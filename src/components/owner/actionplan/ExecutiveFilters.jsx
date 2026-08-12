@@ -68,10 +68,10 @@ export default function ExecutiveFilters({ filters, onChange, onClear, collapsed
           {activeChips.map((chip) => (
             <span
               key={chip.key}
-              className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700"
+              className="inline-flex items-center gap-1 rounded-full bg-status-success-surface px-2.5 py-1 text-xs font-medium text-status-success-text"
             >
               {chip.label}
-              <button onClick={() => removeChip(chip.key)} className="hover:text-emerald-900">
+              <button onClick={() => removeChip(chip.key)} className="hover:text-status-success-text">
                 <X className="h-3 w-3" />
               </button>
             </span>

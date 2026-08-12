@@ -16,7 +16,7 @@ export function StoreHeader({ isRefetching, onRefresh, onExport }: Props) {
       <div className="flex flex-col gap-mx-tiny">
         <div className="flex items-center gap-mx-sm">
           <div
-            className="w-mx-xs h-mx-10 bg-emerald-600 rounded-mx-full shadow-sm"
+            className="w-mx-xs h-mx-10 bg-brand-primary rounded-mx-full shadow-sm"
             aria-hidden="true"
           />
           <Typography variant="h1">
@@ -38,7 +38,7 @@ export function StoreHeader({ isRefetching, onRefresh, onExport }: Props) {
           <RefreshCw size={20} className={cn(isRefetching && 'animate-spin')} />
         </Button>
         <div className="flex items-center gap-mx-xs px-6 h-mx-14 rounded-mx-full border border-border bg-white shadow-sm">
-          <Calendar size={18} className="text-emerald-600" />
+          <Calendar size={18} className="text-status-success-text" />
           <Typography variant="caption" className="">
             Ciclo {format(new Date(), 'yyyy')}
           </Typography>

@@ -22,9 +22,9 @@ const STEPS: Array<{ id: StepId; label: string; pct: number; icon: typeof Store;
 
 const COLOR_MAP = {
   orange: {
-    bg: 'bg-orange-50', border: 'border-orange-200', iconBg: 'bg-orange-500', iconShadow: 'shadow-orange-200',
-    title: 'text-orange-700', sub: 'text-orange-600', btn: 'bg-orange-600 hover:bg-orange-700',
-    stepActive: 'bg-orange-500 text-white', stepDone: 'bg-orange-500 text-white', divider: 'border-orange-100', note: 'text-orange-600', progress: 'bg-orange-500',
+    bg: 'bg-status-warning-surface', border: 'border-status-warning/30', iconBg: 'bg-status-warning', iconShadow: 'shadow-orange-200',
+    title: 'text-status-warning-text', sub: 'text-status-warning-text', btn: 'bg-status-warning hover:bg-status-warning',
+    stepActive: 'bg-status-warning text-white', stepDone: 'bg-status-warning text-white', divider: 'border-status-warning/20', note: 'text-status-warning-text', progress: 'bg-status-warning',
   },
   green: {
     bg: 'bg-green-50', border: 'border-green-200', iconBg: 'bg-green-500', iconShadow: 'shadow-green-200',
@@ -32,9 +32,9 @@ const COLOR_MAP = {
     stepActive: 'bg-green-600 text-white', stepDone: 'bg-green-600 text-white', divider: 'border-green-100', note: 'text-green-500', progress: 'bg-green-500',
   },
   blue: {
-    bg: 'bg-blue-50', border: 'border-blue-200', iconBg: 'bg-blue-600', iconShadow: 'shadow-blue-200',
-    title: 'text-blue-700', sub: 'text-blue-400', btn: 'bg-blue-600 hover:bg-blue-700',
-    stepActive: 'bg-blue-600 text-white', stepDone: 'bg-blue-600 text-white', divider: 'border-blue-100', note: 'text-blue-500', progress: 'bg-blue-600',
+    bg: 'bg-status-info-surface', border: 'border-status-info/30', iconBg: 'bg-status-info', iconShadow: 'shadow-blue-200',
+    title: 'text-status-info-text', sub: 'text-blue-400', btn: 'bg-status-info hover:bg-status-info',
+    stepActive: 'bg-status-info text-white', stepDone: 'bg-status-info text-white', divider: 'border-status-info/20', note: 'text-status-info', progress: 'bg-status-info',
   },
   purple: {
     bg: 'bg-purple-50', border: 'border-purple-200', iconBg: 'bg-purple-600', iconShadow: 'shadow-purple-200',
@@ -73,7 +73,7 @@ function StepperInput({ label, value, onDecrement, onIncrement, onSet, disabled 
   }
 
   return (
-    <div className="flex h-11 items-center rounded-xl border border-border bg-white shadow-sm transition-all focus-within:border-blue-400 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.12)]">
+    <div className="flex h-11 items-center rounded-xl border border-border bg-white shadow-sm transition-all focus-within:border-status-info/50 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.12)]">
       <button
         type="button"
         onClick={() => {
@@ -267,7 +267,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
   }
 
   const totalPct = STEPS.reduce((acc, s) => (completedSteps.has(s.id) ? acc + s.pct : acc), 0)
-  const progressColor = totalPct === 100 ? 'bg-green-500' : totalPct >= 70 ? 'bg-blue-500' : totalPct >= 40 ? 'bg-orange-400' : 'bg-slate-300'
+  const progressColor = totalPct === 100 ? 'bg-green-500' : totalPct >= 70 ? 'bg-status-info' : totalPct >= 40 ? 'bg-orange-400' : 'bg-slate-300'
 
   const co = COLOR_MAP.orange
   const cg = COLOR_MAP.green

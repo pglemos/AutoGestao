@@ -7,19 +7,19 @@ export default function FocusAwaitingValidation({ actions, onValidate }) {
   const awaiting = actions.filter((a) => a.status === "awaiting_validation");
 
   return (
-    <section className="rounded-xl border border-orange-200 bg-orange-50/30 p-4">
+    <section className="rounded-xl border border-status-warning/30 bg-status-warning-surface/30 p-4">
       <div className="mb-3 flex items-center gap-2">
-        <div className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-orange-100">
-          <ClipboardCheck className="h-4 w-4 text-orange-600" />
+        <div className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-status-warning-surface">
+          <ClipboardCheck className="h-4 w-4 text-status-warning-text" />
         </div>
         <h2 className="text-sm font-semibold text-foreground">Aguardando validação</h2>
-        <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-orange-100 px-1.5 text-xs font-bold text-orange-700">
+        <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-status-warning-surface px-1.5 text-xs font-bold text-status-warning-text">
           {awaiting.length}
         </span>
       </div>
 
       {awaiting.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-orange-200 bg-card py-8 text-center">
+        <div className="rounded-lg border border-dashed border-status-warning/30 bg-card py-8 text-center">
           <p className="text-sm text-muted-foreground">Nenhuma ação aguardando validação.</p>
         </div>
       ) : (
@@ -45,7 +45,7 @@ export default function FocusAwaitingValidation({ actions, onValidate }) {
                       <span>Resp.: <span className="font-medium text-foreground">{action.responsible}</span></span>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <FileCheck className="h-3 w-3 text-emerald-500" />
+                      <FileCheck className="h-3 w-3 text-status-success" />
                       <span>Evidência entregue</span>
                       <span>·</span>
                       <span>Enviado: {action.lastUpdate}</span>
@@ -58,7 +58,7 @@ export default function FocusAwaitingValidation({ actions, onValidate }) {
                   </div>
 
                   <div className="mt-2 flex justify-end">
-                    <Button size="sm" onClick={() => onValidate(action, "validate")} className="bg-orange-600 hover:bg-orange-700">
+                    <Button size="sm" onClick={() => onValidate(action, "validate")} className="bg-status-warning hover:bg-status-warning">
                       Validar <ChevronRight className="h-3.5 w-3.5" />
                     </Button>
                   </div>

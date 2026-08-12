@@ -45,7 +45,7 @@ export default function ConsultingMeetingBlock({ meeting }) {
 
           <div className="flex flex-wrap gap-3">
             <div className="flex items-center gap-1.5 rounded-lg bg-muted/60 px-3 py-2 text-xs text-muted-foreground">
-              <CheckSquare className="h-3.5 w-3.5 text-amber-500" />
+              <CheckSquare className="h-3.5 w-3.5 text-status-warning" />
               <span className="tabular-nums">{meeting.client_pending_count || 0}</span> pendências
             </div>
             <div className="flex items-center gap-1.5 rounded-lg bg-muted/60 px-3 py-2 text-xs text-muted-foreground">
@@ -116,14 +116,14 @@ export default function ConsultingMeetingBlock({ meeting }) {
             <ul className="space-y-1.5 text-sm text-muted-foreground">
               {meeting.preparation?.map((a, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <CheckSquare className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-500" />
+                  <CheckSquare className="mt-0.5 h-3.5 w-3.5 shrink-0 text-status-warning" />
                   {a}
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="rounded-md border border-amber-100 bg-amber-50/50 px-3 py-2 text-xs text-muted-foreground">
+          <div className="rounded-md border border-status-warning/20 bg-status-warning-surface/50 px-3 py-2 text-xs text-muted-foreground">
             A agenda completa da Consultoria será construída na próxima etapa.
           </div>
         </div>

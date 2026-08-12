@@ -35,7 +35,7 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
   if (compact) {
     return (
       <div className="flex min-w-0 items-center gap-mx-sm text-mx-tiny">
-        <Calendar size={14} className="shrink-0 text-emerald-600" />
+        <Calendar size={14} className="shrink-0 text-status-success-text" />
         <span className="flex items-center gap-1 font-bold text-muted-foreground">
           {personalConnected
             ? <CheckCircle2 size={12} className="text-status-success" />
@@ -59,7 +59,7 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
     <Card className="space-y-mx-md border bg-white p-mx-lg shadow-none">
       <header className="flex min-w-0 items-center justify-between gap-mx-sm">
         <div className="flex min-w-0 items-center gap-mx-sm">
-          <div className="flex h-mx-12 w-mx-12 shrink-0 items-center justify-center rounded-xl border border-mx-indigo-100 bg-mx-indigo-50 text-emerald-600">
+          <div className="flex h-mx-12 w-mx-12 shrink-0 items-center justify-center rounded-xl border border-mx-indigo-100 bg-mx-indigo-50 text-status-success-text">
             <Calendar size={20} />
           </div>
           <div className="min-w-0">
@@ -166,7 +166,7 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
               const dt = start ? new Date(start) : null
               return (
                 <li key={`${ev._source}-${ev.id}`} className="flex min-w-0 items-center gap-mx-sm rounded-xl p-mx-xs transition-colors hover:bg-gray-50">
-                  <span className={`h-mx-md w-mx-tiny shrink-0 rounded-full ${ev._source === 'central' ? 'bg-emerald-600' : 'bg-status-info'}`} />
+                  <span className={`h-mx-md w-mx-tiny shrink-0 rounded-full ${ev._source === 'central' ? 'bg-brand-primary' : 'bg-status-info'}`} />
                   <div className="min-w-0 flex-1">
                     <Typography variant="caption" className="font-bold truncate block">
                       {ev.summary || '(sem título)'}

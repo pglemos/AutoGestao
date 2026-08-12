@@ -47,7 +47,7 @@ describe('superfície unificada do MX', () => {
       'h-10 w-full rounded-xl border border-border',
     )
     expect(read('src/components/atoms/Button.tsx')).toContain(
-      'rounded-xl bg-emerald-600 text-white shadow-sm',
+      'rounded-xl bg-brand-primary text-white shadow-sm',
     )
   })
 })

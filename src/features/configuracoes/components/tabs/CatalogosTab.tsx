@@ -35,7 +35,7 @@ export function CatalogosTab({ isReadOnly }: TabContext) {
                                     className={cn(
                                         "flex-1 min-w-[140px] flex items-center justify-center gap-mx-sm h-mx-xl px-4 rounded-2xl font-bold uppercase text-xs tracking-widest transition-all",
                                         isActive
-                                            ? "bg-emerald-600 text-white shadow-sm"
+                                            ? "bg-brand-primary text-white shadow-sm"
                                             : "bg-transparent text-muted-foreground hover:bg-gray-50"
                                     )}
                                 >
@@ -65,7 +65,7 @@ export function CatalogosTab({ isReadOnly }: TabContext) {
                                 className={cn(
                                     "flex-1 min-w-[140px] flex items-center justify-center gap-mx-sm h-mx-xl px-4 rounded-2xl font-bold uppercase text-xs tracking-widest transition-all",
                                     isActive
-                                        ? "bg-emerald-600 text-white shadow-sm"
+                                        ? "bg-brand-primary text-white shadow-sm"
                                         : "bg-transparent text-muted-foreground hover:bg-gray-50"
                                 )}
                             >
@@ -79,7 +79,7 @@ export function CatalogosTab({ isReadOnly }: TabContext) {
             {/* Conteúdo do sub-tab */}
             <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
                 <header className="flex items-start gap-mx-md pb-mx-md border-b border-border mb-mx-lg">
-                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center border border-mx-indigo-100">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-status-success-text flex items-center justify-center border border-mx-indigo-100">
                         <Icon size={26} />
                     </div>
                     <div className="flex-1">
@@ -105,7 +105,7 @@ export function CatalogosTab({ isReadOnly }: TabContext) {
             {/* Atalhos secundários */}
             <Card className="p-mx-md border-none bg-gray-50">
                 <div className="flex items-start gap-mx-sm">
-                    <FolderTree size={18} className="text-emerald-600 shrink-0 mt-1" />
+                    <FolderTree size={18} className="text-status-success-text shrink-0 mt-1" />
                     <Typography variant="tiny" tone="muted" className="font-bold leading-relaxed">
                         Os catálogos alimentam treinamentos, devolutivas e produtos digitais consumidos por toda a rede.
                         Alterações são propagadas em tempo real via realtime sync.

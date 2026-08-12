@@ -42,7 +42,7 @@ function StepperInput({ value, onDecrement, onIncrement, onSet, disabled }) {
   }
 
   return (
-    <div className="flex items-center border border-border rounded-xl shadow-sm h-9 focus-within:border-blue-400 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.12)] transition-all bg-white">
+    <div className="flex items-center border border-border rounded-xl shadow-sm h-9 focus-within:border-status-info/50 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.12)] transition-all bg-white">
       <button
         onClick={onDecrement}
         className="w-9 h-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-slate-50 active:bg-slate-100 border-r border-border rounded-l-xl transition-colors text-[18px] font-light flex-shrink-0"
@@ -85,13 +85,13 @@ function FieldRow({ label, value, onDecrement, onIncrement, onSet, disabled }) {
 
 function ShowroomCard({ dc, updateCounter, setCounter, bloqueado }) {
   return (
-    <div className={`flex-1 rounded-2xl p-5 flex flex-col gap-4 min-w-0 border ${bloqueado ? "bg-slate-50 border-border-subtle opacity-70" : "bg-orange-50/60 border-orange-100"}`}>
+    <div className={`flex-1 rounded-2xl p-5 flex flex-col gap-4 min-w-0 border ${bloqueado ? "bg-slate-50 border-border-subtle opacity-70" : "bg-status-warning-surface/60 border-status-warning/20"}`}>
       <div className="flex items-center gap-3">
-        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-md ${bloqueado ? "bg-slate-300 shadow-slate-100" : "bg-orange-500 shadow-orange-200"}`}>
+        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-md ${bloqueado ? "bg-slate-300 shadow-slate-100" : "bg-status-warning shadow-orange-200"}`}>
           {bloqueado ? <Lock className="w-5 h-5 text-white" /> : <Store className="w-5 h-5 text-white" />}
         </div>
         <div>
-          <p className={`text-body-sm font-bold uppercase tracking-wider leading-none ${bloqueado ? "text-muted-foreground" : "text-orange-700"}`}>Showroom</p>
+          <p className={`text-body-sm font-bold uppercase tracking-wider leading-none ${bloqueado ? "text-muted-foreground" : "text-status-warning-text"}`}>Showroom</p>
           <p className={`text-caption mt-0.5 font-medium ${bloqueado ? "text-text-disabled" : "text-orange-400"}`}>Atendimento presencial</p>
         </div>
       </div>
@@ -105,7 +105,7 @@ function ShowroomCard({ dc, updateCounter, setCounter, bloqueado }) {
           disabled={bloqueado}
         />
       </div>
-      <p className={`text-caption leading-relaxed mt-auto pt-1 border-t ${bloqueado ? "text-text-disabled border-border-subtle" : "text-orange-400 border-orange-100"}`}>
+      <p className={`text-caption leading-relaxed mt-auto pt-1 border-t ${bloqueado ? "text-text-disabled border-border-subtle" : "text-orange-400 border-status-warning/20"}`}>
         Vendas devem ser registradas em Cadastrar Venda/Agendamentos.
       </p>
     </div>
@@ -223,13 +223,13 @@ function InternetCard({ dc, updateCounter, setCounter, clients, closingDate, blo
   const showPostFinalizado = d1Editavel || bloqueado;
 
   return (
-    <div className={`flex-1 rounded-2xl p-5 flex flex-col gap-4 min-w-0 border ${bloqueado ? "bg-slate-50 border-border-subtle opacity-70" : "bg-blue-50/60 border-blue-100"}`}>
+    <div className={`flex-1 rounded-2xl p-5 flex flex-col gap-4 min-w-0 border ${bloqueado ? "bg-slate-50 border-border-subtle opacity-70" : "bg-status-info-surface/60 border-status-info/20"}`}>
       <div className="flex items-center gap-3">
-        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-md ${bloqueado ? "bg-slate-300 shadow-slate-100" : "bg-blue-600 shadow-blue-200"}`}>
+        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-md ${bloqueado ? "bg-slate-300 shadow-slate-100" : "bg-status-info shadow-blue-200"}`}>
           {bloqueado ? <Lock className="w-5 h-5 text-white" /> : <Globe className="w-5 h-5 text-white" />}
         </div>
         <div>
-          <p className={`text-body-sm font-bold uppercase tracking-wider leading-none ${bloqueado ? "text-muted-foreground" : "text-blue-700"}`}>Internet</p>
+          <p className={`text-body-sm font-bold uppercase tracking-wider leading-none ${bloqueado ? "text-muted-foreground" : "text-status-info-text"}`}>Internet</p>
           <p className={`text-caption mt-0.5 font-medium ${bloqueado ? "text-text-disabled" : "text-blue-400"}`}>Leads digitais</p>
         </div>
       </div>
@@ -265,27 +265,27 @@ function InternetCard({ dc, updateCounter, setCounter, clients, closingDate, blo
               Agendamentos D+1 ativos
             </span>
             <div className="w-[120px] flex-shrink-0 flex items-center justify-center">
-              <span className={`text-h3 font-bold tabular-nums ${bloqueado ? "text-muted-foreground" : "text-blue-700"}`}>{ativos}</span>
+              <span className={`text-h3 font-bold tabular-nums ${bloqueado ? "text-muted-foreground" : "text-status-info-text"}`}>{ativos}</span>
             </div>
           </div>
         )}
       </div>
       {showPostFinalizado && (
-        <div className={`mt-auto pt-3 border-t space-y-1 ${bloqueado ? "border-border-subtle" : "border-blue-100"}`}>
-          <p className={`text-caption font-medium ${bloqueado ? "text-text-disabled" : "text-blue-500"}`}>
-            Planejados no fechamento: <strong className={bloqueado ? "text-muted-foreground" : "text-blue-700"}>{planejados}</strong>
+        <div className={`mt-auto pt-3 border-t space-y-1 ${bloqueado ? "border-border-subtle" : "border-status-info/20"}`}>
+          <p className={`text-caption font-medium ${bloqueado ? "text-text-disabled" : "text-status-info"}`}>
+            Planejados no fechamento: <strong className={bloqueado ? "text-muted-foreground" : "text-status-info-text"}>{planejados}</strong>
           </p>
           {!bloqueado && (
-            <p className="text-caption font-semibold text-blue-500">
-              Detalhados: <strong className="text-blue-700">{ativos}</strong> de <strong className="text-blue-700">{planejados}</strong>
+            <p className="text-caption font-semibold text-status-info">
+              Detalhados: <strong className="text-status-info-text">{ativos}</strong> de <strong className="text-status-info-text">{planejados}</strong>
             </p>
           )}
         </div>
       )}
       {!showPostFinalizado && planejados > 0 && (
-        <div className="flex items-center gap-1.5 mt-auto pt-3 border-t border-blue-100">
-          <span className="text-caption font-semibold text-blue-500">
-            Detalhados: <strong className="text-blue-700">{ativos}</strong> de <strong className="text-blue-700">{planejados}</strong>
+        <div className="flex items-center gap-1.5 mt-auto pt-3 border-t border-status-info/20">
+          <span className="text-caption font-semibold text-status-info">
+            Detalhados: <strong className="text-status-info-text">{ativos}</strong> de <strong className="text-status-info-text">{planejados}</strong>
           </span>
         </div>
       )}

@@ -29,15 +29,15 @@ export default function ObjectiveExecution({ actions, onFilterByObjective, activ
                 <div className="mt-1 flex items-center gap-3 text-xs text-muted-foreground">
                   <span>{stats.total} ações</span>
                   <span className="inline-flex items-center gap-1">
-                    <CheckCircle2 className="h-3 w-3 text-emerald-500" /> {stats.completed}
+                    <CheckCircle2 className="h-3 w-3 text-status-success" /> {stats.completed}
                   </span>
                   {stats.late > 0 && (
-                    <span className="inline-flex items-center gap-1 text-red-600">
+                    <span className="inline-flex items-center gap-1 text-status-error-text">
                       <AlertTriangle className="h-3 w-3" /> {stats.late}
                     </span>
                   )}
                   {stats.blocked > 0 && (
-                    <span className="inline-flex items-center gap-1 text-red-600">
+                    <span className="inline-flex items-center gap-1 text-status-error-text">
                       <Ban className="h-3 w-3" /> {stats.blocked}
                     </span>
                   )}

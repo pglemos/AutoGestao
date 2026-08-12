@@ -42,7 +42,7 @@ const SCOPE_LABEL: Record<CentralMxPlanoScope, { label: string; icon: typeof Bui
 
 const STATUS_TONE: Record<CentralMxPlanoStatus, string> = {
   pendente: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
-  em_andamento: 'border-brand-primary/40 bg-mx-indigo-50 text-emerald-600',
+  em_andamento: 'border-brand-primary/40 bg-mx-indigo-50 text-status-success-text',
   atrasado: 'border-status-error/30 bg-status-error-surface text-status-error',
   validando_eficacia: 'border-border bg-gray-50 text-muted-foreground',
   concluido: 'border-status-success/30 bg-status-success-surface text-status-success',
@@ -151,7 +151,7 @@ export function CentralMxPlanoSegmentadoPanel({
     <Card className="p-mx-lg">
       <header className="flex items-start justify-between gap-mx-sm">
         <div className="flex items-center gap-mx-sm">
-          <div className="rounded-2xl bg-emerald-600 p-mx-sm text-pure-white shadow-sm">
+          <div className="rounded-2xl bg-brand-primary p-mx-sm text-pure-white shadow-sm">
             <ClipboardList size={22} aria-hidden="true" />
           </div>
           <div>
@@ -216,7 +216,7 @@ export function CentralMxPlanoSegmentadoPanel({
               className={cn(
                 'inline-flex items-center gap-mx-xs rounded-2xl border px-mx-sm py-mx-xs text-mx-tiny font-bold uppercase tracking-widest transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/30',
                 isActive
-                  ? 'border-brand-primary bg-emerald-600 text-pure-white shadow-sm'
+                  ? 'border-brand-primary bg-brand-primary text-pure-white shadow-sm'
                   : 'border-border bg-white text-muted-foreground',
               )}
             >
@@ -293,7 +293,7 @@ function CountTile({
 }) {
   const toneClass: Record<typeof tone, string> = {
     warning: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
-    brand: 'border-brand-primary/30 bg-mx-indigo-50 text-emerald-600',
+    brand: 'border-brand-primary/30 bg-mx-indigo-50 text-status-success-text',
     danger: 'border-status-error/30 bg-status-error-surface text-status-error',
     muted: 'border-border bg-gray-50 text-muted-foreground',
   }
@@ -337,7 +337,7 @@ function PlanoRow({
             </Badge>
           </div>
           <Typography variant="p" className="mt-mx-xs">
-            <span className="mr-mx-xs text-emerald-600">{plano.codigo || `PA-${plano.id.slice(0, 8).toUpperCase()}`}</span>
+            <span className="mr-mx-xs text-status-success-text">{plano.codigo || `PA-${plano.id.slice(0, 8).toUpperCase()}`}</span>
             {plano.acao}
           </Typography>
           <Typography variant="tiny" tone="muted" className="block">

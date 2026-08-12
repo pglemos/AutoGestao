@@ -54,7 +54,7 @@ export default function ApproveModal({ action, open, onOpenChange, onConfirm, re
         <div className="space-y-3">
           <div>
             <Label className="mb-1 block text-sm">Decisão</Label>
-            <p className="rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+            <p className="rounded-md bg-status-success-surface px-3 py-2 text-sm text-status-success-text">
               Aprovar e iniciar execução
             </p>
           </div>

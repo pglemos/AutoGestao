@@ -96,9 +96,9 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
   const temperatureColor = (temp: string | null | undefined) => {
     switch (temp?.toLowerCase()) {
       case 'quente':
-        return 'bg-red-100 text-red-800 border-red-200'
+        return 'bg-status-error-surface text-status-error-text border-status-error/30'
       case 'morno':
-        return 'bg-amber-100 text-amber-800 border-amber-200'
+        return 'bg-status-warning-surface text-status-warning-text border-status-warning/30'
       case 'frio':
         return 'bg-slate-100 text-foreground border-border'
       default:
@@ -110,7 +110,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
     switch (pot?.toLowerCase()) {
       case 'muito alto':
       case 'alto':
-        return 'bg-blue-100 text-blue-800 border-blue-200'
+        return 'bg-status-info-surface text-status-info-text border-status-info/30'
       case 'médio':
       case 'medio':
         return 'bg-slate-100 text-foreground border-border'
@@ -132,14 +132,14 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
           <div className="flex items-start justify-between gap-4">
             <div>
               <div className="flex items-center gap-2 mb-1 flex-wrap">
-                <Badge variant="outline" className="border-blue-400 text-blue-300 bg-blue-950/60 text-xs font-semibold">
+                <Badge variant="outline" className="border-status-info/50 text-blue-300 bg-blue-950/60 text-xs font-semibold">
                   {opportunity.statusCode}
                 </Badge>
                 <Badge variant="outline" className="border-slate-600 text-text-disabled bg-slate-800 text-xs">
                   {priorityClass ? `Prioridade ${priorityClass}` : 'Prioridade não calculada'}
                 </Badge>
                 {isInternal && (
-                  <Badge variant="secondary" className="bg-amber-900/80 text-amber-200 border border-amber-700 text-xs">
+                  <Badge variant="secondary" className="bg-status-warning/80 text-amber-200 border border-amber-700 text-xs">
                     Ação Interna
                   </Badge>
                 )}
@@ -215,7 +215,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
 
               <div>
                 <span className="text-xs font-semibold text-muted-foreground block">Próximo Passo</span>
-                <p className="text-blue-900 font-semibold bg-blue-50/70 p-2.5 rounded border border-blue-200">
+                <p className="text-status-info-text font-semibold bg-status-info-surface/70 p-2.5 rounded border border-status-info/30">
                   {opportunity.nextStep}
                 </p>
               </div>
@@ -281,16 +281,16 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
             </div>
 
             {isSourceBlocker ? (
-              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-amber-900 text-sm space-y-1">
+              <div className="bg-status-warning-surface border border-status-warning/30 rounded-lg p-3 text-status-warning-text text-sm space-y-1">
                 <p className="font-bold text-amber-950">Script ainda não cadastrado na matriz</p>
-                <p className="text-xs text-amber-800">
+                <p className="text-xs text-status-warning-text">
                   O envio via WhatsApp fica desabilitado até a atualização da matriz. O restador do Mentor permanece totalmente operacional.
                 </p>
               </div>
             ) : isInternal ? (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-blue-900 text-sm space-y-1">
+              <div className="bg-status-info-surface border border-status-info/30 rounded-lg p-3 text-status-info-text text-sm space-y-1">
                 <p className="font-bold text-blue-950">Ação Interna (SCR-INTERNO)</p>
-                <p className="text-xs text-blue-800">
+                <p className="text-xs text-status-info-text">
                   Esta atividade deve ser executada internamente no sistema. Não há script de envio de mensagem para o cliente.
                 </p>
               </div>
@@ -312,14 +312,14 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
                 </div>
               </div>
             ) : (
-              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-amber-900 text-sm space-y-2">
+              <div className="bg-status-warning-surface border border-status-warning/30 rounded-lg p-3 text-status-warning-text text-sm space-y-2">
                 <p className="font-semibold">Variáveis pendentes no script:</p>
-                <ul className="list-disc list-inside text-xs space-y-0.5 font-mono text-amber-900">
+                <ul className="list-disc list-inside text-xs space-y-0.5 font-mono text-status-warning-text">
                   {missingVariables.map((v) => (
                     <li key={v}>{`{${v}}`}</li>
                   ))}
                 </ul>
-                <p className="text-xs text-amber-800">
+                <p className="text-xs text-status-warning-text">
                   Preencha as variáveis ausentes para habilitar o envio via WhatsApp.
                 </p>
               </div>
@@ -336,7 +336,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
                 variant="outline"
                 disabled={!renderedScript.allowWhatsApp}
                 onClick={handleOpenWhatsApp}
-                className="w-full border-blue-600 text-blue-700 hover:bg-blue-50 font-medium"
+                className="w-full border-status-info text-status-info-text hover:bg-status-info-surface font-medium"
               >
                 Abrir WhatsApp
               </Button>
@@ -347,7 +347,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
                 type="button"
                 disabled={isSubmitting}
                 onClick={handleExecuteInternal}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold col-span-2"
+                className="w-full bg-status-info hover:bg-status-info text-white font-semibold col-span-2"
               >
                 {isSubmitting ? 'Registrando...' : 'Executar ação interna'}
               </Button>
@@ -356,7 +356,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
                 type="button"
                 disabled={isSubmitting}
                 onClick={() => handleMessageSent('Mensagem enviada')}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+                className="w-full bg-status-info hover:bg-status-info text-white font-semibold"
               >
                 {isSubmitting ? 'Registrando...' : 'Mensagem enviada'}
               </Button>
@@ -389,7 +389,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
               variant="ghost"
               size="sm"
               onClick={handleOpenDetails}
-              className="text-blue-700 hover:text-blue-900 font-medium text-xs h-7 px-2"
+              className="text-status-info-text hover:text-status-info-text font-medium text-xs h-7 px-2"
             >
               Abrir ficha →
             </Button>

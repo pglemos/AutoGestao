@@ -90,7 +90,7 @@ export function MxPageTabs<T extends string>({
             value={searchTerm}
             onChange={(event: ChangeEvent<HTMLInputElement>) => setSearchTerm(event.target.value)}
             placeholder={searchPlaceholder}
-            className="h-10 w-full rounded-xl border border-border bg-white pl-9 pr-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/15"
+            className="h-10 w-full rounded-xl border border-border bg-white pl-9 pr-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-status-success focus:ring-2 focus:ring-status-success/15"
           />
         </label>
       ) : null}
@@ -124,8 +124,8 @@ export function MxPageTabs<T extends string>({
                       onKeyDown={(event: KeyboardEvent<HTMLButtonElement>) => handleKeyDown(event, index)}
                       title={item.description}
                       className={cn(
-                        'inline-flex min-h-10 shrink-0 items-center gap-2 rounded-lg px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30',
-                        selected ? 'bg-white text-emerald-700 shadow-sm' : 'text-muted-foreground hover:bg-white/70 hover:text-foreground',
+                        'inline-flex min-h-10 shrink-0 items-center gap-2 rounded-lg px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-success/30',
+                        selected ? 'bg-white text-status-success-text shadow-sm' : 'text-muted-foreground hover:bg-white/70 hover:text-foreground',
                       )}
                     >
                       {Icon ? <Icon size={15} className="shrink-0" aria-hidden="true" /> : null}

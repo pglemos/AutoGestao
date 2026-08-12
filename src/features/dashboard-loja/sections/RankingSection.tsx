@@ -44,11 +44,11 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
             alt={`Avatar de ${row.user_name}`}
             fallback={row.user_name}
             size="md"
-            className={`h-10 w-10 rounded-xl ${row.is_venda_loja ? 'bg-emerald-600 text-white' : 'bg-emerald-50 text-emerald-700'}`}
+            className={`h-10 w-10 rounded-xl ${row.is_venda_loja ? 'bg-brand-primary text-white' : 'bg-status-success-surface text-status-success-text'}`}
           />
           <div className="min-w-0">
             <p className="break-words text-sm font-semibold text-foreground">{row.user_name}</p>
-            {row.is_venda_loja && <span className="mt-1 inline-flex rounded-md bg-emerald-100 px-1.5 py-0.5 text-caption font-semibold text-emerald-700">Vendas da Gestão (Apoio)</span>}
+            {row.is_venda_loja && <span className="mt-1 inline-flex rounded-md bg-status-success-surface px-1.5 py-0.5 text-caption font-semibold text-status-success-text">Vendas da Gestão (Apoio)</span>}
           </div>
         </div>
       ),
@@ -60,14 +60,14 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
       key: 'vnd_total',
       header: 'Vendas',
       align: 'center',
-      render: row => <span className="text-lg font-bold text-emerald-700 tabular-nums">{row.vnd_total}</span>,
+      render: row => <span className="text-lg font-bold text-status-success-text tabular-nums">{row.vnd_total}</span>,
     },
     {
       key: 'status',
       header: 'Situação',
       align: 'right',
       render: row => (
-        <span className={`inline-flex rounded-lg px-2 py-1 text-xs font-semibold ${row.vnd_total > 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-muted-foreground'}`}>
+        <span className={`inline-flex rounded-lg px-2 py-1 text-xs font-semibold ${row.vnd_total > 0 ? 'bg-status-success-surface text-status-success-text' : 'bg-gray-100 text-muted-foreground'}`}>
           {row.vnd_total > 0 ? 'Com venda' : 'Sem venda'}
         </span>
       ),
@@ -85,7 +85,7 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
       <article className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm xl:col-span-8">
         <header className="flex flex-col gap-4 border-b border-border-subtle px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-3">
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-status-success-surface text-status-success-text">
               <UsersRound size={19} />
             </span>
             <div>
@@ -132,7 +132,7 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
       <aside className="flex flex-col gap-5 xl:col-span-4">
         <article className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <header className="flex items-start gap-3">
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-blue-50 text-blue-600">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-status-info-surface text-status-info-text">
               <BarChart3 size={19} />
             </span>
             <div>

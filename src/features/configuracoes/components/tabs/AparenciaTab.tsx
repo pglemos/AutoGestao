@@ -82,7 +82,7 @@ export function AparenciaTab() {
             {/* Tema */}
             <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
                 <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border mb-mx-lg">
-                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center border border-mx-indigo-100">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-status-success-text flex items-center justify-center border border-mx-indigo-100">
                         <Palette size={26} />
                     </div>
                     <div>
@@ -120,7 +120,7 @@ export function AparenciaTab() {
             <Card className="p-mx-lg border-none bg-white">
                 <header className="flex items-center justify-between pb-mx-md border-b border-border mb-mx-lg">
                     <div className="flex items-center gap-mx-sm">
-                        <div className="w-mx-14 h-mx-14 rounded-2xl bg-pure-black text-emerald-600 flex items-center justify-center">
+                        <div className="w-mx-14 h-mx-14 rounded-2xl bg-pure-black text-status-success-text flex items-center justify-center">
                             <Sparkles size={26} />
                         </div>
                         <div>
@@ -153,12 +153,12 @@ function ThemeOption({ icon, label, desc, active, onClick, badge }: {
             onClick={onClick}
             className={`text-left p-mx-md rounded-2xl border-2 transition-all ${
                 active
-                    ? 'border-brand-primary bg-emerald-600/5 shadow-sm'
+                    ? 'border-brand-primary bg-brand-primary/5 shadow-sm'
                     : 'border-border bg-white hover:border-brand-primary/30 hover:bg-gray-50'
             }`}
         >
             <div className="flex items-center justify-between mb-mx-sm">
-                <div className={`w-mx-10 h-mx-10 rounded-2xl flex items-center justify-center ${active ? 'bg-emerald-600 text-white' : 'bg-gray-50 text-emerald-600'}`}>
+                <div className={`w-mx-10 h-mx-10 rounded-2xl flex items-center justify-center ${active ? 'bg-brand-primary text-white' : 'bg-gray-50 text-status-success-text'}`}>
                     {icon}
                 </div>
                 {badge && <Badge variant="outline" className="text-mx-micro">{badge}</Badge>}
@@ -176,7 +176,7 @@ function DensityOption({ label, desc, active, onClick }: { label: string; desc: 
             onClick={onClick}
             className={`text-left p-mx-md rounded-2xl border-2 transition-all ${
                 active
-                    ? 'border-brand-primary bg-emerald-600/5'
+                    ? 'border-brand-primary bg-brand-primary/5'
                     : 'border-border bg-white hover:border-brand-primary/30'
             }`}
         >

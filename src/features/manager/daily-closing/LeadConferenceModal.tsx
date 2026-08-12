@@ -283,13 +283,13 @@ export function LeadConferenceModal({
             />
           </section>
 
-          <div className="rounded-[12px] border border-blue-200 bg-blue-50 px-3 py-2 text-center text-sm font-semibold text-blue-600">
+          <div className="rounded-[12px] border border-status-info/30 bg-status-info-surface px-3 py-2 text-center text-sm font-semibold text-status-info-text">
             Informe os volumes oficiais consultados no CRM externo.
           </div>
 
           {error && (
             <div
-              className="rounded-[12px] border border-red-200 bg-red-50 p-3 text-sm text-red-700"
+              className="rounded-[12px] border border-status-error/30 bg-status-error-surface p-3 text-sm text-status-error-text"
               role="alert"
             >
               {error}
@@ -386,7 +386,7 @@ export function LeadConferenceModal({
                       {format(parseISO(item.created_at), "dd/MM/yyyy HH:mm")}
                     </p>
                   </div>
-                  <span className={`inline-flex rounded-[8px] px-2 py-1 text-xs font-medium ${item.divergent_sellers ? "bg-amber-100 text-amber-700" : "bg-emerald-100 text-emerald-700"}`}>
+                  <span className={`inline-flex rounded-[8px] px-2 py-1 text-xs font-medium ${item.divergent_sellers ? "bg-status-warning-surface text-status-warning-text" : "bg-status-success-surface text-status-success-text"}`}>
                     {item.divergent_sellers} divergência(s)
                   </span>
                 </div>
@@ -447,11 +447,11 @@ function ConferenceMetric({
 }) {
   const colors =
     tone === "blue"
-      ? "border-blue-200 bg-blue-50"
+      ? "border-status-info/30 bg-status-info-surface"
       : tone === "green"
-        ? "border-emerald-200 bg-emerald-50"
+        ? "border-status-success/30 bg-status-success-surface"
       : tone === "orange"
-        ? "border-orange-200 bg-orange-50"
+        ? "border-status-warning/30 bg-status-warning-surface"
         : "border-border-subtle bg-white text-foreground";
   return (
     <div className={`rounded-[16px] border p-4 ${colors}`}>
@@ -492,7 +492,7 @@ function ConferenceRow({
     <tr>
       <td className="px-3 py-3">
         <div className="flex items-center gap-2">
-          <span className="grid h-7 w-7 place-items-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700">
+          <span className="grid h-7 w-7 place-items-center rounded-full bg-status-success-surface text-xs font-bold text-status-success-text">
             {getInitials(row.sellerName)}
           </span>
           <strong className="text-sm font-medium text-foreground whitespace-nowrap">{row.sellerName}</strong>
@@ -522,7 +522,7 @@ function ConferenceRow({
             Não conferido
           </span>
         ) : (
-          <span className={`inline-flex rounded-[8px] px-2 py-1 text-xs font-medium ${totalDiff === 0 ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"}`}>
+          <span className={`inline-flex rounded-[8px] px-2 py-1 text-xs font-medium ${totalDiff === 0 ? "bg-status-success-surface text-status-success-text" : "bg-status-warning-surface text-status-warning-text"}`}>
             {totalDiff === 0 ? "Conferido" : "Divergente"}
           </span>
         )}
@@ -571,7 +571,7 @@ function OfficialInput({
 function DifferenceValue({ value }: { value: number | null }) {
   return (
     <td
-      className={`px-3 py-3 text-sm font-semibold ${value === null ? "text-muted-foreground" : value === 0 ? "text-emerald-600" : "text-orange-600"}`}
+      className={`px-3 py-3 text-sm font-semibold ${value === null ? "text-muted-foreground" : value === 0 ? "text-status-success-text" : "text-status-warning-text"}`}
     >
       {formatDifference(value)}
     </td>

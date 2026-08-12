@@ -52,12 +52,12 @@ export function RotinaRitualMatinal({
   return (
     <Card className="border p-mx-md space-y-mx-md bg-white relative overflow-hidden">
       <div
-        className="absolute top-mx-0 right-mx-0 w-mx-sidebar-expanded h-mx-64 bg-emerald-600/5 rounded-mx-full blur-mx-xl -mr-32 -mt-32"
+        className="absolute top-mx-0 right-mx-0 w-mx-sidebar-expanded h-mx-64 bg-brand-primary/5 rounded-mx-full blur-mx-xl -mr-32 -mt-32"
         aria-hidden="true"
       />
       <header className="flex items-center justify-between border-b border-border-subtle pb-8 relative z-10">
         <div className="flex items-center gap-mx-md">
-          <div className="w-mx-2xl h-mx-2xl rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm transform -rotate-2">
+          <div className="w-mx-2xl h-mx-2xl rounded-xl bg-brand-primary text-white flex items-center justify-center shadow-sm transform -rotate-2">
             <Zap size={32} />
           </div>
           <div>
@@ -185,7 +185,7 @@ export function RotinaRitualMatinal({
             className={cn(
               'h-mx-14 px-10 rounded-xl font-bold uppercase tracking-widest text-tiny',
               canTriggerMatinal
-                ? 'bg-emerald-600 shadow-sm text-white'
+                ? 'bg-brand-primary shadow-sm text-white'
                 : 'bg-white border-border-subtle text-muted-foreground',
             )}
           >

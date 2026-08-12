@@ -41,14 +41,14 @@ export function SellerPerformancePage() {
         description="Leitura individual e comparativa com filtro de período, acompanhamento em tempo real e ordenação de equipe."
         actions={
           <>
-            <div className="flex items-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50/80 px-3 py-2 text-xs font-semibold text-emerald-800 shadow-xs">
+            <div className="flex items-center gap-2 rounded-xl border border-status-success/20 bg-status-success-surface/80 px-3 py-2 text-xs font-semibold text-status-success-text shadow-xs">
               <span
                 className={cn(
                   'h-2.5 w-2.5 rounded-full',
-                  state.isRealtimeActive ? 'bg-emerald-500 animate-pulse' : 'bg-amber-400'
+                  state.isRealtimeActive ? 'bg-status-success animate-pulse' : 'bg-amber-400'
                 )}
               />
-              <Zap size={13} className="text-emerald-600" />
+              <Zap size={13} className="text-status-success-text" />
               <span>{state.isRealtimeActive ? 'Real-time ativo' : 'Conectando tempo real...'}</span>
             </div>
 
@@ -157,7 +157,7 @@ export function SellerPerformancePage() {
 
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border-subtle bg-white p-3.5 shadow-2xs text-xs font-medium text-muted-foreground">
         <div className="flex items-center gap-2">
-          <Filter size={14} className="text-emerald-600" />
+          <Filter size={14} className="text-status-success-text" />
           <span>
             Período selecionado: <strong className="text-foreground">{state.dateRange.label}</strong> (
             {formatDateBR(state.dateRange.startDate)} até {formatDateBR(state.dateRange.endDate)})
@@ -165,7 +165,7 @@ export function SellerPerformancePage() {
         </div>
         <div className="flex items-center gap-4 text-muted-foreground">
           <span>Vendedores na lista: <strong className="text-foreground">{state.rows.length}</strong></span>
-          <span>Vendas no período: <strong className="text-emerald-700">{totalSalesInPeriod}</strong></span>
+          <span>Vendas no período: <strong className="text-status-success-text">{totalSalesInPeriod}</strong></span>
         </div>
       </div>
 

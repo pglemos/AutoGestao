@@ -52,7 +52,7 @@ export default function ParticipantsModal({ meeting, onClose, onConfirmed }) {
                   <div className="flex items-center gap-1.5">
                     <span className="text-xs text-muted-foreground">{p.role}</span>
                     {p.required ? (
-                      <span className="rounded-full bg-amber-50 px-1.5 py-0.5 text-caption font-medium text-amber-700">Obrigatório</span>
+                      <span className="rounded-full bg-status-warning-surface px-1.5 py-0.5 text-caption font-medium text-status-warning-text">Obrigatório</span>
                     ) : (
                       <span className="rounded-full bg-muted px-1.5 py-0.5 text-caption font-medium text-muted-foreground">Opcional</span>
                     )}

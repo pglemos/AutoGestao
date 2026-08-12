@@ -122,7 +122,7 @@ export function StoreGoalsPanel({ storeId, storeName }: StoreGoalsPanelProps) {
   if (loading) {
     return (
       <div className="min-h-mx-section-lg bg-white rounded-2xl flex flex-col items-center justify-center">
-        <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-emerald-600 mb-6" />
+        <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-status-success-text mb-6" />
         <Typography variant="caption" tone="muted" className="animate-pulse">Carregando metas da loja...</Typography>
       </div>
     )
@@ -195,7 +195,7 @@ export function StoreGoalsPanel({ storeId, storeName }: StoreGoalsPanelProps) {
                 <div className="flex items-center gap-3">
                   <div className={cn(
                     'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg',
-                    benchmark.tone === 'brand' ? 'bg-mx-indigo-50 border-mx-indigo-100 text-emerald-600' :
+                    benchmark.tone === 'brand' ? 'bg-mx-indigo-50 border-mx-indigo-100 text-status-success-text' :
                       benchmark.tone === 'success' ? 'bg-status-success-surface border-mx-emerald-100 text-status-success' :
                         'bg-status-warning-surface border-mx-amber-100 text-status-warning'
                   )}>

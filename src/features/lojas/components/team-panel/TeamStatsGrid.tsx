@@ -33,8 +33,8 @@ export function TeamStatsGrid({ stats }: { stats: TeamStat[] }) {
               <Typography variant="h1" className="text-2xl sm:text-3xl tabular-nums leading-none font-mono-numbers">{item.value}</Typography>
             </div>
             <div className={cn(
-              "hidden sm:flex w-mx-12 h-mx-12 rounded-2xl items-center justify-center bg-white shadow-sm border border-border text-muted-foreground transition-all group-hover:rotate-6 group-hover:border-brand-primary/20 group-hover:text-emerald-600",
-              item.tone === 'brand' && "text-emerald-600"
+              "hidden sm:flex w-mx-12 h-mx-12 rounded-2xl items-center justify-center bg-white shadow-sm border border-border text-muted-foreground transition-all group-hover:rotate-6 group-hover:border-brand-primary/20 group-hover:text-status-success-text",
+              item.tone === 'brand' && "text-status-success-text"
             )}>
               <item.icon size={20} strokeWidth={2} />
             </div>

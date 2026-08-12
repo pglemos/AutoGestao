@@ -60,7 +60,7 @@ export function CorrigirLeadsModal({ open, onClose, sellerName, checkin, onSubmi
   return (
     <Modal open={open} onClose={onClose} size="lg" title={`Corrigir leads — ${sellerName}`} description="Somente leads por canal podem ser alterados. Vendas, atendimentos, agendamentos, qualificados e garantia permanecem intocados."
       referenceStyle
-      footer={<div className="flex justify-end gap-2"><button type="button" className="h-9 rounded-[8px] px-3 text-sm font-medium text-muted-foreground hover:bg-gray-100" onClick={onClose}>Cancelar</button><button type="button" className="h-9 rounded-[8px] bg-emerald-600 px-3 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-40" disabled={saving || !checkin} onClick={() => void submit()}>{saving ? 'Aplicando…' : 'Aplicar correção auditada'}</button></div>}>
+      footer={<div className="flex justify-end gap-2"><button type="button" className="h-9 rounded-[8px] px-3 text-sm font-medium text-muted-foreground hover:bg-gray-100" onClick={onClose}>Cancelar</button><button type="button" className="h-9 rounded-[8px] bg-brand-primary px-3 text-sm font-medium text-white hover:bg-brand-primary-hover disabled:opacity-40" disabled={saving || !checkin} onClick={() => void submit()}>{saving ? 'Aplicando…' : 'Aplicar correção auditada'}</button></div>}>
       {!checkin ? (
         <p className="text-sm text-muted-foreground">Este vendedor ainda não enviou o fechamento do dia — não há leads para corrigir.</p>
       ) : (
@@ -90,7 +90,7 @@ export function CorrigirLeadsModal({ open, onClose, sellerName, checkin, onSubmi
             <textarea className="w-full resize-none rounded-[12px] border border-border px-3 py-2 text-sm" id="corrigir-observacao" rows={2} value={observacao} onChange={event => setObservacao(event.target.value)} placeholder="Contexto adicional para a auditoria" />
           </div>
           <p className="text-xs text-muted-foreground">A correção registra gerente, data/hora, valores anteriores e novos no log de auditoria do fechamento.</p>
-          {error && <p className="text-sm text-red-700" role="alert">{error}</p>}
+          {error && <p className="text-sm text-status-error-text" role="alert">{error}</p>}
         </div>
       )}
     </Modal>

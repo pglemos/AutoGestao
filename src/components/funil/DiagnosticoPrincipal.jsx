@@ -49,21 +49,21 @@ function calcDiagnostico(funis, indicadores) {
 
 const COR_MAP = {
   amber: {
-    bg: "bg-amber-50 border-amber-200",
-    icon: "bg-amber-100 text-amber-600",
-    btn: "bg-amber-500 hover:bg-amber-600 text-white",
-    titulo: "text-amber-900",
-    sub: "text-amber-700",
-    label: "text-amber-600 bg-amber-100",
+    bg: "bg-status-warning-surface border-status-warning/30",
+    icon: "bg-status-warning-surface text-status-warning-text",
+    btn: "bg-status-warning hover:bg-status-warning text-white",
+    titulo: "text-status-warning-text",
+    sub: "text-status-warning-text",
+    label: "text-status-warning-text bg-status-warning-surface",
     labelText: "Recuperar",
   },
   blue: {
-    bg: "bg-blue-50 border-blue-200",
-    icon: "bg-blue-100 text-blue-600",
-    btn: "bg-[#005BFF] hover:bg-blue-700 text-white",
-    titulo: "text-blue-900",
-    sub: "text-blue-700",
-    label: "text-blue-600 bg-blue-100",
+    bg: "bg-status-info-surface border-status-info/30",
+    icon: "bg-status-info-surface text-status-info-text",
+    btn: "bg-[#005BFF] hover:bg-status-info text-white",
+    titulo: "text-status-info-text",
+    sub: "text-status-info-text",
+    label: "text-status-info-text bg-status-info-surface",
     labelText: "Converter",
   },
   purple: {

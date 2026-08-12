@@ -52,7 +52,7 @@ export function RegularizeLateModal({
             type="button"
             onClick={() => void onSubmit(observation.trim())}
             disabled={!valid || saving}
-            className="h-11 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-200"
+            className="h-11 rounded-xl bg-status-info px-4 text-sm font-semibold text-white shadow-sm hover:bg-status-info disabled:cursor-not-allowed disabled:bg-status-info/20"
           >
             {saving ? "Enviando..." : "Enviar Regularização"}
           </button>
@@ -60,7 +60,7 @@ export function RegularizeLateModal({
       }
     >
       <div className="space-y-4">
-        <div className="flex items-start gap-3 rounded-xl border border-blue-100 bg-blue-50 p-4 text-sm leading-5 text-blue-700">
+        <div className="flex items-start gap-3 rounded-xl border border-status-info/20 bg-status-info-surface p-4 text-sm leading-5 text-status-info-text">
           <Info size={18} className="mt-0.5 shrink-0" />
           <p>
             Este fechamento foi enviado fora do horário limite. Ao regularizar,
@@ -84,7 +84,7 @@ export function RegularizeLateModal({
             onChange={(event) => setObservation(event.target.value)}
             rows={4}
             placeholder="Justificativa ou contexto da regularização..."
-            className="w-full resize-none rounded-xl border border-border px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full resize-none rounded-xl border border-border px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-status-info"
           />
           <span className="mt-1 block text-caption text-muted-foreground">
             Informe ao menos 8 caracteres para manter a justificativa auditável.

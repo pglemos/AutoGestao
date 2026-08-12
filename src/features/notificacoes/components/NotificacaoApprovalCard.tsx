@@ -22,7 +22,7 @@ type Props = {
  */
 function ApprovalAvatar({ url, name }: { url: string | null; name: string }) {
   const [erro, setErro] = useState(false)
-  if (!url || erro) return <div className="h-full w-full flex items-center justify-center text-emerald-600"><UserRound size={20} /></div>
+  if (!url || erro) return <div className="h-full w-full flex items-center justify-center text-status-success-text"><UserRound size={20} /></div>
   return <img src={url} alt={name} className="h-full w-full object-cover" loading="lazy" decoding="async" onError={() => setErro(true)} />
 }
 

@@ -573,7 +573,7 @@ export default function ManagerDailyClosing() {
                   type="date"
                   value={date}
                   onChange={(event) => setDate(event.target.value)}
-                  className="h-[36px] rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="h-[36px] rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-status-success"
                 />
               </label>
               <label className="block text-xs text-muted-foreground">
@@ -594,7 +594,7 @@ export default function ManagerDailyClosing() {
               <button
                 type="button"
                 onClick={() => void refreshAll()}
-                className="inline-flex h-[36px] items-center gap-1 rounded-xl bg-emerald-600 px-3 text-xs font-semibold text-white shadow-sm hover:bg-emerald-700"
+                className="inline-flex h-[36px] items-center gap-1 rounded-xl bg-brand-primary px-3 text-xs font-semibold text-white shadow-sm hover:bg-brand-primary-hover"
               >
                 <RefreshCw size={14} /> Atualizar
               </button>
@@ -603,13 +603,13 @@ export default function ManagerDailyClosing() {
         </header>
 
         {(error || requestError) && (
-          <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+          <div className="rounded-xl border border-status-error/30 bg-status-error-surface px-4 py-3 text-sm text-status-error-text" role="alert">
             {error || `Não foi possível carregar as regularizações: ${requestError}`}
             {" "}Use Atualizar para tentar novamente.
           </div>
         )}
         {syncWarning && (
-          <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800" role="status">
+          <div className="rounded-xl border border-status-warning/30 bg-status-warning-surface px-4 py-3 text-sm text-status-warning-text" role="status">
             {syncWarning}
           </div>
         )}
@@ -715,7 +715,7 @@ export default function ManagerDailyClosing() {
 
         <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <h2 className="flex items-center gap-2 text-base font-semibold text-foreground">
-            <BarChart3 size={18} className="text-emerald-600" />
+            <BarChart3 size={18} className="text-status-success-text" />
             Comparativo de Disciplina do Fechamento
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -864,7 +864,7 @@ export function PendingReminderModal({
           <button type="button" onClick={onClose} className="h-11 rounded-xl border border-border bg-white px-4 text-sm font-semibold text-foreground shadow-sm hover:bg-gray-50">
             Cancelar
           </button>
-          <button type="button" disabled={reminding} onClick={onConfirm} className="h-11 rounded-xl bg-amber-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-amber-700 disabled:bg-amber-200">
+          <button type="button" disabled={reminding} onClick={onConfirm} className="h-11 rounded-xl bg-status-warning px-4 text-sm font-semibold text-white shadow-sm hover:bg-status-warning disabled:bg-amber-200">
             {reminding ? "Enviando..." : "Confirmar Cobrança"}
           </button>
         </div>
@@ -876,13 +876,13 @@ export function PendingReminderModal({
           <ul className="space-y-2">
             {pendingRows.map(({ seller }) => (
               <li key={seller.id} className="flex items-center gap-2 text-sm text-foreground">
-                <Megaphone size={15} className="text-amber-500" /> {seller.name}
+                <Megaphone size={15} className="text-status-warning" /> {seller.name}
               </li>
             ))}
           </ul>
         </div>
-        <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
-          <p className="text-sm font-semibold text-amber-700">Mensagem padrão enviada:</p>
+        <div className="rounded-xl border border-status-warning/30 bg-status-warning-surface p-4">
+          <p className="text-sm font-semibold text-status-warning-text">Mensagem padrão enviada:</p>
           <p className="mt-2 text-sm italic leading-6 text-foreground">“{PENDING_CLOSING_MESSAGE}”</p>
         </div>
       </div>
@@ -937,18 +937,18 @@ function SummaryCard({
   onAction: () => void;
 }) {
   const tones = {
-    warning: "border-amber-200 bg-amber-50 text-amber-600",
-    danger: "border-red-200 bg-red-50 text-red-600",
-    success: "border-emerald-200 bg-emerald-50 text-emerald-600",
-    blue: "border-blue-200 bg-blue-50 text-blue-600",
+    warning: "border-status-warning/30 bg-status-warning-surface text-status-warning-text",
+    danger: "border-status-error/30 bg-status-error-surface text-status-error-text",
+    success: "border-status-success/30 bg-status-success-surface text-status-success-text",
+    blue: "border-status-info/30 bg-status-info-surface text-status-info-text",
     neutral: "border-border-subtle bg-white text-muted-foreground",
   }[tone];
-  const actionTone = tone === "warning" ? "border-amber-200 text-amber-700" : tone === "blue" ? "border-blue-200 text-blue-700" : "border-emerald-200 text-emerald-700";
+  const actionTone = tone === "warning" ? "border-status-warning/30 text-status-warning-text" : tone === "blue" ? "border-status-info/30 text-status-info-text" : "border-status-success/30 text-status-success-text";
   return (
     <article className={`flex h-[164px] flex-col rounded-2xl border p-3 shadow-sm ${tones}`}>
       <div className="flex items-center justify-between gap-2">
         <h2 className="flex items-center gap-2 text-xs font-semibold text-muted-foreground"><Icon size={16} /> {title}</h2>
-        {status && status !== "—" && <span className={`rounded-full px-3 py-1 text-xs font-semibold ${status === "Excelente" || status === "Bom" ? "bg-emerald-100 text-emerald-700" : status === "Regular" ? "bg-amber-100 text-amber-700" : "bg-red-100 text-red-700"}`}>{status}</span>}
+        {status && status !== "—" && <span className={`rounded-full px-3 py-1 text-xs font-semibold ${status === "Excelente" || status === "Bom" ? "bg-status-success-surface text-status-success-text" : status === "Regular" ? "bg-status-warning-surface text-status-warning-text" : "bg-status-error-surface text-status-error-text"}`}>{status}</span>}
       </div>
       <strong className="mt-2 text-3xl text-foreground">{value}</strong>
       <p className="mt-1 text-xs text-muted-foreground">{detail}</p>
@@ -966,7 +966,7 @@ function DisciplineCard({ value }: { value: number | null }) {
   const normalized = value === null ? 0 : Math.max(0, Math.min(100, Math.round(value)));
   const label = value === null ? "Sem dados" : classifyDiscipline(value);
   const color = normalized >= 90 ? "#10b981" : normalized >= 70 ? "#3b82f6" : normalized >= 40 ? "#f97316" : "#ef4444";
-  const background = normalized >= 90 ? "bg-emerald-50 border-emerald-100" : normalized >= 70 ? "bg-blue-50 border-blue-100" : normalized >= 40 ? "bg-orange-50 border-orange-100" : "bg-red-50 border-red-100";
+  const background = normalized >= 90 ? "bg-status-success-surface border-status-success/20" : normalized >= 70 ? "bg-status-info-surface border-status-info/20" : normalized >= 40 ? "bg-status-warning-surface border-status-warning/20" : "bg-status-error-surface border-status-error/20";
   return (
     <article className={`flex h-[164px] flex-col rounded-2xl border p-3 shadow-sm ${background}`}>
       <div className="flex items-center justify-between gap-2">
@@ -1020,12 +1020,12 @@ function ClosingRow({ row, onOpenAgenda, onOpenDetails, onRemind, onRegularize, 
   const discipline = checkin?.pontuacao_disciplina_final;
   return (
     <tr className="hover:bg-gray-50/50">
-      <td className="px-4 py-3"><div className="flex items-center gap-2"><span className="grid h-8 w-8 place-items-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700">{initials(row.seller.name)}</span><span className="font-semibold text-foreground">{row.seller.name}</span></div></td>
+      <td className="px-4 py-3"><div className="flex items-center gap-2"><span className="grid h-8 w-8 place-items-center rounded-full bg-status-success-surface text-xs font-bold text-status-success-text">{initials(row.seller.name)}</span><span className="font-semibold text-foreground">{row.seller.name}</span></div></td>
       <td className="px-4 py-3"><StatusBadge status={status} /></td>
       <td className="px-4 py-3 text-muted-foreground">{checkin?.submitted_at ? format(parseISO(checkin.submitted_at), "HH:mm") : "—"}</td>
       <MetricCell value={leads} />
       <MetricCell value="—" muted />
-      <td className="px-4 py-3"><button type="button" onClick={onOpenAgenda} className={`font-semibold underline decoration-dotted underline-offset-4 ${appointments === null ? "text-muted-foreground" : appointments === 0 ? "text-red-600" : appointments === 1 ? "text-orange-600" : "text-emerald-600"}`}>{appointments ?? "—"}</button></td>
+      <td className="px-4 py-3"><button type="button" onClick={onOpenAgenda} className={`font-semibold underline decoration-dotted underline-offset-4 ${appointments === null ? "text-muted-foreground" : appointments === 0 ? "text-status-error-text" : appointments === 1 ? "text-status-warning-text" : "text-status-success-text"}`}>{appointments ?? "—"}</button></td>
       <MetricCell value={visits} />
       <MetricCell value={sales} />
       <td className="px-4 py-3"><MiniDiscipline value={typeof discipline === "number" ? discipline : null} /></td>
@@ -1035,12 +1035,12 @@ function ClosingRow({ row, onOpenAgenda, onOpenDetails, onRemind, onRegularize, 
 }
 
 function ActionButton({ icon: Icon, label, onClick, tone }: { icon: typeof Eye; label: string; onClick: () => void; tone: "gray" | "orange" | "blue" | "green" | "red" | "purple" }) {
-  const toneClass = { gray: "text-muted-foreground hover:bg-gray-50", orange: "text-orange-700 hover:bg-orange-50", blue: "text-blue-700 hover:bg-blue-50", green: "text-emerald-700 hover:bg-emerald-50", red: "text-red-700 hover:bg-red-50", purple: "text-purple-700 hover:bg-purple-50" }[tone];
+  const toneClass = { gray: "text-muted-foreground hover:bg-gray-50", orange: "text-status-warning-text hover:bg-status-warning-surface", blue: "text-status-info-text hover:bg-status-info-surface", green: "text-status-success-text hover:bg-status-success-surface", red: "text-status-error-text hover:bg-status-error-surface", purple: "text-purple-700 hover:bg-purple-50" }[tone];
   return <button type="button" onClick={onClick} className={`inline-flex h-8 items-center gap-1 rounded-lg px-2 text-xs font-medium ${toneClass}`}><Icon size={13} /> {label}</button>;
 }
 
 function StatusBadge({ status }: { status: ClosingStatus }) {
-  const classes: Record<ClosingStatus, string> = { Finalizado: "bg-emerald-100 text-emerald-700", Pendente: "bg-amber-100 text-amber-700", "Fora do horário": "bg-red-100 text-red-700", "Aguardando aprovação": "bg-blue-100 text-blue-700", "Regularizado aprovado": "bg-teal-100 text-teal-700", "Regularização recusada": "bg-red-100 text-red-700" };
+  const classes: Record<ClosingStatus, string> = { Finalizado: "bg-status-success-surface text-status-success-text", Pendente: "bg-status-warning-surface text-status-warning-text", "Fora do horário": "bg-status-error-surface text-status-error-text", "Aguardando aprovação": "bg-status-info-surface text-status-info-text", "Regularizado aprovado": "bg-teal-100 text-teal-700", "Regularização recusada": "bg-status-error-surface text-status-error-text" };
   return <span className={`inline-flex rounded-lg px-2 py-1 text-xs font-medium ${classes[status]}`}>{status}</span>;
 }
 
@@ -1056,16 +1056,16 @@ function MetricCell({ value, muted = false }: { value: number | string | null; m
 
 function DisciplineTrendCard({ trend, range, onRange }: { trend: Array<{ date: string; label: string; value: number | null }>; range: 7 | 15 | 30; onRange: (range: 7 | 15 | 30) => void }) {
   const hasData = trend.some((point) => point.value !== null);
-  return <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm"><div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"><div><h2 className="flex items-center gap-2 text-base font-semibold text-foreground"><TrendingUp size={18} className="text-emerald-600" /> Evolução da Disciplina do Fechamento <HelpTooltip text="Gráfico de evolução percentual da equipe na realização pontual dos fechamentos diários ao longo do período selecionado (7, 15 ou 30 dias)." /></h2><p className="mt-1 text-sm text-muted-foreground">Acompanhe se a equipe está mantendo consistência na prestação de contas diária.</p></div><div className="flex rounded-xl bg-gray-50 p-1">{([7, 15, 30] as const).map((option) => <button key={option} type="button" onClick={() => onRange(option)} className={`rounded-lg px-3 py-2 text-xs font-medium ${range === option ? "bg-emerald-600 text-white shadow-sm" : "text-muted-foreground hover:bg-white"}`}>{option} dias</button>)}</div></div><div className="mt-4 h-[236px]">{hasData ? <ResponsiveContainer width="100%" height="100%"><LineChart data={trend} margin={{ top: 18, right: 12, bottom: 0, left: 0 }}><CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#e5e7eb" /><XAxis dataKey="label" axisLine={{ stroke: "#e5e7eb" }} tickLine={false} tick={{ fontSize: 11, fill: "#9ca3af" }} /><YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} axisLine={false} tickLine={false} tickFormatter={(value) => `${value}%`} tick={{ fontSize: 11, fill: "#9ca3af" }} width={42} /><Line type="monotone" dataKey="value" connectNulls stroke="#10b981" strokeWidth={2.5} dot={{ r: 3.5, fill: "#10b981", strokeWidth: 0 }} /></LineChart></ResponsiveContainer> : <div className="grid h-full place-items-center text-center text-sm text-muted-foreground">Ainda não há histórico de disciplina no período selecionado.</div>}</div><p className="mt-3 text-center text-xs italic text-muted-foreground">O dia atual pode aparecer como parcial enquanto houver fechamentos pendentes ou regularizações em aberto.</p></section>;
+  return <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm"><div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"><div><h2 className="flex items-center gap-2 text-base font-semibold text-foreground"><TrendingUp size={18} className="text-status-success-text" /> Evolução da Disciplina do Fechamento <HelpTooltip text="Gráfico de evolução percentual da equipe na realização pontual dos fechamentos diários ao longo do período selecionado (7, 15 ou 30 dias)." /></h2><p className="mt-1 text-sm text-muted-foreground">Acompanhe se a equipe está mantendo consistência na prestação de contas diária.</p></div><div className="flex rounded-xl bg-gray-50 p-1">{([7, 15, 30] as const).map((option) => <button key={option} type="button" onClick={() => onRange(option)} className={`rounded-lg px-3 py-2 text-xs font-medium ${range === option ? "bg-brand-primary text-white shadow-sm" : "text-muted-foreground hover:bg-white"}`}>{option} dias</button>)}</div></div><div className="mt-4 h-[236px]">{hasData ? <ResponsiveContainer width="100%" height="100%"><LineChart data={trend} margin={{ top: 18, right: 12, bottom: 0, left: 0 }}><CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#e5e7eb" /><XAxis dataKey="label" axisLine={{ stroke: "#e5e7eb" }} tickLine={false} tick={{ fontSize: 11, fill: "#9ca3af" }} /><YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} axisLine={false} tickLine={false} tickFormatter={(value) => `${value}%`} tick={{ fontSize: 11, fill: "#9ca3af" }} width={42} /><Line type="monotone" dataKey="value" connectNulls stroke="#10b981" strokeWidth={2.5} dot={{ r: 3.5, fill: "#10b981", strokeWidth: 0 }} /></LineChart></ResponsiveContainer> : <div className="grid h-full place-items-center text-center text-sm text-muted-foreground">Ainda não há histórico de disciplina no período selecionado.</div>}</div><p className="mt-3 text-center text-xs italic text-muted-foreground">O dia atual pode aparecer como parcial enquanto houver fechamentos pendentes ou regularizações em aberto.</p></section>;
 }
 
 function ComparisonRow({ label, value, tone }: { label: string; value: number | null; tone: "team" | "network" | "top" }) {
-  const color = tone === "team" ? "bg-emerald-500" : tone === "top" ? "bg-emerald-700" : "bg-slate-400";
+  const color = tone === "team" ? "bg-status-success" : tone === "top" ? "bg-status-success" : "bg-slate-400";
   return <div className="grid grid-cols-[150px_1fr] items-center gap-3"><span className="flex items-center gap-2 text-sm font-medium text-muted-foreground">{tone === "top" && <Trophy size={14} />}{label}</span><div className="relative h-6 overflow-hidden rounded-full bg-gray-100"><div className={`flex h-full items-center justify-end rounded-full pr-2 text-xs font-semibold text-white ${color}`} style={{ width: `${value || 0}%` }}>{value === null ? "" : `${value}%`}</div>{value === null && <span className="absolute inset-y-0 right-2 grid place-items-center text-xs font-medium text-muted-foreground">—</span>}</div></div>;
 }
 
 function SummaryGroup({ label, icon: Icon, tone, items }: { label: string; icon: typeof Store; tone: "blue" | "emerald" | "purple" | "amber" | "slate"; items: Array<[string, number | string]> }) {
-  const iconTone = { blue: "bg-blue-50 text-blue-600", emerald: "bg-emerald-50 text-emerald-600", purple: "bg-purple-50 text-purple-600", amber: "bg-amber-50 text-amber-600", slate: "bg-slate-50 text-muted-foreground" }[tone];
+  const iconTone = { blue: "bg-status-info-surface text-status-info-text", emerald: "bg-status-success-surface text-status-success-text", purple: "bg-purple-50 text-purple-600", amber: "bg-status-warning-surface text-status-warning-text", slate: "bg-slate-50 text-muted-foreground" }[tone];
   return <div className="min-h-[88px] rounded-xl bg-gray-50 p-3"><h3 className="flex items-center gap-2 text-xs font-semibold text-muted-foreground"><span className={`grid h-7 w-7 shrink-0 place-items-center rounded-lg ${iconTone}`}><Icon size={15} /></span>{label}</h3>{items.map(([item, value]) => <div key={item} className="mt-2 flex justify-between gap-2 text-xs"><span className="text-muted-foreground">{item}</span><strong className="text-foreground">{value}</strong></div>)}</div>;
 }
 

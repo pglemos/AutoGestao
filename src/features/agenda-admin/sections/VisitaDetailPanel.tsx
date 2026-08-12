@@ -81,7 +81,7 @@ export function VisitaDetailPanel({
                   to={`/consultoria/clientes/${visit.client_slug}/visitas/${visit.visit_number}`}
                   className="block"
                 >
-                  <div className="p-mx-sm rounded-xl border border-border hover:border-brand-primary/30 hover:bg-emerald-600/5 transition-all group overflow-hidden">
+                  <div className="p-mx-sm rounded-xl border border-border hover:border-brand-primary/30 hover:bg-brand-primary/5 transition-all group overflow-hidden">
                     <div className="flex items-center gap-mx-xs mb-1">
                       <div className={cn('w-2 h-2 rounded-mx-full', getVisitDotColor(visit.status))} />
                       <Typography variant="tiny" className="">
@@ -90,7 +90,7 @@ export function VisitaDetailPanel({
                       <Typography variant="tiny" tone="muted">• {visit.duration_hours}h</Typography>
                     </div>
                     <div className="flex items-center gap-mx-xs mb-1 min-w-0">
-                      <Building2 size={12} className="text-emerald-600 shrink-0" />
+                      <Building2 size={12} className="text-status-success-text shrink-0" />
                       <Typography variant="tiny" className="font-bold truncate">{visit.client_name}</Typography>
                     </div>
                     {visit.consultant && (
@@ -120,7 +120,7 @@ export function VisitaDetailPanel({
                     )}
                     <div className="flex items-center justify-between mt-1">
                       <Typography variant="tiny" tone="muted">{getPmrVisitDisplayLabel(visit.visit_number)}</Typography>
-                      <ChevronRight size={14} className="text-muted-foreground group-hover:text-emerald-600 transition-colors" />
+                      <ChevronRight size={14} className="text-muted-foreground group-hover:text-status-success-text transition-colors" />
                     </div>
                   </div>
                 </Link>
@@ -133,10 +133,10 @@ export function VisitaDetailPanel({
                   key={event.id}
                   type="button"
                   onClick={() => onEditEvent(event)}
-                  className="w-full text-left p-mx-sm rounded-xl border border-border hover:border-brand-primary/30 hover:bg-emerald-600/5 transition-all group overflow-hidden"
+                  className="w-full text-left p-mx-sm rounded-xl border border-border hover:border-brand-primary/30 hover:bg-brand-primary/5 transition-all group overflow-hidden"
                 >
                   <div className="flex items-center gap-mx-xs mb-1">
-                    <CalendarDays size={12} className="text-emerald-600 shrink-0" />
+                    <CalendarDays size={12} className="text-status-success-text shrink-0" />
                     <Typography variant="tiny" className="">{format(startsAt, 'HH:mm')}</Typography>
                     <Badge variant="outline" className="text-mx-nano">{getEventTypeLabel(event.event_type)}</Badge>
                   </div>

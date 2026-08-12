@@ -54,7 +54,7 @@ function NumStepper({ value, onChange, disabled }: { value: number; onChange: (v
   }
 
   return (
-    <div className={`flex h-10 items-center rounded-xl border bg-white shadow-sm transition-all ${disabled ? 'border-border-subtle opacity-60' : 'border-border focus-within:border-blue-400'}`}>
+    <div className={`flex h-10 items-center rounded-xl border bg-white shadow-sm transition-all ${disabled ? 'border-border-subtle opacity-60' : 'border-border focus-within:border-status-info/50'}`}>
       <button
         type="button"
         disabled={disabled}
@@ -190,7 +190,7 @@ export function RegularizarFechamentoDrawer({
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
                 <h2 className="text-[16px] font-bold text-[#0F172A]">Regularizar Fechamento</h2>
-                <span className="rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-caption font-bold text-red-600">Fechamento atrasado</span>
+                <span className="rounded-full border border-status-error/30 bg-status-error-surface px-2 py-0.5 text-caption font-bold text-status-error-text">Fechamento atrasado</span>
               </div>
               <p className="mt-0.5 text-body-sm text-muted-foreground">
                 {dataFormatada} — <span className="capitalize">{weekday}</span>
@@ -204,9 +204,9 @@ export function RegularizarFechamentoDrawer({
           {/* Body */}
  <div className="min-w-0 flex-1 space-y-5 overflow-y-auto overflow-x-hidden p-4 sm:p-6">
             {!finalized && (
-              <div className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4">
-                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
-                <p className="text-body-sm font-bold text-amber-800">
+              <div className="flex items-start gap-3 rounded-xl border border-status-warning/30 bg-status-warning-surface p-4">
+                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-status-warning" />
+                <p className="text-body-sm font-bold text-status-warning-text">
                   Preencha os dados e solicite a aprovação do gerente. Nenhum lançamento será aplicado antes da aprovação.
                 </p>
               </div>
@@ -219,10 +219,10 @@ export function RegularizarFechamentoDrawer({
                 <p className="mt-0.5 text-[12px] text-muted-foreground">Informe os atendimentos realizados neste dia</p>
               </div>
               <div className="space-y-4 p-5">
-                <div className="space-y-3 rounded-xl border border-orange-200 bg-orange-50 p-4">
+                <div className="space-y-3 rounded-xl border border-status-warning/30 bg-status-warning-surface p-4">
                   <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-orange-500"><Store className="h-4 w-4 text-white" /></div>
-                    <span className="text-body-sm font-bold uppercase tracking-wide text-orange-700">Showroom</span>
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-status-warning"><Store className="h-4 w-4 text-white" /></div>
+                    <span className="text-body-sm font-bold uppercase tracking-wide text-status-warning-text">Showroom</span>
                   </div>
                   <FieldRow label="Atendimentos" value={formValues.visitas_porta} onChange={(v) => onFieldChange('visitas_porta', v)} disabled={false} />
                 </div>
@@ -237,10 +237,10 @@ export function RegularizarFechamentoDrawer({
                   <FieldRow label="Agendamentos D+1" value={formValues.agd_cart} onChange={(v) => onFieldChange('agd_cart', v)} disabled={false} />
                 </div>
 
-                <div className="space-y-3 rounded-xl border border-blue-200 bg-blue-50 p-4">
+                <div className="space-y-3 rounded-xl border border-status-info/30 bg-status-info-surface p-4">
                   <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600"><Globe className="h-4 w-4 text-white" /></div>
-                    <span className="text-body-sm font-bold uppercase tracking-wide text-blue-700">Internet</span>
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-status-info"><Globe className="h-4 w-4 text-white" /></div>
+                    <span className="text-body-sm font-bold uppercase tracking-wide text-status-info-text">Internet</span>
                   </div>
                   <FieldRow label="Leads recebidos" value={formValues.leads_net} onChange={(v) => onFieldChange('leads_net', v)} disabled={false} />
                   <FieldRow label="Atendimentos" value={formValues.visitas_net} onChange={(v) => onFieldChange('visitas_net', v)} disabled={false} />
@@ -261,9 +261,9 @@ export function RegularizarFechamentoDrawer({
               </div>
               <div className="grid grid-cols-2 divide-y divide-border-subtle sm:grid-cols-5 sm:divide-x sm:divide-y-0">
                 {[
-                  { label: 'Leads', value: totalLeads, color: 'text-blue-600' },
+                  { label: 'Leads', value: totalLeads, color: 'text-status-info-text' },
                   { label: 'Atendimentos', value: totalAtendimentos, color: 'text-purple-600' },
-                  { label: 'Agendamentos D+1', value: totalAgendamentosD1, color: 'text-amber-600' },
+                  { label: 'Agendamentos D+1', value: totalAgendamentosD1, color: 'text-status-warning-text' },
                   { label: 'Vendas', value: totalVendas, color: 'text-green-600' },
                   { label: 'Faturamento', value: totalFaturamento > 0 ? BRL(totalFaturamento) : '—', color: 'text-green-700' },
                 ].map((s) => (
@@ -301,8 +301,8 @@ export function RegularizarFechamentoDrawer({
                     <span className="font-bold text-[#0F172A]">{disciplina.pontuacaoDisciplinaBase}%</span>
                   </div>
                   <div className="flex justify-between text-body-sm">
-                    <span className="font-medium text-red-500">Penalização por atraso</span>
-                    <span className="font-bold text-red-500">-10%</span>
+                    <span className="font-medium text-status-error">Penalização por atraso</span>
+                    <span className="font-bold text-status-error">-10%</span>
                   </div>
                   <div className="flex justify-between border-t border-border-subtle pt-2 text-body-sm">
                     <span className="font-bold text-[#0F172A]">Estimativa após aprovação</span>
@@ -333,7 +333,7 @@ export function RegularizarFechamentoDrawer({
                 vnd_cart: effectiveSales.carteira,
                 vnd_net: effectiveSales.internet,
               })}
- className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#005BFF] px-5 py-2.5 text-center text-body-sm font-bold leading-snug text-white shadow-sm transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 sm:px-6"
+ className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#005BFF] px-5 py-2.5 text-center text-body-sm font-bold leading-snug text-white shadow-sm transition-colors hover:bg-status-info disabled:cursor-not-allowed disabled:opacity-50 sm:px-6"
             >
               <Send className="h-4 w-4" /> {saving ? 'Enviando...' : 'Solicitar aprovação do gerente'}
             </button>

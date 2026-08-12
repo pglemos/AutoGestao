@@ -60,7 +60,7 @@ describe('MxModuleVisualPrimitives', () => {
     expect(html).toContain('shadow-sm')
     expect(html).toContain('text-foreground')
     expect(html).toContain('text-muted-foreground')
-    expect(html).toContain('bg-emerald-600')
+    expect(html).toContain('bg-brand-primary')
     expect(html).toContain('border-border')
     expect(html).toContain('hover:bg-gray-50')
     expect(html).toContain('<h1')

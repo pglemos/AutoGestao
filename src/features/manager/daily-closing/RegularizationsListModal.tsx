@@ -98,7 +98,7 @@ export function RegularizationsListModal({
               <article key={request.id} className="rounded-xl bg-gray-50 p-4">
                 <div className="mb-2 flex items-center justify-between gap-3">
                   <div className="flex min-w-0 items-center gap-2">
-                    <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-blue-100 text-xs font-bold text-blue-700">
+                    <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-status-info-surface text-xs font-bold text-status-info-text">
                       {initials(name)}
                     </div>
                     <div className="min-w-0">
@@ -109,7 +109,7 @@ export function RegularizationsListModal({
                     </div>
                   </div>
                   <div
-                    className="grid h-8 w-8 place-items-center rounded-full p-[4px] text-caption font-bold text-blue-700"
+                    className="grid h-8 w-8 place-items-center rounded-full p-[4px] text-caption font-bold text-status-info-text"
                     style={{ background: `conic-gradient(rgb(59 130 246) ${metrics.discipline * 3.6}deg, rgb(219 234 254) 0deg)` }}
                     aria-label={`Disciplina ${metrics.discipline}%`}
                   >
@@ -131,7 +131,7 @@ export function RegularizationsListModal({
                       setDecision({ request, action: "approve" });
                       setConfirmed(false);
                     }}
-                    className="inline-flex h-8 flex-1 items-center justify-center gap-1 rounded-xl bg-emerald-600 px-3 text-sm font-medium text-white hover:bg-emerald-700"
+                    className="inline-flex h-8 flex-1 items-center justify-center gap-1 rounded-xl bg-brand-primary px-3 text-sm font-medium text-white hover:bg-brand-primary-hover"
                     aria-label={`Aprovar ${name}`}
                   >
                     <Check size={14} /> Aprovar
@@ -142,7 +142,7 @@ export function RegularizationsListModal({
                       setDecision({ request, action: "reject" });
                       setConfirmed(false);
                     }}
-                    className="inline-flex h-8 flex-1 items-center justify-center gap-1 rounded-xl border border-red-200 bg-white px-3 text-sm font-medium text-red-700 hover:bg-red-50"
+                    className="inline-flex h-8 flex-1 items-center justify-center gap-1 rounded-xl border border-status-error/30 bg-white px-3 text-sm font-medium text-status-error-text hover:bg-status-error-surface"
                     aria-label={`Recusar ${name}`}
                   >
                     <X size={14} /> Recusar
@@ -218,7 +218,7 @@ function RegularizationDecisionModal({
             type="button"
             onClick={onSwitchAction}
             disabled={saving}
-            className="h-9 rounded-[12px] border border-red-200 bg-white px-4 text-sm font-medium text-red-700 hover:bg-red-50 disabled:opacity-40"
+            className="h-9 rounded-[12px] border border-status-error/30 bg-white px-4 text-sm font-medium text-status-error-text hover:bg-status-error-surface disabled:opacity-40"
           >
             {approve ? "Recusar" : "Aprovar"}
           </button>
@@ -226,7 +226,7 @@ function RegularizationDecisionModal({
             type="button"
             onClick={onSubmit}
             disabled={!confirmed || saving}
-            className={`h-9 rounded-[12px] px-4 text-sm font-medium text-white disabled:opacity-40 ${approve ? "bg-emerald-600 hover:bg-emerald-700" : "bg-red-600 hover:bg-red-700"}`}
+            className={`h-9 rounded-[12px] px-4 text-sm font-medium text-white disabled:opacity-40 ${approve ? "bg-brand-primary hover:bg-brand-primary-hover" : "bg-status-error hover:bg-status-error"}`}
           >
             {saving ? "Processando..." : actionLabel}
           </button>
@@ -243,7 +243,7 @@ function RegularizationDecisionModal({
             id="regularization-comment"
             rows={2}
             placeholder={`Adicione um comentário sobre a ${approve ? "aprovação" : "recusa"}...`}
-            className="w-full resize-none rounded-[12px] border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="w-full resize-none rounded-[12px] border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-status-success"
           />
         </div>
         <label className="flex cursor-pointer items-start gap-2 text-sm text-muted-foreground">
@@ -251,7 +251,7 @@ function RegularizationDecisionModal({
             type="checkbox"
             checked={confirmed}
             onChange={(event) => onConfirmedChange(event.target.checked)}
-            className="mt-0.5 h-4 w-4 shrink-0 rounded border-border-strong text-emerald-600 focus:ring-emerald-500"
+            className="mt-0.5 h-4 w-4 shrink-0 rounded border-border-strong text-status-success-text focus:ring-status-success"
           />
           {confirmationLabel}
         </label>

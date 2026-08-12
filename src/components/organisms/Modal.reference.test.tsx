@@ -39,10 +39,10 @@ describe("Modal referenceStyle", () => {
     const title = screen.getByRole("heading", { name: "Agenda D+1" });
     expect(title.className).toContain("text-lg");
     expect(title.className).toContain("font-semibold");
-    expect(title.className).toContain("text-gray-800");
+    expect(title.className).toContain("text-foreground");
 
     const description = screen.getByText("Clientes agendados para amanhã");
     expect(description.className).toContain("text-sm");
-    expect(description.className).toContain("text-gray-500");
+    expect(description.className).toContain("text-muted-foreground");
   });
 });

@@ -34,7 +34,7 @@ export default function StrategicIndicatorComparisonTable({ series, height = 360
   const consVar = consCurrent !== null && consPrevious ? calculateVariation(consCurrent, consPrevious) : null;
 
   const rows = [
-    { label: "Meta", values: targetValues, cons: consTarget, fmt: (v) => formatCellValue(v, displayFormat, decimalPlaces), rowClass: "text-blue-700" },
+    { label: "Meta", values: targetValues, cons: consTarget, fmt: (v) => formatCellValue(v, displayFormat, decimalPlaces), rowClass: "text-status-info-text" },
     { label: "Resultado Atual", values: currentValues, cons: consCurrent, fmt: (v) => formatCellValue(v, displayFormat, decimalPlaces), rowClass: areaStyle.text || "text-foreground", rowFont: "font-semibold" },
     { label: "% da Meta", values: pctValues, cons: consPct, fmt: (v) => (v !== null ? formatCellValue(v, "percentage", 1) : "—"), status: true },
     { label: "Ano Anterior", values: previousYearValues, cons: consPrevious, fmt: (v) => formatCellValue(v, displayFormat, decimalPlaces), rowClass: "text-muted-foreground" },
@@ -58,7 +58,7 @@ export default function StrategicIndicatorComparisonTable({ series, height = 360
                 <th
                   key={m}
                   data-month-idx={i}
-                  className={`px-2 py-2 text-center text-xs font-semibold ${i === idx ? "border-b-2 border-blue-400 bg-blue-50 text-blue-700" : "text-muted-foreground"}`}
+                  className={`px-2 py-2 text-center text-xs font-semibold ${i === idx ? "border-b-2 border-status-info/50 bg-status-info-surface text-status-info-text" : "text-muted-foreground"}`}
                 >
                   {m}
                 </th>
@@ -70,7 +70,7 @@ export default function StrategicIndicatorComparisonTable({ series, height = 360
             {rows.map((row, ri) => (
               <tr key={ri} className="border-b border-border/40 bg-card hover:bg-slate-50/50">
                 <td className="sticky left-0 z-10 min-w-[168px] border-r border-border bg-card px-3 py-1.5 text-left text-xs font-medium text-foreground">
-                  {row.label === "Meta" && <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-blue-500 align-middle" />}
+                  {row.label === "Meta" && <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-status-info align-middle" />}
                   {row.label === "Resultado Atual" && <span className={`mr-1.5 inline-block h-2 w-2 rounded-full ${areaStyle.dot} align-middle`} />}
                   {row.label}
                 </td>
@@ -86,7 +86,7 @@ export default function StrategicIndicatorComparisonTable({ series, height = 360
                     <td
                       key={ci}
                       data-month-idx={ci}
-                      className={`px-2 py-1.5 text-center text-xs ${ci === idx ? "bg-blue-50/60 font-medium text-blue-700" : ""} ${row.rowClass || "text-muted-foreground"} ${row.rowFont || ""}`}
+                      className={`px-2 py-1.5 text-center text-xs ${ci === idx ? "bg-status-info-surface/60 font-medium text-status-info-text" : ""} ${row.rowClass || "text-muted-foreground"} ${row.rowFont || ""}`}
                     >
                       {statusStyle ? (
                         <span className={`inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium ${statusStyle.bg} ${statusStyle.text}`}>{row.fmt(v)}</span>

@@ -39,7 +39,7 @@ export function FunnelSection({ funilData, funnelBenchmarks }: FunnelSectionProp
     <section className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm" aria-labelledby="conversion-funnel-title">
       <header className="flex flex-col gap-3 border-b border-border-subtle px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-start gap-3">
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-blue-50 text-blue-600">
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-status-info-surface text-status-info-text">
             <TrendingUp size={19} />
           </span>
           <div>
@@ -47,7 +47,7 @@ export function FunnelSection({ funilData, funnelBenchmarks }: FunnelSectionProp
             <p className="mt-1 text-sm text-muted-foreground">Compare cada passagem comercial com o benchmark definido para a unidade.</p>
           </div>
         </div>
-        <span className={`inline-flex w-fit rounded-lg px-2.5 py-1 text-xs font-semibold ${healthySteps === steps.length ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
+        <span className={`inline-flex w-fit rounded-lg px-2.5 py-1 text-xs font-semibold ${healthySteps === steps.length ? 'bg-status-success-surface text-status-success-text' : 'bg-status-warning-surface text-status-warning-text'}`}>
           {healthySteps}/{steps.length} etapas no ritmo
         </span>
       </header>
@@ -60,7 +60,7 @@ export function FunnelSection({ funilData, funnelBenchmarks }: FunnelSectionProp
             <article key={`${step.from}-${step.to}`} className="rounded-2xl border border-border-subtle bg-gray-50 p-4">
               <div className="flex items-center justify-between gap-3">
                 <span className="grid h-8 w-8 place-items-center rounded-lg bg-white text-xs font-bold text-muted-foreground shadow-sm">{index + 1}</span>
-                <StatusIcon size={18} className={healthy ? 'text-emerald-600' : 'text-amber-600'} />
+                <StatusIcon size={18} className={healthy ? 'text-status-success-text' : 'text-status-warning-text'} />
               </div>
 
               <div className="mt-4 flex items-center gap-2 text-sm font-semibold text-foreground">
@@ -79,7 +79,7 @@ export function FunnelSection({ funilData, funnelBenchmarks }: FunnelSectionProp
                   initial={reduceMotion ? false : { width: 0 }}
                   animate={{ width: `${Math.min(Math.max(step.value, 0), 100)}%` }}
                   transition={{ duration: reduceMotion ? 0 : duration.slow, ease: easing.standard }}
-                  className={`h-full rounded-full ${healthy ? 'bg-emerald-500' : 'bg-amber-500'}`}
+                  className={`h-full rounded-full ${healthy ? 'bg-status-success' : 'bg-status-warning'}`}
                 />
               </div>
 

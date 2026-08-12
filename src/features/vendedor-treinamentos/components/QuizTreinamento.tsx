@@ -67,7 +67,7 @@ export function QuizTreinamento({ trainingId, onCarregado, onAprovado }: {
     return (
         <section className="rounded-2xl border border-border-subtle bg-gray-50/40 p-4" aria-label="Prova oficial da aula">
             <Typography variant="p" className="flex items-center gap-2 text-sm font-bold tracking-wide">
-                <ClipboardCheck size={16} className="text-emerald-600" />
+                <ClipboardCheck size={16} className="text-status-success-text" />
                 Prova Oficial — nota mínima 70%
             </Typography>
             <Typography variant="caption" tone="muted" className="mb-3 mt-1 block">
@@ -89,7 +89,7 @@ export function QuizTreinamento({ trainingId, onCarregado, onAprovado }: {
                                         checked={respostas[questao.id] === opcaoIndice}
                                         onChange={() => setRespostas(atual => ({ ...atual, [questao.id]: opcaoIndice }))}
                                         disabled={Boolean(resultado?.aprovado)}
-                                        className="mt-0.5 h-4 w-4 border-border text-emerald-600 focus:ring-brand-primary"
+                                        className="mt-0.5 h-4 w-4 border-border text-status-success-text focus:ring-brand-primary"
                                     />
                                     <span>{opcao}</span>
                                 </label>
@@ -117,7 +117,7 @@ export function QuizTreinamento({ trainingId, onCarregado, onAprovado }: {
                         type="button"
                         disabled={enviando || !todasRespondidas}
                         onClick={() => void enviar()}
-                        className="rounded-2xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
+                        className="rounded-2xl bg-brand-primary px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
                     >
                         {enviando ? 'Corrigindo...' : resultado ? 'Tentar novamente' : 'Enviar prova'}
                     </button>

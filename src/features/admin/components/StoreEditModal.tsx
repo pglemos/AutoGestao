@@ -135,7 +135,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
             </Button>
           </div>
           <div className="relative">
-            <Link2 size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-emerald-600" aria-hidden="true" />
+            <Link2 size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-status-success-text" aria-hidden="true" />
             <Input
               readOnly
               value={registrationLink}
@@ -302,7 +302,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
               <div key={index} className="rounded-2xl border border-border bg-white p-mx-md">
                 <div className="flex items-center justify-between mb-mx-sm">
                   <div className="flex items-center gap-mx-xs">
-                    <UserRound size={16} className="text-emerald-600" />
+                    <UserRound size={16} className="text-status-success-text" />
                     <Typography variant="tiny" className="">Sócio {index + 1}</Typography>
                   </div>
                   <Button
@@ -310,7 +310,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
                     variant="ghost"
                     size="icon"
                     onClick={() => setForm((prev) => ({ ...prev, partners: (prev.partners || []).filter((_, itemIndex) => itemIndex !== index) }))}
-                    className="h-mx-10 w-mx-10 rounded-2xl text-red-600"
+                    className="h-mx-10 w-mx-10 rounded-2xl text-status-error-text"
                     aria-label={`Remover sócio ${index + 1}`}
                   >
                     <Trash2 size={15} />
@@ -378,7 +378,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
         </label>
 
         {!form.active && (
-          <div className="flex items-start gap-mx-sm rounded-2xl border border-amber-500/20 bg-amber-50 p-mx-md text-amber-700">
+          <div className="flex items-start gap-mx-sm rounded-2xl border border-status-warning/20 bg-status-warning-surface p-mx-md text-status-warning-text">
             <AlertTriangle size={18} className="shrink-0 mt-0.5" />
             <Typography variant="tiny" className="font-bold">
               A loja arquivada sai da lista de unidades ativas. Os registros historicos continuam preservados.

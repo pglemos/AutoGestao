@@ -132,19 +132,19 @@ export function calculateSellerFinancialStatus(
 ): ManagerFinancialStatus {
   if (missingCars !== null) {
     if (missingCars > 0 && salesForecastToday !== null && salesForecastToday >= missingCars) {
-      return { status: 'pode_subir', label: 'Pode subir de faixa hoje', className: 'bg-emerald-600 text-white' }
+      return { status: 'pode_subir', label: 'Pode subir de faixa hoje', className: 'bg-brand-primary text-white' }
     }
     if (missingCars === 1) {
-      return { status: 'proximo', label: 'Próximo da faixa', className: 'bg-emerald-100 text-emerald-700' }
+      return { status: 'proximo', label: 'Próximo da faixa', className: 'bg-status-success-surface text-status-success-text' }
     }
     if (missingCars === 0) {
-      return { status: 'atingida', label: 'Faixa atingida', className: 'bg-emerald-500 text-white' }
+      return { status: 'atingida', label: 'Faixa atingida', className: 'bg-status-success text-white' }
     }
   }
   if (appointmentsToday === 0 && resultPercentage !== null && resultPercentage < 80) {
-    return { status: 'abaixo_ritmo', label: 'Abaixo do ritmo', className: 'bg-orange-100 text-orange-700' }
+    return { status: 'abaixo_ritmo', label: 'Abaixo do ritmo', className: 'bg-status-warning-surface text-status-warning-text' }
   }
-  return { status: 'evolucao', label: 'Em evolução', className: 'bg-blue-100 text-blue-700' }
+  return { status: 'evolucao', label: 'Em evolução', className: 'bg-status-info-surface text-status-info-text' }
 }
 
 const TEAM_FOCUS_STATUS_ORDER: Record<ManagerFinancialStatus['status'], number> = {

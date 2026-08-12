@@ -32,7 +32,7 @@ export default function OwnerActionsBlock() {
             <div
               key={i}
               className={`flex items-center gap-3 rounded-lg border p-3 transition-colors ${
-                isDone ? "border-primary/20 bg-primary/5" : isDelegated ? "border-blue-200 bg-blue-50" : "border-border bg-background"
+                isDone ? "border-primary/20 bg-primary/5" : isDelegated ? "border-status-info/30 bg-status-info-surface" : "border-border bg-background"
               }`}
             >
               <div className="flex w-12 shrink-0 flex-col items-center">
@@ -42,14 +42,14 @@ export default function OwnerActionsBlock() {
               <div className="min-w-0 flex-1">
                 <p className={`text-sm text-foreground ${isDone ? "line-through opacity-60" : ""}`}>{action.title}</p>
                 {isDone && <span className="text-xs font-medium text-primary">Concluído</span>}
-                {isDelegated && !isDone && <span className="text-xs font-medium text-blue-600">Delegado</span>}
+                {isDelegated && !isDone && <span className="text-xs font-medium text-status-info-text">Delegado</span>}
               </div>
               <div className="flex shrink-0 items-center gap-1">
                 <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toggleDone(i)} aria-label="Concluir">
                   <Check className={`h-4 w-4 ${isDone ? "text-primary" : "text-muted-foreground"}`} />
                 </Button>
                 <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toggleDelegated(i)} aria-label="Delegar">
-                  <UserCog className={`h-4 w-4 ${isDelegated ? "text-blue-600" : "text-muted-foreground"}`} />
+                  <UserCog className={`h-4 w-4 ${isDelegated ? "text-status-info-text" : "text-muted-foreground"}`} />
                 </Button>
                 <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setDetail(action)} aria-label="Detalhes">
                   <ChevronRight className="h-4 w-4 text-muted-foreground" />

@@ -34,7 +34,7 @@ export default function CancelModal({ action, open, onOpenChange, onConfirm }) {
           <DialogDescription>{action.code} — {action.title}</DialogDescription>
         </DialogHeader>
         <div className="space-y-3">
-          <div className="rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-700">
+          <div className="rounded-md bg-status-warning-surface px-3 py-2 text-sm text-status-warning-text">
             A ação será removida do Kanban principal e mantida no histórico. Não será incluída nos cálculos.
           </div>
           <div>
@@ -52,7 +52,7 @@ export default function CancelModal({ action, open, onOpenChange, onConfirm }) {
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>Voltar</Button>
-          <Button onClick={handleConfirm} disabled={!isValid} className="bg-red-600 hover:bg-red-700 text-white">Cancelar ação</Button>
+          <Button onClick={handleConfirm} disabled={!isValid} className="bg-status-error hover:bg-status-error text-white">Cancelar ação</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

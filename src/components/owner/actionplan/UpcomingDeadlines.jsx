@@ -10,7 +10,7 @@ export default function UpcomingDeadlines({ actions, onOpen }) {
   return (
     <section className="rounded-xl border border-border bg-card p-4 shadow-sm">
       <div className="mb-3 flex items-center gap-2">
-        <CalendarClock className="h-4 w-4 text-blue-500" />
+        <CalendarClock className="h-4 w-4 text-status-info" />
         <h2 className="text-sm font-semibold text-foreground">Próximos prazos</h2>
       </div>
 

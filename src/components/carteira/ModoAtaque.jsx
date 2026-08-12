@@ -71,7 +71,7 @@ function OportunidadeCard({ cliente, onWhatsApp, onLigar, onFicha, onExecutar })
   return (
     <div className="bg-white rounded-3xl shadow-xl border border-border-subtle overflow-hidden">
       {/* Header do cliente */}
-      <div className="bg-gradient-to-br from-[#005BFF] to-blue-700 p-6 text-white">
+      <div className="bg-gradient-to-br from-[#005BFF] to-status-info p-6 text-white">
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-xl font-black">
             {iniciais}
@@ -91,16 +91,16 @@ function OportunidadeCard({ cliente, onWhatsApp, onLigar, onFicha, onExecutar })
             <p className="text-caption text-muted-foreground font-bold uppercase tracking-wide mb-1">Objetivo</p>
             <p className="text-sm font-bold text-foreground">{objetivo}</p>
           </div>
-          <div className="bg-blue-50 rounded-2xl p-4">
+          <div className="bg-status-info-surface rounded-2xl p-4">
             <p className="text-caption text-[#005BFF] font-bold uppercase tracking-wide mb-1">Próximo passo</p>
             <p className="text-sm font-bold text-[#031B3D]">{proximoPasso}</p>
           </div>
         </div>
 
         {/* Motivo da recomendação */}
-        <div className="flex items-start gap-2 bg-amber-50 rounded-2xl px-4 py-3">
-          <Target className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-          <p className="text-xs text-amber-700 leading-snug">{explicacao}</p>
+        <div className="flex items-start gap-2 bg-status-warning-surface rounded-2xl px-4 py-3">
+          <Target className="w-4 h-4 text-status-warning shrink-0 mt-0.5" />
+          <p className="text-xs text-status-warning-text leading-snug">{explicacao}</p>
         </div>
 
         {/* Ações secundárias */}
@@ -132,7 +132,7 @@ function OportunidadeCard({ cliente, onWhatsApp, onLigar, onFicha, onExecutar })
         {/* Executar */}
         <Button
           onClick={() => onExecutar(cliente)}
-          className="w-full h-14 rounded-2xl bg-[#005BFF] hover:bg-blue-700 text-white text-base font-black gap-2 shadow-lg shadow-blue-200"
+          className="w-full h-14 rounded-2xl bg-[#005BFF] hover:bg-status-info text-white text-base font-black gap-2 shadow-lg shadow-blue-200"
         >
           <Zap className="w-5 h-5" /> Executar próximo passo
         </Button>
@@ -155,9 +155,9 @@ function TelaConclusao({ stats, onPlanoAtaque, onCarteira, onEncerrar }) {
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full max-w-lg">
         {[
-          { label: "Executadas", value: stats.executadas, color: "text-blue-600 bg-blue-50" },
+          { label: "Executadas", value: stats.executadas, color: "text-status-info-text bg-status-info-surface" },
           { label: "Visitas geradas", value: stats.visitas, color: "text-green-600 bg-green-50" },
-          { label: "Propostas enviadas", value: stats.propostas, color: "text-amber-600 bg-amber-50" },
+          { label: "Propostas enviadas", value: stats.propostas, color: "text-status-warning-text bg-status-warning-surface" },
           { label: "Recuperações", value: stats.recuperacoes, color: "text-purple-600 bg-purple-50" },
         ].map(s => (
           <div key={s.label} className={`rounded-2xl p-4 ${s.color}`}>
@@ -169,7 +169,7 @@ function TelaConclusao({ stats, onPlanoAtaque, onCarteira, onEncerrar }) {
 
       <div className="flex flex-col gap-2 w-full max-w-sm">
         <Button onClick={onPlanoAtaque} variant="outline" className="w-full rounded-xl">Ir para Plano de Ataque</Button>
-        <Button onClick={onCarteira} className="w-full rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white">Voltar para Carteira</Button>
+        <Button onClick={onCarteira} className="w-full rounded-xl bg-[#005BFF] hover:bg-status-info text-white">Voltar para Carteira</Button>
         <button onClick={onEncerrar} className="text-xs text-muted-foreground hover:underline mt-1">Encerrar sessão</button>
       </div>
     </div>
@@ -182,16 +182,16 @@ function ModalPausar({ open, onContinuar, onEncerrar }) {
     <Dialog open={open} onOpenChange={() => {}}>
       <DialogContent className="max-w-sm rounded-2xl text-center" hideCloseButton>
         <div className="flex flex-col items-center gap-4 py-2">
-          <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center">
-            <Pause className="w-6 h-6 text-amber-600" />
+          <div className="w-12 h-12 rounded-full bg-status-warning-surface flex items-center justify-center">
+            <Pause className="w-6 h-6 text-status-warning-text" />
           </div>
           <div>
             <p className="text-base font-black text-[#031B3D]">Pausar o Modo Ataque?</p>
             <p className="text-sm text-muted-foreground mt-1">Sua posição na fila será salva. Você continua de onde parou.</p>
           </div>
           <div className="flex flex-col gap-2 w-full">
-            <Button onClick={onContinuar} className="w-full rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white">Continuar depois</Button>
-            <Button onClick={onEncerrar} variant="outline" className="w-full rounded-xl text-red-500 border-red-200 hover:bg-red-50">Encerrar</Button>
+            <Button onClick={onContinuar} className="w-full rounded-xl bg-[#005BFF] hover:bg-status-info text-white">Continuar depois</Button>
+            <Button onClick={onEncerrar} variant="outline" className="w-full rounded-xl text-status-error border-status-error/30 hover:bg-status-error-surface">Encerrar</Button>
           </div>
         </div>
       </DialogContent>

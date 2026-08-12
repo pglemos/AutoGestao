@@ -370,7 +370,7 @@ export function AgendaD1Panel({
     ? rows.find((row) => row.id === confirming.rowId) || null
     : null;
 
-  const filterSelectClass = "w-full rounded-xl border border-border bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500";
+  const filterSelectClass = "w-full rounded-xl border border-border bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-status-success";
 
   return (
     <>
@@ -386,7 +386,7 @@ export function AgendaD1Panel({
         <div className="space-y-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <span className="inline-block rounded-[8px] bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-700">
+              <span className="inline-block rounded-[8px] bg-status-warning-surface px-2.5 py-1 text-xs font-medium text-status-warning-text">
                 Agenda D+1 parcial
               </span>
               <p className="mt-1 text-xs text-muted-foreground">
@@ -507,8 +507,8 @@ export function AgendaD1Panel({
           </div>
 
           {error && (
-            <div className="rounded-[12px] border border-red-200 bg-red-50 p-4">
-              <p className="text-sm text-red-700">
+            <div className="rounded-[12px] border border-status-error/30 bg-status-error-surface p-4">
+              <p className="text-sm text-status-error-text">
                 Não foi possível carregar a Agenda D+1: {error}
               </p>
               <button
@@ -616,7 +616,7 @@ export function AgendaD1Panel({
                             <div className="flex items-center gap-1.5">
                               <button
                                 type="button"
-                                className="flex items-center gap-1 rounded-lg bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700 hover:bg-emerald-50"
+                                className="flex items-center gap-1 rounded-lg bg-status-success-surface px-2 py-1 text-xs font-medium text-status-success-text hover:bg-status-success-surface"
                                 aria-label={`WhatsApp para ${row.cliente?.nome || "cliente"}`}
                                 onClick={() => void openWhatsapp(row)}
                               >
@@ -633,7 +633,7 @@ export function AgendaD1Panel({
                               <div className="relative">
                                 <button
                                   type="button"
-                                  className="flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-emerald-700 hover:bg-emerald-50"
+                                  className="flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-status-success-text hover:bg-status-success-surface"
                                   onClick={() =>
                                     setConfirmMenuRowId((current) =>
                                       current === row.id ? null : row.id,
@@ -655,7 +655,7 @@ export function AgendaD1Panel({
                                         <button
                                           key={outcome}
                                           type="button"
-                                          className="block w-full px-3 py-2 text-left text-sm text-foreground hover:bg-emerald-50 hover:text-emerald-700"
+                                          className="block w-full px-3 py-2 text-left text-sm text-foreground hover:bg-status-success-surface hover:text-status-success-text"
                                           onClick={() => {
                                             setConfirmMenuRowId(null);
                                             if (outcome === "Outro") {
@@ -762,7 +762,7 @@ export function AgendaD1Panel({
                   )
                 }
                 placeholder="Descreva a situação observada..."
-                className="w-full resize-none rounded-[12px] border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full resize-none rounded-[12px] border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-status-success"
               />
             </div>
             <div className="flex justify-end gap-2 pt-1">
@@ -783,7 +783,7 @@ export function AgendaD1Panel({
                     confirming.note,
                   )
                 }
-                className="rounded-[12px] bg-emerald-600 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-40"
+                className="rounded-[12px] bg-brand-primary px-3 py-2 text-sm font-medium text-white hover:bg-brand-primary-hover disabled:opacity-40"
               >
                 {saving ? "Salvando..." : "Registrar"}
               </button>
@@ -822,12 +822,12 @@ function canonicalConfirmationLabel(status: string | null | undefined) {
 
 function confirmationStatusClass(status: string) {
   return {
-    Pendente: "bg-amber-100 text-amber-700",
-    "WhatsApp aberto": "bg-blue-100 text-blue-700",
-    Confirmado: "bg-emerald-100 text-emerald-700",
+    Pendente: "bg-status-warning-surface text-status-warning-text",
+    "WhatsApp aberto": "bg-status-info-surface text-status-info-text",
+    Confirmado: "bg-status-success-surface text-status-success-text",
     "Sem resposta": "bg-gray-200 text-muted-foreground",
-    "Solicitou reagendamento": "bg-orange-100 text-orange-700",
-    Cancelou: "bg-red-100 text-red-700",
+    "Solicitou reagendamento": "bg-status-warning-surface text-status-warning-text",
+    Cancelou: "bg-status-error-surface text-status-error-text",
     Outro: "bg-violet-100 text-violet-700",
   }[status] || "bg-gray-100 text-muted-foreground";
 }

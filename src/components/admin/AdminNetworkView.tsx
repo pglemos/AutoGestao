@@ -79,7 +79,7 @@ export function AdminNetworkView() {
               }}
             >
               <div className="flex items-center gap-mx-sm min-w-0">
-                <div className="w-mx-10 h-mx-10 sm:w-mx-xl sm:h-mx-xl rounded-xl bg-emerald-600/10 flex items-center justify-center text-emerald-600 shrink-0">
+                <div className="w-mx-10 h-mx-10 sm:w-mx-xl sm:h-mx-xl rounded-xl bg-brand-primary/10 flex items-center justify-center text-status-success-text shrink-0">
                   <Building2 size={20} className="sm:size-mx-md" />
                 </div>
                 <div className="min-w-0">

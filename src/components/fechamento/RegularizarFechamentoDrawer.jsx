@@ -36,15 +36,15 @@ const LOSS_REASONS = [
 
 const SALE_STYLE = {
   "Venda realizada": "bg-green-100 text-green-700",
-  "Em negociação": "bg-orange-100 text-orange-700",
-  "Em negociação ativa": "bg-orange-100 text-orange-700",
-  "Venda perdida": "bg-red-100 text-red-600",
+  "Em negociação": "bg-status-warning-surface text-status-warning-text",
+  "Em negociação ativa": "bg-status-warning-surface text-status-warning-text",
+  "Venda perdida": "bg-status-error-surface text-status-error-text",
 };
 
 const CHANNEL_STYLE = {
   Carteira: "bg-green-100 text-green-700",
-  Internet: "bg-blue-100 text-blue-700",
-  Porta: "bg-orange-100 text-orange-700",
+  Internet: "bg-status-info-surface text-status-info-text",
+  Porta: "bg-status-warning-surface text-status-warning-text",
 };
 
 function Badge({ label, className }) {
@@ -74,7 +74,7 @@ function NumStepper({ value, onChange }) {
     setInputVal(null);
   };
   return (
- <div className="grid grid-cols-[44px_minmax(44px,1fr)_44px] items-center border border-border rounded-xl shadow-sm h-11 focus-within:border-blue-400 transition-all bg-white overflow-hidden">
+ <div className="grid grid-cols-[44px_minmax(44px,1fr)_44px] items-center border border-border rounded-xl shadow-sm h-11 focus-within:border-status-info/50 transition-all bg-white overflow-hidden">
  <button type="button" onClick={() => onChange(Math.max(0, value - 1))} className="w-11 h-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-slate-50 border-r border-border transition-colors text-[20px] font-light">−</button>
       <input
         type="text" inputMode="numeric" pattern="[0-9]*"
@@ -112,10 +112,10 @@ function MovimentoDia({ form, onChange }) {
       </div>
       <div className="p-5 space-y-6">
         {/* Showroom */}
-        <div className="bg-orange-50 rounded-xl border border-orange-200 p-4 space-y-3">
+        <div className="bg-status-warning-surface rounded-xl border border-status-warning/30 p-4 space-y-3">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center flex-shrink-0"><Store className="w-4 h-4 text-white" /></div>
-            <span className="text-body-sm font-bold text-orange-700 uppercase tracking-wide">Showroom</span>
+            <div className="w-8 h-8 rounded-full bg-status-warning flex items-center justify-center flex-shrink-0"><Store className="w-4 h-4 text-white" /></div>
+            <span className="text-body-sm font-bold text-status-warning-text uppercase tracking-wide">Showroom</span>
           </div>
           <FieldRow label="Atendimentos" value={form.atendimentos_showroom} onChange={v => set("atendimentos_showroom", v)} />
         </div>
@@ -130,10 +130,10 @@ function MovimentoDia({ form, onChange }) {
           <FieldRow label="Agendamentos D+1" value={form.agendamentos_carteira} onChange={v => set("agendamentos_carteira", v)} />
         </div>
         {/* Internet */}
-        <div className="bg-blue-50 rounded-xl border border-blue-200 p-4 space-y-3">
+        <div className="bg-status-info-surface rounded-xl border border-status-info/30 p-4 space-y-3">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0"><Globe className="w-4 h-4 text-white" /></div>
-            <span className="text-body-sm font-bold text-blue-700 uppercase tracking-wide">Internet</span>
+            <div className="w-8 h-8 rounded-full bg-status-info flex items-center justify-center flex-shrink-0"><Globe className="w-4 h-4 text-white" /></div>
+            <span className="text-body-sm font-bold text-status-info-text uppercase tracking-wide">Internet</span>
           </div>
           <FieldRow label="Leads recebidos" value={form.leads_internet} onChange={v => set("leads_internet", v)} />
           <FieldRow label="Atendimentos" value={form.atendimentos_internet} onChange={v => set("atendimentos_internet", v)} />
@@ -275,8 +275,8 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
                     <div className="flex items-center gap-2 flex-shrink-0">
                       <Badge label={c.canal_comercial || "—"} className={CHANNEL_STYLE[c.canal_comercial] || "bg-slate-100 text-muted-foreground"} />
                       <Badge label={saleLabel} className={SALE_STYLE[saleLabel] || "bg-slate-100 text-muted-foreground"} />
-                      <button onClick={() => openEdit(c)} className="p-1.5 rounded-lg hover:bg-blue-50 text-blue-600 transition-colors"><Pencil className="w-3.5 h-3.5" /></button>
-                      <button onClick={() => setDeleteConfirm({ id: c.id, name: c.nome })} className="p-1.5 rounded-lg hover:bg-red-50 text-red-400 transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
+                      <button onClick={() => openEdit(c)} className="p-1.5 rounded-lg hover:bg-status-info-surface text-status-info-text transition-colors"><Pencil className="w-3.5 h-3.5" /></button>
+                      <button onClick={() => setDeleteConfirm({ id: c.id, name: c.nome })} className="p-1.5 rounded-lg hover:bg-status-error-surface text-red-400 transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
                     </div>
                   </div>
                 );
@@ -375,7 +375,7 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
           <p className="text-body-sm text-muted-foreground mt-1">O registro de <strong>{deleteConfirm?.name}</strong> será removido deste fechamento. O cliente permanece na Carteira.</p>
           <div className="flex items-center justify-end gap-3 mt-4">
             <button onClick={() => setDeleteConfirm(null)} className="px-5 py-2 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-slate-50 transition-colors">Cancelar</button>
-            <button onClick={confirmDelete} className="px-5 py-2 text-body-sm font-bold text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors">Remover</button>
+            <button onClick={confirmDelete} className="px-5 py-2 text-body-sm font-bold text-white bg-status-error hover:bg-status-error rounded-xl transition-colors">Remover</button>
           </div>
         </DialogContent>
       </Dialog>
@@ -399,9 +399,9 @@ function ResumoDia({ form, clientes }) {
     }, 0);
 
   const stats = [
-    { label: "Leads", value: totalLeads, color: "text-blue-600" },
+    { label: "Leads", value: totalLeads, color: "text-status-info-text" },
     { label: "Atendimentos", value: totalAtend, color: "text-purple-600" },
-    { label: "Agendamentos D+1", value: totalAgend, color: "text-amber-600" },
+    { label: "Agendamentos D+1", value: totalAgend, color: "text-status-warning-text" },
     { label: "Vendas", value: totalVendas, color: "text-green-600" },
     { label: "Faturamento", value: totalFaturamento > 0 ? "R$ " + totalFaturamento.toLocaleString("pt-BR", { minimumFractionDigits: 2 }) : "—", color: "text-green-700" },
   ];
@@ -441,7 +441,7 @@ function DisciplinaBloco({ form, clientes }) {
   const scoreCalc = baseScore + bonusScore;
   const scoreFinal = Math.max(0, scoreCalc - 10); // -10 por atraso
 
-  const scoreColor = scoreFinal >= 80 ? "text-green-600" : scoreFinal >= 50 ? "text-amber-600" : "text-red-600";
+  const scoreColor = scoreFinal >= 80 ? "text-green-600" : scoreFinal >= 50 ? "text-status-warning-text" : "text-status-error-text";
   const ringColor = scoreFinal >= 80 ? "#22C55E" : scoreFinal >= 50 ? "#F59E0B" : "#EF4444";
 
   return (
@@ -468,8 +468,8 @@ function DisciplinaBloco({ form, clientes }) {
             <span className="font-bold text-[#0F172A]">{scoreCalc}%</span>
           </div>
           <div className="flex justify-between text-body-sm">
-            <span className="text-red-500 font-medium">Penalização por atraso</span>
-            <span className="font-bold text-red-500">-10%</span>
+            <span className="text-status-error font-medium">Penalização por atraso</span>
+            <span className="font-bold text-status-error">-10%</span>
           </div>
           <div className="flex justify-between text-body-sm border-t border-border-subtle pt-2">
             <span className="font-bold text-[#0F172A]">Estimativa após aprovação</span>
@@ -616,7 +616,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 <h2 className="text-[16px] font-bold text-[#0F172A]">Regularizar Fechamento</h2>
-                <span className="text-caption font-bold text-red-600 bg-red-50 border border-red-200 px-2 py-0.5 rounded-full">Fechamento atrasado</span>
+                <span className="text-caption font-bold text-status-error-text bg-status-error-surface border border-status-error/30 px-2 py-0.5 rounded-full">Fechamento atrasado</span>
               </div>
               <p className="text-body-sm text-muted-foreground mt-0.5">
                 {moment(date).format("DD/MM/YYYY")} — <span className="capitalize">{moment(date).format("dddd")}</span>
@@ -635,14 +635,14 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
               </div>
             ) : sucesso ? (
               <div className="flex flex-col items-center justify-center h-full text-center p-8 gap-4">
-                <div className="w-16 h-16 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center">
-                  <CheckCircle2 className="w-8 h-8 text-amber-500" />
+                <div className="w-16 h-16 rounded-full bg-status-warning-surface border border-status-warning/30 flex items-center justify-center">
+                  <CheckCircle2 className="w-8 h-8 text-status-warning" />
                 </div>
                 <div>
                   <p className="text-[18px] font-bold text-[#0F172A]">Regularização enviada!</p>
                   <p className="text-body-sm text-muted-foreground mt-1 max-w-sm">O fechamento foi salvo e está aguardando aprovação do responsável. Ele só contará nos indicadores após a aprovação.</p>
                 </div>
-                <button onClick={onClose} className="px-8 py-3 rounded-xl bg-[#005BFF] text-white text-[14px] font-bold hover:bg-blue-700 transition-colors mt-2">
+                <button onClick={onClose} className="px-8 py-3 rounded-xl bg-[#005BFF] text-white text-[14px] font-bold hover:bg-status-info transition-colors mt-2">
                   Fechar
                 </button>
               </div>
@@ -650,11 +650,11 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
               <div className="p-4 sm:p-6 space-y-5">
                 {/* Alerta status existente */}
                 {jaEnviado && (
-                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
-                    <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+                  <div className="bg-status-warning-surface border border-status-warning/30 rounded-xl p-4 flex items-start gap-3">
+                    <AlertTriangle className="w-4 h-4 text-status-warning mt-0.5 flex-shrink-0" />
                     <div>
-                      <p className="text-body-sm font-bold text-amber-800">Aguardando Aprovação</p>
-                      <p className="text-[12px] text-amber-700 mt-0.5">Você já enviou a regularização deste dia. Você pode atualizar os dados e reenviar se necessário.</p>
+                      <p className="text-body-sm font-bold text-status-warning-text">Aguardando Aprovação</p>
+                      <p className="text-[12px] text-status-warning-text mt-0.5">Você já enviou a regularização deste dia. Você pode atualizar os dados e reenviar se necessário.</p>
                     </div>
                   </div>
                 )}
@@ -665,12 +665,12 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
                   </div>
                 )}
                 {recusado && (
-                  <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-                    <p className="text-body-sm font-bold text-red-700">Regularização recusada.</p>
+                  <div className="bg-status-error-surface border border-status-error/30 rounded-xl p-4">
+                    <p className="text-body-sm font-bold text-status-error-text">Regularização recusada.</p>
                     {regularizacaoExistente?.motivo_recusa && (
-                      <p className="text-[12px] text-red-600 mt-1">Motivo: {regularizacaoExistente.motivo_recusa}</p>
+                      <p className="text-[12px] text-status-error-text mt-1">Motivo: {regularizacaoExistente.motivo_recusa}</p>
                     )}
-                    <p className="text-[12px] text-red-600 mt-1">Você pode enviar uma nova regularização abaixo.</p>
+                    <p className="text-[12px] text-status-error-text mt-1">Você pode enviar uma nova regularização abaixo.</p>
                   </div>
                 )}
 
@@ -689,7 +689,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
               <button onClick={onClose} className="px-5 py-2.5 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-slate-50 transition-colors">
                 Cancelar
               </button>
-              <button onClick={() => setConfirmOpen(true)} className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-body-sm font-bold transition-colors shadow-sm">
+              <button onClick={() => setConfirmOpen(true)} className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-body-sm font-bold transition-colors shadow-sm">
                 <Send className="w-4 h-4" /> Enviar Regularização
               </button>
             </div>
@@ -703,8 +703,8 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
           <DialogHeader>
             <DialogTitle className="font-bold text-[#0F172A]">Enviar regularização para aprovação?</DialogTitle>
           </DialogHeader>
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mt-2">
-            <p className="text-body-sm text-amber-800 leading-relaxed">
+          <div className="bg-status-warning-surface border border-status-warning/30 rounded-xl p-4 mt-2">
+            <p className="text-body-sm text-status-warning-text leading-relaxed">
               Este fechamento foi realizado fora do prazo. Ele será salvo, mas só contará nos indicadores após aprovação do responsável.
             </p>
           </div>
@@ -712,7 +712,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
             <button onClick={() => setConfirmOpen(false)} disabled={enviando} className="flex-1 py-2.5 rounded-xl border border-border text-body-sm font-bold text-muted-foreground hover:bg-slate-50 transition-colors">
               Não, voltar
             </button>
-            <button onClick={handleEnviar} disabled={enviando} className="flex-1 py-2.5 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-body-sm font-bold transition-colors">
+            <button onClick={handleEnviar} disabled={enviando} className="flex-1 py-2.5 rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-body-sm font-bold transition-colors">
               {enviando ? "Enviando..." : "Sim, enviar"}
             </button>
           </div>

@@ -111,7 +111,7 @@ export function AgendaHeader({
           </div>
 
           <div className="min-w-0">
-            <p className="text-caption font-semibold uppercase tracking-wide text-emerald-700">Consultoria</p>
+            <p className="text-caption font-semibold uppercase tracking-wide text-status-success-text">Consultoria</p>
             <h1 className="text-lg font-bold text-foreground">Agenda MX</h1>
             <h2 className={cn('text-sm text-muted-foreground capitalize', 'font-semibold')}>
               {monthLabel}
@@ -132,7 +132,7 @@ export function AgendaHeader({
                 className={cn(
                   'flex items-center gap-1 rounded-xl px-2.5 py-1.5 text-xs font-bold transition-all',
                   calendarViewMode === option.key
-                    ? 'bg-emerald-600 text-white shadow-2xs'
+                    ? 'bg-brand-primary text-white shadow-2xs'
                     : 'text-muted-foreground hover:bg-gray-50 hover:text-foreground',
                 )}
               >
@@ -150,7 +150,7 @@ export function AgendaHeader({
                 className={cn(
                   'relative flex h-8 items-center gap-1.5 rounded-xl border px-2.5 text-xs font-bold transition-colors',
                   activeFilters > 0
-                    ? 'border-brand-primary bg-emerald-600/10 text-emerald-600'
+                    ? 'border-brand-primary bg-brand-primary/10 text-status-success-text'
                     : 'border-border bg-white text-muted-foreground hover:bg-gray-50 hover:text-foreground',
                 )}
               >
@@ -176,7 +176,7 @@ export function AgendaHeader({
                       Filtros
                     </span>
                     {activeFilters > 0 && (
-                      <button type="button" onClick={clearFilters} className="text-xs text-emerald-600 font-semibold hover:underline">
+                      <button type="button" onClick={clearFilters} className="text-xs text-status-success-text font-semibold hover:underline">
                         Limpar
                       </button>
                     )}
@@ -214,7 +214,7 @@ export function AgendaHeader({
                           className={cn(
                             'rounded-xl px-2.5 py-1 text-xs font-medium transition-colors',
                             statusFilter === filter.key
-                              ? 'bg-emerald-600 text-white font-bold'
+                              ? 'bg-brand-primary text-white font-bold'
                               : 'border border-border bg-white text-muted-foreground hover:bg-gray-50',
                           )}
                         >
@@ -240,7 +240,7 @@ export function AgendaHeader({
 
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
-              <Button className="h-8 px-3 font-bold text-xs text-white shadow-xs hover:bg-emerald-600/90">
+              <Button className="h-8 px-3 font-bold text-xs text-white shadow-xs hover:bg-brand-primary/90">
                 <Plus size={15} className="mr-1" />
                 Criar
                 <ChevronDown size={13} className="ml-1 opacity-80" />
@@ -256,7 +256,7 @@ export function AgendaHeader({
                   onSelect={onCreateVisit}
                   className="flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold text-foreground outline-none transition-colors hover:bg-gray-50"
                 >
-                  <CalendarDays size={15} className="text-emerald-600" /> Agendar Visita
+                  <CalendarDays size={15} className="text-status-success-text" /> Agendar Visita
                 </DropdownMenu.Item>
                 <DropdownMenu.Item
                   onSelect={onCreateEvent}

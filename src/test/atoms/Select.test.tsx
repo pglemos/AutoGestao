@@ -32,7 +32,7 @@ describe("Select", () => {
   test("applies error variant", () => {
     render(<Select variant="error">{options}</Select>);
     const select = screen.getByRole("combobox");
-    expect(select.className).toContain("border-red-300");
+    expect(select.className).toContain("border-status-error/40");
   });
 
   test("applies ghost variant", () => {

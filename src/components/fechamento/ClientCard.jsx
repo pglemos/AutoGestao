@@ -15,16 +15,16 @@ import NovoRegistroModal from "@/components/fechamento/NovoRegistroModal";
 
 const CHANNEL_STYLE = {
   Carteira: "bg-green-100 text-green-700",
-  Internet: "bg-blue-100 text-blue-700",
-  Porta: "bg-orange-100 text-orange-700",
+  Internet: "bg-status-info-surface text-status-info-text",
+  Porta: "bg-status-warning-surface text-status-warning-text",
 };
 
 const SALE_STYLE = {
   "Venda Realizada": "bg-green-100 text-green-700",
-  "Em Negociação": "bg-orange-100 text-orange-700",
-  "Venda perdida": "bg-red-100 text-red-600",
+  "Em Negociação": "bg-status-warning-surface text-status-warning-text",
+  "Venda perdida": "bg-status-error-surface text-status-error-text",
   "Qualificado": "bg-purple-100 text-purple-700",
-  "Garantia Registrada": "bg-amber-100 text-amber-700",
+  "Garantia Registrada": "bg-status-warning-surface text-status-warning-text",
 };
 
 function Badge({ label, className }) {
@@ -601,7 +601,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
   const TIPO_BADGE_FIXED = {
     venda: { label: "$", cls: "text-green-600 bg-green-50" },
     qualificado: { label: "Q", cls: "text-purple-600 bg-purple-50" },
-    garantia: { label: "!", cls: "text-amber-600 bg-amber-50" },
+    garantia: { label: "!", cls: "text-status-warning-text bg-status-warning-surface" },
     perdido: { label: "✕", cls: "text-muted-foreground bg-slate-100" },
   };
 
@@ -610,7 +610,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
     if (tipo === "agendamento" && c.visita_agendada_em) {
       const diffDias = moment(c.visita_agendada_em).startOf("day").diff(moment(closingDate).startOf("day"), "days");
       if (diffDias >= 1) {
-        return { label: `D+${diffDias}`, cls: diffDias === 1 ? "text-blue-600 bg-blue-50" : "text-sky-600 bg-sky-50" };
+        return { label: `D+${diffDias}`, cls: diffDias === 1 ? "text-status-info-text bg-status-info-surface" : "text-sky-600 bg-sky-50" };
       }
       return null;
     }
@@ -664,7 +664,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
             {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.canal_comercial || "—"} className={CHANNEL_STYLE[c.canal_comercial] || "bg-slate-100 text-muted-foreground"} />}
           </td>
           <td className="px-4 py-3">
-            {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.interesse_troca ? "Sim" : "Não"} className={c.interesse_troca ? "bg-green-100 text-green-700" : "bg-red-100 text-red-600"} />}
+            {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.interesse_troca ? "Sim" : "Não"} className={c.interesse_troca ? "bg-green-100 text-green-700" : "bg-status-error-surface text-status-error-text"} />}
           </td>
           <td className="px-4 py-3">
             {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.interesse_financiamento ? "Sim" : "Não"} className={c.interesse_financiamento ? "bg-green-100 text-green-700" : "bg-slate-100 text-muted-foreground"} />}
@@ -673,11 +673,11 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
           <td className="px-4 py-3">
             <div className="flex items-center gap-1.5" onClick={e => e.stopPropagation()}>
               <button onClick={(e) => canEdit && openEdit(c, e)} disabled={!canEdit}
-                className={`p-1.5 rounded-lg transition-colors ${canEdit ? "hover:bg-blue-50 text-[#005BFF]" : "text-slate-200 cursor-not-allowed"}`}>
+                className={`p-1.5 rounded-lg transition-colors ${canEdit ? "hover:bg-status-info-surface text-[#005BFF]" : "text-slate-200 cursor-not-allowed"}`}>
                 <Pencil className="w-3.5 h-3.5" />
               </button>
               <button onClick={(e) => { e.stopPropagation(); canDelete && setDeleteConfirm({ id: c.id, name: c.nome }); }} disabled={!canDelete}
-                className={`p-1.5 rounded-lg transition-colors ${canDelete ? "hover:bg-red-50 text-[#EF4444]" : "text-slate-200 cursor-not-allowed"}`}>
+                className={`p-1.5 rounded-lg transition-colors ${canDelete ? "hover:bg-status-error-surface text-[#EF4444]" : "text-slate-200 cursor-not-allowed"}`}>
                 <Trash2 className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -713,10 +713,10 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
         </div>
 
         {d1Editavel && (
-          <div className="px-6 py-2.5 bg-blue-50 border-b border-blue-100 flex items-center gap-2">
+          <div className="px-6 py-2.5 bg-status-info-surface border-b border-status-info/20 flex items-center gap-2">
             <Info className="w-4 h-4 text-[#005BFF] flex-shrink-0" />
             <p className="text-[12px] font-semibold text-[#1e3a5f]">
-              Fechamento concluído. Somente registros <span className="text-blue-500">D+1</span> podem ser editados.
+              Fechamento concluído. Somente registros <span className="text-status-info">D+1</span> podem ser editados.
             </p>
           </div>
         )}
@@ -768,7 +768,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
                 : (modoD1 ? "Novo Agendamento D+1" : "Cadastrar Novo Cliente")}
             </DialogTitle>
             {modoD1 ? (
-              <div className="mt-1.5 px-3 py-2 bg-blue-50 border border-blue-200 rounded-lg flex items-start gap-2">
+              <div className="mt-1.5 px-3 py-2 bg-status-info-surface border border-status-info/30 rounded-lg flex items-start gap-2">
                 <CalendarClock className="w-4 h-4 text-[#005BFF] mt-0.5 flex-shrink-0" />
                 <p className="text-[12px] font-semibold text-[#1e3a5f]">
                   Este cadastro será considerado um Agendamento D+1 e salvo na Carteira de Clientes.
@@ -890,7 +890,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
               Cancelar
             </button>
             <button onClick={confirmarReagendamento} disabled={saving}
-              className="px-5 py-2 text-body-sm font-bold text-white bg-[#005BFF] hover:bg-blue-700 disabled:opacity-50 rounded-xl transition-colors">
+              className="px-5 py-2 text-body-sm font-bold text-white bg-[#005BFF] hover:bg-status-info disabled:opacity-50 rounded-xl transition-colors">
               {saving ? "Salvando..." : "Confirmar Reagendamento"}
             </button>
           </div>
@@ -912,7 +912,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
               Cancelar
             </button>
             <button onClick={confirmDelete}
-              className="px-5 py-2 text-body-sm font-bold text-white bg-[#EF4444] hover:bg-red-600 rounded-xl transition-colors">
+              className="px-5 py-2 text-body-sm font-bold text-white bg-[#EF4444] hover:bg-status-error rounded-xl transition-colors">
               Remover
             </button>
           </div>

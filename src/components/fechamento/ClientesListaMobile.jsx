@@ -5,25 +5,25 @@ import moment from "moment";
 
 const CHANNEL_STYLE = {
   Carteira: "bg-green-100 text-green-700",
-  Internet: "bg-blue-100 text-blue-700",
-  Showroom: "bg-orange-100 text-orange-700",
-  Porta: "bg-orange-100 text-orange-700",
+  Internet: "bg-status-info-surface text-status-info-text",
+  Showroom: "bg-status-warning-surface text-status-warning-text",
+  Porta: "bg-status-warning-surface text-status-warning-text",
 };
 const FINANCING_STYLE = {
   "Aprovado": "bg-green-100 text-green-700",
-  "Recusado": "bg-red-100 text-red-600",
+  "Recusado": "bg-status-error-surface text-status-error-text",
   "Não se aplica": "bg-slate-100 text-muted-foreground",
 };
 const SALE_STYLE = {
   "Sim": "bg-green-100 text-green-700",
-  "Não": "bg-red-100 text-red-600",
-  "Em Negociação": "bg-orange-100 text-orange-700",
+  "Não": "bg-status-error-surface text-status-error-text",
+  "Em Negociação": "bg-status-warning-surface text-status-warning-text",
   "Venda Realizada": "bg-green-100 text-green-700",
   "Qualificado": "bg-purple-100 text-purple-700",
-  "Garantia Registrada": "bg-amber-100 text-amber-700",
-  "Venda perdida": "bg-red-100 text-red-600",
+  "Garantia Registrada": "bg-status-warning-surface text-status-warning-text",
+  "Venda perdida": "bg-status-error-surface text-status-error-text",
 };
-const BOOL_STYLE = (v) => v === "Sim" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-600";
+const BOOL_STYLE = (v) => v === "Sim" ? "bg-green-100 text-green-700" : "bg-status-error-surface text-status-error-text";
 
 function Badge({ label, className }) {
   return <span className={`inline-block text-caption font-semibold px-2.5 py-0.5 rounded-full whitespace-nowrap ${className}`}>{label}</span>;
@@ -62,12 +62,12 @@ function ClientMobileCard({ c, closingDate, canEdit, canDelete, onEdit, onDelete
   const eD1 = isClienteD1(c, closingDate);
 
   return (
-    <div className={`rounded-2xl border border-border bg-white p-4 space-y-3 ${eD1 ? "border-blue-200 bg-blue-50/30" : ""}`}>
+    <div className={`rounded-2xl border border-border bg-white p-4 space-y-3 ${eD1 ? "border-status-info/30 bg-status-info-surface/30" : ""}`}>
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 flex-wrap">
             <p className="text-body font-bold text-[#0F172A] leading-tight">{nomeCliente}</p>
-            {eD1 && <span className="text-caption font-bold text-blue-500 bg-blue-100 px-1.5 py-0.5 rounded-full">D+1</span>}
+            {eD1 && <span className="text-caption font-bold text-status-info bg-status-info-surface px-1.5 py-0.5 rounded-full">D+1</span>}
           </div>
           {telefone && (
             <div className="flex items-center gap-1 mt-1">
@@ -80,14 +80,14 @@ function ClientMobileCard({ c, closingDate, canEdit, canDelete, onEdit, onDelete
           <button
             onClick={() => canEdit && onEdit(c)}
             disabled={!canEdit}
-            className={`p-2 rounded-xl transition-colors ${canEdit ? "hover:bg-blue-50 text-[#005BFF]" : "text-slate-200 cursor-not-allowed"}`}
+            className={`p-2 rounded-xl transition-colors ${canEdit ? "hover:bg-status-info-surface text-[#005BFF]" : "text-slate-200 cursor-not-allowed"}`}
           >
             <Pencil className="w-4 h-4" />
           </button>
           <button
             onClick={() => canDelete && onDelete(c)}
             disabled={!canDelete}
-            className={`p-2 rounded-xl transition-colors ${canDelete ? "hover:bg-red-50 text-[#EF4444]" : "text-slate-200 cursor-not-allowed"}`}
+            className={`p-2 rounded-xl transition-colors ${canDelete ? "hover:bg-status-error-surface text-[#EF4444]" : "text-slate-200 cursor-not-allowed"}`}
           >
             <Trash2 className="w-4 h-4" />
           </button>

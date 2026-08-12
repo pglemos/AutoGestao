@@ -275,7 +275,7 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
       <section className="rounded-2xl border border-border-subtle bg-white p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div><h2 className="text-lg font-black text-[#031B3D]">Campanhas e condições</h2><p className="mt-1 text-sm text-muted-foreground">Cadastre um feirão, desconto ou bônus de troca e inicie uma missão para os clientes ativos elegíveis.</p></div>
-          <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-[#005BFF]">{campanhas.length} ativa(s)</span>
+          <span className="rounded-full bg-status-info-surface px-3 py-1 text-xs font-bold text-[#005BFF]">{campanhas.length} ativa(s)</span>
         </div>
         <form onSubmit={salvarCampanha} className="mt-4 grid grid-cols-1 gap-3 rounded-xl bg-slate-50 p-4 md:grid-cols-2">
           <select aria-label="Tipo da campanha" value={campanhaForm.tipo} onChange={event => setCampanhaForm(prev => ({ ...prev, tipo: event.target.value }))} className="h-10 rounded-xl border border-border bg-white px-3 text-sm">
@@ -313,7 +313,7 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
           <p className="font-bold">{activeMission.tipo_missao}</p>
           <p className="mt-1 text-sm text-blue-100">{activeMission.mensagens_enviadas || 0}/{activeMission.total_clientes || 0} contatos registrados</p>
           {RESUMABLE_STATUSES.includes(activeMission.status) && missaoRecuperada && (
-            <button type="button" onClick={retomarMissaoRecuperada} className="mt-3 rounded-xl bg-white px-4 py-2 text-xs font-bold text-[#005BFF] hover:bg-blue-50">
+            <button type="button" onClick={retomarMissaoRecuperada} className="mt-3 rounded-xl bg-white px-4 py-2 text-xs font-bold text-[#005BFF] hover:bg-status-info-surface">
               Continuar missão
             </button>
           )}
@@ -338,5 +338,5 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
 }
 
 function Warning({ message }) {
-  return <div role="alert" className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3"><AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" /><p className="text-sm text-amber-800">{message}</p></div>;
+  return <div role="alert" className="flex items-start gap-3 rounded-2xl border border-status-warning/30 bg-status-warning-surface px-4 py-3"><AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-status-warning" /><p className="text-sm text-status-warning-text">{message}</p></div>;
 }

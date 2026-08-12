@@ -113,13 +113,13 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
 
   return (
     <div className={`bg-white border rounded-2xl hover:shadow-sm transition-all ${
-      prioridade === "Máxima" ? "border-red-200" : prioridade === "Alta" ? "border-orange-100" : "border-border-subtle"
+      prioridade === "Máxima" ? "border-status-error/30" : prioridade === "Alta" ? "border-status-warning/20" : "border-border-subtle"
     }`}>
       {/* MOBILE */}
       <div className="flex flex-col gap-3 p-4 sm:hidden">
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-2.5 flex-1 min-w-0">
-            <div className="w-9 h-9 rounded-full bg-blue-50 flex items-center justify-center text-xs font-black text-[#005BFF] shrink-0">{iniciais}</div>
+            <div className="w-9 h-9 rounded-full bg-status-info-surface flex items-center justify-center text-xs font-black text-[#005BFF] shrink-0">{iniciais}</div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-[#031B3D] truncate">{cliente.nome}</p>
               <p className="text-caption text-muted-foreground truncate">{canal} · {cliente.veiculo_interesse || "Sem veículo"}</p>
@@ -135,7 +135,7 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
             <p className="text-caption text-muted-foreground font-bold uppercase tracking-wide">Situação</p>
             <p className="text-caption font-semibold text-foreground mt-0.5 leading-snug">{situacao}</p>
           </div>
-          <div className="bg-blue-50 rounded-xl px-2.5 py-2">
+          <div className="bg-status-info-surface rounded-xl px-2.5 py-2">
             <p className="text-caption text-[#005BFF] font-bold uppercase tracking-wide">Mentor recomenda</p>
             <p className="text-caption font-semibold text-[#031B3D] mt-0.5 leading-snug">{proximoPasso}</p>
           </div>
@@ -145,7 +145,7 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
         <div className="flex gap-2">
           {!encerradoSemVenda && (
           <button onClick={() => onExecutar(cliente)}
-            className="flex items-center gap-1.5 text-xs font-bold text-white bg-[#005BFF] hover:bg-blue-700 px-3 py-2 rounded-xl transition-colors flex-1 justify-center">
+            className="flex items-center gap-1.5 text-xs font-bold text-white bg-[#005BFF] hover:bg-status-info px-3 py-2 rounded-xl transition-colors flex-1 justify-center">
             <Zap className="w-3.5 h-3.5" /> Executar
           </button>
           )}
@@ -159,7 +159,7 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
       {/* DESKTOP */}
       <div className="hidden sm:flex items-stretch divide-x divide-border-subtle">
         <div className="flex items-center gap-3 px-4 py-3.5 w-52 shrink-0">
-          <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-sm font-black text-[#005BFF] shrink-0">{iniciais}</div>
+          <div className="w-10 h-10 rounded-full bg-status-info-surface flex items-center justify-center text-sm font-black text-[#005BFF] shrink-0">{iniciais}</div>
           <div className="min-w-0">
             <p className="text-sm font-bold text-[#031B3D] truncate">{cliente.nome}</p>
             <p className="text-caption text-muted-foreground truncate">{canal}</p>
@@ -177,7 +177,7 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
           </div>
           <ScoreBadge score={score} motivos={motivos} />
         </div>
-        <div className="min-w-0 flex-1 px-4 py-3.5 bg-blue-50/30 space-y-1.5">
+        <div className="min-w-0 flex-1 px-4 py-3.5 bg-status-info-surface/30 space-y-1.5">
           <div>
             <p className="text-caption text-muted-foreground font-bold uppercase tracking-wide">Objetivo</p>
             <p className="text-caption font-semibold text-muted-foreground leading-snug mt-0.5">{objetivo}</p>
@@ -191,7 +191,7 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
         <div className="flex flex-col gap-1.5 px-4 py-3.5 shrink-0 w-40 justify-center">
           {!encerradoSemVenda && (
           <button onClick={() => onExecutar(cliente)}
-            className="flex items-center gap-1.5 text-xs font-bold text-white bg-[#005BFF] hover:bg-blue-700 px-3 py-2 rounded-xl transition-colors justify-center">
+            className="flex items-center gap-1.5 text-xs font-bold text-white bg-[#005BFF] hover:bg-status-info px-3 py-2 rounded-xl transition-colors justify-center">
             <Zap className="w-3.5 h-3.5" /> Executar próximo passo
           </button>
           )}
@@ -230,7 +230,7 @@ function PainelFiltros({ onAplicar, onFechar, filtrosAtivos }) {
 
   function chipClass(ativo) {
     return `text-caption font-semibold px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
-      ativo ? "bg-[#005BFF] text-white border-[#005BFF]" : "bg-white text-muted-foreground border-border hover:border-blue-300"
+      ativo ? "bg-[#005BFF] text-white border-[#005BFF]" : "bg-white text-muted-foreground border-border hover:border-status-info/40"
     }`;
   }
 
@@ -293,7 +293,7 @@ function PainelFiltros({ onAplicar, onFechar, filtrosAtivos }) {
 
         <div className="px-5 py-4 border-t border-border-subtle flex gap-2">
           <Button variant="outline" onClick={() => { setLocal({}); onAplicar({}); }} className="flex-1 rounded-xl text-sm">Limpar</Button>
-          <Button onClick={() => onAplicar(local)} className="flex-1 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-sm">Aplicar filtros</Button>
+          <Button onClick={() => onAplicar(local)} className="flex-1 rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-sm">Aplicar filtros</Button>
         </div>
       </div>
     </div>
@@ -351,7 +351,7 @@ function ChipsFiltrosAtivos({ filtros, onRemover }) {
   return (
     <div className="flex flex-wrap gap-1.5">
       {chips.map(chip => (
-        <span key={chip.key} className="flex items-center gap-1 text-caption font-semibold px-2.5 py-1 rounded-lg bg-blue-50 text-[#005BFF] border border-blue-200">
+        <span key={chip.key} className="flex items-center gap-1 text-caption font-semibold px-2.5 py-1 rounded-lg bg-status-info-surface text-[#005BFF] border border-status-info/30">
           {chip.label}
           <button onClick={() => onRemover(chip.key)}><X className="w-3 h-3" /></button>
         </span>
@@ -458,7 +458,7 @@ export default function CarteiraAtivaTab({ clientes = [], onNovoCliente: _onNovo
           <button
             onClick={() => setFiltrosPanelOpen(true)}
             className={`flex items-center gap-1.5 h-9 px-3.5 rounded-xl border text-sm font-semibold transition-all ${
-              temFiltrosAtivos ? "bg-[#005BFF] text-white border-[#005BFF]" : "bg-white border-border text-muted-foreground hover:border-blue-300"
+              temFiltrosAtivos ? "bg-[#005BFF] text-white border-[#005BFF]" : "bg-white border-border text-muted-foreground hover:border-status-info/40"
             }`}
           >
             <SlidersHorizontal className="w-4 h-4" /> Filtros
@@ -473,7 +473,7 @@ export default function CarteiraAtivaTab({ clientes = [], onNovoCliente: _onNovo
           const ativo = cardAtivo === card.id;
           return (
             <button key={card.id} onClick={() => setCardAtivo(card.id)}
-              className={`text-left p-3.5 rounded-2xl border transition-all ${ativo ? "border-[#005BFF] bg-blue-50 shadow-sm" : "border-border-subtle bg-white hover:border-blue-100 hover:bg-blue-50/30"}`}>
+              className={`text-left p-3.5 rounded-2xl border transition-all ${ativo ? "border-[#005BFF] bg-status-info-surface shadow-sm" : "border-border-subtle bg-white hover:border-status-info/20 hover:bg-status-info-surface/30"}`}>
               <p className={`text-2xl font-black mb-0.5 ${ativo ? "text-[#005BFF]" : "text-[#031B3D]"}`}>{count}</p>
               <p className={`text-xs font-bold leading-snug ${ativo ? "text-[#005BFF]" : "text-muted-foreground"}`}>{card.label}</p>
               <p className="text-caption text-muted-foreground mt-0.5">{card.sublabel}</p>

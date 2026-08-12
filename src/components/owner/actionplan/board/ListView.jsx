@@ -54,7 +54,7 @@ export default function ListView({ actions, sortBy, onSortChange, onQuickAction,
             const selected = selectedIds.includes(action.id);
 
             return (
-              <tr key={action.id} className={`border-b border-border transition-colors hover:bg-muted/30 ${selected ? "bg-emerald-50/40" : ""}`}>
+              <tr key={action.id} className={`border-b border-border transition-colors hover:bg-muted/30 ${selected ? "bg-status-success-surface/40" : ""}`}>
                 <td className="px-2 py-2">
                   <Checkbox checked={selected} onCheckedChange={() => onToggleSelect(action.id)} />
                 </td>
@@ -73,7 +73,7 @@ export default function ListView({ actions, sortBy, onSortChange, onQuickAction,
                 <td className="px-3 py-2">
                   <div className="flex items-center gap-1.5">
                     <div className="h-1.5 w-16 overflow-hidden rounded-full bg-muted">
-                      <div className={`h-full rounded-full ${action.status === "completed" ? "bg-emerald-500" : action.status === "blocked" ? "bg-red-400" : "bg-blue-500"}`} style={{ width: `${action.progress}%` }} />
+                      <div className={`h-full rounded-full ${action.status === "completed" ? "bg-status-success" : action.status === "blocked" ? "bg-red-400" : "bg-status-info"}`} style={{ width: `${action.progress}%` }} />
                     </div>
                     <span className="text-xs text-foreground">{action.progress}%</span>
                   </div>
@@ -81,7 +81,7 @@ export default function ListView({ actions, sortBy, onSortChange, onQuickAction,
                 <td className="px-3 py-2 text-xs text-muted-foreground">{action.startDate}</td>
                 <td className="px-3 py-2 text-xs text-foreground">{formatDueDate(action)}</td>
                 <td className="px-3 py-2 text-xs">
-                  {late ? <span className="font-medium text-red-600">Atrasada há {lateDays}d</span> : <span className="text-muted-foreground">—</span>}
+                  {late ? <span className="font-medium text-status-error-text">Atrasada há {lateDays}d</span> : <span className="text-muted-foreground">—</span>}
                 </td>
                 <td className="px-3 py-2 text-xs text-muted-foreground">{action.lastUpdate}</td>
                 <td className="px-2 py-2 text-center">

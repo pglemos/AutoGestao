@@ -88,7 +88,7 @@ export function TeamListSection({
                         alt={`Avatar de ${member.name || 'integrante'}`}
                         fallback={member.name || '?'}
                         size="lg"
-                        className="rounded-2xl bg-emerald-600/10 text-emerald-600 border-emerald-600/10"
+                        className="rounded-2xl bg-brand-primary/10 text-status-success-text border-status-success/10"
                       />
                       <div className="min-w-0 flex-1">
                         <Typography variant="caption" className="block max-w-full tracking-tight truncate">{member.name}</Typography>
@@ -146,7 +146,7 @@ export function TeamListSection({
                     <Button variant="outline" size="icon" onClick={() => member.phone && window.open(`tel:${member.phone}`)} disabled={!member.phone} className="h-mx-10 w-mx-10 rounded-2xl" aria-label={member.phone ? `Ligar para ${member.name}` : `Telefone não informado para ${member.name}`}>
                       <Phone size={16} />
                     </Button>
-                    <Button variant="outline" size="icon" asChild className="h-mx-10 w-mx-10 text-white border-none hover:bg-emerald-600" aria-label={`Ver performance de ${member.name}`}>
+                    <Button variant="outline" size="icon" asChild className="h-mx-10 w-mx-10 text-white border-none hover:bg-brand-primary" aria-label={`Ver performance de ${member.name}`}>
                       <Link to={`/relatorios/performance-vendedor?id=${member.id}`}>
                         <TrendingUp size={16} />
                       </Link>
@@ -174,7 +174,7 @@ export function TeamListSection({
               animate={{ opacity: 1, y: 0 }}
               className="flex flex-col items-center justify-center space-y-mx-md text-center rounded-2xl border border-dashed border-border bg-gray-50 p-mx-lg"
             >
-              <div className="w-mx-16 h-mx-16 rounded-2xl bg-white flex items-center justify-center text-emerald-600 shadow-sm border border-border">
+              <div className="w-mx-16 h-mx-16 rounded-2xl bg-white flex items-center justify-center text-status-success-text shadow-sm border border-border">
                 <Users size={28} strokeWidth={1.8} />
               </div>
               <div className="space-y-mx-xs max-w-sm">

@@ -56,7 +56,7 @@ export function SellerPerformanceTable({
           render: row => (
             <button
               type="button"
-              className="flex items-center gap-3 text-left hover:text-emerald-700 transition-colors"
+              className="flex items-center gap-3 text-left hover:text-status-success-text transition-colors"
               onClick={() => onSelect(row.user_id, String((row as RankingEntry & { store_id?: string }).store_id || ''))}
             >
               <Avatar src={row.avatar_url || undefined} fallback={row.user_name} size="sm" />

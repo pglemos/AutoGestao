@@ -19,8 +19,8 @@ function Option({ active, children, onClick }) {
       type="button"
       onClick={onClick}
       className={cn(
-        "flex w-full items-center justify-between gap-2 rounded-lg px-2.5 py-2 text-left text-sm outline-none transition-colors hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-emerald-500/30",
-        active ? "font-semibold text-emerald-700" : "text-foreground",
+        "flex w-full items-center justify-between gap-2 rounded-lg px-2.5 py-2 text-left text-sm outline-none transition-colors hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-status-success/30",
+        active ? "font-semibold text-status-success-text" : "text-foreground",
       )}
     >
       <span className="min-w-0 truncate">{children}</span>
@@ -83,7 +83,7 @@ export default function OwnerFilterButton({ lastUpdated }) {
         onClick={() => setOpen((value) => !value)}
         aria-haspopup="dialog"
         aria-expanded={open}
-        className="flex h-10 min-w-0 max-w-full items-center gap-2 rounded-xl border border-border bg-white px-3 text-sm font-semibold text-foreground outline-none transition-colors hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-emerald-500/30"
+        className="flex h-10 min-w-0 max-w-full items-center gap-2 rounded-xl border border-border bg-white px-3 text-sm font-semibold text-foreground outline-none transition-colors hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-status-success/30"
       >
         <SlidersHorizontal className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
         <span className="min-w-0 truncate">
@@ -136,7 +136,7 @@ export default function OwnerFilterButton({ lastUpdated }) {
                   value={customStart}
                   max={customEnd}
                   onChange={(event) => setCustomStart(event.target.value)}
-                  className="mt-1 h-9 w-full rounded-lg border border-border px-2 text-sm font-medium normal-case tracking-normal text-foreground outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30"
+                  className="mt-1 h-9 w-full rounded-lg border border-border px-2 text-sm font-medium normal-case tracking-normal text-foreground outline-none focus-visible:ring-2 focus-visible:ring-status-success/30"
                 />
               </label>
               <label className="text-caption font-semibold uppercase tracking-[0.08em] text-muted-foreground">
@@ -146,7 +146,7 @@ export default function OwnerFilterButton({ lastUpdated }) {
                   value={customEnd}
                   min={customStart}
                   onChange={(event) => setCustomEnd(event.target.value)}
-                  className="mt-1 h-9 w-full rounded-lg border border-border px-2 text-sm font-medium normal-case tracking-normal text-foreground outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30"
+                  className="mt-1 h-9 w-full rounded-lg border border-border px-2 text-sm font-medium normal-case tracking-normal text-foreground outline-none focus-visible:ring-2 focus-visible:ring-status-success/30"
                 />
               </label>
             </div>
@@ -162,7 +162,7 @@ export default function OwnerFilterButton({ lastUpdated }) {
                 reload();
                 setOpen(false);
               }}
-              className="flex h-9 shrink-0 items-center gap-2 rounded-lg border border-border px-2.5 text-xs font-semibold text-foreground outline-none transition-colors hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-emerald-500/30"
+              className="flex h-9 shrink-0 items-center gap-2 rounded-lg border border-border px-2.5 text-xs font-semibold text-foreground outline-none transition-colors hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-status-success/30"
             >
               <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
               Atualizar

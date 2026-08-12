@@ -38,7 +38,7 @@ export default function FinancialSummaryCards({ calcResult }) {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       <SummaryCard
-        icon={DollarSign} iconColor="text-emerald-600" iconBg="bg-emerald-50"
+        icon={DollarSign} iconColor="text-status-success-text" iconBg="bg-status-success-surface"
         label="Comissão confirmada" value={comissao}
         sub={`${qtdVendas} veículo${qtdVendas !== 1 ? "s" : ""} vendido${qtdVendas !== 1 ? "s" : ""} no período`}
       />
@@ -48,7 +48,7 @@ export default function FinancialSummaryCards({ calcResult }) {
         sub={faixaLabel}
       />
       <SummaryCard
-        icon={Award} iconColor="text-amber-600" iconBg="bg-amber-50"
+        icon={Award} iconColor="text-status-warning-text" iconBg="bg-status-warning-surface"
         label="Premiações atingidas" value={premiacoesTotal}
         sub={`${premiacoesAtingidas?.length || 0} prêmio${premiacoesAtingidas?.length !== 1 ? "s" : ""} desbloqueado${premiacoesAtingidas?.length !== 1 ? "s" : ""}`}
       />

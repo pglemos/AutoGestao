@@ -103,7 +103,7 @@ export function DashboardHeader({
         <header data-mx-module-header="" className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
             <div className="flex min-w-0 items-start gap-3">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-status-success-surface text-status-success-text">
                 <Building2 size={20} />
               </span>
               <div className="min-w-0">
@@ -123,7 +123,7 @@ export function DashboardHeader({
                   aria-label="Selecionar unidade"
                   value={selectedStoreId || ''}
                   onChange={event => navigateToStore(event.target.value)}
-                  className="h-10 w-full appearance-none rounded-xl border border-border bg-white pl-9 pr-8 text-sm font-semibold text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="h-10 w-full appearance-none rounded-xl border border-border bg-white pl-9 pr-8 text-sm font-semibold text-foreground outline-none focus:ring-2 focus:ring-status-success"
                 >
                   {selectableStores.map(store => (
                     <option key={store.id} value={store.id}>{store.name}</option>
@@ -141,7 +141,7 @@ export function DashboardHeader({
                       key={tab.key}
                       type="button"
                       onClick={() => onTabChange(tab.key)}
-                      className={`inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-xs font-semibold transition ${active ? 'bg-white text-emerald-700 shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+                      className={`inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-xs font-semibold transition ${active ? 'bg-white text-status-success-text shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
                     >
                       <Icon size={14} />
                       <span className="hidden sm:inline">{tab.label}</span>
@@ -158,7 +158,7 @@ export function DashboardHeader({
                   disabled={isRefetching}
                   aria-label={`Atualizar performance. ${lastSyncLabel}`}
                   title={lastSyncLabel}
-                  className="inline-flex h-10 items-center gap-2 rounded-xl bg-emerald-600 px-4 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
+                  className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-primary px-4 text-sm font-semibold text-white hover:bg-brand-primary-hover disabled:opacity-50"
                 >
                   <RefreshCw size={15} className={cn(isRefetching && 'animate-spin')} />
                   Atualizar
@@ -171,7 +171,7 @@ export function DashboardHeader({
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <LastUpdated value={lastSyncAt} />
           {syncWarning && (
-            <div role="alert" className="rounded-xl border border-amber-100 bg-amber-50 px-3 py-2 text-xs font-medium text-amber-700">
+            <div role="alert" className="rounded-xl border border-status-warning/20 bg-status-warning-surface px-3 py-2 text-xs font-medium text-status-warning-text">
               {syncWarning}
             </div>
           )}
@@ -181,7 +181,7 @@ export function DashboardHeader({
           <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
             <div className="grid gap-4 xl:grid-cols-[1fr_auto_auto] xl:items-end">
               <div className="flex items-start gap-3">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-blue-50 text-blue-600">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-status-info-surface text-status-info-text">
                   <CalendarDays size={18} />
                 </span>
                 <div>
@@ -197,7 +197,7 @@ export function DashboardHeader({
                       key={tab.key}
                       type="button"
                       onClick={() => setViewMode(tab.key)}
-                      className={`rounded-lg px-4 text-xs font-semibold transition ${viewMode === tab.key ? 'bg-white text-emerald-700 shadow-sm' : 'text-muted-foreground'}`}
+                      className={`rounded-lg px-4 text-xs font-semibold transition ${viewMode === tab.key ? 'bg-white text-status-success-text shadow-sm' : 'text-muted-foreground'}`}
                     >
                       {tab.label}
                     </button>
@@ -215,7 +215,7 @@ export function DashboardHeader({
                       setStartDate(event.target.value)
                       setViewMode('month')
                     }}
-                    className="mt-1 block h-10 rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500 disabled:bg-gray-50 disabled:text-muted-foreground"
+                    className="mt-1 block h-10 rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-status-success disabled:bg-gray-50 disabled:text-muted-foreground"
                   />
                 </label>
 
@@ -230,7 +230,7 @@ export function DashboardHeader({
                       setEndDate(event.target.value)
                       setViewMode('month')
                     }}
-                    className="mt-1 block h-10 rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500 disabled:bg-gray-50 disabled:text-muted-foreground"
+                    className="mt-1 block h-10 rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-status-success disabled:bg-gray-50 disabled:text-muted-foreground"
                   />
                 </label>
               </div>
@@ -238,7 +238,7 @@ export function DashboardHeader({
               <button
                 type="button"
                 onClick={() => onTabChange('metas')}
-                className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-emerald-200 px-3 text-sm font-semibold text-emerald-700 hover:bg-emerald-50"
+                className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-status-success/30 px-3 text-sm font-semibold text-status-success-text hover:bg-status-success-surface"
               >
                 <Target size={15} />
                 Ver metas
@@ -258,7 +258,7 @@ export function DashboardHeader({
             Status de Unidade
           </Typography>
           <div className="flex items-center justify-center lg:justify-start gap-mx-sm">
-            <div className="h-mx-10 w-mx-xs shrink-0 rounded-mx-full bg-emerald-600 shadow-sm" aria-hidden="true" />
+            <div className="h-mx-10 w-mx-xs shrink-0 rounded-mx-full bg-brand-primary shadow-sm" aria-hidden="true" />
             <Typography variant="h1" className="max-w-full text-3xl sm:text-5xl tracking-tighter break-words">
               {storeName}
             </Typography>

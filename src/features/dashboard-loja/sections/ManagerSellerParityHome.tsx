@@ -164,7 +164,7 @@ export function ManagerSellerParityHome({
       <ManagerHomeState
         title="Não foi possível carregar o Início"
         description="Os dados da unidade não foram sincronizados. Atualize antes de tomar uma decisão operacional."
-        action={<button type="button" onClick={() => void data.handleRefresh()} className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white">Tentar novamente</button>}
+        action={<button type="button" onClick={() => void data.handleRefresh()} className="rounded-xl bg-brand-primary px-4 py-2 text-sm font-semibold text-white">Tentar novamente</button>}
       />
     )
   }
@@ -280,7 +280,7 @@ function ManagerHomeHeader({
                   aria-label="Unidade"
                   value={selectedStoreId || ''}
                   onChange={event => onStoreChange(event.target.value)}
-                  className="min-w-[120px] rounded-xl border border-border py-2 pl-8 pr-3 text-sm outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="min-w-[120px] rounded-xl border border-border py-2 pl-8 pr-3 text-sm outline-none focus:ring-2 focus:ring-status-success"
                 >
                   {stores.map(store => <option key={store.id} value={store.id}>{store.name}</option>)}
                 </select>
@@ -314,7 +314,7 @@ function HeaderAction({ icon: Icon, label, onClick, tone }: {
     <button
       type="button"
       onClick={onClick}
-      className={`flex h-[36px] items-center gap-1 rounded-xl border px-3 text-sm font-semibold shadow-sm transition-colors ${tone === 'emerald' ? 'border-emerald-600 text-emerald-700 hover:bg-emerald-50' : 'border-gray-800 text-foreground hover:bg-gray-100'}`}
+      className={`flex h-[36px] items-center gap-1 rounded-xl border px-3 text-sm font-semibold shadow-sm transition-colors ${tone === 'emerald' ? 'border-status-success text-status-success-text hover:bg-status-success-surface' : 'border-gray-800 text-foreground hover:bg-gray-100'}`}
     >
       <Icon size={14} /> {label}
     </button>
@@ -323,7 +323,7 @@ function HeaderAction({ icon: Icon, label, onClick, tone }: {
 
 function SalesForecastCard({ salesForecast, appointments, appointmentsPerSale }: { salesForecast: number | null; appointments: number; appointmentsPerSale: number | null }) {
   return (
-    <article className="flex min-h-[140px] flex-col justify-between rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-800 p-5 text-white shadow-md">
+    <article className="flex min-h-[140px] flex-col justify-between rounded-2xl bg-gradient-to-br from-brand-primary to-status-success p-5 text-white shadow-md">
       <div className="flex items-start justify-between">
         <p className="text-xs font-medium uppercase tracking-wide text-emerald-100">Previsão de Vendas Hoje</p>
         <span className="grid h-9 w-9 place-items-center rounded-xl bg-white/20"><TrendingUp size={18} /></span>
@@ -356,7 +356,7 @@ function SalesNeededCard({ salesNeeded }: { salesNeeded: number | null }) {
         {missingGoal ? (
           <><p className="text-2xl font-bold text-muted-foreground">Meta não cadastrada</p><p className="mt-1 text-sm text-muted-foreground">Cadastre a meta da loja para ativar a previsibilidade.</p></>
         ) : fulfilled ? (
-          <><p className="text-3xl font-bold text-emerald-600">0 vendas adicionais</p><p className="mt-1 text-sm text-muted-foreground">Necessidade do dia atendida</p></>
+          <><p className="text-3xl font-bold text-status-success-text">0 vendas adicionais</p><p className="mt-1 text-sm text-muted-foreground">Necessidade do dia atendida</p></>
         ) : (
           <><p className="text-3xl font-bold text-foreground">{salesNeeded} {salesNeeded === 1 ? 'venda' : 'vendas'}</p><p className="mt-1 text-sm text-muted-foreground">Para sustentar a meta da loja hoje</p></>
         )}
@@ -395,24 +395,24 @@ function AppointmentGapCard({ appointmentGap }: { appointmentGap: number | null 
   const positive = appointmentGap !== null && appointmentGap > 0
   const absoluteGap = Math.abs(appointmentGap || 0)
   return (
-    <article className={`flex min-h-[140px] flex-col justify-between rounded-2xl border bg-white p-5 shadow-sm ${negative ? 'border-orange-200' : zero || positive ? 'border-emerald-200' : 'border-border-subtle'}`}>
+    <article className={`flex min-h-[140px] flex-col justify-between rounded-2xl border bg-white p-5 shadow-sm ${negative ? 'border-status-warning/30' : zero || positive ? 'border-status-success/30' : 'border-border-subtle'}`}>
       <div className="flex items-start justify-between">
         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Gap de Agendamentos</p>
         <span className="grid h-9 w-9 place-items-center rounded-xl bg-gray-100">
           {missingGoal || negative
-            ? <AlertTriangle size={18} className={negative ? 'text-orange-500' : 'text-muted-foreground'} />
-            : <CheckCircle size={18} className="text-emerald-500" />}
+            ? <AlertTriangle size={18} className={negative ? 'text-status-warning' : 'text-muted-foreground'} />
+            : <CheckCircle size={18} className="text-status-success" />}
         </span>
       </div>
       <div>
         {missingGoal ? (
           <><p className="text-2xl font-bold text-muted-foreground">Não calculado</p><p className="mt-1 text-sm text-muted-foreground">Cadastre a meta da loja.</p></>
         ) : negative ? (
-          <><p className="text-3xl font-bold text-orange-500">{appointmentGap}</p><p className="mt-1 text-sm text-muted-foreground">Faltam {absoluteGap} agendamento{absoluteGap === 1 ? '' : 's'} para sustentar o volume de vendas necessário</p></>
+          <><p className="text-3xl font-bold text-status-warning">{appointmentGap}</p><p className="mt-1 text-sm text-muted-foreground">Faltam {absoluteGap} agendamento{absoluteGap === 1 ? '' : 's'} para sustentar o volume de vendas necessário</p></>
         ) : zero ? (
-          <><p className="text-3xl font-bold text-emerald-600">0</p><p className="mt-1 text-sm text-muted-foreground">Meta de agendamentos atendida</p></>
+          <><p className="text-3xl font-bold text-status-success-text">0</p><p className="mt-1 text-sm text-muted-foreground">Meta de agendamentos atendida</p></>
         ) : (
-          <><p className="text-3xl font-bold text-emerald-600">+{appointmentGap}</p><p className="mt-1 text-sm text-muted-foreground">{appointmentGap} agendamento{appointmentGap === 1 ? '' : 's'} acima da necessidade</p></>
+          <><p className="text-3xl font-bold text-status-success-text">+{appointmentGap}</p><p className="mt-1 text-sm text-muted-foreground">{appointmentGap} agendamento{appointmentGap === 1 ? '' : 's'} acima da necessidade</p></>
         )}
       </div>
     </article>
@@ -438,11 +438,11 @@ function TodayReading({ salesForecast, salesNeeded, coverage, message }: {
         <div className="text-right"><p className="text-xs text-muted-foreground">Necessidade</p><p className="text-xl font-bold text-foreground">{missingGoal ? '—' : fulfilled ? '0' : `${salesNeeded} vendas`}</p></div>
       </div>
       <div className="relative h-3 overflow-hidden rounded-full bg-gray-100">
-        <div className={`h-full rounded-full transition-all ${deficit ? 'bg-orange-400' : 'bg-emerald-500'}`} style={{ width: `${fill}%` }} />
+        <div className={`h-full rounded-full transition-all ${deficit ? 'bg-orange-400' : 'bg-status-success'}`} style={{ width: `${fill}%` }} />
         <div className="absolute left-full top-0 h-full w-0.5 bg-gray-700" />
       </div>
       {coverage !== null ? <p className="mt-1.5 text-xs text-muted-foreground">Cobertura: {Math.round(coverage)}%</p> : null}
-      <p className={`mt-3 text-sm font-medium ${deficit ? 'text-orange-600' : 'text-muted-foreground'}`}>{message}</p>
+      <p className={`mt-3 text-sm font-medium ${deficit ? 'text-status-warning-text' : 'text-muted-foreground'}`}>{message}</p>
     </article>
   )
 }
@@ -450,7 +450,7 @@ function TodayReading({ salesForecast, salesNeeded, coverage, message }: {
 function SuggestedAction({ message }: { message: string }) {
   return (
     <article className="flex h-full flex-col rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
-      <div className="mb-3 flex items-center gap-2"><span className="grid h-8 w-8 place-items-center rounded-lg bg-amber-50"><Lightbulb size={16} className="text-amber-500" /></span><h2 className="text-sm font-bold text-foreground">Ação sugerida</h2></div>
+      <div className="mb-3 flex items-center gap-2"><span className="grid h-8 w-8 place-items-center rounded-lg bg-status-warning-surface"><Lightbulb size={16} className="text-status-warning" /></span><h2 className="text-sm font-bold text-foreground">Ação sugerida</h2></div>
       <p className="flex-1 text-sm leading-relaxed text-muted-foreground">{message}</p>
     </article>
   )
@@ -475,7 +475,7 @@ function TeamFocus({ team, showAll, onSellerClick, onViewAll }: {
     <section aria-label="Equipe em foco" className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-sm font-bold text-foreground">Equipe em foco</h2>
-        {showAll ? <button type="button" onClick={onViewAll} className="flex items-center gap-0.5 text-xs font-medium text-emerald-600 hover:text-emerald-700">Ver toda a equipe <span aria-hidden>›</span></button> : null}
+        {showAll ? <button type="button" onClick={onViewAll} className="flex items-center gap-0.5 text-xs font-medium text-status-success-text hover:text-status-success-text">Ver toda a equipe <span aria-hidden>›</span></button> : null}
       </div>
       <div className="hidden overflow-x-auto md:block">
         <table className="w-full text-sm">
@@ -515,7 +515,7 @@ function TeamFocusRow({ seller, onClick }: { seller: ManagerTeamFocusItem; onCli
 }
 
 function SellerIdentity({ seller }: { seller: ManagerTeamFocusItem }) {
-  return <div className="flex min-w-0 items-center gap-2"><span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700">{initials(seller.sellerName)}</span><span className="truncate text-sm font-medium text-foreground">{seller.sellerName}</span></div>
+  return <div className="flex min-w-0 items-center gap-2"><span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-status-success-surface text-xs font-bold text-status-success-text">{initials(seller.sellerName)}</span><span className="truncate text-sm font-medium text-foreground">{seller.sellerName}</span></div>
 }
 
 function StatusBadge({ status }: { status: ManagerTeamFocusItem['financialStatus'] }) {
@@ -543,7 +543,7 @@ function FinancialRadar({ team, rulesConfigured }: { team: ManagerTeamFocusItem[
 }
 
 function RadarRow({ icon: Icon, label, value, tone }: { icon: LucideIcon; label: string; value: string; tone: 'emerald' | 'amber' }) {
-  return <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-3"><span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${tone === 'amber' ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'}`}><Icon size={18} /></span><div><p className="text-xs text-muted-foreground">{label}</p><p className="text-lg font-bold text-foreground">{value}</p></div></div>
+  return <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-3"><span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${tone === 'amber' ? 'bg-status-warning-surface text-status-warning-text' : 'bg-status-success-surface text-status-success-text'}`}><Icon size={18} /></span><div><p className="text-xs text-muted-foreground">{label}</p><p className="text-lg font-bold text-foreground">{value}</p></div></div>
 }
 
 function AppointmentsChart({ data, onBarClick }: { data: AppointmentChartItem[]; onBarClick: (item: AppointmentChartItem) => void }) {

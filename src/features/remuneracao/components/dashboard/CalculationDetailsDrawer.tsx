@@ -43,7 +43,7 @@ export function CalculationDetailsDrawer({ open, onClose, calculo }: Props) {
             {calculo.formulaItens.map(item => (
               <div key={item.chave} className="flex justify-between text-sm mt-1">
                 <span className="text-muted-foreground">{item.label}</span>
-                <span className="font-semibold text-emerald-600">{formatCurrency(item.valor)}</span>
+                <span className="font-semibold text-status-success-text">{formatCurrency(item.valor)}</span>
               </div>
             ))}
           </Section>
@@ -51,7 +51,7 @@ export function CalculationDetailsDrawer({ open, onClose, calculo }: Props) {
           <div className="border-t border-border pt-4">
             <div className="flex justify-between items-center">
               <span className="font-bold text-mx-navy">Total previsto</span>
-              <span className="text-2xl font-bold text-emerald-600">{formatCurrency(calculo.total)}</span>
+              <span className="text-2xl font-bold text-status-success-text">{formatCurrency(calculo.total)}</span>
             </div>
           </div>
         </div>

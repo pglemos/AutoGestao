@@ -297,7 +297,7 @@ function AdminMorningReport() {
             <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border pb-10 shrink-0">
                 <div className="flex flex-col gap-mx-tiny">
                     <div className="flex items-center gap-mx-sm">
-                        <div className="w-mx-xs h-mx-10 bg-emerald-600 rounded-mx-full shadow-sm" aria-hidden="true" />
+                        <div className="w-mx-xs h-mx-10 bg-brand-primary rounded-mx-full shadow-sm" aria-hidden="true" />
                         <Typography variant="h1">Matinal <Typography as="span" className="">Rede MX</Typography></Typography>
                     </div>
                     <Typography variant="caption" className="pl-mx-md">Visão Administrativa • Todas as Unidades • {range.label}</Typography>
@@ -319,10 +319,10 @@ function AdminMorningReport() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-mx-lg shrink-0">
                 <Card className="p-mx-lg md:p-10 group relative overflow-hidden border-none bg-white">
-                    <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-emerald-600/5 rounded-mx-full blur-3xl -mr-16 -mt-16" aria-hidden="true" />
+                    <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-3xl -mr-16 -mt-16" aria-hidden="true" />
                     <div className="relative z-10">
                         <div className="flex items-center justify-between mb-8">
-                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center shadow-none border border-mx-indigo-100" aria-hidden="true"><Target size={24} /></div>
+                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-status-success-text flex items-center justify-center shadow-none border border-mx-indigo-100" aria-hidden="true"><Target size={24} /></div>
                             <Badge variant="brand" className="px-4 py-1 shadow-sm"><Typography variant="tiny" as="span">META REDE</Typography></Badge>
                         </div>
                         <Typography variant="h1" className="text-5xl tabular-nums leading-none mb-3 tracking-tighter">{networkMetrics.totalGoal}</Typography>
@@ -362,7 +362,7 @@ function AdminMorningReport() {
                     <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-status-info-surface rounded-mx-full blur-3xl -mr-16 -mt-16 opacity-50" aria-hidden="true" />
                     <div className="relative z-10">
                         <div className="flex items-center justify-between mb-8">
-                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center shadow-none border border-mx-indigo-100" aria-hidden="true"><Users size={24} /></div>
+                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-status-success-text flex items-center justify-center shadow-none border border-mx-indigo-100" aria-hidden="true"><Users size={24} /></div>
                             <Badge variant="outline" className="px-4 py-1 shadow-sm"><Typography variant="tiny" as="span">UNIDADES</Typography></Badge>
                         </div>
                         <Typography variant="h1" className="text-5xl tabular-nums leading-none mb-3 tracking-tighter">{storeData.length}</Typography>
@@ -374,7 +374,7 @@ function AdminMorningReport() {
             <Card className="w-full border-none bg-white overflow-hidden">
                 <CardHeader className="p-mx-lg bg-gray-50/30 border-b border-border flex flex-row items-center justify-between">
                     <div className="flex items-center gap-mx-sm">
-                        <div className="w-mx-xl h-mx-xl rounded-2xl bg-white border border-border flex items-center justify-center shadow-sm" aria-hidden="true"><Building2 size={24} className="text-emerald-600" /></div>
+                        <div className="w-mx-xl h-mx-xl rounded-2xl bg-white border border-border flex items-center justify-center shadow-sm" aria-hidden="true"><Building2 size={24} className="text-status-success-text" /></div>
                         <div>
                             <CardTitle className="text-xl uppercase tracking-tighter">Grade Operacional da Rede</CardTitle>
                             <Typography variant="tiny" tone="muted" className="block mt-1">TODAS AS UNIDADES • {range.label}</Typography>
@@ -405,10 +405,10 @@ function AdminMorningReport() {
                                         <tr className="hover:bg-gray-50/30 transition-colors group cursor-pointer" onClick={() => setExpandedStoreId(isExpanded ? null : store.store_id)}>
                                             <td className="pl-10">
                                                 <div className="flex items-center gap-mx-sm">
-                                                    <div className="w-mx-xl h-mx-xl rounded-2xl bg-gray-50 border border-border flex items-center justify-center group-hover:bg-emerald-600 transition-all shadow-mx-inner" aria-hidden="true">
+                                                    <div className="w-mx-xl h-mx-xl rounded-2xl bg-gray-50 border border-border flex items-center justify-center group-hover:bg-brand-primary transition-all shadow-mx-inner" aria-hidden="true">
                                                         <Typography variant="tiny" className="group-hover:text-white">{store.store_name.substring(0, 2)}</Typography>
                                                     </div>
-                                                    <Typography variant="h3" className="text-base group-hover:text-emerald-600 transition-colors tracking-tight">{store.store_name}</Typography>
+                                                    <Typography variant="h3" className="text-base group-hover:text-status-success-text transition-colors tracking-tight">{store.store_name}</Typography>
                                                     <ChevronDown size={16} className={cn("transition-transform text-muted-foreground", isExpanded && "rotate-180")} />
                                                 </div>
                                             </td>
@@ -583,7 +583,7 @@ function StoreMorningReport() {
             <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border pb-10 shrink-0">
                 <div className="flex flex-col gap-mx-tiny">
                     <div className="flex items-center gap-mx-sm">
-                        <div className="w-mx-xs h-mx-10 bg-emerald-600 rounded-mx-full shadow-sm" aria-hidden="true" />
+                        <div className="w-mx-xs h-mx-10 bg-brand-primary rounded-mx-full shadow-sm" aria-hidden="true" />
                         <Typography variant="h1">Matinal <Typography as="span" className="">Oficial</Typography></Typography>
                     </div>
                     <Typography variant="caption" className="pl-mx-md">Unidade Operacional • Ritual D+1 • {referenceDateLabel}</Typography>
@@ -622,10 +622,10 @@ function StoreMorningReport() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-mx-lg shrink-0">
                 <Card className="p-mx-lg md:p-10 group relative overflow-hidden border-none bg-white">
-                    <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-emerald-600/5 rounded-mx-full blur-3xl -mr-16 -mt-16" aria-hidden="true" />
+                    <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-3xl -mr-16 -mt-16" aria-hidden="true" />
                     <div className="relative z-10">
                         <div className="flex items-center justify-between mb-8">
-                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center shadow-none border border-mx-indigo-100" aria-hidden="true"><Target size={24} /></div>
+                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-status-success-text flex items-center justify-center shadow-none border border-mx-indigo-100" aria-hidden="true"><Target size={24} /></div>
                             <Badge variant="brand" className="px-4 py-1 shadow-sm"><Typography variant="tiny" as="span">META MENSAL</Typography></Badge>
                         </div>
                         <Typography variant="h1" className="text-6xl tabular-nums leading-none mb-3 tracking-tighter">{metrics.teamGoal}</Typography>
@@ -666,7 +666,7 @@ function StoreMorningReport() {
                 <Card className="xl:col-span-8 border-none bg-white overflow-hidden">
                     <CardHeader className="p-mx-10 bg-gray-50/30 border-b border-border flex flex-row items-center justify-between">
                         <div className="flex items-center gap-mx-sm">
-                            <div className="w-mx-xl h-mx-xl rounded-2xl bg-white border border-border flex items-center justify-center shadow-sm" aria-hidden="true"><BarChart3 size={24} className="text-emerald-600" /></div>
+                            <div className="w-mx-xl h-mx-xl rounded-2xl bg-white border border-border flex items-center justify-center shadow-sm" aria-hidden="true"><BarChart3 size={24} className="text-status-success-text" /></div>
                             <div>
                                 <CardTitle className="text-xl uppercase tracking-tighter">Grade Operacional do Time</CardTitle>
                                 <Typography variant="tiny" tone="muted" className="block mt-1">EFICIÊNCIA INDIVIDUAL ACUMULADA</Typography>
@@ -692,10 +692,10 @@ function StoreMorningReport() {
                                         <tr key={r.user_id} className="hover:bg-gray-50/30 transition-colors group h-mx-3xl">
                                             <td className="pl-10">
                                                 <div className="flex items-center gap-mx-sm">
-                                                    <div className="w-mx-xl h-mx-xl rounded-2xl bg-gray-50 border border-border flex items-center justify-center group-hover:bg-emerald-600 transition-all shadow-mx-inner" aria-hidden="true">
+                                                    <div className="w-mx-xl h-mx-xl rounded-2xl bg-gray-50 border border-border flex items-center justify-center group-hover:bg-brand-primary transition-all shadow-mx-inner" aria-hidden="true">
                                                         <Typography variant="tiny" className="group-hover:text-white">{r.user_name.substring(0, 2)}</Typography>
                                                     </div>
-                                                    <Typography variant="h3" className="text-base group-hover:text-emerald-600 transition-colors tracking-tight">{r.user_name}</Typography>
+                                                    <Typography variant="h3" className="text-base group-hover:text-status-success-text transition-colors tracking-tight">{r.user_name}</Typography>
                                                 </div>
                                             </td>
                                             <td className="text-center"><Typography variant="mono" className="text-lg opacity-60 tabular-nums">{r.leads}</Typography></td>
@@ -717,9 +717,9 @@ function StoreMorningReport() {
 
                 <aside className="xl:col-span-4 flex flex-col gap-mx-lg">
                     <Card className="p-mx-10 md:p-14 space-y-mx-10 border-none bg-white relative overflow-hidden group">
-                        <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-emerald-600/5 rounded-mx-full blur-3xl -mr-16 -mt-16 opacity-50" aria-hidden="true" />
+                        <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-3xl -mr-16 -mt-16 opacity-50" aria-hidden="true" />
                         <header className="flex items-center gap-mx-sm border-b border-border pb-8 relative z-10">
-                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center shadow-sm" aria-hidden="true"><Zap size={28} /></div>
+                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-status-success-text flex items-center justify-center shadow-sm" aria-hidden="true"><Zap size={28} /></div>
                             <Typography variant="h3" className="tracking-tight">Foco do Dia</Typography>
                         </header>
                         <div className="space-y-mx-md relative z-10">

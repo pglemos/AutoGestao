@@ -47,7 +47,7 @@ export function VisitActionQuickAdd({ clientId, visitNumber }: { clientId: strin
 
   if (!isOpen) {
     return (
-      <Button variant="outline" className="w-full border-dashed border-2 h-mx-14 font-bold hover:text-emerald-600 hover:border-brand-primary" icon={<Plus size={16} />} onClick={() => setIsOpen(true)}>
+      <Button variant="outline" className="w-full border-dashed border-2 h-mx-14 font-bold hover:text-status-success-text hover:border-brand-primary" icon={<Plus size={16} />} onClick={() => setIsOpen(true)}>
         ADICIONAR AÇÃO AO PLANO PDCA
       </Button>
     )
@@ -56,7 +56,7 @@ export function VisitActionQuickAdd({ clientId, visitNumber }: { clientId: strin
   return (
     <Card className="p-mx-lg border-2 border-brand-primary/30 /5 shadow-sm animate-in zoom-in-95 duration-200">
       <div className="flex items-center gap-mx-xs mb-mx-md">
-        <Target className="w-mx-5 h-mx-5 text-emerald-600" />
+        <Target className="w-mx-5 h-mx-5 text-status-success-text" />
         <Typography variant="h3" className="">Nova Ação Corretiva</Typography>
       </div>
       <div className="space-y-mx-md">

@@ -56,7 +56,7 @@ export default function StrategicContextBlock({ cycle }) {
 
       {isDemo && (
         <div className="mt-4">
-          <Badge variant="outline" className="border-amber-200 bg-amber-50 text-amber-700">
+          <Badge variant="outline" className="border-status-warning/30 bg-status-warning-surface text-status-warning-text">
             Dados demonstrativos
           </Badge>
         </div>

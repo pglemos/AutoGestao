@@ -26,7 +26,7 @@ export function ManagerTourLauncher() {
       <div className="fixed bottom-5 right-5 z-50">
         {helpOpen && (
           <div className="absolute bottom-14 right-0 w-64 overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-2xl">
-            <div className="flex items-center justify-between bg-emerald-600 px-4 py-3">
+            <div className="flex items-center justify-between bg-brand-primary px-4 py-3">
               <div className="flex items-center gap-2">
                 <Sparkles size={16} className="text-white" />
                 <p className="text-sm font-semibold text-white">Central de Ajuda</p>
@@ -42,7 +42,7 @@ export function ManagerTourLauncher() {
               <button
                 type="button"
                 onClick={() => { setHelpOpen(false); restart() }}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-100"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-status-success-surface px-3 py-2 text-sm font-medium text-status-success-text transition-colors hover:bg-status-success-surface"
               >
                 <RotateCcw size={14} /> Repetir tour desta página
               </button>
@@ -55,7 +55,7 @@ export function ManagerTourLauncher() {
           aria-expanded={helpOpen}
           aria-label="Ajuda"
           title="Ajuda"
-          className="grid h-12 w-12 place-items-center rounded-full bg-emerald-600 text-white shadow-lg transition-transform hover:scale-105 hover:bg-emerald-700"
+          className="grid h-12 w-12 place-items-center rounded-full bg-brand-primary text-white shadow-lg transition-transform hover:scale-105 hover:bg-brand-primary-hover"
         >
           <HelpCircle size={22} />
         </button>

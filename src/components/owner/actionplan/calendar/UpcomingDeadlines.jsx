@@ -44,7 +44,7 @@ export default function UpcomingDeadlines({ actions, onSelectDate, onViewAll }) 
                     <span className={`rounded-full px-1.5 py-0.5 text-caption font-medium ${statusStyle.badge || ""}`}>
                       {statusStyle.label}
                     </span>
-                    {late && <span className="text-caption font-medium text-red-600">Atrasada</span>}
+                    {late && <span className="text-caption font-medium text-status-error-text">Atrasada</span>}
                   </div>
                   <p className="truncate text-xs text-muted-foreground">{action.title}</p>
                   <p className="truncate text-caption text-muted-foreground">{action.responsible}</p>

@@ -83,7 +83,7 @@ export default function Consultoria() {
         title="Consultoria"
         subtitle="Acompanhe o programa e os encontros persistidos da unidade."
         actions={(
-          <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
+          <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-status-success-surface px-3 py-1 text-xs font-medium text-status-success-text">
             <TrendingUp className="h-3.5 w-3.5" />
             {program ? `Status: ${program.clientStatus}` : "Sem programa vinculado"}
           </span>

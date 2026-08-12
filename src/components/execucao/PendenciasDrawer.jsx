@@ -9,13 +9,13 @@ import ReagendarPendenciaModal from "./ReagendarPendenciaModal";
 moment.locale("pt-br");
 
 const TIPO_COLOR = {
-  "Atendimento": "bg-blue-500",
-  "Retorno": "bg-amber-500",
+  "Atendimento": "bg-status-info",
+  "Retorno": "bg-status-warning",
   "Documentação": "bg-slate-400",
   "Entrega": "bg-purple-500",
   "Pós-venda": "bg-teal-500",
   "Aniversário": "bg-indigo-500",
-  "Garantia": "bg-orange-500",
+  "Garantia": "bg-status-warning",
   "Outra atividade comercial": "bg-slate-500",
 };
 
@@ -29,7 +29,7 @@ export default function PendenciasDrawer({ open, onClose, pendencias, onResolvid
         <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-[#0F172A] font-bold flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-amber-500" />
+              <AlertTriangle className="w-5 h-5 text-status-warning" />
               Pendências anteriores ({pendencias.length})
             </DialogTitle>
           </DialogHeader>
@@ -47,7 +47,7 @@ export default function PendenciasDrawer({ open, onClose, pendencias, onResolvid
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap mb-1">
                           <span className="text-caption font-bold text-muted-foreground uppercase tracking-wider">{op.tipo}</span>
-                          <span className="text-caption font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full">
+                          <span className="text-caption font-bold text-status-error bg-status-error-surface px-2 py-0.5 rounded-full">
                             {atraso === 0 ? "Hoje" : `${atraso}d atraso`}
                           </span>
                         </div>
@@ -78,7 +78,7 @@ export default function PendenciasDrawer({ open, onClose, pendencias, onResolvid
                       )}
                       {op.cliente_id && (
                         <Link to="/carteira"
-                          className="flex items-center gap-1 text-caption font-bold text-[#005BFF] border border-blue-200 hover:bg-blue-50 px-2.5 py-1.5 rounded-lg transition-colors"
+                          className="flex items-center gap-1 text-caption font-bold text-[#005BFF] border border-status-info/30 hover:bg-status-info-surface px-2.5 py-1.5 rounded-lg transition-colors"
                           onClick={onClose}
                         >
                           <ExternalLink className="w-3 h-3" /> Abrir cliente
@@ -89,7 +89,7 @@ export default function PendenciasDrawer({ open, onClose, pendencias, onResolvid
                         <Calendar className="w-3 h-3" /> Reagendar
                       </button>
                       <button onClick={() => setResolverTarget(op)}
-                        className="flex items-center gap-1 text-caption font-bold text-white bg-[#005BFF] hover:bg-blue-700 px-2.5 py-1.5 rounded-lg transition-colors ml-auto">
+                        className="flex items-center gap-1 text-caption font-bold text-white bg-[#005BFF] hover:bg-status-info px-2.5 py-1.5 rounded-lg transition-colors ml-auto">
                         Resolver
                       </button>
                     </div>

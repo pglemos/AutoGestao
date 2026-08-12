@@ -138,11 +138,11 @@ export default function MeetingDrawer({ meetingId, onClose, user, onDataChange, 
         <div className="border-t border-border bg-card px-5 py-3">
           {anticipation && anticipation.status === "in_analysis" ? (
             <div className="space-y-2">
-              <div className="flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2">
-                <Clock className="h-4 w-4 shrink-0 text-amber-600" />
+              <div className="flex items-center gap-2 rounded-lg border border-status-warning/30 bg-status-warning-surface px-3 py-2">
+                <Clock className="h-4 w-4 shrink-0 text-status-warning-text" />
                 <div className="flex-1">
-                  <p className="text-xs font-medium text-amber-800">Antecipação em análise</p>
-                  <p className="text-caption text-amber-700">
+                  <p className="text-xs font-medium text-status-warning-text">Antecipação em análise</p>
+                  <p className="text-caption text-status-warning-text">
                     Solicitada em {new Date(anticipation.createdAt).toLocaleDateString("pt-BR")}
                   </p>
                 </div>

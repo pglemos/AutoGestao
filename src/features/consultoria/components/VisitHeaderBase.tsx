@@ -23,7 +23,7 @@ export function VisitHeaderBase({ data, onChange, clientName }: Props) {
   return (
     <Card className="p-mx-lg bg-white border relative overflow-hidden group">
       <div className="absolute top-mx-0 right-mx-0 p-mx-lg opacity-5 group-hover:opacity-10 transition-opacity">
-        <Users className="w-mx-20 h-mx-20 text-emerald-600" />
+        <Users className="w-mx-20 h-mx-20 text-status-success-text" />
       </div>
 
       <div className="relative z-10">
@@ -55,9 +55,9 @@ export function VisitHeaderBase({ data, onChange, clientName }: Props) {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-mx-md">
-          <div className="space-y-mx-xs p-mx-md bg-emerald-600/5 rounded-2xl border border-brand-primary/10 shadow-sm">
+          <div className="space-y-mx-xs p-mx-md bg-brand-primary/5 rounded-2xl border border-brand-primary/10 shadow-sm">
             <Typography variant="tiny" className="text-mx-tiny">Meta Mensal</Typography>
-            <Input id="header-meta" name="header-meta" value={data.meta_mensal} onChange={e => onChange({ meta_mensal: e.target.value })} placeholder="Ex: 25" className="bg-transparent border-none p-mx-0 text-2xl font-bold text-emerald-600 focus-visible:ring-0 placeholder:text-emerald-600/10" />
+            <Input id="header-meta" name="header-meta" value={data.meta_mensal} onChange={e => onChange({ meta_mensal: e.target.value })} placeholder="Ex: 25" className="bg-transparent border-none p-mx-0 text-2xl font-bold text-status-success-text focus-visible:ring-0 placeholder:text-status-success-text/10" />
           </div>
           <div className="space-y-mx-xs p-mx-md bg-gray-900/5 rounded-2xl border border-brand-secondary/10 shadow-sm">
             <Typography variant="tiny" className="text-brand-secondary text-mx-tiny">Projeção</Typography>

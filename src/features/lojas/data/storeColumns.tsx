@@ -48,7 +48,7 @@ export function buildStoreColumns({
       render: (store) => (
         <div className="flex min-w-0 items-center gap-mx-sm">
           <span
-            className="grid h-mx-10 w-mx-10 shrink-0 place-items-center rounded-xl bg-status-success-surface text-emerald-600"
+            className="grid h-mx-10 w-mx-10 shrink-0 place-items-center rounded-xl bg-status-success-surface text-status-success-text"
             aria-hidden="true"
           >
             <Building2 size={18} />
@@ -136,7 +136,7 @@ export function buildStoreColumns({
               size={14}
               className={cn(
                 'shrink-0',
-                canManageNetwork ? 'text-emerald-600' : 'text-muted-foreground',
+                canManageNetwork ? 'text-status-success-text' : 'text-muted-foreground',
               )}
               aria-hidden="true"
             />
@@ -153,7 +153,7 @@ export function buildStoreColumns({
               href={getRegistrationLink(store.name)}
               target="_blank"
               rel="noreferrer"
-              className="block max-w-mx-64 truncate bg-gray-50 px-mx-xs py-mx-tiny font-mono text-emerald-700 underline-offset-2 hover:underline"
+              className="block max-w-mx-64 truncate bg-gray-50 px-mx-xs py-mx-tiny font-mono text-status-success-text underline-offset-2 hover:underline"
               title={`Abrir pré-cadastro de ${store.name}`}
             >
               {getRegistrationLink(store.name)}

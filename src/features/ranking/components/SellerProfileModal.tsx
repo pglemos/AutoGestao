@@ -65,7 +65,7 @@ export function SellerProfileModal({ seller, onClose }: SellerProfileModalProps)
                     <div className="absolute top-mx-0 left-mx-0 w-full h-mx-tiny bg-gradient-to-r from-brand-primary to-transparent" aria-hidden="true"></div>
                     <div className="w-mx-32 h-mx-32 rounded-full p-mx-tiny bg-gradient-to-b from-brand-primary to-transparent mb-6 relative shrink-0">
                         <Avatar src={seller.avatar_url || undefined} alt={`Avatar de ${seller.user_name}`} fallback={seller.user_name} className="w-full h-full rounded-full border-4 border-mx-black bg-gray-50" />
-                        <div className="absolute -bottom-2 -right-2 w-mx-10 h-mx-10 bg-gray-900 rounded-full flex items-center justify-center border-2 border-brand-primary text-emerald-600 font-bold shadow-lg">
+                        <div className="absolute -bottom-2 -right-2 w-mx-10 h-mx-10 bg-gray-900 rounded-full flex items-center justify-center border-2 border-brand-primary text-status-success-text font-bold shadow-lg">
                             {seller.position}º
                         </div>
                     </div>
@@ -80,7 +80,7 @@ export function SellerProfileModal({ seller, onClose }: SellerProfileModalProps)
                     </div>
 
                     <div className="w-full space-y-mx-xs mt-auto">
-                        <div className="w-full py-3 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-mx-xs bg-emerald-600 text-mx-black shadow-mx-glow-brand">
+                        <div className="w-full py-3 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-mx-xs bg-brand-primary text-mx-black shadow-mx-glow-brand">
                             <Activity className="w-mx-sm h-mx-sm" /> Performance
                         </div>
                     </div>
@@ -142,7 +142,7 @@ export function SellerProfileModal({ seller, onClose }: SellerProfileModalProps)
                                 <div className="bg-white/5 p-mx-md rounded-xl border border-white/5 relative overflow-hidden">
                                     <div className="absolute right-mx-0 top-mx-0 p-mx-xs opacity-10"><CheckCircle2 className="w-mx-10 h-mx-10" /></div>
                                     <div className="text-mx-tiny text-muted-foreground uppercase font-bold mb-1">Meta</div>
-                                    <div className="text-2xl font-display font-bold text-emerald-600">{seller.meta}</div>
+                                    <div className="text-2xl font-display font-bold text-status-success-text">{seller.meta}</div>
                                 </div>
                             </div>
                     </motion.div>

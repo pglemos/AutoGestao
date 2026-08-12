@@ -17,13 +17,13 @@ export default function BoardHeader({ count, view, onViewChange, sortBy, onSortC
         <div className="inline-flex items-center gap-1 rounded-lg border border-border bg-muted/40 p-1">
           <button
             onClick={() => onViewChange("kanban")}
-            className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${view === "kanban" ? "bg-emerald-50 text-emerald-700 shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+            className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${view === "kanban" ? "bg-status-success-surface text-status-success-text shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
           >
             <KanbanSquare className="h-3.5 w-3.5" /> Kanban
           </button>
           <button
             onClick={() => onViewChange("list")}
-            className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${view === "list" ? "bg-emerald-50 text-emerald-700 shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+            className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${view === "list" ? "bg-status-success-surface text-status-success-text shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
           >
             <List className="h-3.5 w-3.5" /> Lista
           </button>

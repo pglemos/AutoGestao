@@ -5,7 +5,7 @@ import MxLogo from '@/assets/mx-logo.png'
 
 export default function OAuthHome() {
   return (
-    <main className="min-h-screen bg-background text-foreground selection:bg-emerald-600/20">
+    <main className="min-h-screen bg-background text-foreground selection:bg-brand-primary/20">
       <section className="min-h-screen flex flex-col">
         <header className="w-full px-mx-lg sm:px-mx-2xl py-mx-lg flex items-center justify-between gap-mx-md border-b border-border bg-white/95">
           <Link to="/" className="flex items-center gap-mx-sm min-w-0" aria-label="MX PERFORMANCE">
@@ -14,7 +14,7 @@ export default function OAuthHome() {
           </Link>
 
           <nav className="flex items-center gap-mx-sm text-label font-bold">
-            <Link to="/privacy" className="text-muted-foreground hover:text-emerald-600 transition-colors">
+            <Link to="/privacy" className="text-muted-foreground hover:text-status-success-text transition-colors">
               Privacidade
             </Link>
             <Link
@@ -35,7 +35,7 @@ export default function OAuthHome() {
               transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
               className="max-w-3xl"
             >
-              <div className="inline-flex items-center gap-mx-xs rounded-mx-full border border-brand-primary/20 bg-status-success-surface px-mx-md py-mx-xs text-xs font-bold uppercase tracking-widest text-emerald-600 mb-mx-lg">
+              <div className="inline-flex items-center gap-mx-xs rounded-mx-full border border-brand-primary/20 bg-status-success-surface px-mx-md py-mx-xs text-xs font-bold uppercase tracking-widest text-status-success-text mb-mx-lg">
                 <CalendarDays size={14} />
                 Google Calendar Integration
               </div>
@@ -58,7 +58,7 @@ export default function OAuthHome() {
                 </Link>
                 <Link
                   to="/privacy"
-                  className="inline-flex items-center justify-center gap-mx-xs h-mx-12 px-mx-lg rounded-xl border border-border text-muted-foreground text-sm font-bold hover:border-brand-primary hover:text-emerald-600 transition-colors"
+                  className="inline-flex items-center justify-center gap-mx-xs h-mx-12 px-mx-lg rounded-xl border border-border text-muted-foreground text-sm font-bold hover:border-brand-primary hover:text-status-success-text transition-colors"
                 >
                   <ShieldCheck size={18} />
                   Politica de Privacidade
@@ -74,7 +74,7 @@ export default function OAuthHome() {
               <div className="space-y-mx-lg">
                 <div className="flex gap-mx-md">
                   <div className="w-mx-12 h-mx-12 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
-                    <CalendarDays size={22} className="text-emerald-600" />
+                    <CalendarDays size={22} className="text-status-success-text" />
                   </div>
                   <div>
                     <h2 className="text-h4 font-bold">Eventos de visitas</h2>
@@ -86,7 +86,7 @@ export default function OAuthHome() {
 
                 <div className="flex gap-mx-md">
                   <div className="w-mx-12 h-mx-12 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
-                    <LockKeyhole size={22} className="text-emerald-600" />
+                    <LockKeyhole size={22} className="text-status-success-text" />
                   </div>
                   <div>
                     <h2 className="text-h4 font-bold">Acesso restrito</h2>
@@ -103,8 +103,8 @@ export default function OAuthHome() {
         <footer className="px-mx-lg sm:px-mx-2xl py-mx-md border-t border-border flex flex-col sm:flex-row items-center justify-between gap-mx-sm text-xs text-muted-foreground">
           <span className="font-bold">MX Consultoria LTDA © {new Date().getFullYear()}</span>
           <div className="flex items-center gap-mx-md font-bold">
-            <Link to="/privacy" className="hover:text-emerald-600">Politica de Privacidade</Link>
-            <Link to="/terms" className="hover:text-emerald-600">Termos de Servico</Link>
+            <Link to="/privacy" className="hover:text-status-success-text">Politica de Privacidade</Link>
+            <Link to="/terms" className="hover:text-status-success-text">Termos de Servico</Link>
           </div>
         </footer>
       </section>

@@ -103,7 +103,7 @@ export default function AiDiagnostics() {
   if (!internalProfile && role !== 'gerente') {
     return (
       <div className="h-full w-full flex flex-col items-center justify-center text-center p-mx-lg bg-gray-50">
-        <ShieldCheck size={48} className="text-emerald-600 opacity-20 mb-6" aria-hidden="true" />
+        <ShieldCheck size={48} className="text-status-success-text opacity-20 mb-6" aria-hidden="true" />
         <Typography variant="h2" className="tracking-tighter">Acesso Restrito</Typography>
         <Typography variant="caption" tone="muted" className="max-w-sm mx-auto mt-4">Diagnóstico operacional disponível para Admin MX e Gerente.</Typography>
       </div>
@@ -114,7 +114,7 @@ export default function AiDiagnostics() {
     return (
       <div className="w-full flex flex-col gap-mx-lg p-mx-lg bg-gray-50">
         <PageHeading
-          title={<span>Diagnóstico <span className="text-emerald-600">Operacional</span></span>}
+          title={<span>Diagnóstico <span className="text-status-success-text">Operacional</span></span>}
           subtitle="Leitura de funil MX 20/60/33"
           actions={(
             <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-end gap-mx-md shrink-0 w-full sm:w-auto">
@@ -134,7 +134,7 @@ export default function AiDiagnostics() {
           <section className="lg:col-span-7 flex flex-col min-h-mx-chart lg:min-h-0">
             <Card className="flex-1 border-none p-mx-md relative overflow-hidden flex flex-col">
               <div className="flex items-center gap-mx-sm mb-8 relative z-10">
-                <TerminalIcon size={18} className="text-emerald-600/80" aria-hidden="true" />
+                <TerminalIcon size={18} className="text-status-success-text/80" aria-hidden="true" />
                 <Typography variant="caption" tone="white" className="">Eventos do diagnóstico operacional</Typography>
               </div>
               <div className="flex-1 font-mono text-sm leading-relaxed space-y-mx-xs overflow-y-auto pr-4 no-scrollbar border-t border-white/5 pt-8 relative z-10" role="log" aria-live="polite">
@@ -152,14 +152,14 @@ export default function AiDiagnostics() {
           <aside className="lg:col-span-5 flex flex-col pb-20 lg:pb-0">
             <Card className="p-mx-md bg-white border h-full space-y-mx-md flex flex-col">
               <header className="flex items-center gap-mx-sm border-b border-border-subtle pb-4">
-                <div className="w-mx-2xl h-mx-2xl rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm shrink-0" aria-hidden="true"><ShieldCheck size={32} /></div>
+                <div className="w-mx-2xl h-mx-2xl rounded-xl bg-brand-primary text-white flex items-center justify-center shadow-sm shrink-0" aria-hidden="true"><ShieldCheck size={32} /></div>
                 <div><Typography variant="h2" className="text-xl sm:text-2xl tracking-tight">Resumo operacional</Typography><Typography variant="caption" tone="muted" className="">Conclusão e ação sugerida</Typography></div>
               </header>
               <div className="flex-1" aria-live="polite">
                 <AnimatePresence mode="wait">
                   {summary ? (
                     <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-mx-xl">
-                      <Card className="p-mx-md bg-mx-indigo-50 border relative group"><Quote size={64} className="absolute -right-4 -bottom-4 text-emerald-600 opacity-5 -rotate-12" aria-hidden="true" /><Typography variant="p" className="text-lg sm:text-xl italic leading-relaxed relative z-10 tracking-tight">“{summary.diagnostic}”</Typography></Card>
+                      <Card className="p-mx-md bg-mx-indigo-50 border relative group"><Quote size={64} className="absolute -right-4 -bottom-4 text-status-success-text opacity-5 -rotate-12" aria-hidden="true" /><Typography variant="p" className="text-lg sm:text-xl italic leading-relaxed relative z-10 tracking-tight">“{summary.diagnostic}”</Typography></Card>
                       <div className="space-y-mx-md"><div className="flex items-center gap-mx-xs"><div className="w-mx-10 h-mx-10 rounded-xl bg-status-success-surface text-status-success flex items-center justify-center border border-status-success/20" aria-hidden="true"><TrendingUp size={20} /></div><Typography variant="tiny" tone="success" className="">Plano de Ação Gerencial</Typography></div><Typography variant="p" className="text-sm sm:text-base font-bold leading-relaxed bg-gray-50 p-mx-md border tracking-tight">{summary.action}</Typography></div>
                     </motion.div>
                   ) : <div className="h-full flex flex-col items-center justify-center py-20 text-center space-y-mx-md"><div className="w-mx-3xl h-mx-3xl rounded-mx-full border-4 border-border-subtle border-t-brand-primary animate-spin" aria-hidden="true" /><Typography variant="caption" tone="muted" className="animate-pulse">ANALISANDO MALHA...</Typography></div>}
@@ -199,13 +199,13 @@ export default function AiDiagnostics() {
           </div>
         </MxSectionCard>
         <MxSectionCard>
-          <MxSectionHeader title="Resumo operacional" description="Conclusão e ação recomendada para a gestão." actions={<ShieldCheck size={18} className="text-emerald-600" aria-hidden="true" />} />
+          <MxSectionHeader title="Resumo operacional" description="Conclusão e ação recomendada para a gestão." actions={<ShieldCheck size={18} className="text-status-success-text" aria-hidden="true" />} />
           <div className="p-5" aria-live="polite">
             <AnimatePresence mode="wait">
               {summary ? (
                 <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
                   <MxStatusBanner tone="info"><div className="flex gap-3"><Quote size={18} className="mt-0.5 shrink-0" aria-hidden="true" /><p className="leading-6">{summary.diagnostic}</p></div></MxStatusBanner>
-                  <div className="rounded-2xl border border-emerald-100 bg-emerald-50 p-5"><div className="flex items-center gap-2 text-emerald-700"><TrendingUp size={18} aria-hidden="true" /><Typography variant="h4" tone="success">Ação recomendada</Typography></div><Typography variant="p" className="mt-3 text-emerald-800">{summary.action}</Typography></div>
+                  <div className="rounded-2xl border border-status-success/20 bg-status-success-surface p-5"><div className="flex items-center gap-2 text-status-success-text"><TrendingUp size={18} aria-hidden="true" /><Typography variant="h4" tone="success">Ação recomendada</Typography></div><Typography variant="p" className="mt-3 text-status-success-text">{summary.action}</Typography></div>
                   <Typography variant="tiny" tone="muted" className="block text-center">Referência operacional: critério 20/60/33</Typography>
                 </motion.div>
               ) : <MxLoadingState label="Analisando operação" />}

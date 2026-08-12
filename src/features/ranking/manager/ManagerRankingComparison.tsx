@@ -37,8 +37,8 @@ function MetricRow({
   return (
     <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 border-b border-gray-50 py-2.5 last:border-0">
       <div className="pr-1 text-right">
-        <span className={`text-base font-bold ${aWins ? 'text-emerald-600' : 'text-foreground'}`}>{a === null ? '—' : format(a)}</span>
-        {aWins && <Check size={12} className="ml-1 inline text-emerald-500" />}
+        <span className={`text-base font-bold ${aWins ? 'text-status-success-text' : 'text-foreground'}`}>{a === null ? '—' : format(a)}</span>
+        {aWins && <Check size={12} className="ml-1 inline text-status-success" />}
       </div>
       <div className="flex min-w-[108px] items-center justify-center gap-1 text-center text-muted-foreground">
         <Icon size={13} className="text-muted-foreground" />
@@ -135,8 +135,8 @@ export function ManagerRankingComparison({ sellers, periodLabel }: { sellers: Ra
     <div className="space-y-4">
       <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm" data-tour="ranking-comparativo" aria-labelledby="ranking-comparison-title">
         <div className="mb-4 flex items-center gap-2">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-emerald-50">
-            <GitCompareArrows size={18} className="text-emerald-600" />
+          <span className="grid h-9 w-9 place-items-center rounded-xl bg-status-success-surface">
+            <GitCompareArrows size={18} className="text-status-success-text" />
           </span>
           <div>
             <h2 id="ranking-comparison-title" className="font-semibold text-foreground">Comparativo de Vendedores — {periodLabel}</h2>
@@ -244,13 +244,13 @@ export function ManagerRankingComparison({ sellers, periodLabel }: { sellers: Ra
             </div>
           </section>
 
-          <section className="rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-indigo-50 p-5">
+          <section className="rounded-2xl border border-status-success/20 bg-gradient-to-br from-status-success-surface to-indigo-50 p-5">
             <h3 className="mb-2 flex items-center gap-1.5 text-sm font-semibold text-foreground">
-              <Sparkles size={16} className="text-emerald-600" /> Pontos para o feedback
+              <Sparkles size={16} className="text-status-success-text" /> Pontos para o feedback
             </h3>
             <ul className="space-y-1.5 text-sm text-foreground">
               {insights.map(insight => (
-                <li key={insight} className="flex gap-2"><span className="mt-0.5 text-emerald-500">•</span><span>{insight}</span></li>
+                <li key={insight} className="flex gap-2"><span className="mt-0.5 text-status-success">•</span><span>{insight}</span></li>
               ))}
             </ul>
           </section>

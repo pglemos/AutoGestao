@@ -181,7 +181,7 @@ export function ManagerSellerParityHomeCanonical({
           <button
             type="button"
             onClick={() => void refresh()}
-            className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white"
+            className="rounded-xl bg-brand-primary px-4 py-2 text-sm font-semibold text-white"
           >
             Tentar novamente
           </button>
@@ -211,10 +211,10 @@ export function ManagerSellerParityHomeCanonical({
         >
           <MetricCard icon={TrendingUp} label="Previsão de Vendas Hoje" tone="emerald">
             <MetricValue value={formatSales(salesForecastToday)} suffix={saleSuffix(salesForecastToday)} />
-            <p className="mt-2 text-xs text-emerald-700">
+            <p className="mt-2 text-xs text-status-success-text">
               {appointmentsToday} agendamento{appointmentsToday === 1 ? '' : 's'} confirmado{appointmentsToday === 1 ? '' : 's'} válido{appointmentsToday === 1 ? '' : 's'}
             </p>
-            <p className="mt-1 text-caption text-emerald-600">
+            <p className="mt-1 text-caption text-status-success-text">
               Razão oficial: 1 venda a cada {formatSales(appointmentsPerSale)} agendamentos
             </p>
           </MetricCard>
@@ -266,7 +266,7 @@ export function ManagerSellerParityHomeCanonical({
         <section className="grid gap-4 lg:grid-cols-[3fr_2fr]">
           <article className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
             <div className="mb-4 flex items-center gap-2">
-              <BarChart3 size={18} className="text-emerald-600" />
+              <BarChart3 size={18} className="text-status-success-text" />
               <h2 className="font-semibold">Leitura do Dia</h2>
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -283,19 +283,19 @@ export function ManagerSellerParityHomeCanonical({
             </div>
             <div className="mt-4 h-2 overflow-hidden rounded-full bg-gray-100">
               <div
-                className={`h-full rounded-full ${forecastCoverage !== null && forecastCoverage >= 100 ? 'bg-emerald-500' : 'bg-amber-500'}`}
+                className={`h-full rounded-full ${forecastCoverage !== null && forecastCoverage >= 100 ? 'bg-status-success' : 'bg-status-warning'}`}
                 style={{ width: `${Math.min(Math.max(forecastCoverage ?? 0, 0), 100)}%` }}
               />
             </div>
             <p className="mt-3 text-sm text-muted-foreground">{todayReading}</p>
           </article>
 
-          <article className="rounded-2xl border border-emerald-100 bg-emerald-50 p-5">
+          <article className="rounded-2xl border border-status-success/20 bg-status-success-surface p-5">
             <div className="mb-3 flex items-center gap-2">
-              <Lightbulb size={18} className="text-emerald-700" />
-              <h2 className="font-semibold text-emerald-900">Ação sugerida</h2>
+              <Lightbulb size={18} className="text-status-success-text" />
+              <h2 className="font-semibold text-status-success-text">Ação sugerida</h2>
             </div>
-            <p className="text-sm leading-6 text-emerald-800">{suggestedAction}</p>
+            <p className="text-sm leading-6 text-status-success-text">{suggestedAction}</p>
           </article>
         </section>
 
@@ -348,7 +348,7 @@ function ManagerHeader({
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-xl font-bold">Início</h1>
             {planVersion ? (
-              <span className="rounded-full bg-emerald-50 px-2 py-1 text-caption font-semibold uppercase tracking-wide text-emerald-700">
+              <span className="rounded-full bg-status-success-surface px-2 py-1 text-caption font-semibold uppercase tracking-wide text-status-success-text">
                 Plano oficial v{planVersion}
               </span>
             ) : null}
@@ -367,7 +367,7 @@ function ManagerHeader({
               value={selectedStoreId}
               onChange={event => onStoreChange?.(event.target.value)}
               disabled={!onStoreChange || stores.length <= 1}
-              className="h-10 rounded-xl border border-border bg-white pl-9 pr-8 text-sm outline-none focus:ring-2 focus:ring-emerald-500 disabled:cursor-not-allowed disabled:bg-gray-50"
+              className="h-10 rounded-xl border border-border bg-white pl-9 pr-8 text-sm outline-none focus:ring-2 focus:ring-status-success disabled:cursor-not-allowed disabled:bg-gray-50"
             >
               {stores.map(store => <option key={store.id} value={store.id}>{store.name}</option>)}
             </select>
@@ -381,14 +381,14 @@ function ManagerHeader({
           <button
             type="button"
             onClick={onViewGoal}
-            className="h-10 rounded-xl border border-emerald-200 px-3 text-sm font-semibold text-emerald-700 hover:bg-emerald-50"
+            className="h-10 rounded-xl border border-status-success/30 px-3 text-sm font-semibold text-status-success-text hover:bg-status-success-surface"
           >
             Ver Meta da Loja
           </button>
           <button
             type="button"
             onClick={onViewRoutine}
-            className="h-10 rounded-xl bg-emerald-600 px-3 text-sm font-semibold text-white hover:bg-emerald-700"
+            className="h-10 rounded-xl bg-brand-primary px-3 text-sm font-semibold text-white hover:bg-brand-primary-hover"
           >
             Ver Rotina do Dia
           </button>
@@ -419,10 +419,10 @@ function MetricCard({
   children: ReactNode
 }) {
   const toneClass = {
-    emerald: 'bg-emerald-50 text-emerald-600',
-    blue: 'bg-blue-50 text-blue-600',
+    emerald: 'bg-status-success-surface text-status-success-text',
+    blue: 'bg-status-info-surface text-status-info-text',
     violet: 'bg-violet-50 text-violet-600',
-    amber: 'bg-amber-50 text-amber-600',
+    amber: 'bg-status-warning-surface text-status-warning-text',
   }[tone]
 
   return (
@@ -473,7 +473,7 @@ function TeamFocus({
     <article className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm">
       <div className="flex items-center justify-between border-b border-border-subtle px-5 py-4">
         <div className="flex items-center gap-2">
-          <Users size={18} className="text-emerald-600" />
+          <Users size={18} className="text-status-success-text" />
           <div>
             <h2 className="font-semibold">Equipe em foco</h2>
             <p className="text-xs text-muted-foreground">Agenda confirmada, projeção e ritmo por vendedor.</p>
@@ -482,7 +482,7 @@ function TeamFocus({
         <button
           type="button"
           onClick={onViewAll}
-          className="text-xs font-semibold text-emerald-700 hover:underline"
+          className="text-xs font-semibold text-status-success-text hover:underline"
         >
           Ver equipe completa
         </button>
@@ -541,7 +541,7 @@ function FinancialRadar({ team }: { team: ManagerTeamFocusItem[] }) {
   return (
     <article className="min-w-0 rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
       <div className="mb-4 flex items-center gap-2">
-        <DollarSign size={18} className="text-emerald-600" />
+        <DollarSign size={18} className="text-status-success-text" />
         <div>
           <h2 className="font-semibold">Radar Financeiro da Equipe</h2>
           <p className="text-xs text-muted-foreground">Motor financeiro compartilhado com o Vendedor.</p>
@@ -562,7 +562,7 @@ function FinancialRadar({ team }: { team: ManagerTeamFocusItem[] }) {
 function RadarItem({ value, label }: { value: string | number; label: string }) {
   return (
     <div className="text-center">
-      <p className="text-xl font-bold text-emerald-700">{value}</p>
+      <p className="text-xl font-bold text-status-success-text">{value}</p>
       <p className="mt-1 text-caption leading-4 text-muted-foreground">{label}</p>
     </div>
   )
@@ -651,7 +651,7 @@ function ManagerHomeState({
   return (
     <div className="grid min-h-[60vh] place-items-center bg-gray-50 p-6">
       <div className="max-w-lg rounded-2xl border border-border-subtle bg-white p-8 text-center shadow-sm">
-        <CheckCircle2 className="mx-auto mb-4 text-emerald-600" size={36} />
+        <CheckCircle2 className="mx-auto mb-4 text-status-success-text" size={36} />
         <h1 className="text-xl font-bold text-foreground">{title}</h1>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">{description}</p>
         {action ? <div className="mt-5">{action}</div> : null}

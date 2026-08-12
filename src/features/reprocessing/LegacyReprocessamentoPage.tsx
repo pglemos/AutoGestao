@@ -328,7 +328,7 @@ export default function Reprocessamento() {
             <MxSectionHeader
               title="Novo lote"
               description="Selecione a unidade e envie um arquivo CSV validado antes da importação."
-              actions={<Database size={18} className="text-emerald-600" aria-hidden="true" />}
+              actions={<Database size={18} className="text-status-success-text" aria-hidden="true" />}
             />
             <div className="space-y-4 p-5">
               <MxField label="Unidade" htmlFor="reprocessing-store">
@@ -350,8 +350,8 @@ export default function Reprocessamento() {
                   className={cn(
                     'flex min-h-28 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed px-4 text-center transition',
                     file
-                      ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-                      : 'border-border bg-gray-50 text-muted-foreground hover:border-emerald-200 hover:bg-emerald-50/50',
+                      ? 'border-status-success/30 bg-status-success-surface text-status-success-text'
+                      : 'border-border bg-gray-50 text-muted-foreground hover:border-status-success/30 hover:bg-status-success-surface/50',
                   )}
                 >
                   <Upload size={22} aria-hidden="true" />
@@ -414,7 +414,7 @@ export default function Reprocessamento() {
           <MxSectionHeader
             title="Histórico de lotes"
             description="Últimos 100 eventos de importação e seus resultados."
-            actions={<History size={18} className="text-emerald-600" aria-hidden="true" />}
+            actions={<History size={18} className="text-status-success-text" aria-hidden="true" />}
           />
           <DataGrid columns={columns} data={history} emptyMessage="Nenhum lote processado." emptyDescription="Os lotes importados aparecerão aqui." />
         </MxSectionCard>

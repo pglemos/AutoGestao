@@ -102,9 +102,9 @@ export function MxSidebarProfileCard({
               role="menuitem"
               onClick={action}
               className={cn(
-                'flex min-h-11 w-full items-center gap-3 rounded-[12px] px-3 text-left text-sm font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500/30',
+                'flex min-h-11 w-full items-center gap-3 rounded-[12px] px-3 text-left text-sm font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-status-success/30',
                 destructive
-                  ? 'text-red-600 hover:bg-red-50'
+                  ? 'text-status-error-text hover:bg-status-error-surface'
                   : 'text-foreground hover:bg-gray-50 hover:text-foreground',
               )}
             >
@@ -122,7 +122,7 @@ export function MxSidebarProfileCard({
         aria-label={`Abrir menu de usuário de ${displayName}`}
         onClick={() => setOpen((value) => !value)}
         className={cn(
-          'group flex min-h-14 w-full items-center gap-3 rounded-[16px] border border-border-subtle bg-gray-50/60 py-2 text-left outline-none transition-colors hover:border-emerald-100 hover:bg-emerald-50/60 focus-visible:ring-2 focus-visible:ring-emerald-500/30',
+          'group flex min-h-14 w-full items-center gap-3 rounded-[16px] border border-border-subtle bg-gray-50/60 py-2 text-left outline-none transition-colors hover:border-status-success/20 hover:bg-status-success-surface/60 focus-visible:ring-2 focus-visible:ring-status-success/30',
           collapsed ? 'justify-center px-0' : 'px-3.5',
         )}
       >
@@ -131,7 +131,7 @@ export function MxSidebarProfileCard({
           alt={`Avatar de ${displayName}`}
           fallback={initials}
           size="md"
-          className="shrink-0 border-emerald-100 bg-emerald-50 font-bold text-emerald-600"
+          className="shrink-0 border-status-success/20 bg-status-success-surface font-bold text-status-success-text"
         />
         {!collapsed ? (
           <>

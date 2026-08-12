@@ -62,9 +62,9 @@ function formatDateTime(value: string | null, emptyLabel: string) {
 }
 
 function statusClass(status: StoreClosingStatus) {
-  if (status === 'submitted_on_time') return 'bg-emerald-100 text-emerald-700'
-  if (status === 'submitted_late' || status === 'draft') return 'bg-amber-100 text-amber-700'
-  return 'bg-red-100 text-red-700'
+  if (status === 'submitted_on_time') return 'bg-status-success-surface text-status-success-text'
+  if (status === 'submitted_late' || status === 'draft') return 'bg-status-warning-surface text-status-warning-text'
+  return 'bg-status-error-surface text-status-error-text'
 }
 
 function MetricCell({
@@ -80,9 +80,9 @@ function MetricCell({
 }) {
   const differs = declaredAvailable && real !== declared
   return (
-    <td className={`px-4 py-3 ${differs ? 'bg-amber-50/60' : ''}`}>
+    <td className={`px-4 py-3 ${differs ? 'bg-status-warning-surface/60' : ''}`}>
       <p className="text-base font-bold text-foreground">{real}</p>
-      <p className={`mt-0.5 text-caption ${differs ? 'font-semibold text-amber-700' : 'text-muted-foreground'}`}>
+      <p className={`mt-0.5 text-caption ${differs ? 'font-semibold text-status-warning-text' : 'text-muted-foreground'}`}>
         {declaredAvailable ? `Declarado: ${declared}` : `${label}: aguardando fechamento`}
       </p>
     </td>
@@ -196,7 +196,7 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
       <header className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-start gap-3">
-            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-status-success-surface text-status-success-text">
               <UsersRound size={20} />
             </span>
             <div>
@@ -221,7 +221,7 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
               type="button"
               onClick={() => { void fetchRows(true) }}
               disabled={refreshing}
-              className="inline-flex h-10 items-center gap-2 rounded-xl bg-emerald-600 px-4 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-50"
+              className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-primary px-4 text-sm font-semibold text-white transition hover:bg-brand-primary-hover disabled:opacity-50"
             >
               <RefreshCw size={15} className={refreshing ? 'animate-spin' : ''} />
               Atualizar
@@ -231,18 +231,18 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
       </header>
 
       {error && (
-        <article className="flex flex-col gap-3 rounded-2xl border border-red-100 bg-red-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+        <article className="flex flex-col gap-3 rounded-2xl border border-status-error/20 bg-status-error-surface p-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-3">
-            <AlertTriangle className="mt-0.5 shrink-0 text-red-600" size={19} />
+            <AlertTriangle className="mt-0.5 shrink-0 text-status-error-text" size={19} />
             <div>
-              <p className="font-semibold text-red-800">Não foi possível atualizar os dados da equipe.</p>
-              <p className="mt-1 text-sm text-red-700">{error}</p>
+              <p className="font-semibold text-status-error-text">Não foi possível atualizar os dados da equipe.</p>
+              <p className="mt-1 text-sm text-status-error-text">{error}</p>
             </div>
           </div>
           <button
             type="button"
             onClick={() => { void fetchRows(true) }}
-            className="h-9 shrink-0 rounded-xl border border-red-200 bg-white px-3 text-sm font-semibold text-red-700 hover:bg-red-100"
+            className="h-9 shrink-0 rounded-xl border border-status-error/30 bg-white px-3 text-sm font-semibold text-status-error-text hover:bg-status-error-surface"
           >
             Tentar novamente
           </button>
@@ -250,7 +250,7 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
       )}
 
       {syncWarning && !error && (
-        <article className="flex items-start gap-3 rounded-2xl border border-amber-100 bg-amber-50 p-4 text-sm text-amber-800">
+        <article className="flex items-start gap-3 rounded-2xl border border-status-warning/20 bg-status-warning-surface p-4 text-sm text-status-warning-text">
           <AlertTriangle className="mt-0.5 shrink-0" size={18} />
           <p>{syncWarning}</p>
         </article>
@@ -340,7 +340,7 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
                     <MetricCell label="Vendas" real={row.live_sales} declared={row.declared_sales} declaredAvailable={declaredAvailable} />
                     <td className="px-4 py-3">
                       {declaredAvailable ? (
-                        <span className={`inline-flex rounded-lg px-2 py-1 text-xs font-medium ${row.has_divergence ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'}`}>
+                        <span className={`inline-flex rounded-lg px-2 py-1 text-xs font-medium ${row.has_divergence ? 'bg-status-warning-surface text-status-warning-text' : 'bg-status-success-surface text-status-success-text'}`}>
                           {row.has_divergence ? 'Revisar diferenças' : 'Dados conferem'}
                         </span>
                       ) : (
@@ -377,10 +377,10 @@ function SummaryCard({
   tone: 'green' | 'amber' | 'blue' | 'red'
 }) {
   const styles = {
-    green: 'bg-emerald-50 text-emerald-600',
-    amber: 'bg-amber-50 text-amber-600',
-    blue: 'bg-blue-50 text-blue-600',
-    red: 'bg-red-50 text-red-600',
+    green: 'bg-status-success-surface text-status-success-text',
+    amber: 'bg-status-warning-surface text-status-warning-text',
+    blue: 'bg-status-info-surface text-status-info-text',
+    red: 'bg-status-error-surface text-status-error-text',
   }
   return (
     <article className="flex min-h-28 items-start gap-3 rounded-2xl border border-border-subtle bg-white p-4 shadow-sm">

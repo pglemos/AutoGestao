@@ -300,7 +300,7 @@ function ProspeccaoCard({ acao, onVerComoFazer }) {
     <div className="bg-white rounded-2xl border border-border shadow-sm p-4 flex flex-col gap-3">
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-status-info-surface flex items-center justify-center flex-shrink-0">
             <Icon className="w-4 h-4 text-[#005BFF]" />
           </div>
           <div>
@@ -308,7 +308,7 @@ function ProspeccaoCard({ acao, onVerComoFazer }) {
             <p className="text-caption text-muted-foreground">{acao.publico}</p>
           </div>
         </div>
-        <span className="text-caption font-bold text-[#005BFF] bg-blue-50 px-2.5 py-1 rounded-full flex-shrink-0">{acao.meta}</span>
+        <span className="text-caption font-bold text-[#005BFF] bg-status-info-surface px-2.5 py-1 rounded-full flex-shrink-0">{acao.meta}</span>
       </div>
       {acao.exemplo && <p className="text-[12px] text-muted-foreground italic">"{acao.exemplo}"</p>}
       <button
@@ -333,7 +333,7 @@ function ComoFazerDrawer({ acao, onClose }) {
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4 mt-2">
-          <div className="flex items-center gap-3 bg-blue-50 rounded-xl p-3">
+          <div className="flex items-center gap-3 bg-status-info-surface rounded-xl p-3">
             <span className="text-[12px] font-semibold text-[#005BFF]">Meta: {acao.meta}</span>
             <span className="text-[12px] text-muted-foreground">• Público: {acao.publico}</span>
           </div>
@@ -531,9 +531,9 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
       {/* Main steps */}
       <div className="lg:col-span-2 space-y-4">
         {conflito && (
-          <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
-            <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
-            <p className="text-body-sm text-amber-800 font-medium">
+          <div className="flex items-start gap-3 bg-status-warning-surface border border-status-warning/30 rounded-xl px-4 py-3">
+            <AlertTriangle className="w-4 h-4 text-status-warning flex-shrink-0 mt-0.5" />
+            <p className="text-body-sm text-status-warning-text font-medium">
               Você possui um cliente agendado neste horário. Priorize o atendimento e retome sua rotina depois.
             </p>
           </div>
@@ -561,7 +561,7 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className={`text-caption font-bold px-2 py-0.5 rounded-lg ${isCurrent ? "bg-[#005BFF] text-white" : "bg-slate-100 text-muted-foreground"}`}>{time}</span>
                     <span className={`text-[14px] font-bold ${isCurrent ? "text-[#0F172A]" : "text-muted-foreground"}`}>{step.label}</span>
-                    {isCurrent && <span className="text-caption font-bold text-[#005BFF] bg-blue-50 px-2 py-0.5 rounded-full uppercase tracking-wider">Agora</span>}
+                    {isCurrent && <span className="text-caption font-bold text-[#005BFF] bg-status-info-surface px-2 py-0.5 rounded-full uppercase tracking-wider">Agora</span>}
                   </div>
                   {/* Frase contextual no card recolhido */}
                   {!isExpanded && (
@@ -621,7 +621,7 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
                         ))}
                       </div>
                       {objecaoAberta && (
-                        <div className="bg-blue-50 rounded-xl p-4">
+                        <div className="bg-status-info-surface rounded-xl p-4">
                           <p className="text-[12px] font-bold text-[#005BFF] mb-2">{objecaoAberta}</p>
                           <ul className="space-y-1.5">
                             {OBJECOES.find(o => o.label === objecaoAberta)?.dicas.map((d, i) => (
@@ -655,7 +655,7 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
                       {step.atalhos.map(a => (
                         <Link key={a.label} to={a.to}
                           onClick={() => base44.analytics.track({ eventName: "rotina_clicou_atalho", properties: { atalho: a.label, etapa: step.id } })}
-                          className={`flex items-center gap-1.5 text-[12px] font-bold px-3.5 py-2 rounded-xl transition-colors ${a.primary ? "bg-[#005BFF] text-white hover:bg-blue-700" : "border border-[#005BFF] text-[#005BFF] hover:bg-blue-50"}`}>
+                          className={`flex items-center gap-1.5 text-[12px] font-bold px-3.5 py-2 rounded-xl transition-colors ${a.primary ? "bg-[#005BFF] text-white hover:bg-status-info" : "border border-[#005BFF] text-[#005BFF] hover:bg-status-info-surface"}`}>
                           <ExternalLink className="w-3 h-3" />{a.label}
                         </Link>
                       ))}

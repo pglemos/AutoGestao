@@ -54,7 +54,7 @@ export default function CalendarHeader({
                 onClick={() => onViewModeChange(opt.value)}
                 className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
                   viewMode === opt.value
-                    ? "bg-emerald-50 text-emerald-700 shadow-sm"
+                    ? "bg-status-success-surface text-status-success-text shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >

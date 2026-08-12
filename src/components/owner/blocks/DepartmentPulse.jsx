@@ -111,7 +111,7 @@ export default function DepartmentPulse({ snapshots, loading, onTalkToConsultant
               Fonte: {selected.source || "—"} • Atualizado: {formatDateTime(selected.last_data_at || selected.updated_date)}
             </div>
 
-            <div className="rounded-md border border-amber-100 bg-amber-50/50 px-3 py-2 text-xs text-muted-foreground">
+            <div className="rounded-md border border-status-warning/20 bg-status-warning-surface/50 px-3 py-2 text-xs text-muted-foreground">
               A página detalhada do departamento será construída na próxima etapa.
             </div>
           </div>

@@ -49,7 +49,7 @@ function ReportHeader({ report }: { report: WeeklyFeedbackReport }) {
   return (
     <div className="flex items-center justify-between mb-10 relative z-10">
       <div className="flex items-center gap-mx-sm">
-        <div className="w-mx-14 h-mx-14 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm">
+        <div className="w-mx-14 h-mx-14 rounded-xl bg-brand-primary text-white flex items-center justify-center shadow-sm">
           <Calendar size={24} />
         </div>
         <div>

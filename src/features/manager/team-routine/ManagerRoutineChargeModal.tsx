@@ -56,14 +56,14 @@ export function ManagerRoutineChargeModal({ open, sellerName, date, onClose, onS
             value={message}
             onChange={(event) => setMessage(event.target.value)}
             rows={4}
-            className="w-full rounded-xl border border-border px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+            className="w-full rounded-xl border border-border px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-status-success"
           />
         </div>
-        {sent && <div className="rounded-xl bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700">Cobrança registrada.</div>}
+        {sent && <div className="rounded-xl bg-status-success-surface px-3 py-2 text-sm font-medium text-status-success-text">Cobrança registrada.</div>}
         </div>
         <div className="mt-5 flex justify-end gap-2">
           <button type="button" onClick={onClose} className="rounded-xl bg-gray-100 px-4 py-2 text-sm font-medium text-foreground hover:bg-gray-200">Cancelar</button>
-          <button type="button" className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-50" onClick={() => void handleSend()} disabled={sending || sent}>{sending ? 'Enviando...' : 'Enviar cobrança'}</button>
+          <button type="button" className="rounded-xl bg-brand-primary px-4 py-2 text-sm font-medium text-white hover:bg-brand-primary-hover disabled:opacity-50" onClick={() => void handleSend()} disabled={sending || sent}>{sending ? 'Enviando...' : 'Enviar cobrança'}</button>
         </div>
       </div>
     </div>

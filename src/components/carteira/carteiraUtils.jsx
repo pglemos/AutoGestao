@@ -350,9 +350,9 @@ export function classificacaoScore(score) {
   const label = classificacaoScoreOficial(score);
   const CORES = {
     "Excelente": "text-green-600 bg-green-50",
-    "Boa": "text-blue-600 bg-blue-50",
-    "Atenção": "text-amber-600 bg-amber-50",
-    "Crítica": "text-red-600 bg-red-50",
+    "Boa": "text-status-info-text bg-status-info-surface",
+    "Atenção": "text-status-warning-text bg-status-warning-surface",
+    "Crítica": "text-status-error-text bg-status-error-surface",
   };
   return { label, color: CORES[label] };
 }
@@ -371,25 +371,25 @@ export function calcularPrioridade(cliente) {
 
 // ─── CORES ───────────────────────────────────────────────────────────────────
 export function tempColor(t) {
-  if (t === "Quente") return "bg-red-50 text-red-600 border-red-100";
-  if (t === "Morno") return "bg-amber-50 text-amber-600 border-amber-100";
+  if (t === "Quente") return "bg-status-error-surface text-status-error-text border-status-error/20";
+  if (t === "Morno") return "bg-status-warning-surface text-status-warning-text border-status-warning/20";
   return "bg-slate-100 text-muted-foreground border-border";
 }
 
 export function prioridadeColor(p) {
-  if (p === "Máxima") return "bg-red-100 text-red-700";
-  if (p === "Alta") return "bg-red-50 text-red-600";
-  if (p === "Média") return "bg-amber-50 text-amber-600";
+  if (p === "Máxima") return "bg-status-error-surface text-status-error-text";
+  if (p === "Alta") return "bg-status-error-surface text-status-error-text";
+  if (p === "Média") return "bg-status-warning-surface text-status-warning-text";
   return "bg-slate-100 text-muted-foreground";
 }
 
 export function statusComercialColor(s) {
   if (s === "Vendido") return "bg-green-50 text-green-600";
-  if (s === "Perdido") return "bg-red-50 text-red-500";
+  if (s === "Perdido") return "bg-status-error-surface text-status-error";
   // Cancelada é neutra e âmbar: não é sucesso (verde), não é perda de
   // negociação (vermelho) e não é erro técnico.
-  if (s === "Cancelada") return "bg-amber-50 text-amber-700";
-  if (s === "Agendado") return "bg-blue-50 text-blue-600";
+  if (s === "Cancelada") return "bg-status-warning-surface text-status-warning-text";
+  if (s === "Agendado") return "bg-status-info-surface text-status-info-text";
   if (s === "Em negociação") return "bg-purple-50 text-purple-600";
   if (s === "Futuro") return "bg-slate-100 text-muted-foreground";
   return "bg-slate-50 text-muted-foreground";

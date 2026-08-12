@@ -23,11 +23,11 @@ export type MxAccessMode = 'manage' | 'read-only'
 
 type ToneStyle = { icon: string; surface: string; value: string; banner: string; progress: string }
 const toneStyles: Record<MxTone, ToneStyle> = {
-  brand: { icon: 'bg-emerald-50 text-emerald-600', surface: 'border-border-subtle', value: 'text-emerald-700', banner: 'border-emerald-100 bg-emerald-50 text-emerald-800', progress: 'bg-emerald-600' },
-  success: { icon: 'bg-emerald-50 text-emerald-600', surface: 'border-border-subtle', value: 'text-emerald-700', banner: 'border-emerald-100 bg-emerald-50 text-emerald-800', progress: 'bg-emerald-600' },
-  warning: { icon: 'bg-amber-50 text-amber-600', surface: 'border-amber-200', value: 'text-amber-700', banner: 'border-amber-200 bg-amber-50 text-amber-800', progress: 'bg-amber-500' },
-  danger: { icon: 'bg-red-50 text-red-600', surface: 'border-red-200', value: 'text-red-700', banner: 'border-red-200 bg-red-50 text-red-700', progress: 'bg-red-500' },
-  info: { icon: 'bg-blue-50 text-blue-600', surface: 'border-blue-200', value: 'text-blue-700', banner: 'border-blue-200 bg-blue-50 text-blue-700', progress: 'bg-blue-500' },
+  brand: { icon: 'bg-status-success-surface text-status-success-text', surface: 'border-border-subtle', value: 'text-status-success-text', banner: 'border-status-success/20 bg-status-success-surface text-status-success-text', progress: 'bg-brand-primary' },
+  success: { icon: 'bg-status-success-surface text-status-success-text', surface: 'border-border-subtle', value: 'text-status-success-text', banner: 'border-status-success/20 bg-status-success-surface text-status-success-text', progress: 'bg-brand-primary' },
+  warning: { icon: 'bg-status-warning-surface text-status-warning-text', surface: 'border-status-warning/30', value: 'text-status-warning-text', banner: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text', progress: 'bg-status-warning' },
+  danger: { icon: 'bg-status-error-surface text-status-error-text', surface: 'border-status-error/30', value: 'text-status-error-text', banner: 'border-status-error/30 bg-status-error-surface text-status-error-text', progress: 'bg-status-error' },
+  info: { icon: 'bg-status-info-surface text-status-info-text', surface: 'border-status-info/30', value: 'text-status-info-text', banner: 'border-status-info/30 bg-status-info-surface text-status-info-text', progress: 'bg-status-info' },
   violet: { icon: 'bg-violet-50 text-violet-600', surface: 'border-violet-200', value: 'text-violet-700', banner: 'border-violet-200 bg-violet-50 text-violet-700', progress: 'bg-violet-500' },
   neutral: { icon: 'bg-gray-50 text-muted-foreground', surface: 'border-border-subtle', value: 'text-foreground', banner: 'border-border bg-gray-50 text-foreground', progress: 'bg-gray-400' },
 }
@@ -82,7 +82,7 @@ export function MxModuleHeader({ title, description, eyebrow, actions, className
     <InternalMxTemplateHeader data-mx-module-header="" className={cn('rounded-2xl border border-border-subtle bg-white p-5 shadow-sm', className)}>
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="min-w-0 max-w-3xl">
-          {eyebrow ? <Typography variant="caption" className="mb-1 block font-semibold text-emerald-700">{eyebrow}</Typography> : null}
+          {eyebrow ? <Typography variant="caption" className="mb-1 block font-semibold text-status-success-text">{eyebrow}</Typography> : null}
           <Typography as="h1" variant="h2" className="text-xl font-bold text-foreground md:text-2xl">{title}</Typography>
           {description ? <Typography variant="p" className="mt-1 max-w-3xl text-sm leading-6 text-muted-foreground">{description}</Typography> : null}
         </div>
@@ -111,7 +111,7 @@ export function MxMetricCard({ title, value, detail, icon: Icon, tone = 'brand',
         <Typography variant="h2" className={cn('text-3xl font-bold leading-none', styles.value)}>{value}</Typography>
         {children}
       </div>
-      {actionLabel && onAction ? <Button variant="ghost" size="sm" className="mt-3 min-h-10 w-full justify-between px-0 text-emerald-700" onClick={onAction}>{actionLabel}<span aria-hidden="true">→</span></Button> : null}
+      {actionLabel && onAction ? <Button variant="ghost" size="sm" className="mt-3 min-h-10 w-full justify-between px-0 text-status-success-text" onClick={onAction}>{actionLabel}<span aria-hidden="true">→</span></Button> : null}
     </Card>
   )
 }
@@ -153,7 +153,7 @@ export function MxField({ label, hint, error, children, className, ...props }: {
     <label className={cn('flex min-w-0 flex-col gap-2', className)} {...props}>
       <Typography as="span" variant="caption" className="font-medium text-muted-foreground">{label}</Typography>
       {children}
-      {error ? <Typography variant="tiny" className="text-red-600">{error}</Typography> : hint ? <Typography variant="tiny" className="text-muted-foreground">{hint}</Typography> : null}
+      {error ? <Typography variant="tiny" className="text-status-error-text">{error}</Typography> : hint ? <Typography variant="tiny" className="text-muted-foreground">{hint}</Typography> : null}
     </label>
   )
 }
@@ -175,13 +175,13 @@ export function MxEmptyState({ title, description, icon: Icon = Inbox, action, c
 }
 
 export function MxLoadingState({ label = 'Carregando', className }: { label?: string; className?: string }) {
-  return <div className={cn('flex min-h-48 flex-col items-center justify-center gap-3 text-muted-foreground', className)} aria-busy="true" aria-live="polite" aria-label={label}><LoaderCircle className="animate-spin text-emerald-600 motion-reduce:animate-none" size={28} aria-hidden="true" /><Typography variant="caption" className="font-medium text-muted-foreground">{label}</Typography></div>
+  return <div className={cn('flex min-h-48 flex-col items-center justify-center gap-3 text-muted-foreground', className)} aria-busy="true" aria-live="polite" aria-label={label}><LoaderCircle className="animate-spin text-status-success-text motion-reduce:animate-none" size={28} aria-hidden="true" /><Typography variant="caption" className="font-medium text-muted-foreground">{label}</Typography></div>
 }
 
 export function MxErrorState({ title = 'Não foi possível carregar', description, retry, className }: { title?: string; description: string; retry?: () => void; className?: string }) {
   return (
     <div className={cn('flex min-h-48 flex-col items-center justify-center px-5 py-10 text-center', className)} role="alert">
-      <span className="grid h-14 w-14 place-items-center rounded-2xl bg-red-50 text-red-600"><AlertTriangle size={24} aria-hidden="true" /></span>
+      <span className="grid h-14 w-14 place-items-center rounded-2xl bg-status-error-surface text-status-error-text"><AlertTriangle size={24} aria-hidden="true" /></span>
       <Typography variant="h3" className="mt-4 text-base text-foreground">{title}</Typography>
       <Typography variant="p" className="mt-2 max-w-md text-sm leading-6 text-muted-foreground">{description}</Typography>
       {retry ? <Button variant="outline" className="mt-4" onClick={retry}>Tentar novamente</Button> : null}

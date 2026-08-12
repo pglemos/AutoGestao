@@ -408,7 +408,7 @@ export default function ManagerDailyClosing() {
                   type="date"
                   value={date}
                   onChange={(event) => setDate(event.target.value)}
-                  className="h-[36px] border border-border bg-white rounded-[12px] px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 shadow-2xs transition-all"
+                  className="h-[36px] border border-border bg-white rounded-[12px] px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-status-success focus:border-status-success shadow-2xs transition-all"
                 />
               </Field>
               <Field label="Unidade">
@@ -416,7 +416,7 @@ export default function ManagerDailyClosing() {
                   aria-label="Unidade"
                   value={storeId || ""}
                   onChange={() => undefined}
-                  className="h-[36px] border border-border bg-white rounded-[12px] px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 min-w-36 shadow-2xs transition-all"
+                  className="h-[36px] border border-border bg-white rounded-[12px] px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-status-success focus:border-status-success min-w-36 shadow-2xs transition-all"
                 >
                   <option value={storeId || ""}>
                     {membership?.store?.name || "Unidade atual"}
@@ -425,7 +425,7 @@ export default function ManagerDailyClosing() {
               </Field>
               <button
                 type="button"
-                className="inline-flex h-[36px] items-center gap-1 rounded-[12px] bg-emerald-600 px-3 text-xs font-medium text-white shadow-sm transition-colors hover:bg-emerald-700"
+                className="inline-flex h-[36px] items-center gap-1 rounded-[12px] bg-brand-primary px-3 text-xs font-medium text-white shadow-sm transition-colors hover:bg-brand-primary-hover"
                 onClick={refreshAll}
               >
                 <RefreshCw size={16} />
@@ -436,7 +436,7 @@ export default function ManagerDailyClosing() {
         </section>
 
         {(error || requestError) && (
-          <div className="rounded-[12px] border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          <div className="rounded-[12px] border border-status-error/30 bg-status-error-surface p-4 text-sm text-status-error-text">
               {error ||
                 `Não foi possível carregar as regularizações: ${requestError}`}{" "}
               Use Atualizar para tentar novamente.
@@ -444,7 +444,7 @@ export default function ManagerDailyClosing() {
         )}
 
         {syncWarning && (
-          <p className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800" role="status">
+          <p className="rounded-xl border border-status-warning/30 bg-status-warning-surface px-4 py-3 text-sm text-status-warning-text" role="status">
             {syncWarning}
           </p>
         )}
@@ -562,7 +562,7 @@ export default function ManagerDailyClosing() {
 
         <section className="rounded-[16px] border border-border-subtle bg-white p-5 shadow-sm">
           <h2 className="flex items-center gap-2 text-base font-semibold text-foreground">
-            <BarChart3 size={18} className="text-emerald-600" />
+            <BarChart3 size={18} className="text-status-success-text" />
             Comparativo de Disciplina do Fechamento
           </h2>
           <p className="mb-4 mt-0 text-xs text-muted-foreground">
@@ -765,7 +765,7 @@ export function PendingReminderModal({
       </button>
       <button
         type="button"
-        className="h-9 flex-1 rounded-[12px] bg-amber-600 px-4 text-sm font-medium text-white hover:bg-amber-700 disabled:opacity-40"
+        className="h-9 flex-1 rounded-[12px] bg-status-warning px-4 text-sm font-medium text-white hover:bg-status-warning disabled:opacity-40"
         disabled={reminding}
         onClick={onConfirm}
       >
@@ -794,14 +794,14 @@ export function PendingReminderModal({
                 key={seller.id}
                 className="flex items-center gap-2 text-sm text-foreground"
               >
-                <Megaphone size={14} className="text-amber-500" />
+                <Megaphone size={14} className="text-status-warning" />
                 {seller.name}
               </li>
             ))}
           </ul>
         </div>}
-        <div className="rounded-[12px] border border-amber-100 bg-amber-50 p-3">
-          <p className="mb-1 text-xs font-medium text-amber-700">
+        <div className="rounded-[12px] border border-status-warning/20 bg-status-warning-surface p-3">
+          <p className="mb-1 text-xs font-medium text-status-warning-text">
             Mensagem padrão enviada:
           </p>
           <p className="text-sm italic text-foreground">
@@ -855,25 +855,25 @@ function SummaryCard({
   onAction: () => void;
 }) {
   const colors = {
-    warning: "border-amber-200 bg-amber-50 text-amber-600",
-    danger: "border-red-200 bg-red-50 text-red-600",
-    success: "border-emerald-300 bg-emerald-100 text-emerald-700",
-    info: "border-blue-200 bg-blue-50 text-blue-600",
+    warning: "border-status-warning/30 bg-status-warning-surface text-status-warning-text",
+    danger: "border-status-error/30 bg-status-error-surface text-status-error-text",
+    success: "border-status-success/40 bg-status-success-surface text-status-success-text",
+    info: "border-status-info/30 bg-status-info-surface text-status-info-text",
     neutral: "border-border-subtle bg-white text-muted-foreground",
   }[tone];
   const actionColor =
     tone === "danger" || tone === "success"
-      ? "border-emerald-200 text-emerald-700"
+      ? "border-status-success/30 text-status-success-text"
       : tone === "warning"
-        ? "border-amber-200 text-amber-700"
+        ? "border-status-warning/30 text-status-warning-text"
         : tone === "info"
-          ? "border-blue-200 text-blue-600"
+          ? "border-status-info/30 text-status-info-text"
           : "border-border text-muted-foreground";
   const valueColor = {
-    warning: "text-amber-700",
-    danger: "text-red-700",
-    success: "text-emerald-800",
-    info: "text-blue-700",
+    warning: "text-status-warning-text",
+    danger: "text-status-error-text",
+    success: "text-status-success-text",
+    info: "text-status-info-text",
     neutral: "text-foreground",
   }[tone];
   return (
@@ -887,10 +887,10 @@ function SummaryCard({
         {status !== "—" ? (
           <span className={`shrink-0 whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-semibold ${
             status === "Excelente" || status === "Bom"
-              ? "bg-emerald-100 text-emerald-700"
+              ? "bg-status-success-surface text-status-success-text"
               : status === "Regular"
-                ? "bg-amber-100 text-amber-700"
-                : "bg-red-100 text-red-700"
+                ? "bg-status-warning-surface text-status-warning-text"
+                : "bg-status-error-surface text-status-error-text"
           }`}>
             {status}
           </span>
@@ -924,12 +924,12 @@ function DisciplineCard({ value }: { value: number | null }) {
   const palette = value === null
     ? { surface: "bg-gray-50", badge: "bg-gray-100 text-muted-foreground", glow: "from-gray-300 to-gray-400", ring: "rgb(148 163 184)", track: "rgb(241 245 249)", inner: "bg-gray-50", text: "text-muted-foreground" }
     : label === "Excelente"
-      ? { surface: "bg-emerald-50", badge: "bg-emerald-600 text-white", glow: "from-emerald-400 to-emerald-500", ring: "rgb(16 185 129)", track: "rgb(209 250 229)", inner: "bg-emerald-50", text: "text-emerald-600" }
+      ? { surface: "bg-status-success-surface", badge: "bg-brand-primary text-white", glow: "from-emerald-400 to-emerald-500", ring: "rgb(16 185 129)", track: "rgb(209 250 229)", inner: "bg-status-success-surface", text: "text-status-success-text" }
       : label === "Boa"
-        ? { surface: "bg-blue-50", badge: "bg-blue-100 text-blue-700", glow: "from-blue-400 to-blue-500", ring: "rgb(59 130 246)", track: "rgb(219 234 254)", inner: "bg-blue-50", text: "text-blue-500" }
+        ? { surface: "bg-status-info-surface", badge: "bg-status-info-surface text-status-info-text", glow: "from-blue-400 to-blue-500", ring: "rgb(59 130 246)", track: "rgb(219 234 254)", inner: "bg-status-info-surface", text: "text-status-info" }
         : label === "Baixa"
-          ? { surface: "bg-amber-50", badge: "bg-amber-100 text-amber-700", glow: "from-amber-400 to-amber-500", ring: "rgb(245 158 11)", track: "rgb(254 243 199)", inner: "bg-amber-50", text: "text-amber-600" }
-          : { surface: "bg-red-50", badge: "bg-red-100 text-red-700", glow: "from-red-400 to-red-500", ring: "rgb(239 68 68)", track: "rgb(254 226 226)", inner: "bg-red-50", text: "text-red-600" };
+          ? { surface: "bg-status-warning-surface", badge: "bg-status-warning-surface text-status-warning-text", glow: "from-amber-400 to-status-warning", ring: "rgb(245 158 11)", track: "rgb(254 243 199)", inner: "bg-status-warning-surface", text: "text-status-warning-text" }
+          : { surface: "bg-status-error-surface", badge: "bg-status-error-surface text-status-error-text", glow: "from-red-400 to-red-500", ring: "rgb(239 68 68)", track: "rgb(254 226 226)", inner: "bg-status-error-surface", text: "text-status-error-text" };
   return (
     <div className={`flex h-full min-h-[164px] flex-col rounded-[16px] border border-border-subtle p-3 shadow-sm ${palette.surface}`}>
       <div className="mb-1 flex flex-wrap items-center justify-between gap-x-1 gap-y-0.5">
@@ -1047,7 +1047,7 @@ function DisciplineTrendCard({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
               <h2 className="flex items-center gap-2 text-base font-semibold text-foreground">
-            <TrendingUp size={18} className="text-emerald-600" />
+            <TrendingUp size={18} className="text-status-success-text" />
             Evolução da Disciplina do Fechamento
           </h2>
           <p className="text-xs text-muted-foreground">
@@ -1061,7 +1061,7 @@ function DisciplineTrendCard({
               key={option}
               type="button"
               onClick={() => onRange(option)}
-              className={`rounded-lg px-3 py-1.5 text-xs font-medium ${range === option ? "bg-emerald-600 text-white" : "text-muted-foreground hover:text-foreground"}`}
+              className={`rounded-lg px-3 py-1.5 text-xs font-medium ${range === option ? "bg-brand-primary text-white" : "text-muted-foreground hover:text-foreground"}`}
             >
               {option} dias
             </button>
@@ -1148,9 +1148,9 @@ function ComparisonRow({
 }) {
   const color =
     tone === "team"
-      ? "bg-emerald-500"
+      ? "bg-status-success"
       : tone === "top"
-        ? "bg-emerald-700"
+        ? "bg-status-success"
         : "bg-gray-400";
   return (
     <div className="flex items-center gap-3">
@@ -1187,10 +1187,10 @@ function SummaryGroup({
   items: Array<[string, number | string]>;
 }) {
   const iconTone = {
-    blue: "bg-blue-50 text-blue-600",
-    emerald: "bg-emerald-50 text-emerald-600",
+    blue: "bg-status-info-surface text-status-info-text",
+    emerald: "bg-status-success-surface text-status-success-text",
     purple: "bg-purple-50 text-purple-600",
-    amber: "bg-amber-50 text-amber-600",
+    amber: "bg-status-warning-surface text-status-warning-text",
     gray: "bg-gray-50 text-muted-foreground",
   }[tone];
   return (
@@ -1256,10 +1256,10 @@ function ClosingRow({
   return (
     <tr className="h-[64px] bg-white">
       <td className="px-4 py-3">
-        <span className="flex items-center gap-2"><span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700">{initials(name)}</span><span className="font-medium text-foreground">{name}</span></span>
+        <span className="flex items-center gap-2"><span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-status-success-surface text-xs font-bold text-status-success-text">{initials(name)}</span><span className="font-medium text-foreground">{name}</span></span>
       </td>
       <td className="px-4 py-3">
-        <span className={`inline-flex w-fit whitespace-nowrap rounded-[8px] px-2 py-1 text-xs font-medium ${status === "Finalizado" ? "bg-emerald-100 text-emerald-700" : status === "Em andamento" ? "bg-gray-100 text-foreground" :status === "Pendente" ? "bg-amber-100 text-amber-700" : status === "Fora do horário" ? "bg-red-100 text-red-700" : "bg-blue-100 text-blue-700"}`}>
+        <span className={`inline-flex w-fit whitespace-nowrap rounded-[8px] px-2 py-1 text-xs font-medium ${status === "Finalizado" ? "bg-status-success-surface text-status-success-text" : status === "Em andamento" ? "bg-gray-100 text-foreground" :status === "Pendente" ? "bg-status-warning-surface text-status-warning-text" : status === "Fora do horário" ? "bg-status-error-surface text-status-error-text" : "bg-status-info-surface text-status-info-text"}`}>
           {status}
         </span>
         {isDraft && (
@@ -1288,7 +1288,7 @@ function ClosingRow({
       <td className="px-4 py-3 font-semibold">
         <button
           type="button"
-          className={`underline decoration-dotted underline-offset-2 hover:text-emerald-700 ${appointments === null ? "text-muted-foreground" : appointments === 0 ? "text-red-600" : appointments === 1 ? "text-orange-500" : "text-emerald-600"}`}
+          className={`underline decoration-dotted underline-offset-2 hover:text-status-success-text ${appointments === null ? "text-muted-foreground" : appointments === 0 ? "text-status-error-text" : appointments === 1 ? "text-status-warning" : "text-status-success-text"}`}
           aria-label={`Abrir Agenda D+1 de ${name}`}
           onClick={onOpenAgenda}
         >
@@ -1304,7 +1304,7 @@ function ClosingRow({
         <div className="flex min-w-max flex-wrap items-center justify-end gap-1.5">
           <button
             type="button"
-            className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-emerald-50 hover:text-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-status-success-surface hover:text-status-success-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-info"
             aria-label={`Detalhes ${name}`}
             onClick={onOpenDetails}
           >
@@ -1317,11 +1317,11 @@ function ClosingRow({
           */}
           {request ? (
             <>
-            <button type="button" className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-emerald-700 hover:bg-emerald-50" onClick={() => onReview(request, "approve")}><Check size={13} /> Aprovar</button>
-            <button type="button" className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-50" onClick={() => onReview(request, "reject")}><X size={13} /> Recusar</button>
+            <button type="button" className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-status-success-text hover:bg-status-success-surface" onClick={() => onReview(request, "approve")}><Check size={13} /> Aprovar</button>
+            <button type="button" className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-status-error-text hover:bg-status-error-surface" onClick={() => onReview(request, "reject")}><X size={13} /> Recusar</button>
             </>
           ) : status === "Pendente" ? (
-            <button type="button" className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-amber-700 hover:bg-amber-50" aria-label={`Cobrar fechamento de ${name}`} onClick={onRemind}><Megaphone size={13} /> Cobrar</button>
+            <button type="button" className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-status-warning-text hover:bg-status-warning-surface" aria-label={`Cobrar fechamento de ${name}`} onClick={onRemind}><Megaphone size={13} /> Cobrar</button>
           ) : onCorrectLeads ? (
             <button type="button" className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-purple-700 hover:bg-purple-50" aria-label={`Corrigir leads de ${name}`} onClick={onCorrectLeads}><Wrench size={13} /> Leads</button>
           ) : <span className="text-xs text-muted-foreground">Somente consulta</span>}

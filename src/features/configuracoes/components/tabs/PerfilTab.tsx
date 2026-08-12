@@ -78,7 +78,7 @@ export function PerfilTab() {
                             type="button"
                             onClick={() => fileInputRef.current?.click()}
                             disabled={uploadingAvatar}
-                            className="absolute -bottom-2 -right-2 w-mx-10 h-mx-10 rounded-2xl bg-emerald-600 text-white shadow-sm border-2 border-white flex items-center justify-center hover:bg-brand-primary-hover transition-all"
+                            className="absolute -bottom-2 -right-2 w-mx-10 h-mx-10 rounded-2xl bg-brand-primary text-white shadow-sm border-2 border-white flex items-center justify-center hover:bg-brand-primary-hover transition-all"
                             aria-label="Trocar avatar"
                         >
                             {uploadingAvatar ? <RefreshCw size={16} className="animate-spin" /> : <Camera size={16} />}
@@ -166,7 +166,7 @@ export function PerfilTab() {
 
                 <div className="mt-mx-lg pt-mx-md border-t border-border flex items-center justify-between gap-mx-md">
                     <div className="flex items-start gap-mx-sm flex-1">
-                        <Info size={16} className="text-emerald-600 shrink-0 mt-1" />
+                        <Info size={16} className="text-status-success-text shrink-0 mt-1" />
                         <Typography variant="tiny" tone="muted" className="font-bold leading-relaxed">
                             E-mail e hierarquia são gerenciados pela administração MX para fins de auditoria imutável.
                         </Typography>
@@ -184,7 +184,7 @@ export function PerfilTab() {
 
             <Card className="p-mx-lg border-none bg-mx-indigo-50 border border-mx-indigo-100">
                 <div className="flex items-start gap-mx-md">
-                    <Upload size={20} className="text-emerald-600 shrink-0 mt-1" />
+                    <Upload size={20} className="text-status-success-text shrink-0 mt-1" />
                     <div className="space-y-mx-xs">
                         <Typography variant="caption" tone="brand" className="">Avatar</Typography>
                         <Typography variant="tiny" tone="muted" className="font-bold leading-relaxed">

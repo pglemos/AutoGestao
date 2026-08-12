@@ -59,7 +59,7 @@ export function AdminSettingsForm({
     <form onSubmit={onSubmit} className="grid grid-cols-1 xl:grid-cols-12 gap-mx-lg">
       <section className="xl:col-span-4 space-y-mx-md">
         <div className="flex items-center gap-mx-xs">
-          <Target size={16} className="text-emerald-600" />
+          <Target size={16} className="text-status-success-text" />
           <Typography variant="caption" className="">Meta e Regras</Typography>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-mx-md">
@@ -118,7 +118,7 @@ export function AdminSettingsForm({
 
       <section className="xl:col-span-4 space-y-mx-md">
         <div className="flex items-center gap-mx-xs">
-          <ShieldCheck size={16} className="text-emerald-600" />
+          <ShieldCheck size={16} className="text-status-success-text" />
           <Typography variant="caption" className="">Benchmarks</Typography>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-1 gap-mx-md">
@@ -142,7 +142,7 @@ export function AdminSettingsForm({
 
       <section className="xl:col-span-4 space-y-mx-md">
         <div className="flex items-center gap-mx-xs">
-          <Mail size={16} className="text-emerald-600" />
+          <Mail size={16} className="text-status-success-text" />
           <Typography variant="caption" className="">Relatórios</Typography>
         </div>
         <div className="grid grid-cols-1 gap-mx-md">

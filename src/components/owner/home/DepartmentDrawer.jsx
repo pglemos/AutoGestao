@@ -85,14 +85,14 @@ export default function DepartmentDrawer({ department, onClose, onTalkToConsulta
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="rounded-lg border border-border p-3">
               <div className="flex items-center gap-1.5">
-                <Crown className="h-4 w-4 text-amber-600" />
+                <Crown className="h-4 w-4 text-status-warning-text" />
                 <p className="text-xs font-semibold text-foreground">Responsabilidade do Dono</p>
               </div>
               <p className="mt-1.5 text-sm text-muted-foreground">{department.ownerRole}</p>
             </div>
             <div className="rounded-lg border border-border p-3">
               <div className="flex items-center gap-1.5">
-                <UserCog className="h-4 w-4 text-blue-600" />
+                <UserCog className="h-4 w-4 text-status-info-text" />
                 <p className="text-xs font-semibold text-foreground">Responsabilidade do Gerente</p>
               </div>
               <p className="mt-1.5 text-sm text-muted-foreground">{department.managerRole}</p>

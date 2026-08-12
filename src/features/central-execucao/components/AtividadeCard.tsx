@@ -39,34 +39,34 @@ const TYPE_LABEL: Record<CentralActivityType, string> = {
 }
 
 const TYPE_BAR: Record<CentralActivityType, string> = {
-  atendimento: 'bg-blue-500',
-  visita: 'bg-blue-500',
-  retorno: 'bg-amber-500',
+  atendimento: 'bg-status-info',
+  visita: 'bg-status-info',
+  retorno: 'bg-status-warning',
   documentacao: 'bg-slate-400',
   entrega: 'bg-purple-500',
   pos_venda: 'bg-teal-500',
   aniversario: 'bg-indigo-500',
-  garantia: 'bg-orange-500',
+  garantia: 'bg-status-warning',
   comercial: 'bg-slate-400',
-  test_drive: 'bg-blue-500',
-  negociacao: 'bg-blue-500',
+  test_drive: 'bg-status-info',
+  negociacao: 'bg-status-info',
   pdi: 'bg-slate-400',
   feedback: 'bg-slate-400',
   funil: 'bg-slate-400',
 }
 
 const TYPE_BADGE: Record<CentralActivityType, string> = {
-  atendimento: 'bg-blue-50 text-blue-700',
-  visita: 'bg-blue-50 text-blue-700',
-  retorno: 'bg-amber-50 text-amber-700',
+  atendimento: 'bg-status-info-surface text-status-info-text',
+  visita: 'bg-status-info-surface text-status-info-text',
+  retorno: 'bg-status-warning-surface text-status-warning-text',
   documentacao: 'bg-slate-100 text-muted-foreground',
   entrega: 'bg-purple-50 text-purple-700',
   pos_venda: 'bg-teal-50 text-teal-700',
   aniversario: 'bg-indigo-50 text-indigo-700',
-  garantia: 'bg-orange-50 text-orange-700',
+  garantia: 'bg-status-warning-surface text-status-warning-text',
   comercial: 'bg-slate-100 text-muted-foreground',
-  test_drive: 'bg-blue-50 text-blue-700',
-  negociacao: 'bg-blue-50 text-blue-700',
+  test_drive: 'bg-status-info-surface text-status-info-text',
+  negociacao: 'bg-status-info-surface text-status-info-text',
   pdi: 'bg-slate-100 text-muted-foreground',
   feedback: 'bg-slate-100 text-muted-foreground',
   funil: 'bg-slate-100 text-muted-foreground',
@@ -97,9 +97,9 @@ const PRIORITY_LABEL: Record<CentralExecutionAction['priority'], string> = {
 }
 
 const PRIORITY_BADGE: Record<CentralExecutionAction['priority'], string> = {
-  urgent: 'bg-red-50 text-red-600',
-  high: 'bg-red-50 text-red-600',
-  medium: 'bg-amber-50 text-amber-600',
+  urgent: 'bg-status-error-surface text-status-error-text',
+  high: 'bg-status-error-surface text-status-error-text',
+  medium: 'bg-status-warning-surface text-status-warning-text',
   low: 'bg-slate-100 text-muted-foreground',
 }
 
@@ -158,7 +158,7 @@ export function AtividadeCard({
   return (
     <article className={cn(
       'overflow-hidden rounded-2xl border bg-white shadow-sm transition-shadow hover:shadow-md',
-      overdue ? 'border-red-200' : 'border-border',
+      overdue ? 'border-status-error/30' : 'border-border',
     )}>
       <div className="md:hidden">
         <div className={cn('h-1 w-full', TYPE_BAR[action.activityType])} />
@@ -167,8 +167,8 @@ export function AtividadeCard({
             <div className="flex flex-wrap items-center gap-2">
               <span className={cn('rounded-full px-2 py-0.5 text-caption font-bold', TYPE_BADGE[action.activityType])}>{typeLabel}</span>
               <span className={cn('rounded-full px-2 py-0.5 text-caption font-bold', PRIORITY_BADGE[action.priority])}>{PRIORITY_LABEL[action.priority]}</span>
-              {overdue && <span className="rounded-full bg-red-50 px-2 py-0.5 text-caption font-bold text-red-500">Vencido</span>}
-              {alreadyEscalated && <span className="rounded-full bg-amber-50 px-2 py-0.5 text-caption font-bold text-amber-700">Aguardando gerente</span>}
+              {overdue && <span className="rounded-full bg-status-error-surface px-2 py-0.5 text-caption font-bold text-status-error">Vencido</span>}
+              {alreadyEscalated && <span className="rounded-full bg-status-warning-surface px-2 py-0.5 text-caption font-bold text-status-warning-text">Aguardando gerente</span>}
             </div>
             <div className="flex items-center gap-1 text-caption font-bold text-muted-foreground">
               <Clock className="h-3 w-3" aria-hidden="true" />{hour}
@@ -205,16 +205,16 @@ export function AtividadeCard({
               </a>
             )}
             {action.clientId && (
-              <button type="button" onClick={() => onOpenClient(action)} className="flex items-center gap-1 rounded-lg border border-blue-200 px-3 py-1.5 text-caption font-bold text-status-info transition-colors hover:bg-blue-50">
+              <button type="button" onClick={() => onOpenClient(action)} className="flex items-center gap-1 rounded-lg border border-status-info/30 px-3 py-1.5 text-caption font-bold text-status-info transition-colors hover:bg-status-info-surface">
                 <UserRound className="h-3 w-3" aria-hidden="true" /> Cliente
               </button>
             )}
             {!alreadyEscalated && (
-              <button type="button" onClick={() => onEscalate(action)} className="flex items-center gap-1 rounded-lg border border-amber-200 px-3 py-1.5 text-caption font-bold text-amber-700 transition-colors hover:bg-amber-50">
+              <button type="button" onClick={() => onEscalate(action)} className="flex items-center gap-1 rounded-lg border border-status-warning/30 px-3 py-1.5 text-caption font-bold text-status-warning-text transition-colors hover:bg-status-warning-surface">
                 <Shield className="h-3 w-3" aria-hidden="true" /> Apoio
               </button>
             )}
-            <button type="button" onClick={() => onResolve(action)} className="ml-auto rounded-lg bg-status-info px-4 py-1.5 text-[12px] font-bold text-white transition-colors hover:bg-blue-700">
+            <button type="button" onClick={() => onResolve(action)} className="ml-auto rounded-lg bg-status-info px-4 py-1.5 text-[12px] font-bold text-white transition-colors hover:bg-status-info">
               Resolver
             </button>
           </div>
@@ -228,7 +228,7 @@ export function AtividadeCard({
             <div className={cn('mx-auto mb-1 flex h-9 w-9 items-center justify-center rounded-xl', TYPE_BADGE[action.activityType])}>
               <Icon className="h-4 w-4" aria-hidden="true" />
             </div>
-            <p className={cn('text-caption font-bold', overdue ? 'text-red-500' : 'text-muted-foreground')}>{hour}</p>
+            <p className={cn('text-caption font-bold', overdue ? 'text-status-error' : 'text-muted-foreground')}>{hour}</p>
           </div>
 
           <div className="flex min-w-0 flex-1 items-center gap-3">
@@ -240,8 +240,8 @@ export function AtividadeCard({
                 <p className="truncate text-[14px] font-bold text-foreground">{clientName}</p>
                 <span className={cn('rounded-full px-2 py-0.5 text-caption font-bold', TYPE_BADGE[action.activityType])}>{typeLabel}</span>
                 <span className={cn('rounded-full px-2 py-0.5 text-caption font-bold', PRIORITY_BADGE[action.priority])}>{PRIORITY_LABEL[action.priority]}</span>
-                {overdue && <span className="rounded-full bg-red-50 px-2 py-0.5 text-caption font-bold text-red-500">Vencido</span>}
-                {alreadyEscalated && <span className="rounded-full bg-amber-50 px-2 py-0.5 text-caption font-bold text-amber-700">Aguardando gerente</span>}
+                {overdue && <span className="rounded-full bg-status-error-surface px-2 py-0.5 text-caption font-bold text-status-error">Vencido</span>}
+                {alreadyEscalated && <span className="rounded-full bg-status-warning-surface px-2 py-0.5 text-caption font-bold text-status-warning-text">Aguardando gerente</span>}
               </div>
               <div className="flex flex-wrap items-center gap-2 text-[12px] text-muted-foreground">
                 {vehicle && <span className="truncate">{vehicle}</span>}
@@ -254,7 +254,7 @@ export function AtividadeCard({
 
           <div className="flex shrink-0 items-center gap-1.5">
             {!alreadyEscalated && (
-              <button type="button" title="Pedir apoio do gerente" aria-label={`Pedir apoio do gerente para ${clientName}`} onClick={() => onEscalate(action)} className="rounded-xl bg-amber-50 p-2 text-amber-700 transition-colors hover:bg-amber-100">
+              <button type="button" title="Pedir apoio do gerente" aria-label={`Pedir apoio do gerente para ${clientName}`} onClick={() => onEscalate(action)} className="rounded-xl bg-status-warning-surface p-2 text-status-warning-text transition-colors hover:bg-status-warning-surface">
                 <Shield className="h-4 w-4" aria-hidden="true" />
               </button>
             )}
@@ -269,11 +269,11 @@ export function AtividadeCard({
               </a>
             )}
             {action.clientId && (
-              <button type="button" title="Abrir cliente" aria-label={`Abrir cliente ${clientName}`} onClick={() => onOpenClient(action)} className="rounded-xl bg-blue-50 p-2 text-status-info transition-colors hover:bg-blue-100">
+              <button type="button" title="Abrir cliente" aria-label={`Abrir cliente ${clientName}`} onClick={() => onOpenClient(action)} className="rounded-xl bg-status-info-surface p-2 text-status-info transition-colors hover:bg-status-info-surface">
                 <UserRound className="h-4 w-4" aria-hidden="true" />
               </button>
             )}
-            <button type="button" onClick={() => onResolve(action)} className="ml-1 rounded-xl bg-status-info px-4 py-2 text-[12px] font-bold text-white transition-colors hover:bg-blue-700">
+            <button type="button" onClick={() => onResolve(action)} className="ml-1 rounded-xl bg-status-info px-4 py-2 text-[12px] font-bold text-white transition-colors hover:bg-status-info">
               Resolver
             </button>
           </div>

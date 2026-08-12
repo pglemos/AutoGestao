@@ -26,7 +26,7 @@ export function GlobalFiltersBar({
         <Search
           size={16}
           aria-hidden="true"
-          className="pointer-events-none absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-emerald-600 transition-colors"
+          className="pointer-events-none absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-status-success-text transition-colors"
         />
         <Input
           id="ranking-global-search"
@@ -47,7 +47,7 @@ export function GlobalFiltersBar({
           onClick={() => onFilterStoreChange('all')}
           className={cn(
             "px-3 py-1 rounded-lg text-mx-tiny font-bold uppercase tracking-widest whitespace-nowrap transition-colors",
-            filterStore === 'all' ? 'bg-emerald-600 text-white' : 'text-muted-foreground hover:bg-gray-50'
+            filterStore === 'all' ? 'bg-brand-primary text-white' : 'text-muted-foreground hover:bg-gray-50'
           )}
         >Todas</button>
         {lojas.map(store => (
@@ -57,7 +57,7 @@ export function GlobalFiltersBar({
             onClick={() => onFilterStoreChange(store === filterStore ? 'all' : (store || 'all'))}
             className={cn(
               "px-3 py-1 rounded-lg text-mx-tiny font-bold uppercase tracking-widest whitespace-nowrap transition-colors",
-              filterStore === store ? 'bg-emerald-600 text-mx-black' : 'text-muted-foreground hover:bg-gray-50'
+              filterStore === store ? 'bg-brand-primary text-mx-black' : 'text-muted-foreground hover:bg-gray-50'
             )}
           >{hideStoreNames ? getHiddenStoreName(store) : store}</button>
         ))}

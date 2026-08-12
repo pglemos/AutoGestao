@@ -58,7 +58,7 @@ export default function VendedorConfiguracoes() {
         <section className="grid items-start grid-cols-1 gap-mx-lg xl:grid-cols-[320px_minmax(0,1fr)]">
           <Card className="h-fit border bg-white p-mx-lg">
             <div className="flex items-start gap-mx-md">
-              <span className="grid h-mx-14 w-mx-14 shrink-0 place-items-center rounded-2xl bg-emerald-600/10 text-emerald-600">
+              <span className="grid h-mx-14 w-mx-14 shrink-0 place-items-center rounded-2xl bg-brand-primary/10 text-status-success-text">
                 <ShieldCheck size={26} />
               </span>
               <div className="min-w-0">

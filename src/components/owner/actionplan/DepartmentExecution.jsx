@@ -47,12 +47,12 @@ export default function DepartmentExecution({ actions, onFilterByDepartment, act
               <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
                 <span>{stats.active} ativas</span>
                 {stats.late > 0 && (
-                  <span className="inline-flex items-center gap-0.5 text-red-600">
+                  <span className="inline-flex items-center gap-0.5 text-status-error-text">
                     <AlertTriangle className="h-3 w-3" /> {stats.late}
                   </span>
                 )}
                 {stats.blocked > 0 && (
-                  <span className="inline-flex items-center gap-0.5 text-red-600">
+                  <span className="inline-flex items-center gap-0.5 text-status-error-text">
                     <Ban className="h-3 w-3" /> {stats.blocked}
                   </span>
                 )}

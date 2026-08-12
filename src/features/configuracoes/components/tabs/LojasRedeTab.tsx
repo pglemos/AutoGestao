@@ -137,7 +137,7 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
 
             <Card className="border-none bg-white overflow-hidden">
                 {loading ? (
-                    <div className="p-mx-xl text-center"><RefreshCw size={24} className="animate-spin mx-auto text-emerald-600" /></div>
+                    <div className="p-mx-xl text-center"><RefreshCw size={24} className="animate-spin mx-auto text-status-success-text" /></div>
                 ) : filtered.length === 0 ? (
                     <div className="p-mx-xl text-center space-y-mx-sm">
                         <Building2 size={40} className="mx-auto text-muted-foreground opacity-30" />
@@ -150,7 +150,7 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
                             return (
                                 <div key={store.id} className="flex items-center justify-between gap-mx-md p-mx-md hover:bg-gray-50 transition-colors">
                                     <div className="flex items-center gap-mx-sm flex-1 min-w-0">
-                                        <div className={`w-mx-12 h-mx-12 rounded-2xl flex items-center justify-center text-white shrink-0 ${store.active ? 'bg-emerald-600' : 'bg-text-tertiary'}`}>
+                                        <div className={`w-mx-12 h-mx-12 rounded-2xl flex items-center justify-center text-white shrink-0 ${store.active ? 'bg-brand-primary' : 'bg-text-tertiary'}`}>
                                             <Building2 size={20} />
                                         </div>
                                         <div className="min-w-0 flex-1">
@@ -233,7 +233,7 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
 
 function Mini({ icon, label, value, tone }: { icon: React.ReactNode; label: string; value: number; tone?: 'success' | 'brand' | 'error' }) {
     const toneColor = tone === 'success' ? 'text-status-success' :
-        tone === 'brand' ? 'text-emerald-600' :
+        tone === 'brand' ? 'text-status-success-text' :
         tone === 'error' ? 'text-status-error' : 'text-foreground'
     return (
         <Card className="p-mx-md border-none bg-white">

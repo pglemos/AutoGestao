@@ -49,7 +49,7 @@ export default function FocusNeedsYou({ actions, onAnalyze, onApprove, onDelegat
                       <span className={`rounded-full px-1.5 py-0.5 text-caption font-medium ${dept.badge}`}>{dept.label}</span>
                     </div>
                     {late && (
-                      <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-1.5 py-0.5 text-caption font-medium text-red-700">
+                      <span className="inline-flex items-center gap-0.5 rounded-full bg-status-error-surface px-1.5 py-0.5 text-caption font-medium text-status-error-text">
                         <AlertTriangle className="h-2.5 w-2.5" /> Atrasada há {lateDays}d
                       </span>
                     )}

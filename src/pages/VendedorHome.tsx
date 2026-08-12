@@ -110,7 +110,7 @@ export default function VendedorHomePage() {
         aria-label="Carregando cockpit"
       >
         <div className="text-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-600 border-t-transparent mx-auto mb-4" />
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-status-success border-t-transparent mx-auto mb-4" />
           <p className="text-sm text-muted-foreground">Carregando cockpit...</p>
         </div>
       </PageCanvas>
@@ -145,8 +145,8 @@ export default function VendedorHomePage() {
                   onClick={() => navigate('/fechamento-diario')}
                   className={`flex h-[36px] items-center gap-1 rounded-xl border px-3 text-sm font-semibold shadow-sm transition-colors ${
                     home.todayCheckin
-                      ? 'border-emerald-600 text-emerald-700 hover:bg-emerald-50'
-                      : 'border-amber-500 text-amber-700 hover:bg-amber-50'
+                      ? 'border-status-success text-status-success-text hover:bg-status-success-surface'
+                      : 'border-status-warning text-status-warning-text hover:bg-status-warning-surface'
                   }`}
                 >
                   <ClipboardCheck size={14} />
@@ -170,7 +170,7 @@ export default function VendedorHomePage() {
         </header>
 
         <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Métricas do dia">
-          <article className="flex min-h-[140px] flex-col justify-between rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-800 p-5 text-white shadow-md">
+          <article className="flex min-h-[140px] flex-col justify-between rounded-2xl bg-gradient-to-br from-brand-primary to-status-success p-5 text-white shadow-md">
             <div className="flex items-start justify-between">
               <p className="text-xs font-medium uppercase tracking-wide text-emerald-100">Atingimento do Mês</p>
               <span className="grid h-9 w-9 place-items-center rounded-xl bg-white/20">
@@ -200,7 +200,7 @@ export default function VendedorHomePage() {
                 </>
               ) : faltam === 0 ? (
                 <>
-                  <p className="text-3xl font-bold text-emerald-600">0 vendas</p>
+                  <p className="text-3xl font-bold text-status-success-text">0 vendas</p>
                   <p className="mt-1 text-sm text-muted-foreground">Meta do mês atingida! 🎉</p>
                 </>
               ) : (
@@ -242,7 +242,7 @@ export default function VendedorHomePage() {
 
           <article
             className={`flex min-h-[140px] flex-col justify-between rounded-2xl border bg-white p-5 shadow-sm cursor-pointer hover:bg-gray-50 transition-colors ${
-              posicaoRanking === 1 ? 'border-amber-200' : 'border-border-subtle'
+              posicaoRanking === 1 ? 'border-status-warning/30' : 'border-border-subtle'
             }`}
             role="link"
             tabIndex={0}
@@ -257,11 +257,11 @@ export default function VendedorHomePage() {
             <div className="flex items-start justify-between">
               <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Ranking</p>
               <span className="grid h-9 w-9 place-items-center rounded-xl bg-gray-100">
-                <Trophy size={18} className={posicaoRanking === 1 ? 'text-amber-500' : 'text-muted-foreground'} />
+                <Trophy size={18} className={posicaoRanking === 1 ? 'text-status-warning' : 'text-muted-foreground'} />
               </span>
             </div>
             <div>
-              <p className={`text-3xl font-bold ${posicaoRanking === 1 ? 'text-amber-500' : 'text-foreground'}`}>
+              <p className={`text-3xl font-bold ${posicaoRanking === 1 ? 'text-status-warning' : 'text-foreground'}`}>
                 {posicaoRanking ? `#${posicaoRanking}` : '—'}
               </p>
               <p className="mt-1 text-sm text-muted-foreground">posição na loja</p>
@@ -331,7 +331,7 @@ export default function VendedorHomePage() {
             {ritualItems.map((item, i) => (
               <div key={i} className="flex items-center gap-3">
                 {item.done
-                  ? <CheckCircle size={18} className="text-emerald-500 flex-shrink-0" />
+                  ? <CheckCircle size={18} className="text-status-success flex-shrink-0" />
                   : <Circle size={18} className="text-text-disabled flex-shrink-0" />}
                 <p className={`text-sm ${item.done ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>{item.label}</p>
               </div>
@@ -347,7 +347,7 @@ export default function VendedorHomePage() {
                 <button
                   type="button"
                   onClick={() => navigate('/central-execucao')}
-                  className="flex items-center gap-0.5 text-xs font-medium text-emerald-600 hover:text-emerald-700"
+                  className="flex items-center gap-0.5 text-xs font-medium text-status-success-text hover:text-status-success-text"
                 >
                   Ver tudo <span aria-hidden>›</span>
                 </button>
@@ -358,7 +358,7 @@ export default function VendedorHomePage() {
                   <button
                     type="button"
                     onClick={() => navigate('/central-execucao')}
-                    className="mt-2 text-xs font-medium text-emerald-600 hover:underline"
+                    className="mt-2 text-xs font-medium text-status-success-text hover:underline"
                   >
                     Criar atividade
                   </button>
@@ -385,7 +385,7 @@ export default function VendedorHomePage() {
                 <button
                   type="button"
                   onClick={() => navigate('/central-execucao')}
-                  className="mt-3 w-full text-center text-xs font-medium text-emerald-600 hover:underline"
+                  className="mt-3 w-full text-center text-xs font-medium text-status-success-text hover:underline"
                 >
                   Ver mais {agendaHoje.length - 5} compromissos
                 </button>
@@ -404,17 +404,17 @@ export default function VendedorHomePage() {
                 />
                 <ShortcutCard
                   label="Minha Meta"
-                  icon={<Target size={20} className="text-emerald-500" />}
+                  icon={<Target size={20} className="text-status-success" />}
                   onClick={() => navigate('/meu-funil')}
                 />
                 <ShortcutCard
                   label="Fechamento Diário"
-                  icon={<CheckSquare size={20} className="text-blue-500" />}
+                  icon={<CheckSquare size={20} className="text-status-info" />}
                   onClick={() => navigate('/fechamento-diario')}
                 />
                 <ShortcutCard
                   label="Desenvolvimento"
-                  icon={<BookOpen size={20} className="text-amber-500" />}
+                  icon={<BookOpen size={20} className="text-status-warning" />}
                   onClick={() => navigate('/desenvolvimento')}
                 />
               </div>

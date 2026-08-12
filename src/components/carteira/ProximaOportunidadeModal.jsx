@@ -26,7 +26,7 @@ export default function ProximaOportunidadeModal({
               <p className="text-lg font-black text-[#031B3D]">🎉 Excelente!</p>
               <p className="text-sm text-muted-foreground mt-1">Você concluiu todas as oportunidades prioritárias de hoje.</p>
             </div>
-            <Button onClick={onVoltarCarteira} className="w-full rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white">
+            <Button onClick={onVoltarCarteira} className="w-full rounded-xl bg-[#005BFF] hover:bg-status-info text-white">
               Voltar para Carteira
             </Button>
           </div>
@@ -50,7 +50,7 @@ export default function ProximaOportunidadeModal({
             <hr className="border-border-subtle" />
             <div>
               <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-3">Próxima oportunidade</p>
-              <div className="bg-blue-50 rounded-xl p-4 space-y-3">
+              <div className="bg-status-info-surface rounded-xl p-4 space-y-3">
                 <div>
                   <p className="text-base font-black text-[#031B3D]">{proximaOportunidade.nome}</p>
                   {proximaOportunidade.veiculo_interesse && (
@@ -66,7 +66,7 @@ export default function ProximaOportunidadeModal({
             </div>
             <div className="flex gap-2 mt-1">
               <Button variant="outline" onClick={onVoltarCarteira} className="flex-1 rounded-xl text-muted-foreground">Voltar</Button>
-              <Button onClick={() => onExecutar(proximaOportunidade)} className="flex-1 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white gap-2">
+              <Button onClick={() => onExecutar(proximaOportunidade)} className="flex-1 rounded-xl bg-[#005BFF] hover:bg-status-info text-white gap-2">
                 <Zap className="w-4 h-4" /> Executar
               </Button>
             </div>
@@ -110,7 +110,7 @@ export default function ProximaOportunidadeModal({
                 sessionStorage.setItem(MODO_ATAQUE_ACEITO_KEY, "true");
                 onEntrarModoAtaque();
               }}
-              className="w-full rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white gap-2 h-11 font-bold"
+              className="w-full rounded-xl bg-[#005BFF] hover:bg-status-info text-white gap-2 h-11 font-bold"
             >
               <Zap className="w-4 h-4" /> Entrar no Modo Ataque
             </Button>

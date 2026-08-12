@@ -33,7 +33,7 @@ export function VisitTwoExecution({ clientId, clientSlug }: { clientId: string, 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg">
         <Card className="p-mx-lg bg-white border shadow-sm flex flex-col justify-center gap-mx-md">
           <div className="flex items-center gap-mx-sm">
-            <div className="p-mx-xs bg-emerald-600/10 rounded-xl text-emerald-600"><Zap className="w-mx-5 h-mx-5" /></div>
+            <div className="p-mx-xs bg-brand-primary/10 rounded-xl text-status-success-text"><Zap className="w-mx-5 h-mx-5" /></div>
             <Typography variant="h3">Ferramentas de Gestão</Typography>
           </div>
           <Button className="w-full justify-between h-mx-12 shadow-sm font-bold bg-white" variant="outline" onClick={() => window.open(`/consultoria/clientes/${clientSlug}?tab=strategic`, '_blank')}>
@@ -73,7 +73,7 @@ export function VisitThreeExecution() {
   return (
     <Card className="p-mx-lg shadow-sm border bg-white">
       <div className="flex items-center gap-mx-sm mb-mx-md">
-        <div className="p-mx-xs bg-emerald-600/10 rounded-xl text-emerald-600"><Clock size={20} /></div>
+        <div className="p-mx-xs bg-brand-primary/10 rounded-xl text-status-success-text"><Clock size={20} /></div>
         <Typography variant="h3" className="text-lg">Ritual de Rotinas (Disciplina)</Typography>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
@@ -86,7 +86,7 @@ export function VisitThreeExecution() {
         <div className="p-mx-md bg-gray-50/30 rounded-2xl border border-border relative">
           <Badge className="absolute -top-mx-tiny left-mx-md font-bold text-mx-micro text-white border-none px-mx-sm py-0.5 shadow-sm">VENDEDOR</Badge>
           <ul className="space-y-mx-md text-sm font-medium text-muted-foreground mt-2">
-            {[ 'Registro Leads Porta/Online', 'Agendamentos Carteira', 'Atendimento e Prospecção', 'Lançamento Vendas Ontem' ].map(li => (<li key={li} className="flex items-center gap-mx-xs"><div className="w-mx-xs h-mx-xs rounded-mx-full bg-emerald-600 shrink-0" /> {li}</li>))}
+            {[ 'Registro Leads Porta/Online', 'Agendamentos Carteira', 'Atendimento e Prospecção', 'Lançamento Vendas Ontem' ].map(li => (<li key={li} className="flex items-center gap-mx-xs"><div className="w-mx-xs h-mx-xs rounded-mx-full bg-brand-primary shrink-0" /> {li}</li>))}
           </ul>
         </div>
       </div>
@@ -130,7 +130,7 @@ export function VisitFourExecution({ storeId, onGenerateSummary }: { storeId: st
   return (
     <Card className="p-mx-lg border bg-white">
       <div className="flex items-center gap-mx-sm mb-mx-md">
-        <div className="p-mx-xs bg-emerald-600/10 rounded-xl text-emerald-600"><TrendingUp size={20} /></div>
+        <div className="p-mx-xs bg-brand-primary/10 rounded-xl text-status-success-text"><TrendingUp size={20} /></div>
         <Typography variant="h3" className="text-lg">Visita 4: Ritual de Devolutiva e Funil</Typography>
       </div>
 
@@ -178,7 +178,7 @@ export function VisitFourExecution({ storeId, onGenerateSummary }: { storeId: st
         <div className="flex gap-mx-md items-end border-t border-border-subtle pt-mx-md">
           <div className="w-1/3 md:w-1/4">
             <Typography variant="tiny" tone="muted" className="mb-1 block text-mx-tiny">META ACORDADA</Typography>
-            <Input aria-label="META ACORDADA" type="number" value={m} onChange={e => setM(parseInt(e.target.value) || 0)} className="h-mx-12 font-bold text-emerald-600 text-center text-xl" />
+            <Input aria-label="META ACORDADA" type="number" value={m} onChange={e => setM(parseInt(e.target.value) || 0)} className="h-mx-12 font-bold text-status-success-text text-center text-xl" />
           </div>
           <Button className="flex-1 h-mx-12 text-sm" variant="primary" onClick={save} loading={s} icon={<CheckCircle2 size={16} />}>SALVAR FEEDBACK NO CRM</Button>
         </div>
@@ -232,7 +232,7 @@ export function VisitFiveExecution({ storeId, onGenerateSummary }: { storeId: st
   return (
     <Card className="p-mx-lg border bg-white">
       <div className="flex items-center gap-mx-sm mb-mx-md">
-        <div className="p-mx-xs bg-emerald-600/10 rounded-xl text-emerald-600"><Award size={20} /></div>
+        <div className="p-mx-xs bg-brand-primary/10 rounded-xl text-status-success-text"><Award size={20} /></div>
         <Typography variant="h3" className="text-lg">Visita 5: Plano de Desenvolvimento Individual (PDI)</Typography>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg">
@@ -294,7 +294,7 @@ export function VisitSixExecution({ onGenerateSummary }: { onGenerateSummary: (t
   return (
     <Card className="p-mx-lg border bg-white">
       <div className="flex items-center gap-mx-sm mb-mx-md">
-        <div className="p-mx-xs bg-emerald-600/10 rounded-xl text-emerald-600"><Presentation size={20} /></div>
+        <div className="p-mx-xs bg-brand-primary/10 rounded-xl text-status-success-text"><Presentation size={20} /></div>
         <Typography variant="h3" className="text-lg">Visita 6: Posicionamento de Marketing, Conteúdo e Tráfego Pago</Typography>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg mb-mx-md">
@@ -350,7 +350,7 @@ export function VisitSevenExecution({ onGenerateSummary }: { onGenerateSummary: 
   return (
     <Card className="p-mx-lg border bg-white">
       <div className="flex items-center gap-mx-sm mb-mx-md">
-        <div className="p-mx-xs bg-emerald-600/10 rounded-xl text-emerald-600"><Rocket size={20} /></div>
+        <div className="p-mx-xs bg-brand-primary/10 rounded-xl text-status-success-text"><Rocket size={20} /></div>
         <Typography variant="h3" className="text-lg">Visita 7: Análise das Implementações e Plano de Ação Trimestral</Typography>
       </div>
 
@@ -414,7 +414,7 @@ export function VisitEightExecution({ onGenerateSummary }: { onGenerateSummary: 
   return (
     <Card className="p-mx-lg border bg-white">
       <div className="flex items-center gap-mx-sm mb-mx-md">
-        <div className="p-mx-xs bg-emerald-600/10 rounded-xl text-emerald-600"><Clock size={20} /></div>
+        <div className="p-mx-xs bg-brand-primary/10 rounded-xl text-status-success-text"><Clock size={20} /></div>
         <Typography variant="h3" className="text-lg">Acompanhamento Mensal</Typography>
       </div>
 
@@ -475,13 +475,13 @@ export function VisitChecklist({ items, onToggle }: { items: Array<{ task: strin
           className={cn(
             "p-mx-md rounded-2xl border cursor-pointer transition-all flex items-start gap-mx-sm text-xs font-bold shadow-sm hover:shadow-sm active:scale-95 min-h-mx-16",
             it.completed
-              ? "bg-emerald-600/10 text-emerald-600 border-brand-primary/30"
+              ? "bg-brand-primary/10 text-status-success-text border-brand-primary/30"
               : "bg-white border-border text-muted-foreground hover:border-brand-primary/40 hover:bg-gray-50/20"
           )}
         >
           <div className={cn(
             "w-mx-6 h-mx-6 rounded-mx-full flex items-center justify-center border transition-all",
-            it.completed ? "bg-emerald-600 border-brand-primary text-white" : "bg-white border-border text-transparent"
+            it.completed ? "bg-brand-primary border-brand-primary text-white" : "bg-white border-border text-transparent"
           )}>
             <CheckCircle2 className="w-mx-4 h-mx-4" />
           </div>

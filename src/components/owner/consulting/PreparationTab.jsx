@@ -27,9 +27,9 @@ const STATUS_LABEL = {
 
 const STATUS_TONE = {
   not_started: "text-muted-foreground",
-  in_progress: "text-blue-600",
+  in_progress: "text-status-info-text",
   completed: "text-primary",
-  blocked: "text-red-600",
+  blocked: "text-status-error-text",
 };
 
 export default function PreparationTab({ meeting, onChanged }) {
@@ -142,7 +142,7 @@ export default function PreparationTab({ meeting, onChanged }) {
                       {item.title}
                     </p>
                     {item.required && (
-                      <span className="rounded-full bg-amber-50 px-1.5 py-0.5 text-caption font-medium text-amber-700">Obrigatório</span>
+                      <span className="rounded-full bg-status-warning-surface px-1.5 py-0.5 text-caption font-medium text-status-warning-text">Obrigatório</span>
                     )}
                   </div>
                   {item.description && (
@@ -238,11 +238,11 @@ export default function PreparationTab({ meeting, onChanged }) {
 
       {/* Pendências */}
       {pendingRequired.length > 0 && (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 p-3">
-          <p className="text-xs font-medium text-amber-800">Itens obrigatórios pendentes:</p>
+        <div className="rounded-lg border border-status-warning/30 bg-status-warning-surface p-3">
+          <p className="text-xs font-medium text-status-warning-text">Itens obrigatórios pendentes:</p>
           <ul className="mt-1 space-y-0.5">
             {pendingRequired.map((item) => (
-              <li key={item.id} className="text-xs text-amber-700">• {item.title}</li>
+              <li key={item.id} className="text-xs text-status-warning-text">• {item.title}</li>
             ))}
           </ul>
         </div>

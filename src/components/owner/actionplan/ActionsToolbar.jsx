@@ -77,7 +77,7 @@ export default function ActionsToolbar({
                   key={m.value}
                   onClick={() => onModeChange(m.value)}
                     className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
-                    active ? "bg-emerald-50 text-emerald-700 shadow-sm" : "text-muted-foreground hover:text-foreground"
+                    active ? "bg-status-success-surface text-status-success-text shadow-sm" : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   <Icon className="h-3.5 w-3.5" /> {m.label}
@@ -104,10 +104,10 @@ export default function ActionsToolbar({
           {activeChips.map((chip) => (
             <span
               key={chip.key}
-              className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700"
+              className="inline-flex items-center gap-1 rounded-full bg-status-success-surface px-2.5 py-1 text-xs font-medium text-status-success-text"
             >
               {chip.label}
-              <button onClick={() => removeChip(chip.key)} className="hover:text-emerald-900">
+              <button onClick={() => removeChip(chip.key)} className="hover:text-status-success-text">
                 <X className="h-3 w-3" />
               </button>
             </span>

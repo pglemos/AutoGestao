@@ -40,7 +40,7 @@ export function PotentialCommissionCard({ comissaoProjetada, ganhoPotencial }: P
 
       <div className="mt-4 flex items-center gap-2 px-4 py-2.5 rounded-xl" style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.2)' }}>
         <span className="text-lg">🔥</span>
-        <span className="text-emerald-700 text-sm font-semibold">
+        <span className="text-status-success-text text-sm font-semibold">
           Potencial de ganho: <span className="font-bold">{formatBRLWhole(ganhoPotencial)}</span>
         </span>
       </div>

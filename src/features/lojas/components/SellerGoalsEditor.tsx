@@ -17,31 +17,31 @@ import {
 } from './seller-goal-insights'
 
 const STATUS_CARDS = [
-  { key: 'acima', label: 'Acima da meta', icon: TrendingUp, surface: 'border-emerald-100 bg-emerald-50', text: 'text-emerald-600', value: 'text-emerald-700' },
+  { key: 'acima', label: 'Acima da meta', icon: TrendingUp, surface: 'border-status-success/20 bg-status-success-surface', text: 'text-status-success-text', value: 'text-status-success-text' },
   { key: 'no_ritmo', label: 'No ritmo', icon: Minus, surface: 'border-sky-100 bg-sky-50', text: 'text-sky-600', value: 'text-sky-700' },
-  { key: 'risco', label: 'Risco', icon: AlertTriangle, surface: 'border-amber-100 bg-amber-50', text: 'text-amber-600', value: 'text-amber-700' },
-  { key: 'critico', label: 'Crítico', icon: ArrowDown, surface: 'border-red-100 bg-red-50', text: 'text-red-600', value: 'text-red-700' },
+  { key: 'risco', label: 'Risco', icon: AlertTriangle, surface: 'border-status-warning/20 bg-status-warning-surface', text: 'text-status-warning-text', value: 'text-status-warning-text' },
+  { key: 'critico', label: 'Crítico', icon: ArrowDown, surface: 'border-status-error/20 bg-status-error-surface', text: 'text-status-error-text', value: 'text-status-error-text' },
 ] as const
 
 const RECOMMENDATION_TONE = {
-  atencao: 'border-amber-200 bg-amber-50 text-amber-700',
-  risco: 'border-red-200 bg-red-50 text-red-700',
-  positivo: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+  atencao: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
+  risco: 'border-status-error/30 bg-status-error-surface text-status-error-text',
+  positivo: 'border-status-success/30 bg-status-success-surface text-status-success-text',
 } as const
 
 const PROGRESS_TONE = {
-  acima: 'bg-emerald-500',
+  acima: 'bg-status-success',
   no_ritmo: 'bg-sky-500',
-  risco: 'bg-amber-500',
-  critico: 'bg-red-500',
+  risco: 'bg-status-warning',
+  critico: 'bg-status-error',
   sem_meta: 'bg-gray-300',
 } as const
 
 const ATTAINMENT_TONE = {
-  acima: 'text-emerald-600',
+  acima: 'text-status-success-text',
   no_ritmo: 'text-sky-600',
-  risco: 'text-amber-600',
-  critico: 'text-red-600',
+  risco: 'text-status-warning-text',
+  critico: 'text-status-error-text',
   sem_meta: 'text-muted-foreground',
 } as const
 
@@ -185,7 +185,7 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
   if (isLoading) {
     return (
       <div className="flex min-h-[300px] flex-col items-center justify-center">
-        <RefreshCw className="mb-4 h-6 w-6 animate-spin text-emerald-600" />
+        <RefreshCw className="mb-4 h-6 w-6 animate-spin text-status-success-text" />
         <p className="text-sm text-muted-foreground animate-pulse">Carregando...</p>
       </div>
     )
@@ -218,7 +218,7 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
                   type="month"
                   value={monthStr}
                   onChange={(e) => { setMonthStr(e.target.value); setHasChanges(false) }}
-                  className="ml-2 block rounded-lg border border-border px-3 py-1.5 text-sm outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="ml-2 block rounded-lg border border-border px-3 py-1.5 text-sm outline-none focus:ring-2 focus:ring-status-success"
                 />
               </label>
               {canEdit && (
@@ -228,7 +228,7 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
                       type="button"
                       onClick={handleConfirmSave}
                       disabled={saving}
-                      className="inline-flex h-[36px] items-center gap-1.5 rounded-xl bg-emerald-600 px-4 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+                      className="inline-flex h-[36px] items-center gap-1.5 rounded-xl bg-brand-primary px-4 text-sm font-semibold text-white hover:bg-brand-primary-hover disabled:opacity-60"
                     >
                       {saving ? <RefreshCw size={15} className="animate-spin" /> : <Save size={15} />}
                       Salvar
@@ -285,8 +285,8 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
             )}
 
             {canEdit && (
-              <div className="flex flex-wrap items-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-2.5">
-                <label htmlFor="seller-goals-apply-all" className="text-xs font-medium text-emerald-700">Aplicar a todos:</label>
+              <div className="flex flex-wrap items-center gap-2 rounded-xl border border-status-success/20 bg-status-success-surface px-4 py-2.5">
+                <label htmlFor="seller-goals-apply-all" className="text-xs font-medium text-status-success-text">Aplicar a todos:</label>
                 <input
                   id="seller-goals-apply-all"
                   type="number"
@@ -297,9 +297,9 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
                     event.preventDefault()
                     handleApplyToAll((event.target as HTMLInputElement).value)
                   }}
-                  className="w-24 rounded-lg border border-emerald-200 px-2 py-1 text-xs outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-24 rounded-lg border border-status-success/30 px-2 py-1 text-xs outline-none focus:ring-2 focus:ring-status-success"
                 />
-                <span className="text-xs text-emerald-600">vendas/mês e pressione Enter</span>
+                <span className="text-xs text-status-success-text">vendas/mês e pressione Enter</span>
               </div>
             )}
           </>
@@ -342,7 +342,7 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
                         <td className="whitespace-nowrap px-4 py-3 font-medium text-foreground">
                           {seller.name || 'Vendedor'}
                         </td>
-                        <td className="whitespace-nowrap px-4 py-3 text-right font-medium text-emerald-600">
+                        <td className="whitespace-nowrap px-4 py-3 text-right font-medium text-status-success-text">
                           {realized}
                         </td>
                         <td className="whitespace-nowrap px-4 py-3 text-right text-foreground">
@@ -367,7 +367,7 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
                               inputMode="numeric"
                               value={editValue}
                               onChange={(e) => handleValueChange(seller.id, e.target.value)}
-                              className="w-20 rounded-lg border border-border px-2 py-1.5 text-right font-mono text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                              className="w-20 rounded-lg border border-border px-2 py-1.5 text-right font-mono text-sm outline-none focus:border-status-success focus:ring-1 focus:ring-status-success"
                               aria-label={`Nova meta para ${seller.name}`}
                             />
                           </td>
@@ -386,9 +386,9 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
                     <td className="px-4 py-3 text-right">
                       <span className={
                         totals.attainment === null ? 'text-muted-foreground'
-                          : totals.attainment >= 100 ? 'text-emerald-600'
-                            : totals.attainment >= 80 ? 'text-amber-600'
-                              : 'text-red-600'
+                          : totals.attainment >= 100 ? 'text-status-success-text'
+                            : totals.attainment >= 80 ? 'text-status-warning-text'
+                              : 'text-status-error-text'
                       }>
                         {totals.attainment === null ? '—' : `${totals.attainment}%`}
                       </span>

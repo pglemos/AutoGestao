@@ -64,7 +64,7 @@ export function EditMemberModal({
       >
         <Card className="border-none overflow-hidden flex flex-col max-h-[calc(100dvh-1rem)] sm:max-h-[88dvh] shadow-2xl">
           <CardHeader className="bg-gray-900 border-none text-white p-mx-md sm:p-mx-xl relative shrink-0">
-            <div className="absolute top-mx-0 left-mx-0 w-full h-mx-px bg-emerald-600 shadow-mx-glow-brand" />
+            <div className="absolute top-mx-0 left-mx-0 w-full h-mx-px bg-brand-primary shadow-mx-glow-brand" />
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-mx-md">
                 <IconBadge variant="emeraldSolid" size="xl">
@@ -107,7 +107,7 @@ export function EditMemberModal({
                       required
                       value={editingMember.name || ''}
                       onChange={e => onChange({ ...editingMember, name: e.target.value.toUpperCase() })}
-                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-border rounded-2xl text-foreground font-bold uppercase tracking-tight focus:outline-none focus:border-emerald-600 transition-all"
+                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-border rounded-2xl text-foreground font-bold uppercase tracking-tight focus:outline-none focus:border-status-success transition-all"
                     />
                   </div>
                 </div>
@@ -124,7 +124,7 @@ export function EditMemberModal({
                       type="email"
                       value={editingMember.email || ''}
                       onChange={e => onChange({ ...editingMember, email: e.target.value })}
-                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-border rounded-2xl text-foreground font-bold focus:outline-none focus:border-emerald-600 transition-all"
+                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-border rounded-2xl text-foreground font-bold focus:outline-none focus:border-status-success transition-all"
                     />
                   </div>
                 </div>
@@ -139,7 +139,7 @@ export function EditMemberModal({
                       name="phone"
                       value={editingMember.phone || ''}
                       onChange={e => onChange({ ...editingMember, phone: e.target.value })}
-                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-border rounded-2xl text-foreground font-bold focus:outline-none focus:border-emerald-600 transition-all"
+                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-border rounded-2xl text-foreground font-bold focus:outline-none focus:border-status-success transition-all"
                     />
                   </div>
                 </div>
@@ -153,7 +153,7 @@ export function EditMemberModal({
                     name="role"
                     value={editingMember.role || 'vendedor'}
                     onChange={e => onChange({ ...editingMember, role: e.target.value as MembershipRole })}
-                    className="w-full h-mx-14 px-4 bg-gray-50 border border-border rounded-2xl text-foreground font-bold uppercase focus:outline-none focus:border-emerald-600 transition-all"
+                    className="w-full h-mx-14 px-4 bg-gray-50 border border-border rounded-2xl text-foreground font-bold uppercase focus:outline-none focus:border-status-success transition-all"
                   >
                     {editableStoreRoles.map(option => (
                       <option key={option} value={option}>{option}</option>
@@ -170,7 +170,7 @@ export function EditMemberModal({
                     name="store_id"
                     value={editingMember.store_id || storeId || ''}
                     onChange={e => onChange({ ...editingMember, store_id: e.target.value })}
-                    className="w-full h-mx-14 px-4 bg-gray-50 border border-border rounded-2xl text-foreground font-bold uppercase focus:outline-none focus:border-emerald-600 transition-all"
+                    className="w-full h-mx-14 px-4 bg-gray-50 border border-border rounded-2xl text-foreground font-bold uppercase focus:outline-none focus:border-status-success transition-all"
                   >
                     <option value="">Selecione a loja</option>
                     {lojas.map(store => (
@@ -193,7 +193,7 @@ export function EditMemberModal({
                     required
                     value={editingMember.started_at || ''}
                     onChange={e => onChange({ ...editingMember, started_at: e.target.value })}
-                    className="w-full h-mx-14 px-4 bg-gray-50 border border-border rounded-2xl text-foreground font-bold focus:outline-none focus:border-emerald-600 transition-all uppercase"
+                    className="w-full h-mx-14 px-4 bg-gray-50 border border-border rounded-2xl text-foreground font-bold focus:outline-none focus:border-status-success transition-all uppercase"
                   />
                 </div>
                 <div className="space-y-mx-tiny">
@@ -207,7 +207,7 @@ export function EditMemberModal({
                     type="date"
                     value={editingMember.ended_at || ''}
                     onChange={e => onChange({ ...editingMember, ended_at: e.target.value })}
-                    className="w-full h-mx-14 px-4 bg-gray-50 border border-border rounded-2xl text-foreground font-bold focus:outline-none focus:border-emerald-600 transition-all uppercase"
+                    className="w-full h-mx-14 px-4 bg-gray-50 border border-border rounded-2xl text-foreground font-bold focus:outline-none focus:border-status-success transition-all uppercase"
                   />
                 </div>
 

@@ -330,7 +330,7 @@ export default function YouTubePlayer({ videoId, lessonId, userId = "demo", init
                 style={{ width: `${duration > 0 ? (currentTime / duration) * 100 : 0}%` }}
               />
               <div
-                className="absolute top-0 h-full rounded-full bg-blue-500/60"
+                className="absolute top-0 h-full rounded-full bg-status-info/60"
                 style={{ width: `${watchedPercent}%` }}
               />
             </div>

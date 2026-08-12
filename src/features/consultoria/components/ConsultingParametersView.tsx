@@ -169,7 +169,7 @@ export function ConsultingParametersView() {
           <MxSectionHeader
             title="Catálogo de indicadores"
             description="Selecione uma métrica para consultar seus valores e editar quando seu perfil permitir."
-            actions={<BarChart3 size={18} className="text-emerald-600" aria-hidden="true" />}
+            actions={<BarChart3 size={18} className="text-status-success-text" aria-hidden="true" />}
           />
           <MxTableSurface className="rounded-none border-0 shadow-none">
             <table className="w-full text-left">
@@ -187,7 +187,7 @@ export function ConsultingParametersView() {
                   const value = valueByMetric.get(metric.metric_key)
                   const selected = selectedMetric?.metric_key === metric.metric_key
                   return (
-                    <tr key={metric.metric_key} className={selected ? 'bg-emerald-50/60' : undefined}>
+                    <tr key={metric.metric_key} className={selected ? 'bg-status-success-surface/60' : undefined}>
                       <td>
                         <button type="button" className="text-left" onClick={() => setMetricKey(metric.metric_key)}>
                           <Typography variant="h4" className="text-sm">{metric.label}</Typography>

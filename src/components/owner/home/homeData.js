@@ -12,36 +12,36 @@ export const STATUS_STYLES = {
   },
   attention: {
     label: "Atenção",
-    dot: "bg-amber-500",
-    text: "text-amber-600",
-    bg: "bg-amber-50",
-    border: "border-amber-200",
-    gauge: "text-amber-500",
-    cardAccent: "border-amber-200",
+    dot: "bg-status-warning",
+    text: "text-status-warning-text",
+    bg: "bg-status-warning-surface",
+    border: "border-status-warning/30",
+    gauge: "text-status-warning",
+    cardAccent: "border-status-warning/30",
   },
   critical: {
     label: "Crítico",
-    dot: "bg-red-500",
-    text: "text-red-600",
-    bg: "bg-red-50",
-    border: "border-red-200",
-    gauge: "text-red-500",
-    cardAccent: "border-red-200",
+    dot: "bg-status-error",
+    text: "text-status-error-text",
+    bg: "bg-status-error-surface",
+    border: "border-status-error/30",
+    gauge: "text-status-error",
+    cardAccent: "border-status-error/30",
   },
 };
 
 export const ICON_STYLES = {
   green: "bg-primary/10 text-primary",
-  blue: "bg-blue-50 text-blue-600",
+  blue: "bg-status-info-surface text-status-info-text",
   purple: "bg-purple-50 text-purple-600",
-  orange: "bg-orange-50 text-orange-600",
+  orange: "bg-status-warning-surface text-status-warning-text",
 };
 
 export const SPARK_COLORS = {
   green: "text-primary",
-  blue: "text-blue-500",
+  blue: "text-status-info",
   purple: "text-purple-500",
-  orange: "text-orange-500",
+  orange: "text-status-warning",
 };
 
 export const mainIndicators = [

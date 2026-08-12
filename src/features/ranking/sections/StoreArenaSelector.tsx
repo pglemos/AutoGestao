@@ -23,7 +23,7 @@ export function StoreArenaSelector({ loading, opponents, stores, onToggle, onCle
     return (
       <div className="animate-slide-up">
         <div className="flex flex-col items-center justify-center py-16">
-          <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-emerald-600 mb-4" />
+          <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-status-success-text mb-4" />
           <Typography variant="caption" tone="muted">Consolidando indicadores das lojas...</Typography>
         </div>
       </div>
@@ -55,7 +55,7 @@ export function StoreArenaSelector({ loading, opponents, stores, onToggle, onCle
       </div>
 
       <h3 className="font-display font-bold text-lg text-mx-black mb-4 px-2 flex items-center gap-mx-sm">
-        <Building2 size={20} className="text-emerald-600" /> Selecione as lojas para o duelo
+        <Building2 size={20} className="text-status-success-text" /> Selecione as lojas para o duelo
       </h3>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-mx-md">
         {stores.map(store => {
@@ -75,19 +75,19 @@ export function StoreArenaSelector({ loading, opponents, stores, onToggle, onCle
             >
               <div className={cn(
                 'w-mx-14 h-mx-14 rounded-2xl flex items-center justify-center border-2 shrink-0',
-                selected ? 'bg-emerald-600/20 border-brand-primary text-emerald-600' : 'bg-gray-50 border-border text-muted-foreground'
+                selected ? 'bg-brand-primary/20 border-brand-primary text-status-success-text' : 'bg-gray-50 border-border text-muted-foreground'
               )}>
                 <Building2 size={22} />
               </div>
               <span className={cn('font-bold text-xs uppercase truncate w-full', selected ? 'text-white' : 'text-mx-black')}>
                 {store.storeName}
               </span>
-              <span className={cn('font-display font-bold text-lg tabular-nums', selected ? 'text-emerald-600' : reachingTone)}>{store.reaching}%</span>
+              <span className={cn('font-display font-bold text-lg tabular-nums', selected ? 'text-status-success-text' : reachingTone)}>{store.reaching}%</span>
               {selected && (
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  className="absolute top-mx-xs right-mx-xs w-mx-md h-mx-md rounded-full bg-emerald-600 flex items-center justify-center"
+                  className="absolute top-mx-xs right-mx-xs w-mx-md h-mx-md rounded-full bg-brand-primary flex items-center justify-center"
                 >
                   <span className="text-mx-black font-bold text-xs">{opponents.indexOf(store.storeId) + 1}</span>
                 </motion.div>

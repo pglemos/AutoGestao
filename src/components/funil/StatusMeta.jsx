@@ -10,7 +10,7 @@ export default function StatusMeta({ indicadores, filtro }) {
   const probCor =
     probabilidade === null ? "text-muted-foreground" :
     probabilidade >= 80 ? "text-green-600" :
-    probabilidade >= 50 ? "text-amber-600" : "text-red-500";
+    probabilidade >= 50 ? "text-status-warning-text" : "text-status-error";
 
   return (
     <div className="bg-white rounded-2xl border border-border shadow-sm p-5">
@@ -67,7 +67,7 @@ export default function StatusMeta({ indicadores, filtro }) {
           <div className="flex-1 grid grid-cols-2 gap-3">
             <div className="bg-slate-50 rounded-xl p-3">
               <p className="text-caption text-muted-foreground uppercase tracking-wide mb-0.5">Faltam</p>
-              <p className="text-h3 font-bold text-red-500 tabular-nums leading-none">{faltam}</p>
+              <p className="text-h3 font-bold text-status-error tabular-nums leading-none">{faltam}</p>
               <p className="text-caption text-muted-foreground">vendas</p>
             </div>
             <div className="bg-slate-50 rounded-xl p-3">
@@ -81,7 +81,7 @@ export default function StatusMeta({ indicadores, filtro }) {
               <p className="text-caption text-muted-foreground uppercase tracking-wide mb-0.5">Ritmo necessário</p>
               {filtro !== "mes_atual" || necessarioPorDia === null ? (
                 <>
-                  <p className="text-h3 font-bold text-amber-600 tabular-nums leading-none">—</p>
+                  <p className="text-h3 font-bold text-status-warning-text tabular-nums leading-none">—</p>
                   <p className="text-caption text-muted-foreground">sem dados</p>
                 </>
               ) : faltam <= 0 ? (
@@ -91,12 +91,12 @@ export default function StatusMeta({ indicadores, filtro }) {
                 </>
               ) : diasRestantes <= 0 ? (
                 <>
-                  <p className="text-[18px] font-bold text-red-500 leading-tight">Prazo encerrado</p>
+                  <p className="text-[18px] font-bold text-status-error leading-tight">Prazo encerrado</p>
                   <p className="text-caption text-muted-foreground">Revise o fechamento.</p>
                 </>
               ) : Number(necessarioPorDia) >= 1 ? (
                 <>
-                  <p className="text-h3 font-bold text-amber-600 tabular-nums leading-none">
+                  <p className="text-h3 font-bold text-status-warning-text tabular-nums leading-none">
                     {Number(necessarioPorDia) % 1 === 0 ? Number(necessarioPorDia) : Number(necessarioPorDia).toFixed(2)}
                   </p>
                   <p className="text-caption text-muted-foreground">vendas por dia útil</p>
@@ -104,10 +104,10 @@ export default function StatusMeta({ indicadores, filtro }) {
                 </>
               ) : (
                 <>
-                  <p className="text-[14px] font-bold text-amber-600 leading-tight">
+                  <p className="text-[14px] font-bold text-status-warning-text leading-tight">
                     1 venda a cada
                   </p>
-                  <p className="text-h3 font-bold text-amber-600 tabular-nums leading-none">
+                  <p className="text-h3 font-bold text-status-warning-text tabular-nums leading-none">
                     {(diasRestantes / faltam).toFixed(1)} dias
                   </p>
                   <p className="text-caption text-muted-foreground mt-1">≈ {Math.floor(Number(necessarioPorDia) * 6)}–{Math.ceil(Number(necessarioPorDia) * 6)} por semana</p>

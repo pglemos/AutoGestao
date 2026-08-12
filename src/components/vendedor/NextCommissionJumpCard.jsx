@@ -17,7 +17,7 @@ export default function NextCommissionJumpCard({ calcResult }) {
 
   return (
     <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-40 h-40 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
+      <div className="absolute top-0 right-0 w-40 h-40 bg-status-success/10 rounded-full blur-2xl pointer-events-none" />
       <div className="relative z-10">
         <div className="flex items-center gap-2 mb-4">
           <Rocket className="w-4 h-4 text-emerald-400" />
@@ -47,7 +47,7 @@ export default function NextCommissionJumpCard({ calcResult }) {
             <p className="text-muted-foreground text-sm mt-2">e sua comissão salta para</p>
             <p className="text-3xl font-bold text-emerald-400 mt-1">{formatBRL(comissaoProxSalto)}</p>
 
-            <div className="mt-4 bg-emerald-500/15 border border-emerald-500/20 rounded-xl px-4 py-3">
+            <div className="mt-4 bg-status-success/15 border border-status-success/20 rounded-xl px-4 py-3">
               <p className="text-emerald-300 text-xs font-medium">Ganho adicional estimado</p>
               <p className="text-emerald-400 text-2xl font-bold">+ {formatBRL(ganhoAdicionalSalto)}</p>
             </div>
@@ -61,7 +61,7 @@ export default function NextCommissionJumpCard({ calcResult }) {
                 <p className="text-muted-foreground">Agora</p>
                 <p className="text-white font-bold">{qtdVendas} vend. · {formatBRL(comissao)}</p>
               </div>
-              <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-lg px-3 py-2 flex-1">
+              <div className="bg-status-success/10 border border-status-success/20 rounded-lg px-3 py-2 flex-1">
                 <p className="text-emerald-400">Próxima faixa</p>
                 <p className="text-emerald-300 font-bold">{proximaFaixa.quantidade_inicial}+ vend. · {formatBRL(comissaoProxSalto)}</p>
               </div>

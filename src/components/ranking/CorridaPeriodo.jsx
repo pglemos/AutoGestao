@@ -66,14 +66,14 @@ export default function CorridaPeriodo({ vendedores, meta, isVolume, meuId }) {
                 className="absolute flex flex-col items-center"
                 style={{ left: `calc(${pct}% - 20px)`, top: "-28px" }}
               >
-                <p className={`text-caption font-bold mb-0.5 text-center whitespace-nowrap ${isMe ? "text-blue-600" : "text-muted-foreground"}`}>
+                <p className={`text-caption font-bold mb-0.5 text-center whitespace-nowrap ${isMe ? "text-status-info-text" : "text-muted-foreground"}`}>
                   {v.nome?.split(" ")[0]}
                   <br />
-                  <span className={isMe ? "text-blue-500" : "text-muted-foreground"}>{formatValue(val, isVolume)}</span>
+                  <span className={isMe ? "text-status-info" : "text-muted-foreground"}>{formatValue(val, isVolume)}</span>
                 </p>
                 <Avatar nome={v.nome} foto={v.foto} isMe={isMe} size={36} />
                 {isMe && (
-                  <span className="mt-0.5 text-caption font-bold text-white bg-blue-500 px-1.5 py-0.5 rounded-full">VOCÊ</span>
+                  <span className="mt-0.5 text-caption font-bold text-white bg-status-info px-1.5 py-0.5 rounded-full">VOCÊ</span>
                 )}
               </div>
             );

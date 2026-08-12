@@ -11,7 +11,7 @@ function pct(a, b) {
 
 function PctArrow({ value }) {
   if (value === null) return <div className="flex items-center justify-center gap-1 py-1"><ChevronDown className="w-4 h-4 text-text-disabled" /></div>;
-  const color = value >= 60 ? "text-green-600" : value >= 30 ? "text-amber-600" : "text-red-500";
+  const color = value >= 60 ? "text-green-600" : value >= 30 ? "text-status-warning-text" : "text-status-error";
   return (
     <div className="flex items-center justify-center gap-1 py-1">
       <ChevronDown className="w-4 h-4 text-text-disabled" />
@@ -24,7 +24,7 @@ function EtapaRow({ label, value, modalidades, isLast, onClickEtapa }) {
   return (
     <div>
       <div
-        className={`rounded-xl border px-4 py-3 text-center ${onClickEtapa ? "cursor-pointer hover:border-blue-400 hover:bg-blue-50/40 transition-colors" : ""} bg-white border-border`}
+        className={`rounded-xl border px-4 py-3 text-center ${onClickEtapa ? "cursor-pointer hover:border-status-info/50 hover:bg-status-info-surface/40 transition-colors" : ""} bg-white border-border`}
         onClick={onClickEtapa}
       >
         <p className="text-caption font-bold text-muted-foreground uppercase tracking-wider mb-0.5">{label}</p>
@@ -56,8 +56,8 @@ export default function FunilCanal({ titulo, cor, icone: Icone, etapas, conversa
   const semDados = etapas.every(e => e.value === 0);
 
   const corMap = {
-    orange: { border: "border-orange-200", bg: "bg-orange-50", title: "text-orange-700", iconBg: "bg-orange-500", badge: "bg-orange-100 text-orange-700" },
-    blue:   { border: "border-blue-200",   bg: "bg-blue-50",   title: "text-blue-700",   iconBg: "bg-blue-600",   badge: "bg-blue-100 text-blue-700"   },
+    orange: { border: "border-status-warning/30", bg: "bg-status-warning-surface", title: "text-status-warning-text", iconBg: "bg-status-warning", badge: "bg-status-warning-surface text-status-warning-text" },
+    blue:   { border: "border-status-info/30",   bg: "bg-status-info-surface",   title: "text-status-info-text",   iconBg: "bg-status-info",   badge: "bg-status-info-surface text-status-info-text"   },
     green:  { border: "border-green-200",  bg: "bg-green-50",  title: "text-green-700",  iconBg: "bg-green-500",  badge: "bg-green-100 text-green-700"  },
   };
   const c = corMap[cor] || corMap.blue;
@@ -105,7 +105,7 @@ export default function FunilCanal({ titulo, cor, icone: Icone, etapas, conversa
                   <div className="flex items-center justify-center gap-1 py-1.5">
                     <ChevronDown className="w-4 h-4 text-text-disabled" />
                     {conv !== null && (
-                      <span className={`text-[12px] font-bold ${conv >= 60 ? "text-green-600" : conv >= 30 ? "text-amber-600" : "text-red-500"}`}>
+                      <span className={`text-[12px] font-bold ${conv >= 60 ? "text-green-600" : conv >= 30 ? "text-status-warning-text" : "text-status-error"}`}>
                         {conv}%
                       </span>
                     )}

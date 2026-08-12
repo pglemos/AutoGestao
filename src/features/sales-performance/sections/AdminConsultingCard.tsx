@@ -13,7 +13,7 @@ export function AdminConsultingCard({ consultingData, metrics }: Props) {
     <Card className="border-none bg-white overflow-hidden">
       <CardHeader className="p-mx-lg">
         <CardTitle className="text-lg flex items-center gap-mx-sm">
-          <BriefcaseBusiness size={18} className="text-emerald-600" /> Consultoria MX
+          <BriefcaseBusiness size={18} className="text-status-success-text" /> Consultoria MX
         </CardTitle>
         <CardDescription>Clientes, visitas e execucao PMR</CardDescription>
       </CardHeader>

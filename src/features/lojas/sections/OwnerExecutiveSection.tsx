@@ -52,7 +52,7 @@ export function OwnerExecutiveSection({
               Prioridades calculadas a partir da estrutura e da disciplina das lojas.
             </Typography>
           </div>
-          <span className="grid h-mx-10 w-mx-10 shrink-0 place-items-center rounded-xl bg-status-success-surface text-emerald-600">
+          <span className="grid h-mx-10 w-mx-10 shrink-0 place-items-center rounded-xl bg-status-success-surface text-status-success-text">
             <Compass size={20} aria-hidden="true" />
           </span>
         </div>
@@ -113,7 +113,7 @@ export function OwnerExecutiveSection({
               >
                 <div className="flex items-start justify-between gap-mx-sm">
                   <div className="min-w-0">
-                    <Typography variant="p" className="font-semibold group-hover:text-emerald-600">
+                    <Typography variant="p" className="font-semibold group-hover:text-status-success-text">
                       {store.name}
                     </Typography>
                     <Typography variant="tiny" tone="muted" className="mt-mx-xs block">
@@ -140,7 +140,7 @@ export function OwnerExecutiveSection({
                   </div>
                   <ArrowRight
                     size={18}
-                    className="text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-emerald-600"
+                    className="text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-status-success-text"
                     aria-hidden="true"
                   />
                 </div>

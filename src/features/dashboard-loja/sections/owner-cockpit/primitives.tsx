@@ -44,27 +44,27 @@ const statusDotClasses: Record<KpiTone, string> = {
   warning: 'bg-status-warning',
   danger: 'bg-status-error',
   muted: 'bg-border-default',
-  brand: 'bg-emerald-600',
+  brand: 'bg-brand-primary',
   purple: 'bg-[var(--color-accent-purple)]',
 }
 
 const cardBorderClasses: Record<KpiTone, string> = {
   success: 'border-status-success/30',
   info: 'border-status-info/30',
-  warning: 'border-amber-200',
-  danger: 'border-red-200',
+  warning: 'border-status-warning/30',
+  danger: 'border-status-error/30',
   muted: 'border-border',
-  brand: 'border-emerald-200',
+  brand: 'border-status-success/30',
   purple: 'border-[var(--color-accent-purple)]/30',
 }
 
 const iconBgClasses: Record<KpiTone, string> = {
   success: 'bg-status-success/10 text-status-success',
   info: 'bg-status-info/10 text-status-info',
-  warning: 'bg-amber-50 text-status-warning-text',
-  danger: 'bg-red-50 text-status-error-text',
+  warning: 'bg-status-warning-surface text-status-warning-text',
+  danger: 'bg-status-error-surface text-status-error-text',
   muted: 'bg-gray-50 text-text-secondary',
-  brand: 'bg-emerald-50 text-status-success-text',
+  brand: 'bg-status-success-surface text-status-success-text',
   purple: 'bg-[var(--color-accent-purple-soft)] text-[var(--color-accent-purple)]',
 }
 
@@ -147,8 +147,8 @@ function SimpleSparkline({
   const colorClass = {
     success: 'text-status-success',
     info: 'text-status-info',
-    warning: 'text-amber-500',
-    danger: 'text-red-500',
+    warning: 'text-status-warning',
+    danger: 'text-status-error',
     muted: 'text-muted-foreground',
     brand: 'text-status-success-text',
     purple: 'text-[var(--color-accent-purple)]',

@@ -19,19 +19,19 @@ export default function FocusInProgress({ actions, onOpen, onQuickAction }) {
     });
 
   return (
-    <section className="rounded-xl border border-blue-200 bg-blue-50/30 p-4">
+    <section className="rounded-xl border border-status-info/30 bg-status-info-surface/30 p-4">
       <div className="mb-3 flex items-center gap-2">
-        <div className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-blue-100">
-          <Play className="h-4 w-4 text-blue-600" />
+        <div className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-status-info-surface">
+          <Play className="h-4 w-4 text-status-info-text" />
         </div>
         <h2 className="text-sm font-semibold text-foreground">Em execução</h2>
-        <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-blue-100 px-1.5 text-xs font-bold text-blue-700">
+        <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-status-info-surface px-1.5 text-xs font-bold text-status-info-text">
           {inProgress.length}
         </span>
       </div>
 
       {inProgress.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-blue-200 bg-card py-8 text-center">
+        <div className="rounded-lg border border-dashed border-status-info/30 bg-card py-8 text-center">
           <p className="text-sm text-muted-foreground">Nenhuma ação em execução no momento.</p>
         </div>
       ) : (
@@ -41,7 +41,7 @@ export default function FocusInProgress({ actions, onOpen, onQuickAction }) {
             const priority = PRIORITY_STYLES[action.priority] || PRIORITY_STYLES.medium;
             const late = isLate(action);
             const lateDays = daysLate(action);
-            const progressColor = action.status === "completed" ? "bg-emerald-500" : "bg-blue-500";
+            const progressColor = action.status === "completed" ? "bg-status-success" : "bg-status-info";
 
             return (
               <div
@@ -57,7 +57,7 @@ export default function FocusInProgress({ actions, onOpen, onQuickAction }) {
                       <span className={`rounded-full px-1.5 py-0.5 text-caption font-medium ${dept.badge}`}>{dept.label}</span>
                     </div>
                     {late && (
-                      <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-1.5 py-0.5 text-caption font-medium text-red-700">
+                      <span className="inline-flex items-center gap-0.5 rounded-full bg-status-error-surface px-1.5 py-0.5 text-caption font-medium text-status-error-text">
                         <AlertTriangle className="h-2.5 w-2.5" /> Atrasada há {lateDays}d
                       </span>
                     )}

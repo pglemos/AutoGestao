@@ -10,7 +10,7 @@ export default function OwnerPlaceholder({ title, description }) {
       </div>
       <h1 className="mt-4 text-xl font-semibold text-foreground">{title}</h1>
       {description && <p className="mt-1.5 max-w-md text-sm text-muted-foreground">{description}</p>}
-      <p className="mt-4 rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-700">
+      <p className="mt-4 rounded-full bg-status-warning-surface px-3 py-1 text-xs font-medium text-status-warning-text">
         Esta área será construída na próxima etapa
       </p>
       <Button asChild className="mt-6 shadow">

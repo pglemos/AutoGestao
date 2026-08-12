@@ -124,7 +124,7 @@ export default function NovaAtividadeModal({ open, onClose, clients, onCriada, v
             <p className="text-body-sm text-muted-foreground mb-3">Selecione o tipo de atividade comercial:</p>
             {TIPOS.map(t => (
               <button key={t} onClick={() => handleEscolherTipo(t)}
-                className="w-full text-left px-4 py-3 rounded-xl border border-border hover:border-[#005BFF] hover:bg-blue-50 text-body-sm font-semibold text-[#0F172A] transition-colors">
+                className="w-full text-left px-4 py-3 rounded-xl border border-border hover:border-[#005BFF] hover:bg-status-info-surface text-body-sm font-semibold text-[#0F172A] transition-colors">
                 {t}
               </button>
             ))}
@@ -135,7 +135,7 @@ export default function NovaAtividadeModal({ open, onClose, clients, onCriada, v
           <div className="mt-3 space-y-4">
             {/* Tipo selecionado */}
             <div className="flex items-center justify-between">
-              <span className="text-[12px] font-bold text-[#005BFF] bg-blue-50 px-3 py-1 rounded-full">{tipo}</span>
+              <span className="text-[12px] font-bold text-[#005BFF] bg-status-info-surface px-3 py-1 rounded-full">{tipo}</span>
               <button onClick={() => setStep("tipo")} className="text-[12px] text-muted-foreground hover:text-muted-foreground underline">Mudar tipo</button>
             </div>
 
@@ -150,7 +150,7 @@ export default function NovaAtividadeModal({ open, onClose, clients, onCriada, v
                   className="flex-1"
                 />
                 <button onClick={buscarCliente}
-                  className="px-3 py-2 rounded-xl bg-[#005BFF] text-white hover:bg-blue-700 transition-colors">
+                  className="px-3 py-2 rounded-xl bg-[#005BFF] text-white hover:bg-status-info transition-colors">
                   <Search className="w-4 h-4" />
                 </button>
               </div>
@@ -165,10 +165,10 @@ export default function NovaAtividadeModal({ open, onClose, clients, onCriada, v
               )}
               {naoEncontrado && (
                 <div className="mt-2 space-y-2">
-                  <div className="flex items-center gap-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded-xl">
-                    <UserX className="w-4 h-4 text-amber-600 flex-shrink-0" />
+                  <div className="flex items-center gap-2 px-3 py-2 bg-status-warning-surface border border-status-warning/30 rounded-xl">
+                    <UserX className="w-4 h-4 text-status-warning-text flex-shrink-0" />
                     <div className="min-w-0 flex-1">
-                      <p className="text-[12px] font-semibold text-amber-800">Cliente não encontrado.</p>
+                      <p className="text-[12px] font-semibold text-status-warning-text">Cliente não encontrado.</p>
                       <Link to="/carteira" onClick={handleClose} className="text-caption text-[#005BFF] underline">
                         Abrir Carteira de Clientes para cadastrar depois
                       </Link>
@@ -228,7 +228,7 @@ export default function NovaAtividadeModal({ open, onClose, clients, onCriada, v
                 Cancelar
               </button>
               <button onClick={handleSalvar} disabled={!podesSalvar || saving}
-                className="px-6 py-2.5 text-body-sm font-bold text-white bg-[#005BFF] hover:bg-blue-700 disabled:opacity-50 rounded-xl transition-colors">
+                className="px-6 py-2.5 text-body-sm font-bold text-white bg-[#005BFF] hover:bg-status-info disabled:opacity-50 rounded-xl transition-colors">
                 {saving ? "Salvando..." : "Salvar atividade"}
               </button>
             </div>

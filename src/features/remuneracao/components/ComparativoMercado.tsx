@@ -20,7 +20,7 @@ const TAMANHOS = [
 
 const BADGE: Record<Classificacao, { label: string; cls: string }> = {
   abaixo: { label: 'Abaixo da média', cls: 'bg-status-warning-surface text-status-warning' },
-  dentro: { label: 'Dentro da média', cls: 'bg-secondary text-emerald-600' },
+  dentro: { label: 'Dentro da média', cls: 'bg-secondary text-status-success-text' },
   acima: { label: 'Acima da média', cls: 'bg-accent text-accent-foreground' },
   sem_referencia: { label: 'Sem referência', cls: 'bg-muted text-muted-foreground' },
 }

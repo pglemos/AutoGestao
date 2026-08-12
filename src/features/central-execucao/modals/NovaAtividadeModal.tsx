@@ -173,7 +173,7 @@ export function NovaAtividadeModal({
         <div className="space-y-2">
           <p className="mb-3 text-body-sm text-muted-foreground">Selecione o tipo de atividade comercial:</p>
           {TYPES.map(type => (
-            <button key={type.value} type="button" onClick={() => { setActivityType(type.value); setStep('form') }} className="w-full rounded-xl border border-border px-4 py-3 text-left text-body-sm font-semibold text-foreground transition-colors hover:border-status-info hover:bg-blue-50">
+            <button key={type.value} type="button" onClick={() => { setActivityType(type.value); setStep('form') }} className="w-full rounded-xl border border-border px-4 py-3 text-left text-body-sm font-semibold text-foreground transition-colors hover:border-status-info hover:bg-status-info-surface">
               {type.label}
             </button>
           ))}
@@ -181,7 +181,7 @@ export function NovaAtividadeModal({
       ) : (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <span className="rounded-full bg-blue-50 px-3 py-1 text-[12px] font-bold text-status-info">{selectedType?.label}</span>
+            <span className="rounded-full bg-status-info-surface px-3 py-1 text-[12px] font-bold text-status-info">{selectedType?.label}</span>
             <button type="button" onClick={() => setStep('type')} className="text-[12px] text-muted-foreground underline hover:text-muted-foreground">Mudar tipo</button>
           </div>
 
@@ -189,7 +189,7 @@ export function NovaAtividadeModal({
             <label htmlFor="central-client-search" className="text-caption font-bold uppercase tracking-wider text-muted-foreground">Cliente ou telefone</label>
             <div className="mt-1.5 flex gap-2">
               <input id="central-client-search" value={search} onChange={event => { setSearch(event.target.value); setClient(null); setNotFound(false); setAmbiguous(false) }} placeholder="Nome ou (11) 98765-4321" className="h-10 min-w-0 flex-1 rounded-md border border-border px-3 text-body-sm outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15" />
-              <button type="button" onClick={handleSearch} aria-label="Buscar cliente" className="rounded-xl bg-status-info px-3 py-2 text-white transition-colors hover:bg-blue-700"><Search className="h-4 w-4" aria-hidden="true" /></button>
+              <button type="button" onClick={handleSearch} aria-label="Buscar cliente" className="rounded-xl bg-status-info px-3 py-2 text-white transition-colors hover:bg-status-info"><Search className="h-4 w-4" aria-hidden="true" /></button>
             </div>
 
             {client && (
@@ -200,8 +200,8 @@ export function NovaAtividadeModal({
             )}
 
             {(notFound || ambiguous) && (
-              <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2">
-                <div className="flex items-center gap-2"><UserX className="h-4 w-4 shrink-0 text-amber-600" aria-hidden="true" /><p className="text-[12px] font-semibold text-amber-800">{ambiguous ? 'Mais de um cliente encontrado. Refine a busca.' : 'Cliente não encontrado.'}</p></div>
+              <div className="mt-2 rounded-xl border border-status-warning/30 bg-status-warning-surface px-3 py-2">
+                <div className="flex items-center gap-2"><UserX className="h-4 w-4 shrink-0 text-status-warning-text" aria-hidden="true" /><p className="text-[12px] font-semibold text-status-warning-text">{ambiguous ? 'Mais de um cliente encontrado. Refine a busca.' : 'Cliente não encontrado.'}</p></div>
                 {!ambiguous && <Link to="/carteira-clientes" onClick={onClose} className="ml-6 text-caption text-status-info underline">Abrir Carteira de Clientes para cadastrar</Link>}
               </div>
             )}
@@ -224,11 +224,11 @@ export function NovaAtividadeModal({
 
           <div><label htmlFor="central-activity-description" className="text-caption font-bold uppercase tracking-wider text-muted-foreground">Observação (opcional)</label><input id="central-activity-description" value={description} onChange={event => setDescription(event.target.value)} placeholder="Detalhes adicionais..." className="mt-1.5 h-10 w-full rounded-md border border-border px-3 text-body-sm outline-none focus:border-status-info" /></div>
 
-          {error && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-[12px] font-semibold text-red-700">{error}</p>}
+          {error && <p role="alert" className="rounded-xl border border-status-error/30 bg-status-error-surface px-3 py-2 text-[12px] font-semibold text-status-error-text">{error}</p>}
 
           <div className="flex justify-end gap-3 border-t border-border-subtle pt-4">
             <button type="button" onClick={onClose} disabled={saving} className="rounded-xl border border-border px-5 py-2.5 text-body-sm font-semibold text-muted-foreground hover:bg-slate-50 disabled:opacity-50">Cancelar</button>
-            <button type="button" onClick={() => void handleSave()} disabled={!activityType || !date || !time || saving} className="rounded-xl bg-status-info px-6 py-2.5 text-body-sm font-bold text-white hover:bg-blue-700 disabled:opacity-50">{saving ? 'Salvando...' : 'Salvar atividade'}</button>
+            <button type="button" onClick={() => void handleSave()} disabled={!activityType || !date || !time || saving} className="rounded-xl bg-status-info px-6 py-2.5 text-body-sm font-bold text-white hover:bg-status-info disabled:opacity-50">{saving ? 'Salvando...' : 'Salvar atividade'}</button>
           </div>
         </div>
       )}

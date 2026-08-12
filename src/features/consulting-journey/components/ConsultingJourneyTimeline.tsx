@@ -25,7 +25,7 @@ export function ConsultingJourneyTimeline({ visits, nextVisitNumber, onOpen }: {
               onClick={() => onOpen(visit.id)}
               className="flex w-full items-center gap-3 rounded-xl border border-border p-3 text-left transition hover:border-primary/40 hover:bg-muted/30"
             >
-              <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold ${visit.status === 'concluida' ? 'bg-emerald-100 text-emerald-700' : isNext ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground'}`}>
+              <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold ${visit.status === 'concluida' ? 'bg-status-success-surface text-status-success-text' : isNext ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground'}`}>
                 {visit.visitNumber}
               </span>
               <span className="min-w-0 flex-1">

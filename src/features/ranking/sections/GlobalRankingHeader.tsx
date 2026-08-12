@@ -30,7 +30,7 @@ export function GlobalRankingHeader({
   hideStoreNames, onToggleHideStoreNames,
   onRefresh, isRefetching, lastUpdatedAt,
 }: Props) {
-  const activeTabClass = 'bg-emerald-600 text-white shadow-sm'
+  const activeTabClass = 'bg-brand-primary text-white shadow-sm'
 
   return (
     <header data-mx-module-header="" className="flex min-w-0 shrink-0 flex-col justify-between gap-mx-lg rounded-2xl border border-border-subtle bg-white p-5 shadow-sm 2xl:flex-row 2xl:items-center">

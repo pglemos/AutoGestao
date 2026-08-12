@@ -180,7 +180,7 @@ export function PlanejamentoEstrategico({ planningIndicators, periodLabel }: Pro
 
       <Card className="p-mx-md">
         <header className="mb-mx-sm flex items-center gap-mx-sm">
-          <div className="rounded-2xl bg-mx-indigo-50 p-mx-xs text-emerald-600">
+          <div className="rounded-2xl bg-mx-indigo-50 p-mx-xs text-status-success-text">
             <LineChart size={18} aria-hidden="true" />
           </div>
           <div>

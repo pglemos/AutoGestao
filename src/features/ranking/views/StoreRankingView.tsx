@@ -63,7 +63,7 @@ export function StoreRankingView() {
           </div>
 
           {data.error && (
-            <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm font-bold text-red-700">
+            <div role="alert" className="rounded-xl border border-status-error/30 bg-status-error-surface px-4 py-2 text-sm font-bold text-status-error-text">
               {data.error}
             </div>
           )}

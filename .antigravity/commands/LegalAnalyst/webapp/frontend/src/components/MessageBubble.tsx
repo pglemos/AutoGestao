@@ -12,12 +12,12 @@ const AGENT_COLORS: Record<string, string> = {
   "legal-chief": "from-legal-gold to-legal-darkgold",
   "barbosa-classifier": "from-amber-500 to-amber-700",
   "fux-procedural": "from-cyan-500 to-cyan-700",
-  "cnj-compliance": "from-emerald-500 to-emerald-700",
-  "mendes-researcher": "from-blue-500 to-blue-700",
+  "cnj-compliance": "from-status-success to-status-success",
+  "mendes-researcher": "from-status-info to-status-info",
   "toffoli-aggregator": "from-indigo-500 to-indigo-700",
   "moraes-analyst": "from-purple-500 to-purple-700",
   "carmem-relator": "from-indigo-500 to-indigo-700",
-  "fachin-precedent": "from-red-500 to-red-700",
+  "fachin-precedent": "from-status-error to-red-700",
   "nunes-quantitative": "from-teal-500 to-teal-700",
   "barroso-strategist": "from-brand-500 to-brand-700",
   "theodoro-validator": "from-green-500 to-green-700",
@@ -112,8 +112,8 @@ export default function MessageBubble({ message, onReferenceClick }: MessageBubb
             {message.attachments.map((att, idx) => (
               <span
                 key={idx}
-                className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-500/10
-                           text-[11px] text-emerald-300 border border-emerald-500/10"
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-status-success/10
+                           text-[11px] text-emerald-300 border border-status-success/10"
               >
                 <Paperclip className="w-3 h-3" />
                 {att}

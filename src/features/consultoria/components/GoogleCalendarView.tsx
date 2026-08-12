@@ -44,7 +44,7 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
     <div className="bg-white rounded-2xl shadow-sm border border-border p-mx-lg">
       <div className="flex items-center justify-between mb-mx-lg">
         <div className="flex items-center gap-mx-sm">
-          <div className="p-mx-xs bg-mx-indigo-50 text-emerald-600 rounded-xl">
+          <div className="p-mx-xs bg-mx-indigo-50 text-status-success-text rounded-xl">
             <Calendar size={24} />
           </div>
           <div>
@@ -130,10 +130,10 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
               {events.map((event) => (
                 <div
                   key={event.id}
-                  className="flex items-start gap-mx-sm p-mx-md rounded-xl border border-border hover:border-brand-primary/30 hover:bg-emerald-600/5 transition-colors"
+                  className="flex items-start gap-mx-sm p-mx-md rounded-xl border border-border hover:border-brand-primary/30 hover:bg-brand-primary/5 transition-colors"
                 >
-                  <div className="p-mx-xs bg-emerald-600/10 rounded-xl mt-0.5">
-                    <Clock size={14} className="text-emerald-600" />
+                  <div className="p-mx-xs bg-brand-primary/10 rounded-xl mt-0.5">
+                    <Clock size={14} className="text-status-success-text" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <Typography variant="caption" className="font-bold block truncate">
@@ -156,7 +156,7 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
                       href={event.htmlLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-emerald-600 hover:text-brand-primary-hover shrink-0"
+                      className="text-status-success-text hover:text-brand-primary-hover shrink-0"
                     >
                       <ExternalLink size={14} />
                     </a>

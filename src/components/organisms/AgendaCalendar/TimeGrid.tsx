@@ -120,7 +120,7 @@ export function TimeGrid({
               </Typography>
               <span className={cn(
                 'mx-auto mt-1 flex h-mx-9 w-mx-9 items-center justify-center rounded-mx-full text-sm font-semibold',
-                isTodayDate ? 'bg-emerald-600 text-white' : 'text-foreground',
+                isTodayDate ? 'bg-brand-primary text-white' : 'text-foreground',
               )}>
                 {dayInfo.day}
               </span>

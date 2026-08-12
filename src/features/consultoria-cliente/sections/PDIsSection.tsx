@@ -66,7 +66,7 @@ export function PDIsSection({ storeId, visits = [] }: Props) {
           </div>
 
           <div className="p-mx-md bg-gray-50/30 rounded-2xl flex items-center gap-mx-sm mb-mx-md">
-            <FileText className="w-mx-5 h-mx-5 text-emerald-600 shrink-0" />
+            <FileText className="w-mx-5 h-mx-5 text-status-success-text shrink-0" />
             <div className="min-w-0">
               <Typography variant="p" className="text-sm font-bold truncate">{attachment.filename}</Typography>
               <Typography variant="tiny" tone="muted">{formatFileSize(attachment.size_bytes)}</Typography>
@@ -91,7 +91,7 @@ export function PDIsSection({ storeId, visits = [] }: Props) {
           <Card key={pdi.id} className="p-mx-lg bg-white border hover:border-brand-primary/30 transition-all group">
             <div className="flex justify-between items-start mb-mx-md">
               <div>
-                <Typography variant="h3" className="text-lg group-hover:text-emerald-600 transition-colors">{pdi.seller_name || 'Nome não informado'}</Typography>
+                <Typography variant="h3" className="text-lg group-hover:text-status-success-text transition-colors">{pdi.seller_name || 'Nome não informado'}</Typography>
                 <Typography variant="tiny" tone="muted">Plano criado em {format(new Date(pdi.created_at), 'dd/MM/yyyy')}</Typography>
               </div>
               <Badge variant={pdi.status === 'ativo' ? 'success' : 'outline'}>{pdi.status.toUpperCase()}</Badge>

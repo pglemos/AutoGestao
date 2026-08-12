@@ -17,7 +17,7 @@ export function DigitalProductCard({ product, canManage, onEdit, onArchive }: { 
     <Card className="flex h-full flex-col border border-border-subtle bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
       <div className="flex items-start justify-between gap-3 border-b border-border-subtle pb-4">
         <div className="flex min-w-0 items-start gap-3">
-          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600"><Package size={20} aria-hidden="true" /></span>
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-status-success-surface text-status-success-text"><Package size={20} aria-hidden="true" /></span>
           <div className="min-w-0">
             <Typography as="h3" variant="h3" className="line-clamp-2 text-base font-semibold text-foreground">{product.name}</Typography>
             <Typography variant="caption" className="mt-1 block text-xs text-muted-foreground">{product.category || 'Operacional'}</Typography>
@@ -38,7 +38,7 @@ export function DigitalProductCard({ product, canManage, onEdit, onArchive }: { 
         {canManage ? (
           <div className="grid grid-cols-2 gap-2">
             <Button data-mx-requires-manage="" variant="ghost" size="sm" onClick={() => onEdit(product)}><Edit3 size={14} className="mr-2" />Editar</Button>
-            <Button data-mx-requires-manage="" variant="ghost" size="sm" onClick={() => onArchive(product)} className="text-red-600"><Archive size={14} className="mr-2" />Arquivar</Button>
+            <Button data-mx-requires-manage="" variant="ghost" size="sm" onClick={() => onArchive(product)} className="text-status-error-text"><Archive size={14} className="mr-2" />Arquivar</Button>
           </div>
         ) : <Badge variant="success">Disponível para seu perfil</Badge>}
       </div>

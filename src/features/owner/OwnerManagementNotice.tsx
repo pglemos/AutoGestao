@@ -16,7 +16,7 @@ export function OwnerManagementNotice({ storeId, managerEmail }: OwnerManagement
 
   if (management.queryFailed) {
     return (
-      <section role="status" className="flex items-start gap-mx-sm rounded-2xl border border-amber-200 bg-amber-50 p-mx-md text-amber-900">
+      <section role="status" className="flex items-start gap-mx-sm rounded-2xl border border-status-warning/30 bg-status-warning-surface p-mx-md text-status-warning-text">
         <AlertTriangle size={20} className="mt-0.5 shrink-0" aria-hidden="true" />
         <div>
           <p className="text-sm font-bold">Estrutura gerencial não confirmada</p>
@@ -28,7 +28,7 @@ export function OwnerManagementNotice({ storeId, managerEmail }: OwnerManagement
 
   if (management.hasActiveManager) {
     return (
-      <section role="status" className="flex items-start gap-mx-sm rounded-2xl border border-emerald-200 bg-emerald-50 p-mx-md text-emerald-900">
+      <section role="status" className="flex items-start gap-mx-sm rounded-2xl border border-status-success/30 bg-status-success-surface p-mx-md text-status-success-text">
         <ShieldCheck size={20} className="mt-0.5 shrink-0" aria-hidden="true" />
         <div>
           <p className="text-sm font-bold">Gerente ativo identificado</p>
@@ -39,7 +39,7 @@ export function OwnerManagementNotice({ storeId, managerEmail }: OwnerManagement
   }
 
   return (
-    <section role="status" className="flex items-start gap-mx-sm rounded-2xl border border-amber-200 bg-amber-50 p-mx-md text-amber-950">
+    <section role="status" className="flex items-start gap-mx-sm rounded-2xl border border-status-warning/30 bg-status-warning-surface p-mx-md text-amber-950">
       <BriefcaseBusiness size={20} className="mt-0.5 shrink-0" aria-hidden="true" />
       <div>
         <p className="text-sm font-bold">Você responde pela gestão comercial desta loja</p>

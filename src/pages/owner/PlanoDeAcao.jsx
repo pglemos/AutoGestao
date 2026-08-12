@@ -437,7 +437,7 @@ export default function PlanoDeAcao() {
       <ActionPlanTabs tab={tab} onTabChange={handleTabChange} />
 
       {error && (
-        <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+        <div className="rounded-xl border border-status-error/30 bg-status-error-surface px-4 py-3 text-sm text-status-error-text" role="alert">
           Não foi possível carregar os dados reais do Plano de Ação: {error}
         </div>
       )}

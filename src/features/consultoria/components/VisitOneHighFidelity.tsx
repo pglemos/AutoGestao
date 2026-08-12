@@ -48,7 +48,7 @@ export function VisitOneHighFidelity({ clientId, clientSlug, data, onChange }: {
             onClick={() => setTab(t.id)}
             className={cn(
               "flex-1 flex items-center justify-center gap-mx-xs py-mx-sm px-mx-md rounded-xl text-xs font-bold uppercase tracking-mx-wider transition-all",
-              tab === t.id ? "bg-emerald-600 text-white shadow-sm" : "text-muted-foreground hover:text-foreground hover:bg-white"
+              tab === t.id ? "bg-brand-primary text-white shadow-sm" : "text-muted-foreground hover:text-foreground hover:bg-white"
             )}
           >
             <t.icon size={14} />
@@ -81,11 +81,11 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-mx-lg">
         {/* Vendas Trimestre */}
         <Card className="p-mx-lg bg-white border overflow-hidden relative group/card">
-          <div className="absolute -top-mx-4 -right-mx-4 p-mx-md opacity-[0.03] group-hover/card:opacity-[0.06] transition-opacity pointer-events-none text-emerald-600">
+          <div className="absolute -top-mx-4 -right-mx-4 p-mx-md opacity-[0.03] group-hover/card:opacity-[0.06] transition-opacity pointer-events-none text-status-success-text">
             <BarChart3 size={140} />
           </div>
           <div className="relative z-10 mb-mx-md flex items-center gap-mx-sm">
-            <div className="p-mx-xs bg-emerald-600/10 rounded-xl text-emerald-600"><TrendingUp size={20} /></div>
+            <div className="p-mx-xs bg-brand-primary/10 rounded-xl text-status-success-text"><TrendingUp size={20} /></div>
             <div>
               <Typography variant="h3" className="text-lg">Vendas Trimestre</Typography>
               <Typography variant="tiny" tone="muted" className="opacity-60">Volume de emplacamentos/entregas</Typography>
@@ -233,7 +233,7 @@ function VisitOneBenchmark({ data }: { data: VisitOneQuantData }) {
        <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/5 via-transparent to-brand-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
        <div className="relative z-10">
          <div className="w-mx-16 h-mx-16 bg-gray-50 rounded-mx-full flex items-center justify-center mx-auto mb-mx-md border border-border-subtle group-hover:scale-110 transition-transform">
-           <Globe size={48} className="text-emerald-600 opacity-40" />
+           <Globe size={48} className="text-status-success-text opacity-40" />
          </div>
          <Typography variant="h3" className="text-xl mb-mx-xs">Comparativo de Mercado</Typography>
          <Typography variant="p" className="text-sm max-w-mx-80 mx-auto font-medium tracking-tighter">
@@ -350,7 +350,7 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
               className={cn(
                 "text-left p-mx-md rounded-2xl border transition-all relative overflow-hidden shadow-sm min-h-mx-28",
                 isActive
-                  ? "bg-emerald-600 border-brand-primary text-white shadow-sm"
+                  ? "bg-brand-primary border-brand-primary text-white shadow-sm"
                   : "bg-white border-border hover:border-brand-primary/30 hover:bg-gray-50"
               )}
             >
@@ -380,7 +380,7 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
       <Card className="p-mx-lg bg-white border">
         <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-mx-md mb-mx-lg border-b border-border-subtle pb-mx-md">
           <div className="flex items-start gap-mx-sm">
-            <div className="p-mx-xs bg-emerald-600/10 rounded-xl text-emerald-600"><Users size={20} /></div>
+            <div className="p-mx-xs bg-brand-primary/10 rounded-xl text-status-success-text"><Users size={20} /></div>
             <div>
               <Typography variant="tiny" tone="muted" className="">
                 Visita 1 - Diagnóstico PMR
@@ -449,8 +449,8 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
                         className={cn(
                           "h-10 w-10 min-w-10 sm:h-12 sm:w-12 sm:min-w-12 rounded-2xl font-bold transition-all border-2 flex items-center justify-center text-lg",
                           value === option
-                            ? "bg-emerald-600 border-brand-primary text-white shadow-sm scale-105"
-                            : "bg-white border-border text-muted-foreground hover:border-brand-primary/40 hover:text-emerald-600"
+                            ? "bg-brand-primary border-brand-primary text-white shadow-sm scale-105"
+                            : "bg-white border-border text-muted-foreground hover:border-brand-primary/40 hover:text-status-success-text"
                         )}
                       >
                         {option}

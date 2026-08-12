@@ -58,16 +58,16 @@ export function ManagerRoutineDetailModal({ open, sellerName, date, actions, app
             <p className="mt-3 text-xs text-muted-foreground">Denominador aplicado: {officialScore.denominator} pontos.</p>
           </section>}
           <div>
-            <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold text-foreground"><CheckCircle2 size={16} className="text-emerald-600" />Atividades da Central de Execução</h3>
+            <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold text-foreground"><CheckCircle2 size={16} className="text-status-success-text" />Atividades da Central de Execução</h3>
             <ul className="space-y-2">
               {actions.map((action) => (
                 <li key={action.id} className="rounded-xl border border-border-subtle bg-gray-50 p-3">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0"><p className="text-sm font-semibold text-foreground">{action.title}</p><p className="mt-1 text-xs text-muted-foreground">{formatActionDate(action.due_at)} · {action.source_type || 'Central de Execução'}</p></div>
-                    <span className={`rounded-lg px-2 py-1 text-xs font-medium ${action.status === 'concluida' || action.status === 'justificada' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>{formatStatus(action.status)}</span>
+                    <span className={`rounded-lg px-2 py-1 text-xs font-medium ${action.status === 'concluida' || action.status === 'justificada' ? 'bg-status-success-surface text-status-success-text' : 'bg-status-warning-surface text-status-warning-text'}`}>{formatStatus(action.status)}</span>
                   </div>
                   {action.description && <p className="mt-2 text-xs text-muted-foreground">{action.description}</p>}
-                  {action.justificativa && <p className="mt-2 flex items-start gap-1 text-xs text-amber-700"><AlertCircle size={12} className="mt-0.5 shrink-0" />{action.justificativa}</p>}
+                  {action.justificativa && <p className="mt-2 flex items-start gap-1 text-xs text-status-warning-text"><AlertCircle size={12} className="mt-0.5 shrink-0" />{action.justificativa}</p>}
                 </li>
               ))}
             </ul>

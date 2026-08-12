@@ -65,11 +65,11 @@ export function CheckinAutosaveStatus({
   const isOffline = state.status === 'offline'
 
   const tone = finalizado
-    ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
+    ? 'border-status-success/30 bg-status-success-surface text-status-success-text'
     : isProblem
-      ? 'border-red-200 bg-red-50 text-red-900'
+      ? 'border-status-error/30 bg-status-error-surface text-status-error-text'
       : isOffline
-        ? 'border-amber-200 bg-amber-50 text-amber-900'
+        ? 'border-status-warning/30 bg-status-warning-surface text-status-warning-text'
         : 'border-border bg-white text-foreground'
 
   const Icon = finalizado
@@ -102,7 +102,7 @@ export function CheckinAutosaveStatus({
             <button
               type="button"
               onClick={onRetry}
-              className="inline-flex h-11 min-w-[44px] items-center gap-1.5 rounded-lg border border-red-300 bg-white px-3 text-body-sm font-bold text-red-700 transition-colors hover:bg-red-100"
+              className="inline-flex h-11 min-w-[44px] items-center gap-1.5 rounded-lg border border-status-error/40 bg-white px-3 text-body-sm font-bold text-status-error-text transition-colors hover:bg-status-error-surface"
             >
               <RefreshCw size={14} aria-hidden="true" />
               Tentar novamente

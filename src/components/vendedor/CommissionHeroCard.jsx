@@ -26,7 +26,7 @@ export default function CommissionHeroCard({ comissaoEstimada, qtdVendas, onVerC
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-3">
             <span className="text-emerald-400 text-xs font-bold uppercase tracking-widest">Comissão Estimada</span>
-            <button onClick={onVerCalculo} className="text-emerald-600 hover:text-emerald-400 transition-colors">
+            <button onClick={onVerCalculo} className="text-status-success-text hover:text-emerald-400 transition-colors">
               <Info className="w-3.5 h-3.5" />
             </button>
           </div>

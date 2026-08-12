@@ -45,50 +45,50 @@ const COLUMN_CONFIG = {
   critical: {
     label: 'Críticos',
     icon: AlertOctagon,
-    header: 'border-red-200 bg-red-100 text-red-700',
-    body: 'border-red-200 bg-red-50/50',
-    footer: 'border-red-100 bg-red-50 text-red-700',
-    active: 'border-red-600 bg-red-600 text-white',
+    header: 'border-status-error/30 bg-status-error-surface text-status-error-text',
+    body: 'border-status-error/30 bg-status-error-surface/50',
+    footer: 'border-status-error/20 bg-status-error-surface text-status-error-text',
+    active: 'border-status-error bg-status-error text-white',
   },
   attention: {
     label: 'Atenção',
     icon: AlertCircle,
-    header: 'border-amber-200 bg-amber-100 text-amber-700',
-    body: 'border-amber-200 bg-amber-50/50',
-    footer: 'border-amber-100 bg-amber-50 text-amber-700',
-    active: 'border-amber-500 bg-amber-500 text-white',
+    header: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
+    body: 'border-status-warning/30 bg-status-warning-surface/50',
+    footer: 'border-status-warning/20 bg-status-warning-surface text-status-warning-text',
+    active: 'border-status-warning bg-status-warning text-white',
   },
   on_track: {
     label: 'Em dia',
     icon: CheckCircle2,
-    header: 'border-emerald-200 bg-emerald-100 text-emerald-700',
-    body: 'border-emerald-200 bg-emerald-50/50',
-    footer: 'border-emerald-100 bg-emerald-50 text-emerald-700',
-    active: 'border-emerald-600 bg-emerald-600 text-white',
+    header: 'border-status-success/30 bg-status-success-surface text-status-success-text',
+    body: 'border-status-success/30 bg-status-success-surface/50',
+    footer: 'border-status-success/20 bg-status-success-surface text-status-success-text',
+    active: 'border-status-success bg-brand-primary text-white',
   },
 } as const
 
 const CARD_THEME = {
   critical: {
-    border: 'border-red-300',
-    badge: 'bg-red-100 text-red-700',
-    avatar: 'bg-red-100 text-red-700',
-    advice: 'bg-red-50 text-red-700',
-    action: 'border-red-200 text-red-700 hover:bg-red-50',
+    border: 'border-status-error/40',
+    badge: 'bg-status-error-surface text-status-error-text',
+    avatar: 'bg-status-error-surface text-status-error-text',
+    advice: 'bg-status-error-surface text-status-error-text',
+    action: 'border-status-error/30 text-status-error-text hover:bg-status-error-surface',
   },
   attention: {
-    border: 'border-amber-300',
-    badge: 'bg-amber-100 text-amber-700',
-    avatar: 'bg-amber-100 text-amber-700',
-    advice: 'bg-amber-50 text-amber-700',
-    action: 'border-amber-200 text-amber-700 hover:bg-amber-50',
+    border: 'border-status-warning/40',
+    badge: 'bg-status-warning-surface text-status-warning-text',
+    avatar: 'bg-status-warning-surface text-status-warning-text',
+    advice: 'bg-status-warning-surface text-status-warning-text',
+    action: 'border-status-warning/30 text-status-warning-text hover:bg-status-warning-surface',
   },
   on_track: {
-    border: 'border-emerald-300',
-    badge: 'bg-emerald-100 text-emerald-700',
-    avatar: 'bg-emerald-100 text-emerald-700',
-    advice: 'bg-emerald-50 text-emerald-700',
-    action: 'border-emerald-200 text-emerald-700 hover:bg-emerald-50',
+    border: 'border-status-success/40',
+    badge: 'bg-status-success-surface text-status-success-text',
+    avatar: 'bg-status-success-surface text-status-success-text',
+    advice: 'bg-status-success-surface text-status-success-text',
+    action: 'border-status-success/30 text-status-success-text hover:bg-status-success-surface',
   },
 } as const
 
@@ -110,15 +110,15 @@ export function ManagerTeamKanban({ cards, view, storeName, onViewChange, onOpen
     <section className="rounded-2xl border border-border-subtle bg-white p-4 shadow-sm" data-tour="kanban-equipe" aria-label="Visão do Kanban">
       <div className="mb-1.5 flex items-center gap-1.5"><Eye size={14} className="text-muted-foreground"/><p className="text-xs font-medium text-muted-foreground">Visão do Kanban</p></div>
       <div className="inline-flex max-w-full gap-1 overflow-x-auto rounded-xl border border-border bg-gray-50 p-1" role="tablist" aria-label="Classificação da equipe">
-        {VIEW_OPTIONS.map(option => <button key={option.value} type="button" role="tab" aria-selected={view === option.value} onClick={() => onViewChange(option.value)} className={`whitespace-nowrap rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-all ${view === option.value ? 'bg-emerald-600 text-white shadow-sm' : 'text-muted-foreground hover:bg-white hover:text-foreground'}`}>{option.label}</button>)}
+        {VIEW_OPTIONS.map(option => <button key={option.value} type="button" role="tab" aria-selected={view === option.value} onClick={() => onViewChange(option.value)} className={`whitespace-nowrap rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-all ${view === option.value ? 'bg-brand-primary text-white shadow-sm' : 'text-muted-foreground hover:bg-white hover:text-foreground'}`}>{option.label}</button>)}
       </div>
       <p className="mt-1.5 text-caption text-muted-foreground">A posição no Kanban muda conforme a visão selecionada.</p>
     </section>
 
     <div className="sticky top-0 z-30 bg-gray-50 py-1">
       <div className="flex items-center justify-center gap-2 py-2">
-      <Users size={15} className="text-emerald-600"/>
-      <p className="text-sm font-semibold text-foreground"><span className="text-base text-emerald-600">{summary.onTrackPercentage}%</span> da equipe Em dia</p>
+      <Users size={15} className="text-status-success-text"/>
+      <p className="text-sm font-semibold text-foreground"><span className="text-base text-status-success-text">{summary.onTrackPercentage}%</span> da equipe Em dia</p>
       <span className="text-xs text-muted-foreground">({summary.eligible} vendedores elegíveis)</span>
       </div>
     </div>
@@ -188,7 +188,7 @@ function ManagerSellerCard({ card, view, status, storeName, onOpenProfile, onAct
 }
 
 function KanbanMetric({ label, value, status, highlight }: { label: string; value: number | null; status: ManagerTeamStatus; highlight: boolean }) {
-  const valueTone = !highlight ? 'text-foreground' : status === 'not_applicable' ? 'text-muted-foreground' : status === 'on_track' ? 'text-emerald-600' : status === 'attention' ? 'text-amber-600' : 'text-red-600'
+  const valueTone = !highlight ? 'text-foreground' : status === 'not_applicable' ? 'text-muted-foreground' : status === 'on_track' ? 'text-status-success-text' : status === 'attention' ? 'text-status-warning-text' : 'text-status-error-text'
   return <div className="rounded-xl border border-border-subtle bg-gray-50 p-2.5 text-center"><p className={`text-xl font-bold ${valueTone}`}>{value === null ? '—' : `${Math.round(value)}%`}</p><p className="text-xs text-muted-foreground">{label}</p></div>
 }
 

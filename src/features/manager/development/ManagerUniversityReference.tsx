@@ -231,7 +231,7 @@ function UniversityHeader() {
   return (
     <header className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
       <div className="flex flex-col items-stretch gap-3 md:flex-row md:items-center">
-        <span className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+        <span className="grid h-10 w-10 place-items-center rounded-xl bg-status-success-surface text-status-success-text">
           <GraduationCap size={20} />
         </span>
         <div>
@@ -268,7 +268,7 @@ function UniversityTabs({
           onClick={() => onTabChange(item.key)}
           className={`px-5 py-3.5 text-sm font-medium transition-colors ${
             tab === item.key
-              ? 'border-b-2 border-emerald-600 text-emerald-700'
+              ? 'border-b-2 border-status-success text-status-success-text'
               : 'text-muted-foreground hover:text-foreground'
           }`}
         >
@@ -282,7 +282,7 @@ function UniversityTabs({
 function LoadingState() {
   return (
     <div className="flex justify-center py-16">
-      <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-status-success/30 border-t-emerald-600" />
     </div>
   )
 }
@@ -345,7 +345,7 @@ function CatalogTrackGrid({
           className={`flex flex-col rounded-2xl border border-border-subtle bg-white p-5 shadow-sm ${track.comingSoon ? 'opacity-60' : ''}`}
         >
           <div className="flex items-start justify-between">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-status-success-surface text-status-success-text">
               <BookOpen size={18} />
             </span>
             <span className="rounded-lg bg-gray-100 px-2 py-1 text-xs font-medium text-muted-foreground">
@@ -364,7 +364,7 @@ function CatalogTrackGrid({
               <button
                 type="button"
                 onClick={() => onSelect(track)}
-                className="mt-3 w-full rounded-xl bg-emerald-600 py-2 text-xs font-semibold text-white hover:bg-emerald-700"
+                className="mt-3 w-full rounded-xl bg-brand-primary py-2 text-xs font-semibold text-white hover:bg-brand-primary-hover"
               >
                 Iniciar
               </button>
@@ -403,11 +403,11 @@ export function OfficialTrainingGrid({
           return (
             <article key={training.id} className="flex flex-col rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
               <div className="flex items-start justify-between">
-                <span className="grid h-9 w-9 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+                <span className="grid h-9 w-9 place-items-center rounded-xl bg-status-success-surface text-status-success-text">
                   <BookOpen size={18} />
                 </span>
                 <span className={`rounded-lg px-2 py-1 text-xs font-medium ${
-                  training.watched ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-muted-foreground'
+                  training.watched ? 'bg-status-success-surface text-status-success-text' : 'bg-gray-100 text-muted-foreground'
                 }`}>
                   {training.watched ? 'Concluído' : 'Iniciar'}
                 </span>
@@ -419,7 +419,7 @@ export function OfficialTrainingGrid({
                 <span>{training.watched ? '100%' : '0%'}</span>
               </div>
               <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-gray-100">
-                <div className="h-full rounded-full bg-emerald-500" style={{ width: training.watched ? '100%' : '0%' }} />
+                <div className="h-full rounded-full bg-status-success" style={{ width: training.watched ? '100%' : '0%' }} />
               </div>
               {materialUrl ? (
                 <a
@@ -432,7 +432,7 @@ export function OfficialTrainingGrid({
                     next.add(training.id)
                     return next
                   })}
-                  className="mt-3 w-full rounded-xl border border-emerald-200 py-2 text-center text-xs font-semibold text-emerald-700 hover:bg-emerald-50"
+                  className="mt-3 w-full rounded-xl border border-status-success/30 py-2 text-center text-xs font-semibold text-status-success-text hover:bg-status-success-surface"
                 >
                   Abrir conteúdo
                 </a>
@@ -449,9 +449,9 @@ export function OfficialTrainingGrid({
                 }}
                 className={`mt-2 w-full rounded-xl py-2 text-xs font-semibold ${
                   training.watched
-                    ? 'cursor-default bg-emerald-50 text-emerald-600'
+                    ? 'cursor-default bg-status-success-surface text-status-success-text'
                     : canComplete
-                      ? 'bg-emerald-600 text-white hover:bg-emerald-700'
+                      ? 'bg-brand-primary text-white hover:bg-brand-primary-hover'
                       : 'cursor-not-allowed bg-gray-100 text-muted-foreground'
                 }`}
               >
@@ -576,8 +576,8 @@ function UniversityStat({
   tone: 'emerald' | 'blue' | 'green' | 'violet'
 }) {
   const styles = {
-    emerald: 'bg-emerald-50 text-emerald-600',
-    blue: 'bg-blue-50 text-blue-600',
+    emerald: 'bg-status-success-surface text-status-success-text',
+    blue: 'bg-status-info-surface text-status-info-text',
     green: 'bg-green-50 text-green-600',
     violet: 'bg-violet-50 text-violet-600',
   }
@@ -604,9 +604,9 @@ function TeamStat({
   tone: 'emerald' | 'blue' | 'amber' | 'violet'
 }) {
   const styles = {
-    emerald: 'text-emerald-600',
-    blue: 'text-blue-600',
-    amber: 'text-amber-600',
+    emerald: 'text-status-success-text',
+    blue: 'text-status-info-text',
+    amber: 'text-status-warning-text',
     violet: 'text-violet-600',
   }
   return (
@@ -666,8 +666,8 @@ function UniversityTeamTable({
             const statusStyle = !hasOfficialContent
               ? 'bg-gray-100 text-muted-foreground'
               : member.progress >= 75
-                ? 'bg-emerald-100 text-emerald-700'
-                : 'bg-amber-100 text-amber-700'
+                ? 'bg-status-success-surface text-status-success-text'
+                : 'bg-status-warning-surface text-status-warning-text'
             const hasActiveOnboarding = assignments.some(
               assignment => assignment.seller_id === member.seller_id && assignment.status === 'active',
             )
@@ -682,7 +682,7 @@ function UniversityTeamTable({
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
                     <div className="h-1.5 w-20 overflow-hidden rounded-full bg-gray-100">
-                      <div className="h-full rounded-full bg-emerald-500" style={{ width: `${member.progress}%` }} />
+                      <div className="h-full rounded-full bg-status-success" style={{ width: `${member.progress}%` }} />
                     </div>
                     <span className="text-xs text-muted-foreground">{member.progress}%</span>
                   </div>
@@ -704,7 +704,7 @@ function UniversityTeamTable({
                         type="button"
                         disabled={isAssigning}
                         onClick={() => void onRemindSeller(member.seller_id, pendingTraining.title)}
-                        className="text-xs font-medium text-emerald-600"
+                        className="text-xs font-medium text-status-success-text"
                       >
                         Cobrar
                       </button>
@@ -713,7 +713,7 @@ function UniversityTeamTable({
                       <button
                         type="button"
                         onClick={() => setAssigningTo(member.seller_id)}
-                        className="text-xs font-medium text-blue-600"
+                        className="text-xs font-medium text-status-info-text"
                       >
                         Atribuir
                       </button>
@@ -771,10 +771,10 @@ export function AssignTrainingDialog({
             type="button"
             disabled={isAssigning}
             onClick={() => void onAssignTraining(training.id)}
-            className="flex w-full items-center justify-between rounded-xl border border-border p-3 text-left text-sm hover:border-emerald-300 hover:bg-emerald-50"
+            className="flex w-full items-center justify-between rounded-xl border border-border p-3 text-left text-sm hover:border-status-success/40 hover:bg-status-success-surface"
           >
             <span>{training.title}</span>
-            <Send size={15} className="text-emerald-600" />
+            <Send size={15} className="text-status-success-text" />
           </button>
         ))}
         <button
@@ -811,7 +811,7 @@ export function CatalogTrackDialog({
       showClose={false}
     >
       <div ref={dialogContentRef} data-testid="catalog-track-focus-scope" className="space-y-4">
-        <span className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+        <span className="grid h-10 w-10 place-items-center rounded-xl bg-status-success-surface text-status-success-text">
           <BookOpen size={20} />
         </span>
         <p className="rounded-xl bg-gray-50 p-3 text-xs leading-5 text-muted-foreground">

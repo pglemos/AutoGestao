@@ -390,7 +390,7 @@ export function AgendaD1Panel({
         <div className="space-y-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <span className="inline-flex rounded-lg bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-700">
+              <span className="inline-flex rounded-lg bg-status-warning-surface px-2.5 py-1 text-xs font-medium text-status-warning-text">
                 Agenda D+1 parcial
               </span>
               <p className="mt-1 text-xs text-muted-foreground">
@@ -494,19 +494,19 @@ export function AgendaD1Panel({
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
                   placeholder="Buscar (cliente, veículo, horário)..."
-                  className="h-11 w-full rounded-xl border border-border bg-white pl-9 pr-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="h-11 w-full rounded-xl border border-border bg-white pl-9 pr-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-status-success"
                 />
               </label>
             </div>
           </div>
 
           {error && (
-            <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700" role="alert">
+            <div className="rounded-xl border border-status-error/30 bg-status-error-surface p-4 text-sm text-status-error-text" role="alert">
               <p>Não foi possível carregar a Agenda D+1: {error}</p>
               <button
                 type="button"
                 onClick={() => void fetchAgenda()}
-                className="mt-3 rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-medium hover:bg-red-50"
+                className="mt-3 rounded-lg border border-status-error/30 bg-white px-3 py-1.5 text-xs font-medium hover:bg-status-error-surface"
               >
                 Tentar novamente
               </button>
@@ -610,7 +610,7 @@ export function AgendaD1Panel({
                               type="button"
                               aria-label={`WhatsApp para ${row.cliente?.nome || "cliente"}`}
                               onClick={() => void openWhatsapp(row)}
-                              className="inline-flex h-8 items-center gap-1 rounded-lg bg-emerald-50 px-2.5 text-xs font-medium text-emerald-700 hover:bg-emerald-100"
+                              className="inline-flex h-8 items-center gap-1 rounded-lg bg-status-success-surface px-2.5 text-xs font-medium text-status-success-text hover:bg-status-success-surface"
                             >
                               <MessageCircle size={14} /> WhatsApp
                             </button>
@@ -683,7 +683,7 @@ function FilterSelect({
         aria-label={label}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-11 w-full rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+        className="h-11 w-full rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-status-success"
       >
         {children}
       </select>
@@ -747,7 +747,7 @@ function ConfirmationDialog({
                   : current,
               )
             }
-            className="h-11 w-full rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+            className="h-11 w-full rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-status-success"
           >
             {CONFIRMATION_OUTCOMES.map((outcome) => (
               <option key={outcome} value={outcome}>
@@ -770,13 +770,13 @@ function ConfirmationDialog({
             }
             rows={3}
             placeholder="Observações gerenciais (opcional)..."
-            className="w-full resize-none rounded-xl border border-border px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+            className="w-full resize-none rounded-xl border border-border px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-status-success"
           />
         </label>
 
         {(draft.outcome === "Solicitou reagendamento" ||
           draft.outcome === "Cancelou") && (
-          <p className="rounded-xl border border-blue-100 bg-blue-50 px-3 py-2 text-xs text-blue-700">
+          <p className="rounded-xl border border-status-info/20 bg-status-info-surface px-3 py-2 text-xs text-status-info-text">
             A agenda original não será alterada. O vendedor receberá um aviso para
             atualizar o registro pela Carteira.
           </p>
@@ -795,7 +795,7 @@ function ConfirmationDialog({
             type="button"
             onClick={() => void onSave()}
             disabled={saving || (noteRequired && !draft.note.trim())}
-            className="h-10 rounded-xl bg-emerald-600 px-4 text-sm font-semibold text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-emerald-200"
+            className="h-10 rounded-xl bg-brand-primary px-4 text-sm font-semibold text-white hover:bg-brand-primary-hover disabled:cursor-not-allowed disabled:bg-status-success/30"
           >
             {saving ? "Salvando..." : "Salvar"}
           </button>
@@ -839,11 +839,11 @@ function normalizeManagerConfirmationStatus(
 }
 
 function statusBadgeClass(status: string) {
-  if (status === "Confirmado") return "bg-emerald-100 text-emerald-700";
-  if (status === "Cancelou") return "bg-red-100 text-red-700";
-  if (status === "Solicitou reagendamento") return "bg-blue-100 text-blue-700";
+  if (status === "Confirmado") return "bg-status-success-surface text-status-success-text";
+  if (status === "Cancelou") return "bg-status-error-surface text-status-error-text";
+  if (status === "Solicitou reagendamento") return "bg-status-info-surface text-status-info-text";
   if (status === "Sem resposta" || status === "Pendente") {
-    return "bg-amber-100 text-amber-700";
+    return "bg-status-warning-surface text-status-warning-text";
   }
   return "bg-gray-100 text-muted-foreground";
 }

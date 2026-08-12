@@ -9,7 +9,7 @@ import type { StorePreRegistration } from '@/types/database'
 
 function PreRegistrationAvatar({ url, name }: { url: string | null; name: string }) {
   const [erro, setErro] = useState(false)
-  if (!url || erro) return <div className="h-full w-full flex items-center justify-center text-emerald-600"><User size={20} /></div>
+  if (!url || erro) return <div className="h-full w-full flex items-center justify-center text-status-success-text"><User size={20} /></div>
   return <img src={url} alt={name} className="h-full w-full object-cover" onError={() => setErro(true)} />
 }
 
@@ -52,7 +52,7 @@ export function PreRegistrationQueue({
         <CardHeader className="border-b border-border bg-gray-50/60 p-mx-md">
           <div className="flex flex-col gap-mx-md">
             <div className="flex items-start gap-mx-sm min-w-0">
-              <div className="w-mx-12 h-mx-12 rounded-2xl bg-emerald-600/10 border border-brand-primary/10 text-emerald-600 flex items-center justify-center shrink-0">
+              <div className="w-mx-12 h-mx-12 rounded-2xl bg-brand-primary/10 border border-brand-primary/10 text-status-success-text flex items-center justify-center shrink-0">
                 <ClipboardList size={22} />
               </div>
               <div className="min-w-0">
@@ -72,7 +72,7 @@ export function PreRegistrationQueue({
             </Button>
           </div>
           <div className="mt-mx-md flex items-center gap-mx-xs rounded-2xl border border-border bg-white px-mx-md py-mx-sm text-mx-tiny font-bold text-muted-foreground min-w-0">
-            <Link2 size={14} className="text-emerald-600 shrink-0" />
+            <Link2 size={14} className="text-status-success-text shrink-0" />
             <span className="truncate">{registrationLink || 'Link indisponível até a loja ser identificada'}</span>
           </div>
         </CardHeader>
@@ -80,7 +80,7 @@ export function PreRegistrationQueue({
         <CardContent className="p-mx-md mx-pre-registration-scroll">
           {!canApprovePreRegistrations ? (
             <div className="rounded-2xl border border-dashed border-border bg-gray-50 p-mx-lg text-center">
-              <ShieldCheck size={24} className="mx-auto text-emerald-600" />
+              <ShieldCheck size={24} className="mx-auto text-status-success-text" />
               <Typography variant="caption" className="mt-mx-sm block">Aprovação restrita ao Admin MX</Typography>
               <Typography variant="tiny" tone="muted" className="mt-2 block font-bold">A loja pode compartilhar o link; a fila de validação fica visível apenas para Admin MX e MX Master.</Typography>
             </div>
@@ -127,14 +127,14 @@ export function PreRegistrationQueue({
                     </div>
                   </div>
                   <div className="mt-mx-sm flex items-center gap-mx-xs text-mx-tiny font-bold text-muted-foreground">
-                    <BriefcaseBusiness size={13} className="text-emerald-600" />
+                    <BriefcaseBusiness size={13} className="text-status-success-text" />
                     <span>{item.segment}</span>
                   </div>
                   <Button
                     type="button"
                     variant="ghost"
                     onClick={() => onToggleDetails(item.id)}
-                    className="mt-mx-sm h-mx-9 rounded-xl px-mx-sm text-mx-nano font-bold uppercase tracking-widest text-emerald-600"
+                    className="mt-mx-sm h-mx-9 rounded-xl px-mx-sm text-mx-nano font-bold uppercase tracking-widest text-status-success-text"
                     aria-expanded={detailsExpanded}
                   >
                     {detailsExpanded ? 'Ocultar dados sensíveis' : 'Ver dados sensíveis'}

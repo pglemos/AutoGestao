@@ -548,18 +548,18 @@ return (
 
 {previousCard && (
 <section className={`rounded-xl border bg-white px-3 py-2 shadow-mx-lg ${
-previousCard.type === 'previous_done' ? 'border-emerald-200' : 'border-amber-200'
+previousCard.type === 'previous_done' ? 'border-status-success/30' : 'border-status-warning/30'
 }`}>
 <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
 <div className="flex min-w-0 items-start gap-2 md:flex-1">
 <span className={`grid h-7 w-7 shrink-0 place-items-center rounded-lg ${
-previousCard.type === 'previous_done' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
+previousCard.type === 'previous_done' ? 'bg-status-success-surface text-status-success-text' : 'bg-status-warning-surface text-status-warning-text'
 }`}>
 {previousCard.type === 'previous_done' ? <CheckCircle2 size={16} /> : <AlertTriangle size={16} />}
 </span>
 <div className="min-w-0">
 <p className={`text-caption font-bold uppercase tracking-[0.08em] ${
-previousCard.type === 'previous_done' ? 'text-emerald-700' : 'text-amber-800'
+previousCard.type === 'previous_done' ? 'text-status-success-text' : 'text-status-warning-text'
 }`}>
 {previousCard.type === 'previous_done' ? 'FECHAMENTO ANTERIOR CONCLUÍDO' : 'FECHAMENTO ANTERIOR PENDENTE'}
 </p>
@@ -575,7 +575,7 @@ previousCard.type === 'previous_done' ? 'text-emerald-700' : 'text-amber-800'
 Ver histórico
 </button>
 <button type="button" onClick={handleAdjustPrevious} className={`inline-flex h-8 items-center justify-center rounded-lg px-3 text-caption font-bold text-white shadow-sm ${
-previousCard.type === 'previous_done' ? 'bg-[#00A89D]' : 'bg-amber-700'
+previousCard.type === 'previous_done' ? 'bg-[#00A89D]' : 'bg-status-warning'
 }`}>
 {previousCard.type === 'previous_done' ? 'Ajustar fechamento' : `Regularizar ${previousCard.date.slice(8, 10)}/${previousCard.date.slice(5, 7)}`}
 </button>
@@ -722,7 +722,7 @@ return (
                               </div>
                               <div className="h-3 w-px bg-[#DFE0E1]" />
                               <div>
-                                <span className="text-emerald-600 font-bold">{row.atend}</span>{' '}
+                                <span className="text-status-success-text font-bold">{row.atend}</span>{' '}
                                 <span className="text-[#526B7A] font-semibold">atend.</span>
                               </div>
                               <div className="h-3 w-px bg-[#DFE0E1]" />

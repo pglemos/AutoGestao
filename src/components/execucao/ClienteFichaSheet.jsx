@@ -5,17 +5,17 @@ import { Phone, MessageCircle, Car, User, Calendar, FileText, X } from "lucide-r
 import moment from "moment";
 
 const statusColors = {
-  "Em Andamento": "bg-blue-50 text-blue-700",
-  "Aguardando Cliente": "bg-amber-50 text-amber-700",
-  "Sem Resposta": "bg-red-50 text-red-700",
+  "Em Andamento": "bg-status-info-surface text-status-info-text",
+  "Aguardando Cliente": "bg-status-warning-surface text-status-warning-text",
+  "Sem Resposta": "bg-status-error-surface text-status-error-text",
   "Vendido": "bg-green-50 text-green-700",
   "Perdido": "bg-slate-100 text-muted-foreground",
 };
 
 const saleStatusColors = {
   "Sim": "bg-green-50 text-green-700",
-  "Não": "bg-red-50 text-red-700",
-  "Em Negociação": "bg-blue-50 text-blue-700",
+  "Não": "bg-status-error-surface text-status-error-text",
+  "Em Negociação": "bg-status-info-surface text-status-info-text",
 };
 
 function InfoRow({ label, value }) {
@@ -80,7 +80,7 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
           <div className="mt-6 space-y-6">
             {/* Cabeçalho do cliente */}
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-[16px] font-bold text-[#005BFF]">
+              <div className="w-12 h-12 rounded-full bg-status-info-surface flex items-center justify-center text-[16px] font-bold text-[#005BFF]">
                 {(cliente.name || "?").split(" ").slice(0, 2).map(p => p[0]).join("").toUpperCase()}
               </div>
               <div>

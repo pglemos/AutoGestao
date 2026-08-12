@@ -39,13 +39,13 @@ function calcularQualidade(cliente) {
   if (["Financiamento aprovado sem compra", "Em negociação ativa", "Vai pensar"].includes(s))
     return { label: "Excelente oportunidade", color: "bg-green-50 text-green-700 border-green-200" };
   if (["Visita agendada", "Visita hoje", "Visita a confirmar", "Visita realizada", "Proposta enviada"].includes(s))
-    return { label: "Boa oportunidade", color: "bg-blue-50 text-blue-700 border-blue-200" };
+    return { label: "Boa oportunidade", color: "bg-status-info-surface text-status-info-text border-status-info/30" };
   if (temVeiculo && (temValor || temVisita))
-    return { label: "Em desenvolvimento", color: "bg-amber-50 text-amber-700 border-amber-200" };
+    return { label: "Em desenvolvimento", color: "bg-status-warning-surface text-status-warning-text border-status-warning/30" };
   if (temContato && temVeiculo)
-    return { label: "Precisa de informação", color: "bg-orange-50 text-orange-700 border-orange-200" };
+    return { label: "Precisa de informação", color: "bg-status-warning-surface text-status-warning-text border-status-warning/30" };
   if (SITUACOES_ENCERRADAS_SEM_VENDA.includes(s))
-    return { label: "Recuperação", color: "bg-red-50 text-red-700 border-red-200" };
+    return { label: "Recuperação", color: "bg-status-error-surface text-status-error-text border-status-error/30" };
   return { label: "Nova oportunidade", color: "bg-slate-50 text-muted-foreground border-border" };
 }
 
@@ -62,15 +62,15 @@ function calcularUrgencia(cliente) {
   const isAmanha = (d) => d && moment(d).isSame(amanha, "day");
 
   if (["Cliente respondeu", "Aguardando ação do vendedor", "Visita hoje", "Financiamento aprovado sem compra"].includes(s))
-    return { label: "Ação imediata", color: "bg-red-50 text-red-700 border-red-200" };
+    return { label: "Ação imediata", color: "bg-status-error-surface text-status-error-text border-status-error/30" };
   if (isVencido(proxData) || isVencido(visitaData))
-    return { label: "Próximo passo vencido", color: "bg-red-50 text-red-700 border-red-200" };
+    return { label: "Próximo passo vencido", color: "bg-status-error-surface text-status-error-text border-status-error/30" };
   if (isHoje(proxData) || isHoje(visitaData))
-    return { label: "Ação para hoje", color: "bg-orange-50 text-orange-700 border-orange-200" };
+    return { label: "Ação para hoje", color: "bg-status-warning-surface text-status-warning-text border-status-warning/30" };
   if (["Visita agendada", "Visita a confirmar"].includes(s))
-    return { label: "Visita próxima", color: "bg-blue-50 text-blue-700 border-blue-200" };
+    return { label: "Visita próxima", color: "bg-status-info-surface text-status-info-text border-status-info/30" };
   if (isAmanha(proxData) || isAmanha(visitaData))
-    return { label: "Acompanhar amanhã", color: "bg-amber-50 text-amber-700 border-amber-200" };
+    return { label: "Acompanhar amanhã", color: "bg-status-warning-surface text-status-warning-text border-status-warning/30" };
   return { label: "Sem urgência imediata", color: "bg-slate-50 text-muted-foreground border-border" };
 }
 
@@ -308,7 +308,7 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
 
       <div className="flex gap-2 pt-1">
         <Button variant="outline" onClick={onCancelar} className="flex-1 rounded-xl" disabled={salvando}>Cancelar</Button>
-        <Button onClick={onSalvar} className="flex-1 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white" disabled={salvando}>
+        <Button onClick={onSalvar} className="flex-1 rounded-xl bg-[#005BFF] hover:bg-status-info text-white" disabled={salvando}>
           {salvando ? "Salvando..." : "Salvar"}
         </Button>
       </div>
@@ -463,7 +463,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
             {/* ── BLOCO 1: CABEÇALHO ────────────────────────────────────── */}
             <div className="px-5 pt-5 pb-4 border-b border-border-subtle space-y-3">
               <div className="flex items-start gap-3">
-                <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-base font-black text-[#005BFF] shrink-0">
+                <div className="w-12 h-12 rounded-full bg-status-info-surface flex items-center justify-center text-base font-black text-[#005BFF] shrink-0">
                   {iniciais}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -490,18 +490,18 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                   para que ninguém precise consultar a auditoria para entender
                   por que o cliente saiu da esteira. */}
               {isVendaCancelada && (
-                <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5">
+                <div className="rounded-xl border border-status-warning/30 bg-status-warning-surface px-3 py-2.5">
                   <div className="flex items-start gap-2">
-                    <AlertCircle className="w-3.5 h-3.5 text-amber-600 mt-0.5 shrink-0" />
+                    <AlertCircle className="w-3.5 h-3.5 text-status-warning-text mt-0.5 shrink-0" />
                     <div className="min-w-0">
-                      <p className="text-caption font-bold text-amber-800">
+                      <p className="text-caption font-bold text-status-warning-text">
                         Venda cancelada
                         {cliente.cancelada_em ? ` em ${moment(cliente.cancelada_em).format("DD/MM/YYYY [às] HH:mm")}` : ""}
                       </p>
-                      <p className="text-caption text-amber-700 mt-0.5">
+                      <p className="text-caption text-status-warning-text mt-0.5">
                         Motivo: {cliente.motivo_cancelamento || "Não informado"}
                       </p>
-                      <p className="text-caption text-amber-600 mt-0.5">
+                      <p className="text-caption text-status-warning-text mt-0.5">
                         Oportunidade encerrada. O histórico da venda foi preservado.
                       </p>
                     </div>
@@ -538,7 +538,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
 
               {/* ── BLOCO 2: PRÓXIMA AÇÃO RECOMENDADA ──────────────────── */}
               {!editando && (
-                <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 space-y-3">
+                <div className="bg-status-info-surface border border-status-info/30 rounded-2xl p-4 space-y-3">
                   <div className="flex items-center gap-2">
                     <Zap className="w-4 h-4 text-[#005BFF]" />
                     <p className="text-xs font-black text-[#005BFF] uppercase tracking-wide">Mentor Comercial</p>
@@ -566,7 +566,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                       </div>
                     )}
                     {cliente.visita_agendada_em && (
-                      <div className="flex items-center gap-1.5 text-xs text-blue-600 font-semibold">
+                      <div className="flex items-center gap-1.5 text-xs text-status-info-text font-semibold">
                         <Clock className="w-3.5 h-3.5" />
                         Visita: {moment(cliente.visita_agendada_em).format("DD/MM/YYYY [às] HH:mm")}
                       </div>
@@ -580,7 +580,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                       {onExecutar && (
                         <Button
                           onClick={() => { onClose(); onExecutar(cliente); }}
-                          className="flex-1 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-sm gap-2"
+                          className="flex-1 rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-sm gap-2"
                         >
                           <Zap className="w-3.5 h-3.5" /> Executar
                         </Button>
@@ -604,7 +604,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                     {pendencias.map((p, i) => (
                       <div key={i} className="flex items-center justify-between gap-2">
                         <div className="flex items-start gap-2.5">
-                          <AlertCircle className="w-3.5 h-3.5 text-amber-500 mt-0.5 shrink-0" />
+                          <AlertCircle className="w-3.5 h-3.5 text-status-warning mt-0.5 shrink-0" />
                           <span className="text-sm text-muted-foreground">{p}</span>
                         </div>
                         <button
@@ -671,7 +671,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                         </div>
                         {cliente.proposta_enviada && (
                           <div className="col-span-2">
-                            <span className="text-caption bg-blue-50 text-blue-600 px-2.5 py-1 rounded-full font-semibold border border-blue-100">✓ Proposta enviada</span>
+                            <span className="text-caption bg-status-info-surface text-status-info-text px-2.5 py-1 rounded-full font-semibold border border-status-info/20">✓ Proposta enviada</span>
                           </div>
                         )}
                       </div>
@@ -692,8 +692,8 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                     {cliente.motivo_perda && (
                       <div>
                         <p className="text-caption font-black text-muted-foreground uppercase tracking-wide mb-2">Objeções</p>
-                        <div className="bg-red-50 border border-red-100 rounded-xl px-3 py-2">
-                          <p className="text-sm text-red-700">{cliente.motivo_perda}</p>
+                        <div className="bg-status-error-surface border border-status-error/20 rounded-xl px-3 py-2">
+                          <p className="text-sm text-status-error-text">{cliente.motivo_perda}</p>
                         </div>
                       </div>
                     )}
@@ -722,7 +722,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                             </div>
                             {h.descricao && <p className="text-xs text-muted-foreground mt-0.5">{h.descricao}</p>}
                             {h.resultado && (
-                              <span className="inline-block mt-1 text-caption font-semibold text-[#005BFF] bg-blue-50 px-2 py-0.5 rounded-full">
+                              <span className="inline-block mt-1 text-caption font-semibold text-[#005BFF] bg-status-info-surface px-2 py-0.5 rounded-full">
                                 → {h.resultado}
                               </span>
                             )}
@@ -751,7 +751,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                 <Button
                   variant="outline"
                   onClick={() => setCancelarVendaOpen(true)}
-                  className="rounded-xl text-sm border-red-200 text-red-600 hover:bg-red-50"
+                  className="rounded-xl text-sm border-status-error/30 text-status-error-text hover:bg-status-error-surface"
                 >
                   Cancelar venda
                 </Button>
@@ -759,7 +759,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
               {onExecutar && !editando && !isVendaCancelada && (
                 <Button
                   onClick={() => { onClose(); onExecutar(cliente); }}
-                  className="flex-1 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-sm gap-2"
+                  className="flex-1 rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-sm gap-2"
                 >
                   <Zap className="w-3.5 h-3.5" /> Executar próximo passo
                 </Button>

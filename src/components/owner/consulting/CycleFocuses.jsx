@@ -12,8 +12,8 @@ const FOCUSES = [
 
 const THEME_CLASSES = {
   primary: { bg: "bg-primary/10", text: "text-primary" },
-  blue: { bg: "bg-blue-50", text: "text-blue-600" },
-  amber: { bg: "bg-amber-50", text: "text-amber-600" },
+  blue: { bg: "bg-status-info-surface", text: "text-status-info-text" },
+  amber: { bg: "bg-status-warning-surface", text: "text-status-warning-text" },
   purple: { bg: "bg-purple-50", text: "text-purple-600" },
 };
 

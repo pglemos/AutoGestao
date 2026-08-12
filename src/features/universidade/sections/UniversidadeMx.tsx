@@ -41,7 +41,7 @@ const TIPO_LABEL: Record<UniversidadeAulaTipo, string> = {
 
 const TIPO_TONE: Record<UniversidadeAulaTipo, string> = {
   biblioteca: 'border-border bg-gray-50 text-muted-foreground',
-  aula_gravada: 'border-brand-primary/30 bg-mx-indigo-50 text-emerald-600',
+  aula_gravada: 'border-brand-primary/30 bg-mx-indigo-50 text-status-success-text',
   aula_ao_vivo: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
   quiz: 'border-status-success/30 bg-status-success-surface text-status-success',
   desafio: 'border-status-error/30 bg-status-error-surface text-status-error',
@@ -78,7 +78,7 @@ export function UniversidadeMx({ userId }: Props) {
     <PageCanvas as="section" width="dashboard" className="flex flex-col gap-mx-lg" aria-label="Universidade MX">
       <header className="flex flex-col gap-mx-xs md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-mx-sm">
-          <div className="rounded-2xl bg-emerald-600 p-mx-sm text-pure-white shadow-sm">
+          <div className="rounded-2xl bg-brand-primary p-mx-sm text-pure-white shadow-sm">
             <GraduationCap size={22} aria-hidden="true" />
           </div>
           <div>
@@ -116,7 +116,7 @@ export function UniversidadeMx({ userId }: Props) {
             className={cn(
               'rounded-xl border px-mx-xs py-mx-tiny text-mx-tiny font-bold uppercase tracking-widest transition-colors',
               filtros.includes(publico)
-                ? 'border-brand-primary bg-emerald-600 text-pure-white'
+                ? 'border-brand-primary bg-brand-primary text-pure-white'
                 : 'border-border bg-white text-muted-foreground',
             )}
             aria-pressed={filtros.includes(publico)}
@@ -177,7 +177,7 @@ export function UniversidadeMx({ userId }: Props) {
                     href={cert.certificado_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-mx-xs inline-block text-mx-tiny font-bold uppercase tracking-widest text-emerald-600 underline"
+                    className="mt-mx-xs inline-block text-mx-tiny font-bold uppercase tracking-widest text-status-success-text underline"
                   >
                     Baixar certificado
                   </a>

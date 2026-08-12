@@ -384,7 +384,7 @@ export default function BottomSection({
       <div className="bg-white rounded-2xl border border-border shadow-sm px-6 py-4">
         {/* Aviso de atraso (bloqueado, 09h31–12h00) */}
         {isBlocked && (
-          <div className="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-4">
+          <div className="flex items-start gap-3 bg-status-error-surface border border-status-error/30 rounded-xl px-4 py-3 mb-4">
             <AlertTriangle className="w-4 h-4 text-[#EF4444] flex-shrink-0 mt-0.5" />
             <div className="flex-1">
               <p className="text-body-sm font-semibold text-[#EF4444] leading-snug">
@@ -408,7 +408,7 @@ export default function BottomSection({
 
         {/* Aviso discreto: liberado pelo gerente */}
         {liberado && !jaFinalizado && (
-          <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5 mb-4">
+          <div className="flex items-center gap-2 bg-status-warning-surface border border-status-warning/30 rounded-xl px-4 py-2.5 mb-4">
             <AlertTriangle className="w-4 h-4 text-[#F59E0B] flex-shrink-0" />
             <p className="text-[12px] font-semibold text-[#92400E]">
               Fechamento liberado pelo gerente. Ao finalizar, será aplicada penalização de 10% por atraso.
@@ -418,7 +418,7 @@ export default function BottomSection({
 
         {/* Aviso: fechamento concluído, janela D+1 aberta */}
         {jaFinalizado && d1WindowOpen && (
-          <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-xl px-4 py-2.5 mb-4">
+          <div className="flex items-center gap-2 bg-status-info-surface border border-status-info/30 rounded-xl px-4 py-2.5 mb-4">
             <Clock className="w-4 h-4 text-[#005BFF] flex-shrink-0" />
             <p className="text-[12px] font-semibold text-[#1e3a5f]">
               Fechamento concluído. Os Agendamentos D+1 podem ser ajustados até 09h30 de {d1DateExibicao}.

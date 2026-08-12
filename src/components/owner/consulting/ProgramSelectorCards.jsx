@@ -4,7 +4,7 @@ import { Lock } from "lucide-react";
 
 const PROGRAM_THEME = {
   pmr: { activeBorder: "border-primary", activeBg: "bg-primary/5", badge: "bg-primary text-primary-foreground" },
-  pmr_plus: { activeBorder: "border-blue-500", activeBg: "bg-blue-50", badge: "bg-blue-500 text-white" },
+  pmr_plus: { activeBorder: "border-status-info", activeBg: "bg-status-info-surface", badge: "bg-status-info text-white" },
   ppa: { activeBorder: "border-purple-500", activeBg: "bg-purple-50", badge: "bg-purple-500 text-white" },
 };
 

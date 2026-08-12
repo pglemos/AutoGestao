@@ -35,8 +35,8 @@ function EtapaLinha({ label, valor, conv }) {
 function CanalCard({ titulo, cor, volumeLabel, volume, vendas, conversaoGeral, etapas }) {
   const [expandido, setExpandido] = useState(false);
   const COR = {
-    orange: { header: "bg-orange-50 border-orange-200", badge: "bg-orange-100 text-orange-700", btn: "text-orange-600 hover:text-orange-800" },
-    blue:   { header: "bg-blue-50 border-blue-200",     badge: "bg-blue-100 text-blue-700",     btn: "text-blue-600 hover:text-blue-800" },
+    orange: { header: "bg-status-warning-surface border-status-warning/30", badge: "bg-status-warning-surface text-status-warning-text", btn: "text-status-warning-text hover:text-orange-800" },
+    blue:   { header: "bg-status-info-surface border-status-info/30",     badge: "bg-status-info-surface text-status-info-text",     btn: "text-status-info-text hover:text-status-info-text" },
     green:  { header: "bg-green-50 border-green-200",   badge: "bg-green-100 text-green-700",   btn: "text-green-600 hover:text-green-800" },
   };
   const c = COR[cor] || COR.blue;

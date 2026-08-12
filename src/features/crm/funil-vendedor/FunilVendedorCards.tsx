@@ -21,13 +21,13 @@ const VOLUME_LABEL: Record<FunnelChannel, string> = {
 
 const EFFORT_PRINCIPAL_BG: Record<FunnelChannel, string> = {
   Carteira: 'bg-green-50 border-green-200',
-  Internet: 'bg-blue-50 border-blue-200',
-  Showroom: 'bg-orange-50 border-orange-200',
+  Internet: 'bg-status-info-surface border-status-info/30',
+  Showroom: 'bg-status-warning-surface border-status-warning/30',
 }
 
 const EFICIENCIA_COR: Record<FunnelChannel, { header: string; badge: string; btn: string }> = {
-  Showroom: { header: 'bg-orange-50 border-orange-200', badge: 'bg-orange-100 text-orange-700', btn: 'text-orange-600 hover:text-orange-800' },
-  Internet: { header: 'bg-blue-50 border-blue-200', badge: 'bg-blue-100 text-blue-700', btn: 'text-blue-600 hover:text-blue-800' },
+  Showroom: { header: 'bg-status-warning-surface border-status-warning/30', badge: 'bg-status-warning-surface text-status-warning-text', btn: 'text-status-warning-text hover:text-status-warning-text' },
+  Internet: { header: 'bg-status-info-surface border-status-info/30', badge: 'bg-status-info-surface text-status-info-text', btn: 'text-status-info-text hover:text-status-info-text' },
   Carteira: { header: 'bg-green-50 border-green-200', badge: 'bg-green-100 text-green-700', btn: 'text-green-600 hover:text-green-800' },
 }
 
@@ -35,7 +35,7 @@ const EFICIENCIA_ORDER: FunnelChannel[] = ['Showroom', 'Carteira', 'Internet']
 
 const BASE_CONFIANCA_COR: Record<Confidence, string> = {
   Alta: 'text-status-success-text bg-green-50 border-green-200',
-  Média: 'text-status-warning-text bg-amber-50 border-amber-200',
+  Média: 'text-status-warning-text bg-status-warning-surface border-status-warning/30',
   Baixa: 'text-muted-foreground bg-slate-50 border-border',
 }
 
@@ -55,7 +55,7 @@ export function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKe
           <Target className="h-5 w-5 shrink-0 text-muted-foreground" />
           <div>
             <p className="text-body-sm text-muted-foreground">Meta mensal não configurada.</p>
-            <Link to="/perfil" className="text-[12px] font-bold text-blue-700 hover:underline">Definir meta no perfil →</Link>
+            <Link to="/perfil" className="text-[12px] font-bold text-status-info-text hover:underline">Definir meta no perfil →</Link>
           </div>
         </div>
       ) : metaBatida ? (

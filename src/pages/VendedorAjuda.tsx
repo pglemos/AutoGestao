@@ -15,7 +15,7 @@ export default function VendedorAjuda() {
         <section className="grid grid-cols-1 gap-mx-lg lg:grid-cols-3">
         <Card className="border-none bg-white p-mx-lg lg:col-span-2">
           <div className="flex items-start gap-mx-md">
-            <div className="w-mx-2xl h-mx-2xl rounded-2xl bg-emerald-600/10 text-emerald-600 flex items-center justify-center shrink-0">
+            <div className="w-mx-2xl h-mx-2xl rounded-2xl bg-brand-primary/10 text-status-success-text flex items-center justify-center shrink-0">
               <LifeBuoy size={28} />
             </div>
             <div className="space-y-mx-xs">
@@ -35,7 +35,7 @@ export default function VendedorAjuda() {
             ].map(item => (
               <Button key={item.title} asChild variant="outline" className="h-auto justify-start bg-white p-mx-md text-left">
                 <Link to={item.to}>
-                  <item.icon size={18} className="mr-mx-sm shrink-0 text-emerald-600" />
+                  <item.icon size={18} className="mr-mx-sm shrink-0 text-status-success-text" />
                   <span className="min-w-0">
                     <span className="block text-body text-lg font-bold text-foreground">{item.title}</span>
                     <span className="block text-xs font-bold normal-case tracking-normal text-muted-foreground">{item.desc}</span>
@@ -51,14 +51,14 @@ export default function VendedorAjuda() {
             <Badge variant="brand" className="rounded-mx-full px-4 py-1">Escala de suporte</Badge>
             <div className="space-y-mx-sm">
               <div className="flex items-start gap-mx-sm rounded-2xl border border-border bg-gray-50 p-mx-md">
-                <UserRound size={18} className="mt-0.5 text-emerald-600" />
+                <UserRound size={18} className="mt-0.5 text-status-success-text" />
                 <div>
                   <Typography variant="caption" className="">1. Gerente da unidade</Typography>
                   <Typography variant="p" tone="muted" className="text-xs">Correção de lançamento, dúvida de meta ou devolutiva.</Typography>
                 </div>
               </div>
               <div className="flex items-start gap-mx-sm rounded-2xl border border-border bg-gray-50 p-mx-md">
-                <Phone size={18} className="mt-0.5 text-emerald-600" />
+                <Phone size={18} className="mt-0.5 text-status-success-text" />
                 <div>
                   <Typography variant="caption" className="">2. Admin MX</Typography>
                   <Typography variant="p" tone="muted" className="text-xs">Acesso, produto digital, configuração de perfil ou erro técnico persistente.</Typography>

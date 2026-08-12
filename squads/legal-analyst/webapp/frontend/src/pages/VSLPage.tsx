@@ -120,8 +120,8 @@ export default function VSLPage({ onAccessApp }: VSLPageProps) {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-[#0a0e1a] via-[#111827] to-[#0a0e1a]" />
         <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-amber-500/20 rounded-full blur-[128px]" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/10 rounded-full blur-[128px]" />
+          <div className="absolute top-20 left-10 w-72 h-72 bg-status-warning/20 rounded-full blur-[128px]" />
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-status-info/10 rounded-full blur-[128px]" />
         </div>
 
         <nav className="relative z-10 max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
@@ -145,7 +145,7 @@ export default function VSLPage({ onAccessApp }: VSLPageProps) {
         </nav>
 
         <div className="relative z-10 max-w-5xl mx-auto px-6 pt-16 pb-24 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm mb-8">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-status-warning/10 border border-status-warning/20 text-amber-400 text-sm mb-8">
             <Zap className="w-4 h-4" />
             <span>15 Agentes de IA Especializados em Direito Brasileiro</span>
           </div>
@@ -254,12 +254,12 @@ export default function VSLPage({ onAccessApp }: VSLPageProps) {
             ].map((item) => (
               <div
                 key={item.step}
-                className="relative p-8 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-amber-500/20 transition group"
+                className="relative p-8 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-status-warning/20 transition group"
               >
-                <div className="text-5xl font-black text-amber-500/10 absolute top-4 right-6">
+                <div className="text-5xl font-black text-status-warning/10 absolute top-4 right-6">
                   {item.step}
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center mb-5">
+                <div className="w-12 h-12 rounded-xl bg-status-warning/10 flex items-center justify-center mb-5">
                   <item.icon className="w-6 h-6 text-amber-400" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3">{item.title}</h3>
@@ -302,7 +302,7 @@ export default function VSLPage({ onAccessApp }: VSLPageProps) {
             ].map((agent) => (
               <div
                 key={agent.name}
-                className="p-4 rounded-xl bg-white/[0.03] border border-white/5 text-center hover:border-amber-500/20 transition"
+                className="p-4 rounded-xl bg-white/[0.03] border border-white/5 text-center hover:border-status-warning/20 transition"
               >
                 <div
                   className="text-2xl mb-2"
@@ -361,7 +361,7 @@ export default function VSLPage({ onAccessApp }: VSLPageProps) {
             ].map((feat) => (
               <div
                 key={feat.title}
-                className="p-6 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-amber-500/20 transition"
+                className="p-6 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-status-warning/20 transition"
               >
                 <feat.icon className="w-8 h-8 text-amber-400 mb-4" />
                 <h3 className="font-semibold text-lg mb-2">{feat.title}</h3>
@@ -422,7 +422,7 @@ export default function VSLPage({ onAccessApp }: VSLPageProps) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="seu@email.com"
-              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-amber-500/50"
+              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-status-warning/50"
             />
           </div>
 
@@ -435,12 +435,12 @@ export default function VSLPage({ onAccessApp }: VSLPageProps) {
                       key={key}
                       className={`relative p-8 rounded-2xl border transition ${
                         isPopular
-                          ? "bg-gradient-to-b from-amber-500/10 to-transparent border-amber-500/30 scale-105"
+                          ? "bg-gradient-to-b from-amber-500/10 to-transparent border-status-warning/30 scale-105"
                           : "bg-white/[0.03] border-white/5 hover:border-white/10"
                       }`}
                     >
                       {isPopular && (
-                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-amber-500 text-black text-xs font-bold">
+                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-status-warning text-black text-xs font-bold">
                           MAIS POPULAR
                         </div>
                       )}
@@ -483,12 +483,12 @@ export default function VSLPage({ onAccessApp }: VSLPageProps) {
                     key={plan.name}
                     className={`relative p-8 rounded-2xl border transition ${
                       plan.popular
-                        ? "bg-gradient-to-b from-amber-500/10 to-transparent border-amber-500/30 scale-105"
+                        ? "bg-gradient-to-b from-amber-500/10 to-transparent border-status-warning/30 scale-105"
                         : "bg-white/[0.03] border-white/5 hover:border-white/10"
                     }`}
                   >
                     {plan.popular && (
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-amber-500 text-black text-xs font-bold">
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-status-warning text-black text-xs font-bold">
                         MAIS POPULAR
                       </div>
                     )}

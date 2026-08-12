@@ -17,7 +17,7 @@ export default function SummaryTab({ action }) {
         <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${status.badge}`}>{status.label}</span>
         <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${priority.badge}`}>{priority.label}</span>
         <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${dept.badge}`}>{dept.label}</span>
-        {late && <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">Atrasada há {lateDays}d</span>}
+        {late && <span className="rounded-full bg-status-error-surface px-2 py-0.5 text-xs font-medium text-status-error-text">Atrasada há {lateDays}d</span>}
       </div>
 
       {action.description && (
@@ -67,7 +67,7 @@ export default function SummaryTab({ action }) {
         <p className="mb-1 text-xs font-medium text-muted-foreground">Progresso</p>
         <div className="flex items-center gap-2">
           <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
-            <div className={`h-full rounded-full ${action.status === "completed" ? "bg-emerald-500" : action.status === "blocked" ? "bg-red-400" : "bg-blue-500"}`} style={{ width: `${action.progress}%` }} />
+            <div className={`h-full rounded-full ${action.status === "completed" ? "bg-status-success" : action.status === "blocked" ? "bg-red-400" : "bg-status-info"}`} style={{ width: `${action.progress}%` }} />
           </div>
           <span className="text-sm font-bold text-foreground">{action.progress}%</span>
         </div>
@@ -76,12 +76,12 @@ export default function SummaryTab({ action }) {
       {action.budget != null && <InfoRow icon={DollarSign} label="Orçamento">R$ {action.budget.toLocaleString("pt-BR")}</InfoRow>}
 
       {action.blockedReason && (
-        <div className="rounded-lg border border-red-200 bg-red-50 p-3">
-          <p className="mb-1 flex items-center gap-1.5 text-xs font-medium text-red-700"><AlertTriangle className="h-3.5 w-3.5" /> Motivo do bloqueio</p>
-          <p className="text-sm text-red-900">{action.blockedReason}</p>
-          {action.blockCategory && <p className="mt-1 text-xs text-red-600">Categoria: {action.blockCategory}</p>}
-          {action.blockResponsible && <p className="text-xs text-red-600">Responsável: {action.blockResponsible}</p>}
-          {action.expectedUnblockDate && <p className="text-xs text-red-600">Previsão: {action.expectedUnblockDate}</p>}
+        <div className="rounded-lg border border-status-error/30 bg-status-error-surface p-3">
+          <p className="mb-1 flex items-center gap-1.5 text-xs font-medium text-status-error-text"><AlertTriangle className="h-3.5 w-3.5" /> Motivo do bloqueio</p>
+          <p className="text-sm text-status-error-text">{action.blockedReason}</p>
+          {action.blockCategory && <p className="mt-1 text-xs text-status-error-text">Categoria: {action.blockCategory}</p>}
+          {action.blockResponsible && <p className="text-xs text-status-error-text">Responsável: {action.blockResponsible}</p>}
+          {action.expectedUnblockDate && <p className="text-xs text-status-error-text">Previsão: {action.expectedUnblockDate}</p>}
         </div>
       )}
 

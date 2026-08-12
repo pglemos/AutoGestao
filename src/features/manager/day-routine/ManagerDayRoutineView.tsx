@@ -80,8 +80,8 @@ const SORTS: Array<{ key: ManagerRoutineSort; label: string }> = [
 const CATEGORY_STYLE: Record<ManagerRoutineCategory, { color: string; background: string }> = {
   resultado: { color: 'text-purple-600', background: 'bg-purple-50' },
   equipe: { color: 'text-cyan-600', background: 'bg-cyan-50' },
-  desenvolvimento: { color: 'text-emerald-600', background: 'bg-emerald-50' },
-  operacao: { color: 'text-blue-600', background: 'bg-blue-50' },
+  desenvolvimento: { color: 'text-status-success-text', background: 'bg-status-success-surface' },
+  operacao: { color: 'text-status-info-text', background: 'bg-status-info-surface' },
 }
 
 const PRIORITY_STYLE: Record<ManagerRoutinePriority, {
@@ -93,31 +93,31 @@ const PRIORITY_STYLE: Record<ManagerRoutinePriority, {
 }> = {
   vencida: {
     label: 'Vencida',
-    color: 'text-red-800',
-    background: 'bg-red-100',
-    border: 'border-red-300',
-    marker: 'bg-red-700',
+    color: 'text-status-error-text',
+    background: 'bg-status-error-surface',
+    border: 'border-status-error/40',
+    marker: 'bg-status-error',
   },
   critica: {
     label: 'Crítica',
-    color: 'text-red-600',
-    background: 'bg-red-50',
-    border: 'border-red-200',
-    marker: 'bg-red-500',
+    color: 'text-status-error-text',
+    background: 'bg-status-error-surface',
+    border: 'border-status-error/30',
+    marker: 'bg-status-error',
   },
   atencao: {
     label: 'Atenção',
-    color: 'text-amber-600',
-    background: 'bg-amber-50',
-    border: 'border-amber-200',
-    marker: 'bg-amber-500',
+    color: 'text-status-warning-text',
+    background: 'bg-status-warning-surface',
+    border: 'border-status-warning/30',
+    marker: 'bg-status-warning',
   },
   normal: {
     label: 'Normal',
-    color: 'text-emerald-600',
-    background: 'bg-emerald-50',
-    border: 'border-emerald-200',
-    marker: 'bg-emerald-500',
+    color: 'text-status-success-text',
+    background: 'bg-status-success-surface',
+    border: 'border-status-success/30',
+    marker: 'bg-status-success',
   },
   futura: {
     label: 'Agendada',
@@ -142,7 +142,7 @@ const ICONS = {
   Plus,
 }
 
-const FIELD_CLASS = 'w-full rounded-xl border border-border px-3 py-2 text-sm text-foreground outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
+const FIELD_CLASS = 'w-full rounded-xl border border-border px-3 py-2 text-sm text-foreground outline-none transition focus:border-status-success focus:ring-2 focus:ring-status-success/20'
 
 export function ManagerDayRoutineView({
   returnLink,
@@ -192,7 +192,7 @@ export function ManagerDayRoutineView({
                 <p className="text-sm font-semibold text-foreground">{dateLabel.weekday}</p>
                 <p className="text-xs text-muted-foreground">{dateLabel.longDate}</p>
                 {storeName && (
-                  <p className="mt-0.5 text-xs font-medium text-emerald-600">{storeName}</p>
+                  <p className="mt-0.5 text-xs font-medium text-status-success-text">{storeName}</p>
                 )}
               </div>
               <button
@@ -217,7 +217,7 @@ export function ManagerDayRoutineView({
               onClick={() => setActiveTab('today')}
               className={`flex items-center gap-2 px-6 py-3.5 text-sm font-medium transition-colors ${
                 activeTab === 'today'
-                  ? 'border-b-2 border-emerald-600 text-emerald-700'
+                  ? 'border-b-2 border-status-success text-status-success-text'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
@@ -236,7 +236,7 @@ export function ManagerDayRoutineView({
               onClick={() => setActiveTab('history')}
               className={`px-6 py-3.5 text-sm font-medium transition-colors ${
                 activeTab === 'history'
-                  ? 'border-b-2 border-emerald-600 text-emerald-700'
+                  ? 'border-b-2 border-status-success text-status-success-text'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
@@ -342,16 +342,16 @@ function TodayRoutine({
   return (
     <div className="space-y-4">
       {!showOverdue && overdueCount > 0 && (
-        <div className="flex items-center justify-between gap-4 rounded-2xl border border-red-200 bg-red-50 p-4">
+        <div className="flex items-center justify-between gap-4 rounded-2xl border border-status-error/30 bg-status-error-surface p-4">
           <div className="flex min-w-0 items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-100">
-              <AlertTriangle className="h-5 w-5 text-red-600" />
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-status-error-surface">
+              <AlertTriangle className="h-5 w-5 text-status-error-text" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-red-800">
+              <p className="text-sm font-semibold text-status-error-text">
                 Você possui {overdueCount} pendência{overdueCount > 1 ? 's' : ''} de dias anteriores.
               </p>
-              <p className="mt-0.5 text-xs text-red-600">
+              <p className="mt-0.5 text-xs text-status-error-text">
                 Revise e regularize antes de seguir com o dia.
               </p>
             </div>
@@ -359,7 +359,7 @@ function TodayRoutine({
           <button
             type="button"
             onClick={() => setShowOverdue(true)}
-            className="shrink-0 rounded-xl bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-700"
+            className="shrink-0 rounded-xl bg-status-error px-4 py-2 text-sm font-medium text-white transition hover:bg-status-error"
           >
             Ver pendências
           </button>
@@ -370,7 +370,7 @@ function TodayRoutine({
         <button
           type="button"
           onClick={() => setShowOverdue(false)}
-          className="text-xs font-medium text-emerald-600 hover:text-emerald-700"
+          className="text-xs font-medium text-status-success-text hover:text-status-success-text"
         >
           ← Ver todas as tarefas
         </button>
@@ -387,7 +387,7 @@ function TodayRoutine({
                   onClick={() => setFilter(item.key)}
                   className={`whitespace-nowrap rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
                     filter === item.key
-                      ? 'bg-emerald-600 text-white shadow-sm'
+                      ? 'bg-brand-primary text-white shadow-sm'
                       : 'border border-border bg-white text-muted-foreground hover:bg-gray-50'
                   }`}
                 >
@@ -409,7 +409,7 @@ function TodayRoutine({
                 aria-label="Ordenar"
                 value={sort}
                 onChange={event => setSort(event.target.value as ManagerRoutineSort)}
-                className="rounded-lg border border-border px-2.5 py-1.5 text-xs text-muted-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+                className="rounded-lg border border-border px-2.5 py-1.5 text-xs text-muted-foreground outline-none focus:ring-2 focus:ring-status-success"
               >
                 {SORTS.map(item => <option key={item.key} value={item.key}>{item.label}</option>)}
               </select>
@@ -449,7 +449,7 @@ function TodayRoutine({
         <button
           type="button"
           onClick={onCreate}
-          className="flex h-9 items-center gap-1 rounded-xl border border-emerald-200 bg-white px-3 text-sm font-medium text-emerald-700 transition hover:bg-emerald-50"
+          className="flex h-9 items-center gap-1 rounded-xl border border-status-success/30 bg-white px-3 text-sm font-medium text-status-success-text transition hover:bg-status-success-surface"
         >
           <Plus size={14} />
           Nova atividade
@@ -477,7 +477,7 @@ function RoutineTaskCard({
           <Clock size={12} className="text-muted-foreground lg:hidden" />
           <span className={`text-sm font-bold ${priority.color}`}>{task.dueTime || '—'}</span>
           {task.daysLate > 0 && (
-            <span className="text-caption font-medium text-red-600">{task.daysLate}d atraso</span>
+            <span className="text-caption font-medium text-status-error-text">{task.daysLate}d atraso</span>
           )}
         </div>
         <div className={`hidden h-12 w-1 shrink-0 rounded-full lg:block ${priority.marker}`} />
@@ -522,7 +522,7 @@ function RoutineTaskCard({
                 onClick={() => onAction(action, task)}
                 className={`h-9 flex-1 rounded-lg px-3 text-xs font-medium transition lg:h-8 lg:flex-none ${
                   action.kind === 'acao'
-                    ? 'bg-emerald-600 text-white hover:bg-emerald-700'
+                    ? 'bg-brand-primary text-white hover:bg-brand-primary-hover'
                     : 'border border-border bg-white text-foreground hover:bg-gray-50'
                 }`}
               >
@@ -575,7 +575,7 @@ function HistoryRoutine({
               }}
               className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
                 period === value && !startDate
-                  ? 'bg-emerald-600 text-white'
+                  ? 'bg-brand-primary text-white'
                   : 'bg-gray-50 text-muted-foreground hover:bg-gray-100'
               }`}
             >
@@ -588,7 +588,7 @@ function HistoryRoutine({
               aria-label="Data inicial"
               value={startDate}
               onChange={event => setStartDate(event.target.value)}
-              className="min-w-0 rounded-lg border border-border px-2 py-1.5 text-xs text-muted-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+              className="min-w-0 rounded-lg border border-border px-2 py-1.5 text-xs text-muted-foreground outline-none focus:ring-2 focus:ring-status-success"
             />
             <span className="text-xs text-muted-foreground">até</span>
             <input
@@ -596,7 +596,7 @@ function HistoryRoutine({
               aria-label="Data final"
               value={endDate}
               onChange={event => setEndDate(event.target.value)}
-              className="min-w-0 rounded-lg border border-border px-2 py-1.5 text-xs text-muted-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+              className="min-w-0 rounded-lg border border-border px-2 py-1.5 text-xs text-muted-foreground outline-none focus:ring-2 focus:ring-status-success"
             />
           </div>
         </div>
@@ -617,16 +617,16 @@ function HistoryRoutine({
               <header className="flex items-center justify-between border-b border-border-subtle bg-gray-50 px-4 py-3">
                 <h3 className="text-sm font-semibold text-foreground">
                   {formatShortDate(group.date)}
-                  {group.isToday && <span className="ml-2 text-xs font-medium text-emerald-600">Hoje</span>}
+                  {group.isToday && <span className="ml-2 text-xs font-medium text-status-success-text">Hoje</span>}
                 </h3>
                 <div className="flex items-center gap-3 text-xs">
                   {group.completedCount > 0 && (
-                    <span className="text-emerald-600">
+                    <span className="text-status-success-text">
                       {group.completedCount} concluída{group.completedCount > 1 ? 's' : ''}
                     </span>
                   )}
                   {group.overdueCount > 0 && (
-                    <span className="text-red-600">
+                    <span className="text-status-error-text">
                       {group.overdueCount} vencida{group.overdueCount > 1 ? 's' : ''}
                     </span>
                   )}
@@ -728,7 +728,7 @@ function CreateActivityModal({
             type="button"
             disabled={!form.title.trim() || saving}
             onClick={() => void submit()}
-            className="h-8 rounded-xl bg-emerald-600 px-3 text-sm font-medium text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-40"
+            className="h-8 rounded-xl bg-brand-primary px-3 text-sm font-medium text-white hover:bg-brand-primary-hover disabled:cursor-not-allowed disabled:opacity-40"
           >
             Criar atividade
           </button>
@@ -856,7 +856,7 @@ function CompleteActivityModal({
             type="button"
             disabled={!result || saving}
             onClick={() => void submit()}
-            className="h-8 rounded-xl bg-emerald-600 px-3 text-sm font-medium text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-40"
+            className="h-8 rounded-xl bg-brand-primary px-3 text-sm font-medium text-white hover:bg-brand-primary-hover disabled:cursor-not-allowed disabled:opacity-40"
           >
             Confirmar
           </button>
@@ -872,9 +872,9 @@ function CompleteActivityModal({
           <span className="mb-2 block text-xs font-medium text-muted-foreground">Resultado</span>
           <div className="grid grid-cols-2 gap-2">
             {([
-              ['concluida', 'Concluída', 'bg-emerald-600 hover:bg-emerald-700'],
-              ['concluida_parcial', 'Concluída parcialmente', 'bg-amber-500 hover:bg-amber-600'],
-              ['reagendada', 'Reagendada', 'bg-blue-500 hover:bg-blue-600'],
+              ['concluida', 'Concluída', 'bg-brand-primary hover:bg-brand-primary-hover'],
+              ['concluida_parcial', 'Concluída parcialmente', 'bg-status-warning hover:bg-status-warning'],
+              ['reagendada', 'Reagendada', 'bg-status-info hover:bg-status-info'],
               ['nao_realizada', 'Não realizada', 'bg-gray-400 hover:bg-gray-500'],
             ] as const).map(([value, label, activeClass]) => (
               <button
@@ -919,7 +919,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 function LoadingRoutine({ compact = false }: { compact?: boolean }) {
   return (
     <div className={`flex justify-center ${compact ? 'py-12' : 'py-16'}`} aria-label="Carregando rotina">
-      <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-status-success/30 border-t-emerald-600" />
     </div>
   )
 }
@@ -934,8 +934,8 @@ function RoutineNotice({
   description: string
 }) {
   return (
-    <div className={`rounded-2xl border bg-white p-8 text-center shadow-sm ${tone === 'error' ? 'border-red-200' : 'border-border-subtle'}`}>
-      <p className={`text-sm font-semibold ${tone === 'error' ? 'text-red-700' : 'text-muted-foreground'}`}>{title}</p>
+    <div className={`rounded-2xl border bg-white p-8 text-center shadow-sm ${tone === 'error' ? 'border-status-error/30' : 'border-border-subtle'}`}>
+      <p className={`text-sm font-semibold ${tone === 'error' ? 'text-status-error-text' : 'text-muted-foreground'}`}>{title}</p>
       <p className="mt-1 text-xs text-muted-foreground">{description}</p>
     </div>
   )
@@ -970,9 +970,9 @@ function shiftIsoDate(value: string, days: number): string {
 }
 
 function historyStatusStyle(status: string): { color: string; background: string } {
-  if (status === 'concluida') return { color: 'text-emerald-600', background: 'bg-emerald-50' }
-  if (status === 'concluida_parcial') return { color: 'text-amber-600', background: 'bg-amber-50' }
-  if (status === 'reagendada') return { color: 'text-blue-600', background: 'bg-blue-50' }
+  if (status === 'concluida') return { color: 'text-status-success-text', background: 'bg-status-success-surface' }
+  if (status === 'concluida_parcial') return { color: 'text-status-warning-text', background: 'bg-status-warning-surface' }
+  if (status === 'reagendada') return { color: 'text-status-info-text', background: 'bg-status-info-surface' }
   if (status === 'nao_realizada') return { color: 'text-muted-foreground', background: 'bg-gray-50' }
   return { color: 'text-muted-foreground', background: 'bg-gray-50' }
 }

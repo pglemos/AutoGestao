@@ -69,18 +69,18 @@ function calcAcoes(funis) {
 }
 
 const COR_BADGE = {
-  blue:   "bg-blue-100 text-blue-700",
+  blue:   "bg-status-info-surface text-status-info-text",
   green:  "bg-green-100 text-green-700",
-  orange: "bg-orange-100 text-orange-700",
-  amber:  "bg-amber-100 text-amber-700",
+  orange: "bg-status-warning-surface text-status-warning-text",
+  amber:  "bg-status-warning-surface text-status-warning-text",
 };
 const COR_BTN = {
-  blue:   "bg-[#005BFF] hover:bg-blue-700 text-white",
+  blue:   "bg-[#005BFF] hover:bg-status-info text-white",
   green:  "bg-green-600 hover:bg-green-700 text-white",
-  orange: "bg-orange-500 hover:bg-orange-600 text-white",
-  amber:  "bg-amber-500 hover:bg-amber-600 text-white",
+  orange: "bg-status-warning hover:bg-status-warning text-white",
+  amber:  "bg-status-warning hover:bg-status-warning text-white",
 };
-const PRIORIDADE_COR = ["text-red-500", "text-amber-500", "text-muted-foreground"];
+const PRIORIDADE_COR = ["text-status-error", "text-status-warning", "text-muted-foreground"];
 
 export default function OndeAgirAgora({ funis }) {
   const acoes = calcAcoes(funis);

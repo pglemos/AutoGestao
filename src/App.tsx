@@ -131,8 +131,8 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boole
     if (!this.state.hasError) return this.props.children
     return (
       <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center gap-mx-lg p-mx-xl">
-        <div className="w-mx-2xl h-mx-2xl rounded-2xl bg-emerald-600/10 flex items-center justify-center">
-          <span className="text-emerald-600 font-bold text-4xl">MX</span>
+        <div className="w-mx-2xl h-mx-2xl rounded-2xl bg-brand-primary/10 flex items-center justify-center">
+          <span className="text-status-success-text font-bold text-4xl">MX</span>
         </div>
         <h1 className="text-white text-xl font-bold uppercase tracking-wider">Algo deu errado</h1>
         <p className="text-white/50 text-sm text-center max-w-md">
@@ -143,7 +143,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boole
         )}
         <button
           onClick={() => { this.setState({ hasError: false, error: null }); window.location.reload() }}
-          className="mt-mx-md px-8 py-3 bg-emerald-600 text-white rounded-mx-full font-bold uppercase tracking-widest hover:bg-brand-primary-hover transition-colors"
+          className="mt-mx-md px-8 py-3 bg-brand-primary text-white rounded-mx-full font-bold uppercase tracking-widest hover:bg-brand-primary-hover transition-colors"
         >
           Recarregar
         </button>

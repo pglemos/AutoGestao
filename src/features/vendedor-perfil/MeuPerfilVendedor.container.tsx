@@ -19,8 +19,8 @@ function Section({ title, icon: Icon, children }: { title: string; icon: typeof 
     return (
         <Card className="p-mx-lg">
             <div className="mb-mx-lg flex items-center gap-mx-sm">
-                <div className="flex h-mx-10 w-mx-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600/10">
-                    <Icon className="h-4 w-4 text-emerald-600" aria-hidden="true" />
+                <div className="flex h-mx-10 w-mx-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10">
+                    <Icon className="h-4 w-4 text-status-success-text" aria-hidden="true" />
                 </div>
                 <Typography variant="h3" className="text-base font-semibold">{title}</Typography>
             </div>

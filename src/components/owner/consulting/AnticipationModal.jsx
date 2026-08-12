@@ -70,13 +70,13 @@ export default function AnticipationModal({ meeting, program, onClose, onSubmitt
         <form onSubmit={handleSubmit} className="space-y-3">
           {/* Validações */}
           {pendingItems.length > 0 && (
-            <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-2.5">
-              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
+            <div className="flex items-start gap-2 rounded-lg border border-status-warning/30 bg-status-warning-surface p-2.5">
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-status-warning-text" />
               <div>
-                <p className="text-xs font-medium text-amber-800">Itens obrigatórios pendentes:</p>
+                <p className="text-xs font-medium text-status-warning-text">Itens obrigatórios pendentes:</p>
                 <ul className="mt-0.5 space-y-0.5">
                   {pendingItems.map((item) => (
-                    <li key={item.id} className="text-xs text-amber-700">• {item.title}</li>
+                    <li key={item.id} className="text-xs text-status-warning-text">• {item.title}</li>
                   ))}
                 </ul>
               </div>
@@ -84,9 +84,9 @@ export default function AnticipationModal({ meeting, program, onClose, onSubmitt
           )}
 
           {!allParticipantsConfirmed && (
-            <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-2.5">
-              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
-              <p className="text-xs text-amber-700">Participantes obrigatórios não confirmados.</p>
+            <div className="flex items-start gap-2 rounded-lg border border-status-warning/30 bg-status-warning-surface p-2.5">
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-status-warning-text" />
+              <p className="text-xs text-status-warning-text">Participantes obrigatórios não confirmados.</p>
             </div>
           )}
 

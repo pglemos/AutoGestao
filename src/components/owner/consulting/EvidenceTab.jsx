@@ -10,10 +10,10 @@ import { useToast } from "@/components/ui/use-toast";
 
 const EVIDENCE_STATUS = {
   pending: { label: "Pendente", tone: "text-muted-foreground bg-muted" },
-  sent: { label: "Enviada", tone: "text-blue-700 bg-blue-50" },
-  in_analysis: { label: "Em análise", tone: "text-amber-700 bg-amber-50" },
+  sent: { label: "Enviada", tone: "text-status-info-text bg-status-info-surface" },
+  in_analysis: { label: "Em análise", tone: "text-status-warning-text bg-status-warning-surface" },
   approved: { label: "Aprovada", tone: "text-primary bg-primary/10" },
-  returned: { label: "Devolvida", tone: "text-red-600 bg-red-50" },
+  returned: { label: "Devolvida", tone: "text-status-error-text bg-status-error-surface" },
 };
 
 export default function EvidenceTab({ meeting, user }) {
@@ -115,7 +115,7 @@ export default function EvidenceTab({ meeting, user }) {
                         <FileText className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
                         <p className="text-sm font-medium text-foreground">{t.title}</p>
                         {t.required && (
-                          <span className="rounded-full bg-amber-50 px-1.5 py-0.5 text-caption font-medium text-amber-700">Obrigatória</span>
+                          <span className="rounded-full bg-status-warning-surface px-1.5 py-0.5 text-caption font-medium text-status-warning-text">Obrigatória</span>
                         )}
                       </div>
                       {t.description && (
@@ -296,9 +296,9 @@ export default function EvidenceTab({ meeting, user }) {
                 </div>
               )}
               {viewing.consultantNote && (
-                <div className="rounded-md bg-amber-50 p-2.5">
-                  <p className="text-xs font-medium text-amber-800">Devolutiva do consultor:</p>
-                  <p className="mt-0.5 text-sm text-amber-700">{viewing.consultantNote}</p>
+                <div className="rounded-md bg-status-warning-surface p-2.5">
+                  <p className="text-xs font-medium text-status-warning-text">Devolutiva do consultor:</p>
+                  <p className="mt-0.5 text-sm text-status-warning-text">{viewing.consultantNote}</p>
                 </div>
               )}
             </div>

@@ -105,7 +105,7 @@ export function AdminFeedbackModal({
           <Card className="w-full max-w-mx-4xl max-h-full overflow-y-auto no-scrollbar shadow-mx-2xl border-none flex flex-col bg-white">
             <header className="p-mx-lg md:p-10 border-b border-border flex items-center justify-between sticky top-mx-0 bg-white z-10">
               <div className="flex items-center gap-mx-sm">
-                <div className="w-mx-xl h-mx-xl rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-sm">
+                <div className="w-mx-xl h-mx-xl rounded-2xl bg-brand-primary text-white flex items-center justify-center shadow-sm">
                   <MessageSquare size={24} />
                 </div>
                 <div>
@@ -225,7 +225,7 @@ export function AdminFeedbackModal({
                   >
                     Semana
                   </Typography>
-                  <div className="h-mx-14 px-6 bg-gray-50 border border-border rounded-xl flex items-center text-sm font-bold text-emerald-600 shadow-none">
+                  <div className="h-mx-14 px-6 bg-gray-50 border border-border rounded-xl flex items-center text-sm font-bold text-status-success-text shadow-none">
                     <Calendar size={18} className="mr-3 opacity-40" />
                     {previousWeekLabel}
                   </div>
@@ -308,7 +308,7 @@ export function AdminFeedbackModal({
                   <div className="space-y-mx-sm">
                     <label
                       htmlFor="feedback-admin-action"
-                      className="text-mx-tiny font-bold uppercase tracking-widest text-emerald-600 ml-2 flex items-center gap-mx-xs"
+                      className="text-mx-tiny font-bold uppercase tracking-widest text-status-success-text ml-2 flex items-center gap-mx-xs"
                     >
                       <Target size={16} /> Próximo Passo (Ação)
                     </label>
@@ -356,7 +356,7 @@ export function AdminFeedbackModal({
                       type="checkbox"
                       checked={formData.visible_to_seller !== false}
                       onChange={(e) => setFormData((f) => ({ ...f, visible_to_seller: e.target.checked }))}
-                      className="mt-0.5 rounded border-border text-emerald-600 focus:ring-brand-primary"
+                      className="mt-0.5 rounded border-border text-status-success-text focus:ring-brand-primary"
                     />
                     <span>
                       <span className="font-semibold text-foreground">Enviar este feedback ao vendedor</span>

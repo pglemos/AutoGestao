@@ -66,8 +66,8 @@ export function ManagerMentorLibrary() {
   return (
     <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm" aria-labelledby="mentor-library-title">
       <div className="mb-4 flex items-center gap-2">
-        <span className="grid h-9 w-9 place-items-center rounded-xl bg-emerald-50">
-          <BookOpen className="text-emerald-600" size={20} />
+        <span className="grid h-9 w-9 place-items-center rounded-xl bg-status-success-surface">
+          <BookOpen className="text-status-success-text" size={20} />
         </span>
         <div className="flex-1">
           <h2 id="mentor-library-title" className="font-semibold text-foreground">Biblioteca de Orientações</h2>
@@ -76,7 +76,7 @@ export function ManagerMentorLibrary() {
         <button
           type="button"
           onClick={() => setSelected(featured)}
-          className="hidden items-center gap-1.5 rounded-lg border border-emerald-100 bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700 transition-colors hover:bg-emerald-100 sm:flex"
+          className="hidden items-center gap-1.5 rounded-lg border border-status-success/20 bg-status-success-surface px-3 py-1.5 text-xs font-medium text-status-success-text transition-colors hover:bg-status-success-surface sm:flex"
         >
           <Sparkles size={13} /> Destaque
         </button>
@@ -89,7 +89,7 @@ export function ManagerMentorLibrary() {
           onChange={event => setSearch(event.target.value)}
           aria-label="Buscar orientação"
           placeholder="Buscar orientação..."
-          className="w-full rounded-xl border border-border-subtle bg-gray-50 py-2 pl-9 pr-3 text-sm transition-all focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className="w-full rounded-xl border border-border-subtle bg-gray-50 py-2 pl-9 pr-3 text-sm transition-all focus:bg-white focus:outline-none focus:ring-2 focus:ring-status-success"
         />
       </div>
 
@@ -101,7 +101,7 @@ export function ManagerMentorLibrary() {
             aria-pressed={category === item.key}
             onClick={() => setCategory(item.key)}
             className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
-              category === item.key ? 'bg-emerald-600 text-white shadow-sm' : 'bg-gray-50 text-muted-foreground hover:bg-gray-100'
+              category === item.key ? 'bg-brand-primary text-white shadow-sm' : 'bg-gray-50 text-muted-foreground hover:bg-gray-100'
             }`}
           >
             {item.label}
@@ -125,8 +125,8 @@ export function ManagerMentorLibrary() {
                 key={item.title}
                 className={`group rounded-xl border p-4 transition-all ${
                   item.highlight
-                    ? 'border-emerald-200 bg-emerald-50/30'
-                    : 'border-border-subtle bg-gray-50/60 hover:border-emerald-200 hover:bg-emerald-50/40'
+                    ? 'border-status-success/30 bg-status-success-surface/30'
+                    : 'border-border-subtle bg-gray-50/60 hover:border-status-success/30 hover:bg-status-success-surface/40'
                 }`}
               >
                 <div className="mb-2 flex items-start justify-between gap-2">
@@ -134,7 +134,7 @@ export function ManagerMentorLibrary() {
                     {categoryConfig.label}
                   </span>
                   <div className="flex items-center gap-1">
-                    {item.highlight && <Sparkles size={13} className="text-emerald-500" />}
+                    {item.highlight && <Sparkles size={13} className="text-status-success" />}
                     <button
                       type="button"
                       onClick={() => toggleFavorite(item.title)}
@@ -151,7 +151,7 @@ export function ManagerMentorLibrary() {
                 <button
                   type="button"
                   onClick={() => setSelected(item)}
-                  className="flex items-center gap-1 text-xs text-muted-foreground transition-colors group-hover:text-emerald-600"
+                  className="flex items-center gap-1 text-xs text-muted-foreground transition-colors group-hover:text-status-success-text"
                 >
                   Ver orientação <ChevronRight size={13} />
                 </button>

@@ -65,7 +65,7 @@ export function ConsultingDailyTrackingView({ clientId, storeId }: Props) {
         const total = (row.vnd_porta_prev_day || 0) + (row.vnd_cart_prev_day || 0) + (row.vnd_net_prev_day || 0)
         return (
           <div className="flex items-center gap-mx-xs">
-            <CheckCircle2 size={14} className="text-emerald-600" />
+            <CheckCircle2 size={14} className="text-status-success-text" />
             <Typography variant="p" className="">{total}</Typography>
           </div>
         )

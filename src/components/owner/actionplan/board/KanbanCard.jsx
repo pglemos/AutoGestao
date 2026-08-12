@@ -14,7 +14,7 @@ export default function KanbanCard({ action, onQuickAction, onDelete, onMoveTo }
   const quickActions = QUICK_ACTIONS[action.status] || [];
   const showProgress = action.status !== "awaiting_decision" || action.progress > 0;
 
-  const progressColor = action.status === "completed" ? "bg-emerald-500" : action.status === "blocked" ? "bg-red-400" : "bg-blue-500";
+  const progressColor = action.status === "completed" ? "bg-status-success" : action.status === "blocked" ? "bg-red-400" : "bg-status-info";
 
   return (
     <div className="relative overflow-hidden rounded-lg border border-border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
@@ -37,20 +37,20 @@ export default function KanbanCard({ action, onQuickAction, onDelete, onMoveTo }
             <span className="rounded-full bg-violet-100 px-1.5 py-0.5 text-xs font-medium text-violet-700">Sua decisão</span>
           )}
           {late && (
-            <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-1.5 py-0.5 text-xs font-medium text-red-700">
+            <span className="inline-flex items-center gap-0.5 rounded-full bg-status-error-surface px-1.5 py-0.5 text-xs font-medium text-status-error-text">
               <AlertTriangle className="h-2.5 w-2.5" /> Atrasada há {lateDays}d
             </span>
           )}
           {action.blockedReason && (
-            <span className="inline-flex items-center gap-0.5 rounded-full bg-red-50 px-1.5 py-0.5 text-xs font-medium text-red-600">
+            <span className="inline-flex items-center gap-0.5 rounded-full bg-status-error-surface px-1.5 py-0.5 text-xs font-medium text-status-error-text">
               <Lock className="h-2.5 w-2.5" /> Bloqueada
             </span>
           )}
           {action.status === "awaiting_validation" && (
-            <span className="rounded-full bg-orange-100 px-1.5 py-0.5 text-xs font-medium text-orange-700">Validação</span>
+            <span className="rounded-full bg-status-warning-surface px-1.5 py-0.5 text-xs font-medium text-status-warning-text">Validação</span>
           )}
           {action.status === "completed" && action.impactStatus && (
-            <span className="inline-flex items-center gap-0.5 rounded-full bg-emerald-100 px-1.5 py-0.5 text-xs font-medium text-emerald-700">
+            <span className="inline-flex items-center gap-0.5 rounded-full bg-status-success-surface px-1.5 py-0.5 text-xs font-medium text-status-success-text">
               <CheckCircle2 className="h-2.5 w-2.5" /> Impacto medido
             </span>
           )}

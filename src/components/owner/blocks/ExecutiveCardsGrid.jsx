@@ -257,7 +257,7 @@ function CardDetailBody({ detail }) {
 
 function KpiDetail({ kpi }) {
   const tone = toneForStatus(kpi.status);
-  const toneBg = { green: "bg-primary", amber: "bg-amber-500", red: "bg-red-500", blue: "bg-blue-500", slate: "bg-muted-foreground/60" }[tone];
+  const toneBg = { green: "bg-primary", amber: "bg-status-warning", red: "bg-status-error", blue: "bg-status-info", slate: "bg-muted-foreground/60" }[tone];
   return (
     <div className="rounded-lg border border-border p-3">
       <div className="flex items-center justify-between gap-2">

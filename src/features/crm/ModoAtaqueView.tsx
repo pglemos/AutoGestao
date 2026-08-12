@@ -35,12 +35,12 @@ const RESULTADOS_CARDS: ResultadoCard[] = [
 
 const COR_MAP: Record<ResultadoCard['cor'], string> = {
   green: 'bg-white border-green-200 hover:bg-green-50',
-  red: 'bg-white border-red-200 hover:bg-red-50',
+  red: 'bg-white border-status-error/30 hover:bg-status-error-surface',
   slate: 'bg-white border-border hover:bg-slate-50',
-  blue: 'bg-white border-blue-200 hover:bg-blue-50',
-  orange: 'bg-white border-amber-200 hover:bg-amber-50',
-  teal: 'bg-white border-[#005BFF]/20 hover:bg-blue-50',
-  yellow: 'bg-white border-amber-200 hover:bg-amber-50',
+  blue: 'bg-white border-status-info/30 hover:bg-status-info-surface',
+  orange: 'bg-white border-status-warning/30 hover:bg-status-warning-surface',
+  teal: 'bg-white border-[#005BFF]/20 hover:bg-status-info-surface',
+  yellow: 'bg-white border-status-warning/30 hover:bg-status-warning-surface',
 }
 
 interface ModoAtaqueViewProps {
@@ -129,7 +129,7 @@ function OportunidadeCard({
 
   return (
     <div className="overflow-hidden rounded-3xl border border-border-subtle bg-white shadow-xl">
-      <div className="bg-gradient-to-br from-[#005BFF] to-blue-700 p-6 text-white">
+      <div className="bg-gradient-to-br from-[#005BFF] to-status-info p-6 text-white">
         <div className="flex items-center gap-4">
           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/20 text-xl font-bold">
             {iniciais}
@@ -147,15 +147,15 @@ function OportunidadeCard({
             <p className="mb-1 text-caption font-bold uppercase tracking-wide text-muted-foreground">Objetivo</p>
             <p className="text-sm font-bold text-foreground">{objetivo}</p>
           </div>
-          <div className="rounded-2xl bg-blue-50 p-4">
+          <div className="rounded-2xl bg-status-info-surface p-4">
             <p className="mb-1 text-caption font-bold uppercase tracking-wide text-[#005BFF]">Próximo passo</p>
             <p className="text-sm font-bold text-foreground">{proximoPasso}</p>
           </div>
         </div>
 
-        <div className="flex items-start gap-2 rounded-2xl bg-amber-50 px-4 py-3">
-          <Target className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
-          <p className="text-xs leading-snug text-amber-700">{explicacao}</p>
+        <div className="flex items-start gap-2 rounded-2xl bg-status-warning-surface px-4 py-3">
+          <Target className="mt-0.5 h-4 w-4 shrink-0 text-status-warning" />
+          <p className="text-xs leading-snug text-status-warning-text">{explicacao}</p>
         </div>
 
         <div className="grid grid-cols-3 gap-2">
@@ -177,7 +177,7 @@ function OportunidadeCard({
           </button>
         </div>
 
-        <Button onClick={onExecutar} className="h-14 w-full rounded-2xl bg-[#005BFF] text-base text-white shadow-lg shadow-blue-200 hover:bg-blue-700">
+        <Button onClick={onExecutar} className="h-14 w-full rounded-2xl bg-[#005BFF] text-base text-white shadow-lg shadow-blue-200 hover:bg-status-info">
           <Zap className="h-5 w-5" /> Executar próximo passo
         </Button>
       </div>
@@ -296,9 +296,9 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
           {fila.length > 0 && (
             <div className="grid w-full max-w-lg grid-cols-2 gap-mx-sm sm:grid-cols-4">
               {[
-                { label: 'Executadas', value: stats.executadas, tone: 'bg-blue-50 text-[#005BFF]' },
+                { label: 'Executadas', value: stats.executadas, tone: 'bg-status-info-surface text-[#005BFF]' },
                 { label: 'Visitas geradas', value: stats.visitas, tone: 'bg-green-50 text-green-600' },
-                { label: 'Propostas enviadas', value: stats.propostas, tone: 'bg-amber-50 text-amber-600' },
+                { label: 'Propostas enviadas', value: stats.propostas, tone: 'bg-status-warning-surface text-status-warning-text' },
                 { label: 'Recuperações', value: stats.recuperacoes, tone: 'bg-purple-50 text-purple-600' },
               ].map(s => (
                 <div key={s.label} className={`rounded-2xl p-mx-md ${s.tone}`}>
@@ -310,7 +310,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
           )}
           <div className="flex w-full max-w-sm flex-col gap-mx-xs">
             <Button variant="outline" className="w-full" onClick={onPlanoAtaque}>Ir para Plano de Ataque</Button>
-            <Button className="w-full bg-[#005BFF] text-white hover:bg-blue-700" onClick={onSair}>Voltar para Carteira</Button>
+            <Button className="w-full bg-[#005BFF] text-white hover:bg-status-info" onClick={onSair}>Voltar para Carteira</Button>
             <button type="button" onClick={onSair} className="mt-1 text-xs text-muted-foreground hover:underline">Encerrar sessão</button>
           </div>
         </div>
@@ -357,7 +357,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
 
         {clienteAtual && executando && (
           <Card className="overflow-hidden p-0">
-            <div className="bg-gradient-to-br from-[#005BFF] to-blue-700 p-mx-lg text-white">
+            <div className="bg-gradient-to-br from-[#005BFF] to-status-info p-mx-lg text-white">
               <div className="flex items-center gap-mx-sm">
                 <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white/20 text-xl font-bold">
                   {(clienteAtual.nome || '?').split(' ').slice(0, 2).map(p => p[0]).join('').toUpperCase()}
@@ -370,8 +370,8 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
             </div>
 
             <div className="space-y-mx-md p-mx-lg">
-              <div className="rounded-xl border border-amber-200 bg-amber-50 p-mx-sm">
-                <Typography variant="caption" className="font-bold text-amber-600">Próxima ação</Typography>
+              <div className="rounded-xl border border-status-warning/30 bg-status-warning-surface p-mx-sm">
+                <Typography variant="caption" className="font-bold text-status-warning-text">Próxima ação</Typography>
                 <Typography variant="p" className="mt-1 font-semibold">{clienteAtual.proxima_acao || 'Definir próximo passo'}</Typography>
               </div>
 
@@ -387,7 +387,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
                       className={`rounded-xl border px-2.5 py-1 text-caption font-semibold transition-all ${
                         tom === t.id
                           ? 'border-[#005BFF] bg-[#005BFF] text-white'
-                          : 'border-border bg-white text-muted-foreground hover:border-blue-300 hover:text-[#005BFF]'
+                          : 'border-border bg-white text-muted-foreground hover:border-status-info/40 hover:text-[#005BFF]'
                       }`}
                     >
                       {t.label}
@@ -459,14 +459,14 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
       {pausarOpen && (
         <div className="fixed inset-0 z-[210] grid place-items-center bg-black/50 p-4">
           <Card className="w-full max-w-xs space-y-mx-sm p-mx-lg text-center">
-            <span className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-amber-50 text-amber-600">
+            <span className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-status-warning-surface text-status-warning-text">
               <Pause size={20} />
             </span>
             <Typography variant="h3">Pausar o Modo Ataque?</Typography>
             <Typography variant="p" tone="muted">Sua posição na fila é salva. Você continua de onde parou.</Typography>
             <div className="flex flex-col gap-mx-xs pt-mx-xs">
-              <Button className="bg-[#005BFF] text-white hover:bg-blue-700" onClick={() => setPausarOpen(false)}>Continuar atacando</Button>
-              <Button variant="outline" className="text-red-500 border-red-200 hover:bg-red-50" onClick={onSair}>Sair do Modo Ataque</Button>
+              <Button className="bg-[#005BFF] text-white hover:bg-status-info" onClick={() => setPausarOpen(false)}>Continuar atacando</Button>
+              <Button variant="outline" className="text-status-error border-status-error/30 hover:bg-status-error-surface" onClick={onSair}>Sair do Modo Ataque</Button>
             </div>
           </Card>
         </div>

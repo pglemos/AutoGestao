@@ -184,7 +184,7 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
                   onClick={() => setActiveKind(kind)}
                   className={cn(
                     'min-h-mx-14 rounded-2xl px-4 text-left transition-all',
-                    active ? 'bg-emerald-600 text-white shadow-sm' : 'bg-gray-50 text-muted-foreground hover:bg-border-default',
+                    active ? 'bg-brand-primary text-white shadow-sm' : 'bg-gray-50 text-muted-foreground hover:bg-border-default',
                   )}
                 >
                   <span className="block text-xs font-bold uppercase tracking-widest">{KIND_META[kind].label}</span>
@@ -275,7 +275,7 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
       <section aria-live="polite">
         {loading ? (
           <Card className="border-none bg-white p-mx-lg">
-            <div className="flex items-center gap-mx-sm text-emerald-600">
+            <div className="flex items-center gap-mx-sm text-status-success-text">
               <RefreshCw size={18} className="animate-spin" />
               <Typography variant="caption" className="">Carregando catálogo...</Typography>
             </div>
@@ -305,7 +305,7 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
                     </div>
                     {mayManage && (
                       <div className="grid grid-cols-3 gap-mx-xs sm:flex">
-                        <Button variant="ghost" size="sm" onClick={() => openEditForm(option)} className="text-emerald-600">
+                        <Button variant="ghost" size="sm" onClick={() => openEditForm(option)} className="text-status-success-text">
                           <Edit3 size={14} className="mr-2" /> EDITAR
                         </Button>
                         <Button variant="ghost" size="sm" onClick={() => handleArchive(option)} className="text-muted-foreground" disabled={option.status === 'arquivado'}>

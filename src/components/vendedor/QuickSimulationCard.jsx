@@ -83,7 +83,7 @@ function SimLine({ label, value, highlight }) {
   return (
     <div>
       <p className="text-xs text-muted-foreground">{label}</p>
-      <p className={`text-sm font-bold ${highlight ? "text-emerald-600" : "text-mx-navy"}`}>
+      <p className={`text-sm font-bold ${highlight ? "text-status-success-text" : "text-mx-navy"}`}>
         {highlight && value > 0 ? "+" : ""}{formatBRL(value)}
       </p>
     </div>

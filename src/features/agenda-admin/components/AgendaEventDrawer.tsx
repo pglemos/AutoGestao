@@ -129,7 +129,7 @@ export function AgendaEventDrawer({
                       <button
                         type="button"
                         onClick={() => onEditVisit(visit.id)}
-                        className="p-1 rounded-xl text-muted-foreground hover:bg-gray-50 hover:text-emerald-600 transition-colors"
+                        className="p-1 rounded-xl text-muted-foreground hover:bg-gray-50 hover:text-status-success-text transition-colors"
                         title="Editar Visita"
                       >
                         <Edit3 size={15} />
@@ -149,9 +149,9 @@ export function AgendaEventDrawer({
                   <div className="mb-2">
                     <Link
                       to={`/consultoria/clientes/${visit.client_slug}/visitas/${visit.visit_number}`}
-                      className="group/link inline-flex items-center gap-1.5 font-bold text-base text-foreground hover:text-emerald-600 transition-colors"
+                      className="group/link inline-flex items-center gap-1.5 font-bold text-base text-foreground hover:text-status-success-text transition-colors"
                     >
-                      <Building2 size={16} className="text-emerald-600 shrink-0" />
+                      <Building2 size={16} className="text-status-success-text shrink-0" />
                       <span className="truncate">{visit.client_name}</span>
                       <ExternalLink size={13} className="opacity-0 group-hover/link:opacity-100 transition-opacity" />
                     </Link>
@@ -180,7 +180,7 @@ export function AgendaEventDrawer({
                   <div className="flex flex-wrap gap-1 mb-3">
                     {visit.modality && (
                       <Badge variant="outline" className="text-caption font-semibold">
-                        {isOnline ? <Video size={10} className="mr-1 text-emerald-600" /> : <MapPin size={10} className="mr-1 text-muted-foreground" />}
+                        {isOnline ? <Video size={10} className="mr-1 text-status-success-text" /> : <MapPin size={10} className="mr-1 text-muted-foreground" />}
                         {visit.modality}
                       </Badge>
                     )}
@@ -244,7 +244,7 @@ export function AgendaEventDrawer({
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <CalendarDays size={14} className="text-emerald-600" />
+                      <CalendarDays size={14} className="text-status-success-text" />
                       <span className="font-mono font-bold text-sm text-foreground">
                         {format(startsAt, 'HH:mm')}
                       </span>
@@ -257,7 +257,7 @@ export function AgendaEventDrawer({
                       <button
                         type="button"
                         onClick={() => onEditEvent(event)}
-                        className="p-1 rounded-xl text-muted-foreground hover:bg-gray-50 hover:text-emerald-600 transition-colors"
+                        className="p-1 rounded-xl text-muted-foreground hover:bg-gray-50 hover:text-status-success-text transition-colors"
                         title="Editar Evento"
                       >
                         <Edit3 size={15} />

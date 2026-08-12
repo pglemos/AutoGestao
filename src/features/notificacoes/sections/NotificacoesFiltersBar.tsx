@@ -40,7 +40,7 @@ export function NotificacoesFiltersBar({ searchTerm, setSearchTerm, filterType, 
       <div className="relative group">
         <Search
           size={16}
-          className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-emerald-600 transition-colors"
+          className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-status-success-text transition-colors"
         />
         <Input
           placeholder="Buscar notificações"
@@ -62,7 +62,7 @@ export function NotificacoesFiltersBar({ searchTerm, setSearchTerm, filterType, 
             className={cn(
               'flex w-full items-center justify-between rounded-2xl border p-mx-sm text-left transition-all group/f',
               filterType === f.type
-                ? 'bg-emerald-600 border-brand-primary text-white shadow-sm'
+                ? 'bg-brand-primary border-brand-primary text-white shadow-sm'
                 : 'bg-gray-50 border-border hover:bg-white hover:border-brand-primary/20 shadow-none',
             )}
           >
@@ -77,7 +77,7 @@ export function NotificacoesFiltersBar({ searchTerm, setSearchTerm, filterType, 
             </div>
             <ChevronRight
               size={14}
-              className={cn(filterType === f.type ? 'text-white/40' : 'text-muted-foreground opacity-20 group-hover/f:text-emerald-600')}
+              className={cn(filterType === f.type ? 'text-white/40' : 'text-muted-foreground opacity-20 group-hover/f:text-status-success-text')}
             />
           </button>
         ))}

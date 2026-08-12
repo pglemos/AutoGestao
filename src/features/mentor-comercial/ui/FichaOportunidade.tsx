@@ -68,19 +68,19 @@ function translateUrgency(urgency: string): string {
 
 function translatePillarQuality(quality: string): { label: string; badgeClass: string } {
   const map: Record<string, { label: string; badgeClass: string }> = {
-    complete: { label: 'Completo (Pontuação máxima)', badgeClass: 'bg-blue-100 text-blue-800' },
-    partial: { label: 'Parcial (Atenção aos dados)', badgeClass: 'bg-amber-100 text-amber-800' },
+    complete: { label: 'Completo (Pontuação máxima)', badgeClass: 'bg-status-info-surface text-status-info-text' },
+    partial: { label: 'Parcial (Atenção aos dados)', badgeClass: 'bg-status-warning-surface text-status-warning-text' },
     undefined: { label: 'Indefinido (Sem dados)', badgeClass: 'bg-rose-100 text-rose-800' },
     missing: { label: 'Ausente', badgeClass: 'bg-rose-100 text-rose-800' },
-    onTime: { label: 'No prazo', badgeClass: 'bg-blue-100 text-blue-800' },
-    dueToday: { label: 'Vence hoje', badgeClass: 'bg-amber-100 text-amber-800' },
-    lateUnder24h: { label: 'Atraso < 24h', badgeClass: 'bg-amber-100 text-amber-800' },
+    onTime: { label: 'No prazo', badgeClass: 'bg-status-info-surface text-status-info-text' },
+    dueToday: { label: 'Vence hoje', badgeClass: 'bg-status-warning-surface text-status-warning-text' },
+    lateUnder24h: { label: 'Atraso < 24h', badgeClass: 'bg-status-warning-surface text-status-warning-text' },
     lateOver24h: { label: 'Atraso > 24h', badgeClass: 'bg-rose-100 text-rose-800' },
     awaitingSellerResponse: { label: 'Cliente aguarda retorno', badgeClass: 'bg-rose-100 text-rose-800' },
-    respected: { label: 'Cadência respeitada', badgeClass: 'bg-blue-100 text-blue-800' },
+    respected: { label: 'Cadência respeitada', badgeClass: 'bg-status-info-surface text-status-info-text' },
     completedWithoutResponse: { label: 'Cadência concluída sem resposta', badgeClass: 'bg-slate-100 text-foreground' },
     broken: { label: 'Cadência interrompida/quebrada', badgeClass: 'bg-rose-100 text-rose-800' },
-    stale: { label: 'Histórico desatualizado', badgeClass: 'bg-amber-100 text-amber-800' },
+    stale: { label: 'Histórico desatualizado', badgeClass: 'bg-status-warning-surface text-status-warning-text' },
   }
   return map[quality] ?? { label: quality, badgeClass: 'bg-slate-100 text-foreground' }
 }
@@ -138,7 +138,7 @@ export function FichaOportunidade({
         <section className="bg-white rounded-xl border border-border p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-start justify-between gap-4 pb-4 border-b border-border-subtle">
             <div>
-              <span className="text-xs font-bold text-blue-600 uppercase tracking-wide">
+              <span className="text-xs font-bold text-status-info-text uppercase tracking-wide">
                 Bloco 1 — Identificação
               </span>
               <h2 className="text-2xl font-bold text-foreground">{header.clientName}</h2>
@@ -151,14 +151,14 @@ export function FichaOportunidade({
               <span className="px-3 py-1 bg-slate-900 text-slate-100 font-medium text-xs rounded-full">
                 {header.statusLabel} ({header.statusCode})
               </span>
-              <span className="px-3 py-1 bg-blue-50 text-blue-700 font-medium text-xs rounded-full border border-blue-200">
+              <span className="px-3 py-1 bg-status-info-surface text-status-info-text font-medium text-xs rounded-full border border-status-info/30">
                 {header.family}
               </span>
               <span className="px-3 py-1 bg-slate-100 text-foreground font-medium text-xs rounded-full">
                 Resp: {header.responsible}
               </span>
               {header.temperature && (
-                <span className="px-3 py-1 bg-amber-50 text-amber-800 font-medium text-xs rounded-full border border-amber-200">
+                <span className="px-3 py-1 bg-status-warning-surface text-status-warning-text font-medium text-xs rounded-full border border-status-warning/30">
                   Temp: {header.temperature}
                 </span>
               )}
@@ -168,33 +168,33 @@ export function FichaOportunidade({
           {/* Separação estrita: Qualidade (Score) ≠ Urgência (Prioridade) */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Card Qualidade da Condução (Score) */}
-            <div className="bg-blue-50/70 rounded-xl p-5 border border-blue-200 flex flex-col justify-between space-y-4">
+            <div className="bg-status-info-surface/70 rounded-xl p-5 border border-status-info/30 flex flex-col justify-between space-y-4">
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-blue-700">
+                  <span className="text-xs font-bold uppercase tracking-wider text-status-info-text">
                     Qualidade da Condução (Score)
                   </span>
-                  <span className="text-xs bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full font-bold">
+                  <span className="text-xs bg-status-info-surface text-status-info-text px-2.5 py-0.5 rounded-full font-bold">
                     {header.score.classification}
                   </span>
                 </div>
                 <div className="mt-3 flex items-baseline space-x-2">
-                  <span className="text-4xl font-extrabold text-blue-900">{header.score.total}</span>
-                  <span className="text-sm font-semibold text-blue-700">/ 100 pontos</span>
+                  <span className="text-4xl font-extrabold text-status-info-text">{header.score.total}</span>
+                  <span className="text-sm font-semibold text-status-info-text">/ 100 pontos</span>
                 </div>
-                <p className="text-xs text-blue-900/80 mt-1">
+                <p className="text-xs text-status-info-text/80 mt-1">
                   Mede a qualidade do trabalho e condução do vendedor (5 pilares).
                 </p>
               </div>
 
               {/* Breakdown dos 5 pilares do score */}
-              <div className="space-y-2 pt-2 border-t border-blue-200/60">
-                <span className="text-xs font-semibold text-blue-900">Detalhamento dos Pilares:</span>
+              <div className="space-y-2 pt-2 border-t border-status-info/30/60">
+                <span className="text-xs font-semibold text-status-info-text">Detalhamento dos Pilares:</span>
                 <div className="grid grid-cols-1 gap-1.5 text-xs">
                   {header.score.pillarsDetail.map((item: ScorePillarDetail) => (
-                    <div key={item.pillar} className="flex justify-between items-center bg-white/80 px-2.5 py-1.5 rounded border border-blue-100">
+                    <div key={item.pillar} className="flex justify-between items-center bg-white/80 px-2.5 py-1.5 rounded border border-status-info/20">
                       <span className="text-foreground font-medium">{item.label}</span>
-                      <span className="font-bold text-blue-900">
+                      <span className="font-bold text-status-info-text">
                         {item.score} / {item.maxScore} pt
                       </span>
                     </div>
@@ -210,7 +210,7 @@ export function FichaOportunidade({
                   <span className="text-xs font-bold uppercase tracking-wider text-text-disabled">
                     Urgência da Ação (Prioridade)
                   </span>
-                  <span className="text-xs bg-blue-600 text-white px-2.5 py-0.5 rounded-full font-bold">
+                  <span className="text-xs bg-status-info text-white px-2.5 py-0.5 rounded-full font-bold">
                     {header.priority.classification}
                   </span>
                 </div>
@@ -250,10 +250,10 @@ export function FichaOportunidade({
         </section>
 
         {/* BLOCO 2: Próxima Ação Recomendada */}
-        <section className="bg-white rounded-xl border-2 border-blue-600 p-6 shadow-sm space-y-4">
+        <section className="bg-white rounded-xl border-2 border-status-info p-6 shadow-sm space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-border-subtle">
             <div>
-              <span className="text-xs font-bold text-blue-600 uppercase tracking-wide">
+              <span className="text-xs font-bold text-status-info-text uppercase tracking-wide">
                 Bloco 2 — Ação Requerida
               </span>
               <h3 className="text-lg font-bold text-foreground">{nextAction.title}</h3>
@@ -261,7 +261,7 @@ export function FichaOportunidade({
             <button
               type="button"
               onClick={handleExecuteClick}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow-sm transition-colors text-sm flex items-center space-x-2"
+              className="bg-status-info hover:bg-status-info text-white font-semibold px-5 py-2.5 rounded-lg shadow-sm transition-colors text-sm flex items-center space-x-2"
             >
               <span>Executar Próxima Ação</span>
               <span>→</span>
@@ -290,13 +290,13 @@ export function FichaOportunidade({
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Script Determinístico:</span>
-                <span className="font-mono text-blue-700 font-semibold">
+                <span className="font-mono text-status-info-text font-semibold">
                   {nextAction.scriptId ?? `Não resolvido (${nextAction.scriptReason})`}
                 </span>
               </div>
               <div className="flex justify-between items-center pt-1 border-t border-border">
                 <span className="text-muted-foreground">Entra na Central:</span>
-                <span className={`px-2 py-0.5 rounded font-semibold ${nextAction.centralAction ? 'bg-blue-100 text-blue-800' : 'bg-slate-200 text-foreground'}`}>
+                <span className={`px-2 py-0.5 rounded font-semibold ${nextAction.centralAction ? 'bg-status-info-surface text-status-info-text' : 'bg-slate-200 text-foreground'}`}>
                   {nextAction.centralAction ? `Sim (${nextAction.centralRule ?? 'Regra'})` : 'Não'}
                 </span>
               </div>
@@ -305,9 +305,9 @@ export function FichaOportunidade({
 
           {/* Renderização do fluxo de execução reutilizado */}
           {showExecution && (
-            <div className="mt-4 pt-4 border-t border-blue-200 bg-blue-50/50 p-4 rounded-xl">
+            <div className="mt-4 pt-4 border-t border-status-info/30 bg-status-info-surface/50 p-4 rounded-xl">
               <div className="flex justify-between items-center mb-3">
-                <h4 className="font-bold text-blue-900 text-sm">Painel de Execução Principal</h4>
+                <h4 className="font-bold text-status-info-text text-sm">Painel de Execução Principal</h4>
                 <button
                   type="button"
                   onClick={() => setShowExecution(false)}
@@ -324,13 +324,13 @@ export function FichaOportunidade({
                   onClose={() => setShowExecution(false)}
                 />
               ) : (
-                <div className="bg-white p-4 rounded-lg border border-blue-200 text-xs space-y-2">
+                <div className="bg-white p-4 rounded-lg border border-status-info/30 text-xs space-y-2">
                   <p className="font-semibold text-foreground">
                     CTA de Execução acionado.
                   </p>
                   <p className="text-muted-foreground">
                     TODO (TASK 29): O fluxo reutiliza o componente{' '}
-                    <code className="font-mono text-blue-700">
+                    <code className="font-mono text-status-info-text">
                       src/features/mentor-comercial/ui/ExecuteNextStepPanel
                     </code>
                     .
@@ -344,7 +344,7 @@ export function FichaOportunidade({
         {/* BLOCO 3: O que Sabemos */}
         <section className="bg-white rounded-xl border border-border p-6 shadow-sm space-y-4">
           <div>
-            <span className="text-xs font-bold text-blue-600 uppercase tracking-wide">
+            <span className="text-xs font-bold text-status-info-text uppercase tracking-wide">
               Bloco 3 — Fatos Confirmados
             </span>
             <h3 className="text-lg font-bold text-foreground">{whatWeKnow.title}</h3>
@@ -382,7 +382,7 @@ export function FichaOportunidade({
         {/* BLOCO 4: O que Falta para Evoluir */}
         <section className="bg-white rounded-xl border border-border p-6 shadow-sm space-y-4">
           <div>
-            <span className="text-xs font-bold text-blue-600 uppercase tracking-wide">
+            <span className="text-xs font-bold text-status-info-text uppercase tracking-wide">
               Bloco 4 — Diagnóstico de Lacunas
             </span>
             <h3 className="text-lg font-bold text-foreground">{whatIsMissing.title}</h3>
@@ -395,7 +395,7 @@ export function FichaOportunidade({
               {whatIsMissing.pendingFlags.length > 0 ? (
                 <div className="flex flex-wrap gap-1.5">
                   {whatIsMissing.pendingFlags.map((flag) => (
-                    <span key={flag} className="px-2.5 py-1 bg-amber-50 text-amber-800 rounded font-mono border border-amber-200">
+                    <span key={flag} className="px-2.5 py-1 bg-status-warning-surface text-status-warning-text rounded font-mono border border-status-warning/30">
                       {flag}
                     </span>
                   ))}
@@ -433,7 +433,7 @@ export function FichaOportunidade({
                   ))}
                 </div>
               ) : (
-                <p className="text-blue-700 font-medium">Pontuação máxima atingida em todos os pilares!</p>
+                <p className="text-status-info-text font-medium">Pontuação máxima atingida em todos os pilares!</p>
               )}
             </div>
           </div>
@@ -454,14 +454,14 @@ export function FichaOportunidade({
         {/* BLOCO 5: Histórico */}
         <section className="bg-white rounded-xl border border-border p-6 shadow-sm space-y-4">
           <div>
-            <span className="text-xs font-bold text-blue-600 uppercase tracking-wide">
+            <span className="text-xs font-bold text-status-info-text uppercase tracking-wide">
               Bloco 5 — Registro de Atividades
             </span>
             <h3 className="text-lg font-bold text-foreground">{history.title}</h3>
           </div>
 
           {history.transitionSummary && (
-            <div className="bg-blue-50 text-blue-900 p-3 rounded-lg border border-blue-200 text-xs font-medium">
+            <div className="bg-status-info-surface text-status-info-text p-3 rounded-lg border border-status-info/30 text-xs font-medium">
               {history.transitionSummary}
             </div>
           )}

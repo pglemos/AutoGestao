@@ -58,7 +58,7 @@ export function StoreFeedbackHeader({
         <div className="relative group w-full sm:w-mx-sidebar-expanded">
           <Search
             size={16}
-            className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-emerald-600 transition-colors"
+            className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-status-success-text transition-colors"
           />
           <label htmlFor="feedback-store-search" className="sr-only">
             Buscar mentoria

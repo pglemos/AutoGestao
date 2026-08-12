@@ -69,7 +69,7 @@ export function AgendaListView({
         <div key={format(group.date, 'yyyy-MM-dd')}>
           <div className={cn(
             'flex items-center gap-mx-sm mb-mx-sm px-mx-xs',
-            isToday(group.date) && 'text-emerald-600'
+            isToday(group.date) && 'text-status-success-text'
           )}>
             <Calendar size={16} />
             <Typography variant="caption" className="">

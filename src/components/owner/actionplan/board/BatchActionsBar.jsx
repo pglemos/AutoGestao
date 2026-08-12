@@ -8,8 +8,8 @@ export default function BatchActionsBar({ selectedCount, onClear, onBatchRespons
   if (selectedCount === 0) return null;
 
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-3">
-      <span className="text-sm font-medium text-emerald-700">{selectedCount} selecionada{selectedCount !== 1 ? "s" : ""}</span>
+    <div className="flex flex-wrap items-center gap-2 rounded-xl border border-status-success/30 bg-status-success-surface p-3">
+      <span className="text-sm font-medium text-status-success-text">{selectedCount} selecionada{selectedCount !== 1 ? "s" : ""}</span>
       <div className="ml-auto flex flex-wrap items-center gap-2">
         <Select onValueChange={onBatchResponsible}>
           <SelectTrigger className="h-8 w-[140px] text-xs"><span className="flex items-center gap-1"><UserCog className="h-3 w-3" /> Responsável</span></SelectTrigger>

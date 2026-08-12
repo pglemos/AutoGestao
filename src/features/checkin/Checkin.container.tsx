@@ -55,7 +55,7 @@ export function Checkin() {
     if (hookLoading) {
         return (
             <div className="h-full w-full flex flex-col items-center justify-center bg-gray-50">
-                <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-emerald-600 mb-6" />
+                <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-status-success-text mb-6" />
                 <Typography variant="caption" tone="muted" className="animate-pulse">Sincronizando Fechamento Diário...</Typography>
             </div>
         )
@@ -108,7 +108,7 @@ const previousCard = ctx.activeClosingContext.previousCard
 
             {showConfetti && (
                 <div className="fixed inset-0 pointer-events-none z-[100] flex items-center justify-center bg-white/20 backdrop-blur-sm" aria-hidden="true">
-                    <motion.div initial={{ scale: 0, rotate: -20 }} animate={{ scale: [0, 1.25, 1], rotate: 0 }} className="flex h-mx-32 w-mx-32 items-center justify-center rounded-mx-4xl bg-emerald-600 text-white shadow-mx-2xl">
+                    <motion.div initial={{ scale: 0, rotate: -20 }} animate={{ scale: [0, 1.25, 1], rotate: 0 }} className="flex h-mx-32 w-mx-32 items-center justify-center rounded-mx-4xl bg-brand-primary text-white shadow-mx-2xl">
                         <Sparkles size={64} aria-hidden="true" />
                     </motion.div>
                 </div>

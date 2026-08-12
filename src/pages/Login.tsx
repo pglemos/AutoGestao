@@ -393,21 +393,21 @@ export default function Login() {
             // lint-page-roots-ignore: estado de sincronização centrado, antes
             // de o shell existir.
             <main className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-mx-md text-center">
-                <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-emerald-600 mb-6" />
+                <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-status-success-text mb-6" />
                 <Typography variant="caption" tone="white" className="animate-pulse">Sincronizando...</Typography>
             </main>
         )
     }
 
     return (
-        <main className="min-h-screen flex selection:bg-emerald-600/20">
+        <main className="min-h-screen flex selection:bg-brand-primary/20">
             {/* Left Panel — Brand */}
             <div className="hidden lg:flex bg-gray-900 relative overflow-hidden flex-col items-center justify-center p-mx-2xl" style={{ width: '52%' }}>
                 {/* Gradient mesh */}
                 <div className="absolute inset-0" aria-hidden="true">
-                    <div className="absolute bg-emerald-600/10 rounded-full" style={{ top: '-20%', left: '-10%', width: '70%', height: '70%', filter: 'blur(140px)' }} />
+                    <div className="absolute bg-brand-primary/10 rounded-full" style={{ top: '-20%', left: '-10%', width: '70%', height: '70%', filter: 'blur(140px)' }} />
                     <div className="absolute bg-mx-green-900/40 rounded-full" style={{ bottom: '-15%', right: '-10%', width: '60%', height: '60%', filter: 'blur(120px)' }} />
-                    <div className="absolute bg-emerald-600/6 rounded-full" style={{ top: '40%', right: '20%', width: '30%', height: '30%', filter: 'blur(80px)' }} />
+                    <div className="absolute bg-brand-primary/6 rounded-full" style={{ top: '40%', right: '20%', width: '30%', height: '30%', filter: 'blur(80px)' }} />
                 </div>
                 {/* Grid pattern */}
                 <div className="absolute inset-0 bg-mx-matrix opacity-30" />
@@ -428,7 +428,7 @@ export default function Login() {
                         transition={{ delay: 0.3 }}
                     >
                         <h1 className="text-display font-bold text-white mb-4">
-                            MX <span className="text-emerald-600">PERFORMANCE</span>
+                            MX <span className="text-status-success-text">PERFORMANCE</span>
                         </h1>
                         <p className="text-white/60 text-label font-bold mb-16" style={{ letterSpacing: '0.3em' }}>
                             Sistema de Gestao de Elite
@@ -448,8 +448,8 @@ export default function Login() {
                             { icon: ShieldCheck, text: 'Controle preditivo de resultados' },
                         ].map(({ icon: Icon, text }) => (
                             <div key={text} className="flex items-center gap-mx-sm group">
-                                <div className="w-mx-10 h-mx-10 rounded-xl bg-emerald-600/10 border border-brand-primary/15 flex items-center justify-center shrink-0 group-hover:bg-emerald-600/20 transition-colors">
-                                    <Icon size={18} className="text-emerald-600" />
+                                <div className="w-mx-10 h-mx-10 rounded-xl bg-brand-primary/10 border border-brand-primary/15 flex items-center justify-center shrink-0 group-hover:bg-brand-primary/20 transition-colors">
+                                    <Icon size={18} className="text-status-success-text" />
                                 </div>
                                 <span className="text-white/60 text-sm font-medium group-hover:text-white/80 transition-colors">{text}</span>
                             </div>
@@ -532,7 +532,7 @@ export default function Login() {
                                         onClick={() => setShowPassword(v => !v)}
                                         aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
                                         aria-pressed={showPassword}
-                                        className="w-mx-lg h-mx-lg p-mx-tiny rounded-xl text-muted-foreground hover:text-emerald-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 transition-colors"
+                                        className="w-mx-lg h-mx-lg p-mx-tiny rounded-xl text-muted-foreground hover:text-status-success-text focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 transition-colors"
                                         tabIndex={-1}
                                     >
                                         {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -561,7 +561,7 @@ export default function Login() {
                                             onClick={() => setShowPassword(v => !v)}
                                             aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
                                             aria-pressed={showPassword}
-                                            className="w-mx-lg h-mx-lg p-mx-tiny rounded-xl text-muted-foreground hover:text-emerald-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 transition-colors"
+                                            className="w-mx-lg h-mx-lg p-mx-tiny rounded-xl text-muted-foreground hover:text-status-success-text focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 transition-colors"
                                             tabIndex={-1}
                                         >
                                             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -624,7 +624,7 @@ export default function Login() {
                             <button
                                 type="button"
                                 onClick={() => switchMode('forgot')}
-                                className="h-mx-11 rounded-xl border border-border bg-white text-muted-foreground hover:text-emerald-600 hover:border-brand-primary/30 hover:bg-gray-50 font-bold text-sm transition-colors flex items-center justify-center"
+                                className="h-mx-11 rounded-xl border border-border bg-white text-muted-foreground hover:text-status-success-text hover:border-brand-primary/30 hover:bg-gray-50 font-bold text-sm transition-colors flex items-center justify-center"
                                 style={{ gap: '0.5rem' }}
                             >
                                 <KeyRound size={16} />
@@ -636,7 +636,7 @@ export default function Login() {
                             <button
                                 type="button"
                                 onClick={() => switchMode('login')}
-                                className="h-mx-11 rounded-xl border border-border bg-white text-muted-foreground hover:text-emerald-600 hover:border-brand-primary/30 hover:bg-gray-50 font-bold text-label transition-colors flex items-center justify-center"
+                                className="h-mx-11 rounded-xl border border-border bg-white text-muted-foreground hover:text-status-success-text hover:border-brand-primary/30 hover:bg-gray-50 font-bold text-label transition-colors flex items-center justify-center"
                                 style={{ gap: '0.5rem' }}
                             >
                                 <ArrowLeft size={16} />

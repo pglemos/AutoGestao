@@ -102,7 +102,7 @@ export function ConsultingDriveFilesView({ clientId, visits = [] }: { clientId: 
       <Card className="p-mx-lg bg-white border">
         <div className="flex flex-col gap-mx-md lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-mx-md min-w-0">
-            <div className="h-mx-12 w-mx-12 rounded-2xl bg-emerald-600/10 text-emerald-600 flex items-center justify-center shrink-0">
+            <div className="h-mx-12 w-mx-12 rounded-2xl bg-brand-primary/10 text-status-success-text flex items-center justify-center shrink-0">
               <FolderOpen className="h-mx-6 w-mx-6" />
             </div>
             <div className="min-w-0">

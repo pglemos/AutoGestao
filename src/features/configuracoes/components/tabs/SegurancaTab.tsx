@@ -52,7 +52,7 @@ export function SegurancaTab() {
             {/* Alterar senha */}
             <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
                 <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border mb-mx-lg">
-                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center border border-mx-indigo-100 shadow-none">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-status-success-text flex items-center justify-center border border-mx-indigo-100 shadow-none">
                         <KeyRound size={26} />
                     </div>
                     <div>
@@ -80,7 +80,7 @@ export function SegurancaTab() {
                             <button
                                 type="button"
                                 onClick={() => setShowPasswords(s => !s)}
-                                className="absolute right-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground hover:text-emerald-600"
+                                className="absolute right-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground hover:text-status-success-text"
                                 aria-label={showPasswords ? 'Ocultar senha' : 'Mostrar senha'}
                             >
                                 {showPasswords ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -171,7 +171,7 @@ export function SegurancaTab() {
             {/* 2FA placeholder */}
             <Card className="p-mx-lg border-none bg-white">
                 <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border mb-mx-lg">
-                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center border border-mx-indigo-100 shadow-none">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-status-success-text flex items-center justify-center border border-mx-indigo-100 shadow-none">
                         <ShieldCheck size={26} />
                     </div>
                     <div>

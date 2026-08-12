@@ -8,16 +8,16 @@ export default function FocusRecentlyCompleted({ actions, onOpen }) {
   const completed = getRecentlyCompleted(actions);
 
   return (
-    <section className="rounded-xl border border-emerald-200 bg-emerald-50/30 p-4">
+    <section className="rounded-xl border border-status-success/30 bg-status-success-surface/30 p-4">
       <div className="mb-3 flex items-center gap-2">
-        <div className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-100">
-          <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+        <div className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-status-success-surface">
+          <CheckCircle2 className="h-4 w-4 text-status-success-text" />
         </div>
         <h2 className="text-sm font-semibold text-foreground">Concluídas recentemente</h2>
       </div>
 
       {completed.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-emerald-200 bg-card py-8 text-center">
+        <div className="rounded-lg border border-dashed border-status-success/30 bg-card py-8 text-center">
           <p className="text-sm text-muted-foreground">Nenhuma ação concluída recentemente.</p>
         </div>
       ) : (

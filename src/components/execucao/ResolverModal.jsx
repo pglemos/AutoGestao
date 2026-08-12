@@ -193,7 +193,7 @@ export default function ResolverModal({ oportunidade, open, onClose, onResolvida
             Cancelar
           </button>
           <button onClick={handleConfirmar} disabled={!podeConfirmar || saving}
-            className="px-6 py-2.5 text-body-sm font-bold text-white bg-[#005BFF] hover:bg-blue-700 disabled:opacity-50 rounded-xl transition-colors">
+            className="px-6 py-2.5 text-body-sm font-bold text-white bg-[#005BFF] hover:bg-status-info disabled:opacity-50 rounded-xl transition-colors">
             {saving ? "Salvando..." : "Confirmar"}
           </button>
         </div>

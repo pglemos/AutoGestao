@@ -36,7 +36,7 @@ const CounterItem = ({ label, bgColor, textColor, icon: Icon, value, onDecrement
       {/* Big number */}
       <span className={`${compact ? "text-[30px]" : "text-display"} font-bold leading-none tracking-tight tabular-nums ${textColor}`}>{value}</span>
       {/* Stepper */}
-      <div className={`flex items-center border border-border rounded-xl shadow-sm w-full focus-within:border-blue-400 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.15)] transition-all ${compact ? "h-7" : "h-9"}`}>
+      <div className={`flex items-center border border-border rounded-xl shadow-sm w-full focus-within:border-status-info/50 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.15)] transition-all ${compact ? "h-7" : "h-9"}`}>
         <button
           onClick={onDecrement}
           className={`flex-shrink-0 flex items-center justify-center bg-white hover:bg-slate-50 active:bg-slate-100 transition-colors text-muted-foreground font-light border-r border-border rounded-l-xl h-full ${compact ? "w-7 text-body" : "w-9 text-[18px]"}`}

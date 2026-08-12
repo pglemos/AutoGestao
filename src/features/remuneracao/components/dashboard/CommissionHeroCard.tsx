@@ -36,7 +36,7 @@ export function CommissionHeroCard({
                 type="button"
                 onClick={onVerCalculo}
                 aria-label="Ver como a comissão foi calculada"
-                className="rounded-full p-0.5 text-emerald-600 transition-colors hover:bg-emerald-50 hover:text-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/20"
+                className="rounded-full p-0.5 text-status-success-text transition-colors hover:bg-status-success-surface hover:text-status-success-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-success/20"
               >
                 <Info className="h-3.5 w-3.5" aria-hidden="true" />
               </button>
@@ -56,7 +56,7 @@ export function CommissionHeroCard({
           ) : (
             <>
               <p
-                className="font-bold leading-none tabular-nums text-emerald-700"
+                className="font-bold leading-none tabular-nums text-status-success-text"
                 style={{ fontSize: 'clamp(2.5rem, 7vw, 4.5rem)' }}
               >
                 {formatBRLWhole(comissaoEstimada)}
@@ -70,7 +70,7 @@ export function CommissionHeroCard({
               ) : (
                 <p className="mt-4 text-sm text-muted-foreground">
                   Você já vendeu{' '}
-                  <span className="font-semibold text-emerald-700">
+                  <span className="font-semibold text-status-success-text">
                     {qtdVendas} veículo{qtdVendas !== 1 ? 's' : ''}
                   </span>{' '}
                   neste mês.
@@ -83,7 +83,7 @@ export function CommissionHeroCard({
         <div className="hidden flex-shrink-0 items-center justify-center lg:flex">
           <span
             aria-hidden="true"
-            className="grid h-28 w-28 place-items-center rounded-full bg-emerald-50 text-emerald-600"
+            className="grid h-28 w-28 place-items-center rounded-full bg-status-success-surface text-status-success-text"
           >
             <CircleDollarSign className="h-14 w-14" strokeWidth={1.5} />
           </span>

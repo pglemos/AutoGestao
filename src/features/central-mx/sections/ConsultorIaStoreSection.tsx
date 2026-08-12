@@ -8,7 +8,7 @@ import { ConsultorIaChat } from './ConsultorIaChat'
 type ConsultorIaTone = 'brand' | 'info' | 'success'
 
 const toneClasses: Record<ConsultorIaTone, string> = {
-  brand: 'bg-mx-indigo-50 text-emerald-600 border border-mx-indigo-100',
+  brand: 'bg-mx-indigo-50 text-status-success-text border border-mx-indigo-100',
   info: 'bg-status-info-surface text-status-info border border-status-info/20',
   success: 'bg-status-success-surface text-status-success border border-status-success/20',
 }
@@ -65,7 +65,7 @@ function ConsultorIaModuleGrid({
             <Typography variant="p" tone="muted" className="mt-mx-xs text-sm font-bold">
               {item.detail}
             </Typography>
-            <div className="mt-mx-md flex items-center gap-mx-xs text-emerald-600">
+            <div className="mt-mx-md flex items-center gap-mx-xs text-status-success-text">
               <Typography variant="tiny" className="">
                 Abrir
               </Typography>

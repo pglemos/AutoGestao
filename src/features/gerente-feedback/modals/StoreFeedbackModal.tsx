@@ -84,7 +84,7 @@ export function StoreFeedbackModal({
           <Card className="flex max-h-full w-full max-w-[var(--container-mx-4xl)] flex-col overflow-hidden border-none bg-white shadow-mx-2xl">
             <header className="p-mx-lg md:p-10 border-b border-border flex items-center justify-between sticky top-mx-0 bg-white z-10">
               <div className="flex items-center gap-mx-sm">
-                <div className="w-mx-xl h-mx-xl rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-sm">
+                <div className="w-mx-xl h-mx-xl rounded-2xl bg-brand-primary text-white flex items-center justify-center shadow-sm">
                   <MessageSquare size={24} />
                 </div>
                 <div>
@@ -161,7 +161,7 @@ export function StoreFeedbackModal({
                       type="date"
                       value={formData.week_reference}
                       onChange={(e) => onWeekReferenceChange(e.target.value)}
-                      className="w-full h-mx-14 pl-12 pr-6 bg-gray-50 border border-border rounded-xl text-sm font-bold text-emerald-600 shadow-none"
+                      className="w-full h-mx-14 pl-12 pr-6 bg-gray-50 border border-border rounded-xl text-sm font-bold text-status-success-text shadow-none"
                     />
                   </div>
                 </div>
@@ -204,7 +204,7 @@ export function StoreFeedbackModal({
                   <div className="space-y-mx-sm">
                     <label
                       htmlFor="feedback-caso-motivo"
-                      className="text-mx-tiny font-bold uppercase tracking-widest text-emerald-600 ml-2 flex items-center gap-mx-xs"
+                      className="text-mx-tiny font-bold uppercase tracking-widest text-status-success-text ml-2 flex items-center gap-mx-xs"
                     >
                       <AlertCircle size={14} /> Caso/Motivo
                     </label>
@@ -257,7 +257,7 @@ export function StoreFeedbackModal({
                   <div className="space-y-mx-sm">
                     <label
                       htmlFor="feedback-action"
-                      className="text-mx-tiny font-bold uppercase tracking-widest text-emerald-600 ml-2 flex items-center gap-mx-xs"
+                      className="text-mx-tiny font-bold uppercase tracking-widest text-status-success-text ml-2 flex items-center gap-mx-xs"
                     >
                       <Target size={16} /> Ação
                     </label>
@@ -304,7 +304,7 @@ export function StoreFeedbackModal({
                       type="checkbox"
                       checked={formData.visible_to_seller !== false}
                       onChange={(e) => setFormData((f) => ({ ...f, visible_to_seller: e.target.checked }))}
-                      className="mt-0.5 rounded border-border text-emerald-600 focus:ring-brand-primary"
+                      className="mt-0.5 rounded border-border text-status-success-text focus:ring-brand-primary"
                     />
                     <span>
                       <span className="font-semibold text-foreground">Enviar este feedback ao vendedor</span>

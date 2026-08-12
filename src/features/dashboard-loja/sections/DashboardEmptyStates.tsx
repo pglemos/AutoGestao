@@ -11,7 +11,7 @@ import { PageCanvas } from '@/design-system/page'
 export function ResolvingStoreSpinner() {
   return (
     <div className="h-full w-full flex flex-col items-center justify-center bg-gray-50" role="status" aria-busy="true" aria-live="polite">
-      <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-emerald-600 mb-6" aria-hidden="true" />
+      <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-status-success-text mb-6" aria-hidden="true" />
       <Typography variant="caption" tone="muted" className="animate-pulse">
         Identificando Unidade...
       </Typography>

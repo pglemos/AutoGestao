@@ -89,9 +89,9 @@ export const CarteiraAtivaList: React.FC<CarteiraAtivaListProps> = ({
       <div className="bg-white rounded-xl border border-border shadow-sm p-4 md:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <Briefcase className="w-5 h-5 text-blue-900" />
+            <Briefcase className="w-5 h-5 text-status-info-text" />
             <h2 className="text-xl font-bold text-foreground">Carteira Ativa</h2>
-            <span className="bg-blue-50 text-blue-900 text-xs font-bold px-2.5 py-0.5 rounded-full border border-blue-200">
+            <span className="bg-status-info-surface text-status-info-text text-xs font-bold px-2.5 py-0.5 rounded-full border border-status-info/30">
               {totalAtivasCount} ativas
             </span>
           </div>
@@ -124,14 +124,14 @@ export const CarteiraAtivaList: React.FC<CarteiraAtivaListProps> = ({
 
       {/* Indicador se a busca expandiu para encerrados */}
       {searchTerm.trim() !== '' && (
-        <div className="bg-blue-50 border border-blue-100 rounded-lg px-4 py-2 text-xs text-blue-900 flex items-center justify-between">
+        <div className="bg-status-info-surface border border-status-info/20 rounded-lg px-4 py-2 text-xs text-status-info-text flex items-center justify-between">
           <span>
             Exibindo resultados da busca para &quot;<strong>{searchTerm}</strong>&quot; (inclui ativas e encerradas).
           </span>
           <button
             type="button"
             onClick={() => setSearchTerm('')}
-            className="text-blue-700 underline hover:text-blue-900 font-medium"
+            className="text-status-info-text underline hover:text-status-info-text font-medium"
           >
             Limpar busca
           </button>
@@ -156,7 +156,7 @@ export const CarteiraAtivaList: React.FC<CarteiraAtivaListProps> = ({
             <button
               type="button"
               onClick={() => setSearchTerm('')}
-              className="mt-2 bg-blue-900 text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors"
+              className="mt-2 bg-status-info text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-status-info transition-colors"
             >
               Limpar filtro de busca
             </button>

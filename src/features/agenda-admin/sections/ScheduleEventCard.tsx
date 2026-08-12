@@ -23,7 +23,7 @@ export function ScheduleEventCard({ event, onEdit, onDelete }: ScheduleEventCard
         <div className="flex items-center gap-mx-md min-w-0 flex-1">
           <div className={cn(
             'w-mx-10 h-mx-10 rounded-xl border flex items-center justify-center shrink-0',
-            event.event_type === 'aula' ? 'bg-status-info/10 border-status-info/20 text-status-info' : 'bg-emerald-600/10 border-brand-primary/20 text-emerald-600'
+            event.event_type === 'aula' ? 'bg-status-info/10 border-status-info/20 text-status-info' : 'bg-brand-primary/10 border-brand-primary/20 text-status-success-text'
           )}>
             <CalendarDays size={18} />
           </div>
@@ -54,7 +54,7 @@ export function ScheduleEventCard({ event, onEdit, onDelete }: ScheduleEventCard
                   href={event.google_meet_link}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-mx-xs text-emerald-600 hover:text-brand-secondary"
+                  className="flex items-center gap-mx-xs text-status-success-text hover:text-brand-secondary"
                   aria-label={`Abrir Google Meet de ${event.title}`}
                   onClick={(clickEvent) => clickEvent.stopPropagation()}
                 >

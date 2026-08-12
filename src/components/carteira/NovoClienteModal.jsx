@@ -148,7 +148,7 @@ export default function NovoClienteModal({ open, onClose, onCriado, vendedorId }
             <div className="grid grid-cols-1 gap-1.5">
               {MOMENTOS_CADASTRO.map(m => (
                 <button key={m.value} onClick={() => setForm(p => ({ ...p, momento: m.value, situacao_atual: situacaoDoMomento(m.value), proposta_enviada: m.value === "Proposta enviada" || p.proposta_enviada }))}
-                  className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-all ${form.momento === m.value ? "border-[#005BFF] bg-blue-50 text-[#005BFF] font-semibold" : "border-border-subtle text-muted-foreground hover:border-border hover:bg-slate-50"}`}>
+                  className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-all ${form.momento === m.value ? "border-[#005BFF] bg-status-info-surface text-[#005BFF] font-semibold" : "border-border-subtle text-muted-foreground hover:border-border hover:bg-slate-50"}`}>
                   {m.label}
                 </button>
               ))}
@@ -204,7 +204,7 @@ export default function NovoClienteModal({ open, onClose, onCriado, vendedorId }
 
           <div className="flex gap-2 pt-2">
             <Button variant="outline" onClick={onClose} className="flex-1 rounded-xl">Cancelar</Button>
-            <Button onClick={handleSalvar} disabled={saving || !form.nome || !form.whatsapp} className="flex-1 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white">
+            <Button onClick={handleSalvar} disabled={saving || !form.nome || !form.whatsapp} className="flex-1 rounded-xl bg-[#005BFF] hover:bg-status-info text-white">
               {saving ? "Salvando..." : "Adicionar cliente"}
             </Button>
           </div>

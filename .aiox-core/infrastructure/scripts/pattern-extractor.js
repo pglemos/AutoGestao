@@ -766,9 +766,9 @@ export function Button({ variant = 'primary', size = 'md', disabled, children }:
       disabled={disabled}
       className={cn(
         'rounded font-medium transition-colors',
-        variant === 'primary' && 'bg-blue-500 text-white hover:bg-blue-600',
+        variant === 'primary' && 'bg-status-info-surface0 text-white hover:bg-status-info',
         variant === 'secondary' && 'bg-gray-200 text-gray-800 hover:bg-gray-300',
-        variant === 'danger' && 'bg-red-500 text-white hover:bg-red-600',
+        variant === 'danger' && 'bg-status-error-surface0 text-white hover:bg-status-error',
         size === 'sm' && 'px-2 py-1 text-sm',
         size === 'md' && 'px-4 py-2',
         size === 'lg' && 'px-6 py-3 text-lg',

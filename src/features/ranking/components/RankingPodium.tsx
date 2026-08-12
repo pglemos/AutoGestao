@@ -23,7 +23,7 @@ export function RankingPodium({ entries, onSelect }: Props) {
 
   return (
     <div className="flex justify-center items-end gap-mx-sm sm:gap-mx-xl relative pt-4 min-h-48 sm:min-h-56 md:min-h-mx-64">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-48 w-full max-w-xs rounded-full bg-emerald-600/10 blur-mx-huge pointer-events-none sm:h-56 sm:max-w-lg md:h-mx-64"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-48 w-full max-w-xs rounded-full bg-brand-primary/10 blur-mx-huge pointer-events-none sm:h-56 sm:max-w-lg md:h-mx-64"></div>
 
       {entries.map((seller) => {
         const isFirst = seller.position === 1
@@ -65,7 +65,7 @@ export function RankingPodium({ entries, onSelect }: Props) {
               <div className={cn(
                 'absolute -bottom-3 px-3 py-1 rounded-full text-mx-micro font-bold uppercase tracking-wider shadow-lg border border-white/20 whitespace-nowrap z-20',
                 isFirst
-                  ? 'bg-emerald-600 text-white'
+                  ? 'bg-brand-primary text-white'
                   : 'bg-gray-50 text-foreground',
               )}>
                 {isFirst ? '1º lugar' : `#${seller.position} lugar`}

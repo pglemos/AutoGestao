@@ -26,9 +26,9 @@ export default function SalesGoalBlock() {
             <p className="text-xs text-muted-foreground">Vendidos</p>
             <p className="mt-0.5 text-xl font-bold text-primary">{salesGoal.sold}</p>
           </div>
-          <div className="rounded-lg bg-red-50 p-2.5 text-center">
+          <div className="rounded-lg bg-status-error-surface p-2.5 text-center">
             <p className="text-xs text-muted-foreground">Faltam</p>
-            <p className="mt-0.5 text-xl font-bold text-red-600">{salesGoal.remaining}</p>
+            <p className="mt-0.5 text-xl font-bold text-status-error-text">{salesGoal.remaining}</p>
           </div>
           <div className="rounded-lg bg-muted/60 p-2.5 text-center">
             <p className="text-xs text-muted-foreground">Ritmo ideal</p>
@@ -40,14 +40,14 @@ export default function SalesGoalBlock() {
             <p className="text-xs text-muted-foreground">Projeção atual</p>
             <p className="text-sm font-semibold text-foreground">{salesGoal.projection} veículos</p>
           </div>
-          <div className="flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1">
-            <TrendingDown className="h-3.5 w-3.5 text-amber-600" />
-            <span className="text-xs font-medium text-amber-700">Abaixo da meta</span>
+          <div className="flex items-center gap-1.5 rounded-full bg-status-warning-surface px-2.5 py-1">
+            <TrendingDown className="h-3.5 w-3.5 text-status-warning-text" />
+            <span className="text-xs font-medium text-status-warning-text">Abaixo da meta</span>
           </div>
         </div>
-        <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3">
-          <TrendingDown className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
-          <p className="text-xs text-amber-700">{salesGoal.message}</p>
+        <div className="flex items-start gap-2 rounded-lg border border-status-warning/30 bg-status-warning-surface p-3">
+          <TrendingDown className="mt-0.5 h-4 w-4 shrink-0 text-status-warning-text" />
+          <p className="text-xs text-status-warning-text">{salesGoal.message}</p>
         </div>
         <button
           onClick={() =>

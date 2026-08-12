@@ -80,7 +80,7 @@ export function RotinaDiaTab({ actions }: { actions: CentralExecutionAction[] })
   }
 
   if (playbook.error) {
-    return <p role="alert" className="rounded-2xl border border-red-200 bg-red-50 p-4 text-body-sm font-semibold text-red-700">{playbook.error}</p>
+    return <p role="alert" className="rounded-2xl border border-status-error/30 bg-status-error-surface p-4 text-body-sm font-semibold text-status-error-text">{playbook.error}</p>
   }
 
   return (
@@ -88,9 +88,9 @@ export function RotinaDiaTab({ actions }: { actions: CentralExecutionAction[] })
       <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
           {conflict && (
-            <div className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
-              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" aria-hidden="true" />
-              <p className="text-body-sm font-medium text-amber-800">Você possui um cliente agendado neste horário. Priorize o atendimento e retome sua rotina depois.</p>
+            <div className="flex items-start gap-3 rounded-xl border border-status-warning/30 bg-status-warning-surface px-4 py-3">
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-status-warning" aria-hidden="true" />
+              <p className="text-body-sm font-medium text-status-warning-text">Você possui um cliente agendado neste horário. Priorize o atendimento e retome sua rotina depois.</p>
             </div>
           )}
 
@@ -112,7 +112,7 @@ export function RotinaDiaTab({ actions }: { actions: CentralExecutionAction[] })
                     <div className="flex flex-wrap items-center gap-2">
                       <span className={`rounded-lg px-2 py-0.5 text-caption font-bold ${slot.isCurrent ? 'bg-status-info text-white' : 'bg-slate-100 text-muted-foreground'}`}>{slot.time}</span>
                       <span className={`text-[14px] font-bold ${slot.isCurrent ? 'text-foreground' : 'text-muted-foreground'}`}>{template?.nome || STEP_LABELS[slot.key] || slot.key}</span>
-                      {slot.isCurrent && <span className="rounded-full bg-blue-50 px-2 py-0.5 text-caption font-bold uppercase tracking-wider text-status-info">Agora</span>}
+                      {slot.isCurrent && <span className="rounded-full bg-status-info-surface px-2 py-0.5 text-caption font-bold uppercase tracking-wider text-status-info">Agora</span>}
                     </div>
                     {!isExpanded && <p className={`mt-0.5 truncate text-[12px] ${slot.isCurrent ? 'font-semibold text-status-info' : 'text-muted-foreground'}`}>{template?.objetivo || 'Execute esta etapa da rotina.'}</p>}
                   </div>
@@ -134,7 +134,7 @@ export function RotinaDiaTab({ actions }: { actions: CentralExecutionAction[] })
                               <div key={item.id} className="flex flex-col rounded-xl border border-border bg-white p-4">
                                 <div className="mb-3 flex items-start justify-between gap-3">
                                   <div><p className="text-body-sm font-bold text-foreground">{TIPO_ACAO_LABEL[item.tipo_acao] || item.tipo_acao}</p><p className="text-caption text-muted-foreground">{item.publico || 'Todos'}</p></div>
-                                  <span className="shrink-0 rounded-full bg-blue-50 px-2.5 py-1 text-caption font-bold text-status-info">{item.quantidade ? `${item.quantidade}/${item.periodicidade || 'dia'}` : item.periodicidade || 'Hoje'}</span>
+                                  <span className="shrink-0 rounded-full bg-status-info-surface px-2.5 py-1 text-caption font-bold text-status-info">{item.quantidade ? `${item.quantidade}/${item.periodicidade || 'dia'}` : item.periodicidade || 'Hoje'}</span>
                                 </div>
                                 {item.objetivo && <p className="mb-3 text-[12px] text-muted-foreground">{item.objetivo}</p>}
                                 <button type="button" onClick={() => setHowTo(item)} className="mt-auto flex items-center gap-1.5 text-[12px] font-bold text-status-info hover:underline"><BookOpen className="h-3.5 w-3.5" aria-hidden="true" /> Ver como fazer</button>
@@ -154,12 +154,12 @@ export function RotinaDiaTab({ actions }: { actions: CentralExecutionAction[] })
                       </ol>
                     )}
 
-                    {template?.meta_sugerida && <p className="mt-4 rounded-xl bg-blue-50 px-3 py-2 text-[12px] font-semibold text-status-info">Meta sugerida: {template.meta_sugerida}</p>}
+                    {template?.meta_sugerida && <p className="mt-4 rounded-xl bg-status-info-surface px-3 py-2 text-[12px] font-semibold text-status-info">Meta sugerida: {template.meta_sugerida}</p>}
 
                     {shortcuts.length > 0 && (
                       <div className="mt-4 flex flex-wrap gap-2">
                         {shortcuts.map(shortcut => shortcut.type === 'route' && shortcut.target ? (
-                          <Link key={`${slot.key}-${shortcut.label}`} to={shortcut.target} className="rounded-xl border border-blue-200 px-3 py-2 text-[12px] font-bold text-status-info hover:bg-blue-50">{shortcut.label}</Link>
+                          <Link key={`${slot.key}-${shortcut.label}`} to={shortcut.target} className="rounded-xl border border-status-info/30 px-3 py-2 text-[12px] font-bold text-status-info hover:bg-status-info-surface">{shortcut.label}</Link>
                         ) : (
                           <span key={`${slot.key}-${shortcut.label}`} className="rounded-xl border border-border px-3 py-2 text-[12px] font-bold text-muted-foreground">{shortcut.label}</span>
                         ))}
@@ -189,7 +189,7 @@ export function RotinaDiaTab({ actions }: { actions: CentralExecutionAction[] })
       <Modal open={Boolean(howTo)} onClose={() => setHowTo(null)} title={howTo ? TIPO_ACAO_LABEL[howTo.tipo_acao] || howTo.tipo_acao : 'Como fazer'} size="sm" referenceStyle>
         {howTo && (
           <div className="space-y-4">
-            <div className="rounded-xl bg-blue-50 p-3 text-[12px] text-muted-foreground"><strong className="text-status-info">Objetivo:</strong> {howTo.objetivo || 'Executar a ação de prospecção.'}</div>
+            <div className="rounded-xl bg-status-info-surface p-3 text-[12px] text-muted-foreground"><strong className="text-status-info">Objetivo:</strong> {howTo.objetivo || 'Executar a ação de prospecção.'}</div>
             <p className="text-body-sm leading-6 text-muted-foreground">Use uma mensagem simples, pessoal e com uma chamada clara para conversa. Registre os retornos relevantes na Carteira.</p>
             {playbook.storyIdeaHoje && <div className="rounded-xl bg-slate-50 p-3"><p className="text-[12px] font-bold text-foreground">{playbook.storyIdeaHoje.titulo}</p><ol className="mt-2 space-y-1 text-[12px] text-muted-foreground">{playbook.storyIdeaHoje.passos.map((step, index) => <li key={index}>{index + 1}. {step}</li>)}</ol></div>}
           </div>

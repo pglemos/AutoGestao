@@ -8,13 +8,13 @@ export default function FocusAtRisk({ actions, onOpen }) {
   const riskItems = getAllRiskActions(actions);
 
   return (
-    <section className="rounded-xl border border-red-200 bg-red-50/30 p-4">
+    <section className="rounded-xl border border-status-error/30 bg-status-error-surface/30 p-4">
       <div className="mb-3 flex items-center gap-2">
-        <div className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-red-100">
-          <AlertTriangle className="h-4 w-4 text-red-600" />
+        <div className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-status-error-surface">
+          <AlertTriangle className="h-4 w-4 text-status-error-text" />
         </div>
         <h2 className="text-sm font-semibold text-foreground">Em risco</h2>
-        <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-red-100 px-1.5 text-xs font-bold text-red-700">
+        <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-status-error-surface px-1.5 text-xs font-bold text-status-error-text">
           {riskItems.length}
         </span>
       </div>
@@ -23,7 +23,7 @@ export default function FocusAtRisk({ actions, onOpen }) {
       </p>
 
       {riskItems.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-red-200 bg-card py-8 text-center">
+        <div className="rounded-lg border border-dashed border-status-error/30 bg-card py-8 text-center">
           <p className="text-sm text-muted-foreground">Nenhuma ação em risco no momento.</p>
         </div>
       ) : (
@@ -43,7 +43,7 @@ export default function FocusAtRisk({ actions, onOpen }) {
                       <span className="text-xs font-bold text-muted-foreground">{action.code}</span>
                       <span className={`rounded-full px-1.5 py-0.5 text-caption font-medium ${priority.badge}`}>{priority.label}</span>
                     </div>
-                    <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-1.5 py-0.5 text-caption font-medium text-red-700">
+                    <span className="inline-flex items-center gap-0.5 rounded-full bg-status-error-surface px-1.5 py-0.5 text-caption font-medium text-status-error-text">
                       {reason}
                     </span>
                   </div>

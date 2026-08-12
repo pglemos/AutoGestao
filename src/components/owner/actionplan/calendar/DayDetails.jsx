@@ -46,7 +46,7 @@ export default function DayDetails({
                     key={a.id}
                     onClick={() => onSelectAction(a)}
                     className={`flex w-full items-center gap-2 rounded-lg border p-2 text-left text-xs transition-colors ${
-                      isActive ? "border-emerald-300 bg-emerald-50" : "border-border hover:bg-muted/30"
+                      isActive ? "border-status-success/40 bg-status-success-surface" : "border-border hover:bg-muted/30"
                     }`}
                   >
                     <span className={`h-2 w-2 shrink-0 rounded-full ${deptStyle.dot || "bg-slate-400"}`} />
@@ -96,13 +96,13 @@ function ActionDetail({ action, onOpenAction, onUpdateDeadline, onTalkToConsulta
             {prioStyle.label}
           </span>
           {late && (
-            <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-2 py-0.5 text-caption font-medium text-red-700">
+            <span className="inline-flex items-center gap-0.5 rounded-full bg-status-error-surface px-2 py-0.5 text-caption font-medium text-status-error-text">
               <AlertTriangle className="h-3 w-3" />
               Atrasada há {daysLate(action)}d
             </span>
           )}
           {action.status === "blocked" && (
-            <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-2 py-0.5 text-caption font-medium text-red-700">
+            <span className="inline-flex items-center gap-0.5 rounded-full bg-status-error-surface px-2 py-0.5 text-caption font-medium text-status-error-text">
               <Lock className="h-3 w-3" />
               {action.blockedReason || "Bloqueada"}
             </span>

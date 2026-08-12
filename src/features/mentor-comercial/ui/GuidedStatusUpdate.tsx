@@ -179,7 +179,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
         <div className="flex items-center space-x-2">
           <div
             className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${
-              selectedOption ? 'bg-blue-600 text-white' : 'bg-slate-900 text-white'
+              selectedOption ? 'bg-status-info text-white' : 'bg-slate-900 text-white'
             }`}
           >
             1
@@ -208,7 +208,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
               setSelectedOption(null)
               setSelectedStatusId(null)
             }}
-            className="text-xs text-blue-600 hover:text-blue-800"
+            className="text-xs text-status-info-text hover:text-status-info-text"
           >
             <ArrowLeft className="mr-1 h-3.5 w-3.5" />
             Alterar opção
@@ -238,22 +238,22 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
                       setSelectedStatusId(null)
                     }
                   }}
-                  className={`group relative flex items-start space-x-3 rounded-lg border p-3.5 text-left transition-all hover:border-blue-500 hover:bg-blue-50/50 hover:shadow-sm ${
+                  className={`group relative flex items-start space-x-3 rounded-lg border p-3.5 text-left transition-all hover:border-status-info hover:bg-status-info-surface/50 hover:shadow-sm ${
                     opt.isRecommended
-                      ? 'border-blue-300 bg-blue-50/30'
+                      ? 'border-status-info/40 bg-status-info-surface/30'
                       : 'border-border bg-white'
                   }`}
                 >
-                  <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-slate-100 text-foreground transition-colors group-hover:bg-blue-600 group-hover:text-white">
+                  <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-slate-100 text-foreground transition-colors group-hover:bg-status-info group-hover:text-white">
                     <IconComp className="h-4 w-4" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-semibold text-foreground group-hover:text-blue-900">
+                      <span className="text-sm font-semibold text-foreground group-hover:text-status-info-text">
                         {opt.optionText}
                       </span>
                       {opt.isRecommended && (
-                        <Badge variant="secondary" className="bg-amber-100 text-amber-800 text-caption ml-1">
+                        <Badge variant="secondary" className="bg-status-warning-surface text-status-warning-text text-caption ml-1">
                           Recomendado
                         </Badge>
                       )}
@@ -287,7 +287,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
               id="mentor-status-especifico-label"
               className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
             >
-              Selecione o status específico: <span className="text-red-500">*</span>
+              Selecione o status específico: <span className="text-status-error">*</span>
             </span>
 
             <div
@@ -315,7 +315,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
                     }}
                     className={`cursor-pointer rounded-lg border p-3 transition-all ${
                       isSelected
-                        ? 'border-blue-600 bg-blue-50/60 ring-1 ring-blue-600 shadow-sm'
+                        ? 'border-status-info bg-status-info-surface/60 ring-1 ring-blue-600 shadow-sm'
                         : 'border-border bg-white hover:border-border-strong hover:bg-slate-50'
                     }`}
                   >
@@ -324,7 +324,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
                         <div
                           className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border ${
                             isSelected
-                              ? 'border-blue-600 bg-blue-600 text-white'
+                              ? 'border-status-info bg-status-info text-white'
                               : 'border-border-strong bg-white'
                           }`}
                         >
@@ -348,9 +348,9 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
                             variant="secondary"
                             className={`text-caption ${
                               st.temperature.toLowerCase().includes('quente')
-                                ? 'bg-red-100 text-red-800'
+                                ? 'bg-status-error-surface text-status-error-text'
                                 : st.temperature.toLowerCase().includes('morno')
-                                ? 'bg-amber-100 text-amber-800'
+                                ? 'bg-status-warning-surface text-status-warning-text'
                                 : 'bg-slate-100 text-foreground'
                             }`}
                           >
@@ -375,57 +375,57 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
 
       {/* PRÉVIA DETERMINÍSTICA DO NOVO ESTADO */}
       {selectedStatus && (
-        <div className="rounded-lg border border-blue-200 bg-blue-50/40 p-4 space-y-3">
-          <div className="flex items-center space-x-2 border-b border-blue-200/60 pb-2">
-            <Sparkles className="h-4 w-4 text-blue-600" />
-            <h4 className="text-xs font-bold uppercase tracking-wider text-blue-900">
+        <div className="rounded-lg border border-status-info/30 bg-status-info-surface/40 p-4 space-y-3">
+          <div className="flex items-center space-x-2 border-b border-status-info/30/60 pb-2">
+            <Sparkles className="h-4 w-4 text-status-info-text" />
+            <h4 className="text-xs font-bold uppercase tracking-wider text-status-info-text">
               Prévia da Atualização Determinística
             </h4>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-            <div className="bg-white p-2.5 rounded border border-blue-100">
+            <div className="bg-white p-2.5 rounded border border-status-info/20">
               <span className="text-muted-foreground font-medium flex items-center gap-1">
-                <FileText className="h-3.5 w-3.5 text-blue-600" /> Status Resultante
+                <FileText className="h-3.5 w-3.5 text-status-info-text" /> Status Resultante
               </span>
               <p className="font-bold text-foreground mt-1">
                 {selectedStatus.statusId} — {selectedStatus.label}
               </p>
             </div>
 
-            <div className="bg-white p-2.5 rounded border border-blue-100">
+            <div className="bg-white p-2.5 rounded border border-status-info/20">
               <span className="text-muted-foreground font-medium flex items-center gap-1">
-                <Target className="h-3.5 w-3.5 text-blue-600" /> Objetivo Comercial
+                <Target className="h-3.5 w-3.5 text-status-info-text" /> Objetivo Comercial
               </span>
               <p className="font-semibold text-foreground mt-1">{selectedStatus.objective}</p>
             </div>
 
-            <div className="bg-white p-2.5 rounded border border-blue-100">
+            <div className="bg-white p-2.5 rounded border border-status-info/20">
               <span className="text-muted-foreground font-medium flex items-center gap-1">
-                <Sparkles className="h-3.5 w-3.5 text-blue-600" /> Próximo Passo
+                <Sparkles className="h-3.5 w-3.5 text-status-info-text" /> Próximo Passo
               </span>
               <p className="font-semibold text-foreground mt-1">{selectedStatus.nextStep}</p>
             </div>
 
-            <div className="bg-white p-2.5 rounded border border-blue-100">
+            <div className="bg-white p-2.5 rounded border border-status-info/20">
               <span className="text-muted-foreground font-medium flex items-center gap-1">
-                <User className="h-3.5 w-3.5 text-blue-600" /> Responsável
+                <User className="h-3.5 w-3.5 text-status-info-text" /> Responsável
               </span>
               <p className="font-semibold text-foreground mt-1">{selectedStatus.responsible}</p>
             </div>
 
-            <div className="bg-white p-2.5 rounded border border-blue-100">
+            <div className="bg-white p-2.5 rounded border border-status-info/20">
               <span className="text-muted-foreground font-medium flex items-center gap-1">
-                <Clock className="h-3.5 w-3.5 text-blue-600" /> Cadência
+                <Clock className="h-3.5 w-3.5 text-status-info-text" /> Cadência
               </span>
               <p className="font-semibold text-foreground mt-1">
                 {selectedStatus.cadenceId ?? 'Sem cadência'}
               </p>
             </div>
 
-            <div className="bg-white p-2.5 rounded border border-blue-100">
+            <div className="bg-white p-2.5 rounded border border-status-info/20">
               <span className="text-muted-foreground font-medium flex items-center gap-1">
-                <MessageSquare className="h-3.5 w-3.5 text-blue-600" /> Script
+                <MessageSquare className="h-3.5 w-3.5 text-status-info-text" /> Script
               </span>
               <p className="font-semibold text-foreground mt-1">
                 {selectedStatus.scriptId ?? 'Sem script'}
@@ -445,7 +445,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Ex.: Cliente solicitou retorno no final da tarde..."
-              className="w-full rounded-md border border-border-strong p-2 text-xs focus:border-blue-500 focus:outline-none bg-white"
+              className="w-full rounded-md border border-border-strong p-2 text-xs focus:border-status-info focus:outline-none bg-white"
               rows={2}
             />
           </div>
@@ -455,13 +455,13 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
       {/* Validação e Ações do Rodapé */}
       <div className="flex items-center justify-between border-t pt-4">
         {!isFormValid ? (
-          <span className="text-xs text-amber-700 flex items-center gap-1">
-            <AlertCircle className="h-3.5 w-3.5 text-amber-600" />
+          <span className="text-xs text-status-warning-text flex items-center gap-1">
+            <AlertCircle className="h-3.5 w-3.5 text-status-warning-text" />
             Selecione uma situação e um status para habilitar o salvamento.
           </span>
         ) : (
-          <span className="text-xs text-blue-700 font-medium flex items-center gap-1">
-            <Check className="h-3.5 w-3.5 text-blue-600" />
+          <span className="text-xs text-status-info-text font-medium flex items-center gap-1">
+            <Check className="h-3.5 w-3.5 text-status-info-text" />
             Pronto para salvar a nova situação.
           </span>
         )}
@@ -480,7 +480,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
             type="button"
             onClick={handleConfirm}
             disabled={!isFormValid || isSubmitting || isSubmittingLocal}
-            className="bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+            className="bg-status-info text-white hover:bg-status-info disabled:opacity-50"
           >
             {isSubmitting || isSubmittingLocal ? 'Salvando...' : 'Confirmar atualização'}
           </Button>
@@ -497,7 +497,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
     <Dialog open={isOpen} onOpenChange={(open) => (!open ? handleClose() : setInternalIsOpen(true))}>
       {!isControlled && (
         <DialogTrigger asChild>
-          <Button className="bg-blue-600 text-white hover:bg-blue-700 shadow-sm font-medium">
+          <Button className="bg-status-info text-white hover:bg-status-info shadow-sm font-medium">
             {triggerButtonText}
           </Button>
         </DialogTrigger>
@@ -506,7 +506,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
       <DialogContent className="max-w-2xl bg-white p-6 rounded-xl shadow-xl border border-border">
         <DialogHeader className="border-b pb-3 mb-2">
           <DialogTitle className="text-lg font-bold text-foreground flex items-center gap-2">
-            <div className="h-3 w-3 rounded-full bg-blue-600" />
+            <div className="h-3 w-3 rounded-full bg-status-info" />
             {triggerButtonText}
           </DialogTitle>
           <DialogDescription className="text-xs text-muted-foreground">

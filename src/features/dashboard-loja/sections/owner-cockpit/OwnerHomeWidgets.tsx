@@ -56,15 +56,15 @@ export function SalesGoalCard({ data }: { data: DashboardData }) {
             <span className="text-sm font-semibold text-foreground">{goal > 0 ? `${progress}%` : '--'}</span>
           </div>
           <div className="mt-1.5 h-2.5 w-full overflow-hidden rounded-full bg-gray-100">
-            <div className="h-full rounded-full bg-emerald-600" style={{ width: `${progress}%` }} />
+            <div className="h-full rounded-full bg-brand-primary" style={{ width: `${progress}%` }} />
           </div>
         </div>
         <div className="grid grid-cols-3 gap-2">
-          <div className="rounded-lg bg-emerald-600/5 p-2.5 text-center">
+          <div className="rounded-lg bg-brand-primary/5 p-2.5 text-center">
             <p className="text-xs text-muted-foreground">Vendidos</p>
             <p className="mt-0.5 text-xl font-bold text-status-success-text">{formatInteger(sold)}</p>
           </div>
-          <div className="rounded-lg bg-red-50 p-2.5 text-center">
+          <div className="rounded-lg bg-status-error-surface p-2.5 text-center">
             <p className="text-xs text-status-error-text">Faltam</p>
             <p className="mt-0.5 text-xl font-bold text-status-error-text">{goal > 0 ? formatInteger(missing) : '--'}</p>
           </div>
@@ -107,9 +107,9 @@ export function SalesGoalCard({ data }: { data: DashboardData }) {
           )}
         </div>
         {shortfall > 0 && (
-          <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3">
+          <div className="flex items-start gap-2 rounded-lg border border-status-warning/30 bg-status-warning-surface p-3">
             <TrendingDown className="mt-0.5 h-4 w-4 shrink-0 text-status-warning-text" />
-            <p className="text-xs text-amber-700">
+            <p className="text-xs text-status-warning-text">
               Mantido o ritmo atual, a loja encerrará o mês {formatInteger(shortfall)}{' '}
               {shortfall === 1 ? 'veículo' : 'veículos'} abaixo da meta.
             </p>
@@ -140,8 +140,8 @@ export function PriorityIntervention({
   const isCritical = alert.variant === 'danger'
   // Espelha STATUS_STYLES.critical / .attention de components/owner/home/homeData.
   const style = isCritical
-    ? { border: 'border-red-200', bg: 'bg-red-50', text: 'text-status-error-text', dot: 'bg-red-500', label: 'Crítico' }
-    : { border: 'border-amber-200', bg: 'bg-amber-50', text: 'text-status-warning-text', dot: 'bg-amber-500', label: 'Atenção' }
+    ? { border: 'border-status-error/30', bg: 'bg-status-error-surface', text: 'text-status-error-text', dot: 'bg-status-error', label: 'Crítico' }
+    : { border: 'border-status-warning/30', bg: 'bg-status-warning-surface', text: 'text-status-warning-text', dot: 'bg-status-warning', label: 'Atenção' }
   const details = [
     alert.department ? `Departamento: ${alert.department}` : null,
   ].filter((detail): detail is string => Boolean(detail))
@@ -189,7 +189,7 @@ export function PriorityIntervention({
         </div>
       )}
 
-      <div className="mt-3 rounded-lg border border-emerald-600/20 bg-emerald-600/5 p-3">
+      <div className="mt-3 rounded-lg border border-status-success/20 bg-brand-primary/5 p-3">
         <p className="text-xs font-semibold uppercase tracking-wide text-status-success-text">Direcionamento MX</p>
         <p className="mt-1 text-sm text-foreground">{alert.recommendation}</p>
       </div>

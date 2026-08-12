@@ -37,7 +37,7 @@ export default function PeriodFilter({ value, onChange, customStart, customEnd, 
             <button
               key={opt.value}
               onClick={() => { onChange(opt.value); if (opt.value !== "personalizado") setOpen(false); }}
-              className={`w-full text-left px-4 py-2 text-sm transition-colors ${value === opt.value ? (dark ? "text-emerald-400 font-semibold bg-emerald-500/10" : "text-mx-blue font-semibold bg-mx-blue/5") : (dark ? "text-text-disabled hover:bg-white/5" : "text-foreground hover:bg-slate-50")}`}
+              className={`w-full text-left px-4 py-2 text-sm transition-colors ${value === opt.value ? (dark ? "text-emerald-400 font-semibold bg-status-success/10" : "text-mx-blue font-semibold bg-mx-blue/5") : (dark ? "text-text-disabled hover:bg-white/5" : "text-foreground hover:bg-slate-50")}`}
             >
               {opt.label}
             </button>

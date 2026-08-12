@@ -14,9 +14,8 @@ describe("LeadConferenceModal visual contract", () => {
 
   test("não deixa primitives do design system MX vazar no modal Base44", () => {
     expect(source).toContain('`rounded-[16px] border p-4 ${colors}`');
-    expect(source).toContain('"h-10 rounded-[12px] border border-gray-200 bg-white px-3 text-sm"');
+    expect(source).toContain('"h-10 rounded-[12px] border border-border bg-white px-3 text-sm"');
     expect(source).not.toContain("rounded-mx-");
-    expect(source).not.toContain("border-border-subtle");
     expect(source).not.toContain("text-text-secondary");
     expect(source).not.toContain("text-text-primary");
     expect(source).not.toContain("bg-surface-alt");

@@ -58,7 +58,7 @@ export default function ManagerMentor() {
       <div className="mx-auto max-w-4xl space-y-5 px-4 py-6 pb-24">
         <header className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <div className="flex items-center gap-3">
-            <span className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-50 text-emerald-600"><BrainCircuit size={20} /></span>
+            <span className="grid h-10 w-10 place-items-center rounded-xl bg-status-success-surface text-status-success-text"><BrainCircuit size={20} /></span>
             <div>
               <h1 className="text-xl font-bold text-foreground">Mentor Gerencial</h1>
               <p className="mt-0.5 text-sm text-muted-foreground">Área de apoio à gestão. Recomendações baseadas em regras e indicadores da operação.</p>
@@ -68,7 +68,7 @@ export default function ManagerMentor() {
 
         {data.loading ? (
           <div className="flex justify-center py-16" aria-busy="true">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-status-success/30 border-t-emerald-600" />
           </div>
         ) : (
           <>
@@ -88,10 +88,10 @@ export default function ManagerMentor() {
 
         <ManagerMentorLibrary />
 
-        <section className="rounded-2xl border border-blue-100 bg-blue-50 p-5 text-center">
+        <section className="rounded-2xl border border-status-info/20 bg-status-info-surface p-5 text-center">
           <BrainCircuit className="mx-auto text-blue-400" size={32} />
-          <p className="mt-2 text-sm font-medium text-blue-700">Orientações baseadas em regras oficiais</p>
-          <p className="mt-1 text-xs text-blue-500">O Mentor não inventa números nem executa ações no lugar do gerente.</p>
+          <p className="mt-2 text-sm font-medium text-status-info-text">Orientações baseadas em regras oficiais</p>
+          <p className="mt-1 text-xs text-status-info">O Mentor não inventa números nem executa ações no lugar do gerente.</p>
         </section>
       </div>
     </div>

@@ -123,7 +123,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
             classificacao
               ? "border-green-200 bg-green-50 text-green-800"
               : ambigua
-                ? "border-amber-200 bg-amber-50 text-amber-800"
+                ? "border-status-warning/30 bg-status-warning-surface text-status-warning-text"
                 : "border-border bg-slate-50 text-muted-foreground"
           }`}>
           {classificacao ? (
@@ -168,7 +168,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
         <div className="flex gap-2 pt-1">
           <Button variant="outline" onClick={onClose} className="flex-1 rounded-xl">Cancelar</Button>
           <Button onClick={salvar} disabled={!form.marca || !form.modelo || salvando}
-            className="flex-1 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white">
+            className="flex-1 rounded-xl bg-[#005BFF] hover:bg-status-info text-white">
             {salvando ? "Salvando..." : "Salvar veículo"}
           </Button>
         </div>
@@ -185,7 +185,7 @@ function CardVeiculo({ veiculo, compatíveis, onClick }) {
   return (
     <div className="bg-white border border-border-subtle rounded-2xl p-4 space-y-3 hover:shadow-sm transition-all">
       <div className="flex items-start gap-3">
-        <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+        <div className="w-10 h-10 rounded-xl bg-status-info-surface flex items-center justify-center shrink-0">
           <Car className="w-5 h-5 text-[#005BFF]" />
         </div>
         <div className="flex-1 min-w-0">
@@ -207,7 +207,7 @@ function CardVeiculo({ veiculo, compatíveis, onClick }) {
       <Button
         onClick={() => onClick(veiculo)}
         disabled={compatíveis === 0}
-        className="w-full rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-sm gap-1.5 disabled:opacity-40"
+        className="w-full rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-sm gap-1.5 disabled:opacity-40"
       >
         <Zap className="w-4 h-4" /> Iniciar ataque
       </Button>
@@ -268,12 +268,12 @@ function AtaqueVeiculo({ veiculo, clientes, catalog, onVoltar, onExecutar, onFic
 
             return (
               <div key={c.id} className="bg-white border border-border-subtle rounded-2xl px-4 py-3 flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-blue-50 flex items-center justify-center text-xs font-black text-[#005BFF] shrink-0">{iniciais}</div>
+                <div className="w-9 h-9 rounded-full bg-status-info-surface flex items-center justify-center text-xs font-black text-[#005BFF] shrink-0">{iniciais}</div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <p className="text-sm font-semibold text-[#031B3D] truncate">{c.nome}</p>
                     {temUrgente && (
-                      <span className="text-caption font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 shrink-0">
+                      <span className="text-caption font-bold px-2 py-0.5 rounded-full bg-status-warning-surface text-status-warning-text border border-status-warning/30 shrink-0">
                         Próximo passo urgente
                       </span>
                     )}
@@ -285,7 +285,7 @@ function AtaqueVeiculo({ veiculo, clientes, catalog, onVoltar, onExecutar, onFic
                 </div>
                 <div className="flex gap-1.5 shrink-0">
                   <button onClick={() => onExecutar(c, veiculo)}
-                    className="flex items-center gap-1 text-caption font-bold text-white bg-[#005BFF] hover:bg-blue-700 px-2.5 py-1.5 rounded-lg transition-colors">
+                    className="flex items-center gap-1 text-caption font-bold text-white bg-[#005BFF] hover:bg-status-info px-2.5 py-1.5 rounded-lg transition-colors">
                     <Zap className="w-3 h-3" /> Executar
                   </button>
                   <button onClick={() => onFicha(c.id)}
@@ -395,7 +395,7 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
           <h2 className="text-lg font-black text-[#031B3D]">Veículos que chegaram</h2>
           <p className="text-sm text-muted-foreground mt-0.5">Encontre clientes da carteira interessados nos veículos recém-entrados.</p>
         </div>
-        <Button onClick={() => setModalOpen(true)} variant="outline" className="rounded-xl text-sm gap-1.5 border-[#005BFF] text-[#005BFF] hover:bg-blue-50 whitespace-nowrap">
+        <Button onClick={() => setModalOpen(true)} variant="outline" className="rounded-xl text-sm gap-1.5 border-[#005BFF] text-[#005BFF] hover:bg-status-info-surface whitespace-nowrap">
           <Plus className="w-4 h-4" /> Registrar veículo
         </Button>
       </div>
@@ -445,7 +445,7 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
               Ver todas as faixas de preço
             </button>
           ) : (
-            <Button onClick={() => setModalOpen(true)} className="mt-4 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-sm gap-1.5">
+            <Button onClick={() => setModalOpen(true)} className="mt-4 rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-sm gap-1.5">
               <Plus className="w-4 h-4" /> Registrar veículo que chegou
             </Button>
           )}

@@ -53,7 +53,7 @@ export function EvidenceTab({ visit, controller }: { visit: ConsultingJourneyVis
           {mode === 'link' ? <input value={url} onChange={(event: ChangeEvent<HTMLInputElement>) => setUrl(event.target.value)} placeholder="https://..." className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm" /> : null}
           {mode === 'text' ? <textarea value={text} onChange={(event: ChangeEvent<HTMLTextAreaElement>) => setText(event.target.value)} rows={4} placeholder="Descreva a evidência" className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm" /> : null}
           <textarea value={note} onChange={(event: ChangeEvent<HTMLTextAreaElement>) => setNote(event.target.value)} rows={2} placeholder="Observação opcional" className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm" />
-          {previousId ? <p className="text-xs text-amber-700">Este envio substituirá a evidência selecionada.</p> : null}
+          {previousId ? <p className="text-xs text-status-warning-text">Este envio substituirá a evidência selecionada.</p> : null}
           {error ? <p className="text-sm text-destructive" role="alert">{error}</p> : null}
           <button type="button" disabled={controller.mutating} onClick={() => void submit()} className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50">Enviar evidência</button>
         </div>
@@ -69,21 +69,21 @@ export function EvidenceTab({ visit, controller }: { visit: ConsultingJourneyVis
               </div>
               {evidence.externalUrl ? <a href={evidence.externalUrl} target="_blank" rel="noreferrer" className="mt-2 block text-sm text-primary hover:underline">Abrir link</a> : null}
               {evidence.textContent ? <p className="mt-2 whitespace-pre-wrap text-sm text-foreground">{evidence.textContent}</p> : null}
-              {evidence.feedback ? <p className="mt-2 rounded-md bg-amber-50 p-2 text-sm text-amber-900">Devolutiva: {evidence.feedback}</p> : null}
+              {evidence.feedback ? <p className="mt-2 rounded-md bg-status-warning-surface p-2 text-sm text-status-warning-text">Devolutiva: {evidence.feedback}</p> : null}
               {controller.canReviewEvidence && evidence.status !== 'replaced' ? (
                 <div className="mt-3 flex flex-wrap gap-2">
                   <button type="button" onClick={() => void controller.reviewEvidence(evidence.id, 'under_review')} className="rounded-md border border-border px-2.5 py-1.5 text-xs">Em análise</button>
-                  <button type="button" onClick={() => void controller.reviewEvidence(evidence.id, 'approved')} className="rounded-md bg-emerald-600 px-2.5 py-1.5 text-xs text-white">Aprovar</button>
-                  <button type="button" onClick={() => { setReturningEvidenceId(evidence.id); setReturnFeedback(evidence.feedback || '') }} className="rounded-md bg-amber-600 px-2.5 py-1.5 text-xs text-white">Devolver</button>
+                  <button type="button" onClick={() => void controller.reviewEvidence(evidence.id, 'approved')} className="rounded-md bg-brand-primary px-2.5 py-1.5 text-xs text-white">Aprovar</button>
+                  <button type="button" onClick={() => { setReturningEvidenceId(evidence.id); setReturnFeedback(evidence.feedback || '') }} className="rounded-md bg-status-warning px-2.5 py-1.5 text-xs text-white">Devolver</button>
                 </div>
               ) : null}
               {returningEvidenceId === evidence.id ? (
-                <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 p-3">
+                <div className="mt-3 rounded-lg border border-status-warning/30 bg-status-warning-surface p-3">
                   <label className="text-xs font-semibold text-amber-950" htmlFor={`feedback-${evidence.id}`}>Devolutiva obrigatória</label>
-                  <textarea id={`feedback-${evidence.id}`} value={returnFeedback} onChange={(event) => setReturnFeedback(event.target.value)} rows={3} className="mt-2 w-full rounded-md border border-amber-300 bg-white px-3 py-2 text-sm" placeholder="Explique o que deve ser corrigido ou reenviado." />
+                  <textarea id={`feedback-${evidence.id}`} value={returnFeedback} onChange={(event) => setReturnFeedback(event.target.value)} rows={3} className="mt-2 w-full rounded-md border border-status-warning/40 bg-white px-3 py-2 text-sm" placeholder="Explique o que deve ser corrigido ou reenviado." />
                   <div className="mt-2 flex justify-end gap-2">
                     <button type="button" onClick={() => { setReturningEvidenceId(null); setReturnFeedback('') }} className="rounded-md border border-border bg-background px-3 py-1.5 text-xs">Cancelar</button>
-                    <button type="button" disabled={!returnFeedback.trim() || controller.mutating} onClick={() => void controller.reviewEvidence(evidence.id, 'returned', returnFeedback.trim()).then(() => { setReturningEvidenceId(null); setReturnFeedback('') })} className="rounded-md bg-amber-700 px-3 py-1.5 text-xs text-white disabled:opacity-50">Enviar devolutiva</button>
+                    <button type="button" disabled={!returnFeedback.trim() || controller.mutating} onClick={() => void controller.reviewEvidence(evidence.id, 'returned', returnFeedback.trim()).then(() => { setReturningEvidenceId(null); setReturnFeedback('') })} className="rounded-md bg-status-warning px-3 py-1.5 text-xs text-white disabled:opacity-50">Enviar devolutiva</button>
                   </div>
                 </div>
               ) : null}

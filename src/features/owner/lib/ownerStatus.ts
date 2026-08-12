@@ -32,18 +32,18 @@ export const STATUS_META: Record<string, StatusMeta> = {
 };
 
 export const TONE_CLASSES: Record<Tone, string> = {
-  green: "bg-emerald-50 text-emerald-700 border-emerald-200",
-  amber: "bg-amber-50 text-amber-700 border-amber-200",
-  red: "bg-red-50 text-red-600 border-red-200",
-  blue: "bg-blue-50 text-blue-700 border-blue-200",
+  green: "bg-status-success-surface text-status-success-text border-status-success/30",
+  amber: "bg-status-warning-surface text-status-warning-text border-status-warning/30",
+  red: "bg-status-error-surface text-status-error-text border-status-error/30",
+  blue: "bg-status-info-surface text-status-info-text border-status-info/30",
   slate: "bg-muted text-muted-foreground border-border",
 };
 
 export const DOT_CLASSES: Record<Tone, string> = {
-  green: "bg-emerald-500",
-  amber: "bg-amber-500",
-  red: "bg-red-500",
-  blue: "bg-blue-500",
+  green: "bg-status-success",
+  amber: "bg-status-warning",
+  red: "bg-status-error",
+  blue: "bg-status-info",
   slate: "bg-muted-foreground/60",
 };
 

@@ -130,7 +130,7 @@ describe('FichaOportunidade — Renderização e Comportamento', () => {
     expect(screen.getByText('/ 100 índice')).toBeTruthy()
 
     // Garantia de que estão em containers visuais distintos
-    const scoreContainer = scoreHeader.closest('div.bg-blue-50\\/70')
+    const scoreContainer = scoreHeader.closest('div.bg-status-info-surface\\/70')
     const priorityContainer = priorityHeader.closest('div.bg-slate-900')
 
     expect(scoreContainer).not.toBeNull()

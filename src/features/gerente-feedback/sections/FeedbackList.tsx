@@ -29,15 +29,15 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
               transition={{ delay: i * 0.01 }}
             >
               <Card className="border p-mx-md h-full flex flex-col justify-between group hover:shadow-sm transition-all bg-white relative overflow-hidden">
-                <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-emerald-600/5 rounded-mx-full blur-mx-lg -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-mx-lg -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" />
                 <article>
                   <header className="flex items-start justify-between mb-8 border-b border-border-subtle pb-6 relative z-10">
                     <div className="flex items-center gap-mx-sm">
                       <div
                         className={
                           variant === 'admin'
-                            ? 'w-mx-xl h-mx-xl rounded-xl bg-gray-50 border border-border-subtle flex items-center justify-center font-bold text-foreground text-sm group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-none uppercase'
-                            : 'w-mx-xl h-mx-xl rounded-xl bg-gray-50 border border-border-subtle flex items-center justify-center font-bold text-sm group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-none uppercase'
+                            ? 'w-mx-xl h-mx-xl rounded-xl bg-gray-50 border border-border-subtle flex items-center justify-center font-bold text-foreground text-sm group-hover:bg-brand-primary group-hover:text-white transition-all shadow-none uppercase'
+                            : 'w-mx-xl h-mx-xl rounded-xl bg-gray-50 border border-border-subtle flex items-center justify-center font-bold text-sm group-hover:bg-brand-primary group-hover:text-white transition-all shadow-none uppercase'
                         }
                       >
                         {sellerName.substring(0, 2)}
@@ -97,7 +97,7 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
                           >
                             Plano de Ação
                           </Typography>
-                          <Zap size={14} className="text-emerald-600" />
+                          <Zap size={14} className="text-status-success-text" />
                         </header>
                       ) : (
                         <Typography

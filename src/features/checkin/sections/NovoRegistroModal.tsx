@@ -98,9 +98,9 @@ interface TipoDef {
 }
 
 const TIPOS: TipoDef[] = [
-  { id: 'agendamento', icon: CalendarCheck, label: 'Agendamento', desc: 'Compromisso comercial futuro', cor: 'border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700', iconCor: 'text-blue-500' },
+  { id: 'agendamento', icon: CalendarCheck, label: 'Agendamento', desc: 'Compromisso comercial futuro', cor: 'border-status-info/30 bg-status-info-surface hover:bg-status-info-surface text-status-info-text', iconCor: 'text-status-info' },
   { id: 'venda', icon: ShoppingCart, label: 'Venda', desc: 'Negócio fechado', cor: 'border-green-200 bg-green-50 hover:bg-green-100 text-green-700', iconCor: 'text-green-500' },
-  { id: 'garantia', icon: ShieldCheck, label: 'Garantia', desc: 'Pós-venda ou garantia de veículo', cor: 'border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-700', iconCor: 'text-amber-500' },
+  { id: 'garantia', icon: ShieldCheck, label: 'Garantia', desc: 'Pós-venda ou garantia de veículo', cor: 'border-status-warning/30 bg-status-warning-surface hover:bg-status-warning-surface text-status-warning-text', iconCor: 'text-status-warning' },
   { id: 'qualificado', icon: UserCheck, label: 'Qualificado', desc: 'Nova oportunidade trabalhável', cor: 'border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-700', iconCor: 'text-purple-500' },
 ]
 
@@ -136,8 +136,8 @@ function formatAppointmentDate(value: string): string {
 
 function ClienteFichaResumo({ form, ultimoAgendamento }: { form: FormState; ultimoAgendamento: ExistingAppointmentRecord | null }) {
   return (
-    <section aria-label="Ficha do cliente carregada" className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50/60 p-3">
-      <p className="text-caption font-bold uppercase tracking-wide text-emerald-800">Ficha carregada da Carteira</p>
+    <section aria-label="Ficha do cliente carregada" className="mt-4 rounded-xl border border-status-success/20 bg-status-success-surface/60 p-3">
+      <p className="text-caption font-bold uppercase tracking-wide text-status-success-text">Ficha carregada da Carteira</p>
       <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1.5 text-caption text-muted-foreground">
         <p><strong className="text-foreground">Veículo:</strong> {form.veiculo_texto || 'Não informado'}</p>
         <p><strong className="text-foreground">Negociação:</strong> {CRM_ETAPA_LABEL[form.negociacao as CrmEtapaFunil] || 'Não informada'}</p>

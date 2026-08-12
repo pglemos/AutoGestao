@@ -7,8 +7,8 @@ import { IMPACT_LABELS, DEPARTMENT_LABELS } from "@/features/owner/lib/ownerStat
 import { Clock, Tag, Building, Flag, Lightbulb, UserCircle } from "lucide-react";
 
 const impactTone = {
-  high: "bg-red-50 text-red-700 border-red-200",
-  medium: "bg-amber-50 text-amber-700 border-amber-200",
+  high: "bg-status-error-surface text-status-error-text border-status-error/30",
+  medium: "bg-status-warning-surface text-status-warning-text border-status-warning/30",
   low: "bg-muted text-muted-foreground border-border",
 };
 
@@ -55,8 +55,8 @@ export default function DecisionCard({ decision, onAction }) {
       ) : null}
 
       {decision.recommendation && (
-        <div className="mt-2.5 flex gap-2 rounded-md border border-blue-100 bg-blue-50/50 px-2.5 py-2 text-xs text-foreground">
-          <Lightbulb className="mt-0.5 h-3.5 w-3.5 shrink-0 text-blue-500" />
+        <div className="mt-2.5 flex gap-2 rounded-md border border-status-info/20 bg-status-info-surface/50 px-2.5 py-2 text-xs text-foreground">
+          <Lightbulb className="mt-0.5 h-3.5 w-3.5 shrink-0 text-status-info" />
           <p><span className="font-medium text-foreground">Recomendação:</span> {decision.recommendation}</p>
         </div>
       )}

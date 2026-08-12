@@ -39,17 +39,17 @@ export default function CycleSummary({ actions }) {
           <span>Início: {CYCLE_INFO.startDate}</span>
           <span>Fim: {CYCLE_INFO.endDate}</span>
           <span>{CYCLE_INFO.daysRemaining} dias restantes</span>
-          <span className="inline-flex items-center gap-1 font-medium text-amber-600">
+          <span className="inline-flex items-center gap-1 font-medium text-status-warning-text">
             <AlertTriangle className="h-3 w-3" /> Status: {CYCLE_INFO.status}
           </span>
         </div>
       </div>
 
       <SummaryCard icon={Clock} label="Aguardando você" value={awaiting} colorClass="text-violet-600" bgClass="bg-violet-50" />
-      <SummaryCard icon={AlertTriangle} label="Atrasadas" value={late} colorClass="text-red-600" bgClass="bg-red-50" />
-      <SummaryCard icon={Ban} label="Bloqueadas" value={blocked} colorClass="text-red-600" bgClass="bg-red-50" />
-      <SummaryCard icon={PlayCircle} label="Em andamento" value={inProgress} colorClass="text-blue-600" bgClass="bg-blue-50" />
-      <SummaryCard icon={CheckCircle2} label="Concluídas" value={completed} colorClass="text-emerald-600" bgClass="bg-emerald-50" />
+      <SummaryCard icon={AlertTriangle} label="Atrasadas" value={late} colorClass="text-status-error-text" bgClass="bg-status-error-surface" />
+      <SummaryCard icon={Ban} label="Bloqueadas" value={blocked} colorClass="text-status-error-text" bgClass="bg-status-error-surface" />
+      <SummaryCard icon={PlayCircle} label="Em andamento" value={inProgress} colorClass="text-status-info-text" bgClass="bg-status-info-surface" />
+      <SummaryCard icon={CheckCircle2} label="Concluídas" value={completed} colorClass="text-status-success-text" bgClass="bg-status-success-surface" />
     </section>
   );
 }

@@ -84,7 +84,7 @@ export function LiberacaoFechamento() {
         <Typography variant="p" tone="muted" className="max-w-md mx-auto text-xs font-semibold leading-relaxed">
           Apenas gestores, supervisores, administradores ou donos de loja podem aprovar a liberação de fechamentos diários atrasados.
         </Typography>
-        <Button onClick={() => navigate('/home')} className="mt-6 bg-emerald-600 hover:bg-brand-primary-hover text-white font-bold rounded-xl">
+        <Button onClick={() => navigate('/home')} className="mt-6 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl">
           Voltar para Início
         </Button>
       </div>
@@ -102,7 +102,7 @@ export function LiberacaoFechamento() {
         <Typography variant="p" tone="muted" className="max-w-md mx-auto text-xs font-semibold leading-relaxed">
           {loadError || 'O link de liberação é inválido ou a solicitação expirou. Confirme o link enviado pelo vendedor.'}
         </Typography>
-        <Button onClick={() => navigate('/home')} className="mt-6 bg-emerald-600 hover:bg-brand-primary-hover text-white font-bold rounded-xl">
+        <Button onClick={() => navigate('/home')} className="mt-6 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl">
           Voltar para Início
         </Button>
       </div>
@@ -131,33 +131,33 @@ export function LiberacaoFechamento() {
               Aprove o fechamento operacional retroativo para o vendedor.
             </Typography>
           </div>
-          <ShieldCheck size={32} className="text-emerald-600 shrink-0" />
+          <ShieldCheck size={32} className="text-status-success-text shrink-0" />
         </header>
 
         <div className="space-y-4 text-xs leading-relaxed text-muted-foreground">
           {/* Details */}
           <div className="bg-gray-50 p-4 rounded-xl border border-border-subtle space-y-3 shadow-none">
             <div className="flex items-center gap-2">
-              <User size={15} className="text-emerald-600" />
+              <User size={15} className="text-status-success-text" />
               <span className="font-bold text-foreground">Vendedor:</span>
               <span className="font-semibold">{solicitacao.vendedorNome}</span>
             </div>
             <div className="flex items-center gap-2">
-              <Calendar size={15} className="text-emerald-600" />
+              <Calendar size={15} className="text-status-success-text" />
               <span className="font-bold text-foreground">Data do Fechamento:</span>
-              <span className="font-extrabold text-emerald-600">
+              <span className="font-extrabold text-status-success-text">
                 {solicitacao.dataFechamento.split('-').reverse().join('/')}
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <Clock size={15} className="text-emerald-600" />
+              <Clock size={15} className="text-status-success-text" />
               <span className="font-bold text-foreground">Data/Hora Solicitação:</span>
               <span className="font-semibold">
                 {new Date(solicitacao.dataHoraSolicitacao).toLocaleString('pt-BR')}
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 size={15} className="text-emerald-600" />
+              <CheckCircle2 size={15} className="text-status-success-text" />
               <span className="font-bold text-foreground">Status:</span>
               <span className={`inline-block px-2 py-0.5 rounded-xl text-caption font-extrabold ${
                 solicitacao.status === 'liberado'

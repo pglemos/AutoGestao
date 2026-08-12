@@ -21,7 +21,7 @@ export function AdminFunnelChart({ funnelData, metrics }: Props) {
     <Card className="border-none bg-white overflow-hidden">
       <CardHeader className="p-mx-lg">
         <CardTitle className="text-lg flex items-center gap-mx-sm">
-          <Layers3 size={18} className="text-emerald-600" /> Funil agregado
+          <Layers3 size={18} className="text-status-success-text" /> Funil agregado
         </CardTitle>
         <CardDescription>Leads ate vendas no historico</CardDescription>
       </CardHeader>

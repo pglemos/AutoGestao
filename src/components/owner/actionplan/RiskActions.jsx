@@ -10,9 +10,9 @@ export default function RiskActions({ actions, onOpen }) {
   return (
     <section className="rounded-xl border border-border bg-card p-4 shadow-sm">
       <div className="mb-3 flex items-center gap-2">
-        <AlertTriangle className="h-4 w-4 text-red-500" />
+        <AlertTriangle className="h-4 w-4 text-status-error" />
         <h2 className="text-sm font-semibold text-foreground">Ações em risco</h2>
-        <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-red-100 px-1.5 text-xs font-bold text-red-700">
+        <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-status-error-surface px-1.5 text-xs font-bold text-status-error-text">
           {riskItems.length}
         </span>
       </div>
@@ -43,7 +43,7 @@ export default function RiskActions({ actions, onOpen }) {
                     <span>·</span>
                     <span>Prazo: {formatDueDate(action)}</span>
                     <span>·</span>
-                    <span className="font-medium text-red-600">{reason}</span>
+                    <span className="font-medium text-status-error-text">{reason}</span>
                   </div>
                 </div>
                 <Button size="sm" variant="ghost" onClick={() => onOpen(action)} className="shrink-0">

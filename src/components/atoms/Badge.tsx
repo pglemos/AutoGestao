@@ -5,17 +5,17 @@ import { Typography } from '@/components/atoms/Typography'
 
 /** Aparência única — sem variação por perfil (§8.5). */
 const badgeVariants = cva(
-  'inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold tracking-normal transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/20',
+  'inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold tracking-normal transition-colors focus:outline-none focus:ring-2 focus:ring-status-success/20',
   {
     variants: {
       variant: {
-        default: 'border-transparent bg-emerald-600 text-white shadow-sm',
-        brand: 'border-transparent bg-emerald-600 text-white shadow-sm',
+        default: 'border-transparent bg-brand-primary text-white shadow-sm',
+        brand: 'border-transparent bg-brand-primary text-white shadow-sm',
         secondary: 'border-border bg-gray-50 text-foreground',
-        success: 'border-emerald-100 bg-emerald-50 text-emerald-700',
-        warning: 'border-amber-100 bg-amber-50 text-amber-700',
-        info: 'border-blue-100 bg-blue-50 text-blue-700',
-        danger: 'border-red-100 bg-red-50 text-red-700',
+        success: 'border-status-success/20 bg-status-success-surface text-status-success-text',
+        warning: 'border-status-warning/20 bg-status-warning-surface text-status-warning-text',
+        info: 'border-status-info/20 bg-status-info-surface text-status-info-text',
+        danger: 'border-status-error/20 bg-status-error-surface text-status-error-text',
         outline: 'border-border bg-white text-foreground',
         ghost: 'border-transparent bg-transparent text-muted-foreground',
       },

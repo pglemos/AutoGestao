@@ -1340,7 +1340,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
               <button
                 type="button"
                 onClick={() => setCoerenciaModalOpen(false)}
-                className="h-11 rounded-xl bg-[#F59E0B] px-4 text-sm font-bold text-white shadow-sm transition-colors hover:bg-amber-700"
+                className="h-11 rounded-xl bg-[#F59E0B] px-4 text-sm font-bold text-white shadow-sm transition-colors hover:bg-status-warning"
               >
                 Corrigir canal ou atendimento
               </button>

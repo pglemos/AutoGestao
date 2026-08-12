@@ -149,18 +149,18 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
               {moment(date).format("DD/MM/YYYY")}
             </span>
             <span className="text-[12px] text-muted-foreground capitalize">{moment(date).format("dddd")}</span>
-            <span className="ml-auto text-caption font-bold text-red-600 bg-red-50 px-2.5 py-0.5 rounded-full">
+            <span className="ml-auto text-caption font-bold text-status-error-text bg-status-error-surface px-2.5 py-0.5 rounded-full">
               Fechamento atrasado
             </span>
           </div>
 
           {/* Se já foi enviado e aguardando */}
           {jaEnviado && step !== "success" && (
-            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3 mb-4">
-              <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+            <div className="bg-status-warning-surface border border-status-warning/30 rounded-xl p-4 flex items-start gap-3 mb-4">
+              <AlertTriangle className="w-4 h-4 text-status-warning mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-body-sm font-bold text-amber-800">Aguardando Aprovação</p>
-                <p className="text-[12px] text-amber-700 mt-0.5">
+                <p className="text-body-sm font-bold text-status-warning-text">Aguardando Aprovação</p>
+                <p className="text-[12px] text-status-warning-text mt-0.5">
                   Você já enviou a regularização deste dia. Ela está aguardando aprovação do responsável.
                 </p>
               </div>
@@ -175,12 +175,12 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
           )}
 
           {recusado && step !== "success" && (
-            <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-4">
-              <p className="text-body-sm font-bold text-red-700">Regularização recusada.</p>
+            <div className="bg-status-error-surface border border-status-error/30 rounded-xl p-4 mb-4">
+              <p className="text-body-sm font-bold text-status-error-text">Regularização recusada.</p>
               {regularizacaoExistente?.motivo_recusa && (
-                <p className="text-[12px] text-red-600 mt-1">Motivo: {regularizacaoExistente.motivo_recusa}</p>
+                <p className="text-[12px] text-status-error-text mt-1">Motivo: {regularizacaoExistente.motivo_recusa}</p>
               )}
-              <p className="text-[12px] text-red-600 mt-1">Você pode enviar uma nova regularização abaixo.</p>
+              <p className="text-[12px] text-status-error-text mt-1">Você pode enviar uma nova regularização abaixo.</p>
             </div>
           )}
 
@@ -206,7 +206,7 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
                 </button>
                 <button
                   onClick={() => setStep("confirm")}
-                  className="flex-1 py-2.5 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-body-sm font-bold transition-colors"
+                  className="flex-1 py-2.5 rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-body-sm font-bold transition-colors"
                 >
                   Enviar Regularização
                 </button>
@@ -217,9 +217,9 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
           {/* STEP: confirm */}
           {step === "confirm" && (
             <div className="space-y-4">
-              <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-                <p className="text-[14px] font-bold text-amber-900 mb-1">Enviar regularização para aprovação?</p>
-                <p className="text-body-sm text-amber-800">
+              <div className="bg-status-warning-surface border border-status-warning/30 rounded-xl p-4">
+                <p className="text-[14px] font-bold text-status-warning-text mb-1">Enviar regularização para aprovação?</p>
+                <p className="text-body-sm text-status-warning-text">
                   Este fechamento foi realizado fora do prazo. Ele será salvo, mas só contará nos indicadores após aprovação do responsável.
                 </p>
               </div>
@@ -233,7 +233,7 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
                 </button>
                 <button
                   onClick={handleEnviar}
-                  className="flex-1 py-2.5 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-body-sm font-bold transition-colors"
+                  className="flex-1 py-2.5 rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-body-sm font-bold transition-colors"
                   disabled={salvando}
                 >
                   {salvando ? "Enviando..." : "Sim, enviar"}
@@ -245,8 +245,8 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
           {/* STEP: success */}
           {step === "success" && (
             <div className="text-center py-4 space-y-3">
-              <div className="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center mx-auto">
-                <CheckCircle2 className="w-6 h-6 text-amber-500" />
+              <div className="w-12 h-12 rounded-full bg-status-warning-surface flex items-center justify-center mx-auto">
+                <CheckCircle2 className="w-6 h-6 text-status-warning" />
               </div>
               <p className="text-body font-bold text-[#0F172A]">Regularização enviada!</p>
               <p className="text-body-sm text-muted-foreground max-w-xs mx-auto">
@@ -254,7 +254,7 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
               </p>
               <button
                 onClick={onClose}
-                className="mt-2 px-6 py-2.5 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-body-sm font-bold transition-colors"
+                className="mt-2 px-6 py-2.5 rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-body-sm font-bold transition-colors"
               >
                 Fechar
               </button>

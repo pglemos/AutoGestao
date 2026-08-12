@@ -49,7 +49,7 @@ export function RotinaHeader({
     <>
       {isAdmin && selectedStoreId && (
         <div className="flex items-center gap-mx-sm bg-white rounded-xl px-4 py-2 shadow-sm border border-border-subtle self-start">
-          <Store size={16} className="text-emerald-600" />
+          <Store size={16} className="text-status-success-text" />
           <Typography
             variant="tiny"
             className=""
@@ -74,7 +74,7 @@ export function RotinaHeader({
       )}
 
       <PageHeading
-        title={<>Centro de <span className="text-emerald-600">Comando</span></>}
+        title={<>Centro de <span className="text-status-success-text">Comando</span></>}
         subtitle="GESTÃO DE UNIDADE • CICLO OPERACIONAL MX"
         actions={(
           <div className="flex flex-wrap items-center gap-mx-sm shrink-0">
@@ -102,7 +102,7 @@ export function RotinaHeader({
         <Card className="border bg-white p-mx-md">
           <div className="flex flex-col gap-mx-xs sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-mx-sm">
-              <Store size={18} className="text-emerald-600" aria-hidden="true" />
+              <Store size={18} className="text-status-success-text" aria-hidden="true" />
               <Typography variant="p" className="">
                 Unidade atual: {membership.store.name}
               </Typography>

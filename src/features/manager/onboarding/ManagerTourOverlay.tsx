@@ -127,11 +127,11 @@ export function ManagerTourOverlay({
           ? { position: 'fixed', top: popover.top, left: popover.left, width: popover.width, zIndex: 180 }
           : { position: 'fixed', top: '50%', left: '50%', marginLeft: -190, marginTop: -100, width: 380, zIndex: 180 }}
       >
-        <div className="relative h-1 bg-emerald-100">
-          <div className="h-full bg-emerald-500 transition-all duration-300" style={{ width: `${progress}%` }} />
+        <div className="relative h-1 bg-status-success-surface">
+          <div className="h-full bg-status-success transition-all duration-300" style={{ width: `${progress}%` }} />
         </div>
 
-        <header className="flex items-center justify-between bg-emerald-600 px-5 py-3">
+        <header className="flex items-center justify-between bg-brand-primary px-5 py-3">
           <div className="flex items-center gap-2">
             <span className="grid h-7 w-7 place-items-center rounded-lg bg-white/20 text-xs font-bold text-white">{index + 1}</span>
             <p className="text-sm font-semibold text-white">{step?.title || 'Tour do Gerente'}</p>
@@ -143,7 +143,7 @@ export function ManagerTourOverlay({
 
         <div className="px-5 py-4">
           {step?.subtitle && (
-            <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-emerald-600">{step.subtitle}</p>
+            <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-status-success-text">{step.subtitle}</p>
           )}
           <p className="text-sm leading-relaxed text-muted-foreground">{step?.description}</p>
         </div>
@@ -159,7 +159,7 @@ export function ManagerTourOverlay({
                 <ChevronLeft size={14} /> Voltar
               </button>
             )}
-            <button type="button" onClick={next} className="flex h-8 items-center gap-1 rounded-lg bg-emerald-600 px-3 text-xs font-semibold text-white hover:bg-emerald-700">
+            <button type="button" onClick={next} className="flex h-8 items-center gap-1 rounded-lg bg-brand-primary px-3 text-xs font-semibold text-white hover:bg-brand-primary-hover">
               {isLast ? <><Check size={14} /> Concluir</> : <>Próximo <ChevronRight size={14} /></>}
             </button>
           </div>

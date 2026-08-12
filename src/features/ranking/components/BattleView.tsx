@@ -26,12 +26,12 @@ export function BattleView({ opponents, ranking }: BattleViewProps) {
         return (
             <div className="mb-6 group">
                 <div className="flex justify-between items-end mb-2 text-sm font-bold text-white">
-                    <span className={winner === 'p1' ? 'text-emerald-600 scale-110 transition-transform' : 'text-muted-foreground'}>{format(v1)}</span>
+                    <span className={winner === 'p1' ? 'text-status-success-text scale-110 transition-transform' : 'text-muted-foreground'}>{format(v1)}</span>
                     <span className="text-mx-tiny uppercase text-muted-foreground tracking-widest">{label}</span>
                     <span className={winner === 'p2' ? 'text-status-info scale-110 transition-transform' : 'text-muted-foreground'}>{format(v2)}</span>
                 </div>
                 <div className="h-mx-sm bg-gray-900 rounded-full overflow-hidden flex relative shadow-none">
-                    <div className={`h-full transition-all duration-1000 ${winner === 'p1' ? 'bg-emerald-600 shadow-mx-glow-brand' : 'bg-emerald-600/50'}`} style={{ width: `${p1Pct}%` }}></div>
+                    <div className={`h-full transition-all duration-1000 ${winner === 'p1' ? 'bg-brand-primary shadow-mx-glow-brand' : 'bg-brand-primary/50'}`} style={{ width: `${p1Pct}%` }}></div>
                     <div className="w-mx-tiny bg-gray-50 z-10 skew-x-[-20deg]"></div>
                     <div className={`h-full transition-all duration-1000 flex-1 ${winner === 'p2' ? 'bg-status-info shadow-mx-glow-brand' : 'bg-status-info/50'}`}></div>
                 </div>
@@ -49,10 +49,10 @@ export function BattleView({ opponents, ranking }: BattleViewProps) {
 
                 {/* Player 1 */}
                 <div className="bg-gray-900 p-mx-lg rounded-3xl border border-brand-primary/20 flex flex-col items-center w-full md:w-mx-sm/12 relative overflow-hidden">
-                    <div className="absolute top-mx-0 right-mx-0 w-mx-32 h-mx-32 bg-emerald-600 blur-mx-huge opacity-20 rounded-full"></div>
+                    <div className="absolute top-mx-0 right-mx-0 w-mx-32 h-mx-32 bg-brand-primary blur-mx-huge opacity-20 rounded-full"></div>
                     <Avatar src={p1.avatar_url || undefined} alt={`Avatar de ${p1.user_name}`} fallback={p1.user_name} className="w-mx-20 h-mx-20 rounded-2xl border-2 border-brand-primary shadow-mx-glow-brand mb-4" />
                     <h3 className="font-display font-bold text-2xl text-white text-center">{p1.user_name}</h3>
-                    <p className="text-xs font-bold text-emerald-600 uppercase tracking-widest text-center mt-1">{p1.store_name}</p>
+                    <p className="text-xs font-bold text-status-success-text uppercase tracking-widest text-center mt-1">{p1.store_name}</p>
                 </div>
 
                 {/* Player 2 */}

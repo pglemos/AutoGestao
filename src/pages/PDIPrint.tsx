@@ -36,7 +36,7 @@ export default function PDIPrint() {
         <div className="min-h-screen p-mx-20 text-center flex flex-col items-center justify-center bg-surface-alt">
             <History size={48} className="text-muted-foreground mb-6 opacity-20" />
             <Typography variant="h3" tone="muted" className="tracking-tighter">Plano ou permissão não localizados.</Typography>
-            <button onClick={() => navigate(-1)} className="mt-8 px-8 py-4 bg-emerald-600 text-white rounded-mx-full font-bold text-xs uppercase tracking-widest">VOLTAR</button>
+            <button onClick={() => navigate(-1)} className="mt-8 px-8 py-4 bg-brand-primary text-white rounded-mx-full font-bold text-xs uppercase tracking-widest">VOLTAR</button>
         </div>
     )
 
@@ -112,8 +112,8 @@ export default function PDIPrint() {
                             <Typography variant="h3" className="text-brand-secondary border-l-4 border-brand-primary pl-4 mb-4">Metas de Curto Prazo (6 Meses)</Typography>
                             <ul className="space-y-mx-xs pl-8 list-none">
                                 {metas6.map((m, i) => (
-                                    <li key={i} className="text-sm font-bold uppercase relative before:content-[''] before:absolute before:-left-5 before:top-1.5 before:w-2 before:h-2 before:bg-emerald-600 before:rounded-full">
-                                        <span className="text-emerald-600 text-xs mr-2">[{m.tipo}]</span> {m.descricao}
+                                    <li key={i} className="text-sm font-bold uppercase relative before:content-[''] before:absolute before:-left-5 before:top-1.5 before:w-2 before:h-2 before:bg-brand-primary before:rounded-full">
+                                        <span className="text-status-success-text text-xs mr-2">[{m.tipo}]</span> {m.descricao}
                                     </li>
                                 ))}
                             </ul>
@@ -122,8 +122,8 @@ export default function PDIPrint() {
                             <Typography variant="h3" className="text-brand-secondary border-l-4 border-brand-primary pl-4 mb-4">Metas de Médio Prazo (12 Meses)</Typography>
                             <ul className="space-y-mx-xs pl-8 list-none">
                                 {metas12.map((m, i) => (
-                                    <li key={i} className="text-sm font-bold uppercase relative before:content-[''] before:absolute before:-left-5 before:top-1.5 before:w-2 before:h-2 before:bg-emerald-600 before:rounded-full">
-                                        <span className="text-emerald-600 text-xs mr-2">[{m.tipo}]</span> {m.descricao}
+                                    <li key={i} className="text-sm font-bold uppercase relative before:content-[''] before:absolute before:-left-5 before:top-1.5 before:w-2 before:h-2 before:bg-brand-primary before:rounded-full">
+                                        <span className="text-status-success-text text-xs mr-2">[{m.tipo}]</span> {m.descricao}
                                     </li>
                                 ))}
                             </ul>
@@ -132,8 +132,8 @@ export default function PDIPrint() {
                             <Typography variant="h3" className="text-brand-secondary border-l-4 border-brand-primary pl-4 mb-4">Metas de Longo Prazo (24 Meses)</Typography>
                             <ul className="space-y-mx-xs pl-8 list-none">
                                 {metas24.map((m, i) => (
-                                    <li key={i} className="text-sm font-bold uppercase relative before:content-[''] before:absolute before:-left-5 before:top-1.5 before:w-2 before:h-2 before:bg-emerald-600 before:rounded-full">
-                                        <span className="text-emerald-600 text-xs mr-2">[{m.tipo}]</span> {m.descricao}
+                                    <li key={i} className="text-sm font-bold uppercase relative before:content-[''] before:absolute before:-left-5 before:top-1.5 before:w-2 before:h-2 before:bg-brand-primary before:rounded-full">
+                                        <span className="text-status-success-text text-xs mr-2">[{m.tipo}]</span> {m.descricao}
                                     </li>
                                 ))}
                             </ul>
@@ -141,7 +141,7 @@ export default function PDIPrint() {
                     </div>
 
                     <footer className="mt-auto pt-10 text-center space-y-mx-sm">
-                        <Sparkles size={24} className="mx-auto text-emerald-600 opacity-30" />
+                        <Sparkles size={24} className="mx-auto text-status-success-text opacity-30" />
                         <Typography variant="p" className="text-sm font-bold italic leading-relaxed">
                             "Comprometa-se com suas metas e encare os obstáculos como etapas para atingir o objetivo final. 
                             Disciplina é a ponte entre metas e realizações."
@@ -171,7 +171,7 @@ export default function PDIPrint() {
                                     {bundle.avaliacoes.map((av, i) => (
                                         <tr key={i} className="border-b border-border">
                                             <td className="py-2 px-3">{av.competencia}</td>
-                                            <td className="py-2 px-3 text-center text-emerald-600">{av.nota}</td>
+                                            <td className="py-2 px-3 text-center text-status-success-text">{av.nota}</td>
                                             <td className="py-2 px-3 text-center text-muted-foreground">{av.alvo}</td>
                                         </tr>
                                     ))}
@@ -230,7 +230,7 @@ export default function PDIPrint() {
                                     <tr key={i} className="border-b-2 border-border">
                                         <td className="py-4 px-4 font-bold uppercase text-muted-foreground">{acao.competencia}</td>
                                         <td className="py-4 px-4 font-bold text-foreground">{acao.descricao_acao}</td>
-                                        <td className="py-4 px-4 font-bold text-center text-emerald-600">{format(parseISO(acao.data_conclusao), 'dd/MM/yyyy')}</td>
+                                        <td className="py-4 px-4 font-bold text-center text-status-success-text">{format(parseISO(acao.data_conclusao), 'dd/MM/yyyy')}</td>
                                         <td className="py-4 px-4 font-bold text-center uppercase">{acao.impacto}</td>
                                         <td className="py-4 px-4 font-bold text-center uppercase">{acao.custo}</td>
                                     </tr>

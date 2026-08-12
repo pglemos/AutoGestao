@@ -77,7 +77,7 @@ export function GoogleMeetArtifactsPanel({ artifact, hasMeetLink }: GoogleMeetAr
           <details className="rounded-xl border border-border bg-white p-mx-sm">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-mx-sm">
               <span className="flex items-center gap-mx-xs">
-                <FileText size={14} className="text-emerald-600" />
+                <FileText size={14} className="text-status-success-text" />
                 <Typography variant="tiny" className="">Ata da reunião</Typography>
               </span>
               <span className="text-mx-nano font-bold uppercase tracking-widest text-muted-foreground">{textStats(ataText)}</span>
@@ -95,7 +95,7 @@ export function GoogleMeetArtifactsPanel({ artifact, hasMeetLink }: GoogleMeetAr
           <details className="rounded-xl border border-border bg-white p-mx-sm">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-mx-sm">
               <span className="flex items-center gap-mx-xs">
-                <ScrollText size={14} className="text-emerald-600" />
+                <ScrollText size={14} className="text-status-success-text" />
                 <Typography variant="tiny" className="">Transcrição oficial</Typography>
               </span>
               <span className="text-mx-nano font-bold uppercase tracking-widest text-muted-foreground">{textStats(transcriptText)}</span>

@@ -25,9 +25,9 @@ export function StoreEvolutionPanel({ store }: { store: NetworkCockpitStore }) {
         <div className="rounded-xl border border-border bg-card p-3"><p className="text-xs text-muted-foreground">Participantes pendentes</p><p className="mt-1 text-xl font-bold">{store.consultingParticipantsPending}</p></div>
       </div>
       {store.riskReasons.length ? (
-        <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 p-3">
-          <p className="text-xs font-semibold uppercase tracking-wide text-amber-800">Motivos de atenção</p>
-          <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-amber-900">{store.riskReasons.map(reason => <li key={reason}>{reason}</li>)}</ul>
+        <div className="mt-3 rounded-xl border border-status-warning/30 bg-status-warning-surface p-3">
+          <p className="text-xs font-semibold uppercase tracking-wide text-status-warning-text">Motivos de atenção</p>
+          <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-status-warning-text">{store.riskReasons.map(reason => <li key={reason}>{reason}</li>)}</ul>
         </div>
       ) : null}
     </section>

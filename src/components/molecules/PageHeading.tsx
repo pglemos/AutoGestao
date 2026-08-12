@@ -27,7 +27,7 @@ export function PageHeading({
     >
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex min-w-0 items-start gap-3">
-            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-status-success-surface text-status-success-text">
               <Icon size={20} strokeWidth={1.8} aria-hidden="true" />
             </span>
             <div className="min-w-0">

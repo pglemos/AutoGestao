@@ -80,7 +80,7 @@ export function DepartamentoDashboard({ storeId, code, periodLabel, period }: Pr
     <section className="space-y-mx-md" aria-label={`Dashboard ${def.name}`}>
       <header className="flex flex-col gap-mx-xs md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-mx-sm">
-          <div className="rounded-2xl bg-emerald-600 p-mx-sm text-pure-white shadow-sm">
+          <div className="rounded-2xl bg-brand-primary p-mx-sm text-pure-white shadow-sm">
             <def.icon size={22} aria-hidden="true" />
           </div>
           <div>
@@ -138,7 +138,7 @@ export function DepartamentoDashboard({ storeId, code, periodLabel, period }: Pr
                 className="rounded-2xl border border-border bg-white p-mx-sm"
               >
                 <div className="flex items-center gap-mx-xs">
-                  <span className="rounded-xl bg-emerald-600 px-mx-xs py-mx-tiny text-mx-tiny font-bold uppercase tracking-widest text-pure-white">
+                  <span className="rounded-xl bg-brand-primary px-mx-xs py-mx-tiny text-mx-tiny font-bold uppercase tracking-widest text-pure-white">
                     {step.passo}
                   </span>
                   <Typography variant="caption" className="">
@@ -225,7 +225,7 @@ export function DepartamentoDashboard({ storeId, code, periodLabel, period }: Pr
                     href={entry.url_externo}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-mx-tiny inline-block text-mx-tiny font-bold uppercase tracking-widest text-emerald-600 underline"
+                    className="mt-mx-tiny inline-block text-mx-tiny font-bold uppercase tracking-widest text-status-success-text underline"
                   >
                     Abrir material
                   </a>
@@ -242,7 +242,7 @@ export function DepartamentoDashboard({ storeId, code, periodLabel, period }: Pr
 function ScoreCard({ tone, value }: { tone: string; value: string }) {
   const toneClass: Record<string, string> = {
     success: 'border-status-success/30 bg-status-success-surface text-status-success',
-    brand: 'border-brand-primary/30 bg-mx-indigo-50 text-emerald-600',
+    brand: 'border-brand-primary/30 bg-mx-indigo-50 text-status-success-text',
     warning: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
     danger: 'border-status-error/30 bg-status-error-surface text-status-error',
     muted: 'border-border bg-gray-50 text-muted-foreground',
@@ -276,7 +276,7 @@ function KpiCard({ kpi }: { kpi: DepartamentoKpi }) {
             : 'danger'
   const toneClass: Record<string, string> = {
     success: 'border-status-success/30 bg-status-success-surface text-status-success',
-    brand: 'border-brand-primary/30 bg-mx-indigo-50 text-emerald-600',
+    brand: 'border-brand-primary/30 bg-mx-indigo-50 text-status-success-text',
     warning: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
     danger: 'border-status-error/30 bg-status-error-surface text-status-error',
     muted: 'border-border bg-gray-50 text-muted-foreground',
@@ -313,7 +313,7 @@ function SectionBlock({
   return (
     <Card className="p-mx-md">
       <header className="mb-mx-sm flex items-center gap-mx-xs">
-        <div className="rounded-2xl bg-mx-indigo-50 p-mx-xs text-emerald-600">
+        <div className="rounded-2xl bg-mx-indigo-50 p-mx-xs text-status-success-text">
           <Icon size={18} aria-hidden="true" />
         </div>
         <Typography variant="h3" className="">

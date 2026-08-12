@@ -113,7 +113,7 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
         <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between border-b border-border pb-6 shrink-0">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-3">
-              <div className="w-1 h-10 bg-emerald-600 rounded-full shadow-md" aria-hidden="true" />
+              <div className="w-1 h-10 bg-brand-primary rounded-full shadow-md" aria-hidden="true" />
               <h1 className="text-3xl font-bold tracking-tight md:text-4xl">Painel de Identidade</h1>
             </div>
             <p className="pl-4 text-xs font-bold uppercase tracking-widest text-muted-foreground">
@@ -204,8 +204,8 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
 
               <div className="pt-14 border-t border-border space-y-10">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-lg bg-indigo-50 text-emerald-600 flex items-center justify-center shadow-none border border-indigo-100"><ShieldCheck size={20} /></div>
-                  <p className="text-xs font-bold uppercase tracking-widest text-emerald-600">Segurança & Criptografia MX</p>
+                  <div className="h-10 w-10 rounded-lg bg-indigo-50 text-status-success-text flex items-center justify-center shadow-none border border-indigo-100"><ShieldCheck size={20} /></div>
+                  <p className="text-xs font-bold uppercase tracking-widest text-status-success-text">Segurança & Criptografia MX</p>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
@@ -215,7 +215,7 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
                     onClick={() => setShowPasswordModal(true)}
                   >
                     <div className="flex items-center gap-3">
-                      <div className="h-xl w-xl rounded-xl bg-card border border-border flex items-center justify-center text-muted-foreground group-hover/sec:text-emerald-600 transition-colors shadow-sm"><Key size={20} /></div>
+                      <div className="h-xl w-xl rounded-xl bg-card border border-border flex items-center justify-center text-muted-foreground group-hover/sec:text-status-success-text transition-colors shadow-sm"><Key size={20} /></div>
                       <span className="text-xs font-bold uppercase tracking-widest text-foreground">Alterar Senha</span>
                     </div>
                     <ChevronRight size={18} className="text-muted-foreground opacity-30 group-hover/sec:translate-x-1 transition-all shrink-0" />

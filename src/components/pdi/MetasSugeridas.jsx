@@ -94,7 +94,7 @@ export default function MetasSugeridas() {
       label: "Leads / dia",
       valor: `${metrics.avgLeadsDia}/dia`,
       sugestao: bump(metrics.avgLeadsDia),
-      cor: "border-blue-100 bg-blue-50/40",
+      cor: "border-status-info/20 bg-status-info-surface/40",
       detalhe: `+15% sobre sua média dos últimos ${metrics.diasAnalisados} dias`,
     },
     {
@@ -108,7 +108,7 @@ export default function MetasSugeridas() {
       label: "Agendamentos D+1 / dia",
       valor: `${metrics.avgAgendDia}/dia`,
       sugestao: bump(metrics.avgAgendDia),
-      cor: "border-amber-100 bg-amber-50/40",
+      cor: "border-status-warning/20 bg-status-warning-surface/40",
       detalhe: `+15% sobre sua média dos últimos ${metrics.diasAnalisados} dias`,
     },
     {
@@ -158,9 +158,9 @@ export default function MetasSugeridas() {
             ))}
           </div>
 
-          <div className="flex items-start gap-2 bg-amber-50 border border-amber-100 rounded-xl px-4 py-3">
+          <div className="flex items-start gap-2 bg-status-warning-surface border border-status-warning/20 rounded-xl px-4 py-3">
             <TrendingUp className="w-4 h-4 text-mx-amber flex-shrink-0 mt-0.5" />
-            <p className="text-[12px] text-amber-800 leading-relaxed">
+            <p className="text-[12px] text-status-warning-text leading-relaxed">
               As sugestões são calculadas com <strong>+15% de incremento</strong> sobre sua média histórica. Ajuste suas metas no Funil de Vendas e no seu Perfil para refletir esses objetivos.
             </p>
           </div>

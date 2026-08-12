@@ -170,15 +170,15 @@ const MISSOES: MissaoDef[] = semVendaCancelada([
 const PRIORIDADE_ORDEM: Record<MissaoDef['prioridade'], number> = { Máxima: 0, Alta: 1, Média: 2, Baixa: 3 }
 
 function prioridadeBadgeClass(p: MissaoDef['prioridade']): string {
-  if (p === 'Máxima') return 'bg-red-100 text-red-700'
-  if (p === 'Alta') return 'bg-red-50 text-red-600'
-  if (p === 'Média') return 'bg-amber-50 text-amber-600'
+  if (p === 'Máxima') return 'bg-status-error-surface text-status-error-text'
+  if (p === 'Alta') return 'bg-status-error-surface text-status-error-text'
+  if (p === 'Média') return 'bg-status-warning-surface text-status-warning-text'
   return 'bg-slate-100 text-muted-foreground'
 }
 
 function temperaturaBadgeClass(t: Temperatura): string {
-  if (t === 'quente') return 'bg-red-50 text-red-600'
-  if (t === 'morno') return 'bg-amber-50 text-amber-600'
+  if (t === 'quente') return 'bg-status-error-surface text-status-error-text'
+  if (t === 'morno') return 'bg-status-warning-surface text-status-warning-text'
   return 'bg-slate-100 text-muted-foreground'
 }
 
@@ -255,7 +255,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
             </p>
             {listaCompativeis.map(cliente => (
               <div key={cliente.id} className="bg-white border border-border-subtle rounded-xl px-4 py-3 flex items-center gap-3">
-                <span className="w-9 h-9 shrink-0 grid place-items-center rounded-full bg-blue-50 text-xs font-bold text-[#005BFF]">
+                <span className="w-9 h-9 shrink-0 grid place-items-center rounded-full bg-status-info-surface text-xs font-bold text-[#005BFF]">
                   {(cliente.nome || '?').split(' ').slice(0, 2).map(p => p[0]).join('').toUpperCase()}
                 </span>
                 <div className="min-w-0 flex-1">
@@ -267,7 +267,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                 <button
                   type="button"
                   onClick={() => onAbrirFicha(cliente.id)}
-                  className="rounded-lg border border-border px-3 py-1.5 text-xs font-bold text-[#005BFF] hover:bg-blue-50"
+                  className="rounded-lg border border-border px-3 py-1.5 text-xs font-bold text-[#005BFF] hover:bg-status-info-surface"
                 >
                   Ficha
                 </button>
@@ -331,7 +331,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                   : null
                 return (
                   <div key={ctx.cliente.id} className="bg-white border border-border-subtle rounded-xl px-4 py-3 flex items-center gap-3">
-                    <span className="w-9 h-9 shrink-0 grid place-items-center rounded-full bg-blue-50 text-xs font-bold text-[#005BFF]">
+                    <span className="w-9 h-9 shrink-0 grid place-items-center rounded-full bg-status-info-surface text-xs font-bold text-[#005BFF]">
                       {(ctx.cliente.nome || '?').split(' ').slice(0, 2).map(p => p[0]).join('').toUpperCase()}
                     </span>
                     <div className="min-w-0 flex-1">
@@ -354,7 +354,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                     <button
                       type="button"
                       onClick={() => onAbrirFicha(ctx.cliente.id)}
-                      className="shrink-0 rounded-lg border border-border px-3 py-1.5 text-xs font-bold text-[#005BFF] hover:bg-blue-50"
+                      className="shrink-0 rounded-lg border border-border px-3 py-1.5 text-xs font-bold text-[#005BFF] hover:bg-status-info-surface"
                     >
                       Ficha
                     </button>
@@ -473,7 +473,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
               <button
                 type="button"
                 onClick={() => setModalOpen(true)}
-                className="mt-4 inline-flex items-center gap-1.5 rounded-xl bg-[#005BFF] px-4 py-2 text-sm font-bold text-white hover:bg-blue-700"
+                className="mt-4 inline-flex items-center gap-1.5 rounded-xl bg-[#005BFF] px-4 py-2 text-sm font-bold text-white hover:bg-status-info"
               >
                 <Plus size={16} /> Registrar veículo que chegou
               </button>
@@ -486,7 +486,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
               return (
                 <div key={veiculo.id} className="bg-white border border-border-subtle rounded-2xl p-4 space-y-3">
                   <div className="flex items-start gap-3">
-                    <span className="w-10 h-10 shrink-0 grid place-items-center rounded-xl bg-blue-50 text-[#005BFF]">
+                    <span className="w-10 h-10 shrink-0 grid place-items-center rounded-xl bg-status-info-surface text-[#005BFF]">
                       <Car size={20} />
                     </span>
                     <div className="min-w-0 flex-1">
@@ -507,7 +507,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                     type="button"
                     disabled={compat === 0}
                     onClick={() => setVeiculoAtaque(veiculo)}
-                    className="w-full flex items-center justify-center gap-1.5 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white h-10 text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="w-full flex items-center justify-center gap-1.5 rounded-xl bg-[#005BFF] hover:bg-status-info text-white h-10 text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     <Zap size={16} /> Iniciar ataque
                   </button>
@@ -557,9 +557,9 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
       </div>
 
       {totalOportunidades === 0 && (
-        <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3">
-          <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-          <p className="text-sm text-amber-800">Nenhuma missão recomendada no momento. Continue trabalhando a carteira normalmente.</p>
+        <div className="flex items-start gap-3 bg-status-warning-surface border border-status-warning/30 rounded-2xl px-4 py-3">
+          <AlertTriangle className="w-4 h-4 text-status-warning shrink-0 mt-0.5" />
+          <p className="text-sm text-status-warning-text">Nenhuma missão recomendada no momento. Continue trabalhando a carteira normalmente.</p>
         </div>
       )}
 
@@ -625,7 +625,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvar }: { onClose: () => void; onS
             type="button"
             disabled={!marca.trim() || !modelo.trim() || saving}
             onClick={handleSalvar}
-            className="flex-1 rounded-xl bg-[#005BFF] px-4 py-2.5 text-sm font-bold text-white hover:bg-blue-700 disabled:opacity-50"
+            className="flex-1 rounded-xl bg-[#005BFF] px-4 py-2.5 text-sm font-bold text-white hover:bg-status-info disabled:opacity-50"
           >
             {saving ? 'Salvando...' : 'Salvar veículo'}
           </button>

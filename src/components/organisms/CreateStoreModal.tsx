@@ -63,7 +63,7 @@ export function CreateStoreModal({
               <form onSubmit={onSubmit} className="space-y-mx-xl relative z-10">
                 <header className="flex items-center justify-between border-b border-border pb-8">
                   <div className="flex items-center gap-mx-sm">
-                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 flex items-center justify-center text-emerald-600 border border-mx-indigo-100 shadow-none shrink-0">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 flex items-center justify-center text-status-success-text border border-mx-indigo-100 shadow-none shrink-0">
                       <Building2 size={28} />
                     </div>
                     <div>
@@ -129,7 +129,7 @@ export function CreateStoreModal({
                     <div className="relative group">
                       <Mail
                         size={18}
-                        className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-emerald-600 transition-colors"
+                        className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-status-success-text transition-colors"
                         aria-hidden="true"
                       />
                       <Input

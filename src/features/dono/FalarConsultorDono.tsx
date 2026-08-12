@@ -91,7 +91,7 @@ function normalizePhone(phone: string | null) {
 
 function ConsultantAvatar({ avatarUrl, name, initialsFn }: { avatarUrl: string | null | undefined; name: string; initialsFn: (name: string) => string }) {
   const [erro, setErro] = useState(false)
-  if (!avatarUrl || erro) return <div className="flex h-mx-20 w-mx-20 items-center justify-center rounded-mx-full bg-emerald-600 text-2xl font-bold text-white shadow-sm">{initialsFn(name)}</div>
+  if (!avatarUrl || erro) return <div className="flex h-mx-20 w-mx-20 items-center justify-center rounded-mx-full bg-brand-primary text-2xl font-bold text-white shadow-sm">{initialsFn(name)}</div>
   return <img src={avatarUrl} alt="" className="h-mx-20 w-mx-20 rounded-mx-full object-cover" onError={() => setErro(true)} />
 }
 
@@ -295,7 +295,7 @@ export default function FalarConsultorDono() {
 
               <div className="mt-mx-lg space-y-mx-xs border-t border-border-subtle pt-mx-md">
                 {contact?.consultant_email && (
-                  <a href={mailtoUrl || undefined} className="flex items-center gap-mx-xs break-all text-sm font-bold text-muted-foreground hover:text-emerald-600">
+                  <a href={mailtoUrl || undefined} className="flex items-center gap-mx-xs break-all text-sm font-bold text-muted-foreground hover:text-status-success-text">
                     <Mail size={14} className="shrink-0 text-muted-foreground" /> {contact.consultant_email}
                   </a>
                 )}
@@ -316,7 +316,7 @@ export default function FalarConsultorDono() {
 
         <Card className="border bg-white p-mx-lg">
           <div className="flex items-center gap-mx-sm">
-            <Send size={22} className="text-emerald-600" />
+            <Send size={22} className="text-status-success-text" />
             <div>
               <Typography variant="h3" className="text-xl">Nova solicitação</Typography>
               <Typography variant="tiny" tone="muted" className="mt-mx-tiny block font-bold normal-case">
@@ -327,7 +327,7 @@ export default function FalarConsultorDono() {
 
           {contextSummary.length > 0 && (
             <div className="mt-mx-md rounded-2xl border border-brand-primary/15 bg-mx-indigo-50 p-mx-md">
-              <div className="flex items-center gap-mx-xs text-xs font-bold uppercase tracking-mx-wide text-emerald-600">
+              <div className="flex items-center gap-mx-xs text-xs font-bold uppercase tracking-mx-wide text-status-success-text">
                 <Paperclip size={15} /> Contexto anexado automaticamente
               </div>
               <div className="mt-mx-sm flex flex-wrap gap-mx-xs">
@@ -381,7 +381,7 @@ export default function FalarConsultorDono() {
 
       <Card className="border bg-white p-mx-lg">
         <div className="flex items-center gap-mx-sm">
-          <Clock3 size={21} className="text-emerald-600" />
+          <Clock3 size={21} className="text-status-success-text" />
           <div>
             <Typography variant="h3" className="text-xl">Histórico de solicitações</Typography>
             <Typography variant="tiny" tone="muted" className="mt-mx-tiny block font-bold normal-case">Últimos registros persistidos para esta loja.</Typography>

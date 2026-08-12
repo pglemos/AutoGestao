@@ -5,20 +5,20 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 const DEPT_LEGEND = [
   { value: "commercial", label: "Comercial", color: "bg-violet-500" },
   { value: "marketing", label: "Marketing", color: "bg-indigo-500" },
-  { value: "product_stock", label: "Produto e Estoque", color: "bg-blue-500" },
-  { value: "financial", label: "Financeiro", color: "bg-emerald-500" },
-  { value: "operations", label: "Operações", color: "bg-orange-500" },
+  { value: "product_stock", label: "Produto e Estoque", color: "bg-status-info" },
+  { value: "financial", label: "Financeiro", color: "bg-status-success" },
+  { value: "operations", label: "Operações", color: "bg-status-warning" },
   { value: "people_hr", label: "Pessoas — RH", color: "bg-teal-500" },
   { value: "general", label: "Geral e Estratégia", color: "bg-indigo-500" },
 ];
 
 const STATUS_LEGEND = [
   { value: "awaiting_decision", label: "Aguardando decisão", color: "bg-violet-500" },
-  { value: "in_progress", label: "Em andamento", color: "bg-blue-500" },
-  { value: "blocked", label: "Bloqueada", color: "bg-red-500" },
-  { value: "awaiting_validation", label: "Aguardando validação", color: "bg-orange-500" },
-  { value: "completed", label: "Concluída", color: "bg-emerald-500" },
-  { value: "late", label: "Atrasada", color: "bg-red-500" },
+  { value: "in_progress", label: "Em andamento", color: "bg-status-info" },
+  { value: "blocked", label: "Bloqueada", color: "bg-status-error" },
+  { value: "awaiting_validation", label: "Aguardando validação", color: "bg-status-warning" },
+  { value: "completed", label: "Concluída", color: "bg-status-success" },
+  { value: "late", label: "Atrasada", color: "bg-status-error" },
 ];
 
 export default function CalendarLegend() {

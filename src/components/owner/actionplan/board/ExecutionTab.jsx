@@ -88,7 +88,7 @@ export default function ExecutionTab({ action, onReload, onQuickAction, user }) 
             <span className="text-lg font-bold text-foreground">{action.progress}%</span>
           </div>
           <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
-            <div className="h-full rounded-full bg-blue-500" style={{ width: `${action.progress}%` }} />
+            <div className="h-full rounded-full bg-status-info" style={{ width: `${action.progress}%` }} />
           </div>
           {checklistProgress != null && (
             <p className="mt-1.5 text-xs text-muted-foreground">Checklist sugere: {checklistProgress}%</p>
@@ -110,7 +110,7 @@ export default function ExecutionTab({ action, onReload, onQuickAction, user }) 
                 size="sm"
                 variant={isPrimary ? "default" : "outline"}
                 onClick={() => onQuickAction(action, quickAction.value)}
-                className={isPrimary ? "bg-primary hover:bg-primary/90" : isDanger ? "text-red-600 hover:text-red-700" : ""}
+                className={isPrimary ? "bg-primary hover:bg-primary/90" : isDanger ? "text-status-error-text hover:text-status-error-text" : ""}
               >
                 {quickAction.label}
               </Button>
@@ -127,7 +127,7 @@ export default function ExecutionTab({ action, onReload, onQuickAction, user }) 
             <div key={item.id} className="flex items-center gap-2 rounded-md bg-muted/30 px-2 py-1.5">
               <button
                 onClick={() => handleToggleChecklist(item.id, item.done)}
-                className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border ${item.done ? "border-emerald-500 bg-emerald-500 text-white" : "border-border"}`}
+                className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border ${item.done ? "border-status-success bg-status-success text-white" : "border-border"}`}
               >
                 {item.done && <Check className="h-3 w-3" />}
               </button>
@@ -135,10 +135,10 @@ export default function ExecutionTab({ action, onReload, onQuickAction, user }) 
                 <Input value={editText} onChange={(e) => setEditText(e.target.value)} onBlur={() => handleSaveEdit(item.id)} onKeyDown={(e) => e.key === "Enter" && handleSaveEdit(item.id)} className="h-7 text-xs" autoFocus />
               ) : (
                 <span className={`flex-1 text-xs ${item.done ? "text-muted-foreground line-through" : "text-foreground"}`} onClick={() => handleStartEdit(item)}>
-                  {item.text} {item.required && <span className="text-red-500">*</span>}
+                  {item.text} {item.required && <span className="text-status-error">*</span>}
                 </span>
               )}
-              <button onClick={() => handleRemoveChecklist(item.id)} className="text-muted-foreground hover:text-red-500">
+              <button onClick={() => handleRemoveChecklist(item.id)} className="text-muted-foreground hover:text-status-error">
                 <Trash2 className="h-3 w-3" />
               </button>
             </div>
@@ -157,11 +157,11 @@ export default function ExecutionTab({ action, onReload, onQuickAction, user }) 
 
       {/* Bloqueio */}
       {action.status === "blocked" ? (
-        <section className="rounded-lg border border-red-200 bg-red-50 p-3">
-          <p className="mb-1 flex items-center gap-1.5 text-sm font-medium text-red-700"><Lock className="h-4 w-4" /> Ação bloqueada</p>
-          <p className="text-sm text-red-900">{action.blockedReason}</p>
-          {action.blockCategory && <p className="mt-1 text-xs text-red-600">Categoria: {action.blockCategory}</p>}
-          {action.blockResponsible && <p className="text-xs text-red-600">Responsável: {action.blockResponsible}</p>}
+        <section className="rounded-lg border border-status-error/30 bg-status-error-surface p-3">
+          <p className="mb-1 flex items-center gap-1.5 text-sm font-medium text-status-error-text"><Lock className="h-4 w-4" /> Ação bloqueada</p>
+          <p className="text-sm text-status-error-text">{action.blockedReason}</p>
+          {action.blockCategory && <p className="mt-1 text-xs text-status-error-text">Categoria: {action.blockCategory}</p>}
+          {action.blockResponsible && <p className="text-xs text-status-error-text">Responsável: {action.blockResponsible}</p>}
           <Button size="sm" variant="outline" className="mt-2" onClick={() => onQuickAction(action, "unblock")}>
             <Unlock className="h-3.5 w-3.5" /> Remover bloqueio
           </Button>
@@ -169,7 +169,7 @@ export default function ExecutionTab({ action, onReload, onQuickAction, user }) 
       ) : action.status === "in_progress" && (
         <section className="rounded-lg border border-border p-3">
           <p className="mb-2 text-sm font-medium text-foreground">Bloqueio</p>
-          <Button size="sm" variant="outline" onClick={() => onQuickAction(action, "block")} className="text-red-600 hover:text-red-700">
+          <Button size="sm" variant="outline" onClick={() => onQuickAction(action, "block")} className="text-status-error-text hover:text-status-error-text">
             <Lock className="h-3.5 w-3.5" /> Bloquear ação
           </Button>
         </section>

@@ -19,7 +19,7 @@ export function AdminGoalCompareChart({ topStores }: Props) {
     <Card className="xl:col-span-7 border-none bg-white overflow-hidden">
       <CardHeader className="p-mx-lg">
         <CardTitle className="text-lg flex items-center gap-mx-sm">
-          <Target size={18} className="text-emerald-600" /> Comparativo loja x meta
+          <Target size={18} className="text-status-success-text" /> Comparativo loja x meta
         </CardTitle>
         <CardDescription>
           As 10 maiores lojas com realizado historico e meta mensal vigente

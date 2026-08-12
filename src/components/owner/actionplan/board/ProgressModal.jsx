@@ -67,7 +67,7 @@ export default function ProgressModal({ action, open, onOpenChange, onConfirm })
             </div>
           </div>
           {progress === 100 && (
-            <div className="rounded-md bg-blue-50 px-3 py-2 text-sm text-blue-700">
+            <div className="rounded-md bg-status-info-surface px-3 py-2 text-sm text-status-info-text">
               Progresso 100% não conclui a ação automaticamente. Use "Enviar para validação" após salvar.
             </div>
           )}

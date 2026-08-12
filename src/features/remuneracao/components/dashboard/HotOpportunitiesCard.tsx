@@ -36,7 +36,7 @@ export function HotOpportunitiesCard({ qtdOportunidades, comissaoPotencial }: Pr
               <span className="font-bold" style={{ fontSize: '4rem', lineHeight: 1 }}>
                 {qtdOportunidades}
               </span>
-              <span className="text-blue-700 text-xl font-bold">oportunidades</span>
+              <span className="text-status-info-text text-xl font-bold">oportunidades</span>
             </div>
             <p className="text-muted-foreground text-sm mt-1">que podem gerar</p>
             <p className="font-bold mt-1" style={{ fontSize: '2rem' }}>
@@ -49,8 +49,8 @@ export function HotOpportunitiesCard({ qtdOportunidades, comissaoPotencial }: Pr
       <div className="mt-4 flex items-center justify-between px-4 py-3 rounded-xl" style={{ background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.15)' }}>
         <span className="text-muted-foreground text-sm">Clientes quentes na sua carteira</span>
         <div className="flex items-center gap-2">
-          <span className="text-blue-700 font-bold text-lg">{qtdOportunidades}</span>
-          <Users className="w-4 h-4 text-blue-700" />
+          <span className="text-status-info-text font-bold text-lg">{qtdOportunidades}</span>
+          <Users className="w-4 h-4 text-status-info-text" />
         </div>
       </div>
     </div>

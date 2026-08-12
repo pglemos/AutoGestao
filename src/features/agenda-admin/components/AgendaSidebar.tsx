@@ -45,7 +45,7 @@ export function AgendaSidebar({
 
   const statusOptions = [
     { key: 'todos', label: 'Todas', count: metrics.total, color: 'bg-text-tertiary', icon: Calendar },
-    { key: 'agendada', label: 'Agendadas', count: metrics.agendadas, color: 'bg-emerald-600', icon: Clock },
+    { key: 'agendada', label: 'Agendadas', count: metrics.agendadas, color: 'bg-brand-primary', icon: Clock },
     { key: 'em_andamento', label: 'Em Andamento', count: metrics.emAndamento, color: 'bg-status-warning', icon: PlayCircle },
     { key: 'concluida', label: 'Concluídas', count: metrics.concluidas, color: 'bg-status-success', icon: CheckCircle2 },
     { key: 'cancelada', label: 'Canceladas', count: metrics.canceladas, color: 'bg-status-error', icon: XCircle },
@@ -110,7 +110,7 @@ export function AgendaSidebar({
                 className={cn(
                   'flex items-center gap-1.5 rounded-xl px-2 py-1 text-caption font-medium transition-colors',
                   isActive
-                    ? 'bg-emerald-600 text-white font-bold shadow-2xs'
+                    ? 'bg-brand-primary text-white font-bold shadow-2xs'
                     : 'text-muted-foreground hover:bg-gray-50 hover:text-foreground',
                 )}
               >
@@ -152,7 +152,7 @@ export function AgendaSidebar({
                 className={cn(
                   'flex w-full items-center px-2 py-1.5 rounded-xl text-caption font-medium transition-colors',
                   consultantFilter === 'todos'
-                    ? 'bg-emerald-600/10 text-emerald-600 font-bold border border-brand-primary/20'
+                    ? 'bg-brand-primary/10 text-status-success-text font-bold border border-brand-primary/20'
                     : 'text-muted-foreground hover:bg-gray-50 hover:text-foreground',
                 )}
               >
@@ -170,14 +170,14 @@ export function AgendaSidebar({
                     className={cn(
                       'flex w-full items-center gap-1.5 px-2 py-1.5 rounded-xl text-caption font-medium transition-colors text-left truncate',
                       isSelected
-                        ? 'bg-emerald-600 text-white font-bold shadow-2xs'
+                        ? 'bg-brand-primary text-white font-bold shadow-2xs'
                         : 'text-muted-foreground hover:bg-gray-50 hover:text-foreground',
                     )}
                   >
                     <span
                       className={cn(
                         'flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-caption font-bold',
-                        isSelected ? 'bg-white text-emerald-600' : 'bg-emerald-600/10 text-emerald-600',
+                        isSelected ? 'bg-white text-status-success-text' : 'bg-brand-primary/10 text-status-success-text',
                       )}
                     >
                       {c.name.charAt(0).toUpperCase()}

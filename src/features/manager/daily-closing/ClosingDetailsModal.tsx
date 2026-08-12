@@ -46,12 +46,12 @@ export function ClosingDetailsModal({
       footer={onOpenAgenda || onCorrectLeads ? (
         <div className="flex flex-wrap justify-end gap-2">
           {onCorrectLeads && (
-            <button type="button" onClick={onCorrectLeads} className="inline-flex h-9 items-center gap-1.5 rounded-[8px] border border-amber-200 bg-white px-3 text-sm font-medium text-amber-700 hover:bg-amber-50">
+            <button type="button" onClick={onCorrectLeads} className="inline-flex h-9 items-center gap-1.5 rounded-[8px] border border-status-warning/30 bg-white px-3 text-sm font-medium text-status-warning-text hover:bg-status-warning-surface">
               <Pencil size={15} /> Corrigir leads
             </button>
           )}
           {onOpenAgenda && (
-            <button type="button" onClick={onOpenAgenda} className="inline-flex h-9 items-center gap-1.5 rounded-[8px] border border-emerald-200 bg-white px-3 text-sm font-medium text-emerald-700 hover:bg-emerald-50">
+            <button type="button" onClick={onOpenAgenda} className="inline-flex h-9 items-center gap-1.5 rounded-[8px] border border-status-success/30 bg-white px-3 text-sm font-medium text-status-success-text hover:bg-status-success-surface">
               <CalendarClock size={15} /> Ver Agenda D+1 deste vendedor
             </button>
           )}

@@ -5,9 +5,9 @@ import { consultingRepository } from "./consultingRepository";
 
 const TONE_DOT = {
   green: "bg-primary",
-  blue: "bg-blue-500",
-  amber: "bg-amber-500",
-  red: "bg-red-500",
+  blue: "bg-status-info",
+  amber: "bg-status-warning",
+  red: "bg-status-error",
   slate: "bg-muted-foreground/40",
 };
 

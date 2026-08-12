@@ -12,9 +12,9 @@ export default function Terms() {
     return (
         // lint-page-roots-ignore: rota pública com card centrado em viewport
         // cheio, fora do AppShell. Não tem sidebar nem margem de página.
-        <main className="min-h-screen bg-surface-alt flex items-center justify-center p-mx-sm sm:p-10 selection:bg-emerald-600 selection:text-white relative overflow-hidden">
+        <main className="min-h-screen bg-surface-alt flex items-center justify-center p-mx-sm sm:p-10 selection:bg-brand-primary selection:text-white relative overflow-hidden">
 
-            <div className="absolute top-mx-0 right-mx-0 w-mx-hero h-mx-hero bg-emerald-600/5 rounded-mx-full blur-mx-xl -mr-mx-lg -mt-mx-lg pointer-events-none" aria-hidden="true" />
+            <div className="absolute top-mx-0 right-mx-0 w-mx-hero h-mx-hero bg-brand-primary/5 rounded-mx-full blur-mx-xl -mr-mx-lg -mt-mx-lg pointer-events-none" aria-hidden="true" />
             <div className="absolute bottom-mx-0 left-mx-0 w-mx-hero h-mx-hero bg-status-success-surface rounded-mx-full blur-mx-xl -ml-mx-lg -mb-mx-lg pointer-events-none" aria-hidden="true" />
 
             <motion.div
@@ -43,7 +43,7 @@ export default function Terms() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg">
                                 <Card className="bg-gray-50 p-mx-10 border-none shadow-mx-inner group hover:bg-white hover:shadow-sm transition-all">
-                                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 transition-transform">
+                                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-status-success-text flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 transition-transform">
                                         <Lock size={24} strokeWidth={2} />
                                     </div>
                                     <Typography variant="h2" className="mb-4">Autoridade de Acesso</Typography>
@@ -65,7 +65,7 @@ export default function Terms() {
 
                             <div className="space-y-mx-md pt-10 border-t border-border">
                                 <header className="flex items-center gap-mx-sm">
-                                    <div className="w-mx-10 h-mx-10 rounded-xl bg-gray-900 text-emerald-600 flex items-center justify-center shadow-sm"><Zap size={20} /></div>
+                                    <div className="w-mx-10 h-mx-10 rounded-xl bg-gray-900 text-status-success-text flex items-center justify-center shadow-sm"><Zap size={20} /></div>
                                     <Typography variant="h2">Desempenho e Disponibilidade</Typography>
                                 </header>
                                 <Typography variant="caption" tone="muted" className="leading-relaxed">
@@ -75,7 +75,7 @@ export default function Terms() {
                         </div>
 
                         <footer className="pt-10 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-mx-10 w-full flex-wrap">
-                            <Button variant="ghost" onClick={() => navigate(-1)} className="text-caption font-bold text-muted-foreground hover:text-emerald-600 bg-white shadow-sm rounded-mx-full px-6 h-mx-xl w-full sm:w-auto justify-center">
+                            <Button variant="ghost" onClick={() => navigate(-1)} className="text-caption font-bold text-muted-foreground hover:text-status-success-text bg-white shadow-sm rounded-mx-full px-6 h-mx-xl w-full sm:w-auto justify-center">
                                 <ArrowLeft size={16} className="mr-2" /> VOLTAR AO SISTEMA
                             </Button>
                             <div className="text-center sm:text-right space-y-mx-tiny">

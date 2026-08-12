@@ -24,7 +24,7 @@ export function RotinaProgressCard({ routineProgress }: Props) {
         <div className="flex min-w-mx-48 items-center gap-mx-sm">
           <div className="h-mx-xs flex-1 overflow-hidden rounded-mx-full bg-gray-50">
             <div
-              className="h-full rounded-mx-full bg-emerald-600 transition-all"
+              className="h-full rounded-mx-full bg-brand-primary transition-all"
               style={{ width: `${routineProgress.percent}%` }}
             />
           </div>

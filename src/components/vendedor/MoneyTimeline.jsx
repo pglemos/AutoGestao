@@ -34,27 +34,27 @@ export default function MoneyTimeline({ calcResult, faixas = [] }) {
                 isAtual
                   ? "bg-slate-900 text-white shadow-lg"
                   : ponto.novaFaixa
-                  ? "bg-emerald-50 border-2 border-emerald-300"
+                  ? "bg-status-success-surface border-2 border-status-success/40"
                   : "bg-slate-50 border border-border-subtle"
               }`}
             >
               {ponto.novaFaixa && !isAtual && (
                 <div className="flex items-center justify-center gap-1 mb-2">
-                  <Star className="w-3 h-3 text-emerald-500" fill="currentColor" />
-                  <span className="text-caption font-bold text-emerald-600 uppercase tracking-wider">Nova faixa</span>
+                  <Star className="w-3 h-3 text-status-success" fill="currentColor" />
+                  <span className="text-caption font-bold text-status-success-text uppercase tracking-wider">Nova faixa</span>
                 </div>
               )}
               <p className={`text-xs font-medium mb-1 ${isAtual ? "text-text-disabled" : "text-muted-foreground"}`}>
                 {isAtual ? "Atual" : `+${i} venda${i !== 1 ? "s" : ""}`}
               </p>
-              <p className={`text-lg font-bold tabular-nums ${isAtual ? "text-white" : ponto.novaFaixa ? "text-emerald-700" : "text-mx-navy"}`}>
+              <p className={`text-lg font-bold tabular-nums ${isAtual ? "text-white" : ponto.novaFaixa ? "text-status-success-text" : "text-mx-navy"}`}>
                 {ponto.vendas} <span className="text-xs font-normal">vend.</span>
               </p>
               <p className={`text-sm font-bold mt-1 tabular-nums ${isAtual ? "text-emerald-400" : "text-mx-navy"}`}>
                 {formatBRL(ponto.comissao)}
               </p>
               {!isAtual && ganho > 0 && (
-                <p className="text-caption font-bold text-emerald-600 mt-1">+ {formatBRL(ganho)}</p>
+                <p className="text-caption font-bold text-status-success-text mt-1">+ {formatBRL(ganho)}</p>
               )}
               {ponto.faixa && (
                 <p className={`text-caption mt-1.5 ${isAtual ? "text-muted-foreground" : "text-muted-foreground"}`}>

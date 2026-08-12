@@ -107,22 +107,22 @@ export function ConsultingMonthlyCloseView({ clientId }: Props) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-mx-md">
         <Card className="p-mx-lg border-none bg-white">
-          <Megaphone className="w-mx-5 h-mx-5 text-emerald-600 mb-mx-sm" />
+          <Megaphone className="w-mx-5 h-mx-5 text-status-success-text mb-mx-sm" />
           <Typography variant="caption" tone="muted">Leads recebidos</Typography>
           <Typography variant="h2">{formatNumber(summary.leads)}</Typography>
         </Card>
         <Card className="p-mx-lg border-none bg-white">
-          <ShoppingCart className="w-mx-5 h-mx-5 text-emerald-600 mb-mx-sm" />
+          <ShoppingCart className="w-mx-5 h-mx-5 text-status-success-text mb-mx-sm" />
           <Typography variant="caption" tone="muted">Vendas registradas</Typography>
           <Typography variant="h2">{formatNumber(summary.salesRows.length || summary.internetSales)}</Typography>
         </Card>
         <Card className="p-mx-lg border-none bg-white">
-          <Car className="w-mx-5 h-mx-5 text-emerald-600 mb-mx-sm" />
+          <Car className="w-mx-5 h-mx-5 text-status-success-text mb-mx-sm" />
           <Typography variant="caption" tone="muted">Estoque total</Typography>
           <Typography variant="h2">{formatNumber(summary.inventory?.total_stock || 0)}</Typography>
         </Card>
         <Card className="p-mx-lg border-none bg-white">
-          <Database className="w-mx-5 h-mx-5 text-emerald-600 mb-mx-sm" />
+          <Database className="w-mx-5 h-mx-5 text-status-success-text mb-mx-sm" />
           <Typography variant="caption" tone="muted">Investimento internet</Typography>
           <Typography variant="h2">{formatCurrency(summary.investment)}</Typography>
         </Card>
@@ -170,14 +170,14 @@ export function ConsultingMonthlyCloseView({ clientId }: Props) {
           <div className="space-y-mx-sm">
             <div className="flex items-center justify-between gap-mx-sm p-mx-sm rounded-xl bg-gray-50">
               <div className="flex items-center gap-mx-xs">
-                <Users className="w-mx-4 h-mx-4 text-emerald-600" />
+                <Users className="w-mx-4 h-mx-4 text-status-success-text" />
                 <Typography variant="p" className="font-bold">Vendedores ativos</Typography>
               </div>
               <Typography variant="p" className="">{summary.sellers}</Typography>
             </div>
             <div className="flex items-center justify-between gap-mx-sm p-mx-sm rounded-xl bg-gray-50">
               <div className="flex items-center gap-mx-xs">
-                <BarChart3 className="w-mx-4 h-mx-4 text-emerald-600" />
+                <BarChart3 className="w-mx-4 h-mx-4 text-status-success-text" />
                 <Typography variant="p" className="font-bold">Ticket médio</Typography>
               </div>
               <Typography variant="p" className="">{formatCurrency(summary.avgTicket)}</Typography>

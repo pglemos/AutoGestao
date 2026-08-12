@@ -504,7 +504,7 @@ export default function MxSidebarShell({
           type="button"
           aria-label="Abrir menu principal"
           onClick={() => setMobileOpen(true)}
-          className="flex min-w-0 items-center gap-2 text-left text-foreground outline-none transition-opacity hover:opacity-80 active:opacity-60 focus-visible:ring-2 focus-visible:ring-emerald-500/30"
+          className="flex min-w-0 items-center gap-2 text-left text-foreground outline-none transition-opacity hover:opacity-80 active:opacity-60 focus-visible:ring-2 focus-visible:ring-status-success/30"
         >
           <Menu className="h-5.5 w-5.5 shrink-0 text-foreground" aria-hidden="true" />
           <img src={SIDEBAR_LOGO} alt="MX" className="h-6 w-6 shrink-0 object-contain" />
@@ -512,7 +512,7 @@ export default function MxSidebarShell({
             Menu
           </span>
           <span className="hidden min-w-0 leading-tight min-[500px]:block">
-            <span className="block truncate text-caption font-bold uppercase tracking-[0.12em] text-emerald-700">
+            <span className="block truncate text-caption font-bold uppercase tracking-[0.12em] text-status-success-text">
               {moduleLabel}
             </span>
           </span>
@@ -526,7 +526,7 @@ export default function MxSidebarShell({
             type="button"
             aria-label={`Abrir perfil de ${displayName}`}
             onClick={() => goTo(profilePath)}
-            className="grid h-9 w-9 place-items-center rounded-full bg-emerald-50 text-caption font-bold uppercase text-emerald-700 ring-1 ring-emerald-100 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30"
+            className="grid h-9 w-9 place-items-center rounded-full bg-status-success-surface text-caption font-bold uppercase text-status-success-text ring-1 ring-status-success/20 outline-none focus-visible:ring-2 focus-visible:ring-status-success/30"
           >
             {initials}
           </button>
@@ -591,12 +591,12 @@ export default function MxSidebarShell({
       >
         {isSimulating ? (
           <section
-            className="m-3 flex flex-col gap-3 rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-emerald-950 md:flex-row md:items-center md:justify-between"
+            className="m-3 flex flex-col gap-3 rounded-2xl border border-status-success/20 bg-status-success-surface p-4 text-emerald-950 md:flex-row md:items-center md:justify-between"
             aria-label="Simulação ativa"
           >
             <div className="min-w-0">
               <p className="text-sm font-bold">Simulação {simulationLabel} ativa</p>
-              <p className="mt-1 truncate text-xs font-semibold text-emerald-800">
+              <p className="mt-1 truncate text-xs font-semibold text-status-success-text">
                 Base: {simulationBase} • Loja: {simulationStore}
               </p>
             </div>
@@ -604,7 +604,7 @@ export default function MxSidebarShell({
               <button
                 type="button"
                 onClick={onStopSimulation}
-                className="h-10 rounded-xl bg-emerald-600 px-4 text-sm font-semibold text-white outline-none transition-colors hover:bg-emerald-700 focus-visible:ring-2 focus-visible:ring-emerald-500/30"
+                className="h-10 rounded-xl bg-brand-primary px-4 text-sm font-semibold text-white outline-none transition-colors hover:bg-brand-primary-hover focus-visible:ring-2 focus-visible:ring-status-success/30"
               >
                 Voltar Admin MX
               </button>

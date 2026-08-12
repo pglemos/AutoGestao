@@ -185,8 +185,8 @@ export function usePerformanceAlerts({
     const total = metrics.totalSales
 
     return [
-      { label: 'Porta (Showroom)', color: 'bg-emerald-500', pct: total > 0 ? Math.round((porta / total) * 100) : 0, tone: 'success' as ChannelTone },
-      { label: 'Carteira (Ativo)', color: 'bg-blue-500', pct: total > 0 ? Math.round((carteira / total) * 100) : 0, tone: 'info' as ChannelTone },
+      { label: 'Porta (Showroom)', color: 'bg-status-success', pct: total > 0 ? Math.round((porta / total) * 100) : 0, tone: 'success' as ChannelTone },
+      { label: 'Carteira (Ativo)', color: 'bg-status-info', pct: total > 0 ? Math.round((carteira / total) * 100) : 0, tone: 'info' as ChannelTone },
       { label: 'Digital (Leads)', color: 'bg-violet-500', pct: total > 0 ? Math.round((digital / total) * 100) : 0, tone: 'brand' as ChannelTone },
     ]
   }, [checkins, metrics.totalSales])
@@ -211,7 +211,7 @@ export function PerformanceAlerts({ role, isOwner, alerts }: PerformanceAlertsPr
     <section className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm" aria-labelledby="performance-alerts-title">
       <header className="flex flex-col gap-3 border-b border-border-subtle px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-start gap-3">
-          <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${hasDanger ? 'bg-red-50 text-red-600' : hasWarning ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'}`}>
+          <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${hasDanger ? 'bg-status-error-surface text-status-error-text' : hasWarning ? 'bg-status-warning-surface text-status-warning-text' : 'bg-status-success-surface text-status-success-text'}`}>
             <SummaryIcon size={19} />
           </span>
           <div>
@@ -221,7 +221,7 @@ export function PerformanceAlerts({ role, isOwner, alerts }: PerformanceAlertsPr
             <p className="mt-1 text-sm text-muted-foreground">Alertas de performance, rotina e funil organizados por impacto.</p>
           </div>
         </div>
-        <span className={`inline-flex w-fit rounded-lg px-2.5 py-1 text-xs font-semibold ${hasDanger ? 'bg-red-100 text-red-700' : hasWarning ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'}`}>
+        <span className={`inline-flex w-fit rounded-lg px-2.5 py-1 text-xs font-semibold ${hasDanger ? 'bg-status-error-surface text-status-error-text' : hasWarning ? 'bg-status-warning-surface text-status-warning-text' : 'bg-status-success-surface text-status-success-text'}`}>
           {summaryLabel}
         </span>
       </header>
@@ -246,23 +246,23 @@ function AlertCard({
 }) {
   const styles = {
     success: {
-      surface: 'border-emerald-100 bg-emerald-50/60',
-      badge: 'bg-emerald-100 text-emerald-700',
-      icon: 'text-emerald-600',
+      surface: 'border-status-success/20 bg-status-success-surface/60',
+      badge: 'bg-status-success-surface text-status-success-text',
+      icon: 'text-status-success-text',
       label: 'Dentro do esperado',
       Icon: CheckCircle2,
     },
     warning: {
-      surface: 'border-amber-100 bg-amber-50/60',
-      badge: 'bg-amber-100 text-amber-700',
-      icon: 'text-amber-600',
+      surface: 'border-status-warning/20 bg-status-warning-surface/60',
+      badge: 'bg-status-warning-surface text-status-warning-text',
+      icon: 'text-status-warning-text',
       label: 'Atenção',
       Icon: CircleAlert,
     },
     danger: {
-      surface: 'border-red-100 bg-red-50/60',
-      badge: 'bg-red-100 text-red-700',
-      icon: 'text-red-600',
+      surface: 'border-status-error/20 bg-status-error-surface/60',
+      badge: 'bg-status-error-surface text-status-error-text',
+      icon: 'text-status-error-text',
       label: 'Crítico',
       Icon: AlertTriangle,
     },

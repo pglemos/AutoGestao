@@ -60,7 +60,7 @@ export function FichaClienteSheet({
                 {[0, 1, 2].map(item => <div key={item} className="h-24 animate-pulse rounded-2xl bg-slate-200" />)}
               </div>
             ) : error ? (
-              <p role="alert" className="rounded-2xl border border-red-200 bg-red-50 p-4 text-body-sm font-semibold text-red-700">{error}</p>
+              <p role="alert" className="rounded-2xl border border-status-error/30 bg-status-error-surface p-4 text-body-sm font-semibold text-status-error-text">{error}</p>
             ) : !client ? (
               <p className="rounded-2xl border border-border bg-white p-6 text-center text-body-sm text-muted-foreground">Cliente não encontrado.</p>
             ) : (
@@ -71,7 +71,7 @@ export function FichaClienteSheet({
                       <h2 className="truncate text-[18px] font-bold text-foreground">{client.nome}</h2>
                       <p className="mt-1 flex items-center gap-1.5 text-body-sm text-muted-foreground"><Phone className="h-3.5 w-3.5" aria-hidden="true" />{client.telefone || 'Sem telefone'}</p>
                     </div>
-                    <span className="rounded-full bg-blue-50 px-3 py-1 text-caption font-bold capitalize text-status-info">{humanize(client.status)}</span>
+                    <span className="rounded-full bg-status-info-surface px-3 py-1 text-caption font-bold capitalize text-status-info">{humanize(client.status)}</span>
                   </div>
                   {client.observacoes && <p className="mt-4 rounded-xl bg-slate-50 p-3 text-[12px] leading-5 text-muted-foreground">{client.observacoes}</p>}
                 </section>

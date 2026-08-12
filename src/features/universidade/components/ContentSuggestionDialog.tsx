@@ -49,7 +49,7 @@ export function ContentSuggestionDialog() {
         type="button"
         variant="outline"
         onClick={() => setOpen(true)}
-        className="h-10 w-full justify-center rounded-xl border-emerald-200 bg-white px-3 text-xs font-bold text-emerald-700 hover:bg-emerald-50 md:w-auto"
+        className="h-10 w-full justify-center rounded-xl border-status-success/30 bg-white px-3 text-xs font-bold text-status-success-text hover:bg-status-success-surface md:w-auto"
       >
         <Lightbulb size={15} className="mr-2" />
         Sugerir tema de aula
@@ -88,7 +88,7 @@ export function ContentSuggestionDialog() {
                 <select
                   value={form.theme}
                   onChange={event => setForm(current => ({ ...current, theme: event.target.value as DevelopmentTheme }))}
-                  className="mt-1 h-11 w-full rounded-xl border border-border bg-white px-3 text-sm font-medium text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="mt-1 h-11 w-full rounded-xl border border-border bg-white px-3 text-sm font-medium text-foreground outline-none focus:ring-2 focus:ring-status-success"
                 >
                   {DEVELOPMENT_THEMES.map(theme => <option key={theme.key} value={theme.key}>{theme.label}</option>)}
                 </select>
@@ -112,14 +112,14 @@ export function ContentSuggestionDialog() {
                   placeholder="Descreva a dúvida ou situação prática."
                   maxLength={500}
                   rows={4}
-                  className="mt-1 w-full resize-none rounded-xl border border-border p-3 text-sm outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="mt-1 w-full resize-none rounded-xl border border-border p-3 text-sm outline-none focus:ring-2 focus:ring-status-success"
                 />
               </label>
             </div>
 
             <footer className="mt-5 flex justify-end gap-2">
               <Button type="button" variant="ghost" onClick={close}>Cancelar</Button>
-              <Button type="submit" className="rounded-xl bg-emerald-600 font-bold text-white hover:bg-emerald-700">
+              <Button type="submit" className="rounded-xl bg-brand-primary font-bold text-white hover:bg-brand-primary-hover">
                 <Send size={15} className="mr-2" /> Enviar sugestão
               </Button>
             </footer>

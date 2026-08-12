@@ -267,7 +267,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                 <header className="p-mx-lg md:p-10 border-b border-border flex flex-col gap-mx-lg sticky top-mx-0 bg-white z-10 shadow-sm">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-mx-sm">
-                            <div className="w-mx-xl h-mx-xl rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-sm"><Target size={24} /></div>
+                            <div className="w-mx-xl h-mx-xl rounded-2xl bg-brand-primary text-white flex items-center justify-center shadow-sm"><Target size={24} /></div>
                             <div>
                                 <Dialog.Title asChild>
                                     <Typography variant="h2" className="tracking-tighter">Sessão PDI MX 360º</Typography>
@@ -279,14 +279,14 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                     </div>
                     {randomFrase && (
                         <div className="bg-mx-indigo-50 border border-brand-primary/20 p-mx-sm rounded-2xl flex items-center gap-mx-sm">
-                            <Sparkles className="text-emerald-600 shrink-0" size={20} />
+                            <Sparkles className="text-status-success-text shrink-0" size={20} />
                             <Typography variant="p" tone="brand" className="text-sm font-bold italic">{randomFrase}</Typography>
                         </div>
                     )}
                     <div className="flex items-center justify-between gap-mx-sm">
                         {steps.map((step, idx) => (
                             <div key={step.id} className="flex-1 flex flex-col gap-mx-xs">
-                                <div className={cn("h-mx-xs rounded-mx-full transition-all duration-500", idx <= currentStep ? "bg-emerald-600" : "bg-gray-50")} />
+                                <div className={cn("h-mx-xs rounded-mx-full transition-all duration-500", idx <= currentStep ? "bg-brand-primary" : "bg-gray-50")} />
                             </div>
                         ))}
                     </div>
@@ -359,7 +359,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                                             value={meta.tipo}
                                                             onChange={e => { const nm = [...form.metas]; nm[idx].tipo = e.target.value; setForm({ ...form, metas: nm }) }}
                                                             aria-label="Tipo de meta"
-                                                            className="text-mx-tiny font-bold uppercase text-emerald-600 bg-transparent outline-none cursor-pointer"
+                                                            className="text-mx-tiny font-bold uppercase text-status-success-text bg-transparent outline-none cursor-pointer"
                                                         >
                                                             <option value="pessoal">META PESSOAL</option>
                                                             <option value="profissional">META PROFISSIONAL</option>
@@ -419,7 +419,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                                             />
                                                             
                                                             <div className="flex justify-between items-center bg-white p-mx-xs rounded-xl text-xs font-bold text-muted-foreground border border-border">
-                                                                <span className="flex items-center gap-mx-xs text-emerald-600/80"><AlertCircle size={14}/> Ind: {c.indicador}</span>
+                                                                <span className="flex items-center gap-mx-xs text-status-success-text/80"><AlertCircle size={14}/> Ind: {c.indicador}</span>
                                                                 <span className="uppercase text-mx-tiny tracking-widest">{descritor}</span>
                                                             </div>
                                                         </div>
@@ -490,7 +490,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                                     <input 
                                                         type="date" value={form.proxima_revisao_data} onChange={e => setForm({ ...form, proxima_revisao_data: e.target.value })}
                                                         aria-label="Data de revisão"
-                                                        className="text-sm font-bold text-emerald-600 border-none outline-none bg-transparent"
+                                                        className="text-sm font-bold text-status-success-text border-none outline-none bg-transparent"
                                                     />
                                                 </div>
                                             </div>
@@ -499,7 +499,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                         {form.plano_acao.map((acao, idx) => (
                                             <div key={idx} className="p-mx-md bg-gray-50 border border-border rounded-2xl space-y-mx-sm">
                                                 <div className="flex items-center gap-mx-sm">
-                                                    <div className="w-mx-lg h-mx-lg rounded-mx-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shrink-0">{idx + 1}</div>
+                                                    <div className="w-mx-lg h-mx-lg rounded-mx-full bg-brand-primary text-white flex items-center justify-center font-bold text-xs shrink-0">{idx + 1}</div>
                                                     <select 
                                                         value={acao.competencia_id} onChange={e => handleCompetenciaAcaoChange(idx, e.target.value)}
                                                         aria-label="Competência"
@@ -515,7 +515,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                                         <select 
                                                             aria-label="Ação Recomendada"
                                                             onChange={e => { const np = [...form.plano_acao]; np[idx].descricao_acao = e.target.value; setForm({ ...form, plano_acao: np }) }}
-                                                            className="w-full p-mx-xs bg-mx-indigo-50 border border-brand-primary/20 rounded-xl text-xs font-bold text-emerald-600 outline-none cursor-pointer"
+                                                            className="w-full p-mx-xs bg-mx-indigo-50 border border-brand-primary/20 rounded-xl text-xs font-bold text-status-success-text outline-none cursor-pointer"
                                                         >
                                                             <option value="">✨ Selecionar Ação Recomendada da MX...</option>
                                                             {suggestedActions[acao.competencia_id].map(sa => (

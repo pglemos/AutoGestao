@@ -103,7 +103,7 @@ export default function EsforcoNecessario({ funis, faltam, funisBase90, usou90 }
     : canalPrincipal === "Internet" ? inetCalc
     : showCalc;
 
-  const COR_CANAL = { Carteira: "bg-green-50 border-green-200", Internet: "bg-blue-50 border-blue-200", Showroom: "bg-orange-50 border-orange-200" };
+  const COR_CANAL = { Carteira: "bg-green-50 border-green-200", Internet: "bg-status-info-surface border-status-info/30", Showroom: "bg-status-warning-surface border-status-warning/30" };
   const corPrincipal = canalPrincipal ? COR_CANAL[canalPrincipal] : "";
 
   return (

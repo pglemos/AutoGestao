@@ -10,7 +10,7 @@ const TONE_CHIP: Record<StatTone, string> = {
   red: 'bg-status-error/10 text-status-error',
   orange: 'bg-status-warning/10 text-status-warning',
   blue: 'bg-status-info/10 text-status-info',
-  brand: 'bg-emerald-600/10 text-emerald-600',
+  brand: 'bg-brand-primary/10 text-status-success-text',
 }
 
 type StatCardProps = {

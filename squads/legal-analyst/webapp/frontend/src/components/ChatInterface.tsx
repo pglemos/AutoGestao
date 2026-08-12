@@ -154,7 +154,7 @@ export default function ChatInterface({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="mx-4 mb-2 px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center gap-2"
+            className="mx-4 mb-2 px-3 py-2 rounded-lg bg-status-error/10 border border-status-error/20 flex items-center gap-2"
           >
             <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
             <span className="text-xs text-red-300 flex-1">{error}</span>

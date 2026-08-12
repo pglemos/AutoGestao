@@ -185,10 +185,10 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
     const completedCheckin = (team || []).filter(m => m.checkin_today).length;
 
     return [
-        { label: 'Integrantes', shortLabel: 'Int.', value: total, icon: Users, tone: 'brand', color: 'from-emerald-600/20 to-emerald-600/5' },
-        { label: 'Fechamentos', shortLabel: 'Fech.', value: completedCheckin, icon: CheckCircle2, tone: 'success', color: 'from-emerald-100 to-transparent' },
-        { label: 'Ativos', shortLabel: 'Atv.', value: activeMembers.length, icon: Zap, tone: 'success', color: 'from-emerald-100 to-transparent' },
-        { label: 'Líderes', shortLabel: 'Líd.', value: leaders.length, icon: Shield, tone: 'warning', color: 'from-amber-100 to-transparent' },
+        { label: 'Integrantes', shortLabel: 'Int.', value: total, icon: Users, tone: 'brand', color: 'from-brand-primary/20 to-brand-primary/5' },
+        { label: 'Fechamentos', shortLabel: 'Fech.', value: completedCheckin, icon: CheckCircle2, tone: 'success', color: 'from-status-success-surface to-transparent' },
+        { label: 'Ativos', shortLabel: 'Atv.', value: activeMembers.length, icon: Zap, tone: 'success', color: 'from-status-success-surface to-transparent' },
+        { label: 'Líderes', shortLabel: 'Líd.', value: leaders.length, icon: Shield, tone: 'warning', color: 'from-status-warning-surface to-transparent' },
     ];
   }, [team])
 
@@ -277,8 +277,8 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
   const getVigenciaStatus = (m: TeamMember) => {
     const today = new Date().toISOString().slice(0, 10)
     if (!m.is_active) return { label: 'INATIVO', variant: 'outline' as const, color: 'text-muted-foreground border-border bg-gray-50' }
-    if (m.ended_at && m.ended_at.slice(0, 10) < today) return { label: 'ENCERRADO', variant: 'danger' as const, color: 'text-red-600 border-red-200 bg-red-50' }
-    return { label: 'ATIVO', variant: 'success' as const, color: 'text-emerald-600 border-emerald-200 bg-emerald-50' }
+    if (m.ended_at && m.ended_at.slice(0, 10) < today) return { label: 'ENCERRADO', variant: 'danger' as const, color: 'text-status-error-text border-status-error/30 bg-status-error-surface' }
+    return { label: 'ATIVO', variant: 'success' as const, color: 'text-status-success-text border-status-success/30 bg-status-success-surface' }
   }
 
   const handleRefresh = useCallback(async () => {
@@ -414,7 +414,7 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
               <div className="flex flex-col sm:flex-row items-center gap-mx-sm w-full lg:w-auto">
                 <div className="relative group w-full sm:w-mx-96">
                   <label htmlFor="search-specialist" className="sr-only">Buscar integrante da equipe</label>
-                  <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-emerald-600 transition-colors" />
+                  <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-status-success-text transition-colors" />
                   <Input
                     id="search-specialist"
                     name="search-specialist"

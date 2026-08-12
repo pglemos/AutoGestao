@@ -10,7 +10,7 @@ export function ConfiguracoesTabSummary({ definition, isReadOnly }: { definition
     <MxSectionCard>
       <div className="flex flex-col gap-4 p-5 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex min-w-0 items-start gap-3">
-          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-status-success-surface text-status-success-text">
             <Icon size={22} aria-hidden="true" />
           </span>
           <div className="min-w-0">

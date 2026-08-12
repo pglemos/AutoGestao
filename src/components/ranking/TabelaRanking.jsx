@@ -25,9 +25,9 @@ function Avatar({ nome, foto, size = 32 }) {
 
 function StatusBadge({ pct }) {
   if (pct >= 100) return <span className="px-2.5 py-1 rounded-full text-caption font-semibold bg-green-100 text-green-700">Acima da meta</span>;
-  if (pct >= 80)  return <span className="px-2.5 py-1 rounded-full text-caption font-semibold bg-amber-100 text-amber-700">Próximo da meta</span>;
-  if (pct >= 50)  return <span className="px-2.5 py-1 rounded-full text-caption font-semibold bg-blue-100 text-blue-700">Em evolução</span>;
-  return <span className="px-2.5 py-1 rounded-full text-caption font-semibold bg-red-100 text-red-600">Abaixo do esperado</span>;
+  if (pct >= 80)  return <span className="px-2.5 py-1 rounded-full text-caption font-semibold bg-status-warning-surface text-status-warning-text">Próximo da meta</span>;
+  if (pct >= 50)  return <span className="px-2.5 py-1 rounded-full text-caption font-semibold bg-status-info-surface text-status-info-text">Em evolução</span>;
+  return <span className="px-2.5 py-1 rounded-full text-caption font-semibold bg-status-error-surface text-status-error-text">Abaixo do esperado</span>;
 }
 
 function formatBRL(v) {
@@ -55,7 +55,7 @@ export default function TabelaRanking({ vendedores, meta, isVolume, meuId }) {
               return (
                 <tr
                   key={v.id}
-                  className={`border-b border-slate-50 transition-colors ${isMe ? "bg-blue-50/60" : "hover:bg-slate-50/50"}`}
+                  className={`border-b border-slate-50 transition-colors ${isMe ? "bg-status-info-surface/60" : "hover:bg-slate-50/50"}`}
                   style={isMe ? { outline: "1.5px solid #3b82f6", outlineOffset: "-1px" } : {}}
                 >
                   {/* Posição */}
@@ -75,7 +75,7 @@ export default function TabelaRanking({ vendedores, meta, isVolume, meuId }) {
                       <div>
                         <div className="flex items-center gap-1.5">
                           <span className="text-body-sm font-semibold text-foreground">{v.nome}</span>
-                          {isMe && <span className="px-1.5 py-0.5 bg-blue-100 text-blue-600 text-caption font-bold rounded-full">Você</span>}
+                          {isMe && <span className="px-1.5 py-0.5 bg-status-info-surface text-status-info-text text-caption font-bold rounded-full">Você</span>}
                         </div>
                       </div>
                     </div>
@@ -84,7 +84,7 @@ export default function TabelaRanking({ vendedores, meta, isVolume, meuId }) {
                   <td className="px-4 py-3 text-body-sm text-muted-foreground">{v.unidade || "—"}</td>
                   {/* Vendas / Faturamento */}
                   <td className="px-4 py-3">
-                    <span className={`text-[14px] font-bold ${isMe ? "text-blue-600" : "text-green-600"}`}>
+                    <span className={`text-[14px] font-bold ${isMe ? "text-status-info-text" : "text-green-600"}`}>
                       {isVolume ? val : formatBRL(val)}
                     </span>
                   </td>
@@ -92,7 +92,7 @@ export default function TabelaRanking({ vendedores, meta, isVolume, meuId }) {
                   <td className="px-4 py-3 text-body-sm text-muted-foreground">{isVolume ? meta : formatBRL(meta)}</td>
                   {/* Atingimento */}
                   <td className="px-4 py-3">
-                    <span className={`text-[14px] font-bold ${pct >= 100 ? "text-green-600" : pct >= 80 ? "text-amber-600" : pct >= 50 ? "text-blue-500" : "text-red-500"}`}>
+                    <span className={`text-[14px] font-bold ${pct >= 100 ? "text-green-600" : pct >= 80 ? "text-status-warning-text" : pct >= 50 ? "text-status-info" : "text-status-error"}`}>
                       {pct}%
                     </span>
                   </td>

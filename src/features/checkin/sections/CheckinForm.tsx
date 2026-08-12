@@ -95,7 +95,7 @@ export function InfoTooltip({ text }: { text: string }) {
         onMouseLeave={() => setVisible(false)}
         onClick={() => setVisible(!visible)}
         onBlur={() => setVisible(false)}
-        className="text-muted-foreground/50 hover:text-emerald-600 transition-colors focus:outline-none"
+        className="text-muted-foreground/50 hover:text-status-success-text transition-colors focus:outline-none"
         aria-label="Informação adicional"
       >
         <HelpCircle size={14} className="stroke-[2.5]" />
@@ -253,11 +253,11 @@ return (
 <form onSubmit={onFormSubmit} className="mt-mx-xs grid w-full min-w-0 grid-cols-[minmax(0,1fr)] gap-mx-sm pb-[calc(8rem+env(safe-area-inset-bottom))] md:pb-16">
 {/* Aviso discreto (após 12h01, sem liberação — Especificação Funcional §3.3) */}
       {showDiscreetPendingBanner && (
-        <div className="hidden items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 sm:flex">
+        <div className="hidden items-center gap-3 rounded-xl border border-status-warning/30 bg-status-warning-surface px-4 py-3 sm:flex">
           <AlertTriangle size={16} className="shrink-0 text-[#F59E0B]" />
           <p className="text-body-sm font-medium text-[#92400E]">
             Existe um fechamento anterior pendente.{' '}
-            <button type="button" onClick={onOpenHistory} className="font-semibold underline transition-colors hover:text-amber-900">
+            <button type="button" onClick={onOpenHistory} className="font-semibold underline transition-colors hover:text-status-warning-text">
               Acesse o Histórico de Fechamentos
             </button>{' '}
             para regularizar.
@@ -480,7 +480,7 @@ return (
                 <p>
                   Ou seja: se você preencher apenas os números e finalizar o fechamento, sua disciplina será de 70%.
                 </p>
-                <div className="bg-blue-50 text-blue-800 font-bold p-2.5 rounded-lg border border-blue-200 flex items-center gap-2">
+                <div className="bg-status-info-surface text-status-info-text font-bold p-2.5 rounded-lg border border-status-info/30 flex items-center gap-2">
                   <Info size={14} />
                   <span>Preencheu os números do dia = 70%</span>
                 </div>
@@ -569,8 +569,8 @@ return (
                 <p>
                   Neste caso, sua pontuação será ajustada e ficará em 95%.
                 </p>
-                <div className="bg-red-50 text-red-800 font-bold p-2.5 rounded-lg border border-red-200 flex items-center gap-2">
-                  <AlertTriangle size={14} className="text-red-600" />
+                <div className="bg-status-error-surface text-status-error-text font-bold p-2.5 rounded-lg border border-status-error/30 flex items-center gap-2">
+                  <AlertTriangle size={14} className="text-status-error-text" />
                   <span>Agendamento com data diferente de amanhã vale apenas 50% na pontuação extra.</span>
                 </div>
               </div>
@@ -594,7 +594,7 @@ return (
                 <p>
                   Mas ele não conta como agendamento para amanhã. Para contar como agendamento, o campo deve estar como: <strong className="text-[#071822]">“Venda Realizada = Em Negociação”</strong>.
                 </p>
-                <div className="bg-blue-50 text-blue-800 font-bold p-2.5 rounded-lg border border-blue-200 flex items-center gap-2">
+                <div className="bg-status-info-surface text-status-info-text font-bold p-2.5 rounded-lg border border-status-info/30 flex items-center gap-2">
                   <Info size={14} />
                   <span>Venda Realizada = Sim conta como venda, não como agendamento.</span>
                 </div>
@@ -667,7 +667,7 @@ Ao concluir, leads, atendimentos, vendas e demais informações referentes ao di
 Novos registros comerciais continuam disponíveis 24 horas. Para corrigir números deste fechamento após a conclusão, use o Histórico.
 </p>
 {hasIncompleteD1 && (
-<div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-[12px] font-semibold text-amber-800">
+<div className="rounded-xl border border-status-warning/30 bg-status-warning-surface px-4 py-3 text-[12px] font-semibold text-status-warning-text">
 Você informou {totalAgendamentosD1} Agendamentos D+1 e detalhou {creditosValidos}. A pontuação será calculada apenas com os agendamentos detalhados.
 </div>
 )}
@@ -707,11 +707,11 @@ className="rounded-xl bg-[#22C55E] px-6 py-2.5 text-body-sm font-bold text-white
       {/* Finalizar Fechamento */}
       <div className="min-w-0 rounded-2xl border border-[#dfe7f0] bg-white px-6 py-5 shadow-mx-lg mt-5 space-y-4">
         {isPastDeadline && !fechamentoConcluido && (
-          <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 shadow-sm">
+          <div className="rounded-xl border border-status-warning/30 bg-status-warning-surface p-4 shadow-sm">
             <div className="flex items-start gap-2">
-              <AlertTriangle size={18} className="mt-0.5 shrink-0 text-amber-600" />
+              <AlertTriangle size={18} className="mt-0.5 shrink-0 text-status-warning-text" />
               <div className="flex-1">
-                <Typography variant="p" className="text-sm font-bold text-amber-900">
+                <Typography variant="p" className="text-sm font-bold text-status-warning-text">
                   Este fechamento está pendente, mas continua disponível para envio sem liberação de gerente. Após concluir, qualquer correção deverá ser solicitada pelo Histórico.
                 </Typography>
               </div>

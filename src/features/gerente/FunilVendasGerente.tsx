@@ -18,9 +18,9 @@ const CHANNEL_UI: Record<FunnelChannel, { description: string; icon: typeof User
 }
 
 const TONE: Record<ChannelTone, { icon: string; pill: string; column: string }> = {
-  emerald: { icon: 'bg-emerald-50 text-emerald-700', pill: 'bg-emerald-50 text-emerald-700', column: 'text-emerald-700' },
+  emerald: { icon: 'bg-status-success-surface text-status-success-text', pill: 'bg-status-success-surface text-status-success-text', column: 'text-status-success-text' },
   sky: { icon: 'bg-sky-50 text-sky-700', pill: 'bg-sky-50 text-sky-700', column: 'text-sky-700' },
-  amber: { icon: 'bg-amber-50 text-amber-700', pill: 'bg-amber-50 text-amber-700', column: 'text-amber-700' },
+  amber: { icon: 'bg-status-warning-surface text-status-warning-text', pill: 'bg-status-warning-surface text-status-warning-text', column: 'text-status-warning-text' },
 }
 
 const CHANNEL_ORDER: FunnelChannel[] = ['Showroom', 'Internet', 'Carteira']
@@ -95,8 +95,8 @@ export default function FunilVendasGerente() {
       />
 
       {error && (
-        <Card className="border border-amber-200 bg-amber-50 p-mx-md" role="status">
-          <Typography variant="p" className="text-sm font-semibold text-amber-800">
+        <Card className="border border-status-warning/30 bg-status-warning-surface p-mx-md" role="status">
+          <Typography variant="p" className="text-sm font-semibold text-status-warning-text">
             Não foi possível carregar os eventos comerciais: {error}
           </Typography>
         </Card>
@@ -229,12 +229,12 @@ function MetricCard({
   return (
     <Card className="border bg-white p-mx-md">
       <div className="flex items-center gap-mx-sm">
-        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600" aria-hidden="true">
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-status-success-surface text-status-success-text" aria-hidden="true">
           <Icon size={18} strokeWidth={1.8} />
         </span>
         <Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">{label}</Typography>
       </div>
-      <Typography variant="h2" className={cn('mt-mx-sm text-2xl tabular-nums', tone === 'emerald' ? 'text-emerald-700' : 'text-foreground')}>
+      <Typography variant="h2" className={cn('mt-mx-sm text-2xl tabular-nums', tone === 'emerald' ? 'text-status-success-text' : 'text-foreground')}>
         {value}
       </Typography>
       <Typography variant="p" className="mt-1 text-xs font-semibold text-muted-foreground">{hint}</Typography>
@@ -303,7 +303,7 @@ function RankingRow({ row, position }: { row: TeamRankingRow; position: number }
           <span
             className={cn(
               'grid h-7 w-7 shrink-0 place-items-center rounded-full text-xs font-bold tabular-nums',
-              position === 1 ? 'bg-amber-50 text-amber-700' : 'bg-gray-50 text-muted-foreground',
+              position === 1 ? 'bg-status-warning-surface text-status-warning-text' : 'bg-gray-50 text-muted-foreground',
             )}
           >
             {position}

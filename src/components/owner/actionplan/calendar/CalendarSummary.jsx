@@ -3,11 +3,11 @@ import { countByStatus, countLate } from "../actionPlanUtils";
 
 const ITEMS = [
   { key: "total", label: "Ações no ciclo", color: "text-foreground", bg: "bg-muted/40" },
-  { key: "in_progress", label: "Em andamento", color: "text-blue-700", bg: "bg-blue-50" },
+  { key: "in_progress", label: "Em andamento", color: "text-status-info-text", bg: "bg-status-info-surface" },
   { key: "awaiting_decision", label: "Aguardando decisão", color: "text-violet-700", bg: "bg-violet-50" },
-  { key: "blocked", label: "Bloqueadas", color: "text-red-700", bg: "bg-red-50" },
-  { key: "completed", label: "Concluídas", color: "text-emerald-700", bg: "bg-emerald-50" },
-  { key: "late", label: "Atrasadas", color: "text-red-700", bg: "bg-red-50" },
+  { key: "blocked", label: "Bloqueadas", color: "text-status-error-text", bg: "bg-status-error-surface" },
+  { key: "completed", label: "Concluídas", color: "text-status-success-text", bg: "bg-status-success-surface" },
+  { key: "late", label: "Atrasadas", color: "text-status-error-text", bg: "bg-status-error-surface" },
 ];
 
 export default function CalendarSummary({ actions }) {

@@ -30,7 +30,7 @@ export function EstadoVazio({
 
   return (
     <div className="rounded-2xl border border-border bg-white p-8 text-center shadow-sm sm:p-14">
-      <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50">
+      <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-status-info-surface">
         <CheckCircle2 className="h-7 w-7 text-status-info" aria-hidden="true" />
       </div>
       <p className="mb-1 text-[16px] font-bold text-foreground">Tela limpa por hoje.</p>
@@ -38,13 +38,13 @@ export function EstadoVazio({
         Você não possui oportunidades pendentes para executar agora.
       </p>
       <div className="flex flex-wrap items-center justify-center gap-3">
-        <button type="button" onClick={onOpenRoutine} className="flex items-center gap-1.5 rounded-xl border border-status-info px-4 py-2 text-body-sm font-bold text-status-info transition-colors hover:bg-blue-50">
+        <button type="button" onClick={onOpenRoutine} className="flex items-center gap-1.5 rounded-xl border border-status-info px-4 py-2 text-body-sm font-bold text-status-info transition-colors hover:bg-status-info-surface">
           <Sparkles className="h-4 w-4" aria-hidden="true" /> Ver Rotina do Dia
         </button>
         <Link to="/carteira-clientes" className="flex items-center gap-1.5 rounded-xl border border-border px-4 py-2 text-body-sm font-bold text-muted-foreground transition-colors hover:bg-slate-50">
           <Users className="h-4 w-4" aria-hidden="true" /> Abrir Carteira
         </Link>
-        <button type="button" onClick={onCreate} className="flex items-center gap-1.5 rounded-xl bg-status-info px-4 py-2 text-body-sm font-bold text-white transition-colors hover:bg-blue-700">
+        <button type="button" onClick={onCreate} className="flex items-center gap-1.5 rounded-xl bg-status-info px-4 py-2 text-body-sm font-bold text-white transition-colors hover:bg-status-info">
           <Plus className="h-4 w-4" aria-hidden="true" /> Nova atividade
         </button>
       </div>

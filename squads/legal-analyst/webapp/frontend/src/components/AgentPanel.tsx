@@ -34,7 +34,7 @@ interface AgentPanelProps {
 const TIER_CONFIG: Record<string, { label: string; color: string; icon: typeof Shield }> = {
   orchestrator: { label: "Orchestrator", color: "text-legal-gold border-legal-gold/30 bg-legal-gold/10", icon: Zap },
   tier_0: { label: "Tier 0 - Triagem", color: "text-cyan-400 border-cyan-400/30 bg-cyan-400/10", icon: Shield },
-  tier_1: { label: "Tier 1 - Pesquisa", color: "text-blue-400 border-blue-400/30 bg-blue-400/10", icon: Search },
+  tier_1: { label: "Tier 1 - Pesquisa", color: "text-blue-400 border-status-info/50/30 bg-blue-400/10", icon: Search },
   tier_2: { label: "Tier 2 - Analise", color: "text-purple-400 border-purple-400/30 bg-purple-400/10", icon: Target },
   tier_3: { label: "Tier 3 - Validacao", color: "text-emerald-400 border-emerald-400/30 bg-emerald-400/10", icon: Shield },
 };

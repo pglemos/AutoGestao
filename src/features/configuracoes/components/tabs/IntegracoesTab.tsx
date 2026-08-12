@@ -12,7 +12,7 @@ export function IntegracoesTab() {
             {/* Google Calendar pessoal + central */}
             <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
                 <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border mb-mx-lg">
-                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center border border-mx-indigo-100">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-status-success-text flex items-center justify-center border border-mx-indigo-100">
                         <Calendar size={26} />
                     </div>
                     <div>
@@ -121,7 +121,7 @@ function IntegrationCard({ icon, title, desc, badge, route, disabled }: {
     return (
         <Card className="p-mx-md border-none bg-white hover:shadow-sm transition-shadow">
             <div className="flex items-start gap-mx-sm">
-                <div className="w-mx-12 h-mx-12 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center shrink-0">{icon}</div>
+                <div className="w-mx-12 h-mx-12 rounded-2xl bg-mx-indigo-50 text-status-success-text flex items-center justify-center shrink-0">{icon}</div>
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-mx-xs">
                         <Typography variant="caption" className="tracking-tight">{title}</Typography>

@@ -70,7 +70,7 @@ export function PlanoCarreira() {
                 {porCargo.get(cargo)!.map(n => (
                   <li key={n.id} className="rounded-xl bg-gray-50 p-mx-sm">
                     <div className="flex items-center gap-mx-sm">
-                      <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-mx-full bg-emerald-600 px-2 text-xs font-bold text-white">{n.nivel}</span>
+                      <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-mx-full bg-brand-primary px-2 text-xs font-bold text-white">{n.nivel}</span>
                       <span className="font-bold uppercase text-sm">{n.nome}</span>
                       {n.proximo_cargo && <span className="ml-auto text-xs font-bold text-muted-foreground">→ {n.proximo_cargo}</span>}
                     </div>

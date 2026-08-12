@@ -12,17 +12,17 @@ const buttonVariants = cva(
         // Aparência única — sem variação por perfil (§8.5). Estes são os
         // estilos aprovados do Base44/Dono, antes acessíveis só sob o modo
         // `manager`.
-        primary: "rounded-xl bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 focus-visible:ring-emerald-500/20 disabled:bg-gray-100 disabled:text-muted-foreground",
-        brand: "rounded-xl bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 focus-visible:ring-emerald-500/20 disabled:bg-gray-100 disabled:text-muted-foreground",
-        secondary: "rounded-xl border border-border bg-white text-foreground shadow-none hover:bg-gray-50 hover:text-foreground focus-visible:ring-emerald-500/20 disabled:border-border-subtle disabled:bg-gray-50 disabled:text-muted-foreground",
-        outline: "rounded-xl border border-border bg-white text-foreground shadow-none hover:bg-gray-50 hover:text-foreground focus-visible:ring-emerald-500/20 disabled:border-border-subtle disabled:bg-gray-50 disabled:text-muted-foreground",
-        ghost: "rounded-xl bg-transparent text-muted-foreground shadow-none hover:bg-gray-50 hover:text-foreground focus-visible:ring-emerald-500/20 disabled:bg-transparent disabled:text-text-disabled",
-        success: "rounded-xl bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 focus-visible:ring-emerald-500/20",
-        warning: "rounded-xl bg-amber-500 text-white shadow-sm hover:bg-amber-600 focus-visible:ring-amber-500/20",
-        info: "rounded-xl bg-blue-600 text-white shadow-sm hover:bg-blue-700 focus-visible:ring-blue-500/20",
-        danger: "rounded-xl bg-red-600 text-white shadow-sm hover:bg-red-700 focus-visible:ring-red-500/20",
+        primary: "rounded-xl bg-brand-primary text-white shadow-sm hover:bg-brand-primary-hover focus-visible:ring-status-success/20 disabled:bg-gray-100 disabled:text-muted-foreground",
+        brand: "rounded-xl bg-brand-primary text-white shadow-sm hover:bg-brand-primary-hover focus-visible:ring-status-success/20 disabled:bg-gray-100 disabled:text-muted-foreground",
+        secondary: "rounded-xl border border-border bg-white text-foreground shadow-none hover:bg-gray-50 hover:text-foreground focus-visible:ring-status-success/20 disabled:border-border-subtle disabled:bg-gray-50 disabled:text-muted-foreground",
+        outline: "rounded-xl border border-border bg-white text-foreground shadow-none hover:bg-gray-50 hover:text-foreground focus-visible:ring-status-success/20 disabled:border-border-subtle disabled:bg-gray-50 disabled:text-muted-foreground",
+        ghost: "rounded-xl bg-transparent text-muted-foreground shadow-none hover:bg-gray-50 hover:text-foreground focus-visible:ring-status-success/20 disabled:bg-transparent disabled:text-text-disabled",
+        success: "rounded-xl bg-brand-primary text-white shadow-sm hover:bg-brand-primary-hover focus-visible:ring-status-success/20",
+        warning: "rounded-xl bg-status-warning text-white shadow-sm hover:bg-status-warning focus-visible:ring-status-warning/20",
+        info: "rounded-xl bg-status-info text-white shadow-sm hover:bg-status-info focus-visible:ring-status-info/20",
+        danger: "rounded-xl bg-status-error text-white shadow-sm hover:bg-status-error focus-visible:ring-status-error/20",
         whatsapp: "rounded-xl bg-whatsapp text-white shadow-sm hover:bg-whatsapp/90",
-        "mx-elite": "rounded-xl bg-emerald-700 text-white shadow-sm hover:bg-emerald-800 focus-visible:ring-emerald-500/20",
+        "mx-elite": "rounded-xl bg-status-success text-white shadow-sm hover:bg-status-success focus-visible:ring-status-success/20",
       },
       size: {
         default: "h-mx-11 px-6 sm:h-10 sm:px-4",

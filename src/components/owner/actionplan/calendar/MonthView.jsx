@@ -33,8 +33,8 @@ function EventCard({ action, provided, isDragging }) {
       <div className="flex items-center gap-1">
         <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${deptStyle.dot || "bg-slate-400"}`} />
         <span className="truncate font-medium text-foreground">{action.code}</span>
-        {isBlocked && <Lock className="h-3 w-3 shrink-0 text-red-500" />}
-        {late && <AlertTriangle className="h-3 w-3 shrink-0 text-red-500" />}
+        {isBlocked && <Lock className="h-3 w-3 shrink-0 text-status-error" />}
+        {late && <AlertTriangle className="h-3 w-3 shrink-0 text-status-error" />}
       </div>
       <p className="truncate text-muted-foreground">{action.title}</p>
     </div>
@@ -51,13 +51,13 @@ function DayCell({ date, actions, isCurrentMonth, isSelected, isToday, inCycle, 
       onClick={() => onSelectDate(date)}
       className={`min-h-[80px] cursor-pointer border border-border p-1 transition-colors hover:bg-muted/30 lg:min-h-[100px] ${
         !isCurrentMonth ? "bg-muted/20" : "bg-card"
-      } ${isSelected ? "ring-2 ring-emerald-400 ring-inset" : ""} ${isToday ? "bg-emerald-50/50" : ""}`}
+      } ${isSelected ? "ring-2 ring-emerald-400 ring-inset" : ""} ${isToday ? "bg-status-success-surface/50" : ""}`}
     >
       <div className="mb-1 flex items-center justify-between">
         <span
           className={`text-xs font-medium ${
             isToday
-              ? "flex h-5 w-5 items-center justify-center rounded-full bg-emerald-600 text-white"
+              ? "flex h-5 w-5 items-center justify-center rounded-full bg-brand-primary text-white"
               : isCurrentMonth
               ? "text-foreground"
               : "text-muted-foreground/50"
@@ -173,9 +173,9 @@ function MonthViewMobile({ refDate, selectedDate, actionsByDate, onSelectDate, o
               onClick={() => onSelectDate(date)}
               className={`flex min-h-[44px] flex-col items-center justify-start border-b border-r border-border p-1 ${
                 !isCurrentMonth ? "bg-muted/20" : ""
-              } ${isSelected ? "bg-emerald-50" : ""} ${isToday ? "bg-emerald-50/50" : ""}`}
+              } ${isSelected ? "bg-status-success-surface" : ""} ${isToday ? "bg-status-success-surface/50" : ""}`}
             >
-              <span className={`text-xs font-medium ${isToday ? "flex h-5 w-5 items-center justify-center rounded-full bg-emerald-600 text-white" : isCurrentMonth ? "text-foreground" : "text-muted-foreground/50"}`}>
+              <span className={`text-xs font-medium ${isToday ? "flex h-5 w-5 items-center justify-center rounded-full bg-brand-primary text-white" : isCurrentMonth ? "text-foreground" : "text-muted-foreground/50"}`}>
                 {date.getDate()}
               </span>
               {actions.length > 0 && (

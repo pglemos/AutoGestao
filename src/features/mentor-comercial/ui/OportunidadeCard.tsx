@@ -75,11 +75,11 @@ function getInitials(name: string): string {
 function getPriorityBadgeClass(prioClass?: string | null): string {
   switch (prioClass) {
     case 'Máxima':
-      return 'bg-red-50 text-red-700 border-red-200'
+      return 'bg-status-error-surface text-status-error-text border-status-error/30'
     case 'Alta':
-      return 'bg-amber-50 text-amber-800 border-amber-200'
+      return 'bg-status-warning-surface text-status-warning-text border-status-warning/30'
     case 'Média':
-      return 'bg-blue-50 text-blue-800 border-blue-200'
+      return 'bg-status-info-surface text-status-info-text border-status-info/30'
     case 'Baixa':
     default:
       return 'bg-slate-100 text-foreground border-border'
@@ -89,14 +89,14 @@ function getPriorityBadgeClass(prioClass?: string | null): string {
 function getScoreBadgeClass(scoreClass?: string | null): string {
   switch (scoreClass) {
     case 'Excelente':
-      return 'bg-blue-50 text-blue-800 border-blue-200'
+      return 'bg-status-info-surface text-status-info-text border-status-info/30'
     case 'Boa':
       return 'bg-indigo-50 text-indigo-800 border-indigo-200'
     case 'Atenção':
-      return 'bg-amber-50 text-amber-800 border-amber-200'
+      return 'bg-status-warning-surface text-status-warning-text border-status-warning/30'
     case 'Crítica':
     default:
-      return 'bg-red-50 text-red-800 border-red-200'
+      return 'bg-status-error-surface text-status-error-text border-status-error/30'
   }
 }
 
@@ -104,12 +104,12 @@ function getTemperatureBadgeClass(temp?: string | null): string {
   if (!temp) return 'bg-slate-100 text-muted-foreground border-border'
   const t = temp.toLowerCase()
   if (t.includes('quente') || t.includes('alta')) {
-    return 'bg-red-50 text-red-700 border-red-200 font-semibold'
+    return 'bg-status-error-surface text-status-error-text border-status-error/30 font-semibold'
   }
   if (t.includes('morno') || t.includes('média')) {
-    return 'bg-amber-50 text-amber-700 border-amber-200'
+    return 'bg-status-warning-surface text-status-warning-text border-status-warning/30'
   }
-  return 'bg-blue-50 text-blue-700 border-blue-200'
+  return 'bg-status-info-surface text-status-info-text border-status-info/30'
 }
 
 export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
@@ -170,7 +170,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
       {/* Cabeçalho do Card: Iniciais, Nome, Contato, Canal, Origem, Veículo */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border-subtle pb-4">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-full bg-blue-900 text-white font-bold text-base flex items-center justify-center shrink-0 shadow-sm">
+          <div className="w-12 h-12 rounded-full bg-status-info text-white font-bold text-base flex items-center justify-center shrink-0 shadow-sm">
             {getInitials(cliente_nome)}
           </div>
           <div>
@@ -185,7 +185,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
             <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1 flex-wrap">
               {phone && (
                 <span className="flex items-center gap-1 font-medium text-foreground">
-                  <Phone className="w-3.5 h-3.5 text-blue-800" />
+                  <Phone className="w-3.5 h-3.5 text-status-info-text" />
                   {formatarTelefoneBR(phone)}
                 </span>
               )}
@@ -201,7 +201,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
         <div className="flex flex-col md:items-end gap-1 text-xs">
           {veiculo_interesse && (
             <div className="flex items-center gap-1.5 font-semibold text-foreground">
-              <Car className="w-4 h-4 text-blue-900" />
+              <Car className="w-4 h-4 text-status-info-text" />
               <span>{veiculo_interesse}</span>
               {placa_veiculo && (
                 <span className="bg-slate-100 text-muted-foreground px-1.5 py-0.5 rounded text-caption font-mono">
@@ -226,7 +226,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
             Status Atual
           </span>
           <div className="flex items-center gap-1.5 font-semibold text-foreground text-sm">
-            <Target className="w-4 h-4 text-blue-800 shrink-0" />
+            <Target className="w-4 h-4 text-status-info-text shrink-0" />
             <span>{statusDisplay}</span>
           </div>
           {current_objective && (
@@ -243,11 +243,11 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
           <p className="font-semibold text-foreground text-sm">{current_next_step || 'A definir pelo mentor'}</p>
           <div className="flex items-center gap-3 mt-1.5 text-caption text-muted-foreground">
             <span className="flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5 text-blue-900" />
+              <Calendar className="w-3.5 h-3.5 text-status-info-text" />
               {nextActionDisplay}
             </span>
             {typeof current_cadence_step === 'number' && (
-              <span className="flex items-center gap-1 bg-blue-50 text-blue-800 px-1.5 py-0.5 rounded font-medium">
+              <span className="flex items-center gap-1 bg-status-info-surface text-status-info-text px-1.5 py-0.5 rounded font-medium">
                 <Clock className="w-3 h-3" />
                 Tentativa {current_cadence_step}
               </span>
@@ -260,7 +260,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
           {/* Prioridade */}
           <div className="flex items-center justify-between">
             <span className="text-muted-foreground font-medium text-caption flex items-center gap-1">
-              <Zap className="w-3.5 h-3.5 text-amber-600" />
+              <Zap className="w-3.5 h-3.5 text-status-warning-text" />
               Prioridade:
             </span>
             <div className="flex items-center gap-1.5">
@@ -279,8 +279,8 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
           <div className="flex items-center justify-between">
             <span className="text-muted-foreground font-medium text-caption">Score de Condução:</span>
             {needs_mentor_classification ? (
-              <span className="px-2.5 py-0.5 text-caption font-bold rounded-full bg-amber-50 text-amber-800 border border-amber-300 flex items-center gap-1">
-                <ShieldAlert className="w-3 h-3 text-amber-600" />
+              <span className="px-2.5 py-0.5 text-caption font-bold rounded-full bg-status-warning-surface text-status-warning-text border border-status-warning/40 flex items-center gap-1">
+                <ShieldAlert className="w-3 h-3 text-status-warning-text" />
                 Definir situação atual
               </span>
             ) : (
@@ -307,8 +307,8 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
 
       {/* Explicações / Mentor Guidance */}
       {explanationsList.length > 0 && (
-        <div className="text-xs bg-blue-50/50 border border-blue-100 rounded-lg p-2.5 text-blue-950">
-          <strong className="font-semibold text-blue-900">Orientação do Mentor:</strong>
+        <div className="text-xs bg-status-info-surface/50 border border-status-info/20 rounded-lg p-2.5 text-blue-950">
+          <strong className="font-semibold text-status-info-text">Orientação do Mentor:</strong>
           <ul className="list-disc list-inside mt-0.5 space-y-0.5">
             {explanationsList.map((exp, idx) => (
               <li key={idx} className="text-foreground">
@@ -324,7 +324,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
         <button
           type="button"
           onClick={() => onExecutar?.(oportunidade)}
-          className="bg-blue-900 hover:bg-blue-800 active:bg-blue-950 text-white font-semibold text-xs px-4 py-2 rounded-lg transition-colors flex items-center gap-1.5 shadow-sm"
+          className="bg-status-info hover:bg-status-info active:bg-blue-950 text-white font-semibold text-xs px-4 py-2 rounded-lg transition-colors flex items-center gap-1.5 shadow-sm"
         >
           <Play className="w-3.5 h-3.5 fill-current" />
           Executar

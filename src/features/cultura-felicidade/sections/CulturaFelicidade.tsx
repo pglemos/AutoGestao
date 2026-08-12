@@ -22,7 +22,7 @@ const TIPO_LABEL: Record<CulturaTipo, string> = {
 
 const TIPO_TONE: Record<CulturaTipo, string> = {
   repescagem: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
-  campanha: 'border-brand-primary/30 bg-mx-indigo-50 text-emerald-600',
+  campanha: 'border-brand-primary/30 bg-mx-indigo-50 text-status-success-text',
   reconhecimento: 'border-status-success/30 bg-status-success-surface text-status-success',
   feed_cultural: 'border-border bg-gray-50 text-muted-foreground',
 }
@@ -51,7 +51,7 @@ export function CulturaFelicidade({ storeId }: Props) {
     <section className="space-y-mx-lg" aria-label="Cultura e Felicidade">
       <header className="flex flex-col gap-mx-xs md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-mx-sm">
-          <div className="rounded-2xl bg-emerald-600 p-mx-sm text-pure-white shadow-sm">
+          <div className="rounded-2xl bg-brand-primary p-mx-sm text-pure-white shadow-sm">
             <Heart size={22} aria-hidden="true" />
           </div>
           <div>
@@ -103,7 +103,7 @@ export function CulturaFelicidade({ storeId }: Props) {
 
       <Card className="p-mx-md">
         <header className="mb-mx-sm flex items-center gap-mx-xs">
-          <div className="rounded-2xl bg-mx-indigo-50 p-mx-xs text-emerald-600">
+          <div className="rounded-2xl bg-mx-indigo-50 p-mx-xs text-status-success-text">
             <TrendingUp size={18} aria-hidden="true" />
           </div>
           <div>
@@ -146,7 +146,7 @@ export function CulturaFelicidade({ storeId }: Props) {
 
       <Card className="p-mx-md">
         <header className="mb-mx-sm flex items-center gap-mx-xs">
-          <div className="rounded-2xl bg-mx-indigo-50 p-mx-xs text-emerald-600">
+          <div className="rounded-2xl bg-mx-indigo-50 p-mx-xs text-status-success-text">
             <Sparkles size={18} aria-hidden="true" />
           </div>
           <div>

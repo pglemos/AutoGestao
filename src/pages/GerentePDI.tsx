@@ -110,7 +110,7 @@ export default function GerentePDI() {
                 actions={(
                     <div className="flex flex-col sm:flex-row items-center gap-mx-sm shrink-0 w-full sm:w-auto">
                         <div className="relative group w-full sm:w-mx-sidebar-expanded">
-                            <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-emerald-600 transition-colors" />
+                            <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-status-success-text transition-colors" />
                             <label htmlFor="pdi-search" className="sr-only">Buscar plano de PDI</label>
                             <Input
                                 id="pdi-search"
@@ -124,7 +124,7 @@ export default function GerentePDI() {
                             <RefreshCw size={20} className={cn(isRefetching && "animate-spin")} />
                         </Button>
                         {canManagePDI && (
-                            <Button onClick={() => setShowForm(true)} className="h-mx-xl px-8 shadow-sm bg-emerald-600 hover:bg-brand-primary-hover font-bold text-sm rounded-2xl text-white">
+                            <Button onClick={() => setShowForm(true)} className="h-mx-xl px-8 shadow-sm bg-brand-primary hover:bg-brand-primary-hover font-bold text-sm rounded-2xl text-white">
                                 <Plus size={18} className="mr-2" /> NOVO PDI
                             </Button>
                         )}
@@ -173,7 +173,7 @@ export default function GerentePDI() {
                                 return (
                                     <motion.article key={p.id} layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.02 }}>
                                         <Card className="border p-mx-md h-full flex flex-col justify-between group hover:shadow-sm transition-all bg-white relative overflow-hidden">
-                                            <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-emerald-600/5 rounded-mx-full blur-mx-lg -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden="true" />
+                                            <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-mx-lg -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden="true" />
                                             
                                             <div>
                                                 <header className="flex items-start justify-between mb-10 border-b border-border pb-6 relative z-10">
@@ -186,7 +186,7 @@ export default function GerentePDI() {
                                                             className="w-mx-14 h-mx-14 rounded-xl shadow-mx-inner group-hover:border-brand-primary transition-all transform group-hover:rotate-3"
                                                         />
                                                         <div className="min-w-0">
-                                                            <Typography variant="h3" className="text-base truncate group-hover:text-emerald-600 transition-colors">{p.seller_name}</Typography>
+                                                            <Typography variant="h3" className="text-base truncate group-hover:text-status-success-text transition-colors">{p.seller_name}</Typography>
                                                             <Typography variant="tiny" tone="muted" className="">ESPECIALISTA</Typography>
                                                         </div>
                                                     </div>
@@ -204,12 +204,12 @@ export default function GerentePDI() {
                                             <footer className="pt-8 border-t border-border flex items-center justify-between mt-10 relative z-10">
                                                 <div className="flex items-center gap-mx-md">
                                                     <div className="flex items-center gap-mx-xs">
-                                                        <Calendar size={14} className="text-emerald-600" />
+                                                        <Calendar size={14} className="text-status-success-text" />
                                                         <Typography variant="mono" tone="muted" className="text-mx-tiny">
                                                             {formatSafeDate(p.due_date)}
                                                         </Typography>
                                                     </div>
-                                                    <Button type="button" variant="ghost" size="icon" onClick={() => navigate(`/pdi/${p.id}/print`)} className="w-mx-10 h-mx-10 rounded-xl text-muted-foreground hover:text-emerald-600 hover:bg-mx-indigo-50 bg-white shadow-sm border border-border-subtle" aria-label={`Imprimir PDI de ${p.seller_name || 'nome não informado'}`}>
+                                                    <Button type="button" variant="ghost" size="icon" onClick={() => navigate(`/pdi/${p.id}/print`)} className="w-mx-10 h-mx-10 rounded-xl text-muted-foreground hover:text-status-success-text hover:bg-mx-indigo-50 bg-white shadow-sm border border-border-subtle" aria-label={`Imprimir PDI de ${p.seller_name || 'nome não informado'}`}>
                                                         <Printer size={18} />
                                                     </Button>
                                                 </div>

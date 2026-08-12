@@ -60,7 +60,7 @@ export function EscalarAtividadeModal({
       footer={(
         <>
           <button type="button" onClick={onClose} disabled={saving} className="rounded-xl border border-border px-5 py-2.5 text-body-sm font-semibold text-muted-foreground hover:bg-slate-50 disabled:opacity-50">Cancelar</button>
-          <button type="button" onClick={() => void handleSubmit()} disabled={!reason.trim() || saving} className="rounded-xl bg-amber-600 px-6 py-2.5 text-body-sm font-bold text-white hover:bg-amber-700 disabled:opacity-50">{saving ? 'Enviando...' : 'Pedir apoio'}</button>
+          <button type="button" onClick={() => void handleSubmit()} disabled={!reason.trim() || saving} className="rounded-xl bg-status-warning px-6 py-2.5 text-body-sm font-bold text-white hover:bg-status-warning disabled:opacity-50">{saving ? 'Enviando...' : 'Pedir apoio'}</button>
         </>
       )}
     >
@@ -70,7 +70,7 @@ export function EscalarAtividadeModal({
           <label htmlFor="central-escalate-reason" className="text-caption font-bold uppercase tracking-wider text-muted-foreground">Motivo do apoio</label>
           <textarea id="central-escalate-reason" rows={3} value={reason} onChange={event => setReason(event.target.value)} placeholder="Explique por que precisa do apoio do gerente..." className="mt-1.5 w-full resize-none rounded-md border border-border px-3 py-2 text-body-sm outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15" />
         </div>
-        {error && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-[12px] font-semibold text-red-700">{error}</p>}
+        {error && <p role="alert" className="rounded-xl border border-status-error/30 bg-status-error-surface px-3 py-2 text-[12px] font-semibold text-status-error-text">{error}</p>}
       </div>
     </Modal>
   )

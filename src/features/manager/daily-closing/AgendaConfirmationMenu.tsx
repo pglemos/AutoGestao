@@ -43,7 +43,7 @@ export function AgendaConfirmationMenu({
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => setOpen((current) => !current)}
-        className="inline-flex h-8 items-center gap-1 rounded-lg px-2 text-xs font-medium text-emerald-700 transition-colors hover:bg-emerald-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30 disabled:cursor-not-allowed disabled:opacity-50"
+        className="inline-flex h-8 items-center gap-1 rounded-lg px-2 text-xs font-medium text-status-success-text transition-colors hover:bg-status-success-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-success/30 disabled:cursor-not-allowed disabled:opacity-50"
       >
         <CheckCircle size={14} />
         Confirmar

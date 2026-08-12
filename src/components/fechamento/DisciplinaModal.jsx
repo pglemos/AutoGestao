@@ -6,10 +6,10 @@ import {
 
 const InfoBox = ({ color, children }) => {
   const styles = {
-    blue:   "bg-blue-50 border-blue-200 text-blue-800",
+    blue:   "bg-status-info-surface border-status-info/30 text-status-info-text",
     green:  "bg-green-50 border-green-200 text-green-800",
-    amber:  "bg-amber-50 border-amber-200 text-amber-800",
-    red:    "bg-red-50 border-red-200 text-red-800",
+    amber:  "bg-status-warning-surface border-status-warning/30 text-status-warning-text",
+    red:    "bg-status-error-surface border-status-error/30 text-status-error-text",
     slate:  "bg-slate-100 border-border text-foreground",
   };
   return (
@@ -209,7 +209,7 @@ export default function DisciplinaModal({ open, onClose }) {
         <div className="flex-shrink-0 px-7 py-4 border-t border-border-subtle bg-white flex items-center justify-end">
           <button
             onClick={onClose}
-            className="bg-[#005BFF] hover:bg-blue-700 active:scale-[0.98] transition-all text-white font-bold text-body-sm px-8 h-[40px] rounded-xl shadow-sm shadow-blue-200"
+            className="bg-[#005BFF] hover:bg-status-info active:scale-[0.98] transition-all text-white font-bold text-body-sm px-8 h-[40px] rounded-xl shadow-sm shadow-blue-200"
           >
             Entendi
           </button>

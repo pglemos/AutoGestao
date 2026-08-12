@@ -174,7 +174,7 @@ export function ROISection({ client }: Props) {
 
             <Card className="p-mx-lg bg-white border">
               <Typography variant="h3" className="mb-mx-md flex items-center gap-mx-xs">
-                <div className="w-mx-xs h-mx-xs bg-emerald-600 rounded-mx-full" /> GANHOS DE EFICIÊNCIA
+                <div className="w-mx-xs h-mx-xs bg-brand-primary rounded-mx-full" /> GANHOS DE EFICIÊNCIA
               </Typography>
               <div className="space-y-mx-md">
                 <div className="flex justify-between items-center border-b border-border-subtle pb-mx-xs">

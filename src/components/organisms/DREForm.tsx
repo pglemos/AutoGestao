@@ -138,7 +138,7 @@ export function DREForm({
       })}
 
       {computedPreview && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-mx-sm mt-mx-lg p-mx-md bg-emerald-600/5 rounded-xl border border-brand-primary/20">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-mx-sm mt-mx-lg p-mx-md bg-brand-primary/5 rounded-xl border border-brand-primary/20">
           <div>
             <Typography variant="tiny" tone="muted" className="">Lucro Bruto</Typography>
             <Typography variant="h3" className="">R$ {fmt(computedPreview.gross_profit)}</Typography>

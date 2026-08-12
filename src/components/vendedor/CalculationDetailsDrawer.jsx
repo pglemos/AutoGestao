@@ -64,7 +64,7 @@ export default function CalculationDetailsDrawer({ open, onClose, calcResult, pe
               {premiacoesAtingidas.map((p, i) => (
                 <div key={i} className="flex justify-between text-sm mt-1">
                   <span className="text-muted-foreground">{p.quantidade_vendas_necessarias} vendas</span>
-                  <span className="font-semibold text-emerald-600">{formatBRL(p.valor_premio)}</span>
+                  <span className="font-semibold text-status-success-text">{formatBRL(p.valor_premio)}</span>
                 </div>
               ))}
             </Section>
@@ -74,7 +74,7 @@ export default function CalculationDetailsDrawer({ open, onClose, calcResult, pe
             <Section title="Próxima premiação">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">{proximaPremiacao.quantidade_vendas_necessarias} vendas</span>
-                <span className="font-semibold text-amber-600">{formatBRL(proximaPremiacao.valor_premio)} — Não atingida</span>
+                <span className="font-semibold text-status-warning-text">{formatBRL(proximaPremiacao.valor_premio)} — Não atingida</span>
               </div>
             </Section>
           )}
@@ -82,7 +82,7 @@ export default function CalculationDetailsDrawer({ open, onClose, calcResult, pe
           <div className="border-t border-border pt-4">
             <div className="flex justify-between items-center">
               <span className="font-bold text-mx-navy">Total previsto</span>
-              <span className="text-2xl font-bold text-emerald-600">{formatBRL(salarioPrevisto)}</span>
+              <span className="text-2xl font-bold text-status-success-text">{formatBRL(salarioPrevisto)}</span>
             </div>
           </div>
         </div>

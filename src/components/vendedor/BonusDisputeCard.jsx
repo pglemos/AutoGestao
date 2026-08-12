@@ -13,9 +13,9 @@ const TIPO_STATUS = {
 };
 
 const STATUS_CONFIG = {
-  disputa: { label: "Em disputa", color: "text-orange-600", bg: "bg-orange-50", border: "border-orange-100", icon: Clock },
-  condicional: { label: "Condicional", color: "text-blue-600", bg: "bg-blue-50", border: "border-blue-100", icon: Shield },
-  ativa: { label: "Ativa", color: "text-emerald-600", bg: "bg-emerald-50", border: "border-emerald-100", icon: CheckCircle2 },
+  disputa: { label: "Em disputa", color: "text-status-warning-text", bg: "bg-status-warning-surface", border: "border-status-warning/20", icon: Clock },
+  condicional: { label: "Condicional", color: "text-status-info-text", bg: "bg-status-info-surface", border: "border-status-info/20", icon: Shield },
+  ativa: { label: "Ativa", color: "text-status-success-text", bg: "bg-status-success-surface", border: "border-status-success/20", icon: CheckCircle2 },
 };
 
 export default function BonusDisputeCard({ bonificacoes }) {

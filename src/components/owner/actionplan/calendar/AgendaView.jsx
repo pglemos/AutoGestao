@@ -43,7 +43,7 @@ export default function AgendaView({ actions, selectedDate, onSelectDate, onOpen
             onClick={() => setSubFilter(sf.value)}
             className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
               subFilter === sf.value
-                ? "bg-emerald-50 text-emerald-700"
+                ? "bg-status-success-surface text-status-success-text"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -70,9 +70,9 @@ export default function AgendaView({ actions, selectedDate, onSelectDate, onOpen
               <div key={key} className="flex">
                 <button
                   onClick={() => onSelectDate(date)}
-                  className={`w-28 shrink-0 border-r border-border p-3 text-left ${isToday ? "bg-emerald-50" : "bg-muted/20"}`}
+                  className={`w-28 shrink-0 border-r border-border p-3 text-left ${isToday ? "bg-status-success-surface" : "bg-muted/20"}`}
                 >
-                  <div className={`text-xs font-semibold uppercase ${isToday ? "text-emerald-700" : "text-muted-foreground"}`}>
+                  <div className={`text-xs font-semibold uppercase ${isToday ? "text-status-success-text" : "text-muted-foreground"}`}>
                     {getRelativeDayLabel(date)}
                   </div>
                   <div className="mt-0.5 text-lg font-bold text-foreground">{date.getDate()}</div>
@@ -100,12 +100,12 @@ export default function AgendaView({ actions, selectedDate, onSelectDate, onOpen
                                 {prioStyle.label}
                               </span>
                               {late && (
-                                <span className="inline-flex items-center gap-0.5 text-caption font-medium text-red-600">
+                                <span className="inline-flex items-center gap-0.5 text-caption font-medium text-status-error-text">
                                   <AlertTriangle className="h-3 w-3" />
                                   Atrasada há {daysLate(action)}d
                                 </span>
                               )}
-                              {action.status === "blocked" && <Lock className="h-3 w-3 text-red-500" />}
+                              {action.status === "blocked" && <Lock className="h-3 w-3 text-status-error" />}
                             </div>
                             <p className="mt-1 truncate text-sm text-muted-foreground">{action.title}</p>
                             <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">

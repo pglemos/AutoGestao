@@ -142,7 +142,7 @@ export function KpisSection({
           <button
             type="button"
             onClick={() => navigate('/rotina-equipe')}
-            className="inline-flex h-9 items-center gap-2 rounded-xl border border-amber-200 bg-white px-3 text-sm font-semibold text-amber-700 hover:bg-amber-50"
+            className="inline-flex h-9 items-center gap-2 rounded-xl border border-status-warning/30 bg-white px-3 text-sm font-semibold text-status-warning-text hover:bg-status-warning-surface"
           >
             <Zap size={15} />
             Resolver pendências
@@ -183,10 +183,10 @@ function MetricCard({
   tone: MetricTone
 }) {
   const toneClass: Record<MetricTone, string> = {
-    green: 'bg-emerald-50 text-emerald-600',
-    amber: 'bg-amber-50 text-amber-600',
-    red: 'bg-red-50 text-red-600',
-    blue: 'bg-blue-50 text-blue-600',
+    green: 'bg-status-success-surface text-status-success-text',
+    amber: 'bg-status-warning-surface text-status-warning-text',
+    red: 'bg-status-error-surface text-status-error-text',
+    blue: 'bg-status-info-surface text-status-info-text',
     violet: 'bg-violet-50 text-violet-600',
     slate: 'bg-slate-100 text-muted-foreground',
   }

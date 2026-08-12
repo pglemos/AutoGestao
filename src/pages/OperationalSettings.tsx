@@ -167,7 +167,7 @@ export default function OperationalSettings() {
               <MxSectionHeader
                 title="Unidade analisada"
                 description="A seleção altera somente o contexto dos dados exibidos."
-                actions={<Building2 size={18} className="text-emerald-600" aria-hidden="true" />}
+                actions={<Building2 size={18} className="text-status-success-text" aria-hidden="true" />}
               />
               <div className="space-y-4 p-5">
                 <MxField label="Loja" htmlFor="operational-store">
@@ -212,7 +212,7 @@ export default function OperationalSettings() {
               <MxSectionHeader
                 title="Projeção de metas"
                 description="Defina a base matemática usada na projeção da unidade."
-                actions={<SlidersHorizontal size={18} className="text-emerald-600" aria-hidden="true" />}
+                actions={<SlidersHorizontal size={18} className="text-status-success-text" aria-hidden="true" />}
               />
               <div className="grid gap-3 p-5 sm:grid-cols-2">
                 <Button
@@ -240,7 +240,7 @@ export default function OperationalSettings() {
               <MxSectionHeader
                 title="Destinatários oficiais"
                 description="Separe os e-mails por vírgula. Endereços sem @ são ignorados ao salvar."
-                actions={<Mail size={18} className="text-emerald-600" aria-hidden="true" />}
+                actions={<Mail size={18} className="text-status-success-text" aria-hidden="true" />}
               />
               <div className="space-y-5 p-5">
                 {DELIVERY_LISTS.map((list) => (
@@ -255,7 +255,7 @@ export default function OperationalSettings() {
                     />
                   </MxField>
                 ))}
-                <div className="flex items-start gap-3 rounded-xl border border-blue-100 bg-blue-50 p-4 text-blue-800">
+                <div className="flex items-start gap-3 rounded-xl border border-status-info/20 bg-status-info-surface p-4 text-status-info-text">
                   <Info size={18} className="mt-0.5 shrink-0" aria-hidden="true" />
                   <Typography variant="p" className="text-sm">
                     Alterações são registradas por usuário e unidade. O Consultor MX permanece em consulta segura.

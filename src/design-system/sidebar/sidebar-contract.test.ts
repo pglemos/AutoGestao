@@ -39,7 +39,7 @@ describe('design tokens da sidebar', () => {
     expect(SIDEBAR.itemActive).toContain('bg-mxsb-active-surface')
     expect(SIDEBAR.itemActive).toContain('text-mxsb-active')
     expect(SIDEBAR.badge).toContain('text-caption')
-    expect(SIDEBAR.badgeWarning).toContain('amber')
+    expect(SIDEBAR.badgeWarning).toContain('status-warning')
     expect(SIDEBAR.brandTitle).toContain('text-body-sm')
     expect(SIDEBAR.brandModule).toContain('tracking-[0.14em]')
     expect(SIDEBAR.sectionLabel).toContain('text-caption')

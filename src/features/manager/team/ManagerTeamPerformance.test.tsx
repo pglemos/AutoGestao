@@ -55,7 +55,7 @@ describe('ManagerTeamPerformance loading state', () => {
 
     const message = screen.getByText('Nenhum vendedor vinculado a este gerente.')
     const emptyState = message.parentElement
-    expect(emptyState).toHaveClass('rounded-2xl', 'border-gray-100', 'shadow-sm', 'py-16')
+    expect(emptyState).toHaveClass('rounded-2xl', 'border-border-subtle', 'shadow-sm', 'py-16')
     expect(emptyState).not.toHaveClass('border-dashed')
   })
 })

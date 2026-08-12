@@ -154,8 +154,8 @@ export function OwnerRoutineView({
       <Card className="border bg-white p-mx-lg">
         <div className="flex items-center justify-between gap-mx-sm">
           <div className="flex items-center gap-mx-sm">
-            <span className="flex h-mx-10 w-mx-10 items-center justify-center rounded-2xl bg-emerald-600/10">
-              <Users size={20} className="text-emerald-600" />
+            <span className="flex h-mx-10 w-mx-10 items-center justify-center rounded-2xl bg-brand-primary/10">
+              <Users size={20} className="text-status-success-text" />
             </span>
             <div>
               <Typography variant="h3" className="text-xl">Fechamento Diário da Equipe</Typography>
@@ -474,13 +474,13 @@ export function OwnerConsultingView({ data }: { data: DashboardData }) {
                   <ConsultingMetric label="Dados do programa" completed={program.clientId ? 'Disponível' : '—'} total="" percent={null} />
                 </div>
               </div>
-              <div className="rounded-xl border border-brand-primary/20 bg-emerald-600/5 p-mx-md">
+              <div className="rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-mx-md">
                 <Typography variant="tiny" tone="muted" className="font-bold">Próximo encontro</Typography>
                 <Typography variant="p" className="mt-mx-xs font-bold">{nextVisit ? `Encontro ${nextVisit}` : 'A agendar'}</Typography>
                 <Typography variant="p" className="text-sm">{program.nextVisitObjective || 'Objetivo ainda não informado.'}</Typography>
                 <Typography variant="tiny" tone="muted" className="mt-mx-xs block">{program.nextVisitScheduledAt ? new Date(program.nextVisitScheduledAt).toLocaleString('pt-BR') : 'Sem data registrada'}</Typography>
                 <div className="mt-mx-sm space-y-mx-xs">
-                  {program.nextVisitMeetLink && <a href={program.nextVisitMeetLink} target="_blank" rel="noreferrer" className="flex h-mx-10 items-center justify-center rounded-xl bg-emerald-600 px-mx-sm text-mx-tiny font-bold text-white">Entrar na Reunião</a>}
+                  {program.nextVisitMeetLink && <a href={program.nextVisitMeetLink} target="_blank" rel="noreferrer" className="flex h-mx-10 items-center justify-center rounded-xl bg-brand-primary px-mx-sm text-mx-tiny font-bold text-white">Entrar na Reunião</a>}
                   <button type="button" onClick={() => navigate(`/falar-consultor?${contextQuery}`)} className="flex h-mx-10 w-full items-center justify-center gap-mx-xs rounded-xl border border-border-subtle bg-white text-mx-tiny font-bold text-foreground">Falar com Consultor <ArrowRight size={14} /></button>
                 </div>
               </div>
@@ -491,8 +491,8 @@ export function OwnerConsultingView({ data }: { data: DashboardData }) {
             {programCards.map(card => {
               const isActive = card.key === activeProgram
               return (
-                <div key={card.key} className={cn('rounded-2xl border bg-white p-mx-md', isActive ? 'border-brand-primary bg-emerald-600/5' : 'border-border-subtle opacity-60')}>
-                  <div className="flex items-center justify-between"><span className={cn('rounded-mx-full px-mx-xs py-0.5 text-mx-tiny font-bold', isActive ? 'bg-emerald-600 text-white' : 'bg-gray-50 text-muted-foreground')}>{isActive ? 'Ativo' : 'Bloqueado'}</span>{!isActive && <Lock size={15} className="text-muted-foreground" />}</div>
+                <div key={card.key} className={cn('rounded-2xl border bg-white p-mx-md', isActive ? 'border-brand-primary bg-brand-primary/5' : 'border-border-subtle opacity-60')}>
+                  <div className="flex items-center justify-between"><span className={cn('rounded-mx-full px-mx-xs py-0.5 text-mx-tiny font-bold', isActive ? 'bg-brand-primary text-white' : 'bg-gray-50 text-muted-foreground')}>{isActive ? 'Ativo' : 'Bloqueado'}</span>{!isActive && <Lock size={15} className="text-muted-foreground" />}</div>
                   <Typography variant="p" className="mt-mx-sm font-bold">{card.name}</Typography>
                   <Typography variant="tiny" tone="muted" className="mt-mx-xs block line-clamp-2">{card.detail}</Typography>
                   <Typography variant="tiny" tone="muted" className="mt-mx-sm block">{card.total ? `${card.total} encontros` : 'Detalhes não disponíveis'}</Typography>
@@ -509,7 +509,7 @@ export function OwnerConsultingView({ data }: { data: DashboardData }) {
                 const number = index + 1
                 const completed = number <= completedVisits
                 const current = number === nextVisit
-                return <div key={number} className="flex min-w-[76px] flex-1 flex-col items-center text-center"><div className={cn('flex h-8 w-8 items-center justify-center rounded-full border-2 text-mx-tiny font-bold', completed ? 'border-brand-primary bg-emerald-600 text-white' : current ? 'border-brand-primary bg-emerald-600/10 text-emerald-600' : 'border-border bg-gray-50 text-muted-foreground')}>{completed ? '✓' : number}</div><span className={cn('mt-mx-xs text-mx-tiny', current ? 'font-bold text-foreground' : 'text-muted-foreground')}>{current ? program.nextVisitObjective || 'Próximo encontro' : `Encontro ${number}`}</span><span className="mt-0.5 text-caption text-muted-foreground">{completed ? 'Concluído' : current ? 'Agendado' : 'Pendente'}</span></div>
+                return <div key={number} className="flex min-w-[76px] flex-1 flex-col items-center text-center"><div className={cn('flex h-8 w-8 items-center justify-center rounded-full border-2 text-mx-tiny font-bold', completed ? 'border-brand-primary bg-brand-primary text-white' : current ? 'border-brand-primary bg-brand-primary/10 text-status-success-text' : 'border-border bg-gray-50 text-muted-foreground')}>{completed ? '✓' : number}</div><span className={cn('mt-mx-xs text-mx-tiny', current ? 'font-bold text-foreground' : 'text-muted-foreground')}>{current ? program.nextVisitObjective || 'Próximo encontro' : `Encontro ${number}`}</span><span className="mt-0.5 text-caption text-muted-foreground">{completed ? 'Concluído' : current ? 'Agendado' : 'Pendente'}</span></div>
               })}
             </div>
           </Card>
@@ -529,5 +529,5 @@ export function OwnerConsultingView({ data }: { data: DashboardData }) {
 }
 
 function ConsultingMetric({ label, completed, total, percent }: { label: string; completed: string | number; total: string | number; percent: number | null }) {
-  return <div className="rounded-lg border border-border-subtle bg-gray-50/60 p-mx-sm"><Typography variant="tiny" className="font-bold">{label}</Typography><div className="mt-mx-xs flex items-baseline gap-1"><span className="text-base font-bold text-foreground">{completed}</span>{total !== '' && <span className="text-mx-tiny text-muted-foreground">de {total}</span>}{percent != null && <span className="ml-auto text-mx-tiny text-muted-foreground">{percent}%</span>}</div>{percent != null && <div className="mt-mx-xs h-1.5 overflow-hidden rounded-full bg-border-subtle"><div className="h-full rounded-full bg-emerald-600" style={{ width: `${percent}%` }} /></div>}</div>
+  return <div className="rounded-lg border border-border-subtle bg-gray-50/60 p-mx-sm"><Typography variant="tiny" className="font-bold">{label}</Typography><div className="mt-mx-xs flex items-baseline gap-1"><span className="text-base font-bold text-foreground">{completed}</span>{total !== '' && <span className="text-mx-tiny text-muted-foreground">de {total}</span>}{percent != null && <span className="ml-auto text-mx-tiny text-muted-foreground">{percent}%</span>}</div>{percent != null && <div className="mt-mx-xs h-1.5 overflow-hidden rounded-full bg-border-subtle"><div className="h-full rounded-full bg-brand-primary" style={{ width: `${percent}%` }} /></div>}</div>
 }

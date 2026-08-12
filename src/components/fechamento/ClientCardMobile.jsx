@@ -260,7 +260,7 @@ export default function ClientCardMobile({
         </button>
       )}
       {d1Editavel && (
-        <div className="px-3 py-2.5 bg-blue-50 border border-blue-100 rounded-xl flex items-center gap-2">
+        <div className="px-3 py-2.5 bg-status-info-surface border border-status-info/20 rounded-xl flex items-center gap-2">
           <Info className="w-4 h-4 text-[#005BFF] flex-shrink-0" />
           <p className="text-[12px] font-semibold text-[#1e3a5f]">
             Somente registros de Agendamentos D+1 podem ser editados.
@@ -284,7 +284,7 @@ export default function ClientCardMobile({
                 : (modoD1 ? "Novo Agendamento D+1" : "Cadastrar Novo Cliente")}
             </DialogTitle>
             {modoD1 && (
-              <div className="mt-1.5 px-3 py-2 bg-blue-50 border border-blue-200 rounded-lg flex items-start gap-2">
+              <div className="mt-1.5 px-3 py-2 bg-status-info-surface border border-status-info/30 rounded-lg flex items-start gap-2">
                 <CalendarClock className="w-4 h-4 text-[#005BFF] mt-0.5 flex-shrink-0" />
                 <p className="text-[12px] font-semibold text-[#1e3a5f]">
                   Este cadastro será considerado um Agendamento D+1.
@@ -428,7 +428,7 @@ export default function ClientCardMobile({
             <button onClick={() => setDeleteConfirm(null)} className="px-5 py-2 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors">
               Cancelar
             </button>
-            <button onClick={confirmDelete} className="px-5 py-2 text-body-sm font-bold text-white bg-[#EF4444] hover:bg-red-600 rounded-xl transition-colors">
+            <button onClick={confirmDelete} className="px-5 py-2 text-body-sm font-bold text-white bg-[#EF4444] hover:bg-status-error rounded-xl transition-colors">
               Excluir
             </button>
           </div>

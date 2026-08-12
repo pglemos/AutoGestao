@@ -588,7 +588,7 @@ export default function ConsultoriaVisitaExecucao() {
     }
   }
 
-  if (clientLoading || methodologyLoading) return <div className="flex w-full items-center justify-center p-mx-20"><Loader2 className="w-mx-8 h-mx-8 animate-spin text-emerald-600" /></div>
+  if (clientLoading || methodologyLoading) return <div className="flex w-full items-center justify-center p-mx-20"><Loader2 className="w-mx-8 h-mx-8 animate-spin text-status-success-text" /></div>
 
   if (!client) return <div className="p-mx-20 text-center opacity-50"><Typography variant="h3">Cliente não localizado.</Typography></div>
 
@@ -647,7 +647,7 @@ export default function ConsultoriaVisitaExecucao() {
                </div>
             </div>
             <Typography variant="tiny" tone="muted" className="opacity-70 flex items-center gap-mx-xs mt-0.5">
-              <Target size={12} className="text-emerald-600" />
+              <Target size={12} className="text-status-success-text" />
               {step?.objective}
             </Typography>
           </div>
@@ -698,7 +698,7 @@ export default function ConsultoriaVisitaExecucao() {
           <Card className="p-mx-lg border bg-white overflow-hidden">
             <div className="flex flex-col gap-mx-md">
               <div className="flex items-center gap-mx-sm border-b border-border-subtle pb-mx-md">
-                <div className="p-mx-xs bg-emerald-600/10 rounded-xl text-emerald-600"><Calendar size={20} /></div>
+                <div className="p-mx-xs bg-brand-primary/10 rounded-xl text-status-success-text"><Calendar size={20} /></div>
                 <div>
                   <Typography variant="h3" className="text-lg">Periodo de Analise</Typography>
                   <Typography variant="tiny" tone="muted" className="font-bold">
@@ -742,7 +742,7 @@ export default function ConsultoriaVisitaExecucao() {
 
           <Card className="p-mx-lg border bg-white overflow-hidden">
              <div className="flex items-center gap-mx-sm mb-mx-lg border-b border-border-subtle pb-mx-md">
-                <div className="p-mx-xs bg-emerald-600/10 rounded-xl text-emerald-600"><ClipboardCheck size={20} /></div>
+                <div className="p-mx-xs bg-brand-primary/10 rounded-xl text-status-success-text"><ClipboardCheck size={20} /></div>
                 <Typography variant="h3" className="text-lg">Execução Metodológica</Typography>
              </div>
 
@@ -763,15 +763,15 @@ export default function ConsultoriaVisitaExecucao() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg">
             <Card className="p-mx-lg border bg-white relative overflow-hidden group">
-              <div className="absolute top-mx-0 right-mx-0 p-mx-md opacity-[0.02] group-hover:opacity-[0.05] transition-opacity pointer-events-none text-emerald-600">
+              <div className="absolute top-mx-0 right-mx-0 p-mx-md opacity-[0.02] group-hover:opacity-[0.05] transition-opacity pointer-events-none text-status-success-text">
                 <FileText size={120} />
               </div>
               <div className="flex items-center justify-between mb-mx-md relative z-10">
                 <div className="flex items-center gap-mx-sm">
-                  <div className="p-mx-xs bg-emerald-600/10 rounded-xl text-emerald-600"><FileText size={20} /></div>
+                  <div className="p-mx-xs bg-brand-primary/10 rounded-xl text-status-success-text"><FileText size={20} /></div>
                   <Typography variant="h3" className="text-lg">Relato Executivo (CRM)</Typography>
                 </div>
-                <Button size="xs" variant="outline" className="h-mx-9 border-brand-primary/30 text-mx-tiny px-mx-md hover:bg-emerald-600 hover:text-white transition-all" onClick={handleGenerateAISummary} disabled={isGeneratingAiSummary} icon={isGeneratingAiSummary ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />}>RESUMIR PARA GRUPO</Button>
+                <Button size="xs" variant="outline" className="h-mx-9 border-brand-primary/30 text-mx-tiny px-mx-md hover:bg-brand-primary hover:text-white transition-all" onClick={handleGenerateAISummary} disabled={isGeneratingAiSummary} icon={isGeneratingAiSummary ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />}>RESUMIR PARA GRUPO</Button>
               </div>
               <Textarea
                 id="visit-executive-summary"
@@ -866,7 +866,7 @@ export default function ConsultoriaVisitaExecucao() {
                      <div key={att.id} className="group p-mx-xs bg-gray-50 rounded-2xl border border-border flex items-center justify-between hover:bg-white transition-colors shadow-sm">
                         <div className="flex items-center gap-mx-sm min-w-0">
                            <div className="w-mx-10 h-mx-10 rounded-xl bg-white flex items-center justify-center border border-border-subtle shadow-sm shrink-0">
-                              {att.content_type?.includes('image') ? <Image className="w-mx-5 h-mx-5 text-emerald-600" /> : <FileText className="w-mx-5 h-mx-5 text-muted-foreground" />}
+                              {att.content_type?.includes('image') ? <Image className="w-mx-5 h-mx-5 text-status-success-text" /> : <FileText className="w-mx-5 h-mx-5 text-muted-foreground" />}
                            </div>
                            <div className="min-w-0">
                               <Typography variant="p" className="text-xs font-bold truncate max-w-mx-40 text-foreground">{att.filename}</Typography>
@@ -895,8 +895,8 @@ export default function ConsultoriaVisitaExecucao() {
           </Card>
 
           <Card className="p-mx-lg bg-white border text-center">
-             <div className="w-mx-12 h-mx-12 bg-emerald-600/10 rounded-mx-full flex items-center justify-center mx-auto mb-mx-md">
-               <Presentation className="w-mx-6 h-mx-6 text-emerald-600" />
+             <div className="w-mx-12 h-mx-12 bg-brand-primary/10 rounded-mx-full flex items-center justify-center mx-auto mb-mx-md">
+               <Presentation className="w-mx-6 h-mx-6 text-status-success-text" />
              </div>
              <Typography variant="h3" className="text-lg mb-mx-xs">Reporte Oficial MX</Typography>
              <Typography variant="p" className="text-mx-micro mb-mx-lg leading-tight font-bold tracking-tighter">O relatório compila os dados e o diagnóstico da visita.</Typography>

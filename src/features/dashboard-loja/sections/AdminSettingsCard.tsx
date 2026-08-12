@@ -169,7 +169,7 @@ export function AdminSettingsCard({
       <header className="p-5">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
           <div className="flex items-start gap-3">
-            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-status-success-surface text-status-success-text">
               <Settings2 size={20} />
             </span>
             <div>
@@ -203,7 +203,7 @@ export function AdminSettingsCard({
             <button
               type="button"
               onClick={onToggleAdminSettings}
-              className={`inline-flex h-10 items-center gap-2 rounded-xl px-3 text-sm font-semibold transition ${showAdminSettings ? 'bg-gray-100 text-foreground' : 'bg-emerald-600 text-white hover:bg-emerald-700'}`}
+              className={`inline-flex h-10 items-center gap-2 rounded-xl px-3 text-sm font-semibold transition ${showAdminSettings ? 'bg-gray-100 text-foreground' : 'bg-brand-primary text-white hover:bg-brand-primary-hover'}`}
             >
               <SlidersHorizontal size={15} />
               {showAdminSettings ? 'Ocultar parâmetros' : 'Configurar parâmetros'}

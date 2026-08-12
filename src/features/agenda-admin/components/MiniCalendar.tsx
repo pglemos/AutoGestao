@@ -75,8 +75,8 @@ export function MiniCalendar({ selectedDate, onDateSelect, hasEventsOnDate }: Mi
                 'relative flex h-7 w-7 items-center justify-center mx-auto rounded-mx-full text-xs font-medium transition-all',
                 !isCurrentM && 'text-muted-foreground/40',
                 isCurrentM && !isSelected && !isCurrentDay && 'text-foreground hover:bg-gray-50',
-                isCurrentDay && !isSelected && 'border border-brand-primary text-emerald-600 font-bold',
-                isSelected && 'bg-emerald-600 text-white font-bold shadow-sm',
+                isCurrentDay && !isSelected && 'border border-brand-primary text-status-success-text font-bold',
+                isSelected && 'bg-brand-primary text-white font-bold shadow-sm',
               )}
             >
               {format(day, 'd')}
@@ -84,7 +84,7 @@ export function MiniCalendar({ selectedDate, onDateSelect, hasEventsOnDate }: Mi
                 <span
                   className={cn(
                     'absolute bottom-0.5 h-1 w-1 rounded-full',
-                    isCurrentDay ? 'bg-emerald-600' : 'bg-gray-900',
+                    isCurrentDay ? 'bg-brand-primary' : 'bg-gray-900',
                   )}
                 />
               )}

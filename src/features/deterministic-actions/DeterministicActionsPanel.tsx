@@ -15,9 +15,9 @@ interface DeterministicActionsPanelProps {
 }
 
 const priorityCopy = {
-  critical: { label: 'Crítica', badge: 'bg-red-100 text-red-700', border: 'border-red-200' },
-  high: { label: 'Alta', badge: 'bg-amber-100 text-amber-700', border: 'border-amber-200' },
-  medium: { label: 'Média', badge: 'bg-blue-100 text-blue-700', border: 'border-blue-200' },
+  critical: { label: 'Crítica', badge: 'bg-status-error-surface text-status-error-text', border: 'border-status-error/30' },
+  high: { label: 'Alta', badge: 'bg-status-warning-surface text-status-warning-text', border: 'border-status-warning/30' },
+  medium: { label: 'Média', badge: 'bg-status-info-surface text-status-info-text', border: 'border-status-info/30' },
   low: { label: 'Baixa', badge: 'bg-gray-100 text-muted-foreground', border: 'border-border' },
 } as const
 
@@ -86,7 +86,7 @@ export default function DeterministicActionsPanel({
     <section className={wrapperClass} aria-labelledby="deterministic-actions-title">
       <div className="mb-4 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <span className="grid h-8 w-8 place-items-center rounded-lg bg-amber-50 text-amber-600">
+          <span className="grid h-8 w-8 place-items-center rounded-lg bg-status-warning-surface text-status-warning-text">
             <AlertTriangle size={16} aria-hidden="true" />
           </span>
           <div>
@@ -113,11 +113,11 @@ export default function DeterministicActionsPanel({
             <RefreshCw size={16} className="mr-2 animate-spin" /> Avaliando dados oficiais...
           </div>
         ) : error || localError ? (
-          <div role="alert" className="rounded-xl border border-red-100 bg-red-50 p-3 text-sm text-red-700">
+          <div role="alert" className="rounded-xl border border-status-error/20 bg-status-error-surface p-3 text-sm text-status-error-text">
             Não foi possível atualizar as ações: {localError || error}
           </div>
         ) : visibleActions.length === 0 ? (
-          <div className="flex flex-1 items-center gap-3 rounded-xl border border-emerald-100 bg-emerald-50 p-4 text-sm text-emerald-700">
+          <div className="flex flex-1 items-center gap-3 rounded-xl border border-status-success/20 bg-status-success-surface p-4 text-sm text-status-success-text">
             <CheckCircle2 size={18} className="shrink-0" /> Nenhuma pendência determinística no momento.
           </div>
         ) : (
@@ -149,13 +149,13 @@ export default function DeterministicActionsPanel({
                       <button
                         type="button"
                         onClick={() => navigate(action.actionUrl!)}
-                        className="inline-flex min-h-9 items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white transition-colors hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-200"
+                        className="inline-flex min-h-9 items-center gap-1.5 rounded-lg bg-brand-primary px-3 py-2 text-xs font-semibold text-white transition-colors hover:bg-brand-primary-hover focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-status-success/30"
                       >
                         Abrir ação <ArrowRight size={14} aria-hidden="true" />
                       </button>
                     )}
                     {requiresSourceRegularization ? (
-                      <span className="inline-flex min-h-9 items-center rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-700">
+                      <span className="inline-flex min-h-9 items-center rounded-lg border border-status-warning/30 bg-status-warning-surface px-3 py-2 text-xs font-semibold text-status-warning-text">
                         Regularize a origem para concluir
                       </span>
                     ) : (

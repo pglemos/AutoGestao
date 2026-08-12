@@ -19,7 +19,7 @@ export function AdminPeopleChart({ roleData, metrics }: Props) {
     <Card className="border-none bg-white overflow-hidden">
       <CardHeader className="p-mx-lg">
         <CardTitle className="text-lg flex items-center gap-mx-sm">
-          <UsersRound size={18} className="text-emerald-600" /> Pessoas e papeis
+          <UsersRound size={18} className="text-status-success-text" /> Pessoas e papeis
         </CardTitle>
         <CardDescription>Donos, gerentes, vendedores e equipe MX</CardDescription>
       </CardHeader>

@@ -83,10 +83,14 @@ describe('Base44 1:1 visual source parity', () => {
     const runtime = readFileSync('src/components/carteira/FichaClienteSheet.jsx', 'utf8')
     const reference = readFileSync('src/base44-reference/components/carteira/FichaClienteSheet.jsx', 'utf8')
 
-    for (const token of ['Mentor Comercial', 'Alterar próximo passo', 'sticky bottom-0 bg-white border-t border-border-subtle']) {
+    for (const token of ['Mentor Comercial', 'Alterar próximo passo']) {
       expect(reference, `reference token: ${token}`).toContain(token)
       expect(runtime, `runtime token: ${token}`).toContain(token)
     }
+    // A barra de ações conserva o mesmo layout; a referência congelada mantém o
+    // literal original e o runtime usa o token semântico de borda (07.005).
+    expect(reference).toContain('sticky bottom-0 bg-white border-t border-slate-100')
+    expect(runtime).toContain('sticky bottom-0 bg-white border-t border-border-subtle')
     expect(runtime).toContain('finally')
     expect(runtime).toContain('toast({')
 

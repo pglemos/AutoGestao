@@ -90,7 +90,7 @@ export function ForcePasswordChange() {
             <form onSubmit={handleSubmit} className="p-mx-xl sm:p-mx-2xl space-y-mx-lg">
               <header className="text-center space-y-mx-md">
                 <div className="relative inline-block">
-                  <div className="w-mx-20 h-mx-20 rounded-2xl bg-emerald-600/10 border border-brand-primary/20 flex items-center justify-center text-emerald-600 shadow-sm mx-auto relative z-10">
+                  <div className="w-mx-20 h-mx-20 rounded-2xl bg-brand-primary/10 border border-brand-primary/20 flex items-center justify-center text-status-success-text shadow-sm mx-auto relative z-10">
                     <ShieldCheck size={40} strokeWidth={1.5} />
                   </div>
                   <motion.div 
@@ -102,7 +102,7 @@ export function ForcePasswordChange() {
                 
                 <div className="space-y-mx-tiny">
                   <Typography variant="h2" className="text-3xl tracking-tighter">
-                    Segurança <span className="text-emerald-600">MX</span>
+                    Segurança <span className="text-status-success-text">MX</span>
                   </Typography>
                   <Typography variant="p" tone="muted" className="font-bold tracking-tight leading-relaxed">
                     Olá, <span className="text-mx-black font-bold">{profile?.name?.split(' ')[0]}</span>. <br/>
@@ -131,7 +131,7 @@ export function ForcePasswordChange() {
                     )}
                   </div>
                   <div className="relative group/input">
-                    <KeyRound size={20} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-emerald-600 transition-colors z-10" />
+                    <KeyRound size={20} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-status-success-text transition-colors z-10" />
                     <Input 
                       required 
                       minLength={6}
@@ -155,7 +155,7 @@ export function ForcePasswordChange() {
                 <div className="space-y-mx-xs">
                   <Typography variant="tiny" tone="muted" className="px-mx-xs">Confirmação</Typography>
                   <div className="relative group/input">
-                    <Lock size={20} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-emerald-600 transition-colors z-10" />
+                    <Lock size={20} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-status-success-text transition-colors z-10" />
                     <Input 
                       required 
                       type={showPassword ? 'text' : 'password'} 
@@ -170,7 +170,7 @@ export function ForcePasswordChange() {
 
               {/* Security Hint */}
               <div className="p-mx-md rounded-2xl bg-gray-50 border border-border flex gap-mx-md items-start">
-                <div className="p-mx-xs rounded-xl bg-emerald-600/10 text-emerald-600">
+                <div className="p-mx-xs rounded-xl bg-brand-primary/10 text-status-success-text">
                   <Sparkles size={16} />
                 </div>
                 <Typography variant="tiny" tone="muted" className="leading-relaxed tracking-tight">

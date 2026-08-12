@@ -39,8 +39,8 @@ function WeekEvent({ action, provided, isDragging, onOpenAction }) {
       <div className="mt-1 flex items-center gap-2 text-caption text-muted-foreground">
         <span className={`h-1.5 w-1.5 rounded-full ${deptStyle.dot || "bg-slate-400"}`} />
         <span className="truncate">{action.responsible}</span>
-        {action.status === "blocked" && <Lock className="h-3 w-3 text-red-500" />}
-        {late && <AlertTriangle className="h-3 w-3 text-red-500" />}
+        {action.status === "blocked" && <Lock className="h-3 w-3 text-status-error" />}
+        {late && <AlertTriangle className="h-3 w-3 text-status-error" />}
       </div>
     </div>
   );
@@ -86,10 +86,10 @@ export default function WeekView({ refDate, selectedDate, actionsByDate, onSelec
             <div key={key} className="rounded-xl border border-border bg-card shadow-sm">
               <button
                 onClick={() => onSelectDate(date)}
-                className={`w-full border-b border-border px-2 py-2 text-center ${isToday ? "bg-emerald-50" : ""} ${isSelected ? "bg-emerald-50" : ""}`}
+                className={`w-full border-b border-border px-2 py-2 text-center ${isToday ? "bg-status-success-surface" : ""} ${isSelected ? "bg-status-success-surface" : ""}`}
               >
                 <div className="text-xs font-semibold text-muted-foreground">{WEEKDAY_LABELS[idx]}</div>
-                <div className={`mt-0.5 text-lg font-bold ${isToday ? "text-emerald-700" : "text-foreground"}`}>
+                <div className={`mt-0.5 text-lg font-bold ${isToday ? "text-status-success-text" : "text-foreground"}`}>
                   {date.getDate()}
                 </div>
                 <div className="text-caption text-muted-foreground">{getRelativeDayLabel(date)}</div>

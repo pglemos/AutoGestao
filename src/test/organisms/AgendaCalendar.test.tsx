@@ -124,7 +124,7 @@ describe("AgendaCalendar — month view", () => {
     render(<AgendaCalendar {...defaultProps} />);
     const todayEl = screen.getByText(String(today.getDate()));
     const todayContainer = todayEl.closest("span")!;
-    expect(todayContainer.className).toContain("bg-emerald-600");
+    expect(todayContainer.className).toContain("bg-brand-primary");
     expect(todayContainer.className).toContain("text-white");
   });
 

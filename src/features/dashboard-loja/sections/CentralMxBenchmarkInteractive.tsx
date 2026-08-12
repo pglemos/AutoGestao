@@ -69,7 +69,7 @@ export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
   return (
     <Card className="p-mx-lg">
       <div className="flex items-start gap-mx-sm">
-        <div className="rounded-2xl bg-mx-indigo-50 p-mx-sm text-emerald-600">
+        <div className="rounded-2xl bg-mx-indigo-50 p-mx-sm text-status-success-text">
           <Gauge size={20} aria-hidden="true" />
         </div>
         <div className="flex-1 min-w-0">
@@ -200,7 +200,7 @@ export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
             key={code}
             type="button"
             onClick={() => setMetricCode(code)}
-            className="rounded-xl border border-border bg-white px-mx-xs py-mx-tiny text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground hover:border-brand-primary/40 hover:text-emerald-600"
+            className="rounded-xl border border-border bg-white px-mx-xs py-mx-tiny text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground hover:border-brand-primary/40 hover:text-status-success-text"
           >
             {code}
             <ArrowRight size={10} className="ml-1 inline" />

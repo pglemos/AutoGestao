@@ -18,7 +18,7 @@ export default function FinancialHeroCard({ calcResult, userName, periodLabel, o
   return (
     <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl p-6 lg:p-8 text-white relative overflow-hidden shadow-2xl">
       {/* Glow */}
-      <div className="absolute top-0 right-0 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-0 w-72 h-72 bg-status-success/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-mx-blue/10 rounded-full blur-2xl pointer-events-none" />
 
       <div className="relative z-10">

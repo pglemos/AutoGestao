@@ -43,7 +43,7 @@ export function StoreBranches() {
         render: (store) => (
           <div className="flex min-w-0 items-center gap-mx-sm">
             <span
-              className="grid h-mx-10 w-mx-10 shrink-0 place-items-center rounded-xl bg-status-success-surface text-emerald-600"
+              className="grid h-mx-10 w-mx-10 shrink-0 place-items-center rounded-xl bg-status-success-surface text-status-success-text"
               aria-hidden="true"
             >
               <Building2 size={18} />

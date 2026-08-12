@@ -28,7 +28,7 @@ export default function MetricCard({ indicator }) {
       <p className="mt-0.5 text-2xl font-bold tracking-tight text-foreground" aria-label={`${indicator.title}: ${indicator.value}`}>{indicator.value}</p>
       {indicator.complement && <p className="mt-0.5 text-xs text-muted-foreground">{indicator.complement}</p>}
       <div className="mt-2 flex items-end justify-between gap-2">
-        <p className={`text-xs font-medium ${indicator.trendUp ? "text-primary" : "text-red-600"}`} aria-label={`Tendência: ${indicator.trend}`}>
+        <p className={`text-xs font-medium ${indicator.trendUp ? "text-primary" : "text-status-error-text"}`} aria-label={`Tendência: ${indicator.trend}`}>
           {indicator.trend}
         </p>
         <div className="h-8 w-16 shrink-0" aria-hidden="true">

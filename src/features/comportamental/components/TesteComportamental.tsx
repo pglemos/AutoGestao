@@ -71,7 +71,7 @@ export function TesteComportamental() {
                         key={v}
                         type="button"
                         onClick={() => setRespostas(p => ({ ...p, [q.id]: v }))}
-                        className={`h-9 w-9 rounded-mx-full text-sm font-bold transition-colors ${respostas[q.id] === v ? 'bg-emerald-600 text-white' : 'bg-gray-50 text-muted-foreground hover:bg-border-default'}`}
+                        className={`h-9 w-9 rounded-mx-full text-sm font-bold transition-colors ${respostas[q.id] === v ? 'bg-brand-primary text-white' : 'bg-gray-50 text-muted-foreground hover:bg-border-default'}`}
                       >
                         {v}
                       </button>

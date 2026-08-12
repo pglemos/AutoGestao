@@ -89,11 +89,11 @@ export default function ConsultorNotificacoes() {
                     <motion.section initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }} className="shrink-0 mb-10">
                         <form onSubmit={handleSubmit}>
                             <Card className="p-mx-10 md:p-14 border-none bg-white overflow-hidden relative">
-                                <div className="absolute top-mx-0 right-mx-0 w-mx-96 h-mx-96 bg-emerald-600/5 rounded-mx-full blur-mx-xl -mr-48 -mt-48" />
+                                <div className="absolute top-mx-0 right-mx-0 w-mx-96 h-mx-96 bg-brand-primary/5 rounded-mx-full blur-mx-xl -mr-48 -mt-48" />
 
                                 <header className="flex items-center justify-between border-b border-border pb-8 mb-10 relative z-10">
                                     <div className="flex items-center gap-mx-md">
-                                        <div className="w-mx-14 h-mx-14 rounded-2xl bg-pure-black text-white flex items-center justify-center shadow-sm transform rotate-2"><Mail size={24} className="text-emerald-600" /></div>
+                                        <div className="w-mx-14 h-mx-14 rounded-2xl bg-pure-black text-white flex items-center justify-center shadow-sm transform rotate-2"><Mail size={24} className="text-status-success-text" /></div>
                                         <div>
                                             <Typography variant="h3">Compor Comunicado</Typography>
                                             <Typography variant="caption" tone="muted" className="mt-1">INTELIGÊNCIA DE REDE</Typography>
@@ -123,10 +123,10 @@ export default function ConsultorNotificacoes() {
                                             <Typography variant="caption" tone="muted" className="ml-2">Público Alvo (Segmentação)</Typography>
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-sm">
                                                 <button type="button" onClick={() => setForm(p => ({ ...p, target_type: 'all' }))} className={cn("p-mx-lg rounded-2xl border-2 transition-all flex flex-col items-center justify-center gap-mx-sm text-center group", form.target_type === 'all' ? "bg-mx-indigo-50 border-brand-primary shadow-sm" : "bg-white border-border hover:border-brand-primary/20")}>
-                                                    <div className={cn("w-mx-xl h-mx-xl rounded-2xl flex items-center justify-center shadow-sm transition-all", form.target_type === 'all' ? "bg-emerald-600 text-white" : "bg-gray-50 text-muted-foreground group-hover:bg-white")}>
+                                                    <div className={cn("w-mx-xl h-mx-xl rounded-2xl flex items-center justify-center shadow-sm transition-all", form.target_type === 'all' ? "bg-brand-primary text-white" : "bg-gray-50 text-muted-foreground group-hover:bg-white")}>
                                                         <Globe size={22} />
                                                     </div>
-                                                    <Typography variant="caption" className={cn("font-bold", form.target_type === 'all' ? "text-emerald-600" : "text-muted-foreground")}>TODA A REDE</Typography>
+                                                    <Typography variant="caption" className={cn("font-bold", form.target_type === 'all' ? "text-status-success-text" : "text-muted-foreground")}>TODA A REDE</Typography>
                                                 </button>
                                                 <button type="button" onClick={() => setForm(p => ({ ...p, target_type: 'store' }))} className={cn("p-mx-lg rounded-2xl border-2 transition-all flex flex-col items-center justify-center gap-mx-sm text-center group", form.target_type === 'store' ? "bg-status-warning-surface border-status-warning shadow-sm" : "bg-white border-border hover:border-brand-primary/20")}>
                                                     <div className={cn("w-mx-xl h-mx-xl rounded-2xl flex items-center justify-center shadow-sm transition-all", form.target_type === 'store' ? "bg-status-warning text-white" : "bg-gray-50 text-muted-foreground group-hover:bg-white")}>
@@ -183,7 +183,7 @@ export default function ConsultorNotificacoes() {
                     broadcasts.map((n, i) => (
                         <motion.article key={n.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
                             <Card className="p-mx-lg h-full border-none bg-white group hover:shadow-sm transition-all relative overflow-hidden flex flex-col">
-                                <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-emerald-600/5 rounded-mx-full blur-mx-lg -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-mx-lg -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" />
 
                                 <header className="flex items-start justify-between mb-8 border-b border-border pb-6 relative z-10">
                                     <div className="w-mx-xl h-mx-xl rounded-2xl bg-gray-50 flex items-center justify-center text-muted-foreground group-hover:bg-pure-black group-hover:text-white transition-all shadow-none transform group-hover:rotate-6">
@@ -198,13 +198,13 @@ export default function ConsultorNotificacoes() {
                                 </header>
 
                                 <div className="flex-1 mb-8 relative z-10 space-y-mx-xs">
-                                    <Typography variant="h3" className="text-lg leading-tight group-hover:text-emerald-600 transition-colors line-clamp-2">{n.title}</Typography>
+                                    <Typography variant="h3" className="text-lg leading-tight group-hover:text-status-success-text transition-colors line-clamp-2">{n.title}</Typography>
                                     <Typography variant="p" tone="muted" className="text-xs font-bold leading-relaxed line-clamp-4">"{n.message}"</Typography>
                                 </div>
 
                                 <footer className="pt-6 border-t border-border flex items-center justify-between mt-auto relative z-10">
                                     <div className="flex items-center gap-mx-xs text-caption font-bold text-muted-foreground">
-                                        <Calendar size={14} className="text-emerald-600" /> {new Date(n.created_at).toLocaleDateString('pt-BR')}
+                                        <Calendar size={14} className="text-status-success-text" /> {new Date(n.created_at).toLocaleDateString('pt-BR')}
                                     </div>
                                     <Typography variant="mono" className="text-mx-tiny opacity-30">{new Date(n.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</Typography>
                                 </footer>

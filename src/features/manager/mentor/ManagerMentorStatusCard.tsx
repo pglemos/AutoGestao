@@ -3,30 +3,30 @@ import { countMentorLevels, type MentorRecommendation, type MentorSituation } fr
 
 const SITUATION = {
   controlada: {
-    surface: 'border-emerald-200 from-emerald-50',
+    surface: 'border-status-success/30 from-status-success-surface',
     icon: ShieldCheck,
-    iconColor: 'text-emerald-600',
-    iconSurface: 'bg-emerald-100',
+    iconColor: 'text-status-success-text',
+    iconSurface: 'bg-status-success-surface',
     title: 'Operação Controlada',
-    titleColor: 'text-emerald-700',
+    titleColor: 'text-status-success-text',
     message: 'Sua equipe está performando bem. Continue acompanhando de perto e reforce os comportamentos positivos.',
   },
   atencao: {
-    surface: 'border-amber-200 from-amber-50',
+    surface: 'border-status-warning/30 from-amber-50',
     icon: AlertTriangle,
-    iconColor: 'text-amber-600',
-    iconSurface: 'bg-amber-100',
+    iconColor: 'text-status-warning-text',
+    iconSurface: 'bg-status-warning-surface',
     title: 'Ponto de Atenção',
-    titleColor: 'text-amber-700',
+    titleColor: 'text-status-warning-text',
     message: 'Alguns indicadores precisam de atenção. Verifique as recomendações e tome ações corretivas.',
   },
   critica: {
-    surface: 'border-red-200 from-red-50',
+    surface: 'border-status-error/30 from-status-error-surface',
     icon: AlertOctagon,
-    iconColor: 'text-red-600',
-    iconSurface: 'bg-red-100',
+    iconColor: 'text-status-error-text',
+    iconSurface: 'bg-status-error-surface',
     title: 'Situação Crítica',
-    titleColor: 'text-red-700',
+    titleColor: 'text-status-error-text',
     message: 'A operação exige intervenção imediata. Priorize as ações críticas e atue agora com a equipe.',
   },
 } as const satisfies Record<MentorSituation, unknown>
@@ -56,7 +56,7 @@ export function ManagerMentorStatusCard({
             <div className="flex items-center gap-2">
               <p className={`font-semibold ${config.titleColor}`}>{config.title}</p>
               {total === 0 && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-caption font-semibold text-emerald-700">
+                <span className="inline-flex items-center gap-1 rounded-full bg-status-success-surface px-2 py-0.5 text-caption font-semibold text-status-success-text">
                   <Sparkles size={10} /> Sem alertas
                 </span>
               )}
@@ -66,11 +66,11 @@ export function ManagerMentorStatusCard({
         </div>
         <div className="flex gap-2.5">
           <div className="min-w-[84px] rounded-xl border border-white/60 bg-white/70 px-4 py-2.5 text-center backdrop-blur">
-            <p className="text-2xl font-bold leading-none text-red-600">{critical}</p>
+            <p className="text-2xl font-bold leading-none text-status-error-text">{critical}</p>
             <p className="mt-1 text-caption uppercase tracking-wide text-muted-foreground">Críticos</p>
           </div>
           <div className="min-w-[84px] rounded-xl border border-white/60 bg-white/70 px-4 py-2.5 text-center backdrop-blur">
-            <p className="text-2xl font-bold leading-none text-amber-600">{attention}</p>
+            <p className="text-2xl font-bold leading-none text-status-warning-text">{attention}</p>
             <p className="mt-1 text-caption uppercase tracking-wide text-muted-foreground">Atenção</p>
           </div>
         </div>

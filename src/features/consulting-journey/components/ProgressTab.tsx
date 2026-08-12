@@ -5,7 +5,7 @@ import { calculateDeliveryProgress, calculateLessonProgress } from '../consultin
 function Step({ label, completed, detail }: { label: string; completed: boolean; detail: string }) {
   return (
     <li className="flex items-start gap-3 rounded-lg border border-border p-3">
-      <span className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold ${completed ? 'bg-emerald-100 text-emerald-700' : 'bg-muted text-muted-foreground'}`}>{completed ? '✓' : '•'}</span>
+      <span className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold ${completed ? 'bg-status-success-surface text-status-success-text' : 'bg-muted text-muted-foreground'}`}>{completed ? '✓' : '•'}</span>
       <span><strong className="block text-sm text-foreground">{label}</strong><span className="text-xs text-muted-foreground">{detail}</span></span>
     </li>
   )

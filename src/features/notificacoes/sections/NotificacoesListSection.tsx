@@ -56,7 +56,7 @@ type Props = {
 function getTypeIcon(type: string) {
   switch (type) {
     case 'approval':
-      return <ShieldCheck size={20} className="text-emerald-600" />
+      return <ShieldCheck size={20} className="text-status-success-text" />
     case 'discipline':
       return <AlertTriangle size={20} className="text-status-error" />
     case 'performance':
@@ -64,7 +64,7 @@ function getTypeIcon(type: string) {
     case 'alert':
       return <Clock size={20} className="text-status-warning" />
     default:
-      return <Bell size={20} className="text-emerald-600" />
+      return <Bell size={20} className="text-status-success-text" />
   }
 }
 
@@ -88,7 +88,7 @@ export function NotificacoesListSection({
         <div className="flex items-center gap-mx-md">
           <div className={cn(
             'flex h-mx-11 w-mx-11 shrink-0 items-center justify-center rounded-2xl',
-            'bg-emerald-50 text-emerald-600 shadow-none',
+            'bg-status-success-surface text-status-success-text shadow-none',
           )}>
             <Bell size={22} strokeWidth={2} />
           </div>
@@ -158,7 +158,7 @@ export function NotificacoesListSection({
                       <div className="flex-1 min-w-0">
                         <header className="flex justify-between items-start mb-2 gap-mx-sm">
                           <div className="flex items-center gap-mx-sm min-w-0">
-                            <Typography variant="h3" className="truncate text-base font-bold transition-colors group-hover/item:text-emerald-600">
+                            <Typography variant="h3" className="truncate text-base font-bold transition-colors group-hover/item:text-status-success-text">
                               {n.title}
                             </Typography>
                             {!n.read && n.priority === 'high' && (
@@ -205,7 +205,7 @@ export function NotificacoesListSection({
                                 toast.success('Alerta marcado como lido.')
                               }
                             }}
-                            className="h-auto p-mx-0 text-xs font-semibold text-muted-foreground hover:bg-transparent hover:text-emerald-600"
+                            className="h-auto p-mx-0 text-xs font-semibold text-muted-foreground hover:bg-transparent hover:text-status-success-text"
                           >
                             {n.read ? 'Marcar não lida' : 'Marcar lida'}
                           </Button>
@@ -226,7 +226,7 @@ export function NotificacoesListSection({
                         </footer>
                       </div>
                       {!n.read && (
-                        <div className="absolute right-mx-lg top-mx-sm sm:top-1/2 sm:-translate-y-1/2 w-2.5 h-2.5 rounded-mx-full bg-emerald-600 shadow-sm animate-pulse" />
+                        <div className="absolute right-mx-lg top-mx-sm sm:top-1/2 sm:-translate-y-1/2 w-2.5 h-2.5 rounded-mx-full bg-brand-primary shadow-sm animate-pulse" />
                       )}
                     </motion.article>
                   )

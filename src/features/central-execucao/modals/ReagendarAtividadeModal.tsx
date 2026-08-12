@@ -76,7 +76,7 @@ export function ReagendarAtividadeModal({
       footer={(
         <>
           <button type="button" onClick={onClose} disabled={saving} className="rounded-xl border border-border px-5 py-2.5 text-body-sm font-semibold text-muted-foreground hover:bg-slate-50 disabled:opacity-50">Cancelar</button>
-          <button type="button" onClick={() => void handleSubmit()} disabled={!dueAt || saving} className="rounded-xl bg-status-info px-6 py-2.5 text-body-sm font-bold text-white hover:bg-blue-700 disabled:opacity-50">{saving ? 'Salvando...' : 'Reagendar'}</button>
+          <button type="button" onClick={() => void handleSubmit()} disabled={!dueAt || saving} className="rounded-xl bg-status-info px-6 py-2.5 text-body-sm font-bold text-white hover:bg-status-info disabled:opacity-50">{saving ? 'Salvando...' : 'Reagendar'}</button>
         </>
       )}
     >
@@ -89,7 +89,7 @@ export function ReagendarAtividadeModal({
           <label htmlFor="central-reschedule-note" className="text-caption font-bold uppercase tracking-wider text-muted-foreground">Observação (opcional)</label>
           <textarea id="central-reschedule-note" rows={3} value={note} onChange={event => setNote(event.target.value)} className="mt-1.5 w-full resize-none rounded-md border border-border px-3 py-2 text-body-sm outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15" />
         </div>
-        {error && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-[12px] font-semibold text-red-700">{error}</p>}
+        {error && <p role="alert" className="rounded-xl border border-status-error/30 bg-status-error-surface px-3 py-2 text-[12px] font-semibold text-status-error-text">{error}</p>}
       </div>
     </Modal>
   )

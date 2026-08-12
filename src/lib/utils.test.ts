@@ -12,7 +12,7 @@ describe('cn utility', () => {
 
   it('should merge tailwind classes correctly', () => {
     expect(cn('px-2 py-1', 'px-4')).toBe('py-1 px-4')
-    expect(cn('bg-status-error-surface0', 'bg-[#00A89D]')).toBe('bg-[#00A89D]')
+    expect(cn('bg-status-error', 'bg-[#00A89D]')).toBe('bg-[#00A89D]')
   })
 
   it('should handle arrays and objects', () => {

@@ -200,7 +200,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
     return (
       <div className="space-y-6">
         {erro && (
-          <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <div role="alert" className="rounded-xl border border-status-error/30 bg-status-error-surface px-4 py-3 text-sm text-status-error-text">
             {erro}
           </div>
         )}
@@ -216,7 +216,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
               <p className="text-2xl font-black text-[#031B3D]">{total}</p>
               <p className="text-xs text-muted-foreground">Total</p>
             </div>
-            <div className="bg-blue-50 rounded-xl p-3">
+            <div className="bg-status-info-surface rounded-xl p-3">
               <p className="text-2xl font-black text-[#005BFF]">{enviados}</p>
               <p className="text-xs text-muted-foreground">Enviadas</p>
             </div>
@@ -225,11 +225,11 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
               <p className="text-xs text-muted-foreground">Pulados</p>
             </div>
           </div>
-          <div className="bg-amber-50 border border-amber-100 rounded-xl p-3 mt-2">
-            <p className="text-xs font-bold text-amber-600 uppercase tracking-wide">Status da Missão</p>
-            <p className="text-sm font-semibold text-amber-700 mt-0.5">Aguardando respostas</p>
+          <div className="bg-status-warning-surface border border-status-warning/20 rounded-xl p-3 mt-2">
+            <p className="text-xs font-bold text-status-warning-text uppercase tracking-wide">Status da Missão</p>
+            <p className="text-sm font-semibold text-status-warning-text mt-0.5">Aguardando respostas</p>
           </div>
-          <Button onClick={handleVoltar} className="w-full rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white mt-2">
+          <Button onClick={handleVoltar} className="w-full rounded-xl bg-[#005BFF] hover:bg-status-info text-white mt-2">
             Voltar ao Plano de Ataque
           </Button>
         </div>
@@ -240,7 +240,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
   return (
     <div className="space-y-6">
       {erro && (
-        <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <div role="alert" className="rounded-xl border border-status-error/30 bg-status-error-surface px-4 py-3 text-sm text-status-error-text">
           {erro}
         </div>
       )}
@@ -258,7 +258,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
             <p className="text-xs font-black text-muted-foreground uppercase tracking-wide">Missão</p>
             <p className="text-base font-black text-[#031B3D]">{missao.tipo_missao}</p>
           </div>
-          <span className="text-xs bg-amber-50 text-amber-600 font-bold px-2.5 py-1 rounded-full border border-amber-100">Em execução</span>
+          <span className="text-xs bg-status-warning-surface text-status-warning-text font-bold px-2.5 py-1 rounded-full border border-status-warning/20">Em execução</span>
         </div>
         <div className="grid grid-cols-3 gap-3">
           <div className="text-center">
@@ -291,7 +291,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
             <p className="text-xs font-black text-muted-foreground uppercase tracking-wide">Cliente {indice + 1} de {total}</p>
           </div>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-base font-black text-[#005BFF]">
+            <div className="w-12 h-12 rounded-full bg-status-info-surface flex items-center justify-center text-base font-black text-[#005BFF]">
               {(clienteAtual.nome || "?").split(" ").slice(0, 2).map(p => p[0]).join("").toUpperCase()}
             </div>
             <div>
@@ -314,7 +314,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
             </Button>
             {waUrl && (
               <a href={waUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
-                <Button className="w-full rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white gap-1.5 text-sm">
+                <Button className="w-full rounded-xl bg-[#005BFF] hover:bg-status-info text-white gap-1.5 text-sm">
                   <MessageCircle className="w-4 h-4" /> Abrir WhatsApp
                 </Button>
               </a>
@@ -325,7 +325,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
             <Button variant="outline" onClick={pularCliente} disabled={persistindo} className="rounded-xl gap-1.5 text-sm text-muted-foreground">
               <SkipForward className="w-4 h-4" /> Pular
             </Button>
-            <Button onClick={marcarEnviado} disabled={persistindo} className="flex-1 rounded-xl bg-blue-50 text-[#005BFF] hover:bg-blue-100 font-bold gap-1.5 text-sm border border-blue-100">
+            <Button onClick={marcarEnviado} disabled={persistindo} className="flex-1 rounded-xl bg-status-info-surface text-[#005BFF] hover:bg-status-info-surface font-bold gap-1.5 text-sm border border-status-info/20">
               Mensagem enviada →
             </Button>
           </div>
@@ -342,7 +342,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
           <div className="grid grid-cols-1 gap-1.5">
             {RESULTADOS.map(r => (
               <button key={r} onClick={() => setResultado(r)}
-                className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-all ${resultado === r ? "border-[#005BFF] bg-blue-50 text-[#005BFF] font-semibold" : "border-border-subtle text-muted-foreground hover:bg-slate-50"}`}>
+                className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-all ${resultado === r ? "border-[#005BFF] bg-status-info-surface text-[#005BFF] font-semibold" : "border-border-subtle text-muted-foreground hover:bg-slate-50"}`}>
                 {r}
               </button>
             ))}
@@ -350,7 +350,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
           <div className="flex gap-2">
             <Button variant="outline" onClick={avancar} disabled={salvando || persistindo} className="flex-1 rounded-xl text-sm">Pular resultado</Button>
             <Button onClick={registrarResultado} disabled={!resultado || salvando || persistindo}
-              className="flex-1 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-sm">
+              className="flex-1 rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-sm">
               {salvando ? "Salvando..." : "Confirmar e avançar"}
             </Button>
           </div>

@@ -34,10 +34,10 @@ export function LiveFloor({ ranking }: LiveFloorProps) {
     return (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col h-full gap-mx-lg pb-2 relative">
             <div className="bg-gray-900 rounded-2xl p-mx-tiny border border-white/10 flex items-center justify-between gap-mx-lg relative overflow-hidden shrink-0 shadow-lg">
-                <div className="absolute top-mx-0 left-mx-0 h-full bg-emerald-600/10 transition-all duration-1000" style={{ width: `${Math.min(teamProgress, 100)}%` }} aria-hidden="true" />
+                <div className="absolute top-mx-0 left-mx-0 h-full bg-brand-primary/10 transition-all duration-1000" style={{ width: `${Math.min(teamProgress, 100)}%` }} aria-hidden="true" />
 
                 <div className="flex items-center gap-mx-md px-6 py-3 relative z-10">
-                    <div className="w-mx-10 h-mx-10 rounded-xl bg-emerald-600 text-foreground flex items-center justify-center font-bold shadow-mx-glow-brand">
+                    <div className="w-mx-10 h-mx-10 rounded-xl bg-brand-primary text-foreground flex items-center justify-center font-bold shadow-mx-glow-brand">
                         <Trophy className="w-mx-sm h-mx-sm" aria-hidden="true" />
                     </div>
                     <div>
@@ -106,10 +106,10 @@ export function LiveFloor({ ranking }: LiveFloorProps) {
                                 <div className="space-y-mx-xs mb-4 relative z-10">
                                     <div className="flex justify-between text-mx-micro font-bold text-muted-foreground uppercase mb-1">
                                         <span>Vendas</span>
-                                        <span className={agent.vnd_total > 0 ? 'text-emerald-600' : ''}>{agent.vnd_total}/{agent.meta}</span>
+                                        <span className={agent.vnd_total > 0 ? 'text-status-success-text' : ''}>{agent.vnd_total}/{agent.meta}</span>
                                     </div>
                                     <div className="h-mx-tiny.5 bg-black/20 rounded-full overflow-hidden">
-                                        <div className="h-full bg-emerald-600 rounded-full" style={{ width: `${Math.min(agent.atingimento, 100)}%` }} />
+                                        <div className="h-full bg-brand-primary rounded-full" style={{ width: `${Math.min(agent.atingimento, 100)}%` }} />
                                     </div>
                                 </div>
                             </div>
@@ -119,7 +119,7 @@ export function LiveFloor({ ranking }: LiveFloorProps) {
 
                 <div className="w-full lg:w-mx-80 bg-gray-900 rounded-2xl border border-white/10 p-mx-lg flex flex-col shrink-0">
                     <h3 className="font-display font-bold text-lg text-white mb-6 flex items-center gap-mx-xs">
-                        <Activity className="w-mx-sm h-mx-sm text-emerald-600" aria-hidden="true" />
+                        <Activity className="w-mx-sm h-mx-sm text-status-success-text" aria-hidden="true" />
                         Feed
                     </h3>
 

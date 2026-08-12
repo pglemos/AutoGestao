@@ -52,10 +52,10 @@ export function TransferConfirmationDialog({
           aria-modal="true"
           aria-labelledby="transfer-confirm-title"
           aria-describedby="transfer-confirm-description"
-          className="relative z-10 w-full max-w-lg rounded-3xl border border-amber-200 bg-white p-mx-xl shadow-2xl overflow-hidden"
+          className="relative z-10 w-full max-w-lg rounded-3xl border border-status-warning/30 bg-white p-mx-xl shadow-2xl overflow-hidden"
         >
           <div className="flex items-center gap-mx-md mb-mx-md">
-            <div className="w-mx-14 h-mx-14 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 border border-amber-200">
+            <div className="w-mx-14 h-mx-14 rounded-2xl bg-status-warning-surface text-status-warning-text flex items-center justify-center shrink-0 border border-status-warning/30">
               <ArrowRightLeft size={24} />
             </div>
             <div>
@@ -68,17 +68,17 @@ export function TransferConfirmationDialog({
             </div>
           </div>
 
-          <div id="transfer-confirm-description" className="space-y-mx-md bg-amber-50/60 rounded-2xl p-mx-md border border-amber-200/60">
+          <div id="transfer-confirm-description" className="space-y-mx-md bg-status-warning-surface/60 rounded-2xl p-mx-md border border-status-warning/30/60">
             <p className="text-xs text-foreground font-medium leading-relaxed">
               O e-mail <strong className="text-foreground font-bold">{existingUser.email}</strong> já pertence ao integrante{' '}
               <strong className="text-foreground font-bold">{existingUser.name}</strong>, que está ativamente vinculado à loja{' '}
-              <span className="inline-flex items-center gap-1 font-bold text-amber-900 bg-amber-200/60 px-2 py-0.5 rounded-md">
+              <span className="inline-flex items-center gap-1 font-bold text-status-warning-text bg-amber-200/60 px-2 py-0.5 rounded-md">
                 <Building2 size={12} /> {existingUser.current_store_name}
               </span>.
             </p>
 
-            <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground pt-2 border-t border-amber-200/40">
-              <UserCheck size={14} className="text-emerald-600 shrink-0" />
+            <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground pt-2 border-t border-status-warning/30/40">
+              <UserCheck size={14} className="text-status-success-text shrink-0" />
               <span>
                 Deseja encerrar o vínculo na loja <strong>{existingUser.current_store_name}</strong> e transferi-lo{targetStoreName ? ` para a loja ${targetStoreName}` : ' para a nova unidade'}?
               </span>
@@ -99,7 +99,7 @@ export function TransferConfirmationDialog({
               type="button"
               onClick={() => void onConfirm()}
               disabled={loading}
-              className="h-mx-12 rounded-2xl font-bold uppercase tracking-widest text-mx-nano bg-amber-600 hover:bg-amber-700 text-white shadow-sm flex items-center justify-center gap-2"
+              className="h-mx-12 rounded-2xl font-bold uppercase tracking-widest text-mx-nano bg-status-warning hover:bg-status-warning text-white shadow-sm flex items-center justify-center gap-2"
             >
               {loading ? <RefreshCw className="animate-spin size-4" /> : <ArrowRightLeft size={16} />}
               Confirmar Transferência

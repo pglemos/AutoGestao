@@ -58,9 +58,9 @@ export const SIDEBAR = {
   headerCollapsed: 'justify-center px-2',
   brandLogo: 'h-7 w-7 shrink-0 object-contain',
   brandTitle: 'truncate text-body-sm font-black tracking-tight text-foreground',
-  brandModule: 'mt-0.5 truncate text-caption font-bold uppercase tracking-[0.14em] text-emerald-700',
+  brandModule: 'mt-0.5 truncate text-caption font-bold uppercase tracking-[0.14em] text-status-success-text',
   toggle:
-    'flex h-9 w-9 shrink-0 items-center justify-center rounded-[12px] border border-mxsb-line bg-white text-muted-foreground outline-none transition-colors hover:bg-slate-50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-emerald-500/30',
+    'flex h-9 w-9 shrink-0 items-center justify-center rounded-[12px] border border-mxsb-line bg-white text-muted-foreground outline-none transition-colors hover:bg-slate-50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-status-success/30',
 
   /** Área de navegação. */
   nav: 'flex-1 min-h-0 overflow-y-auto py-4',
@@ -72,7 +72,7 @@ export const SIDEBAR = {
   sectionItems: 'space-y-0.5',
 
   /** Item de navegação. */
-  item: 'group relative flex w-full items-center gap-2.5 rounded-[8px] py-2 text-sm font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500/30',
+  item: 'group relative flex w-full items-center gap-2.5 rounded-[8px] py-2 text-sm font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-status-success/30',
   itemExpanded: 'px-3',
   itemCollapsed: 'justify-center px-0',
   itemActive: 'bg-mxsb-active-surface font-semibold text-mxsb-active',
@@ -82,18 +82,18 @@ export const SIDEBAR = {
 
   /** Grupo expansível. */
   groupTrigger:
-    'flex w-full items-center gap-2.5 rounded-[8px] py-2 text-sm font-medium text-mxsb-muted outline-none transition-colors hover:bg-mxsb-hover hover:text-mxsb-ink-strong focus-visible:ring-2 focus-visible:ring-emerald-500/30',
+    'flex w-full items-center gap-2.5 rounded-[8px] py-2 text-sm font-medium text-mxsb-muted outline-none transition-colors hover:bg-mxsb-hover hover:text-mxsb-ink-strong focus-visible:ring-2 focus-visible:ring-status-success/30',
   groupChevron: 'h-3.5 w-3.5 shrink-0',
   subnav: 'ml-3 mt-0.5 space-y-0.5 border-l border-mxsb-line pl-3',
   nestedItem:
-    'flex w-full items-center gap-1.5 rounded-[6px] px-2.5 py-1 text-body-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500/30',
+    'flex w-full items-center gap-1.5 rounded-[6px] px-2.5 py-1 text-body-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-status-success/30',
   nestedItemActive: 'bg-mxsb-active-surface font-medium text-mxsb-active',
   nestedItemIdle: 'text-mxsb-muted hover:bg-mxsb-hover hover:text-mxsb-ink-strong',
 
   /** Badges. */
   badge: 'shrink-0 rounded-full px-1.5 py-0.5 text-caption font-medium',
-  badgeWarning: 'bg-amber-50 text-amber-700',
-  badgeDefault: 'bg-emerald-50 text-emerald-700',
+  badgeWarning: 'bg-status-warning-surface text-status-warning-text',
+  badgeDefault: 'bg-status-success-surface text-status-success-text',
 
   /** Rodapés (CTA e cartão de perfil). */
   footer: 'border-t border-mxsb-line py-3',
@@ -101,7 +101,7 @@ export const SIDEBAR = {
   footerCollapsed: 'px-2',
   ctaSlot: 'border-t border-mxsb-line p-3',
   ctaButton:
-    'flex h-9 w-full items-center gap-2.5 rounded-[6px] bg-mxsb-active px-4 text-sm font-medium text-white shadow outline-none transition-colors hover:bg-mxsb-active/90 focus-visible:ring-2 focus-visible:ring-emerald-500/30',
+    'flex h-9 w-full items-center gap-2.5 rounded-[6px] bg-mxsb-active px-4 text-sm font-medium text-white shadow outline-none transition-colors hover:bg-mxsb-active/90 focus-visible:ring-2 focus-visible:ring-status-success/30',
   ctaButtonExpanded: 'justify-start',
   ctaButtonCollapsed: 'justify-center px-0',
 
@@ -111,7 +111,7 @@ export const SIDEBAR = {
   drawerPanel:
     'relative flex h-full w-72 max-w-[85vw] flex-col overflow-hidden bg-mxsb-surface shadow-xl sm:w-80 sm:max-w-sm',
   drawerClose:
-    'absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-[8px] text-mxsb-ink outline-none transition-colors hover:bg-mxsb-hover focus-visible:ring-2 focus-visible:ring-emerald-500/30',
+    'absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-[8px] text-mxsb-ink outline-none transition-colors hover:bg-mxsb-hover focus-visible:ring-2 focus-visible:ring-status-success/30',
 } as const
 
 export type SidebarTokens = typeof SIDEBAR

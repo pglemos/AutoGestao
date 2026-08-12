@@ -99,14 +99,14 @@ export default function RescheduleModal({ action, newDate, open, onOpenChange, o
           </div>
 
           {isAwaitingValidation && (
-            <div className="flex items-start gap-2 rounded-lg bg-orange-50 p-3 text-xs text-orange-700">
+            <div className="flex items-start gap-2 rounded-lg bg-status-warning-surface p-3 text-xs text-status-warning-text">
               <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
               <span>Esta ação aguarda validação. Confirme que a alteração do prazo é necessária.</span>
             </div>
           )}
 
           {isBlocked && (
-            <div className="flex items-start gap-2 rounded-lg bg-red-50 p-3 text-xs text-red-700">
+            <div className="flex items-start gap-2 rounded-lg bg-status-error-surface p-3 text-xs text-status-error-text">
               <Lock className="mt-0.5 h-4 w-4 shrink-0" />
               <span>A ação continuará bloqueada após a alteração do prazo.</span>
             </div>

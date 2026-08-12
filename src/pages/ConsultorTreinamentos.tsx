@@ -55,7 +55,7 @@ export default function ConsultorTreinamentos() {
 
     if (loading) return (
         <div className="h-full w-full flex flex-col items-center justify-center bg-surface-alt">
-            <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-emerald-600 mb-6" />
+            <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-status-success-text mb-6" />
             <Typography variant="caption" tone="muted" className="animate-pulse">Auditando Academy...</Typography>
         </div>
     )
@@ -64,7 +64,7 @@ export default function ConsultorTreinamentos() {
         <PageTemplate as="div" width="dashboard" className="flex flex-col gap-mx-lg">
             
             <PageHeading
-                title={<span>Curadoria <span className="text-emerald-600">Academy</span></span>}
+                title={<span>Curadoria <span className="text-status-success-text">Academy</span></span>}
                 subtitle="GESTÃO DE CONHECIMENTO & ALTA PERFORMANCE"
                 actions={
                     <div className="flex items-center gap-mx-sm shrink-0">
@@ -79,7 +79,7 @@ export default function ConsultorTreinamentos() {
                         </Button>
                         <Button 
                             onClick={() => setShowForm(true)} 
-                            className="h-mx-xl px-8 shadow-sm bg-emerald-600 hover:bg-brand-primary-hover text-white rounded-xl font-bold"
+                            className="h-mx-xl px-8 shadow-sm bg-brand-primary hover:bg-brand-primary-hover text-white rounded-xl font-bold"
                         >
                             <Plus size={18} className="mr-2" /> NOVO CONTEÚDO
                         </Button>
@@ -92,11 +92,11 @@ export default function ConsultorTreinamentos() {
                     <motion.section initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }} className="shrink-0 mb-10">
                         <form onSubmit={handleSubmit}>
                             <Card className="border p-mx-md bg-white relative">
-                                <div className="absolute top-mx-0 right-mx-0 w-mx-96 h-mx-96 bg-emerald-600/5 rounded-mx-full blur-mx-xl -mr-48 -mt-48" />
+                                <div className="absolute top-mx-0 right-mx-0 w-mx-96 h-mx-96 bg-brand-primary/5 rounded-mx-full blur-mx-xl -mr-48 -mt-48" />
                                 
                                 <header className="flex items-center justify-between border-b border-border-subtle pb-4 mb-4 relative z-10">
                                     <div className="flex items-center gap-mx-md">
-                                        <div className="w-mx-14 h-mx-14 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm transform rotate-2"><GraduationCap size={24} /></div>
+                                        <div className="w-mx-14 h-mx-14 rounded-xl bg-brand-primary text-white flex items-center justify-center shadow-sm transform rotate-2"><GraduationCap size={24} /></div>
                                         <div>
                                             <Typography variant="h3">Publicar Treinamento</Typography>
                                             <Typography variant="caption" tone="muted" className="mt-1">EXPANSÃO DE BASE TÉCNICA</Typography>
@@ -205,10 +205,10 @@ export default function ConsultorTreinamentos() {
                 {treinamentos.map((t, i) => (
                     <motion.article key={t.id} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.05 }}>
                         <Card className="border bg-white p-mx-md hover:shadow-sm transition-all relative flex flex-col">
-                            <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-emerald-600/5 rounded-mx-full blur-mx-huge -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-mx-huge -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" />
                             
                             <div className="flex items-start justify-between mb-8 border-b border-border-subtle pb-6 relative z-10">
-                                <div className={cn("w-mx-xl h-mx-xl rounded-xl flex items-center justify-center transition-all shadow-none transform group-hover:rotate-6", t.watched ? "bg-status-success-surface text-status-success" : "bg-gray-50 text-muted-foreground group-hover:bg-emerald-600 group-hover:text-white")}>
+                                <div className={cn("w-mx-xl h-mx-xl rounded-xl flex items-center justify-center transition-all shadow-none transform group-hover:rotate-6", t.watched ? "bg-status-success-surface text-status-success" : "bg-gray-50 text-muted-foreground group-hover:bg-brand-primary group-hover:text-white")}>
                                     {t.watched ? <CheckCircle size={20} /> : <Play size={20} className="ml-1" />}
                                 </div>
                                 <div className="flex flex-col items-end gap-mx-xs">
@@ -219,7 +219,7 @@ export default function ConsultorTreinamentos() {
                             </div>
 
                             <div className="flex-1 mb-8 relative z-10 space-y-mx-xs">
-                                <Typography variant="h3" className="leading-tight group-hover:text-emerald-600 transition-colors line-clamp-2">{t.title}</Typography>
+                                <Typography variant="h3" className="leading-tight group-hover:text-status-success-text transition-colors line-clamp-2">{t.title}</Typography>
                                 <Typography variant="p" tone="muted" className="leading-relaxed line-clamp-3 italic">"{t.description}"</Typography>
                                 
                                 <div className="flex flex-wrap gap-mx-xs pt-4">
@@ -236,7 +236,7 @@ export default function ConsultorTreinamentos() {
                                             <Typography variant="caption" as="span">{String.fromCharCode(64 + j)}</Typography>
                                         </div>
                                     ))}
-                                    <div className="w-mx-lg h-mx-lg rounded-xl border border-border-subtle bg-mx-indigo-50 flex items-center justify-center text-emerald-600 shadow-sm">
+                                    <div className="w-mx-lg h-mx-lg rounded-xl border border-border-subtle bg-mx-indigo-50 flex items-center justify-center text-status-success-text shadow-sm">
                                         <Typography variant="tiny" as="span">+12</Typography>
                                     </div>
                                 </div>

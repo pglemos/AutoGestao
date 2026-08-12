@@ -42,7 +42,7 @@ export default function MinhaRemuneracaoPage() {
     return (
       <div className="h-full w-full flex flex-col items-center justify-center gap-4" style={{ background: '#FFFFFF' }}>
         <p className="text-muted-foreground font-medium">{data.error}</p>
-        <button type="button" className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-foreground rounded-xl text-sm font-semibold">
+        <button type="button" className="flex items-center gap-2 px-4 py-2 bg-brand-primary text-foreground rounded-xl text-sm font-semibold">
           <RefreshCw className="w-4 h-4" /> Tentar novamente
         </button>
       </div>
@@ -104,7 +104,7 @@ export default function MinhaRemuneracaoPage() {
 
         <div className="text-center pt-4 pb-2">
           <p className="text-muted-foreground text-sm">
-            <span className="text-emerald-500">⚡</span> Disciplina hoje, liberdade amanhã. Você no controle dos seus resultados.
+            <span className="text-status-success">⚡</span> Disciplina hoje, liberdade amanhã. Você no controle dos seus resultados.
           </p>
         </div>
 

@@ -28,7 +28,7 @@ export function AdminStoreMatrixTable({ metrics, onStoreClick }: Props) {
       <CardHeader className="p-mx-lg flex flex-col md:flex-row md:items-center justify-between gap-mx-md">
         <div>
           <CardTitle className="text-lg flex items-center gap-mx-sm">
-            <Eye size={18} className="text-emerald-600" /> Matriz completa de lojas
+            <Eye size={18} className="text-status-success-text" /> Matriz completa de lojas
           </CardTitle>
           <CardDescription>
             Leitura executiva para auditoria visual e tomada de decisao
@@ -59,7 +59,7 @@ export function AdminStoreMatrixTable({ metrics, onStoreClick }: Props) {
                   <button
                     type="button"
                     onClick={() => onStoreClick(store.storeId, store.storeName)}
-                    className="font-bold uppercase text-foreground hover:text-emerald-600 text-xs"
+                    className="font-bold uppercase text-foreground hover:text-status-success-text text-xs"
                   >
                     {store.storeName}
                   </button>

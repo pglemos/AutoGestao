@@ -65,8 +65,8 @@ export function RegularizationDecisionModal({
             disabled={!canSubmit || saving}
             className={
               isApproval
-                ? "h-11 rounded-xl bg-emerald-600 px-4 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-emerald-200"
-                : "h-11 rounded-xl bg-red-600 px-4 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:bg-red-200"
+                ? "h-11 rounded-xl bg-brand-primary px-4 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-brand-primary-hover disabled:cursor-not-allowed disabled:bg-status-success/30"
+                : "h-11 rounded-xl bg-status-error px-4 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-status-error disabled:cursor-not-allowed disabled:bg-status-error/20"
             }
           >
             {saving
@@ -102,7 +102,7 @@ export function RegularizationDecisionModal({
                 ? "Adicione um comentário sobre a aprovação..."
                 : "Descreva por que a regularização foi recusada..."
             }
-            className="w-full resize-none rounded-xl border border-border px-3 py-2 text-sm text-foreground outline-none transition-shadow focus:ring-2 focus:ring-emerald-500"
+            className="w-full resize-none rounded-xl border border-border px-3 py-2 text-sm text-foreground outline-none transition-shadow focus:ring-2 focus:ring-status-success"
           />
         </div>
 
@@ -119,7 +119,7 @@ export function RegularizationDecisionModal({
               aria-hidden="true"
               className={`mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded ${
                 confirmed
-                  ? "bg-emerald-600 text-white"
+                  ? "bg-brand-primary text-white"
                   : "border border-border-strong bg-white"
               }`}
             >

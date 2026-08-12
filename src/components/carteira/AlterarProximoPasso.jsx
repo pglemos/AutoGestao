@@ -169,7 +169,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
                   className={`text-xs font-semibold px-3 py-1.5 rounded-xl border transition-all ${
                     passo === s
                       ? "bg-[#005BFF] text-white border-[#005BFF]"
-                      : "bg-blue-50 text-[#005BFF] border-blue-200 hover:bg-blue-100"
+                      : "bg-status-info-surface text-[#005BFF] border-status-info/30 hover:bg-status-info-surface"
                   }`}
                 >
                   ✦ {s}
@@ -190,7 +190,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
                 className={`text-left text-xs font-semibold px-3 py-2.5 rounded-xl border transition-all flex items-start gap-2 ${
                   passo === p.label
                     ? "bg-[#005BFF] text-white border-[#005BFF]"
-                    : "bg-white text-muted-foreground border-border hover:border-blue-300 hover:bg-blue-50/50"
+                    : "bg-white text-muted-foreground border-border hover:border-status-info/40 hover:bg-status-info-surface/50"
                 }`}
               >
                 <span className={`text-caption font-black shrink-0 mt-0.5 ${passo === p.label ? "text-blue-200" : "text-muted-foreground"}`}>{p.codigo}</span>
@@ -258,7 +258,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
           <Button
             onClick={salvar}
             disabled={!podeSalvar || salvando}
-            className="flex-1 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white"
+            className="flex-1 rounded-xl bg-[#005BFF] hover:bg-status-info text-white"
           >
             {salvando ? "Salvando..." : "Salvar próximo passo"}
           </Button>

@@ -27,7 +27,7 @@ export default function OwnerActionCard({ action, onAnalyze, onApprove, onDelega
             </span>
           </div>
           {late && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
+            <span className="inline-flex items-center gap-1 rounded-full bg-status-error-surface px-2 py-0.5 text-xs font-medium text-status-error-text">
               <AlertTriangle className="h-3 w-3" /> Atrasada há {lateDays}d
             </span>
           )}

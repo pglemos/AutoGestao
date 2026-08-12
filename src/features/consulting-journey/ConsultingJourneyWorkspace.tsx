@@ -21,7 +21,7 @@ export function ConsultingJourneyWorkspace() {
     <div className="space-y-5 pb-12">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div><p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Programa contratado</p><h1 className="mt-1 text-2xl font-bold text-foreground">{snapshot.programName}</h1><p className="mt-1 text-sm text-muted-foreground">{snapshot.visitsCompleted} de {snapshot.totalVisits} encontros concluídos.</p><p className="mt-2 max-w-2xl text-sm text-muted-foreground"><strong>{snapshot.programRules.label}:</strong> {snapshot.programRules.description}</p></div>
-        <span className={`w-fit rounded-full px-3 py-1 text-xs font-medium ${controller.realtimeStatus === 'connected' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-800'}`}>{controller.realtimeStatus === 'connected' ? 'Atualização em tempo real' : 'Reconectando dados'}</span>
+        <span className={`w-fit rounded-full px-3 py-1 text-xs font-medium ${controller.realtimeStatus === 'connected' ? 'bg-status-success-surface text-status-success-text' : 'bg-status-warning-surface text-status-warning-text'}`}>{controller.realtimeStatus === 'connected' ? 'Atualização em tempo real' : 'Reconectando dados'}</span>
       </header>
       <section className="rounded-2xl border border-primary/20 bg-primary/5 p-4">
         <p className="text-xs font-semibold uppercase tracking-wide text-primary">Próximo passo</p>
@@ -31,7 +31,7 @@ export function ConsultingJourneyWorkspace() {
         </div>
       </section>
       {snapshot.confidentialityLevel === 'restricted' ? <div className="rounded-xl border border-border-strong bg-slate-50 p-4 text-sm text-foreground"><strong>Confidencialidade PPA:</strong> conteúdo estratégico restrito e auditável.</div> : null}
-      {!snapshot.canViewStrategicContent ? <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">Conteúdo estratégico do PPA restrito ao Dono, sócios autorizados e perfis internos MX.</div> : null}
+      {!snapshot.canViewStrategicContent ? <div className="rounded-xl border border-status-warning/30 bg-status-warning-surface p-4 text-sm text-status-warning-text">Conteúdo estratégico do PPA restrito ao Dono, sócios autorizados e perfis internos MX.</div> : null}
       <ConsultingJourneyTimeline visits={snapshot.visits} nextVisitNumber={snapshot.nextVisitNumber} onOpen={controller.openVisit} />
       <ConsultingMeetingDialog controller={controller} />
     </div>

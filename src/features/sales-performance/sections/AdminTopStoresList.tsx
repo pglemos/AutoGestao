@@ -15,7 +15,7 @@ export function AdminTopStoresList({ topStores, onStoreClick }: Props) {
     <Card className="xl:col-span-5 border-none bg-white overflow-hidden">
       <CardHeader className="p-mx-lg">
         <CardTitle className="text-lg flex items-center gap-mx-sm">
-          <BarChart3 size={18} className="text-emerald-600" /> Top lojas por sell-out
+          <BarChart3 size={18} className="text-status-success-text" /> Top lojas por sell-out
         </CardTitle>
         <CardDescription>Ranking historico com meta, equipe e ultima atividade</CardDescription>
       </CardHeader>
@@ -34,7 +34,7 @@ export function AdminTopStoresList({ topStores, onStoreClick }: Props) {
                   i === 0
                     ? 'bg-status-warning text-white'
                     : i === 1
-                      ? 'bg-emerald-600 text-white'
+                      ? 'bg-brand-primary text-white'
                       : i === 2
                         ? 'bg-status-info text-white'
                         : 'bg-gray-50 text-muted-foreground',

@@ -21,24 +21,24 @@ moment.locale("pt-br");
 // ── Constantes ─────────────────────────────────────────────────────────────────
 
 const TIPO_COLOR_BAR = {
-  "Atendimento": "bg-blue-500",
-  "Retorno": "bg-amber-500",
+  "Atendimento": "bg-status-info",
+  "Retorno": "bg-status-warning",
   "Documentação": "bg-slate-400",
   "Entrega": "bg-purple-500",
   "Pós-venda": "bg-teal-500",
   "Aniversário": "bg-indigo-500",
-  "Garantia": "bg-orange-500",
+  "Garantia": "bg-status-warning",
   "Outra atividade comercial": "bg-slate-400",
 };
 
 const TIPO_COLOR_BADGE = {
-  "Atendimento": "bg-blue-50 text-blue-700",
-  "Retorno": "bg-amber-50 text-amber-700",
+  "Atendimento": "bg-status-info-surface text-status-info-text",
+  "Retorno": "bg-status-warning-surface text-status-warning-text",
   "Documentação": "bg-slate-100 text-muted-foreground",
   "Entrega": "bg-purple-50 text-purple-700",
   "Pós-venda": "bg-teal-50 text-teal-700",
   "Aniversário": "bg-indigo-50 text-indigo-700",
-  "Garantia": "bg-orange-50 text-orange-700",
+  "Garantia": "bg-status-warning-surface text-status-warning-text",
   "Outra atividade comercial": "bg-slate-100 text-muted-foreground",
 };
 
@@ -176,13 +176,13 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
 
   if (isMobile) {
     return (
-      <div className={`bg-white rounded-2xl border shadow-sm overflow-hidden ${isVencido ? "border-red-200" : "border-border"}`}>
+      <div className={`bg-white rounded-2xl border shadow-sm overflow-hidden ${isVencido ? "border-status-error/30" : "border-border"}`}>
         <div className={`h-1 w-full ${TIPO_COLOR_BAR[op.tipo] || "bg-slate-300"}`} />
         <div className="p-4">
           <div className="flex items-start justify-between mb-2">
             <div className="flex items-center gap-2 flex-wrap">
               <span className={`text-caption font-bold px-2 py-0.5 rounded-full ${TIPO_COLOR_BADGE[op.tipo] || "bg-slate-100 text-muted-foreground"}`}>{op.tipo}</span>
-              {isVencido && <span className="text-caption font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full">Vencido</span>}
+              {isVencido && <span className="text-caption font-bold text-status-error bg-status-error-surface px-2 py-0.5 rounded-full">Vencido</span>}
             </div>
             <div className="flex items-center gap-1 text-caption font-bold text-muted-foreground">
               <Clock className="w-3 h-3" />{hora}
@@ -217,12 +217,12 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
             )}
             {op.cliente_id && (
               <button onClick={() => onAbrirCliente(op)}
-                className="flex items-center gap-1 text-caption font-bold text-[#005BFF] border border-blue-200 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors">
+                className="flex items-center gap-1 text-caption font-bold text-[#005BFF] border border-status-info/30 hover:bg-status-info-surface px-3 py-1.5 rounded-lg transition-colors">
                 <UserRound className="w-3 h-3" /> Cliente
               </button>
             )}
             <button onClick={() => onResolver(op)}
-              className="ml-auto flex items-center gap-1 text-[12px] font-bold text-white bg-[#005BFF] hover:bg-blue-700 px-4 py-1.5 rounded-lg transition-colors">
+              className="ml-auto flex items-center gap-1 text-[12px] font-bold text-white bg-[#005BFF] hover:bg-status-info px-4 py-1.5 rounded-lg transition-colors">
               Resolver
             </button>
           </div>
@@ -233,7 +233,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
 
   // Desktop
   return (
-    <div className={`bg-white rounded-2xl border shadow-sm overflow-hidden flex group transition-shadow hover:shadow-md ${isVencido ? "border-red-200" : "border-border"}`}>
+    <div className={`bg-white rounded-2xl border shadow-sm overflow-hidden flex group transition-shadow hover:shadow-md ${isVencido ? "border-status-error/30" : "border-border"}`}>
       <div className={`w-1.5 flex-shrink-0 ${TIPO_COLOR_BAR[op.tipo] || "bg-slate-300"}`} />
       <div className="flex items-center gap-4 px-5 py-4 flex-1 min-w-0">
         {/* Ícone e horário */}
@@ -241,7 +241,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
           <div className={`w-9 h-9 rounded-xl flex items-center justify-center mx-auto mb-1 ${TIPO_COLOR_BADGE[op.tipo] || "bg-slate-100"}`}>
             <Icon className="w-4 h-4" />
           </div>
-          <p className={`text-caption font-bold ${isVencido ? "text-red-500" : "text-muted-foreground"}`}>{hora}</p>
+          <p className={`text-caption font-bold ${isVencido ? "text-status-error" : "text-muted-foreground"}`}>{hora}</p>
         </div>
 
         {/* Avatar + nome + info */}
@@ -253,7 +253,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
             <div className="flex items-center gap-2 flex-wrap">
               <p className="font-bold text-[14px] text-[#0F172A] truncate">{op.nome_cliente_snapshot || "—"}</p>
               <span className={`text-caption font-bold px-2 py-0.5 rounded-full ${TIPO_COLOR_BADGE[op.tipo] || "bg-slate-100 text-muted-foreground"}`}>{op.tipo}</span>
-              {isVencido && <span className="text-caption font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full">Vencido</span>}
+              {isVencido && <span className="text-caption font-bold text-status-error bg-status-error-surface px-2 py-0.5 rounded-full">Vencido</span>}
             </div>
             {op.veiculo_snapshot && <p className="text-[12px] text-muted-foreground truncate">{op.veiculo_snapshot}</p>}
             {op.descricao && <p className="text-[12px] text-muted-foreground truncate">{op.descricao}</p>}
@@ -279,12 +279,12 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
           )}
           {op.cliente_id && (
             <button onClick={() => onAbrirCliente(op)} title="Abrir cliente"
-              className="p-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#005BFF] transition-colors">
+              className="p-2 rounded-xl bg-status-info-surface hover:bg-status-info-surface text-[#005BFF] transition-colors">
               <UserRound className="w-4 h-4" />
             </button>
           )}
           <button onClick={() => onResolver(op)}
-            className="flex items-center gap-1.5 text-[12px] font-bold text-white bg-[#005BFF] hover:bg-blue-700 px-4 py-2 rounded-xl transition-colors ml-1">
+            className="flex items-center gap-1.5 text-[12px] font-bold text-white bg-[#005BFF] hover:bg-status-info px-4 py-2 rounded-xl transition-colors ml-1">
             Resolver
           </button>
         </div>
@@ -509,9 +509,9 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
     <div className="space-y-5">
       {/* ── Aviso de pendências ── */}
       {pendenciasAnteriores.length > 0 && (
-        <div className="flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3">
-          <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0" />
-          <p className="text-body-sm font-semibold text-amber-800 flex-1">
+        <div className="flex items-center gap-3 bg-status-warning-surface border border-status-warning/30 rounded-2xl px-4 py-3">
+          <AlertTriangle className="w-4 h-4 text-status-warning flex-shrink-0" />
+          <p className="text-body-sm font-semibold text-status-warning-text flex-1">
             Você possui {pendenciasAnteriores.length} pendência{pendenciasAnteriores.length > 1 ? "s" : ""} de dias anteriores.
           </p>
           <button onClick={() => setPendenciasOpen(true)}
@@ -566,7 +566,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
               </SelectContent>
             </Select>
             <button onClick={() => setNovaAtividade(true)}
-              className="flex items-center gap-1.5 bg-[#005BFF] hover:bg-blue-700 text-white text-[12px] font-bold px-4 py-2 rounded-xl transition-colors shadow-sm shadow-blue-100">
+              className="flex items-center gap-1.5 bg-[#005BFF] hover:bg-status-info text-white text-[12px] font-bold px-4 py-2 rounded-xl transition-colors shadow-sm shadow-blue-100">
               <Plus className="w-4 h-4" /> Nova atividade
             </button>
           </div>
@@ -582,7 +582,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
           totalHoje === 0 ? (
             // Estado vazio completo
             <div className="bg-white rounded-2xl border border-border shadow-sm p-14 text-center">
-              <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-4">
+              <div className="w-14 h-14 rounded-2xl bg-status-info-surface flex items-center justify-center mx-auto mb-4">
                 <CheckCircle2 className="w-7 h-7 text-[#005BFF]" />
               </div>
               <p className="text-[16px] font-bold text-[#0F172A] mb-1">Tela limpa por hoje.</p>
@@ -592,7 +592,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
               <div className="flex items-center justify-center gap-3 flex-wrap">
                 {onGoToRotina && (
                   <button onClick={onGoToRotina}
-                    className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-[#005BFF] border border-[#005BFF] rounded-xl hover:bg-blue-50 transition-colors">
+                    className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-[#005BFF] border border-[#005BFF] rounded-xl hover:bg-status-info-surface transition-colors">
                     <Sparkles className="w-4 h-4" /> Ver Rotina do Dia
                   </button>
                 )}
@@ -601,7 +601,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
                   <Users className="w-4 h-4" /> Abrir Carteira
                 </Link>
                 <button onClick={() => setNovaAtividade(true)}
-                  className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-white bg-[#005BFF] rounded-xl hover:bg-blue-700 transition-colors">
+                  className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-white bg-[#005BFF] rounded-xl hover:bg-status-info transition-colors">
                   <Plus className="w-4 h-4" /> Nova atividade
                 </button>
               </div>
@@ -631,7 +631,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
                 <div className="flex items-center justify-center gap-3 flex-wrap">
                   {onGoToRotina && (
                     <button onClick={onGoToRotina}
-                      className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-[#005BFF] border border-[#005BFF] rounded-xl hover:bg-blue-50 transition-colors">
+                      className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-[#005BFF] border border-[#005BFF] rounded-xl hover:bg-status-info-surface transition-colors">
                       <Sparkles className="w-4 h-4" /> Ver Rotina do Dia
                     </button>
                   )}

@@ -20,10 +20,10 @@ export function BroadcastsTab() {
     return (
         <div className="space-y-mx-lg">
             <Card className="p-mx-lg border-none bg-pure-black text-white relative overflow-hidden">
-                <div className="absolute -right-20 -top-20 w-mx-48 h-mx-48 bg-emerald-600/20 rounded-mx-full blur-3xl pointer-events-none" />
+                <div className="absolute -right-20 -top-20 w-mx-48 h-mx-48 bg-brand-primary/20 rounded-mx-full blur-3xl pointer-events-none" />
                 <div className="relative z-10 flex items-start justify-between gap-mx-md">
                     <div className="flex items-start gap-mx-md flex-1">
-                        <div className="w-mx-14 h-mx-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-emerald-600">
+                        <div className="w-mx-14 h-mx-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-status-success-text">
                             <Megaphone size={28} />
                         </div>
                         <div className="space-y-mx-xs">
@@ -53,7 +53,7 @@ export function BroadcastsTab() {
                 </header>
 
                 {loading ? (
-                    <div className="p-mx-xl text-center"><RefreshCw size={24} className="animate-spin mx-auto text-emerald-600" /></div>
+                    <div className="p-mx-xl text-center"><RefreshCw size={24} className="animate-spin mx-auto text-status-success-text" /></div>
                 ) : broadcasts.length === 0 ? (
                     <div className="p-mx-xl text-center space-y-mx-sm">
                         <Megaphone size={40} className="mx-auto text-muted-foreground opacity-30" />

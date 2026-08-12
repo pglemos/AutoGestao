@@ -197,7 +197,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
             <Card className="border-none bg-white overflow-hidden">
                 {loading ? (
                     <div className="p-mx-xl text-center">
-                        <RefreshCw size={24} className="animate-spin mx-auto text-emerald-600" />
+                        <RefreshCw size={24} className="animate-spin mx-auto text-status-success-text" />
                     </div>
                 ) : filtered.length === 0 ? (
                     <div className="p-mx-xl text-center space-y-mx-sm">
@@ -216,7 +216,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
                                             alt={`Avatar de ${user.name || 'usuário'}`}
                                             fallback={user.name || '?'}
                                             size="lg"
-                                            className={`rounded-2xl text-sm ${isInactive ? 'bg-text-tertiary text-white' : 'bg-emerald-600 text-white'}`}
+                                            className={`rounded-2xl text-sm ${isInactive ? 'bg-text-tertiary text-white' : 'bg-brand-primary text-white'}`}
                                         />
                                         <div className="min-w-0 flex-1">
                                             <div className="flex items-center gap-mx-sm">
@@ -297,7 +297,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
 
 function StatCard({ icon, label, value, tone }: { icon: React.ReactNode; label: string; value: number; tone?: 'success' | 'brand' | 'muted' }) {
     const toneColor = tone === 'success' ? 'text-status-success' :
-        tone === 'brand' ? 'text-emerald-600' : 'text-foreground'
+        tone === 'brand' ? 'text-status-success-text' : 'text-foreground'
     return (
         <Card className="p-mx-md border-none bg-white">
             <div className="flex items-center gap-mx-sm">

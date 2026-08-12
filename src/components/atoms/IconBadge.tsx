@@ -7,12 +7,12 @@ const iconBadgeVariants = cva(
   {
     variants: {
       variant: {
-        emerald: 'bg-emerald-100 text-emerald-600 border border-emerald-200',
-        emeraldSolid: 'bg-emerald-600 text-white shadow-sm',
-        emeraldSubtle: 'bg-emerald-600/10 text-emerald-600',
-        amber: 'bg-amber-100 text-amber-600 border border-amber-200',
-        red: 'bg-red-100 text-red-600 border border-red-200',
-        blue: 'bg-blue-100 text-blue-600 border border-blue-200',
+        emerald: 'bg-status-success-surface text-status-success-text border border-status-success/30',
+        emeraldSolid: 'bg-brand-primary text-white shadow-sm',
+        emeraldSubtle: 'bg-brand-primary/10 text-status-success-text',
+        amber: 'bg-status-warning-surface text-status-warning-text border border-status-warning/30',
+        red: 'bg-status-error-surface text-status-error-text border border-status-error/30',
+        blue: 'bg-status-info-surface text-status-info-text border border-status-info/30',
         gray: 'bg-gray-100 text-muted-foreground border border-border',
         ghost: 'bg-gray-50 text-muted-foreground border border-border-subtle',
       },

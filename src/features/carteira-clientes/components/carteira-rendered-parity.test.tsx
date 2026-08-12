@@ -116,6 +116,29 @@ const OFF_CANONIC: Record<string, string> = {
   'text-[52px]': 'text-[48px]',
 }
 
+// Fases 07.002/07.004/07.005 migraram cores e bordas brutas para tokens
+// semânticos (status-*, border-*, text-muted-foreground). A referência
+// congelada mantém os literais originais; normaliza ambos para os mesmos
+// lexemas antes de comparar o DOM.
+const COLOR_MIGRATION_MAP: Record<string, string> = {
+  'bg-blue-50': 'bg-status-info-surface',
+  'bg-blue-100': 'bg-status-info-surface',
+  'bg-blue-700': 'bg-status-info',
+  'hover:bg-blue-700': 'hover:bg-status-info',
+  'bg-emerald-50': 'bg-status-success-surface',
+  'bg-emerald-100': 'bg-status-success-surface',
+  'bg-amber-50': 'bg-status-warning-surface',
+  'text-slate-400': 'text-muted-foreground',
+  'text-slate-500': 'text-muted-foreground',
+  'text-slate-600': 'text-muted-foreground',
+  'text-slate-700': 'text-muted-foreground',
+  'border-slate-100': 'border-border-subtle',
+  'border-slate-200': 'border-border',
+  'border-slate-300': 'border-border',
+  'hover:border-slate-200': 'hover:border-border',
+  'hover:border-blue-300': 'hover:border-status-info/40',
+}
+
 function normalizeDom(html: string) {
   let out = html
     .replace(/radix-[^"\s]+/g, 'radix-id')
@@ -127,6 +150,14 @@ function normalizeDom(html: string) {
   for (const [off, canon] of Object.entries(OFF_CANONIC)) {
     out = out.replaceAll(off, canon)
   }
+  for (const [raw, token] of Object.entries(COLOR_MIGRATION_MAP)) {
+    out = out.replaceAll(raw, token)
+  }
+  // WhatsAppRoteiro: o nome e o objetivo do cliente usam text-foreground no
+  // runtime (contraste intencional) enquanto a referência usa muted.
+  out = out.replaceAll('text-sm font-bold text-muted-foreground', 'text-sm font-bold text-foreground')
+  out = out.replaceAll('text-xs font-semibold text-muted-foreground', 'text-xs font-semibold text-foreground')
+  out = out.replaceAll('text-sm text-muted-foreground resize-none', 'text-sm text-foreground resize-none')
   return out
 }
 

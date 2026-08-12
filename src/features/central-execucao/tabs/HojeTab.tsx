@@ -86,7 +86,7 @@ export function HojeTab({
             <option value="tipo">Tipo</option>
             <option value="cliente">Cliente</option>
           </select>
-          <button type="button" onClick={onCreate} className="flex items-center gap-1.5 rounded-xl bg-status-info px-4 py-2 text-[12px] font-bold text-white shadow-sm shadow-blue-100 transition-colors hover:bg-blue-700">
+          <button type="button" onClick={onCreate} className="flex items-center gap-1.5 rounded-xl bg-status-info px-4 py-2 text-[12px] font-bold text-white shadow-sm shadow-blue-100 transition-colors hover:bg-status-info">
             <Plus className="h-4 w-4" aria-hidden="true" /> Nova atividade
           </button>
         </div>
@@ -99,7 +99,7 @@ export function HojeTab({
           {[0, 1, 2].map(item => <div key={item} className="h-[80px] animate-pulse rounded-2xl bg-slate-200" />)}
         </div>
       ) : error ? (
-        <p role="alert" className="rounded-2xl border border-red-200 bg-red-50 p-4 text-body-sm font-semibold text-red-700">{error}</p>
+        <p role="alert" className="rounded-2xl border border-status-error/30 bg-status-error-surface p-4 text-body-sm font-semibold text-status-error-text">{error}</p>
       ) : filtered.length === 0 ? (
         <EstadoVazio
           filtered={actions.length > 0 && filter !== 'todos'}

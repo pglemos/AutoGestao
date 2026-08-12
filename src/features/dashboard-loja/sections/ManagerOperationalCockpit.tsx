@@ -238,7 +238,7 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
         <Card className="border bg-white p-mx-md xl:col-span-1 2xl:col-span-3">
           <div className="flex items-center justify-between gap-mx-md">
             <Typography variant="h3" className="tracking-tight">Ranking da Loja</Typography>
-            <button type="button" onClick={() => navigate('/classificacao')} className="text-mx-tiny font-bold uppercase tracking-widest text-emerald-600">Ver ranking</button>
+            <button type="button" onClick={() => navigate('/classificacao')} className="text-mx-tiny font-bold uppercase tracking-widest text-status-success-text">Ver ranking</button>
           </div>
           <div className="mt-mx-lg space-y-mx-sm">
             {visibleRanking.slice(0, 3).map((row, index) => (
@@ -283,7 +283,7 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
 function ManagerHeader({ storeName, periodLabel }: { storeName: string; periodLabel: string }) {
   return (
     <PageHeading
-      title={<>Bom dia, <span className="text-emerald-600">Gerente</span>!</>}
+      title={<>Bom dia, <span className="text-status-success-text">Gerente</span>!</>}
       subtitle={`${storeName.toUpperCase()} · DESEMPENHO DA EQUIPE`}
       actions={(
         <div className="flex flex-wrap gap-mx-sm">
@@ -402,7 +402,7 @@ function PanelHeader({
         {typeof badge === 'number' && <Badge variant={badge > 0 ? 'danger' : 'success'} className="rounded-mx-full px-2 py-0.5">{badge}</Badge>}
       </div>
       {action && onAction && (
-        <button type="button" onClick={onAction} className="text-mx-tiny font-bold uppercase tracking-widest text-emerald-600">
+        <button type="button" onClick={onAction} className="text-mx-tiny font-bold uppercase tracking-widest text-status-success-text">
           {action}
         </button>
       )}
@@ -463,8 +463,8 @@ function EngagementMetric({ label, value, icon, accent = 'info' }: { label: stri
     info: { iconBg: 'bg-[var(--color-status-info-surface)]', iconText: 'text-status-info', bar: 'bg-status-info' },
     success: { iconBg: 'bg-[var(--color-status-success-surface)]', iconText: 'text-status-success', bar: 'bg-status-success' },
     warning: { iconBg: 'bg-[var(--color-status-warning-surface)]', iconText: 'text-status-warning', bar: 'bg-status-warning' },
-    teal: { iconBg: 'bg-secondary', iconText: 'text-emerald-600', bar: 'bg-emerald-600' },
-    brand: { iconBg: 'bg-[var(--color-brand-primary)]/10', iconText: 'text-emerald-600', bar: 'bg-emerald-600' },
+    teal: { iconBg: 'bg-secondary', iconText: 'text-status-success-text', bar: 'bg-brand-primary' },
+    brand: { iconBg: 'bg-[var(--color-brand-primary)]/10', iconText: 'text-status-success-text', bar: 'bg-brand-primary' },
   }
   const styles = accentClasses[accent]
   const clamped = Math.min(Math.max(value, 0), 100)
@@ -557,7 +557,7 @@ function SemiCircularGauge({ value, label, suffix = '' }: { value: number; label
 function AgendaItem({ time, title, detail }: { time: string; title: string; detail: string }) {
   return (
     <div className="flex gap-mx-sm rounded-xl bg-gray-50 p-mx-sm">
-      <div className="flex h-mx-10 w-mx-12 shrink-0 items-center justify-center rounded-xl bg-white text-mx-tiny font-bold uppercase text-emerald-600 shadow-sm">
+      <div className="flex h-mx-10 w-mx-12 shrink-0 items-center justify-center rounded-xl bg-white text-mx-tiny font-bold uppercase text-status-success-text shadow-sm">
         {time}
       </div>
       <div className="min-w-0">
@@ -596,7 +596,7 @@ function ProgressBar({ value, tone = 'brand', className }: { value: number; tone
 
 function toneBorder(tone: ManagerTone) {
   return {
-    brand: 'border-mx-indigo-100 bg-mx-indigo-50 text-emerald-600',
+    brand: 'border-mx-indigo-100 bg-mx-indigo-50 text-status-success-text',
     success: 'border-status-success/20 bg-status-success-surface text-status-success',
     warning: 'border-status-warning/20 bg-status-warning-surface text-status-warning',
     danger: 'border-status-error/20 bg-status-error-surface text-status-error',
@@ -607,7 +607,7 @@ function toneBorder(tone: ManagerTone) {
 
 function toneSurface(tone: ManagerTone) {
   return {
-    brand: 'bg-mx-indigo-50 text-emerald-600',
+    brand: 'bg-mx-indigo-50 text-status-success-text',
     success: 'bg-status-success-surface text-status-success',
     warning: 'bg-status-warning-surface text-status-warning',
     danger: 'bg-status-error-surface text-status-error',
@@ -618,7 +618,7 @@ function toneSurface(tone: ManagerTone) {
 
 function toneFill(tone: ManagerTone) {
   return {
-    brand: 'bg-emerald-600',
+    brand: 'bg-brand-primary',
     success: 'bg-status-success',
     warning: 'bg-status-warning',
     danger: 'bg-status-error',

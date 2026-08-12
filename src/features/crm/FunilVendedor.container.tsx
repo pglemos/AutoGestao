@@ -163,7 +163,7 @@ export function FunilVendedor() {
         <section aria-label="Filtro de período">
           <div className="inline-flex flex-wrap gap-mx-xs rounded-xl border border-border-subtle bg-white p-mx-xs shadow-sm">
             {PERIOD_OPTIONS.map(option => (
-              <button key={option.key} type="button" className={`h-9 rounded-xl px-mx-md text-sm font-semibold transition ${period === option.key ? 'bg-emerald-600 text-white' : 'text-muted-foreground hover:bg-gray-50'}`} onClick={() => setPeriod(option.key)}>
+              <button key={option.key} type="button" className={`h-9 rounded-xl px-mx-md text-sm font-semibold transition ${period === option.key ? 'bg-brand-primary text-white' : 'text-muted-foreground hover:bg-gray-50'}`} onClick={() => setPeriod(option.key)}>
                 {option.label}
               </button>
             ))}
@@ -197,7 +197,7 @@ export function FunilVendedor() {
           <div className="mt-mx-sm grid gap-mx-sm xl:grid-cols-3">{CHANNELS.map(canal => <EfficiencyCard key={canal} metrics={statsPeriod.channels[canal]} />)}</div>
           <DashboardCard className="mt-mx-sm">
             <div className="flex items-start gap-mx-sm">
-              <span className="mt-1 text-emerald-600"><Info size={20} /></span>
+              <span className="mt-1 text-status-success-text"><Info size={20} /></span>
               <div>
                 <Typography variant="h3">Principal limitador</Typography>
                 <Typography variant="p" className="mt-1 text-sm font-semibold">{limitador}</Typography>
@@ -348,7 +348,7 @@ function MiniBar({ label, value, max, className }: { label: string; value: numbe
 }
 
 function SectionHeader({ icon, title, subtitle }: { icon: ReactNode; title: string; subtitle?: string }) {
-  return <div className="flex items-start gap-mx-sm"><span className="mt-1 text-emerald-600">{icon}</span><div><Typography variant="h2" className="text-xl">{title}</Typography>{subtitle && <Typography variant="p" className="mt-1 text-sm font-semibold">{subtitle}</Typography>}</div></div>
+  return <div className="flex items-start gap-mx-sm"><span className="mt-1 text-status-success-text">{icon}</span><div><Typography variant="h2" className="text-xl">{title}</Typography>{subtitle && <Typography variant="p" className="mt-1 text-sm font-semibold">{subtitle}</Typography>}</div></div>
 }
 
 function DashboardCard({ children, className = '' }: { children: ReactNode; className?: string }) {

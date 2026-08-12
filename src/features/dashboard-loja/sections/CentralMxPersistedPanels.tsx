@@ -39,7 +39,7 @@ const ALERT_TONE: Record<string, string> = {
   critical: 'bg-status-error-surface text-status-error border-status-error/30',
   warning: 'bg-status-warning-surface text-status-warning border-status-warning/30',
   positive: 'bg-status-success-surface text-status-success border-status-success/30',
-  consultive: 'bg-mx-indigo-50 text-emerald-600 border-brand-primary/30',
+  consultive: 'bg-mx-indigo-50 text-status-success-text border-brand-primary/30',
 }
 
 const ALERT_STATUS_LABEL: Record<CentralMxAlertStatus, string> = {
@@ -51,7 +51,7 @@ const ALERT_STATUS_LABEL: Record<CentralMxAlertStatus, string> = {
 
 const PLANO_TONE: Record<string, string> = {
   pendente: 'bg-status-warning-surface text-status-warning border-status-warning/30',
-  em_andamento: 'bg-mx-indigo-50 text-emerald-600 border-brand-primary/30',
+  em_andamento: 'bg-mx-indigo-50 text-status-success-text border-brand-primary/30',
   atrasado: 'bg-status-error-surface text-status-error border-status-error/30',
   validando_eficacia: 'bg-gray-50 text-muted-foreground border-border',
   concluido: 'bg-status-success-surface text-status-success border-status-success/30',
@@ -73,7 +73,7 @@ export function CentralMxPersistedAlertsPanel({ storeId }: Props) {
     <Card className="p-mx-lg">
       <div className="flex items-start justify-between gap-mx-sm">
         <div className="flex items-center gap-mx-sm">
-          <div className="rounded-2xl bg-mx-indigo-50 p-mx-sm text-emerald-600">
+          <div className="rounded-2xl bg-mx-indigo-50 p-mx-sm text-status-success-text">
             <Bell size={20} aria-hidden="true" />
           </div>
           <div>
@@ -228,7 +228,7 @@ export function CentralMxPersistedPlanosPanel({ storeId }: Props) {
     <Card className="p-mx-lg">
       <div className="flex items-start justify-between gap-mx-sm">
         <div className="flex items-center gap-mx-sm">
-          <div className="rounded-2xl bg-mx-indigo-50 p-mx-sm text-emerald-600">
+          <div className="rounded-2xl bg-mx-indigo-50 p-mx-sm text-status-success-text">
             <ClipboardList size={20} aria-hidden="true" />
           </div>
           <div>
@@ -305,7 +305,7 @@ function PersistedPlanoRow({
             </Badge>
           </div>
           <Typography variant="p" className="mt-mx-xs">
-            <span className="mr-mx-xs text-emerald-600">{plano.codigo || `PA-${plano.id.slice(0, 8).toUpperCase()}`}</span>
+            <span className="mr-mx-xs text-status-success-text">{plano.codigo || `PA-${plano.id.slice(0, 8).toUpperCase()}`}</span>
             {plano.acao}
           </Typography>
           <Typography variant="tiny" tone="muted" className="block">
@@ -349,7 +349,7 @@ export function CentralMxPersistedAgendaPanel({ storeId }: Props) {
     <Card className="p-mx-lg">
       <div className="flex items-start justify-between gap-mx-sm">
         <div className="flex items-center gap-mx-sm">
-          <div className="rounded-2xl bg-mx-indigo-50 p-mx-sm text-emerald-600">
+          <div className="rounded-2xl bg-mx-indigo-50 p-mx-sm text-status-success-text">
             <Bell size={20} aria-hidden="true" />
           </div>
           <div>

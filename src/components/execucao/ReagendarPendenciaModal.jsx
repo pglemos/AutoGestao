@@ -52,7 +52,7 @@ export default function ReagendarPendenciaModal({ oportunidade, open, onClose, o
             Cancelar
           </button>
           <button onClick={handleSalvar} disabled={!novaData || saving}
-            className="px-5 py-2 text-body-sm font-bold text-white bg-[#005BFF] hover:bg-blue-700 disabled:opacity-50 rounded-xl">
+            className="px-5 py-2 text-body-sm font-bold text-white bg-[#005BFF] hover:bg-status-info disabled:opacity-50 rounded-xl">
             {saving ? "Salvando..." : "Reagendar"}
           </button>
         </div>

@@ -24,11 +24,11 @@ function formatDate(value: string) {
 }
 
 function barColor(type: CentralExecutionAction['activityType']) {
-  if (['atendimento', 'visita', 'test_drive', 'negociacao'].includes(type)) return 'bg-blue-500'
-  if (type === 'retorno') return 'bg-amber-500'
+  if (['atendimento', 'visita', 'test_drive', 'negociacao'].includes(type)) return 'bg-status-info'
+  if (type === 'retorno') return 'bg-status-warning'
   if (type === 'entrega') return 'bg-purple-500'
   if (type === 'pos_venda') return 'bg-teal-500'
-  if (type === 'garantia') return 'bg-orange-500'
+  if (type === 'garantia') return 'bg-status-warning'
   if (type === 'aniversario') return 'bg-indigo-500'
   return 'bg-slate-400'
 }
@@ -79,7 +79,7 @@ export function PendenciasDrawer({
                   <div className="min-w-0 flex-1">
                     <div className="mb-1 flex flex-wrap items-center gap-2">
                       <span className="text-caption font-bold uppercase tracking-wider text-muted-foreground">{action.title}</span>
-                      <span className="rounded-full bg-red-50 px-2 py-0.5 text-caption font-bold text-red-500">{late === 0 ? 'Hoje' : `${late}d atraso`}</span>
+                      <span className="rounded-full bg-status-error-surface px-2 py-0.5 text-caption font-bold text-status-error">{late === 0 ? 'Hoje' : `${late}d atraso`}</span>
                     </div>
                     <p className="truncate text-body-sm font-bold text-foreground">{clientName}</p>
                     {vehicle && <p className="truncate text-[12px] text-muted-foreground">{vehicle}</p>}
@@ -100,17 +100,17 @@ export function PendenciasDrawer({
                     </a>
                   )}
                   {action.clientId && (
-                    <button type="button" onClick={() => onOpenClient(action)} className="flex items-center gap-1 rounded-lg border border-blue-200 px-2.5 py-1.5 text-caption font-bold text-status-info hover:bg-blue-50">
+                    <button type="button" onClick={() => onOpenClient(action)} className="flex items-center gap-1 rounded-lg border border-status-info/30 px-2.5 py-1.5 text-caption font-bold text-status-info hover:bg-status-info-surface">
                       <UserRound className="h-3 w-3" aria-hidden="true" /> Abrir cliente
                     </button>
                   )}
                   <button type="button" onClick={() => onReschedule(action)} className="flex items-center gap-1 rounded-lg border border-border px-2.5 py-1.5 text-caption font-bold text-muted-foreground hover:bg-slate-50">
                     <Calendar className="h-3 w-3" aria-hidden="true" /> Reagendar
                   </button>
-                  <button type="button" onClick={() => onEscalate(action)} className="flex items-center gap-1 rounded-lg border border-amber-200 px-2.5 py-1.5 text-caption font-bold text-amber-700 hover:bg-amber-50">
+                  <button type="button" onClick={() => onEscalate(action)} className="flex items-center gap-1 rounded-lg border border-status-warning/30 px-2.5 py-1.5 text-caption font-bold text-status-warning-text hover:bg-status-warning-surface">
                     <AlertTriangle className="h-3 w-3" aria-hidden="true" /> Pedir apoio
                   </button>
-                  <button type="button" onClick={() => onResolve(action)} className="ml-auto rounded-lg bg-status-info px-2.5 py-1.5 text-caption font-bold text-white hover:bg-blue-700">Resolver</button>
+                  <button type="button" onClick={() => onResolve(action)} className="ml-auto rounded-lg bg-status-info px-2.5 py-1.5 text-caption font-bold text-white hover:bg-status-info">Resolver</button>
                 </div>
               </article>
             )

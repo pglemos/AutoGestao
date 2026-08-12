@@ -181,12 +181,12 @@ export default function ContentTab({ meeting, program, userRole, userId = "demo"
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-semibold text-foreground">{activeLesson.title}</h3>
               {activeLesson.required ? (
-                <span className="rounded-full bg-amber-50 px-1.5 py-0.5 text-caption font-medium text-amber-700">Obrigatória</span>
+                <span className="rounded-full bg-status-warning-surface px-1.5 py-0.5 text-caption font-medium text-status-warning-text">Obrigatória</span>
               ) : (
                 <span className="rounded-full bg-muted px-1.5 py-0.5 text-caption font-medium text-muted-foreground">Opcional</span>
               )}
               {activeLesson.type === "onboarding" && (
-                <span className="rounded-full bg-blue-50 px-1.5 py-0.5 text-caption font-medium text-blue-700">Onboarding</span>
+                <span className="rounded-full bg-status-info-surface px-1.5 py-0.5 text-caption font-medium text-status-info-text">Onboarding</span>
               )}
             </div>
             <p className="mt-0.5 text-xs text-muted-foreground">{activeLesson.code}</p>
@@ -243,7 +243,7 @@ export default function ContentTab({ meeting, program, userRole, userId = "demo"
                 <div className="flex items-center gap-1.5">
                   <span className="text-xs text-muted-foreground">{p.role}</span>
                   {p.required ? (
-                    <span className="rounded-full bg-amber-50 px-1.5 py-0.5 text-caption font-medium text-amber-700">Obrigatório</span>
+                    <span className="rounded-full bg-status-warning-surface px-1.5 py-0.5 text-caption font-medium text-status-warning-text">Obrigatório</span>
                   ) : (
                     <span className="rounded-full bg-muted px-1.5 py-0.5 text-caption font-medium text-muted-foreground">Opcional</span>
                   )}

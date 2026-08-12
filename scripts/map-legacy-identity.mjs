@@ -43,17 +43,17 @@ const MAP = {
   'font-black': 'font-bold',
 
   // Superfícies e fundos de marca
-  'bg-brand-primary': 'bg-emerald-600',
+  'bg-brand-primary': 'bg-brand-primary',
   'bg-brand-secondary': 'bg-gray-900',
-  'bg-mx-action': 'bg-emerald-600',
+  'bg-mx-action': 'bg-brand-primary',
   'bg-mx-black': 'bg-gray-900',
-  'bg-mx-teal': 'bg-emerald-600',
+  'bg-mx-teal': 'bg-brand-primary',
   'bg-mx-bg': 'bg-gray-50',
   'bg-surface-alt': 'bg-gray-50',
 
   // Texto de marca
-  'text-brand-primary': 'text-emerald-600',
-  'text-mx-action': 'text-emerald-600',
+  'text-brand-primary': 'text-status-success-text',
+  'text-mx-action': 'text-status-success-text',
   'text-mx-text': 'text-gray-800',
   'text-text-primary': 'text-gray-800',
   'text-text-secondary': 'text-gray-500',

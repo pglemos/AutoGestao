@@ -200,7 +200,7 @@ export function OperacionalLojaTab({ isReadOnly }: TabContext) {
                     {/* Metas e Benchmarks */}
                     <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
                         <header className="border-b border-border pb-mx-md mb-mx-lg flex items-center gap-mx-sm">
-                            <Target size={20} className="text-emerald-600" />
+                            <Target size={20} className="text-status-success-text" />
                             <div>
                                 <Typography variant="h3" className="tracking-tight">Metas & Benchmarks</Typography>
                                 <Typography variant="caption" tone="muted" className="mt-1">Distribuição e referência</Typography>
@@ -246,7 +246,7 @@ export function OperacionalLojaTab({ isReadOnly }: TabContext) {
                     {/* Privacidade da Remuneração */}
                     <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
                         <header className="border-b border-border pb-mx-md mb-mx-lg flex items-center gap-mx-sm">
-                            <ShieldCheck size={20} className="text-emerald-600" />
+                            <ShieldCheck size={20} className="text-status-success-text" />
                             <div>
                                 <Typography variant="h3" className="tracking-tight">Privacidade da Remuneração</Typography>
                                 <Typography variant="caption" tone="muted" className="mt-1">Visibilidade do detalhamento ao vendedor</Typography>
@@ -264,7 +264,7 @@ export function OperacionalLojaTab({ isReadOnly }: TabContext) {
                     {/* Destinatários de e-mail */}
                     <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
                         <header className="border-b border-border pb-mx-md mb-mx-lg flex items-center gap-mx-sm">
-                            <Mail size={20} className="text-emerald-600" />
+                            <Mail size={20} className="text-status-success-text" />
                             <div>
                                 <Typography variant="h3" className="tracking-tight">Destinatários de Relatórios</Typography>
                                 <Typography variant="caption" tone="muted" className="mt-1">Distribuição automática</Typography>
@@ -294,7 +294,7 @@ export function OperacionalLojaTab({ isReadOnly }: TabContext) {
                             ))}
                         </div>
                         <div className="mt-mx-md p-mx-md bg-mx-indigo-50 border border-mx-indigo-100 rounded-2xl flex items-start gap-mx-sm">
-                            <Info size={16} className="text-emerald-600 shrink-0 mt-0.5" />
+                            <Info size={16} className="text-status-success-text shrink-0 mt-0.5" />
                             <Typography variant="tiny" tone="brand" className="leading-relaxed">
                                 Separe os e-mails por vírgula. Validação de sintaxe antes do disparo automático.
                             </Typography>

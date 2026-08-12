@@ -31,7 +31,7 @@ import {
 const PRIORITY_TONE: Record<ConsultorIaPriority, string> = {
   critica: 'border-status-error/40 bg-status-error-surface text-status-error',
   alta: 'border-status-warning/40 bg-status-warning-surface text-status-warning',
-  media: 'border-brand-primary/40 bg-mx-indigo-50 text-emerald-600',
+  media: 'border-brand-primary/40 bg-mx-indigo-50 text-status-success-text',
   baixa: 'border-status-success/40 bg-status-success-surface text-status-success',
 }
 
@@ -66,7 +66,7 @@ export function ConsultorIaChat({ storeId }: Props) {
     <Card className="p-mx-lg">
       <div className="flex items-start justify-between gap-mx-sm">
         <div className="flex items-center gap-mx-sm">
-          <div className="rounded-2xl bg-emerald-600 p-mx-sm text-pure-white">
+          <div className="rounded-2xl bg-brand-primary p-mx-sm text-pure-white">
             <Bot size={22} aria-hidden="true" />
           </div>
           <div>
@@ -184,7 +184,7 @@ function ConsultorIaBalloon({
   const toneClass = PRIORITY_TONE[solucao.priority] ?? PRIORITY_TONE.media
   return (
     <li className="flex items-start gap-mx-sm">
-      <div className="rounded-mx-full bg-emerald-600 p-mx-xs text-pure-white shadow-sm">
+      <div className="rounded-mx-full bg-brand-primary p-mx-xs text-pure-white shadow-sm">
         <Bot size={16} aria-hidden="true" />
       </div>
       <div className={cn('flex-1 min-w-0 rounded-2xl border p-mx-sm shadow-sm', toneClass)}>

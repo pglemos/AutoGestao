@@ -71,7 +71,7 @@ export function VisitCard({
         >
           <div className={cn(
             'w-mx-10 h-mx-10 rounded-xl border flex items-center justify-center shrink-0',
-            isToday(scheduledDate) ? 'bg-emerald-600/10 border-brand-primary/20 text-emerald-600' : 'bg-gray-50 border-border text-muted-foreground'
+            isToday(scheduledDate) ? 'bg-brand-primary/10 border-brand-primary/20 text-status-success-text' : 'bg-gray-50 border-border text-muted-foreground'
           )}>
             <Typography variant="h3" className="text-lg">
               {format(scheduledDate, 'dd')}
@@ -80,7 +80,7 @@ export function VisitCard({
 
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-mx-xs mb-1 min-w-0">
-              <Building2 size={14} className="text-emerald-600 shrink-0" />
+              <Building2 size={14} className="text-status-success-text shrink-0" />
               <Typography variant="h3" className="text-sm leading-tight break-words sm:truncate">{visit.client_name}</Typography>
             </div>
             <div className="flex flex-wrap items-center gap-x-mx-sm gap-y-mx-xs text-muted-foreground">
@@ -163,7 +163,7 @@ export function VisitCard({
                 href={visit.google_meet_link}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex h-mx-9 items-center justify-center gap-mx-xs rounded-lg px-3 text-emerald-600 hover:bg-gray-50 transition-all"
+                className="inline-flex h-mx-9 items-center justify-center gap-mx-xs rounded-lg px-3 text-status-success-text hover:bg-gray-50 transition-all"
                 aria-label={`Abrir Google Meet da visita de ${visit.client_name}`}
                 onClick={(event) => event.stopPropagation()}
               >
@@ -177,7 +177,7 @@ export function VisitCard({
               </Button>
             )}
             <Link to={linkTo} aria-label={`Abrir visita de ${visit.client_name}`} className="inline-flex items-center justify-center min-h-11 min-w-11 rounded-mx-full">
-              <ChevronRight size={18} className="text-muted-foreground group-hover:text-emerald-600 transition-colors shrink-0" />
+              <ChevronRight size={18} className="text-muted-foreground group-hover:text-status-success-text transition-colors shrink-0" />
             </Link>
           </div>
         </div>

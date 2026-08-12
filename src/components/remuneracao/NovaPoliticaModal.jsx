@@ -125,7 +125,7 @@ export default function NovaPoliticaModal({ open, onClose, onSaved, me }) {
             </Select>
           </div>
           {form.tipo_comissao === "Comissão por faixa de volume" && (
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+            <div className="bg-status-info-surface border border-status-info/30 rounded-xl p-4">
               <div className="flex items-center justify-between mb-2">
                 <div>
                   <p className="text-body-sm font-bold text-[#0F172A]">Aplicar faixa sobre todos os veículos</p>
@@ -133,7 +133,7 @@ export default function NovaPoliticaModal({ open, onClose, onSaved, me }) {
                 </div>
                 <Switch checked={form.aplicar_faixa_sobre_todos_veiculos} onCheckedChange={v => set("aplicar_faixa_sobre_todos_veiculos", v)} />
               </div>
-              <p className="text-caption text-blue-600 bg-blue-100 rounded-lg p-2 leading-relaxed">
+              <p className="text-caption text-status-info-text bg-status-info-surface rounded-lg p-2 leading-relaxed">
                 Exemplo: política define R$450 por veículo entre 5–6 vendas e R$550 entre 7–8. Ao atingir 7 vendas, todos os 7 veículos passam a pagar R$550 cada.
               </p>
             </div>

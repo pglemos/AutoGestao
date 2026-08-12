@@ -25,7 +25,7 @@ export function PerformanceCard({ melhorMes, comissaoAtual }: Props) {
             <div>
               <div className="flex justify-between items-center mb-2">
                 <span className="text-muted-foreground text-sm">Seu melhor mês</span>
-                <span className="text-emerald-700 font-bold text-sm tabular-nums">{formatBRLWhole(melhorMes)}</span>
+                <span className="text-status-success-text font-bold text-sm tabular-nums">{formatBRLWhole(melhorMes)}</span>
               </div>
               <div className="w-full rounded-full h-3" style={{ background: 'rgba(255,255,255,0.06)' }}>
                 <div className="h-3 rounded-full" style={{ width: '100%', background: '#FFFFFF', }} />
@@ -35,7 +35,7 @@ export function PerformanceCard({ melhorMes, comissaoAtual }: Props) {
             <div>
               <div className="flex justify-between items-center mb-2">
                 <span className="text-muted-foreground text-sm">Mês atual</span>
-                <span className="text-blue-700 font-bold text-sm tabular-nums">{formatBRLWhole(comissaoAtual)}</span>
+                <span className="text-status-info-text font-bold text-sm tabular-nums">{formatBRLWhole(comissaoAtual)}</span>
               </div>
               <div className="w-full rounded-full h-3" style={{ background: 'rgba(255,255,255,0.06)' }}>
                 <div className="h-3 rounded-full" style={{ width: `${atualPct}%`, background: '#FFFFFF', }} />
@@ -44,9 +44,9 @@ export function PerformanceCard({ melhorMes, comissaoAtual }: Props) {
           </div>
 
           <div className="flex items-center gap-2 mt-5">
-            <TrendingUp className="w-4 h-4 text-emerald-700" />
+            <TrendingUp className="w-4 h-4 text-status-success-text" />
             <p className="text-muted-foreground text-sm">
-              Você está <span className="text-emerald-700 font-bold">{pct}%</span> do seu melhor resultado!
+              Você está <span className="text-status-success-text font-bold">{pct}%</span> do seu melhor resultado!
             </p>
           </div>
         </>
