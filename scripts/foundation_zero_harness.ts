@@ -391,8 +391,25 @@ async function collectA11y(page: Page): Promise<AxeResult> {
     await page.evaluate(async () => {
       const animations = document.getAnimations?.() ?? []
       if (animations.length === 0) return
+      // Animação em loop (pulse, spin) nunca resolve `finished`, então esperar
+      // por ela só gastaria o teto de tempo e o axe mediria no meio do ciclo
+      // mesmo assim. Salta cada animação FINITA para o estado final e ignora as
+      // infinitas — o que interessa para contraste é a cor de repouso.
+      for (const animation of animations) {
+        try {
+          const iterations = animation.effect?.getTiming?.().iterations
+          if (iterations === Infinity) continue
+          animation.finish()
+        } catch {
+          // Animação já cancelada ou sem timing utilizável: segue o jogo.
+        }
+      }
       await Promise.race([
-        Promise.allSettled(animations.map(animation => animation.finished)),
+        Promise.allSettled(
+          animations
+            .filter(animation => animation.effect?.getTiming?.().iterations !== Infinity)
+            .map(animation => animation.finished),
+        ),
         new Promise(resolve => setTimeout(resolve, 3_000)),
       ])
     })

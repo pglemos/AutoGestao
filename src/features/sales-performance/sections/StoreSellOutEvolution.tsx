@@ -24,7 +24,11 @@ export function StoreSellOutEvolution({ chartData }: Props) {
             VOLUME CONSOLIDADO MENSAL
           </CardDescription>
         </div>
-        <Badge variant="brand" className="animate-pulse px-4 py-1.5 rounded-mx-full">
+        <Badge variant="brand" className="gap-2 px-4 py-1.5 rounded-mx-full">
+          <span
+            className="inline-block h-1.5 w-1.5 rounded-full bg-current animate-pulse motion-reduce:animate-none"
+            aria-hidden="true"
+          />
           LIVE MATRIX
         </Badge>
       </CardHeader>
