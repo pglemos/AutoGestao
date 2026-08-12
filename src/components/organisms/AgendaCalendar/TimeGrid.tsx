@@ -203,17 +203,21 @@ export function TimeGrid({
                   if (isDraggedAway) return null
 
                   return (
-                    <AgendaEventPopover
+                    // O trigger do popover precisa recair sobre o CARD, não sobre o
+                    // div de posicionamento: um `div` sem role recebendo
+                    // `aria-haspopup`/`aria-expanded` do Radix viola aria-allowed-attr
+                    // (critical), medido em /agenda no sweep da FASE AB.
+                    <div
                       key={`${item.kind}-${item.id}`}
-                      item={item}
-                      getVisitDotColor={getVisitDotColor}
-                      quickActions={quickActions}
-                      open={openPopoverId === item.id}
-                      onOpenChange={(open) => setOpenPopoverId(open ? item.id : null)}
+                      className="absolute px-px"
+                      style={{ top, height, left: `${leftPct}%`, width: `${widthPct}%` }}
                     >
-                      <div
-                        className="absolute px-px"
-                        style={{ top, height, left: `${leftPct}%`, width: `${widthPct}%` }}
+                      <AgendaEventPopover
+                        item={item}
+                        getVisitDotColor={getVisitDotColor}
+                        quickActions={quickActions}
+                        open={openPopoverId === item.id}
+                        onOpenChange={(open) => setOpenPopoverId(open ? item.id : null)}
                       >
                         <AgendaEventCard
                           item={item}
@@ -224,8 +228,8 @@ export function TimeGrid({
                           onPointerDownHandle={(event) => startResize(event, item.id)}
                           onOpen={() => setOpenPopoverId((current) => (current === item.id ? null : item.id))}
                         />
-                      </div>
-                    </AgendaEventPopover>
+                      </AgendaEventPopover>
+                    </div>
                   )
                 })}
 

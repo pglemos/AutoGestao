@@ -44,6 +44,14 @@ export const ScrollableRegion = React.forwardRef<HTMLDivElement, ScrollableRegio
     return (
       <div
         ref={ref}
+        /**
+         * Marca a região como scroll DECLARADO. O harness da Foundation Zero
+         * conta scroll owners de página varrendo o PageViewport; sem um
+         * marcador, um scroll interno legítimo (lista com `max-h`, corpo de
+         * modal, Kanban) é indistinguível de uma página que criou um segundo
+         * scroller por acidente. Quem passa por aqui declarou a intenção.
+         */
+        data-mx-scroll-region=""
         role="region"
         aria-label={label}
         tabIndex={0}

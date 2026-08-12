@@ -68,7 +68,7 @@ export function MonthGrid({
               }}
               className={cn(
                 'relative flex min-h-[88px] md:min-h-[104px] flex-col items-start gap-1 border-b border-r border-border-subtle p-1.5 text-left transition-colors',
-                !dayInfo.isCurrentMonth && 'bg-gray-50/40 text-muted-foreground/40',
+                !dayInfo.isCurrentMonth && 'bg-gray-50/40 text-muted-foreground',
                 dayInfo.isCurrentMonth && 'hover:bg-gray-50/50',
                 isSelected && 'bg-brand-primary/10 ring-1 ring-brand-primary ring-inset',
                 isTodayDate && !isSelected && 'bg-brand-primary/5',
@@ -79,7 +79,7 @@ export function MonthGrid({
                 'flex h-6 min-w-6 items-center justify-center rounded-full text-xs font-bold transition-all',
                 isTodayDate && 'bg-brand-primary text-white shadow-2xs',
                 !isTodayDate && dayInfo.isCurrentMonth && 'text-foreground',
-                !dayInfo.isCurrentMonth && 'text-muted-foreground/40',
+                !dayInfo.isCurrentMonth && 'text-muted-foreground',
               )}>
                 {dayInfo.day}
               </span>

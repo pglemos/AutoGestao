@@ -3,6 +3,7 @@ import { Calendar, Users, CheckCircle2, Clock, PlayCircle, XCircle, ChevronDown,
 import { cn } from '@/lib/utils'
 import type { AgendaConsultant } from '@/hooks/agenda'
 import { MiniCalendar } from './MiniCalendar'
+import { ScrollableRegion } from '@/design-system/page/ScrollableRegion'
 
 type Metrics = {
   total: number
@@ -119,7 +120,7 @@ export function AgendaSidebar({
                 <span
                   className={cn(
                     'px-1 py-0.5 rounded-full text-caption font-mono font-semibold',
-                    isActive ? 'bg-white/20 text-white' : 'bg-gray-50 text-muted-foreground',
+                    isActive ? 'bg-black/20 text-white' : 'bg-gray-50 text-muted-foreground',
                   )}
                 >
                   {opt.count}
@@ -145,7 +146,7 @@ export function AgendaSidebar({
           </button>
 
           {consultantsExpanded && (
-            <div className="space-y-1 max-h-40 overflow-y-auto no-scrollbar">
+            <ScrollableRegion axis="vertical" label="Filtro de consultores" className="space-y-1 max-h-40 no-scrollbar">
               <button
                 type="button"
                 onClick={() => onConsultantChange('todos')}
@@ -186,7 +187,7 @@ export function AgendaSidebar({
                   </button>
                 )
               })}
-            </div>
+            </ScrollableRegion>
           )}
         </div>
       )}

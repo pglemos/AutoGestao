@@ -73,7 +73,7 @@ export function MiniCalendar({ selectedDate, onDateSelect, hasEventsOnDate }: Mi
               onClick={() => onDateSelect(day)}
               className={cn(
                 'relative flex h-7 w-7 items-center justify-center mx-auto rounded-mx-full text-xs font-medium transition-all',
-                !isCurrentM && 'text-muted-foreground/40',
+                !isCurrentM && 'text-muted-foreground',
                 isCurrentM && !isSelected && !isCurrentDay && 'text-foreground hover:bg-gray-50',
                 isCurrentDay && !isSelected && 'border border-brand-primary text-status-success-text font-bold',
                 isSelected && 'bg-brand-primary text-white font-bold shadow-sm',

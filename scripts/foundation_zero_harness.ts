@@ -326,6 +326,10 @@ async function collectDomMetrics(page: Page, viewport: ViewportCase): Promise<Do
     const pageScrollOwnerCount = pageCandidates.filter((element) => {
       const overflowY = getComputedStyle(element).overflowY
       if (overflowY !== 'auto' && overflowY !== 'scroll') return false
+      // Regiões declaradas pelo primitivo ScrollableRegion são scroll LOCAL de
+      // conteúdo (lista com max-h, tabela larga, Kanban) e não disputam a posse
+      // do scroll de página. O que o contrato proíbe é o scroller acidental.
+      if (element !== pageViewport && element.hasAttribute('data-mx-scroll-region')) return false
       // The canonical viewport is an explicit owner even when the current
       // route is shorter than the viewport. Descendants count only when they
       // actually clip overflowing content, which avoids false positives from
