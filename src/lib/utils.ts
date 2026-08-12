@@ -1,5 +1,50 @@
 import { clsx, type ClassValue } from 'clsx'
-import { twMerge } from 'tailwind-merge'
+import { extendTailwindMerge } from 'tailwind-merge'
+
+/**
+ * Utilities tipográficas próprias do MX. Todas começam com `text-`, e é aí que
+ * mora a armadilha: o tailwind-merge, sem conhecê-las, classifica
+ * `text-<desconhecido>` como COR e descarta a cor declarada antes.
+ *
+ * O efeito era invisível na leitura do código e visível no runtime:
+ *
+ *   twMerge('bg-brand-primary text-white', 'text-mx-micro')
+ *     -> 'bg-brand-primary text-mx-micro'      // o branco sumiu
+ *
+ * Foi o que deixou o Badge `brand` com texto quase preto sobre o verde da
+ * marca (3.19:1) em /relatorios/performance-vendas — 21 nós de color-contrast
+ * medidos pelo sweep da FASE V que NÃO eram erro de quem escreveu a tela.
+ *
+ * Declarar as classes como font-size devolve a precedência à cor.
+ */
+const MX_FONT_SIZE_UTILITIES = [
+    // Escala semântica (@utility em design-system/tokens/semantic.css)
+    'display',
+    'h1',
+    'h2',
+    'h3',
+    'h4',
+    'h5',
+    'h6',
+    'body',
+    'body-sm',
+    'caption',
+    'label',
+    'data',
+    // Degraus legados declarados em index.css
+    'mx-micro',
+    'mx-tiny',
+    'mx-nano',
+    'mx-xs',
+]
+
+const twMerge = extendTailwindMerge({
+    extend: {
+        classGroups: {
+            'font-size': MX_FONT_SIZE_UTILITIES.map(name => `text-${name}`),
+        },
+    },
+})
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
