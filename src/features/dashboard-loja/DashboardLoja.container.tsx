@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
-import { ConditionalPageCanvas } from '@/design-system/page'
+import { PageCanvas } from '@/design-system/page'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { isAdministradorMx, isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { useStores } from '@/hooks/useStores'
@@ -119,9 +119,9 @@ export function DashboardLoja() {
   }
   if (!resolving && !storesLoading && role === 'gerente' && activeTab === 'performance' && !selectedStoreId) {
     return (
-      <div className="w-full bg-gray-50">
+      <PageCanvas as="div" width="dashboard" className="flex flex-col gap-5 text-gray-800">
         <ManagerSellerParityHomeCanonical data={data} alerts={[]} />
-      </div>
+      </PageCanvas>
     )
   }
   if (!resolving && !storesLoading && !selectedStoreId && (isPerfilInternoMx(role) || role === 'dono')) {
@@ -142,16 +142,12 @@ export function DashboardLoja() {
    * /vendas nenhuma fornecia, e o título encostava na borda da área de
    * conteúdo — medido em 0px de respiro por scripts/audit-page-gutters.mjs.
    *
-   * O ramo de performance do gerente segue sem canvas porque o componente
-   * canônico dele já traz o próprio recuo. O cockpit do Dono, porém, é a rota
-   * executiva que deve consumir o canvas: `as="div"` evita aninhar outro
-   * landmark `main` dentro do shell.
-   */
-  <div className="w-full bg-gray-50">
-    <ConditionalPageCanvas
-      enabled={!isFocusedRolePerformance || isOwner}
-      as="div"
-    >
+   * Todos os ramos de DashboardLoja consomem o mesmo canvas. O componente
+   * canônico do gerente fornece apenas conteúdo e não pode ser um proprietário
+   * alternativo de gutter/width. `as="div"` evita aninhar outro landmark
+   * `main` dentro do shell.
+  */
+  <PageCanvas as="div" width="dashboard" className="flex flex-col gap-5 text-gray-800">
       {!isFocusedRolePerformance && !isManagerSection && (
         <DashboardErrorBoundary sectionName="Header">
           <DashboardHeader
@@ -232,8 +228,7 @@ export function DashboardLoja() {
         onClose={() => actions.setCreateStoreOpen(false)}
         onSubmit={actions.handleCreateStore}
       />
-    </ConditionalPageCanvas>
-    </div>
+  </PageCanvas>
   )
 }
 

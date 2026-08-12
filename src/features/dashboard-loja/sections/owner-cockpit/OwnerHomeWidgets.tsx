@@ -65,7 +65,7 @@ export function SalesGoalCard({ data }: { data: DashboardData }) {
             <p className="mt-0.5 text-xl font-bold text-status-success-text">{formatInteger(sold)}</p>
           </div>
           <div className="rounded-lg bg-red-50 p-2.5 text-center">
-            <p className="text-xs text-gray-500">Faltam</p>
+            <p className="text-xs text-status-error-text">Faltam</p>
             <p className="mt-0.5 text-xl font-bold text-status-error-text">{goal > 0 ? formatInteger(missing) : '--'}</p>
           </div>
           <div className="rounded-lg bg-gray-100/60 p-2.5 text-center">

@@ -18,8 +18,8 @@ describe('OwnerExecutiveCockpit data-backed sections', () => {
   })
 
   test('mantém o cockpit do Dono dentro do PageCanvas canônico', () => {
-    const canvasTag = dashboardSource.match(/<ConditionalPageCanvas\b[^>]*>/)?.[0] ?? ''
-    expect(canvasTag).toContain('enabled={!isFocusedRolePerformance || isOwner}')
+    const canvasTag = dashboardSource.match(/<PageCanvas\b[^>]*>/)?.[0] ?? ''
+    expect(canvasTag).toContain('width="dashboard"')
     expect(canvasTag).toContain('as="div"')
     expect(source).not.toContain('p-mx-sm')
     expect(source).not.toContain('md:p-mx-lg')

@@ -100,12 +100,20 @@ export default function VendedorHomePage() {
 
   if (home.isLoading) {
     return (
-      <div className="h-full w-full flex items-center justify-center">
+      <PageCanvas
+        as="div"
+        width="dashboard"
+        bottomClearance="navigation"
+        className="flex min-h-full items-center justify-center"
+        aria-busy="true"
+        aria-live="polite"
+        aria-label="Carregando cockpit"
+      >
         <div className="text-center">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-600 border-t-transparent mx-auto mb-4" />
           <p className="text-sm text-gray-500">Carregando cockpit...</p>
         </div>
-      </div>
+      </PageCanvas>
     )
   }
 
@@ -187,8 +195,8 @@ export default function VendedorHomePage() {
             <div>
               {meta === 0 ? (
                 <>
-                  <p className="text-2xl font-bold text-gray-400">Meta não cadastrada</p>
-                  <p className="mt-1 text-sm text-gray-400">Fale com seu gerente.</p>
+                  <p className="text-2xl font-bold text-gray-600">Meta não cadastrada</p>
+                  <p className="mt-1 text-sm text-gray-600">Fale com seu gerente.</p>
                 </>
               ) : faltam === 0 ? (
                 <>
@@ -289,7 +297,7 @@ export default function VendedorHomePage() {
                   }}
                 />
               </div>
-              <p className="mt-1.5 text-xs text-gray-400">
+              <p className="mt-1.5 text-xs text-gray-600">
                 {disciplina >= 80 ? 'Excelente ritmo na semana' : disciplina >= 50 ? 'Bom progresso, mantenha a frequência' : 'Atenção à disciplina diária'}
               </p>
               <p className="mt-3 text-sm font-medium text-gray-600">
@@ -325,7 +333,7 @@ export default function VendedorHomePage() {
                 {item.done
                   ? <CheckCircle size={18} className="text-emerald-500 flex-shrink-0" />
                   : <Circle size={18} className="text-gray-300 flex-shrink-0" />}
-                <p className={`text-sm ${item.done ? 'text-gray-700 font-medium' : 'text-gray-400'}`}>{item.label}</p>
+                <p className={`text-sm ${item.done ? 'text-gray-700 font-medium' : 'text-gray-600'}`}>{item.label}</p>
               </div>
             ))}
           </div>
@@ -346,7 +354,7 @@ export default function VendedorHomePage() {
               </div>
               {agendaHoje.length === 0 ? (
                 <div className="py-6 text-center">
-                  <p className="text-sm text-gray-400">Nenhum compromisso agendado para hoje.</p>
+                  <p className="text-sm text-gray-600">Nenhum compromisso agendado para hoje.</p>
                   <button
                     type="button"
                     onClick={() => navigate('/central-execucao')}
@@ -363,7 +371,7 @@ export default function VendedorHomePage() {
                         <span className="flex-shrink-0 w-2 h-2 rounded-full bg-emerald-400" />
                         <div className="min-w-0">
                           <p className="text-sm font-medium text-gray-800 truncate">{item.cliente?.nome || 'Cliente'}</p>
-                          <p className="text-xs text-gray-400">
+                          <p className="text-xs text-gray-600">
                             {item.tipo} · {new Date(item.data_hora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                           </p>
                         </div>

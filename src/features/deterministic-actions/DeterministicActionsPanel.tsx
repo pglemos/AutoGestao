@@ -139,7 +139,7 @@ export default function DeterministicActionsPanel({
                   </div>
                   <p className="mt-2 text-sm leading-relaxed text-gray-600">{action.explanation}</p>
                   {(dueDate || evidence) && (
-                    <div className="mt-2 space-y-1 text-xs text-gray-400">
+                    <div className="mt-2 space-y-1 text-xs text-gray-600">
                       {dueDate && <p>Prazo de atenção: {dueDate}</p>}
                       {evidence && <p className="truncate" title={evidence}>Evidências: {evidence}</p>}
                     </div>
@@ -177,7 +177,7 @@ export default function DeterministicActionsPanel({
       </div>
 
       {maxItems && actions.length > maxItems && (
-        <p className="mt-3 text-xs text-gray-400">Mais {actions.length - maxItems} ação(ões) disponível(is) nas áreas operacionais.</p>
+        <p className="mt-3 text-xs text-gray-600">Mais {actions.length - maxItems} ação(ões) disponível(is) nas áreas operacionais.</p>
       )}
     </section>
   )

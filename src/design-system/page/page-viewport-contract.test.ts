@@ -13,6 +13,7 @@ describe('contrato do viewport de página', () => {
     expect(viewport).toContain('data-mx-page-viewport=""')
     expect(viewport).toContain('overflow-y-auto')
     expect(viewport).toContain('overflow-x-hidden')
+    expect(viewport).toContain('tabIndex={props.tabIndex ?? 0}')
     expect(shell).toContain('<PageViewport>')
     expect(shell).not.toContain('overflow-y-auto overflow-x-hidden')
   })

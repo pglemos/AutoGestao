@@ -8,6 +8,7 @@ import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
 import { Select } from '@/components/atoms/Select'
 import { Typography } from '@/components/atoms/Typography'
+import { InternalMxTemplateHeader } from '@/components/module/InternalMxTemplateSlots'
 import { cn } from '@/lib/utils'
 import type { AgendaConsultant, DateFilter } from '@/hooks/agenda'
 import { statusFilters } from '../data/agendaFilters'
@@ -80,7 +81,7 @@ export function AgendaHeader({
   }
 
   return (
-    <header className="flex shrink-0 flex-col gap-3 border-b border-gray-200 pb-3 bg-white">
+    <InternalMxTemplateHeader className="flex shrink-0 flex-col gap-3 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-1">
@@ -275,6 +276,6 @@ export function AgendaHeader({
           </DropdownMenu.Root>
         </div>
       </div>
-    </header>
+    </InternalMxTemplateHeader>
   )
 }

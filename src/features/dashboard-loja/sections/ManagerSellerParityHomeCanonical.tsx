@@ -313,7 +313,7 @@ export function ManagerSellerParityHomeCanonical({
           />
         </section>
 
-        <p className="text-center text-caption text-gray-400">
+        <p className="text-center text-caption text-gray-600">
           Fontes oficiais: Plano de Sustentação v{plan?.version ?? '—'} e agenda confirmada da unidade.
         </p>
     </div>
@@ -442,7 +442,7 @@ function MetricValue({ value, suffix }: { value: string; suffix: string }) {
   return (
     <p>
       <strong className="text-3xl text-gray-800">{value}</strong>{' '}
-      <span className="text-sm font-medium text-gray-400">{suffix}</span>
+      <span className="text-sm font-medium text-gray-600">{suffix}</span>
     </p>
   )
 }
@@ -454,7 +454,7 @@ function UnavailableValue({ text }: { text: string }) {
 function ReadingValue({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="text-xs uppercase tracking-wide text-gray-400">{label}</p>
+      <p className="text-xs uppercase tracking-wide text-gray-600">{label}</p>
       <p className="mt-1 text-lg font-bold text-gray-800">{value}</p>
     </div>
   )
@@ -476,7 +476,7 @@ function TeamFocus({
           <Users size={18} className="text-emerald-600" />
           <div>
             <h2 className="font-semibold">Equipe em foco</h2>
-            <p className="text-xs text-gray-400">Agenda confirmada, projeção e ritmo por vendedor.</p>
+            <p className="text-xs text-gray-600">Agenda confirmada, projeção e ritmo por vendedor.</p>
           </div>
         </div>
         <button
@@ -488,7 +488,7 @@ function TeamFocus({
         </button>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto" role="region" aria-label="Tabela da equipe em foco" tabIndex={0}>
         <table className="w-full min-w-[848px] text-sm">
           <thead className="bg-gray-50">
             <tr>
@@ -505,7 +505,7 @@ function TeamFocus({
           <tbody className="divide-y divide-gray-50">
             {team.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-gray-400">
+                <td colSpan={7} className="px-4 py-8 text-center text-gray-600">
                   Nenhum vendedor vinculado a este gerente.
                 </td>
               </tr>
@@ -519,8 +519,8 @@ function TeamFocus({
                 <td className="px-4 py-3">{item.appointmentsToday}</td>
                 <td className="px-4 py-3">{formatSales(item.salesForecastToday)}</td>
                 <td className="px-4 py-3">{item.salesThisMonth}</td>
-                <td className="px-4 py-3 text-gray-400">Sem regra configurada</td>
-                <td className="px-4 py-3 text-gray-400">—</td>
+                <td className="px-4 py-3 text-gray-600">Sem regra configurada</td>
+                <td className="px-4 py-3 text-gray-600">—</td>
                 <td className="px-4 py-3">
                   <span className={`rounded-lg px-2 py-1 text-xs font-medium ${item.financialStatus.className}`}>
                     {item.financialStatus.label}
@@ -544,7 +544,7 @@ function FinancialRadar({ team }: { team: ManagerTeamFocusItem[] }) {
         <DollarSign size={18} className="text-emerald-600" />
         <div>
           <h2 className="font-semibold">Radar Financeiro da Equipe</h2>
-          <p className="text-xs text-gray-400">Motor financeiro compartilhado com o Vendedor.</p>
+          <p className="text-xs text-gray-600">Motor financeiro compartilhado com o Vendedor.</p>
         </div>
       </div>
       <div className="grid grid-cols-3 gap-3">
@@ -563,7 +563,7 @@ function RadarItem({ value, label }: { value: string | number; label: string }) 
   return (
     <div className="text-center">
       <p className="text-xl font-bold text-emerald-700">{value}</p>
-      <p className="mt-1 text-caption leading-4 text-gray-400">{label}</p>
+      <p className="mt-1 text-caption leading-4 text-gray-600">{label}</p>
     </div>
   )
 }
@@ -584,7 +584,7 @@ function AppointmentsChart({
     <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
       <div className="mb-4">
         <h2 className="font-semibold">Agendamentos por Vendedor</h2>
-        <p className="text-xs text-gray-400">
+        <p className="text-xs text-gray-600">
           Somatório conciliado: {data.reduce((sum, item) => sum + item.appointments, 0)} confirmados.
         </p>
       </div>

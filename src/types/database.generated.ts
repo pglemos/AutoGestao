@@ -1527,6 +1527,8 @@ export type Database = {
           inicio_em: string
           loja_id: string
           status: string
+          targeting_config: Json | null
+          targeting_kind: string
           tipo: string
           titulo: string
           updated_at: string
@@ -1543,6 +1545,8 @@ export type Database = {
           inicio_em?: string
           loja_id: string
           status?: string
+          targeting_config?: Json | null
+          targeting_kind?: string
           tipo: string
           titulo: string
           updated_at?: string
@@ -1559,6 +1563,8 @@ export type Database = {
           inicio_em?: string
           loja_id?: string
           status?: string
+          targeting_config?: Json | null
+          targeting_kind?: string
           tipo?: string
           titulo?: string
           updated_at?: string
@@ -1639,6 +1645,7 @@ export type Database = {
           cliente_id: string
           concluido_em: string | null
           created_at: string
+          eligibility_reason: Json | null
           id: string
           mensagem_enviada_em: string | null
           metadata: Json
@@ -1654,6 +1661,7 @@ export type Database = {
           cliente_id: string
           concluido_em?: string | null
           created_at?: string
+          eligibility_reason?: Json | null
           id?: string
           mensagem_enviada_em?: string | null
           metadata?: Json
@@ -1669,6 +1677,7 @@ export type Database = {
           cliente_id?: string
           concluido_em?: string | null
           created_at?: string
+          eligibility_reason?: Json | null
           id?: string
           mensagem_enviada_em?: string | null
           metadata?: Json
@@ -2022,6 +2031,9 @@ export type Database = {
           id: string
           new_values: Json
           old_values: Json
+          reason: string | null
+          seller_id: string | null
+          store_id: string | null
         }
         Insert: {
           change_type?: string
@@ -2032,6 +2044,9 @@ export type Database = {
           id?: string
           new_values: Json
           old_values: Json
+          reason?: string | null
+          seller_id?: string | null
+          store_id?: string | null
         }
         Update: {
           change_type?: string
@@ -2042,6 +2057,9 @@ export type Database = {
           id?: string
           new_values?: Json
           old_values?: Json
+          reason?: string | null
+          seller_id?: string | null
+          store_id?: string | null
         }
         Relationships: [
           {
@@ -8374,11 +8392,13 @@ export type Database = {
           cancelada_em: string | null
           cancelada_por: string | null
           carro_avaliado: boolean
+          catalog_model_id: string | null
           categoria_veiculo:
             | Database["public"]["Enums"]["crm_categoria_veiculo"]
             | null
           channel_entry: string | null
           channel_sale: string | null
+          classification_source: string | null
           cliente_id: string
           closed_at: string | null
           created_at: string
@@ -8413,6 +8433,8 @@ export type Database = {
           origem_modulo: string
           placa_veiculo: string | null
           potential: string | null
+          preco_interesse_max: number | null
+          preco_interesse_min: number | null
           previous_status_code: string | null
           priority_class: string | null
           priority_index: number | null
@@ -8438,11 +8460,13 @@ export type Database = {
           cancelada_em?: string | null
           cancelada_por?: string | null
           carro_avaliado?: boolean
+          catalog_model_id?: string | null
           categoria_veiculo?:
             | Database["public"]["Enums"]["crm_categoria_veiculo"]
             | null
           channel_entry?: string | null
           channel_sale?: string | null
+          classification_source?: string | null
           cliente_id: string
           closed_at?: string | null
           created_at?: string
@@ -8477,6 +8501,8 @@ export type Database = {
           origem_modulo?: string
           placa_veiculo?: string | null
           potential?: string | null
+          preco_interesse_max?: number | null
+          preco_interesse_min?: number | null
           previous_status_code?: string | null
           priority_class?: string | null
           priority_index?: number | null
@@ -8502,11 +8528,13 @@ export type Database = {
           cancelada_em?: string | null
           cancelada_por?: string | null
           carro_avaliado?: boolean
+          catalog_model_id?: string | null
           categoria_veiculo?:
             | Database["public"]["Enums"]["crm_categoria_veiculo"]
             | null
           channel_entry?: string | null
           channel_sale?: string | null
+          classification_source?: string | null
           cliente_id?: string
           closed_at?: string | null
           created_at?: string
@@ -8541,6 +8569,8 @@ export type Database = {
           origem_modulo?: string
           placa_veiculo?: string | null
           potential?: string | null
+          preco_interesse_max?: number | null
+          preco_interesse_min?: number | null
           previous_status_code?: string | null
           priority_class?: string | null
           priority_index?: number | null
@@ -8565,6 +8595,13 @@ export type Database = {
             columns: ["cancelada_por"]
             isOneToOne: false
             referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "oportunidades_catalog_model_fkey"
+            columns: ["catalog_model_id"]
+            isOneToOne: false
+            referencedRelation: "vehicle_model_catalog"
             referencedColumns: ["id"]
           },
           {
@@ -11915,6 +11952,7 @@ export type Database = {
           requested_by: string | null
           requested_values: Json
           reviewed_at: string | null
+          reviewed_by: string | null
           seller_id: string
           status: Database["public"]["Enums"]["correction_status"]
           store_id: string
@@ -11936,6 +11974,7 @@ export type Database = {
           requested_by?: string | null
           requested_values: Json
           reviewed_at?: string | null
+          reviewed_by?: string | null
           seller_id: string
           status?: Database["public"]["Enums"]["correction_status"]
           store_id: string
@@ -11957,6 +11996,7 @@ export type Database = {
           requested_by?: string | null
           requested_values?: Json
           reviewed_at?: string | null
+          reviewed_by?: string | null
           seller_id?: string
           status?: Database["public"]["Enums"]["correction_status"]
           store_id?: string
@@ -13347,10 +13387,69 @@ export type Database = {
           },
         ]
       }
+      vehicle_model_catalog: {
+        Row: {
+          active: boolean
+          aliases: string[]
+          brand: string
+          category: Database["public"]["Enums"]["crm_categoria_veiculo"]
+          created_at: string
+          id: string
+          market: string
+          model: string
+          normalized_brand: string
+          normalized_model: string
+          source: string
+          source_version: string
+          updated_at: string
+          vehicle_type: string
+          year_from: number | null
+          year_to: number | null
+        }
+        Insert: {
+          active?: boolean
+          aliases?: string[]
+          brand: string
+          category: Database["public"]["Enums"]["crm_categoria_veiculo"]
+          created_at?: string
+          id?: string
+          market?: string
+          model: string
+          normalized_brand: string
+          normalized_model: string
+          source: string
+          source_version: string
+          updated_at?: string
+          vehicle_type?: string
+          year_from?: number | null
+          year_to?: number | null
+        }
+        Update: {
+          active?: boolean
+          aliases?: string[]
+          brand?: string
+          category?: Database["public"]["Enums"]["crm_categoria_veiculo"]
+          created_at?: string
+          id?: string
+          market?: string
+          model?: string
+          normalized_brand?: string
+          normalized_model?: string
+          source?: string
+          source_version?: string
+          updated_at?: string
+          vehicle_type?: string
+          year_from?: number | null
+          year_to?: number | null
+        }
+        Relationships: []
+      }
       veiculos_estoque: {
         Row: {
           ano: string | null
+          catalog_model_id: string | null
           categoria: Database["public"]["Enums"]["crm_categoria_veiculo"] | null
+          classification_source: string | null
           created_at: string
           created_by: string
           data_entrada: string
@@ -13367,9 +13466,11 @@ export type Database = {
         }
         Insert: {
           ano?: string | null
+          catalog_model_id?: string | null
           categoria?:
             | Database["public"]["Enums"]["crm_categoria_veiculo"]
             | null
+          classification_source?: string | null
           created_at?: string
           created_by: string
           data_entrada?: string
@@ -13386,9 +13487,11 @@ export type Database = {
         }
         Update: {
           ano?: string | null
+          catalog_model_id?: string | null
           categoria?:
             | Database["public"]["Enums"]["crm_categoria_veiculo"]
             | null
+          classification_source?: string | null
           created_at?: string
           created_by?: string
           data_entrada?: string
@@ -13404,6 +13507,13 @@ export type Database = {
           versao?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "veiculos_estoque_catalog_model_fkey"
+            columns: ["catalog_model_id"]
+            isOneToOne: false
+            referencedRelation: "vehicle_model_catalog"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "veiculos_estoque_created_by_fkey"
             columns: ["created_by"]
@@ -14532,6 +14642,8 @@ export type Database = {
           inicio_em: string
           loja_id: string
           status: string
+          targeting_config: Json | null
+          targeting_kind: string
           tipo: string
           titulo: string
           updated_at: string
@@ -15936,6 +16048,10 @@ export type Database = {
       }
       pode_ler_cliente_por_oportunidade: {
         Args: { p_cliente_id: string }
+        Returns: boolean
+      }
+      pode_ler_evidencia_consultoria: {
+        Args: { p_storage_path: string; p_user_id?: string }
         Returns: boolean
       }
       pode_ler_lancamentos_loja: {
