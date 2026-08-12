@@ -316,6 +316,16 @@ to { height: 0; }
   /* Shadow Matrix — derivado dos primitivos --mx-shadow-* (T4.6).
      Corrige o bug de cópia (md/lg/xl eram idênticos a sm) e unifica a
      elevação modal em --shadow-mx-2xl. */
+  /* 07.011 — a escala Tailwind (`shadow-sm/md/lg/xl/2xl`) passa a derivar dos
+     mesmos primitivos `--mx-shadow-*`. Sem isso o projeto mantinha duas escalas
+     de elevação em paralelo: a do Tailwind (default) nos 664 usos de
+     `shadow-sm` e a canônica em `shadow-mx-*`. */
+  --shadow-sm: var(--mx-shadow-sm);
+  --shadow-md: var(--mx-shadow-md);
+  --shadow-lg: var(--mx-shadow-lg);
+  --shadow-xl: var(--mx-shadow-xl);
+  --shadow-2xl: var(--mx-shadow-2xl);
+
   --shadow-mx-sm: var(--mx-shadow-sm);
   --shadow-mx-md: var(--mx-shadow-md);
   --shadow-mx-lg: var(--mx-shadow-lg);
