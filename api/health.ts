@@ -12,7 +12,7 @@
  * normalizadas para um código curto.
  */
 
-import { getServerRelease } from '../src/lib/observability/server-release'
+import { getServerRelease } from '../src/lib/observability/server-release.js'
 
 const TIMEOUT_MS = 8_000
 

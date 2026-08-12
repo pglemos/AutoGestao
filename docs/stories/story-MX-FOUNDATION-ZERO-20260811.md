@@ -40,6 +40,7 @@ Executar o contrato Foundation Zero no estado real do `main`, consolidando a fun
 - Execução coordenada pelo aiox-master/Orion; alterações de código devem ser implementadas em lotes pequenos e revisadas por QA.
 - O checkout inicial desta retomada estava limpo em `main` no SHA `3d8158ea`; o grafo Graphify foi atualizado estruturalmente e deixou pendências de descrições assistidas, que não serão tratadas como prova de código.
 - 2026-08-11: lote release-probe implementado em TDD pelo aiox-dev e revisado pelo aiox-qa. O RED confirmou que `/api/health.release` não existia; o GREEN confirmou 3 contratos novos e regressão de `/api/health` preservada.
+- 2026-08-12: a reconciliação trouxe `origin/main` (`475da966bfb371d4d27367508a5866f0d8a88f6c`) para a base dos 8 commits locais até `336b62d15ed251d78a500896987f29792e60c52c`, sem conflito e sem descartar trabalho local. O contrato Node ESM reproduziu o `ERR_MODULE_NOT_FOUND` do artefato sem extensão e ficou verde após a correção mínima `.js`.
 
 ### File List
 
@@ -49,9 +50,11 @@ Executar o contrato Foundation Zero no estado real do `main`, consolidando a fun
 - `api/health.release.ts`
 - `src/lib/observability/server-release.ts`
 - `src/test/api-health-release-contract.test.ts`
+- `src/test/api-health-node-esm-contract.test.ts`
 
 ### Completion Notes
 
 - Ainda não concluída.
 - Lote release-probe: RED `bun test --isolate --concurrency=1 src/test/api-health-release-contract.test.ts` falhou pela ausência esperada de `../../api/health.release`; GREEN `bun test ... api-health-release-contract.test.ts api-health-probe-contract.test.ts` passou 15/15.
-- Gates pós-lote: `npm run typecheck`, `npm run lint`, `npm test` (2642/0), `npm run build`, `npm run check:bundle-size`, `npm run audit:routes-data`, `npm run audit:management-design-system` e `npm run audit:layout-contract` passaram. Paridade de produção ainda pendente até o próximo release.
+- Contrato Node ESM: a transpilação de `api/health.ts` e `api/health.release.ts` para um sandbox `type: module`, seguida de import pelo Node real, reproduziu `ERR_MODULE_NOT_FOUND` com o import sem extensão e passou após os imports `server-release.js`. A execução focada dos três contratos passou `16/16`, com `36` expectations.
+- Gates pós-correção: `npm run typecheck`, `npm run lint`, `npm test` (`2769` pass / `0` fail / `19191` asserts), `npm run build`, `npm run check:bundle-size` (`1815.67/1860 KB gzip`), `npm run audit:routes-data`, `npm run audit:management-design-system` e `npm run audit:layout-contract` passaram. Paridade de produção ainda pendente até o próximo release.

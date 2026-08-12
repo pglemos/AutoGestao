@@ -1,4 +1,4 @@
-import { getServerRelease } from '../src/lib/observability/server-release'
+import { getServerRelease } from '../src/lib/observability/server-release.js'
 
 const RELEASE_HEADERS = {
     'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
