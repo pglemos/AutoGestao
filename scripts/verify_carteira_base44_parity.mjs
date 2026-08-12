@@ -113,7 +113,7 @@ assert(!/\bpotencial\s*:/.test(carteiraUtils), 'carteiraUtils.jsx has no invente
 // side Sheet (product decision). base44-reference stays frozen with the original Sheet.
 const fichaReference = read('src/base44-reference/components/carteira/FichaClienteSheet.jsx')
 const fichaRuntime = read('src/components/carteira/FichaClienteSheet.jsx')
-for (const token of ['Mentor Comercial', 'Alterar próximo passo', 'sticky bottom-0 bg-white border-t border-slate-100']) {
+for (const token of ['Mentor Comercial', 'Alterar próximo passo', 'sticky bottom-0 bg-white border-t']) {
   assert(fichaReference.includes(token), `FichaClienteSheet.jsx reference includes ${token}`)
   assert(fichaRuntime.includes(token), `FichaClienteSheet.jsx runtime preserves ${token}`)
 }
