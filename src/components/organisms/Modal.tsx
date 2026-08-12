@@ -95,7 +95,7 @@ export function Modal({
           data-mx-overlay-backdrop="modal"
           data-reference-overlay={referenceStyle ? "true" : undefined}
           className={cn(
-            "mx-overlay-backdrop fixed inset-0",
+            "mx-overlay-backdrop fixed inset-0 z-[var(--mx-z-overlay,50)]",
             referenceStyle ? "bg-black/30" : "bg-gray-900/60 backdrop-blur-md",
           )}
         />
@@ -115,7 +115,7 @@ export function Modal({
             requestAnimationFrame(() => previouslyFocusedElement.focus());
           }}
           className={cn(
-            "mx-overlay-surface",
+            "mx-overlay-surface z-[var(--mx-z-modal,60)]",
             referenceStyle
               ? "fixed left-4 right-4 top-1/2 -translate-y-1/2 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 focus:outline-none"
               : "fixed left-mx-md right-mx-md top-mx-md bottom-mx-md sm:left-1/2 sm:right-auto sm:top-1/2 sm:bottom-auto sm:-translate-x-1/2 sm:-translate-y-1/2 focus:outline-none",

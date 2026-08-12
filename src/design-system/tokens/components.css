@@ -28,10 +28,23 @@
   --mx-overlay-shadow: var(--mx-shadow-2xl);
   --mx-overlay-backdrop-alpha: 0.48;
   --mx-overlay-close-size: var(--mx-touch-target-min);
+  --mx-overlay-close-radius: var(--mx-radius-md);
+
+  /* Lista fechada de z-index no :root para portais fora de .mx-ds */
+  --mx-z-base: 0;
+  --mx-z-sticky: 10;
+  --mx-z-sidebar: 20;
+  --mx-z-topbar: 30;
+  --mx-z-drawer: 40;
+  --mx-z-overlay: 50;
+  --mx-z-modal: 60;
+  --mx-z-popover: 70;
+  --mx-z-toast: 80;
+  --mx-z-tooltip: 90;
 }
 
 .mx-overlay-backdrop {
-  z-index: var(--mx-z-overlay);
+  z-index: var(--mx-z-overlay, 50);
   background-color: hsl(var(--mx-black) / var(--mx-overlay-backdrop-alpha));
 }
 
@@ -45,7 +58,7 @@
 
 .mx-overlay-surface {
   box-sizing: border-box;
-  z-index: var(--mx-z-modal);
+  z-index: var(--mx-z-modal, 60);
   max-height: var(--mx-overlay-max-height);
   overflow: hidden;
   border: 1px solid hsl(var(--mx-overlay-border));
@@ -83,6 +96,8 @@
   --mx-button-padding-inline-md: var(--mx-space-4);
   --mx-button-padding-inline-lg: var(--mx-space-5);
   --mx-button-radius: var(--mx-radius-sm);
+  --mx-button-shadow: var(--mx-shadow-sm);
+  --mx-button-hover-shadow: var(--mx-shadow-md);
   --mx-button-font-size: 14px;
   --mx-button-font-weight: 600;
 
@@ -104,8 +119,19 @@
   --mx-sidebar-width-expanded: 256px;
   --mx-sidebar-width-collapsed: 64px;
   --mx-sidebar-drawer-width: 288px;
+  --mx-sidebar-drawer-width-sm: 320px;
+  --mx-sidebar-drawer-max-width: 85vw;
+  --mx-sidebar-header-height: 52px;
   --mx-sidebar-item-height: 36px;
   --mx-sidebar-item-radius: var(--mx-radius-md);
+  --mx-sidebar-subitem-radius: var(--mx-radius-sm);
+  --mx-sidebar-toggle-radius: var(--mx-radius-xl);
+  --mx-sidebar-drawer-close-radius: var(--mx-radius-md);
+
+  /* ------------------------------------------------------- mobile header */
+  --mx-mobile-header-height: 72px;
+  --mx-mobile-header-padding-inline: var(--mx-space-4);
+  --mx-mobile-header-touch-target: var(--mx-touch-target-min);
 
   /* --------------------------------------------------------------- modal */
   --mx-modal-radius: var(--mx-radius-lg);
@@ -136,19 +162,6 @@
   --mx-icon-size-sm: 16px;
   --mx-icon-size-md: 20px;
   --mx-icon-size-lg: 24px;
-
-  /* ------------------------------------------------------------- z-index */
-  /* Lista fechada — §34: nenhum z-index novo fora desta escala. */
-  --mx-z-base: 0;
-  --mx-z-sticky: 10;
-  --mx-z-sidebar: 20;
-  --mx-z-topbar: 30;
-  --mx-z-drawer: 40;
-  --mx-z-overlay: 50;
-  --mx-z-modal: 60;
-  --mx-z-popover: 70;
-  --mx-z-toast: 80;
-  --mx-z-tooltip: 90;
 }
 
 @media (min-width: 1024px) {
