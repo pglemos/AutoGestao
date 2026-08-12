@@ -28,7 +28,7 @@ export function PageTemplate({
   as = 'div',
   ...canvasProps
 }: PageTemplateProps) {
-  const background = surface === 'muted' ? 'bg-gray-50' : 'bg-white'
+  const background = surface === 'muted' ? 'bg-surface-alt' : 'bg-background'
   return (
     <div
       className={`min-h-full w-full min-w-0 ${background} ${scrollerClassName ?? ''}`.trim()}

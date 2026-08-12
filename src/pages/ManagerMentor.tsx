@@ -54,7 +54,7 @@ export default function ManagerMentor() {
   const situation = useMemo(() => resolveMentorSituation(recommendations), [recommendations])
 
   return (
-    <div className="min-h-full bg-gray-50">
+    <div className="min-h-full bg-surface-alt">
       <div className="mx-auto max-w-4xl space-y-5 px-4 py-6 pb-24">
         <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
           <div className="flex items-center gap-3">

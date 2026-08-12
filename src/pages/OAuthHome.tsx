@@ -5,7 +5,7 @@ import MxLogo from '@/assets/mx-logo.png'
 
 export default function OAuthHome() {
   return (
-    <main className="min-h-screen bg-white text-gray-800 selection:bg-emerald-600/20">
+    <main className="min-h-screen bg-background text-gray-800 selection:bg-emerald-600/20">
       <section className="min-h-screen flex flex-col">
         <header className="w-full px-mx-lg sm:px-mx-2xl py-mx-lg flex items-center justify-between gap-mx-md border-b border-gray-200 bg-white/95">
           <Link to="/" className="flex items-center gap-mx-sm min-w-0" aria-label="MX PERFORMANCE">

@@ -76,7 +76,7 @@ export function LiberacaoFechamento() {
     return (
       // lint-page-roots-ignore: tela de estado centrada em viewport cheio, não
       // página em canvas — o padding serve à centralização.
-      <div className="h-screen w-screen flex flex-col items-center justify-center text-center p-6 bg-gray-50">
+      <div className="h-screen w-screen flex flex-col items-center justify-center text-center p-6 bg-surface-alt">
         <ShieldCheck size={64} className="text-status-error/20 mb-6" />
         <Typography variant="h2" className="mb-2 text-status-error font-extrabold">
           Acesso Restrito
@@ -94,7 +94,7 @@ export function LiberacaoFechamento() {
   if (!loading && (!solicitacao || loadError)) {
     return (
       // lint-page-roots-ignore: idem — estado de recurso inexistente.
-      <div className="h-screen w-screen flex flex-col items-center justify-center text-center p-6 bg-gray-50">
+      <div className="h-screen w-screen flex flex-col items-center justify-center text-center p-6 bg-surface-alt">
         <AlertTriangle size={64} className="text-status-warning/20 mb-6" />
         <Typography variant="h2" className="mb-2 font-extrabold">
           Solicitação Não Encontrada
@@ -111,7 +111,7 @@ export function LiberacaoFechamento() {
 
   if (loading || !solicitacao) {
     return (
-      <div className="h-screen w-screen flex items-center justify-center bg-gray-50">
+      <div className="h-screen w-screen flex items-center justify-center bg-surface-alt">
         <Typography variant="p" tone="muted" className="text-xs font-semibold">Carregando solicitação...</Typography>
       </div>
     )
@@ -120,7 +120,7 @@ export function LiberacaoFechamento() {
   return (
     // lint-page-roots-ignore: fluxo de aprovação por link, um card centrado em
     // max-w-lg. Não tem sidebar nem margem de página para padronizar.
-    <div className="min-h-screen w-full bg-gray-50 flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 font-sans">
+    <div className="min-h-screen w-full bg-surface-alt flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 font-sans">
       <Card className="w-full max-w-lg bg-white border p-mx-md space-y-mx-md">
         <header className="border-b border-gray-100 pb-4 flex items-center justify-between">
           <div>

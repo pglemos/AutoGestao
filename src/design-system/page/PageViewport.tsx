@@ -30,7 +30,7 @@ export function PageViewport({
       data-mx-page-viewport=""
       tabIndex={props.tabIndex ?? 0}
       className={cn(
-        'h-full min-h-0 w-full min-w-0 overflow-y-auto overflow-x-hidden no-scrollbar bg-gray-50 text-gray-800',
+        'h-full min-h-0 w-full min-w-0 overflow-y-auto overflow-x-hidden no-scrollbar bg-surface-alt text-gray-800',
         className,
       )}
     >

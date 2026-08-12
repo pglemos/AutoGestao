@@ -54,7 +54,7 @@ export default function ConsultorTreinamentos() {
     }
 
     if (loading) return (
-        <div className="h-full w-full flex flex-col items-center justify-center bg-gray-50">
+        <div className="h-full w-full flex flex-col items-center justify-center bg-surface-alt">
             <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-emerald-600 mb-6" />
             <Typography variant="caption" tone="muted" className="animate-pulse">Auditando Academy...</Typography>
         </div>

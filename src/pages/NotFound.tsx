@@ -10,7 +10,7 @@ export default function NotFound() {
 
     return (
         // lint-page-roots-ignore: estado 404 centrado em viewport cheio.
-        <main className="min-h-screen bg-gray-50 flex items-center justify-center p-mx-sm sm:p-10 selection:bg-emerald-600 selection:text-white relative overflow-hidden">
+        <main className="min-h-screen bg-surface-alt flex items-center justify-center p-mx-sm sm:p-10 selection:bg-emerald-600 selection:text-white relative overflow-hidden">
 
             <div className="absolute top-mx-0 right-mx-0 w-mx-hero h-mx-hero bg-emerald-600/5 rounded-mx-full blur-mx-xl -mr-mx-lg -mt-mx-lg pointer-events-none" aria-hidden="true" />
             <div className="absolute bottom-mx-0 left-mx-0 w-mx-xl h-mx-xl bg-status-error-surface rounded-mx-full blur-mx-lg -ml-mx-lg -mb-mx-lg pointer-events-none" aria-hidden="true" />

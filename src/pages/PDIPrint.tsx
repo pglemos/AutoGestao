@@ -26,14 +26,14 @@ export default function PDIPrint() {
     }, [id, fetchPrintBundle])
 
     if (loading) return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-surface-alt">
             <Typography variant="h3" className="animate-pulse">Carregando Bundle Documental...</Typography>
         </div>
     )
 
     if (error || !bundle) return (
         // lint-page-roots-ignore: estado centrado de documento não encontrado.
-        <div className="min-h-screen p-mx-20 text-center flex flex-col items-center justify-center bg-gray-50">
+        <div className="min-h-screen p-mx-20 text-center flex flex-col items-center justify-center bg-surface-alt">
             <History size={48} className="text-gray-500 mb-6 opacity-20" />
             <Typography variant="h3" tone="muted" className="tracking-tighter">Plano ou permissão não localizados.</Typography>
             <button onClick={() => navigate(-1)} className="mt-8 px-8 py-4 bg-emerald-600 text-white rounded-mx-full font-bold text-xs uppercase tracking-widest">VOLTAR</button>
@@ -63,7 +63,7 @@ export default function PDIPrint() {
         // lint-page-roots-ignore: documento para impressão. A largura é A4
         // (max-w-[210mm]) e o padding vertical existe só na visualização em
         // tela (print:py-0) — não é margem de página, é folha.
-        <div className="min-h-screen bg-mx-indigo-50 font-sans print:bg-white flex flex-col items-center py-10 print:py-0 overflow-x-hidden">
+        <div className="min-h-screen bg-mx-indigo-50 font-sans print:bg-background flex flex-col items-center py-10 print:py-0 overflow-x-hidden">
             
             {/* Action Bar (Not Printed) */}
             <div className="w-full max-w-[210mm] flex items-center justify-between mb-8 print:hidden px-4">
@@ -76,7 +76,7 @@ export default function PDIPrint() {
             </div>
 
             {/* A4 Document Container */}
-            <div ref={printRef} className="w-[210mm] bg-white shadow-2xl print:shadow-none print:w-full print:max-w-none text-gray-800 flex flex-col gap-y-[20mm]">
+            <div ref={printRef} className="w-[210mm] bg-background shadow-2xl print:shadow-none print:w-full print:max-w-none text-gray-800 flex flex-col gap-y-[20mm]">
                 
                 {/* --- PÁGINA 1: CAPA --- */}
                 <div className="p-[20mm] h-[297mm] relative break-after-page flex flex-col border border-gray-200 print:border-none">

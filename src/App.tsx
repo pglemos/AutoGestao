@@ -257,7 +257,7 @@ function PublicHome() {
   const { profile, loading, initialized } = useAuth()
 
   if (loading || !initialized) {
-    return <div className="h-screen flex items-center justify-center bg-white"><Spinner /></div>
+    return <div className="h-screen flex items-center justify-center bg-background"><Spinner /></div>
   }
 
   if (profile) return <RoleRedirect />

@@ -186,7 +186,7 @@ export default function FunilVendedor() {
   const hasAnyData = rows.events.length > 0 || rows.customers.length > 0
 
   return (
-    <div className="min-h-full bg-gray-50">
+    <div className="min-h-full bg-surface-alt">
       <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-4">
         <SellerPageHeader
           icon={TrendingUp}

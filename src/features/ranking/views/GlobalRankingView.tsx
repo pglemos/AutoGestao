@@ -25,7 +25,7 @@ export function GlobalRankingView() {
 
   return (
     <RankingErrorBoundary sectionName="Ranking Global">
-      <div className="relative flex min-h-full w-full min-w-0 flex-col gap-mx-lg bg-gray-50 p-mx-lg pb-32">
+      <div className="relative flex min-h-full w-full min-w-0 flex-col gap-mx-lg bg-surface-alt p-mx-lg pb-32">
         <GlobalRankingHeader
           totalLojas={data.lojas.length}
           totalVendedores={data.totalVendedores}
