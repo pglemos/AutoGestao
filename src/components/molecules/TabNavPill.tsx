@@ -45,7 +45,7 @@ export function TabNavPill<T extends string = string>({
           role="tab"
           aria-selected={activeTab === key}
           className={cn(
-            'relative h-mx-10 w-full px-3 sm:w-auto sm:px-6 rounded-mx-full uppercase font-bold tracking-widest text-mx-tiny shrink-0',
+            'relative h-mx-10 w-full px-3 sm:w-auto sm:px-6 rounded-mx-full text-label font-medium shrink-0',
             buttonClassName
           )}
         >
