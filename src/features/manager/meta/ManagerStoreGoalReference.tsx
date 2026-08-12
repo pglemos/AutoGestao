@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, type ComponentType, type ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type ComponentType, type ReactNode } from 'react'
 import { eachDayOfInterval, endOfMonth, format, isWeekend, parseISO } from 'date-fns'
 import { useNavigate } from 'react-router-dom'
 import { Activity, Building2, CalendarClock, CheckCircle2, Gauge, MessageSquarePlus, MoreVertical, RefreshCw, ShoppingCart, Target, TrendingUp, UserCircle, Wrench, X, Zap } from 'lucide-react'
@@ -78,6 +78,7 @@ export function ManagerStoreGoalReference({
   const [goalsOpen, setGoalsOpen] = useState(false)
   const [persistedPlans, setPersistedPlans] = useState<Partial<Record<PersistedHorizon, PersistedTargetPlan>>>({})
   const [targetPlanRefreshing, setTargetPlanRefreshing] = useState(false)
+  const targetPlanRequestIdRef = useRef(0)
 
   useEffect(() => {
     data.setViewMode('month')
@@ -95,8 +96,10 @@ export function ManagerStoreGoalReference({
       : data.referenceDate
 
   const refreshTargetPlans = useCallback(async () => {
+    const requestId = ++targetPlanRequestIdRef.current
     if (!data.selectedStoreId) {
       setPersistedPlans({})
+      setTargetPlanRefreshing(false)
       return
     }
 
@@ -107,6 +110,7 @@ export function ManagerStoreGoalReference({
           p_store_id: data.selectedStoreId,
           p_reference_date: activeReferenceDate,
         })
+        if (requestId !== targetPlanRequestIdRef.current) return
         if (consolidated.error) throw consolidated.error
       }
 
@@ -116,23 +120,29 @@ export function ManagerStoreGoalReference({
         .eq('store_id', data.selectedStoreId)
         .eq('reference_date', activeReferenceDate)
         .order('version', { ascending: false })
+      if (requestId !== targetPlanRequestIdRef.current) return
       if (error) throw error
 
       const latest: Partial<Record<PersistedHorizon, PersistedTargetPlan>> = {}
       for (const row of (rows || []) as PersistedTargetPlan[]) {
         if (!latest[row.horizon]) latest[row.horizon] = row
       }
+      if (requestId !== targetPlanRequestIdRef.current) return
       setPersistedPlans(latest)
     } catch (error) {
+      if (requestId !== targetPlanRequestIdRef.current) return
       console.error('Audit Error [ManagerStoreGoalReference]: target plan persistence failed ->', error)
       setPersistedPlans({})
     } finally {
-      setTargetPlanRefreshing(false)
+      if (requestId === targetPlanRequestIdRef.current) setTargetPlanRefreshing(false)
     }
   }, [activeReferenceDate, baseRole, data.selectedStoreId])
 
   useEffect(() => {
     void refreshTargetPlans()
+    return () => {
+      targetPlanRequestIdRef.current += 1
+    }
   }, [refreshTargetPlans])
 
   const days = getDiasInfo(activeReferenceDate, projectionMode)

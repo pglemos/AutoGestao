@@ -650,11 +650,12 @@ export function AgendaD1Panel({
                                       className="fixed inset-0 z-40 cursor-default"
                                       onClick={() => setConfirmMenuRowId(null)}
                                     />
-                                    <div className="absolute right-0 top-full z-50 mt-1 min-w-[208px] rounded-mx-xl border border-border bg-white py-1 shadow-lg">
+                                    <div className="absolute right-0 top-full z-50 mt-1 min-w-[208px] rounded-mx-xl border border-border bg-white py-1 shadow-lg" role="menu" aria-label="Resultado da confirmação">
                                       {CONFIRMATION_OUTCOMES.map((outcome) => (
                                         <button
                                           key={outcome}
                                           type="button"
+                                          role="menuitem"
                                           className="block w-full px-3 py-2 text-left text-sm text-foreground hover:bg-status-success-surface hover:text-status-success-text"
                                           onClick={() => {
                                             setConfirmMenuRowId(null);

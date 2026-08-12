@@ -70,6 +70,10 @@
 --color-mxsb-line: hsl(var(--mx-gray-200));
 --color-mxsb-muted: hsl(var(--mx-sidebar-muted));
 --color-mxsb-active: hsl(var(--mx-green-600));
+/* Texto ativo da sidebar: green-700 garante 5.31:1 sobre a superfície ativa
+   (green-600/10), acima do mínimo 4.5:1 do WCAG 2.2 AA para texto normal.
+   O green-600 continua sendo a cor de preenchimento (bg-mxsb-active). */
+--color-mxsb-active-ink: hsl(var(--mx-green-700));
 --color-mxsb-active-surface: hsl(var(--mx-green-600) / 0.1);
 --color-mxsb-base: hsl(var(--mx-neutral-950));
 

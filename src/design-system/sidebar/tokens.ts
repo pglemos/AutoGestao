@@ -72,14 +72,14 @@ export const SIDEBAR = {
   navCollapsed: 'px-2',
   section: 'mb-5',
   sectionLabel:
-    'truncate px-3 pb-1.5 text-caption font-semibold uppercase tracking-wider text-mxsb-muted/70',
+    'truncate px-3 pb-1.5 text-caption font-semibold uppercase tracking-wider text-mxsb-muted',
   sectionItems: 'space-y-0.5',
 
   /** Item de navegação. */
   item: 'group relative flex w-full items-center gap-2.5 rounded-[var(--mx-sidebar-item-radius)] py-2 text-sm font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-status-success/30',
   itemExpanded: 'px-3',
   itemCollapsed: 'justify-center px-0',
-  itemActive: 'bg-mxsb-active-surface font-semibold text-mxsb-active',
+  itemActive: 'bg-mxsb-active-surface font-semibold text-mxsb-active-ink',
   itemIdle: 'text-mxsb-ink hover:bg-mxsb-hover hover:text-mxsb-ink-strong',
   itemIcon: 'h-4 w-4 shrink-0 text-mxsb-muted/80',
   itemLabel: 'min-w-0 flex-1 truncate',
@@ -91,7 +91,7 @@ export const SIDEBAR = {
   subnav: 'ml-3 mt-0.5 space-y-0.5 border-l border-mxsb-line pl-3',
   nestedItem:
     'flex w-full items-center gap-1.5 rounded-[var(--mx-sidebar-subitem-radius)] px-2.5 py-1 text-body-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-status-success/30',
-  nestedItemActive: 'bg-mxsb-active-surface font-medium text-mxsb-active',
+  nestedItemActive: 'bg-mxsb-active-surface font-medium text-mxsb-active-ink',
   nestedItemIdle: 'text-mxsb-muted hover:bg-mxsb-hover hover:text-mxsb-ink-strong',
 
   /** Badges. */
