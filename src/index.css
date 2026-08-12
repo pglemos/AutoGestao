@@ -218,6 +218,7 @@ to { height: 0; }
 
   /* Semantic status — aliases canônicos para bg/text/border/ring (T4.9). */
   --color-text-disabled: hsl(var(--mx-color-text-disabled));
+  --color-text-on-dark-muted: hsl(var(--mx-color-text-on-dark-muted));
   --color-danger: hsl(var(--mx-color-danger));
   --color-danger-subtle: hsl(var(--mx-color-danger-subtle));
   --color-success: hsl(var(--mx-color-success));

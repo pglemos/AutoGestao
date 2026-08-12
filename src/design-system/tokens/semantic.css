@@ -39,6 +39,10 @@
   --mx-color-text-primary: var(--mx-neutral-950);
   --mx-color-text-secondary: var(--mx-neutral-500);
   --mx-color-text-disabled: var(--mx-neutral-500);
+  /* Texto secundário SOBRE SUPERFÍCIE ESCURA (terminal de logs, cards dark).
+     O degrau claro-para-escuro não serve aqui: `text-disabled` sobre a
+     superfície escura dá 3.09:1 e reprova AA. `neutral-400` entrega 7.05:1. */
+  --mx-color-text-on-dark-muted: var(--mx-neutral-400);
 
   --mx-color-border: var(--mx-neutral-200);
   --mx-color-border-strong: var(--mx-neutral-300);

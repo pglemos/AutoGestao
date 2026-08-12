@@ -390,8 +390,8 @@ export default function Reprocessamento() {
               description="Acompanhamento técnico do lote atual."
               actions={<TerminalIcon size={18} className="text-muted-foreground" aria-hidden="true" />}
             />
-            <div className="max-h-72 min-h-48 overflow-y-auto bg-gray-900 p-4 font-mono text-xs leading-5 text-text-disabled" role="log" aria-live="polite">
-              {logs.length === 0 ? <p className="text-muted-foreground">Nenhum processamento iniciado nesta sessão.</p> : null}
+            <div className="max-h-72 min-h-48 overflow-y-auto bg-gray-900 p-4 font-mono text-xs leading-5 text-text-on-dark-muted" role="log" aria-live="polite">
+              {logs.length === 0 ? <p className="text-text-on-dark-muted">Nenhum processamento iniciado nesta sessão.</p> : null}
               {logs.map((log, index) => (
                 <p
                   key={`${log.msg}-${index}`}

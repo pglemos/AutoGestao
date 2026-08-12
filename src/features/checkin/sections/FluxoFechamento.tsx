@@ -23,22 +23,22 @@ const STEPS: Array<{ id: StepId; label: string; pct: number; icon: typeof Store;
 const COLOR_MAP = {
   orange: {
     bg: 'bg-status-warning-surface', border: 'border-status-warning/30', iconBg: 'bg-status-warning', iconShadow: 'shadow-orange-200',
-    title: 'text-status-warning-text', sub: 'text-status-warning-text', btn: 'bg-status-warning hover:bg-status-warning',
+    title: 'text-status-warning-text', sub: 'text-status-warning-text', btn: 'bg-status-warning hover:bg-status-warning', btnText: 'text-status-warning-foreground',
     stepActive: 'bg-status-warning text-status-warning-foreground', stepDone: 'bg-status-warning text-status-warning-foreground', divider: 'border-status-warning/20', note: 'text-status-warning-text', progress: 'bg-status-warning',
   },
   green: {
     bg: 'bg-green-50', border: 'border-green-200', iconBg: 'bg-green-500', iconShadow: 'shadow-green-200',
-    title: 'text-green-700', sub: 'text-green-400', btn: 'bg-green-600 hover:bg-green-700',
+    title: 'text-green-700', sub: 'text-green-400', btn: 'bg-green-600 hover:bg-green-700', btnText: 'text-white',
     stepActive: 'bg-green-600 text-white', stepDone: 'bg-green-600 text-white', divider: 'border-green-100', note: 'text-green-500', progress: 'bg-green-500',
   },
   blue: {
     bg: 'bg-status-info-surface', border: 'border-status-info/30', iconBg: 'bg-status-info', iconShadow: 'shadow-blue-200',
-    title: 'text-status-info-text', sub: 'text-blue-400', btn: 'bg-status-info hover:bg-status-info',
+    title: 'text-status-info-text', sub: 'text-blue-400', btn: 'bg-status-info hover:bg-status-info', btnText: 'text-white',
     stepActive: 'bg-status-info text-white', stepDone: 'bg-status-info text-white', divider: 'border-status-info/20', note: 'text-status-info', progress: 'bg-status-info',
   },
   purple: {
     bg: 'bg-status-info-surface', border: 'border-status-info/30', iconBg: 'bg-status-info', iconShadow: 'shadow-[var(--mx-shadow-sm)]',
-    title: 'text-status-info-text', sub: 'text-status-info-text', btn: 'bg-status-info hover:bg-status-info',
+    title: 'text-status-info-text', sub: 'text-status-info-text', btn: 'bg-status-info hover:bg-status-info', btnText: 'text-white',
     stepActive: 'bg-status-info text-white', stepDone: 'bg-status-info text-white', divider: 'border-status-info/20', note: 'text-status-info-text', progress: 'bg-status-info',
   },
 } as const
@@ -332,7 +332,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
             />
           </div>
           {!disabled && (
-            <button type="button" onClick={() => handleConfirm('showroom')} className={`w-full rounded-xl py-3.5 text-[14px] font-bold text-white shadow-sm transition-colors active:scale-95 ${co.btn}`}>
+            <button type="button" onClick={() => handleConfirm('showroom')} className={`w-full rounded-xl py-3.5 text-[14px] font-bold shadow-sm transition-colors active:scale-95 ${co.btn} ${co.btnText}`}>
               Confirmar Showroom ✓
             </button>
           )}
@@ -369,7 +369,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
             )}
           </div>
           {!disabled && (
-            <button type="button" onClick={() => handleConfirm('carteira')} className={`w-full rounded-xl py-3.5 text-[14px] font-bold text-white shadow-sm transition-colors active:scale-95 ${cg.btn}`}>
+            <button type="button" onClick={() => handleConfirm('carteira')} className={`w-full rounded-xl py-3.5 text-[14px] font-bold shadow-sm transition-colors active:scale-95 ${cg.btn} ${cg.btnText}`}>
               Confirmar Carteira ✓
             </button>
           )}
@@ -405,7 +405,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
             )}
           </div>
           {!disabled && (
-            <button type="button" onClick={() => handleConfirm('internet')} className={`w-full rounded-xl py-3.5 text-[14px] font-bold text-white shadow-sm transition-colors active:scale-95 ${cb.btn}`}>
+            <button type="button" onClick={() => handleConfirm('internet')} className={`w-full rounded-xl py-3.5 text-[14px] font-bold shadow-sm transition-colors active:scale-95 ${cb.btn} ${cb.btnText}`}>
               Confirmar Internet ✓
             </button>
           )}
