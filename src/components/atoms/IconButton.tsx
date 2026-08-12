@@ -26,7 +26,7 @@ const iconButtonVariants = cva(
       size: {
         // Alvos de toque: `sm` só é aceitável em barras densas de desktop.
         sm: 'h-8 w-8 [&_svg]:h-4 [&_svg]:w-4',
-        md: 'h-10 w-10 [&_svg]:h-[16px] [&_svg]:w-[16px]',
+        md: 'h-10 w-10 [&_svg]:h-4 [&_svg]:w-4',
         lg: 'h-12 w-12 [&_svg]:h-6 [&_svg]:w-6',
       },
     },

@@ -84,7 +84,7 @@ export default function ExecutiveCardsStrip({ actions, activeCard, onCardClick }
             <div className="flex items-start justify-between gap-2 pl-1.5">
               <div className="min-w-0 flex-1">
                 <div className={`mb-2 inline-flex h-9 w-9 items-center justify-center rounded-lg ${card.iconBg}`} aria-hidden="true">
-                  <Icon className="h-[16px] w-[16px]" />
+                  <Icon className="h-4 w-4" />
                 </div>
                 <p className="text-3xl font-bold leading-none text-foreground">{value}</p>
                 <p className="mt-1.5 text-sm font-semibold text-foreground">{card.title}</p>

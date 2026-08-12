@@ -123,6 +123,8 @@ describe('CheckinHeader — regularização (P0-02/P0-06)', () => {
     test('usa o token de texto de sucesso sobre superfícies claras', () => {
         expect(headerSource).toContain('text-status-success-text')
         expect(headerSource).not.toContain('text-[#00A89D]')
+        expect(headerSource).toContain('bg-status-warning text-foreground')
+        expect(headerSource).toContain('bg-brand-primary text-white')
     })
 
     test('não reutiliza observação operacional como motivo de regularização', () => {

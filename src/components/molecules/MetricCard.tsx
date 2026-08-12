@@ -62,7 +62,7 @@ const MetricCard = React.forwardRef<HTMLDivElement, MetricCardProps>(
           {icon ? (
             <span
               aria-hidden
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[var(--mx-radius-md)] bg-brand-primary-subtle text-primary [&_svg]:h-[16px] [&_svg]:w-[16px]"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[var(--mx-radius-md)] bg-brand-primary-subtle text-primary [&_svg]:h-4 [&_svg]:w-4"
             >
               {icon}
             </span>

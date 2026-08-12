@@ -437,9 +437,9 @@ export default function MxSidebarShell({
             className={SIDEBAR.toggle}
           >
             {isCollapsed ? (
-              <PanelLeftOpen className="h-[16px] w-[16px]" aria-hidden="true" />
+              <PanelLeftOpen className="h-4 w-4" aria-hidden="true" />
             ) : (
-              <PanelLeftClose className="h-[16px] w-[16px]" aria-hidden="true" />
+              <PanelLeftClose className="h-4 w-4" aria-hidden="true" />
             )}
           </button>
         ) : null}

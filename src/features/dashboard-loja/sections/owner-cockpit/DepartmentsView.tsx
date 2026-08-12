@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import { toneClasses, type DepartmentScore } from './types'
 import { formatPlanningValue } from './format'
 import { SectionTitle, SideList } from './primitives'
+import { ScrollableRegion } from '@/design-system/page/ScrollableRegion'
 import { OwnerDepartmentScoreGrid } from './OwnerHomeWidgets'
 
 export function DepartmentsView({
@@ -54,7 +55,7 @@ export function DepartmentsView({
                 </div>
               ))}
             </div>
-            <div className="mt-mx-lg overflow-x-auto">
+            <ScrollableRegion className="mt-mx-lg" label={`Indicadores de ${selectedDepartment.name}`}>
               <table className="min-w-[760px] w-full text-sm">
                 <thead className="bg-gray-50 text-left text-mx-tiny font-bold uppercase text-muted-foreground">
                   <tr>
@@ -77,7 +78,7 @@ export function DepartmentsView({
                   ))}
                 </tbody>
               </table>
-            </div>
+            </ScrollableRegion>
           </Card>
           <div className="space-y-mx-md">
             <SideList title="Checklist do Departamento" items={selectedDepartment.checklist} />

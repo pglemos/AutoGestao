@@ -574,8 +574,8 @@ previousCard.type === 'previous_done' ? 'text-status-success-text' : 'text-statu
 <button type="button" onClick={handleViewPreviousHistory} className="inline-flex h-8 items-center justify-center rounded-lg border border-border bg-white px-3 text-caption font-bold text-muted-foreground shadow-sm hover:border-[#005BFF] hover:text-[#005BFF]">
 Ver histórico
 </button>
-<button type="button" onClick={handleAdjustPrevious} className={`inline-flex h-8 items-center justify-center rounded-lg px-3 text-caption font-bold text-white shadow-sm ${
-previousCard.type === 'previous_done' ? 'bg-[#00A89D]' : 'bg-status-warning'
+<button type="button" onClick={handleAdjustPrevious} className={`inline-flex h-8 items-center justify-center rounded-lg px-3 text-caption font-bold shadow-sm ${
+previousCard.type === 'previous_done' ? 'bg-brand-primary text-white hover:bg-brand-primary-hover' : 'bg-status-warning text-foreground hover:bg-status-warning'
 }`}>
 {previousCard.type === 'previous_done' ? 'Ajustar fechamento' : `Regularizar ${previousCard.date.slice(8, 10)}/${previousCard.date.slice(5, 7)}`}
 </button>
