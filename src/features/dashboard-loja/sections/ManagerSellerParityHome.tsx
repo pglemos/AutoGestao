@@ -46,6 +46,7 @@ import {
 import type { DailyCheckin, Store } from '@/types/database'
 import type { useDashboardLojaData } from '../hooks/useDashboardLojaData'
 import type { OwnerPerformanceAlert } from './PerformanceAlerts'
+import { ScrollableRegion } from '@/design-system/page/ScrollableRegion'
 
 type DashboardData = ReturnType<typeof useDashboardLojaData>
 
@@ -477,12 +478,12 @@ function TeamFocus({ team, showAll, onSellerClick, onViewAll }: {
         <h2 className="text-sm font-bold text-foreground">Equipe em foco</h2>
         {showAll ? <button type="button" onClick={onViewAll} className="flex items-center gap-0.5 text-xs font-medium text-status-success-text hover:text-status-success-text">Ver toda a equipe <span aria-hidden>›</span></button> : null}
       </div>
-      <div className="hidden overflow-x-auto md:block">
+      <ScrollableRegion label="Tabela da equipe em foco" className="hidden md:block">
         <table className="w-full text-sm">
           <thead><tr className="border-b border-border-subtle text-xs uppercase tracking-wide text-muted-foreground">{['Vendedor', 'Agend. Hoje', 'Projeção', 'Realizado mês', 'Próx. faixa', 'Faltam carros', 'Status'].map((label, index) => <th key={label} className={`${index === 0 ? 'text-left' : 'text-center'} pb-2 font-medium`}>{label}</th>)}</tr></thead>
           <tbody>{team.map(seller => <TeamFocusRow key={seller.sellerId} seller={seller} onClick={() => onSellerClick(seller)} />)}</tbody>
         </table>
-      </div>
+      </ScrollableRegion>
       <div className="space-y-3 md:hidden">
         {team.map(seller => (
           <button key={seller.sellerId} type="button" onClick={() => onSellerClick(seller)} className="w-full rounded-xl border border-border-subtle p-3 text-left hover:bg-gray-50">

@@ -6,6 +6,7 @@ import { Typography } from '@/components/atoms/Typography'
 import { Card } from '@/components/molecules/Card'
 import { Skeleton } from '@/components/atoms/Skeleton'
 import { MotionList, MotionRow, duration, rowVariants } from '@/design/motion'
+import { ScrollableRegion } from '@/design-system/page/ScrollableRegion'
 
 export interface Column<T> {
   key: string
@@ -27,6 +28,11 @@ export interface DataGridProps<T> {
   onRowClick?: (item: T) => void
   minWidth?: string
   stickyHeader?: boolean
+  /**
+   * Nome acessível da tabela. Como a região é rolável e focável, ela precisa
+   * de nome — sem ele vira uma parada de tab anônima (WCAG 2.4.6).
+   */
+  label?: string
 }
 
 function getCellValue<T>(item: T, key: string): ReactNode {
@@ -44,6 +50,7 @@ function DataGridInner<T extends { id: string | number }>({
   onRowClick,
   minWidth = 'min-w-mx-table',
   stickyHeader = true,
+  label = 'Tabela de dados',
 }: DataGridProps<T>) {
   const effectiveMinWidth = minWidth === 'min-w-mx-table' ? 'min-w-[760px]' : minWidth
 
@@ -87,7 +94,7 @@ function DataGridInner<T extends { id: string | number }>({
 
   return (
     <div className="w-full">
-      <div className="hidden overflow-x-auto md:block">
+      <ScrollableRegion label={label} className="hidden md:block">
         <Typography variant="tiny" tone="muted" className="sr-only">
           Se houver colunas fora da área visível, role a tabela horizontalmente.
         </Typography>
@@ -141,7 +148,7 @@ function DataGridInner<T extends { id: string | number }>({
             </AnimatePresence>
           </MotionList>
         </table>
-      </div>
+      </ScrollableRegion>
 
       <MotionList className={'space-y-4 pb-24 md:hidden'}>
         <AnimatePresence mode="popLayout">
