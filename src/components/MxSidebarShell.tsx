@@ -240,8 +240,12 @@ export default function MxSidebarShell({
       setMobileOpen(false)
     }
 
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
+    // Capture, não bubble: com o drawer aberto o keydown de Escape chega ao
+    // document na fase de captura mas nunca na de bolha — algum handler no
+    // caminho interrompe a propagação, e o drawer ficava sem fechar por
+    // teclado (medido com contador nas duas fases, FASE H 08.013).
+    document.addEventListener('keydown', handleKeyDown, true)
+    return () => document.removeEventListener('keydown', handleKeyDown, true)
   }, [mobileOpen])
 
   const goTo = (path: string) => {

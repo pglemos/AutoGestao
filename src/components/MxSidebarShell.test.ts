@@ -102,6 +102,15 @@ describe('sidebar universal MX', () => {
     expect(shellSource).toContain('onStopSimulation')
   })
 
+  test('fecha o drawer por Escape mesmo quando algo interrompe a propagação', () => {
+    // O keydown de Escape chega ao document na fase de captura mas não na de
+    // bolha com o drawer aberto (medido com contador nas duas fases). Um
+    // listener de bolha deixa o drawer sem fechamento por teclado — WCAG 2.1.2.
+    expect(shellSource).toContain("document.addEventListener('keydown', handleKeyDown, true)")
+    expect(shellSource).toContain("document.removeEventListener('keydown', handleKeyDown, true)")
+    expect(shellSource).not.toMatch(/addEventListener\('keydown', handleKeyDown\)/)
+  })
+
   test('mantém o cabeçalho móvel em três colunas sem sobrepor a marca e o título', () => {
     expect(shellSource).toContain('grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]')
     expect(shellSource).toContain('min-[500px]:block')
