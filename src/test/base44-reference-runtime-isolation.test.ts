@@ -13,10 +13,6 @@ import { execFileSync } from 'node:child_process'
  */
 const ALLOWLIST = new Map([
   [
-    'src/pages/VendedorDesenvolvimento.tsx',
-    'Rotas /desenvolvimento e /devolutivas (vendedor) ainda montam o protótipo. Port para implementação própria pendente.',
-  ],
-  [
     'src/features/carteira-clientes/pages/CarteiraClientesBase44Page.tsx',
     '/carteira-clientes ainda monta o protótipo. Port pendente.',
   ],
