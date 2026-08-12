@@ -264,7 +264,7 @@ function KpiCard({
   const colorClass = color === 'green'
     ? 'text-status-success-text'
     : color === 'amber'
-    ? 'text-amber-600'
+    ? 'text-status-warning-text'
     : color === 'red'
     ? 'text-status-error-text'
     : highlight

@@ -307,7 +307,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
 
       {/* Explicações / Mentor Guidance */}
       {explanationsList.length > 0 && (
-        <div className="text-xs bg-status-info-surface/50 border border-status-info/20 rounded-lg p-2.5 text-blue-950">
+        <div className="text-xs bg-status-info-surface/50 border border-status-info/20 rounded-lg p-2.5 text-status-info-text">
           <strong className="font-semibold text-status-info-text">Orientação do Mentor:</strong>
           <ul className="list-disc list-inside mt-0.5 space-y-0.5">
             {explanationsList.map((exp, idx) => (
@@ -324,7 +324,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
         <button
           type="button"
           onClick={() => onExecutar?.(oportunidade)}
-          className="bg-status-info hover:bg-status-info active:bg-blue-950 text-white font-semibold text-xs px-4 py-2 rounded-lg transition-colors flex items-center gap-1.5 shadow-sm"
+          className="bg-status-info hover:bg-status-info active:bg-status-info text-white font-semibold text-xs px-4 py-2 rounded-lg transition-colors flex items-center gap-1.5 shadow-sm"
         >
           <Play className="w-3.5 h-3.5 fill-current" />
           Executar

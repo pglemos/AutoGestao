@@ -132,14 +132,14 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
           <div className="flex items-start justify-between gap-4">
             <div>
               <div className="flex items-center gap-2 mb-1 flex-wrap">
-                <Badge variant="outline" className="border-status-info/50 text-blue-300 bg-blue-950/60 text-xs font-semibold">
+                <Badge variant="outline" className="border-status-info/50 text-blue-300 bg-status-info/60 text-xs font-semibold">
                   {opportunity.statusCode}
                 </Badge>
                 <Badge variant="outline" className="border-slate-600 text-text-disabled bg-slate-800 text-xs">
                   {priorityClass ? `Prioridade ${priorityClass}` : 'Prioridade não calculada'}
                 </Badge>
                 {isInternal && (
-                  <Badge variant="secondary" className="bg-status-warning/80 text-amber-200 border border-amber-700 text-xs">
+                  <Badge variant="secondary" className="bg-status-warning/80 text-amber-200 border border-status-warning text-xs">
                     Ação Interna
                   </Badge>
                 )}
@@ -282,14 +282,14 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
 
             {isSourceBlocker ? (
               <div className="bg-status-warning-surface border border-status-warning/30 rounded-lg p-3 text-status-warning-text text-sm space-y-1">
-                <p className="font-bold text-amber-950">Script ainda não cadastrado na matriz</p>
+                <p className="font-bold text-status-warning-text">Script ainda não cadastrado na matriz</p>
                 <p className="text-xs text-status-warning-text">
                   O envio via WhatsApp fica desabilitado até a atualização da matriz. O restador do Mentor permanece totalmente operacional.
                 </p>
               </div>
             ) : isInternal ? (
               <div className="bg-status-info-surface border border-status-info/30 rounded-lg p-3 text-status-info-text text-sm space-y-1">
-                <p className="font-bold text-blue-950">Ação Interna (SCR-INTERNO)</p>
+                <p className="font-bold text-status-info-text">Ação Interna (SCR-INTERNO)</p>
                 <p className="text-xs text-status-info-text">
                   Esta atividade deve ser executada internamente no sistema. Não há script de envio de mensagem para o cliente.
                 </p>

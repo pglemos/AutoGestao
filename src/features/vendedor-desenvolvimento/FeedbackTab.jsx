@@ -85,7 +85,7 @@ export default function FeedbackPage({ hideHeader = false }) {
                     className="rounded-xl resize-none"
                     rows={2}
                   />
-                  <Button onClick={() => acknowledge(f.id)} className="bg-mx-blue hover:bg-blue-600 rounded-xl gap-2">
+                  <Button onClick={() => acknowledge(f.id)} className="bg-mx-blue hover:bg-status-info rounded-xl gap-2">
                     <CheckCircle2 className="w-4 h-4" />
                     Li e compreendi
                   </Button>

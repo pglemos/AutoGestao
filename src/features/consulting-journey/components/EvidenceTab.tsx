@@ -79,7 +79,7 @@ export function EvidenceTab({ visit, controller }: { visit: ConsultingJourneyVis
               ) : null}
               {returningEvidenceId === evidence.id ? (
                 <div className="mt-3 rounded-lg border border-status-warning/30 bg-status-warning-surface p-3">
-                  <label className="text-xs font-semibold text-amber-950" htmlFor={`feedback-${evidence.id}`}>Devolutiva obrigatória</label>
+                  <label className="text-xs font-semibold text-status-warning-text" htmlFor={`feedback-${evidence.id}`}>Devolutiva obrigatória</label>
                   <textarea id={`feedback-${evidence.id}`} value={returnFeedback} onChange={(event) => setReturnFeedback(event.target.value)} rows={3} className="mt-2 w-full rounded-md border border-status-warning/40 bg-white px-3 py-2 text-sm" placeholder="Explique o que deve ser corrigido ou reenviado." />
                   <div className="mt-2 flex justify-end gap-2">
                     <button type="button" onClick={() => { setReturningEvidenceId(null); setReturnFeedback('') }} className="rounded-md border border-border bg-background px-3 py-1.5 text-xs">Cancelar</button>

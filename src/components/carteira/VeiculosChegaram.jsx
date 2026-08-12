@@ -245,7 +245,7 @@ function AtaqueVeiculo({ veiculo, clientes, catalog, onVoltar, onExecutar, onFic
         <ArrowLeft className="w-4 h-4" /> Voltar aos veículos
       </button>
 
-      <div className="bg-gradient-to-r from-[#005BFF] to-blue-600 rounded-2xl p-5 text-white">
+      <div className="bg-gradient-to-r from-[#005BFF] to-status-info rounded-2xl p-5 text-white">
         <p className="text-caption font-bold text-blue-300 uppercase tracking-wider">Veículo que chegou</p>
         <p className="text-xl font-black mt-1">{veiculo.marca} {veiculo.modelo} {veiculo.versao}</p>
         <p className="text-sm text-blue-200">{veiculo.ano}{veiculo.preco ? ` · R$ ${veiculo.preco.toLocaleString("pt-BR")}` : ""}</p>

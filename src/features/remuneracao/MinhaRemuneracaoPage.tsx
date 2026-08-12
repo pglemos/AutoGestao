@@ -32,7 +32,7 @@ export default function MinhaRemuneracaoPage() {
   if (data.isLoading) {
     return (
       <div className="h-full w-full flex flex-col items-center justify-center gap-4" style={{ background: '#FFFFFF' }}>
-        <div className="w-10 h-10 border-4 border-emerald-900 border-t-emerald-400 rounded-full animate-spin" />
+        <div className="w-10 h-10 border-4 border-status-success border-t-emerald-400 rounded-full animate-spin" />
         <p className="text-muted-foreground font-medium">Calculando sua comissão do mês...</p>
       </div>
     )

@@ -32,7 +32,7 @@ key={t.key}
 onClick={() => setTab(t.key)}
 className={`rounded-lg px-5 py-2 text-sm font-semibold transition-colors ${
 tab === t.key
-? "bg-white text-blue-700 shadow-sm"
+? "bg-white text-status-info-text shadow-sm"
 : "text-muted-foreground hover:text-foreground"
 }`}
 >

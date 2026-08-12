@@ -39,7 +39,7 @@ export function OwnerManagementNotice({ storeId, managerEmail }: OwnerManagement
   }
 
   return (
-    <section role="status" className="flex items-start gap-mx-sm rounded-2xl border border-status-warning/30 bg-status-warning-surface p-mx-md text-amber-950">
+    <section role="status" className="flex items-start gap-mx-sm rounded-2xl border border-status-warning/30 bg-status-warning-surface p-mx-md text-status-warning-text">
       <BriefcaseBusiness size={20} className="mt-0.5 shrink-0" aria-hidden="true" />
       <div>
         <p className="text-sm font-bold">Você responde pela gestão comercial desta loja</p>

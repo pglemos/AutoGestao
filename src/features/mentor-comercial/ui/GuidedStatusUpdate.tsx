@@ -315,7 +315,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
                     }}
                     className={`cursor-pointer rounded-lg border p-3 transition-all ${
                       isSelected
-                        ? 'border-status-info bg-status-info-surface/60 ring-1 ring-blue-600 shadow-sm'
+                        ? 'border-status-info bg-status-info-surface/60 ring-1 ring-status-info shadow-sm'
                         : 'border-border bg-white hover:border-border-strong hover:bg-slate-50'
                     }`}
                   >

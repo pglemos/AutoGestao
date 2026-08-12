@@ -235,7 +235,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
           <ArrowLeft className="h-4 w-4" /> Voltar aos veículos
         </button>
 
-        <div className="bg-gradient-to-r from-[#005BFF] to-blue-600 rounded-2xl p-5 text-white">
+        <div className="bg-gradient-to-r from-[#005BFF] to-status-info rounded-2xl p-5 text-white">
           <p className="text-xs font-bold uppercase tracking-wide text-blue-200">Veículo que chegou</p>
           <p className="text-xl font-bold mt-1">{veiculoAtaque.marca} {veiculoAtaque.modelo} {veiculoAtaque.versao}</p>
           <p className="text-sm text-blue-100 mt-1">
@@ -518,7 +518,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
         )}
       </div>
 
-      <div className="bg-gradient-to-r from-[#005BFF] to-blue-600 rounded-2xl p-5 text-white">
+      <div className="bg-gradient-to-r from-[#005BFF] to-status-info rounded-2xl p-5 text-white">
         <p className="text-base font-bold leading-snug">
           Olá, {vendedorNome}! Hoje existem <span className="text-blue-200 font-bold">{totalOportunidades} oportunidades</span> na sua carteira.
         </p>

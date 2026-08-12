@@ -924,12 +924,12 @@ function DisciplineCard({ value }: { value: number | null }) {
   const palette = value === null
     ? { surface: "bg-gray-50", badge: "bg-gray-100 text-muted-foreground", glow: "from-gray-300 to-gray-400", ring: "rgb(148 163 184)", track: "rgb(241 245 249)", inner: "bg-gray-50", text: "text-muted-foreground" }
     : label === "Excelente"
-      ? { surface: "bg-status-success-surface", badge: "bg-brand-primary text-white", glow: "from-emerald-400 to-emerald-500", ring: "rgb(16 185 129)", track: "rgb(209 250 229)", inner: "bg-status-success-surface", text: "text-status-success-text" }
+      ? { surface: "bg-status-success-surface", badge: "bg-brand-primary text-white", glow: "from-emerald-400 to-status-success", ring: "rgb(16 185 129)", track: "rgb(209 250 229)", inner: "bg-status-success-surface", text: "text-status-success-text" }
       : label === "Boa"
-        ? { surface: "bg-status-info-surface", badge: "bg-status-info-surface text-status-info-text", glow: "from-blue-400 to-blue-500", ring: "rgb(59 130 246)", track: "rgb(219 234 254)", inner: "bg-status-info-surface", text: "text-status-info-text" }
+        ? { surface: "bg-status-info-surface", badge: "bg-status-info-surface text-status-info-text", glow: "from-blue-400 to-status-info", ring: "rgb(59 130 246)", track: "rgb(219 234 254)", inner: "bg-status-info-surface", text: "text-status-info-text" }
         : label === "Baixa"
           ? { surface: "bg-status-warning-surface", badge: "bg-status-warning-surface text-status-warning-text", glow: "from-amber-400 to-status-warning", ring: "rgb(245 158 11)", track: "rgb(254 243 199)", inner: "bg-status-warning-surface", text: "text-status-warning-text" }
-          : { surface: "bg-status-error-surface", badge: "bg-status-error-surface text-status-error-text", glow: "from-red-400 to-red-500", ring: "rgb(239 68 68)", track: "rgb(254 226 226)", inner: "bg-status-error-surface", text: "text-status-error-text" };
+          : { surface: "bg-status-error-surface", badge: "bg-status-error-surface text-status-error-text", glow: "from-red-400 to-status-error", ring: "rgb(239 68 68)", track: "rgb(254 226 226)", inner: "bg-status-error-surface", text: "text-status-error-text" };
   return (
     <div className={`flex h-full min-h-[164px] flex-col rounded-mx-2xl border border-border-subtle p-3 shadow-sm ${palette.surface}`}>
       <div className="mb-1 flex flex-wrap items-center justify-between gap-x-1 gap-y-0.5">

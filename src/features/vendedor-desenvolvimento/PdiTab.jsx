@@ -249,7 +249,7 @@ export default function PDIPage({ hideHeader = false }) {
           <h3 className="text-base font-semibold text-mx-navy">Plano de Ação</h3>
           {canEdit && <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
-              <Button size="sm" className="bg-mx-blue hover:bg-blue-600 rounded-xl gap-1"><Plus className="w-4 h-4" />Nova Ação</Button>
+              <Button size="sm" className="bg-mx-blue hover:bg-status-info rounded-xl gap-1"><Plus className="w-4 h-4" />Nova Ação</Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader><DialogTitle>Nova Ação</DialogTitle></DialogHeader>
@@ -258,7 +258,7 @@ export default function PDIPage({ hideHeader = false }) {
                 <div><Label>Competência</Label><Input value={newAction.competency} onChange={e => setNewAction({ ...newAction, competency: e.target.value })} /></div>
                 <div><Label>Descrição</Label><Textarea value={newAction.description} onChange={e => setNewAction({ ...newAction, description: e.target.value })} className="resize-none" rows={2} /></div>
                 <div><Label>Prazo</Label><Input type="date" value={newAction.deadline} onChange={e => setNewAction({ ...newAction, deadline: e.target.value })} /></div>
-                <Button onClick={createAction} disabled={!newAction.action || !newAction.competency || !newAction.deadline} className="bg-mx-blue hover:bg-blue-600 rounded-xl">Criar Ação</Button>
+                <Button onClick={createAction} disabled={!newAction.action || !newAction.competency || !newAction.deadline} className="bg-mx-blue hover:bg-status-info rounded-xl">Criar Ação</Button>
               </div>
             </DialogContent>
           </Dialog>}

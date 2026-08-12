@@ -602,7 +602,7 @@ export default function MxSidebarShell({
       >
         {isSimulating ? (
           <section
-            className="m-3 flex shrink-0 flex-col gap-3 rounded-[var(--mx-radius-2xl)] border border-status-success/20 bg-status-success-surface p-4 text-emerald-950 md:flex-row md:items-center md:justify-between"
+            className="m-3 flex shrink-0 flex-col gap-3 rounded-[var(--mx-radius-2xl)] border border-status-success/20 bg-status-success-surface p-4 text-status-success-text md:flex-row md:items-center md:justify-between"
             aria-label="Simulação ativa"
           >
             <div className="min-w-0">
