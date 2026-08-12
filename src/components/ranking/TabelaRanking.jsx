@@ -1,5 +1,6 @@
 import React from "react";
 import { Trophy } from "lucide-react";
+import { ScrollableRegion } from '@/design-system/page/ScrollableRegion';
 
 const MEDAL = [
   { color: "#F59E0B", bg: "#FEF3C7" },
@@ -37,7 +38,7 @@ function formatBRL(v) {
 export default function TabelaRanking({ vendedores, meta, isVolume, meuId }) {
   return (
     <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
-      <div className="overflow-x-auto">
+      <ScrollableRegion label="Tabela de ranking de vendedores">
         <table className="w-full min-w-[640px]">
           <thead>
             <tr className="bg-slate-50 border-b border-border-subtle">
@@ -108,7 +109,7 @@ export default function TabelaRanking({ vendedores, meta, isVolume, meuId }) {
             Nenhum dado encontrado para os filtros selecionados.
           </div>
         )}
-      </div>
+      </ScrollableRegion>
     </div>
   );
 }

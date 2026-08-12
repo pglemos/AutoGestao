@@ -100,8 +100,8 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
           showFilter={false}
           actions={(
             <>
-              <Button variant="outline" size="icon" onClick={() => signOut()} className="h-10 w-10 rounded-lg text-status-error border-status-error/20 hover:bg-status-error-surface">
-                <LogOut size={18} />
+              <Button variant="outline" size="icon" aria-label="Sair da conta" onClick={() => signOut()} className="h-10 w-10 rounded-lg text-status-error border-status-error/20 hover:bg-status-error-surface">
+                <LogOut size={18} aria-hidden="true" />
               </Button>
               <Button onClick={handleSave} disabled={saving}>
                 {saving ? <RefreshCw className="animate-spin mr-2" size={16} /> : <ShieldCheck size={16} className="mr-2" />}
@@ -123,8 +123,8 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
           </div>
 
           <div className="flex items-center gap-3 shrink-0">
-            <Button variant="outline" size="icon" onClick={() => signOut()} className="h-14 w-14 rounded-lg text-status-error border-status-error/20 hover:bg-status-error-surface shadow-sm bg-card">
-              <LogOut size={24} />
+            <Button variant="outline" size="icon" aria-label="Sair da conta" onClick={() => signOut()} className="h-14 w-14 rounded-lg text-status-error border-status-error/20 hover:bg-status-error-surface shadow-sm bg-card">
+              <LogOut size={24} aria-hidden="true" />
             </Button>
             <Button onClick={handleSave} disabled={saving} className="h-14 px-10 rounded-full shadow-xl">
               {saving ? <RefreshCw className="animate-spin mr-2" /> : <ShieldCheck size={18} className="mr-2" />}

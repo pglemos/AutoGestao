@@ -8,6 +8,7 @@ import { useOwnerConsultingProgram } from "@/features/dashboard-loja/hooks/useOw
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import OwnerPageHeading from "@/components/owner/OwnerPageHeading";
+import { PageCanvas } from '@/design-system/page/PageCanvas';
 
 function formatDate(value) {
   if (!value) return "A agendar";
@@ -57,27 +58,27 @@ export default function Consultoria() {
 
   if (loading) {
     return (
-      <div id="page-consultoria" aria-label="Consultoria" className="flex min-h-0 flex-1 flex-col space-y-6 pb-20 lg:pb-0" role="status" aria-busy="true">
+      <PageCanvas as="div" id="page-consultoria" aria-label="Consultoria" width="dashboard" bottomClearance="navigation" className="flex min-h-0 flex-1 flex-col space-y-6" role="status" aria-busy="true">
         <div className="h-8 w-56 animate-pulse rounded bg-muted" />
         <div className="h-64 animate-pulse rounded-xl bg-card" />
-      </div>
+      </PageCanvas>
     );
   }
 
   if (error) {
     return (
-      <div id="page-consultoria" aria-label="Consultoria" className="flex min-h-0 flex-1 flex-col space-y-6 pb-20 lg:pb-0">
+      <PageCanvas as="div" id="page-consultoria" aria-label="Consultoria" width="dashboard" bottomClearance="navigation" className="flex min-h-0 flex-1 flex-col space-y-6">
         <section className="rounded-xl border border-destructive/30 bg-card p-6" role="alert">
           <h1 className="text-lg font-semibold text-foreground">Não foi possível carregar a Consultoria</h1>
           <p className="mt-2 text-sm text-muted-foreground">{error}</p>
           <Button className="mt-4" onClick={() => void refresh()}>Tentar novamente</Button>
         </section>
-      </div>
+      </PageCanvas>
     );
   }
 
   return (
-    <div id="page-consultoria" aria-label="Consultoria" className="flex min-h-0 flex-1 flex-col space-y-6 pb-20 lg:pb-0">
+    <PageCanvas as="div" id="page-consultoria" aria-label="Consultoria" width="dashboard" bottomClearance="navigation" className="flex min-h-0 flex-1 flex-col space-y-6">
       <OwnerPageHeading
         icon={Users}
         title="Consultoria"
@@ -157,6 +158,6 @@ export default function Consultoria() {
           </div>
         </>
       )}
-    </div>
+    </PageCanvas>
   );
 }
