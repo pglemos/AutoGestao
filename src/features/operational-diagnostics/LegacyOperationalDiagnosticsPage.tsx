@@ -21,6 +21,7 @@ import { isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 import type { DailyCheckin } from '@/types/database'
 import { isLancamentosViaRpcEnabled } from '@/lib/feature-flags'
+import { PageCanvas } from '@/design-system/page/PageCanvas'
 
 interface AuditLog {
   type: 'info' | 'success' | 'warning' | 'error'
@@ -102,17 +103,17 @@ export default function AiDiagnostics() {
 
   if (!internalProfile && role !== 'gerente') {
     return (
-      <div className="h-full w-full flex flex-col items-center justify-center text-center p-mx-lg bg-gray-50">
+      <PageCanvas width="focused" className="flex flex-col items-center justify-center text-center">
         <ShieldCheck size={48} className="text-status-success-text opacity-20 mb-6" aria-hidden="true" />
         <Typography variant="h2" className="tracking-tighter">Acesso Restrito</Typography>
         <Typography variant="caption" tone="muted" className="max-w-sm mx-auto mt-4">Diagnóstico operacional disponível para Admin MX e Gerente.</Typography>
-      </div>
+      </PageCanvas>
     )
   }
 
   if (!internalProfile) {
     return (
-      <div className="w-full flex flex-col gap-mx-lg p-mx-lg bg-gray-50">
+      <PageCanvas width="dashboard" className="flex flex-col gap-mx-lg">
         <PageHeading
           title={<span>Diagnóstico <span className="text-status-success-text">Operacional</span></span>}
           subtitle="Leitura de funil MX 20/60/33"
@@ -169,7 +170,7 @@ export default function AiDiagnostics() {
             </Card>
           </aside>
         </div>
-      </div>
+      </PageCanvas>
     )
   }
 
