@@ -126,13 +126,13 @@ export default function ConsultorNotificacoes() {
                                                     <div className={cn("w-mx-xl h-mx-xl rounded-2xl flex items-center justify-center shadow-sm transition-all", form.target_type === 'all' ? "bg-emerald-600 text-white" : "bg-gray-50 text-gray-500 group-hover:bg-white")}>
                                                         <Globe size={22} />
                                                     </div>
-                                                    <Typography variant="caption" className={cn("font-bold tracking-widest", form.target_type === 'all' ? "text-emerald-600" : "text-gray-500")}>TODA A REDE</Typography>
+                                                    <Typography variant="caption" className={cn("font-bold", form.target_type === 'all' ? "text-emerald-600" : "text-gray-500")}>TODA A REDE</Typography>
                                                 </button>
                                                 <button type="button" onClick={() => setForm(p => ({ ...p, target_type: 'store' }))} className={cn("p-mx-lg rounded-2xl border-2 transition-all flex flex-col items-center justify-center gap-mx-sm text-center group", form.target_type === 'store' ? "bg-status-warning-surface border-status-warning shadow-sm" : "bg-white border-gray-200 hover:border-brand-primary/20")}>
                                                     <div className={cn("w-mx-xl h-mx-xl rounded-2xl flex items-center justify-center shadow-sm transition-all", form.target_type === 'store' ? "bg-status-warning text-white" : "bg-gray-50 text-gray-500 group-hover:bg-white")}>
                                                         <Building2 size={22} />
                                                     </div>
-                                                    <Typography variant="caption" className={cn("font-bold tracking-widest", form.target_type === 'store' ? "text-status-warning" : "text-gray-500")}>UNIDADE ALVO</Typography>
+                                                    <Typography variant="caption" className={cn("font-bold", form.target_type === 'store' ? "text-status-warning" : "text-gray-500")}>UNIDADE ALVO</Typography>
                                                 </button>
                                             </div>
                                         </div>
@@ -141,7 +141,7 @@ export default function ConsultorNotificacoes() {
                                             <Typography variant="caption" tone="muted" className="ml-2">Nível Hierárquico</Typography>
                                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-mx-xs">
                                                 {NOTIFICATION_TARGET_ROLES.map(role => (
-                                                    <Button key={role} type="button" variant={form.target_role === role ? 'secondary' : 'outline'} onClick={() => setForm(p => ({ ...p, target_role: role }))} className="h-mx-10 rounded-2xl text-mx-micro font-bold uppercase px-0">{role}</Button>
+                                                    <Button key={role} type="button" variant={form.target_role === role ? 'secondary' : 'outline'} onClick={() => setForm(p => ({ ...p, target_role: role }))} className="h-mx-10 rounded-2xl text-label font-bold px-0">{role}</Button>
                                                 ))}
                                             </div>
                                         </div>
@@ -203,7 +203,7 @@ export default function ConsultorNotificacoes() {
                                 </div>
 
                                 <footer className="pt-6 border-t border-gray-200 flex items-center justify-between mt-auto relative z-10">
-                                    <div className="flex items-center gap-mx-xs text-mx-micro font-bold text-gray-500 uppercase tracking-widest">
+                                    <div className="flex items-center gap-mx-xs text-caption font-bold text-gray-500">
                                         <Calendar size={14} className="text-emerald-600" /> {new Date(n.created_at).toLocaleDateString('pt-BR')}
                                     </div>
                                     <Typography variant="mono" className="text-mx-tiny opacity-30">{new Date(n.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</Typography>

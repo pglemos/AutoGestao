@@ -19,7 +19,7 @@ export default function VendedorAjuda() {
               <LifeBuoy size={28} />
             </div>
             <div className="space-y-mx-xs">
-              <Typography variant="h2" className="tracking-tight">Precisa destravar algo hoje?</Typography>
+              <Typography variant="h2" className="">Precisa destravar algo hoje?</Typography>
               <Typography variant="p" tone="muted" className="text-sm">
                 Use esta rota para saber onde agir sem procurar no menu. Problemas de número, prazo, correção ou feedback devem seguir um caminho claro antes de acionar o gestor.
               </Typography>
@@ -37,7 +37,7 @@ export default function VendedorAjuda() {
                 <Link to={item.to}>
                   <item.icon size={18} className="mr-mx-sm shrink-0 text-emerald-600" />
                   <span className="min-w-0">
-                    <span className="block text-sm font-bold uppercase tracking-tight text-gray-800">{item.title}</span>
+                    <span className="block text-body text-lg font-bold text-gray-800">{item.title}</span>
                     <span className="block text-xs font-bold normal-case tracking-normal text-gray-500">{item.desc}</span>
                   </span>
                 </Link>
@@ -53,14 +53,14 @@ export default function VendedorAjuda() {
               <div className="flex items-start gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-md">
                 <UserRound size={18} className="mt-0.5 text-emerald-600" />
                 <div>
-                  <Typography variant="caption" className="tracking-tight">1. Gerente da unidade</Typography>
+                  <Typography variant="caption" className="">1. Gerente da unidade</Typography>
                   <Typography variant="p" tone="muted" className="text-xs">Correção de lançamento, dúvida de meta ou devolutiva.</Typography>
                 </div>
               </div>
               <div className="flex items-start gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-md">
                 <Phone size={18} className="mt-0.5 text-emerald-600" />
                 <div>
-                  <Typography variant="caption" className="tracking-tight">2. Admin MX</Typography>
+                  <Typography variant="caption" className="">2. Admin MX</Typography>
                   <Typography variant="p" tone="muted" className="text-xs">Acesso, produto digital, configuração de perfil ou erro técnico persistente.</Typography>
                 </div>
               </div>

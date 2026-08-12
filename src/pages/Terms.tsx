@@ -31,13 +31,13 @@ export default function Terms() {
                         <div className="w-mx-20 h-mx-header rounded-2xl bg-white/10 text-white flex items-center justify-center mx-auto mb-8 shadow-sm backdrop-blur-xl relative z-10 border border-white/10">
                             <FileText size={32} strokeWidth={2} />
                         </div>
-                        <Typography variant="h1" tone="white" className="text-4xl md:text-5xl mb-4 relative z-10 tracking-tighter">Termos de <Typography as="span" variant="h1" tone="brand">Serviço</Typography></Typography>
+                        <Typography variant="h1" tone="white" className="text-display mb-4 relative z-10">Termos de <Typography as="span" variant="h1" tone="brand">Serviço</Typography></Typography>
                         <Typography variant="tiny" tone="white" className="max-w-xl mx-auto opacity-60 relative z-10 block">CONTRATO DE LICENCIAMENTO & USO MX PERFORMANCE</Typography>
                     </header>
 
                     <CardContent className="p-mx-10 md:p-20 space-y-mx-14">
                         <div className="space-y-mx-10">
-                            <Typography variant="p" className="text-xl font-bold leading-relaxed border-l-4 border-brand-primary pl-8 italic tracking-tight">
+                            <Typography variant="p" className="text-label font-bold border-l-4 border-brand-primary pl-8 italic">
                                 "O acesso contínuo e a utilização do sistema MX PERFORMANCE caracterizam concordância incondicional com as diretrizes e protocolos de segurança aqui estipulados."
                             </Typography>
 
@@ -46,7 +46,7 @@ export default function Terms() {
                                     <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 transition-transform">
                                         <Lock size={24} strokeWidth={2} />
                                     </div>
-                                    <Typography variant="h2" className="text-2xl mb-4 tracking-tight">Autoridade de Acesso</Typography>
+                                    <Typography variant="h2" className="mb-4">Autoridade de Acesso</Typography>
                                     <Typography variant="caption" tone="muted" className="leading-relaxed opacity-60">
                                         O portal é dedicado restritamente a colaboradores com credenciais validadas. Cada agente responde pela segurança de suas chaves.
                                     </Typography>
@@ -56,7 +56,7 @@ export default function Terms() {
                                     <div className="w-mx-14 h-mx-14 rounded-2xl bg-status-warning-surface text-status-warning flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 transition-transform">
                                         <AlertTriangle size={24} strokeWidth={2} />
                                     </div>
-                                    <Typography variant="h2" className="text-2xl mb-4 tracking-tight">Obrigações & Sanções</Typography>
+                                    <Typography variant="h2" className="mb-4">Obrigações & Sanções</Typography>
                                     <Typography variant="caption" tone="muted" className="leading-relaxed opacity-60">
                                         O provimento de dados deve ser factual. Distorções recorrentes autorizam o encerramento do acesso por quebra de governança.
                                     </Typography>
@@ -66,16 +66,16 @@ export default function Terms() {
                             <div className="space-y-mx-md pt-10 border-t border-gray-200">
                                 <header className="flex items-center gap-mx-sm">
                                     <div className="w-mx-10 h-mx-10 rounded-xl bg-gray-900 text-emerald-600 flex items-center justify-center shadow-sm"><Zap size={20} /></div>
-                                    <Typography variant="h2" className="text-2xl tracking-tighter">Desempenho e Disponibilidade</Typography>
+                                    <Typography variant="h2">Desempenho e Disponibilidade</Typography>
                                 </header>
-                                <Typography variant="caption" tone="muted" className="text-base leading-relaxed tracking-tight">
+                                <Typography variant="caption" tone="muted" className="leading-relaxed">
                                     As informações transacionadas via interface (Lançamentos Diários, Metas, Feedbacks) são estritamente para fins de consultoria operacional. A MX assegura as melhores tecnologias para processamento dos índices preditivos com alta disponibilidade.
                                 </Typography>
                             </div>
                         </div>
 
-                        <footer className="pt-10 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-mx-10">
-                            <Button variant="ghost" onClick={() => navigate(-1)} className="text-tiny font-bold uppercase tracking-widest text-gray-500 hover:text-emerald-600 bg-white shadow-sm rounded-mx-full px-8 h-mx-xl">
+                        <footer className="pt-10 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-mx-10 w-full flex-wrap">
+                            <Button variant="ghost" onClick={() => navigate(-1)} className="text-caption font-bold text-gray-500 hover:text-emerald-600 bg-white shadow-sm rounded-mx-full px-6 h-mx-xl w-full sm:w-auto justify-center">
                                 <ArrowLeft size={16} className="mr-2" /> VOLTAR AO SISTEMA
                             </Button>
                             <div className="text-center sm:text-right space-y-mx-tiny">

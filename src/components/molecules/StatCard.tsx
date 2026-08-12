@@ -40,7 +40,7 @@ export function StatCard({ icon, label, value, detail, tone = 'brand', action }:
           {action}
         </div>
       )}
-      <Typography variant="caption" tone="muted" className="mt-mx-md block tracking-wide leading-tight break-words">
+      <Typography variant="caption" tone="muted" className="mt-mx-md block break-words">
         {label}
       </Typography>
       <Typography variant="h2" className="mt-mx-xs tabular-nums leading-tight">

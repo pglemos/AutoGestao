@@ -32,7 +32,7 @@ export function PageHeading({
             </span>
             <div className="min-w-0">
               {breadcrumb ? <div className="mb-1 text-xs text-gray-500">{breadcrumb}</div> : null}
-              <Typography as="h1" variant="h2" className="text-xl font-bold text-gray-800 md:text-2xl">
+              <Typography as="h1" variant="h2" className="font-bold text-gray-800">
                 {title}
               </Typography>
               {subtitle ? (

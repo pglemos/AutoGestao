@@ -168,7 +168,7 @@ export function VisitCard({
                 onClick={(event) => event.stopPropagation()}
               >
                 <Video size={14} aria-hidden="true" />
-                <span className="text-mx-micro font-bold uppercase tracking-widest">Meet</span>
+                <span className="text-caption font-bold">Meet</span>
               </a>
             )}
             {visit.status === 'cancelada' && onDelete && (

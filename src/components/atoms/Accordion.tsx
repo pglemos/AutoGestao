@@ -34,7 +34,7 @@ const AccordionItem = React.forwardRef<HTMLDetailsElement, AccordionItemProps>(
         className={cn(accordionVariants({ variant }), className)}
         {...props}
       >
-        <summary className="flex cursor-pointer items-center justify-between px-mx-md py-mx-sm font-bold text-sm text-gray-800 uppercase tracking-widest select-none list-none hover:bg-gray-50/50 transition-colors [&::-webkit-details-marker]:hidden">
+        <summary className="flex cursor-pointer items-center justify-between px-mx-md py-mx-sm font-bold text-sm text-gray-800 select-none list-none hover:bg-gray-50/50 transition-colors [&::-webkit-details-marker]:hidden">
           <span>{summary}</span>
           <svg
             className="h-mx-xs w-mx-xs text-gray-500 transition-transform duration-200 group-open:rotate-180 shrink-0 ml-mx-xs"

@@ -117,14 +117,14 @@ export default function GerentePDI() {
                                 name="pdi-search"
                                 placeholder="BUSCAR PLANO..." value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="!pl-11 !h-12 uppercase tracking-widest text-mx-tiny font-bold"
+                                className="!pl-11 !h-12 text-caption font-bold"
                             />
                         </div>
                         <Button variant="outline" size="icon" onClick={handleRefresh} aria-label="Atualizar lista de PDIs" className="h-mx-xl w-mx-xl bg-white hover:bg-gray-50">
                             <RefreshCw size={20} className={cn(isRefetching && "animate-spin")} />
                         </Button>
                         {canManagePDI && (
-                            <Button onClick={() => setShowForm(true)} className="h-mx-xl px-8 shadow-sm bg-emerald-600 hover:bg-brand-primary-hover font-bold uppercase text-xs tracking-widest rounded-2xl text-white">
+                            <Button onClick={() => setShowForm(true)} className="h-mx-xl px-8 shadow-sm bg-emerald-600 hover:bg-brand-primary-hover font-bold text-sm rounded-2xl text-white">
                                 <Plus size={18} className="mr-2" /> NOVO PDI
                             </Button>
                         )}
@@ -134,7 +134,7 @@ export default function GerentePDI() {
 
             {isManager && (
                 <Card className="border border-status-info/20 bg-status-info-surface p-mx-md">
-                    <Typography variant="h3" className="tracking-tight text-status-info">Escopo do gerente</Typography>
+                    <Typography variant="h3" className=" text-status-info">Escopo do gerente</Typography>
                     <Typography variant="p" className="mt-mx-xs text-sm text-status-info">
                         Esta tela mostra os PDIs da sua unidade. Use o botão de novo PDI para conduzir desenvolvimento da equipe; Admin MX e Dono usam a mesma rota em escopos diferentes.
                     </Typography>
@@ -143,7 +143,7 @@ export default function GerentePDI() {
 
             {isOwner && (
                 <Card className="border border-status-info/20 bg-status-info-surface p-mx-md">
-                    <Typography variant="h3" className="tracking-tight text-status-info">PDI como acompanhamento do Dono</Typography>
+                    <Typography variant="h3" className=" text-status-info">PDI como acompanhamento do Dono</Typography>
                     <Typography variant="p" className="mt-mx-xs text-sm text-status-info">
                         Esta visão mostra evolução, prazos e consistência dos planos. Criação e condução de PDI ficam com gerente/Admin MX; aqui o foco é decidir onde cobrar cadência.
                     </Typography>
@@ -186,7 +186,7 @@ export default function GerentePDI() {
                                                             className="w-mx-14 h-mx-14 rounded-xl shadow-mx-inner group-hover:border-brand-primary transition-all transform group-hover:rotate-3"
                                                         />
                                                         <div className="min-w-0">
-                                                            <Typography variant="h3" className="text-base tracking-tight truncate group-hover:text-emerald-600 transition-colors">{p.seller_name}</Typography>
+                                                            <Typography variant="h3" className="text-base truncate group-hover:text-emerald-600 transition-colors">{p.seller_name}</Typography>
                                                             <Typography variant="tiny" tone="muted" className="">ESPECIALISTA</Typography>
                                                         </div>
                                                     </div>
@@ -196,7 +196,7 @@ export default function GerentePDI() {
                                                 <div className="space-y-mx-lg relative z-10">
                                                     <div className="space-y-mx-xs">
                                                         <Typography variant="tiny" tone="brand" className="mb-2 block">Objetivo 06 Meses</Typography>
-                                                        <Typography variant="h2" className="text-xl leading-snug line-clamp-2 tracking-tighter">"{p.meta_6m || 'N/A'}"</Typography>
+                                                        <Typography variant="h2" className="text-xl leading-snug line-clamp-2er">"{p.meta_6m || 'N/A'}"</Typography>
                                                     </div>
                                                 </div>
                                             </div>
@@ -228,10 +228,10 @@ export default function GerentePDI() {
                         <div className="w-mx-3xl h-mx-3xl rounded-xl bg-gray-50 shadow-sm flex items-center justify-center mb-8 border border-gray-100 group-hover:rotate-12 transition-transform duration-500">
                             <TrendingUp size={48} className="text-gray-500 opacity-20" />
                         </div>
-                        <Typography variant="h2" className="mb-4 tracking-tighter">Matriz de Evolução Limpa</Typography>
+                        <Typography variant="h2" className="mb-4er">Matriz de Evolução Limpa</Typography>
                         <Typography variant="caption" tone="muted" className="max-w-sm mx-auto mb-10">Não localizamos planos de desenvolvimento para os filtros atuais.</Typography>
                         {canManagePDI && (
-                            <Button onClick={() => setShowForm(true)} className="h-mx-2xl px-12 rounded-2xl shadow-sm font-bold uppercase tracking-widest text-xs">
+                            <Button onClick={() => setShowForm(true)} className="h-mx-2xl px-12 rounded-2xl shadow-sm font-bold text-sm">
                                 <Plus size={20} className="mr-3" /> INICIAR PRIMEIRO PDI
                             </Button>
                         )}

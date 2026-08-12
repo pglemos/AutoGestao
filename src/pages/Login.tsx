@@ -427,10 +427,10 @@ export default function Login() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
                     >
-                        <h1 className="text-5xl font-bold text-white tracking-tight mb-4">
+                        <h1 className="text-display font-bold text-white mb-4">
                             MX <span className="text-emerald-600">PERFORMANCE</span>
                         </h1>
-                        <p className="text-white/50 text-sm font-bold uppercase mb-16" style={{ letterSpacing: '0.3em' }}>
+                        <p className="text-white/60 text-label font-bold mb-16" style={{ letterSpacing: '0.3em' }}>
                             Sistema de Gestao de Elite
                         </p>
                     </motion.div>
@@ -458,7 +458,7 @@ export default function Login() {
                 </div>
 
                 <div className="absolute text-center" style={{ bottom: '2rem', left: 0, right: 0 }}>
-                    <span className="text-white/40 text-xs font-bold uppercase" style={{ letterSpacing: '0.25em' }}>MX Performance v4.0</span>
+                    <span className="text-white/50 text-caption font-bold" style={{ letterSpacing: '0.25em' }}>MX Performance v4.0</span>
                 </div>
             </div>
 
@@ -467,7 +467,7 @@ export default function Login() {
                 {/* Mobile logo */}
                 <div className="lg:hidden mb-12 text-center">
                     <img src={MxLogo} alt="MX Performance" className="w-mx-20 h-mx-20 object-contain mx-auto mb-6" />
-                    <h1 className="text-2xl font-bold text-gray-800 tracking-tight">
+                    <h1 className="text-h3 font-bold text-gray-800">
                         MX <span className="text-mx-green-800">PERFORMANCE</span>
                     </h1>
                 </div>
@@ -479,7 +479,7 @@ export default function Login() {
                     className="w-full max-w-sm"
                 >
                     <div className="mb-10">
-                        <h2 className="text-2xl font-bold text-gray-800 tracking-tight mb-2">
+                        <h2 className="text-h3 font-bold text-gray-800 mb-2">
                             {mode === 'login' && 'Acessar sistema'}
                             {mode === 'forgot' && 'Recuperar acesso'}
                             {mode === 'recovery' && 'Definir nova senha'}
@@ -606,7 +606,7 @@ export default function Login() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-gray-900 hover:bg-mx-green-950 text-white rounded-xl font-bold text-sm uppercase tracking-wider flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-brand-primary/25 hover:shadow-brand-primary/40 active:scale-[0.98] mt-2"
+                            className="w-full bg-gray-900 hover:bg-mx-green-950 text-white rounded-xl font-bold text-sm flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-brand-primary/25 hover:shadow-brand-primary/40 active:scale-[0.98] mt-2"
                             style={{ height: '3.25rem', gap: '0.5rem' }}
                         >
                             {loading ? (
@@ -624,7 +624,7 @@ export default function Login() {
                             <button
                                 type="button"
                                 onClick={() => switchMode('forgot')}
-                                className="h-mx-11 rounded-xl border border-gray-200 bg-white text-gray-500 hover:text-emerald-600 hover:border-brand-primary/30 hover:bg-gray-50 font-bold text-xs uppercase tracking-widest transition-colors flex items-center justify-center"
+                                className="h-mx-11 rounded-xl border border-gray-200 bg-white text-gray-500 hover:text-emerald-600 hover:border-brand-primary/30 hover:bg-gray-50 font-bold text-sm transition-colors flex items-center justify-center"
                                 style={{ gap: '0.5rem' }}
                             >
                                 <KeyRound size={16} />
@@ -636,7 +636,7 @@ export default function Login() {
                             <button
                                 type="button"
                                 onClick={() => switchMode('login')}
-                                className="h-mx-11 rounded-xl border border-gray-200 bg-white text-gray-500 hover:text-emerald-600 hover:border-brand-primary/30 hover:bg-gray-50 font-bold text-xs uppercase tracking-widest transition-colors flex items-center justify-center"
+                                className="h-mx-11 rounded-xl border border-gray-200 bg-white text-gray-500 hover:text-emerald-600 hover:border-brand-primary/30 hover:bg-gray-50 font-bold text-label transition-colors flex items-center justify-center"
                                 style={{ gap: '0.5rem' }}
                             >
                                 <ArrowLeft size={16} />

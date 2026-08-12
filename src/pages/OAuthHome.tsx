@@ -13,7 +13,7 @@ export default function OAuthHome() {
             <span className="hidden sm:inline text-sm sm:text-base font-bold tracking-tight uppercase">MX PERFORMANCE</span>
           </Link>
 
-          <nav className="flex items-center gap-mx-sm text-xs font-bold uppercase tracking-widest">
+          <nav className="flex items-center gap-mx-sm text-label font-bold">
             <Link to="/privacy" className="text-gray-500 hover:text-emerald-600 transition-colors">
               Privacidade
             </Link>
@@ -40,7 +40,7 @@ export default function OAuthHome() {
                 Google Calendar Integration
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-gray-800">
+              <h1 className="text-display font-bold text-gray-800">
                 MX PERFORMANCE
               </h1>
 
@@ -51,14 +51,14 @@ export default function OAuthHome() {
               <div className="mt-mx-2xl flex flex-col sm:flex-row gap-mx-sm">
                 <Link
                   to="/login"
-                  className="inline-flex items-center justify-center gap-mx-xs h-mx-12 px-mx-lg rounded-xl bg-gray-900 text-white text-sm font-bold uppercase tracking-widest hover:bg-mx-green-950 transition-colors"
+                  className="inline-flex items-center justify-center gap-mx-xs h-mx-12 px-mx-lg rounded-xl bg-gray-900 text-white text-sm font-bold hover:bg-mx-green-950 transition-colors"
                 >
                   <LogIn size={18} />
                   Acessar Sistema
                 </Link>
                 <Link
                   to="/privacy"
-                  className="inline-flex items-center justify-center gap-mx-xs h-mx-12 px-mx-lg rounded-xl border border-gray-200 text-gray-500 text-sm font-bold uppercase tracking-widest hover:border-brand-primary hover:text-emerald-600 transition-colors"
+                  className="inline-flex items-center justify-center gap-mx-xs h-mx-12 px-mx-lg rounded-xl border border-gray-200 text-gray-500 text-sm font-bold hover:border-brand-primary hover:text-emerald-600 transition-colors"
                 >
                   <ShieldCheck size={18} />
                   Politica de Privacidade
@@ -77,7 +77,7 @@ export default function OAuthHome() {
                     <CalendarDays size={22} className="text-emerald-600" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-bold uppercase tracking-tight">Eventos de visitas</h2>
+                    <h2 className="text-h4 font-bold">Eventos de visitas</h2>
                     <p className="mt-mx-xs text-sm leading-relaxed text-white/65">
                       Criacao, edicao e consulta de eventos autorizados para sincronizar a agenda central da MX e agendas de usuarios conectados.
                     </p>
@@ -89,7 +89,7 @@ export default function OAuthHome() {
                     <LockKeyhole size={22} className="text-emerald-600" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-bold uppercase tracking-tight">Acesso restrito</h2>
+                    <h2 className="text-h4 font-bold">Acesso restrito</h2>
                     <p className="mt-mx-xs text-sm leading-relaxed text-white/65">
                       Uso exclusivo de usuarios autorizados pela MX Consultoria, com autenticação e permissoes internas.
                     </p>

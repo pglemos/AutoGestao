@@ -183,7 +183,7 @@ export default function ConsultorTreinamentos() {
                 <Card className="border bg-white p-mx-md">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-mx-md mb-mx-md">
                         <div>
-                            <Typography variant="h3" className="tracking-tight">Backlog editorial</Typography>
+                            <Typography variant="h3" className="">Backlog editorial</Typography>
                             <Typography variant="caption" tone="muted" className="">Sugestões recebidas da rede para curadoria MX</Typography>
                         </div>
                         <Badge variant="brand" className="px-4 py-1">{suggestions.length} sugestões</Badge>
@@ -232,7 +232,7 @@ export default function ConsultorTreinamentos() {
                             <footer className="pt-6 border-t border-gray-100 flex items-center justify-between mt-auto relative z-10">
                                 <div className="flex -space-x-2">
                                     {[1, 2, 3].map(j => (
-                                        <div key={j} className="w-mx-lg h-mx-lg rounded-xl border-2 border-white bg-gray-50 flex items-center justify-center text-gray-500 uppercase">
+                                        <div key={j} className="w-mx-lg h-mx-lg rounded-xl border-2 border-white bg-gray-50 flex items-center justify-center text-gray-500">
                                             <Typography variant="caption" as="span">{String.fromCharCode(64 + j)}</Typography>
                                         </div>
                                     ))}

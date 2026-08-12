@@ -40,7 +40,7 @@ const SortControl = React.forwardRef<HTMLButtonElement, SortControlProps>(
         onClick={() => onSortChange(next)}
         className={cn(
           'inline-flex items-center gap-1 rounded-[var(--mx-radius-sm)] px-1 py-0.5',
-          'text-[length:var(--mx-font-size-xs)] font-semibold uppercase tracking-wide',
+          'text-caption font-semibold',
           direction
             ? 'text-text-primary'
             : 'text-text-secondary',

@@ -39,8 +39,8 @@ export default function NotFound() {
 
                     <CardContent className="p-mx-10 md:p-16 text-center flex flex-col items-center gap-mx-10">
                         <div className="max-w-md space-y-mx-sm">
-                            <Typography variant="h2" className="text-2xl tracking-tighter">Destino Inexistente</Typography>
-                            <Typography variant="p" tone="muted" className="text-base leading-relaxed font-bold italic opacity-60 tracking-tight">
+                            <Typography variant="h2">Destino Inexistente</Typography>
+                            <Typography variant="p" tone="muted" className="font-bold italic opacity-60">
                                 "A coordenada solicitada não foi localizada nos servidores de inteligência MX. A rota pode ter sido alterada ou o acesso expirou."
                             </Typography>
                         </div>
@@ -48,13 +48,13 @@ export default function NotFound() {
                         <div className="flex flex-col sm:flex-row items-center gap-mx-md w-full sm:w-auto">
                             <Button 
                                 variant="outline" onClick={() => navigate(-1)} 
-                                className="w-full sm:w-auto h-mx-14 px-10 rounded-mx-full font-bold uppercase tracking-widest text-xs shadow-sm bg-white border-gray-200 hover:border-brand-primary"
+                                className="w-full sm:w-auto h-mx-14 px-10 rounded-mx-full font-bold text-sm shadow-sm bg-white border-gray-200 hover:border-brand-primary"
                             >
                                 <ArrowLeft size={16} className="mr-2" /> RECUAR
                             </Button>
                             <Button 
                                 onClick={() => navigate('/')} 
-                                className="w-full sm:w-auto h-mx-14 px-12 rounded-mx-full shadow-sm font-bold uppercase tracking-widest text-xs bg-emerald-600"
+                                className="w-full sm:w-auto h-mx-14 px-12 rounded-mx-full shadow-sm font-bold text-sm bg-emerald-600"
                             >
                                 <Zap size={16} className="mr-2 fill-current" /> CENTRAL DE COMANDO
                             </Button>

@@ -62,7 +62,7 @@ export default function VendedorConfiguracoes() {
                 <ShieldCheck size={26} />
               </span>
               <div className="min-w-0">
-                <Typography variant="h2" className="text-2xl">
+                <Typography variant="h2">
                   {profile?.name || 'Nome não informado'}
                 </Typography>
                 <Typography variant="p" tone="muted" className="mt-mx-xs">

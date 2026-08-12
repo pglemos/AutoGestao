@@ -100,18 +100,18 @@ export const AlertCard = React.forwardRef<HTMLDivElement, AlertCardProps>(
         <div className="flex items-start gap-3">
           <Icon className={cn('w-5 h-5 mt-0.5 shrink-0', cfg.iconColor)} aria-hidden="true" />
           <div className="flex-1 min-w-0">
-            <p className={cn('text-xs font-bold uppercase tracking-wider mb-2', cfg.iconColor)}>{cfg.title}</p>
+            <p className={cn('text-caption font-bold mb-2', cfg.iconColor)}>{cfg.title}</p>
             <dl className="space-y-1.5 text-sm">
               <div>
                 <dt className="sr-only">Problema</dt>
                 <dd className="font-semibold text-gray-800">{problem}</dd>
               </div>
               <div>
-                <dt className="text-gray-500 text-xs uppercase tracking-wide font-bold">Impacto</dt>
+                <dt className="text-gray-500 text-caption font-bold">Impacto</dt>
                 <dd className="text-gray-500">{impact}</dd>
               </div>
               <div>
-                <dt className="text-gray-500 text-xs uppercase tracking-wide font-bold">Recomendação</dt>
+                <dt className="text-gray-500 text-caption font-bold">Recomendação</dt>
                 <dd className="text-gray-500">{recommendation}</dd>
               </div>
             </dl>

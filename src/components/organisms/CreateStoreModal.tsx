@@ -109,7 +109,7 @@ export function CreateStoreModal({
                       onChange={e =>
                         setNewStore(p => ({ ...p, name: e.target.value.toUpperCase() }))
                       }
-                      className="!h-14 !px-6 font-bold uppercase tracking-widest"
+                      className="!h-14 !px-6 font-bold"
                     />
                   </div>
                   <div className="space-y-mx-xs">

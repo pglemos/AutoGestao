@@ -244,7 +244,7 @@ export default function GerenteTreinamentos() {
                                 <Input 
                                     placeholder="BUSCAR CONTEÚDO..." value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="!pl-11 !h-12 uppercase tracking-widest text-mx-tiny font-bold"
+                                    className="!pl-11 !h-12 text-caption font-bold"
                                 />
                             </div>
                         </div>
@@ -252,7 +252,7 @@ export default function GerenteTreinamentos() {
             <div className="flex-1 min-h-0 pb-32" aria-live="polite">
                 {!isOwner && (
                     <Card className="mb-mx-lg border border-status-info/20 bg-status-info-surface p-mx-md">
-                        <Typography variant="h3" className="tracking-tight text-status-info">Desenvolvimento do gerente</Typography>
+                        <Typography variant="h3" className="text-status-info">Desenvolvimento do gerente</Typography>
                         <Typography variant="p" className="mt-mx-xs text-sm text-status-info">
                             Separe a leitura por tarefa: equipe mostra progresso individual, matriz compara cobertura de conteúdos e minha trilha reúne seus próprios módulos. Conteúdo institucional e sugestões ficam como governança, não como competição.
                         </Typography>
@@ -260,7 +260,7 @@ export default function GerenteTreinamentos() {
                 )}
                 {isOwner && (
                     <Card className="mb-mx-lg border border-status-info/20 bg-status-info-surface p-mx-md">
-                        <Typography variant="h3" className="tracking-tight text-status-info">Uso executivo dos treinamentos</Typography>
+                        <Typography variant="h3" className="text-status-info">Uso executivo dos treinamentos</Typography>
                         <Typography variant="p" className="mt-mx-xs text-sm text-status-info">
                             Dono acompanha absorção, gargalos e consistência da trilha. Cobranças, atribuições e publicação de conteúdo institucional devem ser feitas pelo gerente ou Admin MX.
                         </Typography>
@@ -273,7 +273,7 @@ export default function GerenteTreinamentos() {
                     <Card className="mb-mx-lg border bg-white p-mx-md">
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-mx-md">
                             <div>
-                                <Typography variant="h3" className="tracking-tight">Sugestões de conteúdo da equipe</Typography>
+                                <Typography variant="h3" className="">Sugestões de conteúdo da equipe</Typography>
                                 <Typography variant="p" tone="muted" className="text-sm">Fila de curadoria enviada por vendedores e gestores.</Typography>
                             </div>
                             <div className="flex flex-wrap gap-mx-xs">
@@ -305,7 +305,7 @@ export default function GerenteTreinamentos() {
                                             <Typography variant="p" tone="muted" className="text-xs font-bold leading-relaxed opacity-60">"{t.description}"</Typography>
                                         </div>
                                         <footer className="pt-8 border-t border-gray-100 flex items-center justify-between mt-auto relative z-10">
-                                            <div className="flex items-center gap-mx-xs text-mx-micro font-bold text-gray-500 uppercase">
+                                            <div className="flex items-center gap-mx-xs text-caption font-bold text-gray-500">
                                                 <Award size={14} className="text-status-warning" /> {t.watched ? 'ABSORVIDO' : 'PENDENTE'}
                                             </div>
                                             <div className="flex items-center gap-mx-tiny text-status-warning">
@@ -313,7 +313,7 @@ export default function GerenteTreinamentos() {
                                                 <Typography variant="tiny" as="span" className="">{t.average_rating || 0} ({t.rating_count || 0})</Typography>
                                             </div>
                                             {!t.watched && (
-                                                <Button size="sm" onClick={() => markWatched(t.id)} className="h-mx-10 px-6 rounded-mx-full font-bold uppercase text-mx-micro shadow-sm">
+                                                <Button size="sm" onClick={() => markWatched(t.id)} className="h-mx-10 px-6 rounded-mx-full font-bold text-label shadow-sm">
                                                     ASSISTIR <Play size={14} className="ml-2 fill-white" />
                                                 </Button>
                                             )}
@@ -341,12 +341,12 @@ export default function GerenteTreinamentos() {
                                 <div className="flex-1 overflow-x-auto no-scrollbar">
                                     <table className="w-full text-left min-w-mx-elite-table">
                                         <thead>
-                                            <tr className="bg-gray-50/50 border-b border-gray-200 text-mx-micro font-bold uppercase tracking-mx-wider text-gray-500">
+                                            <tr className="bg-gray-50/50 border-b border-gray-200 text-caption font-semibold text-gray-500">
                                                 <th scope="col" className="pl-10 py-6 sticky left-mx-0 bg-gray-50/50 z-20">VENDEDOR</th>
                                                 {treinamentos.map(t => (
                                                     <th key={t.id} scope="col" className="px-4 py-6 text-center group relative min-w-mx-32">
                                                         <span className="truncate block max-w-mx-20 mx-auto">{t.title}</span>
-                                                        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-3 py-1.5 bg-gray-900 text-white text-mx-micro font-bold uppercase tracking-widest rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-[70] whitespace-nowrap shadow-sm">
+                                                        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-3 py-1.5 bg-gray-900 text-white text-caption font-bold rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-[70] whitespace-nowrap shadow-sm">
                                                             {t.title}
                                                         </div>
                                                     </th>
@@ -359,7 +359,7 @@ export default function GerenteTreinamentos() {
                                                     <td className="pl-10 sticky left-mx-0 bg-white group-hover:bg-gray-50/30 z-10 border-r border-gray-200">
                                                         <div className="flex items-center gap-mx-sm">
                                                             <Avatar src={p.avatar_url || undefined} alt={`Avatar de ${p.seller_name}`} fallback={p.seller_name} className="w-mx-10 h-mx-10 rounded-2xl shadow-none" />
-                                                            <Typography variant="p" className="text-sm tracking-tight truncate max-w-mx-label-lg">{p.seller_name}</Typography>
+                                                            <Typography variant="p" className="text-sm  truncate max-w-mx-label-lg">{p.seller_name}</Typography>
                                                         </div>
                                                     </td>
                                                     {treinamentos.map(t => {
