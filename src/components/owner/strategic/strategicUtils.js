@@ -51,7 +51,7 @@ export const STATUS_STYLES = {
   good: { bg: "bg-status-success-surface", text: "text-status-success-text", border: "border-status-success/30", label: "Bom" },
   attention: { bg: "bg-status-warning-surface", text: "text-status-warning-text", border: "border-status-warning/30", label: "Atenção" },
   critical: { bg: "bg-status-error-surface", text: "text-status-error-text", border: "border-status-error/30", label: "Crítico" },
-  neutral: { bg: "bg-muted", text: "text-muted-foreground", border: "border-slate-200", label: "Sem dados" },
+  neutral: { bg: "bg-muted", text: "text-muted-foreground", border: "border-border", label: "Sem dados" },
 };
 
 export function formatCellValue(value, format, decimalPlaces = 0) {

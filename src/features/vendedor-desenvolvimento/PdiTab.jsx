@@ -105,7 +105,7 @@ export default function PDIPage({ hideHeader = false }) {
   };
 
   if (loading) {
-    return <div className="flex items-center justify-center h-64"><div className="w-8 h-8 border-4 border-slate-200 border-t-mx-blue rounded-full animate-spin" /></div>;
+    return <div className="flex items-center justify-center h-64"><div className="w-8 h-8 border-4 border-border border-t-mx-blue rounded-full animate-spin" /></div>;
   }
 
   const currentPDI = pdi || {};
@@ -114,7 +114,7 @@ export default function PDIPage({ hideHeader = false }) {
 
   const CompetencySlider = ({ comp, value, onChange, onCommit, disabled = false }) => (
     <div className="flex items-center gap-4">
-      <span className="text-sm text-slate-600 w-32 flex-shrink-0">{comp.label}</span>
+      <span className="text-sm text-muted-foreground w-32 flex-shrink-0">{comp.label}</span>
       <Slider
         value={[value]}
         onValueChange={v => onChange(v[0])}
@@ -127,7 +127,7 @@ export default function PDIPage({ hideHeader = false }) {
       />
       <div className="flex items-center gap-2 w-20">
         <span className="text-sm font-bold text-mx-navy w-6 text-right">{value}</span>
-        <span className="text-xs text-slate-400">/10</span>
+        <span className="text-xs text-muted-foreground">/10</span>
       </div>
     </div>
   );
@@ -143,11 +143,11 @@ export default function PDIPage({ hideHeader = false }) {
       {!hideHeader && <PageHeader title="PDI" subtitle="Plano de Desenvolvimento Individual" />}
 
       {/* Goals */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-border">
         <div className="flex items-center gap-2 mb-6">
           <Trophy className="w-5 h-5 text-status-warning-text" />
           <h3 className="text-base font-semibold text-mx-navy">Conquistas</h3>
-          {!canEdit && <span className="ml-auto text-xs font-medium text-slate-400">Somente gerente, dono ou Admin MX podem editar</span>}
+          {!canEdit && <span className="ml-auto text-xs font-medium text-muted-foreground">Somente gerente, dono ou Admin MX podem editar</span>}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
@@ -156,8 +156,8 @@ export default function PDIPage({ hideHeader = false }) {
             { label: "Longo Prazo", sublabel: "3 Anos", key: "long_term_goal", color: "border-mx-amber" },
           ].map(goal => (
             <div key={goal.key} className={`border-l-4 ${goal.color} pl-4`}>
-              <p className="text-xs text-slate-400 uppercase tracking-wider">{goal.label}</p>
-              <p className="text-xs text-slate-400">{goal.sublabel}</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-wider">{goal.label}</p>
+              <p className="text-xs text-muted-foreground">{goal.sublabel}</p>
               <Textarea
                 value={currentPDI[goal.key] || ""}
                 onChange={e => {
@@ -168,7 +168,7 @@ export default function PDIPage({ hideHeader = false }) {
                 disabled={!canEdit}
                 readOnly={!canEdit}
                 placeholder="Descreva sua meta..."
-                className="mt-2 rounded-xl resize-none border-slate-100"
+                className="mt-2 rounded-xl resize-none border-border"
                 rows={3}
               />
             </div>
@@ -179,7 +179,7 @@ export default function PDIPage({ hideHeader = false }) {
       {/* Competencies */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Technical */}
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-border">
           <h3 className="text-base font-semibold text-mx-navy mb-6">Competências Técnicas</h3>
           <div className="h-64 mb-6 w-full min-w-0">
             <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={256} initialDimension={{ width: 320, height: 256 }}>
@@ -211,7 +211,7 @@ export default function PDIPage({ hideHeader = false }) {
         </div>
 
         {/* Behavioral */}
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-border">
           <h3 className="text-base font-semibold text-mx-navy mb-6">Competências Comportamentais</h3>
           <div className="h-64 mb-6 w-full min-w-0">
             <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={256} initialDimension={{ width: 320, height: 256 }}>
@@ -244,8 +244,8 @@ export default function PDIPage({ hideHeader = false }) {
       </div>
 
       {/* Action Plan */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-        <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+      <div className="bg-white rounded-2xl shadow-sm border border-border overflow-hidden">
+        <div className="p-5 border-b border-border flex items-center justify-between">
           <h3 className="text-base font-semibold text-mx-navy">Plano de Ação</h3>
           {canEdit && <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
@@ -265,8 +265,8 @@ export default function PDIPage({ hideHeader = false }) {
         </div>
         {actions.length === 0 ? (
           <div className="p-12 text-center">
-            <Target className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-            <p className="text-sm text-slate-400">Nenhuma ação cadastrada.</p>
+            <Target className="w-10 h-10 text-text-disabled mx-auto mb-3" />
+            <p className="text-sm text-muted-foreground">Nenhuma ação cadastrada.</p>
           </div>
         ) : (
           <ScrollableRegion label="Ações do plano de desenvolvimento">
@@ -278,15 +278,15 @@ export default function PDIPage({ hideHeader = false }) {
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y divide-border-subtle">
                 {actions.map(a => (
                   <tr key={a.id} className="hover:bg-surface-alt/50">
                     <td className="px-5 py-3.5">
                       <p className="text-sm font-medium text-mx-navy">{a.action}</p>
-                      <p className="text-xs text-slate-400">{a.description}</p>
+                      <p className="text-xs text-muted-foreground">{a.description}</p>
                     </td>
-                    <td className="px-5 py-3.5 text-sm text-slate-600">{a.competency}</td>
-                    <td className="px-5 py-3.5 text-sm text-slate-600 flex items-center gap-1"><Calendar className="w-3 h-3 text-slate-400" />{a.deadline}</td>
+                    <td className="px-5 py-3.5 text-sm text-muted-foreground">{a.competency}</td>
+                    <td className="px-5 py-3.5 text-sm text-muted-foreground flex items-center gap-1"><Calendar className="w-3 h-3 text-muted-foreground" />{a.deadline}</td>
                     <td className="px-5 py-3.5">
                       <Select disabled={!canEdit} value={a.status} onValueChange={v => updateActionStatus(a.id, v, v === "Concluído" ? 100 : a.progress)}>
                         <SelectTrigger className="h-8 w-[140px] border-0 shadow-none">
@@ -301,7 +301,7 @@ export default function PDIPage({ hideHeader = false }) {
                     </td>
                     <td className="px-5 py-3.5 w-32">
                       <Progress value={a.progress || 0} className="h-2" />
-                      <p className="text-[10px] text-slate-400 mt-1">{a.progress || 0}%</p>
+                      <p className="text-[10px] text-muted-foreground mt-1">{a.progress || 0}%</p>
                     </td>
                   </tr>
                 ))}

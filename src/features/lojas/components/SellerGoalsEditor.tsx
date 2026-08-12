@@ -320,7 +320,7 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
                   )}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y divide-border-subtle">
                 {sellers.length === 0 ? (
                   <tr>
                     <td colSpan={canEdit ? 5 : 4} className="px-4 py-8 text-center text-sm text-muted-foreground">

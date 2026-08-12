@@ -355,7 +355,7 @@ function CanalCard({ channel }: { channel: ChannelFunnel }) {
 
 function EtapaLinha({ label, valor, conv }: { label: string; valor: number; conv: string | null }) {
   return (
-    <div className="flex items-center justify-between border-b border-slate-50 py-1.5 last:border-0">
+    <div className="flex items-center justify-between border-b border-border-subtle py-1.5 last:border-0">
       <div className="flex flex-col">
         <span className="text-[12px] text-muted-foreground">{label}</span>
         {conv && <span className="text-caption text-muted-foreground">→ {conv}</span>}

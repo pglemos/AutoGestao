@@ -31,10 +31,10 @@ export const STATUS_STYLES = {
   not_started: {
     label: "Não iniciada",
     bg: "bg-muted",
-    text: "text-slate-600",
-    badge: "bg-muted text-slate-600",
+    text: "text-muted-foreground",
+    badge: "bg-muted text-muted-foreground",
     dot: "bg-slate-400",
-    border: "border-slate-200",
+    border: "border-border",
   },
   in_progress: {
     label: "Em andamento",
@@ -172,7 +172,7 @@ export const PRIORITY_STYLES = {
   critical: { label: "Crítica", badge: "bg-status-error-surface text-status-error-text", dot: "bg-status-error" },
   high: { label: "Alta", badge: "bg-status-warning-surface text-status-warning-text", dot: "bg-status-warning" },
   medium: { label: "Média", badge: "bg-status-warning-surface text-status-warning-text", dot: "bg-status-warning" },
-  low: { label: "Baixa", badge: "bg-muted text-slate-600", dot: "bg-slate-400" },
+  low: { label: "Baixa", badge: "bg-muted text-muted-foreground", dot: "bg-slate-400" },
 };
 
 export const ORIGINS = [
@@ -203,7 +203,7 @@ export const IMPACT_STATUSES = [
 export const IMPACT_STYLES = {
   positive: { label: "Impacto positivo", badge: "bg-status-success-surface text-status-success-text", dot: "bg-status-success" },
   partial: { label: "Impacto parcial", badge: "bg-status-warning-surface text-status-warning-text", dot: "bg-status-warning" },
-  none: { label: "Sem impacto comprovado", badge: "bg-muted text-slate-600", dot: "bg-slate-400" },
+  none: { label: "Sem impacto comprovado", badge: "bg-muted text-muted-foreground", dot: "bg-slate-400" },
   negative: { label: "Impacto negativo", badge: "bg-status-error-surface text-status-error-text", dot: "bg-status-error" },
   unmeasured: { label: "Ainda não medido", badge: "bg-status-info-surface text-status-info-text", dot: "bg-status-info" },
 };

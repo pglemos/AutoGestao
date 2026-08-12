@@ -328,7 +328,7 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
           {missions.filter((mission) => mission.clientes.length > 0).map((mission) => (
             <button key={mission.id} type="button" onClick={() => setMissaoSelecionada(mission)} className="rounded-2xl border border-border-subtle bg-white p-4 text-left transition hover:border-[#005BFF]">
               <div className="mb-3 flex items-start justify-between"><span className="text-2xl" aria-hidden="true">{mission.icone}</span><span className={`rounded-full px-2 py-0.5 text-caption font-bold ${prioridadeColor(mission.prioridade)}`}>{mission.prioridade}</span></div>
-              <p className="text-sm font-bold text-[#031B3D]">{mission.nome}</p><p className="mt-1 text-xs text-muted-foreground">{mission.objetivo}</p><p className="mt-3 border-t border-slate-50 pt-2 text-xs font-bold text-status-info-text">{mission.clientes.length} cliente(s)</p>
+              <p className="text-sm font-bold text-[#031B3D]">{mission.nome}</p><p className="mt-1 text-xs text-muted-foreground">{mission.objetivo}</p><p className="mt-3 border-t border-border-subtle pt-2 text-xs font-bold text-status-info-text">{mission.clientes.length} cliente(s)</p>
             </button>
           ))}
         </div>

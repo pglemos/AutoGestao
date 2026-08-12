@@ -303,7 +303,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
               <p className="text-xs text-muted-foreground mt-1 italic">{missao.porqueAgora}</p>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4 pt-2 border-t border-slate-50">
+          <div className="grid grid-cols-2 gap-4 pt-2 border-t border-border-subtle">
             <div className="text-center">
               <p className="text-2xl font-bold text-foreground">{missao.contextos.length}</p>
               <p className="text-xs text-muted-foreground">Clientes</p>
@@ -497,7 +497,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                       <p className="text-xs font-semibold text-status-info-text">{entradaLabel(veiculo.data_entrada)}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1.5 pt-2 border-t border-slate-50">
+                  <div className="flex items-center gap-1.5 pt-2 border-t border-border-subtle">
                     <Users size={14} className="text-muted-foreground" />
                     <span className={`text-xs ${compat > 0 ? 'font-bold text-muted-foreground' : 'text-muted-foreground'}`}>
                       {compat} cliente{compat !== 1 ? 's' : ''} compatível{compat !== 1 ? 'eis' : ''}
@@ -544,7 +544,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                 <p className="text-sm font-bold text-foreground leading-tight">{missao.nome}</p>
                 <p className="text-xs text-muted-foreground mt-1 leading-snug">{missao.objetivo}</p>
                 <p className="text-caption text-text-disabled mt-1 leading-snug italic">{missao.porqueAgora}</p>
-                <div className="flex items-center mt-3 pt-2 border-t border-slate-50">
+                <div className="flex items-center mt-3 pt-2 border-t border-border-subtle">
                   <div className="flex items-center gap-1.5">
                     <Users className="w-3.5 h-3.5 text-muted-foreground" />
                     <span className="text-xs font-bold text-muted-foreground">{count} cliente{count !== 1 ? 's' : ''}</span>

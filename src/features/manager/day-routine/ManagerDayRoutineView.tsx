@@ -632,7 +632,7 @@ function HistoryRoutine({
                   )}
                 </div>
               </header>
-              <div className="divide-y divide-gray-50">
+              <div className="divide-y divide-border-subtle">
                 {group.items.map(task => <HistoryTaskRow key={task.id} task={task} />)}
               </div>
             </section>

@@ -332,7 +332,7 @@ export function LeadConferenceModal({
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-50 bg-white">
+                <tbody className="divide-y divide-border-subtle bg-white">
                   {rows.map((row) => (
                     <ConferenceRow
                       key={row.sellerId}

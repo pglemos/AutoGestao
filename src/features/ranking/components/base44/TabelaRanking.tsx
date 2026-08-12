@@ -42,7 +42,7 @@ const pct = vendedorMeta > 0 ? Math.round((v.vendas / vendedorMeta) * 100) : 0
               return (
                 <tr
                   key={v.id}
-                  className={`border-b border-slate-50 transition-colors ${isMe ? 'bg-status-info-surface/60' : 'hover:bg-surface-alt/50'}`}
+                  className={`border-b border-border-subtle transition-colors ${isMe ? 'bg-status-info-surface/60' : 'hover:bg-surface-alt/50'}`}
                   style={isMe ? { outline: '1.5px solid var(--color-chart-2)', outlineOffset: '-1px' } : undefined}
                 >
                   <td className="px-4 py-3">

@@ -80,14 +80,14 @@ function ClientMobileCard({ c, closingDate, canEdit, canDelete, onEdit, onDelete
           <button
             onClick={() => canEdit && onEdit(c)}
             disabled={!canEdit}
-            className={`p-2 rounded-xl transition-colors ${canEdit ? "hover:bg-status-info-surface text-status-info-text" : "text-slate-200 cursor-not-allowed"}`}
+            className={`p-2 rounded-xl transition-colors ${canEdit ? "hover:bg-status-info-surface text-status-info-text" : "text-text-disabled cursor-not-allowed"}`}
           >
             <Pencil className="w-4 h-4" />
           </button>
           <button
             onClick={() => canDelete && onDelete(c)}
             disabled={!canDelete}
-            className={`p-2 rounded-xl transition-colors ${canDelete ? "hover:bg-status-error-surface text-[#EF4444]" : "text-slate-200 cursor-not-allowed"}`}
+            className={`p-2 rounded-xl transition-colors ${canDelete ? "hover:bg-status-error-surface text-[#EF4444]" : "text-text-disabled cursor-not-allowed"}`}
           >
             <Trash2 className="w-4 h-4" />
           </button>

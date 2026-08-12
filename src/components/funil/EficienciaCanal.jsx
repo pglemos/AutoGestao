@@ -20,7 +20,7 @@ function pctLabel(a, b) {
 
 function EtapaLinha({ label, valor, conv }) {
   return (
-    <div className="flex items-center justify-between py-1.5 border-b border-slate-50 last:border-0">
+    <div className="flex items-center justify-between py-1.5 border-b border-border-subtle last:border-0">
       <div className="flex flex-col">
         <span className="text-[12px] text-muted-foreground">{label}</span>
         {conv !== null && conv !== undefined && (

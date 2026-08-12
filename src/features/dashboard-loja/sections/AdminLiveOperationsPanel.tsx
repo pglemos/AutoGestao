@@ -298,7 +298,7 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50">
+            <tbody className="divide-y divide-border-subtle">
               {hasUnavailableData ? (
                 <tr>
                   <td colSpan={8} className="px-4 py-12 text-center text-sm text-muted-foreground">

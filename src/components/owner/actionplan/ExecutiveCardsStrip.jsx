@@ -22,7 +22,7 @@ const CARDS = [
     strip: "bg-slate-400",
     iconBg: "bg-muted text-muted-foreground",
     selectedBg: "bg-surface-alt/80",
-    selectedBorder: "border-slate-400",
+    selectedBorder: "border-border-strong",
     getValue: (actions) => countByStatus(actions, "not_started"),
   },
   {

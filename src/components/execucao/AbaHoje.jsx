@@ -609,7 +609,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
           ) : (
             // Filtro sem resultados
             <div className="bg-white rounded-2xl border border-border shadow-sm p-10 text-center">
-              <Inbox className="w-10 h-10 text-slate-200 mx-auto mb-3" />
+              <Inbox className="w-10 h-10 text-text-disabled mx-auto mb-3" />
               <p className="text-body-sm text-muted-foreground">Nenhuma oportunidade do tipo <strong>{filtroTipo}</strong> para hoje.</p>
               <button onClick={() => setFiltroTipo("todos")} className="text-[12px] text-status-info-text font-bold mt-2 hover:underline">Ver todas</button>
             </div>

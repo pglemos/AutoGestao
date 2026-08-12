@@ -17,7 +17,7 @@ export function EstadoVazio({
   if (filtered) {
     return (
       <div className="rounded-2xl border border-border bg-white p-10 text-center shadow-sm">
-        <Inbox className="mx-auto mb-3 h-10 w-10 text-slate-200" aria-hidden="true" />
+        <Inbox className="mx-auto mb-3 h-10 w-10 text-text-disabled" aria-hidden="true" />
         <p className="text-body-sm text-muted-foreground">
           Nenhuma oportunidade do tipo <strong>{filterLabel}</strong> para hoje.
         </p>

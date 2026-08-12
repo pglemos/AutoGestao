@@ -218,7 +218,7 @@ export default function FunilVendedor() {
 
         {!hasAnyData && (
           <div className="rounded-2xl border border-border bg-white p-10 text-center shadow-sm">
-            <TrendingUp className="mx-auto mb-3 h-10 w-10 text-slate-200" />
+            <TrendingUp className="mx-auto mb-3 h-10 w-10 text-text-disabled" />
             <p className="mb-1 text-body font-bold text-foreground">Sem dados suficientes neste período.</p>
             <p className="text-body-sm text-muted-foreground">Registre atendimentos na Carteira ou no Fechamento Diário para alimentar o Funil.</p>
           </div>

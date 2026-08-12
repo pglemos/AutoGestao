@@ -659,7 +659,7 @@ function UniversityTeamTable({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-50">
+        <tbody className="divide-y divide-border-subtle">
           {teamRows.map(member => {
             const pendingTraining = allTrainings.find(training => !member.watched.includes(training.id))
             const statusLabel = !hasOfficialContent ? 'Sem conteúdo' : member.progress >= 75 ? 'Em dia' : 'Atenção'

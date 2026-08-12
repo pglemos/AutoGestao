@@ -35,7 +35,7 @@ function MetricRow({
   const bWins = comparable && (b as number) > (a as number)
 
   return (
-    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 border-b border-gray-50 py-2.5 last:border-0">
+    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 border-b border-border-subtle py-2.5 last:border-0">
       <div className="pr-1 text-right">
         <span className={`text-base font-bold ${aWins ? 'text-status-success-text' : 'text-foreground'}`}>{a === null ? '—' : format(a)}</span>
         {aWins && <Check size={12} className="ml-1 inline text-status-success-text" />}

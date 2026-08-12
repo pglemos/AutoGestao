@@ -115,7 +115,7 @@ export function VendasFechadasLoja({
             </thead>
             <tbody>
               {filtradas.map(venda => (
-                <tr key={venda.id} className="border-b border-slate-50 hover:bg-surface-alt/50">
+                <tr key={venda.id} className="border-b border-border-subtle hover:bg-surface-alt/50">
                   <td className="px-4 py-3 text-body-sm font-semibold text-foreground">{venda.cliente_nome}</td>
                   <td className="px-4 py-3 text-body-sm text-muted-foreground">{venda.seller_nome}</td>
                   <td className="px-4 py-3 text-body-sm text-muted-foreground">{venda.veiculo_interesse || '—'}</td>

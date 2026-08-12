@@ -40,7 +40,7 @@ export default function FeedbackPage({ hideHeader = false }) {
     : { label: "Positivo", className: "bg-brand-primary-subtle text-brand-primary" });
 
   if (loading) {
-    return <div className="flex items-center justify-center h-64"><div className="w-8 h-8 border-4 border-slate-200 border-t-mx-blue rounded-full animate-spin" /></div>;
+    return <div className="flex items-center justify-center h-64"><div className="w-8 h-8 border-4 border-border border-t-mx-blue rounded-full animate-spin" /></div>;
   }
 
   const pending = feedbacks.filter(f => !f.acknowledged);
@@ -65,16 +65,16 @@ export default function FeedbackPage({ hideHeader = false }) {
           <h3 className="text-base font-semibold text-mx-navy mb-4">Feedbacks Pendentes</h3>
           <div className="space-y-4">
             {pending.map(f => (
-              <div key={f.id} className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 border-l-4 border-l-mx-amber">
+              <div key={f.id} className="bg-white rounded-2xl p-6 shadow-sm border border-border border-l-4 border-l-mx-amber">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${feedbackBadge(f).className}`}>{feedbackBadge(f).label}</span>
-                      <span className="text-xs text-slate-400">{f.competency}</span>
-                      <span className="text-xs text-slate-400">· {moment(f.created_date).format("DD/MM/YYYY")}</span>
+                      <span className="text-xs text-muted-foreground">{f.competency}</span>
+                      <span className="text-xs text-muted-foreground">· {moment(f.created_date).format("DD/MM/YYYY")}</span>
                     </div>
-                    <p className="text-sm text-slate-700 mb-1">{f.message}</p>
-                    <p className="text-xs text-slate-400">Por: {f.responsible}</p>
+                    <p className="text-sm text-foreground mb-1">{f.message}</p>
+                    <p className="text-xs text-muted-foreground">Por: {f.responsible}</p>
                   </div>
                 </div>
                 <div className="mt-4 space-y-3">
@@ -97,14 +97,14 @@ export default function FeedbackPage({ hideHeader = false }) {
       )}
 
       {/* History */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-        <div className="p-5 border-b border-slate-100">
+      <div className="bg-white rounded-2xl shadow-sm border border-border overflow-hidden">
+        <div className="p-5 border-b border-border">
           <h3 className="text-base font-semibold text-mx-navy">Histórico</h3>
         </div>
         {feedbacks.filter(f => f.acknowledged).length === 0 ? (
           <div className="p-12 text-center">
-            <MessageSquare className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-            <p className="text-sm text-slate-400">Nenhum feedback confirmado ainda.</p>
+            <MessageSquare className="w-10 h-10 text-text-disabled mx-auto mb-3" />
+            <p className="text-sm text-muted-foreground">Nenhum feedback confirmado ainda.</p>
           </div>
         ) : (
           <ScrollableRegion label="Histórico de devolutivas">
@@ -116,16 +116,16 @@ export default function FeedbackPage({ hideHeader = false }) {
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y divide-border-subtle">
                 {feedbacks.filter(f => f.acknowledged).map(f => (
                   <tr key={f.id} className="hover:bg-surface-alt/50">
-                    <td className="px-5 py-3.5 text-sm text-slate-600">{moment(f.created_date).format("DD/MM/YYYY")}</td>
+                    <td className="px-5 py-3.5 text-sm text-muted-foreground">{moment(f.created_date).format("DD/MM/YYYY")}</td>
                     <td className="px-5 py-3.5">
                       <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${feedbackBadge(f).className}`}>{feedbackBadge(f).label}</span>
                     </td>
-                    <td className="px-5 py-3.5 text-sm text-slate-600">{f.competency}</td>
-                    <td className="px-5 py-3.5 text-sm text-slate-600">{f.responsible}</td>
-                    <td className="px-5 py-3.5 text-sm text-slate-600 max-w-[200px] truncate">{f.user_comment || "—"}</td>
+                    <td className="px-5 py-3.5 text-sm text-muted-foreground">{f.competency}</td>
+                    <td className="px-5 py-3.5 text-sm text-muted-foreground">{f.responsible}</td>
+                    <td className="px-5 py-3.5 text-sm text-muted-foreground max-w-[200px] truncate">{f.user_comment || "—"}</td>
                     <td className="px-5 py-3.5"><CheckCircle2 className="w-4 h-4 text-brand-primary" /></td>
                   </tr>
                 ))}

@@ -128,14 +128,14 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <SheetContent side="right" className="w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl h-full p-0 flex flex-col bg-surface-alt overflow-hidden">
         {/* Cabeçalho Fixo em Azul Marinho */}
-        <div className="bg-slate-900 text-white p-5 sm:p-6 shrink-0 border-b border-slate-800">
+        <div className="bg-slate-900 text-white p-5 sm:p-6 shrink-0 border-b border-border-strong">
           <div className="flex items-start justify-between gap-4">
             <div>
               <div className="flex items-center gap-2 mb-1 flex-wrap">
                 <Badge variant="outline" className="border-status-info/50 text-blue-300 bg-status-info/60 text-xs font-semibold">
                   {opportunity.statusCode}
                 </Badge>
-                <Badge variant="outline" className="border-slate-600 text-text-disabled bg-slate-800 text-xs">
+                <Badge variant="outline" className="border-border-strong text-text-disabled bg-slate-800 text-xs">
                   {priorityClass ? `Prioridade ${priorityClass}` : 'Prioridade não calculada'}
                 </Badge>
                 {isInternal && (
@@ -296,7 +296,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
               </div>
             ) : renderedScript.scriptReady && renderedScript.text ? (
               <div className="space-y-2">
-                <div className="bg-slate-900 text-slate-100 p-3.5 rounded-lg text-sm font-sans whitespace-pre-wrap leading-relaxed border border-slate-800 shadow-inner max-h-60 overflow-y-auto">
+                <div className="bg-slate-900 text-muted-foreground p-3.5 rounded-lg text-sm font-sans whitespace-pre-wrap leading-relaxed border border-border-strong shadow-inner max-h-60 overflow-y-auto">
                   {renderedScript.text}
                 </div>
                 <div className="flex justify-end">

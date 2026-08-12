@@ -57,7 +57,7 @@ export function HelpTooltip({
         <Content
           side={side}
           sideOffset={6}
-          className="z-[var(--mx-z-tooltip)] max-w-[280px] rounded-lg border border-slate-700/50 bg-slate-800 px-3 py-2 text-xs font-normal leading-relaxed text-slate-50 shadow-xl pointer-events-none"
+          className="z-[var(--mx-z-tooltip)] max-w-[280px] rounded-lg border border-border-strong/50 bg-slate-800 px-3 py-2 text-xs font-normal leading-relaxed text-slate-50 shadow-xl pointer-events-none"
         >
           {text}
         </Content>

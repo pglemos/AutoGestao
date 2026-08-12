@@ -136,7 +136,7 @@ export default function VendedorHomePage() {
                 <button
                   type="button"
                   onClick={() => navigate('/central-execucao')}
-                  className="flex h-[36px] items-center gap-1 rounded-xl border border-gray-800 px-3 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-muted"
+                  className="flex h-[36px] items-center gap-1 rounded-xl border border-border-strong px-3 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-muted"
                 >
                   <CalendarClock size={14} /> Rotina do Dia
                 </button>
@@ -364,7 +364,7 @@ export default function VendedorHomePage() {
                   </button>
                 </div>
               ) : (
-                <div className="divide-y divide-gray-50">
+                <div className="divide-y divide-border-subtle">
                   {agendaHoje.slice(0, 5).map(item => (
                     <div key={item.id} className="flex items-center justify-between py-3">
                       <div className="flex items-center gap-3 min-w-0">

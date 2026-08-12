@@ -564,7 +564,7 @@ export function AgendaD1Panel({
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-50">
+                <tbody className="divide-y divide-border-subtle">
                   {visible.map((row) => {
                     const lastContact =
                       row.last_contact_at || row.cliente?.ultima_interacao || null;

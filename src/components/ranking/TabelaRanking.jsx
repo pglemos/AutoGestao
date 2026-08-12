@@ -56,7 +56,7 @@ export default function TabelaRanking({ vendedores, meta, isVolume, meuId }) {
               return (
                 <tr
                   key={v.id}
-                  className={`border-b border-slate-50 transition-colors ${isMe ? "bg-status-info-surface/60" : "hover:bg-surface-alt/50"}`}
+                  className={`border-b border-border-subtle transition-colors ${isMe ? "bg-status-info-surface/60" : "hover:bg-surface-alt/50"}`}
                   style={isMe ? { outline: "1.5px solid #3b82f6", outlineOffset: "-1px" } : {}}
                 >
                   {/* Posição */}

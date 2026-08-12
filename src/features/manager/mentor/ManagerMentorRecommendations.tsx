@@ -39,7 +39,7 @@ export function ManagerMentorRecommendations({ recommendations }: { recommendati
               onClick={() => setFilter(item.key)}
               className={`rounded-lg border px-3 py-1 text-xs font-medium transition-all ${
                 filter === item.key
-                  ? 'border-gray-800 bg-gray-800 text-white'
+                  ? 'border-border-strong bg-gray-800 text-white'
                   : 'border-border-subtle bg-surface-alt text-muted-foreground hover:bg-muted'
               }`}
             >

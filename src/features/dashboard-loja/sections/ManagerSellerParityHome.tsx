@@ -315,7 +315,7 @@ function HeaderAction({ icon: Icon, label, onClick, tone }: {
     <button
       type="button"
       onClick={onClick}
-      className={`flex h-[36px] items-center gap-1 rounded-xl border px-3 text-sm font-semibold shadow-sm transition-colors ${tone === 'emerald' ? 'border-status-success text-status-success-text hover:bg-status-success-surface' : 'border-gray-800 text-foreground hover:bg-muted'}`}
+      className={`flex h-[36px] items-center gap-1 rounded-xl border px-3 text-sm font-semibold shadow-sm transition-colors ${tone === 'emerald' ? 'border-status-success text-status-success-text hover:bg-status-success-surface' : 'border-border-strong text-foreground hover:bg-muted'}`}
     >
       <Icon size={14} /> {label}
     </button>
@@ -503,7 +503,7 @@ function TeamFocus({ team, showAll, onSellerClick, onViewAll }: {
 
 function TeamFocusRow({ seller, onClick }: { seller: ManagerTeamFocusItem; onClick: () => void }) {
   return (
-    <tr onClick={onClick} className="cursor-pointer border-b border-gray-50 transition-colors hover:bg-surface-alt">
+    <tr onClick={onClick} className="cursor-pointer border-b border-border-subtle transition-colors hover:bg-surface-alt">
       <td className="py-2.5 pr-3"><SellerIdentity seller={seller} /></td>
       <td className="px-2 text-center text-foreground">{seller.appointmentsToday}</td>
       <td className="px-2 text-center text-foreground">{formatSales(seller.salesForecastToday)}</td>

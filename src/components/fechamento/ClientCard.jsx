@@ -644,7 +644,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
                 ? isExpanded
                   ? <ChevronUp className="w-3.5 h-3.5 text-status-info-text flex-shrink-0" />
                   : <ChevronDown className="w-3.5 h-3.5 text-text-disabled group-hover:text-muted-foreground flex-shrink-0" />
-                : <Lock className="w-3.5 h-3.5 text-slate-200 flex-shrink-0" />
+                : <Lock className="w-3.5 h-3.5 text-text-disabled flex-shrink-0" />
               }
               {c.nome}
               {tipoBadge && (
@@ -673,11 +673,11 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
           <td className="px-4 py-3">
             <div className="flex items-center gap-1.5" onClick={e => e.stopPropagation()}>
               <button onClick={(e) => canEdit && openEdit(c, e)} disabled={!canEdit}
-                className={`p-1.5 rounded-lg transition-colors ${canEdit ? "hover:bg-status-info-surface text-status-info-text" : "text-slate-200 cursor-not-allowed"}`}>
+                className={`p-1.5 rounded-lg transition-colors ${canEdit ? "hover:bg-status-info-surface text-status-info-text" : "text-text-disabled cursor-not-allowed"}`}>
                 <Pencil className="w-3.5 h-3.5" />
               </button>
               <button onClick={(e) => { e.stopPropagation(); canDelete && setDeleteConfirm({ id: c.id, name: c.nome }); }} disabled={!canDelete}
-                className={`p-1.5 rounded-lg transition-colors ${canDelete ? "hover:bg-status-error-surface text-[#EF4444]" : "text-slate-200 cursor-not-allowed"}`}>
+                className={`p-1.5 rounded-lg transition-colors ${canDelete ? "hover:bg-status-error-surface text-[#EF4444]" : "text-text-disabled cursor-not-allowed"}`}>
                 <Trash2 className="w-3.5 h-3.5" />
               </button>
             </div>

@@ -107,7 +107,7 @@ export function FichaOportunidade({
   return (
     <div className="w-full max-w-5xl mx-auto bg-surface-alt font-sans text-foreground rounded-2xl shadow-xl border border-border overflow-hidden my-4">
       {/* Structural Top Bar — Identity Sidebar Navy */}
-      <div className="bg-slate-900 text-white px-6 py-4 flex items-center justify-between border-b border-slate-800">
+      <div className="bg-slate-900 text-white px-6 py-4 flex items-center justify-between border-b border-border-strong">
         <div>
           <div className="flex items-center space-x-3">
             <span className="text-xs uppercase tracking-wider font-semibold text-blue-400">
@@ -148,7 +148,7 @@ export function FichaOportunidade({
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 bg-slate-900 text-slate-100 font-medium text-xs rounded-full">
+              <span className="px-3 py-1 bg-slate-900 text-muted-foreground font-medium text-xs rounded-full">
                 {header.statusLabel} ({header.statusCode})
               </span>
               <span className="px-3 py-1 bg-status-info-surface text-status-info-text font-medium text-xs rounded-full border border-status-info/30">
@@ -204,7 +204,7 @@ export function FichaOportunidade({
             </div>
 
             {/* Card Urgência da Ação (Prioridade) */}
-            <div className="bg-slate-900 text-white rounded-xl p-5 border border-slate-800 flex flex-col justify-between space-y-4">
+            <div className="bg-slate-900 text-white rounded-xl p-5 border border-border-strong flex flex-col justify-between space-y-4">
               <div>
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold uppercase tracking-wider text-text-disabled">
@@ -223,7 +223,7 @@ export function FichaOportunidade({
                 </p>
               </div>
 
-              <div className="space-y-2 pt-2 border-t border-slate-800 text-xs">
+              <div className="space-y-2 pt-2 border-t border-border-strong text-xs">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Escala de Urgência:</span>
                   <span className="font-semibold text-blue-300">
@@ -232,7 +232,7 @@ export function FichaOportunidade({
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Potencial Comercial:</span>
-                  <span className="font-semibold text-slate-200">
+                  <span className="font-semibold text-text-disabled">
                     {header.priority.potential ?? 'Baixo'}
                   </span>
                 </div>
