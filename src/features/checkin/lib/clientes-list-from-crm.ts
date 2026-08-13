@@ -1,10 +1,10 @@
 // Deriva a tabela "Cadastrar Venda/Agendamentos" do Fechamento a partir das
 // fontes reais do CRM (oportunidades + agendamentos), em vez de localStorage
-// (EV-1.7). Uma oportunidade pertence ao fechamento do dia quando foi criada
-// naquele dia de competência — mesmo critério já usado em
-// crm-derived-totals.ts (deriveCrmDerivedTotals) para leads/vendas/visitas,
-// já que oportunidades/agendamentos não têm uma coluna própria de
-// "fechamento_id"/data de competência.
+// (EV-1.7). Uma oportunidade pertence ao fechamento do dia quando a data de
+// competência ou o evento terminal (closed_at) cai nessa data — o mesmo
+// critério já usado em crm-derived-totals.ts (deriveCrmDerivedTotals) para
+// vendas. O fallback por created_at preserva leads/oportunidades legados que
+// ainda não têm data de competência.
 import { toDateOnlyBR } from '@/lib/schemas/crm.schema'
 import { calcularTipoRegistro } from '../hooks/useCheckinPage'
 import type { ClienteRow } from '../hooks/useCheckinPage'
@@ -24,6 +24,7 @@ export interface OportunidadeForClienteRow {
   carro_avaliado: boolean
   motivo_perda: string | null
   created_at: string
+  closed_at?: string | null
   data_competencia?: string | null
   cliente?: { nome: string; telefone: string | null } | null
 }
@@ -111,6 +112,7 @@ export function deriveClientesListFromCrm(
   return oportunidades
     .filter(op => {
       const pertenceAoFechamento = op.data_competencia === selectedDate
+        || timestampMatchesDateOnly(op.closed_at, selectedDate)
         || (!op.data_competencia && timestampMatchesDateOnly(op.created_at, selectedDate))
       const agendamentoD1DoFechamento = options.fechamentoPendente
         && agendamentoPorOportunidade.has(op.id)

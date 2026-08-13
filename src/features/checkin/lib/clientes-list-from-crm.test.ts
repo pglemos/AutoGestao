@@ -39,6 +39,25 @@ describe('deriveClientesListFromCrm', () => {
     expect(rows[0].valorNegociado).toBe(100000)
   })
 
+  test('venda convertida de oportunidade antiga usa closed_at como data do fechamento', () => {
+    const rows = deriveClientesListFromCrm(
+      [{
+        ...baseOportunidade,
+        etapa: 'ganho',
+        created_at: '2026-06-20T12:00:00-03:00',
+        data_competencia: '2026-06-20',
+        closed_at: '2026-06-23T13:45:00-03:00',
+        valor_negociado: 100000,
+      }],
+      [],
+      '2026-06-23',
+    )
+
+    expect(rows).toHaveLength(1)
+    expect(rows[0].vendaRealizada).toBe('Sim')
+    expect(rows[0].tipoRegistroCalculado).toBe('Venda')
+  })
+
   test('perda (etapa perdido) carrega motivo_perda', () => {
     const rows = deriveClientesListFromCrm(
       [{ ...baseOportunidade, etapa: 'perdido', motivo_perda: 'Comprou em outra marca' }],

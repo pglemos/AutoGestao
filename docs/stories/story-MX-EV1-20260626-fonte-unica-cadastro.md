@@ -2,7 +2,7 @@
 
 ## Status
 
-InReview
+Ready for Review
 
 ## Story
 
@@ -59,13 +59,17 @@ Claude Sonnet 4.6 (aiox-master orquestrando, hat @dev)
 ### Debug Log References
 
 - `npm run typecheck`, `npm run lint`, `npm test` (645/645, 0 falhas), `npm run build` — todos verdes.
+- 2026-08-12: reprodução do caso do vídeo no Fechamento Diário; venda convertida de oportunidade antiga não era incluída quando `created_at`/`data_competencia` eram anteriores. A lista agora também considera `closed_at` na data operacional de São Paulo.
+- 2026-08-12: leitura autenticada somente leitura no Supabase para o vendedor: 27 oportunidades e 15 agendamentos; `2026-07-28` derivou 1 linha/1 venda (`Venda`) e `2026-08-12` derivou 0/0.
+- 2026-08-12: teste focado `clientes-list-from-crm.test.ts` (8 pass), `npm run typecheck`, `npm run lint`, `npm run build` e `git diff --check` passaram; lint mantém 1 warning preexistente em `PdiTab.jsx:304`.
+- 2026-08-12: validação renderizada local autenticada em `/fechamento-diario`, desktop e `474x850`, sem overlay, erro de console ou overflow horizontal. A suíte global do checkout limpo teve 2.768 pass/0 fail.
 
 ### Completion Notes
 
 - **AC4 revisado:** a premissa original do AC4/Dev Notes ("a escrita já está correta desde EV-1.2, este slice mexe só na leitura") estava **errada** — investigação mostrou que o campo "Data Agendamento" do form "+ Novo Cliente" nunca foi persistido em `oportunidades` (não existe essa coluna) nem em nenhuma outra tabela; só existia em `localStorage`. Em vez de criar uma coluna ad-hoc em `oportunidades`, optei por usar a tabela `agendamentos` já existente (FK `oportunidade_id`, já é a fonte oficial de Agendamentos D+1 usada em `crm-derived-totals.ts`) — decisão tomada antes de escrever código, evita inconsistência futura entre o que o Fechamento mostra e o resto do CRM vê.
 - **AC1/AC3 revisado:** implementei sem cache otimista de localStorage — `clientesList` é um `useMemo` puro sobre `oportunidades`+`agendamentos` (ambos vindos de `useOportunidades()`/`useAgendamentos()`), e toda escrita (`handleCadastrar`/`handleSaveInline`/`handleDelete`) chama `refetchClientesList()` (que dispara os 2 `refetch()`) ao final. Não há resposta "instantânea" antes da confirmação do banco — dado que as próprias mutações já fazem `await` + refetch dentro dos hooks (~200-400ms local), a latência percebida é baixa e não justificou a complexidade extra de um cache otimista paralelo que poderia divergir do servidor.
 - **Bug pré-existente corrigido de carona:** `handleCadastrar` sempre chamava `createOportunidade` mesmo ao editar um registro existente (`editingClientId` setado) — isso criava uma oportunidade duplicada no banco a cada edição, mascarado porque a tabela exibida era só o `localStorage`. Como `ClienteRow.id` agora é o `oportunidades.id` real (não mais um id local aleatório), adicionei `updateOportunidade` e troquei a lógica para create-or-update conforme `editingClientId`.
-- `clientesList` é derivado por `created_at` da oportunidade casando com `selectedDate` (mesmo critério de `crm-derived-totals.ts`), já que `oportunidades` não tem coluna própria de "dia de competência do fechamento".
+- `clientesList` é derivado por `data_competencia`, pelo evento terminal `closed_at` ou, para oportunidades legadas sem competência, por `created_at`, sempre casando com `selectedDate` na data operacional de São Paulo.
 - `handleDelete` agora também apaga o `agendamentos` vinculado antes de apagar a oportunidade — o FK é `ON DELETE SET NULL`, não cascade, então sem essa exclusão explícita o agendamento ficaria órfão.
 
 ### Change Log
@@ -74,6 +78,7 @@ Claude Sonnet 4.6 (aiox-master orquestrando, hat @dev)
 - 2026-06-26: Validação @po — GO. Escopo bem isolado (troca de fonte de leitura, escrita já correta). Risco principal é regressão de UX (latência de refetch vs. resposta instantânea do localStorage) — cobrir com cache otimista conforme AC3. Status definido como Ready.
 - 2026-06-26: Implementação concluída por @dev. Premissa do AC4 corrigida durante a investigação (escrita do agendamento nunca existiu, não só a leitura) — resolvida via tabela `agendamentos` existente em vez de coluna nova. Bug pré-existente de duplicação de oportunidade ao editar corrigido de carona. Gates verdes. Status: Ready for Review.
 - 2026-06-26: QA (@qa, Quinn) — PASS. Confirmado em código: RLS `FOR ALL` de `oportunidades`/`agendamentos` cobre os fluxos de create/update/delete usados por `CheckinCrmSection.tsx`; `createOportunidade` agora retorna `id` via `.select('id').single()` (testado que a policy de SELECT pós-insert não bloqueia, já que é a mesma `FOR ALL` do seller). Ver relatório completo em `docs/reports/qa-gate-ev1-fechamento-stories-20260626.md`. Status: InReview.
+- 2026-08-12: Correção de vendas convertidas em oportunidade antiga usando `closed_at`, com validação real somente leitura e prova visual local. Status: Ready for Review para publicação isolada.
 
 ## QA Results
 
