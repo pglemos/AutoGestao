@@ -8,13 +8,14 @@ import { Skeleton, type SkeletonProps } from '@/components/atoms/Skeleton'
 import { Textarea, type TextareaProps } from '@/components/atoms/Textarea'
 import { Typography } from '@/components/atoms/Typography'
 import { Card } from '@/components/molecules/Card'
+import { PageHeader } from '@/components/molecules/PageHeader'
 import { PageCanvas, type PageBottomClearance, type PageWidth } from '@/design-system/page'
 import { cn } from '@/lib/utils'
+import { TableSurface } from '@/components/organisms/Table'
 import {
   InternalMxTemplateHeader,
   InternalMxTemplatePage,
   InternalMxTemplateSection,
-  InternalMxTemplateTable,
   InternalMxTemplateToolbar,
 } from './InternalMxTemplateSlots'
 
@@ -79,16 +80,19 @@ export function MxModulePage({
 
 export function MxModuleHeader({ title, description, eyebrow, actions, className }: { title: ReactNode; description?: ReactNode; eyebrow?: ReactNode; actions?: ReactNode; className?: string }) {
   return (
-    <InternalMxTemplateHeader data-mx-module-header="" className={cn('rounded-2xl border border-border-subtle bg-white p-5 shadow-sm', className)}>
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="min-w-0 max-w-3xl">
-          {eyebrow ? <Typography variant="caption" className="mb-1 block font-semibold text-status-success-text">{eyebrow}</Typography> : null}
-          <Typography as="h1" variant="h2" className="text-xl font-bold text-foreground md:text-2xl">{title}</Typography>
-          {description ? <Typography variant="p" className="mt-1 max-w-3xl text-sm leading-6 text-muted-foreground">{description}</Typography> : null}
-        </div>
-        {actions ? <div className="flex min-w-0 flex-wrap items-center gap-2">{actions}</div> : null}
-      </div>
-    </InternalMxTemplateHeader>
+    <PageHeader
+      data-mx-module-header=""
+      data-mx-template-header=""
+      data-mx-template-slot="header"
+      data-mx-visual-system="manager"
+      title={title}
+      description={description}
+      eyebrow={eyebrow}
+      actions={actions}
+      titleVariant="h2"
+      descriptionVariant="p"
+      className={className}
+    />
   )
 }
 
@@ -161,7 +165,7 @@ export function MxField({ label, hint, error, children, className, ...props }: {
 export function MxInput(props: InputProps) { return <Input {...props} /> }
 export function MxSelect(props: SelectProps) { return <Select {...props} /> }
 export function MxTextarea(props: TextareaProps) { return <Textarea {...props} /> }
-export function MxTableSurface({ children, className, role, tabIndex, 'aria-label': ariaLabel, ...props }: HTMLAttributes<HTMLDivElement>) { return <InternalMxTemplateTable data-mx-table-surface="" role={role ?? 'region'} tabIndex={tabIndex ?? 0} aria-label={ariaLabel ?? 'Tabela com rolagem horizontal'} className={cn('w-full overflow-x-auto rounded-2xl border border-border-subtle bg-white', className)} {...props}>{children}</InternalMxTemplateTable> }
+export function MxTableSurface({ children, className, role, tabIndex, 'aria-label': ariaLabel, ...props }: HTMLAttributes<HTMLDivElement>) { return <TableSurface label={ariaLabel ?? 'Tabela com rolagem horizontal'} role={role ?? 'region'} tabIndex={tabIndex ?? 0} data-mx-template-slot="table" data-mx-template-table="" className={className} {...props}>{children}</TableSurface> }
 
 export function MxEmptyState({ title, description, icon: Icon = Inbox, action, className }: { title: string; description?: string; icon?: LucideIcon; action?: ReactNode; className?: string }) {
   return (

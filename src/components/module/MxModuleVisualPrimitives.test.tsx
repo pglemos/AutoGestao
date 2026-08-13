@@ -16,6 +16,41 @@ import {
 } from './MxModuleVisualPrimitives'
 
 describe('MxModuleVisualPrimitives', () => {
+  test('o header de módulo delega a geometria para o PageHeader canônico', () => {
+    const html = renderToStaticMarkup(
+      <MxModuleHeader
+        eyebrow="Gestão"
+        title="Painel"
+        description="Descrição operacional"
+        actions={<Button>Atualizar</Button>}
+      />,
+    )
+
+    expect(html).toContain('data-mx-page-header=""')
+    expect(html).toContain('data-mx-module-header=""')
+    expect(html).toContain('rounded-[var(--mx-card-radius)]')
+    expect(html).toContain('shadow-[var(--mx-card-shadow)]')
+    expect(html).not.toContain('rounded-2xl border border-border-subtle bg-white p-5 shadow-sm')
+  })
+
+  test('MxTableSurface delega à TableSurface canônica com single ownership e paridade MX', () => {
+    const html = renderToStaticMarkup(
+      <MxTableSurface><table><tbody><tr><td>OK</td></tr></tbody></table></MxTableSurface>,
+    )
+
+    expect(html).toContain('data-mx-table-surface=""')
+    expect(html).toContain('data-mx-scroll-region=""')
+    expect(html).toContain('data-mx-template-slot="table"')
+    expect(html).toContain('data-mx-template-table=""')
+    expect(html).toMatch(/role="region"/)
+    expect(html).toMatch(/aria-label="Tabela com rolagem horizontal"/)
+    expect(html).toMatch(/tabindex="0"/)
+    expect(html).toContain('rounded-2xl')
+    expect(html).toContain('bg-white')
+    expect(html).not.toContain('rounded-mx-xl')
+    expect(html).not.toContain('bg-background')
+  })
+
   test('reproduz a anatomia visual concreta do módulo Gerente', () => {
     const html = renderToStaticMarkup(
       <MxModulePage>
