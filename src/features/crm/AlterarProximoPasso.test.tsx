@@ -16,6 +16,8 @@ describe('AlterarProximoPasso', () => {
       />,
     )
 
-    expect(screen.getByRole('dialog', { name: 'Alterar próximo passo' }).className).toContain('z-[300]')
+    const dialog = screen.getByRole('dialog', { name: 'Alterar próximo passo' })
+    expect(dialog).toHaveAttribute('data-mx-overlay', 'modal')
+    expect(dialog.className).toContain('z-[var(--mx-z-modal')
   })
 })

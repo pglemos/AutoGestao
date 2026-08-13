@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
-import { X } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
-import { Card } from '@/components/molecules/Card'
+import { Modal } from '@/components/organisms/Modal'
 import { Typography } from '@/components/atoms/Typography'
 import type { Cliente } from '@/lib/schemas/crm.schema'
 
@@ -50,8 +49,6 @@ export function AlterarProximoPasso({ open, cliente, onClose, onSalvar }: Altera
     }
   }, [open, cliente])
 
-  if (!open || !cliente) return null
-
   const podeSalvar = acao.trim().length > 0
 
   async function handleSalvar() {
@@ -64,75 +61,76 @@ export function AlterarProximoPasso({ open, cliente, onClose, onSalvar }: Altera
   }
 
   return (
-    <div className="fixed inset-0 z-[300] grid place-items-center bg-surface-overlay/40 p-4 backdrop-blur-[3px]" role="dialog" aria-modal="true" aria-label="Alterar próximo passo">
-      <Card className="w-full max-w-md space-y-mx-sm p-mx-lg">
-        <div className="flex items-start justify-between">
-          <div>
-            <Typography variant="h3">Alterar próximo passo</Typography>
-            <Typography variant="caption" tone="muted">Defina o que precisa acontecer para {cliente.nome.split(' ')[0]} evoluir.</Typography>
-          </div>
-          <button type="button" onClick={onClose} aria-label="Fechar"><X size={18} className="text-muted-foreground" /></button>
-        </div>
-
-        <div>
-          <Typography variant="caption" tone="muted" className="mb-mx-xs block font-bold">Sugestões</Typography>
-          <div className="flex flex-wrap gap-1.5">
-            {SUGESTOES_PROXIMA_ACAO.map(sugestao => (
-              <button
-                key={sugestao}
-                type="button"
-                onClick={() => setAcao(sugestao)}
-                className={`rounded-xl border px-mx-xs py-1 text-xs font-semibold transition-colors ${
-                  acao === sugestao
-                    ? 'border-status-info bg-status-info text-white'
-                    : 'border-border-subtle bg-surface-alt text-muted-foreground hover:border-status-info/40'
-                }`}
-              >
-                {sugestao}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <Typography variant="caption" tone="muted" className="mb-mx-xs block font-bold">Próxima ação *</Typography>
-          <textarea
-            value={acao}
-            onChange={event => setAcao(event.target.value)}
-            rows={2}
-            placeholder="Descreva o próximo passo..."
-            className="w-full resize-none rounded-xl border border-border-subtle bg-white p-mx-sm text-sm outline-none focus:border-status-info focus:ring-4 focus:ring-status-info/10"
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-mx-xs">
-          <div>
-            <Typography variant="caption" tone="muted" className="mb-mx-xs block font-bold">Data</Typography>
-            <input
-              type="date"
-              value={dataStr}
-              onChange={event => setDataStr(event.target.value)}
-              className="h-9 w-full rounded-xl border border-border-subtle bg-white px-mx-xs text-sm outline-none focus:border-status-info"
-            />
-          </div>
-          <div>
-            <Typography variant="caption" tone="muted" className="mb-mx-xs block font-bold">Horário (opcional)</Typography>
-            <input
-              type="time"
-              value={horario}
-              onChange={event => setHorario(event.target.value)}
-              className="h-9 w-full rounded-xl border border-border-subtle bg-white px-mx-xs text-sm outline-none focus:border-status-info"
-            />
-          </div>
-        </div>
-
-        <div className="flex gap-mx-xs pt-mx-xs">
+    <Modal
+      open={open && !!cliente}
+      onClose={onClose}
+      title="Alterar próximo passo"
+      description={cliente ? `Defina o que precisa acontecer para ${cliente.nome.split(' ')[0]} evoluir.` : undefined}
+      size="sm"
+      footer={
+        <>
           <Button variant="outline" className="flex-1" onClick={onClose} disabled={salvando}>Cancelar</Button>
-          <Button className="flex-1" disabled={!podeSalvar || salvando} onClick={handleSalvar}>
+          <Button className="flex-1" disabled={!podeSalvar || salvando} onClick={() => void handleSalvar()}>
             {salvando ? 'Salvando...' : 'Salvar próximo passo'}
           </Button>
+        </>
+      }
+    >
+      {cliente && (
+        <div className="space-y-mx-sm">
+          <div>
+            <Typography variant="caption" tone="muted" className="mb-mx-xs block font-bold">Sugestões</Typography>
+            <div className="flex flex-wrap gap-1.5">
+              {SUGESTOES_PROXIMA_ACAO.map(sugestao => (
+                <button
+                  key={sugestao}
+                  type="button"
+                  onClick={() => setAcao(sugestao)}
+                  className={`rounded-xl border px-mx-xs py-1 text-xs font-semibold transition-colors ${
+                    acao === sugestao
+                      ? 'border-status-info bg-status-info text-white'
+                      : 'border-border-subtle bg-surface-alt text-muted-foreground hover:border-status-info/40'
+                  }`}
+                >
+                  {sugestao}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <Typography variant="caption" tone="muted" className="mb-mx-xs block font-bold">Próxima ação *</Typography>
+            <textarea
+              value={acao}
+              onChange={event => setAcao(event.target.value)}
+              rows={2}
+              placeholder="Descreva o próximo passo..."
+              className="w-full resize-none rounded-xl border border-border-subtle bg-white p-mx-sm text-sm outline-none focus:border-status-info focus:ring-4 focus:ring-status-info/10"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-mx-xs">
+            <div>
+              <Typography variant="caption" tone="muted" className="mb-mx-xs block font-bold">Data</Typography>
+              <input
+                type="date"
+                value={dataStr}
+                onChange={event => setDataStr(event.target.value)}
+                className="h-9 w-full rounded-xl border border-border-subtle bg-white px-mx-xs text-sm outline-none focus:border-status-info"
+              />
+            </div>
+            <div>
+              <Typography variant="caption" tone="muted" className="mb-mx-xs block font-bold">Horário (opcional)</Typography>
+              <input
+                type="time"
+                value={horario}
+                onChange={event => setHorario(event.target.value)}
+                className="h-9 w-full rounded-xl border border-border-subtle bg-white px-mx-xs text-sm outline-none focus:border-status-info"
+              />
+            </div>
+          </div>
         </div>
-      </Card>
-    </div>
+      )}
+    </Modal>
   )
 }
