@@ -5,6 +5,15 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import { dirname, isAbsolute, join, resolve } from 'node:path'
 import { chromium, type Browser, type BrowserContext, type Page, type Request } from 'playwright'
+import {
+  safeSlug,
+  planWork,
+  parseBatchSize,
+  acquireRunLock,
+  acquireGlobalLock,
+  runRoleLoop,
+  aggregateSummaryFromDisk,
+} from './foundation-zero-runner.mjs'
 
 type FoundationRole =
   | 'administrador_geral'
@@ -228,14 +237,6 @@ function parseArgs(argv: string[]) {
 function csv(value: string | boolean | undefined): string[] | undefined {
   if (typeof value !== 'string') return undefined
   return value.split(',').map(item => item.trim()).filter(Boolean)
-}
-
-function safeSlug(value: string): string {
-  return value
-    .replace(/:[^/]+/g, 'param')
-    .replace(/[^a-zA-Z0-9_-]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .toLowerCase() || 'root'
 }
 
 function routeWithRealParameters(routeTemplate: string, args: Record<string, string | boolean>): string {
@@ -676,85 +677,146 @@ async function main() {
   const matrix = JSON.parse(await readFile(matrixPath, 'utf8')) as Matrix
   const routeFilter = csv(args.route)
   const rows = routeRows(matrix, roles, routeFilter)
-  const limit = typeof args.limit === 'string' ? Number.parseInt(args.limit, 10) : Number.POSITIVE_INFINITY
-  if (!Number.isFinite(limit) && args.limit !== undefined) throw new Error(`--limit inválido: ${String(args.limit)}`)
-  const planned = rows.flatMap(row => viewports.map(viewport => ({ row, viewport }))).slice(0, limit)
+  const limit = typeof args.limit === 'string' ? Number(args.limit) : Number.POSITIVE_INFINITY
+  if (args.limit !== undefined && (!Number.isInteger(limit) || limit < 0)) throw new Error(`--limit inválido: ${String(args.limit)}`)
+  const ttlHours = typeof args['lock-ttl'] === 'string' ? Number.parseFloat(args['lock-ttl']) : undefined
+  if (ttlHours !== undefined && (!Number.isFinite(ttlHours) || ttlHours <= 0)) throw new Error(`--lock-ttl inválido: ${String(args['lock-ttl'])}`)
+  const planned = rows.flatMap(row => viewports.map(viewport => ({ row, viewport })))
+  const resume = args['no-resume'] !== true
+  const batchSize = parseBatchSize(args['batch-size'])
+  const force = args.force === true || args.force === 'true'
+  const useGlobalLock = args['no-global-lock'] !== true
 
-  console.log(JSON.stringify({ runId, baseUrl, matrixPath, outputRoot, roles, viewports: viewports.map(item => item.key), routeRows: rows.length, plannedCases: planned.length }, null, 2))
+  console.log(JSON.stringify({ runId, baseUrl, matrixPath, outputRoot, roles, viewports: viewports.map(item => item.key), routeRows: rows.length, resume, limit, plannedCases: planned.length }, null, 2))
   if (!ROLE_PASSWORD) console.warn('E2E_ROLE_PASSWORD/E2E_AUTH_PASSWORD ausente; casos serão SKIP.')
 
-  const browser: Browser = await chromium.launch({ headless: true })
-  const results: CaseState[] = []
+  // Lock global fixo e compartilhado entre shards (chaveado por baseUrl), para
+  // que outputRoots diferentes (matrix-shards/<role>) nunca rodem em paralelo.
+  const globalLockDir = join(ROOT, 'artifacts/foundation-zero/.locks')
+  const globalHandle = useGlobalLock ? await acquireGlobalLock(globalLockDir, { runId, baseUrl }, { force, ttlHours }) : null
+  let results: CaseState[] = []
+  let sessions = { sessionsOpened: 0, sessionsClosed: 0 }
+  let plan: { resumed: unknown[]; toRun: unknown[]; selected: Array<{ row: RouteRoleRow; viewport: ViewportCase }>; effective: Array<{ row: RouteRoleRow; viewport: ViewportCase }>; counts: Record<string, number> } | undefined
+  const writeSummary = async () => {
+    if (!plan) return undefined
+    const fromDisk = await aggregateSummaryFromDisk(plan.effective, outputRoot, plan.selected, runId)
+    const summary = {
+      runId,
+      generatedAt: new Date().toISOString(),
+      baseUrl,
+      matrixPath,
+      outputRoot,
+      scope: 'invocation',
+      counts: {
+        ...plan.counts,
+        capturedCases: fromDisk.capturedCases,
+      },
+      sessions,
+      denominators: {
+        matrixRoutes: matrix.summary.routesTotal,
+        matrixRouteRoleRows: matrix.summary.routeRoleTotal,
+        standardCanvasRoutes: matrix.summary.standardCanvasTotal,
+        standardCanvasRenderings: matrix.summary.standardCanvasRenderings,
+        viewportCases: viewports.length,
+        plannedCases: planned.length,
+      },
+      results: {
+        pass: fromDisk.pass,
+        fail: fromDisk.fail,
+        skip: fromDisk.skip,
+      },
+      cases: results,
+    }
+    await writeJson(join(outputRoot, 'run-summary.json'), summary)
+    console.log(JSON.stringify({ runId, scope: summary.scope, counts: summary.counts, results: summary.results, summary: join(outputRoot, 'run-summary.json') }, null, 2))
+    return summary
+  }
   try {
-    for (const role of roles) {
-      const roleRows = planned.filter(item => item.row.role === role)
-      if (!roleRows.length) continue
-      const context = await browser.newContext({ baseURL: baseUrl, viewport: { width: 1280, height: 800 } })
-      try {
-        const loginPage = await context.newPage()
-        const auth = await authenticate(loginPage, role)
-        await loginPage.close()
-        if (!auth.ok) {
-          for (const item of roleRows) {
-            const startedAt = new Date().toISOString()
-            const state: CaseState = {
-              runId,
-              status: 'SKIP',
-              role,
-              requestedRole: role,
-              routeTemplate: item.row.path,
-              route: routeWithRealParameters(item.row.path, args),
-              viewport: item.viewport,
-              surface: item.row.surface,
-              kind: item.row.kind,
-              startedAt,
-              finishedAt: new Date().toISOString(),
-              checks: { authenticated: false, mainCount: null, pageCanvasCount: null, pageViewportCount: null, pageScrollOwnerCount: null, horizontalOverflow: null, criticalA11yViolations: null, seriousA11yViolations: null, consoleErrors: 0, pageErrors: 0, failedRequests: 0, httpErrors: 0 },
-              classification: { geometry: 'NOT_CAPTURED', runtime: 'NOT_CAPTURED', accessibility: 'NOT_CAPTURED' },
-              notes: [auth.reason || 'credencial ausente'],
-            }
-            await writePlaceholderState(join(outputRoot, role, safeSlug(item.row.path), item.viewport.key), state)
-            results.push(state)
+    const runHandle = await acquireRunLock(outputRoot, { runId, baseUrl }, { force, ttlHours })
+    try {
+      plan = await planWork({ planned, outputRoot, resume, limit })
+      console.log(JSON.stringify({ counts: plan.counts, scope: 'invocation' }, null, 2))
+
+      const openSession = async (role: FoundationRole) => {
+        const browser: Browser = await chromium.launch({ headless: true })
+        const context = await browser.newContext({ baseURL: baseUrl, viewport: { width: 1280, height: 800 } })
+        try {
+          const loginPage = await context.newPage()
+          const auth = await authenticate(loginPage, role)
+          await loginPage.close()
+          if (!auth.ok) {
+            await context.close()
+            await browser.close()
+            return { ok: false, reason: auth.reason }
           }
-          continue
+          return { ok: true, session: { browser, context } }
+        } catch (error) {
+          await context.close().catch(() => {})
+          await browser.close().catch(() => {})
+          return { ok: false, reason: redactError(error) }
         }
-        for (const item of roleRows) {
-          const result = await captureCase(context, item.row, item.viewport, baseUrl, outputRoot, runId, args)
-          results.push(result)
-          console.log(`[${result.status}] ${role} ${item.row.path} ${item.viewport.key}`)
+      }
+      const closeSession = async (handle: { ok: boolean; session?: { browser: Browser; context: BrowserContext } }) => {
+        if (!handle || !handle.ok || !handle.session) return
+        await handle.session.context.close().catch(() => {})
+        await handle.session.browser.close().catch(() => {})
+      }
+      const capture = async (handle: { ok: boolean; session?: { browser: Browser; context: BrowserContext } }, item: { row: RouteRoleRow; viewport: ViewportCase }) =>
+        captureCase(handle.session!.context, item.row, item.viewport, baseUrl, outputRoot, runId, args)
+      const writeSkip = async (item: { row: RouteRoleRow; viewport: ViewportCase }, reason: string) => {
+        const startedAt = new Date().toISOString()
+        const state: CaseState = {
+          runId,
+          status: 'SKIP',
+          role: item.row.role,
+          requestedRole: item.row.role,
+          routeTemplate: item.row.path,
+          route: routeWithRealParameters(item.row.path, args),
+          viewport: item.viewport,
+          surface: item.row.surface,
+          kind: item.row.kind,
+          startedAt,
+          finishedAt: new Date().toISOString(),
+          checks: { authenticated: false, mainCount: null, pageCanvasCount: null, pageViewportCount: null, pageScrollOwnerCount: null, horizontalOverflow: null, criticalA11yViolations: null, seriousA11yViolations: null, consoleErrors: 0, pageErrors: 0, failedRequests: 0, httpErrors: 0 },
+          classification: { geometry: 'NOT_CAPTURED', runtime: 'NOT_CAPTURED', accessibility: 'NOT_CAPTURED' },
+          notes: [reason],
+        }
+        await writePlaceholderState(join(outputRoot, item.row.role, safeSlug(item.row.path), item.viewport.key), state)
+        return state
+      }
+      const onResult = (state: CaseState) => {
+        results.push(state)
+        console.log(`[${state.status}] ${state.role} ${state.routeTemplate} ${state.viewport.key}`)
+      }
+      const onRoleComplete = async (_role: FoundationRole, _roleResults: CaseState[], counters: { sessionsOpened: number; sessionsClosed: number }) => {
+        sessions = { sessionsOpened: counters.sessionsOpened, sessionsClosed: counters.sessionsClosed }
+        await writeSummary()
+      }
+      const outcome = await runRoleLoop({
+        roles,
+        selected: plan.selected,
+        openSession,
+        capture,
+        closeSession,
+        onResult,
+        onRoleComplete,
+        writeSkip,
+        batchSize,
+      })
+      sessions = { sessionsOpened: outcome.sessionsOpened, sessionsClosed: outcome.sessionsClosed }
+    } finally {
+      try {
+        if (plan) {
+          const summary = await writeSummary()
+          if (summary && summary.results.fail > 0 && args['allow-failures'] !== true) process.exitCode = 1
         }
       } finally {
-        await context.close()
+        await runHandle.release()
       }
     }
   } finally {
-    await browser.close()
+    if (globalHandle) await globalHandle.release()
   }
-
-  const summary = {
-    runId,
-    generatedAt: new Date().toISOString(),
-    baseUrl,
-    matrixPath,
-    outputRoot,
-    denominators: {
-      matrixRoutes: matrix.summary.routesTotal,
-      matrixRouteRoleRows: matrix.summary.routeRoleTotal,
-      standardCanvasRoutes: matrix.summary.standardCanvasTotal,
-      standardCanvasRenderings: matrix.summary.standardCanvasRenderings,
-      viewportCases: viewports.length,
-      plannedCases: planned.length,
-    },
-    results: {
-      pass: results.filter(item => item.status === 'PASS').length,
-      fail: results.filter(item => item.status === 'FAIL').length,
-      skip: results.filter(item => item.status === 'SKIP').length,
-    },
-    cases: results,
-  }
-  await writeJson(join(outputRoot, 'run-summary.json'), summary)
-  console.log(JSON.stringify({ runId, results: summary.results, summary: join(outputRoot, 'run-summary.json') }, null, 2))
-  if (summary.results.fail > 0 && args['allow-failures'] !== true) process.exitCode = 1
 }
 
 main().catch(error => {
