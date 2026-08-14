@@ -1,0 +1,540 @@
+{
+  "generatedAt": "2026-08-14T20:56:25.574Z",
+  "baseline": {
+    "src/App.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/carteira/CarteiraAtivaTab.jsx": {
+      "button-hover-without-focus": 6
+    },
+    "src/components/carteira/ExecucaoMissao.jsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/components/carteira/FichaClienteSheet.jsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/components/carteira/ModoAtaque.jsx": {
+      "hover-only-nav-link": 1,
+      "button-hover-without-focus": 3
+    },
+    "src/components/carteira/PlanoAtaqueTab.jsx": {
+      "button-hover-without-focus": 4
+    },
+    "src/components/carteira/VeiculosChegaram.jsx": {
+      "button-hover-without-focus": 4
+    },
+    "src/components/execucao/AbaHoje.jsx": {
+      "hover-only-nav-link": 6,
+      "button-hover-without-focus": 10
+    },
+    "src/components/execucao/AbaRotina.jsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/execucao/ClienteFichaSheet.jsx": {
+      "hover-only-nav-link": 2,
+      "button-hover-without-focus": 1
+    },
+    "src/components/execucao/NovaAtividadeModal.jsx": {
+      "button-hover-without-focus": 5
+    },
+    "src/components/execucao/PendenciasDrawer.jsx": {
+      "hover-only-nav-link": 3,
+      "button-hover-without-focus": 2
+    },
+    "src/components/execucao/ReagendarPendenciaModal.jsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/components/execucao/ResolverModal.jsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/components/fechamento/BottomSection.jsx": {
+      "button-hover-without-focus": 4
+    },
+    "src/components/fechamento/ClientCard.jsx": {
+      "button-hover-without-focus": 7
+    },
+    "src/components/fechamento/ClientCardMobile.jsx": {
+      "button-hover-without-focus": 5
+    },
+    "src/components/fechamento/CounterSection.jsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/components/fechamento/DisciplinaMobile.jsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/fechamento/DisciplinaModal.jsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/components/fechamento/FinalizarMobile.jsx": {
+      "button-hover-without-focus": 3
+    },
+    "src/components/fechamento/FluxoFechamento.jsx": {
+      "button-hover-without-focus": 3
+    },
+    "src/components/fechamento/MovimentoDia.jsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/components/fechamento/NovoRegistroModal.jsx": {
+      "button-hover-without-focus": 3
+    },
+    "src/components/fechamento/RegularizarFechamentoDrawer.jsx": {
+      "button-hover-without-focus": 15
+    },
+    "src/components/fechamento/RegularizarFechamentoModal.jsx": {
+      "button-hover-without-focus": 7
+    },
+    "src/components/funil/FunilCanal.jsx": {
+      "hover-only-nav-link": 1
+    },
+    "src/components/funil/RecuperarVendas.jsx": {
+      "hover-only-nav-link": 1
+    },
+    "src/components/funil/StatusMeta.jsx": {
+      "hover-only-nav-link": 1
+    },
+    "src/components/molecules/Breadcrumb.tsx": {
+      "hover-only-nav-link": 1
+    },
+    "src/components/molecules/TabNav.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/NotificationBellButton.tsx": {
+      "button-hover-without-focus": 3
+    },
+    "src/components/organisms/AgendaCalendar/AgendaEventPopover.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/organisms/AgendaCalendar/index.tsx": {
+      "button-hover-without-focus": 3
+    },
+    "src/components/organisms/AgendaCalendar/TimeGrid.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/organisms/DREForm.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/organisms/Modal.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/organisms/VisitCard.tsx": {
+      "hover-only-nav-link": 1
+    },
+    "src/components/owner/actionplan/ActionsToolbar.jsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/components/owner/actionplan/board/ExecutionTab.jsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/owner/actionplan/board/ListView.jsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/components/owner/actionplan/calendar/MoreActionsPopover.jsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/components/owner/actionplan/calendar/UpcomingDeadlines.jsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/owner/actionplan/ExecutiveCardsStrip.jsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/owner/actionplan/ExecutiveFilters.jsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/owner/blocks/DepartmentPulse.jsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/owner/blocks/ExecutiveCardsGrid.jsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/owner/consulting/PreparationTab.jsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/components/owner/home/DepartmentCard.jsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/owner/home/MxScoreCard.jsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/owner/home/OwnerActionsBlock.jsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/owner/home/SalesGoalBlock.jsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/owner/home/SecondaryAlerts.jsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/owner/strategic/StrategicIndicatorGuidance.jsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/owner/strategic/StrategicPlanOverview.jsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/pdi/MetasSugeridas.jsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/vendedor/CalculationDetailsDrawer.jsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/vendedor/CommissionHeroCard.jsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/vendedor/FinancialHeroCard.jsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/vendedor/QuickSimulationCard.jsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/components/vendedor/RecordRoutineCard.jsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/agenda-admin/components/AgendaEventDrawer.tsx": {
+      "button-hover-without-focus": 5,
+      "hover-only-nav-link": 1
+    },
+    "src/features/agenda-admin/components/AgendaSearchBar.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/agenda-admin/components/AgendaSidebar.tsx": {
+      "button-hover-without-focus": 5
+    },
+    "src/features/agenda-admin/components/MiniCalendar.tsx": {
+      "button-hover-without-focus": 3
+    },
+    "src/features/agenda-admin/sections/AgendaHeader.tsx": {
+      "button-hover-without-focus": 5
+    },
+    "src/features/agenda-admin/sections/ScheduleEventCard.tsx": {
+      "hover-only-nav-link": 1
+    },
+    "src/features/agenda-admin/sections/VisitaDetailPanel.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/features/auth/components/ForcePasswordChange.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/features/central-execucao/components/AtividadeCard.tsx": {
+      "button-hover-without-focus": 8,
+      "hover-only-nav-link": 2
+    },
+    "src/features/central-execucao/components/EstadoVazio.tsx": {
+      "button-hover-without-focus": 3,
+      "hover-only-nav-link": 1
+    },
+    "src/features/central-execucao/components/FichaClienteSheet.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/central-execucao/components/PendenciasBanner.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/central-execucao/components/PendenciasDrawer.tsx": {
+      "button-hover-without-focus": 5,
+      "hover-only-nav-link": 1
+    },
+    "src/features/central-execucao/modals/EscalarAtividadeModal.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/features/central-execucao/modals/NovaAtividadeModal.tsx": {
+      "button-hover-without-focus": 5
+    },
+    "src/features/central-execucao/modals/ReagendarAtividadeModal.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/features/central-execucao/modals/ResolverAtividadeModal.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/features/central-execucao/tabs/HojeTab.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/central-execucao/tabs/RotinaDiaTab.tsx": {
+      "button-hover-without-focus": 1,
+      "hover-only-nav-link": 1
+    },
+    "src/features/checkin/autosave/CheckinAutosaveStatus.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/features/checkin/sections/CheckinCrmSection.tsx": {
+      "button-hover-without-focus": 11
+    },
+    "src/features/checkin/sections/CheckinForm.tsx": {
+      "button-hover-without-focus": 10
+    },
+    "src/features/checkin/sections/CheckinHeader.tsx": {
+      "button-hover-without-focus": 9
+    },
+    "src/features/checkin/sections/FluxoFechamento.tsx": {
+      "button-hover-without-focus": 3
+    },
+    "src/features/checkin/sections/NovoRegistroModal.tsx": {
+      "button-hover-without-focus": 4
+    },
+    "src/features/checkin/sections/RegularizarFechamentoDrawer.tsx": {
+      "button-hover-without-focus": 5
+    },
+    "src/features/configuracoes/components/AgendaOptionsCatalog.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/configuracoes/components/tabs/CatalogosTab.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/features/configuracoes/components/tabs/PerfilTab.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/configuracoes/components/tabs/SegurancaTab.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/consulting-journey/components/AnticipationPanel.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/consulting-journey/components/ConsultingJourneyTimeline.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/consulting-journey/components/EvidenceTab.tsx": {
+      "button-hover-without-focus": 1,
+      "hover-only-nav-link": 1
+    },
+    "src/features/consulting-journey/components/LessonOverviewTab.tsx": {
+      "hover-only-nav-link": 1
+    },
+    "src/features/consulting-journey/components/ProgressTab.tsx": {
+      "hover-only-nav-link": 1
+    },
+    "src/features/consultoria-cliente/sections/ClientHeaderSection.tsx": {
+      "hover-only-nav-link": 1
+    },
+    "src/features/consultoria-visita/LegacyConsultoriaVisitaExecucaoPage.tsx": {
+      "hover-only-nav-link": 1
+    },
+    "src/features/consultoria/components/GoogleCalendarView.tsx": {
+      "hover-only-nav-link": 1
+    },
+    "src/features/consultoria/components/VisitOneHighFidelity.tsx": {
+      "button-hover-without-focus": 3
+    },
+    "src/features/crm/funil-vendedor/FunilVendedorCards.tsx": {
+      "button-hover-without-focus": 1,
+      "hover-only-nav-link": 1
+    },
+    "src/features/crm/ModoAtaqueView.tsx": {
+      "hover-only-nav-link": 2,
+      "button-hover-without-focus": 6
+    },
+    "src/features/crm/PlanoAtaqueTab.tsx": {
+      "button-hover-without-focus": 10,
+      "hover-only-nav-link": 1
+    },
+    "src/features/dashboard-loja/sections/AdminLiveOperationsPanel.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/features/dashboard-loja/sections/AdminSettingsCard.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/features/dashboard-loja/sections/CentralMxBenchmarkInteractive.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/dashboard-loja/sections/CentralMxCriarPlanoModal.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/dashboard-loja/sections/DashboardHeader.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/features/dashboard-loja/sections/KpisSection.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/dashboard-loja/sections/ManagerSellerParityHome.tsx": {
+      "button-hover-without-focus": 3
+    },
+    "src/features/dashboard-loja/sections/ManagerSellerParityHomeCanonical.tsx": {
+      "button-hover-without-focus": 4
+    },
+    "src/features/dashboard-loja/sections/owner-cockpit/OwnerHomeWidgets.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/features/dashboard-loja/sections/PerformanceAlerts.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/dashboard-loja/sections/RankingSection.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/features/deterministic-actions/DeterministicActionsPanel.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/digital-products/components/DigitalProductFormModal.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/dono/FalarConsultorDono.tsx": {
+      "hover-only-nav-link": 1
+    },
+    "src/features/equipe/components/UserCreationModal.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/features/internal-profile/LegacyProfilePage.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/features/lojas/components/SellerGoalsEditor.tsx": {
+      "button-hover-without-focus": 3
+    },
+    "src/features/lojas/data/storeColumns.tsx": {
+      "hover-only-nav-link": 1
+    },
+    "src/features/manager/daily-closing/AgendaD1Panel.tsx": {
+      "button-hover-without-focus": 7
+    },
+    "src/features/manager/daily-closing/AgendaD1PanelBase44.tsx": {
+      "button-hover-without-focus": 5
+    },
+    "src/features/manager/daily-closing/ClosingDetailsModal.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/features/manager/daily-closing/CorrigirLeadsModal.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/features/manager/daily-closing/LeadConferenceModal.tsx": {
+      "button-hover-without-focus": 3
+    },
+    "src/features/manager/daily-closing/ManagerDailyClosing.container.tsx": {
+      "button-hover-without-focus": 9
+    },
+    "src/features/manager/daily-closing/ManagerDailyClosingBase44.tsx": {
+      "button-hover-without-focus": 4
+    },
+    "src/features/manager/daily-closing/RegularizationDecisionModal.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/features/manager/daily-closing/RegularizationsListModal.tsx": {
+      "button-hover-without-focus": 3
+    },
+    "src/features/manager/daily-closing/RegularizeLateModal.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/features/manager/day-routine/ManagerDayRoutineView.tsx": {
+      "button-hover-without-focus": 8
+    },
+    "src/features/manager/development/ManagerFeedbackModal.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/manager/development/ManagerUniversityReference.tsx": {
+      "button-hover-without-focus": 2,
+      "hover-only-nav-link": 1
+    },
+    "src/features/manager/home/ManagerHomeReturnLink.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/manager/mentor/ManagerMentorLibrary.tsx": {
+      "button-hover-without-focus": 3
+    },
+    "src/features/manager/meta/ManagerStoreGoalReference.tsx": {
+      "button-hover-without-focus": 4
+    },
+    "src/features/manager/onboarding/ManagerTourLauncher.tsx": {
+      "button-hover-without-focus": 3
+    },
+    "src/features/manager/onboarding/ManagerTourOverlay.tsx": {
+      "button-hover-without-focus": 4
+    },
+    "src/features/manager/team-routine/ManagerRoutineChargeModal.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/features/manager/team-routine/ManagerRoutineDetailModal.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/manager/team-routine/ManagerTeamRoutineCanonical.container.tsx": {
+      "button-hover-without-focus": 3
+    },
+    "src/features/manager/team/ManagerSellerProfileModal.tsx": {
+      "button-hover-without-focus": 9
+    },
+    "src/features/manager/team/ManagerTeamKanban.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/mentor-comercial/ui/CarteiraAtivaList.tsx": {
+      "button-hover-without-focus": 3
+    },
+    "src/features/mentor-comercial/ui/FichaOportunidade.tsx": {
+      "button-hover-without-focus": 3
+    },
+    "src/features/mentor-comercial/ui/GuidedStatusUpdate.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/mentor-comercial/ui/OportunidadeCard.tsx": {
+      "button-hover-without-focus": 3
+    },
+    "src/features/notificacoes/sections/NotificacoesFiltersBar.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/ranking/components/SellerListItem.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/ranking/components/SellerProfileModal.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/ranking/manager/ManagerRankingComparison.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/ranking/sections/BattleSelector.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/ranking/sections/GlobalFiltersBar.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/features/ranking/sections/GlobalRankingHeader.tsx": {
+      "button-hover-without-focus": 3
+    },
+    "src/features/ranking/sections/StoreArenaSelector.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/ranking/views/ManagerRankingReference.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/remuneracao/components/dashboard/CalculationDetailsDrawer.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/remuneracao/components/dashboard/RecordRoutineCard.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/remuneracao/MinhaRemuneracaoPage.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/sales-performance/sections/AdminStoreMatrixTable.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/sales-performance/sections/AdminTopStoresList.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/seller-performance/sections/SellerPerformanceTable.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/universidade/sections/AulasAoVivoSection.tsx": {
+      "hover-only-nav-link": 1,
+      "button-hover-without-focus": 1
+    },
+    "src/features/vendas-loja/VendasFechadasLoja.tsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/features/vendedor-treinamentos/VendedorTreinamentos.container.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/pages/ConsultorNotificacoes.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/pages/Login.tsx": {
+      "button-hover-without-focus": 3
+    },
+    "src/pages/OAuthHome.tsx": {
+      "hover-only-nav-link": 6
+    },
+    "src/pages/owner/OwnerHome.jsx": {
+      "button-hover-without-focus": 1
+    },
+    "src/pages/PDIPrint.tsx": {
+      "button-hover-without-focus": 2
+    },
+    "src/pages/Privacy.tsx": {
+      "hover-only-nav-link": 1
+    },
+    "src/pages/VendedorHome.tsx": {
+      "button-hover-without-focus": 6
+    }
+  },
+  "total": 465
+}

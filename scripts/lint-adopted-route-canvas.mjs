@@ -161,6 +161,7 @@ function resolvePageDelegate(source, fileName, readFile) {
   const sf = createSourceFile(fileName, source)
   const bindings = collectBindings(sf)
   const rendered = new Set()
+  const targets = []
   for (const statement of sf.statements) {
     let body = null
     if (ts.isFunctionDeclaration(statement)) body = statement.body
@@ -187,14 +188,14 @@ function resolvePageDelegate(source, fileName, readFile) {
     }
   }
   for (const tag of rendered) {
-    if (CANVAS_TAGS.has(tag)) return null // raiz tem canvas próprio
+    if (CANVAS_TAGS.has(tag)) return [] // raiz tem canvas próprio
     const spec = bindings[tag]
     if (!spec) continue
     const candidates = candidatePaths(spec)
     const resolved = candidates.find((rel) => readFile(rel) !== null)
-    if (resolved) return resolved
+    if (resolved) targets.push(resolved)
   }
-  return null
+  return targets
 }
 
 /** Tags realmente renderizadas, ignorando ForbiddenRoute/Navigate. */
@@ -206,6 +207,11 @@ function extractRenderedTags(node, sf, out = new Set()) {
     return out
   }
   if (ts.isJsxExpression(node)) return extractRenderedTags(node.expression, sf, out)
+  if (ts.isConditionalExpression(node)) {
+    extractRenderedTags(node.whenTrue, sf, out)
+    extractRenderedTags(node.whenFalse, sf, out)
+    return out
+  }
   if (isJsxTag(node)) {
     const name = nodeTagName(node, sf)
     if (SKIPPED_TAGS.has(name)) return out
@@ -263,23 +269,56 @@ function inspectRootFile(source, fileName, meta, route) {
   }
 
   /**
+   * Coleta nomes de variáveis locais que derivam da metadata de rota:
+   * `const pageWidth = resolveRouteLayout(location.pathname).width` ou
+   * `const { width: pageWidth } = resolveRouteLayout(location.pathname)`.
+   * Quando a prop do canvas referencia essas variáveis, o componente segue a
+   * metadata da rota (mesmo contrato do padrão inline).
+   */
+  const collectMetadataVars = () => {
+    const vars = new Set()
+    const visit = (node) => {
+      if (ts.isVariableDeclaration(node) && node.initializer) {
+        const initText = node.initializer.getText(sf)
+        if (/\bresolveRouteLayout\s*\(/.test(initText)) {
+          if (ts.isIdentifier(node.name)) vars.add(node.name.text)
+          if (ts.isObjectBindingPattern(node.name)) {
+            for (const el of node.name.elements) {
+              if (ts.isBindingElement(el) && ts.isIdentifier(el.name)) vars.add(el.name.text)
+            }
+          }
+        }
+      }
+      ts.forEachChild(node, visit)
+    }
+    visit(sf)
+    return vars
+  }
+  const metadataVars = collectMetadataVars()
+
+  /**
    * Lê a prop `width`/`bottomClearance` de um canvas.
    *
    * Além do literal, aceita o padrão canônico de largura dinâmica por rota:
    * `width={resolveRouteLayout(useLocation().pathname).width}` (idem para
-   * `bottomClearance`). Esse é o único non-literal permitido — o componente
-   * promete seguir a metadata da rota atual, então a validação é transferida
-   * para o contrato de metadata (lint-route-layout). Qualquer outra expressão
-   * permanece `non-literal` e viola o gate.
+   * `bottomClearance`) e variáveis locais que derivam de `resolveRouteLayout`.
+   * Esse é o único non-literal permitido — o componente promete seguir a
+   * metadata da rota atual, então a validação é transferida para o contrato de
+   * metadata (lint-route-layout). Qualquer outra expressão permanece
+   * `non-literal` e viola o gate.
    */
   const propVal = (attrs, prop) => {
     const attr = attrs.find((a) => ts.isJsxAttribute(a) && a.name.getText(sf) === prop)
     if (!attr?.initializer) return undefined
     if (ts.isStringLiteral(attr.initializer)) return attr.initializer.text
-    const exprText = attr.initializer.getText(sf)
-    const fromMetadata = /resolveRouteLayout\s*\(/.test(exprText)
-    if (prop === 'width' && fromMetadata && /\.width\s*$/.test(exprText)) return 'dynamic-metadata-width'
-    if (prop === 'bottomClearance' && fromMetadata && /\.bottomClearance\s*$/.test(exprText)) return 'dynamic-metadata-clearance'
+    // Atributo JSX `{expr}`: o initializer é um JsxExpression cujo `getText`
+    // inclui as chaves; usar a expressão interna para inspecionar o padrão.
+    const expr = ts.isJsxExpression(attr.initializer) ? attr.initializer.expression : attr.initializer
+    if (!expr) return '<non-literal>'
+    const exprText = expr.getText(sf)
+    const fromMetadata = /\bresolveRouteLayout\s*\(/.test(exprText) || (ts.isIdentifier(expr) && metadataVars.has(expr.text))
+    if (prop === 'width' && fromMetadata && (/\.width\s*$/.test(exprText) || (ts.isIdentifier(expr) && metadataVars.has(expr.text)))) return 'dynamic-metadata-width'
+    if (prop === 'bottomClearance' && fromMetadata && (/\.bottomClearance\s*$/.test(exprText) || (ts.isIdentifier(expr) && metadataVars.has(expr.text)))) return 'dynamic-metadata-clearance'
     return '<non-literal>'
   }
 
@@ -414,8 +453,8 @@ export function inspectAdoptedRouteCanvas({ appSource, metadataSource, readFile 
         continue
       }
       const candidates = candidatePaths(spec)
-      let resolved = candidates.find((rel) => readFile(rel) !== null)
-      if (!resolved) {
+      const root = candidates.find((rel) => readFile(rel) !== null)
+      if (!root) {
         violations.push({
           rule: 'unresolved-root',
           route: meta.route,
@@ -424,25 +463,34 @@ export function inspectAdoptedRouteCanvas({ appSource, metadataSource, readFile 
         })
         continue
       }
-      // Segue re-exports puros (ADR-0050) e wrappers que delegam a outro
-      // componente de página (Padrão A da coorte C7) até o arquivo que
-      // realmente declara o canvas. Limite de profundidade para evitar loops.
-      const visited = new Set([resolved])
-      for (let hop = 0; hop < 4; hop += 1) {
-        const currentSource = readFile(resolved)
-        if (currentSource === null) break
-        const reexportTarget = resolvePageReExport(currentSource, readFile)
-        const delegateTarget = resolvePageDelegate(currentSource, resolved, readFile)
-        const next = reexportTarget ?? delegateTarget
-        if (!next || visited.has(next)) break
-        visited.add(next)
-        resolved = next
+      // BFS: segue re-exports puros (ADR-0050) e wrappers que delegam a outro
+      // componente de página (Padrão A da coorte C7, inclusive ternários com
+      // dois delegados) até os arquivos que realmente declaram o canvas.
+      // Limite de profundidade para evitar loops.
+      const queue = [root]
+      const visited = new Set([root])
+      const canvasFiles = []
+      for (let hop = 0; hop < 4 && queue.length > 0; hop += 1) {
+        const current = queue.shift()
+        const currentSource = readFile(current)
+        if (currentSource === null) continue
+        const next = [...new Set([...resolvePageReExport(currentSource, readFile) ? [resolvePageReExport(currentSource, readFile)] : [], ...resolvePageDelegate(currentSource, current, readFile)])]
+        for (const n of next) {
+          if (!n || visited.has(n)) continue
+          visited.add(n)
+          queue.push(n)
+        }
+        // Só inspeciona arquivos sem delegados restantes (folhas do grafo).
+        if (next.length === 0) canvasFiles.push(current)
       }
-      const key = `${resolved}:${meta.route}:${tag}`
-      if (checked.has(key)) continue
-      checked.add(key)
-      const source = readFile(resolved)
-      violations.push(...inspectRootFile(source, resolved, meta, meta.route))    }
+      const sourceFiles = canvasFiles.length > 0 ? canvasFiles : [root]
+      for (const resolved of sourceFiles) {
+        const key = `${resolved}:${meta.route}:${tag}`
+        if (checked.has(key)) continue
+        checked.add(key)
+        const source = readFile(resolved)
+        violations.push(...inspectRootFile(source, resolved, meta, meta.route))
+      }
   }
 
   return {

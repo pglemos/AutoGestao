@@ -51,7 +51,7 @@ export function HelpTooltip({
             onBlur={() => setOpen(false)}
             className={`inline-flex cursor-help items-center justify-center border-0 bg-transparent p-0 align-middle text-muted-foreground transition-colors hover:text-status-success-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-success/30 ${className}`}
           >
-            <HelpCircle size={14} strokeWidth={2.25} />
+            <HelpCircle size={14} strokeWidth={2} />
           </button>
         </TooltipTrigger>
         <Content

@@ -122,10 +122,6 @@ export const ALLOWLIST = new Map([
     'src/features/remuneracao/components/dashboard/CalculationDetailsDrawer.tsx',
     'Botão icon-only sem aria-label.',
   ],
-  [
-    'src/pages/ConsultorTreinamentos.tsx',
-    'Link externo icon-only (aria-label no Button asChild, não no <a>).',
-  ],
 ])
 
 function openingOf(element) {

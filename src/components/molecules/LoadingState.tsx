@@ -12,11 +12,18 @@ export interface LoadingStateProps extends React.HTMLAttributes<HTMLDivElement> 
   variant?: 'spinner' | 'skeleton'
   /** Linhas do esqueleto. Ignorado em `spinner`. */
   rows?: number
+  /**
+   * Contexto do carregamento (18.010):
+   * - `initial`: primeira carga da tela — ocupa o espaço e anuncia por aria-live.
+   * - `refresh`: atualização silenciosa em segundo plano.
+   * - `pagination`: carregando mais itens ao final de uma lista.
+   */
+  context?: 'initial' | 'refresh' | 'pagination'
 }
 
 /** Estado de carregamento padrão. Nenhuma página inventa o seu (§9.5). */
 const LoadingState = React.forwardRef<HTMLDivElement, LoadingStateProps>(
-  ({ className, label = 'Carregando dados', variant = 'spinner', rows = 3, ...props }, ref) => {
+  ({ className, label = 'Carregando dados', variant = 'spinner', rows = 3, context = 'initial', ...props }, ref) => {
     if (variant === 'skeleton') {
       return (
         <div
@@ -47,13 +54,15 @@ const LoadingState = React.forwardRef<HTMLDivElement, LoadingStateProps>(
         ref={ref}
         role="status"
         aria-busy="true"
+        aria-label={label}
+        aria-live={context === 'pagination' || context === 'refresh' ? 'polite' : 'assertive'}
         className={cn(
           'flex flex-col items-center justify-center gap-[var(--mx-space-3)] py-[var(--mx-space-10)]',
           className,
         )}
         {...props}
       >
-        <Spinner size="lg" tone="primary" label="" />
+        <Spinner size={context === 'pagination' ? 'sm' : 'lg'} tone="primary" label="" />
         <p className="text-[length:var(--mx-font-size-base)] text-text-secondary">
           {label}
         </p>
