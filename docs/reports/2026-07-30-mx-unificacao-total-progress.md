@@ -1,13 +1,61 @@
 # MX Unificação Total — Progresso
 
-Atualizado em 2026-08-10 durante a retomada isolada no branch
-`feat/mx-unificacao-total-20260809`, commit local `a3ede247` sobre
-`origin/main` `71d9286a`. As observações abaixo da seção histórica de 03/08
+Atualizado em 2026-08-10 durante a retomada isolada no worktree
+`/Users/pedroguilherme/PROJETOS/mx-full-execution-20260810`, branch
+`fix/mx-full-execution-20260810`, sobre `origin/main` `9f998e27`. O diff desta
+retomada está staged e ainda não possui commit. As observações históricas abaixo
 continuam preservadas, mas não são evidência atual deste checkout.
 
-> **Estado vigente:** correção do PageCanvas do Dono implementada, testada,
-> validada localmente e comprovada no preview/CI remoto. Produção, Sentry e
-> backup restaurável ainda não foram aprovados nesta retomada.
+> **Estado vigente:** correções gerenciais do `PageCanvas` implementadas e
+> validadas localmente. Commit, CI remoto, preview, produção, Sentry e backup
+> restaurável ainda não foram aprovados para este diff.
+
+## Revalidação corrente — 2026-08-10 — worktree `fix/mx-full-execution-20260810`
+
+### Tarefa
+
+Alinhar fechamento diário, rotina do dia e loading da performance da equipe ao
+`PageCanvas` canônico, remover duplicação de layout e fechar os contratos de
+tipografia/acessibilidade associados sem criar canvas aninhado.
+
+### Diagnóstico e causa raiz
+
+As raízes de `ManagerDailyClosingBase44` e `ManagerDayRoutine` mantinham
+gutters/`max-w-7xl`/safe area próprios, e o loading de
+`ManagerTeamPerformance` repetia container e padding do canvas pai. O
+`HelpTooltip` usava `span[role=button]`, e o Check-in tinha tamanhos
+tipográficos arbitrários.
+
+### Alterações e arquivos
+
+- `ManagerDailyClosingBase44` e `ManagerDayRoutineCanonical` agora usam o
+  `PageCanvas` compartilhado; suas views não definem mais largura/margem raiz.
+- `ManagerTeamPerformance` delega também o loading ao canvas pai.
+- `HelpTooltip` usa `<button type="button">` nativo.
+- `CheckinHeader` usa `text-caption` nos trechos ajustados.
+- Contratos de regressão e paridade foram atualizados; a story registra o
+  estado parcial e a lista de arquivos.
+
+### Testes executados
+
+- Direcionados: `38 pass / 0 fail / 8221 expect()`.
+- Suíte completa: `2604 pass / 0 fail / 18181 expect()` em 462 arquivos.
+- `npm run lint`, `npm run typecheck`, `npm run build`,
+  `npm run check:bundle-size`, `npm run audit:layout-contract`,
+  `npm run audit:routes-data`, `validate:structure`, `validate:parity`,
+  `sync:ide:check`, `validate:agents`, `audit:management-design-system`,
+  `lint:a11y` e `git diff --check`: exit 0.
+- Bundle: `1563,80/1860 KB gzip`; build sem sourcemaps públicos.
+- `gitleaks protect --staged`: exit 0. O histórico contém 116 achados
+  redigidos; o scan de `src/` encontrou três falsos positivos genéricos em
+  fixtures/diagnósticos não alterados.
+
+### Resultado
+
+Validação local aprovada para esta unidade. Agy/Antigravity não produziu
+parecer técnico; não é contado como gate. Commit/PR/CI/preview/produção,
+matriz browser integral, backup/PITR, Sentry/source maps e rollback continuam
+pendentes.
 
 ## Revalidação atual — 2026-08-10
 

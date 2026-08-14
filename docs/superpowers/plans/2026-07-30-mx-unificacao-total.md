@@ -1,6 +1,27 @@
 # MX Unificação Total — Plano de Execução
 
-> Data: 2026-07-30 · Branch: `main` (por decisão explícita do solicitante) · Stack real: Vite 7 + React 19 + TS + Tailwind 4 + Radix/shadcn + Supabase + Vercel + Playwright + Storybook + bun test
+> Data: 2026-07-30 · Branch histórica: `main` · Stack real revalidada: Vite 6.4.3 + React 19 + TypeScript + Tailwind 4 + Radix/shadcn + Supabase + Vercel + Playwright + Storybook + bun test
+
+> **Revalidação corrente (2026-08-10):** a execução atual ocorre no worktree
+> `/Users/pedroguilherme/PROJETOS/mx-full-execution-20260810`, branch
+> `fix/mx-full-execution-20260810`, sobre `origin/main` `9f998e27`. O plano e os
+> estados históricos abaixo são preservados; a unidade gerencial corrente está
+> validada localmente, staged e ainda sem commit/preview/produção.
+
+## Revalidação corrente da unidade gerencial — 2026-08-10
+
+- `ManagerDailyClosingBase44` e `ManagerDayRoutineCanonical` usam `PageCanvas`
+  sem gutters/`max-w-7xl`/safe area próprios.
+- `ManagerTeamPerformance` deixa o canvas pai controlar também o loading;
+  `HelpTooltip` é botão nativo e `CheckinHeader` usa escala tipográfica
+  canônica nos trechos ajustados.
+- Contratos direcionados: `38 pass / 0 fail / 8221 expect()`; suíte total:
+  `2604 pass / 0 fail / 18181 expect()`.
+- Lint, typecheck, build, bundle (`1563,80/1860 KB gzip`), layout/route
+  audits, AIOX structure/parity/IDE sync, a11y, management design system e
+  diff-check passaram.
+- Commit, PR, CI remoto, preview, produção, backup/PITR, Sentry/source maps,
+  browser autenticado novo e rollback operacional ainda não foram provados.
 
 ## 0. Estado real medido (Fase 0 — concluída)
 

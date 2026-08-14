@@ -184,8 +184,11 @@ describe('CheckinHeader — Produção Zero com seletor de data', () => {
     })
 
     test('data retroativa usa escopo historical; data ativa usa daily', () => {
+        expect(headerSource).toContain('if (isActiveDate)')
         expect(headerSource).toContain("saveCheckin(placeholderPayload, 'historical', productionZeroDate)")
+        expect(headerSource).toContain("          'daily',\n          productionZeroDate,")
         expect(headerSource).toContain('isActiveDate = productionZeroDate === activeClosingDate')
+        expect(headerSource).not.toContain("saveCheckin(placeholderPayload, 'daily', productionZeroDate)")
     })
 
     test('fechamentos concluídos ficam indisponíveis no seletor (regularização é o caminho)', () => {

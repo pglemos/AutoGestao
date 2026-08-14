@@ -103,6 +103,6 @@ function ManagerTeamLoadingState() {
             <div className="h-56 animate-pulse rounded-2xl bg-surface-alt" />
           </div>
         </section>)}
-    </div>
+      </div>
   </section>
 }

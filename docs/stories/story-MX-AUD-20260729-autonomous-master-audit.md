@@ -119,8 +119,8 @@ anteriores de conclusão não contam como evidência nova.
   - [x] Corrigir causas raiz e repetir a matriz local completa.
   - [ ] Provar rollback e monitorar o pós-deploy.
 - [ ] Fases 13–14 — entrega (AC: 12, 13)
-  - [ ] Atualizar checkboxes, Dev Agent Record e File List.
-  - [ ] Revisar diff, executar quality gate e secret scan.
+  - [x] Atualizar checkboxes, Dev Agent Record e File List.
+  - [x] Revisar diff, executar quality gate e secret scan.
   - [ ] Preparar commits/PR/deploy via autoridade AIOX DevOps.
   - [ ] Entregar relatório final baseado nas evidências atuais.
 
@@ -201,6 +201,7 @@ anteriores de conclusão não contam como evidência nova.
 | 2026-07-29 | 0.2.1 | Development started (yolo mode) — Status: Ready → InProgress | Dex (Dev) |
 | 2026-07-29 | 0.3.0 | Inventário reproduzível de rotas, autorização, dados e mutations | Dex (Dev) |
 | 2026-08-10 | 0.3.1 | Regressão do PageCanvas do Dono corrigida e validada localmente em dois breakpoints | Dex (Dev) |
+| 2026-08-10 | 0.3.2 | Rotas gerenciais restantes migradas para PageCanvas; gates locais, layout contract e secret scan revalidados | Dex (Dev) |
 
 ## Dev Agent Record
 
@@ -393,6 +394,26 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - 2026-08-10: CodeRabbit não encontrou novos achados após o ajuste do contrato.
   A revisão Agy em sandbox foi tentada, mas atingiu cota externa antes de
   produzir parecer e não foi contada como gate.
+- 2026-08-10: `npm run audit:layout-contract` encontrou duas raízes sem canvas
+  em `ManagerDailyClosingBase44.tsx` e no loading de
+  `ManagerTeamPerformance.tsx`. Ambas foram migradas/remediadas sem criar
+  canvas aninhado no `DashboardLoja`; a repetição retornou zero violações.
+- 2026-08-10: o contrato novo de layout e os testes de `ManagerTeamPerformance`
+  passaram direcionados com 18/18 testes e 8.165 asserts; a suíte completa
+  isolada passou 2.604/2.604 testes, 18.181 asserts e 0 falhas. A repetição
+  concorrente apresentou uma falha transitória de foco após 13,3s, reproduzida
+  isoladamente como 2/2 pass.
+- 2026-08-10: `npm run lint`, `npm run typecheck`, `npm run build` e
+  `npm run check:bundle-size` passaram; build sem `.map` público e bundle
+  1.563,80/1.860 KB gzip, com os seis warnings CSS existentes do otimizador.
+  `git diff --check`, busca de padrões de tokens e Gitleaks em fontes/diff
+  também passaram sem segredo detectado.
+- 2026-08-10: a nova execução do Gitleaks 8.30.1 percorreu 1.950 commits e
+  encontrou 116 achados históricos redigidos; o scan do estado staged deste
+  worktree retornou zero leaks. O scan corrente de `src/` apontou somente três
+  falsos positivos genéricos em fixtures/diagnósticos não alterados nesta
+  tarefa, sem credencial operacional identificada. A dívida histórica continua
+  aberta e exige rotação/expurgo coordenados.
 
 ### Completion Notes List
 
@@ -421,14 +442,28 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - A migração moderna das Edge Functions está implementada e validada somente
   localmente; fallback legado, revisão integral, deploy e smoke permanecem
   pendentes.
-- A correção atual é local e commitada; preview, CI remoto, produção, Sentry,
-  backup restaurável e a matriz integral de perfis continuam pendentes. A
-  story permanece `InProgress` e parcialmente concluída.
+- A correção atual permanece somente neste worktree local e ainda não está
+  commitada; preview, CI remoto, produção, Sentry, backup restaurável e a
+  matriz integral de perfis continuam pendentes. A story permanece
+  `InProgress` e parcialmente concluída.
+- As rotas gerenciais auditadas agora não deixam `max-w-7xl`, gutters ou safe
+  area na raiz fora de `PageCanvas`; o canvas do `DashboardLoja` continua sendo
+  a autoridade quando `ManagerTeamPerformance` é renderizado como seção filha.
+- A validação desta retomada permanece local: não há evidência nova de
+  preview, CI remoto, produção, backup restaurável, Sentry ou matriz integral
+  de perfis/estados/ações. Esses gates continuam bloqueando qualquer alegação
+  de conclusão ou publicação.
+- O scan histórico de Gitleaks atualizado permanece uma evidência de dívida,
+  não de falha introduzida por este diff: `gitleaks protect --staged` passou,
+  enquanto os três achados do scan de `src/` pertencem a fixtures/diagnósticos
+  fora dos arquivos desta tarefa.
 
 ### File List
 
 - `.ai/decision-log-MX-AUD-20260729.md`
 - `docs/auditoria/relatorios/RELATORIO_FINAL_MX_GESTAO_PREDITIVA.md`
+- `docs/reports/2026-07-30-mx-unificacao-total-final.md`
+- `docs/reports/2026-07-30-mx-unificacao-total-progress.md`
 - `docs/auditoria/matrizes/MATRIZ_ROTAS_DADOS_MX.md`
 - `docs/auditoria/matrizes/MATRIZ_ROTACAO_CREDENCIAIS_MX.md`
 - `docs/auth/first-login-flow.md`
@@ -452,6 +487,7 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `check_rls.mjs` (removido)
 - `check_schema.mjs` (removido)
 - `docs/superpowers/plans/2026-07-07-plano-remuneracao-brothers-car.md`
+- `docs/superpowers/plans/2026-07-30-mx-unificacao-total.md`
 - `scripts/capture_mx_v2.js`
 - `scripts/capture_mx_v3.js`
 - `scripts/capture_vendedor.cjs`
@@ -468,6 +504,17 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `scripts/legacy/test-login.mjs` (removido)
 - `scripts/legacy/test-queries.mjs` (removido)
 - `scripts/legacy/test-queries-error-handling.mjs` (removido)
+- `src/components/ui/HelpTooltip.tsx`
+- `src/features/checkin/sections/CheckinHeader.test.ts`
+- `src/features/checkin/sections/CheckinHeader.tsx`
+- `src/features/manager/daily-closing/ManagerDailyClosingBase44.tsx`
+- `src/features/manager/daily-closing/manager-daily-closing-layout-contract.test.ts`
+- `src/features/manager/day-routine/ManagerDayRoutineCanonical.container.tsx`
+- `src/features/manager/day-routine/ManagerDayRoutineView.tsx`
+- `src/features/manager/day-routine/manager-day-routine-canonical-source.test.ts`
+- `src/features/manager/team/ManagerTeamPerformance.test.tsx`
+- `src/features/manager/team/ManagerTeamPerformance.tsx`
+- `src/test/module-design-system-parity.test.ts`
 - `scripts/legacy/test-queries-error-handling2.mjs` (removido)
 - `scripts/legacy/test-queries-final.mjs` (removido)
 - `scripts/provision_mx_consultoria_sandbox.ts`
