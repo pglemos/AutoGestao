@@ -107,7 +107,7 @@ const previousCard = ctx.activeClosingContext.previousCard
             )}
 
             {showConfetti && (
-                <div className="fixed inset-0 pointer-events-none z-[100] flex items-center justify-center bg-white/20 backdrop-blur-sm" aria-hidden="true">
+                <div className="fixed inset-0 pointer-events-none z-[var(--mx-z-overlay)] flex items-center justify-center bg-white/20 backdrop-blur-sm" aria-hidden="true">
                     <motion.div initial={{ scale: 0, rotate: -20 }} animate={{ scale: [0, 1.25, 1], rotate: 0 }} className="flex h-mx-32 w-mx-32 items-center justify-center rounded-mx-4xl bg-brand-primary text-white shadow-mx-2xl">
                         <Sparkles size={64} aria-hidden="true" />
                     </motion.div>

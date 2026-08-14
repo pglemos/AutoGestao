@@ -48,7 +48,7 @@ export function AgendaEventDrawer({
 
   return (
     <aside
-      className="fixed inset-y-0 right-0 z-[100] flex w-full max-w-md flex-col border-l border-border bg-white shadow-2xl transition-transform duration-300 animate-in slide-in-from-right"
+      className="fixed inset-y-0 right-0 z-[var(--mx-z-drawer)] flex w-full max-w-md flex-col border-l border-border bg-white shadow-2xl transition-transform duration-300 animate-in slide-in-from-right"
       aria-label="Painel de detalhes do dia"
     >
       {/* Drawer Header */}
@@ -74,7 +74,7 @@ export function AgendaEventDrawer({
       {/* Drawer Quick Action Bar */}
       <div className="flex items-center gap-2 border-b border-border px-5 py-3 bg-white">
         <Button
-          variant="secondary"
+          variant="outline"
           size="sm"
           onClick={() => onScheduleVisit(selectedDate)}
           className="flex-1 rounded-xl font-semibold"
@@ -92,7 +92,7 @@ export function AgendaEventDrawer({
       </div>
 
       {/* Drawer Body Items List */}
-      <div className="flex-1 overflow-y-auto p-5 space-y-4 no-scrollbar">
+      <div data-mx-scroll-region="vertical" className="flex-1 overflow-y-auto p-5 space-y-4 no-scrollbar">
         {totalItems === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <div className="flex h-14 w-14 items-center justify-center rounded-mx-full bg-surface-alt text-muted-foreground mb-3">
@@ -200,7 +200,7 @@ export function AgendaEventDrawer({
                   <div className="flex items-center gap-2 pt-2 border-t border-border">
                     {visit.status === 'agendada' && (
                       <Button
-                        variant="secondary"
+                        variant="outline"
                         size="sm"
                         onClick={() => onStartVisit(visit.id)}
                         className="w-full text-xs font-semibold"

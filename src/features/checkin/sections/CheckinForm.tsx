@@ -37,6 +37,7 @@ import { CheckinAutosaveStatus } from '../autosave/CheckinAutosaveStatus'
 import type { CheckinPageContext, NumericCheckinField } from '../hooks/useCheckinPage'
 import { shouldConfirmBeforeFinalizar } from '../lib/confirm-finalize'
 import { addDaysDateOnly } from '../lib/crm-derived-totals'
+import { chartTokens } from "@/lib/charts/tokens"
 
 interface CheckinFormProps {
   ctx: CheckinPageContext
@@ -102,7 +103,7 @@ export function InfoTooltip({ text }: { text: string }) {
       </button>
       {visible && (
         <div
-          className="fixed z-[9999] w-64 -translate-x-1/2 -translate-y-full rounded-lg border border-border bg-white p-3 text-[12px] font-medium leading-relaxed text-muted-foreground shadow-lg pointer-events-none transition-all"
+          className="fixed z-[var(--mx-z-tooltip)] w-64 -translate-x-1/2 -translate-y-full rounded-lg border border-border bg-white p-3 text-[12px] font-medium leading-relaxed text-muted-foreground shadow-lg pointer-events-none transition-all"
           style={{
             top: `${coords.top}px`,
             left: `${coords.left}px`,
@@ -286,7 +287,7 @@ return (
       {/* Estado do rascunho sempre visível. Sticky para acompanhar o scroll de
           uma tela longa — sem isto, o vendedor rola para preencher e perde de
           vista se o que digitou já chegou ao servidor. */}
-      <div className="sticky top-2 z-20 -mx-1 px-1">
+      <div className="sticky top-2 z-[var(--mx-z-sticky)] -mx-1 px-1">
         <CheckinAutosaveStatus
           state={autosaveState}
           finalizado={fechamentoConcluido}
@@ -382,8 +383,8 @@ return (
           // Escala de cores da Disciplina (Especificação Funcional §18):
           // 0-39% vermelho, 40-69% laranja, 70-89% azul, 90-100% verde.
           const arcColor =
-            disciplinePercent >= 90 ? '#22C55E' : disciplinePercent >= 70 ? '#3B82F6' : disciplinePercent >= 40 ? '#F97316' : '#EF4444'
-          const trackColor = '#F7F8F8'
+            disciplinePercent >= 90 ? chartTokens.success() : disciplinePercent >= 70 ? chartTokens.info() : disciplinePercent >= 40 ? chartTokens.warning() : chartTokens.danger()
+          const trackColor = chartTokens.grid()
           const arcDeg = Math.round(disciplinePercent * 3.6)
           return (
             <div className="rounded-2xl border border-border bg-white px-6 py-5 shadow-mx-lg flex items-center gap-5">
@@ -438,7 +439,7 @@ return (
       </section>
 
       {disciplineModalOpen && (
-<div className="fixed inset-0 z-[140] grid place-items-center bg-surface-overlay/35 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur-[3px]">
+<div className="fixed inset-0 z-[var(--mx-z-modal)] grid place-items-center bg-surface-overlay/35 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur-[3px]">
 <div className="flex max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[min(620px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-border bg-white shadow-mx-2xl transition-all animate-in fade-in zoom-in-95 duration-200">
             {/* Fixed Header */}
             <header className="px-6 py-5 border-b border-border flex items-center justify-between bg-surface-alt">
@@ -651,7 +652,7 @@ return (
       )}
 
 {confirmFinalizeModalOpen && (
-<div className="fixed inset-0 z-[140] grid place-items-center bg-surface-overlay/35 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur-[3px]">
+<div className="fixed inset-0 z-[var(--mx-z-modal)] grid place-items-center bg-surface-overlay/35 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur-[3px]">
 <div role="dialog" aria-modal="true" aria-labelledby="checkin-finalize-title" aria-describedby="checkin-finalize-description" className="flex max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[min(460px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-border bg-white shadow-mx-2xl transition-all animate-in fade-in zoom-in-95 duration-200">
 <header className="border-b border-border bg-white px-6 py-5">
 <h2 id="checkin-finalize-title" className="text-h5 font-bold leading-snug tracking-tight text-mx-navy">

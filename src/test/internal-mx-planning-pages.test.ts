@@ -37,9 +37,12 @@ describe('páginas de planejamento do módulo interno MX', () => {
   })
 
   test('mantém overlays nos próprios workspaces acima da navegação', () => {
-    expect(read('src/features/consulting-journey/components/ConsultingMeetingDialog.tsx')).toContain('z-[140]')
+    const meetingDialog = read('src/features/consulting-journey/components/ConsultingMeetingDialog.tsx')
+    expect(meetingDialog).toContain('<DialogContent')
+    expect(meetingDialog).toContain('<DialogBody')
+    expect(meetingDialog).toContain('mx-overlay-close')
     expect(read('src/features/action-plan/components/DeleteActionDialog.tsx')).toContain('Dialog')
-    expect(read('src/features/strategic-plan/StrategicPlanWorkspace.tsx')).not.toContain('fixed inset-0 z-50')
+    expect(read('src/features/strategic-plan/StrategicPlanWorkspace.tsx')).not.toContain('fixed inset-0 z-[var(--mx-z-overlay)]')
   })
 
   test('mantém seleção global de loja e realtime compartilhado', () => {

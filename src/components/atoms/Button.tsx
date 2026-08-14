@@ -11,18 +11,16 @@ const buttonVariants = cva(
       variant: {
         // Aparência única — sem variação por perfil (§8.5). Estes são os
         // estilos aprovados do Base44/Dono, antes acessíveis só sob o modo
-        // `manager`.
+        // `manager`. FASE K 11.005: variantes duplicatas/mortas eliminadas
+        // (brand→primary, secondary→outline, mx-elite removido).
         primary: "bg-brand-primary text-white shadow-[var(--mx-button-shadow)] hover:bg-brand-primary-hover focus-visible:ring-status-success/20 disabled:bg-muted disabled:text-muted-foreground",
-        brand: "bg-brand-primary text-white shadow-[var(--mx-button-shadow)] hover:bg-brand-primary-hover focus-visible:ring-status-success/20 disabled:bg-muted disabled:text-muted-foreground",
-        secondary: "border border-border bg-white text-foreground shadow-none hover:bg-surface-alt hover:text-foreground focus-visible:ring-status-success/20 disabled:border-border-subtle disabled:bg-surface-alt disabled:text-muted-foreground",
         outline: "border border-border bg-white text-foreground shadow-none hover:bg-surface-alt hover:text-foreground focus-visible:ring-status-success/20 disabled:border-border-subtle disabled:bg-surface-alt disabled:text-muted-foreground",
         ghost: "bg-transparent text-muted-foreground shadow-none hover:bg-surface-alt hover:text-foreground focus-visible:ring-status-success/20 disabled:bg-transparent disabled:text-text-disabled",
         success: "bg-brand-primary text-white shadow-[var(--mx-button-shadow)] hover:bg-brand-primary-hover focus-visible:ring-status-success/20",
         warning: "bg-status-warning text-status-warning-foreground shadow-[var(--mx-button-shadow)] hover:bg-status-warning focus-visible:ring-status-warning/20",
         info: "bg-status-info text-white shadow-[var(--mx-button-shadow)] hover:bg-status-info focus-visible:ring-status-info/20",
-        danger: "bg-status-error text-white shadow-[var(--mx-button-shadow)] hover:bg-status-error focus-visible:ring-status-error/20",
+        danger: "bg-status-error text-status-error-foreground shadow-[var(--mx-button-shadow)] hover:bg-status-error focus-visible:ring-status-error/20",
         whatsapp: "bg-whatsapp text-white shadow-[var(--mx-button-shadow)] hover:bg-whatsapp/90",
-        "mx-elite": "bg-status-success text-white shadow-[var(--mx-button-shadow)] hover:bg-status-success focus-visible:ring-status-success/20",
       },
       size: {
         default: "h-mx-11 px-6 sm:h-10 sm:px-4",
@@ -103,7 +101,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               decoratedChildren
             )}
             {iconTooltip && (
-              <span className="pointer-events-none absolute left-1/2 top-full z-50 mt-mx-xs -translate-x-1/2 rounded-[var(--mx-button-radius)] bg-gray-900 px-mx-xs py-mx-tiny text-mx-micro font-medium text-white opacity-0 shadow-[var(--mx-button-shadow)] transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+              <span className="pointer-events-none absolute left-1/2 top-full z-[var(--mx-z-tooltip)] mt-mx-xs -translate-x-1/2 rounded-[var(--mx-button-radius)] bg-gray-900 px-mx-xs py-mx-tiny text-mx-micro font-medium text-white opacity-0 shadow-[var(--mx-button-shadow)] transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
                 {iconTooltip}
               </span>
             )}

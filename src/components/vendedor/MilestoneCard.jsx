@@ -1,22 +1,23 @@
 import React from "react";
 import { Trophy } from "lucide-react";
 import { formatBRL } from "@/components/vendedor/formatBRL";
+import { chartTokens } from "@/lib/charts/tokens"
 
 export default function MilestoneCard({ veiculosFaltam, valorProjetado, percentual, semDados }) {
   return (
     <div
       className="relative overflow-hidden rounded-2xl p-6"
       style={{
-        background: "linear-gradient(135deg, #0F1A08 0%, #1A2A0A 50%, #1F3010 100%)",
+        background: `linear-gradient(135deg, ${chartTokens.primary()} 0%, ${chartTokens.primary()} 50%, ${chartTokens.primary()} 100%)`,
         border: "1px solid rgba(245,158,11,0.2)",
         boxShadow: "0 0 30px rgba(245,158,11,0.05)",
       }}
     >
       <div className="absolute top-4 right-4 opacity-70">
-        <Trophy className="w-14 h-14" style={{ color: "#F59E0B", filter: "drop-shadow(0 0 8px rgba(245,158,11,0.5))" }} />
+        <Trophy className="w-14 h-14" style={{ color: chartTokens.warning(), filter: "drop-shadow(0 0 8px rgba(245,158,11,0.5))" }} />
       </div>
 
-      <div className="relative z-10">
+      <div className="relative z-[var(--mx-z-sticky)]">
         {semDados ? (
           <div>
             <p className="text-text-disabled text-sm font-semibold">Sem vendas no período</p>
@@ -34,7 +35,7 @@ export default function MilestoneCard({ veiculosFaltam, valorProjetado, percentu
               </span>
             </div>
             <p className="text-muted-foreground text-sm mt-1">para você ganhar</p>
-            <p className="font-bold mt-1" style={{ fontSize: "2rem", color: "#F59E0B", textShadow: "0 0 15px rgba(245,158,11,0.3)" }}>
+            <p className="font-bold mt-1" style={{ fontSize: "2rem", color: chartTokens.warning(), textShadow: "0 0 15px rgba(245,158,11,0.3)" }}>
               {formatBRL(valorProjetado).replace(",00", "")}
             </p>
 
@@ -46,7 +47,7 @@ export default function MilestoneCard({ veiculosFaltam, valorProjetado, percentu
               <div className="w-full rounded-full h-2.5" style={{ background: "rgba(255,255,255,0.08)" }}>
                 <div
                   className="h-2.5 rounded-full transition-all duration-700"
-                  style={{ width: `${percentual}%`, background: "linear-gradient(90deg, #d97706, #f59e0b)", boxShadow: "0 0 8px rgba(245,158,11,0.5)" }}
+                  style={{ width: `${percentual}%`, background: `linear-gradient(90deg, ${chartTokens.warning()}, ${chartTokens.warning()})`, boxShadow: "0 0 8px rgba(245,158,11,0.5)" }}
                 />
               </div>
               <p className="text-right text-amber-400 text-xs font-bold mt-1">{percentual}%</p>

@@ -6,6 +6,7 @@ import { useAgendamentos } from '@/features/crm/hooks/useAgendamentos'
 import { deriveClientesListFromCrm, deriveRegularizacaoCrmMetrics, type RegularizacaoCrmMetrics } from '../lib/clientes-list-from-crm'
 import { calcularDisciplina } from '../lib/disciplina'
 import { CheckinCrmSection } from './CheckinCrmSection'
+import { chartTokens } from "@/lib/charts/tokens"
 
 const BRL = (value: number) =>
   value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })
@@ -146,7 +147,7 @@ export function RegularizarFechamentoDrawer({
   const dataFormatada = dataObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })
   const weekday = dataObj.toLocaleDateString('pt-BR', { weekday: 'long' })
 
-  const ringColor = disciplina.pontuacaoDisciplinaFinal >= 80 ? '#22C55E' : disciplina.pontuacaoDisciplinaFinal >= 50 ? '#F59E0B' : '#EF4444'
+  const ringColor = disciplina.pontuacaoDisciplinaFinal >= 80 ? chartTokens.success() : disciplina.pontuacaoDisciplinaFinal >= 50 ? chartTokens.warning() : chartTokens.danger()
   const ringColorClass = disciplina.pontuacaoDisciplinaFinal >= 80 ? 'text-status-success' : disciplina.pontuacaoDisciplinaFinal >= 50 ? 'text-status-warning-text' : 'text-status-error'
 
   const crmCtx = {
@@ -176,14 +177,14 @@ export function RegularizarFechamentoDrawer({
   }
 
   return (
-    <div className="fixed inset-0 z-[140] grid place-items-center p-4">
+    <div className="fixed inset-0 z-[var(--mx-z-modal)] grid place-items-center p-4">
       <button
         type="button"
         aria-label="Fechar regularização"
         className="absolute inset-0 bg-surface-overlay/40 backdrop-blur-[2px]"
         onClick={onClose}
       />
-      <div className="relative z-10 flex w-full max-w-4xl max-h-[90vh] flex-col overflow-hidden rounded-2xl bg-surface-alt shadow-2xl">
+      <div className="relative z-[var(--mx-z-sticky)] flex w-full max-w-4xl max-h-[90vh] flex-col overflow-hidden rounded-2xl bg-surface-alt shadow-2xl">
           {/* Header */}
           <div className="flex flex-shrink-0 items-center gap-3 border-b border-border bg-white px-5 py-4">
             <CalendarDays className="h-5 w-5 shrink-0 text-status-info-text" />
@@ -284,7 +285,7 @@ export function RegularizarFechamentoDrawer({
               <div className="flex items-center gap-6 p-5">
                 <div className="relative h-20 w-20 shrink-0">
                   <svg className="h-20 w-20 -rotate-90" viewBox="0 0 80 80">
-                    <circle cx="40" cy="40" r="32" fill="none" stroke="#E5E7EB" strokeWidth="8" />
+                    <circle cx="40" cy="40" r="32" fill="none" stroke={chartTokens.grid()} strokeWidth="8" />
                     <circle
                       cx="40" cy="40" r="32" fill="none" stroke={ringColor} strokeWidth="8"
                       strokeDasharray={`${(Math.PI * 64 * disciplina.pontuacaoDisciplinaFinal) / 100} ${Math.PI * 64}`}

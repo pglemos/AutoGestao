@@ -10,7 +10,7 @@ type Props = { metrics: NetworkMetrics }
 export function AdminHealthCard({ metrics }: Props) {
   return (
     <Card className="p-mx-lg md:p-mx-10 text-white border-none relative overflow-hidden flex-1 group">
-      <div className="relative z-10 flex flex-col justify-between h-full">
+      <div className="relative z-[var(--mx-z-sticky)] flex flex-col justify-between h-full">
         <div>
           <div className="w-mx-2xl h-mx-2xl rounded-2xl bg-white/10 text-white flex items-center justify-center border border-white/10 shadow-none mb-8 transform group-hover:rotate-6 transition-transform">
             <Activity size={32} />

@@ -137,8 +137,8 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_2fr]">
         <aside className="flex flex-col gap-6">
           <div className="rounded-xl border border-border bg-card p-10 md:p-12 flex flex-col items-center text-center group relative overflow-hidden shadow-lg">
-            <div className="absolute top-0 left-0 w-full h-4xl bg-gray-900 z-0 opacity-10" aria-hidden="true" />
-            <div className="relative z-10 space-y-6">
+            <div className="absolute top-0 left-0 w-full h-4xl bg-gray-900 z-[var(--mx-z-base)] opacity-10" aria-hidden="true" />
+            <div className="relative z-[var(--mx-z-sticky)] space-y-6">
               <div className="relative group/avatar inline-block">
                 <div className="w-4xl h-4xl rounded-3xl border-8 border-card shadow-xl overflow-hidden bg-muted transition-transform group-hover/avatar:scale-105 duration-500">
                   <LegacyProfileAvatar url={getAvatarDisplayUrl(profile.avatar_url, profile.name, { size: 256, background: '4f46e5', color: 'fff' })} name={profile.name} />
@@ -171,7 +171,7 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
         <section className="flex flex-col gap-6">
           <div className="rounded-xl border border-border bg-card shadow-xl group flex flex-col overflow-hidden">
             <header className="bg-muted/30 border-b border-border p-10 md:p-14 flex flex-row items-center justify-between relative overflow-hidden">
-              <div className="flex items-center gap-4 relative z-10">
+              <div className="flex items-center gap-4 relative z-[var(--mx-z-sticky)]">
                 <div className="w-2xl h-2xl rounded-2xl bg-gray-900 text-white flex items-center justify-center shadow-xl transform rotate-2"><User size={32} /></div>
                 <div>
                   <h2 className="text-2xl uppercase tracking-tighter leading-none text-foreground">Configurações de Conta</h2>
@@ -180,7 +180,7 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
               </div>
             </header>
 
-            <div className="p-10 md:p-14 space-y-14 relative z-10">
+            <div className="p-10 md:p-14 space-y-14 relative z-[var(--mx-z-sticky)]">
               <div className="grid md:grid-cols-2 gap-10">
                 <div className="space-y-3">
                   <p className="ml-2 text-xs font-bold uppercase tracking-widest leading-none text-muted-foreground">Nome Operacional</p>
@@ -243,7 +243,7 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
           role="dialog"
           aria-modal="true"
           aria-labelledby="profile-password-modal-title"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-surface-overlay/50 p-4"
+          className="fixed inset-0 z-[var(--mx-z-modal)] flex items-center justify-center bg-surface-overlay/50 p-4"
           onClick={() => setShowPasswordModal(false)}
           onKeyDown={(event) => {
             if (event.key === 'Escape') setShowPasswordModal(false)

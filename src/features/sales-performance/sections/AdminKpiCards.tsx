@@ -51,7 +51,7 @@ export function AdminKpiCards({ metrics }: Props) {
           transition={{ delay: i * 0.05 }}
         >
           <Card className="p-mx-lg border-none hover:shadow-sm transition-all group relative overflow-hidden bg-white min-h-mx-36">
-            <div className="flex items-center gap-mx-md relative z-10">
+            <div className="flex items-center gap-mx-md relative z-[var(--mx-z-sticky)]">
               <div
                 className={cn(
                   'w-mx-14 h-mx-14 rounded-2xl flex items-center justify-center border shadow-none transition-transform group-hover:scale-110',

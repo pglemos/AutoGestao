@@ -43,7 +43,7 @@ export function EditMemberModal({
   return (
     <div
       ref={editMemberDialogRef}
-      className="fixed inset-0 z-[100] overflow-y-auto p-2 sm:p-4 flex flex-col items-center justify-start sm:justify-center"
+      className="fixed inset-0 z-[var(--mx-z-modal)] overflow-y-auto p-2 sm:p-4 flex flex-col items-center justify-start sm:justify-center"
       role="dialog"
       aria-modal="true"
       aria-labelledby="edit-team-member-title"
@@ -60,7 +60,7 @@ export function EditMemberModal({
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
-        className="w-full max-w-2xl relative z-10 my-auto max-h-[calc(100dvh-1rem)] sm:max-h-[88dvh] flex flex-col"
+        className="w-full max-w-2xl relative z-[var(--mx-z-sticky)] my-auto max-h-[calc(100dvh-1rem)] sm:max-h-[88dvh] flex flex-col"
       >
         <Card className="border-none overflow-hidden flex flex-col max-h-[calc(100dvh-1rem)] sm:max-h-[88dvh] shadow-2xl">
           <CardHeader className="bg-gray-900 border-none text-white p-mx-md sm:p-mx-xl relative shrink-0">

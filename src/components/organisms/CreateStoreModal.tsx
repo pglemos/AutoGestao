@@ -48,7 +48,7 @@ export function CreateStoreModal({
       {open && (
         <div
           ref={modalRef}
-          className="fixed inset-0 z-50 flex items-center justify-center p-mx-md bg-gray-900/60 backdrop-blur-md"
+          className="fixed inset-0 z-[var(--mx-z-modal)] flex items-center justify-center p-mx-md bg-gray-900/60 backdrop-blur-md"
           role="dialog"
           aria-modal="true"
           aria-labelledby="create-store-title"
@@ -60,7 +60,7 @@ export function CreateStoreModal({
             className="w-full max-w-lg"
           >
             <Card className="p-mx-lg md:p-14 border-none shadow-mx-2xl bg-white overflow-hidden relative">
-              <form onSubmit={onSubmit} className="space-y-mx-xl relative z-10">
+              <form onSubmit={onSubmit} className="space-y-mx-xl relative z-[var(--mx-z-sticky)]">
                 <header className="flex items-center justify-between border-b border-border pb-8">
                   <div className="flex items-center gap-mx-sm">
                     <div className="w-mx-14 h-mx-14 rounded-2xl bg-brand-primary-subtle flex items-center justify-center text-status-success-text border border-brand-primary/20 shadow-none shrink-0">

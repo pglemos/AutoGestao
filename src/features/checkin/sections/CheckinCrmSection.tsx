@@ -711,9 +711,9 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                     key={column}
                     className={`px-4 py-3.5 font-extrabold whitespace-nowrap truncate ${
                       column === 'Nome do Cliente'
-                        ? 'sticky left-0 aggression-z z-10 bg-surface-alt shadow-mx-sticky-start'
+                        ? 'sticky left-0 aggression-z z-[var(--mx-z-sticky)] bg-surface-alt shadow-mx-sticky-start'
                         : column === 'Ações'
-                          ? 'sticky right-0 z-10 bg-surface-alt shadow-mx-sticky-end'
+                          ? 'sticky right-0 z-[var(--mx-z-sticky)] bg-surface-alt shadow-mx-sticky-end'
                           : ''
                     }`}
                     title={column}
@@ -747,7 +747,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                           isExpanded ? 'bg-surface-alt/50' : 'bg-white'
                         }`}
                       >
-                        <td className="sticky left-0 z-10 whitespace-nowrap bg-inherit px-4 py-3 font-bold text-status-success shadow-mx-sticky-start">
+                        <td className="sticky left-0 z-[var(--mx-z-sticky)] whitespace-nowrap bg-inherit px-4 py-3 font-bold text-status-success shadow-mx-sticky-start">
                           <div className="flex items-center gap-1.5">
                             {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                             <span className="truncate" title={row.nomeCliente}>{row.nomeCliente}</span>
@@ -775,7 +775,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                         <td className="px-4 py-3">
                           <VendaBadge value={row.vendaRealizada} />
                         </td>
-                        <td className="sticky right-0 z-10 bg-inherit px-4 py-3 shadow-mx-sticky-end" onClick={e => e.stopPropagation()}>
+                        <td className="sticky right-0 z-[var(--mx-z-sticky)] bg-inherit px-4 py-3 shadow-mx-sticky-end" onClick={e => e.stopPropagation()}>
                           <div className="flex items-center gap-2">
                             <button
                               type="button"
@@ -900,7 +900,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 
       {drawerOpen && (
         <div
-          className="fixed inset-0 z-50 grid place-items-center bg-surface-overlay/40 p-4 backdrop-blur-[3px] overflow-y-auto"
+          className="fixed inset-0 z-[var(--mx-z-modal)] grid place-items-center bg-surface-overlay/40 p-4 backdrop-blur-[3px] overflow-y-auto"
           role="dialog"
           aria-modal="true"
           aria-label="Cadastro completo do cliente"
@@ -1315,7 +1315,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
       />
 
       {coerenciaModalOpen && (
-        <div className="fixed inset-0 z-[150] grid place-items-center bg-surface-overlay/40 p-4 backdrop-blur-[3px]" role="dialog" aria-modal="true" aria-label="Confirme a origem da venda">
+        <div className="fixed inset-0 z-[var(--mx-z-modal)] grid place-items-center bg-surface-overlay/40 p-4 backdrop-blur-[3px]" role="dialog" aria-modal="true" aria-label="Confirme a origem da venda">
           <div className="w-full max-w-[440px] rounded-2xl border border-border bg-white shadow-mx-2xl">
             <header className="px-6 py-5 border-b border-border">
               <h2 className="flex items-center gap-2 text-[16px] font-extrabold text-mx-navy">

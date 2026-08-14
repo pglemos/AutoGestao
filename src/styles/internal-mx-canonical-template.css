@@ -366,7 +366,7 @@
 .mx-canonical-detail :is([role='tablist'], nav[aria-label*='aba' i], nav[aria-label*='seção' i]) {
   position: sticky;
   top: 0;
-  z-index: 20;
+  z-index: var(--mx-z-sticky);
 }
 
 .mx-canonical-workspace main:not([data-mx-module-page]) {

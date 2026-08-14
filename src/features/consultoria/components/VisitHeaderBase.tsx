@@ -26,7 +26,7 @@ export function VisitHeaderBase({ data, onChange, clientName }: Props) {
         <Users className="w-mx-20 h-mx-20 text-status-success-text" />
       </div>
 
-      <div className="relative z-10">
+      <div className="relative z-[var(--mx-z-sticky)]">
         <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-mx-md mb-mx-lg border-b border-border-subtle pb-mx-md">
           <div className="min-w-0">
             <Typography variant="tiny" tone="muted" className="mb-0 block opacity-60">Identificação do Cliente</Typography>

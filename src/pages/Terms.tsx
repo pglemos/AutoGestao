@@ -23,16 +23,16 @@ export default function Terms() {
                 transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                 className="w-full max-w-4xl"
             >
-                <Card className="border-none bg-white overflow-hidden flex flex-col relative z-10">
+                <Card className="border-none bg-white overflow-hidden flex flex-col relative z-[var(--mx-z-sticky)]">
                     <header className="bg-gray-900 p-mx-10 md:p-16 relative overflow-hidden text-center">
-                        <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/20 to-transparent z-0 pointer-events-none" />
+                        <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/20 to-transparent z-[var(--mx-z-base)] pointer-events-none" />
                         <div className="absolute inset-0 bg-mx-matrix opacity-20 pointer-events-none" />
 
-                        <div className="w-mx-20 h-mx-header rounded-2xl bg-white/10 text-white flex items-center justify-center mx-auto mb-8 shadow-sm backdrop-blur-xl relative z-10 border border-white/10">
+                        <div className="w-mx-20 h-mx-header rounded-2xl bg-white/10 text-white flex items-center justify-center mx-auto mb-8 shadow-sm backdrop-blur-xl relative z-[var(--mx-z-sticky)] border border-white/10">
                             <FileText size={32} strokeWidth={2} />
                         </div>
-                        <Typography variant="h1" tone="white" className="text-display mb-4 relative z-10">Termos de <Typography as="span" variant="h1" tone="brand">Serviço</Typography></Typography>
-                        <Typography variant="tiny" tone="white" className="max-w-xl mx-auto opacity-60 relative z-10 block">CONTRATO DE LICENCIAMENTO & USO MX PERFORMANCE</Typography>
+                        <Typography variant="h1" tone="white" className="text-display mb-4 relative z-[var(--mx-z-sticky)]">Termos de <Typography as="span" variant="h1" tone="brand">Serviço</Typography></Typography>
+                        <Typography variant="tiny" tone="white" className="max-w-xl mx-auto opacity-60 relative z-[var(--mx-z-sticky)] block">CONTRATO DE LICENCIAMENTO & USO MX PERFORMANCE</Typography>
                     </header>
 
                     <CardContent className="p-mx-10 md:p-20 space-y-mx-14">

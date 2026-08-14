@@ -173,7 +173,7 @@ export function QualificadoStatusHelp() {
         <div
           role="dialog"
           aria-label="Ajuda: passos da oportunidade"
-          className="absolute left-0 top-5 z-50 max-h-64 w-72 overflow-y-auto rounded-lg border border-border bg-white p-3 text-left shadow-lg"
+          className="absolute left-0 top-5 z-[var(--mx-z-popover)] max-h-64 w-72 overflow-y-auto rounded-lg border border-border bg-white p-3 text-left shadow-lg"
         >
           {SITUACOES_OPORTUNIDADE.map(s => (
             <div key={s} className="mb-2 last:mb-0">
@@ -639,7 +639,7 @@ export function NovoRegistroModal({ open, onClose, onSaved, defaultDate }: NovoR
   const formProps: FormProps = { form, setF, clienteEncontrado: !!clienteEncontradoId, clienteJaVendido, onPhoneBlur: handleWhatsAppBlur, responsaveis }
 
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-surface-overlay/40 p-4 backdrop-blur-[3px] overflow-y-auto" role="dialog" aria-modal="true" aria-label="Novo registro">
+    <div className="fixed inset-0 z-[var(--mx-z-modal)] grid place-items-center bg-surface-overlay/40 p-4 backdrop-blur-[3px] overflow-y-auto" role="dialog" aria-modal="true" aria-label="Novo registro">
       <div className="relative my-8 w-full max-w-2xl rounded-2xl border border-border-subtle bg-white p-6 shadow-mx-2xl">
         <div className="mb-1 flex items-center justify-between">
           <div className="flex items-center gap-2">

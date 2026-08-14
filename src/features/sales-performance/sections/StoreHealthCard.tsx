@@ -10,7 +10,7 @@ export function StoreHealthCard({ reaching }: Props) {
   return (
     <Card className="p-mx-10 md:p-14 text-white border-none relative overflow-hidden flex-1 group">
       <div className="absolute top-mx-0 right-mx-0 w-mx-sidebar-expanded h-mx-64 bg-brand-primary/10 rounded-mx-full blur-mx-xl -mr-32 -mt-32 transition-opacity group-hover:opacity-100" />
-      <div className="relative z-10 flex flex-col justify-between h-full">
+      <div className="relative z-[var(--mx-z-sticky)] flex flex-col justify-between h-full">
         <div>
           <div className="w-mx-2xl h-mx-2xl rounded-2xl bg-white/10 text-white flex items-center justify-center border border-white/10 shadow-none mb-10 transform group-hover:rotate-6 transition-transform">
             <Activity size={32} />

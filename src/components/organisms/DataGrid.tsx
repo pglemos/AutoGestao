@@ -5,6 +5,9 @@ import { cn } from '@/lib/utils'
 import { Typography } from '@/components/atoms/Typography'
 import { Card } from '@/components/molecules/Card'
 import { Skeleton } from '@/components/atoms/Skeleton'
+import { ErrorState } from '@/components/molecules/ErrorState'
+import { Pagination, type PaginationProps } from '@/components/molecules/Pagination'
+import { StatusBadge, type StatusBadgeProps } from '@/components/molecules/StatusBadge'
 import { MotionList, MotionRow, duration, rowVariants } from '@/design/motion'
 import { ScrollableRegion } from '@/design-system/page/ScrollableRegion'
 
@@ -14,6 +17,8 @@ export interface Column<T> {
   width?: string
   align?: 'left' | 'center' | 'right'
   render?: (item: T, index: number) => ReactNode
+  /** Célula de status canônica (StatusBadge). Substitui `render` quando presente. */
+  status?: (item: T) => Pick<StatusBadgeProps, 'status' | 'label'> & Partial<Pick<StatusBadgeProps, 'description'>>
   mobileOnly?: boolean
   desktopOnly?: boolean
 }
@@ -22,12 +27,18 @@ export interface DataGridProps<T> {
   columns: Column<T>[]
   data: T[]
   loading?: boolean
+  /** Mensagem de erro da consulta. Quando presente, renderiza ErrorState no lugar da tabela. */
+  error?: string
+  /** Nova tentativa do estado de erro. */
+  onRetry?: () => void
   emptyMessage?: string
   emptyDescription?: string
   rowClassName?: string
   onRowClick?: (item: T) => void
   minWidth?: string
   stickyHeader?: boolean
+  /** Paginação canônica. Quando presente, renderiza Pagination abaixo da tabela. */
+  pagination?: PaginationProps
   /**
    * Nome acessível da tabela. Como a região é rolável e focável, ela precisa
    * de nome — sem ele vira uma parada de tab anônima (WCAG 2.4.6).
@@ -44,12 +55,15 @@ function DataGridInner<T extends { id: string | number }>({
   columns,
   data,
   loading,
+  error,
+  onRetry,
   emptyMessage = 'Nenhum registro localizado.',
   emptyDescription,
   rowClassName,
   onRowClick,
   minWidth = 'min-w-mx-table',
   stickyHeader = true,
+  pagination,
   label = 'Tabela de dados',
 }: DataGridProps<T>) {
   const effectiveMinWidth = minWidth === 'min-w-mx-table' ? 'min-w-[760px]' : minWidth
@@ -65,6 +79,17 @@ function DataGridInner<T extends { id: string | number }>({
           <Skeleton key={i} variant="table-row" className="w-full" />
         ))}
       </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <ErrorState
+        kind="server"
+        description={error}
+        onRetry={onRetry}
+        data-mx-datagrid-error=""
+      />
     )
   }
 
@@ -99,7 +124,7 @@ function DataGridInner<T extends { id: string | number }>({
           Se houver colunas fora da área visível, role a tabela horizontalmente.
         </Typography>
         <table className={cn('w-full border-collapse text-left', effectiveMinWidth)}>
-          <thead className={cn(stickyHeader && 'sticky top-0 z-20')}>
+        <thead className={cn(stickyHeader && 'sticky top-0 z-[var(--mx-z-sticky)]')}>
             <tr className={'border-b border-border-subtle bg-surface-alt'}>
               {columns.filter((col) => !col.mobileOnly).map((col) => (
                 <th
@@ -140,7 +165,11 @@ function DataGridInner<T extends { id: string | number }>({
                         col.align === 'center' ? 'text-center' : col.align === 'right' ? 'text-right' : 'text-left',
                       )}
                     >
-                      {col.render ? col.render(item, idx) : getCellValue(item, col.key)}
+                      {col.status ? (
+                        <StatusBadge {...col.status(item)} data-mx-status-cell="" />
+                      ) : col.render ? (
+                        col.render(item, idx)
+                      ) : getCellValue(item, col.key)}
                     </td>
                   ))}
                 </MotionRow>
@@ -186,7 +215,11 @@ function DataGridInner<T extends { id: string | number }>({
                         'text-sm font-medium text-foreground',
                         cIdx === 0 && ('text-base font-semibold text-foreground'),
                       )}>
-                        {col.render ? col.render(item, idx) : getCellValue(item, col.key)}
+                        {col.status ? (
+                          <StatusBadge {...col.status(item)} data-mx-status-cell="" />
+                        ) : col.render ? (
+                          col.render(item, idx)
+                        ) : getCellValue(item, col.key)}
                       </div>
                     </div>
                   ))}
@@ -196,6 +229,8 @@ function DataGridInner<T extends { id: string | number }>({
           ))}
         </AnimatePresence>
       </MotionList>
+
+      {pagination && <Pagination {...pagination} className={'mt-[var(--mx-space-2)]'} />}
     </div>
   )
 }

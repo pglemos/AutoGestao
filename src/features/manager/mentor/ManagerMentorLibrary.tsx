@@ -163,7 +163,7 @@ export function ManagerMentorLibrary() {
 
       {selected && (
         <div
-          className="fixed inset-0 z-[140] flex items-center justify-center bg-surface-overlay/40 p-4"
+          className="fixed inset-0 z-[var(--mx-z-modal)] flex items-center justify-center bg-surface-overlay/40 p-4"
           role="presentation"
           onMouseDown={() => setSelected(null)}
         >

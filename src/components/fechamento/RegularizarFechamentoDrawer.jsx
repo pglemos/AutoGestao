@@ -10,6 +10,7 @@ import {
   Plus, Pencil, Trash2, Star, Send
 } from "lucide-react";
 import moment from "moment/min/moment-with-locales";
+import { chartTokens } from "@/lib/charts/tokens"
 
 moment.locale("pt-br");
 
@@ -375,7 +376,7 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
           <p className="text-body-sm text-muted-foreground mt-1">O registro de <strong>{deleteConfirm?.name}</strong> será removido deste fechamento. O cliente permanece na Carteira.</p>
           <div className="flex items-center justify-end gap-3 mt-4">
             <button onClick={() => setDeleteConfirm(null)} className="px-5 py-2 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-surface-alt transition-colors">Cancelar</button>
-            <button onClick={confirmDelete} className="px-5 py-2 text-body-sm font-bold text-white bg-status-error hover:bg-status-error rounded-xl transition-colors">Remover</button>
+            <button onClick={confirmDelete} className="px-5 py-2 text-body-sm font-bold text-status-error-foreground bg-status-error hover:bg-status-error rounded-xl transition-colors">Remover</button>
           </div>
         </DialogContent>
       </Dialog>
@@ -442,7 +443,7 @@ function DisciplinaBloco({ form, clientes }) {
   const scoreFinal = Math.max(0, scoreCalc - 10); // -10 por atraso
 
   const scoreColor = scoreFinal >= 80 ? "text-status-success-text" : scoreFinal >= 50 ? "text-status-warning-text" : "text-status-error-text";
-  const ringColor = scoreFinal >= 80 ? "#22C55E" : scoreFinal >= 50 ? "#F59E0B" : "#EF4444";
+  const ringColor = scoreFinal >= 80 ? chartTokens.success() : scoreFinal >= 50 ? chartTokens.warning() : chartTokens.danger();
 
   return (
     <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
@@ -454,7 +455,7 @@ function DisciplinaBloco({ form, clientes }) {
         {/* Anel */}
         <div className="relative flex-shrink-0 w-20 h-20">
           <svg className="w-20 h-20 -rotate-90" viewBox="0 0 80 80">
-            <circle cx="40" cy="40" r="32" fill="none" stroke="#E5E7EB" strokeWidth="8" />
+            <circle cx="40" cy="40" r="32" fill="none" stroke={chartTokens.grid()} strokeWidth="8" />
             <circle cx="40" cy="40" r="32" fill="none" stroke={ringColor} strokeWidth="8"
               strokeDasharray={`${Math.PI * 64 * scoreFinal / 100} ${Math.PI * 64}`}
               strokeLinecap="round" className="transition-all duration-700"
@@ -605,10 +606,10 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
   return (
     <>
       {/* Overlay */}
-      <div className="fixed inset-0 z-40 bg-surface-overlay/50" onClick={onClose} />
+      <div className="fixed inset-0 z-[var(--mx-z-drawer)] bg-surface-overlay/50" onClick={onClose} />
 
       {/* Drawer */}
-      <div className="fixed inset-0 z-50 flex items-stretch sm:items-start sm:justify-end pointer-events-none">
+      <div className="fixed inset-0 z-[var(--mx-z-overlay)] flex items-stretch sm:items-start sm:justify-end pointer-events-none">
         <div className="pointer-events-auto w-full sm:w-[720px] h-full bg-surface-alt flex flex-col shadow-2xl sm:rounded-l-2xl overflow-hidden">
           {/* Header */}
           <div className="bg-white border-b border-border px-5 py-4 flex items-center gap-3 flex-shrink-0">
@@ -699,7 +700,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
 
       {/* Modal de Confirmação */}
       <Dialog open={confirmOpen} onOpenChange={v => { if (!enviando) setConfirmOpen(v); }}>
-        <DialogContent className="sm:max-w-sm z-[60]">
+        <DialogContent className="sm:max-w-sm z-[var(--mx-z-modal)]">
           <DialogHeader>
             <DialogTitle className="font-bold text-mx-navy">Enviar regularização para aprovação?</DialogTitle>
           </DialogHeader>

@@ -49,7 +49,7 @@ export function AgendaEventCard({
           ? 'border-status-info/20 bg-status-info-surface text-status-info-text'
           : 'border-brand-primary/20 bg-brand-primary-subtle text-brand-secondary',
         compact ? 'min-h-mx-6' : 'h-full min-h-mx-8',
-        !compact && 'cursor-grab hover:z-10 hover:shadow-sm active:cursor-grabbing',
+        !compact && 'cursor-grab hover:z-[var(--mx-z-sticky)] hover:shadow-sm active:cursor-grabbing',
         ghost && 'opacity-60 shadow-sm ring-2 ring-brand-primary/40',
         'focus-visible:ring-2 focus-visible:ring-brand-primary/50',
       )}

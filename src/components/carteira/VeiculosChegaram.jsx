@@ -94,7 +94,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface-overlay/50 px-4">
+    <div className="fixed inset-0 z-[var(--mx-z-modal)] flex items-center justify-center bg-surface-overlay/50 px-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 space-y-4">
         <div className="flex items-center justify-between">
           <p className="font-black text-mx-navy">Registrar veículo que chegou</p>

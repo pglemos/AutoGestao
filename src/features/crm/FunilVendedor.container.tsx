@@ -138,14 +138,14 @@ export function FunilVendedor() {
     return (
       <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex min-h-full flex-col items-center justify-center gap-4">
         <Typography variant="p" className="text-sm font-bold text-status-error-text">Erro ao carregar dados do funil.</Typography>
-        <Button type="button" variant="secondary" size="sm" onClick={() => refetch()}>Tentar novamente</Button>
+        <Button type="button" variant="outline" size="sm" onClick={() => refetch()}>Tentar novamente</Button>
       </PageCanvas>
     )
   }
 
   return (
     <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex min-h-full flex-col gap-mx-lg">
-        <header className="relative z-40 shrink-0 border-b border-border/60 bg-surface-alt pb-3 pt-2 shadow-mx-lg md:sticky md:top-0 md:pt-3">
+        <header className="relative z-[var(--mx-z-topbar)] shrink-0 border-b border-border/60 bg-surface-alt pb-3 pt-2 shadow-mx-lg md:sticky md:top-0 md:pt-3">
           <PageHeading
             title="Funil de Vendas"
             subtitle="Com sua conversão atual, veja o que precisa produzir para atingir a meta."

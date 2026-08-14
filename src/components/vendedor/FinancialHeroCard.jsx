@@ -21,7 +21,7 @@ export default function FinancialHeroCard({ calcResult, userName, periodLabel, o
       <div className="absolute top-0 right-0 w-72 h-72 bg-status-success/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-mx-blue/10 rounded-full blur-2xl pointer-events-none" />
 
-      <div className="relative z-10">
+      <div className="relative z-[var(--mx-z-sticky)]">
         <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Check, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import type { ManagerTourStep } from './manager-tours'
+import { useFocusTrap } from '@/hooks/useFocusTrap'
 
 const SPOTLIGHT_PADDING = 8
 const POPOVER_HEIGHT = 210
@@ -28,6 +29,8 @@ export function ManagerTourOverlay({
   const [spotlight, setSpotlight] = useState<Rect | null>(null)
   const [popover, setPopover] = useState<{ top: number; left: number; width: number } | null>(null)
   const frameRef = useRef<number | null>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  useFocusTrap(containerRef, true)
 
   const step = steps[index]
   const isLast = index === steps.length - 1
@@ -46,7 +49,11 @@ export function ManagerTourOverlay({
       return
     }
 
-    element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    const prefersReducedMotion =
+      typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+        ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        : false
+    element.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' })
     const rect = element.getBoundingClientRect()
     setSpotlight({
       top: rect.top - SPOTLIGHT_PADDING,
@@ -88,15 +95,33 @@ export function ManagerTourOverlay({
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onSkip()
-      else if (event.key === 'ArrowRight' || event.key === 'Enter') next()
+      else if (event.key === 'ArrowRight') next()
       else if (event.key === 'ArrowLeft') previous()
+      else if (event.key === 'Enter') {
+        // Enter em elemento interativo (botão/link) dispara o clique nativo —
+        // avançar aqui dobraria o passo. Fora do diálogo (atrás do overlay)
+        // também não avança. Apenas alvo não-interativo dentro do diálogo
+        // avança uma vez, preservando o contrato anterior.
+        const target = event.target as HTMLElement | null
+        const isInteractive = Boolean(
+          target?.closest('button, input, select, textarea, a[href], [role="button"], [tabindex]'),
+        )
+        const insideDialog = Boolean(containerRef.current?.contains(target))
+        if (insideDialog && !isInteractive) next()
+      }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [next, previous, onSkip])
 
   return (
-    <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label="Tour do Gerente">
+    <div
+      ref={containerRef}
+      className="fixed inset-0 z-[var(--mx-z-overlay)]"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Tour do Gerente"
+    >
       {!spotlight && (
         <div className="absolute inset-0 bg-slate-900/55 backdrop-blur-[1px]" role="presentation" onClick={onSkip} />
       )}
@@ -113,7 +138,7 @@ export function ManagerTourOverlay({
             height: spotlight.height,
             borderRadius: 16,
             boxShadow: '0 0 0 9999px rgba(15, 23, 42, 0.58)',
-            zIndex: 170,
+            zIndex: 'var(--mx-z-popover)',
             cursor: 'pointer',
           }}
         >
@@ -124,8 +149,8 @@ export function ManagerTourOverlay({
       <section
         className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-2xl transition-all"
         style={popover
-          ? { position: 'fixed', top: popover.top, left: popover.left, width: popover.width, zIndex: 180 }
-          : { position: 'fixed', top: '50%', left: '50%', marginLeft: -190, marginTop: -100, width: 380, zIndex: 180 }}
+          ? { position: 'fixed', top: popover.top, left: popover.left, width: popover.width, zIndex: 'var(--mx-z-tooltip)' }
+          : { position: 'fixed', top: '50%', left: '50%', marginLeft: -190, marginTop: -100, width: 380, zIndex: 'var(--mx-z-tooltip)' }}
       >
         <div className="relative h-1 bg-status-success-surface">
           <div className="h-full bg-status-success transition-all duration-300" style={{ width: `${progress}%` }} />

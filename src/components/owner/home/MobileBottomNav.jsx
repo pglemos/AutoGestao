@@ -10,7 +10,7 @@ const NAV_ITEMS = [
 
 export default function MobileBottomNav() {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t border-border bg-card px-2 py-2 lg:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-[var(--mx-z-drawer)] flex items-center justify-around border-t border-border bg-card px-2 py-2 lg:hidden">
       {NAV_ITEMS.map((item) => {
         const Icon = item.icon;
         return (

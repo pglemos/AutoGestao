@@ -21,6 +21,7 @@ import { AulasAoVivoSection } from '@/features/universidade/sections/AulasAoVivo
 import { ManagerUniversityReference } from '@/features/manager/development/ManagerUniversityReference'
 import { ContentSuggestionDialog } from '@/features/universidade/components/ContentSuggestionDialog'
 import { PageTemplate } from '@/components/templates/PageTemplate'
+import { ScrollableRegion } from '@/design-system/page/ScrollableRegion'
 
 export default function GerenteTreinamentos() {
     const { role, membership } = useAuth()
@@ -293,18 +294,18 @@ export default function GerenteTreinamentos() {
                                 <motion.article key={t.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>
                                     <Card className="border p-mx-md h-full bg-white group hover:shadow-sm transition-all relative overflow-hidden flex flex-col gap-mx-10">
                                         <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-mx-xl -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                        <header className="flex justify-between items-start relative z-10">
+                                        <header className="flex justify-between items-start relative z-[var(--mx-z-sticky)]">
                                             <div className={cn("w-mx-14 h-mx-14 rounded-xl flex items-center justify-center border shadow-none transition-all", t.watched ? "bg-status-success-surface text-status-success border-mx-emerald-100" : "bg-surface-alt text-muted-foreground border-border-subtle group-hover:bg-brand-primary group-hover:text-white")}>
                                                 <GraduationCap size={28} strokeWidth={2} />
                                             </div>
                                             {t.watched && <Badge variant="success" className="px-4 py-1 rounded-mx-full text-mx-micro shadow-sm">CONCLUÍDO</Badge>}
                                         </header>
-                                        <div className="flex-1 space-y-mx-xs relative z-10">
+                                        <div className="flex-1 space-y-mx-xs relative z-[var(--mx-z-sticky)]">
                                             <Typography variant="tiny" tone="brand" className="">{t.type}</Typography>
                                             <Typography variant="h3" className="text-lg leading-tight group-hover:text-status-success-text transition-colors">{t.title}</Typography>
                                             <Typography variant="p" tone="muted" className="text-xs font-bold leading-relaxed opacity-60">"{t.description}"</Typography>
                                         </div>
-                                        <footer className="pt-8 border-t border-border-subtle flex items-center justify-between mt-auto relative z-10">
+                                        <footer className="pt-8 border-t border-border-subtle flex items-center justify-between mt-auto relative z-[var(--mx-z-sticky)]">
                                             <div className="flex items-center gap-mx-xs text-caption font-bold text-muted-foreground">
                                                 <Award size={14} className="text-status-warning-text" /> {t.watched ? 'ABSORVIDO' : 'PENDENTE'}
                                             </div>
@@ -338,15 +339,15 @@ export default function GerenteTreinamentos() {
                                     </Badge>
                                 </header>
 
-                                <div className="flex-1 overflow-x-auto no-scrollbar">
+                                <ScrollableRegion axis="horizontal" label="Matriz de Cobertura" className="flex-1 no-scrollbar">
                                     <table className="w-full text-left min-w-mx-elite-table">
                                         <thead>
                                             <tr className="bg-surface-alt/50 border-b border-border text-caption font-semibold text-muted-foreground">
-                                                <th scope="col" className="pl-10 py-6 sticky left-mx-0 bg-surface-alt/50 z-20">VENDEDOR</th>
+                                                <th scope="col" className="pl-10 py-6 sticky left-mx-0 bg-surface-alt/50 z-[var(--mx-z-sticky)]">VENDEDOR</th>
                                                 {treinamentos.map(t => (
                                                     <th key={t.id} scope="col" className="px-4 py-6 text-center group relative min-w-mx-32">
                                                         <span className="truncate block max-w-mx-20 mx-auto">{t.title}</span>
-                                                        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-3 py-1.5 bg-gray-900 text-white text-caption font-bold rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-[70] whitespace-nowrap shadow-sm">
+                                                        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-3 py-1.5 bg-gray-900 text-white text-caption font-bold rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-[var(--mx-z-tooltip)] whitespace-nowrap shadow-sm">
                                                             {t.title}
                                                         </div>
                                                     </th>
@@ -356,7 +357,7 @@ export default function GerenteTreinamentos() {
                                         <tbody className="divide-y divide-border-default bg-white">
                                             {teamProgress.map((p) => (
                                                 <tr key={p.seller_id} className="hover:bg-surface-alt/30 transition-colors h-mx-20 group">
-                                                    <td className="pl-10 sticky left-mx-0 bg-white group-hover:bg-surface-alt/30 z-10 border-r border-border">
+                                                    <td className="pl-10 sticky left-mx-0 bg-white group-hover:bg-surface-alt/30 z-[var(--mx-z-sticky)] border-r border-border">
                                                         <div className="flex items-center gap-mx-sm">
                                                             <Avatar src={p.avatar_url || undefined} alt={`Avatar de ${p.seller_name}`} fallback={p.seller_name} className="w-mx-10 h-mx-10 rounded-2xl shadow-none" />
                                                             <Typography variant="p" className="text-sm  truncate max-w-mx-label-lg">{p.seller_name}</Typography>
@@ -380,7 +381,7 @@ export default function GerenteTreinamentos() {
                                             ))}
                                         </tbody>
                                     </table>
-                                </div>
+                                </ScrollableRegion>
                             </Card>
                         </motion.div>
                     ) : (
@@ -392,11 +393,11 @@ export default function GerenteTreinamentos() {
                                     <Card className="border bg-white p-mx-md group hover:shadow-sm transition-all relative overflow-hidden flex flex-col items-center text-center">
                                         <div className="absolute top-mx-0 right-mx-0 w-mx-32 h-mx-32 bg-brand-primary/5 rounded-mx-full blur-2xl -mr-16 -mt-16" />
                                         
-                                        <div className="w-mx-20 h-mx-20 rounded-mx-full border-4 border-white shadow-sm overflow-hidden bg-surface-alt mb-6 group-hover:scale-105 transition-transform relative z-10">
+                                        <div className="w-mx-20 h-mx-20 rounded-mx-full border-4 border-white shadow-sm overflow-hidden bg-surface-alt mb-6 group-hover:scale-105 transition-transform relative z-[var(--mx-z-sticky)]">
                                             <Avatar src={p.avatar_url || undefined} alt={`Avatar de ${p.seller_name}`} fallback={p.seller_name} className="w-full h-full rounded-mx-full" />
                                         </div>
 
-                                        <div className="relative z-10 w-full">
+                                        <div className="relative z-[var(--mx-z-sticky)] w-full">
                                             <Typography variant="h3" className="text-base truncate">{p.seller_name}</Typography>
                                             <Typography variant="caption" tone="muted" className="text-mx-micro mb-6 block">Especialista da equipe</Typography>
                                             

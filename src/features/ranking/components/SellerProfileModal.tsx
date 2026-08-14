@@ -41,7 +41,7 @@ export function SellerProfileModal({ seller, onClose }: SellerProfileModalProps)
     const badge = seller.position === 1 ? 'crown' : seller.atingimento >= 100 ? 'fire' : 'none'
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-mx-md">
+        <div className="fixed inset-0 z-[var(--mx-z-modal)] flex items-center justify-center p-mx-md">
             <motion.div 
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                 className="absolute inset-0 bg-gray-900/80 backdrop-blur-sm" 
@@ -51,12 +51,12 @@ export function SellerProfileModal({ seller, onClose }: SellerProfileModalProps)
             <motion.div 
                 ref={dialogRef}
                 initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }}
-                className="bg-gray-900 w-full max-w-3xl rounded-2xl shadow-2xl relative z-10 overflow-hidden flex flex-col md:flex-row text-white max-h-[90vh] border border-white/10"
+                className="bg-gray-900 w-full max-w-3xl rounded-2xl shadow-2xl relative z-[var(--mx-z-modal)] overflow-hidden flex flex-col md:flex-row text-white max-h-[90vh] border border-white/10"
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="seller-profile-title"
             >
-                <button ref={closeButtonRef} type="button" aria-label="Fechar perfil do vendedor" onClick={onClose} className="absolute top-mx-sm right-mx-sm p-mx-xs hover:bg-white/10 rounded-full transition-colors z-20">
+                <button ref={closeButtonRef} type="button" aria-label="Fechar perfil do vendedor" onClick={onClose} className="absolute top-mx-sm right-mx-sm p-mx-xs hover:bg-white/10 rounded-full transition-colors z-[var(--mx-z-base)]">
                     <X className="w-mx-md h-mx-md text-muted-foreground" aria-hidden="true" />
                 </button>
 

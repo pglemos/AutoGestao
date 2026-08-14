@@ -66,7 +66,7 @@ export function ForcePasswordChange() {
   }
 
   return (
-    <div ref={trapRef} className="fixed inset-0 z-[999] flex items-center justify-center p-mx-md overflow-hidden" role="dialog" aria-modal="true" aria-label="Alteração obrigatória de senha">
+    <div ref={trapRef} className="fixed inset-0 z-[var(--mx-z-modal)] flex items-center justify-center p-mx-md overflow-hidden" role="dialog" aria-modal="true" aria-label="Alteração obrigatória de senha">
       {/* Premium Glassmorphism Background */}
       <motion.div 
         initial={{ opacity: 0 }} 
@@ -77,7 +77,7 @@ export function ForcePasswordChange() {
       <motion.div 
         initial={{ opacity: 0, y: 20, scale: 0.95 }} 
         animate={{ opacity: 1, y: 0, scale: 1 }} 
-        className="w-full max-w-lg relative z-10"
+        className="w-full max-w-lg relative z-[var(--mx-z-sticky)]"
       >
         <div className="relative group">
           {/* Subtle Border Glow */}
@@ -90,7 +90,7 @@ export function ForcePasswordChange() {
             <form onSubmit={handleSubmit} className="p-mx-xl sm:p-mx-2xl space-y-mx-lg">
               <header className="text-center space-y-mx-md">
                 <div className="relative inline-block">
-                  <div className="w-mx-20 h-mx-20 rounded-2xl bg-brand-primary/10 border border-brand-primary/20 flex items-center justify-center text-status-success-text shadow-sm mx-auto relative z-10">
+                  <div className="w-mx-20 h-mx-20 rounded-2xl bg-brand-primary/10 border border-brand-primary/20 flex items-center justify-center text-status-success-text shadow-sm mx-auto relative z-[var(--mx-z-sticky)]">
                     <ShieldCheck size={40} strokeWidth={1.5} />
                   </div>
                   <motion.div 
@@ -131,7 +131,7 @@ export function ForcePasswordChange() {
                     )}
                   </div>
                   <div className="relative group/input">
-                    <KeyRound size={20} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-status-success-text transition-colors z-10" />
+                    <KeyRound size={20} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-status-success-text transition-colors z-[var(--mx-z-sticky)]" />
                     <Input 
                       required 
                       minLength={6}
@@ -144,7 +144,7 @@ export function ForcePasswordChange() {
                     <button 
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground hover:text-mx-black transition-colors z-10"
+                      className="absolute right-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground hover:text-mx-black transition-colors z-[var(--mx-z-sticky)]"
                     >
                       {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
@@ -155,7 +155,7 @@ export function ForcePasswordChange() {
                 <div className="space-y-mx-xs">
                   <Typography variant="tiny" tone="muted" className="px-mx-xs">Confirmação</Typography>
                   <div className="relative group/input">
-                    <Lock size={20} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-status-success-text transition-colors z-10" />
+                    <Lock size={20} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-status-success-text transition-colors z-[var(--mx-z-sticky)]" />
                     <Input 
                       required 
                       type={showPassword ? 'text' : 'password'} 

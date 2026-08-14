@@ -162,7 +162,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
   return (
     <AnimatePresence>
       {isOpen && (
-        <div ref={dialogRef} className="fixed inset-0 z-[110] flex items-center justify-center p-mx-lg overflow-hidden" role="dialog" aria-modal="true" aria-label="Criar novo integrante">
+        <div ref={dialogRef} className="fixed inset-0 z-[var(--mx-z-modal)] flex items-center justify-center p-mx-lg overflow-hidden" role="dialog" aria-modal="true" aria-label="Criar novo integrante">
           <motion.div 
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
@@ -175,7 +175,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
             initial={{ opacity: 0, scale: 0.9, y: 40 }} 
             animate={{ opacity: 1, scale: 1, y: 0 }} 
             exit={{ opacity: 0, scale: 0.9, y: 40 }} 
-            className="w-full max-w-6xl relative z-10"
+            className="w-full max-w-6xl relative z-[var(--mx-z-sticky)]"
           >
             <div className="relative w-full bg-white/90 backdrop-blur-2xl border border-border rounded-mx-4xl shadow-sm overflow-hidden">
               <div className="absolute top-mx-0 left-mx-0 w-full h-mx-xs bg-gradient-to-r from-brand-primary/50 via-brand-primary to-brand-primary/50" />
@@ -183,7 +183,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
               <form onSubmit={handleSubmit} autoComplete="off" className="flex flex-col lg:flex-row max-h-[85vh] w-full overflow-hidden">
                 {/* Sidebar Context */}
                 <div className="w-full lg:w-mx-sidebar-expanded shrink-0 bg-surface-alt/50 border-b lg:border-b-0 lg:border-r border-border p-mx-lg flex flex-col justify-between relative overflow-y-auto lg:overflow-hidden">
-                    <div className="space-y-mx-lg relative z-10">
+                    <div className="space-y-mx-lg relative z-[var(--mx-z-sticky)]">
                         <div className="w-mx-20 h-mx-20 rounded-2xl bg-brand-primary/10 border border-status-success/20 flex items-center justify-center text-status-success-text shadow-sm">
                             <UserPlus size={40} strokeWidth={1.5} />
                         </div>
@@ -208,7 +208,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                         </div>
                     </div>
 
-                    <div className="relative z-10 pt-mx-lg">
+                    <div className="relative z-[var(--mx-z-sticky)] pt-mx-lg">
                         <button type="button" onClick={onClose} className="group flex items-center gap-mx-sm text-muted-foreground hover:text-status-success-text transition-colors">
                             <X size={20} />
                             <Typography variant="tiny" className="">CANCELAR</Typography>
@@ -290,7 +290,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                         <div className="space-y-mx-xs">
                           <Typography variant="tiny" tone="muted" className="px-1">Papel na loja</Typography>
                           <div className="relative group">
-                            <Shield size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-status-success-text transition-colors z-10 pointer-events-none" />
+                            <Shield size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-status-success-text transition-colors z-[var(--mx-z-sticky)] pointer-events-none" />
                             <select
                               aria-label="Papel na loja"
                               id="new-user-role"
@@ -312,7 +312,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                         <div className="space-y-mx-xs">
                           <Typography variant="tiny" tone="muted" className="px-1">Loja vinculada</Typography>
                           <div className="relative group">
-                            <Building2 size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-status-success-text transition-colors z-10 pointer-events-none" />
+                            <Building2 size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-status-success-text transition-colors z-[var(--mx-z-sticky)] pointer-events-none" />
                             <select
                               aria-label="Loja vinculada"
                               id="new-user-store"

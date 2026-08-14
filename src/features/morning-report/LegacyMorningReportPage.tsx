@@ -311,7 +311,7 @@ function AdminMorningReport() {
                     <Button variant="outline" onClick={handleDownloadXlsx} className="h-mx-xl px-6 rounded-mx-full bg-white">
                         <FileDown size={16} className="mr-2" aria-hidden="true" /> <Typography variant="tiny" as="span" className="">PLANILHA</Typography>
                     </Button>
-                    <Button variant="secondary" onClick={handleSendEmail} className="h-mx-xl px-8 rounded-mx-full" disabled={isSendingEmail}>
+                    <Button variant="outline" onClick={handleSendEmail} className="h-mx-xl px-8 rounded-mx-full" disabled={isSendingEmail}>
                         {isSendingEmail ? <RefreshCw size={16} className="animate-spin mr-2" aria-hidden="true" /> : <Mail size={16} className="mr-2" aria-hidden="true" />}
                         <Typography variant="tiny" as="span" className="">DIREÇÃO MX</Typography>
                     </Button>
@@ -321,7 +321,7 @@ function AdminMorningReport() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-mx-lg shrink-0">
                 <Card className="p-mx-lg md:p-10 group relative overflow-hidden border-none bg-white">
                     <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-3xl -mr-16 -mt-16" aria-hidden="true" />
-                    <div className="relative z-10">
+                    <div className="relative z-[var(--mx-z-sticky)]">
                         <div className="flex items-center justify-between mb-8">
                             <div className="w-mx-14 h-mx-14 rounded-2xl bg-brand-primary-subtle text-status-success-text flex items-center justify-center shadow-none border border-brand-primary/20" aria-hidden="true"><Target size={24} /></div>
                             <Badge variant="brand" className="px-4 py-1 shadow-sm"><Typography variant="tiny" as="span">META REDE</Typography></Badge>
@@ -337,7 +337,7 @@ function AdminMorningReport() {
 
                 <Card className="p-mx-lg md:p-10 text-white border-none relative overflow-hidden">
                     <div className="absolute top-mx-0 right-mx-0 w-mx-48 h-mx-48 bg-white/5 rounded-mx-full blur-3xl -mr-24 -mt-24" aria-hidden="true" />
-                    <div className="relative z-10">
+                    <div className="relative z-[var(--mx-z-sticky)]">
                         <div className="flex items-center justify-between mb-8">
                             <div className="w-mx-14 h-mx-14 rounded-2xl bg-white/10 text-white flex items-center justify-center border border-white/10 shadow-none" aria-hidden="true"><TrendingUp size={24} /></div>
                             <Badge variant="outline" className="bg-white text-brand-secondary border-white px-4 py-1"><Typography variant="tiny" as="span" className="text-inherit">PROJEÇÃO</Typography></Badge>
@@ -349,7 +349,7 @@ function AdminMorningReport() {
 
                 <Card className="p-mx-lg md:p-10 border-none bg-white relative overflow-hidden group">
                     <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-status-success-surface rounded-mx-full blur-3xl -mr-16 -mt-16 opacity-50" aria-hidden="true" />
-                    <div className="relative z-10">
+                    <div className="relative z-[var(--mx-z-sticky)]">
                         <div className="flex items-center justify-between mb-8">
                             <div className="w-mx-14 h-mx-14 rounded-2xl bg-status-success-surface text-status-success-text flex items-center justify-center shadow-none border border-mx-emerald-100" aria-hidden="true"><Activity size={24} /></div>
                             <Badge variant="success" className="px-4 py-1 shadow-sm"><Typography variant="tiny" as="span">SAÚDE REDE</Typography></Badge>
@@ -361,7 +361,7 @@ function AdminMorningReport() {
 
                 <Card className="p-mx-lg md:p-10 border-none bg-white relative overflow-hidden group">
                     <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-status-info-surface rounded-mx-full blur-3xl -mr-16 -mt-16 opacity-50" aria-hidden="true" />
-                    <div className="relative z-10">
+                    <div className="relative z-[var(--mx-z-sticky)]">
                         <div className="flex items-center justify-between mb-8">
                             <div className="w-mx-14 h-mx-14 rounded-2xl bg-brand-primary-subtle text-status-success-text flex items-center justify-center shadow-none border border-brand-primary/20" aria-hidden="true"><Users size={24} /></div>
                             <Badge variant="outline" className="px-4 py-1 shadow-sm"><Typography variant="tiny" as="span">UNIDADES</Typography></Badge>
@@ -601,7 +601,7 @@ function StoreMorningReport() {
                     <Button onClick={handleShareWhatsApp} className="h-mx-xl px-8 rounded-mx-full bg-status-success hover:bg-status-success/90">
                         <MessageCircle size={16} className="mr-2 fill-white/20" aria-hidden="true" /> <Typography variant="tiny" as="span" tone="white" className="">WHATSAPP</Typography>
                     </Button>
-                    <Button variant="secondary" onClick={handleSendEmail} className="h-mx-xl px-8 rounded-mx-full" disabled={isSendingEmail}>
+                    <Button variant="outline" onClick={handleSendEmail} className="h-mx-xl px-8 rounded-mx-full" disabled={isSendingEmail}>
                         {isSendingEmail ? <RefreshCw size={16} className="animate-spin mr-2" aria-hidden="true" /> : <Mail size={16} className="mr-2" aria-hidden="true" />}
                         <Typography variant="tiny" as="span" className="">DIREÇÃO MX</Typography>
                     </Button>
@@ -626,7 +626,7 @@ function StoreMorningReport() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-mx-lg shrink-0">
                 <Card className="p-mx-lg md:p-10 group relative overflow-hidden border-none bg-white">
                     <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-3xl -mr-16 -mt-16" aria-hidden="true" />
-                    <div className="relative z-10">
+                    <div className="relative z-[var(--mx-z-sticky)]">
                         <div className="flex items-center justify-between mb-8">
                             <div className="w-mx-14 h-mx-14 rounded-2xl bg-brand-primary-subtle text-status-success-text flex items-center justify-center shadow-none border border-brand-primary/20" aria-hidden="true"><Target size={24} /></div>
                             <Badge variant="brand" className="px-4 py-1 shadow-sm"><Typography variant="tiny" as="span">META MENSAL</Typography></Badge>
@@ -642,7 +642,7 @@ function StoreMorningReport() {
 
                 <Card className="p-mx-lg md:p-10 text-white border-none relative overflow-hidden">
                     <div className="absolute top-mx-0 right-mx-0 w-mx-48 h-mx-48 bg-white/5 rounded-mx-full blur-3xl -mr-24 -mt-24" aria-hidden="true" />
-                    <div className="relative z-10">
+                    <div className="relative z-[var(--mx-z-sticky)]">
                         <div className="flex items-center justify-between mb-8">
                             <div className="w-mx-14 h-mx-14 rounded-2xl bg-white/10 text-white flex items-center justify-center border border-white/10 shadow-none" aria-hidden="true"><TrendingUp size={24} /></div>
                             <Badge variant="outline" className="bg-white text-brand-secondary border-white px-4 py-1"><Typography variant="tiny" as="span" className="text-inherit">PROJEÇÃO MX</Typography></Badge>
@@ -654,7 +654,7 @@ function StoreMorningReport() {
 
                 <Card className="p-mx-lg md:p-10 border-none bg-white relative overflow-hidden group">
                     <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-status-success-surface rounded-mx-full blur-3xl -mr-16 -mt-16 opacity-50" aria-hidden="true" />
-                    <div className="relative z-10">
+                    <div className="relative z-[var(--mx-z-sticky)]">
                         <div className="flex items-center justify-between mb-8">
                             <div className="w-mx-14 h-mx-14 rounded-2xl bg-status-success-surface text-status-success-text flex items-center justify-center shadow-none border border-mx-emerald-100" aria-hidden="true"><Activity size={24} /></div>
                             <Badge variant="success" className="px-4 py-1 shadow-sm"><Typography variant="tiny" as="span">SAÚDE DA MALHA</Typography></Badge>
@@ -721,11 +721,11 @@ function StoreMorningReport() {
                 <aside className="xl:col-span-4 flex flex-col gap-mx-lg">
                     <Card className="p-mx-10 md:p-14 space-y-mx-10 border-none bg-white relative overflow-hidden group">
                         <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-3xl -mr-16 -mt-16 opacity-50" aria-hidden="true" />
-                        <header className="flex items-center gap-mx-sm border-b border-border pb-8 relative z-10">
+                        <header className="flex items-center gap-mx-sm border-b border-border pb-8 relative z-[var(--mx-z-sticky)]">
                             <div className="w-mx-14 h-mx-14 rounded-2xl bg-brand-primary-subtle text-status-success-text flex items-center justify-center shadow-sm" aria-hidden="true"><Zap size={28} /></div>
                             <Typography variant="h3" className="tracking-tight">Foco do Dia</Typography>
                         </header>
-                        <div className="space-y-mx-md relative z-10">
+                        <div className="space-y-mx-md relative z-[var(--mx-z-sticky)]">
                             {metrics.pendingSellers.length > 0 && (
                                 <Card className="p-mx-lg bg-status-error-surface border-none shadow-mx-inner space-y-mx-md">
                                     <header className="flex justify-between items-start">

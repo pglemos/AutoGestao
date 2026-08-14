@@ -168,7 +168,7 @@ export function AgendaHeader({
                 side="bottom"
                 align="end"
                 sideOffset={8}
-                className="z-[90] w-72 rounded-2xl border border-border bg-white p-4 shadow-xl animate-in fade-in-80"
+                className="z-[var(--mx-z-popover)] w-72 rounded-2xl border border-border bg-white p-4 shadow-xl animate-in fade-in-80"
               >
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center justify-between border-b border-border-subtle pb-2">
@@ -250,7 +250,7 @@ export function AgendaHeader({
               <DropdownMenu.Content
                 align="end"
                 sideOffset={6}
-                className="z-[90] w-52 rounded-2xl border border-border bg-white p-1.5 shadow-xl animate-in fade-in-80"
+                className="z-[var(--mx-z-popover)] w-52 rounded-2xl border border-border bg-white p-1.5 shadow-xl animate-in fade-in-80"
               >
                 <DropdownMenu.Item
                   onSelect={onCreateVisit}

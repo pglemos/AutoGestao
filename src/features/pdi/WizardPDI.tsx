@@ -260,11 +260,11 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                 <Dialog.Overlay asChild forceMount>
                     <motion.div 
                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[140] flex items-center justify-center p-mx-sm md:p-10 bg-gray-900/80 backdrop-blur-md"
+                        className="fixed inset-0 z-[var(--mx-z-modal)] flex items-center justify-center p-mx-sm md:p-10 bg-gray-900/80 backdrop-blur-md"
                     >
                         <Dialog.Content asChild forceMount>
                             <Card className="w-full max-w-mx-6xl max-h-full overflow-y-auto no-scrollbar border-none flex flex-col bg-white">
-                <header className="p-mx-lg md:p-10 border-b border-border flex flex-col gap-mx-lg sticky top-mx-0 bg-white z-10 shadow-sm">
+                <header className="p-mx-lg md:p-10 border-b border-border flex flex-col gap-mx-lg sticky top-mx-0 bg-white z-[var(--mx-z-sticky)] shadow-sm">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-mx-sm">
                             <div className="w-mx-xl h-mx-xl rounded-2xl bg-brand-primary text-white flex items-center justify-center shadow-sm"><Target size={24} /></div>
@@ -592,7 +592,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                     )}
                 </div>
 
-                <footer className="p-mx-lg md:p-10 border-t border-border sticky bottom-mx-0 bg-white z-10 flex flex-col sm:flex-row gap-mx-md justify-between">
+                <footer className="p-mx-lg md:p-10 border-t border-border sticky bottom-mx-0 bg-white z-[var(--mx-z-sticky)] flex flex-col sm:flex-row gap-mx-md justify-between">
                     <Button variant="ghost" onClick={() => currentStep > 0 ? setCurrentStep(s => s - 1) : onClose()} className="h-mx-14 px-8 rounded-mx-full font-bold uppercase text-xs border border-border w-full sm:w-auto">
                         <ChevronLeft size={18} className="mr-2" /> {currentStep === 0 ? 'CANCELAR' : 'VOLTAR'}
                     </Button>

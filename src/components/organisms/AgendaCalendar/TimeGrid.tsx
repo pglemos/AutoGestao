@@ -98,7 +98,8 @@ export function TimeGrid({
   return (
     <div className="flex flex-col rounded-xl border border-border bg-white">
       <div
-        className="sticky top-0 z-30 grid overflow-x-auto border-b border-border bg-white"
+        data-mx-scroll-region="horizontal"
+        className="sticky top-0 z-[var(--mx-z-topbar)] grid overflow-x-auto border-b border-border bg-white"
         style={{ gridTemplateColumns: days.length === 1 ? '4rem minmax(0, 1fr)' : `4rem repeat(${days.length}, minmax(7.5rem, 1fr))` }}
       >
         <div className="border-r border-border" aria-hidden="true" />
@@ -129,7 +130,7 @@ export function TimeGrid({
         })}
       </div>
 
-      <div className="grid overflow-x-auto" style={{ gridTemplateColumns: '4rem minmax(0, 1fr)' }}>
+      <div data-mx-scroll-region="horizontal" className="grid overflow-x-auto" style={{ gridTemplateColumns: '4rem minmax(0, 1fr)' }}>
         <div className="border-r border-border bg-white">
           {TIME_SLOTS.map((slot) => (
             <div key={slot} className="border-b border-border-subtle pr-mx-xs pt-mx-xs text-right" style={{ height: HOUR_HEIGHT }}>
@@ -179,7 +180,7 @@ export function TimeGrid({
 
                 {showNowLine && (
                   <div
-                    className="pointer-events-none absolute inset-x-0 z-20 flex items-center"
+                    className="pointer-events-none absolute inset-x-0 z-[var(--mx-z-sticky)] flex items-center"
                     style={{ top: nowTop }}
                     aria-hidden="true"
                   >

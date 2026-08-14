@@ -11,21 +11,21 @@ export function HotOpportunitiesCard({ qtdOportunidades, comissaoPotencial }: Pr
     <div
       className="relative overflow-hidden rounded-2xl p-6 flex flex-col justify-between"
       style={{
-        background: '#FFFFFF',
-        border: '1px solid rgba(59,130,246,0.2)',
+        background: 'hsl(var(--mx-color-surface))',
+        border: '1px solid hsl(var(--mx-status-info) / 0.2)',
         minHeight: '220px',
       }}
     >
       <div className="absolute top-4 right-4 opacity-80">
         <div
           className="w-14 h-14 rounded-full flex items-center justify-center"
-          style={{ background: '#FFFFFF', }}
+          style={{ background: 'hsl(var(--mx-color-surface))', }}
         >
           <Target className="w-7 h-7 text-foreground" />
         </div>
       </div>
 
-      <div className="relative z-10 flex-1">
+      <div className="relative z-[var(--mx-z-sticky)] flex-1">
         <p className="text-muted-foreground text-xs font-bold uppercase tracking-wide mb-3">Hoje você possui</p>
 
         {qtdOportunidades === 0 ? (
@@ -46,7 +46,7 @@ export function HotOpportunitiesCard({ qtdOportunidades, comissaoPotencial }: Pr
         )}
       </div>
 
-      <div className="mt-4 flex items-center justify-between px-4 py-3 rounded-xl" style={{ background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.15)' }}>
+      <div className="mt-4 flex items-center justify-between px-4 py-3 rounded-xl" style={{ background: 'hsl(var(--mx-status-info) / 0.1)', border: '1px solid hsl(var(--mx-status-info) / 0.15)' }}>
         <span className="text-muted-foreground text-sm">Clientes quentes na sua carteira</span>
         <div className="flex items-center gap-2">
           <span className="text-status-info-text font-bold text-lg">{qtdOportunidades}</span>

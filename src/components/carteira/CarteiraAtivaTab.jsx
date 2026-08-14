@@ -235,7 +235,7 @@ function PainelFiltros({ onAplicar, onFechar, filtrosAtivos }) {
   }
 
   return (
-    <div className="fixed inset-0 z-40 flex">
+    <div className="fixed inset-0 z-[var(--mx-z-drawer)] flex">
       <div className="flex-1 bg-surface-overlay/30" onClick={onFechar} />
       <div className="w-80 bg-white shadow-2xl overflow-y-auto flex flex-col">
         <div className="flex items-center justify-between px-5 py-4 border-b border-border-subtle">

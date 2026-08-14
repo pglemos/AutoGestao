@@ -47,7 +47,7 @@ export function WeeklyReportsList({ reports, variant = 'admin' }: Props) {
 
 function ReportHeader({ report }: { report: WeeklyFeedbackReport }) {
   return (
-    <div className="flex items-center justify-between mb-10 relative z-10">
+    <div className="flex items-center justify-between mb-10 relative z-[var(--mx-z-sticky)]">
       <div className="flex items-center gap-mx-sm">
         <div className="w-mx-14 h-mx-14 rounded-xl bg-brand-primary text-white flex items-center justify-center shadow-sm">
           <Calendar size={24} />
@@ -88,7 +88,7 @@ function ReportMetrics({
       className={
         dense
           ? 'grid grid-cols-2 gap-mx-md py-8 border-y border-border-subtle'
-          : 'grid grid-cols-1 sm:grid-cols-2 gap-mx-md py-8 border-y border-border-subtle relative z-10'
+          : 'grid grid-cols-1 sm:grid-cols-2 gap-mx-md py-8 border-y border-border-subtle relative z-[var(--mx-z-sticky)]'
       }
     >
       <div className="bg-surface-alt rounded-xl p-mx-md shadow-mx-inner text-center">

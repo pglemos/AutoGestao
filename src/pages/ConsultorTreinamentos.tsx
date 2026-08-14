@@ -94,7 +94,7 @@ export default function ConsultorTreinamentos() {
                             <Card className="border p-mx-md bg-white relative">
                                 <div className="absolute top-mx-0 right-mx-0 w-mx-96 h-mx-96 bg-brand-primary/5 rounded-mx-full blur-mx-xl -mr-48 -mt-48" />
                                 
-                                <header className="flex items-center justify-between border-b border-border-subtle pb-4 mb-4 relative z-10">
+                                <header className="flex items-center justify-between border-b border-border-subtle pb-4 mb-4 relative z-[var(--mx-z-sticky)]">
                                     <div className="flex items-center gap-mx-md">
                                         <div className="w-mx-14 h-mx-14 rounded-xl bg-brand-primary text-white flex items-center justify-center shadow-sm transform rotate-2"><GraduationCap size={24} /></div>
                                         <div>
@@ -105,7 +105,7 @@ export default function ConsultorTreinamentos() {
                                     <Button variant="ghost" size="icon" onClick={() => setShowForm(false)} aria-label="Fechar" className="rounded-mx-full w-mx-xl h-mx-xl bg-surface-alt hover:bg-white shadow-sm"><X size={24} /></Button>
                                 </header>
 
-                                <div className="grid lg:grid-cols-2 gap-mx-14 relative z-10">
+                                <div className="grid lg:grid-cols-2 gap-mx-14 relative z-[var(--mx-z-sticky)]">
                                     <div className="space-y-mx-lg">
                                         <div className="space-y-mx-sm">
                                             <Typography variant="caption" tone="muted" className="ml-2">Título da Aula</Typography>
@@ -166,7 +166,7 @@ export default function ConsultorTreinamentos() {
                                     </div>
                                 </div>
 
-                                <footer className="pt-10 flex justify-end gap-mx-sm border-t border-border-subtle mt-10 relative z-10">
+                                <footer className="pt-10 flex justify-end gap-mx-sm border-t border-border-subtle mt-10 relative z-[var(--mx-z-sticky)]">
                                     <Button type="submit" disabled={saving} className="h-mx-2xl px-14 hover:bg-brand-primary-hover text-white">
                                         {saving ? <RefreshCw className="animate-spin mr-3" /> : <Save size={20} className="mr-3" />} <Typography variant="caption" as="span">PUBLICAR TREINAMENTO</Typography>
                                     </Button>
@@ -207,7 +207,7 @@ export default function ConsultorTreinamentos() {
                         <Card className="border bg-white p-mx-md hover:shadow-sm transition-all relative flex flex-col">
                             <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-mx-huge -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" />
                             
-                            <div className="flex items-start justify-between mb-8 border-b border-border-subtle pb-6 relative z-10">
+                            <div className="flex items-start justify-between mb-8 border-b border-border-subtle pb-6 relative z-[var(--mx-z-sticky)]">
                                 <div className={cn("w-mx-xl h-mx-xl rounded-xl flex items-center justify-center transition-all shadow-none transform group-hover:rotate-6", t.watched ? "bg-status-success-surface text-status-success" : "bg-surface-alt text-muted-foreground group-hover:bg-brand-primary group-hover:text-white")}>
                                     {t.watched ? <CheckCircle size={20} /> : <Play size={20} className="ml-1" />}
                                 </div>
@@ -218,7 +218,7 @@ export default function ConsultorTreinamentos() {
                                 </div>
                             </div>
 
-                            <div className="flex-1 mb-8 relative z-10 space-y-mx-xs">
+                            <div className="flex-1 mb-8 relative z-[var(--mx-z-sticky)] space-y-mx-xs">
                                 <Typography variant="h3" className="leading-tight group-hover:text-status-success-text transition-colors line-clamp-2">{t.title}</Typography>
                                 <Typography variant="p" tone="muted" className="leading-relaxed line-clamp-3 italic">"{t.description}"</Typography>
                                 
@@ -229,7 +229,7 @@ export default function ConsultorTreinamentos() {
                                 </div>
                             </div>
 
-                            <footer className="pt-6 border-t border-border-subtle flex items-center justify-between mt-auto relative z-10">
+                            <footer className="pt-6 border-t border-border-subtle flex items-center justify-between mt-auto relative z-[var(--mx-z-sticky)]">
                                 <div className="flex -space-x-2">
                                     {[1, 2, 3].map(j => (
                                         <div key={j} className="w-mx-lg h-mx-lg rounded-xl border-2 border-white bg-surface-alt flex items-center justify-center text-muted-foreground">
@@ -240,7 +240,7 @@ export default function ConsultorTreinamentos() {
                                         <Typography variant="tiny" as="span">+12</Typography>
                                     </div>
                                 </div>
-                                <Button asChild size="icon" variant="secondary" className="w-mx-xl h-mx-xl hover:bg-brand-primary-hover text-white group-hover:scale-110 transition-transform" aria-label="Ação">
+                                <Button asChild size="icon" variant="outline" className="w-mx-xl h-mx-xl hover:bg-brand-primary-hover text-white group-hover:scale-110 transition-transform" aria-label="Ação">
                                     <a href={t.video_url} target="_blank" rel="noopener noreferrer">
                                         <ExternalLink size={20} />
                                     </a>

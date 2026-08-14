@@ -69,7 +69,7 @@ export default function OAuthHome() {
 
           <div className="bg-gray-900 text-white px-mx-lg sm:px-mx-2xl py-mx-2xl lg:py-mx-hero flex flex-col justify-center relative overflow-hidden">
             <div className="absolute inset-0 bg-mx-matrix opacity-25" aria-hidden="true" />
-            <div className="relative z-10 max-w-xl">
+            <div className="relative z-[var(--mx-z-sticky)] max-w-xl">
               <img src={MxLogo} alt="MX PERFORMANCE" className="object-contain mb-mx-2xl" style={{ width: 96, height: 96 }} />
               <div className="space-y-mx-lg">
                 <div className="flex gap-mx-md">

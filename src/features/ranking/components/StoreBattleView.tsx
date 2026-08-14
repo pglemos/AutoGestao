@@ -81,7 +81,7 @@ function ComparisonRow({ label, v1, v2, format = v => Math.round(v).toString(), 
           animate={{ width: `${pct1}%` }}
           transition={{ duration: 0.9, ease: 'easeOut' }}
         />
-        <div className="w-mx-tiny bg-surface-alt z-10 skew-x-[-20deg]" />
+        <div className="w-mx-tiny bg-surface-alt z-[var(--mx-z-sticky)] skew-x-[-20deg]" />
         <motion.div
           className={cn('h-full flex-1', winner === 'p2' ? 'bg-status-info shadow-mx-glow-brand' : 'bg-status-info/40')}
           initial={{ width: 0 }}
@@ -148,7 +148,7 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 pointer-events-none z-[80] flex items-center justify-center"
+            className="fixed inset-0 pointer-events-none z-[var(--mx-z-overlay)] flex items-center justify-center"
           >
             <motion.div
               initial={{ scale: 0, rotate: -30 }}
@@ -170,7 +170,7 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.2 }}
-          className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-mx-2xl h-mx-2xl rounded-full bg-gray-900 border-4 border-surface-alt items-center justify-center z-20 shadow-2xl"
+          className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-mx-2xl h-mx-2xl rounded-full bg-gray-900 border-4 border-surface-alt items-center justify-center z-[var(--mx-z-sticky)] shadow-2xl"
         >
           <span className="font-display font-bold text-3xl italic text-status-success-text">VS</span>
         </motion.div>
@@ -194,23 +194,23 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
             <motion.div
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              className="absolute top-mx-sm left-mx-sm z-10"
+              className="absolute top-mx-sm left-mx-sm z-[var(--mx-z-sticky)]"
             >
               <Crown size={24} className="text-status-warning-text fill-status-warning/30" />
             </motion.div>
           )}
-          <div className="w-mx-2xl h-mx-2xl rounded-2xl bg-brand-primary/10 border-2 border-brand-primary flex items-center justify-center mb-4 relative z-10">
+          <div className="w-mx-2xl h-mx-2xl rounded-2xl bg-brand-primary/10 border-2 border-brand-primary flex items-center justify-center mb-4 relative z-[var(--mx-z-sticky)]">
             <Building2 size={32} className="text-status-success-text" />
           </div>
-          <h3 className="font-display font-bold text-2xl text-white text-center relative z-10 truncate max-w-full">{p1.storeName}</h3>
-          <p className="text-mx-tiny font-bold text-status-success-text uppercase tracking-widest text-center mt-1 relative z-10">
+          <h3 className="font-display font-bold text-2xl text-white text-center relative z-[var(--mx-z-sticky)] truncate max-w-full">{p1.storeName}</h3>
+          <p className="text-mx-tiny font-bold text-status-success-text uppercase tracking-widest text-center mt-1 relative z-[var(--mx-z-sticky)]">
             {p1.reaching}% atingido
           </p>
           {winnerSide === 'p1' && (
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="mt-3 px-3 py-1 rounded-full bg-status-warning/20 border border-status-warning/40 flex items-center gap-mx-xs relative z-10"
+              className="mt-3 px-3 py-1 rounded-full bg-status-warning/20 border border-status-warning/40 flex items-center gap-mx-xs relative z-[var(--mx-z-sticky)]"
             >
               <Flame size={12} className="text-status-warning-text" />
               <span className="text-mx-tiny font-bold uppercase tracking-widest text-status-warning-text">Líder</span>
@@ -242,23 +242,23 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
             <motion.div
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              className="absolute top-mx-sm right-mx-sm z-10"
+              className="absolute top-mx-sm right-mx-sm z-[var(--mx-z-sticky)]"
             >
               <Crown size={24} className="text-status-warning-text fill-status-warning/30" />
             </motion.div>
           )}
-          <div className="w-mx-2xl h-mx-2xl rounded-2xl bg-status-info/10 border-2 border-status-info flex items-center justify-center mb-4 relative z-10">
+          <div className="w-mx-2xl h-mx-2xl rounded-2xl bg-status-info/10 border-2 border-status-info flex items-center justify-center mb-4 relative z-[var(--mx-z-sticky)]">
             <Building2 size={32} className="text-status-info-text" />
           </div>
-          <h3 className="font-display font-bold text-2xl text-white text-center relative z-10 truncate max-w-full">{p2.storeName}</h3>
-          <p className="text-mx-tiny font-bold text-status-info-text uppercase tracking-widest text-center mt-1 relative z-10">
+          <h3 className="font-display font-bold text-2xl text-white text-center relative z-[var(--mx-z-sticky)] truncate max-w-full">{p2.storeName}</h3>
+          <p className="text-mx-tiny font-bold text-status-info-text uppercase tracking-widest text-center mt-1 relative z-[var(--mx-z-sticky)]">
             {p2.reaching}% atingido
           </p>
           {winnerSide === 'p2' && (
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="mt-3 px-3 py-1 rounded-full bg-status-warning/20 border border-status-warning/40 flex items-center gap-mx-xs relative z-10"
+              className="mt-3 px-3 py-1 rounded-full bg-status-warning/20 border border-status-warning/40 flex items-center gap-mx-xs relative z-[var(--mx-z-sticky)]"
             >
               <Flame size={12} className="text-status-warning-text" />
               <span className="text-mx-tiny font-bold uppercase tracking-widest text-status-warning-text">Líder</span>

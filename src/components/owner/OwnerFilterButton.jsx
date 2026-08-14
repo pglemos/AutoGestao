@@ -96,7 +96,7 @@ export default function OwnerFilterButton({ lastUpdated }) {
         <div
           role="dialog"
           aria-label="Filtros do módulo Dono"
-          className="absolute left-0 top-12 z-40 w-[min(320px,calc(100vw-2rem))] rounded-2xl border border-border-subtle bg-white p-3 shadow-xl sm:left-auto sm:right-0"
+          className="absolute left-0 top-12 z-[var(--mx-z-popover)] w-[min(320px,calc(100vw-2rem))] rounded-2xl border border-border-subtle bg-white p-3 shadow-xl sm:left-auto sm:right-0"
         >
           <p className="px-2.5 pb-1 text-caption font-semibold uppercase tracking-[0.08em] text-muted-foreground">
             Loja

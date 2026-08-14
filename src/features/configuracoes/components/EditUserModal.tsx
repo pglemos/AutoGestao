@@ -240,7 +240,7 @@ function FormGroup({ icon, label, children }: { icon: React.ReactNode; label: st
         <div className="space-y-mx-xs">
             <Typography variant="tiny" tone="muted" className="px-1">{label}</Typography>
             <div className="relative">
-                <span className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground z-10 pointer-events-none">{icon}</span>
+                <span className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground z-[var(--mx-z-sticky)] pointer-events-none">{icon}</span>
                 {children}
             </div>
         </div>

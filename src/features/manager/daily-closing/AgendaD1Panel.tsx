@@ -647,10 +647,10 @@ export function AgendaD1Panel({
                                     <button
                                       type="button"
                                       aria-label="Fechar opções de confirmação"
-                                      className="fixed inset-0 z-40 cursor-default"
+                                      className="fixed inset-0 z-[var(--mx-z-overlay)] cursor-default"
                                       onClick={() => setConfirmMenuRowId(null)}
                                     />
-                                    <div className="absolute right-0 top-full z-50 mt-1 min-w-[208px] rounded-mx-xl border border-border bg-white py-1 shadow-lg" role="menu" aria-label="Resultado da confirmação">
+                                    <div className="absolute right-0 top-full z-[var(--mx-z-popover)] mt-1 min-w-[208px] rounded-mx-xl border border-border bg-white py-1 shadow-lg" role="menu" aria-label="Resultado da confirmação">
                                       {CONFIRMATION_OUTCOMES.map((outcome) => (
                                         <button
                                           key={outcome}

@@ -134,11 +134,11 @@ export default function AiDiagnostics() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-mx-lg flex-1 min-h-0">
           <section className="lg:col-span-7 flex flex-col min-h-mx-chart lg:min-h-0">
             <Card className="flex-1 border-none p-mx-md relative overflow-hidden flex flex-col">
-              <div className="flex items-center gap-mx-sm mb-8 relative z-10">
+              <div className="flex items-center gap-mx-sm mb-8 relative z-[var(--mx-z-sticky)]">
                 <TerminalIcon size={18} className="text-status-success-text/80" aria-hidden="true" />
                 <Typography variant="caption" tone="white" className="">Eventos do diagnóstico operacional</Typography>
               </div>
-              <div className="flex-1 font-mono text-sm leading-relaxed space-y-mx-xs overflow-y-auto pr-4 no-scrollbar border-t border-white/5 pt-8 relative z-10" role="log" aria-live="polite">
+              <div className="flex-1 font-mono text-sm leading-relaxed space-y-mx-xs overflow-y-auto pr-4 no-scrollbar border-t border-white/5 pt-8 relative z-[var(--mx-z-sticky)]" role="log" aria-live="polite">
                 {logs.map((log, index) => (
                   <div key={`${log.msg}-${index}`} className="flex gap-mx-sm group hover:bg-white/5 p-mx-xs rounded-lg transition-colors">
                     <Typography variant="tiny" tone="muted" as="span" className="opacity-10" aria-hidden="true">{(index + 1).toString().padStart(3, '0')}</Typography>
@@ -160,7 +160,7 @@ export default function AiDiagnostics() {
                 <AnimatePresence mode="wait">
                   {summary ? (
                     <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-mx-xl">
-                      <Card className="p-mx-md bg-brand-primary-subtle border relative group"><Quote size={64} className="absolute -right-4 -bottom-4 text-status-success-text opacity-5 -rotate-12" aria-hidden="true" /><Typography variant="p" className="text-lg sm:text-xl italic leading-relaxed relative z-10 tracking-tight">“{summary.diagnostic}”</Typography></Card>
+                      <Card className="p-mx-md bg-brand-primary-subtle border relative group"><Quote size={64} className="absolute -right-4 -bottom-4 text-status-success-text opacity-5 -rotate-12" aria-hidden="true" /><Typography variant="p" className="text-lg sm:text-xl italic leading-relaxed relative z-[var(--mx-z-sticky)] tracking-tight">“{summary.diagnostic}”</Typography></Card>
                       <div className="space-y-mx-md"><div className="flex items-center gap-mx-xs"><div className="w-mx-10 h-mx-10 rounded-xl bg-status-success-surface text-status-success-text flex items-center justify-center border border-status-success/20" aria-hidden="true"><TrendingUp size={20} /></div><Typography variant="tiny" tone="success" className="">Plano de Ação Gerencial</Typography></div><Typography variant="p" className="text-sm sm:text-base font-bold leading-relaxed bg-surface-alt p-mx-md border tracking-tight">{summary.action}</Typography></div>
                     </motion.div>
                   ) : <div className="h-full flex flex-col items-center justify-center py-20 text-center space-y-mx-md"><div className="w-mx-3xl h-mx-3xl rounded-mx-full border-4 border-border-subtle border-t-brand-primary animate-spin" aria-hidden="true" /><Typography variant="caption" tone="muted" className="animate-pulse">ANALISANDO MALHA...</Typography></div>}

@@ -108,7 +108,7 @@ export function AdminNetworkView() {
                   <div className="p-mx-sm sm:p-mx-md grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-mx-sm">
                     {members.map((member) => (
                       <div key={member.id} className="bg-white p-mx-sm rounded-xl border border-border flex flex-col gap-mx-sm shadow-sm relative overflow-hidden group">
-                        <div className="flex items-center gap-mx-sm relative z-10">
+                        <div className="flex items-center gap-mx-sm relative z-[var(--mx-z-sticky)]">
                           <div className="w-mx-10 h-mx-10 rounded-xl bg-surface-alt flex items-center justify-center border border-border overflow-hidden shrink-0">
                             {member.avatar_url ? <img src={member.avatar_url} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" /> : <Users size={16} className="text-muted-foreground" />}
                           </div>
@@ -119,7 +119,7 @@ export function AdminNetworkView() {
                           {member.checkin_today ? <Zap size={16} className="text-status-success-text fill-status-success/20" /> : <Clock size={16} className="text-muted-foreground opacity-20" />}
                         </div>
                         
-                        <div className="flex gap-mx-xs border-t border-border pt-mx-xs mt-1 relative z-10">
+                        <div className="flex gap-mx-xs border-t border-border pt-mx-xs mt-1 relative z-[var(--mx-z-sticky)]">
                           <Button 
                             variant="outline" size="sm" className="flex-1 h-mx-lg sm:h-mx-10 text-mx-micro sm:text-mx-tiny"
                             disabled={!!processing}
@@ -128,7 +128,7 @@ export function AdminNetworkView() {
                             {member.role === 'vendedor' ? 'Promover' : 'Rebaixar'}
                           </Button>
                           <Button 
-                            variant="danger" size="sm" className="px-3 h-mx-lg sm:h-mx-10 bg-status-error-surface text-status-error border-status-error/20 hover:bg-status-error hover:text-white"
+                            variant="danger" size="sm" className="px-3 h-mx-lg sm:h-mx-10 bg-status-error-surface text-status-error border-status-error/20 hover:bg-status-error hover:text-status-error-foreground"
                             disabled={!!processing}
                             onClick={(e) => { e.stopPropagation(); handleRemove(member, store.store_id) }}
                           >

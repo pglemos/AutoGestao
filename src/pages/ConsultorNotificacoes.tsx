@@ -91,7 +91,7 @@ export default function ConsultorNotificacoes() {
                             <Card className="p-mx-10 md:p-14 border-none bg-white overflow-hidden relative">
                                 <div className="absolute top-mx-0 right-mx-0 w-mx-96 h-mx-96 bg-brand-primary/5 rounded-mx-full blur-mx-xl -mr-48 -mt-48" />
 
-                                <header className="flex items-center justify-between border-b border-border pb-8 mb-10 relative z-10">
+                                <header className="flex items-center justify-between border-b border-border pb-8 mb-10 relative z-[var(--mx-z-sticky)]">
                                     <div className="flex items-center gap-mx-md">
                                         <div className="w-mx-14 h-mx-14 rounded-2xl bg-pure-black text-white flex items-center justify-center shadow-sm transform rotate-2"><Mail size={24} className="text-status-success-text" /></div>
                                         <div>
@@ -102,7 +102,7 @@ export default function ConsultorNotificacoes() {
                                     <Button variant="ghost" size="icon" onClick={() => setShowForm(false)} aria-label="Fechar" className="rounded-mx-full w-mx-xl h-mx-xl bg-surface-alt hover:bg-white shadow-sm"><X size={24} /></Button>
                                 </header>
 
-                                <div className="grid lg:grid-cols-2 gap-mx-14 relative z-10">
+                                <div className="grid lg:grid-cols-2 gap-mx-14 relative z-[var(--mx-z-sticky)]">
                                     <div className="space-y-mx-lg">
                                         <div className="space-y-mx-sm">
                                             <Typography variant="caption" tone="muted" className="ml-2">Assunto Estratégico</Typography>
@@ -158,7 +158,7 @@ export default function ConsultorNotificacoes() {
                                     </div>
                                 </div>
 
-                                <footer className="pt-10 flex justify-end gap-mx-sm border-t border-border mt-10 relative z-10">
+                                <footer className="pt-10 flex justify-end gap-mx-sm border-t border-border mt-10 relative z-[var(--mx-z-sticky)]">
                                     <Button type="submit" disabled={saving} className="h-mx-2xl px-14 rounded-mx-full text-mx-tiny">
                                         {saving ? <RefreshCw className="animate-spin mr-3" /> : <Send size={20} className="mr-3" />} DISPARAR NA REDE
                                     </Button>
@@ -185,7 +185,7 @@ export default function ConsultorNotificacoes() {
                             <Card className="p-mx-lg h-full border-none bg-white group hover:shadow-sm transition-all relative overflow-hidden flex flex-col">
                                 <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-mx-lg -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" />
 
-                                <header className="flex items-start justify-between mb-8 border-b border-border pb-6 relative z-10">
+                                <header className="flex items-start justify-between mb-8 border-b border-border pb-6 relative z-[var(--mx-z-sticky)]">
                                     <div className="w-mx-xl h-mx-xl rounded-2xl bg-surface-alt flex items-center justify-center text-muted-foreground group-hover:bg-pure-black group-hover:text-white transition-all shadow-none transform group-hover:rotate-6">
                                         <Zap size={20} />
                                     </div>
@@ -197,12 +197,12 @@ export default function ConsultorNotificacoes() {
                                     </div>
                                 </header>
 
-                                <div className="flex-1 mb-8 relative z-10 space-y-mx-xs">
+                                <div className="flex-1 mb-8 relative z-[var(--mx-z-sticky)] space-y-mx-xs">
                                     <Typography variant="h3" className="text-lg leading-tight group-hover:text-status-success-text transition-colors line-clamp-2">{n.title}</Typography>
                                     <Typography variant="p" tone="muted" className="text-xs font-bold leading-relaxed line-clamp-4">"{n.message}"</Typography>
                                 </div>
 
-                                <footer className="pt-6 border-t border-border flex items-center justify-between mt-auto relative z-10">
+                                <footer className="pt-6 border-t border-border flex items-center justify-between mt-auto relative z-[var(--mx-z-sticky)]">
                                     <div className="flex items-center gap-mx-xs text-caption font-bold text-muted-foreground">
                                         <Calendar size={14} className="text-status-success-text" /> {new Date(n.created_at).toLocaleDateString('pt-BR')}
                                     </div>

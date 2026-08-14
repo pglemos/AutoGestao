@@ -24,7 +24,7 @@ export function TeamStatsGrid({ stats }: { stats: TeamStat[] }) {
           className="p-mx-xs sm:p-mx-lg rounded-2xl sm:rounded-mx-4xl bg-white border border-border relative overflow-hidden group shadow-sm hover:shadow-sm transition-all h-mx-16 sm:h-mx-24 flex items-center"
         >
           <div className={cn("absolute inset-0 bg-gradient-to-br opacity-50 group-hover:opacity-70 transition-opacity", item.color)} />
-          <div className="flex items-center justify-between relative z-10 w-full">
+          <div className="flex items-center justify-between relative z-[var(--mx-z-sticky)] w-full">
             <div className="space-y-0.5 min-w-0">
               <Typography variant="tiny" tone="muted" className="block text-mx-nano opacity-60 truncate">
                 <span className="sm:hidden">{item.shortLabel}</span>

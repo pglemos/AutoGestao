@@ -613,7 +613,7 @@ export default function ConsultoriaVisitaExecucao() {
   }
 
   return (
-    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="w-full pb-mx-xl relative z-0">
+    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="w-full pb-mx-xl relative z-[var(--mx-z-base)]">
       <div className="fixed !-left-full top-mx-0 overflow-hidden pointer-events-none" aria-hidden="true">
          <div id="report-template-render">
             <VisitReportTemplate
@@ -651,7 +651,7 @@ export default function ConsultoriaVisitaExecucao() {
          </div>
       </div>
 
-      <div className="sticky top-mx-0 z-40 bg-surface-alt/80 backdrop-blur-xl px-mx-md py-mx-sm flex flex-col md:flex-row md:items-center justify-between gap-mx-sm mb-mx-md print:hidden border-b border-border-subtle shadow-sm transition-all">
+      <div className="sticky top-mx-0 z-[var(--mx-z-topbar)] bg-surface-alt/80 backdrop-blur-xl px-mx-md py-mx-sm flex flex-col md:flex-row md:items-center justify-between gap-mx-sm mb-mx-md print:hidden border-b border-border-subtle shadow-sm transition-all">
         <div className="flex items-center gap-mx-md">
           <Link to={`/consultoria/clientes/${client?.slug}`} className="p-mx-xs border border-border-subtle rounded-2xl hover:bg-white hover:shadow-sm transition-all text-muted-foreground bg-white/50 backdrop-blur-sm shadow-sm group">
             <ArrowLeft className="w-mx-5 h-mx-5 group-hover:-translate-x-1 transition-transform" />
@@ -687,7 +687,7 @@ export default function ConsultoriaVisitaExecucao() {
             </Button>
             {!hasRequiredEvidence && step?.evidence_required && (
               <span className="absolute -top-1 right-mx-0 flex h-mx-4 w-mx-4 animate-pulse">
-                <span className="relative inline-flex rounded-mx-full h-mx-4 w-mx-4 bg-status-error items-center justify-center text-mx-micro text-white font-bold">!</span>
+                <span className="relative inline-flex rounded-mx-full h-mx-4 w-mx-4 bg-status-error items-center justify-center text-mx-micro text-status-error-foreground font-bold">!</span>
               </span>
             )}
           </div>
@@ -786,7 +786,7 @@ export default function ConsultoriaVisitaExecucao() {
               <div className="absolute top-mx-0 right-mx-0 p-mx-md opacity-[0.02] group-hover:opacity-[0.05] transition-opacity pointer-events-none text-status-success-text">
                 <FileText size={120} />
               </div>
-              <div className="flex items-center justify-between mb-mx-md relative z-10">
+              <div className="flex items-center justify-between mb-mx-md relative z-[var(--mx-z-sticky)]">
                 <div className="flex items-center gap-mx-sm">
                   <div className="p-mx-xs bg-brand-primary/10 rounded-xl text-status-success-text"><FileText size={20} /></div>
                   <Typography variant="h3" className="text-lg">Relato Executivo (CRM)</Typography>
@@ -800,9 +800,9 @@ export default function ConsultoriaVisitaExecucao() {
                 value={executiveSummary}
                 onChange={(e) => setExecutiveSummary(e.target.value)}
                 placeholder="Insira o rascunho da visita. Depois clique em RESUMIR PARA GRUPO para deixar a mensagem pronta para enviar..."
-                className="min-h-mx-64 text-sm bg-surface-alt/20 border-border focus:border-brand-primary focus:bg-white rounded-2xl p-mx-md shadow-mx-inner resize-none transition-all mb-mx-md font-medium leading-relaxed relative z-10"
+                className="min-h-mx-64 text-sm bg-surface-alt/20 border-border focus:border-brand-primary focus:bg-white rounded-2xl p-mx-md shadow-mx-inner resize-none transition-all mb-mx-md font-medium leading-relaxed relative z-[var(--mx-z-sticky)]"
               />
-              <div className="relative z-10">
+              <div className="relative z-[var(--mx-z-sticky)]">
                 <VisitActionQuickAdd clientId={clientId!} visitNumber={visitNum} />
               </div>
             </Card>
@@ -812,7 +812,7 @@ export default function ConsultoriaVisitaExecucao() {
                 <div className="absolute top-mx-0 right-mx-0 p-mx-md opacity-[0.02] group-hover:opacity-[0.05] transition-opacity pointer-events-none text-brand-secondary">
                   <MessageSquare size={100} />
                 </div>
-                <div className="flex items-center gap-mx-sm mb-mx-md relative z-10">
+                <div className="flex items-center gap-mx-sm mb-mx-md relative z-[var(--mx-z-sticky)]">
                   <div className="p-mx-xs bg-gray-900/10 rounded-xl text-brand-secondary"><MessageSquare size={20} /></div>
                   <Typography variant="h3" className="text-lg">Devolutiva ao Cliente</Typography>
                 </div>
@@ -823,7 +823,7 @@ export default function ConsultoriaVisitaExecucao() {
                   value={feedbackClient}
                   onChange={(e) => setFeedbackClient(e.target.value)}
                   placeholder="Pontos de atenção emergenciais..."
-                  className="min-h-mx-32 text-sm bg-surface-alt/20 border-border focus:border-brand-secondary focus:bg-white rounded-2xl p-mx-md shadow-mx-inner resize-none transition-all font-medium leading-relaxed relative z-10"
+                  className="min-h-mx-32 text-sm bg-surface-alt/20 border-border focus:border-brand-secondary focus:bg-white rounded-2xl p-mx-md shadow-mx-inner resize-none transition-all font-medium leading-relaxed relative z-[var(--mx-z-sticky)]"
                 />
               </Card>
 
@@ -831,7 +831,7 @@ export default function ConsultoriaVisitaExecucao() {
                 <div className="absolute top-mx-0 right-mx-0 p-mx-md opacity-[0.03] group-hover:opacity-[0.06] transition-opacity pointer-events-none text-mx-orange-500">
                   <Target size={100} />
                 </div>
-                <div className="flex items-center gap-mx-sm mb-mx-md relative z-10">
+                <div className="flex items-center gap-mx-sm mb-mx-md relative z-[var(--mx-z-sticky)]">
                   <div className="p-mx-xs bg-mx-orange-500/10 rounded-xl text-mx-orange-500"><Target size={20} /></div>
                   <Typography variant="h3" className="text-lg text-mx-orange-600">Objetivo Próximo Ciclo</Typography>
                 </div>
@@ -842,7 +842,7 @@ export default function ConsultoriaVisitaExecucao() {
                   value={nextCycleGoal}
                   onChange={(e) => setNextCycleGoal(e.target.value)}
                   placeholder="O que deve ser o foco da loja até a próxima visita da consultoria?"
-                  className="min-h-mx-32 text-sm bg-surface-alt/20 border-border focus:border-mx-orange-500 focus:bg-white rounded-2xl p-mx-md shadow-mx-inner resize-none transition-all font-bold leading-relaxed relative z-10 text-mx-orange-700"
+                  className="min-h-mx-32 text-sm bg-surface-alt/20 border-border focus:border-mx-orange-500 focus:bg-white rounded-2xl p-mx-md shadow-mx-inner resize-none transition-all font-bold leading-relaxed relative z-[var(--mx-z-sticky)] text-mx-orange-700"
                 />
               </Card>
             </div>
@@ -872,7 +872,7 @@ export default function ConsultoriaVisitaExecucao() {
             <div className="flex items-center justify-between mb-mx-md">
                <Typography variant="tiny" tone="muted" className="text-mx-micro">Evidências ({attachments.length})</Typography>
                <input aria-label="Selecionar arquivo" id="visit-evidence-upload" name="visit_evidence_upload" type="file" multiple className="hidden" ref={fileInputRef} onChange={handleFileUpload} accept="image/*,application/pdf" />
-               <Button size="sm" variant="secondary" onClick={() => fileInputRef.current?.click()} loading={isUploading} className="h-mx-10 font-bold uppercase text-xs tracking-widest px-mx-md shadow-sm" icon={<Plus size={14} />}>ADICIONAR</Button>
+               <Button size="sm" variant="outline" onClick={() => fileInputRef.current?.click()} loading={isUploading} className="h-mx-10 font-bold uppercase text-xs tracking-widest px-mx-md shadow-sm" icon={<Plus size={14} />}>ADICIONAR</Button>
             </div>
 
             {attachments.length === 0 ? (
@@ -922,7 +922,7 @@ export default function ConsultoriaVisitaExecucao() {
              <Typography variant="p" className="text-mx-micro mb-mx-lg leading-tight font-bold tracking-tighter">O relatório compila os dados e o diagnóstico da visita.</Typography>
              <div className="space-y-mx-md">
                <Button className="w-full h-mx-12 text-xs bg-gradient-to-r from-brand-primary to-brand-primary/90 border-none group relative overflow-hidden" variant="primary" icon={<Eye size={16} className="group-hover:scale-125 transition-transform" />} onClick={() => setShowReportModal(true)}>
-                   <span className="relative z-10">VER RELATÓRIO</span>
+                   <span className="relative z-[var(--mx-z-sticky)]">VER RELATÓRIO</span>
                    <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </Button>
 
@@ -945,12 +945,12 @@ export default function ConsultoriaVisitaExecucao() {
       <Modal open={showReportModal} onClose={() => setShowReportModal(false)} title="DOCUMENTO DE AUDITORIA">
          <div className="p-mx-md">
             <div className="p-mx-lg bg-surface-alt rounded-2xl font-mono text-xs whitespace-pre-wrap border border-border-subtle max-h-mx-96 overflow-y-auto mb-mx-md">
-               <div className="relative z-10 text-foreground">{generateReportText()}</div>
+               <div className="relative z-[var(--mx-z-sticky)] text-foreground">{generateReportText()}</div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
                <Button className="h-mx-11 text-sm bg-white" variant="outline" onClick={() => window.print()} icon={<Printer className="w-mx-4 h-mx-4" />}>IMPRIMIR PDF</Button>
                <Button className="h-mx-11 text-sm bg-brand-primary hover:bg-brand-primary text-white border-none" onClick={() => { const t = encodeURIComponent(generateReportText()); window.open(`https://wa.me/?text=${t}`) }} icon={<Share2 className="w-mx-4 h-mx-4" />}>Enviar WhatsApp</Button>
-               <Button variant="secondary" className="h-mx-11 text-sm text-white border-none col-span-1 sm:col-span-2" onClick={handleDownloadPDF} icon={<Download className="w-mx-4 h-mx-4" />}>BAIXAR PDF OFICIAL (A4)</Button>
+               <Button variant="outline" className="h-mx-11 text-sm text-white border-none col-span-1 sm:col-span-2" onClick={handleDownloadPDF} icon={<Download className="w-mx-4 h-mx-4" />}>BAIXAR PDF OFICIAL (A4)</Button>
             </div>
          </div>
       </Modal>

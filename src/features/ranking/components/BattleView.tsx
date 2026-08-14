@@ -32,7 +32,7 @@ export function BattleView({ opponents, ranking }: BattleViewProps) {
                 </div>
                 <div className="h-mx-sm bg-gray-900 rounded-full overflow-hidden flex relative shadow-none">
                     <div className={`h-full transition-all duration-1000 ${winner === 'p1' ? 'bg-brand-primary shadow-mx-glow-brand' : 'bg-brand-primary/50'}`} style={{ width: `${p1Pct}%` }}></div>
-                    <div className="w-mx-tiny bg-surface-alt z-10 skew-x-[-20deg]"></div>
+                    <div className="w-mx-tiny bg-surface-alt z-[var(--mx-z-sticky)] skew-x-[-20deg]"></div>
                     <div className={`h-full transition-all duration-1000 flex-1 ${winner === 'p2' ? 'bg-status-info shadow-mx-glow-brand' : 'bg-status-info/50'}`}></div>
                 </div>
             </div>
@@ -43,7 +43,7 @@ export function BattleView({ opponents, ranking }: BattleViewProps) {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl mx-auto">
             <div className="flex flex-col md:flex-row justify-between items-center mb-10 relative gap-mx-lg md:gap-0">
                 {/* VS Badge */}
-                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-mx-20 h-mx-20 rounded-full bg-gray-900 border-4 border-surface-alt flex items-center justify-center z-20 shadow-xl">
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-mx-20 h-mx-20 rounded-full bg-gray-900 border-4 border-surface-alt flex items-center justify-center z-[var(--mx-z-sticky)] shadow-xl">
                     <span className="font-display font-bold text-2xl italic text-white">VS</span>
                 </div>
 

@@ -45,7 +45,7 @@ export function AgendaEventPopover({
           align="start"
           sideOffset={8}
           collisionPadding={12}
-          className="z-[90] w-72 rounded-xl border border-border bg-white p-mx-md shadow-sm outline-none"
+          className="z-[var(--mx-z-popover)] w-72 rounded-xl border border-border bg-white p-mx-md shadow-sm outline-none"
           onOpenAutoFocus={(event) => event.preventDefault()}
         >
           <div className="flex items-start justify-between gap-mx-sm">

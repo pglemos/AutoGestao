@@ -84,7 +84,7 @@ export function NotificacoesListSection({
 
   return (
     <Card className="flex min-h-[420px] flex-col overflow-hidden bg-white">
-      <CardHeader className="relative z-10 flex flex-col items-start justify-between gap-mx-md border-b border-border bg-surface-alt/30 p-mx-md sm:flex-row sm:items-center sm:p-mx-lg">
+      <CardHeader className="relative z-[var(--mx-z-sticky)] flex flex-col items-start justify-between gap-mx-md border-b border-border bg-surface-alt/30 p-mx-md sm:flex-row sm:items-center sm:p-mx-lg">
         <div className="flex items-center gap-mx-md">
           <div className={cn(
             'flex h-mx-11 w-mx-11 shrink-0 items-center justify-center rounded-2xl',
@@ -106,7 +106,7 @@ export function NotificacoesListSection({
         </Badge>
       </CardHeader>
 
-      <CardContent className="relative z-10 flex-1 p-mx-md sm:p-mx-lg">
+      <CardContent className="relative z-[var(--mx-z-sticky)] flex-1 p-mx-md sm:p-mx-lg">
         <AnimatePresence mode="popLayout">
           {Object.entries(grouped).length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center text-muted-foreground">

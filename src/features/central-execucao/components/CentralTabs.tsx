@@ -12,7 +12,7 @@ export function CentralTabs({ value, onChange }: {
   onChange: (tab: CentralTab) => void
 }) {
   return (
-    <div className="sticky top-16 z-20 border-b border-border bg-white px-5 sm:px-6">
+    <div className="sticky top-16 z-[var(--mx-z-sticky)] border-b border-border bg-white px-5 sm:px-6">
       <div className="flex" role="tablist" aria-label="Central de Execução">
         {TABS.map(tab => (
           <button

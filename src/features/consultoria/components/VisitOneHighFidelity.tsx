@@ -25,6 +25,7 @@ import { usePmrDiagnostics } from '@/hooks/usePmrDiagnostics'
 import type { PmrFormField } from '@/lib/schemas/consulting-client.schema'
 import type { VisitOneQuantData } from '@/features/consultoria/types'
 import { cn } from '@/lib/utils'
+import { chartTokens } from "@/lib/charts/tokens"
 
 type VisitOneTab = 'dashboards' | 'benchmark' | 'entrevistas'
 type VisitOneStockKey = keyof VisitOneQuantData['stock']
@@ -65,7 +66,7 @@ export function VisitOneHighFidelity({ clientId, clientSlug, data, onChange }: {
 }
 
 function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onChange: (d: VisitOneQuantData) => void }) {
-  const COLORS = ['#071822', '#00A89D', '#FACC15', '#6B7280']
+  const COLORS = [chartTokens.primary(), chartTokens.success(), chartTokens.series.s3(), chartTokens.axisTick()]
 
   const handleSalesChange = (index: number, value: number) => {
     const newSales = [...data.sales]
@@ -84,7 +85,7 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
           <div className="absolute -top-mx-4 -right-mx-4 p-mx-md opacity-[0.03] group-hover/card:opacity-[0.06] transition-opacity pointer-events-none text-status-success-text">
             <BarChart3 size={140} />
           </div>
-          <div className="relative z-10 mb-mx-md flex items-center gap-mx-sm">
+          <div className="relative z-[var(--mx-z-sticky)] mb-mx-md flex items-center gap-mx-sm">
             <div className="p-mx-xs bg-brand-primary/10 rounded-xl text-status-success-text"><TrendingUp size={20} /></div>
             <div>
               <Typography variant="h3" className="text-lg">Vendas Trimestre</Typography>
@@ -125,7 +126,7 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
           <div className="absolute -top-mx-4 -right-mx-4 p-mx-md opacity-[0.03] group-hover/card:opacity-[0.06] transition-opacity pointer-events-none text-brand-secondary">
             <PieChart size={140} />
           </div>
-          <div className="relative z-10 mb-mx-md flex items-center gap-mx-sm">
+          <div className="relative z-[var(--mx-z-sticky)] mb-mx-md flex items-center gap-mx-sm">
             <div className="p-mx-xs bg-gray-900/10 rounded-xl text-brand-secondary"><Zap size={20} /></div>
             <div>
               <Typography variant="h3" className="text-lg">Performance MKT</Typography>
@@ -192,7 +193,7 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
           <div className="absolute -top-mx-4 -right-mx-4 p-mx-md opacity-[0.03] group-hover/card:opacity-[0.06] transition-opacity pointer-events-none text-status-warning-text">
             <Layers size={140} />
           </div>
-          <div className="relative z-10 mb-mx-md flex items-center gap-mx-sm">
+          <div className="relative z-[var(--mx-z-sticky)] mb-mx-md flex items-center gap-mx-sm">
             <div className="p-mx-xs bg-status-warning/10 rounded-xl text-status-warning"><Layers size={20} /></div>
             <div>
               <Typography variant="h3" className="text-lg">Raio-X do Estoque</Typography>
@@ -231,7 +232,7 @@ function VisitOneBenchmark({ data }: { data: VisitOneQuantData }) {
   return (
     <Card className="p-mx-20 text-center bg-white border border-dashed relative overflow-hidden group">
        <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/5 via-transparent to-brand-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-       <div className="relative z-10">
+       <div className="relative z-[var(--mx-z-sticky)]">
          <div className="w-mx-16 h-mx-16 bg-surface-alt rounded-mx-full flex items-center justify-center mx-auto mb-mx-md border border-border-subtle group-hover:scale-110 transition-transform">
            <Globe size={48} className="text-status-success-text opacity-40" />
          </div>

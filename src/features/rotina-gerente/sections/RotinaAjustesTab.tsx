@@ -36,7 +36,7 @@ export function RotinaAjustesTab({
           className="absolute top-mx-0 right-mx-0 w-mx-sidebar-expanded h-mx-64 bg-brand-primary/5 rounded-mx-full blur-mx-xl -mr-32 -mt-32"
           aria-hidden="true"
         />
-        <header className="flex items-center justify-between border-b border-border-subtle pb-8 mb-10 relative z-10">
+        <header className="flex items-center justify-between border-b border-border-subtle pb-8 mb-10 relative z-[var(--mx-z-sticky)]">
           <div className="flex items-center gap-mx-md">
             <div className="w-mx-2xl h-mx-2xl rounded-xl bg-brand-primary text-white flex items-center justify-center shadow-sm transform rotate-2">
               <ShieldAlert size={32} />
@@ -62,7 +62,7 @@ export function RotinaAjustesTab({
           </Badge>
         </header>
 
-        <div className="space-y-mx-md relative z-10">
+        <div className="space-y-mx-md relative z-[var(--mx-z-sticky)]">
           {pendingRequests.length === 0 ? (
             <div className="py-20 text-center flex flex-col items-center justify-center gap-mx-md bg-surface-alt rounded-xl border border-dashed border-border-subtle">
               <ShieldCheck size={48} className="text-muted-foreground/20" />

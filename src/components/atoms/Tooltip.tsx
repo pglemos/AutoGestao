@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 const tooltipVariants = cva(
-  "absolute z-50 whitespace-nowrap rounded-xl bg-surface-overlay px-3 py-1.5 text-mx-tiny font-bold text-white shadow-sm opacity-0 pointer-events-none transition-opacity duration-150",
+  "absolute z-[var(--mx-z-tooltip)] whitespace-nowrap rounded-xl bg-surface-overlay px-3 py-1.5 text-mx-tiny font-bold text-white shadow-sm opacity-0 pointer-events-none transition-opacity duration-150",
   {
     variants: {
       position: {

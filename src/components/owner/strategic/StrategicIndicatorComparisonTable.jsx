@@ -51,9 +51,9 @@ export default function StrategicIndicatorComparisonTable({ series, height = 360
       </div>
       <div ref={scrollRef} className="flex-1 overflow-auto" role="region" tabIndex={0} aria-label="Comparativo de indicadores com rolagem">
         <table className="w-full min-w-[820px] border-collapse text-sm">
-          <thead className="sticky top-0 z-20">
+          <thead className="sticky top-0 z-[var(--mx-z-sticky)]">
             <tr className="border-b border-border bg-surface-alt">
-              <th className="sticky left-0 z-30 min-w-[168px] border-r border-border bg-surface-alt px-3 py-2 text-left text-xs font-semibold text-foreground">Comparativo</th>
+              <th className="sticky left-0 z-[var(--mx-z-topbar)] min-w-[168px] border-r border-border bg-surface-alt px-3 py-2 text-left text-xs font-semibold text-foreground">Comparativo</th>
               {MONTHS.map((m, i) => (
                 <th
                   key={m}
@@ -69,7 +69,7 @@ export default function StrategicIndicatorComparisonTable({ series, height = 360
           <tbody>
             {rows.map((row, ri) => (
               <tr key={ri} className="border-b border-border/40 bg-card hover:bg-surface-alt/50">
-                <td className="sticky left-0 z-10 min-w-[168px] border-r border-border bg-card px-3 py-1.5 text-left text-xs font-medium text-foreground">
+                <td className="sticky left-0 z-[var(--mx-z-sticky)] min-w-[168px] border-r border-border bg-card px-3 py-1.5 text-left text-xs font-medium text-foreground">
                   {row.label === "Meta" && <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-status-info align-middle" />}
                   {row.label === "Resultado Atual" && <span className={`mr-1.5 inline-block h-2 w-2 rounded-full ${areaStyle.dot} align-middle`} />}
                   {row.label}

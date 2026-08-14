@@ -24,6 +24,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import type { useDashboardLojaData } from '@/features/dashboard-loja/hooks/useDashboardLojaData'
 import { ManagerHomeReturnLink } from '@/features/manager/home/ManagerHomeReturnLink'
 import { useAuth } from '@/hooks/useAuth'
+import { TabNavPill } from '@/components/molecules/TabNavPill'
 import { buildStoreGoalChannelRows, buildStoreGoalClosingRows, buildStoreGoalTeamRows, calculateStoreGoalMetrics, calculateSustainabilityPlan, formatStoreGoalMetric, operationalDayPredicate, type SustainabilityPlan } from './manager-store-goal'
 import { ScrollableRegion } from '@/design-system/page/ScrollableRegion'
 
@@ -328,7 +329,18 @@ export function ManagerStoreGoalReference({
 
         <article className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <div className="mb-4 flex flex-wrap items-center gap-2"><span className="grid h-8 w-8 place-items-center rounded-lg bg-status-success-surface"><Activity size={16} className="text-status-success-text" /></span><h2 className="font-semibold text-foreground">Plano de Sustentação</h2>{selectedPersistedPlan ? <span className="rounded-full bg-status-success-surface px-2 py-1 text-caption font-semibold uppercase tracking-wide text-status-success-text">Oficial v{selectedPersistedPlan.version}</span> : null}</div>
-          <div className="mb-5 flex gap-1.5 overflow-x-auto pb-1">{([['hoje', 'Hoje'], ['semana', 'Esta semana'], ['dezena', 'Esta dezena'], ['mes', 'Este mês']] as const).map(([key, label]) => <button key={key} type="button" onClick={() => setHorizon(key)} className={`whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium transition-all ${horizon === key ? 'bg-brand-primary text-white shadow-sm' : 'bg-surface-alt text-muted-foreground hover:bg-muted'}`}>{label}</button>)}</div>
+          <TabNavPill
+            tabs={[
+              { key: 'hoje', label: 'Hoje' },
+              { key: 'semana', label: 'Esta semana' },
+              { key: 'dezena', label: 'Esta dezena' },
+              { key: 'mes', label: 'Este mês' },
+            ]}
+            activeTab={horizon}
+            onTabChange={setHorizon}
+            aria-label="Horizonte do plano de sustentação"
+            className="mb-5"
+          />
           {goal <= 0 ? <p className="rounded-xl border border-border-subtle bg-surface-alt p-4 text-sm text-muted-foreground">Meta ainda não cadastrada.</p> : <>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <SustainabilityBlock icon={Zap} label="Faltam" tone="orange">
@@ -381,7 +393,7 @@ export function ManagerStoreGoalReference({
         </article>
       {goalsOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-surface-overlay/40 p-4"
+          className="fixed inset-0 z-[var(--mx-z-modal)] flex items-start justify-center overflow-y-auto bg-surface-overlay/40 p-4"
           role="presentation"
           onMouseDown={() => setGoalsOpen(false)}
         >

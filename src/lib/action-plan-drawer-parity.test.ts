@@ -10,7 +10,7 @@ import {
 describe('action drawer execution actions', () => {
   it('keeps select menus above the dialog overlay so form choices are clickable', () => {
     const selectSource = readFileSync(resolve(import.meta.dir, '../components/ui/select.jsx'), 'utf8')
-    expect(selectSource).toContain('z-[110]')
+    expect(selectSource).toContain('z-[var(--mx-z-popover)]')
   })
 
   it('keeps progress, block and unblock out of the shared action group', () => {

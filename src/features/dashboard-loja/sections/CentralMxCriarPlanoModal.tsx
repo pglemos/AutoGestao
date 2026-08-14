@@ -119,7 +119,7 @@ export function CentralMxCriarPlanoModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="criar-plano-title"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-surface-overlay/60 p-mx-md"
+      className="fixed inset-0 z-[var(--mx-z-modal)] flex items-center justify-center bg-surface-overlay/60 p-mx-md"
       onClick={onClose}
       onKeyDown={(event) => {
         if (event.key === 'Escape') onClose()

@@ -48,7 +48,7 @@ const COLUMN_CONFIG = {
     header: 'border-status-error/30 bg-status-error-surface text-status-error-text',
     body: 'border-status-error/30 bg-status-error-surface/50',
     footer: 'border-status-error/20 bg-status-error-surface text-status-error-text',
-    active: 'border-status-error bg-status-error text-white',
+    active: 'border-status-error bg-status-error text-status-error-foreground',
   },
   attention: {
     label: 'Atenção',
@@ -115,7 +115,7 @@ export function ManagerTeamKanban({ cards, view, storeName, onViewChange, onOpen
       <p className="mt-1.5 text-caption text-muted-foreground">A posição no Kanban muda conforme a visão selecionada.</p>
     </section>
 
-    <div className="sticky top-0 z-30 bg-surface-alt py-1">
+    <div className="sticky top-0 z-[var(--mx-z-topbar)] bg-surface-alt py-1">
       <div className="flex items-center justify-center gap-2 py-2">
       <Users size={15} className="text-status-success-text"/>
       <p className="text-sm font-semibold text-foreground"><span className="text-base text-status-success-text">{summary.onTrackPercentage}%</span> da equipe Em dia</p>
@@ -127,7 +127,7 @@ export function ManagerTeamKanban({ cards, view, storeName, onViewChange, onOpen
       {STATUS_ORDER.map(status => <KanbanColumn key={status} status={status} cards={groups[status]} view={view} storeName={storeName} onOpenProfile={onOpenProfile} onAction={onAction}/>)}
     </div>
 
-    <div className="-mx-1 hidden snap-x snap-mandatory items-start gap-3 overflow-x-auto px-1 pb-2 md:flex lg:hidden">
+    <div data-mx-scroll-region="horizontal" className="-mx-1 hidden snap-x snap-mandatory items-start gap-3 overflow-x-auto px-1 pb-2 md:flex lg:hidden">
       {STATUS_ORDER.map(status => <div key={status} className="w-[300px] shrink-0 snap-start"><KanbanColumn status={status} cards={groups[status]} view={view} storeName={storeName} onOpenProfile={onOpenProfile} onAction={onAction}/></div>)}
     </div>
 
@@ -183,7 +183,7 @@ function ManagerSellerCard({ card, view, status, storeName, onOpenProfile, onAct
     <div className="mb-3 flex items-start justify-between gap-2"><div className="flex min-w-0 items-center gap-2.5"><span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl text-xs font-bold ${theme.avatar}`}>{initials(card.row.user_name)}</span><div className="min-w-0"><p className="truncate text-sm font-semibold text-foreground">{card.row.user_name}</p><p className="truncate text-xs text-muted-foreground">{storeName}</p></div></div><span className={`shrink-0 rounded-lg px-2 py-0.5 text-xs font-medium ${theme.badge}`}>{statusLabel}</span></div>
     <div className="mb-3 grid grid-cols-2 gap-2"><KanbanMetric label="Resultado" value={card.result} status={card.resultStatus} highlight={view === 'result'}/><KanbanMetric label="Consistência" value={card.consistency} status={card.consistencyStatus} highlight={view === 'consistency'}/></div>
     <div className={`mb-3 rounded-xl p-2.5 ${theme.advice}`}><div className="flex items-start gap-1.5"><TrendingUp size={13} className="mt-0.5 shrink-0"/><p className="min-h-12 text-xs leading-snug">{getManagerTeamNextStep(card, view)}</p></div></div>
-    <div className="mt-auto flex items-center gap-1"><button type="button" onClick={() => onOpenProfile(card.row)} className={`flex min-h-9 flex-1 items-center justify-center gap-1 rounded-xl border px-2 text-xs font-semibold transition-colors ${theme.action}`}>Ver perfil completo <ChevronRight size={14}/></button><details className="group relative"><summary aria-label={`Mais ações para ${card.row.user_name}`} className={`grid h-9 w-9 cursor-pointer list-none place-items-center rounded-xl border transition-colors [&::-webkit-details-marker]:hidden ${theme.action}`}><MoreVertical size={14}/></summary><div className="absolute bottom-11 right-0 z-30 w-52 overflow-hidden rounded-xl border border-border bg-white p-1 shadow-xl"><ActionItem icon={CalendarClock} label="Ver rotina de hoje" onClick={() => onAction('routine', card.row)}/><ActionItem icon={MessageSquarePlus} label="Registrar feedback" onClick={() => onAction('feedback', card.row)}/><ActionItem icon={FileText} label="Abrir Fechamento Diário" onClick={() => onAction('closing', card.row)}/><ActionItem icon={GraduationCap} label="Recomendar treinamento" onClick={() => onAction('training', card.row)}/></div></details></div>
+    <div className="mt-auto flex items-center gap-1"><button type="button" onClick={() => onOpenProfile(card.row)} className={`flex min-h-9 flex-1 items-center justify-center gap-1 rounded-xl border px-2 text-xs font-semibold transition-colors ${theme.action}`}>Ver perfil completo <ChevronRight size={14}/></button><details className="group relative"><summary aria-label={`Mais ações para ${card.row.user_name}`} className={`grid h-9 w-9 cursor-pointer list-none place-items-center rounded-xl border transition-colors [&::-webkit-details-marker]:hidden ${theme.action}`}><MoreVertical size={14}/></summary><div className="absolute bottom-11 right-0 z-[var(--mx-z-popover)] w-52 overflow-hidden rounded-xl border border-border bg-white p-1 shadow-xl"><ActionItem icon={CalendarClock} label="Ver rotina de hoje" onClick={() => onAction('routine', card.row)}/><ActionItem icon={MessageSquarePlus} label="Registrar feedback" onClick={() => onAction('feedback', card.row)}/><ActionItem icon={FileText} label="Abrir Fechamento Diário" onClick={() => onAction('closing', card.row)}/><ActionItem icon={GraduationCap} label="Recomendar treinamento" onClick={() => onAction('training', card.row)}/></div></details></div>
   </article>
 }
 

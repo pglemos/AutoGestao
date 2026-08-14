@@ -81,7 +81,7 @@ export function ROISection({ client }: Props) {
     <div className="space-y-mx-lg animate-in fade-in slide-in-from-bottom-4 duration-500 pb-mx-xl">
       <div className="flex justify-end">
         <Button
-          variant="secondary"
+          variant="outline"
           className="text-white"
           onClick={handleDownloadROI}
           icon={<Download className="w-mx-4 h-mx-4" />}
@@ -93,7 +93,7 @@ export function ROISection({ client }: Props) {
       <div id="roi-report-content" className="space-y-mx-lg bg-surface-alt p-mx-md rounded-2xl print:p-0 print:bg-white">
         <Card className="p-mx-xl text-white border-none shadow-mx-2xl relative overflow-hidden">
           <div className="absolute top-mx-0 right-mx-0 p-mx-lg opacity-10"><TrendingUp size={200} strokeWidth={1} /></div>
-          <div className="relative z-10">
+          <div className="relative z-[var(--mx-z-sticky)]">
             <Typography variant="h3" className="text-white/70 mb-mx-xs">Relatório de Choque: ROI da Consultoria</Typography>
             <div className="flex items-baseline gap-mx-md">
               <Typography variant="h1" className="text-6xl">{roi > 0 ? '+' : ''}{roi.toFixed(1)}%</Typography>

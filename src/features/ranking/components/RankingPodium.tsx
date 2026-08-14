@@ -42,7 +42,7 @@ export function RankingPodium({ entries, onSelect }: Props) {
                 onSelect(seller.user_id)
               }
             }}
-            className={`flex flex-col items-center group cursor-pointer transition-transform duration-500 hover:-translate-y-2 z-10 ${isFirst ? '-mb-4 sm:-mb-0' : ''}`}
+            className={`flex flex-col items-center group cursor-pointer transition-transform duration-500 hover:-translate-y-2 z-[var(--mx-z-sticky)] ${isFirst ? '-mb-4 sm:-mb-0' : ''}`}
           >
             <div className="relative mb-3 flex flex-col items-center">
               {isFirst && <Crown className="w-mx-lg h-mx-lg text-status-warning-text mb-2 animate-bounce drop-shadow-lg" />}
@@ -63,7 +63,7 @@ export function RankingPodium({ entries, onSelect }: Props) {
                 />
               </div>
               <div className={cn(
-                'absolute -bottom-3 px-3 py-1 rounded-full text-mx-micro font-bold uppercase tracking-wider shadow-lg border border-white/20 whitespace-nowrap z-20',
+                'absolute -bottom-3 px-3 py-1 rounded-full text-mx-micro font-bold uppercase tracking-wider shadow-lg border border-white/20 whitespace-nowrap z-[var(--mx-z-sticky)]',
                 isFirst
                   ? 'bg-brand-primary text-white'
                   : 'bg-surface-alt text-foreground',

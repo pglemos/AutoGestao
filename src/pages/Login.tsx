@@ -412,7 +412,7 @@ export default function Login() {
                 {/* Grid pattern */}
                 <div className="absolute inset-0 bg-mx-matrix opacity-30" />
 
-                <div className="relative z-10 max-w-md text-center">
+                <div className="relative z-[var(--mx-z-sticky)] max-w-md text-center">
                     <motion.img
                         src={MxLogo}
                         alt="MX Performance"
@@ -463,7 +463,7 @@ export default function Login() {
             </div>
 
             {/* Right Panel — Form */}
-            <div className="flex-1 bg-white flex flex-col items-center justify-center p-mx-lg md:p-mx-2xl relative">
+            <div className="flex-1 min-w-0 bg-white flex flex-col items-center justify-center p-mx-lg md:p-mx-2xl relative">
                 {/* Mobile logo */}
                 <div className="lg:hidden mb-12 text-center">
                     <img src={MxLogo} alt="MX Performance" className="w-mx-20 h-mx-20 object-contain mx-auto mb-6" />

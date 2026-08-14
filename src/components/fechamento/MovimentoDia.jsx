@@ -308,7 +308,7 @@ export default function MovimentoDia({ dc, updateCounter, setCounter, clients = 
         </div>
         <div className="relative group flex-shrink-0">
           <Info className="w-4 h-4 text-text-disabled hover:text-muted-foreground cursor-pointer transition-colors" />
-          <div className="absolute right-0 top-6 w-72 bg-slate-800 text-white text-caption rounded-xl p-3 shadow-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 leading-relaxed">
+          <div className="absolute right-0 top-6 w-72 bg-slate-800 text-white text-caption rounded-xl p-3 shadow-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-[var(--mx-z-tooltip)] leading-relaxed">
             Preencha os dados de cada canal. Os totais são somados automaticamente no Resumo do Dia. Após a finalização, os Agendamentos D+1 ativos são calculados automaticamente pelos registros cadastrados.
           </div>
         </div>

@@ -19,22 +19,22 @@ export default function NotFound() {
                 initial={{ opacity: 0, scale: 0.98, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className="w-full max-w-2xl relative z-10"
+                className="w-full max-w-2xl relative z-[var(--mx-z-sticky)]"
             >
                 <Card className="border-none bg-white overflow-hidden flex flex-col">
                     <header className="bg-gray-900 p-mx-10 md:p-16 relative overflow-hidden text-center">
-                        <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/20 to-transparent z-0 pointer-events-none" />
+                        <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/20 to-transparent z-[var(--mx-z-base)] pointer-events-none" />
                         
                         <motion.div
                             initial={{ rotate: -10, scale: 0.9 }}
                             animate={{ rotate: 0, scale: 1 }}
                             transition={{ type: 'spring', stiffness: 200, damping: 10, delay: 0.2 }}
-                            className="w-mx-3xl h-mx-3xl rounded-2xl bg-white/10 text-white flex items-center justify-center mx-auto mb-8 shadow-sm backdrop-blur-xl relative z-10 border border-white/10"
+                            className="w-mx-3xl h-mx-3xl rounded-2xl bg-white/10 text-white flex items-center justify-center mx-auto mb-8 shadow-sm backdrop-blur-xl relative z-[var(--mx-z-sticky)] border border-white/10"
                         >
                             <ShieldAlert size={48} strokeWidth={2} />
                         </motion.div>
-                        <Typography variant="h1" tone="white" className="text-7xl md:text-9xl mb-4 relative z-10 font-mono-numbers leading-none">404</Typography>
-                        <Typography variant="caption" tone="white" className="max-w-xl mx-auto opacity-60 relative z-10 block">Ponto Fora da Malha</Typography>
+                        <Typography variant="h1" tone="white" className="text-7xl md:text-9xl mb-4 relative z-[var(--mx-z-sticky)] font-mono-numbers leading-none">404</Typography>
+                        <Typography variant="caption" tone="white" className="max-w-xl mx-auto opacity-60 relative z-[var(--mx-z-sticky)] block">Ponto Fora da Malha</Typography>
                     </header>
 
                     <CardContent className="p-mx-10 md:p-16 text-center flex flex-col items-center gap-mx-10">

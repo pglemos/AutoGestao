@@ -510,7 +510,7 @@ const stepItems = [
 const activeStepLabel = stepItems.find((item) => item.step === activeStep)?.label ?? 'Internet'
 
 return (
-<header className="relative z-40 shrink-0 space-y-4 md:pt-3 border-none bg-transparent shadow-none pb-1 w-full">
+<header className="relative z-[var(--mx-z-topbar)] shrink-0 space-y-4 md:pt-3 border-none bg-transparent shadow-none pb-1 w-full">
       {/* Contract matcher: md:sticky md:top-0 */}
       {/* Top Header Row (Desktop only, centered rounded card matching meu-funil) */}
       <div className="hidden md:block w-full">
@@ -649,7 +649,7 @@ return (
 
 {/* Histórico de Fechamentos Modal */}
 {historyOpen && activeView === 'list' && (
-<div className="fixed inset-0 z-[140] grid place-items-center bg-surface-overlay/35 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur-[3px]" role="dialog" aria-modal="true" aria-label="Histórico de Fechamentos">
+<div className="fixed inset-0 z-[var(--mx-z-modal)] grid place-items-center bg-surface-overlay/35 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur-[3px]" role="dialog" aria-modal="true" aria-label="Histórico de Fechamentos">
 <div className="flex max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[min(42rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-border bg-white shadow-mx-2xl transition-all animate-in fade-in zoom-in-95 duration-200">
 
             {/* Modal Header */}
@@ -820,7 +820,7 @@ return (
 
       {historyOpen && productionZeroModalOpen && (
         <div
-          className="fixed inset-0 z-[150] grid place-items-center bg-surface-overlay/35 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur-[3px]"
+          className="fixed inset-0 z-[var(--mx-z-modal)] grid place-items-center bg-surface-overlay/35 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur-[3px]"
           role="presentation"
           onMouseDown={event => {
             if (event.target === event.currentTarget && !productionZeroSaving) {
@@ -963,7 +963,7 @@ return (
           leitura, já que o spec não prescreve telas separadas por ação. */}
       {historyOpen && activeView === 'detail' && (
         <div
-          className="fixed inset-0 z-[150] grid place-items-center bg-surface-overlay/35 px-4 backdrop-blur-[3px]"
+          className="fixed inset-0 z-[var(--mx-z-modal)] grid place-items-center bg-surface-overlay/35 px-4 backdrop-blur-[3px]"
           role="dialog"
           aria-modal="true"
           aria-label="Detalhe da regularização"

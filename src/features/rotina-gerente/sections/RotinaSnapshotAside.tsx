@@ -38,7 +38,7 @@ export function RotinaSnapshotAside({
           className="absolute inset-0 bg-gradient-to-br from-brand-primary/20 to-transparent opacity-50"
           aria-hidden="true"
         />
-        <div className="relative z-10 space-y-mx-lg">
+        <div className="relative z-[var(--mx-z-sticky)] space-y-mx-lg">
           <header className="flex items-center justify-between mb-10 border-b border-white/10 pb-6">
             <div className="flex items-center gap-mx-sm">
               <div className="w-mx-xl h-mx-xl rounded-xl bg-white/10 flex items-center justify-center border border-white/10 shadow-mx-inner">
@@ -87,7 +87,7 @@ export function RotinaSnapshotAside({
           </div>
           <Button
             type="button"
-            variant="secondary"
+            variant="outline"
             onClick={onSendDailyReminders}
             disabled={pendingSellersCount === 0 || !activeRoutineStoreId}
             className="w-full h-mx-12 text-mx-tiny"

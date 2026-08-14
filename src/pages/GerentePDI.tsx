@@ -176,7 +176,7 @@ export default function GerentePDI() {
                                             <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-mx-lg -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden="true" />
                                             
                                             <div>
-                                                <header className="flex items-start justify-between mb-10 border-b border-border pb-6 relative z-10">
+                                                <header className="flex items-start justify-between mb-10 border-b border-border pb-6 relative z-[var(--mx-z-sticky)]">
                                                     <div className="flex items-center gap-mx-sm min-w-0">
                                                         <Avatar
                                                             src={p.seller_avatar_url || undefined}
@@ -193,7 +193,7 @@ export default function GerentePDI() {
                                                     <Badge variant={status.variant} className="px-4 py-1 text-mx-tiny shadow-sm border-none">{status.label}</Badge>
                                                 </header>
 
-                                                <div className="space-y-mx-lg relative z-10">
+                                                <div className="space-y-mx-lg relative z-[var(--mx-z-sticky)]">
                                                     <div className="space-y-mx-xs">
                                                         <Typography variant="tiny" tone="brand" className="mb-2 block">Objetivo 06 Meses</Typography>
                                                         <Typography variant="h2" className="text-xl leading-snug line-clamp-2er">"{p.meta_6m || 'N/A'}"</Typography>
@@ -201,7 +201,7 @@ export default function GerentePDI() {
                                                 </div>
                                             </div>
 
-                                            <footer className="pt-8 border-t border-border flex items-center justify-between mt-10 relative z-10">
+                                            <footer className="pt-8 border-t border-border flex items-center justify-between mt-10 relative z-[var(--mx-z-sticky)]">
                                                 <div className="flex items-center gap-mx-md">
                                                     <div className="flex items-center gap-mx-xs">
                                                         <Calendar size={14} className="text-status-success-text" />
@@ -213,7 +213,7 @@ export default function GerentePDI() {
                                                         <Printer size={18} />
                                                     </Button>
                                                 </div>
-                                                <Button type="button" variant="secondary" size="icon" onClick={() => navigate(`/pdi/${p.id}/print`)} className="w-mx-xl h-mx-xl rounded-xl shadow-sm hover:scale-110 active:scale-95 transition-all" aria-label={`Abrir PDI de ${p.seller_name || 'nome não informado'}`}>
+                                                <Button type="button" variant="outline" size="icon" onClick={() => navigate(`/pdi/${p.id}/print`)} className="w-mx-xl h-mx-xl rounded-xl shadow-sm hover:scale-110 active:scale-95 transition-all" aria-label={`Abrir PDI de ${p.seller_name || 'nome não informado'}`}>
                                                     <ChevronRight size={24} strokeWidth={2} />
                                                 </Button>
                                             </footer>

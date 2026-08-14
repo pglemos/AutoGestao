@@ -4,6 +4,7 @@ import { toast } from '@/lib/toast'
 import { Button } from '@/components/atoms/Button'
 import { Card } from '@/components/molecules/Card'
 import { Typography } from '@/components/atoms/Typography'
+import { ScrollableRegion } from '@/design-system/page/ScrollableRegion'
 import type { Cliente } from '@/lib/schemas/crm.schema'
 import type { OportunidadeComCliente } from '@/features/crm/hooks/useOportunidades'
 import type { CadenciaResultadoAcao } from '@/features/crm/lib/cadencia'
@@ -280,7 +281,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
   if (concluido) {
     sessionStorage.removeItem(STORAGE_KEY)
     return (
-      <div className="fixed inset-0 z-[200] overflow-y-auto bg-surface-alt">
+      <ScrollableRegion axis="vertical" label="Modo Ataque" className="fixed inset-0 z-[var(--mx-z-modal)] bg-surface-alt">
         <div className="mx-auto flex max-w-xl flex-col items-center gap-mx-md px-mx-md py-mx-xl text-center">
           <span className="grid h-16 w-16 place-items-center rounded-full bg-brand-primary-subtle text-status-success-text">
             <Trophy size={32} />
@@ -314,13 +315,13 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
             <button type="button" onClick={onSair} className="mt-1 text-xs text-muted-foreground hover:underline">Encerrar sessão</button>
           </div>
         </div>
-      </div>
+      </ScrollableRegion>
     )
   }
 
   return (
-    <div className="fixed inset-0 z-[200] overflow-y-auto bg-status-info-surface">
-      <div className="sticky top-0 z-10 bg-mx-navy px-mx-md py-mx-sm text-white shadow-lg">
+    <ScrollableRegion axis="vertical" label="Modo Ataque" className="fixed inset-0 z-[var(--mx-z-modal)] bg-status-info-surface">
+      <div className="sticky top-0 z-[var(--mx-z-sticky)] bg-mx-navy px-mx-md py-mx-sm text-white shadow-lg">
         <div className="mx-auto flex max-w-xl flex-wrap items-center gap-3 sm:flex-nowrap">
           <span className="flex shrink-0 items-center gap-2 text-sm font-bold tracking-wide">
             <span className="grid h-7 w-7 place-items-center rounded-lg bg-status-info">
@@ -457,7 +458,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
       </div>
 
       {pausarOpen && (
-        <div className="fixed inset-0 z-[210] grid place-items-center bg-surface-overlay/50 p-4">
+        <div className="fixed inset-0 z-[var(--mx-z-modal)] grid place-items-center bg-surface-overlay/50 p-4">
           <Card className="w-full max-w-xs space-y-mx-sm p-mx-lg text-center">
             <span className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-status-warning-surface text-status-warning-text">
               <Pause size={20} />
@@ -471,6 +472,6 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
           </Card>
         </div>
       )}
-    </div>
+    </ScrollableRegion>
   )
 }

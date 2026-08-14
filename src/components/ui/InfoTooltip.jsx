@@ -29,7 +29,7 @@ export default function InfoTooltip({ text }) {
 
       {visible && (
         <div
-          className="fixed z-[9999] w-[280px] bg-white border border-border rounded-xl shadow-xl px-3.5 py-3"
+          className="fixed z-[var(--mx-z-tooltip)] w-[280px] bg-white border border-border rounded-xl shadow-xl px-3.5 py-3"
           style={{
             fontFamily: "Inter, sans-serif",
             top: ref.current ? ref.current.getBoundingClientRect().bottom + 6 : 0,

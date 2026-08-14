@@ -722,7 +722,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                           {idx < historico.length - 1 && (
                             <div className="absolute left-[7px] top-5 bottom-0 w-px bg-muted" />
                           )}
-                          <div className="w-3.5 h-3.5 rounded-full border-2 border-status-info bg-white shrink-0 mt-0.5 relative z-10" />
+                          <div className="w-3.5 h-3.5 rounded-full border-2 border-status-info bg-white shrink-0 mt-0.5 relative z-[var(--mx-z-sticky)]" />
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2">
                               <p className="text-xs font-bold text-foreground">{h.tipo}</p>

@@ -25,10 +25,10 @@ export default function ListView({ actions, sortBy, onSortChange, onQuickAction,
             <th className="w-10 px-2 py-2 text-left">
               <Checkbox aria-label="Selecionar todas as ações" checked={allSelected} onCheckedChange={() => onToggleSelectAll(sorted.map((a) => a.id))} />
             </th>
-            <th className="sticky left-10 z-10 whitespace-nowrap bg-muted/50 px-3 py-2 text-left text-xs font-medium text-muted-foreground">
+            <th className="sticky left-10 z-[var(--mx-z-sticky)] whitespace-nowrap bg-muted/50 px-3 py-2 text-left text-xs font-medium text-muted-foreground">
               <SortButton label="Código" onClick={() => onSortChange("updated_recent")} />
             </th>
-            <th className="sticky left-[88px] z-10 whitespace-nowrap bg-muted/50 px-3 py-2 text-left text-xs font-medium text-muted-foreground">Ação</th>
+            <th className="sticky left-[88px] z-[var(--mx-z-sticky)] whitespace-nowrap bg-muted/50 px-3 py-2 text-left text-xs font-medium text-muted-foreground">Ação</th>
             <th className="whitespace-nowrap px-3 py-2 text-left text-xs font-medium text-muted-foreground">Objetivo</th>
             <th className="whitespace-nowrap px-3 py-2 text-left text-xs font-medium text-muted-foreground">Indicador</th>
             <th className="whitespace-nowrap px-3 py-2 text-left text-xs font-medium text-muted-foreground">Depto</th>
@@ -58,8 +58,8 @@ export default function ListView({ actions, sortBy, onSortChange, onQuickAction,
                 <td className="px-2 py-2">
                   <Checkbox aria-label={`Selecionar ação ${action.title}`} checked={selected} onCheckedChange={() => onToggleSelect(action.id)} />
                 </td>
-                <td className="sticky left-10 z-10 bg-card px-3 py-2 text-xs font-bold text-muted-foreground">{action.code}</td>
-                <td className="sticky left-[88px] z-10 max-w-[256px] bg-card px-3 py-2">
+                <td className="sticky left-10 z-[var(--mx-z-sticky)] bg-card px-3 py-2 text-xs font-bold text-muted-foreground">{action.code}</td>
+                <td className="sticky left-[88px] z-[var(--mx-z-sticky)] max-w-[256px] bg-card px-3 py-2">
                   <button title={action.title} onClick={() => onQuickAction(action, "open")} className="block w-full truncate text-left text-sm font-medium text-foreground hover:text-primary">
                     {action.title}
                   </button>

@@ -18,7 +18,7 @@ export default function NextCommissionJumpCard({ calcResult }) {
   return (
     <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
       <div className="absolute top-0 right-0 w-40 h-40 bg-status-success/10 rounded-full blur-2xl pointer-events-none" />
-      <div className="relative z-10">
+      <div className="relative z-[var(--mx-z-sticky)]">
         <div className="flex items-center gap-2 mb-4">
           <Rocket className="w-4 h-4 text-emerald-400" />
           <span className="text-emerald-400 text-xs font-semibold uppercase tracking-widest">Próximo Salto</span>

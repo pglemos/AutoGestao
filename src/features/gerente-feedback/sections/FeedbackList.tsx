@@ -31,7 +31,7 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
               <Card className="border p-mx-md h-full flex flex-col justify-between group hover:shadow-sm transition-all bg-white relative overflow-hidden">
                 <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-mx-lg -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" />
                 <article>
-                  <header className="flex items-start justify-between mb-8 border-b border-border-subtle pb-6 relative z-10">
+                  <header className="flex items-start justify-between mb-8 border-b border-border-subtle pb-6 relative z-[var(--mx-z-sticky)]">
                     <div className="flex items-center gap-mx-sm">
                       <div
                         className={
@@ -69,7 +69,7 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
                       {f.acknowledged ? 'LIDO' : 'PENDENTE'}
                     </Badge>
                   </header>
-                  <div className="space-y-mx-md relative z-10">
+                  <div className="space-y-mx-md relative z-[var(--mx-z-sticky)]">
                     {f.caso_motivo && (
                       <div className="p-mx-md bg-status-warning-surface rounded-xl border border-status-warning/10">
                         <Typography
@@ -117,7 +117,7 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
                     </div>
                   </div>
                 </article>
-                <footer className="mt-10 pt-8 border-t border-border-subtle flex items-center justify-between relative z-10">
+                <footer className="mt-10 pt-8 border-t border-border-subtle flex items-center justify-between relative z-[var(--mx-z-sticky)]">
                   {variant === 'admin' ? (
                     <div className="flex gap-mx-xs">
                       <Button

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
 
 const modalSizeVariants = cva(
-  "w-auto sm:w-full bg-white shadow-sm rounded-2xl sm:rounded-2xl overflow-hidden flex flex-col max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100dvh-4rem)]",
+  "fixed left-mx-md right-mx-md top-1/2 -translate-y-1/2 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 focus:outline-none w-auto sm:w-full flex flex-col",
   {
     variants: {
       size: {
@@ -22,15 +22,6 @@ const modalSizeVariants = cva(
     },
   },
 );
-
-const referenceModalSizes = {
-  sm: "max-w-md",
-  md: "max-w-lg",
-  lg: "max-w-xl",
-  xl: "max-w-3xl",
-  "2xl": "max-w-5xl",
-  "3xl": "max-w-[1280px]",
-} as const;
 
 export interface ModalProps extends VariantProps<typeof modalSizeVariants> {
   open: boolean;
@@ -94,10 +85,7 @@ export function Modal({
         <Dialog.Overlay
           data-mx-overlay-backdrop="modal"
           data-reference-overlay={referenceStyle ? "true" : undefined}
-          className={cn(
-            "mx-overlay-backdrop fixed inset-0 z-[var(--mx-z-overlay,50)]",
-            referenceStyle ? "bg-surface-overlay/30" : "bg-gray-900/60 backdrop-blur-md",
-          )}
+          className="mx-overlay-backdrop fixed inset-0 z-[var(--mx-z-overlay,50)]"
         />
         <Dialog.Content
           data-mx-overlay="modal"
@@ -116,36 +104,29 @@ export function Modal({
           }}
           className={cn(
             "mx-overlay-surface z-[var(--mx-z-modal,60)]",
-            referenceStyle
-              ? "fixed left-4 right-4 top-1/2 -translate-y-1/2 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 focus:outline-none"
-              : "fixed left-mx-md right-mx-md top-mx-md bottom-mx-md sm:left-1/2 sm:right-auto sm:top-1/2 sm:bottom-auto sm:-translate-x-1/2 sm:-translate-y-1/2 focus:outline-none",
-            referenceStyle
-              // `w-auto` abaixo de sm, como no shell não-reference: com
-              // `left-4 right-4` e `width:100%` o painel mede 100% da viewport
-              // a partir de x=16 e vaza 16px à direita. Medido em 390px na
-              // "Nova atividade" da Rotina do Dia: borda direita em 406.
-              ? `w-auto sm:w-full max-h-[90vh] flex flex-col bg-white shadow-xl rounded-2xl ${referenceModalSizes[resolvedSize]}`
-              : modalSizeVariants({ size: resolvedSize }),
+            modalSizeVariants({ size: resolvedSize }),
             className,
           )}
         >
           <div className={cn(
-            "border-b flex justify-between gap-mx-md bg-white z-10 shrink-0",
+            "flex shrink-0 justify-between gap-mx-md border-b bg-white",
             referenceStyle
-              ? "items-center border-border-subtle px-5 py-4"
+              ? "items-center border-border-subtle px-mx-5 py-mx-4"
               : "items-start border-border p-mx-md sm:p-mx-lg",
           )}>
             <div className="min-w-0">
               <Dialog.Title asChild>
-                <h2 className={referenceStyle ? (resolvedSize === "sm" ? "text-base leading-6 font-semibold text-foreground" : "text-lg leading-6 font-semibold text-foreground") : "text-lg font-semibold text-foreground"}>{title}</h2>
+                <h2 className={cn(
+                  "text-lg",
+                  "font-semibold leading-6 text-foreground",
+                )}>{title}</h2>
               </Dialog.Title>
               {description && (
                 <Dialog.Description asChild>
-                  {referenceStyle ? (
-                    <p className="mt-0.5 text-sm text-muted-foreground">{description}</p>
-                  ) : (
-                    <p className="mt-1 text-sm text-muted-foreground">{description}</p>
-                  )}
+                  <p className={cn(
+                    "text-sm text-muted-foreground",
+                    referenceStyle ? "mt-0.5" : "mt-1",
+                  )}>{description}</p>
                 </Dialog.Description>
               )}
             </div>
@@ -155,10 +136,10 @@ export function Modal({
                   type="button"
                   aria-label="Fechar modal"
                   className={cn(
-                    "mx-overlay-close flex items-center justify-center transition-colors shrink-0",
+                    "mx-overlay-close shrink-0 transition-colors",
                     referenceStyle
-                      ? "rounded-none bg-transparent p-0 text-muted-foreground hover:text-muted-foreground"
-                      : "rounded-2xl bg-surface-alt",
+                      ? "!min-h-0 !min-w-0 h-5 w-5 rounded-none bg-transparent p-0 text-muted-foreground hover:text-muted-foreground"
+                      : "rounded-[var(--mx-overlay-close-radius)] bg-surface-alt text-muted-foreground hover:text-foreground",
                   )}
                 >
                   <X size={referenceStyle ? 18 : 20} />
@@ -170,7 +151,7 @@ export function Modal({
           <ModalBody className={cn(
             "min-h-0 flex-1 overflow-y-auto overscroll-contain",
             referenceStyle
-              ? "p-5 [&_input]:!text-sm [&_select]:!text-sm [&_textarea]:!text-sm"
+              ? "p-mx-5 [&_input]:!text-sm [&_select]:!text-sm [&_textarea]:!text-sm"
               : "p-mx-md sm:p-mx-lg",
           )}>
             {children}
@@ -179,12 +160,12 @@ export function Modal({
           {footer && (
             <div
               className={cn(
-                "border-t flex bg-white shrink-0",
+                "flex shrink-0 border-t bg-white",
                 referenceStyle
-                  ? "flex-row justify-end gap-3 border-border-subtle px-5 py-4"
-                  : "flex-col-reverse gap-mx-sm border-border sm:flex-row sm:justify-end p-mx-md sm:p-mx-lg",
+                  ? "flex-row justify-end gap-mx-sm border-border-subtle px-mx-5 py-mx-4 [&>button]:!min-h-0"
+                  : "flex-col-reverse gap-mx-sm border-border p-mx-md sm:flex-row sm:justify-end sm:p-mx-lg",
               )}
-              style={referenceStyle ? undefined : {
+              style={{
                 paddingBottom: "max(env(safe-area-inset-bottom, 0px), 1rem)",
               }}
             >

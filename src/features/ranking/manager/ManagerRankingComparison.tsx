@@ -91,7 +91,7 @@ function SellerSelect({
         </div>
       </button>
       {open && (
-        <div className="absolute z-30 mt-1 max-h-60 w-full overflow-y-auto rounded-xl border border-border bg-white shadow-lg">
+        <div className="absolute z-[var(--mx-z-popover)] mt-1 max-h-60 w-full overflow-y-auto rounded-xl border border-border bg-white shadow-lg">
           {sellers.map(seller => (
             <button
               key={seller.id}
@@ -163,8 +163,8 @@ export function ManagerRankingComparison({ sellers, periodLabel }: { sellers: Ra
           <div
             className="flex items-center gap-3 rounded-2xl border p-4"
             style={{
-              backgroundColor: winnerColor ? `${winnerColor}12` : '#f9fafb',
-              borderColor: winnerColor ? `${winnerColor}40` : '#f3f4f6',
+              backgroundColor: winnerColor ? `${winnerColor}12` : 'hsl(var(--mx-color-surface))',
+              borderColor: winnerColor ? `${winnerColor}40` : 'hsl(var(--mx-border))',
             }}
           >
             <Award size={22} style={{ color: winnerColor || chartTokens.axisTickMuted() }} />
@@ -186,7 +186,7 @@ export function ManagerRankingComparison({ sellers, periodLabel }: { sellers: Ra
               <p className="mb-2 text-xs text-muted-foreground">Quanto maior a área, mais completo o desempenho.</p>
               <ResponsiveContainer width="100%" height={280}>
                 <RadarChart data={radar} outerRadius="75%">
-                  <PolarGrid stroke="#f0f0f0" />
+                  <PolarGrid stroke={chartTokens.grid()} />
                   <PolarAngleAxis dataKey="metric" tick={{ fontSize: 11, fill: chartTokens.axisTick() }} />
                   <PolarRadiusAxis domain={[0, 100]} tick={false} axisLine={false} />
                   <Radar name={sellerA.nome} dataKey="a" stroke={COMPARISON_SIDE_A} fill={COMPARISON_SIDE_A} fillOpacity={0.25} />

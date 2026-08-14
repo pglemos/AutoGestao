@@ -36,7 +36,7 @@ export function LiveFloor({ ranking }: LiveFloorProps) {
             <div className="bg-gray-900 rounded-2xl p-mx-tiny border border-white/10 flex items-center justify-between gap-mx-lg relative overflow-hidden shrink-0 shadow-lg">
                 <div className="absolute top-mx-0 left-mx-0 h-full bg-brand-primary/10 transition-all duration-1000" style={{ width: `${Math.min(teamProgress, 100)}%` }} aria-hidden="true" />
 
-                <div className="flex items-center gap-mx-md px-6 py-3 relative z-10">
+                <div className="flex items-center gap-mx-md px-6 py-3 relative z-[var(--mx-z-sticky)]">
                     <div className="w-mx-10 h-mx-10 rounded-xl bg-brand-primary text-foreground flex items-center justify-center font-bold shadow-mx-glow-brand">
                         <Trophy className="w-mx-sm h-mx-sm" aria-hidden="true" />
                     </div>
@@ -52,7 +52,7 @@ export function LiveFloor({ ranking }: LiveFloorProps) {
                     <div className="h-full bg-gradient-to-r from-brand-primary to-status-info transition-all duration-1000 relative" style={{ width: `${Math.min(teamProgress, 100)}%` }} />
                 </div>
 
-                <div className="px-6 py-3 relative z-10 flex items-center gap-mx-sm">
+                <div className="px-6 py-3 relative z-[var(--mx-z-sticky)] flex items-center gap-mx-sm">
                     <button
                         type="button"
                         disabled
@@ -84,7 +84,7 @@ export function LiveFloor({ ranking }: LiveFloorProps) {
                         )}
                         {liveAgents.map(agent => (
                             <div key={agent.user_id} role="listitem" className={`p-mx-md rounded-2xl border transition-all duration-300 relative overflow-hidden group ${agent.status.bg}`}>
-                                <div className="flex justify-between items-start mb-4 relative z-10">
+                                <div className="flex justify-between items-start mb-4 relative z-[var(--mx-z-sticky)]">
                                     <div className="flex items-center gap-mx-sm">
                                         <div className="relative">
                                             <Avatar src={agent.avatar_url || undefined} alt={`Avatar de ${agent.user_name}`} fallback={agent.user_name} className="w-mx-10 h-mx-10 rounded-xl border border-white/10" />
@@ -103,7 +103,7 @@ export function LiveFloor({ ranking }: LiveFloorProps) {
                                     </div>
                                 </div>
 
-                                <div className="space-y-mx-xs mb-4 relative z-10">
+                                <div className="space-y-mx-xs mb-4 relative z-[var(--mx-z-sticky)]">
                                     <div className="flex justify-between text-mx-micro font-bold text-muted-foreground uppercase mb-1">
                                         <span>Vendas</span>
                                         <span className={agent.vnd_total > 0 ? 'text-status-success-text' : ''}>{agent.vnd_total}/{agent.meta}</span>
