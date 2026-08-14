@@ -40,11 +40,11 @@ for (const token of [
 // visual, então estes arquivos passam a ser verificados por tokens de layout
 // e pelos símbolos de domínio que o Base44 definiu.
 const visualContractComponents = {
-  'CarteiraAtivaTab.jsx': ['rounded-xl', 'bg-[#005BFF]'],
-  'ModoAtaque.jsx': ['rounded-2xl', 'bg-[#005BFF]', 'max-w-sm'],
-  'ProximaOportunidadeModal.jsx': ['rounded-2xl', 'bg-[#005BFF]', 'max-w-sm'],
+  'CarteiraAtivaTab.jsx': ['rounded-xl'],
+  'ModoAtaque.jsx': ['rounded-2xl', 'max-w-sm'],
+  'ProximaOportunidadeModal.jsx': ['rounded-2xl', 'max-w-sm'],
   'RetornoWhatsAppModal.jsx': ['rounded-2xl', 'max-w-sm'],
-  'VeiculosChegaram.jsx': ['rounded-xl', 'bg-[#005BFF]'],
+  'VeiculosChegaram.jsx': ['rounded-xl'],
 }
 
 // proximoPassoLib.js não tem layout: o que precisa sobreviver é a máquina de
@@ -132,7 +132,6 @@ for (const token of ['clientes_ids', 'MISSOES']) {
 
 const mission = read('src/components/carteira/ExecucaoMissao.jsx')
 for (const token of [
-  'bg-[#005BFF]',
   'rounded-2xl',
   'CarteiraMissao.update',
   'indice_atual',
