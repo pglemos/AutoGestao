@@ -43,7 +43,21 @@ export function catalogSearchTokens(entry: VehicleCatalogEntry): string[] {
 
 /** Marca da entrada já normalizada (evita re-normalizar a cada resolução). */
 export function normalizeBrand(brand: string | null | undefined): string {
-  return normalizeVehicleText(brand)
+  const norm = normalizeVehicleText(brand)
+  const synonyms: Record<string, string> = {
+    vw: 'volkswagen',
+    volks: 'volkswagen',
+    chevy: 'chevrolet',
+    gm: 'chevrolet',
+    mercedes: 'mercedes benz',
+    mb: 'mercedes benz',
+    mbenz: 'mercedes benz',
+    caoa: 'caoa chery',
+    chery: 'caoa chery',
+    lr: 'land rover',
+    bimmer: 'bmw',
+  }
+  return synonyms[norm] || norm
 }
 
 export type CatalogResolutionKind = 'resolved' | 'ambiguous' | 'not_found'
@@ -75,18 +89,44 @@ export function resolveCatalogModel(
   }
 
   const active = catalog.filter((entry) => entry.active !== false)
-  const candidates = active.filter((entry) => {
-    const brandMatch = normalizeBrand(entry.brand) === queryBrand
-    if (!brandMatch) return false
+  const brandCandidates = active.filter((entry) => {
+    const entryBrand = normalizeBrand(entry.brand)
+    return entryBrand === queryBrand || entryBrand.includes(queryBrand) || queryBrand.includes(entryBrand)
+  })
+
+  if (brandCandidates.length === 0) {
+    return { kind: 'not_found', entry: null, queryModel, matches: 0 }
+  }
+
+  // 1. Tenta correspondência exata por token (ex.: "onix plus" === "onix plus")
+  const exactCandidates = brandCandidates.filter((entry) => {
     return catalogSearchTokens(entry).includes(queryModel)
   })
 
-  if (candidates.length === 1) {
-    return { kind: 'resolved', entry: candidates[0], queryModel, matches: 1 }
+  if (exactCandidates.length === 1) {
+    return { kind: 'resolved', entry: exactCandidates[0], queryModel, matches: 1 }
   }
-  if (candidates.length > 1) {
-    return { kind: 'ambiguous', entry: null, queryModel, matches: candidates.length }
+  if (exactCandidates.length > 1) {
+    return { kind: 'ambiguous', entry: null, queryModel, matches: exactCandidates.length }
   }
+
+  // 2. Se não houver correspondência exata, tenta substring / token contido
+  const partialCandidates = brandCandidates.filter((entry) => {
+    const tokens = catalogSearchTokens(entry)
+    return tokens.some((token) => {
+      if (!token) return false
+      return queryModel.includes(token)
+        || (token.length >= 3 && queryModel.length >= 3 && token.includes(queryModel))
+    })
+  })
+
+  if (partialCandidates.length === 1) {
+    return { kind: 'resolved', entry: partialCandidates[0], queryModel, matches: 1 }
+  }
+  if (partialCandidates.length > 1) {
+    return { kind: 'ambiguous', entry: null, queryModel, matches: partialCandidates.length }
+  }
+
   return { kind: 'not_found', entry: null, queryModel, matches: 0 }
 }
 

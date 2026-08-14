@@ -131,6 +131,28 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
     [clientes],
   );
 
+  async function encerrarMissaoAtiva() {
+    const target = missaoAtiva || missaoRecuperada;
+    if (!target?.id) {
+      setMissaoRecuperada(null);
+      return;
+    }
+    setIniciando(true);
+    setError("");
+    try {
+      await base44.entities.CarteiraMissao.update(target.id, {
+        status: "Concluída",
+        concluida_em: new Date().toISOString(),
+      });
+      setMissaoRecuperada(null);
+      if (onIniciarMissao) onIniciarMissao(null, []);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Não foi possível encerrar a missão.");
+    } finally {
+      setIniciando(false);
+    }
+  }
+
   async function startMission(mission) {
     if (mission.clientes.length === 0 || missionBlock) return;
     setIniciando(true);
@@ -252,7 +274,7 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
             </div>
           </div>
         </section>
-        {missionBlock && <Warning message={missionBlock} />}
+        {missionBlock && <Warning message={missionBlock} onEncerrar={encerrarMissaoAtiva} encerrando={iniciando} />}
         {error && <Warning message={error} />}
         <div className="space-y-2">
           {missaoSelecionada.clientes.map((client) => (
@@ -312,14 +334,19 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
           <p className="text-xs font-semibold uppercase text-blue-100">Missão em andamento</p>
           <p className="font-bold">{activeMission.tipo_missao}</p>
           <p className="mt-1 text-sm text-blue-100">{activeMission.mensagens_enviadas || 0}/{activeMission.total_clientes || 0} contatos registrados</p>
-          {RESUMABLE_STATUSES.includes(activeMission.status) && missaoRecuperada && (
-            <button type="button" onClick={retomarMissaoRecuperada} className="mt-3 rounded-xl bg-white px-4 py-2 text-xs font-bold text-status-info-text hover:bg-status-info-surface">
-              Continuar missão
+          <div className="mt-3 flex flex-wrap gap-2">
+            {missaoRecuperada && (
+              <button type="button" onClick={retomarMissaoRecuperada} className="rounded-xl bg-white px-4 py-2 text-xs font-bold text-status-info-text hover:bg-status-info-surface">
+                Continuar missão
+              </button>
+            )}
+            <button type="button" onClick={encerrarMissaoAtiva} disabled={iniciando} className="rounded-xl bg-red-500/20 text-white border border-white/30 px-4 py-2 text-xs font-bold hover:bg-red-500/40 transition-colors">
+              Encerrar missão
             </button>
-          )}
+          </div>
         </section>
       )}
-      {missionBlock && <Warning message={missionBlock} />}
+      {missionBlock && <Warning message={missionBlock} onEncerrar={encerrarMissaoAtiva} encerrando={iniciando} />}
       {error && <Warning message={error} />}
       {missions.every((mission) => mission.clientes.length === 0) ? (
         <section className="rounded-2xl border border-dashed border-border bg-white p-8 text-center"><p className="font-bold text-muted-foreground">Nenhuma missão disponível com os dados atuais.</p><p className="mt-1 text-sm text-muted-foreground">Atualize a situação dos clientes para gerar a próxima fila real.</p></section>
@@ -337,6 +364,23 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
   );
 }
 
-function Warning({ message }) {
-  return <div role="alert" className="flex items-start gap-3 rounded-2xl border border-status-warning/30 bg-status-warning-surface px-4 py-3"><AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-status-warning-text" /><p className="text-sm text-status-warning-text">{message}</p></div>;
+function Warning({ message, onEncerrar, encerrando }) {
+  return (
+    <div role="alert" className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border border-status-warning/30 bg-status-warning-surface px-4 py-3">
+      <div className="flex items-start gap-3">
+        <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-status-warning-text" />
+        <p className="text-sm text-status-warning-text">{message}</p>
+      </div>
+      {onEncerrar && (
+        <button
+          type="button"
+          onClick={onEncerrar}
+          disabled={encerrando}
+          className="shrink-0 rounded-xl bg-white px-3 py-1.5 text-xs font-bold text-status-warning-text border border-status-warning/40 hover:bg-status-warning-surface transition-colors shadow-sm disabled:opacity-50"
+        >
+          {encerrando ? "Encerrando..." : "Encerrar missão atual"}
+        </button>
+      )}
+    </div>
+  );
 }

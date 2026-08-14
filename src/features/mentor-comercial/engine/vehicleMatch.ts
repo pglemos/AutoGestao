@@ -15,6 +15,7 @@
 
 import {
   normalizeVehicleText,
+  normalizeBrand,
   resolveInterestText,
   resolveCatalogModel,
   type VehicleCatalogEntry,
@@ -110,6 +111,19 @@ export function matchVehicleAgainstOpportunities(
       const tokens = [vehicleEntry.model, ...(vehicleEntry.aliases || [])].map(normalizeVehicleText)
       if (brandToken && normalizedInterest.includes(brandToken) && tokens.some((token) => token && normalizedInterest.includes(token))) {
         reasons.push({ kind: 'model', detail: `${vehicleEntry.brand} ${vehicleEntry.model}` })
+      }
+    } else if (opportunity.veiculoInteresse) {
+      // Fallback por texto livre entre a oportunidade e os critérios do veículo (ex.: "TCROSS", "Civic")
+      const normalizedInterest = normalizeVehicleText(opportunity.veiculoInteresse)
+      const normModel = normalizeVehicleText(criteria.model)
+      const normBrand = normalizeBrand(criteria.brand)
+
+      if (normModel && normModel.length >= 3) {
+        const modelMatch = normalizedInterest.includes(normModel) || normModel.includes(normalizedInterest)
+        const brandMatch = !normBrand || normalizedInterest.includes(normBrand) || normBrand.includes(normalizedInterest) || true
+        if (modelMatch && brandMatch) {
+          reasons.push({ kind: 'model', detail: `${criteria.brand || ''} ${criteria.model || ''}`.trim() })
+        }
       }
     }
 

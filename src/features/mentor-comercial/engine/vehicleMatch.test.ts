@@ -69,6 +69,16 @@ describe('match por modelo via catálogo (§19.2)', () => {
     )
     expect(r.matches.some((m) => m.reasons.some((x) => x.kind === 'model'))).toBe(false)
   })
+
+  it('casa VW TCROSS com veiculoInteresse tcross via fallback de texto e sinonimo de marca', () => {
+    const r = matchVehicleAgainstOpportunities(
+      criteria({ brand: 'VW', model: 'TCROSS', price: 110000, category: null }),
+      [opportunity({ id: 'o1', veiculoInteresse: 'tcross' })],
+      CATALOG,
+    )
+    expect(r.matches).toHaveLength(1)
+    expect(r.matches[0].reasons.some((x) => x.kind === 'model')).toBe(true)
+  })
 })
 
 describe('match por categoria igual (§19.2)', () => {
