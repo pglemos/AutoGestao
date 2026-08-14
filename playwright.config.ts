@@ -70,6 +70,24 @@ export default defineConfig({
       },
     },
     {
+      name: 'visual-mobile-360',
+      testDir: './e2e/visual',
+      testMatch: /(?<!manager-module)\.spec\.ts$/,
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 360, height: 800 },
+      },
+    },
+    {
+      name: 'visual-mobile-412',
+      testDir: './e2e/visual',
+      testMatch: /(?<!manager-module)\.spec\.ts$/,
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 412, height: 915 },
+      },
+    },
+    {
       name: 'manager-visual-desktop',
       testDir: './e2e/visual',
       testMatch: /manager-module\.spec\.ts/,
