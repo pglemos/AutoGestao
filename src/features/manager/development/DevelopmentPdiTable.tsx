@@ -1,6 +1,7 @@
 import { ChevronRight, FileText } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { MxEmptyState, MxProgress, MxTableSurface } from '@/components/module/MxModuleVisualPrimitives'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/organisms/Table'
 import type { PDIAvaliacao360, PDISessionSummary } from '@/hooks/usePDI_MX'
 
 export interface DevelopmentPdiRow {
@@ -18,26 +19,26 @@ function formatDate(value?: string | null) {
 }
 
 export function DevelopmentPdiTable({ rows, onOpenOrStart }: { rows: DevelopmentPdiRow[]; onOpenOrStart: (row: DevelopmentPdiRow) => void }) {
-  if (!rows.length) return <MxTableSurface><MxEmptyState icon={FileText} title="Nenhum vendedor encontrado" description="Ajuste os filtros para localizar os PDIs da equipe." /></MxTableSurface>
+  if (!rows.length) return <MxEmptyState icon={FileText} title="Nenhum vendedor encontrado" description="Ajuste os filtros para localizar os PDIs da equipe." />
   return (
     <MxTableSurface>
-      <table className="w-full min-w-[1080px] text-sm">
-        <thead className="border-b border-border-subtle bg-surface-alt"><tr>{['Vendedor', 'Status', 'Última avaliação', 'Próxima revisão', 'Competências', 'Progresso', 'Ações vencidas', ''].map((label) => <th key={label} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</th>)}</tr></thead>
-        <tbody className="divide-y divide-border-subtle">
+      <Table className="min-w-[1080px]">
+        <TableHeader><TableRow>{['Vendedor', 'Status', 'Última avaliação', 'Próxima revisão', 'Competências', 'Progresso', 'Ações vencidas', ''].map((label) => <TableHead key={label} className="text-xs font-semibold uppercase tracking-wide">{label}</TableHead>)}</TableRow></TableHeader>
+        <TableBody>
           {rows.map((row) => (
-            <tr key={row.seller.id} className="hover:bg-surface-alt">
-              <td className="px-4 py-3 font-medium text-foreground">{row.seller.name}</td>
-              <td className="px-4 py-3"><span className={`rounded-lg px-2 py-1 text-xs font-medium ${row.status.className}`}>{row.status.label}</span></td>
-              <td className="px-4 py-3 text-muted-foreground">{formatDate(row.pdi?.data_realizacao || row.pdi?.created_at)}</td>
-              <td className="px-4 py-3 text-muted-foreground">{formatDate(row.pdi?.due_date)}</td>
-              <td className="max-w-60 px-4 py-3 text-xs text-muted-foreground">{(row.pdi?.top_5_gaps ?? []).map((gap: PDIAvaliacao360) => gap.competencia).slice(0, 3).join(', ') || '—'}</td>
-              <td className="min-w-40 px-4 py-3">{row.pdi ? <MxProgress value={row.progress} /> : '—'}</td>
-              <td className="px-4 py-3"><span className={row.overdueActions > 0 ? 'font-medium text-status-error-text' : 'text-muted-foreground'}>{row.overdueActions}</span></td>
-              <td className="px-4 py-3"><Button variant="ghost" size="sm" onClick={() => onOpenOrStart(row)}>{row.pdi ? 'Abrir' : 'Iniciar'}<ChevronRight size={14} className="ml-1" /></Button></td>
-            </tr>
+            <TableRow key={row.seller.id}>
+              <TableCell className="font-medium text-foreground">{row.seller.name}</TableCell>
+              <TableCell><span className={`rounded-lg px-2 py-1 text-xs font-medium ${row.status.className}`}>{row.status.label}</span></TableCell>
+              <TableCell className="text-muted-foreground">{formatDate(row.pdi?.data_realizacao || row.pdi?.created_at)}</TableCell>
+              <TableCell className="text-muted-foreground">{formatDate(row.pdi?.due_date)}</TableCell>
+              <TableCell className="max-w-60 text-xs text-muted-foreground">{(row.pdi?.top_5_gaps ?? []).map((gap: PDIAvaliacao360) => gap.competencia).slice(0, 3).join(', ') || '—'}</TableCell>
+              <TableCell className="min-w-40">{row.pdi ? <MxProgress value={row.progress} /> : '—'}</TableCell>
+              <TableCell><span className={row.overdueActions > 0 ? 'font-medium text-status-error-text' : 'text-muted-foreground'}>{row.overdueActions}</span></TableCell>
+              <TableCell><Button variant="ghost" size="sm" onClick={() => onOpenOrStart(row)}>{row.pdi ? 'Abrir' : 'Iniciar'}<ChevronRight size={14} className="ml-1" /></Button></TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </MxTableSurface>
   )
 }
