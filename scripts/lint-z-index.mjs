@@ -58,7 +58,7 @@ const Z_TOKEN = /\bvar\(--(mx-z-[a-z]+)\)/g
  */
 export const SEMANTIC_RULES = [
   ['src/components/atoms/Tooltip.tsx', 'mx-z-tooltip', [6]],
-  ['src/components/atoms/Button.tsx', 'mx-z-tooltip', [106]],
+  ['src/components/atoms/Button.tsx', 'mx-z-tooltip', [107]],
   ['src/components/fechamento/MovimentoDia.jsx', 'mx-z-tooltip', [311]],
   ['src/components/ui/dropdown-menu.jsx', 'mx-z-popover', [39, 53]],
   ['src/components/ui/popover.jsx', 'mx-z-popover', [19]],
@@ -78,7 +78,7 @@ export const SEMANTIC_RULES = [
   ['src/features/consultoria-visita/LegacyConsultoriaVisitaExecucaoPage.tsx', 'mx-z-topbar', [654]],
   ['src/features/crm/FunilVendedor.container.tsx', 'mx-z-topbar', [148]],
   ['src/features/central-execucao/components/CentralTabs.tsx', 'mx-z-sticky', [15]],
-  ['src/components/organisms/DataGrid.tsx', 'mx-z-sticky', [102]],
+  ['src/components/organisms/DataGrid.tsx', 'mx-z-sticky', [127]],
   ['src/components/organisms/AgendaCalendar/TimeGrid.tsx', 'mx-z-sticky', [183]],
   ['src/components/owner/strategic/StrategicIndicatorComparisonTable.jsx', 'mx-z-sticky', [54, 72]],
   ['src/components/owner/strategic/StrategicPlanOverview.jsx', 'mx-z-sticky', [73, 83]],
