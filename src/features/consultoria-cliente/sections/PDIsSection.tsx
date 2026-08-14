@@ -77,7 +77,7 @@ export function PDIsSection({ storeId, visits = [] }: Props) {
             <Button variant="outline" size="sm" onClick={() => void handleEvidenceAction('open', attachment)} icon={<Eye />}>
               Visualizar
             </Button>
-            <Button variant="secondary" size="sm" onClick={() => void handleEvidenceAction('download', attachment)} icon={<Download />}>
+            <Button variant="outline" size="sm" onClick={() => void handleEvidenceAction('download', attachment)} icon={<Download />}>
               Baixar
             </Button>
           </div>

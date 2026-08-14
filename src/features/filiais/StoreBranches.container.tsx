@@ -100,7 +100,7 @@ export function StoreBranches() {
             {page.canManage ? (
               <>
                 <Button
-                  variant="secondary"
+                  variant="outline"
                   size="sm"
                   onClick={() => page.setEditingStore(store)}
                   aria-label={`Editar cadastro de ${store.name}`}
@@ -109,7 +109,7 @@ export function StoreBranches() {
                   Editar
                 </Button>
                 <Button
-                  variant="secondary"
+                  variant="outline"
                   size="sm"
                   onClick={() => page.handleUnlinkBranch(store)}
                   aria-label={`Desvincular ${store.name} da matriz`}
@@ -140,7 +140,7 @@ export function StoreBranches() {
 
   if (page.loading) {
     return (
-      <MxModulePage>
+      <MxModulePage width="wide" bottomClearance="navigation">
         <MxLoadingState label="Carregando filiais da matriz" />
       </MxModulePage>
     )
@@ -148,7 +148,7 @@ export function StoreBranches() {
 
   if (!page.matriz) {
     return (
-      <MxModulePage>
+      <MxModulePage width="wide" bottomClearance="navigation">
         <MxErrorState
           title="Matriz não encontrada"
           description={
@@ -163,7 +163,7 @@ export function StoreBranches() {
   const matriz = page.matriz
 
   return (
-    <MxModulePage accessMode={page.canManage ? 'manage' : 'read-only'}>
+    <MxModulePage width="wide" bottomClearance="navigation" accessMode={page.canManage ? 'manage' : 'read-only'}>
       <MxModuleHeader
         eyebrow="Administração da rede"
         title={`Filiais de ${matriz.name}`}

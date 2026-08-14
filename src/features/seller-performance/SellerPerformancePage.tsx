@@ -34,7 +34,7 @@ export function SellerPerformancePage() {
   const totalSalesInPeriod = state.rows.reduce((sum, row) => sum + (row.vnd_total || 0), 0)
 
   return (
-    <MxModulePage id="seller-performance">
+    <MxModulePage id="seller-performance" width="wide" bottomClearance="navigation">
       <MxModuleHeader
         eyebrow="Relatórios e diagnóstico"
         title="Performance por Vendedor"
@@ -52,13 +52,13 @@ export function SellerPerformancePage() {
               <span>{state.isRealtimeActive ? 'Real-time ativo' : 'Conectando tempo real...'}</span>
             </div>
 
-            <Button variant="secondary" onClick={() => navigate(-1)}>
+            <Button variant="outline" onClick={() => navigate(-1)}>
               <ArrowLeft size={18} />
               Voltar
             </Button>
 
             <Button
-              variant="secondary"
+              variant="outline"
               onClick={() => void state.refresh()}
               disabled={state.refreshing}
             >

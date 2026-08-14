@@ -148,7 +148,7 @@ export function ConsultingParametersView() {
         actions={(
           <>
             <Button
-              variant="secondary"
+              variant="outline"
               size="icon"
               onClick={() => void handleRefresh()}
               disabled={refreshing}

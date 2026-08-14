@@ -22,7 +22,7 @@ export function PersonEvolutionList({ title, people, onOpen }: {
                 </div>
                 {person.reasons.length ? <p className="mt-1 text-xs text-muted-foreground">{person.reasons.join(' · ')}</p> : null}
               </div>
-              <Button variant="secondary" size="sm" onClick={() => onOpen(person)}>Abrir</Button>
+              <Button variant="outline" size="sm" onClick={() => onOpen(person)}>Abrir</Button>
             </div>
           ))}
         </div>

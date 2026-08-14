@@ -11,11 +11,10 @@ const buttonVariants = cva(
       variant: {
         // Aparência única — sem variação por perfil (§8.5). Estes são os
         // estilos aprovados do Base44/Dono, antes acessíveis só sob o modo
-        // `manager`. FASE K 11.005 fica para G-K: secondary/brand/mx-elite
-        // permanecem até os 8 consumidores migrarem para outline/primary.
+        // `manager`. FASE K 11.005: variantes duplicatas/mortas eliminadas
+        // (brand→primary, secondary→outline, mx-elite removido) — todos os
+        // consumidores migrados antes da remoção.
         primary: "bg-brand-primary text-white shadow-[var(--mx-button-shadow)] hover:bg-brand-primary-hover focus-visible:ring-status-success/20 disabled:bg-muted disabled:text-muted-foreground",
-        brand: "bg-brand-primary text-white shadow-[var(--mx-button-shadow)] hover:bg-brand-primary-hover focus-visible:ring-status-success/20 disabled:bg-muted disabled:text-muted-foreground",
-        secondary: "border border-border bg-white text-foreground shadow-none hover:bg-surface-alt hover:text-foreground focus-visible:ring-status-success/20 disabled:border-border-subtle disabled:bg-surface-alt disabled:text-muted-foreground",
         outline: "border border-border bg-white text-foreground shadow-none hover:bg-surface-alt hover:text-foreground focus-visible:ring-status-success/20 disabled:border-border-subtle disabled:bg-surface-alt disabled:text-muted-foreground",
         ghost: "bg-transparent text-muted-foreground shadow-none hover:bg-surface-alt hover:text-foreground focus-visible:ring-status-success/20 disabled:bg-transparent disabled:text-text-disabled",
         success: "bg-brand-primary text-white shadow-[var(--mx-button-shadow)] hover:bg-brand-primary-hover focus-visible:ring-status-success/20",
@@ -23,7 +22,6 @@ const buttonVariants = cva(
         info: "bg-status-info text-white shadow-[var(--mx-button-shadow)] hover:bg-status-info focus-visible:ring-status-info/20",
         danger: "bg-status-error text-status-error-foreground shadow-[var(--mx-button-shadow)] hover:bg-status-error focus-visible:ring-status-error/20",
         whatsapp: "bg-whatsapp text-white shadow-[var(--mx-button-shadow)] hover:bg-whatsapp/90",
-        "mx-elite": "bg-status-success text-white shadow-[var(--mx-button-shadow)] hover:bg-status-success focus-visible:ring-status-success/20",
       },
       size: {
         default: "h-mx-11 px-6 sm:h-10 sm:px-4",

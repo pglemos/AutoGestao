@@ -19,7 +19,7 @@ export function NetworkDashboardHeader({ refreshing, lastUpdatedAt, realtimeStat
           <Badge variant={realtimeStatus === 'connected' ? 'success' : realtimeStatus === 'degraded' ? 'warning' : 'outline'}>
             {realtimeStatus === 'connected' ? <><Wifi size={14} aria-hidden="true" /> Tempo real ativo</> : realtimeStatus === 'degraded' ? <><WifiOff size={14} aria-hidden="true" /> Atualização manual</> : <><RefreshCw size={14} className="animate-spin motion-reduce:animate-none" aria-hidden="true" /> Conectando</>}
           </Badge>
-          <Button variant="secondary" onClick={onRefresh} disabled={refreshing}>
+          <Button variant="outline" onClick={onRefresh} disabled={refreshing}>
             <RefreshCw size={18} className={refreshing ? 'animate-spin motion-reduce:animate-none' : ''} />
             Atualizar
           </Button>

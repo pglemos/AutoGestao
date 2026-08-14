@@ -55,7 +55,7 @@ export function VisitaDetailPanel({
             <CalendarDays size={32} className="text-muted-foreground" />
             <Typography variant="tiny" tone="muted">Nenhum item neste dia</Typography>
             <div className="mt-mx-sm flex flex-wrap justify-center gap-mx-xs">
-              <Button variant="secondary" size="sm" onClick={() => onScheduleVisit(selectedDate)}>
+              <Button variant="outline" size="sm" onClick={() => onScheduleVisit(selectedDate)}>
                 <Plus size={14} className="mr-2" /> AGENDAR
               </Button>
               <Button variant="outline" size="sm" onClick={() => onBlockDate(selectedDate)}>
@@ -66,7 +66,7 @@ export function VisitaDetailPanel({
         ) : (
           <div className="space-y-mx-sm">
             <div className="flex flex-wrap gap-mx-xs">
-              <Button variant="secondary" size="sm" onClick={() => onScheduleVisit(selectedDate)}>
+              <Button variant="outline" size="sm" onClick={() => onScheduleVisit(selectedDate)}>
                 <Plus size={14} className="mr-2" /> AGENDAR
               </Button>
               <Button variant="outline" size="sm" onClick={() => onBlockDate(selectedDate)}>

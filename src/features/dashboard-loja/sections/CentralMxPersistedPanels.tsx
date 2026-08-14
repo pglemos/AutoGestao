@@ -189,7 +189,7 @@ function PersistedAlertRow({
         </div>
         <div className="flex flex-wrap items-center gap-mx-xs">
           {alert.status === 'open' && (
-            <Button type="button" size="sm" variant="secondary" onClick={() => onAck(alert.id)}>
+            <Button type="button" size="sm" variant="outline" onClick={() => onAck(alert.id)}>
               Marcar visto
             </Button>
           )}
@@ -446,7 +446,7 @@ function PersistedAgendaRow({
             <Button
               type="button"
               size="sm"
-              variant={event.integration_status === 'sincronizado' ? 'secondary' : 'primary'}
+              variant={event.integration_status === 'sincronizado' ? 'outline' : 'primary'}
               onClick={() => onSync(event.id, 'upsert')}
               disabled={syncing}
               aria-label="Sincronizar com Google Calendar"

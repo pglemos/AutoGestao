@@ -114,7 +114,7 @@ export function ConsultingDriveFilesView({ clientId, visits = [] }: { clientId: 
           </div>
 
           <div className="flex flex-wrap gap-mx-xs">
-            <Button variant="secondary" size="sm" onClick={() => listFiles()} loading={loading} icon={<RefreshCw />}>
+            <Button variant="outline" size="sm" onClick={() => listFiles()} loading={loading} icon={<RefreshCw />}>
               Atualizar
             </Button>
             {folderUrl && (

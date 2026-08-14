@@ -35,7 +35,7 @@ export function VisitsSection({
           <div className="flex flex-wrap gap-mx-xs">
             <Button
               type="button"
-              variant="secondary"
+              variant="outline"
               onClick={onOpenLegacyCompletion}
               icon={<ShieldCheck className="w-mx-4 h-mx-4" />}
             >
@@ -67,7 +67,7 @@ export function VisitsSection({
               <div className="flex flex-wrap items-center gap-mx-sm lg:justify-end">
                 <Badge variant={v?.status === 'concluida' ? 'success' : 'outline'}>{v?.status?.toUpperCase() || 'PENDENTE'}</Badge>
                 {canManage && (
-                  <Button type="button" variant="secondary" size="sm" onClick={() => onOpenVisitModal(step.visit_number)}>
+                  <Button type="button" variant="outline" size="sm" onClick={() => onOpenVisitModal(step.visit_number)}>
                     {v ? 'EDITAR' : 'CRIAR'}
                   </Button>
                 )}

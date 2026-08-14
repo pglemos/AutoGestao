@@ -29,7 +29,7 @@ export function StoreHealthTable({ rows, sort, onSort, onOpen }: {
         <td className="px-4 py-4 font-semibold text-foreground"><div>{row.name}</div><div className="mt-1 text-xs font-normal text-muted-foreground">{statusLabel}</div></td>
         <td className="px-4 py-4 tabular-nums">{row.sales}</td><td className="px-4 py-4 tabular-nums">{row.goal}</td><td className="px-4 py-4 tabular-nums">{row.proj}</td>
         <td className="px-4 py-4 tabular-nums">{row.efficiency.toFixed(1)}%</td><td className="px-4 py-4 tabular-nums">{row.disciplinePct.toFixed(0)}%</td>
-        <td className="px-4 py-4 tabular-nums">{pending}</td><td className="px-4 py-4 text-right"><Button variant="secondary" size="sm" onClick={() => onOpen(row)}>Analisar</Button></td>
+        <td className="px-4 py-4 tabular-nums">{pending}</td><td className="px-4 py-4 text-right"><Button variant="outline" size="sm" onClick={() => onOpen(row)}>Analisar</Button></td>
       </tr>
     })}</tbody></table></MxTableSurface>
   )

@@ -175,7 +175,7 @@ export function buildStoreColumns({
         >
           {store.active ? (
             <>
-              <Button asChild variant="secondary" size="sm">
+              <Button asChild variant="outline" size="sm">
                 <Link to={`/lojas/${slugify(store.name)}?id=${store.id}`}>
                   {isOwner ? 'Abrir unidade' : OPERATIONAL_ACTION_LABELS.openDashboard}
                 </Link>
@@ -230,7 +230,7 @@ export function buildStoreColumns({
                 <Edit3 size={16} aria-hidden="true" />
               </Button>
               <Button
-                variant="secondary"
+                variant="outline"
                 size="sm"
                 onClick={() => toggleStoreStatus(store.id, true)}
               >

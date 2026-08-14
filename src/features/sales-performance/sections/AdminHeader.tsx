@@ -52,7 +52,7 @@ export function AdminHeader({ metrics, isRefetching, onRefresh, onExport }: Prop
           </Typography>
         </div>
         <Button
-          variant="secondary"
+          variant="outline"
           onClick={onExport}
           className="h-mx-14 px-8 rounded-mx-full text-mx-tiny"
         >

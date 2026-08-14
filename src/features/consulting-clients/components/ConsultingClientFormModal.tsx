@@ -1,5 +1,6 @@
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
+import { Modal } from '@/components/organisms/Modal'
 import { MxField, MxTextarea } from '@/components/module/MxModuleVisualPrimitives'
 import { ConsultingModuleSelector } from './ConsultingModuleSelector'
 import type { ConsultingClientDraft } from '../types'
@@ -14,11 +15,22 @@ export function ConsultingClientFormModal(props: {
   onClose: () => void
   editing?: boolean
 }) {
-  if (!props.open) return null
+  const title = props.editing ? 'Editar cliente da consultoria' : 'Novo cliente da consultoria'
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface-overlay/50 p-4" role="dialog" aria-modal="true" aria-labelledby="consulting-client-modal-title" onMouseDown={event => { if (event.currentTarget === event.target) props.onClose() }}>
-      <section className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white p-5 shadow-xl">
-        <h2 id="consulting-client-modal-title" className="text-xl font-bold text-foreground">{props.editing ? 'Editar cliente da consultoria' : 'Novo cliente da consultoria'}</h2>
+    <Modal
+      open={props.open}
+      onClose={props.onClose}
+      title={title}
+      size="xl"
+      closeOnEscape={!props.submitting}
+      footer={(
+        <>
+          <Button variant="outline" onClick={props.onClose} disabled={props.submitting}>Cancelar</Button>
+          <Button onClick={props.onSubmit} disabled={props.submitting}>{props.submitting ? 'Salvando...' : props.editing ? 'Salvar alterações' : 'Criar cliente'}</Button>
+        </>
+      )}
+    >
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
           <MxField label="Nome"><Input value={props.draft.name} onChange={event => props.onDraft({ ...props.draft, name: event.target.value })} /></MxField>
           <MxField label="Razão social"><Input value={props.draft.legal_name} onChange={event => props.onDraft({ ...props.draft, legal_name: event.target.value })} /></MxField>
@@ -27,8 +39,6 @@ export function ConsultingClientFormModal(props: {
           <MxField label="Observações" className="sm:col-span-2"><MxTextarea rows={4} value={props.draft.notes} onChange={event => props.onDraft({ ...props.draft, notes: event.target.value })} /></MxField>
           <div className="sm:col-span-2"><ConsultingModuleSelector modules={props.modules} value={props.draft.enabled_modules} onChange={enabled_modules => props.onDraft({ ...props.draft, enabled_modules })} /></div>
         </div>
-        <div className="mt-6 flex justify-end gap-2"><Button variant="secondary" onClick={props.onClose} disabled={props.submitting}>Cancelar</Button><Button onClick={props.onSubmit} disabled={props.submitting}>{props.submitting ? 'Salvando...' : props.editing ? 'Salvar alterações' : 'Criar cliente'}</Button></div>
-      </section>
-    </div>
+    </Modal>
   )
 }

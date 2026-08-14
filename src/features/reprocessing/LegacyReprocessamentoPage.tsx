@@ -309,7 +309,7 @@ export default function Reprocessamento() {
         description="Valide, importe e acompanhe lotes de dados com histórico auditável por unidade."
         actions={(
           <>
-            <Button asChild variant="secondary">
+            <Button asChild variant="outline">
               <Link to="/configuracoes">
                 <ArrowLeft size={16} aria-hidden="true" />
                 Voltar

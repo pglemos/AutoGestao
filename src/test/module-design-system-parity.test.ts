@@ -148,11 +148,20 @@ describe('paridade visual dos módulos MX com o Gerente', () => {
     for (const variant of [
       'primary',
       'outline',
-      'secondary',
       'ghost',
+      'success',
+      'warning',
+      'info',
+      'danger',
+      'whatsapp',
     ]) {
       expect(button).toContain(`${variant}:`)
     }
+    // FASE K 11.005: `secondary`/`brand`/`mx-elite` foram eliminadas (duplicatas
+    // visuais de outline/primary, ou mortas). O contrato canônico tem 8 variantes.
+    expect(button).not.toContain('secondary:')
+    expect(button).not.toContain('brand:')
+    expect(button).not.toContain('mx-elite:')
     // As variantes deixaram de ter par "manager": a aparência aprovada é a
     // única, então não há mais provider nem modo a resolver (§8.5).
     expect(button).not.toContain('ButtonVisualProvider')

@@ -32,7 +32,7 @@ export function HardDeleteStoreModal({
       size="md"
       footer={(
         <>
-          <Button variant="secondary" onClick={onClose} disabled={deleting}>
+          <Button variant="outline" onClick={onClose} disabled={deleting}>
             Cancelar
           </Button>
           <Button onClick={onConfirm} loading={deleting} disabled={!matches}>

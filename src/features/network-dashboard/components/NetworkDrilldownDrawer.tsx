@@ -34,10 +34,10 @@ export function NetworkDrilldownDrawer({ store, open, onOpenChange, onNavigate, 
           <div className="mt-5 space-y-4">
             <div className="flex flex-wrap gap-2">
               <Button onClick={() => onNavigate('store', store)}>Abrir loja</Button>
-              <Button variant="secondary" onClick={() => onNavigate('strategic', store)}>Plano Estratégico</Button>
-              <Button variant="secondary" onClick={() => onNavigate('actions', store)}>Plano de Ação</Button>
-              <Button variant="secondary" onClick={() => onNavigate('consulting', store)}>Consultoria</Button>
-              <Button variant="secondary" onClick={() => onNavigate('closing', store)}>Fechamento diário</Button>
+              <Button variant="outline" onClick={() => onNavigate('strategic', store)}>Plano Estratégico</Button>
+              <Button variant="outline" onClick={() => onNavigate('actions', store)}>Plano de Ação</Button>
+              <Button variant="outline" onClick={() => onNavigate('consulting', store)}>Consultoria</Button>
+              <Button variant="outline" onClick={() => onNavigate('closing', store)}>Fechamento diário</Button>
             </div>
             <StoreEvolutionPanel store={store} />
             <PersonEvolutionList title="Vendedores" people={store.sellersEvolution} onOpen={person => onOpenPerson(person, store)} />
