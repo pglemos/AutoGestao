@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'bun:test'
-import { execFileSync } from 'node:child_process'
+
+import { auditVisualRaw } from '../../scripts/lint-visual-raw.mjs'
 
 /**
  * FASE G — 07.014
@@ -7,35 +8,24 @@ import { execFileSync } from 'node:child_process'
  * O guard `scripts/lint-visual-raw.mjs` precisa (a) estar verde no runtime e
  * (b) realmente falhar quando aparece uma decisão visual crua. Sem o segundo
  * teste um guard quebrado passaria por guard funcionando.
+ *
+ * O scanner é 100% fs (readdir/readFile) e o teste importa `auditVisualRaw()`
+ * diretamente — nenhum subprocesso, então o bun test 1.3.5 (que engole o
+ * stdout de subprocessos sob o project root) não afeta este contrato.
  */
-function runGuard(): { status: number; stdout: string } {
-  try {
-    const stdout = execFileSync('node', ['scripts/lint-visual-raw.mjs'], {
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'pipe'],
-    })
-    return { status: 0, stdout }
-  } catch (error) {
-    const err = error as { status?: number; stdout?: string }
-    return { status: err.status ?? 1, stdout: err.stdout ?? '' }
-  }
-}
-
 describe('07.014 guard de decisão visual crua', () => {
   test('runtime está livre de raio/sombra/cor crua fora dos tokens', () => {
-    const { status, stdout } = runGuard()
-    const report = JSON.parse(stdout.slice(stdout.indexOf('{')))
-    expect(report.totalViolations, stdout).toBe(0)
-    expect(status).toBe(0)
+    const report = auditVisualRaw()
+    expect(report.totalViolations).toBe(0)
   })
 
-  test('cobre as três famílias de decisão visual', () => {
-    const { stdout } = runGuard()
-    const report = JSON.parse(stdout.slice(stdout.indexOf('{')))
+  test('cobre as famílias de decisão visual e tokens', () => {
+    const report = auditVisualRaw()
     expect(report.rules.map((rule: { rule: string }) => rule.rule).sort()).toEqual([
       'hex-cru-em-componentes',
       'radius-arbitrario-px',
       'shadow-arbitrario',
+      'token-call-em-string',
     ])
   })
 })

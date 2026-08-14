@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'bun:test'
-import { execFileSync } from 'node:child_process'
+
+import { scanSourceFiles } from './lib/scanSourceFiles'
 
 /**
  * FASE G — 07.013
@@ -10,27 +11,25 @@ import { execFileSync } from 'node:child_process'
  *
  * Se algum dia o dark for construído de verdade, este teste falha e obriga a
  * decisão a passar pela camada de tokens (e não por `dark:` avulso em telas).
+ *
+ * C8: varredura 100% fs via `scanSourceFiles` — um `git grep` aqui retornaria
+ * vazio sob bun test (stdout engolido), fazendo o teste 2 falhar falso-RED e o
+ * teste 1 passar vacuamente.
  */
-function gitGrep(pattern: string, paths: string[]): string[] {
-  try {
-    return execFileSync('git', ['grep', '--untracked', '-n', '-E', pattern, '--', ...paths], {
-      encoding: 'utf8',
-    })
-      .trim()
-      .split('\n')
-      .filter(Boolean)
-  } catch (error) {
-    if ((error as { status?: number }).status === 1) return []
-    throw error
+function filesWith(pattern: RegExp, roots: string[]): string[] {
+  const matches: string[] = []
+  for (const { rel, lines } of scanSourceFiles({ roots })) {
+    if (lines.some((line) => pattern.test(line))) matches.push(rel)
   }
+  return matches.sort()
 }
 
 describe('07.013 suporte a aparência', () => {
   test('nenhuma camada de token declara escopo .dark', () => {
-    expect(gitGrep(String.raw`^\s*\.dark[\s,{]`, ['src/index.css', 'src/design-system', 'src/styles'])).toEqual([])
+    expect(filesWith(/^\s*\.dark[\s,{]/, ['src/index.css', 'src/design-system', 'src/styles'])).toEqual([])
   })
 
   test('a densidade, essa sim, é suportada por data-attribute', () => {
-    expect(gitGrep('data-mx-density|dataset.mxDensity', ['src']).length).toBeGreaterThan(0)
+    expect(filesWith(/data-mx-density|dataset\.mxDensity/, ['src']).length).toBeGreaterThan(0)
   })
 })

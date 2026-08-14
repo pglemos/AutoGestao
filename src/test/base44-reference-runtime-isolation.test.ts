@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'bun:test'
-import { execFileSync } from 'node:child_process'
+
+import { scanSourceFiles } from './lib/scanSourceFiles'
 
 /**
  * `src/base44-reference/**` é REFERÊNCIA congelada: serve para comparar
@@ -10,6 +11,11 @@ import { execFileSync } from 'node:child_process'
  *
  * Este guard proíbe import de runtime. A allowlist existe só para o que ainda
  * não foi portado, e cada linha é dívida declarada — não um padrão aceito.
+ *
+ * C8: a varredura é 100% fs (readdir/readFile) via `scanSourceFiles` — nenhum
+ * subprocesso, então o bun test 1.3.5 (que engole o stdout de subprocessos sob
+ * o project root) não afeta este contrato. Um `git grep` aqui retornaria vazio
+ * e a allowlist pareceria morta (falso RED).
  */
 const ALLOWLIST = new Map([
   [
@@ -18,31 +24,23 @@ const ALLOWLIST = new Map([
   ],
 ])
 
+const IMPORT_RE = /(?:from|import)\s*\(?\s*['"](@\/base44-reference|\.\.\/base44-reference)/
+
 function runtimeImports(): string[] {
-  try {
-    const output = execFileSync(
-      'git',
-      [
-        'grep',
-        '--untracked',
-        '-n',
-        '-E',
-        // POSIX ERE: `git grep -E` não conhece `\s`.
-        String.raw`(from|import)[[:space:]]*\(?[[:space:]]*['"](@/base44-reference|\.\./base44-reference)`,
-        '--',
-        'src',
-        ':!src/base44-reference/**',
-        ':!src/**/*.test.*',
-        ':!src/**/*.spec.*',
-        ':!src/**/*.stories.*',
-      ],
-      { encoding: 'utf8' },
-    )
-    return output.trim().split('\n').filter(Boolean)
-  } catch (error) {
-    if ((error as { status?: number }).status === 1) return []
-    throw error
+  const hits: string[] = []
+  for (const { rel, lines } of scanSourceFiles({
+    extraExcluded: [
+      'src/base44-reference/**',
+      '**/*.test.*',
+      '**/*.spec.*',
+      '**/*.stories.*',
+    ],
+  })) {
+    lines.forEach((line, idx) => {
+      if (IMPORT_RE.test(line)) hits.push(`${rel}:${idx + 1}:${line.trim()}`)
+    })
   }
+  return hits
 }
 
 describe('isolamento do base44-reference', () => {

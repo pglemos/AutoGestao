@@ -1,53 +1,41 @@
 import { describe, expect, test } from 'bun:test'
-import { execFileSync } from 'node:child_process'
 
 import { applyNeutralComplementRules } from '../../scripts/migrate-neutral-complement.mjs'
+import { scanSourceFiles } from './lib/scanSourceFiles'
+
+const MIGRATABLE_RE =
+  /(text|border|divide|ring|hover:border|hover:text|focus:border|focus:text)-(gray|slate)-(100|200|300|400|500|600|700|800)/
+
+const SRC_EXCLUDED = [
+  '**/base44-reference/**',
+  '**/*.test.*',
+  '**/*.spec.*',
+  '**/*.playwright.*',
+  '**/_stories/**',
+  '**/design-system/tokens/**',
+  '**/index.css',
+  '**/WhatsApp*',
+  '**/RetornoWhatsApp*',
+]
+
+function filesWith(pattern: RegExp): string[] {
+  const matches: string[] = []
+  for (const { rel, lines } of scanSourceFiles({ extraExcluded: SRC_EXCLUDED })) {
+    if (lines.some((line) => pattern.test(line))) matches.push(rel)
+  }
+  return matches.sort()
+}
 
 describe('07.020 neutral complement migration', () => {
   test('runtime has no migratable gray/slate text-border utilities outside exceptions', () => {
-    let matches = ''
-    try {
-      matches = execFileSync(
-        'rg',
-        [
-          '-l',
-          '(text|border|divide|ring|hover:border|hover:text|focus:border|focus:text)-(gray|slate)-(100|200|300|400|500|600|700|800)',
-          'src',
-          '--glob',
-          '*.{css,ts,tsx,js,jsx,mjs}',
-          '--glob',
-          '!**/base44-reference/**',
-          '--glob',
-          '!**/*.test.*',
-          '--glob',
-          '!**/*.spec.*',
-          '--glob',
-          '!**/*.playwright.*',
-          '--glob',
-          '!**/_stories/**',
-          '--glob',
-          '!**/design-system/tokens/**',
-          '--glob',
-          '!**/index.css',
-          '--glob',
-          '!**/WhatsApp*',
-          '--glob',
-          '!**/RetornoWhatsApp*',
-        ],
-        { encoding: 'utf8' },
-      ).trim()
-    } catch (error) {
-      if (error?.status !== 1) throw error
-    }
-
-    expect(matches).toBe('')
+    expect(filesWith(MIGRATABLE_RE)).toEqual([])
   })
 
   test('text-slate-50 on dark tooltip is a documented on-dark exception', () => {
-    const source = execFileSync('rg', ['-l', 'text-slate-50', 'src', '--glob', '*.{css,ts,tsx,js,jsx,mjs}', '--glob', '!**/base44-reference/**', '--glob', '!**/*.test.*', '--glob', '!**/design-system/tokens/**', '--glob', '!**/index.css'], { encoding: 'utf8' }).trim()
+    const matches = filesWith(/text-slate-50/)
     // text-on-dark (papel 07.002): texto claro sobre bg-slate-800 em tooltip
     // dark — mesma categoria do text-white, excecao de contexto documentada.
-    expect(source).toBe('src/components/ui/HelpTooltip.tsx')
+    expect(matches).toEqual(['src/components/ui/HelpTooltip.tsx'])
   })
 
   test('maps text neutrals by semantic role', () => {
