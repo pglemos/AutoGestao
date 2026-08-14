@@ -70,7 +70,12 @@
   --mx-color-warning-surface: var(--mx-amber-100);
   --mx-color-warning-border: var(--mx-amber-500);
   --mx-color-danger: var(--mx-red-500);
-  --mx-color-danger-foreground: var(--mx-neutral-0);
+  /* Texto sobre o PREENCHIMENTO SÓLIDO de danger. Branco sobre o fill
+     (60% de lightness, o degrau claro de error) reprova AA em texto normal;
+     o degrau quase preto entrega 5.24:1 — mesmo padrão do
+     `--mx-color-warning-foreground`. O `-danger-text` (sobre superfície
+     clara) continua sendo outro token. */
+  --mx-color-danger-foreground: var(--mx-neutral-950);
   --mx-color-danger-text: var(--mx-status-error-text);
   --mx-color-danger-subtle: var(--mx-red-100);
   --mx-color-danger-surface: var(--mx-red-100);

@@ -64,7 +64,7 @@ export const SIDEBAR = {
   brandTitle: 'truncate text-body-sm font-black tracking-tight text-foreground',
   brandModule: 'mt-0.5 truncate text-caption font-bold uppercase tracking-[0.14em] text-status-success-text',
   toggle:
-    'flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--mx-sidebar-toggle-radius)] border border-mxsb-line bg-white text-muted-foreground outline-none transition-colors hover:bg-surface-alt hover:text-foreground focus-visible:ring-2 focus-visible:ring-status-success/30',
+    'flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--mx-sidebar-toggle-radius)] border border-mxsb-line bg-white text-muted-foreground outline-none transition-colors hover:bg-surface-alt hover:text-foreground active:bg-mxsb-hover active:text-foreground focus-visible:ring-2 focus-visible:ring-status-success/30 disabled:pointer-events-none disabled:opacity-50',
 
   /** Área de navegação. */
   nav: 'flex-1 min-h-0 overflow-y-auto py-4',
@@ -76,7 +76,7 @@ export const SIDEBAR = {
   sectionItems: 'space-y-0.5',
 
   /** Item de navegação. */
-  item: 'group relative flex w-full items-center gap-2.5 rounded-[var(--mx-sidebar-item-radius)] py-2 text-sm font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-status-success/30',
+  item: 'group relative flex w-full items-center gap-2.5 rounded-[var(--mx-sidebar-item-radius)] py-2 text-sm font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-status-success/30 active:bg-mxsb-hover',
   itemExpanded: 'px-3',
   itemCollapsed: 'justify-center px-0',
   itemActive: 'bg-mxsb-active-surface font-semibold text-mxsb-active-ink',
@@ -86,11 +86,11 @@ export const SIDEBAR = {
 
   /** Grupo expansível. */
   groupTrigger:
-    'flex w-full items-center gap-2.5 rounded-[var(--mx-sidebar-item-radius)] py-2 text-sm font-medium text-mxsb-muted outline-none transition-colors hover:bg-mxsb-hover hover:text-mxsb-ink-strong focus-visible:ring-2 focus-visible:ring-status-success/30',
+    'flex w-full items-center gap-2.5 rounded-[var(--mx-sidebar-item-radius)] py-2 text-sm font-medium text-mxsb-muted outline-none transition-colors hover:bg-mxsb-hover hover:text-mxsb-ink-strong active:bg-mxsb-hover focus-visible:ring-2 focus-visible:ring-status-success/30 disabled:pointer-events-none disabled:opacity-50',
   groupChevron: 'h-3.5 w-3.5 shrink-0',
   subnav: 'ml-3 mt-0.5 space-y-0.5 border-l border-mxsb-line pl-3',
   nestedItem:
-    'flex w-full items-center gap-1.5 rounded-[var(--mx-sidebar-subitem-radius)] px-2.5 py-1 text-body-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-status-success/30',
+    'flex w-full items-center gap-1.5 rounded-[var(--mx-sidebar-subitem-radius)] px-2.5 py-1 text-body-sm outline-none transition-colors active:bg-mxsb-hover focus-visible:ring-2 focus-visible:ring-status-success/30',
   nestedItemActive: 'bg-mxsb-active-surface font-medium text-mxsb-active-ink',
   nestedItemIdle: 'text-mxsb-muted hover:bg-mxsb-hover hover:text-mxsb-ink-strong',
 
@@ -105,7 +105,7 @@ export const SIDEBAR = {
   footerCollapsed: 'px-2',
   ctaSlot: 'border-t border-mxsb-line p-3',
   ctaButton:
-    'flex h-9 w-full items-center gap-2.5 rounded-[var(--mx-sidebar-subitem-radius)] bg-mxsb-active px-4 text-sm font-medium text-white shadow outline-none transition-colors hover:bg-mxsb-active/90 focus-visible:ring-2 focus-visible:ring-status-success/30',
+    'flex h-9 w-full items-center gap-2.5 rounded-[var(--mx-sidebar-subitem-radius)] bg-mxsb-active px-4 text-sm font-medium text-white shadow outline-none transition-colors hover:bg-mxsb-active/90 active:bg-mxsb-active/80 focus-visible:ring-2 focus-visible:ring-status-success/30 disabled:pointer-events-none disabled:opacity-50',
   ctaButtonExpanded: 'justify-start',
   ctaButtonCollapsed: 'justify-center px-0',
 
@@ -113,9 +113,9 @@ export const SIDEBAR = {
   drawerOverlay: 'fixed inset-0 z-[var(--mx-z-drawer)] xl:hidden',
   drawerScrim: 'absolute inset-0 bg-surface-overlay/40',
   drawerPanel:
-    'relative z-10 flex h-full w-[var(--mx-sidebar-drawer-width)] max-w-[var(--mx-sidebar-drawer-max-width)] flex-col overflow-hidden bg-mxsb-surface shadow-[var(--mx-shadow-xl)] sm:w-[var(--mx-sidebar-drawer-width-sm)] sm:max-w-sm',
+    'relative z-[var(--mx-z-sticky)] flex h-full w-[var(--mx-sidebar-drawer-width)] max-w-[var(--mx-sidebar-drawer-max-width)] flex-col overflow-hidden bg-mxsb-surface shadow-[var(--mx-shadow-xl)] sm:w-[var(--mx-sidebar-drawer-width-sm)] sm:max-w-sm',
   drawerClose:
-    'absolute right-2 top-2 z-10 flex h-[var(--mx-mobile-header-touch-target)] w-[var(--mx-mobile-header-touch-target)] items-center justify-center rounded-[var(--mx-sidebar-drawer-close-radius)] text-mxsb-ink outline-none transition-colors hover:bg-mxsb-hover focus-visible:ring-2 focus-visible:ring-status-success/30',
+    'absolute right-2 top-2 z-[var(--mx-z-sticky)] flex h-[var(--mx-mobile-header-touch-target)] w-[var(--mx-mobile-header-touch-target)] items-center justify-center rounded-[var(--mx-sidebar-drawer-close-radius)] text-mxsb-ink outline-none transition-colors hover:bg-mxsb-hover focus-visible:ring-2 focus-visible:ring-status-success/30',
 } as const
 
 export type SidebarTokens = typeof SIDEBAR
