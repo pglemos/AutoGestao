@@ -42,6 +42,7 @@ describe('App Shell unificado', () => {
     expect(resolveAppShellConfig('dono').density).toBe('comfortable')
     expect(resolveAppShellConfig('gerente').density).toBe('standard')
     expect(resolveAppShellConfig('vendedor').density).toBe('standard')
+    expect(resolveAppShellConfig('administrador_geral').density).toBe('compact')
     expect(resolveAppShellConfig('administrador_mx').density).toBe('compact')
     expect(resolveAppShellConfig('consultor_mx').density).toBe('compact')
     // Perfil desconhecido ou ausente não quebra o shell.

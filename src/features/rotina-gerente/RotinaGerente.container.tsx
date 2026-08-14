@@ -1,4 +1,5 @@
 import { AnimatePresence } from 'motion/react'
+import { PageCanvas } from '@/design-system/page'
 import { RotinaErrorBoundary } from './components/RotinaErrorBoundary'
 import { useRotinaGerentePage } from './hooks/useRotinaGerentePage'
 import { RotinaAdminStoreSelector } from './sections/RotinaAdminStoreSelector'
@@ -22,7 +23,13 @@ export function RotinaGerenteContainer() {
   const showContent = !page.isAdmin || page.selectedStoreId
 
   return (
-    <div className="w-full flex flex-col gap-mx-lg p-mx-lg bg-surface-alt">
+    <PageCanvas
+      as="div"
+      id="page-rotina-gerente"
+      aria-label="Rotina do Gerente"
+      bottomClearance="navigation"
+      className="flex min-h-0 flex-1 flex-col gap-mx-lg"
+    >
       {showSelector && (
         <RotinaErrorBoundary sectionName="seletor de unidade">
           <RotinaAdminStoreSelector
@@ -94,7 +101,7 @@ export function RotinaGerenteContainer() {
           </div>
         </>
       )}
-    </div>
+    </PageCanvas>
   )
 }
 
