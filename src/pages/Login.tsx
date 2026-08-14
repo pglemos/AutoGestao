@@ -467,9 +467,9 @@ export default function Login() {
                 {/* Mobile logo */}
                 <div className="lg:hidden mb-12 text-center">
                     <img src={MxLogo} alt="MX Performance" className="w-mx-20 h-mx-20 object-contain mx-auto mb-6" />
-                    <h1 className="text-h3 font-bold text-foreground">
+                    <h2 className="text-h3 font-bold text-foreground">
                         MX <span className="text-brand-primary-active">PERFORMANCE</span>
-                    </h1>
+                    </h2>
                 </div>
 
                 <motion.div

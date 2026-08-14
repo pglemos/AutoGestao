@@ -68,4 +68,20 @@ describe('Foundation Zero accessibility contracts', () => {
     expect(pdi).not.toMatch(/PDI como acompanhamento do Dono[\s\S]{0,260}text-status-info["']/)
     expect(pdi).toContain('text-status-info-text')
   })
+
+  test('names UserCreationModal text inputs (22.003)', () => {
+    const modal = read('src/features/equipe/components/UserCreationModal.tsx')
+    expect(modal).toMatch(/id="new-user-name"[\s\S]{0,120}aria-label="Nome completo"/)
+    expect(modal).toMatch(/id="new-user-phone"[\s\S]{0,120}aria-label="Telefone \/ WhatsApp"/)
+    expect(modal).toMatch(/id="new-user-email"[\s\S]{0,120}aria-label="E-mail de acesso"/)
+    expect(modal).toMatch(/id="new-user-password"[\s\S]{0,120}aria-label="Senha provisória"/)
+  })
+
+  test('associates QuickSimulationCard labels via htmlFor (22.003)', () => {
+    const card = read('src/components/vendedor/QuickSimulationCard.jsx')
+    expect(card).toContain('htmlFor="qs-vendas-adicionais"')
+    expect(card).toContain('htmlFor="qs-valor-medio"')
+    expect(card).toContain('id="qs-vendas-adicionais"')
+    expect(card).toContain('id="qs-valor-medio"')
+  })
 })

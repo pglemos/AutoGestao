@@ -185,7 +185,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                 <div className="w-full lg:w-mx-sidebar-expanded shrink-0 bg-surface-alt/50 border-b lg:border-b-0 lg:border-r border-border p-mx-lg flex flex-col justify-between relative overflow-y-auto lg:overflow-hidden">
                     <div className="space-y-mx-lg relative z-[var(--mx-z-sticky)]">
                         <div className="w-mx-20 h-mx-20 rounded-2xl bg-brand-primary/10 border border-status-success/20 flex items-center justify-center text-status-success-text shadow-sm">
-                            <UserPlus size={40} strokeWidth={1.5} />
+                            <UserPlus size={40} strokeWidth={1.8} />
                         </div>
                         <div className="space-y-mx-xs">
                             <Typography variant="h2" className="text-3xl tracking-tighter">Novo <span className="text-status-success-text">Integrante</span></Typography>
@@ -227,6 +227,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                             <input 
                               id="new-user-name"
                               name="new_user_name"
+                              aria-label="Nome completo"
                               autoComplete="off"
                               required placeholder="NOME COMPLETO" 
                               value={formData.name} onChange={e => setFormData({...formData, name: e.target.value.toUpperCase()})}
@@ -243,6 +244,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                             <input 
                               id="new-user-phone"
                               name="new_user_phone"
+                              aria-label="Telefone / WhatsApp"
                               autoComplete="off"
                               required placeholder="(00) 00000-0000" 
                               value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})}
@@ -259,6 +261,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                             <input 
                               id="new-user-email"
                               name="new_user_email"
+                              aria-label="E-mail de acesso"
                               autoComplete="off"
                               required type="email" placeholder="USUARIO@MX PERFORMANCE.COM" 
                               value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})}
@@ -275,6 +278,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                             <input 
                               id="new-user-password"
                               name="new_user_password"
+                              aria-label="Senha provisória"
                               autoComplete="new-password"
                               required
                               minLength={6}

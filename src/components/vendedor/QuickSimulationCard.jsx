@@ -34,19 +34,21 @@ export default function QuickSimulationCard({ calcResult, faixas = [], premiacoe
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <div>
-          <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Vendas adicionais</label>
+          <label htmlFor="qs-vendas-adicionais" className="text-xs font-medium text-muted-foreground mb-1.5 block">Vendas adicionais</label>
           <input
+            id="qs-vendas-adicionais"
             type="number" min={1} max={30} value={vendasAdicionais}
             onChange={e => setVendasAdicionais(e.target.value)}
             className="w-full border border-border rounded-xl px-3 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-mx-blue/30"
           />
         </div>
         <div>
-          <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
+          <label htmlFor="qs-valor-medio" className="text-xs font-medium text-muted-foreground mb-1.5 block">
             Valor médio por veículo
             {ticketMedio > 0 && <span className="text-muted-foreground ml-1">(padrão: {formatBRL(ticketMedio)})</span>}
           </label>
           <input
+            id="qs-valor-medio"
             type="number" min={0} value={valorMedio}
             placeholder={ticketMedio > 0 ? String(Math.round(ticketMedio)) : "0"}
             onChange={e => setValorMedio(e.target.value)}

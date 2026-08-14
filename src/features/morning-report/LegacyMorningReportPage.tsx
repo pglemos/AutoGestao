@@ -403,7 +403,7 @@ function AdminMorningReport() {
                                 const healthPct = store.totalSellers > 0 ? Math.round((store.checkedInCount / store.totalSellers) * 100) : 0
                                 return (
                                     <React.Fragment key={store.store_id}>
-                                        <tr className="hover:bg-surface-alt/30 transition-colors group cursor-pointer" onClick={() => setExpandedStoreId(isExpanded ? null : store.store_id)}>
+                                        <tr className="hover:bg-surface-alt/30 transition-colors group cursor-pointer" tabIndex={0} aria-expanded={isExpanded} onClick={() => setExpandedStoreId(isExpanded ? null : store.store_id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setExpandedStoreId(isExpanded ? null : store.store_id) } }}>
                                             <td className="pl-10">
                                                 <div className="flex items-center gap-mx-sm">
                                                     <div className="w-mx-xl h-mx-xl rounded-2xl bg-surface-alt border border-border flex items-center justify-center group-hover:bg-brand-primary transition-all shadow-mx-inner" aria-hidden="true">
