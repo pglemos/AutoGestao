@@ -6,14 +6,13 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { MONTHS, MONTHS_FULL, SELECTED_MONTH_INDEX, formatCellValue, consolidateValues, getConsolidatedLabel, AREA_STYLES } from './strategicUtils'
 import { DIRECTION_LABELS, AGGREGATION_LABELS, FORMAT_LABELS } from './strategicIndicatorCatalog'
-import { useToast } from '@/components/ui/use-toast'
+import { toast } from '@/lib/toast'
 import { useAuth } from '@/features/owner/lib/ownerAuth'
 import { ShoppingCart, Megaphone, Package, Wallet, Settings } from 'lucide-react'
 
 const AREA_ICONS = { Vendas: ShoppingCart, Marketing: Megaphone, Estoque: Package, Financeiro: Wallet, Operacional: Settings }
 
 export default function EditTargetsDrawer({ repository, open, onOpenChange, indicator, year, onSaved }) {
-  const { toast } = useToast()
   const { user } = useAuth()
   const [values, setValues] = useState(Array(12).fill(''))
   const [errors, setErrors] = useState({})
@@ -56,7 +55,7 @@ export default function EditTargetsDrawer({ repository, open, onOpenChange, indi
   const applyJanuary = () => {
     const error = validate(values[0])
     if (error) {
-      toast({ title: 'Corrija Janeiro antes de replicar.', variant: 'destructive' })
+      toast.error('Corrija Janeiro antes de replicar.')
       return
     }
     setValues(Array(12).fill(values[0]))
@@ -66,16 +65,16 @@ export default function EditTargetsDrawer({ repository, open, onOpenChange, indi
     const nextErrors = Object.fromEntries(values.map((raw, index) => [index, validate(raw)]).filter(([, error]) => error))
     if (Object.keys(nextErrors).length) {
       setErrors(nextErrors)
-      toast({ title: 'Corrija os campos destacados.', variant: 'destructive' })
+      toast.error('Corrija os campos destacados.')
       return
     }
     try {
       await repository.updateTargets(indicator.id, year, values.map(parseValue), user, note)
-      toast({ title: 'Metas atualizadas com sucesso.' })
+      toast.info('Metas atualizadas com sucesso.')
       onSaved?.()
       onOpenChange(false)
     } catch (error) {
-      toast({ title: 'Não foi possível atualizar as metas.', description: error instanceof Error ? error.message : 'Erro desconhecido', variant: 'destructive' })
+      toast.error('Não foi possível atualizar as metas.', { description: error instanceof Error ? error.message : 'Erro desconhecido' })
     }
   }
 

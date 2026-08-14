@@ -29,7 +29,6 @@ import {
 } from '@/features/dashboard-loja/sections/owner-cockpit/ownerBase44Config'
 import { OwnerProvider } from '@/components/owner/OwnerContext'
 import ConsultantRequestModal from '@/components/owner/ConsultantRequestModal'
-import { Toaster as OwnerToaster } from '@/components/ui/toaster'
 import { ManagerTourLauncher } from '@/features/manager/onboarding/ManagerTourLauncher'
 
 type SubItem = {
@@ -421,7 +420,6 @@ export default function Layout() {
       <div className="h-dvh min-h-0 overflow-hidden">
         <LayoutContent />
         <ConsultantRequestModal />
-        <OwnerToaster />
       </div>
     </OwnerProvider>
   )

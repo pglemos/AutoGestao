@@ -112,6 +112,29 @@ describe('design tokens da sidebar', () => {
     expect(SIDEBAR.aside).not.toContain('shadow')
     expect(SIDEBAR.root).not.toContain('shadow')
   })
+
+  test('declara o estado pressed em todos os controles interativos', () => {
+    // FASE H 08.007 — hover e focus já existiam; pressed faltava. O feedback
+    // de toque/clique não pode depender só de cor, senão some em superfícies
+    // de status e em temas de alto contraste.
+    for (const key of ['item', 'nestedItem', 'groupTrigger', 'toggle', 'ctaButton'] as const) {
+      expect(SIDEBAR[key], key).toMatch(/\bactive:/)
+    }
+  })
+
+  test('controles em <button> declaram disabled sem depender só de opacity', () => {
+    // O goldênio documenta disabled herdado do Button. Só botões podem ser
+    // nativamente desabilitados; itens de navegação (Link) continuam clicáveis
+    // mesmo "em construção" (badge âmbar).
+    for (const key of ['groupTrigger', 'toggle', 'ctaButton'] as const) {
+      expect(SIDEBAR[key], key).toMatch(/disabled:opacity-\d+/)
+      expect(SIDEBAR[key], key).toMatch(/disabled:pointer-events-none/)
+    }
+    // Links não ganham disabled nativo — o shell nunca deve "desabilitar" um item.
+    for (const key of ['item', 'nestedItem'] as const) {
+      expect(SIDEBAR[key], key).not.toMatch(/disabled:/)
+    }
+  })
 })
 
 describe('consumidores do design system', () => {

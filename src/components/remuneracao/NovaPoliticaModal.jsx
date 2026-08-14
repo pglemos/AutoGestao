@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/atoms/Input";
+import { Label } from "@/components/atoms/Label";
+import { Select } from "@/components/atoms/Select";
+import { Switch } from "@/components/atoms/Switch";
 import { base44 } from "@/api/base44Client";
 
 const TIPOS_COMISSAO = [
@@ -89,20 +89,14 @@ export default function NovaPoliticaModal({ open, onClose, onSaved, me }) {
           </div>
           <div>
             <Label>Tipo de comissão *</Label>
-            <Select value={form.tipo_comissao} onValueChange={v => set("tipo_comissao", v)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                {TIPOS_COMISSAO.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
-              </SelectContent>
+            <Select value={form.tipo_comissao} onChange={e => set("tipo_comissao", e.target.value)} aria-label="Tipo de comissão">
+              {TIPOS_COMISSAO.map(t => <option key={t} value={t}>{t}</option>)}
             </Select>
           </div>
           <div>
             <Label>Período de apuração *</Label>
-            <Select value={form.periodo_apuracao} onValueChange={v => set("periodo_apuracao", v)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                {PERIODOS.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
-              </SelectContent>
+            <Select value={form.periodo_apuracao} onChange={e => set("periodo_apuracao", e.target.value)} aria-label="Período de apuração">
+              {PERIODOS.map(p => <option key={p} value={p}>{p}</option>)}
             </Select>
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -117,11 +111,8 @@ export default function NovaPoliticaModal({ open, onClose, onSaved, me }) {
           </div>
           <div>
             <Label>Status</Label>
-            <Select value={form.status} onValueChange={v => set("status", v)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                {STATUS_OPTS.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-              </SelectContent>
+            <Select value={form.status} onChange={e => set("status", e.target.value)} aria-label="Status">
+              {STATUS_OPTS.map(s => <option key={s} value={s}>{s}</option>)}
             </Select>
           </div>
           {form.tipo_comissao === "Comissão por faixa de volume" && (

@@ -1,5 +1,6 @@
 import React from "react";
 import { Trophy } from "lucide-react";
+import { chartTokens } from "@/lib/charts/tokens"
 
 function Avatar({ nome, foto, size = 64, border = "" }) {
   const initials = nome ? nome.split(" ").map(n => n[0]).slice(0, 2).join("").toUpperCase() : "?";
@@ -8,8 +9,8 @@ function Avatar({ nome, foto, size = 64, border = "" }) {
       className={`rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 ${border}`}
       style={{
         width: size, height: size, minWidth: size,
-        background: "linear-gradient(135deg, #00A896, #005BFF)",
-        border: border ? undefined : "3px solid #e2e8f0",
+        background: `linear-gradient(135deg, ${chartTokens.success()}, ${chartTokens.info()})`,
+        border: border ? undefined : `3px solid ${chartTokens.grid()}`,
         fontSize: size * 0.32,
       }}
     >
@@ -51,10 +52,10 @@ export default function PodioRanking({ top3, isVolume }) {
               {pos === 1 && (
                 <Trophy className="w-6 h-6 mb-0.5" style={{ color: "#F59E0B", filter: "drop-shadow(0 0 6px rgba(245,158,11,0.5))" }} fill="currentColor" />
               )}
-              <Avatar nome={v.nome} foto={v.foto} size={pos === 1 ? 68 : 56} border={pos === 1 ? "4px solid #F59E0B" : "3px solid #e2e8f0"} />
+              <Avatar nome={v.nome} foto={v.foto} size={pos === 1 ? 68 : 56} border={pos === 1 ? `4px solid ${chartTokens.warning()}` : `3px solid ${chartTokens.grid()}`} />
               <div className="text-center mt-1">
                 <p className="text-body-sm font-bold text-foreground leading-tight">{v.nome?.split(" ")[0]}</p>
-                <p className="text-caption font-semibold" style={{ color: "#00A896" }}>{formatValue(isVolume ? v.vendas : v.faturamento, isVolume)}</p>
+                <p className="text-caption font-semibold" style={{ color: chartTokens.success() }}>{formatValue(isVolume ? v.vendas : v.faturamento, isVolume)}</p>
               </div>
               <div className="relative rounded-t-md flex items-center justify-center w-16 sm:w-20" style={{ height, background: bg }}>
                 <span className="text-white font-bold text-xl drop-shadow">{label}</span>

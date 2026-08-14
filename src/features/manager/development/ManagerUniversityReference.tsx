@@ -28,6 +28,7 @@ import {
 import { useFocusTrap } from '@/hooks/useFocusTrap'
 import { ContentSuggestionDialog } from '@/features/universidade/components/ContentSuggestionDialog'
 import { PageCanvas } from '@/design-system/page'
+import { ScrollableRegion } from '@/design-system/page/ScrollableRegion'
 
 type Trainings = ReturnType<typeof useTrainings>['treinamentos']
 type TeamProgress = ReturnType<typeof useTeamTrainings>['teamProgress']
@@ -648,7 +649,7 @@ function UniversityTeamTable({
 
   const hasOfficialContent = allTrainings.length > 0
   return (
-    <div className="overflow-x-auto rounded-2xl border border-border-subtle bg-white shadow-sm">
+    <ScrollableRegion axis="horizontal" label="Progresso dos treinamentos" className="rounded-2xl border border-border-subtle bg-white shadow-sm">
       <table className="w-full min-w-[820px] text-sm">
         <thead className="border-b border-border-subtle bg-surface-alt">
           <tr>
@@ -733,7 +734,7 @@ function UniversityTeamTable({
           })}
         </tbody>
       </table>
-    </div>
+    </ScrollableRegion>
   )
 }
 

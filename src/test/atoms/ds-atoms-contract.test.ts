@@ -8,6 +8,7 @@ const read = (name: string) => readFileSync(resolve(root, 'src/components/atoms'
 /** Átomos criados sobre a arquitetura de tokens (§9.1). */
 const DS_ATOMS = [
   'Checkbox.tsx',
+  'Combobox.tsx',
   'Divider.tsx',
   'IconButton.tsx',
   'Kbd.tsx',

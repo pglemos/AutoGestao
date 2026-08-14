@@ -1,9 +1,8 @@
 import { secondaryAlerts } from "./homeData";
 import { AlertCircle, ChevronRight } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from '@/lib/toast'
 
 export default function SecondaryAlerts() {
-  const { toast } = useToast();
 
   return (
     <section className="rounded-2xl border border-border bg-card p-5 shadow-sm">
@@ -34,7 +33,7 @@ export default function SecondaryAlerts() {
         ))}
       </div>
       <button
-        onClick={() => toast({ title: "Alertas", description: "Consulte os alertas reais na Visão Geral do Dono." })}
+        onClick={() => toast.info("Alertas", { description: "Consulte os alertas reais na Visão Geral do Dono." })}
         className="mt-3 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
       >
         Ver todos os alertas

@@ -1,6 +1,7 @@
 import React from "react";
 import { Trophy } from "lucide-react";
 import { ScrollableRegion } from '@/design-system/page/ScrollableRegion';
+import { chartTokens } from "@/lib/charts/tokens"
 
 const MEDAL = [
   { color: "#F59E0B", bg: "#FEF3C7" },
@@ -15,7 +16,7 @@ function Avatar({ nome, foto, size = 32 }) {
       className="rounded-full flex items-center justify-center font-bold text-white flex-shrink-0"
       style={{
         width: size, height: size, minWidth: size,
-        background: "linear-gradient(135deg,#00A896,#005BFF)",
+        background: `linear-gradient(135deg,${chartTokens.success()},${chartTokens.info()})`,
         fontSize: size * 0.35,
       }}
     >
@@ -57,7 +58,7 @@ export default function TabelaRanking({ vendedores, meta, isVolume, meuId }) {
                 <tr
                   key={v.id}
                   className={`border-b border-border-subtle transition-colors ${isMe ? "bg-status-info-surface/60" : "hover:bg-surface-alt/50"}`}
-                  style={isMe ? { outline: "1.5px solid #3b82f6", outlineOffset: "-1px" } : {}}
+                  style={isMe ? { outline: `1.5px solid ${chartTokens.info()}`, outlineOffset: "-1px" } : {}}
                 >
                   {/* Posição */}
                   <td className="px-4 py-3">

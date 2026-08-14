@@ -1,5 +1,6 @@
 import { Trophy } from 'lucide-react'
 import { RankingAvatar } from './RankingAvatar'
+import { ScrollableRegion } from '@/design-system/page/ScrollableRegion'
 import type { RankedVendedor } from '../../hooks/useStoreRankingPageData'
 
 const MEDAL = [
@@ -24,7 +25,7 @@ type Props = {
 export function TabelaRanking({ vendedores, meta, meuId }: Props) {
   return (
     <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
-      <div className="overflow-x-auto">
+      <ScrollableRegion axis="horizontal" label="Classificação dos vendedores" className="">
         <table className="w-full min-w-[640px]">
           <thead>
             <tr className="bg-surface-alt border-b border-border-subtle">
@@ -84,7 +85,7 @@ const pct = vendedorMeta > 0 ? Math.round((v.vendas / vendedorMeta) * 100) : 0
             Nenhum dado encontrado para os filtros selecionados.
           </div>
         )}
-      </div>
+      </ScrollableRegion>
     </div>
   )
 }

@@ -287,7 +287,7 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
           )}
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto overflow-y-hidden" role="region" tabIndex={0} aria-label="Acompanhamento diário da equipe com rolagem horizontal">
           <table className="w-full min-w-[1120px] text-sm">
             <thead className="border-b border-border-subtle bg-surface-alt">
               <tr>

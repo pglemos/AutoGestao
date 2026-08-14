@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import StatusBadge from "@/components/owner/StatusBadge";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/atoms/Badge";
 import { formatBRL, formatDate, relativeDayLabel } from "@/features/owner/lib/ownerFormatters";
 import { IMPACT_LABELS, DEPARTMENT_LABELS } from "@/features/owner/lib/ownerStatus";
 import { Clock, Tag, Building, Flag, Lightbulb, UserCircle } from "lucide-react";

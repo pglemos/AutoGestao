@@ -1,6 +1,6 @@
 // Aba Execução do drawer — progresso, checklist, comentários, bloqueios.
 import { useState } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from '@/lib/toast'
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,7 +9,6 @@ import { actionPlanLiveRepository } from "../actionPlanLiveRepository";
 import { getExecutionQuickActions, shouldShowProgressEditor } from "../actionPlanUiUtils";
 
 export default function ExecutionTab({ action, onReload, onQuickAction, user }) {
-  const { toast } = useToast();
   const [newChecklistText, setNewChecklistText] = useState("");
   const [newChecklistRequired, setNewChecklistRequired] = useState(false);
   const [newComment, setNewComment] = useState("");
@@ -28,7 +27,7 @@ export default function ExecutionTab({ action, onReload, onQuickAction, user }) 
       setNewChecklistRequired(false);
       await onReload();
     } catch (error) {
-      toast({ title: "Não foi possível adicionar o item.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+      toast.error("Não foi possível adicionar o item.", { description: error instanceof Error ? error.message : "Erro desconhecido" });
     }
   };
 
@@ -37,7 +36,7 @@ export default function ExecutionTab({ action, onReload, onQuickAction, user }) 
       await actionPlanLiveRepository.updateChecklistItem(action.id, itemId, { done: !done });
       await onReload();
     } catch (error) {
-      toast({ title: "Não foi possível atualizar o checklist.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+      toast.error("Não foi possível atualizar o checklist.", { description: error instanceof Error ? error.message : "Erro desconhecido" });
     }
   };
 
@@ -46,7 +45,7 @@ export default function ExecutionTab({ action, onReload, onQuickAction, user }) 
       await actionPlanLiveRepository.removeChecklistItem(action.id, itemId);
       await onReload();
     } catch (error) {
-      toast({ title: "Não foi possível remover o item.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+      toast.error("Não foi possível remover o item.", { description: error instanceof Error ? error.message : "Erro desconhecido" });
     }
   };
 
@@ -63,7 +62,7 @@ export default function ExecutionTab({ action, onReload, onQuickAction, user }) 
       setEditingId(null);
       await onReload();
     } catch (error) {
-      toast({ title: "Não foi possível editar o item.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+      toast.error("Não foi possível editar o item.", { description: error instanceof Error ? error.message : "Erro desconhecido" });
     }
   };
 
@@ -74,7 +73,7 @@ export default function ExecutionTab({ action, onReload, onQuickAction, user }) 
       setNewComment("");
       await onReload();
     } catch (error) {
-      toast({ title: "Não foi possível adicionar o comentário.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+      toast.error("Não foi possível adicionar o comentário.", { description: error instanceof Error ? error.message : "Erro desconhecido" });
     }
   };
 

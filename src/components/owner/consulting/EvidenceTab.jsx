@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { consultingRepository } from "./consultingRepository";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from '@/lib/toast'
 
 const EVIDENCE_STATUS = {
   pending: { label: "Pendente", tone: "text-muted-foreground bg-muted" },
@@ -17,7 +17,6 @@ const EVIDENCE_STATUS = {
 };
 
 export default function EvidenceTab({ meeting, user }) {
-  const { toast } = useToast();
   const [templates] = useState(consultingRepository.getEvidenceTemplates(meeting.id));
   const [evidences, setEvidences] = useState(consultingRepository.getEvidences(meeting.id));
   const [viewing, setViewing] = useState(null);
@@ -54,25 +53,25 @@ export default function EvidenceTab({ meeting, user }) {
       });
     }
     refresh();
-    toast({ title: "Evidência enviada", description: file.name });
+    toast.info("Evidência enviada", { description: file.name });
     e.target.value = "";
   };
 
   const handleRemoveEvidence = (evidenceId) => {
     consultingRepository.removeEvidence(meeting.id, evidenceId);
     refresh();
-    toast({ title: "Evidência removida" });
+    toast.info("Evidência removida");
   };
 
   const handleResend = (evidenceId) => {
     consultingRepository.updateEvidence(meeting.id, evidenceId, { status: "sent" });
     refresh();
-    toast({ title: "Evidência reenviada" });
+    toast.info("Evidência reenviada");
   };
 
   const handleAddCustom = () => {
     if (!customName.trim()) {
-      toast({ title: "Informe um nome para a evidência", variant: "destructive" });
+      toast.error("Informe um nome para a evidência");
       return;
     }
     consultingRepository.addEvidence(meeting.id, {
@@ -86,7 +85,7 @@ export default function EvidenceTab({ meeting, user }) {
     setShowAddCustom(false);
     setCustomName("");
     setCustomNote("");
-    toast({ title: "Evidência adicionada" });
+    toast.info("Evidência adicionada");
   };
 
   const customEvidences = evidences.filter((e) => !e.evidenceTemplateId);

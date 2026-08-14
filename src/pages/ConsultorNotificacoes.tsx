@@ -141,7 +141,7 @@ export default function ConsultorNotificacoes() {
                                             <Typography variant="caption" tone="muted" className="ml-2">Nível Hierárquico</Typography>
                                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-mx-xs">
                                                 {NOTIFICATION_TARGET_ROLES.map(role => (
-                                                    <Button key={role} type="button" variant={form.target_role === role ? 'secondary' : 'outline'} onClick={() => setForm(p => ({ ...p, target_role: role }))} className="h-mx-10 rounded-2xl text-label font-bold px-0">{role}</Button>
+                                                    <Button key={role} type="button" variant="outline" onClick={() => setForm(p => ({ ...p, target_role: role }))} className="h-mx-10 rounded-2xl text-label font-bold px-0">{role}</Button>
                                                 ))}
                                             </div>
                                         </div>

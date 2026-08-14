@@ -4,13 +4,15 @@ import { cn } from '@/lib/utils'
 
 /** Aparência única — sem variação por perfil (§8.5). */
 const selectVariants = cva(
-  'h-10 w-full appearance-none rounded-[var(--mx-input-radius)] border bg-white py-2 pl-3 pr-10 text-sm font-normal text-foreground outline-none transition disabled:cursor-not-allowed disabled:bg-surface-alt disabled:text-muted-foreground',
+  'h-[var(--mx-input-height)] w-full appearance-none rounded-[var(--mx-input-radius)] border bg-surface-default py-2 pl-3 pr-10 text-sm font-normal text-text-primary outline-none transition disabled:cursor-not-allowed disabled:bg-surface-alt disabled:text-text-disabled',
   {
     variants: {
       variant: {
-        default: 'border-border focus:border-status-success focus:ring-2 focus:ring-status-success/20',
-        error: 'border-status-error/40 focus:border-status-error focus:ring-2 focus:ring-status-error/20',
-        ghost: 'border-transparent bg-transparent focus:ring-0',
+        default:
+          'border-border focus-visible:border-primary focus-visible:ring-[length:var(--mx-input-focus-ring-width)] focus-visible:ring-focus-ring/25',
+        error:
+          'border-status-error/40 focus-visible:border-status-error focus-visible:ring-[length:var(--mx-input-focus-ring-width)] focus-visible:ring-status-error/20',
+        ghost: 'border-transparent bg-transparent focus-visible:ring-0',
       },
     },
     defaultVariants: { variant: 'default' },
@@ -38,7 +40,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         >
           {children}
         </select>
-        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground">
+        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-text-secondary">
           <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
@@ -50,7 +52,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
       return (
         <div className="w-full space-y-2">
           <label htmlFor={fieldId} className="block">
-            <span className="text-sm font-medium text-muted-foreground">{label}</span>
+            <span className="text-sm font-medium text-text-primary">{label}</span>
           </label>
           {selectElement}
         </div>

@@ -21,10 +21,10 @@ export const DISPLAY_MODES = [
 
 export const AREA_STYLES = {
   Vendas: { bg: "bg-status-info-surface", text: "text-status-info-text", iconBg: "bg-status-info-surface text-status-info-text", dot: "bg-status-info", border: "border-status-info/30", hex: chartTokens.info(), lightBg: "bg-status-info-surface/50" },
-  Marketing: { bg: "bg-status-info-surface", text: "text-status-info-text", iconBg: "bg-status-info-surface text-status-info-text", dot: "bg-status-info", border: "border-status-info/30", hex: "#4F46E5", lightBg: "bg-status-info-surface/50" },
-  Estoque: { bg: "bg-status-info-surface", text: "text-status-info-text", iconBg: "bg-status-info-surface text-status-info-text", dot: "bg-status-info", border: "border-status-info/30", hex: "#2563EB", lightBg: "bg-status-info-surface/50" },
-  Financeiro: { bg: "bg-status-success-surface", text: "text-status-success-text", iconBg: "bg-status-success-surface text-status-success-text", dot: "bg-status-success", border: "border-status-success/30", hex: "#16A34A", lightBg: "bg-status-success-surface/50" },
-  Operacional: { bg: "bg-status-warning-surface", text: "text-status-warning-text", iconBg: "bg-status-warning-surface text-status-warning-text", dot: "bg-status-warning", border: "border-status-warning/30", hex: "#F97316", lightBg: "bg-status-warning-surface/50" },
+  Marketing: { bg: "bg-status-info-surface", text: "text-status-info-text", iconBg: "bg-status-info-surface text-status-info-text", dot: "bg-status-info", border: "border-status-info/30", hex: chartTokens.series.s4(), lightBg: "bg-status-info-surface/50" },
+  Estoque: { bg: "bg-status-info-surface", text: "text-status-info-text", iconBg: "bg-status-info-surface text-status-info-text", dot: "bg-status-info", border: "border-status-info/30", hex: chartTokens.info(), lightBg: "bg-status-info-surface/50" },
+  Financeiro: { bg: "bg-status-success-surface", text: "text-status-success-text", iconBg: "bg-status-success-surface text-status-success-text", dot: "bg-status-success", border: "border-status-success/30", hex: chartTokens.success(), lightBg: "bg-status-success-surface/50" },
+  Operacional: { bg: "bg-status-warning-surface", text: "text-status-warning-text", iconBg: "bg-status-warning-surface text-status-warning-text", dot: "bg-status-warning", border: "border-status-warning/30", hex: chartTokens.warning(), lightBg: "bg-status-warning-surface/50" },
 };
 
 export const AREA_HEX = Object.fromEntries(

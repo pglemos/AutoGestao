@@ -84,7 +84,7 @@ export function NotificacoesTab() {
                     </div>
                     <Button
                         type="button"
-                        variant={push.subscribed ? 'secondary' : 'primary'}
+                        variant={push.subscribed ? 'outline' : 'primary'}
                         size="sm"
                         disabled={!push.supported || push.subscribing}
                         onClick={() => (push.subscribed ? push.unsubscribe() : push.subscribe())}

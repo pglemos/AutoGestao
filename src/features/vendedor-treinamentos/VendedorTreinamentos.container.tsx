@@ -11,7 +11,7 @@ import { supabase } from '@/lib/supabase'
 import { Card } from '@/components/molecules/Card'
 import { Typography } from '@/components/atoms/Typography'
 import PageHeaderBase from '@/components/ui/PageHeader'
-import LegacyStatCardBase from '@/components/ui/StatCard'
+import { StatCard } from '@/components/molecules/StatCard'
 import { Tabs, TabsContent as TabsContentBase, TabsList as TabsListBase, TabsTrigger as TabsTriggerBase } from '@/components/ui/tabs'
 import { Input as InputBase } from '@/components/ui/input'
 import { Select, SelectContent as SelectContentBase, SelectItem as SelectItemBase, SelectTrigger as SelectTriggerBase, SelectValue as SelectValueBase } from '@/components/ui/select'
@@ -44,14 +44,6 @@ const LEVEL_COLORS: Record<string, string> = {
 // Os componentes visuais legados são JavaScript e não expõem props TypeScript.
 // Os aliases mantêm o layout anterior tipado sem alterar os componentes globais.
 const PageHeader = PageHeaderBase as ComponentType<{ title: string; subtitle?: string; children?: ReactNode }>
-const LegacyStatCard = LegacyStatCardBase as ComponentType<{
-    label: string
-    value: ReactNode
-    sublabel?: string
-    icon?: ComponentType<{ className?: string }>
-    color?: string
-    children?: ReactNode
-}>
 const TabsList = TabsListBase as ComponentType<PropsWithChildren<{ className?: string }>>
 const TabsTrigger = TabsTriggerBase as ComponentType<PropsWithChildren<{ value: string; className?: string }>>
 const TabsContent = TabsContentBase as ComponentType<PropsWithChildren<{ value: string; className?: string }>>
@@ -220,11 +212,11 @@ export default function VendedorTreinamentosContainer() {
             </PageHeader>
 
             <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-                <LegacyStatCard label="Minha Trilha" value={nivelMaturidade} sublabel={nivelMaturidadeLabel} icon={Star} color="blue" />
-                <LegacyStatCard label="Progresso" value={`${progressoPercent}%`} icon={BarChart3} color="green" />
-                <LegacyStatCard label="Aulas Concluídas" value={completedCount} icon={CheckCircle2} color="blue" />
-                <LegacyStatCard label="Tarefas Concluídas" value={totalTarefasConcluidas} icon={ClipboardCheck} color="amber" />
-                <LegacyStatCard label="Conteúdos Disponíveis" value={trainings.length} icon={BookOpen} color="navy" />
+                <StatCard label="Minha Trilha" value={nivelMaturidade} detail={nivelMaturidadeLabel} icon={<Star />} tone="blue" />
+                <StatCard label="Progresso" value={`${progressoPercent}%`} icon={<BarChart3 />} tone="green" />
+                <StatCard label="Aulas Concluídas" value={completedCount} icon={<CheckCircle2 />} tone="blue" />
+                <StatCard label="Tarefas Concluídas" value={totalTarefasConcluidas} icon={<ClipboardCheck />} tone="orange" />
+                <StatCard label="Conteúdos Disponíveis" value={trainings.length} icon={<BookOpen />} tone="brand" />
             </div>
 
             <Tabs value={tab} onValueChange={value => setTab(value as TabKey)} className="w-full">

@@ -3,7 +3,20 @@ import { describe, expect, it } from 'bun:test'
 import {
   buildActionUpdatePatch,
   mapLiveAction,
+  uniqueResponsiblePeople,
 } from '../components/owner/actionplan/actionPlanLiveRepository.js'
+
+describe('uniqueResponsiblePeople', () => {
+  it('deduplicates names while preserving the database order', () => {
+    expect(uniqueResponsiblePeople([
+      { name: 'Ana Souza' },
+      { name: 'Bruno Lima' },
+      { name: 'Ana Souza' },
+      { name: null },
+      { name: 'Bruno Lima' },
+    ])).toEqual(['Ana Souza', 'Bruno Lima'])
+  })
+})
 
 describe('mapLiveAction', () => {
   it('preserves a persisted blocked status instead of treating it as late', () => {

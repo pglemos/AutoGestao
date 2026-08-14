@@ -3,7 +3,7 @@ import { ChevronDown, ChevronRight, History, RotateCcw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { MONTHS } from './strategicUtils'
 import { formatDateTime } from '@/features/owner/lib/ownerFormatters'
-import { useToast } from '@/components/ui/use-toast'
+import { toast } from '@/lib/toast'
 import { useAuth } from '@/features/owner/lib/ownerAuth'
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
@@ -11,7 +11,6 @@ import {
 } from '@/components/ui/alert-dialog'
 
 export default function TargetHistoryPanel({ repository, indicatorId, year, onRestored }) {
-  const { toast } = useToast()
   const { user } = useAuth()
   const [open, setOpen] = useState(false)
   const [history, setHistory] = useState([])
@@ -23,12 +22,12 @@ export default function TargetHistoryPanel({ repository, indicatorId, year, onRe
   const restore = async id => {
     try {
       await repository.restoreHistoryVersion(id, user)
-      toast({ title: 'Versão restaurada com sucesso.' })
+      toast.info('Versão restaurada com sucesso.')
       setConfirmId(null)
       load()
       onRestored?.()
     } catch (error) {
-      toast({ title: 'Não foi possível restaurar a versão.', description: error instanceof Error ? error.message : 'Erro desconhecido', variant: 'destructive' })
+      toast.error('Não foi possível restaurar a versão.', { description: error instanceof Error ? error.message : 'Erro desconhecido' })
       setConfirmId(null)
     }
   }

@@ -1,7 +1,7 @@
 import { useOwner } from "@/components/owner/OwnerContext";
 import { PHASE_LABELS } from "@/features/owner/lib/ownerStatus";
 import { greetingByHour, formatDate, formatDateTime } from "@/features/owner/lib/ownerFormatters";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/atoms/Badge";
 import { Sparkles, UserCircle, CalendarClock, RefreshCcw } from "lucide-react";
 
 export default function StrategicContextBlock({ cycle }) {

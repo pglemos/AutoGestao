@@ -1,6 +1,6 @@
 // Container principal da aba Ações — Kanban e tabela detalhada.
 import { useState } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from '@/lib/toast'
 import { actionPlanLiveRepository } from "../actionPlanLiveRepository";
 import { exportActionsCSV } from "../exportActions";
 import { Button } from "@/components/ui/button";
@@ -25,7 +25,6 @@ export default function BoardView({
   onReload,
   responsiblePeople = [],
 }) {
-  const { toast } = useToast();
   const [selectedIds, setSelectedIds] = useState([]);
 
   const toggleSelect = (id) => {
@@ -42,22 +41,22 @@ export default function BoardView({
   const handleBatchResponsible = async (responsible) => {
     try {
       await actionPlanLiveRepository.batchUpdate(selectedIds, { responsible });
-      toast({ title: `${selectedIds.length} ação(ões) atualizada(s).` });
+      toast.info(`${selectedIds.length} ação(ões) atualizada(s).`);
       setSelectedIds([]);
       await onReload();
     } catch (error) {
-      toast({ title: "Não foi possível atualizar as ações.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+      toast.error("Não foi possível atualizar as ações.", { description: error instanceof Error ? error.message : "Erro desconhecido" });
     }
   };
 
   const handleBatchPriority = async (priority) => {
     try {
       await actionPlanLiveRepository.batchUpdate(selectedIds, { priority });
-      toast({ title: `${selectedIds.length} ação(ões) atualizada(s).` });
+      toast.info(`${selectedIds.length} ação(ões) atualizada(s).`);
       setSelectedIds([]);
       await onReload();
     } catch (error) {
-      toast({ title: "Não foi possível atualizar as ações.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+      toast.error("Não foi possível atualizar as ações.", { description: error instanceof Error ? error.message : "Erro desconhecido" });
     }
   };
 
@@ -66,18 +65,18 @@ export default function BoardView({
     if (!dueDate) return;
     try {
       await actionPlanLiveRepository.batchUpdate(selectedIds, { dueDate });
-      toast({ title: `${selectedIds.length} ação(ões) atualizada(s).` });
+      toast.info(`${selectedIds.length} ação(ões) atualizada(s).`);
       setSelectedIds([]);
       await onReload();
     } catch (error) {
-      toast({ title: "Não foi possível atualizar as ações.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+      toast.error("Não foi possível atualizar as ações.", { description: error instanceof Error ? error.message : "Erro desconhecido" });
     }
   };
 
   const handleExportSelected = () => {
     const selected = actions.filter((a) => selectedIds.includes(a.id));
     exportActionsCSV(selected);
-    toast({ title: "Exportação concluída." });
+    toast.info("Exportação concluída.");
   };
 
   const handleRequestUpdate = async () => {
@@ -86,11 +85,11 @@ export default function BoardView({
         author: user?.full_name || "Nome não informado",
         content: "Solicito atualização do status e progresso desta ação.",
       })));
-      toast({ title: `${selectedIds.length} solicitação(ões) enviada(s).` });
+      toast.info(`${selectedIds.length} solicitação(ões) enviada(s).`);
       setSelectedIds([]);
       await onReload();
     } catch (error) {
-      toast({ title: "Não foi possível solicitar atualização.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+      toast.error("Não foi possível solicitar atualização.", { description: error instanceof Error ? error.message : "Erro desconhecido" });
     }
   };
 

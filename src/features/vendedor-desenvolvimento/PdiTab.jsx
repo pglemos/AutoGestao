@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import PageHeader from "@/components/ui/PageHeader";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/atoms/Input";
+import { Label } from "@/components/atoms/Label";
+import { Textarea } from "@/components/atoms/Textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -15,6 +15,7 @@ import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Responsi
 import { useAuth } from "@/hooks/useAuth";
 import { canManagePDI } from "@/lib/auth/capabilities";
 import { ScrollableRegion } from "@/design-system/page/ScrollableRegion";
+import { chartTokens } from "@/lib/charts/tokens";
 
 const techCompetencies = [
   { key: "tech_planejamento", label: "Planejamento" },
@@ -184,11 +185,11 @@ export default function PDIPage({ hideHeader = false }) {
           <div className="h-64 mb-6 w-full min-w-0">
             <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={256} initialDimension={{ width: 320, height: 256 }}>
               <RadarChart data={techData}>
-                <PolarGrid stroke="#e2e8f0" />
-                <PolarAngleAxis dataKey="subject" tick={{ fontSize: 10, fill: '#64748b' }} />
+                <PolarGrid stroke={chartTokens.grid()} />
+                <PolarAngleAxis dataKey="subject" tick={{ fontSize: 10, fill: chartTokens.axisTick() }} />
                 <PolarRadiusAxis angle={30} domain={[0, 10]} tick={{ fontSize: 10 }} />
-                <Radar name="Atual" dataKey="value" stroke="#005BFF" fill="#005BFF" fillOpacity={0.2} />
-                <Radar name="Alvo" dataKey="target" stroke="#22C55E" fill="#22C55E" fillOpacity={0.05} strokeDasharray="5 5" />
+                <Radar name="Atual" dataKey="value" stroke={chartTokens.info()} fill={chartTokens.info()} fillOpacity={0.2} />
+                <Radar name="Alvo" dataKey="target" stroke={chartTokens.success()} fill={chartTokens.success()} fillOpacity={0.05} strokeDasharray="5 5" />
               </RadarChart>
             </ResponsiveContainer>
           </div>
@@ -216,11 +217,11 @@ export default function PDIPage({ hideHeader = false }) {
           <div className="h-64 mb-6 w-full min-w-0">
             <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={256} initialDimension={{ width: 320, height: 256 }}>
               <RadarChart data={behavData}>
-                <PolarGrid stroke="#e2e8f0" />
-                <PolarAngleAxis dataKey="subject" tick={{ fontSize: 10, fill: '#64748b' }} />
+                <PolarGrid stroke={chartTokens.grid()} />
+                <PolarAngleAxis dataKey="subject" tick={{ fontSize: 10, fill: chartTokens.axisTick() }} />
                 <PolarRadiusAxis angle={30} domain={[0, 10]} tick={{ fontSize: 10 }} />
-                <Radar name="Atual" dataKey="value" stroke="#F59E0B" fill="#F59E0B" fillOpacity={0.2} />
-                <Radar name="Alvo" dataKey="target" stroke="#22C55E" fill="#22C55E" fillOpacity={0.05} strokeDasharray="5 5" />
+                <Radar name="Atual" dataKey="value" stroke={chartTokens.warning()} fill={chartTokens.warning()} fillOpacity={0.2} />
+                <Radar name="Alvo" dataKey="target" stroke={chartTokens.success()} fill={chartTokens.success()} fillOpacity={0.05} strokeDasharray="5 5" />
               </RadarChart>
             </ResponsiveContainer>
           </div>

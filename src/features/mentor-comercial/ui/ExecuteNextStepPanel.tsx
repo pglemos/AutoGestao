@@ -22,7 +22,7 @@ import {
   SheetDescription,
 } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
+import { Badge } from '@/components/atoms/Badge'
 import {
   useExecuteNextStep,
   type OpportunityData,

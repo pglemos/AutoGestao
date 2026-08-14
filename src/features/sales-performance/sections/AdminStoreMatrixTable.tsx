@@ -1,6 +1,7 @@
 import { Eye } from 'lucide-react'
 import { Badge } from '@/components/atoms/Badge'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/molecules/Card'
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/molecules/Card'
+import { ScrollableRegion } from '@/design-system/page/ScrollableRegion'
 import { formatNumber, formatPercent, shortDate } from '../data/formatters'
 import type { NetworkMetrics } from '../data/types'
 
@@ -38,7 +39,7 @@ export function AdminStoreMatrixTable({ metrics, onStoreClick }: Props) {
           {metrics.byStore.length} linhas
         </Badge>
       </CardHeader>
-      <CardContent className="p-mx-0 overflow-x-auto">
+      <ScrollableRegion axis="horizontal" label="Matriz completa de lojas" className="p-mx-0">
         <table className="w-full text-left" style={{ minWidth: 960 }}>
           <thead className="bg-surface-alt/60 border-y border-border-subtle">
             <tr>
@@ -106,7 +107,7 @@ export function AdminStoreMatrixTable({ metrics, onStoreClick }: Props) {
             ))}
           </tbody>
         </table>
-      </CardContent>
+      </ScrollableRegion>
     </Card>
   )
 }

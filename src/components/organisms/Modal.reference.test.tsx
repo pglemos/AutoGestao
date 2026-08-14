@@ -13,7 +13,7 @@ describe("Modal referenceStyle", () => {
   beforeEach(() => cleanup());
   afterEach(() => cleanup());
 
-  test("expõe o shell visual Base44 sem blur", () => {
+  test("expõe a superfície canônica sem geometria paralela", () => {
     render(
       <Modal
         open
@@ -30,11 +30,9 @@ describe("Modal referenceStyle", () => {
     const overlay = document.querySelector('[data-reference-overlay="true"]');
 
     expect(dialog.getAttribute("data-reference-modal")).toBe("true");
-    expect(dialog.className).toContain("rounded-2xl");
-    expect(dialog.className).toContain("shadow-xl");
+    expect(dialog.className).toContain("mx-overlay-surface");
     expect(overlay).toBeTruthy();
-    expect(overlay?.className).toContain("bg-surface-overlay/30");
-    expect(overlay?.className).not.toContain("backdrop-blur");
+    expect(overlay?.className).toContain("mx-overlay-backdrop");
 
     const title = screen.getByRole("heading", { name: "Agenda D+1" });
     expect(title.className).toContain("text-lg");

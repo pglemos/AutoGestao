@@ -1,8 +1,17 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from 'bun:test'
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import type { FeedbackListItem } from '@/features/gerente-feedback/lib/helpers'
 import { Modal } from '@/components/organisms/Modal'
 import { DevelopmentTeamCompetencyMap } from './DevelopmentTeamCompetencyMap'
+
+/**
+ * Flake conhecido (story-OPS): timeouts de foco/cleanup em execuções cheias.
+ * O Modal restaura o foco via `requestAnimationFrame` no `onCloseAutoFocus`; sob
+ * carga, o `waitFor` default (1s) estoura. Endurecemos com timeout explícito e
+ * envolvemos as transições em `act` para sincronizar efeitos/RAF antes da
+ * asserção. Nenhuma mudança no componente.
+ */
+const FOCUS_TIMEOUT = 5000
 
 const resetDom = () => {
   cleanup()
@@ -50,27 +59,33 @@ describe('Desenvolvimento manager dialogs', () => {
     document.body.appendChild(trigger)
     trigger.focus()
 
-    const { rerender } = render(
-      <Modal open onClose={onClose} title="Detalhes do feedback" description={feedback.seller_name} referenceStyle>
-        <p>{feedback.positives}</p>
-        <p>{feedback.attention_points}</p>
-        <p>{feedback.action}</p>
-      </Modal>,
-    )
+    let rerender: ReturnType<typeof render>['rerender']
+    await act(async () => {
+      const view = render(
+        <Modal open onClose={onClose} title="Detalhes do feedback" description={feedback.seller_name} referenceStyle>
+          <p>{feedback.positives}</p>
+          <p>{feedback.attention_points}</p>
+          <p>{feedback.action}</p>
+        </Modal>,
+      )
+      rerender = view.rerender
+    })
     const close = screen.getByRole('button', { name: 'Fechar modal' })
-    await waitFor(() => expect(document.activeElement).toBe(close))
+    await waitFor(() => expect(document.activeElement).toBe(close), { timeout: FOCUS_TIMEOUT })
 
     fireEvent.keyDown(close, { key: 'Escape' })
     expect(onClose).toHaveBeenCalledTimes(1)
 
-    rerender(
-      <Modal open={false} onClose={onClose} title="Detalhes do feedback" description={feedback.seller_name} referenceStyle>
-        <p>{feedback.positives}</p>
-        <p>{feedback.attention_points}</p>
-        <p>{feedback.action}</p>
-      </Modal>,
-    )
-    await waitFor(() => expect(document.activeElement).toBe(trigger))
+    await act(async () => {
+      rerender(
+        <Modal open={false} onClose={onClose} title="Detalhes do feedback" description={feedback.seller_name} referenceStyle>
+          <p>{feedback.positives}</p>
+          <p>{feedback.attention_points}</p>
+          <p>{feedback.action}</p>
+        </Modal>,
+      )
+    })
+    await waitFor(() => expect(document.activeElement).toBe(trigger), { timeout: FOCUS_TIMEOUT })
   })
 
   test('prende foco, fecha por Escape e devolve foco no mapa da equipe', async () => {
@@ -80,14 +95,20 @@ describe('Desenvolvimento manager dialogs', () => {
     document.body.appendChild(trigger)
     trigger.focus()
 
-    const { rerender } = render(<DevelopmentTeamCompetencyMap open pdis={[]} onClose={onClose} />)
+    let rerender: ReturnType<typeof render>['rerender']
+    await act(async () => {
+      const view = render(<DevelopmentTeamCompetencyMap open pdis={[]} onClose={onClose} />)
+      rerender = view.rerender
+    })
     const close = screen.getByRole('button', { name: 'Fechar modal' })
-    await waitFor(() => expect(document.activeElement).toBe(close))
+    await waitFor(() => expect(document.activeElement).toBe(close), { timeout: FOCUS_TIMEOUT })
 
     fireEvent.keyDown(close, { key: 'Escape' })
     expect(onClose).toHaveBeenCalledTimes(1)
 
-    rerender(<DevelopmentTeamCompetencyMap open={false} pdis={[]} onClose={onClose} />)
-    await waitFor(() => expect(document.activeElement).toBe(trigger))
+    await act(async () => {
+      rerender(<DevelopmentTeamCompetencyMap open={false} pdis={[]} onClose={onClose} />)
+    })
+    await waitFor(() => expect(document.activeElement).toBe(trigger), { timeout: FOCUS_TIMEOUT })
   })
 })

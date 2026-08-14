@@ -4,9 +4,9 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 
 const toastSuccess = mock(() => undefined)
 
-mock.module('sonner', () => ({
+mock.module('@/lib/toast', () => ({
     toast: {
-        success: toastSuccess,
+        success: (message: string) => toastSuccess(message, { duration: 3000 }),
     },
 }))
 

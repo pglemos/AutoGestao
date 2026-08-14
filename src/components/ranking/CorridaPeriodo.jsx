@@ -1,5 +1,6 @@
 import React from "react";
 import { Flag } from "lucide-react";
+import { chartTokens } from "@/lib/charts/tokens"
 
 function Avatar({ nome, foto, isMe, size = 40 }) {
   const initials = nome ? nome.split(" ").map(n => n[0]).slice(0, 2).join("").toUpperCase() : "?";
@@ -8,8 +9,8 @@ function Avatar({ nome, foto, isMe, size = 40 }) {
       className={`rounded-full flex items-center justify-center font-bold text-white flex-shrink-0`}
       style={{
         width: size, height: size, minWidth: size,
-        background: isMe ? "linear-gradient(135deg,#3b82f6,#2563eb)" : "linear-gradient(135deg,#00A896,#005BFF)",
-        border: isMe ? "3px solid #3b82f6" : "3px solid #e2e8f0",
+        background: isMe ? `linear-gradient(135deg,${chartTokens.info()},${chartTokens.info()})` : `linear-gradient(135deg,${chartTokens.success()},${chartTokens.info()})`,
+        border: isMe ? `3px solid ${chartTokens.info()}` : `3px solid ${chartTokens.grid()}`,
         boxShadow: isMe ? "0 0 0 3px rgba(59,130,246,0.25)" : "none",
         fontSize: size * 0.35,
       }}

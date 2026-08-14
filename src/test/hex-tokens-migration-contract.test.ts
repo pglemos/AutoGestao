@@ -1,46 +1,48 @@
 import { describe, expect, test } from 'bun:test'
-import { execFileSync } from 'node:child_process'
+import { readdir, readFile } from 'node:fs/promises'
+import { join, resolve } from 'node:path'
 
 import { applyHexTokenRules } from '../../scripts/migrate-hex-tokens.mjs'
 
-describe('07.021 hex tokens migration (COMP-hex-tokens)', () => {
-  test('runtime has no arbitrary hex utilities outside exceptions', () => {
-    let matches = ''
-    try {
-      matches = execFileSync(
-        'rg',
-        [
-          '-l',
-          '(bg|text|border|ring|from|to|via|fill|stroke|shadow|outline|divide|decoration|accent|caret|placeholder|!bg|hover:bg|focus-visible:ring)-\\[#[0-9A-Fa-f]{6}\\]',
-          'src',
-          '--glob',
-          '*.{css,ts,tsx,js,jsx,mjs}',
-          '--glob',
-          '!**/base44-reference/**',
-          '--glob',
-          '!**/*.test.*',
-          '--glob',
-          '!**/*.spec.*',
-          '--glob',
-          '!**/*.playwright.*',
-          '--glob',
-          '!**/_stories/**',
-          '--glob',
-          '!**/design-system/tokens/**',
-          '--glob',
-          '!**/index.css',
-          '--glob',
-          '!**/WhatsApp*',
-          '--glob',
-          '!**/RetornoWhatsApp*',
-        ],
-        { encoding: 'utf8' },
-      ).trim()
-    } catch (error) {
-      if (error?.status !== 1) throw error
-    }
+const root = resolve(import.meta.dir, '..', '..')
 
-    expect(matches).toBe('')
+/**
+ * Varredura determinística do runtime (Node/Bun, sem child_process): o preload
+ * happy-dom do bun test intercepta o spawn e faria o gate passar cegamente.
+ * Escopo e exclusões espelham o guard 07.021 original.
+ */
+async function scanRuntimeClassNames(): Promise<Array<{ file: string; line: number }>> {
+  const hits: Array<{ file: string; line: number }> = []
+  const HEX_UTIL = /(?:^|\s)(?:!)?(?:bg|text|border|ring|from|to|via|fill|stroke|shadow|outline|divide|decoration|accent|caret|placeholder|hover:bg|focus-visible:ring|focus:ring)-\[#[0-9A-Fa-f]{6}\]/
+
+  async function walk(dir: string) {
+    const entries = await readdir(dir, { withFileTypes: true })
+    for (const entry of entries) {
+      const path = join(dir, entry.name)
+      if (entry.isDirectory()) {
+        if (entry.name === 'base44-reference' || entry.name === '_stories') continue
+        if (entry.name === 'node_modules') continue
+        await walk(path)
+        continue
+      }
+      if (!/\.(css|ts|tsx|js|jsx|mjs)$/.test(entry.name)) continue
+      if (/(\.test\.|\.spec\.|\.playwright\.)/.test(entry.name)) continue
+      if (path.includes('design-system/tokens') || path.endsWith('index.css')) continue
+      const content = await readFile(path, 'utf8')
+      content.split('\n').forEach((line, idx) => {
+        if (HEX_UTIL.test(line)) hits.push({ file: path, line: idx + 1 })
+      })
+    }
+  }
+
+  await walk(resolve(root, 'src'))
+  return hits.map((h) => ({ file: h.file.replace(resolve(root) + '/', ''), line: h.line }))
+}
+
+describe('07.021 hex tokens migration (COMP-hex-tokens)', () => {
+  test('runtime has no arbitrary hex utilities outside exceptions', async () => {
+    const hits = await scanRuntimeClassNames()
+    expect(hits).toEqual([])
   })
 
   test('maps the info-consultive hex to status-info', () => {

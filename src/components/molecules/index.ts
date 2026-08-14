@@ -6,6 +6,8 @@ export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
 export { ErrorState } from './ErrorState'
 export type { ErrorStateProps, ErrorKind } from './ErrorState'
 export { fieldBaseClasses, fieldInvalidClasses, nakedInputClasses } from './fieldStyles'
+export { Field } from './Field'
+export type { FieldProps, FieldControlProps } from './Field'
 export { FilterBar } from './FilterBar'
 export type { FilterBarProps } from './FilterBar'
 export { FilterChip } from './FilterChip'

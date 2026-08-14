@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from '@/lib/toast'
 import {
   X, CalendarDays, AlertTriangle, CheckCircle2, Store, Users, Globe, ShoppingCart,
   Plus, Pencil, Trash2, Star, Send
@@ -155,7 +155,6 @@ const EMPTY_FORM = {
 };
 
 function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange }) {
-  const { toast } = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingCliente, setEditingCliente] = useState(null);
   const [form, setForm] = useState(EMPTY_FORM);
@@ -210,18 +209,18 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
       if (editingCliente) {
         const updated = await base44.entities.CarteiraCliente.update(editingCliente.id, payload);
         onClientesChange(clientes.map(c => c.id === editingCliente.id ? { ...c, ...updated } : c));
-        toast({ title: "Alterações salvas." });
+        toast.info("Alterações salvas.");
       } else {
         const created = await base44.entities.CarteiraCliente.create({ ...payload, vendedor_id: currentUser?.id, canal_entrada: payload.canal_comercial, ativo: true });
         await base44.entities.CarteiraHistorico.create({ cliente_id: created.id, vendedor_id: currentUser?.id, tipo: "Cadastro via Regularização", descricao: `Cliente cadastrado na regularização de ${closingDate}.` }).catch(() => {});
         onClientesChange([...clientes, created]);
-        toast({ title: `${form.nome} cadastrado na Carteira.` });
+        toast.info(`${form.nome} cadastrado na Carteira.`);
       }
       setSaving(false);
       setDialogOpen(false);
     } catch {
       setSaving(false);
-      toast({ title: "Não foi possível salvar. Tente novamente." });
+      toast.info("Não foi possível salvar. Tente novamente.");
     }
   };
 
@@ -230,7 +229,7 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
     await base44.entities.CarteiraCliente.update(deleteConfirm.id, { ativo: false }).catch(() => {});
     onClientesChange(clientes.filter(c => c.id !== deleteConfirm.id));
     setDeleteConfirm(null);
-    toast({ title: "Registro removido." });
+    toast.info("Registro removido.");
   };
 
   const getSaleLabel = (c) => {

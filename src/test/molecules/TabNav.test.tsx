@@ -60,4 +60,29 @@ describe("TabNav", () => {
     expect(screen.getByRole("tab", { name: "Visão Geral" }).getAttribute("aria-controls")).toBe("overview-panel");
     expect(screen.getByRole("tab", { name: "Arquivos" }).getAttribute("aria-controls")).toBe("files-panel");
   });
+
+  test("FASE J: roving tabindex — apenas a aba ativa está na ordem de tabulação", () => {
+    render(<TabNav tabs={tabs} activeTab="overview" onTabChange={() => {}} />);
+
+    expect(screen.getByRole("tab", { name: "Visão Geral" }).getAttribute("tabindex")).toBe("0");
+    expect(screen.getByRole("tab", { name: "Arquivos" }).getAttribute("tabindex")).toBe("-1");
+    expect(screen.getByRole("tab", { name: "Visão Geral" }).getAttribute("aria-selected")).toBe("true");
+  });
+
+  test("FASE J: setas direcionais movem a seleção entre abas (roving)", () => {
+    const events: string[] = [];
+    render(<TabNav tabs={tabs} activeTab="overview" onTabChange={(key) => events.push(key)} />);
+
+    fireEvent.keyDown(screen.getByRole("tab", { name: "Visão Geral" }), { key: "ArrowRight" });
+    expect(events[0]).toBe("visits");
+
+    fireEvent.keyDown(screen.getByRole("tab", { name: "Visão Geral" }), { key: "ArrowLeft" });
+    expect(events[1]).toBe("files");
+
+    fireEvent.keyDown(screen.getByRole("tab", { name: "Visão Geral" }), { key: "Home" });
+    expect(events[2]).toBe("overview");
+
+    fireEvent.keyDown(screen.getByRole("tab", { name: "Visão Geral" }), { key: "End" });
+    expect(events[3]).toBe("files");
+  });
 });

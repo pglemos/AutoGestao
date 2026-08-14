@@ -14,18 +14,39 @@ export interface RouteAnnouncerProps {
  * recomeça a tabulação do meio do menu (§13.3, §14).
  *
  * A montagem inicial é ignorada: roubar o foco no primeiro carregamento
- * atrapalharia quem chegou por link direto.
+ * atrapalharia quem chegou por link direto. Isso também vale para o redirect
+ * inicial — uma carga em "/" resolve para a home como navegação interna, mas o
+ * usuário fez um carregamento novo e a skip-link deve continuar sendo a
+ * primeira parada. Por isso o foco/announce só passam a valer após a primeira
+ * interação do usuário (teclado ou ponteiro).
  */
 export function RouteAnnouncer({ mainContentId }: RouteAnnouncerProps) {
   const { pathname } = useLocation()
   const firstRender = React.useRef(true)
+  const hasInteracted = React.useRef(false)
   const [message, setMessage] = React.useState('')
+
+  React.useEffect(() => {
+    const markInteraction = () => {
+      hasInteracted.current = true
+    }
+    window.addEventListener('keydown', markInteraction)
+    window.addEventListener('pointerdown', markInteraction)
+    return () => {
+      window.removeEventListener('keydown', markInteraction)
+      window.removeEventListener('pointerdown', markInteraction)
+    }
+  }, [])
 
   React.useEffect(() => {
     if (firstRender.current) {
       firstRender.current = false
       return
     }
+
+    // Redirect inicial ("/" -> home) ou navegação programática sem interação
+    // prévia: o foco fica onde está e a skip-link é a primeira parada.
+    if (!hasInteracted.current) return
 
     const target = document.getElementById(mainContentId)
     if (target) {

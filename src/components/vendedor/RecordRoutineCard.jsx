@@ -2,13 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Star, Play } from "lucide-react";
 import { formatBRL } from "@/components/vendedor/formatBRL";
+import { chartTokens } from "@/lib/charts/tokens"
 
 export default function RecordRoutineCard({ melhorMes }) {
   return (
     <div
       className="rounded-2xl p-6 flex flex-col justify-between"
       style={{
-        background: "#071525",
+        background: chartTokens.primary(),
         border: "1px solid rgba(255,255,255,0.06)",
         minHeight: "220px",
       }}
@@ -18,7 +19,7 @@ export default function RecordRoutineCard({ melhorMes }) {
           className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"
           style={{ background: "rgba(34,197,94,0.15)", border: "2px solid rgba(34,197,94,0.3)" }}
         >
-          <Star className="w-7 h-7" style={{ color: "#22c55e", filter: "drop-shadow(0 0 6px rgba(34,197,94,0.5))" }} fill="currentColor" />
+          <Star className="w-7 h-7" style={{ color: chartTokens.success(), filter: "drop-shadow(0 0 6px rgba(34,197,94,0.5))" }} fill="currentColor" />
         </div>
 
         <p className="text-muted-foreground text-sm mb-1">Seu recorde foi</p>
@@ -30,7 +31,7 @@ export default function RecordRoutineCard({ melhorMes }) {
         </p>
         <p className="text-muted-foreground text-sm mt-2">
           Vamos buscar{" "}
-          <span style={{ color: "#22c55e" }}>isso novamente?</span>
+          <span style={{ color: chartTokens.success() }}>isso novamente?</span>
         </p>
       </div>
 
@@ -38,8 +39,8 @@ export default function RecordRoutineCard({ melhorMes }) {
         <button
           className="w-full mt-5 flex items-center justify-center gap-3 py-4 rounded-xl font-bold text-base tracking-wide transition-all hover:brightness-110 active:scale-95"
           style={{
-            background: "linear-gradient(135deg, #16a34a, #22c55e)",
-            color: "#030B14",
+            background: `linear-gradient(135deg, ${chartTokens.success()}, ${chartTokens.success()})`,
+            color: chartTokens.primary(),
             boxShadow: "0 4px 20px rgba(34,197,94,0.35)",
           }}
         >

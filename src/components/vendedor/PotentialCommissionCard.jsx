@@ -1,5 +1,6 @@
 import React from "react";
 import { formatBRL } from "@/components/vendedor/formatBRL";
+import { chartTokens } from "@/lib/charts/tokens"
 
 // Mini sparkline ascendente usando SVG inline
 function Sparkline() {
@@ -11,8 +12,8 @@ function Sparkline() {
     <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} fill="none">
       <defs>
         <linearGradient id="spline" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#16a34a" />
-          <stop offset="100%" stopColor="#22c55e" />
+          <stop offset="0%" stopColor={chartTokens.success()} />
+          <stop offset="100%" stopColor={chartTokens.success()} />
         </linearGradient>
       </defs>
       <polyline points={coords} stroke="url(#spline)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -25,7 +26,7 @@ export default function PotentialCommissionCard({ comissaoProjetada, ganhoPotenc
     <div
       className="rounded-2xl p-6 flex flex-col justify-between"
       style={{
-        background: "#071525",
+        background: chartTokens.primary(),
         border: "1px solid rgba(255,255,255,0.06)",
         minHeight: "180px",
       }}

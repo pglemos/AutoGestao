@@ -1,10 +1,11 @@
 import React from "react";
 import { Trophy } from "lucide-react";
 import { formatBRL } from "@/components/vendedor/formatBRL";
+import { chartTokens } from "@/lib/charts/tokens"
 export default function LastSixMonthsCard({ historico }) {
   if (!historico || historico.length === 0) {
     return (
-      <div className="rounded-2xl p-6" style={{ background: "#071525", border: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="rounded-2xl p-6" style={{ background: chartTokens.primary(), border: "1px solid rgba(255,255,255,0.06)" }}>
         <p className="text-muted-foreground text-xs font-bold uppercase tracking-widest mb-4">Últimos 6 Meses</p>
         <p className="text-muted-foreground text-sm">Sem histórico disponível ainda.</p>
       </div>
@@ -15,7 +16,7 @@ export default function LastSixMonthsCard({ historico }) {
   const maxVal = melhorComissao || 1;
 
   return (
-    <div className="rounded-2xl p-6" style={{ background: "#071525", border: "1px solid rgba(255,255,255,0.06)" }}>
+    <div className="rounded-2xl p-6" style={{ background: chartTokens.primary(), border: "1px solid rgba(255,255,255,0.06)" }}>
       <p className="text-text-disabled text-xs font-bold uppercase tracking-widest mb-5">Últimos 6 Meses</p>
       <div className="space-y-3">
         {historico.map((mes, i) => {
@@ -32,10 +33,10 @@ export default function LastSixMonthsCard({ historico }) {
                     style={{
                       width: `${barWidth}%`,
                       background: mes.isAtual
-                        ? "linear-gradient(90deg, #1d4ed8, #3b82f6)"
+                        ? `linear-gradient(90deg, ${chartTokens.info()}, ${chartTokens.info()})`
                         : isMelhor
-                        ? "linear-gradient(90deg, #16a34a, #22c55e)"
-                        : "linear-gradient(90deg, #15803d, #16a34a)",
+                        ? `linear-gradient(90deg, ${chartTokens.success()}, ${chartTokens.success()})`
+                        : `linear-gradient(90deg, ${chartTokens.success()}, ${chartTokens.success()})`,
                       boxShadow: isMelhor ? "0 0 6px rgba(34,197,94,0.4)" : "none",
                     }}
                   />
@@ -44,7 +45,7 @@ export default function LastSixMonthsCard({ historico }) {
               </div>
               <span
                 className="text-sm font-bold tabular-nums w-24 text-right flex-shrink-0"
-                style={{ color: mes.isAtual ? "#60A5FA" : isMelhor ? "#4ade80" : "#94a3b8" }}
+                style={{ color: mes.isAtual ? chartTokens.info() : isMelhor ? chartTokens.success() : chartTokens.axisTickMuted() }}
               >
                 {formatBRL(mes.comissao).replace(",00", "")}
               </span>

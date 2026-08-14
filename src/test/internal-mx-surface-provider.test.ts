@@ -43,8 +43,11 @@ describe('superfície unificada do MX', () => {
     expect(read('src/components/molecules/Card.tsx')).toContain(
       'rounded-[var(--mx-card-radius)] border border-border-subtle bg-white shadow-[var(--mx-card-shadow)]',
     )
+    // FASE L (12.013): a altura do campo passou a ser o token --mx-input-height
+    // (40px; 36px em compact) e a borda o token --mx-input-border-width, em vez
+    // de h-10/border crus. Anatomia aprovada, agora por densidade.
     expect(read('src/components/atoms/Input.tsx')).toContain(
-      'h-10 w-full rounded-[var(--mx-input-radius)] border border-border',
+      'h-[var(--mx-input-height)] w-full rounded-[var(--mx-input-radius)] border-[length:var(--mx-input-border-width)] border-solid border-border',
     )
     expect(read('src/components/atoms/Button.tsx')).toContain(
       'rounded-[var(--mx-button-radius)]',

@@ -7,11 +7,10 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { formatCellValue, calculatePercentageOfTarget, getStatusFromPercentage, STATUS_STYLES, SELECTED_MONTH_INDEX } from './strategicUtils'
-import { useToast } from '@/components/ui/use-toast'
+import { toast } from '@/lib/toast'
 import { useAuth } from '@/features/owner/lib/ownerAuth'
 
 export default function CreateActionModal({ repository, open, onOpenChange, indicator, year, onCreated }) {
-  const { toast } = useToast()
   const { user } = useAuth()
   const [form, setForm] = useState({})
 
@@ -45,23 +44,23 @@ export default function CreateActionModal({ repository, open, onOpenChange, indi
   const set = (key, value) => setForm(current => ({ ...current, [key]: value }))
   const save = async () => {
     if (!form.title || !form.action) {
-      toast({ title: 'Preencha o título e a ação proposta.', variant: 'destructive' })
+      toast.error('Preencha o título e a ação proposta.')
       return
     }
     const existing = repository.getActionItems(indicator.id)?.[0]
     if (existing) {
-      toast({ title: 'Já existe um Plano de Ação ativo para este indicador.' })
+      toast.info('Já existe um Plano de Ação ativo para este indicador.')
       onCreated?.(existing)
       onOpenChange(false)
       return
     }
     try {
       const created = await repository.createActionItem({ ...form, year, createdBy: user?.full_name || user?.email || 'Usuário' })
-      toast({ title: 'Plano de Ação criado com sucesso.' })
+      toast.info('Plano de Ação criado com sucesso.')
       onCreated?.(created)
       onOpenChange(false)
     } catch (error) {
-      toast({ title: 'Não foi possível criar o Plano de Ação.', description: error instanceof Error ? error.message : 'Erro desconhecido', variant: 'destructive' })
+      toast.error('Não foi possível criar o Plano de Ação.', { description: error instanceof Error ? error.message : 'Erro desconhecido' })
     }
   }
 

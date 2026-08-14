@@ -1,6 +1,6 @@
 // Aba Histórico e Impacto do drawer — timeline + medição de impacto.
 import { useEffect, useState } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from '@/lib/toast'
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,7 +27,6 @@ const HISTORY_ICONS = {
 };
 
 export default function HistoryTab({ action, onReload, user }) {
-  const { toast } = useToast();
   const [impactForm, setImpactForm] = useState({
     impactStatus: action.impactStatus || "unmeasured",
     valueBefore: "",
@@ -61,7 +60,7 @@ export default function HistoryTab({ action, onReload, user }) {
       });
       await onReload();
     } catch (error) {
-      toast({ title: "Não foi possível registrar o impacto.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+      toast.error("Não foi possível registrar o impacto.", { description: error instanceof Error ? error.message : "Erro desconhecido" });
     }
   };
 

@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync, statSync } from 'node:fs'
+import { readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs'
 import { resolve, relative } from 'node:path'
 import ts from 'typescript'
 
@@ -229,7 +229,7 @@ if (process.argv.includes('--json')) {
       .map(([name, files]) => [name, [...files].sort()]),
   )
 
-  console.log(JSON.stringify({
+  writeFileSync(1, JSON.stringify({
     generatedAt: new Date().toISOString(),
     routes: inventory,
     counts: {
@@ -251,7 +251,7 @@ if (process.argv.includes('--json')) {
     },
     ungoverned: ungoverned.map(route => route.path),
     duplicatePaths,
-  }, null, 2))
+  }, null, 2) + '\n')
 
   if (process.argv.includes('--check') && (ungoverned.length || duplicatePaths.length)) {
     process.exitCode = 1

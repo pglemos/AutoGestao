@@ -1,6 +1,7 @@
 import { Fragment, useMemo, useState } from 'react'
 import { CheckCircle2, ChevronRight, Globe, ShoppingCart, Store, Users } from 'lucide-react'
 import type { NumericCheckinField } from '../hooks/useCheckinPage'
+import { chartTokens } from "@/lib/charts/tokens"
 
 /**
  * Wizard de 4 etapas (Showroom → Carteira → Internet → Vendas) com barra de
@@ -44,7 +45,20 @@ const COLOR_MAP = {
 } as const
 
 const SEGMENT_COLORS: Record<StepId, string> = {
-  showroom: '#F97316', carteira: '#22C55E', internet: '#3B82F6', vendas: '#9333EA',
+  showroom: chartTokens.warning(), carteira: chartTokens.success(), internet: chartTokens.info(), vendas: chartTokens.series.s4(),
+}
+
+/**
+ * Cores de TEXTO/ícone por segmento — tokens semânticos escurecidos (AA) do
+ * primitives.css. A barra (SEGMENT_COLORS) mantém a semântica visual; só o
+ * texto/ícone do label troca para o token apropriado. `vendas` (roxo) mapeia
+ * para info-text, como o COLOR_MAP já faz.
+ */
+const SEGMENT_TEXT_COLORS: Record<StepId, string> = {
+  showroom: 'hsl(var(--mx-status-warning-text))',
+  carteira: 'hsl(var(--mx-status-success-text))',
+  internet: 'hsl(var(--mx-status-info-text))',
+  vendas: 'hsl(var(--mx-status-info-text))',
 }
 
 /** Mesmo clamp do setCounter original do Base44: Math.min(999, Math.max(0, newVal)). */
@@ -189,8 +203,8 @@ function ProgressBarMobile({ completedSteps }: { completedSteps: Set<StepId> }) 
             <div key={step.id} className="flex items-center justify-center gap-0.5" style={{ flex: step.pct }}>
               {done && (
                 <>
-                  <CheckCircle2 className="h-2.5 w-2.5 shrink-0" style={{ color: SEGMENT_COLORS[step.id] }} />
-                  <span className="truncate text-caption font-bold" style={{ color: SEGMENT_COLORS[step.id] }}>{step.label}</span>
+                  <CheckCircle2 className="h-2.5 w-2.5 shrink-0" style={{ color: SEGMENT_TEXT_COLORS[step.id] }} />
+                  <span className="truncate text-caption font-bold" style={{ color: SEGMENT_TEXT_COLORS[step.id] }}>{step.label}</span>
                 </>
               )}
             </div>

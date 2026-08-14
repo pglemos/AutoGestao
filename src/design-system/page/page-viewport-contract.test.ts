@@ -15,7 +15,10 @@ describe('contrato do viewport de página', () => {
     expect(viewport).toContain('overflow-y-auto')
     expect(viewport).toContain('overflow-x-hidden')
     expect(viewport).toContain('flex-1')
-    expect(viewport).toContain('tabIndex={props.tabIndex ?? 0}')
+    // FASE H 08.003 — o scroll container é passivo: fora da ordem de tabulação,
+    // foco somente programático. O primeiro Tab em carga nova cai no skip-link.
+    expect(viewport).toContain('tabIndex={props.tabIndex ?? -1}')
+    expect(viewport).not.toContain('tabIndex={props.tabIndex ?? 0}')
     expect(shell).toContain('<PageViewport>')
     expect(shell).toContain('data-mx-shell-main=""')
     expect(shell).not.toContain('overflow-y-auto')

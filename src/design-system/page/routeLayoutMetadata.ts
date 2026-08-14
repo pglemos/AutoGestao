@@ -70,23 +70,24 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   // ------------------------------------------------------- tabelas e listagens
   // `wide` e não `dashboard`: tabelas densas ficam mais legíveis um pouco mais
   // estreitas, porque a linha de leitura horizontal encurta.
-  lojas: { width: 'wide' },
+  lojas: { width: 'wide', bottomClearance: 'navigation', adopted: true },
   'lojas/:storeSlug': { width: 'wide' },
   'lojas/:storeSlug/equipe': { width: 'wide' },
   'lojas/:storeSlug/consultor-ia': { width: 'focused' },
+  'lojas/:storeSlug/filiais': { width: 'wide', bottomClearance: 'navigation', adopted: true },
   clientes: { width: 'wide' },
   carteira: { width: 'wide' },
-  'carteira-clientes': { width: 'wide' },
+  'carteira-clientes': { width: 'wide', bottomClearance: 'navigation', adopted: true },
   'vendedor/carteira': { width: 'wide', bottomClearance: 'navigation' },
   equipe: { width: 'wide' },
   team: { width: 'wide' },
-  produtos: { width: 'wide' },
-  notificacoes: { width: 'wide' },
-  relatorios: { width: 'wide' },
-  'relatorios-vendedor': { width: 'wide' },
+  produtos: { width: 'wide', bottomClearance: 'navigation', adopted: true },
+  notificacoes: { width: 'wide', bottomClearance: 'navigation', adopted: true },
+  relatorios: { width: 'wide', bottomClearance: 'navigation', adopted: true },
+  'relatorios-vendedor': { width: 'wide', bottomClearance: 'navigation', adopted: true },
   'relatorios/performance-vendas': { width: 'wide' },
-  'relatorios/performance-vendedor': { width: 'wide' },
-  agenda: { width: 'wide' },
+  'relatorios/performance-vendedor': { width: 'wide', bottomClearance: 'navigation', adopted: true },
+  agenda: { width: 'wide', adopted: true },
   'liberacao-fechamento': { width: 'wide' },
   departamentos: { width: 'wide' },
   consultoria: { width: 'wide' },
@@ -132,6 +133,10 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   // Alias que redireciona para `configuracoes`; mantido no registro para que a
   // decisão continue resolvível se o redirect for removido.
   'vendedor/configuracoes': { width: 'dashboard', bottomClearance: 'navigation' },
+  // Redirects legados continuam classificados para não depender do default
+  // enquanto preservam a URL histórica para integrações externas.
+  metas: { width: 'dashboard' },
+  'minhas-lojas': { width: 'wide' },
   perfil: { width: 'form' },
   'meu-perfil': { width: 'form' },
   'meu-perfil-vendedor': { width: 'form' },

@@ -13,6 +13,7 @@ describe('ManagerRoutineDetailModal', () => {
     render(<ManagerRoutineDetailModal open sellerName="Ana" date="2026-07-11" actions={[]} appointments={0} execution={0} onClose={() => undefined} />)
 
     expect(screen.getByText('Nenhuma rotina registrada para este vendedor nesta data.')).toBeTruthy()
+    expect(screen.getByRole('dialog')).toHaveAttribute('data-mx-overlay', 'modal')
     expect(screen.queryByText('Atividades da Central de Execução')).toBeNull()
   })
 
@@ -40,6 +41,7 @@ describe('ManagerRoutineDetailModal', () => {
 
     render(<ManagerRoutineDetailModal open sellerName="Ana" date="2026-07-11" actions={[{ id: 'a1', title: 'Ação', status: 'concluida', due_at: '2026-07-11T10:00:00-03:00' }]} appointments={1} execution={80} officialScore={officialScore} onClose={() => undefined} />)
 
+    expect(screen.getByRole('dialog')).toHaveAttribute('data-mx-overlay-layer', 'modal')
     expect(screen.getByText('Pontuação oficial — 100 pontos')).toBeTruthy()
     expect(screen.getByText('Acessou a Rotina do Dia')).toBeTruthy()
     expect(screen.getByText('Não aplicável')).toBeTruthy()

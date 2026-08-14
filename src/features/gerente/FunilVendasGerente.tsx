@@ -4,6 +4,7 @@ import { Typography } from '@/components/atoms/Typography'
 import { Card } from '@/components/molecules/Card'
 import { PageHeading } from '@/components/molecules/PageHeading'
 import { PageCanvas } from '@/design-system/page'
+import { ScrollableRegion } from '@/design-system/page/ScrollableRegion'
 import { cn } from '@/lib/utils'
 import type { ChannelFunnel, FunnelChannel } from '@/features/crm/lib/funil-vendas-diagnostico'
 import { TEAM_PERIOD_LABELS, useTeamFunnel, type TeamPeriodKey } from '@/features/gerente/hooks/useTeamFunnel'
@@ -179,10 +180,10 @@ export default function FunilVendasGerente() {
                   Vendas da equipe por canal no período selecionado.
                 </Typography>
 
-                {/* tabIndex e role: região com rolagem horizontal precisa ser
+                {/* ScrollableRegion: região com rolagem horizontal precisa ser
                     alcançável por teclado, senão as colunas fora da viewport
                     ficam inacessíveis sem mouse. */}
-                <div className="mt-mx-md overflow-x-auto" tabIndex={0} role="region" aria-label="Vendas da equipe por canal">
+                <ScrollableRegion axis="horizontal" label="Vendas da equipe por canal" className="mt-mx-md">
                   {ranking.length === 0 ? (
                     <Typography variant="p" className="text-sm font-semibold text-muted-foreground">
                       Nenhuma venda registrada no período.
@@ -203,7 +204,7 @@ export default function FunilVendasGerente() {
                       </tbody>
                     </table>
                   )}
-                </div>
+                </ScrollableRegion>
               </Card>
             </section>
           )}

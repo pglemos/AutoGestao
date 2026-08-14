@@ -43,19 +43,6 @@ declare module '@/components/ui/button' {
   }): string
 }
 
-declare module '@/components/ui/badge' {
-  import type * as React from 'react'
-
-  export type BadgeVariant = 'default' | 'secondary' | 'destructive' | 'outline'
-
-  export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
-    variant?: BadgeVariant
-  }
-
-  export function Badge(props: BadgeProps): React.ReactElement
-  export function badgeVariants(options?: { variant?: BadgeVariant; className?: string }): string
-}
-
 declare module '@/components/ui/sheet' {
   import type * as React from 'react'
 

@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from '@/lib/toast'
 import { CalendarCheck, ShoppingCart, ShieldCheck, UserCheck, ArrowLeft } from "lucide-react";
 import moment from "moment";
 
@@ -661,7 +661,6 @@ function canSaveForm(tipo, form, clienteEncontrado) {
 // ── Componente Principal ──────────────────────────────────────────────────────
 
 export default function NovoRegistroModal({ open, onClose, closingDate, dailyCloseId, currentUser, onSaved }) {
-  const { toast } = useToast();
   const [tipo, setTipo] = useState(null);
   const [form, setFormState] = useState({});
   const [clienteEncontrado, setClienteEncontrado] = useState(null);
@@ -715,18 +714,14 @@ export default function NovoRegistroModal({ open, onClose, closingDate, dailyClo
       await criarEventos({ tipo, form, cliente, currentUser, closingDate, dailyCloseId }).catch((eventErr) => {
         console.warn("[NovoRegistroModal] Registro principal salvo, mas evento auxiliar falhou:", eventErr);
       });
-      toast({ title: `${tipo.charAt(0).toUpperCase() + tipo.slice(1)} salvo com sucesso.` });
+      toast.info(`${tipo.charAt(0).toUpperCase() + tipo.slice(1)} salvo com sucesso.`);
       onSaved && onSaved({ cliente, tipo, isNovo });
       handleClose();
     } catch (err) {
       console.error("[NovoRegistroModal] Erro ao salvar registro do fechamento:", err);
       const message = err?.message || "Não foi possível salvar. Tente novamente.";
       setSaveError(message);
-      toast({
-        title: "Não foi possível salvar.",
-        description: message,
-        variant: "destructive",
-      });
+      toast.error("Não foi possível salvar.", { description: message });
     } finally {
       setSaving(false);
     }

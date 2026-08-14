@@ -26,7 +26,7 @@ const SheetOverlay = React.forwardRef(({ className, ...props }, ref) => (
 SheetOverlay.displayName = SheetPrimitive.Overlay.displayName
 
 const sheetVariants = cva(
-  "mx-overlay-surface fixed flex min-h-0 flex-col gap-4 bg-background p-6 transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=open]:animate-in data-[state=closed]:animate-out",
+  "mx-overlay-surface fixed flex min-h-0 flex-col gap-[var(--mx-overlay-gap)] p-[var(--mx-overlay-padding)] transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=open]:animate-in data-[state=closed]:animate-out",
   {
     variants: {
       side: {
@@ -55,9 +55,8 @@ const SheetContent = React.forwardRef(({ side = "right", className, children, ..
       {...props}>
       <SheetPrimitive.Close
         aria-label="Fechar painel"
-        className="mx-overlay-close absolute right-4 top-4 rounded-[var(--mx-overlay-close-radius)] opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
+        className="mx-overlay-close absolute right-[var(--mx-overlay-compact-gutter)] top-[var(--mx-overlay-compact-gutter)] rounded-[var(--mx-overlay-close-radius)] opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
         <X className="h-4 w-4" />
-        <span className="sr-only">Close</span>
       </SheetPrimitive.Close>
       {children}
     </SheetPrimitive.Content>

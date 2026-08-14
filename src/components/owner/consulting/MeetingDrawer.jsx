@@ -9,7 +9,7 @@ import ContentTab from "./ContentTab";
 import PreparationTab from "./PreparationTab";
 import EvidenceTab from "./EvidenceTab";
 import AnticipationModal from "./AnticipationModal";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from '@/lib/toast'
 
 const TABS = [
   { id: "content", label: "Aula", icon: Play },
@@ -18,7 +18,6 @@ const TABS = [
 ];
 
 export default function MeetingDrawer({ meetingId, onClose, user, onDataChange, initialLessonId, initialTab }) {
-  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("content");
   const [showAnticipation, setShowAnticipation] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -49,7 +48,7 @@ export default function MeetingDrawer({ meetingId, onClose, user, onDataChange, 
     if (!anticipation) return;
     if (window.confirm("Deseja cancelar a solicitação de antecipação?")) {
       consultingRepository.cancelAnticipationRequest(anticipation.id);
-      toast({ title: "Solicitação cancelada" });
+      toast.info("Solicitação cancelada");
       handleDataChanged();
     }
   };

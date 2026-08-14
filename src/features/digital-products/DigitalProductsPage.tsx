@@ -10,7 +10,7 @@ export function DigitalProductsPage() {
 
   if (controller.loading) {
     return (
-      <MxModulePage id="produtos-digitais" accessMode={controller.canManage ? 'manage' : 'read-only'}>
+      <MxModulePage id="produtos-digitais" width="wide" bottomClearance="navigation" accessMode={controller.canManage ? 'manage' : 'read-only'}>
         <MxModuleHeader title="Produtos Digitais" description="Catálogo de produtos e materiais liberados por público." />
         <MxSectionCard><MxLoadingState label="Sincronizando produtos" /></MxSectionCard>
       </MxModulePage>
@@ -19,7 +19,7 @@ export function DigitalProductsPage() {
 
   if (controller.loadError) {
     return (
-      <MxModulePage id="produtos-digitais" accessMode={controller.canManage ? 'manage' : 'read-only'}>
+      <MxModulePage id="produtos-digitais" width="wide" bottomClearance="navigation" accessMode={controller.canManage ? 'manage' : 'read-only'}>
         <MxModuleHeader title="Produtos Digitais" description="Catálogo de produtos e materiais liberados por público." />
         <MxSectionCard><MxErrorState description={controller.loadError} retry={() => void controller.fetchProducts()} /></MxSectionCard>
       </MxModulePage>
@@ -27,7 +27,7 @@ export function DigitalProductsPage() {
   }
 
   return (
-    <MxModulePage id="produtos-digitais" accessMode={controller.canManage ? 'manage' : 'read-only'}>
+    <MxModulePage id="produtos-digitais" width="wide" bottomClearance="navigation" accessMode={controller.canManage ? 'manage' : 'read-only'}>
       <MxModuleHeader
         title="Produtos Digitais"
         description={controller.canManage ? 'Administre publicação, público e ordem do catálogo operacional.' : 'Consulte os produtos ativos liberados para o seu perfil.'}

@@ -9,6 +9,8 @@ import { Button } from '@/components/atoms/Button'
 import { Select } from '@/components/atoms/Select'
 import { Typography } from '@/components/atoms/Typography'
 import { InternalMxTemplateHeader } from '@/components/module/InternalMxTemplateSlots'
+import { TabNavPill, type TabNavPillItem } from '@/components/molecules/TabNavPill'
+import { FilterChip } from '@/components/molecules/FilterChip'
 import { cn } from '@/lib/utils'
 import type { AgendaConsultant, DateFilter } from '@/hooks/agenda'
 import { statusFilters } from '../data/agendaFilters'
@@ -40,11 +42,11 @@ interface AgendaHeaderProps {
   canViewAllAgendas?: boolean
 }
 
-const VIEW_OPTIONS: { key: AdminCalendarViewMode; label: string }[] = [
+const VIEW_OPTIONS: TabNavPillItem<AdminCalendarViewMode>[] = [
   { key: 'day', label: 'Dia' },
   { key: 'week', label: 'Semana' },
   { key: 'month', label: 'Mês' },
-  { key: 'list', label: 'Lista' },
+  { key: 'list', label: 'Lista', icon: List },
 ]
 
 export function AgendaHeader({
@@ -122,25 +124,14 @@ export function AgendaHeader({
         <div className="flex flex-wrap items-center gap-2">
           <AgendaSearchBar searchQuery={searchQuery} onSearchChange={onSearchChange} />
 
-          <div className="flex rounded-xl border border-border bg-surface-alt/60 p-0.5 shrink-0">
-            {VIEW_OPTIONS.map((option) => (
-              <button
-                key={option.key}
-                type="button"
-                onClick={() => handleViewModeChange(option.key)}
-                aria-pressed={calendarViewMode === option.key}
-                className={cn(
-                  'flex items-center gap-1 rounded-xl px-2.5 py-1.5 text-xs font-bold transition-all',
-                  calendarViewMode === option.key
-                    ? 'bg-brand-primary text-white shadow-2xs'
-                    : 'text-muted-foreground hover:bg-surface-alt hover:text-foreground',
-                )}
-              >
-                {option.key === 'list' && <List size={13} />}
-                {option.label}
-              </button>
-            ))}
-          </div>
+          <TabNavPill
+            tabs={VIEW_OPTIONS}
+            activeTab={calendarViewMode}
+            onTabChange={handleViewModeChange}
+            buttonClassName="h-8 px-3"
+            className="w-full sm:w-auto shrink-0"
+            aria-label="Modo de exibição da agenda"
+          />
 
           <Popover.Root>
             <Popover.Trigger asChild>
@@ -207,19 +198,12 @@ export function AgendaHeader({
                     </span>
                     <div className="flex flex-wrap gap-1">
                       {statusFilters.map((filter) => (
-                        <button
+                        <FilterChip
                           key={filter.key}
-                          type="button"
+                          label={filter.label}
+                          selected={statusFilter === filter.key}
                           onClick={() => setStatusFilter(filter.key)}
-                          className={cn(
-                            'rounded-xl px-2.5 py-1 text-xs font-medium transition-colors',
-                            statusFilter === filter.key
-                              ? 'bg-brand-primary text-white font-bold'
-                              : 'border border-border bg-white text-muted-foreground hover:bg-surface-alt',
-                          )}
-                        >
-                          {filter.label}
-                        </button>
+                        />
                       ))}
                     </div>
                   </div>

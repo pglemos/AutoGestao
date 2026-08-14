@@ -100,7 +100,7 @@ export default function MeuPerfilVendedorContainer() {
                 title="Meu Perfil"
                 subtitle="Gerencie suas informações pessoais e profissionais"
                 actions={
-                    <Button variant="brand" onClick={handleSave} disabled={saving} loading={saving} icon={<Save className="h-4 w-4" />}>
+                    <Button variant="primary" onClick={handleSave} disabled={saving} loading={saving} icon={<Save className="h-4 w-4" />}>
                         {saving ? 'Salvando...' : 'Salvar'}
                     </Button>
                 }

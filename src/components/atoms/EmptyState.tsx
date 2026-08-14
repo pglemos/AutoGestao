@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
+import { Inbox, SearchX } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Typography } from '@/components/atoms/Typography'
 
@@ -35,6 +36,19 @@ const iconSizeVariants = cva(
   }
 )
 
+/**
+ * Distinção semântica do vazio (18.011):
+ * - `filter`: existe dado, mas o filtro não retornou nada → SearchX.
+ * - `dataset`: não há dado cadastrado ainda → Inbox.
+ * A variação nunca é comunicada só por cor (§43.15).
+ */
+const DEFAULT_ICON: Record<'filter' | 'dataset', React.ReactNode> = {
+  filter: <SearchX aria-hidden="true" />,
+  dataset: <Inbox aria-hidden="true" />,
+}
+
+export type EmptyStateVariant = 'filter' | 'dataset'
+
 export interface EmptyStateProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof emptyStateVariants> {
@@ -43,15 +57,22 @@ export interface EmptyStateProps
   description?: string
   nextStep?: string
   action?: React.ReactNode
+  /** `filter` = filtro sem resultado; `dataset` = sem dados cadastrados. */
+  variant?: EmptyStateVariant
 }
 
 const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(
-  ({ className, size, icon, title, description, nextStep, action, ...props }, ref) => {
+  ({ className, size, icon, title, description, nextStep, action, variant = 'dataset', ...props }, ref) => {
     return (
-      <div ref={ref} className={cn(emptyStateVariants({ size }), className)} {...props}>
-        {icon && (
+      <div
+        ref={ref}
+        data-mx-empty={variant}
+        className={cn(emptyStateVariants({ size }), className)}
+        {...props}
+      >
+        {(icon ?? DEFAULT_ICON[variant]) && (
           <div className={cn(iconSizeVariants({ size }))}>
-            {icon}
+            {icon ?? DEFAULT_ICON[variant]}
           </div>
         )}
         <Typography variant="h3" className="">

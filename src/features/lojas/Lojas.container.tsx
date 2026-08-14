@@ -50,7 +50,7 @@ export function Lojas() {
 
   return (
     <LojasErrorBoundary sectionName="Lojas">
-      <MxModulePage>
+      <MxModulePage width="wide" bottomClearance="navigation">
         <LojasErrorBoundary sectionName="LojasHeader">
           <LojasHeader
             isOwner={page.isOwner}

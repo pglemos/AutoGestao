@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import DisciplinaModal from "@/components/fechamento/DisciplinaModal";
 import { ModalMaisVendasQueAtendimentos, detectarDivergencias } from "@/components/fechamento/CoerenciaVendaModal";
 import { base44 } from "@/api/base44Client";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from '@/lib/toast'
 import moment from "moment/min/moment-with-locales";
 
 moment.locale("pt-br");
@@ -133,7 +133,7 @@ export default function BottomSection({
   closingDate, penalizado = false, liberado = false,
   dailyClose, onDailyCloseUpdate,
 }) {
-  const { toast } = useToast();
+
   // dailyClose necessário para detectar divergências de atendimento por canal
   const faturamentoStr = totalFaturamento > 0
     ? `R$ ${totalFaturamento.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
@@ -206,11 +206,7 @@ export default function BottomSection({
       setSolicitacaoEnviada(true);
     } catch (e) {
       console.error(e);
-      toast({
-        title: "Não foi possível finalizar.",
-        description: e?.message || "Tente novamente ou solicite liberação ao gerente.",
-        variant: "destructive",
-      });
+      toast.error("Não foi possível finalizar.", { description: e?.message || "Tente novamente ou solicite liberação ao gerente." });
     }
     setEnviando(false);
   };

@@ -10,7 +10,7 @@ export default function KanbanBoard({ actions, sortBy, onQuickAction, onDelete, 
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory lg:overflow-x-visible lg:snap-none">
+      <div data-mx-scroll-region="horizontal" className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory lg:overflow-x-visible lg:snap-none">
         {KANBAN_COLUMNS.map((col) => {
           const colActions = col.isDerived
             ? sorted.filter((a) => lateIds.has(a.id))

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Store, Users, Globe, ShoppingCart, CheckCircle2, ChevronRight, Lock } from "lucide-react";
 import moment from "moment";
+import { chartTokens } from "@/lib/charts/tokens"
 
 // ── Stepper Input (same logic as MovimentoDia) ────────────────────────────────
 
@@ -194,10 +195,10 @@ function StepperHeader({ currentStep, completedSteps, onStepClick }) {
 // ── Progress Bar (mobile slim) ────────────────────────────────────────────────
 
 const SEGMENT_COLORS = {
-  showroom: "#F97316",
-  carteira: "#22C55E",
-  internet: "#3B82F6",
-  vendas:   "#9333EA",
+  showroom: chartTokens.warning(),
+  carteira: chartTokens.success(),
+  internet: chartTokens.info(),
+  vendas: chartTokens.series.s4(),
 };
 
 function ProgressBar({ completedSteps }) {

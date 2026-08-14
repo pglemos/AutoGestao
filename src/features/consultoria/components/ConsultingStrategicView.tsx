@@ -355,7 +355,7 @@ export function ConsultingStrategicView({ clientId, clientName = 'Cliente PMR' }
                     </div>
                     <Button
                       type="button"
-                      variant={selectedArtifact?.id === art.id ? 'secondary' : 'ghost'}
+                      variant={selectedArtifact?.id === art.id ? 'outline' : 'ghost'}
                       size="icon"
                       className="h-mx-8 w-mx-8"
                       title="Ver Markdown"

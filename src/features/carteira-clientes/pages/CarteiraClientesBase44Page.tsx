@@ -33,7 +33,7 @@ export function CarteiraClientesBase44Page() {
   // montamos a referência Base44 nesse intervalo, evitando que sua consulta
   // inicial seja feita com o UID real do administrador.
   return (
-    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex min-h-full flex-col">
+    <PageCanvas as="div" width="wide" bottomClearance="navigation" className="flex min-h-full flex-col">
       {waitingForSimulationIdentity ? (
         <div className="flex min-h-[320px] flex-1 items-center justify-center text-sm font-semibold text-muted-foreground" role="status" aria-live="polite">
           Preparando carteira do vendedor simulado...

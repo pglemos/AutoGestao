@@ -35,7 +35,7 @@ export default function RetornoWhatsAppModal({ open, cliente, resultado, onResul
               <MessageCircle className="w-4 h-4 text-status-success-text" />
             </div>
             <div>
-              <DialogTitle className="text-sm font-black text-[#031B3D]">
+              <DialogTitle className="text-sm font-black text-mx-navy">
                 Como terminou esse contato?
               </DialogTitle>
               {cliente && (

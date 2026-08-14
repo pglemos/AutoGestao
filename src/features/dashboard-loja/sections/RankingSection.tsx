@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { BarChart3, History, Search, UsersRound, X, ShoppingCart, Calendar, Target, TrendingUp, AlertCircle } from 'lucide-react'
+import { BarChart3, History, Search, UsersRound, ShoppingCart, Calendar, Target, TrendingUp, AlertCircle } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
 import { Input } from '@/components/atoms/Input'
 import { Avatar } from '@/components/atoms/Avatar'
 import { DataGrid, type Column } from '@/components/organisms/DataGrid'
+import { Modal } from '@/components/organisms/Modal'
 import { duration, easing } from '@/design/motion'
 import type { RankingEntry } from '@/types/database'
 import type { ViewMode } from '../hooks/useDashboardLojaData'
@@ -140,115 +141,88 @@ function SellerDetailModal({
   const attainmentPct = seller.meta > 0 ? Math.round((seller.vnd_total / seller.meta) * 100) : 0
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-surface-overlay/40 backdrop-blur-sm p-4"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="seller-modal-title"
-      onClick={e => { if (e.target === e.currentTarget) onClose() }}
-      onKeyDown={e => { if (e.key === 'Escape') onClose() }}
-      tabIndex={-1}
+    <Modal
+      open
+      onClose={onClose}
+      title={seller.user_name}
+      description={`Período: ${formatDate(periodStart)} — ${formatDate(periodEnd)}`}
+      size="lg"
     >
-      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white shadow-2xl">
-        {/* Header */}
-        <div className="sticky top-0 z-10 flex items-center gap-4 border-b border-border-subtle bg-white px-6 py-5">
-          <Avatar
-            src={seller.avatar_url || undefined}
-            fallback={seller.user_name}
-            size="lg"
-            className="h-12 w-12 shrink-0 rounded-xl bg-status-success-surface text-status-success-text"
-          />
-          <div className="min-w-0 flex-1">
-            <h2 id="seller-modal-title" className="text-lg font-bold text-foreground truncate">
-              {seller.user_name}
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              Período: {formatDate(periodStart)} — {formatDate(periodEnd)}
-            </p>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <KpiCard icon={<ShoppingCart size={16} />} label="Vendas" value={String(seller.vnd_total)} highlight />
+        <KpiCard icon={<Target size={16} />} label="Meta" value={String(seller.meta || '—')} />
+        <KpiCard
+          icon={<TrendingUp size={16} />}
+          label="Atingimento"
+          value={seller.meta > 0 ? `${attainmentPct}%` : '—'}
+          color={attainmentPct >= 100 ? 'green' : attainmentPct >= 70 ? 'amber' : 'red'}
+        />
+        <KpiCard icon={<Calendar size={16} />} label="Leads" value={String(seller.leads)} />
+      </div>
+
+      <div className="mt-5">
+        <h3 className="mb-3 text-sm font-semibold text-foreground">
+          Vendas registradas ({loading ? '...' : sales.length})
+        </h3>
+
+        {loading ? (
+          <div className="flex items-center justify-center py-10 text-muted-foreground">
+            <span className="animate-spin mr-2">⟳</span> Carregando vendas...
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-border text-muted-foreground hover:bg-muted transition-colors"
-            aria-label="Fechar"
-          >
-            <X size={18} />
-          </button>
-        </div>
-
-        {/* KPIs */}
-        <div className="grid grid-cols-2 gap-3 px-6 py-5 sm:grid-cols-4">
-          <KpiCard icon={<ShoppingCart size={16} />} label="Vendas" value={String(seller.vnd_total)} highlight />
-          <KpiCard icon={<Target size={16} />} label="Meta" value={String(seller.meta || '—')} />
-          <KpiCard icon={<TrendingUp size={16} />} label="Atingimento" value={seller.meta > 0 ? `${attainmentPct}%` : '—'} color={attainmentPct >= 100 ? 'green' : attainmentPct >= 70 ? 'amber' : 'red'} />
-          <KpiCard icon={<Calendar size={16} />} label="Leads" value={String(seller.leads)} />
-        </div>
-
-        {/* Sales list */}
-        <div className="px-6 pb-6">
-          <h3 className="mb-3 text-sm font-semibold text-foreground">
-            Vendas registradas ({loading ? '...' : sales.length})
-          </h3>
-
-          {loading ? (
-            <div className="flex items-center justify-center py-10 text-muted-foreground">
-              <span className="animate-spin mr-2">⟳</span> Carregando vendas...
-            </div>
-          ) : error ? (
-            <div className="flex items-center gap-2 rounded-xl border border-status-error/20 bg-status-error-surface p-4 text-sm text-status-error-text">
-              <AlertCircle size={16} className="shrink-0" />
-              {error}
-            </div>
-          ) : sales.length === 0 ? (
-            <div className="rounded-xl bg-surface-alt p-6 text-center text-sm text-muted-foreground">
-              Nenhuma venda encontrada neste período.
-            </div>
-          ) : (
-            <div className="divide-y divide-border-subtle overflow-hidden rounded-xl border border-border-subtle">
-              {sales.map((sale, i) => {
-                const competencia = sale.data_competencia
-                  || new Date(sale.data_evento).toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' })
-                return (
-                  <div key={sale.id} className="flex items-start gap-3 px-4 py-3 hover:bg-surface-alt transition-colors">
-                    <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-status-success-surface text-xs font-bold text-status-success-text mt-0.5">
-                      {i + 1}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-sm font-semibold text-foreground">
-                          {sale.oportunidade?.veiculo_interesse || sale.oportunidade?.tipo_veiculo || 'Veículo'}
+        ) : error ? (
+          <div className="flex items-center gap-2 rounded-xl border border-status-error/20 bg-status-error-surface p-4 text-sm text-status-error-text">
+            <AlertCircle size={16} className="shrink-0" />
+            {error}
+          </div>
+        ) : sales.length === 0 ? (
+          <div className="rounded-xl bg-surface-alt p-6 text-center text-sm text-muted-foreground">
+            Nenhuma venda encontrada neste período.
+          </div>
+        ) : (
+          <div className="divide-y divide-border-subtle overflow-hidden rounded-xl border border-border-subtle">
+            {sales.map((sale, i) => {
+              const competencia = sale.data_competencia
+                || new Date(sale.data_evento).toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' })
+              return (
+                <div key={sale.id} className="flex items-start gap-3 px-4 py-3 hover:bg-surface-alt transition-colors">
+                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-status-success-surface text-xs font-bold text-status-success-text mt-0.5">
+                    {i + 1}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-sm font-semibold text-foreground">
+                        {sale.oportunidade?.veiculo_interesse || sale.oportunidade?.tipo_veiculo || 'Veículo'}
+                      </span>
+                      {sale.oportunidade?.placa_veiculo && (
+                        <span className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono text-muted-foreground">
+                          {sale.oportunidade.placa_veiculo}
                         </span>
-                        {sale.oportunidade?.placa_veiculo && (
-                          <span className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono text-muted-foreground">
-                            {sale.oportunidade.placa_veiculo}
-                          </span>
-                        )}
-                        {sale.canal && (
-                          <span className="rounded-md bg-status-info-surface px-1.5 py-0.5 text-xs font-semibold text-status-info-text">
-                            {canalLabel(sale.canal)}
-                          </span>
-                        )}
-                      </div>
-                      <div className="mt-0.5 flex flex-wrap gap-3 text-xs text-muted-foreground">
-                        <span>{formatDate(competencia)}</span>
-                        {sale.oportunidade?.cliente_nome && (
-                          <span>Cliente: {sale.oportunidade.cliente_nome}</span>
-                        )}
-                        {sale.oportunidade?.valor_negociado ? (
-                          <span className="font-semibold text-status-success-text">
-                            {formatCurrency(sale.oportunidade.valor_negociado)}
-                          </span>
-                        ) : null}
-                      </div>
+                      )}
+                      {sale.canal && (
+                        <span className="rounded-md bg-status-info-surface px-1.5 py-0.5 text-xs font-semibold text-status-info-text">
+                          {canalLabel(sale.canal)}
+                        </span>
+                      )}
+                    </div>
+                    <div className="mt-0.5 flex flex-wrap gap-3 text-xs text-muted-foreground">
+                      <span>{formatDate(competencia)}</span>
+                      {sale.oportunidade?.cliente_nome && (
+                        <span>Cliente: {sale.oportunidade.cliente_nome}</span>
+                      )}
+                      {sale.oportunidade?.valor_negociado ? (
+                        <span className="font-semibold text-status-success-text">
+                          {formatCurrency(sale.oportunidade.valor_negociado)}
+                        </span>
+                      ) : null}
                     </div>
                   </div>
-                )
-              })}
-            </div>
-          )}
-        </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
       </div>
-    </div>
+    </Modal>
   )
 }
 

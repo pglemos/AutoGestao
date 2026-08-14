@@ -2,9 +2,10 @@
 import { useState } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
 import { MONTHS, SELECTED_MONTH_INDEX, REFERENCE_YEAR, formatCellValue, calculatePercentageOfTarget, getStatusFromPercentage, STATUS_STYLES, AREA_HEX } from "./strategicUtils";
+import { chartTokens } from "@/lib/charts/tokens"
 
-const META_COLOR = "#2563EB";
-const ANTERIOR_COLOR = "#F59E0B";
+const META_COLOR = chartTokens.info();
+const ANTERIOR_COLOR = chartTokens.warning();
 
 const SERIES_LABELS = {
   meta: "Meta",
@@ -50,7 +51,7 @@ export default function StrategicIndicatorChart({ series, height = 360 }) {
   const [hidden, setHidden] = useState({ meta: false, atual: false, anterior: false });
   if (!series) return null;
   const { targetValues, currentValues, previousYearValues, displayFormat, decimalPlaces, name, area } = series;
-  const areaHex = AREA_HEX[area] || "#16A34A";
+  const areaHex = AREA_HEX[area] || chartTokens.success();
 
   const idx = SELECTED_MONTH_INDEX;
   const pct = calculatePercentageOfTarget(currentValues[idx], targetValues[idx]);
@@ -84,9 +85,9 @@ export default function StrategicIndicatorChart({ series, height = 360 }) {
         {Object.entries(SERIES_LABELS).map(([key, label]) => (
           <button key={key} onClick={() => toggleSeries(key)} className="flex items-center gap-1.5 text-xs">
             {key === "meta" ? (
-              <span className="h-0.5 w-4 rounded" style={{ backgroundColor: hidden[key] ? "#cbd5e1" : seriesColors[key], borderTop: "2px dashed" }} />
+              <span className="h-0.5 w-4 rounded" style={{ backgroundColor: hidden[key] ? chartTokens.axisTickMuted() : seriesColors[key], borderTop: "2px dashed" }} />
             ) : (
-              <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: hidden[key] ? "#cbd5e1" : seriesColors[key] }} />
+              <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: hidden[key] ? chartTokens.axisTickMuted() : seriesColors[key] }} />
             )}
             <span className={hidden[key] ? "text-muted-foreground line-through" : "text-foreground"}>{label}</span>
           </button>
@@ -97,10 +98,10 @@ export default function StrategicIndicatorChart({ series, height = 360 }) {
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
             <ReferenceLine x={MONTHS[idx]} stroke={areaHex} strokeOpacity={0.25} strokeWidth={6} />
-            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
-            <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke={chartTokens.grid()} vertical={false} />
+            <XAxis dataKey="month" tick={{ fontSize: 11, fill: chartTokens.axisTick() }} axisLine={false} tickLine={false} />
             <YAxis
-              tick={{ fontSize: 11, fill: "#64748b" }}
+              tick={{ fontSize: 11, fill: chartTokens.axisTick() }}
               axisLine={false}
               tickLine={false}
               tickFormatter={(v) => formatCellValue(v, displayFormat, decimalPlaces)}

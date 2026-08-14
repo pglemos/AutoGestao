@@ -21,19 +21,21 @@ type StatCardProps = {
   tone?: StatTone
   /** Ação opcional no canto superior direito (ex.: link "Ver detalhes"). */
   action?: ReactNode
+  /** Conteúdo extra opcional abaixo de detail (ex.: mini progresso). */
+  children?: ReactNode
 }
 
 /**
  * Card de KPI/estatística padrão do sistema: icon-chip tintado + label + valor.
  * Unifica o visual entre telas (vendedor/gerente/admin) — substitui cards bare/flat.
  */
-export function StatCard({ icon, label, value, detail, tone = 'brand', action }: StatCardProps) {
+export function StatCard({ icon, label, value, detail, tone = 'brand', action, children }: StatCardProps) {
   return (
-    <Card className="border bg-white p-mx-lg">
+    <Card className="border bg-white p-[var(--mx-card-padding)]">
       {(icon || action) && (
         <div className="flex items-start justify-between gap-mx-sm">
           {icon ? (
-            <span className={`grid h-mx-12 w-mx-12 shrink-0 place-items-center rounded-2xl ${TONE_CHIP[tone]}`}>
+            <span className={`grid h-mx-12 w-mx-12 shrink-0 place-items-center rounded-[var(--mx-radius-2xl)] ${TONE_CHIP[tone]}`}>
               {icon}
             </span>
           ) : <span />}
@@ -51,6 +53,7 @@ export function StatCard({ icon, label, value, detail, tone = 'brand', action }:
           {detail}
         </Typography>
       )}
+      {children && <div className="mt-mx-md">{children}</div>}
     </Card>
   )
 }

@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from '@/lib/toast'
 import { Plus, Lock, Info, CalendarClock } from "lucide-react";
 import { isClienteD1 } from "@/components/fechamento/ClientCard";
 import moment from "moment";
@@ -78,7 +78,7 @@ export default function ClientCardMobile({
   deleteConfirmExterno,
   onDeleteExternoHandled,
 }) {
-  const { toast } = useToast();
+
   const today = moment().format("YYYY-MM-DD");
 
   const [currentUser, setCurrentUser] = useState(null);
@@ -207,7 +207,7 @@ export default function ClientCardMobile({
         }
         const next = clients.map(c => c.id === editingClient.id ? { ...c, ...updated } : c);
         syncClients(next);
-        toast({ title: "Alterações salvas." });
+        toast.info("Alterações salvas.");
       } else {
         const created = await base44.entities.Client.create(payload);
         if (d1Editavel && onAuditLog && isClienteD1(created, closingDate)) {
@@ -215,7 +215,7 @@ export default function ClientCardMobile({
         }
         const next = [...clients, created];
         syncClients(next);
-        toast({ title: d1Editavel ? "Agendamento salvo." : `${form.name} cadastrado com sucesso.` });
+        toast.info(d1Editavel ? "Agendamento salvo." : `${form.name} cadastrado com sucesso.`);
       }
       setSaving(false);
       setDialogOpen(false);
@@ -239,9 +239,9 @@ export default function ClientCardMobile({
         await base44.entities.Client.delete(id);
         syncClients(clients.filter(c => c.id !== id));
       }
-      toast({ title: "Cliente excluído." });
+      toast.info("Cliente excluído.");
     } catch {
-      toast({ title: "Não foi possível excluir. Tente novamente." });
+      toast.info("Não foi possível excluir. Tente novamente.");
     }
   };
 

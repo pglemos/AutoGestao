@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from '@/lib/toast'
 import { Plus, Pencil, Trash2, Star, ChevronDown, ChevronUp, Lock, Info, CalendarClock } from "lucide-react";
 import InfoTooltip from "@/components/ui/InfoTooltip";
 import moment from "moment";
@@ -157,7 +157,7 @@ function Field({ label, required, children }) {
 // ── Main Component ────────────────────────────────────────────────────────────
 
 export default function ClientCard({ onClientsChange, closingDate, bloqueado = false, d1Editavel = false, onAuditLog, dailyCloseId, dailyClose, onRegistroSalvo }) {
-  const { toast } = useToast();
+
   const d1Date = moment(closingDate).add(1, "day").format("YYYY-MM-DD");
 
   const [clientes, setClientes] = useState([]);
@@ -503,7 +503,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
         }).catch(() => {});
         const next = clientes.map(c => c.id === original.id ? clienteParaExibicao({ ...c, ...updated }) : c);
         syncClientes(next);
-        toast({ title: "Alterações salvas." });
+        toast.info("Alterações salvas.");
       } else {
         // Novo cliente — cria sempre um novo registro no fechamento
         // (não reutiliza existentes pelo WhatsApp para evitar sobrescrever dados de outros fechamentos)
@@ -527,7 +527,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
           console.warn("[ClientCard] Registro salvo, mas a atualização local falhou. Recarregando lista:", syncErr);
           await loadClientes();
         }
-        toast({ title: d1Editavel ? "Agendamento salvo." : `${form.nome} cadastrado na Carteira.` });
+        toast.info(d1Editavel ? "Agendamento salvo." : `${form.nome} cadastrado na Carteira.`);
       }
       setSaving(false);
       setDialogOpen(false);
@@ -577,9 +577,9 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
         const next = clientes.filter(c => c.id !== id);
         syncClientes(next);
       }
-      toast({ title: d1Editavel ? "Agendamento excluído." : "Registro removido do fechamento." });
+      toast.info(d1Editavel ? "Agendamento excluído." : "Registro removido do fechamento.");
     } catch {
-      toast({ title: "Não foi possível excluir. Tente novamente." });
+      toast.info("Não foi possível excluir. Tente novamente.");
     }
   };
 

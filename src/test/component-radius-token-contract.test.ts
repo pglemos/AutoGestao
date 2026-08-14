@@ -13,8 +13,7 @@ const families = [
   ['src/components/molecules/Card.tsx', '--mx-card-radius'],
   ['src/components/molecules/AlertCard.tsx', '--mx-card-radius'],
   ['src/components/molecules/OptionCard.tsx', '--mx-card-radius'],
-  ['src/components/ui/PageHeader.jsx', '--mx-card-radius'],
-  ['src/components/ui/StatCard.jsx', '--mx-card-radius'],
+  ['src/components/molecules/PageHeader.tsx', '--mx-card-radius'],
 ] as const
 
 describe('07.009 component radius ownership', () => {
@@ -35,5 +34,13 @@ describe('07.009 component radius ownership', () => {
     expect(dialog).not.toContain('sm:rounded-lg')
     expect(sheet).toContain('mx-overlay-surface')
     expect(sheet).not.toMatch(/\brounded-(?:sm|md|lg|xl|2xl)\b/)
+  })
+
+  test('legacy PageHeader remains a thin adapter to the canonical family', () => {
+    const source = readFileSync(path.join(root, 'src/components/ui/PageHeader.jsx'), 'utf8')
+
+    expect(source).toContain('PageHeader as CanonicalPageHeader')
+    expect(source).not.toMatch(/\brounded-(?:sm|md|lg|xl|2xl|3xl)\b/)
+    expect(source).not.toMatch(/(?<![-\w])shadow-(?:sm|md|lg|xl|2xl)\b/)
   })
 })

@@ -1,6 +1,6 @@
 // Aba Evidências do drawer — adicionar e remover evidências.
 import { useState } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from '@/lib/toast'
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,7 +17,6 @@ const EVIDENCE_TYPES = [
 ];
 
 export default function EvidenceTab({ action, onReload, user }) {
-  const { toast } = useToast();
   const [form, setForm] = useState({ type: "file", name: "", url: "", note: "", valueBefore: "", valueAfter: "" });
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
 
@@ -35,7 +34,7 @@ export default function EvidenceTab({ action, onReload, user }) {
       setForm({ type: "file", name: "", url: "", note: "", valueBefore: "", valueAfter: "" });
       await onReload();
     } catch (error) {
-      toast({ title: "Não foi possível adicionar a evidência.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+      toast.error("Não foi possível adicionar a evidência.", { description: error instanceof Error ? error.message : "Erro desconhecido" });
     }
   };
 
@@ -44,7 +43,7 @@ export default function EvidenceTab({ action, onReload, user }) {
       await actionPlanLiveRepository.removeEvidence(action.id, evidenceId);
       await onReload();
     } catch (error) {
-      toast({ title: "Não foi possível remover a evidência.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+      toast.error("Não foi possível remover a evidência.", { description: error instanceof Error ? error.message : "Erro desconhecido" });
     }
   };
 

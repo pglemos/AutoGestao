@@ -1,6 +1,7 @@
 import React from "react";
 import { TrendingUp, Info } from "lucide-react";
 import { formatBRL } from "@/components/vendedor/formatBRL";
+import { chartTokens } from "@/lib/charts/tokens"
 
 export default function PerformanceCard({ melhorMes, comissaoAtual }) {
   const pct = melhorMes > 0 ? Math.round((comissaoAtual / melhorMes) * 100) : 0;
@@ -11,7 +12,7 @@ export default function PerformanceCard({ melhorMes, comissaoAtual }) {
     <div
       className="rounded-2xl p-6"
       style={{
-        background: "#071525",
+        background: chartTokens.primary(),
         border: "1px solid rgba(255,255,255,0.06)",
       }}
     >
@@ -31,7 +32,7 @@ export default function PerformanceCard({ melhorMes, comissaoAtual }) {
                 <span className="text-emerald-400 font-bold text-sm tabular-nums">{formatBRL(melhorMes).replace(",00","")}</span>
               </div>
               <div className="w-full rounded-full h-3" style={{ background: "rgba(255,255,255,0.06)" }}>
-                <div className="h-3 rounded-full" style={{ width: `${melhorPct}%`, background: "linear-gradient(90deg, #16a34a, #22c55e)", boxShadow: "0 0 8px rgba(34,197,94,0.3)" }} />
+                <div className="h-3 rounded-full" style={{ width: `${melhorPct}%`, background: `linear-gradient(90deg, ${chartTokens.success()}, ${chartTokens.success()})`, boxShadow: "0 0 8px rgba(34,197,94,0.3)" }} />
               </div>
             </div>
 
@@ -41,7 +42,7 @@ export default function PerformanceCard({ melhorMes, comissaoAtual }) {
                 <span className="text-blue-400 font-bold text-sm tabular-nums">{formatBRL(comissaoAtual).replace(",00","")}</span>
               </div>
               <div className="w-full rounded-full h-3" style={{ background: "rgba(255,255,255,0.06)" }}>
-                <div className="h-3 rounded-full" style={{ width: `${atualPct}%`, background: "linear-gradient(90deg, #1d4ed8, #3b82f6)", boxShadow: "0 0 8px rgba(59,130,246,0.3)" }} />
+                <div className="h-3 rounded-full" style={{ width: `${atualPct}%`, background: `linear-gradient(90deg, ${chartTokens.info()}, ${chartTokens.info()})`, boxShadow: "0 0 8px rgba(59,130,246,0.3)" }} />
               </div>
             </div>
           </div>

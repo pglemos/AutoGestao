@@ -93,4 +93,18 @@ describe('ManagerStoreGoalReference Base44 parity', () => {
     expect(screen.getByRole('menuitem', { name: 'Ver rotina' })).toBeTruthy()
     expect(screen.getByRole('menuitem', { name: 'Registrar orientação' })).toBeTruthy()
   })
+
+  it('exposes the sustainability horizon as canonical keyboard tabs', () => {
+    const data = dashboardData()
+    data.metrics.goalValue = 20
+    render(<MemoryRouter><ManagerStoreGoalReference data={data} /></MemoryRouter>)
+
+    const activeTab = screen.getByRole('tab', { name: 'Esta semana' })
+    expect(activeTab).toHaveAttribute('tabindex', '0')
+
+    fireEvent.keyDown(activeTab, { key: 'ArrowLeft' })
+
+    expect(screen.getByRole('tab', { name: 'Hoje' })).toHaveAttribute('tabindex', '0')
+    expect(screen.getByRole('tab', { name: 'Esta semana' })).toHaveAttribute('tabindex', '-1')
+  })
 })

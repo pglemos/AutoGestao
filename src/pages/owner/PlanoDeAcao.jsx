@@ -1,7 +1,7 @@
 // Página Plano de Ação — dados canônicos do Supabase, tabela, quadro e calendário.
 import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from '@/lib/toast'
 import { useAuth } from "@/features/owner/lib/ownerAuth";
 import { useOwner } from "@/components/owner/OwnerContext";
 import { useIsMobile } from "@/hooks/useIsMobile";
@@ -49,7 +49,6 @@ const MODE_KEY = "mx_action_plan_mode";
 const SORT_KEY = "mx_action_plan_board_sort";
 
 export default function PlanoDeAcao() {
-  const { toast } = useToast();
   const { user } = useAuth();
   const { openConsultantModal, currentUnits, unitId } = useOwner();
   const isMobile = useIsMobile();
@@ -167,9 +166,9 @@ export default function PlanoDeAcao() {
       await actionPlanLiveRepository.approveAction(id, { ...payload, approvedBy: user?.full_name || user?.email || "Nome não informado" });
       setApproveAction(null);
       await loadActions();
-      toast({ title: "Ação aprovada com sucesso." });
+      toast.info("Ação aprovada com sucesso.");
     } catch (err) {
-      toast({ title: "Não foi possível aprovar a ação.", description: err instanceof Error ? err.message : "Erro desconhecido", variant: "destructive" });
+      toast.error("Não foi possível aprovar a ação.", { description: err instanceof Error ? err.message : "Erro desconhecido" });
     }
   };
 
@@ -183,9 +182,9 @@ export default function PlanoDeAcao() {
       await actionPlanLiveRepository.delegateAction(id, { ...payload, delegatedBy: user?.full_name || "Nome não informado" });
       setDelegateAction(null);
       await loadActions();
-      toast({ title: "Ação delegada com sucesso." });
+      toast.info("Ação delegada com sucesso.");
     } catch (err) {
-      toast({ title: "Não foi possível delegar a ação.", description: err instanceof Error ? err.message : "Erro desconhecido", variant: "destructive" });
+      toast.error("Não foi possível delegar a ação.", { description: err instanceof Error ? err.message : "Erro desconhecido" });
     }
   };
 
@@ -199,9 +198,9 @@ export default function PlanoDeAcao() {
       await actionPlanLiveRepository.updateActionById(id, payload);
       setEditAction(null);
       await loadActions();
-      toast({ title: "Ação atualizada com sucesso." });
+      toast.info("Ação atualizada com sucesso.");
     } catch (err) {
-      toast({ title: "Não foi possível atualizar a ação.", description: err instanceof Error ? err.message : "Erro desconhecido", variant: "destructive" });
+      toast.error("Não foi possível atualizar a ação.", { description: err instanceof Error ? err.message : "Erro desconhecido" });
     }
   };
 
@@ -224,10 +223,10 @@ export default function PlanoDeAcao() {
       setNewActionOpen(false);
       setNewActionInitialDate("");
       await loadActions();
-      toast({ title: "Ação criada com sucesso." });
+      toast.info("Ação criada com sucesso.");
       if (created) openDrawer(created, "resumo");
     } catch (err) {
-      toast({ title: "Não foi possível criar a ação.", description: err instanceof Error ? err.message : "Erro desconhecido", variant: "destructive" });
+      toast.error("Não foi possível criar a ação.", { description: err instanceof Error ? err.message : "Erro desconhecido" });
     }
   };
 
@@ -235,9 +234,9 @@ export default function PlanoDeAcao() {
     try {
       await actionPlanLiveRepository.updateDueDate(id, payload);
       await loadActions();
-      toast({ title: "Prazo atualizado com sucesso." });
+      toast.info("Prazo atualizado com sucesso.");
     } catch (err) {
-      toast({ title: "Não foi possível atualizar o prazo.", description: err instanceof Error ? err.message : "Erro desconhecido", variant: "destructive" });
+      toast.error("Não foi possível atualizar o prazo.", { description: err instanceof Error ? err.message : "Erro desconhecido" });
     }
   };
 
@@ -246,9 +245,9 @@ export default function PlanoDeAcao() {
     try {
       await actionPlanLiveRepository.deleteAction(action.id);
       await loadActions();
-      toast({ title: "Ação excluída definitivamente." });
+      toast.info("Ação excluída definitivamente.");
     } catch (err) {
-      toast({ title: "Não foi possível excluir a ação.", description: err instanceof Error ? err.message : "Erro desconhecido", variant: "destructive" });
+      toast.error("Não foi possível excluir a ação.", { description: err instanceof Error ? err.message : "Erro desconhecido" });
     }
   };
 
@@ -299,7 +298,7 @@ export default function PlanoDeAcao() {
   const handleExport = () => {
     const filtered = filterActions(actions, filters);
     exportActionsCSV(filtered);
-    toast({ title: "Exportação concluída." });
+    toast.info("Exportação concluída.");
   };
 
   const handleQuickAction = async (action, actionType) => {
@@ -323,9 +322,9 @@ export default function PlanoDeAcao() {
         try {
           await actionPlanLiveRepository.startAction(action.id, { startedBy: user?.full_name || "Nome não informado" });
           await loadActions();
-          toast({ title: "Ação iniciada." });
+          toast.info("Ação iniciada.");
         } catch (err) {
-          toast({ title: "Não foi possível iniciar a ação.", description: err instanceof Error ? err.message : "Erro desconhecido", variant: "destructive" });
+          toast.error("Não foi possível iniciar a ação.", { description: err instanceof Error ? err.message : "Erro desconhecido" });
         }
         break;
       case "viewImpact":
@@ -341,7 +340,7 @@ export default function PlanoDeAcao() {
   const handleMoveTo = async (action, destStatus) => {
     const rule = TRANSITION_RULES[action.status]?.[destStatus];
     if (!rule) {
-      toast({ title: "Transição não permitida.", variant: "destructive" });
+      toast.error("Transição não permitida.");
       return;
     }
     if (rule.direct) {
@@ -385,7 +384,7 @@ export default function PlanoDeAcao() {
             const details = Array.isArray(result.errors)
               ? result.errors.join("; ")
               : result.message || "Revise os requisitos da ação e tente novamente.";
-            toast({ title: "Não foi possível enviar.", description: details, variant: "destructive" });
+            toast.error("Não foi possível enviar.", { description: details });
             return;
           }
           successMessage = "Ação enviada para validação.";
@@ -411,7 +410,7 @@ export default function PlanoDeAcao() {
           const newAction = await actionPlanLiveRepository.duplicateAction(id, { ...payload, createdBy: userName });
           setActiveModal({ type: null, action: null });
           await loadActions();
-          toast({ title: "Ação duplicada com sucesso." });
+          toast.info("Ação duplicada com sucesso.");
           if (newAction) openDrawer(newAction, "resumo");
           return;
         }
@@ -420,9 +419,9 @@ export default function PlanoDeAcao() {
       }
       setActiveModal({ type: null, action: null });
       await loadActions();
-      if (successMessage) toast({ title: successMessage });
+      if (successMessage) toast.info(successMessage);
     } catch (err) {
-      toast({ title: "Não foi possível atualizar a ação.", description: err instanceof Error ? err.message : "Erro desconhecido", variant: "destructive" });
+      toast.error("Não foi possível atualizar a ação.", { description: err instanceof Error ? err.message : "Erro desconhecido" });
     }
   };
 

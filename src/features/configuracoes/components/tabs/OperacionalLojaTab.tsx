@@ -160,14 +160,14 @@ export function OperacionalLojaTab({ isReadOnly }: TabContext) {
                                 </div>
                                 <div className="flex p-mx-tiny bg-white border border-border rounded-mx-full shadow-sm">
                                     <Button
-                                        variant={metaRules?.projection_mode === 'calendar' ? 'secondary' : 'ghost'}
+                                        variant={metaRules?.projection_mode === 'calendar' ? 'outline' : 'ghost'}
                                         size="sm"
                                         onClick={() => updateMetaRules({ projection_mode: 'calendar' })}
                                         disabled={isReadOnly}
                                         className="h-mx-9 px-4 rounded-mx-full text-mx-tiny font-bold uppercase"
                                     >Calendário</Button>
                                     <Button
-                                        variant={metaRules?.projection_mode === 'business' ? 'secondary' : 'ghost'}
+                                        variant={metaRules?.projection_mode === 'business' ? 'outline' : 'ghost'}
                                         size="sm"
                                         onClick={() => updateMetaRules({ projection_mode: 'business' })}
                                         disabled={isReadOnly}

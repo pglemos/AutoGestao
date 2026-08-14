@@ -65,7 +65,7 @@ export function ConsultingModulesPanel({ modules, loading = false, canManage = f
               {canManage && (
                 <Button
                   type="button"
-                  variant={module.enabled ? 'ghost' : 'secondary'}
+                  variant={module.enabled ? 'ghost' : 'outline'}
                   size="sm"
                   onClick={() => handleToggle(module.module_key, !module.enabled)}
                   disabled={loading}

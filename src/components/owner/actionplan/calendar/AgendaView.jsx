@@ -52,7 +52,7 @@ export default function AgendaView({ actions, selectedDate, onSelectDate, onOpen
         ))}
       </div>
 
-      <div className="max-h-[600px] divide-y divide-border overflow-y-auto">
+      <div data-mx-scroll-region="vertical" className="max-h-[600px] divide-y divide-border overflow-y-auto">
         {dateKeys.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <CalendarClock className="h-10 w-10 text-muted-foreground/40" />

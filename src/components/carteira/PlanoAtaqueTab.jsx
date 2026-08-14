@@ -55,7 +55,7 @@ function candidatosElegiveis(clientes, campanha) {
   const targeting = targetingDeCampanha(campanha);
   const candidates = clientes
     .filter(client => client.ativo !== false)
-    .map(client => ({ ...toEligibilityInput(client, campanha, targeting), id: client.id }));
+    .map(client => ({ ...client, ...toEligibilityInput(client, campanha, targeting), id: client.id }));
   return { targeting, candidates, resultado: countEligible(candidates, targeting) };
 }
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { Target, TrendingUp, Trophy } from "lucide-react";
+import { chartTokens } from "@/lib/charts/tokens"
 
 function formatFaltam(v, isVolume) {
   if (v === null || v === undefined) return "—";
@@ -15,7 +16,7 @@ export default function SuaPosicao({ posicao, total, atingimento, faltamValor, i
   return (
     <div className="relative bg-white rounded-2xl border border-border shadow-sm p-5 min-w-[220px] overflow-hidden flex flex-col justify-between">
       {/* bg trophy watermark */}
-      <Trophy className="absolute right-2 top-2 opacity-[0.06]" style={{ width: 120, height: 120, color: "#00A896" }} />
+      <Trophy className="absolute right-2 top-2 opacity-[0.06]" style={{ width: 120, height: 120, color: chartTokens.success() }} />
       <div>
         <p className="text-body-sm font-semibold text-muted-foreground mb-1">Sua posição</p>
         <p className="text-h2 font-bold text-foreground leading-tight">{posLabel}</p>

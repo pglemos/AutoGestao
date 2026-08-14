@@ -31,6 +31,7 @@ import {
 } from "lucide-react";
 import { HelpTooltip } from "@/components/ui/HelpTooltip";
 import { PageCanvas } from "@/design-system/page";
+import { ScrollableRegion } from "@/design-system/page/ScrollableRegion";
 import {
   CartesianGrid,
   Line,
@@ -80,6 +81,7 @@ import {
   sumNumericMetrics,
 } from "./manager-closing-metrics";
 import { subscribeToManagerClosingRealtime } from "./manager-closing-realtime";
+import { chartTokens } from "@/lib/charts/tokens"
 
 export const PENDING_CLOSING_MESSAGE =
   "Seu Fechamento Diário está pendente. Finalize o registro do dia para que a gestão acompanhe corretamente o movimento comercial.";
@@ -965,7 +967,7 @@ function SummaryCard({
 function DisciplineCard({ value }: { value: number | null }) {
   const normalized = value === null ? 0 : Math.max(0, Math.min(100, Math.round(value)));
   const label = value === null ? "Sem dados" : classifyDiscipline(value);
-  const color = normalized >= 90 ? "#10b981" : normalized >= 70 ? "#3b82f6" : normalized >= 40 ? "#f97316" : "#ef4444";
+  const color = normalized >= 90 ? chartTokens.success() : normalized >= 70 ? chartTokens.info() : normalized >= 40 ? chartTokens.warning() : chartTokens.danger();
   const background = normalized >= 90 ? "bg-status-success-surface border-status-success/20" : normalized >= 70 ? "bg-status-info-surface border-status-info/20" : normalized >= 40 ? "bg-status-warning-surface border-status-warning/20" : "bg-status-error-surface border-status-error/20";
   return (
     <article className={`flex h-[164px] flex-col rounded-2xl border p-3 shadow-sm ${background}`}>
@@ -992,14 +994,14 @@ function ClosingTable({ rows, onOpenAgenda, onOpenDetails, onRemind, onRegulariz
   onCorrectLeads: (row: ClosingRowModel) => void;
 }) {
   return (
-    <div className="overflow-x-auto">
+    <ScrollableRegion axis="horizontal" label="Movimento da Equipe" className="">
       <table className="w-full min-w-[1100px] text-sm">
         <thead className="border-b border-border-subtle bg-surface-alt"><tr>{["Vendedor", "Status", "Entrega", "Leads", "Qualif.", "Agend.", "Atendi.", "Venda", "Disc.", "Ações"].map((label) => <th key={label} className="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-muted-foreground">{label}</th>)}</tr></thead>
         <tbody className="divide-y divide-border-subtle bg-white">
           {rows.map((row) => <ClosingRow key={row.seller.id} row={row} onOpenAgenda={() => onOpenAgenda(row.seller.id)} onOpenDetails={() => onOpenDetails(row)} onRemind={() => onRemind(row)} onRegularize={() => onRegularize(row)} onDecide={(action) => onDecide(row, action)} onCorrectLeads={() => onCorrectLeads(row)} />)}
         </tbody>
       </table>
-    </div>
+    </ScrollableRegion>
   );
 }
 
@@ -1046,8 +1048,8 @@ function StatusBadge({ status }: { status: ClosingStatus }) {
 
 function MiniDiscipline({ value }: { value: number | null }) {
   const normalized = value === null ? 0 : Math.max(0, Math.min(100, Math.round(value)));
-  const color = normalized >= 90 ? "#10b981" : normalized >= 70 ? "#3b82f6" : normalized >= 40 ? "#f97316" : "#ef4444";
-  return <div className="grid h-10 w-10 place-items-center rounded-full p-1" style={{ background: `conic-gradient(${color} ${normalized * 3.6}deg, #f3f4f6 0deg)` }}><div className="grid h-full w-full place-items-center rounded-full bg-white"><span className="text-caption font-bold" style={{ color }}>{value === null ? "—" : `${normalized}%`}</span></div></div>;
+  const color = normalized >= 90 ? chartTokens.success() : normalized >= 70 ? chartTokens.info() : normalized >= 40 ? chartTokens.warning() : chartTokens.danger();
+  return <div className="grid h-10 w-10 place-items-center rounded-full p-1" style={{ background: `conic-gradient(${color} ${normalized * 3.6}deg, hsl(var(--mx-border)) 0deg)` }}><div className="grid h-full w-full place-items-center rounded-full bg-white"><span className="text-caption font-bold" style={{ color }}>{value === null ? "—" : `${normalized}%`}</span></div></div>;
 }
 
 function MetricCell({ value, muted = false }: { value: number | string | null; muted?: boolean }) {
@@ -1056,7 +1058,7 @@ function MetricCell({ value, muted = false }: { value: number | string | null; m
 
 function DisciplineTrendCard({ trend, range, onRange }: { trend: Array<{ date: string; label: string; value: number | null }>; range: 7 | 15 | 30; onRange: (range: 7 | 15 | 30) => void }) {
   const hasData = trend.some((point) => point.value !== null);
-  return <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm"><div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"><div><h2 className="flex items-center gap-2 text-base font-semibold text-foreground"><TrendingUp size={18} className="text-status-success-text" /> Evolução da Disciplina do Fechamento <HelpTooltip text="Gráfico de evolução percentual da equipe na realização pontual dos fechamentos diários ao longo do período selecionado (7, 15 ou 30 dias)." /></h2><p className="mt-1 text-sm text-muted-foreground">Acompanhe se a equipe está mantendo consistência na prestação de contas diária.</p></div><div className="flex rounded-xl bg-surface-alt p-1">{([7, 15, 30] as const).map((option) => <button key={option} type="button" onClick={() => onRange(option)} className={`rounded-lg px-3 py-2 text-xs font-medium ${range === option ? "bg-brand-primary text-white shadow-sm" : "text-muted-foreground hover:bg-white"}`}>{option} dias</button>)}</div></div><div className="mt-4 h-[236px]">{hasData ? <ResponsiveContainer width="100%" height="100%"><LineChart data={trend} margin={{ top: 18, right: 12, bottom: 0, left: 0 }}><CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#e5e7eb" /><XAxis dataKey="label" axisLine={{ stroke: "#e5e7eb" }} tickLine={false} tick={{ fontSize: 11, fill: "#9ca3af" }} /><YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} axisLine={false} tickLine={false} tickFormatter={(value) => `${value}%`} tick={{ fontSize: 11, fill: "#9ca3af" }} width={42} /><Line type="monotone" dataKey="value" connectNulls stroke="#10b981" strokeWidth={2.5} dot={{ r: 3.5, fill: "#10b981", strokeWidth: 0 }} /></LineChart></ResponsiveContainer> : <div className="grid h-full place-items-center text-center text-sm text-muted-foreground">Ainda não há histórico de disciplina no período selecionado.</div>}</div><p className="mt-3 text-center text-xs italic text-muted-foreground">O dia atual pode aparecer como parcial enquanto houver fechamentos pendentes ou regularizações em aberto.</p></section>;
+  return <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm"><div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"><div><h2 className="flex items-center gap-2 text-base font-semibold text-foreground"><TrendingUp size={18} className="text-status-success-text" /> Evolução da Disciplina do Fechamento <HelpTooltip text="Gráfico de evolução percentual da equipe na realização pontual dos fechamentos diários ao longo do período selecionado (7, 15 ou 30 dias)." /></h2><p className="mt-1 text-sm text-muted-foreground">Acompanhe se a equipe está mantendo consistência na prestação de contas diária.</p></div><div className="flex rounded-xl bg-surface-alt p-1">{([7, 15, 30] as const).map((option) => <button key={option} type="button" onClick={() => onRange(option)} className={`rounded-lg px-3 py-2 text-xs font-medium ${range === option ? "bg-brand-primary text-white shadow-sm" : "text-muted-foreground hover:bg-white"}`}>{option} dias</button>)}</div></div><div className="mt-4 h-[236px]">{hasData ? <ResponsiveContainer width="100%" height="100%"><LineChart data={trend} margin={{ top: 18, right: 12, bottom: 0, left: 0 }}><CartesianGrid vertical={false} strokeDasharray="3 3" stroke={chartTokens.grid()} /><XAxis dataKey="label" axisLine={{ stroke: chartTokens.grid() }} tickLine={false} tick={{ fontSize: 11, fill: chartTokens.axisTick() }} /><YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} axisLine={false} tickLine={false} tickFormatter={(value) => `${value}%`} tick={{ fontSize: 11, fill: chartTokens.axisTick() }} width={42} /><Line type="monotone" dataKey="value" connectNulls stroke={chartTokens.success()} strokeWidth={2.5} dot={{ r: 3.5, fill: chartTokens.success(), strokeWidth: 0 }} /></LineChart></ResponsiveContainer> : <div className="grid h-full place-items-center text-center text-sm text-muted-foreground">Ainda não há histórico de disciplina no período selecionado.</div>}</div><p className="mt-3 text-center text-xs italic text-muted-foreground">O dia atual pode aparecer como parcial enquanto houver fechamentos pendentes ou regularizações em aberto.</p></section>;
 }
 
 function ComparisonRow({ label, value, tone }: { label: string; value: number | null; tone: "team" | "network" | "top" }) {

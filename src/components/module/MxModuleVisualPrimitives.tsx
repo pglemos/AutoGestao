@@ -1,7 +1,8 @@
 import type { ElementType, HTMLAttributes, LabelHTMLAttributes, ReactNode } from 'react'
 import type { LucideIcon } from 'lucide-react'
-import { AlertTriangle, Inbox, LoaderCircle } from 'lucide-react'
+import { AlertTriangle, LoaderCircle } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
+import { EmptyState, type EmptyStateProps as MxEmptyStateProps } from '@/components/atoms/EmptyState'
 import { Input, type InputProps } from '@/components/atoms/Input'
 import { Select, type SelectProps } from '@/components/atoms/Select'
 import { Skeleton, type SkeletonProps } from '@/components/atoms/Skeleton'
@@ -167,14 +168,16 @@ export function MxSelect(props: SelectProps) { return <Select {...props} /> }
 export function MxTextarea(props: TextareaProps) { return <Textarea {...props} /> }
 export function MxTableSurface({ children, className, role, tabIndex, 'aria-label': ariaLabel, ...props }: HTMLAttributes<HTMLDivElement>) { return <TableSurface label={ariaLabel ?? 'Tabela com rolagem horizontal'} role={role ?? 'region'} tabIndex={tabIndex ?? 0} data-mx-template-slot="table" data-mx-template-table="" className={className} {...props}>{children}</TableSurface> }
 
-export function MxEmptyState({ title, description, icon: Icon = Inbox, action, className }: { title: string; description?: string; icon?: LucideIcon; action?: ReactNode; className?: string }) {
+export function MxEmptyState({ title, description, icon: Icon, action, variant = 'dataset', className }: { title: string; description?: string; icon?: LucideIcon; action?: ReactNode; variant?: 'filter' | 'dataset'; className?: string }) {
   return (
-    <div className={cn('flex min-h-48 flex-col items-center justify-center px-5 py-10 text-center', className)}>
-      <span className="grid h-14 w-14 place-items-center rounded-2xl bg-surface-alt text-muted-foreground"><Icon size={24} strokeWidth={1.8} aria-hidden="true" /></span>
-      <Typography variant="h3" className="mt-4 text-base text-foreground">{title}</Typography>
-      {description ? <Typography variant="p" className="mt-2 max-w-md text-sm leading-6 text-muted-foreground">{description}</Typography> : null}
-      {action ? <div className="mt-4">{action}</div> : null}
-    </div>
+    <EmptyState
+      title={title}
+      description={description}
+      icon={Icon ? <Icon size={24} strokeWidth={1.8} /> : undefined}
+      action={action}
+      variant={variant}
+      className={className}
+    />
   )
 }
 

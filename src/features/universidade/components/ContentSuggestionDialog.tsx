@@ -1,8 +1,8 @@
 import { useState, type FormEvent } from 'react'
-import { Lightbulb, Send, X } from 'lucide-react'
+import { Lightbulb, Send } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
-import { Typography } from '@/components/atoms/Typography'
+import { Modal } from '@/components/organisms/Modal'
 import { useSuggestContent } from '@/hooks/useTrainings'
 import { DEVELOPMENT_THEMES, type DevelopmentTheme } from '@/lib/development-content'
 import { toast } from '@/lib/toast'
@@ -55,77 +55,57 @@ export function ContentSuggestionDialog() {
         Sugerir tema de aula
       </Button>
 
-      {open && (
-        <div
-          className="fixed inset-0 z-[180] grid place-items-center bg-surface-overlay/45 p-4"
-          role="presentation"
-          onMouseDown={event => { if (event.target === event.currentTarget) close() }}
-        >
-          <form
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="content-suggestion-title"
-            onSubmit={event => void submit(event)}
-            className="w-full max-w-lg rounded-2xl bg-white p-5 shadow-2xl"
-          >
-            <header className="flex items-start justify-between gap-4">
-              <div>
-                <Typography id="content-suggestion-title" variant="h3" className="text-lg text-foreground">
-                  Sugerir tema de aula
-                </Typography>
-                <Typography variant="caption" tone="muted">
-                  A sugestão será enviada para a curadoria do Admin MX.
-                </Typography>
-              </div>
-              <button type="button" onClick={close} aria-label="Fechar sugestão" className="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground">
-                <X size={18} />
-              </button>
-            </header>
+      <Modal
+        open={open}
+        onClose={close}
+        title="Sugerir tema de aula"
+        description="A sugestão será enviada para a curadoria do Admin MX."
+        size="md"
+      >
+        <form onSubmit={event => void submit(event)} className="flex flex-col">
+          <div className="space-y-4">
+            <label className="block text-xs font-bold uppercase tracking-wide text-muted-foreground">
+              Tema
+              <select
+                value={form.theme}
+                onChange={event => setForm(current => ({ ...current, theme: event.target.value as DevelopmentTheme }))}
+                className="mt-1 h-11 w-full rounded-xl border border-border bg-white px-3 text-sm font-medium text-foreground outline-none focus:ring-2 focus:ring-status-success"
+              >
+                {DEVELOPMENT_THEMES.map(theme => <option key={theme.key} value={theme.key}>{theme.label}</option>)}
+              </select>
+            </label>
+            <label className="block text-xs font-bold uppercase tracking-wide text-muted-foreground">
+              Título da aula
+              <Input
+                value={form.title}
+                onChange={event => setForm(current => ({ ...current, title: event.target.value }))}
+                placeholder="Ex.: Como melhorar a conversão de visitas"
+                maxLength={120}
+                required
+                className="mt-1 h-11 rounded-xl"
+              />
+            </label>
+            <label className="block text-xs font-bold uppercase tracking-wide text-muted-foreground">
+              O que você gostaria de aprender? <span className="font-normal normal-case text-muted-foreground">(opcional)</span>
+              <textarea
+                value={form.description}
+                onChange={event => setForm(current => ({ ...current, description: event.target.value }))}
+                placeholder="Descreva a dúvida ou situação prática."
+                maxLength={500}
+                rows={4}
+                className="mt-1 w-full resize-none rounded-xl border border-border p-3 text-sm outline-none focus:ring-2 focus:ring-status-success"
+              />
+            </label>
+          </div>
 
-            <div className="mt-5 space-y-4">
-              <label className="block text-xs font-bold uppercase tracking-wide text-muted-foreground">
-                Tema
-                <select
-                  value={form.theme}
-                  onChange={event => setForm(current => ({ ...current, theme: event.target.value as DevelopmentTheme }))}
-                  className="mt-1 h-11 w-full rounded-xl border border-border bg-white px-3 text-sm font-medium text-foreground outline-none focus:ring-2 focus:ring-status-success"
-                >
-                  {DEVELOPMENT_THEMES.map(theme => <option key={theme.key} value={theme.key}>{theme.label}</option>)}
-                </select>
-              </label>
-              <label className="block text-xs font-bold uppercase tracking-wide text-muted-foreground">
-                Título da aula
-                <Input
-                  value={form.title}
-                  onChange={event => setForm(current => ({ ...current, title: event.target.value }))}
-                  placeholder="Ex.: Como melhorar a conversão de visitas"
-                  maxLength={120}
-                  required
-                  className="mt-1 h-11 rounded-xl"
-                />
-              </label>
-              <label className="block text-xs font-bold uppercase tracking-wide text-muted-foreground">
-                O que você gostaria de aprender? <span className="font-normal normal-case text-muted-foreground">(opcional)</span>
-                <textarea
-                  value={form.description}
-                  onChange={event => setForm(current => ({ ...current, description: event.target.value }))}
-                  placeholder="Descreva a dúvida ou situação prática."
-                  maxLength={500}
-                  rows={4}
-                  className="mt-1 w-full resize-none rounded-xl border border-border p-3 text-sm outline-none focus:ring-2 focus:ring-status-success"
-                />
-              </label>
-            </div>
-
-            <footer className="mt-5 flex justify-end gap-2">
-              <Button type="button" variant="ghost" onClick={close}>Cancelar</Button>
-              <Button type="submit" className="rounded-xl bg-brand-primary font-bold text-white hover:bg-brand-primary-hover">
-                <Send size={15} className="mr-2" /> Enviar sugestão
-              </Button>
-            </footer>
-          </form>
-        </div>
-      )}
+          <div className="mt-5 flex justify-end gap-2">
+            <Button type="button" variant="ghost" onClick={close}>Cancelar</Button>
+            <Button type="submit" className="rounded-xl bg-brand-primary font-bold text-white hover:bg-brand-primary-hover">
+              <Send size={15} className="mr-2" /> Enviar sugestão
+            </Button>
+          </div>
+        </form>
+      </Modal>
     </>
   )
 }

@@ -50,9 +50,14 @@ describe('contrato canônico do módulo interno MX', () => {
       expect(slots).toContain(`data-mx-template-slot="${slot}"`)
     }
     const primitives = read('src/components/module/MxModuleVisualPrimitives.tsx')
-    for (const primitive of ['InternalMxTemplatePage', 'InternalMxTemplateHeader', 'InternalMxTemplateToolbar', 'InternalMxTemplateSection', 'InternalMxTemplateTable']) {
+    for (const primitive of ['InternalMxTemplatePage', 'InternalMxTemplateHeader', 'InternalMxTemplateToolbar', 'InternalMxTemplateSection']) {
       expect(primitives).toContain(primitive)
     }
+    // C5-TableSurface: a superfície de tabela delega à TableSurface canônica
+    // (single ownership), preservando o slot semântico via atributo no wrapper.
+    expect(primitives).toContain("import { TableSurface } from '@/components/organisms/Table'")
+    expect(primitives).toContain('data-mx-template-slot="table"')
+    expect(primitives).not.toContain('InternalMxTemplateTable')
   })
 
   test('a composição não adiciona seletores específicos por rota', () => {
@@ -105,7 +110,8 @@ describe('contrato canônico do módulo interno MX', () => {
   test('PageHeading permanece apenas como ponte compacta para páginas ainda não migradas', () => {
     const heading = read('src/components/molecules/PageHeading.tsx')
     expect(heading).toContain('data-mx-page-heading="manager"')
-    expect(heading).toContain('rounded-2xl border border-border-subtle bg-white p-5 shadow-sm')
+    expect(heading).toContain("import { PageHeader } from './PageHeader'")
+    expect(heading).not.toContain('rounded-2xl border border-border-subtle bg-white p-5 shadow-sm')
   })
 
   for (const file of wave2CanonicalContainers) {

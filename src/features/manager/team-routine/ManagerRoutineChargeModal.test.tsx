@@ -13,6 +13,7 @@ describe('ManagerRoutineChargeModal', () => {
     render(<ManagerRoutineChargeModal open sellerName="Ana" date="11/07/2026" onClose={() => undefined} onSave={onSave} />)
 
     expect(screen.getByText('Cobrar rotina do vendedor')).toBeTruthy()
+    expect(screen.getByRole('dialog')).toHaveAttribute('data-mx-overlay', 'modal')
     const message = screen.getByLabelText('Mensagem') as HTMLTextAreaElement
     expect(message.value).toBe(DEFAULT_MESSAGE)
     fireEvent.change(message, { target: { value: 'Atualize suas pendências hoje.' } })

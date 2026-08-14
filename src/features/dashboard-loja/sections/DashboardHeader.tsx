@@ -132,24 +132,7 @@ export function DashboardHeader({
                 <ChevronDown size={15} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               </label>
 
-              <nav className="flex rounded-xl bg-muted p-1" aria-label="Abas da loja">
-                {LOJA_TABS.map(tab => {
-                  const Icon = tab.icon
-                  const active = activeTab === tab.key
-                  return (
-                    <button
-                      key={tab.key}
-                      type="button"
-                      onClick={() => onTabChange(tab.key)}
-                      className={`inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-xs font-semibold transition ${active ? 'bg-white text-status-success-text shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
-                    >
-                      <Icon size={14} />
-                      <span className="hidden sm:inline">{tab.label}</span>
-                      <span className="sm:hidden">{tab.mobileLabel}</span>
-                    </button>
-                  )
-                })}
-              </nav>
+              <TabNavPill tabs={LOJA_TABS} activeTab={activeTab} onTabChange={onTabChange} buttonClassName="h-mx-8 px-3" aria-label="Abas da loja" />
 
               {activeTab === 'performance' && (
                 <button
@@ -191,18 +174,7 @@ export function DashboardHeader({
               </div>
 
               <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
-                <div className="flex h-10 rounded-xl bg-muted p-1">
-                  {PERIODO_TABS.map(tab => (
-                    <button
-                      key={tab.key}
-                      type="button"
-                      onClick={() => setViewMode(tab.key)}
-                      className={`rounded-lg px-4 text-xs font-semibold transition ${viewMode === tab.key ? 'bg-white text-status-success-text shadow-sm' : 'text-muted-foreground'}`}
-                    >
-                      {tab.label}
-                    </button>
-                  ))}
-                </div>
+                <TabNavPill tabs={PERIODO_TABS} activeTab={viewMode} onTabChange={(mode) => setViewMode(mode as ViewMode)} buttonClassName="h-mx-9 px-5" aria-label="Período do dashboard" />
 
                 <label className="text-xs text-muted-foreground">
                   Início

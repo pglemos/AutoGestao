@@ -17,6 +17,13 @@ export interface PageViewportProps
  * `PageCanvas` decide largura, gutters e safe areas; este componente decide
  * apenas a viewport rolável. Conteúdo de modal, drawer, listbox e tabela pode
  * rolar internamente, mas uma página comum não deve criar outro `overflow-y`.
+ *
+ * `tabIndex` padrão é `-1` (FASE H 08.003): o scroll container é passivo e não
+ * pode ser uma parada de tabulação — o primeiro Tab em carga nova deve cair no
+ * skip-link, e o foco programático de SkipLink/RouteAnnouncer visa o
+ * `main#main-content`, não esta viewport. Um consumidor que de fato precise
+ * expor a viewport na ordem de tabulação continua podendo passar `tabIndex={0}`
+ * explicitamente.
  */
 export function PageViewport({
   as: Element = 'section',
@@ -29,7 +36,7 @@ export function PageViewport({
       {...props}
       data-mx-page-viewport=""
       data-mx-page-scroll-owner=""
-      tabIndex={props.tabIndex ?? 0}
+      tabIndex={props.tabIndex ?? -1}
       className={cn(
         'min-h-0 w-full min-w-0 flex-1 overflow-y-auto overflow-x-hidden no-scrollbar bg-surface-alt text-foreground',
         className,

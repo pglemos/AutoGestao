@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/atoms/Input";
+import { Label } from "@/components/atoms/Label";
+import { Select } from "@/components/atoms/Select";
 import { base44 } from "@/api/base44Client";
 
 const TIPOS = [
@@ -57,11 +57,8 @@ export default function NovaBonificacaoModal({ open, onClose, onSaved, me }) {
           </div>
           <div>
             <Label>Tipo *</Label>
-            <Select value={form.tipo} onValueChange={v => set("tipo", v)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                {TIPOS.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
-              </SelectContent>
+            <Select value={form.tipo} onChange={e => set("tipo", e.target.value)} aria-label="Tipo">
+              {TIPOS.map(t => <option key={t} value={t}>{t}</option>)}
             </Select>
           </div>
           <div>
@@ -110,13 +107,10 @@ export default function NovaBonificacaoModal({ open, onClose, onSaved, me }) {
           </div>
           <div>
             <Label>Status</Label>
-            <Select value={form.status} onValueChange={v => set("status", v)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Ativa">Ativa</SelectItem>
-                <SelectItem value="Inativa">Inativa</SelectItem>
-                <SelectItem value="Encerrada">Encerrada</SelectItem>
-              </SelectContent>
+            <Select value={form.status} onChange={e => set("status", e.target.value)} aria-label="Status">
+              <option value="Ativa">Ativa</option>
+              <option value="Inativa">Inativa</option>
+              <option value="Encerrada">Encerrada</option>
             </Select>
           </div>
           <div>

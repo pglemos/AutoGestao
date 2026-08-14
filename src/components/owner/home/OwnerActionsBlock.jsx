@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ownerActions } from "./homeData";
 import { Clock, Check, UserCog, ChevronRight, CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from '@/lib/toast'
 import {
   Dialog,
   DialogContent,
@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/dialog";
 
 export default function OwnerActionsBlock() {
-  const { toast } = useToast();
   const [done, setDone] = useState({});
   const [delegated, setDelegated] = useState({});
   const [detail, setDetail] = useState(null);
@@ -60,7 +59,7 @@ export default function OwnerActionsBlock() {
         })}
       </div>
       <button
-        onClick={() => toast({ title: "Agenda", description: "Consulte a agenda real na Visão Geral do Dono." })}
+        onClick={() => toast.info("Agenda", { description: "Consulte a agenda real na Visão Geral do Dono." })}
         className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
       >
         <CalendarDays className="h-3.5 w-3.5" />

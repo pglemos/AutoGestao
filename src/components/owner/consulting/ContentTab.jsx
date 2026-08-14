@@ -5,7 +5,7 @@ import { Calendar, Clock, User, Users, MapPin, ShieldCheck, Lock, FileText, Uplo
 import { Button } from "@/components/ui/button";
 import YouTubePlayer from "./YouTubePlayer";
 import { consultingRepository } from "./consultingRepository";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from '@/lib/toast'
 
 function InfoRow({ icon: Icon, label, value }) {
   return (
@@ -20,7 +20,7 @@ function InfoRow({ icon: Icon, label, value }) {
 }
 
 export default function ContentTab({ meeting, program, userRole, userId = "demo", onProgressSaved, initialLessonId }) {
-  const { toast } = useToast();
+
   const lessons = consultingRepository.getLessons(meeting.id);
   const onboardingLessons = meeting.number === 1 ? consultingRepository.getOnboardingLessons(meeting.programId) : [];
   const allLessons = [...onboardingLessons, ...lessons];
@@ -69,7 +69,7 @@ export default function ContentTab({ meeting, program, userRole, userId = "demo"
   };
 
   const handleComplete = () => {
-    toast({ title: "Aula concluída", description: "A preparação do encontro foi atualizada." });
+    toast.info("Aula concluída", { description: "A preparação do encontro foi atualizada." });
     onProgressSaved?.();
   };
 
@@ -82,7 +82,7 @@ export default function ContentTab({ meeting, program, userRole, userId = "demo"
       fileType: file.type,
     });
     setLessonFiles(consultingRepository.getLessonFiles(activeLessonId));
-    toast({ title: "Arquivo adicionado" });
+    toast.info("Arquivo adicionado");
     e.target.value = "";
   };
 
@@ -90,7 +90,7 @@ export default function ContentTab({ meeting, program, userRole, userId = "demo"
     if (!activeLessonId) return;
     consultingRepository.removeLessonFile(activeLessonId, fileId);
     setLessonFiles(consultingRepository.getLessonFiles(activeLessonId));
-    toast({ title: "Arquivo removido" });
+    toast.info("Arquivo removido");
   };
 
   const initialProgress = activeLesson ? consultingRepository.getLessonProgress(activeLesson.id, userId) : null;

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import PageHeader from "@/components/ui/PageHeader";
-import StatCard from "@/components/ui/StatCard";
+import { StatCard } from "@/components/molecules/StatCard";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "@/components/atoms/Textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { MessageSquare, ThumbsUp, TrendingUp, Clock, CheckCircle2 } from "lucide-react";
 import moment from "moment";
@@ -53,10 +53,10 @@ export default function FeedbackPage({ hideHeader = false }) {
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label="Feedbacks Recebidos" value={feedbacks.length} icon={MessageSquare} color="blue" />
-        <StatCard label="Positivos" value={positive} icon={ThumbsUp} color="green" />
-        <StatCard label="Desenvolvimento" value={development} icon={TrendingUp} color="amber" />
-        <StatCard label="Pendentes" value={pending.length} icon={Clock} color="red" />
+        <StatCard label="Feedbacks Recebidos" value={feedbacks.length} icon={<MessageSquare />} tone="blue" />
+        <StatCard label="Positivos" value={positive} icon={<ThumbsUp />} tone="green" />
+        <StatCard label="Desenvolvimento" value={development} icon={<TrendingUp />} tone="orange" />
+        <StatCard label="Pendentes" value={pending.length} icon={<Clock />} tone="red" />
       </div>
 
       {/* Pending */}
@@ -82,7 +82,7 @@ export default function FeedbackPage({ hideHeader = false }) {
                     placeholder="Meu comentário (opcional)..."
                     value={comments[f.id] || ""}
                     onChange={e => setComments(prev => ({ ...prev, [f.id]: e.target.value }))}
-                    className="rounded-xl resize-none"
+                    className="resize-none"
                     rows={2}
                   />
                   <Button onClick={() => acknowledge(f.id)} className="bg-mx-blue hover:bg-status-info rounded-xl gap-2">

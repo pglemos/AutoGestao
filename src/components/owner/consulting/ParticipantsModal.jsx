@@ -7,10 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { CheckCircle2, Circle } from "lucide-react";
 import { consultingRepository } from "./consultingRepository";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from '@/lib/toast'
 
 export default function ParticipantsModal({ meeting, onClose, onConfirmed }) {
-  const { toast } = useToast();
   const [participants, setParticipants] = useState(
     consultingRepository.getParticipants(meeting.id).map((p) => ({ ...p, note: p.note || "" }))
   );
@@ -29,7 +28,7 @@ export default function ParticipantsModal({ meeting, onClose, onConfirmed }) {
 
   const handleConfirm = () => {
     consultingRepository.confirmParticipants(meeting.id, { participants });
-    toast({ title: "Participantes confirmados", description: "O checklist foi atualizado." });
+    toast.info("Participantes confirmados", { description: "O checklist foi atualizado." });
     onConfirmed?.();
   };
 

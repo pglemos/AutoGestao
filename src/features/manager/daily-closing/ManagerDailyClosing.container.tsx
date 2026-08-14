@@ -30,6 +30,7 @@ import { useNotifications } from "@/hooks/useData";
 import { supabase } from "@/lib/supabase";
 import { calculateReferenceDate } from "@/hooks/checkins/types";
 import { PageCanvas } from "@/design-system/page";
+import { ScrollableRegion } from "@/design-system/page/ScrollableRegion";
 import { Skeleton } from "@/components/atoms/Skeleton";
 import { Modal } from "@/components/organisms/Modal";
 import {
@@ -984,7 +985,7 @@ export function ClosingTable({
   onCorrectLeads: (detail: { seller: { id: string; name: string }; checkin: CheckinWithTotals }) => void;
 }) {
   return (
-    <div className="overflow-x-auto">
+    <ScrollableRegion axis="horizontal" label="Movimento da Equipe" className="">
       <table className="w-full text-sm">
         <thead className="bg-surface-alt">
           <tr>
@@ -1028,7 +1029,7 @@ export function ClosingTable({
           ))}
         </tbody>
       </table>
-    </div>
+    </ScrollableRegion>
   );
 }
 

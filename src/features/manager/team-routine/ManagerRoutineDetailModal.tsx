@@ -1,5 +1,6 @@
 import { format, parseISO } from 'date-fns'
-import { AlertCircle, CheckCircle2, X } from 'lucide-react'
+import { AlertCircle, CheckCircle2 } from 'lucide-react'
+import { Modal } from '@/components/organisms/Modal'
 import type { OfficialRoutineScore } from './manager-team-routine'
 
 export type RoutineDetailAction = {
@@ -27,20 +28,23 @@ type ManagerRoutineDetailModalProps = {
 export function ManagerRoutineDetailModal({ open, sellerName, date, actions, appointments, execution, officialScore, onClose }: ManagerRoutineDetailModalProps) {
   const completed = actions.filter((action) => action.status === 'concluida' || action.status === 'justificada').length
   const hasRoutine = actions.length > 0
-  if (!open) return null
+  const formattedDate = (() => {
+    try { return format(parseISO(date), 'dd/MM/yyyy') } catch { return date }
+  })()
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-surface-overlay/30 p-4" role="dialog" aria-modal="true" aria-labelledby={hasRoutine ? 'manager-routine-detail-title' : undefined}>
-      {!hasRoutine ? <div className="w-full max-w-md rounded-2xl bg-white p-6 text-center shadow-xl">
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={hasRoutine ? `Rotina do Dia — ${sellerName}` : 'Rotina do Dia'}
+      description={hasRoutine ? `Atividades oficiais para ${formattedDate}.` : `Nenhuma rotina registrada para ${sellerName} em ${formattedDate}.`}
+      size={hasRoutine ? 'xl' : 'md'}
+      footer={hasRoutine ? <div className="flex w-full justify-end"><button type="button" className="rounded-xl bg-muted px-4 py-2 text-sm font-medium text-foreground hover:bg-muted" onClick={onClose}>Fechar</button></div> : undefined}
+    >
+      {!hasRoutine ? <div className="py-4 text-center">
           <p className="text-sm text-muted-foreground">Nenhuma rotina registrada para este vendedor nesta data.</p>
-          <button type="button" className="mt-4 rounded-xl bg-muted px-4 py-2 text-sm font-medium text-foreground hover:bg-muted" onClick={onClose}>Fechar</button>
-        </div> : <div className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-xl">
-          <div className="flex items-center justify-between border-b border-border-subtle px-5 py-4">
-            <div><h2 id="manager-routine-detail-title" className="text-lg font-semibold text-foreground">Rotina do Dia — {sellerName}</h2><p className="text-xs text-muted-foreground">Atividades oficiais para {(() => { try { return format(parseISO(date), 'dd/MM/yyyy') } catch { return date } })()}.</p></div>
-            <button type="button" aria-label="Fechar modal" onClick={onClose} className="text-muted-foreground hover:text-muted-foreground"><X size={20}/></button>
-          </div>
-          <div className="space-y-5 overflow-y-auto px-5 py-4">
-          <p className="text-xs text-muted-foreground">Unidade e atividades oficiais da Central de Execução para {(() => { try { return format(parseISO(date), 'dd/MM/yyyy') } catch { return date } })()}.</p>
+        </div> : <div className="space-y-5">
+          <p className="text-xs text-muted-foreground">Unidade e atividades oficiais da Central de Execução para {formattedDate}.</p>
           <div className="grid grid-cols-2 gap-3 rounded-xl bg-surface-alt p-4 sm:grid-cols-4">
             <DetailMetric label="Execução" value={execution === null ? '—' : `${execution}%`} />
             <DetailMetric label="Ações" value={`${completed}/${actions.length}`} />
@@ -72,10 +76,8 @@ export function ManagerRoutineDetailModal({ open, sellerName, date, actions, app
               ))}
             </ul>
           </div>
-          </div>
-          <div className="flex justify-end border-t border-border-subtle px-5 py-3"><button type="button" className="rounded-xl bg-muted px-4 py-2 text-sm font-medium text-foreground hover:bg-muted" onClick={onClose}>Fechar</button></div>
-        </div>}
-    </div>
+          </div>}
+    </Modal>
   )
 }
 

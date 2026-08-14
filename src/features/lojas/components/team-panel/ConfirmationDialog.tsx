@@ -1,6 +1,11 @@
 import type { RefObject } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
-import { Typography } from '@/components/atoms/Typography'
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { Button } from '@/components/atoms/Button'
 
 export type PendingConfirmation = {
@@ -21,58 +26,40 @@ export function ConfirmationDialog({
   onDismiss: (key: string) => void
 }) {
   return (
-    <AnimatePresence>
+    <AlertDialog
+      open={pendingConfirmation !== null}
+      onOpenChange={(open) => {
+        if (!open && pendingConfirmation) onDismiss(pendingConfirmation.key)
+      }}
+    >
       {pendingConfirmation && (
-        <div className="fixed inset-0 z-[140] flex items-center justify-center p-mx-md" role="presentation">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-gray-900/60 backdrop-blur-md"
-            onClick={() => onDismiss(pendingConfirmation.key)}
-          />
-          <motion.div
-            ref={confirmDialogRef}
-            initial={{ opacity: 0, scale: 0.96, y: 12 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.96, y: 12 }}
-            role="alertdialog"
-            aria-modal="true"
-            aria-labelledby="team-confirm-title"
-            aria-describedby="team-confirm-description"
-            className="relative z-10 w-full max-w-md rounded-2xl border border-border bg-white p-mx-xl shadow-sm"
-          >
-            <Typography id="team-confirm-title" variant="h2" className="tracking-tight">
-              {pendingConfirmation.title}
-            </Typography>
-            <Typography id="team-confirm-description" variant="caption" tone="muted" className="mt-mx-sm block font-bold leading-relaxed">
-              {pendingConfirmation.description}
-            </Typography>
-            <div className="mt-mx-xl flex flex-col-reverse sm:flex-row gap-mx-sm sm:justify-end">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => onDismiss(pendingConfirmation.key)}
-                className="h-mx-12 rounded-2xl font-bold uppercase tracking-widest text-mx-nano"
-              >
-                Cancelar
-              </Button>
-              <Button
-                type="button"
-                variant="danger"
-                onClick={() => {
-                  const action = pendingConfirmation.onConfirm
-                  onDismiss(pendingConfirmation.key)
-                  action()
-                }}
-                className="h-mx-12 rounded-2xl font-bold uppercase tracking-widest text-mx-nano"
-              >
-                {pendingConfirmation.label}
-              </Button>
-            </div>
-          </motion.div>
-        </div>
+        <AlertDialogContent ref={confirmDialogRef}>
+          <AlertDialogTitle>{pendingConfirmation.title}</AlertDialogTitle>
+          <AlertDialogDescription>{pendingConfirmation.description}</AlertDialogDescription>
+          <AlertDialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              className="h-mx-12 rounded-2xl font-bold uppercase tracking-widest text-mx-nano"
+              onClick={() => onDismiss(pendingConfirmation.key)}
+            >
+              Cancelar
+            </Button>
+            <Button
+              type="button"
+              variant="danger"
+              className="h-mx-12 rounded-2xl font-bold uppercase tracking-widest text-mx-nano"
+              onClick={() => {
+                const action = pendingConfirmation.onConfirm
+                onDismiss(pendingConfirmation.key)
+                action()
+              }}
+            >
+              {pendingConfirmation.label}
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
       )}
-    </AnimatePresence>
+    </AlertDialog>
   )
 }

@@ -29,7 +29,7 @@ const AlertDialogContent = React.forwardRef(({ className, ...props }, ref) => (
       data-mx-overlay="alert-dialog"
       data-mx-overlay-layer="modal"
       className={cn(
-        "mx-overlay-surface fixed left-4 right-4 top-[50%] flex w-auto max-w-lg translate-y-[-50%] flex-col gap-4 p-6 duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:left-[50%] sm:right-auto sm:w-full sm:rounded-lg",
+        "mx-overlay-surface fixed left-[var(--mx-overlay-compact-gutter)] right-[var(--mx-overlay-compact-gutter)] top-[50%] flex w-auto max-w-lg translate-y-[-50%] flex-col gap-[var(--mx-overlay-gap)] p-[var(--mx-overlay-padding)] duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:left-[50%] sm:-translate-x-1/2 sm:right-auto sm:w-full",
         className
       )}
       {...props} />

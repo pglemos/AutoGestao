@@ -58,7 +58,7 @@ const Z_TOKEN = /\bvar\(--(mx-z-[a-z]+)\)/g
  */
 export const SEMANTIC_RULES = [
   ['src/components/atoms/Tooltip.tsx', 'mx-z-tooltip', [6]],
-  ['src/components/atoms/Button.tsx', 'mx-z-tooltip', [107]],
+  ['src/components/atoms/Button.tsx', 'mx-z-tooltip', [105]],
   ['src/components/fechamento/MovimentoDia.jsx', 'mx-z-tooltip', [311]],
   ['src/components/ui/dropdown-menu.jsx', 'mx-z-popover', [39, 53]],
   ['src/components/ui/popover.jsx', 'mx-z-popover', [19]],
@@ -90,7 +90,10 @@ function walk(dir, files = []) {
     if (entry.isDirectory()) {
       if (entry.name === 'node_modules' || entry.name === '.git') continue
       walk(full, files)
-    } else if (/\.(tsx?|jsx?|css)$/.test(entry.name)) {
+    } else if (
+      /\.(tsx?|jsx?|css)$/.test(entry.name) &&
+      !/\.(test|spec|stories|playwright)\./.test(entry.name)
+    ) {
       files.push(full)
     }
   }

@@ -1,5 +1,6 @@
 import React from "react";
 import { BookOpen, MessageSquare, Target, TrendingUp, UserCircle } from "lucide-react";
+import { PageHeader as CanonicalPageHeader } from "@/components/molecules/PageHeader";
 
 const ICONS = {
   "Meu Perfil": UserCircle,
@@ -12,16 +13,14 @@ export default function PageHeader({ title, subtitle, children }) {
   const Icon = ICONS[title] || TrendingUp;
 
   return (
-    <header className="mb-8 flex min-h-16 w-full flex-col justify-center gap-3 rounded-[var(--mx-card-radius)] border border-border bg-white px-4 py-4 shadow-[var(--mx-card-shadow)] sm:px-6 lg:flex-row lg:items-center lg:justify-between">
-      <div className="flex min-w-0 items-center gap-3">
-        <Icon className="h-5 w-5 shrink-0 text-status-info-text" aria-hidden="true" />
-        <div className="min-w-0">
-          <h1 className="truncate text-[18px] font-bold uppercase leading-tight tracking-tight text-foreground sm:text-h3">
-            {title}
-          </h1>
-        </div>
-      </div>
-      {children && <div className="flex min-w-0 flex-wrap items-center gap-2 lg:justify-end">{children}</div>}
-    </header>
+    <CanonicalPageHeader
+      className="mb-8"
+      title={title}
+      description={subtitle}
+      icon={Icon}
+      actions={children}
+      titleVariant="h3"
+      descriptionVariant="p"
+    />
   );
 }

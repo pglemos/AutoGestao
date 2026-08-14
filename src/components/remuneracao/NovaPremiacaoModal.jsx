@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/atoms/Input";
+import { Label } from "@/components/atoms/Label";
+import { Select } from "@/components/atoms/Select";
 import { base44 } from "@/api/base44Client";
 
 export default function NovaPremiacaoModal({ open, onClose, onSaved, politicas, me }) {
@@ -54,14 +54,13 @@ export default function NovaPremiacaoModal({ open, onClose, onSaved, politicas, 
         <div className="space-y-4 mt-2">
           <div>
             <Label>Política vinculada *</Label>
-            <Select value={form.politica_id} onValueChange={v => {
+            <Select value={form.politica_id || ""} onChange={e => {
+              const v = e.target.value;
               const p = politicas.find(x => x.id === v);
               setForm(f => ({ ...f, politica_id: v, politica_nome: p?.nome || "" }));
-            }}>
-              <SelectTrigger><SelectValue placeholder="Selecione a política" /></SelectTrigger>
-              <SelectContent>
-                {politicas.map(p => <SelectItem key={p.id} value={p.id}>{p.nome}</SelectItem>)}
-              </SelectContent>
+            }} aria-label="Política vinculada">
+              <option value="" disabled>Selecione a política</option>
+              {politicas.map(p => <option key={p.id} value={p.id}>{p.nome}</option>)}
             </Select>
           </div>
           <div>
@@ -74,12 +73,9 @@ export default function NovaPremiacaoModal({ open, onClose, onSaved, politicas, 
           </div>
           <div>
             <Label>Tipo de premiação</Label>
-            <Select value={form.tipo_premiacao} onValueChange={v => set("tipo_premiacao", v)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Acumulativa">Acumulativa</SelectItem>
-                <SelectItem value="Substitutiva">Substitutiva</SelectItem>
-              </SelectContent>
+            <Select value={form.tipo_premiacao} onChange={e => set("tipo_premiacao", e.target.value)} aria-label="Tipo de premiação">
+              <option value="Acumulativa">Acumulativa</option>
+              <option value="Substitutiva">Substitutiva</option>
             </Select>
             <p className="text-caption text-muted-foreground mt-1">
               {form.tipo_premiacao === "Acumulativa"

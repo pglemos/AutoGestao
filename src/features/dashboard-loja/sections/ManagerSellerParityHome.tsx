@@ -562,7 +562,7 @@ function AppointmentsChart({ data, onBarClick }: { data: AppointmentChartItem[];
             <XAxis type="number" domain={[0, maxValue]} hide />
             <YAxis type="category" dataKey="firstName" width={100} tick={{ fontSize: 12, fill: chartTokens.managerAxisTick() }} axisLine={false} tickLine={false} />
             <Bar dataKey="appointments" radius={[0, 4, 4, 0]} cursor="pointer" onClick={handleBarClick}>
-              {data.map(item => <Cell key={item.sellerId} fill={item.appointments > 0 ? chartTokens.managerPositive() : '#d1d5db'} />)}
+              {data.map(item => <Cell key={item.sellerId} fill={item.appointments > 0 ? chartTokens.managerPositive() : chartTokens.managerStoreGoal()} />)}
             </Bar>
           </BarChart>
         </ResponsiveContainer>

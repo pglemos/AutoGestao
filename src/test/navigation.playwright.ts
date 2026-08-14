@@ -23,37 +23,39 @@ test.describe('Navigation: Main Sidebar & Mobile Bar', () => {
     await expect(page.locator('button[type="submit"]')).toBeVisible();
   });
 
-  test('header renders MX Performance branding', async ({ page }) => {
+  test('header renders MX Performance branding', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'mobile-chrome', 'O mobile header é oculto no desktop; a marca no desktop vem da sidebar.');
     await loginAsAdmin(page);
-    const header = page.locator('header[role="banner"]');
+    const header = page.locator('[data-mx-mobile-header]');
     await expect(header).toBeVisible();
-    await expect(header.locator('img[alt="MX Performance"]')).toBeVisible();
+    await expect(header.locator('img[alt="MX"]')).toBeVisible();
   });
 
-  test('sidebar navigation renders category icons when authenticated', async ({ page }, testInfo) => {
+  test('sidebar navigation renders nav items when authenticated', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name === 'mobile-chrome', 'A navegação lateral é substituída pela barra mobile.');
     await loginAsAdmin(page);
 
-    const sidebar = page.locator('aside[aria-label="Menu Lateral Principal"]');
+    const sidebar = page.locator('aside[aria-label^="Menu principal do"]');
     await expect(sidebar).toBeVisible();
+    // A marca no desktop vive na sidebar, não no header mobile (oculto no xl).
+    await expect(sidebar.locator('img[alt="MX"]')).toBeVisible();
 
-    const navButtons = sidebar.locator('nav[aria-label="Módulos de Gestão"] button[type="button"]');
-    const count = await navButtons.count();
+    const navLinks = sidebar.locator('nav a');
+    const count = await navLinks.count();
     expect(count).toBeGreaterThan(0);
   });
 
-  test('sidebar drawer opens on category click and shows nav items', async ({ page }, testInfo) => {
-    test.skip(testInfo.project.name === 'mobile-chrome', 'A navegação lateral é substituída pelo menu mobile.');
+  test('mobile drawer opens on menu button and shows nav items', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'mobile-chrome', 'O drawer mobile substitui a sidebar no compacto.');
     await loginAsAdmin(page);
 
-    const sidebar = page.locator('aside[aria-label="Menu Lateral Principal"]');
-    await expect(sidebar).toBeVisible();
+    const menuButton = page.locator('button[aria-label="Abrir menu principal"]');
+    await expect(menuButton).toBeVisible();
+    await menuButton.click();
 
-    const firstCategoryBtn = sidebar.locator('nav button[type="button"]').first();
-    await firstCategoryBtn.click();
-
-    const drawer = page.locator('#drawer-navigation');
+    const drawer = page.locator('[role="dialog"][aria-modal="true"]');
     await expect(drawer).toBeVisible();
+    await expect(drawer).toHaveAttribute('aria-label', /Menu principal/);
 
     const navLinks = drawer.locator('a');
     const linkCount = await navLinks.count();
@@ -92,32 +94,15 @@ test.describe('Navigation: Main Sidebar & Mobile Bar', () => {
     await expect(page.getByText('Agenda MX')).toBeVisible();
   });
 
-  test('mobile bottom bar is visible on mobile viewport', async ({ page }) => {
+  test('mobile menu button opens overlay menu', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'mobile-chrome', 'O drawer mobile é mobile-only.');
     await page.setViewportSize({ width: 375, height: 667 });
     await loginAsAdmin(page);
 
-    const mobileBar = page.locator('nav[aria-label="Barra de Navegação Rápida"]');
-    await expect(mobileBar).toBeVisible();
-  });
-
-  test('mobile bottom bar has navigation links', async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 667 });
-    await loginAsAdmin(page);
-
-    const mobileBar = page.locator('nav[aria-label="Barra de Navegação Rápida"]');
-    const links = mobileBar.locator('a');
-    const count = await links.count();
-    expect(count).toBeGreaterThanOrEqual(2);
-  });
-
-  test('mobile menu button opens overlay menu', async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 667 });
-    await loginAsAdmin(page);
-
-    const menuButton = page.locator('button[aria-label="Abrir menu mobile"]');
+    const menuButton = page.locator('button[aria-label="Abrir menu principal"]');
     await menuButton.click();
 
-    const mobileMenu = page.locator('div[aria-modal="true"][aria-label="Menu Mobile Principal"]');
+    const mobileMenu = page.locator('[role="dialog"][aria-modal="true"][aria-label^="Menu principal"]');
     await expect(mobileMenu).toBeVisible();
   });
 

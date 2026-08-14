@@ -1,6 +1,6 @@
 // Container principal da aba Calendário — orquestra visualizações, sidebar e modais.
 import { useState, useEffect, useMemo } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from '@/lib/toast'
 import { useIsMobile } from "@/hooks/useIsMobile";
 import {
   Sheet,
@@ -48,7 +48,7 @@ export default function CalendarView({
   unitName,
   responsiblePeople = [],
 }) {
-  const { toast } = useToast();
+
   const isMobile = useIsMobile();
   const prefs = useMemo(() => loadCalendarPrefs(), []);
   const refToday = useMemo(() => getRefDate(), []);
@@ -106,11 +106,11 @@ export default function CalendarView({
   const handleRescheduleDrag = (action, newDate) => {
     const check = canReschedule(action);
     if (!check.allowed) {
-      toast({ title: check.message, variant: "destructive" });
+      toast.error(check.message);
       return;
     }
     if (check.requireFuture && newDate.getTime() < refToday.getTime()) {
-      toast({ title: "Ação aguardando decisão só pode ser reagendada para data futura.", variant: "destructive" });
+      toast.error("Ação aguardando decisão só pode ser reagendada para data futura.");
       return;
     }
     setRescheduleAction(action);
@@ -130,11 +130,11 @@ export default function CalendarView({
 
   const handleExportCalendar = () => {
     exportCalendarCSV(actions, refDate);
-    toast({ title: "Calendário exportado." });
+    toast.info("Calendário exportado.");
   };
   const handleExportAgenda = () => {
     exportMonthAgendaCSV(actions, refDate);
-    toast({ title: "Agenda do mês exportada." });
+    toast.info("Agenda do mês exportada.");
   };
   const handlePrint = () => {
     printCalendar(actions, refDate, companyName, unitName);

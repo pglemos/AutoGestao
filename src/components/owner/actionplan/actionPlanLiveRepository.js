@@ -187,6 +187,15 @@ function nullableNumber(value) {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+/**
+ * SelectItem values in the action-plan UI are names for legacy contract
+ * compatibility. Keep the first occurrence when two linked users share a
+ * name so React keys and Radix Select values remain unique and deterministic.
+ */
+export function uniqueResponsiblePeople(rows = []) {
+  return [...new Set((rows || []).map((row) => row?.name).filter(Boolean))];
+}
+
 function mapHistory(rows) {
   return (rows || []).map((row) => ({
     id: row.id,
@@ -498,7 +507,7 @@ export const actionPlanLiveRepository = {
     }
     const { data, error } = await query;
     if (error) throw error;
-    return (data || []).map((user) => user.name).filter(Boolean);
+    return uniqueResponsiblePeople(data);
   },
 
   async getActions(options) {

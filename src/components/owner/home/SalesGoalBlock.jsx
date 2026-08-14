@@ -1,9 +1,8 @@
 import { salesGoal } from "./homeData";
 import { Target, TrendingDown, ArrowUpRight } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from '@/lib/toast'
 
 export default function SalesGoalBlock() {
-  const { toast } = useToast();
 
   return (
     <section className="rounded-2xl border border-border bg-card p-5 shadow-sm">
@@ -51,7 +50,7 @@ export default function SalesGoalBlock() {
         </div>
         <button
           onClick={() =>
-            toast({ title: "Diagnóstico comercial", description: "Consulte o diagnóstico comercial com dados reais na Visão Geral do Dono." })
+            toast.info("Diagnóstico comercial", { description: "Consulte o diagnóstico comercial com dados reais na Visão Geral do Dono." })
           }
           className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
         >

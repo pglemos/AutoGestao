@@ -1,6 +1,13 @@
-import { useEffect, useRef, useState } from 'react'
-import { Calendar, X } from 'lucide-react'
-import { useFocusTrap } from '@/hooks/useFocusTrap'
+import { useEffect, useState } from 'react'
+import { Calendar } from 'lucide-react'
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import type { ManagerFeedbackDraft } from './manager-feedback-draft'
 
 type Seller = { id: string; name: string }
@@ -30,23 +37,17 @@ function emptyDraft(initialDate: string, sellerId = ''): ManagerFeedbackDraft {
 }
 
 export function ManagerFeedbackModal({ open, saving, sellers, initialDate, preselectedSeller = '', onClose, onSubmit }: Props) {
-  const dialogRef = useRef<HTMLDivElement>(null)
   const [draft, setDraft] = useState(() => emptyDraft(initialDate, preselectedSeller))
   const [impactCustom, setImpactCustom] = useState('')
   const [validation, setValidation] = useState('')
-  useFocusTrap(dialogRef, open)
 
   useEffect(() => {
     if (!open) return
     setDraft(emptyDraft(initialDate, preselectedSeller))
     setImpactCustom('')
     setValidation('')
-    const onKeyDown = (event: KeyboardEvent) => { if (event.key === 'Escape') onClose() }
-    document.addEventListener('keydown', onKeyDown)
-    return () => document.removeEventListener('keydown', onKeyDown)
-  }, [initialDate, onClose, open, preselectedSeller])
+  }, [initialDate, open, preselectedSeller])
 
-  if (!open) return null
   const set = <K extends keyof ManagerFeedbackDraft>(key: K, value: ManagerFeedbackDraft[K]) => setDraft(current => ({ ...current, [key]: value }))
   const submit = () => {
     if (!draft.sellerId || !draft.type) {
@@ -56,13 +57,16 @@ export function ManagerFeedbackModal({ open, saving, sellers, initialDate, prese
     onSubmit({ ...draft, impact: draft.impact === 'Outro' ? impactCustom.trim() : draft.impact })
   }
 
-  return <div className="fixed inset-0 z-[140] flex items-end justify-center bg-surface-overlay/30 p-0 backdrop-blur-[1px] sm:items-center sm:p-6" role="presentation">
-    <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="manager-feedback-title" className="flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-t-2xl bg-white shadow-xl sm:rounded-2xl">
-      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-border-subtle bg-white px-6 py-4">
-        <h2 id="manager-feedback-title" className="text-lg font-semibold text-foreground">Novo Feedback</h2>
-        <button type="button" onClick={onClose} aria-label="Fechar" className="rounded-lg p-1 text-muted-foreground hover:bg-surface-alt hover:text-foreground"><X size={18} /></button>
-      </header>
-      <div className="overflow-y-auto px-6 py-5">
+  return <Dialog open={open} onOpenChange={(nextOpen) => { if (!nextOpen && !saving) onClose() }}>
+    <DialogContent
+      aria-describedby="manager-feedback-description"
+      className="max-h-[var(--mx-overlay-max-height)] max-w-2xl gap-0 overflow-hidden p-0"
+    >
+      <DialogHeader className="shrink-0 border-b border-border-subtle px-6 py-4 text-left">
+        <DialogTitle>Novo Feedback</DialogTitle>
+        <p id="manager-feedback-description" className="text-body-sm text-muted-foreground">Registre um feedback estruturado para acompanhar o desenvolvimento do vendedor.</p>
+      </DialogHeader>
+      <DialogBody className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
         <section className="space-y-3">
           <h3 className="text-sm font-semibold text-foreground">Identificação</h3>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -77,8 +81,11 @@ export function ManagerFeedbackModal({ open, saving, sellers, initialDate, prese
         <section className="mt-6 space-y-3"><h3 className="text-sm font-semibold text-foreground">Impacto e orientação</h3><div><p className="mb-1.5 text-xs text-muted-foreground">Qual foi o impacto?</p><div className="flex flex-wrap gap-1.5">{IMPACTS.map(item => <button key={item} type="button" onClick={() => set('impact', item)} className={`rounded-lg border px-3 py-1.5 text-xs ${draft.impact === item ? 'border-status-success bg-status-success-surface text-status-success-text' : 'border-border text-muted-foreground hover:border-border-strong'}`}>{item}</button>)}</div>{draft.impact === 'Outro' ? <input aria-label="Outro impacto" value={impactCustom} onChange={event => setImpactCustom(event.target.value)} placeholder="Descreva o impacto..." className={`mt-2 ${fieldClass}`} /> : null}</div><label className="text-xs text-muted-foreground">Qual orientação foi dada?<textarea aria-label="Orientação" value={draft.orientation} onChange={event => set('orientation', event.target.value)} placeholder="Descreva a orientação..." rows={2} className={`mt-1 ${fieldClass}`} /></label></section>
         <section className="mt-6 space-y-3"><h3 className="text-sm font-semibold text-foreground">Compromisso do vendedor</h3><p className="text-xs text-muted-foreground">O que o vendedor se comprometeu a fazer?</p><input aria-label="Compromisso" value={draft.commitment} onChange={event => set('commitment', event.target.value)} placeholder="Descreva o compromisso (opcional para reconhecimento)..." className={fieldClass} /><div className="grid grid-cols-1 gap-3 md:grid-cols-2"><label className="text-xs font-medium text-muted-foreground">Prazo<input aria-label="Prazo" type="date" value={draft.deadline} onChange={event => set('deadline', event.target.value)} className={`mt-1 ${fieldClass}`} /></label><label className="text-xs font-medium text-muted-foreground">Próxima conversa<input aria-label="Próxima conversa" type="date" value={draft.nextConversation} onChange={event => set('nextConversation', event.target.value)} className={`mt-1 ${fieldClass}`} /></label></div><label className="flex items-center gap-2 text-xs text-muted-foreground"><input aria-label="Usar este feedback como evidência no próximo PDI" type="checkbox" checked={draft.useAsPdiEvidence} onChange={event => set('useAsPdiEvidence', event.target.checked)} className="rounded border-border-strong text-status-success-text focus:ring-status-success" />Usar este feedback como evidência no próximo PDI</label><label className="flex items-start gap-2 text-xs text-muted-foreground"><input aria-label="Enviar este feedback ao vendedor" type="checkbox" checked={draft.sendToSeller} onChange={event => set('sendToSeller', event.target.checked)} className="mt-0.5 rounded border-border-strong text-status-success-text focus:ring-status-success" /><span><span className="font-medium text-foreground">Enviar este feedback ao vendedor</span><span className="block text-caption text-muted-foreground">Desmarque para manter esta observação somente na visão da liderança.</span></span></label></section>
         {validation ? <p role="alert" className="mt-4 text-xs text-status-warning-text">{validation}</p> : null}
-      </div>
-      <footer className="sticky bottom-0 flex justify-end gap-2 border-t border-border-subtle bg-white px-6 py-4"><button type="button" onClick={onClose} className="rounded-xl border border-border px-4 py-2 text-sm font-medium text-foreground">Cancelar</button><button type="button" onClick={submit} disabled={saving} className="rounded-xl bg-brand-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-primary-hover disabled:opacity-60">{saving ? 'Salvando...' : 'Enviar Feedback'}</button></footer>
-    </div>
-  </div>
+      </DialogBody>
+      <DialogFooter className="shrink-0 gap-2 border-t border-border-subtle bg-white px-6 py-4">
+        <button type="button" onClick={onClose} disabled={saving} className="rounded-xl border border-border px-4 py-2 text-sm font-medium text-foreground">Cancelar</button>
+        <button type="button" onClick={submit} disabled={saving} className="rounded-xl bg-brand-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-primary-hover disabled:opacity-60">{saving ? 'Salvando...' : 'Enviar Feedback'}</button>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
 }

@@ -7,7 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { consultingRepository } from "./consultingRepository";
 import ParticipantsModal from "./ParticipantsModal";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from '@/lib/toast'
 
 const TYPE_ICON = {
   lesson: Play,
@@ -33,7 +33,6 @@ const STATUS_TONE = {
 };
 
 export default function PreparationTab({ meeting, onChanged }) {
-  const { toast } = useToast();
   const [items, setItems] = useState(consultingRepository.getPreparationItems(meeting.id));
   const [prep, setPrep] = useState(consultingRepository.getMeetingPreparation(meeting.id));
   const [showParticipants, setShowParticipants] = useState(false);
@@ -54,17 +53,14 @@ export default function PreparationTab({ meeting, onChanged }) {
       completedAt: newStatus === "completed" ? new Date().toISOString() : null,
     });
     refresh();
-    toast({
-      title: newStatus === "completed" ? "Item concluído" : "Item reaberto",
-      description: item.title,
-    });
+    toast.info(newStatus === "completed" ? "Item concluído" : "Item reaberto", { description: item.title });
   };
 
   const handleSaveNote = (item) => {
     const note = itemNotes[item.id] || item.notes || "";
     consultingRepository.updatePreparationItem(meeting.id, item.id, { notes: note });
     refresh();
-    toast({ title: "Observação salva" });
+    toast.info("Observação salva");
   };
 
   const handleFileSelect = (e, item) => {
@@ -76,14 +72,14 @@ export default function PreparationTab({ meeting, onChanged }) {
       fileType: file.type,
     });
     refresh();
-    toast({ title: "Arquivo anexado", description: file.name });
+    toast.info("Arquivo anexado", { description: file.name });
     e.target.value = "";
   };
 
   const handleRemoveFile = (item, fileId) => {
     consultingRepository.removePreparationItemFile(meeting.id, item.id, fileId);
     refresh();
-    toast({ title: "Arquivo removido" });
+    toast.info("Arquivo removido");
   };
 
   const handleParticipantsConfirmed = () => {

@@ -9,12 +9,11 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 import { consultingRepository } from "./consultingRepository";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from '@/lib/toast'
 
 const MODALITIES = ["Online", "Presencial", "Conforme disponibilidade"];
 
 export default function AnticipationModal({ meeting, program, onClose, onSubmitted }) {
-  const { toast } = useToast();
   const [form, setForm] = useState({
     reason: "",
     requestedModality: meeting.modality || "Online",
@@ -53,7 +52,7 @@ export default function AnticipationModal({ meeting, program, onClose, onSubmitt
       },
     });
 
-    toast({ title: "Solicitação de antecipação enviada ao consultor." });
+    toast.info("Solicitação de antecipação enviada ao consultor.");
     onSubmitted?.();
   };
 
