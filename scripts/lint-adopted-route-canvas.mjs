@@ -126,6 +126,16 @@ function candidatePaths(spec) {
   return candidates
 }
 
+/** Caminhos candidatos para um especifier relativo (`./...`) a partir de um arquivo. */
+function relativeCandidatePaths(spec, fileName) {
+  if (!spec.startsWith('.')) return []
+  const base = path.normalize(path.join(path.dirname(fileName), spec))
+  const candidates = []
+  for (const ext of SOURCE_EXTENSIONS) candidates.push(`${base}${ext}`)
+  for (const ext of SOURCE_EXTENSIONS) candidates.push(path.join(base, `index${ext}`))
+  return candidates
+}
+
 /**
  * Segue um re-export de página em um nível.
  *
@@ -160,6 +170,29 @@ function resolvePageReExport(source, readFile) {
 function resolvePageDelegate(source, fileName, readFile) {
   const sf = createSourceFile(fileName, source)
   const bindings = collectBindings(sf)
+  // Imports relativos (`./views/X`) também precisam ser resolvidos contra o
+  // diretório do arquivo (ex.: SalesPerformance.container → views/).
+  const relativeBindings = new Map()
+  const visitImports = (node) => {
+    if (
+      ts.isImportDeclaration(node) &&
+      node.moduleSpecifier &&
+      ts.isStringLiteral(node.moduleSpecifier) &&
+      node.moduleSpecifier.text.startsWith('.')
+    ) {
+      const spec = node.moduleSpecifier.text
+      const clause = node.importClause
+      if (clause) {
+        if (clause.name) relativeBindings.set(clause.name.text, spec)
+        const named = clause.namedBindings
+        if (named && ts.isNamedImports(named)) {
+          for (const el of named.elements) relativeBindings.set(el.name.text, spec)
+        }
+      }
+    }
+    ts.forEachChild(node, visitImports)
+  }
+  visitImports(sf)
   const rendered = new Set()
   const targets = []
   for (const statement of sf.statements) {
@@ -189,6 +222,14 @@ function resolvePageDelegate(source, fileName, readFile) {
   }
   for (const tag of rendered) {
     if (CANVAS_TAGS.has(tag)) return [] // raiz tem canvas próprio
+    const relativeSpec = relativeBindings.get(tag)
+    if (relativeSpec) {
+      const resolved = relativeCandidatePaths(relativeSpec, fileName).find((rel) => readFile(rel) !== null)
+      if (resolved) {
+        targets.push(resolved)
+        continue
+      }
+    }
     const spec = bindings[tag]
     if (!spec) continue
     const candidates = candidatePaths(spec)
@@ -234,21 +275,52 @@ function extractRenderedTags(node, sf, out = new Set()) {
 function collectRouteRenders(sf) {
   const renders = new Map()
   const isRouteTag = (node) => isJsxTag(node) && nodeTagName(node, sf) === 'Route'
-  const visit = (node) => {
+  const visit = (node, parentPath) => {
     if (isRouteTag(node)) {
       const attrs = nodeAttributes(node).properties
       const pathAttr = attrs.find((a) => ts.isJsxAttribute(a) && a.name.getText(sf) === 'path')
       const elementAttr = attrs.find((a) => ts.isJsxAttribute(a) && a.name.getText(sf) === 'element')
-      if (pathAttr && elementAttr && ts.isStringLiteral(pathAttr.initializer)) {
-        const route = normalizeRoute(pathAttr.initializer.text)
+      const isIndex = attrs.some((a) => ts.isJsxAttribute(a) && a.name.getText(sf) === 'index')
+      const path = pathAttr && ts.isStringLiteral(pathAttr.initializer)
+        ? pathAttr.initializer.text.replace(/^\/+|\/+$/g, '')
+        : null
+      // Rota index aninhada herda o path do pai (ex.: <Route path="consultoria"><Route index .../>)
+      const effectivePath = isIndex ? parentPath : path
+      if (elementAttr && effectivePath) {
+        const route = normalizeRoute(effectivePath)
         const tags = extractRenderedTags(elementAttr.initializer, sf)
-        renders.set(route, [...tags])
+        renders.set(route, [...new Set([...(renders.get(route) ?? []), ...tags])])
       }
+      // Desce nos filhos, acumulando o path (relativo composto com o pai).
+      const childPath = path
+        ? parentPath
+          ? `${parentPath}/${path}`.replace(/^\/+|\/+$/g, '')
+          : path
+        : parentPath
+      const children = nodeChildren(node)
+      for (const child of children) visit(child, childPath)
+      return
+    }
+    ts.forEachChild(node, (child) => visit(child, parentPath))
+  }
+  visit(sf, undefined)
+  return renders
+}
+
+/** Checa se o arquivo contém qualquer canvas (PageCanvas/PageTemplate/MxModulePage). */
+function fileHasCanvas(source) {
+  const sf = createSourceFile('__hascanvas__.ts', source)
+  let found = false
+  const visit = (node) => {
+    if (found) return
+    if (isJsxTag(node) && CANVAS_TAGS.has(nodeTagName(node, sf))) {
+      found = true
+      return
     }
     ts.forEachChild(node, visit)
   }
   visit(sf)
-  return renders
+  return found
 }
 
 /** Checa uma raiz renderizada contra a metadata. */
@@ -389,14 +461,20 @@ function inspectRootFile(source, fileName, meta, route) {
       }
     }
     if (body && ts.isBlock(body)) {
-      const collectReturns = (n) => {
+      // Varre returns E declarações de variáveis do corpo (ex.:
+      // `const content = <MxModulePage ...>` montado antes do return). O
+      // canvas pode estar num wrapper retornado depois.
+      const collect = (n) => {
         if (ts.isReturnStatement(n) && n.expression) {
           if (containsCanvas(n.expression)) rootHasCanvas = true
           return
         }
-        ts.forEachChild(n, collectReturns)
+        if (ts.isVariableDeclaration(n) && n.initializer && containsCanvas(n.initializer)) {
+          rootHasCanvas = true
+        }
+        ts.forEachChild(n, collect)
       }
-      collectReturns(body)
+      collect(body)
     }
   }
   for (const statement of sf.statements) visitStatements(statement)
@@ -474,14 +552,16 @@ export function inspectAdoptedRouteCanvas({ appSource, metadataSource, readFile 
         const current = queue.shift()
         const currentSource = readFile(current)
         if (currentSource === null) continue
-        const next = [...new Set([...resolvePageReExport(currentSource, readFile) ? [resolvePageReExport(currentSource, readFile)] : [], ...resolvePageDelegate(currentSource, current, readFile)])]
-        for (const n of next) {
+        const nextTargets = [...new Set([...resolvePageReExport(currentSource, readFile) ? [resolvePageReExport(currentSource, readFile)] : [], ...resolvePageDelegate(currentSource, current, readFile)])]
+        for (const n of nextTargets) {
           if (!n || visited.has(n)) continue
           visited.add(n)
           queue.push(n)
         }
-        // Só inspeciona arquivos sem delegados restantes (folhas do grafo).
-        if (next.length === 0) canvasFiles.push(current)
+        // O arquivo é folha-canônica quando declara o próprio canvas, mesmo que
+        // também renderize wrappers (ex.: LojasErrorBoundary envolvendo o
+        // MxModulePage). Se não tem canvas e tem delegados, seguimos o grafo.
+        if (fileHasCanvas(currentSource)) canvasFiles.push(current)
       }
       const sourceFiles = canvasFiles.length > 0 ? canvasFiles : [root]
       for (const resolved of sourceFiles) {
@@ -491,6 +571,7 @@ export function inspectAdoptedRouteCanvas({ appSource, metadataSource, readFile 
         const source = readFile(resolved)
         violations.push(...inspectRootFile(source, resolved, meta, meta.route))
       }
+    }
   }
 
   return {
