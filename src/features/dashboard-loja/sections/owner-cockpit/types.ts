@@ -110,7 +110,7 @@ export const vividIconClasses: Record<KpiTone, string> = {
   success: 'bg-status-success text-white',
   info: 'bg-status-info text-white',
   warning: 'bg-status-warning text-status-warning-foreground',
-  danger: 'bg-status-error text-white',
+  danger: 'bg-status-error text-status-error-foreground',
   muted: 'bg-surface-alt text-text-tertiary',
   brand: 'bg-brand-primary text-white',
   purple: 'bg-status-info text-white',

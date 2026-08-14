@@ -90,6 +90,13 @@ const TEXT_PAIRS: Pair[] = [
   // Preenchimentos sólidos e seu texto.
   { label: 'primary-foreground / primary', fg: '--mx-color-primary-foreground', bg: '--mx-color-primary', min: 4.5 },
   { label: 'sidebar-foreground / sidebar', fg: '--mx-color-sidebar-foreground', bg: '--mx-color-sidebar-background', min: 4.5 },
+  // Texto sobre o PREENCHIMENTO sólido de danger. Branco sobre o fill (#ef4343)
+  // dá 3.78:1 e reprova AA em texto normal; o foreground semântico (ink escuro)
+  // deve entregar pelo menos 4.5:1 sobre o fill. O `-foreground` é o degrau que
+  // o produto usa para texto sobre superfície SÓLIDA; `-text` é para texto sobre
+  // superfície clara e continua sendo coberto pelos pares acima.
+  { label: 'danger-foreground / danger', fg: '--mx-color-danger-foreground', bg: '--mx-color-danger', min: 4.5 },
+  { label: 'danger-foreground / status-error', fg: '--mx-color-danger-foreground', bg: '--mx-status-error', min: 4.5 },
 ]
 
 /** Componentes e contornos: mínimo 3:1 (WCAG 2.2 1.4.11). */

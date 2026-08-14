@@ -217,8 +217,8 @@ export function calcularScoreMX(vendas: number, meta: number, funil: FunnelData,
 
 /** Get status operacional baseado no ritmo e disciplina */
 export function getOperationalStatus(pacing: number, disciplinePct: number): { label: string; color: string } {
-    if (disciplinePct < 80) return { label: 'INDISCIPLINA', color: 'bg-status-error text-white' }
-    if (pacing < 30) return { label: 'CRÍTICO', color: 'bg-status-error text-white' }
+    if (disciplinePct < 80) return { label: 'INDISCIPLINA', color: 'bg-status-error text-status-error-foreground' }
+    if (pacing < 30) return { label: 'CRÍTICO', color: 'bg-status-error text-status-error-foreground' }
     if (pacing < 70) return { label: 'ALERTA RITMO', color: 'bg-status-warning text-status-warning-foreground' }
     if (pacing < 100) return { label: 'NO RITMO', color: 'bg-brand-primary text-white' }
     return { label: 'EXCELÊNCIA', color: 'bg-brand-primary text-white' }

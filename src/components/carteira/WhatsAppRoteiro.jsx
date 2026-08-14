@@ -127,7 +127,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
     <Dialog open={open} onOpenChange={v => { if (!v) onClose(); }}>
       <DialogContent className="max-w-md rounded-2xl max-h-[92vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-[#031B3D] font-black flex items-center gap-2">
+          <DialogTitle className="text-mx-navy font-black flex items-center gap-2">
             <Zap className="w-4 h-4 text-status-info-text" />
             Executar próximo passo
           </DialogTitle>
@@ -144,7 +144,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
                 </div>
                 <div>
                   <p className="text-caption text-status-info-text font-bold uppercase tracking-wide">Mentor recomenda</p>
-                  <p className="text-xs font-bold text-[#031B3D]">
+                  <p className="text-xs font-bold text-mx-navy">
                     {codigoPasso ? `${codigoPasso} · ` : ""}{passoAtual}
                   </p>
                 </div>
@@ -171,7 +171,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
             onClick={() => setMostrarRegistro(v => !v)}
             className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border transition-all ${
               mostrarRegistro
-                ? "bg-[#005BFF] text-white border-[#005BFF]"
+                ? "bg-status-info text-status-info-foreground border-status-info"
                 : "bg-white text-muted-foreground border-border hover:bg-status-info-surface hover:border-status-info/40"
             }`}
           >
@@ -218,7 +218,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
                     value={motivoPerda}
                     onChange={e => setMotivoPerda(e.target.value)}
                     placeholder="Descreva o motivo..."
-                    className="w-full h-9 rounded-xl border border-border bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+                    className="w-full h-9 rounded-xl border border-border bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-status-info/40"
                   />
                 </div>
               )}
@@ -230,7 +230,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
                     type="datetime-local"
                     value={novaDataVisita}
                     onChange={e => setNovaDataVisita(e.target.value)}
-                    className="w-full h-9 rounded-xl border border-border bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+                    className="w-full h-9 rounded-xl border border-border bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-status-info/40"
                   />
                 </div>
               )}
@@ -242,7 +242,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
                   onChange={e => setObservacao(e.target.value)}
                   placeholder="Detalhes do contato..."
                   rows={3}
-                  className="w-full rounded-xl border border-border bg-slate-50 px-3 py-2.5 text-sm text-foreground resize-none focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+                  className="w-full rounded-xl border border-border bg-slate-50 px-3 py-2.5 text-sm text-foreground resize-none focus:outline-none focus:ring-1 focus:ring-status-info/40"
                 />
               </div>
 
@@ -251,7 +251,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
                 <Button
                   onClick={registrar}
                   disabled={!resultado || salvando || (precisaMotivo && !motivoPerda) || (precisaDataVisita && !novaDataVisita)}
-                  className="flex-1 rounded-xl bg-[#005BFF] hover:bg-status-info text-white"
+                  className="flex-1 rounded-xl bg-status-info text-status-info-foreground"
                 >
                   {salvando ? "Salvando..." : "Registrar resultado"}
                 </Button>

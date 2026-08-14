@@ -912,7 +912,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
               Cancelar
             </button>
             <button onClick={confirmDelete}
-              className="px-5 py-2 text-body-sm font-bold text-white bg-status-error hover:bg-status-error rounded-xl transition-colors">
+              className="px-5 py-2 text-body-sm font-bold text-status-error-foreground bg-status-error hover:bg-status-error rounded-xl transition-colors">
               Remover
             </button>
           </div>

@@ -487,7 +487,7 @@ export default function App() {
               </Route>
             </Routes>
           </Router>
-          <Toaster richColors closeButton expand visibleToasts={5} position="top-right" toastOptions={{ duration: 4000 }} />
+          <Toaster richColors closeButton expand visibleToasts={5} position="top-right" toastOptions={{ duration: 4000 }} className="mx-toaster" />
         </MotionConfig>
       </ErrorBoundary>
     </AuthProvider>

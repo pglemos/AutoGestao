@@ -43,9 +43,40 @@
   --mx-z-tooltip: 90;
 }
 
+/*
+ * TOAST (C2/C1) — as cores do `<Toaster richColors>` do Sonner vêm da paleta
+ * crua injetada por ele em `[data-sonner-toaster][data-sonner-theme='light']`
+ * (`--success-bg: hsl(143, 85%, 96%)` etc.). O toast de erro default dele mede
+ * 4.35:1 sobre o próprio fundo — reprova WCAG 2.2 AA. Este bloco remapeia as
+ * variáveis para os tokens `--mx-status-*`, herdados pelos `[data-sonner-toast]`
+ * filhos. O seletor é mais específico que o do Sonner (elemento + classe +
+ * atributo), então vence independentemente da ordem de injeção do CSS dele.
+ */
+html [data-sonner-toaster].mx-toaster {
+  --success-bg: hsl(var(--mx-status-success) / 0.08);
+  --success-border: hsl(var(--mx-status-success) / 0.35);
+  --success-text: hsl(var(--mx-status-success-text));
+
+  --warning-bg: hsl(var(--mx-status-warning) / 0.05);
+  --warning-border: hsl(var(--mx-status-warning) / 0.35);
+  --warning-text: hsl(var(--mx-status-warning-text));
+
+  --error-bg: hsl(var(--mx-status-error) / 0.08);
+  --error-border: hsl(var(--mx-status-error) / 0.35);
+  --error-text: hsl(var(--mx-status-error-text));
+
+  --info-bg: hsl(var(--mx-status-info) / 0.08);
+  --info-border: hsl(var(--mx-status-info) / 0.35);
+  --info-text: hsl(var(--mx-status-info-text));
+}
+
 .mx-overlay-backdrop {
   z-index: var(--mx-z-overlay, 50);
   background-color: hsl(var(--mx-black) / var(--mx-overlay-backdrop-alpha));
+}
+
+.mx-overlay-backdrop[data-reference-overlay='true'] {
+  --mx-overlay-backdrop-alpha: 0.3;
 }
 
 .mx-overlay-close {
@@ -106,6 +137,7 @@
   --mx-input-radius: var(--mx-radius-sm);
   --mx-input-border-width: 1px;
   --mx-input-focus-ring-width: 2px;
+  --mx-textarea-min-height: 120px;
 
   /* ---------------------------------------------------------------- card */
   --mx-card-radius: var(--mx-radius-xl);

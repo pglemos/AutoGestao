@@ -428,7 +428,7 @@ export default function ClientCardMobile({
             <button onClick={() => setDeleteConfirm(null)} className="px-5 py-2 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-surface-alt transition-colors">
               Cancelar
             </button>
-            <button onClick={confirmDelete} className="px-5 py-2 text-body-sm font-bold text-white bg-status-error hover:bg-status-error rounded-xl transition-colors">
+            <button onClick={confirmDelete} className="px-5 py-2 text-body-sm font-bold text-status-error-foreground bg-status-error hover:bg-status-error rounded-xl transition-colors">
               Excluir
             </button>
           </div>

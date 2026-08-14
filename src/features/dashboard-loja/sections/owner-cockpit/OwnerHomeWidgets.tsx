@@ -251,7 +251,7 @@ export function OwnerAlertList({ alerts }: { alerts: OwnerPerformanceAlert[] }) 
           <Bell size={24} className="text-status-error-text" />
           <Typography variant="h3" className="text-xl">Alertas que exigem sua atenção</Typography>
         </div>
-        <span className="min-w-mx-7 h-mx-7 rounded-mx-full bg-status-error px-mx-xs text-white text-xs font-bold flex items-center justify-center">{visibleAlerts.length}</span>
+        <span className="min-w-mx-7 h-mx-7 rounded-mx-full bg-status-error px-mx-xs text-status-error-foreground text-xs font-bold flex items-center justify-center">{visibleAlerts.length}</span>
       </div>
       <div className="mt-mx-md divide-y divide-border-subtle">
         {visibleAlerts.map((alert, index) => {

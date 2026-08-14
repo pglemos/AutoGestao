@@ -66,7 +66,7 @@ export function RegularizationDecisionModal({
             className={
               isApproval
                 ? "h-11 rounded-xl bg-brand-primary px-4 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-brand-primary-hover disabled:cursor-not-allowed disabled:bg-status-success/30"
-                : "h-11 rounded-xl bg-status-error px-4 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-status-error disabled:cursor-not-allowed disabled:bg-status-error/20"
+                : "h-11 rounded-xl bg-status-error px-4 text-sm font-semibold text-status-error-foreground shadow-sm transition-colors hover:bg-status-error disabled:cursor-not-allowed disabled:bg-status-error/20"
             }
           >
             {saving

@@ -52,7 +52,7 @@ export default function CancelModal({ action, open, onOpenChange, onConfirm }) {
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>Voltar</Button>
-          <Button onClick={handleConfirm} disabled={!isValid} className="bg-status-error hover:bg-status-error text-white">Cancelar ação</Button>
+          <Button onClick={handleConfirm} disabled={!isValid} className="bg-status-error hover:bg-status-error text-status-error-foreground">Cancelar ação</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

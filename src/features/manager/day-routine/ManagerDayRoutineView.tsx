@@ -359,7 +359,7 @@ function TodayRoutine({
           <button
             type="button"
             onClick={() => setShowOverdue(true)}
-            className="shrink-0 rounded-xl bg-status-error px-4 py-2 text-sm font-medium text-white transition hover:bg-status-error"
+            className="shrink-0 rounded-xl bg-status-error px-4 py-2 text-sm font-medium text-status-error-foreground transition hover:bg-status-error"
           >
             Ver pendências
           </button>

@@ -77,7 +77,7 @@ export default function BlockModal({ action, open, onOpenChange, onConfirm, resp
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancelar</Button>
-          <Button onClick={handleConfirm} disabled={!isValid} className="bg-status-error hover:bg-status-error text-white">Confirmar bloqueio</Button>
+          <Button onClick={handleConfirm} disabled={!isValid} className="bg-status-error hover:bg-status-error text-status-error-foreground">Confirmar bloqueio</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
