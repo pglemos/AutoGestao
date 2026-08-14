@@ -31,14 +31,15 @@ describe('contrato de metadata de layout por rota', () => {
     expect(result.pass).toBe(true)
   })
 
-  test('rotas parametrizadas de consultoria resolvem wide pelo prefixo, sem default silencioso', () => {
-    // `/consultoria` é `wide` (linha 92 do mapa). As rotas filhas
-    // parametrizadas resolvem pelo prefixo mais longo — resolução explícita,
-    // NÃO o `DEFAULT_ROUTE_LAYOUT`. Adicionar entradas explícitas para
-    // `:clientSlug` e `:visitNumber` seria redundante; este teste fixa a
-    // decisão atual (`width: wide`, padrão consultoria) e a ausência de default.
-    expect(resolveRouteLayout('/consultoria/clientes/:clientSlug')).toEqual({ width: 'wide' })
-    expect(resolveRouteLayout('/consultoria/clientes/:clientSlug/visitas/:visitNumber')).toEqual({ width: 'wide' })
+  test('rotas parametrizadas de consultoria resolvem pelo prefixo wide, sem default silencioso', () => {
+    // `/consultoria` é wide (mapa). As rotas filhas parametrizadas resolvem
+    // pelo prefixo mais longo — resolução explícita, NÃO o `DEFAULT_ROUTE_LAYOUT`.
+    // Adicionar entradas explícitas para `:clientSlug` e `:visitNumber` seria
+    // redundante; este teste fixa a herança do prefixo e a ausência de default.
+    const inherited = resolveRouteLayout('/consultoria')
+    expect(inherited.width).toBe('wide')
+    expect(resolveRouteLayout('/consultoria/clientes/:clientSlug')).toEqual(inherited)
+    expect(resolveRouteLayout('/consultoria/clientes/:clientSlug/visitas/:visitNumber')).toEqual(inherited)
     expect(resolveRouteLayout('/consultoria/clientes/:clientSlug')).not.toEqual(DEFAULT_ROUTE_LAYOUT)
     expect(resolveRouteLayout('/consultoria/clientes/:clientSlug/visitas/:visitNumber')).not.toEqual(DEFAULT_ROUTE_LAYOUT)
   })

@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react'
+import { useLocation } from 'react-router-dom'
+import { resolveRouteLayout } from '@/design-system/page'
 import {
   MxErrorState,
   MxLoadingState,
@@ -25,9 +27,13 @@ export function ReportPageShell(props: {
 }) {
   const loading = props.loading ?? false
   const hasData = props.hasData ?? true
+  const location = useLocation()
+  // Compartilhado por /relatorios/performance-vendas (wide) e /relatorio-matinal
+  // (dashboard): largura e clearance vêm da metadata da rota atual.
+  const { width: pageWidth, bottomClearance: pageBottomClearance } = resolveRouteLayout(location.pathname)
 
   return (
-    <MxModulePage id={props.id ?? 'internal-report'}>
+    <MxModulePage id={props.id ?? 'internal-report'} width={pageWidth} bottomClearance={pageBottomClearance}>
       {props.header ?? (
         <MxModuleHeader
           eyebrow={props.eyebrow}

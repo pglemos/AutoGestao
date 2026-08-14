@@ -47,19 +47,19 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   // Visões de indicadores: aproveitam a largura, limitadas a 1400px para que
   // os cards não virem faixas em telas ultrawide (§14.4).
   home: { width: 'dashboard' },
-  painel: { width: 'dashboard' },
+  painel: { width: 'dashboard', bottomClearance: 'navigation' },
   'meu-dia': { width: 'dashboard', bottomClearance: 'navigation' },
   'central-de-execucao': { width: 'dashboard' },
   'central-execucao': { width: 'dashboard' },
   // Checkin para vendedor; os outros perfis caem em ForbiddenRoute.
   'terminal-mx': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'vendedor/terminal-mx': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
-  'relatorio-matinal': { width: 'dashboard' },
+  'relatorio-matinal': { width: 'dashboard', bottomClearance: 'navigation' },
   'minha-equipe': { width: 'dashboard' },
   ranking: { width: 'dashboard' },
   classificacao: { width: 'dashboard' },
   mercado: { width: 'dashboard' },
-  'plano-estrategico': { width: 'dashboard' },
+  'plano-estrategico': { width: 'dashboard', bottomClearance: 'navigation' },
   // Estas duas tinham conteúdo encostado na sidebar antes do canvas: o header
   // começava exatamente em 256px, sem margem alguma. Ver commit desta onda.
   organograma: { width: 'dashboard', adopted: true },
@@ -71,8 +71,8 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   // `wide` e não `dashboard`: tabelas densas ficam mais legíveis um pouco mais
   // estreitas, porque a linha de leitura horizontal encurta.
   lojas: { width: 'wide', bottomClearance: 'navigation', adopted: true },
-  'lojas/:storeSlug': { width: 'wide' },
-  'lojas/:storeSlug/equipe': { width: 'wide' },
+  'lojas/:storeSlug': { width: 'wide', adopted: true },
+  'lojas/:storeSlug/equipe': { width: 'wide', adopted: true },
   'lojas/:storeSlug/consultor-ia': { width: 'focused' },
   'lojas/:storeSlug/filiais': { width: 'wide', bottomClearance: 'navigation', adopted: true },
   clientes: { width: 'wide' },
@@ -85,12 +85,18 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   notificacoes: { width: 'wide', bottomClearance: 'navigation', adopted: true },
   relatorios: { width: 'wide', bottomClearance: 'navigation', adopted: true },
   'relatorios-vendedor': { width: 'wide', bottomClearance: 'navigation', adopted: true },
-  'relatorios/performance-vendas': { width: 'wide' },
+  'relatorios/performance-vendas': { width: 'wide', bottomClearance: 'navigation', adopted: true },
   'relatorios/performance-vendedor': { width: 'wide', bottomClearance: 'navigation', adopted: true },
   agenda: { width: 'wide', adopted: true },
   'liberacao-fechamento': { width: 'wide' },
-  departamentos: { width: 'wide' },
-  consultoria: { width: 'wide' },
+  departamentos: { width: 'wide', adopted: true },
+  'departamentos/comercial': { width: 'wide', adopted: true },
+  'departamentos/marketing': { width: 'wide', adopted: true },
+  'departamentos/produto-e-estoque': { width: 'wide', adopted: true },
+  'departamentos/pessoas-rh': { width: 'wide', adopted: true },
+  'departamentos/financeiro': { width: 'wide', adopted: true },
+  'departamentos/operacoes': { width: 'wide', adopted: true },
+  consultoria: { width: 'wide', bottomClearance: 'navigation', adopted: true },
   clientes_visita: { width: 'wide' },
 
   // ------------------------------------------------------------------- funis
@@ -136,7 +142,7 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   // Redirects legados continuam classificados para não depender do default
   // enquanto preservam a URL histórica para integrações externas.
   metas: { width: 'dashboard' },
-  'minhas-lojas': { width: 'wide' },
+  'minhas-lojas': { width: 'wide', bottomClearance: 'navigation', adopted: true },
   perfil: { width: 'form' },
   'meu-perfil': { width: 'form' },
   'meu-perfil-vendedor': { width: 'form' },

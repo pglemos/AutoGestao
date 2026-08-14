@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { Building2, RefreshCw } from 'lucide-react'
+import { useLocation } from 'react-router-dom'
+import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
 import { Select } from '@/components/atoms/Select'
 import { MxField, MxModuleHeader, MxModulePage, MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
@@ -69,6 +71,10 @@ export function InternalMxPlanningShell({
   children: ReactNode
 }) {
   const { profile, role } = useAuth()
+  const location = useLocation()
+  // Compartilhado por /consultoria (wide), /plano-estrategico (dashboard) e
+  // /plano-acao (focused): largura e clearance vêm da metadata da rota atual.
+  const { width: pageWidth, bottomClearance: pageBottomClearance } = resolveRouteLayout(location.pathname)
   const actor = useMemo(() => {
     if (!profile || !role) return null
     try {
@@ -84,7 +90,7 @@ export function InternalMxPlanningShell({
   }, [profile, role])
 
   const content = (
-    <MxModulePage id={`internal-${title.toLocaleLowerCase('pt-BR').replaceAll(' ', '-')}`}>
+    <MxModulePage id={`internal-${title.toLocaleLowerCase('pt-BR').replaceAll(' ', '-')}`} width={pageWidth} bottomClearance={pageBottomClearance}>
       <MxModuleHeader
         eyebrow={eyebrow}
         title={title}

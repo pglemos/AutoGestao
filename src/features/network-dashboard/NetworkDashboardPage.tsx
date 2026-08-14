@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { resolveRouteLayout } from '@/design-system/page'
 import { useAuth } from '@/hooks/useAuth'
 import { slugify } from '@/lib/utils'
 import { MxErrorState, MxLoadingState, MxModulePage, MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
@@ -22,6 +23,10 @@ function withStore(path: string, storeId: string, extra?: Record<string, string>
 export function NetworkDashboardPage({ scope = 'internal' }: { scope?: NetworkCockpitScope } = {}) {
   const controller = useNetworkDashboardController(scope)
   const navigate = useNavigate()
+  const location = useLocation()
+  // Compartilhado por /minhas-lojas (wide) e /painel (dashboard): a largura vem
+  // da metadata da rota atual (coorte C7, Padrão A).
+  const { width: pageWidth, bottomClearance: pageBottomClearance } = resolveRouteLayout(location.pathname)
   const { role, setActiveStoreId } = useAuth()
   const [selectedStore, setSelectedStore] = useState<NetworkCockpitStore | null>(null)
   const canTrigger = canTriggerNetworkReport(role)
@@ -42,7 +47,7 @@ export function NetworkDashboardPage({ scope = 'internal' }: { scope?: NetworkCo
   }
 
   return (
-    <MxModulePage id="internal-network-dashboard">
+    <MxModulePage id="internal-network-dashboard" width={pageWidth} bottomClearance={pageBottomClearance}>
       <NetworkDashboardHeader refreshing={controller.refreshing} lastUpdatedAt={controller.lastUpdatedAt} realtimeStatus={controller.realtimeStatus} onRefresh={controller.refresh} />
       {controller.realtimeStatus === 'degraded' ? <MxStatusBanner tone="warning">A conexão Realtime foi interrompida. Os dados anteriores permanecem disponíveis e serão reconciliados após a reconexão.</MxStatusBanner> : null}
       {controller.error && controller.allRows.length > 0 ? <MxStatusBanner tone="warning">Os dados anteriores foram mantidos. {controller.error}</MxStatusBanner> : null}

@@ -58,7 +58,7 @@ export default function Consultoria() {
 
   if (loading) {
     return (
-      <PageCanvas as="div" id="page-consultoria" aria-label="Consultoria" width="dashboard" bottomClearance="navigation" className="flex min-h-0 flex-1 flex-col space-y-6" role="status" aria-busy="true">
+      <PageCanvas as="div" id="page-consultoria" aria-label="Consultoria" width="wide" bottomClearance="navigation" className="flex min-h-0 flex-1 flex-col space-y-6" role="status" aria-busy="true">
         <div className="h-8 w-56 animate-pulse rounded bg-muted" />
         <div className="h-64 animate-pulse rounded-xl bg-card" />
       </PageCanvas>
@@ -67,7 +67,7 @@ export default function Consultoria() {
 
   if (error) {
     return (
-      <PageCanvas as="div" id="page-consultoria" aria-label="Consultoria" width="dashboard" bottomClearance="navigation" className="flex min-h-0 flex-1 flex-col space-y-6">
+      <PageCanvas as="div" id="page-consultoria" aria-label="Consultoria" width="wide" bottomClearance="navigation" className="flex min-h-0 flex-1 flex-col space-y-6">
         <section className="rounded-xl border border-destructive/30 bg-card p-6" role="alert">
           <h1 className="text-lg font-semibold text-foreground">Não foi possível carregar a Consultoria</h1>
           <p className="mt-2 text-sm text-muted-foreground">{error}</p>
@@ -78,7 +78,7 @@ export default function Consultoria() {
   }
 
   return (
-    <PageCanvas as="div" id="page-consultoria" aria-label="Consultoria" width="dashboard" bottomClearance="navigation" className="flex min-h-0 flex-1 flex-col space-y-6">
+    <PageCanvas as="div" id="page-consultoria" aria-label="Consultoria" width="wide" bottomClearance="navigation" className="flex min-h-0 flex-1 flex-col space-y-6">
       <OwnerPageHeading
         icon={Users}
         title="Consultoria"

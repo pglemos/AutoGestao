@@ -24,7 +24,7 @@ export function StorePerformanceView() {
   }
 
   return (
-    <PageTemplate as="div" width="dashboard" className="flex flex-col gap-mx-lg">
+    <PageTemplate as="div" width="wide" bottomClearance="navigation" className="flex flex-col gap-mx-lg">
       <StoreHeader
         isRefetching={isRefetching}
         onRefresh={handleRefresh}

@@ -19,8 +19,12 @@ describe('OwnerExecutiveCockpit data-backed sections', () => {
 
   test('mantém o cockpit do Dono dentro do PageCanvas canônico', () => {
     const canvasTag = dashboardSource.match(/<PageCanvas\b[^>]*>/)?.[0] ?? ''
-    expect(canvasTag).toContain('width="dashboard"')
     expect(canvasTag).toContain('as="div"')
+    // Largura resolvida da metadata da rota (Padrão A C7): DashboardLoja é
+    // compartilhado por rotas dashboard/wide/focused e segue a metadata em vez
+    // de um literal fixo. O contrato passa a exigir a resolução dinâmica.
+    expect(canvasTag).toMatch(/width=\{pageWidth\}/)
+    expect(dashboardSource).toContain('resolveRouteLayout(location.pathname).width')
     expect(source).not.toContain('p-mx-sm')
     expect(source).not.toContain('md:p-mx-lg')
   })

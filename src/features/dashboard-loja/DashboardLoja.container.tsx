@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
-import { PageCanvas } from '@/design-system/page'
+import { PageCanvas, resolveRouteLayout } from '@/design-system/page'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { isAdministradorMx, isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { useStores } from '@/hooks/useStores'
@@ -33,6 +33,10 @@ export function DashboardLoja() {
   const { setActiveStoreId } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
+  // DashboardLoja é compartilhado por rotas de larguras diferentes (dashboard,
+  // wide, focused). A largura é resolvida da metadata da rota atual em vez de
+  // um literal fixo — coorte C7 (Padrão A).
+  const pageWidth = resolveRouteLayout(location.pathname).width
   const { lojas, loading: storesLoading, createStore, updateStore, deleteStore, refetch: refetchStores } = useStores()
   const activeStores = useMemo(() => (lojas || []).filter(store => store.active), [lojas])
 
@@ -119,7 +123,7 @@ export function DashboardLoja() {
   }
   if (!resolving && !storesLoading && role === 'gerente' && activeTab === 'performance' && !selectedStoreId) {
     return (
-      <PageCanvas as="div" width="dashboard" className="flex flex-col gap-5 text-foreground">
+      <PageCanvas as="div" width={pageWidth} className="flex flex-col gap-5 text-foreground">
         <ManagerSellerParityHomeCanonical data={data} alerts={[]} />
       </PageCanvas>
     )
@@ -147,7 +151,7 @@ export function DashboardLoja() {
    * alternativo de gutter/width. `as="div"` evita aninhar outro landmark
    * `main` dentro do shell.
   */
-  <PageCanvas as="div" width="dashboard" className="flex flex-col gap-5 text-foreground">
+  <PageCanvas as="div" width={pageWidth} className="flex flex-col gap-5 text-foreground">
       {!isFocusedRolePerformance && !isManagerSection && (
         <DashboardErrorBoundary sectionName="Header">
           <DashboardHeader
