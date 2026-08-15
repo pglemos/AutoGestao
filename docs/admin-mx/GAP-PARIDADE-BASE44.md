@@ -10,7 +10,7 @@ Levantamento honesto do que existe no export `mx-admin-flow` e do que o MX tem h
 | `/equipe` | 8 / 1.311 | lista + editar + carteira + **perfil do consultor** | ~65% |
 | `/produtos` | 4 / 691 | **ciclo de vida + módulos + tempos** | ~85% |
 | `/indicadores` | 34 / 6.630 | lista + criar/editar | ~8% |
-| `/planos-acao` | 21 / 3.941 | rede + templates + sugestões | ~30% |
+| `/planos-acao` | 21 / 3.941 | rede + templates + sugestões + **kanban e detalhe** | ~55% |
 | `/consultoria-mx` | 19 / 2.742 | lista de encontros | ~10% |
 | **Total** | **109 / 20.886** | ~2.400 linhas | **~20%** |
 
@@ -43,9 +43,9 @@ Levantamento honesto do que existe no export `mx-admin-flow` e do que o MX tem h
 - **Metas e realizados**: cadastro rápido, importação/exportação de planilha, histórico com reversão, valor oficial, cópia de metas entre lojas.
 
 ### `/planos-acao`
-- **Kanban** por status com arrastar.
+- ~~Kanban por status~~ — **feito** (sem arrastar: transição por botão no detalhe).
+- ~~Drawer de detalhe com abas resumo/execução/evidências/histórico, alterar prazo com motivo, concluir com data efetiva~~ — **feito**.
 - **Wizard de plano por cliente** com ações ponderadas, participantes, indicador de eficácia.
-- **Drawer de detalhe** com abas: resumo, execução, evidências, histórico e impacto; alterar prazo com motivo; concluir com data efetiva.
 - **Templates**: wizard completo, filtros, detalhe com versões, promover plano existente a padrão, desabilitar/reativar/arquivar.
 - **Sugestões ao dono**: validar, publicar, descartar, visualizar como dono.
 - **Aplicações nos clientes**: acompanhamento por cliente com progresso e eficácia.
@@ -66,6 +66,6 @@ Sem elas, parte do gap não fecha: qualificação de consultor por produto e por
 1. ~~`/produtos` — ciclo de vida + abas Módulos e Tempos~~ — feito.
 2. ~~`/equipe` — perfil do consultor com programas, encontros e capacidade~~ — feito.
 3. ~~`/clientes` — Visão 360 e ativação com checklist~~ — feito.
-4. `/planos-acao` — kanban, detalhe em abas, wizard por cliente.
+4. ~~`/planos-acao` — kanban e detalhe em abas~~ — feito (falta o wizard por cliente).
 5. `/indicadores` — ordem, wizard, drawer, parâmetros.
 6. `/consultoria-mx` — metodologia por produto e editor de encontro.
