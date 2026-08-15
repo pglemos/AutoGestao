@@ -9,6 +9,7 @@ import {
   LayoutDashboard,
   MessageSquare,
   MonitorPlay,
+  Gauge,
   Package,
   Settings,
   SlidersHorizontal,
@@ -47,6 +48,18 @@ export function buildInternalMxNavigation(
       ],
     },
     {
+      key: 'admin-mx',
+      label: 'Administração MX',
+      items: [
+        { key: 'admin-clients', label: 'Clientes', path: '/clientes', icon: BriefcaseBusiness, activePaths: ['/clientes', '/clientes/novo'] },
+        { key: 'admin-team', label: 'Equipe MX', path: '/equipe', icon: User },
+        { key: 'admin-products', label: 'Produtos de Consultoria', path: '/produtos', icon: Package },
+        { key: 'admin-indicators', label: 'Indicadores', path: '/indicadores', icon: Gauge },
+        { key: 'admin-action-plans', label: 'Planos de Ação', path: '/planos-acao', icon: ClipboardList },
+        { key: 'admin-consulting', label: 'Consultoria MX', path: '/consultoria-mx', icon: CalendarDays },
+      ],
+    },
+    {
       key: 'simulation',
       label: 'Simulação',
       items: [
@@ -62,7 +75,6 @@ export function buildInternalMxNavigation(
         { key: 'ranking', label: 'Ranking', path: '/classificacao', icon: Trophy },
         { key: 'feedback', label: 'Devolutivas/PDI', path: '/devolutivas', icon: MessageSquare },
         { key: 'training', label: 'Desenvolvimento', path: '/treinamentos', icon: GraduationCap },
-        { key: 'products', label: 'Produtos Digitais', path: '/produtos', icon: Package },
         { key: 'notifications', label: 'Notificações', path: '/notificacoes', icon: Bell, badge: clampBadge(counts.unreadNotifications) },
       ],
     },

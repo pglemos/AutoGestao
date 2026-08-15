@@ -10,6 +10,7 @@ describe('navegação interna MX', () => {
       const items = sections.flatMap((section) => section.items)
       expect(sections.map((section) => section.label)).toEqual([
         'Rede e Gestão',
+        'Administração MX',
         'Simulação',
         'Rotina e Conteúdo',
         'Relatórios e Diagnóstico',
@@ -19,6 +20,13 @@ describe('navegação interna MX', () => {
       expect(items.some((item) => item.path === '/plano-estrategico')).toBe(true)
       expect(items.some((item) => item.path === '/plano-acao')).toBe(true)
       expect(items.some((item) => item.path === '/consultoria/clientes')).toBe(true)
+      expect(items.some((item) => item.path === '/clientes')).toBe(true)
+      expect(items.some((item) => item.path === '/indicadores')).toBe(true)
+      expect(items.some((item) => item.path === '/planos-acao')).toBe(true)
+      expect(items.some((item) => item.path === '/consultoria-mx')).toBe(true)
+      // /produtos agora é o catálogo de consultoria para o interno MX.
+      expect(items.filter((item) => item.path === '/produtos')).toHaveLength(1)
+      expect(items.find((item) => item.path === '/produtos')?.label).toBe('Produtos de Consultoria')
       expect(items.find((item) => item.path === '/notificacoes')?.badge).toBe('7')
     })
   }
