@@ -42,8 +42,8 @@ describe('FASE T — tab order previsível (20.010)', () => {
     expect(frame).toContain('<SkipLink')
     expect(frame).toContain('skipLinkLabel')
     const skip = read('src/design-system/shell/SkipLink.tsx')
-    expect(skip).toContain('href')
     expect(skip).toContain('targetId')
+    expect(skip).toContain('target.focus()')
   })
 
   test('main#main-content é o alvo do skip-link', () => {
