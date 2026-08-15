@@ -67,6 +67,7 @@ const Lojas = lazy(() => import('@/pages/Lojas'))
 const StoreBranches = lazy(() => import('@/pages/StoreBranches'))
 const ConsultorTreinamentos = lazy(() => import('@/pages/ConsultorTreinamentos'))
 const ProdutosDigitais = lazy(() => import('@/pages/ProdutosDigitais'))
+const AdminClienteDetalhePage = lazy(() => import('@/features/admin-mx/AdminClienteDetalhePage'))
 const AdminNovoClientePage = lazy(() => import('@/features/admin-mx/AdminNovoClientePage'))
 const AdminEquipeMxPage = lazy(() => import('@/features/admin-mx/AdminEquipeMxPage'))
 const AdminProdutosConsultoriaPage = lazy(() => import('@/features/admin-mx/AdminProdutosConsultoriaPage'))
@@ -485,6 +486,9 @@ export default function App() {
                 </Suspense>} />
                 <Route path="clientes/novo" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminNovoClientePage />} />
+                </Suspense>} />
+                <Route path="clientes/:clientSlug" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminClienteDetalhePage />} />
                 </Suspense>} />
                 <Route path="consultoria-mx" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminConsultoriaMxPage />} />

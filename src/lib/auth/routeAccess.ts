@@ -49,6 +49,7 @@ export const ROUTE_ACCESS_RULES = [
   // Módulo Administrador MX: carteira, jornada, catálogo e planos de ação.
   { pattern: '/clientes', roles: INTERNAL_ROLES },
   { pattern: '/clientes/novo', roles: INTERNAL_ROLES },
+  { pattern: '/clientes/:clientSlug', roles: INTERNAL_ROLES },
   { pattern: '/consultoria-mx', roles: INTERNAL_ROLES },
   { pattern: '/indicadores', roles: INTERNAL_ROLES },
   { pattern: '/planos-acao', roles: INTERNAL_ROLES },
