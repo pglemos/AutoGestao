@@ -4,20 +4,19 @@ Data: 2026-08-15 · Passos LOCAIS pré-push apenas
 
 ## 37.002 — Remoto verificado
 
-- `git fetch origin main` → **remoto NÃO avançou**.
-- local HEAD = origin/main = `b083b6fb0c8bf63337db2d58b6a1f60307fc3cea` (0 behind, 0 ahead).
+- `git fetch origin main` → remoto em `3b76364e`; push realizado até `7678966e`.
+- local HEAD = origin/main = `7678966ef16bd236e38d51572eed088fa1cf17f2` (0 behind, 0 ahead).
 
 ## 37.004 — FINAL_CANDIDATE_SHA
 
 ```
-FINAL_CANDIDATE_SHA = b083b6fb0c8bf63337db2d58b6a1f60307fc3cea
+FINAL_CANDIDATE_SHA = 7678966ef16bd236e38d51572eed088fa1cf17f2
 ```
 
-- **Commit:** `b083b6fb fix(admin-mx): nome acessível nos selects do módulo`
-- **Commits desde o último tag** (`pre-main-autonomous-20260809-184732`): 75
-- **FASEs entregues na janela:** B..AL (22 fases 100%, 86.3% do spec total)
-- **Working tree:** 131 mudanças pendentes (DS1/DS4 em voo) — **37.001 NÃO feito**
-  (working tree NÃO está limpa; é esperado nesta janela).
+- **Commit:** `7678966e chore(inventory): regenera route-role-matrix (timestamp)`
+- **FASEs entregues na janela:** B..AL (fases 100%)
+- **Working tree:** LIMPA — 0 mudanças pendentes (exceto 5 ag-*.playwright.ts
+  untracked segurados, aguardando GREEN do DS1); **37.001 FEITO**.
 
 ## 37.005 — Bundle do candidato final
 
