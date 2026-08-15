@@ -67,7 +67,6 @@ Sem elas, parte do gap não fecha: qualificação de consultor por produto e por
 1. ~~`/produtos` — ciclo de vida + abas Módulos e Tempos~~ — feito.
 2. ~~`/equipe` — perfil do consultor com programas, encontros e capacidade~~ — feito.
 3. ~~`/clientes` — Visão 360 e ativação com checklist~~ — feito.
-<<<<<<< HEAD
 4. ~~`/planos-acao` — kanban e detalhe em abas~~ — feito.
 5. ~~`/planos-acao` — wizard por cliente, templates, sugestões ao dono e aplicações~~ — feito (branch route/admin-planos-acao).
 6. ~~`/indicadores` — ordem, drawer, parâmetros~~ — feito.
