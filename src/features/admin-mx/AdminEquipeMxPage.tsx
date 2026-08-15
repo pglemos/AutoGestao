@@ -24,6 +24,7 @@ import { useConsultingClients } from '@/hooks/useConsultingClients'
 import { ConsultantProfileModal } from './equipe/ConsultantProfileModal'
 import { SITUATION_LABEL, type ConsultantSituation } from './equipe/consultantProfile'
 import { TeamMemberFormModal } from './equipe/TeamMemberFormModal'
+import { UserEditModal } from './equipe/UserEditModal'
 import {
   deactivateTeamMember,
   fetchMemberAssignments,
@@ -48,6 +49,7 @@ export function AdminEquipeMxPage() {
   const [assignedClientIds, setAssignedClientIds] = useState<string[]>([])
   const [submitting, setSubmitting] = useState(false)
   const [profileMember, setProfileMember] = useState<AdminTeamMember | null>(null)
+  const [editMember, setEditMember] = useState<AdminTeamMember | null>(null)
   const [situacao, setSituacao] = useState('todas')
   const location = useLocation()
 
@@ -180,7 +182,8 @@ export function AdminEquipeMxPage() {
                             <TableCell className="text-right">
                               <div className="flex justify-end gap-2">
                                 <Button variant="outline" size="sm" onClick={() => setProfileMember(member)}>Perfil</Button>
-                                <Button variant="outline" size="sm" onClick={() => void openEdit(member)}>Editar</Button>
+                                <Button variant="outline" size="sm" onClick={() => setEditMember(member)}>Editar</Button>
+                                <Button variant="outline" size="sm" onClick={() => void openEdit(member)}>Carteira</Button>
                                 <Button variant="outline" size="sm" onClick={() => void toggleActive(member)}>{member.active === false ? 'Reativar' : 'Desativar'}</Button>
                               </div>
                             </TableCell>
@@ -208,6 +211,7 @@ export function AdminEquipeMxPage() {
           />
         ) : null}
         <ConsultantProfileModal member={profileMember} onClose={() => setProfileMember(null)} onSaved={() => void refetch()} />
+        <UserEditModal member={editMember} onClose={() => setEditMember(null)} onSaved={() => void refetch()} />
       </div>
     </MxModulePage>
   )
