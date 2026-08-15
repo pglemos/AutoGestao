@@ -24,7 +24,16 @@ function WeekEvent({ action, provided, isDragging, onOpenAction }) {
       ref={provided?.innerRef}
       {...provided?.draggableProps}
       {...provided?.dragHandleProps}
+      role="button"
+      tabIndex={0}
       onClick={(e) => { e.stopPropagation(); onOpenAction(action); }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          e.stopPropagation()
+          onOpenAction(action)
+        }
+      }}
       className={`mb-1.5 cursor-grab rounded border-l-2 bg-white p-2 text-xs shadow-sm hover:shadow-md ${
         deptStyle.border || "border-border"
       } ${late ? "border-l-red-500" : ""} ${isDragging ? "opacity-70" : ""}`}

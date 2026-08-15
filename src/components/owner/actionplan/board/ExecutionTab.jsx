@@ -133,7 +133,18 @@ export default function ExecutionTab({ action, onReload, onQuickAction, user }) 
               {editingId === item.id ? (
                 <Input value={editText} onChange={(e) => setEditText(e.target.value)} onBlur={() => handleSaveEdit(item.id)} onKeyDown={(e) => e.key === "Enter" && handleSaveEdit(item.id)} className="h-7 text-xs" autoFocus />
               ) : (
-                <span className={`flex-1 text-xs ${item.done ? "text-muted-foreground line-through" : "text-foreground"}`} onClick={() => handleStartEdit(item)}>
+                <span
+                  role="button"
+                  tabIndex={0}
+                  className={`flex-1 cursor-pointer text-xs ${item.done ? "text-muted-foreground line-through" : "text-foreground"}`}
+                  onClick={() => handleStartEdit(item)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      handleStartEdit(item)
+                    }
+                  }}
+                >
                   {item.text} {item.required && <span className="text-status-error-text">*</span>}
                 </span>
               )}

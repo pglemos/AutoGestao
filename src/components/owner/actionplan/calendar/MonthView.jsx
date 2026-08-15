@@ -48,7 +48,15 @@ function DayCell({ date, actions, isCurrentMonth, isSelected, isToday, inCycle, 
 
   return (
     <div
+      role="button"
+      tabIndex={0}
       onClick={() => onSelectDate(date)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          onSelectDate(date)
+        }
+      }}
       className={`min-h-[80px] cursor-pointer border border-border p-1 transition-colors hover:bg-muted/30 lg:min-h-[100px] ${
         !isCurrentMonth ? "bg-muted/20" : "bg-card"
       } ${isSelected ? "ring-2 ring-emerald-400 ring-inset" : ""} ${isToday ? "bg-status-success-surface/50" : ""}`}
@@ -73,7 +81,18 @@ function DayCell({ date, actions, isCurrentMonth, isSelected, isToday, inCycle, 
         {visible.map((action, idx) => (
           <Draggable key={action.id} draggableId={action.id} index={idx}>
             {(prov, snap) => (
-              <div onClick={(e) => { e.stopPropagation(); onOpenAction(action); }}>
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={(e) => { e.stopPropagation(); onOpenAction(action); }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    onOpenAction(action)
+                  }
+                }}
+              >
                 <EventCard action={action} provided={prov} isDragging={snap.isDragging} />
               </div>
             )}
