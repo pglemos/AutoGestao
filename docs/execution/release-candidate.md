@@ -4,19 +4,24 @@ Data: 2026-08-15 · Passos LOCAIS pré-push apenas
 
 ## 37.002 — Remoto verificado
 
-- `git fetch origin main` → remoto em `3b76364e`; push realizado até `7678966e`.
-- local HEAD = origin/main = `7678966ef16bd236e38d51572eed088fa1cf17f2` (0 behind, 0 ahead).
+- `git fetch origin main` → push realizado até `0a37ccfb`.
+- local HEAD = origin/main = `0a37ccfbf5f6cd9f2a6c29c3933f8a14ab6d3388` (0 behind, 0 ahead).
 
 ## 37.004 — FINAL_CANDIDATE_SHA
 
 ```
-FINAL_CANDIDATE_SHA = 7678966ef16bd236e38d51572eed088fa1cf17f2
+FINAL_CANDIDATE_SHA = 0a37ccfbf5f6cd9f2a6c29c3933f8a14ab6d3388
 ```
 
-- **Commit:** `7678966e chore(inventory): regenera route-role-matrix (timestamp)`
+- **Commit:** `0a37ccfb chore(e2e): helper mx-e2e-360 (login admin viewport 360)`
 - **FASEs entregues na janela:** B..AL (fases 100%)
-- **Working tree:** LIMPA — 0 mudanças pendentes (exceto 5 ag-*.playwright.ts
-  untracked segurados, aguardando GREEN do DS1); **37.001 FEITO**.
+- **Working tree:** LIMPA — 0 mudanças pendentes; **37.001 FEITO**.
+- **Deploy:** READY em produção (health `release` = FINAL_CANDIDATE_SHA).
+
+> ✅ **Atualizado (freeze real):** FINAL_CANDIDATE_SHA re-registrado em `0a37ccfb`
+> após commit dos 5 ag-*.playwright.ts (`b5138d50`) + helper e2e (`0a37ccfb`).
+> Bundle backup anterior (`final-candidate-7678966e-*`) mantido como ponto de
+> restore.
 
 ## 37.005 — Bundle do candidato final
 
