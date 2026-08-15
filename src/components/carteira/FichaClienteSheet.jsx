@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/atoms/Input";
+import { Textarea } from "@/components/atoms/Textarea";
 import { base44 } from "@/api/base44Client";
-import { Zap, X, Edit2, ChevronDown, ChevronUp, AlertCircle, Clock, CheckCircle2, Pencil } from "lucide-react";
+import { Zap, X, ChevronDown, ChevronUp, AlertCircle, Clock, CheckCircle2, Pencil } from "lucide-react";
 import AlterarProximoPasso from "./AlterarProximoPasso";
 import moment from "moment/min/moment-with-locales";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/lib/toast";
 import { useAuth } from "@/hooks/useAuth";
 import { CancelarVendaModal } from "@/features/crm/components/CancelarVendaModal";
 
@@ -155,7 +156,7 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
         value={form[k] != null ? (type === "datetime-local" ? String(form[k]).slice(0, 16) : form[k]) : ""}
         onChange={e => setForm(p => ({ ...p, [k]: e.target.value }))}
         placeholder={placeholder}
-        className="rounded-xl h-8 text-sm"
+        className=""
       />
     </div>
   );
@@ -262,15 +263,15 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
       <div className="grid grid-cols-2 gap-3">
         <div className="col-span-2">
           <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Próximo passo</label>
-          <Input value={form.proximo_passo || ""} onChange={e => setForm(p => ({ ...p, proximo_passo: e.target.value }))} className="rounded-xl h-8 text-sm" />
+          <Input value={form.proximo_passo || ""} onChange={e => setForm(p => ({ ...p, proximo_passo: e.target.value }))} />
         </div>
         <div className="col-span-2">
           <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Data do próximo passo</label>
-          <Input type="datetime-local" value={form.proxima_acao_data ? form.proxima_acao_data.slice(0, 16) : ""} onChange={e => setForm(p => ({ ...p, proxima_acao_data: e.target.value }))} className="rounded-xl h-8 text-sm" />
+          <Input type="datetime-local" value={form.proxima_acao_data ? form.proxima_acao_data.slice(0, 16) : ""} onChange={e => setForm(p => ({ ...p, proxima_acao_data: e.target.value }))} />
         </div>
         <div className="col-span-2">
           <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Data e Hora da Visita / Agendamento</label>
-          <Input type="datetime-local" value={form.visita_agendada_em ? form.visita_agendada_em.slice(0, 16) : ""} onChange={e => setForm(p => ({ ...p, visita_agendada_em: e.target.value }))} className="rounded-xl h-8 text-sm" />
+          <Input type="datetime-local" value={form.visita_agendada_em ? form.visita_agendada_em.slice(0, 16) : ""} onChange={e => setForm(p => ({ ...p, visita_agendada_em: e.target.value }))} />
         </div>
       </div>
 
@@ -298,12 +299,12 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
 
       <div>
         <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Objeções / Motivo de perda</label>
-        <Input value={form.motivo_perda || ""} onChange={e => setForm(p => ({ ...p, motivo_perda: e.target.value }))} className="rounded-xl h-8 text-sm" placeholder="Ex: preço, parcela, avaliação..." />
+        <Input value={form.motivo_perda || ""} onChange={e => setForm(p => ({ ...p, motivo_perda: e.target.value }))} placeholder="Ex: preço, parcela, avaliação..." />
       </div>
 
       <div>
         <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Observações</label>
-        <textarea value={form.observacoes || ""} onChange={e => setForm(p => ({ ...p, observacoes: e.target.value }))} rows={2} className="w-full rounded-xl border border-input bg-white px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-ring" />
+        <Textarea value={form.observacoes || ""} onChange={e => setForm(p => ({ ...p, observacoes: e.target.value }))} rows={2} className="resize-none" />
       </div>
 
       <div className="flex gap-2 pt-1">
@@ -364,11 +365,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
     try {
       persistido = await base44.entities.CarteiraCliente.update(clienteId, atualizado);
     } catch (error) {
-      toast({
-        title: "Não foi possível salvar a ficha.",
-        description: "As alterações foram preservadas. Tente novamente.",
-        variant: "destructive",
-      });
+      toast.error("Não foi possível salvar a ficha.", { description: "As alterações foram preservadas. Tente novamente." });
       return;
     } finally {
       setSalvando(false);
@@ -385,17 +382,13 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
   async function confirmarCancelarVenda(motivo) {
     const oppId = cliente?.oportunidade_id || cliente?.oportunidade_cancelada_id;
     if (!oppId) {
-      toast({
-        title: "Não foi possível cancelar a venda.",
-        description: "ID da oportunidade de venda não encontrado.",
-        variant: "destructive",
-      });
+      toast.error("Não foi possível cancelar a venda.", { description: "ID da oportunidade de venda não encontrado." });
       return;
     }
     setCancelandoVenda(true);
     try {
       const atualizado = await base44.entities.CarteiraCliente.cancelarVenda(oppId, motivo);
-      toast({ title: "Venda cancelada com sucesso." });
+      toast.info("Venda cancelada com sucesso.");
       setCancelarVendaOpen(false);
       if (atualizado) {
         setCliente(atualizado);
@@ -403,11 +396,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
         if (onAtualizado) onAtualizado(atualizado);
       }
     } catch (error) {
-      toast({
-        title: "Não foi possível cancelar a venda.",
-        description: error?.message || "Tente novamente.",
-        variant: "destructive",
-      });
+      toast.error("Não foi possível cancelar a venda.", { description: error?.message || "Tente novamente." });
     } finally {
       setCancelandoVenda(false);
     }
@@ -753,7 +742,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                 onClick={() => { setEditando(e => !e); if (editando) setForm(cliente); }}
                 className="rounded-xl text-sm gap-1.5 border-border"
               >
-                <Edit2 className="w-3.5 h-3.5" /> {editando ? "Cancelar edição" : "Editar"}
+                <Pencil className="w-3.5 h-3.5" /> {editando ? "Cancelar edição" : "Editar"}
               </Button>
               {podeCancelarVenda && !editando && (
                 <Button

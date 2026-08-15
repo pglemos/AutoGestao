@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/lib/toast"
 import { Link } from "react-router-dom";
 import { Search, UserCheck, UserX } from "lucide-react";
 import moment from "moment";
@@ -28,7 +28,6 @@ function normalizePhone(raw) {
 }
 
 export default function NovaAtividadeModal({ open, onClose, clients, onCriada, vendedorId }) {
-  const { toast } = useToast();
   const [step, setStep] = useState("tipo"); // "tipo" | "form"
   const [tipo, setTipo] = useState("");
   const [telefone, setTelefone] = useState("");
@@ -100,12 +99,12 @@ export default function NovaAtividadeModal({ open, onClose, clients, onCriada, v
         criado_automaticamente: false,
         ativo: true,
       });
-      toast({ title: "Atividade criada com sucesso." });
+      toast.info("Atividade criada com sucesso.");
       onCriada(nova);
       handleClose();
     } catch (e) {
       console.error(e);
-      toast({ title: "Não foi possível criar a atividade.", description: e?.message || "Tente novamente." });
+      toast.info("Não foi possível criar a atividade.", { description: e?.message || "Tente novamente."  });
     }
     setSaving(false);
   };

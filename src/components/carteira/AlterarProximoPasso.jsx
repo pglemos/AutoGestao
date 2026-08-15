@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
 import moment from "moment";
 import { TODOS_PASSOS, detectarCodigo } from "@/features/carteira-clientes/lib/proximoPassoMx";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/lib/toast";
 
 // Monta mapa de objetivo a partir da biblioteca
 const OBJETIVO_MAP = Object.fromEntries(TODOS_PASSOS.map(p => [p.label, p.objetivo]));
@@ -120,11 +120,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
     try {
       persistido = await base44.entities.CarteiraCliente.update(cliente.id, update);
     } catch (error) {
-      toast({
-        title: "Não foi possível alterar o próximo passo.",
-        description: "Os campos foram preservados. Tente novamente.",
-        variant: "destructive",
-      });
+      toast.error("Não foi possível alterar o próximo passo.", { description: "Os campos foram preservados. Tente novamente." });
       return;
     } finally {
       setSalvando(false);

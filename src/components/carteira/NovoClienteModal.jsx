@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/atoms/Input";
+import { Textarea } from "@/components/atoms/Textarea";
 import { base44 } from "@/api/base44Client";
 import { calcularProximaAcao } from "./carteiraUtils";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/lib/toast";
 
 const MOMENTOS_CADASTRO = [
   { value: "Novo contato", label: "Só demonstrou interesse" },
@@ -63,7 +64,7 @@ export default function NovoClienteModal({ open, onClose, onCriado, vendedorId }
   async function handleSalvar() {
     const phoneDigits = String(form.whatsapp || "").replace(/\D/g, "");
     if (!form.nome || phoneDigits.length < 10) {
-      toast({ title: "Informe um WhatsApp válido.", description: "Use DDD e número com 10 ou 11 dígitos.", variant: "destructive" });
+      toast.error("Informe um WhatsApp válido.", { description: "Use DDD e número com 10 ou 11 dígitos." });
       return;
     }
     setSaving(true);
@@ -92,11 +93,7 @@ export default function NovoClienteModal({ open, onClose, onCriado, vendedorId }
     try {
       criado = await base44.entities.CarteiraCliente.create(payload);
     } catch (error) {
-      toast({
-        title: "Não foi possível adicionar o cliente.",
-        description: "Confira sua conexão e tente novamente.",
-        variant: "destructive",
-      });
+      toast.error("Não foi possível adicionar o cliente.", { description: "Confira sua conexão e tente novamente." });
       return;
     } finally {
       setSaving(false);
@@ -119,11 +116,11 @@ export default function NovoClienteModal({ open, onClose, onCriado, vendedorId }
           <div className="grid grid-cols-2 gap-3">
             <div className="col-span-2">
               <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Nome *</label>
-              <Input value={form.nome} onChange={e => set("nome", e.target.value)} placeholder="Nome completo" className="rounded-xl" />
+              <Input value={form.nome} onChange={e => set("nome", e.target.value)} placeholder="Nome completo" />
             </div>
             <div>
               <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">WhatsApp *</label>
-              <Input value={form.whatsapp} onChange={e => set("whatsapp", formatarWhatsapp(e.target.value))} placeholder="(11) 99999-9999" className="rounded-xl" />
+              <Input value={form.whatsapp} onChange={e => set("whatsapp", formatarWhatsapp(e.target.value))} placeholder="(11) 99999-9999" />
             </div>
             <div>
               <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Canal</label>
@@ -133,12 +130,12 @@ export default function NovoClienteModal({ open, onClose, onCriado, vendedorId }
             </div>
             <div className="col-span-2">
               <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Veículo de Interesse</label>
-              <Input value={form.veiculo_interesse} onChange={e => set("veiculo_interesse", e.target.value)} placeholder="Ex: Corolla XEI 2023" className="rounded-xl" />
+              <Input value={form.veiculo_interesse} onChange={e => set("veiculo_interesse", e.target.value)} placeholder="Ex: Corolla XEI 2023" />
             </div>
             {["Proposta enviada", "Em negociação", "Venda realizada"].includes(form.momento) && (
               <div className="col-span-2">
                 <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Orçamento</label>
-                <Input type="number" min="0" value={form.valor_negociado} onChange={e => set("valor_negociado", e.target.value)} placeholder="Ex: 60000" className="rounded-xl" />
+                <Input type="number" min="0" value={form.valor_negociado} onChange={e => set("valor_negociado", e.target.value)} placeholder="Ex: 60000" />
               </div>
             )}
           </div>
@@ -158,7 +155,7 @@ export default function NovoClienteModal({ open, onClose, onCriado, vendedorId }
           {form.momento === "Visita agendada" && (
             <div>
               <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Data e hora da visita</label>
-              <Input type="datetime-local" value={form.visita_agendada_em} onChange={e => set("visita_agendada_em", e.target.value)} className="rounded-xl" />
+              <Input type="datetime-local" value={form.visita_agendada_em} onChange={e => set("visita_agendada_em", e.target.value)} />
             </div>
           )}
 
@@ -187,11 +184,11 @@ export default function NovoClienteModal({ open, onClose, onCriado, vendedorId }
               {form.interesse_troca && <>
               <div>
                 <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Veículo na troca</label>
-                <Input value={form.veiculo_troca} onChange={e => set("veiculo_troca", e.target.value)} placeholder="Ex: Polo 2018" className="rounded-xl" />
+                <Input value={form.veiculo_troca} onChange={e => set("veiculo_troca", e.target.value)} placeholder="Ex: Polo 2018" />
               </div>
               <div>
                 <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Valor da troca</label>
-                <Input type="number" min="0" value={form.valor_troca} onChange={e => set("valor_troca", e.target.value)} placeholder="Ex: 30000" className="rounded-xl" />
+                <Input type="number" min="0" value={form.valor_troca} onChange={e => set("valor_troca", e.target.value)} placeholder="Ex: 30000" />
               </div>
               </>}
             </div>
@@ -199,7 +196,7 @@ export default function NovoClienteModal({ open, onClose, onCriado, vendedorId }
 
           <div>
             <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Observação inicial</label>
-            <textarea value={form.observacoes} onChange={e => set("observacoes", e.target.value)} placeholder="Contexto do primeiro contato..." rows={2} className="w-full rounded-xl border border-input bg-transparent px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-ring" />
+            <Textarea value={form.observacoes} onChange={e => set("observacoes", e.target.value)} placeholder="Contexto do primeiro contato..." rows={2} className="resize-none" />
           </div>
 
           <div className="flex gap-2 pt-2">

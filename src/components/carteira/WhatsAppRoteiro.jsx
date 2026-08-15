@@ -11,7 +11,7 @@ import {
   getResultados, aplicarTransicao, detectarCodigo, PASSOS,
 } from "@/features/carteira-clientes/lib/proximoPassoMx";
 import ScriptIA from "./ScriptIA";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/lib/toast";
 
 const COR_MAP = {
   green:  { sel: "bg-green-50 border-green-400 text-green-700",    base: "bg-white border-border hover:bg-green-50 hover:border-green-300" },
@@ -106,11 +106,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
     try {
       persistido = await base44.entities.CarteiraCliente.update(cliente.id, patch);
     } catch (error) {
-      toast({
-        title: "Não foi possível registrar o resultado.",
-        description: "Seus dados foram preservados. Tente novamente.",
-        variant: "destructive",
-      });
+      toast.error("Não foi possível registrar o resultado.", { description: "Seus dados foram preservados. Tente novamente." });
       return;
     } finally {
       setSalvando(false);

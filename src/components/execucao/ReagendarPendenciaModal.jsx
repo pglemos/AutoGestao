@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/lib/toast"
 
 export default function ReagendarPendenciaModal({ oportunidade, open, onClose, onReagendada }) {
-  const { toast } = useToast();
   const [novaData, setNovaData] = useState("");
   const [saving, setSaving] = useState(false);
 
@@ -26,11 +25,11 @@ export default function ReagendarPendenciaModal({ oportunidade, open, onClose, o
           appointment_datetime: novaData,
         });
       }
-      toast({ title: "Atividade reagendada." });
+      toast.info("Atividade reagendada.");
       onReagendada(oportunidade.id, novaData);
       onClose();
     } catch (e) {
-      toast({ title: "Erro ao reagendar." });
+      toast.info("Erro ao reagendar.");
     }
     setSaving(false);
   };
