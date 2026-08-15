@@ -64,6 +64,7 @@ export type AdminConsultingProduct = {
   name: string | null
   total_visits: number | null
   active: boolean | null
+  status: string | null
   clients: number
 }
 
@@ -71,7 +72,7 @@ export function useAdminConsultingProducts(): QueryState<AdminConsultingProduct>
   return useSupabaseList<AdminConsultingProduct>('produtos de consultoria', async () => {
     const { data: programs, error } = await supabase
       .from('programas_visita_consultoria')
-      .select('program_key, name, total_visits, active')
+      .select('program_key, name, total_visits, active, status')
       .order('name', { ascending: true })
     if (error) throw new Error(error.message)
     const { data: clients } = await supabase
@@ -86,20 +87,6 @@ export function useAdminConsultingProducts(): QueryState<AdminConsultingProduct>
     }
     return (programs ?? []).map(program => ({ ...program, clients: counters.get(program.program_key) ?? 0 })) as AdminConsultingProduct[]
   })
-}
-
-export type ConsultingProductInput = { program_key: string; name: string; total_visits: number; active: boolean }
-
-/** Cria ou atualiza um produto de consultoria pela chave do programa. */
-export async function saveConsultingProduct(input: ConsultingProductInput): Promise<{ error: string | null }> {
-  const key = input.program_key.trim()
-  if (!key) return { error: 'Informe a chave do programa.' }
-  if (!input.name.trim()) return { error: 'Informe o nome do produto.' }
-  if (!Number.isFinite(input.total_visits) || input.total_visits < 1) return { error: 'A jornada precisa de ao menos 1 encontro.' }
-  const { error } = await supabase
-    .from('programas_visita_consultoria')
-    .upsert({ program_key: key, name: input.name.trim(), total_visits: input.total_visits, active: input.active }, { onConflict: 'program_key' })
-  return { error: error?.message ?? null }
 }
 
 export type AvailableStore = { id: string; name: string }

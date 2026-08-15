@@ -183,7 +183,7 @@ export function AdminNovoClientePage() {
                       }}
                     >
                       <option value="">Selecione o produto</option>
-                      {products.rows.map(product => <option key={product.program_key} value={product.program_key}>{product.name || product.program_key}</option>)}
+                      {products.rows.filter(product => product.status !== 'arquivado' && product.status !== 'rascunho').map(product => <option key={product.program_key} value={product.program_key}>{product.name || product.program_key}</option>)}
                     </MxSelect>
                   </MxField>
                   <MxField label="Modalidade">
