@@ -36,6 +36,8 @@ export type CatalogIndicator = {
   visivel_dono: boolean
   ano_inicial: number | null
   ano_final: number | null
+  formula_expression: string | null
+  target_calculation_mode: string | null
   sort_order: number
   active: boolean
   targets: number
@@ -92,6 +94,20 @@ export function reorderIndicators(keys: string[], metricKey: string, direction: 
   return next.map((key, position) => ({ metric_key: key, sort_order: (position + 1) * 10 }))
 }
 
+/**
+ * Restauração da ordem padrão MX. Como o catálogo MX não tem uma sequência
+ * canônica fixa por chave (diferente dos 45 indicadores do Base44), a
+ * restauração normaliza a ordem oficial numa sequência limpa de 10 em 10,
+ * preservando a ordem relativa atual e o ciclo de vida (não arquivados na
+ * frente, arquivados ao final).
+ */
+export function restoreDefaultOrder(rows: CatalogIndicator[]): Array<{ metric_key: string; sort_order: number }> {
+  const active = rows.filter(item => item.status !== 'arquivado')
+  const archived = rows.filter(item => item.status === 'arquivado')
+  const ordered = [...active, ...archived]
+  return ordered.map((item, index) => ({ metric_key: item.metric_key, sort_order: (index + 1) * 10 }))
+}
+
 /** Faixas precisam ser monotônicas na direção do indicador. */
 export function validateThresholds(parameter: Pick<IndicatorParameter, 'red_threshold' | 'yellow_threshold' | 'green_threshold'>, direction: string): string | null {
   const { red_threshold: red, yellow_threshold: yellow, green_threshold: green } = parameter
@@ -109,7 +125,7 @@ export async function fetchCatalogIndicators(): Promise<{ rows: CatalogIndicator
   const [{ data, error }, { data: targets }] = await Promise.all([
     supabase
       .from('catalogo_metricas_consultoria')
-      .select('metric_key, label, area, descricao, value_type, direction, source_scope, status, frequencia, casas_decimais, visivel_dono, ano_inicial, ano_final, sort_order, active')
+      .select('metric_key, label, area, descricao, value_type, direction, source_scope, status, frequencia, casas_decimais, visivel_dono, ano_inicial, ano_final, formula_expression, target_calculation_mode, sort_order, active')
       .order('sort_order', { ascending: true }),
     supabase.from('metas_metricas_cliente').select('metric_key'),
   ])

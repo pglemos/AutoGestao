@@ -164,6 +164,14 @@ export type IndicatorInput = {
   direction: string
   source_scope: string
   active: boolean
+  descricao?: string | null
+  casas_decimais?: number
+  frequencia?: string
+  ano_inicial?: number | null
+  ano_final?: number | null
+  formula_expression?: string | null
+  target_calculation_mode?: string
+  visivel_dono?: boolean
 }
 
 // O catálogo é NOT NULL em area/value_type/direction/source_scope e tem CHECK
@@ -187,6 +195,16 @@ export function validateIndicatorInput(input: IndicatorInput): string | null {
   if (!INDICATOR_VALUE_TYPES.includes(input.value_type as (typeof INDICATOR_VALUE_TYPES)[number])) {
     return 'Selecione o tipo de valor do indicador.'
   }
+  const decimals = input.casas_decimais ?? 0
+  if (!Number.isInteger(decimals) || decimals < 0 || decimals > 4) {
+    return 'Casas decimais deve ser um inteiro de 0 a 4.'
+  }
+  if (input.ano_inicial != null && (input.ano_inicial < 2000 || input.ano_inicial > 2100)) {
+    return 'Ano inicial fora do intervalo suportado.'
+  }
+  if (input.ano_final != null && input.ano_inicial != null && input.ano_final < input.ano_inicial) {
+    return 'Ano final anterior ao inicial.'
+  }
   return null
 }
 
@@ -205,6 +223,15 @@ export async function saveIndicator(input: IndicatorInput): Promise<{ error: str
       direction: input.direction,
       source_scope: input.source_scope || 'manual',
       active: input.active,
+      descricao: input.descricao ?? null,
+      casas_decimais: input.casas_decimais ?? 0,
+      frequencia: input.frequencia ?? 'mensal',
+      ano_inicial: input.ano_inicial ?? null,
+      ano_final: input.ano_final ?? null,
+      formula_expression: input.formula_expression ?? null,
+      target_calculation_mode: input.target_calculation_mode ?? 'MANUAL',
+      visivel_dono: input.visivel_dono ?? true,
+      updated_at: new Date().toISOString(),
     }, { onConflict: 'metric_key' })
   return { error: error?.message ?? null }
 }
