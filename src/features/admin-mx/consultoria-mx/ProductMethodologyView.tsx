@@ -139,7 +139,7 @@ export function ProductMethodologyView(props: {
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="truncate text-xs font-medium">{encounterDisplayName(encounter.visit_number)}</div>
-                    <div className={`truncate text-[10px] ${selectedEncounter === encounter.visit_number ? 'text-white/70' : 'text-muted-foreground'}`}>{encounter.objective || 'Sem título'}</div>
+                    <div className={`truncate text-caption ${selectedEncounter === encounter.visit_number ? 'text-white/70' : 'text-muted-foreground'}`}>{encounter.objective || 'Sem título'}</div>
                   </div>
                 </button>
               ))}

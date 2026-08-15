@@ -156,7 +156,7 @@ export function ProductStrategicPlanTab(props: { product: ConsultingProduct; onC
             <p className="mt-0.5 text-xs text-muted-foreground">Quando ativado, os clientes deste produto recebem os indicadores padrão do pacote vinculado.</p>
           </div>
           <div className="flex items-center gap-2">
-            {isPublished ? <span className="flex items-center gap-1 text-xs text-amber-600"><Lock size={12} /> Publicado</span> : null}
+            {isPublished ? <span className="flex items-center gap-1 text-xs text-status-warning-text"><Lock size={12} /> Publicado</span> : null}
             <button
               type="button"
               role="switch"
@@ -179,10 +179,10 @@ export function ProductStrategicPlanTab(props: { product: ConsultingProduct; onC
           <p className="text-sm text-muted-foreground">Este produto não utiliza o Plano Estratégico como entrega padrão.</p>
         </div>
       ) : !product.indicator_package_version_id ? (
-        <div className="rounded-xl border border-amber-200 bg-amber-50 p-6 text-center dark:border-amber-800 dark:bg-amber-950/40">
-          <AlertCircle size={24} className="mx-auto mb-2 text-amber-500" />
-          <p className="text-sm font-medium text-amber-700 dark:text-amber-300">Nenhum pacote de indicadores vinculado</p>
-          <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">Vincule um pacote de indicadores publicado para definir os indicadores padrão deste produto.</p>
+        <div className="rounded-xl border border-status-warning/30 bg-status-warning-surface p-6 text-center">
+          <AlertCircle size={24} className="mx-auto mb-2 text-status-warning" />
+          <p className="text-sm font-medium text-status-warning-text">Nenhum pacote de indicadores vinculado</p>
+          <p className="mt-1 text-xs text-status-warning-text/80">Vincule um pacote de indicadores publicado para definir os indicadores padrão deste produto.</p>
           {!isPublished ? (
             <div className="mx-auto mt-4 flex max-w-md flex-wrap items-center justify-center gap-2">
               <MxSelect aria-label="Versão publicada do pacote" value={selectedVersion} onChange={event => setSelectedVersion(event.target.value)} className="min-w-[220px]">
@@ -208,7 +208,7 @@ export function ProductStrategicPlanTab(props: { product: ConsultingProduct; onC
                 <div className="mt-0.5 text-xs text-muted-foreground">Status: {pkgVersion?.status === 'publicada' ? 'Publicada' : 'Rascunho'}</div>
               </div>
               {pkgVersion ? (
-                <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${pkgVersion.status === 'publicada' ? 'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300' : 'bg-muted text-muted-foreground'}`}>
+                <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${pkgVersion.status === 'publicada' ? 'bg-status-success-surface text-status-success-text' : 'bg-muted text-muted-foreground'}`}>
                   {pkgVersion.status === 'publicada' ? 'Publicado' : 'Rascunho'}
                 </span>
               ) : null}
@@ -302,13 +302,13 @@ function StrategicPlanGroupRows(props: { area: string; items: PackageIndicator[]
           </TableCell>
           <TableCell className="text-xs text-muted-foreground">{item.area}</TableCell>
           <TableCell>
-            <span className={`rounded-full px-1.5 py-0.5 text-xs font-medium ${item.calculavel ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300'}`}>
+            <span className={`rounded-full px-1.5 py-0.5 text-xs font-medium ${item.calculavel ? 'bg-status-info-surface text-status-info-text' : 'bg-status-success-surface text-status-success-text'}`}>
               {item.calculavel ? 'Calculado' : 'Digitável'}
             </span>
           </TableCell>
           <TableCell className="text-xs text-muted-foreground">{item.value_type || '—'}</TableCell>
           <TableCell>
-            <span className={`rounded-full px-1.5 py-0.5 text-xs font-medium ${item.inclusion_reason === 'dependencia_formula' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300' : 'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300'}`}>
+            <span className={`rounded-full px-1.5 py-0.5 text-xs font-medium ${item.inclusion_reason === 'dependencia_formula' ? 'bg-status-warning-surface text-status-warning-text' : 'bg-status-success-surface text-status-success-text'}`}>
               {inclusionReasonLabel(item.inclusion_reason)}
             </span>
           </TableCell>

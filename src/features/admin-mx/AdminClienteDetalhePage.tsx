@@ -359,7 +359,7 @@ export function AdminClienteDetalhePage() {
                             {unit.store_type === 'matriz' ? <span className="rounded-full bg-primary/10 px-2 py-0.5 text-caption font-medium text-primary">Matriz</span> : null}
                             {unit.store_type === 'filial' ? <span className="rounded-full bg-status-info-bg px-2 py-0.5 text-caption font-medium text-status-info-text">Filial</span> : null}
                             {unit.is_primary ? <span className="rounded-full bg-surface-alt px-2 py-0.5 text-caption font-medium text-muted-foreground">Principal</span> : null}
-                            {unit.status === 'inativa' ? <span className="rounded-full bg-status-warning-bg px-2 py-0.5 text-caption font-medium text-status-warning-text">Inativa</span> : null}
+                            {unit.status === 'inativa' ? <span className="rounded-full bg-status-warning-surface px-2 py-0.5 text-caption font-medium text-status-warning-text">Inativa</span> : null}
                           </div>
                           <div className="flex items-center gap-2">
                             <Button variant="outline" size="sm" onClick={() => setStoreModal({ open: true, initial: { ...emptyStoreDraft(unit.store_type === 'matriz' ? 'matriz' : 'filial'), id: unit.id, name: unit.name, cnpj: unit.cnpj ?? '', internal_code: unit.internal_code ?? '', address_street: unit.address_street ?? '', address_city: unit.city ?? '', address_state: unit.state ?? '', address_zip: unit.address_zip ?? '', timezone: unit.timezone ?? 'America/Sao_Paulo', status: unit.status === 'inativa' ? 'inativa' : 'ativa', opening_date: unit.opening_date ?? '', notes: unit.notes ?? '', is_primary: unit.is_primary } })}>
@@ -422,7 +422,7 @@ export function AdminClienteDetalhePage() {
                               <div>
                                 <div className="flex items-center gap-2 text-sm font-medium text-foreground">
                                   {person.nome}
-                                  {person.is_dono_master ? <Crown size={12} className="text-amber-600" /> : null}
+                                  {person.is_dono_master ? <Crown size={12} className="text-status-warning" /> : null}
                                 </div>
                                 <div className="text-xs text-muted-foreground">{person.funcao_declarada || '—'} · {person.email}</div>
                               </div>

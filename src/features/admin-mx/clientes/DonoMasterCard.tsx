@@ -70,7 +70,7 @@ export function DonoMasterCard(props: {
         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary"><Crown size={16} /></div>
         <div>
           <div className="flex items-center gap-2 text-sm font-bold text-foreground">
-            DONO MASTER <span className="rounded-full bg-amber-500/20 px-1.5 py-0.5 text-caption text-amber-600">Master</span>
+            DONO MASTER <span className="rounded-full bg-status-warning/20 px-1.5 py-0.5 text-caption text-status-warning-text">Master</span>
           </div>
           <div className="mt-0.5 text-xs text-muted-foreground">{person.nome}</div>
           <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">

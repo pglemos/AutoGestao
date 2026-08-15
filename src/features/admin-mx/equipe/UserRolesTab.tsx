@@ -154,12 +154,12 @@ export function UserRolesTab(props: {
               <div key={grant.id} className="flex items-center justify-between rounded-lg border border-border bg-surface-default px-3 py-2">
                 <div className="flex items-center gap-2">
                   <button type="button" title="Definir como principal" disabled={saving} onClick={() => void setPrimary(grant)}>
-                    <Star size={14} className={grant.is_primary ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'} />
+                    <Star size={14} className={grant.is_primary ? 'fill-status-warning text-status-warning' : 'text-muted-foreground'} />
                   </button>
                   <span className="text-sm font-medium text-foreground">{ROLE_LABEL[grant.role] ?? grant.role}</span>
-                  {grant.is_primary ? <span className="rounded-full bg-yellow-100 px-1.5 py-0.5 text-[10px] font-medium text-yellow-700">Principal</span> : null}
+                  {grant.is_primary ? <span className="rounded-full bg-status-warning-surface px-1.5 py-0.5 text-caption font-medium text-status-warning-text">Principal</span> : null}
                 </div>
-                <button type="button" aria-label={`Remover papel ${ROLE_LABEL[grant.role] ?? grant.role}`} disabled={saving} className="rounded-lg p-1 text-muted-foreground hover:bg-red-50 hover:text-red-500" onClick={() => void removeRole(grant)}>
+                <button type="button" aria-label={`Remover papel ${ROLE_LABEL[grant.role] ?? grant.role}`} disabled={saving} className="rounded-lg p-1 text-muted-foreground hover:bg-status-error-surface hover:text-status-error focus-visible:ring-2 focus-visible:ring-status-error/40 focus-visible:outline-none" onClick={() => void removeRole(grant)}>
                   <X size={14} />
                 </button>
               </div>
@@ -174,7 +174,7 @@ export function UserRolesTab(props: {
           {compatibleViewsList.map(view => <option key={view.value} value={view.value}>{view.label}</option>)}
         </MxSelect>
         {defaultView && !compatibleViewsList.find(view => view.value === defaultView) ? (
-          <p className="mt-1 text-xs text-red-500">A visão padrão atual não é compatível com os papéis ativos.</p>
+          <p className="mt-1 text-xs text-status-error-text">A visão padrão atual não é compatível com os papéis ativos.</p>
         ) : null}
       </MxField>
 

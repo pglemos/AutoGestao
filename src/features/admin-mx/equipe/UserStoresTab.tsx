@@ -104,7 +104,7 @@ export function UserStoresTab(props: {
   return (
     <div className="space-y-4">
       {isVendedor ? (
-        <div className="rounded-lg bg-yellow-50 p-2 text-xs text-yellow-700">
+        <div className="rounded-lg bg-status-warning-surface p-2 text-xs text-status-warning-text">
           Vendedor deve possuir apenas uma Loja operacional principal ativa por vez. Para trocar de Loja, use o fluxo de Transferência de Vendedor.
         </div>
       ) : null}
@@ -142,16 +142,16 @@ export function UserStoresTab(props: {
               <div key={assignment.id} className="flex items-center justify-between rounded-lg border border-border bg-surface-default px-3 py-2">
                 <div className="flex items-center gap-2">
                   <button type="button" title="Definir como principal" disabled={saving} onClick={() => void setPrimary(assignment)}>
-                    <Star size={14} className={assignment.is_primary ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'} />
+                    <Star size={14} className={assignment.is_primary ? 'fill-status-warning text-status-warning' : 'text-muted-foreground'} />
                   </button>
                   <Building2 size={14} className="text-status-success-text" />
                   <div>
                     <span className="text-sm font-medium text-foreground">{assignment.store_name}</span>
                     <span className="ml-2 text-xs text-muted-foreground">{ASSIGNMENT_LABEL[assignment.assignment_type] ?? assignment.assignment_type}</span>
                   </div>
-                  {assignment.is_primary ? <span className="rounded-full bg-yellow-100 px-1.5 py-0.5 text-[10px] font-medium text-yellow-700">Principal</span> : null}
+                  {assignment.is_primary ? <span className="rounded-full bg-status-warning-surface px-1.5 py-0.5 text-caption font-medium text-status-warning-text">Principal</span> : null}
                 </div>
-                <button type="button" aria-label={`Remover vínculo com ${assignment.store_name}`} disabled={saving} className="rounded-lg p-1 text-muted-foreground hover:bg-red-50 hover:text-red-500" onClick={() => void removeStore(assignment)}>
+                <button type="button" aria-label={`Remover vínculo com ${assignment.store_name}`} disabled={saving} className="rounded-lg p-1 text-muted-foreground hover:bg-status-error-surface hover:text-status-error focus-visible:ring-2 focus-visible:ring-status-error/40 focus-visible:outline-none" onClick={() => void removeStore(assignment)}>
                   <X size={14} />
                 </button>
               </div>

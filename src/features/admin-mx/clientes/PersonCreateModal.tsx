@@ -137,7 +137,7 @@ export function PersonCreateModal(props: {
             <label className="flex items-start gap-2">
               <input type="checkbox" checked={draft.is_dono_master} onChange={toggleMaster} className="mt-0.5 rounded" />
               <div>
-                <div className="flex items-center gap-1.5 text-sm font-medium text-foreground"><Crown size={14} className="text-amber-600" />Definir como Dono Master desta empresa</div>
+                <div className="flex items-center gap-1.5 text-sm font-medium text-foreground"><Crown size={14} className="text-status-warning" />Definir como Dono Master desta empresa</div>
                 <div className="mt-1 text-xs text-muted-foreground">Governança principal da conta, acesso global às unidades e autorização para administrar usuários, metas e configurações.</div>
               </div>
             </label>

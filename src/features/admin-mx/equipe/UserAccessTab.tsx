@@ -180,7 +180,7 @@ export function UserAccessTab(props: {
                     <span className="ml-2 text-xs text-muted-foreground">{delegation.access_level} · até {delegation.valid_until}</span>
                   </div>
                 </div>
-                <button type="button" aria-label={`Encerrar delegação de ${delegation.store_name}`} disabled={saving} className="rounded-lg p-1 text-muted-foreground hover:bg-red-50 hover:text-red-500" onClick={() => void endDeleg(delegation)}>
+                <button type="button" aria-label={`Encerrar delegação de ${delegation.store_name}`} disabled={saving} className="rounded-lg p-1 text-muted-foreground hover:bg-status-error-surface hover:text-status-error focus-visible:ring-2 focus-visible:ring-status-error/40 focus-visible:outline-none" onClick={() => void endDeleg(delegation)}>
                   <X size={14} />
                 </button>
               </div>

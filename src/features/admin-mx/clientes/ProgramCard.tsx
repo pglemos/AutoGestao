@@ -69,7 +69,7 @@ export function ProgramCard(props: { summary: ProgramSummary; onEditProgram: () 
       </div>
 
       <div className="mt-4 border-t border-border pt-3">
-        <button type="button" onClick={props.onEditProgram} className="text-xs font-medium text-primary hover:underline">
+        <button type="button" onClick={props.onEditProgram} className="text-xs font-medium text-primary hover:underline focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:outline-none">
           Editar programa
         </button>
       </div>
