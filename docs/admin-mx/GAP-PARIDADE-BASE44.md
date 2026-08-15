@@ -11,7 +11,7 @@ Levantamento honesto do que existe no export `mx-admin-flow` e do que o MX tem h
 | `/produtos` | 4 / 691 | **ciclo de vida + módulos + tempos** | ~85% |
 | `/indicadores` | 34 / 6.630 | catálogo com ciclo, ordem, drawer e **parâmetros** | ~35% |
 | `/planos-acao` | 21 / 3.941 | rede + templates + sugestões + **kanban e detalhe** | ~55% |
-| `/consultoria-mx` | 19 / 2.742 | lista de encontros | ~10% |
+| `/consultoria-mx` | 19 / 2.742 | **5 abas completas (metodologia, editor, biblioteca, relatórios, histórico)** | ~85% |
 | **Total** | **109 / 20.886** | ~2.400 linhas | **~20%** |
 
 ## O que falta, por rota
@@ -52,11 +52,11 @@ Levantamento honesto do que existe no export `mx-admin-flow` e do que o MX tem h
 - **Aplicações nos clientes**: acompanhamento por cliente com progresso e eficácia.
 
 ### `/consultoria-mx`
-- **Metodologia por produto**: versão estrutural vs metodológica, publicar, comparar versões, completude.
-- **Editor de encontro** com abas: objetivo, conteúdo (vídeo/aula), entrega, evidências, arquivos, relatório, planos de ação, guia do consultor.
-- **Biblioteca de materiais**: upload, tipos, visibilidade, utilizações, arquivar.
-- **Modelos de relatório**: seções, publicar, duplicar, arquivar.
-- **Prévia do Módulo Dono** e histórico de alterações.
+- ~~**Metodologia por produto**: versão estrutural vs metodológica, publicar, comparar versões, completude~~ — **feito**.
+- ~~**Editor de encontro** com abas: objetivo, conteúdo (vídeo/aula), entrega, evidências, arquivos, relatório, planos de ação, guia do consultor~~ — **feito**.
+- ~~**Biblioteca de materiais**: upload, tipos, visibilidade, utilizações, arquivar~~ — **feito**.
+- ~~**Modelos de relatório**: seções, publicar, duplicar, arquivar~~ — **feito**.
+- ~~**Prévia do Módulo Dono** e histórico de alterações~~ — **feito**.
 
 ## Tabelas que faltam no Supabase
 
@@ -69,4 +69,4 @@ Sem elas, parte do gap não fecha: qualificação de consultor por produto e por
 3. ~~`/clientes` — Visão 360 e ativação com checklist~~ — feito.
 4. ~~`/planos-acao` — kanban e detalhe em abas~~ — feito (falta o wizard por cliente).
 5. ~~`/indicadores` — ordem, drawer, parâmetros~~ — feito (faltam wizard completo, fórmulas e importação de metas).
-6. `/consultoria-mx` — metodologia por produto e editor de encontro.
+6. ~~`/consultoria-mx` — metodologia por produto e editor de encontro~~ — feito.
