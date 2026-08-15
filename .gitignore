@@ -71,3 +71,5 @@ artifacts/foundation-zero/
 # Graphify runtime artifacts (AGENTS.md: never commit branch/worktree/cache)
 .graphify/
 **/.graphify/
+graphify-out/
+**/graphify-out/
