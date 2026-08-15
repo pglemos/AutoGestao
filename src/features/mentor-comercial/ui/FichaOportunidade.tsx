@@ -16,6 +16,7 @@
  */
 
 import React, { useState } from 'react'
+import { EmptyState } from '@/components/atoms/EmptyState'
 import type { MentorDecision, OpportunityFacts } from '../engine/engine'
 import {
   buildFichaBlocks,
@@ -401,7 +402,7 @@ export function FichaOportunidade({
                   ))}
                 </div>
               ) : (
-                <p className="text-muted-foreground italic">Nenhuma bandeira pendente.</p>
+                <EmptyState size="sm" variant="filter" title="Nenhuma bandeira pendente." />
               )}
 
               {whatIsMissing.scoreAlerts.length > 0 && (

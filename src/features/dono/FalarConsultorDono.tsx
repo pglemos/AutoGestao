@@ -14,6 +14,7 @@ import {
   UserRoundCheck,
 } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
+import { EmptyState } from '@/components/atoms/EmptyState'
 import { Input } from '@/components/atoms/Input'
 import { Typography } from '@/components/atoms/Typography'
 import { Card } from '@/components/molecules/Card'
@@ -392,11 +393,7 @@ export default function FalarConsultorDono() {
           {loading ? (
             <div className="h-24 animate-pulse rounded-2xl bg-surface-alt" />
           ) : requests.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-border p-mx-lg text-center">
-              <UserRoundCheck size={26} className="mx-auto text-muted-foreground" />
-              <p className="mt-mx-sm text-sm font-bold text-foreground">Nenhuma solicitação registrada</p>
-              <p className="mt-mx-xs text-xs font-bold text-muted-foreground">O primeiro envio aparecerá aqui com status e data.</p>
-            </div>
+            <EmptyState size="sm" variant="dataset" icon={<UserRoundCheck size={26} />} title="Nenhuma solicitação registrada" description="O primeiro envio aparecerá aqui com status e data." />
           ) : requests.map(request => (
             <div key={request.id} className="flex flex-col gap-mx-sm rounded-2xl border border-border p-mx-md md:flex-row md:items-center md:justify-between">
               <div className="min-w-0">

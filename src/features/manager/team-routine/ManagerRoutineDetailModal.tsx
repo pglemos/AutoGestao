@@ -1,5 +1,6 @@
 import { format, parseISO } from 'date-fns'
 import { AlertCircle, CheckCircle2 } from 'lucide-react'
+import { EmptyState } from '@/components/atoms/EmptyState'
 import { Modal } from '@/components/organisms/Modal'
 import type { OfficialRoutineScore } from './manager-team-routine'
 
@@ -41,9 +42,7 @@ export function ManagerRoutineDetailModal({ open, sellerName, date, actions, app
       size={hasRoutine ? 'xl' : 'md'}
       footer={hasRoutine ? <div className="flex w-full justify-end"><button type="button" className="rounded-xl bg-muted px-4 py-2 text-sm font-medium text-foreground hover:bg-muted" onClick={onClose}>Fechar</button></div> : undefined}
     >
-      {!hasRoutine ? <div className="py-4 text-center">
-          <p className="text-sm text-muted-foreground">Nenhuma rotina registrada para este vendedor nesta data.</p>
-        </div> : <div className="space-y-5">
+      {!hasRoutine ? <EmptyState size="sm" variant="dataset" title="Nenhuma rotina registrada para este vendedor nesta data." /> : <div className="space-y-5">
           <p className="text-xs text-muted-foreground">Unidade e atividades oficiais da Central de Execução para {formattedDate}.</p>
           <div className="grid grid-cols-2 gap-3 rounded-xl bg-surface-alt p-4 sm:grid-cols-4">
             <DetailMetric label="Execução" value={execution === null ? '—' : `${execution}%`} />

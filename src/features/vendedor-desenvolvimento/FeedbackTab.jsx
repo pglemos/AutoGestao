@@ -3,6 +3,7 @@ import { base44 } from "@/api/base44Client";
 import PageHeader from "@/components/ui/PageHeader";
 import { StatCard } from "@/components/molecules/StatCard";
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/atoms/EmptyState";
 import { Textarea } from "@/components/atoms/Textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { MessageSquare, ThumbsUp, TrendingUp, Clock, CheckCircle2 } from "lucide-react";
@@ -102,10 +103,7 @@ export default function FeedbackPage({ hideHeader = false }) {
           <h3 className="text-base font-semibold text-mx-navy">Histórico</h3>
         </div>
         {feedbacks.filter(f => f.acknowledged).length === 0 ? (
-          <div className="p-12 text-center">
-            <MessageSquare className="w-10 h-10 text-text-disabled mx-auto mb-3" />
-            <p className="text-sm text-muted-foreground">Nenhum feedback confirmado ainda.</p>
-          </div>
+          <EmptyState size="sm" variant="dataset" icon={<MessageSquare size={24} />} title="Nenhum feedback confirmado ainda." />
         ) : (
           <ScrollableRegion label="Histórico de devolutivas">
             <table className="w-full">

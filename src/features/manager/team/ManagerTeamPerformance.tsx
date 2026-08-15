@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { endOfMonth, format, parseISO, startOfMonth, subDays, subMonths } from 'date-fns'
 import { Search, Users } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { EmptyState } from '@/components/atoms/EmptyState'
 import type { RankingEntry, Store } from '@/types/database'
 import type { useDashboardLojaData } from '@/features/dashboard-loja/hooks/useDashboardLojaData'
 import { ManagerHomeReturnLink } from '@/features/manager/home/ManagerHomeReturnLink'
@@ -63,7 +64,9 @@ export function ManagerTeamPerformance({ data, storeName, selectableStores = [],
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"><div><h1 className="text-xl font-bold text-foreground">Minha Equipe</h1><p className="mt-0.5 text-sm text-muted-foreground">Acompanhe a evolução da equipe e identifique onde sua atuação gerencial é necessária.</p></div><div className="flex flex-wrap items-end gap-2"><div><label className="mb-1 block text-xs text-muted-foreground" htmlFor="manager-team-search">Buscar</label><div className="relative"><Search className="pointer-events-none absolute left-3 top-2.5 text-muted-foreground" size={15}/><input id="manager-team-search" aria-label="Buscar vendedor" placeholder="Vendedor..." value={search} onChange={event => setSearch(event.target.value)} className="w-44 rounded-xl border border-border px-3 py-2 pl-9 text-sm font-normal leading-5 focus:outline-none focus:ring-2 focus:ring-status-success"/></div></div><div><label className="mb-1 block text-xs text-muted-foreground" htmlFor="manager-team-period">Período</label><select id="manager-team-period" value={period} onChange={event => setPeriod(event.target.value as TeamPeriod)} aria-label="Período da equipe" className="block rounded-xl border border-border bg-white px-3 py-2 text-sm text-foreground"><option value="current">Mês atual</option><option value="previous">Mês anterior</option><option value="last30">Últimos 30 dias</option></select></div>{selectableStores.length > 1 && onStoreChange ? <div><label className="mb-1 block text-xs text-muted-foreground" htmlFor="manager-team-store">Unidade</label><select id="manager-team-store" aria-label="Unidade da equipe" value={data.selectedStoreId || ''} onChange={event => onStoreChange(event.target.value)} className="block min-w-[140px] rounded-xl border border-border bg-white px-3 py-2 text-sm text-foreground"><option value="">Todas</option>{selectableStores.map(store => <option key={store.id} value={store.id}>{store.name}</option>)}</select></div> : null}</div></div>
     </header>
 
-    {filtered.length ? <ManagerTeamKanban cards={cards} view={view} storeName={storeName} onViewChange={setView} onOpenProfile={openProfile} onAction={handleAction}/> : <div className="flex flex-col items-center justify-center rounded-2xl border border-border-subtle bg-white py-16 text-center shadow-sm"><Users className="mb-3 h-12 w-12 text-text-disabled"/><p className="font-medium text-muted-foreground">{rows.length === 0 ? 'Nenhum vendedor vinculado a este gerente.' : 'Nenhum vendedor corresponde à busca.'}</p></div>}
+    {filtered.length ? <ManagerTeamKanban cards={cards} view={view} storeName={storeName} onViewChange={setView} onOpenProfile={openProfile} onAction={handleAction}/> : rows.length === 0
+      ? <EmptyState size="sm" variant="dataset" icon={<Users size={24} />} title="Nenhum vendedor vinculado a este gerente." />
+      : <EmptyState size="sm" variant="filter" title="Nenhum vendedor corresponde à busca." />}
 
     <ManagerSellerProfileModal
       open={Boolean(selected)}

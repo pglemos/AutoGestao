@@ -3,6 +3,7 @@ import { CheckCircle, ChevronDown, ChevronUp, Target } from 'lucide-react'
 import { Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { Link } from 'react-router-dom'
 import { Progress } from '@/components/atoms/Progress'
+import { EmptyState } from '@/components/atoms/EmptyState'
 import { chartTokens } from '@/lib/charts/tokens'
 import type {
   ChannelFunnel,
@@ -393,7 +394,7 @@ export function EvolucaoCollapsible({ data, chartAberto, onToggle }: { data: Mon
       {chartAberto && (
         <div className="border-t border-border-subtle px-5 pb-4">
           {semRegistros ? (
-            <p className="py-6 text-center text-[12px] text-muted-foreground">Sem registros nos últimos 6 meses.</p>
+            <EmptyState size="sm" variant="dataset" title="Sem registros nos últimos 6 meses." />
           ) : (
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={data} margin={{ top: 12, right: 8, left: -18, bottom: 0 }}>
