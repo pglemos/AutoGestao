@@ -114,6 +114,15 @@ export default defineConfig({
         viewport: { width: 390, height: 844 },
       },
     },
+    {
+      name: 'smoke-areas',
+      testDir: './e2e',
+      testMatch: /smoke-areas\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 1280, height: 800 },
+      },
+    },
   ],
 
   webServer: skipWebServer
