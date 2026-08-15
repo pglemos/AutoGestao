@@ -112,7 +112,7 @@ export default function OperationalSettings() {
 
   if (accessMode === 'hidden') {
     return (
-      <MxModulePage>
+      <MxModulePage width="focused">
         <MxModuleHeader title="Configuração operacional" description="Seu perfil não possui acesso a esta área." />
         <MxStatusBanner tone="danger">Acesso não autorizado para o perfil {role || 'sem perfil'}.</MxStatusBanner>
       </MxModulePage>
@@ -122,7 +122,7 @@ export default function OperationalSettings() {
   const loading = storesLoading || deliveryLoading || metaLoading
 
   return (
-    <MxModulePage accessMode={accessMode}>
+    <MxModulePage accessMode={accessMode} width="focused">
       <MxModuleHeader
         eyebrow="Governança por unidade"
         title="Configuração operacional"

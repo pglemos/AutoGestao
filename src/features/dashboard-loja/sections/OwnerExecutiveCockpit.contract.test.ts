@@ -24,7 +24,7 @@ describe('OwnerExecutiveCockpit data-backed sections', () => {
     // compartilhado por rotas dashboard/wide/focused e segue a metadata em vez
     // de um literal fixo. O contrato passa a exigir a resolução dinâmica.
     expect(canvasTag).toMatch(/width=\{pageWidth\}/)
-    expect(dashboardSource).toContain('resolveRouteLayout(location.pathname).width')
+    expect(dashboardSource).toContain('resolveRouteLayout(location.pathname)')
     expect(source).not.toContain('p-mx-sm')
     expect(source).not.toContain('md:p-mx-lg')
   })

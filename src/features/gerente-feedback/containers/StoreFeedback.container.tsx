@@ -6,15 +6,19 @@ import { FeedbackLoadingSkeleton } from '../sections/FeedbackLoadingSkeleton'
 import { ManagerScopeBanner, OwnerScopeBanner } from '../sections/ScopeBanners'
 import { StoreFeedbackHeader } from '../sections/StoreFeedbackHeader'
 import { WeeklyReportsList } from '../sections/WeeklyReportsList'
-import { PageCanvas } from '@/design-system/page'
+import { useLocation } from 'react-router-dom'
+import { PageCanvas, resolveRouteLayout } from '@/design-system/page'
 
 export function StoreFeedbackContainer() {
   const vm = useStoreFeedback()
+  const location = useLocation()
+  // /devolutivas é focused/navigation (FASE Z, paridade Dono/Gerente).
+  const pageLayout = resolveRouteLayout(location.pathname)
 
   if (vm.isLoading) return <FeedbackLoadingSkeleton ariaLabel="Carregando devolutivas" />
 
   return (
-    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" id="page-devolutivas" className="flex min-h-0 flex-1 flex-col space-y-6" aria-label="Devolutivas">
+    <PageCanvas as="div" width={pageLayout.width} bottomClearance={pageLayout.bottomClearance} id="page-devolutivas" className="flex min-h-0 flex-1 flex-col space-y-6" aria-label="Devolutivas">
       <FeedbackErrorBoundary sectionName="Cabeçalho">
         <StoreFeedbackHeader
           isOwner={vm.isOwner}

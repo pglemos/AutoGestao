@@ -39,10 +39,14 @@ describe('ManagerDayRoutine canonical sources', () => {
   })
 
   test('uses the canonical PageCanvas and leaves page spacing to the shared layout', () => {
-    expect(containerSource).toContain("import { PageCanvas } from '@/design-system/page'")
+    expect(containerSource).toContain("from '@/design-system/page'")
+    expect(containerSource).toContain('PageCanvas')
+    // width/clearance resolvidos da metadata da rota (Padrão A C7 / FASE Z),
+    // não literal fixo.
     expect(containerSource).toContain(
-      '<PageCanvas as="div" width="dashboard" bottomClearance="navigation"',
+      '<PageCanvas as="div" width={pageLayout.width} bottomClearance={pageLayout.bottomClearance}',
     )
+    expect(containerSource).toContain('resolveRouteLayout')
     expect(containerSource).not.toContain('min-h-full bg-gray-50')
     const viewComponentSource = viewSource.slice(viewSource.indexOf('export function ManagerDayRoutineView'))
     const viewRoot = viewComponentSource.match(/return\s*\(\s*(<div className="[^"]+">)/)?.[1]

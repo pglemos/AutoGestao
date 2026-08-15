@@ -1,5 +1,6 @@
 import { Skeleton } from '@/components/atoms/Skeleton'
-import { PageCanvas } from '@/design-system/page'
+import { useLocation } from 'react-router-dom'
+import { PageCanvas, resolveRouteLayout } from '@/design-system/page'
 
 type Props = {
   ariaLabel?: string
@@ -10,11 +11,13 @@ export function FeedbackLoadingSkeleton({
   ariaLabel = 'Carregando devolutivas',
   errorMessage = null,
 }: Props) {
+  const location = useLocation()
+  const pageLayout = resolveRouteLayout(location.pathname)
   return (
     <PageCanvas
       as="div"
-      width="dashboard"
-      bottomClearance="navigation"
+      width={pageLayout.width}
+      bottomClearance={pageLayout.bottomClearance}
       className="flex min-h-0 flex-1 flex-col space-y-6"
       aria-busy="true"
       aria-live="polite"

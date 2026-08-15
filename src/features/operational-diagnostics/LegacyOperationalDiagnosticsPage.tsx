@@ -103,7 +103,7 @@ export default function AiDiagnostics() {
 
   if (!internalProfile && role !== 'gerente') {
     return (
-      <PageCanvas width="focused" className="flex flex-col items-center justify-center text-center">
+      <PageCanvas width="dashboard" className="flex flex-col items-center justify-center text-center">
         <ShieldCheck size={48} className="text-status-success-text opacity-20 mb-6" aria-hidden="true" />
         <Typography variant="h2" className="tracking-tighter">Acesso Restrito</Typography>
         <Typography variant="caption" tone="muted" className="max-w-sm mx-auto mt-4">Diagnóstico operacional disponível para Admin MX e Gerente.</Typography>

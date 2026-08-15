@@ -1,23 +1,21 @@
 import { describe, expect, test } from 'bun:test'
+import { readFileSync, readdirSync, statSync } from 'node:fs'
+import { join, relative } from 'node:path'
 
 import {
+  ALLOWLIST,
   inspectHorizontalPageOverflow,
   runHorizontalPageOverflowGate,
 } from '../../scripts/lint-horizontal-page-overflow.mjs'
 
 /**
- * Residuais documentados de largura de viewport em raiz de página.
- *
- * Telas de estado fullscreen montadas por rota (acesso restrito, aguardando
- * carregamento) centralizam conteúdo com `h-screen w-screen` — o shell
- * autenticado (`main#main-content` com `overflow-hidden`) clipa o conteúdo, e o
- * harness browser mede `scrollWidth <= clientWidth + 1` nessas rotas (prova:
- * browser test da matriz route × viewport). São exceções DECLARADAS: o
- * orçamento deve ENCOLHER conforme essas telas migram para `PageCanvas`/tokens.
+ * A allowlist do gate é a fonte única de verdade dos residuais documentados
+ * (telas fullscreen deliberadas, clipadas pelo main do shell, medidas sem
+ * overflow no harness). O orçamento deve ENCOLHER conforme essas telas migram
+ * para `PageCanvas`/tokens — o gate filtra por ela, e o contrato exige que ela
+ * não cresça.
  */
-const RESIDUAL: Record<string, string> = {
-  'src/pages/LiberacaoFechamento.tsx': 'tela de estado fullscreen (acesso restrito) centralizada com h-screen w-screen; clipada pelo main do shell; medida sem overflow no harness.',
-}
+const RESIDUAL: Record<string, string> = Object.fromEntries(ALLOWLIST)
 
 describe('contrato AC-29.016 — horizontal page overflow estático', () => {
   test('RED: raiz de página com w-screen é flagrada', () => {
@@ -74,8 +72,27 @@ describe('contrato AC-29.016 — horizontal page overflow estático', () => {
   })
 
   test('cada residual documentado ainda está presente (orçamento não apodrece)', () => {
-    const keys = new Set(runHorizontalPageOverflowGate().map((v) => v.file))
-    const stale = Object.keys(RESIDUAL).filter((key) => !keys.has(key))
-    expect(stale, `residuais já migrados — remover do orçamento RESIDUAL:\n${stale.join('\n')}`).toEqual([])
+    // Verifica contra as violações CRUAS (antes do filtro da allowlist) para
+    // garantir que o residual ainda existe no código — se a tela migrar para
+    // PageCanvas, o residual vira obsoleto e deve sair da allowlist.
+    const root = join(import.meta.dir, '../..')
+    const rawByFile = new Set<string>()
+    function walk(dir: string): void {
+      for (const entry of readdirSync(dir)) {
+        const abs = join(dir, entry)
+        if (statSync(abs).isDirectory()) {
+          if (['node_modules', '.git', 'base44-reference', '_stories'].includes(entry)) continue
+          walk(abs)
+          continue
+        }
+        if (!/\.(tsx|jsx)$/.test(entry) || /\.(test|spec|stories)\./.test(entry)) continue
+        const rel = relative(root, abs).replace(/\\/g, '/')
+        const found = inspectHorizontalPageOverflow(readFileSync(abs, 'utf8'), rel)
+        for (const v of found) rawByFile.add(v.file)
+      }
+    }
+    walk(join(root, 'src'))
+    const stale = Object.keys(RESIDUAL).filter((key) => !rawByFile.has(key))
+    expect(stale, `residuais já migrados — remover da allowlist:\n${stale.join('\n')}`).toEqual([])
   })
 })

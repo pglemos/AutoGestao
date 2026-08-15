@@ -5,10 +5,14 @@ import { AdminFeedbackHeader } from '../sections/AdminFeedbackHeader'
 import { FeedbackList } from '../sections/FeedbackList'
 import { FeedbackLoadingSkeleton } from '../sections/FeedbackLoadingSkeleton'
 import { WeeklyReportsList } from '../sections/WeeklyReportsList'
-import { PageCanvas } from '@/design-system/page'
+import { useLocation } from 'react-router-dom'
+import { PageCanvas, resolveRouteLayout } from '@/design-system/page'
 
 export function AdminFeedbackContainer() {
   const vm = useAdminFeedback()
+  const location = useLocation()
+  // /devolutivas é focused/navigation (FASE Z, paridade Dono/Gerente).
+  const pageLayout = resolveRouteLayout(location.pathname)
 
   if (vm.isLoading) {
     return (
@@ -23,7 +27,7 @@ export function AdminFeedbackContainer() {
   // ficava em 16px até 1024px, inclusive na faixa tablet onde a régua pede
   // 24px, e divergia das outras dezoito áreas internas.
   return (
-    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" id="page-devolutivas" className="flex min-h-0 flex-1 flex-col space-y-6" aria-label="Devolutivas">
+    <PageCanvas as="div" width={pageLayout.width} bottomClearance={pageLayout.bottomClearance} id="page-devolutivas" className="flex min-h-0 flex-1 flex-col space-y-6" aria-label="Devolutivas">
       <FeedbackErrorBoundary sectionName="Cabeçalho">
         <AdminFeedbackHeader
           activeTab={vm.activeTab}

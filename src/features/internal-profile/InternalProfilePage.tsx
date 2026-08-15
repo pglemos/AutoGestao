@@ -16,9 +16,9 @@ function ProfileAvatar({ url, name }: { url: string; name: string }) {
 
 export function InternalProfilePage() {
   const state = useInternalProfileController()
-  if (!state.profile) return <MxModulePage id="internal-profile-loading"><MxLoadingState label="Carregando perfil" /></MxModulePage>
+  if (!state.profile) return <MxModulePage id="internal-profile-loading" bottomClearance="navigation"><MxLoadingState label="Carregando perfil" /></MxModulePage>
   return (
-    <MxModulePage id="internal-profile">
+    <MxModulePage id="internal-profile" bottomClearance="navigation">
       <MxModuleHeader eyebrow="Conta" title="Meu Perfil" description="Dados pessoais, foto e segurança da conta MX." actions={<><Button variant="outline" onClick={() => void state.signOut()}><LogOut size={18} />Sair</Button><Button onClick={() => void state.save()} disabled={!state.canEdit || state.saving}>{state.saving ? <RefreshCw size={18} className="animate-spin motion-reduce:animate-none" /> : <Save size={18} />}Salvar</Button></>} />
       {!state.canEdit ? <MxStatusBanner tone="warning">Este perfil está disponível somente para leitura.</MxStatusBanner> : null}
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">

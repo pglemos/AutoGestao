@@ -24,7 +24,7 @@ export default function ManagerDevelopment() {
   }
 
   return (
-    <MxModulePage id="desenvolvimento">
+    <MxModulePage id="desenvolvimento" width="focused">
       <ManagerHomeReturnLink />
       <MxModuleHeader title="Desenvolvimento" description="Reconheça, oriente e desenvolva sua equipe com Feedback e PDI." eyebrow="Gestão de pessoas" />
       <MxPageTabs items={[...tabs]} activeKey={tab} onChange={selectTab} ariaLabel="Desenvolvimento" />

@@ -303,7 +303,7 @@ export default function Reprocessamento() {
   )
 
   return (
-    <MxModulePage>
+    <MxModulePage width="form">
       <MxModuleHeader
         title="Reprocessamento"
         description="Valide, importe e acompanhe lotes de dados com histórico auditável por unidade."

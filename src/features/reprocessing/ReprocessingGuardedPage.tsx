@@ -8,7 +8,7 @@ export default function ReprocessingGuardedPage() {
   const { role } = useAuth()
   if (!canExecuteReprocessing(role)) {
     return (
-      <MxModulePage id="reprocessing-forbidden">
+      <MxModulePage width="form" id="reprocessing-forbidden">
         <MxModuleHeader
           eyebrow="Configurações"
           title="Reprocessamento"

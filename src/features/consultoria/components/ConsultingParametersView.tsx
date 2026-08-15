@@ -123,7 +123,7 @@ export function ConsultingParametersView() {
 
   if (loading) {
     return (
-      <MxModulePage accessMode={accessMode === 'manage' ? 'manage' : 'read-only'}>
+      <MxModulePage accessMode={accessMode === 'manage' ? 'manage' : 'read-only'} width="focused">
         <MxModuleHeader title="Parâmetros PMR" description="Carregando catálogo, benchmarks e limites da consultoria." />
         <MxSectionCard><MxLoadingState label="Carregando parâmetros PMR" /></MxSectionCard>
       </MxModulePage>
@@ -132,7 +132,7 @@ export function ConsultingParametersView() {
 
   if (error) {
     return (
-      <MxModulePage accessMode={accessMode === 'manage' ? 'manage' : 'read-only'}>
+      <MxModulePage accessMode={accessMode === 'manage' ? 'manage' : 'read-only'} width="focused">
         <MxModuleHeader title="Parâmetros PMR" description="Catálogo de indicadores e benchmarks da consultoria." />
         <MxSectionCard><MxErrorState description={error} retry={() => void refetch()} /></MxSectionCard>
       </MxModulePage>
@@ -140,7 +140,7 @@ export function ConsultingParametersView() {
   }
 
   return (
-    <MxModulePage accessMode={accessMode === 'manage' ? 'manage' : 'read-only'}>
+    <MxModulePage accessMode={accessMode === 'manage' ? 'manage' : 'read-only'} width="focused">
       <MxModuleHeader
         eyebrow="Metodologia consultiva"
         title="Parâmetros PMR"
