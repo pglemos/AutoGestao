@@ -125,7 +125,7 @@ export function ApproveDecisionModal({ decision, open, onOpenChange, onDone }) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[440px]">
+      <DialogContent size="sm">
         <DialogHeader>
           <DialogTitle>Aprovar decisão</DialogTitle>
           <DialogDescription>
@@ -196,7 +196,7 @@ export function DelegateDecisionModal({ decision, open, onOpenChange, onDone }) 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[460px]">
+      <DialogContent size="sm">
         <DialogHeader>
           <DialogTitle>Delegar decisão</DialogTitle>
           <DialogDescription>Defina o responsável, o prazo e a orientação para a execução.</DialogDescription>
@@ -290,7 +290,7 @@ export function ConvertToActionModal({ decision, open, onOpenChange, onDone }) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[460px]">
+      <DialogContent size="sm">
         <DialogHeader>
           <DialogTitle>Transformar decisão em ação</DialogTitle>
           <DialogDescription>

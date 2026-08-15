@@ -58,7 +58,7 @@ export default function AnticipationModal({ meeting, program, onClose, onSubmitt
 
   return (
     <Dialog open onOpenChange={onClose}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[520px]">
+      <DialogContent size="md" scrollable>
         <DialogHeader>
           <DialogTitle>Solicitar antecipação do encontro</DialogTitle>
           <DialogDescription>

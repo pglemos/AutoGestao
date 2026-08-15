@@ -66,7 +66,7 @@ export default function CreateActionModal({ repository, open, onOpenChange, indi
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[560px]">
+      <DialogContent size="lg" scrollable>
         <DialogHeader><DialogTitle>Criar Plano de Ação</DialogTitle><DialogDescription>Vincule uma única ação ativa ao indicador selecionado.</DialogDescription></DialogHeader>
         <div className={`rounded-lg border p-3 ${statusStyle.border} ${statusStyle.bg}`}>
           <div className="flex items-center gap-2"><AlertTriangle className={`h-4 w-4 ${statusStyle.text}`} /><span className={`text-sm font-semibold ${statusStyle.text}`}>{statusStyle.label}</span><span className="text-xs text-muted-foreground">· {form.indicatorName}</span></div>

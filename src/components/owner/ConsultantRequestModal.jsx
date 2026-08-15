@@ -98,7 +98,7 @@ export default function ConsultantRequestModal() {
 
   return (
     <Dialog open={consultantModal.open} onOpenChange={(o) => !o && handleClose()}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[520px]">
+      <DialogContent size="md" className="overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Falar com Consultor</DialogTitle>
           <DialogDescription>

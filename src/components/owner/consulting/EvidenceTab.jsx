@@ -237,7 +237,7 @@ export default function EvidenceTab({ meeting, user }) {
       {/* Modal adicionar evidência extra */}
       {showAddCustom && (
         <Dialog open={showAddCustom} onOpenChange={setShowAddCustom}>
-          <DialogContent className="sm:max-w-[440px]">
+          <DialogContent size="sm">
             <DialogHeader>
               <DialogTitle>Adicionar evidência</DialogTitle>
               <DialogDescription>Registre uma evidência adicional para o encontro {meeting.number} — {meeting.title}.</DialogDescription>
@@ -273,7 +273,7 @@ export default function EvidenceTab({ meeting, user }) {
       {/* Modal visualizar evidência */}
       {viewing && (
         <Dialog open={!!viewing} onOpenChange={() => setViewing(null)}>
-          <DialogContent className="sm:max-w-[440px]">
+          <DialogContent size="sm">
             <DialogHeader>
               <DialogTitle>{viewing.name}</DialogTitle>
               <DialogDescription>

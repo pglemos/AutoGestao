@@ -34,7 +34,7 @@ export default function ParticipantsModal({ meeting, onClose, onConfirmed }) {
 
   return (
     <Dialog open onOpenChange={onClose}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[480px]">
+      <DialogContent size="sm" scrollable>
         <DialogHeader>
           <DialogTitle>Confirmar participantes</DialogTitle>
           <DialogDescription>
