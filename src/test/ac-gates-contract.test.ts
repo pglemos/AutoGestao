@@ -67,8 +67,10 @@ describe('contrato AC-29.006 — overrides perigosos em canônicos', () => {
     expect(inspectDangerousOverrides(src, 'x/Page.tsx')).toEqual([])
   })
 
-  test('allowlist documenta 11 arquivos de dívida real', () => {
-    expect(Object.keys(DANGEROUS_OVERRIDE_ALLOWLIST).length).toBeGreaterThanOrEqual(11)
+  test('allowlist de dívida só encolhe (teto de 11 arquivos)', () => {
+    // A allowlist nasceu com 11 arquivos; conforme a dívida é paga ela diminui.
+    // O gate é o teto — subir de novo é que seria regressão.
+    expect(Object.keys(DANGEROUS_OVERRIDE_ALLOWLIST).length).toBeLessThanOrEqual(11)
   })
 
   test('RED: !h-important em Button é flagrado (11.012)', () => {

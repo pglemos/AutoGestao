@@ -1,7 +1,7 @@
 # Matriz reproduzível de rotas, autorização e dados
 
-- Rotas declaradas em `src/App.tsx`: **114**
-- Rotas protegidas: **106**
+- Rotas declaradas em `src/App.tsx`: **115**
+- Rotas protegidas: **107**
 - Rotas públicas: **8**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
@@ -115,6 +115,7 @@
 | `/produtos` | route | protegida | — | `/produtos` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ProdutosDigitais />} gerente={<ProdutosDigitais />} dono={<ProdutosDigitais />} admin={<AdminProdutosConsultoriaPage />} />` |
 | `/clientes` | route | protegida | — | `/clientes` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ConsultoriaClientes />} /> </Suspense>` |
 | `/clientes/novo` | route | protegida | — | `/clientes/novo` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminNovoClientePage />} /> </Suspense>` |
+| `/clientes/:clientSlug` | route | protegida | — | `/clientes/:clientSlug` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminClienteDetalhePage />} /> </Suspense` |
 | `/consultoria-mx` | route | protegida | — | `/consultoria-mx` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminConsultoriaMxPage />} /> </Suspense>` |
 | `/indicadores` | route | protegida | — | `/indicadores` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminIndicadoresPage />} /> </Suspense>` |
 | `/planos-acao` | route | protegida | — | `/planos-acao` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminPlanosAcaoGlobalPage />} /> </Suspen` |
@@ -153,7 +154,7 @@
 | `catalogo_metricas_consultoria` | 3 |
 | `central_execucao_aberturas` | 3 |
 | `clientes` | 6 |
-| `clientes_consultoria` | 11 |
+| `clientes_consultoria` | 12 |
 | `clientes_oportunidades` | 1 |
 | `comportamental_perfis` | 1 |
 | `comportamental_questoes` | 1 |
@@ -324,8 +325,8 @@
 | `central_execucao_aberturas:upsert` | 2 |
 | `clientes_consultoria:delete` | 1 |
 | `clientes_consultoria:insert` | 4 |
-| `clientes_consultoria:select` | 11 |
-| `clientes_consultoria:update` | 2 |
+| `clientes_consultoria:select` | 12 |
+| `clientes_consultoria:update` | 3 |
 | `clientes_oportunidades:select` | 1 |
 | `clientes:delete` | 2 |
 | `clientes:insert` | 2 |

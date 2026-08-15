@@ -20,8 +20,8 @@ describe('Foundation Zero route × role matrix', () => {
   test('is generated from the live route audit and contains no governance gap', () => {
     execFileSync('bun', ['scripts/generate_foundation_zero_route_matrix.ts'], { stdio: 'pipe' })
     const matrix = JSON.parse(readFileSync(artifactPath, 'utf8')) as RouteMatrix
-    expect(matrix.summary.routesTotal).toBe(114)
-    expect(matrix.summary.routesProtected).toBe(106)
+    expect(matrix.summary.routesTotal).toBe(115)
+    expect(matrix.summary.routesProtected).toBe(107)
     expect(matrix.summary.routesPublic).toBe(8)
     expect(matrix.summary.routeRoleTotal).toBeGreaterThan(0)
     expect(matrix.summary.ungoverned).toBe(0)
@@ -30,7 +30,7 @@ describe('Foundation Zero route × role matrix', () => {
 
   test('does not silently lose route rows or role status columns', () => {
     const matrix = JSON.parse(readFileSync(artifactPath, 'utf8')) as RouteMatrix
-    expect(matrix.rows).toHaveLength(114)
+    expect(matrix.rows).toHaveLength(115)
     for (const row of matrix.rows) {
       expect(Object.keys(row.roleStatus)).toEqual([
         'administrador_geral',

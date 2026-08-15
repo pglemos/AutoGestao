@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-15T12:29:52.323Z",
-  "baselineSha": "663c75a67cec825163dc764416ed1209ca5ac83b",
-  "routeCount": 112,
+  "generatedAt": "2026-08-15T18:52:59.454Z",
+  "baselineSha": "9e2c3fb41eff5d2292c7c0621f44a701ea46ddb6",
+  "routeCount": 113,
   "routes": [
     {
       "path": "/",
@@ -225,6 +225,27 @@
       "metadata": {
         "width": "dashboard",
         "source": "default"
+      }
+    },
+    {
+      "path": "/clientes/:clientSlug",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:AdminClienteDetalhePage"
+      ],
+      "files": [
+        "src/features/admin-mx/AdminClienteDetalhePage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "wide",
+        "bottomClearance": "navigation",
+        "adopted": true
       }
     },
     {
@@ -1439,7 +1460,7 @@
       ],
       "canvas": 0,
       "template": 0,
-      "structural": 0,
+      "structural": 2,
       "metadata": {
         "width": "wide",
         "bottomClearance": "navigation",
