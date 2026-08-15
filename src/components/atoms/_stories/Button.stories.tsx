@@ -26,6 +26,13 @@ export const Danger: Story = { args: { variant: 'danger' } }
 export const Ghost: Story = { args: { variant: 'ghost' } }
 export const Disabled: Story = { args: { variant: 'primary', disabled: true } }
 
+export const Success: Story = { args: { variant: 'success' } }
+export const Warning: Story = { args: { variant: 'warning' } }
+export const Info: Story = { args: { variant: 'info' } }
+export const WhatsApp: Story = { args: { variant: 'whatsapp', children: 'Enviar pelo WhatsApp' } }
+
+export const Carregando: Story = { args: { variant: 'primary', loading: true } }
+
 export const AllSizes: Story = {
   render: (args) => (
     <div className="flex items-center gap-3">
