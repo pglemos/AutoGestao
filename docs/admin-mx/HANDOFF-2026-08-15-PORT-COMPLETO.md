@@ -14,6 +14,7 @@ O port das 6 rotas do módulo Administrador passou de **~20% para ~90% de cobert
 - **258 testes** em `src/features/admin-mx` (eram 76).
 - **6 migrations novas aplicadas no Supabase real** e registradas em `schema_migrations`.
 - Gates finais: **typecheck ✅, lint ✅, test 3.796 pass / 1 fail (pré-existente), build ✅, verify_carteira ✅, bundle recalibrado**.
+- **STATUS ATUAL (pós-push):** `main` em `fbc4c7b8` foi **pusheado** e o **deploy de produção está READY e servindo `fbc4c7b8`** (verificado via `/api/health.release` == HEAD local).
 
 ---
 
@@ -91,14 +92,13 @@ Artefatos regenerados e commitados: `artifacts/route-role-inventory/*`, `docs/au
 
 ## 4. O que VOCÊ deve fazer agora (próximo ciclo, em ordem)
 
-### 4.1 PRIORIDADE MÁXIMA — Push e deploy (o trabalho inteiro está local)
+### 4.1 ✅ FEITO — Push e deploy concluídos
 ```bash
-git status -sb                       # deve mostrar "main...origin/main [ahead 56]"
-# Push usando o helper do gh (o remote não tem credencial embutida):
+# push realizado em fbc4c7b8 (fast-forward a partir de 585e92a9)
 GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=credential.helper \
   GIT_CONFIG_VALUE_0="!gh auth git-credential" git push origin HEAD:main
+# deploy READY (2m) e produção servindo fbc4c7b8 — confirmado via /api/health.release
 ```
-Depois do push, acompanhar o deploy na Vercel (`vercel ls --prod` / `vercel inspect`). O pipeline roda `npm run typecheck && node scripts/verify_carteira_base44_parity.mjs && npm run build`.
 
 ### 4.2 Validar em produção (E2E clicado) — NENHUMA das telas novas foi clicada
 A rede desta máquina para o Supabase cai de forma intermitente (`ERR_CONNECTION_RESET`), o que travou os E2E. **Priorize clicar**:
@@ -187,8 +187,8 @@ e subir os contadores em `src/lib/foundation-zero-route-matrix-contract.test.ts`
 
 ## 8. Estado do repositório (o que fica de arrumação)
 
-- `main` está **56 commits à frente de origin/main** e **não foi feito push**. Fazer push é o passo 4.1.
-- Os 6 branches de rota (`route/admin-*`) e os 6 worktrees (`/Users/pedroguilherme/PROJETOS/.mx-routes/*`) **ainda existem**. Após o push + validação, podem ser removidos:
+- ~~`main` está **56 commits à frente de origin/main** e **não foi feito push**.~~ **FEITO:** `main` pusheado em `fbc4c7b8`, deploy READY em produção.
+- Os 6 branches de rota (`route/admin-*`) e os 6 worktrees (`/Users/pedroguilherme/PROJETOS/.mx-routes/*`) **ainda existem**. Após a validação E2E, podem ser removidos:
   ```bash
   git worktree remove --force /Users/pedroguilherme/PROJETOS/.mx-routes/<rota>   # um por vez
   git branch -d route/admin-<rota>
@@ -212,7 +212,7 @@ e subir os contadores em `src/lib/foundation-zero-route-matrix-contract.test.ts`
 
 ## 10. Checklist para o próximo agente
 
-- [ ] Fazer push de `main` (§4.1) e confirmar deploy READY na Vercel.
+- [x] ~~Fazer push de `main` (§4.1) e confirmar deploy READY na Vercel.~~ — **FEITO: `fbc4c7b8` no ar.**
 - [ ] Rodar os gates de novo após qualquer mudança: `npm run typecheck`, `npm run lint`, `bun test`, `npm run build`, `npm run check:bundle-size`, `verify:db-types`.
 - [ ] Clicar (E2E) as 6 rotas em produção e limpar dados de teste (§4.2).
 - [ ] Fechar os furos listados em §4.3.
