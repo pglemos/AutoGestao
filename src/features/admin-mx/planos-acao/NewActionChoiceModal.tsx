@@ -18,7 +18,7 @@ export function NewActionChoiceModal(props: {
         <button
           type="button"
           onClick={props.onUseTemplate}
-          className="w-full space-y-1 rounded-lg border-2 border-primary bg-primary/5 p-4 text-left transition-colors hover:bg-primary/10"
+          className="w-full space-y-1 rounded-lg border-2 border-primary bg-primary/5 p-4 text-left transition-colors hover:bg-primary/10 focus-visible:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
         >
           <div className="flex items-center gap-2">
             <FileCheck size={16} className="text-primary" />
@@ -30,7 +30,7 @@ export function NewActionChoiceModal(props: {
         <button
           type="button"
           onClick={props.onCreateCustom}
-          className="w-full space-y-1 rounded-lg border border-border p-4 text-left transition-colors hover:bg-surface-alt"
+          className="w-full space-y-1 rounded-lg border border-border p-4 text-left transition-colors hover:bg-surface-alt focus-visible:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border"
         >
           <div className="flex items-center gap-2">
             <Plus size={16} className="text-muted-foreground" />

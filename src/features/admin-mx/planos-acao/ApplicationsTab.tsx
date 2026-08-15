@@ -118,7 +118,7 @@ export function ApplicationsTab(props: { onOpenPlan: (planId: string) => void })
                         </TableCell>
                         <TableCell>{efficacy ?? <span className="text-xs text-muted-foreground">Não avaliada</span>}</TableCell>
                         <TableCell className="text-right">
-                          <button type="button" onClick={() => props.onOpenPlan(plan.id)} className="text-sm font-medium text-primary hover:underline">
+                          <button type="button" onClick={() => props.onOpenPlan(plan.id)} className="text-sm font-medium text-primary hover:underline focus-visible:underline focus-visible:outline-none">
                             Abrir
                           </button>
                         </TableCell>
