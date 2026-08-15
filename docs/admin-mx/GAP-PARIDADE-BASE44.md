@@ -46,10 +46,10 @@ Levantamento honesto do que existe no export `mx-admin-flow` e do que o MX tem h
 ### `/planos-acao`
 - ~~Kanban por status~~ — **feito** (sem arrastar: transição por botão no detalhe).
 - ~~Drawer de detalhe com abas resumo/execução/evidências/histórico, alterar prazo com motivo, concluir com data efetiva~~ — **feito**.
-- **Wizard de plano por cliente** com ações ponderadas, participantes, indicador de eficácia.
-- **Templates**: wizard completo, filtros, detalhe com versões, promover plano existente a padrão, desabilitar/reativar/arquivar.
-- **Sugestões ao dono**: validar, publicar, descartar, visualizar como dono.
-- **Aplicações nos clientes**: acompanhamento por cliente com progresso e eficácia.
+- ~~Wizard de plano por cliente com ações ponderadas, participantes, indicador de eficácia~~ — **feito** (ClientActionPlanWizard, 4 passos; opção de criar também template em rascunho).
+- ~~Templates: wizard completo, filtros, detalhe com versões, promover plano existente a padrão, desabilitar/reativar/arquivar~~ — **feito** (filtros avançados + PromoteToTemplateModal; publish/apply já existiam).
+- ~~Sugestões ao dono: validar, publicar, descartar, visualizar como dono~~ — **feito** (SuggestionsTab com ciclo de vida + preview como Dono; NewActionChoiceModal, StrategicIndicatorActionSelector e SuggestToClientModal).
+- ~~Aplicações nos clientes: acompanhamento por cliente com progresso e eficácia~~ — **feito** (ApplicationsTab com progresso ponderado pelo checklist e eficácia por score).
 
 ### `/consultoria-mx`
 - **Metodologia por produto**: versão estrutural vs metodológica, publicar, comparar versões, completude.
@@ -67,9 +67,11 @@ Sem elas, parte do gap não fecha: qualificação de consultor por produto e por
 1. ~~`/produtos` — ciclo de vida + abas Módulos e Tempos~~ — feito.
 2. ~~`/equipe` — perfil do consultor com programas, encontros e capacidade~~ — feito.
 3. ~~`/clientes` — Visão 360 e ativação com checklist~~ — feito.
-4. ~~`/planos-acao` — kanban e detalhe em abas~~ — feito (falta o wizard por cliente).
-5. ~~`/indicadores` — ordem, drawer, parâmetros~~ — feito (faltam wizard completo, fórmulas e importação de metas).
-6. `/consultoria-mx` — metodologia por produto e editor de encontro.
+4. ~~`/planos-acao` — kanban e detalhe em abas~~ — feito.
+5. ~~`/planos-acao` — wizard por cliente, templates, sugestões ao dono e aplicações~~ — feito (branch route/admin-planos-acao).
+6. ~~`/indicadores` — ordem, drawer, parâmetros~~ — feito.
+7. ~~`/indicadores` — wizard completo, fórmulas e importação de metas~~ — feito (branch route/admin-indicadores).
+8. ~~`/consultoria-mx` — metodologia por produto e editor de encontro~~ — feito (branch route/admin-consultoria-mx).
 
 ## Fatia — `/produtos` aba Plano Estratégico (2026-08-15)
 

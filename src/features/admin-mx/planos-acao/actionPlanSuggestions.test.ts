@@ -1,7 +1,25 @@
 import { describe, expect, test } from 'bun:test'
-import { isSuggestionPromoted, suggestionPriorityToPlanPriority } from './actionPlanSuggestions'
+import {
+  isSuggestionPromoted,
+  nextSuggestionActions,
+  suggestionPriorityToPlanPriority,
+  SUGGESTION_STATUS_LABEL,
+} from './actionPlanSuggestions'
 
 describe('sugestões do motor determinístico', () => {
+  test('prioridade de texto (enum action_priority) é mantida', () => {
+    expect(suggestionPriorityToPlanPriority('critica')).toBe('critica')
+    expect(suggestionPriorityToPlanPriority('alta')).toBe('alta')
+    expect(suggestionPriorityToPlanPriority('media')).toBe('media')
+    expect(suggestionPriorityToPlanPriority('baixa')).toBe('baixa')
+  })
+
+  test('prioridade em maiúsculas do Base44 é traduzida', () => {
+    expect(suggestionPriorityToPlanPriority('CRITICA')).toBe('critica')
+    expect(suggestionPriorityToPlanPriority('ATENCAO')).toBe('alta')
+    expect(suggestionPriorityToPlanPriority('EVOLUCAO')).toBe('baixa')
+  })
+
   test('prioridade numérica vira escala de plano de ação', () => {
     expect(suggestionPriorityToPlanPriority(1)).toBe('critica')
     expect(suggestionPriorityToPlanPriority(2)).toBe('alta')
@@ -13,10 +31,32 @@ describe('sugestões do motor determinístico', () => {
     expect(suggestionPriorityToPlanPriority(null)).toBe('media')
     expect(suggestionPriorityToPlanPriority(0)).toBe('critica')
     expect(suggestionPriorityToPlanPriority(99)).toBe('baixa')
+    expect(suggestionPriorityToPlanPriority('desconhecida')).toBe('media')
   })
 
   test('sugestão com plano vinculado conta como promovida', () => {
     expect(isSuggestionPromoted({ source_plano_id: null })).toBe(false)
     expect(isSuggestionPromoted({ source_plano_id: 'plan-1' })).toBe(true)
+  })
+})
+
+describe('ciclo de vida da sugestão ao dono', () => {
+  test('pendente pode validar ou descartar', () => {
+    expect(nextSuggestionActions('pendente_validacao')).toEqual(['validar', 'descartar'])
+  })
+
+  test('validada pode publicar ou descartar', () => {
+    expect(nextSuggestionActions('validada')).toEqual(['publicar', 'descartar'])
+  })
+
+  test('exibida ao dono não tem mais ações', () => {
+    expect(nextSuggestionActions('exibida_dono')).toEqual([])
+    expect(nextSuggestionActions('convertida')).toEqual([])
+    expect(nextSuggestionActions('descartada')).toEqual([])
+  })
+
+  test('rótulos de status existem', () => {
+    expect(SUGGESTION_STATUS_LABEL.pendente_validacao).toBe('Pendente de validação')
+    expect(SUGGESTION_STATUS_LABEL.convertida).toBe('Convertida em Plano')
   })
 })

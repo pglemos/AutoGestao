@@ -1,24 +1,44 @@
 import { supabase } from '@/lib/supabase'
 import type { TemplateItemPriority } from './actionPlanTemplates'
 
+export type SuggestionStatus = 'pendente_validacao' | 'validada' | 'exibida_dono' | 'convertida' | 'descartada'
+
+export const SUGGESTION_STATUS_LABEL: Record<SuggestionStatus, string> = {
+  pendente_validacao: 'Pendente de validação',
+  validada: 'Validada pelo consultor',
+  exibida_dono: 'Exibida ao Dono',
+  convertida: 'Convertida em Plano',
+  descartada: 'Descartada',
+}
+
 export type ActionPlanSuggestion = {
   id: string
   problem: string | null
   recommendation: string | null
   rationale: string | null
-  priority: number | null
+  priority: string | number | null
   rule_code: string | null
   scope_type: string | null
   scope_id: string | null
   source_plano_id: string | null
+  status: SuggestionStatus
+  dismissed_reason: string | null
   created_at: string
 }
 
 /**
- * Prioridade numérica do motor determinístico (1 = mais urgente) para a escala
- * de plano de ação. Fora da faixa conhecida, cai em 'media'.
+ * Prioridade da sugestão para a escala de plano de ação. O banco guarda o
+ * enum action_priority (texto) — esse é o caminho principal; números são
+ * aceitos por compatibilidade com a leitura antiga do motor.
  */
-export function suggestionPriorityToPlanPriority(priority: number | null): TemplateItemPriority {
+export function suggestionPriorityToPlanPriority(priority: string | number | null): TemplateItemPriority {
+  if (typeof priority === 'string') {
+    if (['critica', 'alta', 'media', 'baixa'].includes(priority)) return priority as TemplateItemPriority
+    if (priority === 'ATENCAO' || priority === 'ALTA') return 'alta'
+    if (priority === 'CRITICA') return 'critica'
+    if (priority === 'EVOLUCAO' || priority === 'BAIXA') return 'baixa'
+    return 'media'
+  }
   if (priority === null) return 'media'
   if (priority <= 1) return 'critica'
   if (priority === 2) return 'alta'
@@ -30,15 +50,56 @@ export function isSuggestionPromoted(suggestion: Pick<ActionPlanSuggestion, 'sou
   return Boolean(suggestion.source_plano_id)
 }
 
+/** Transições permitidas no ciclo de vida da sugestão ao dono. */
+export function nextSuggestionActions(status: SuggestionStatus): Array<'validar' | 'publicar' | 'descartar'> {
+  if (status === 'pendente_validacao') return ['validar', 'descartar']
+  if (status === 'validada') return ['publicar', 'descartar']
+  return []
+}
+
 export async function fetchActionPlanSuggestions(): Promise<{ rows: ActionPlanSuggestion[]; error: string | null }> {
   const { data, error } = await supabase
     .from('consultor_solucoes')
-    .select('id, problem, recommendation, rationale, priority, rule_code, scope_type, scope_id, source_plano_id, created_at')
-    .order('priority', { ascending: true, nullsFirst: false })
+    .select('id, problem, recommendation, rationale, priority, rule_code, scope_type, scope_id, source_plano_id, status, dismissed_reason, created_at')
     .order('created_at', { ascending: false })
     .limit(200)
   if (error) return { rows: [], error: error.message }
-  return { rows: (data ?? []) as ActionPlanSuggestion[], error: null }
+  return {
+    rows: (data ?? []).map(item => ({
+      ...item,
+      status: (item.status ?? 'pendente_validacao') as SuggestionStatus,
+      dismissed_reason: item.dismissed_reason ?? null,
+    })) as ActionPlanSuggestion[],
+    error: null,
+  }
+}
+
+/** Valida a sugestão como consultor (pendente → validada). */
+export async function validateSuggestion(suggestionId: string, userId: string): Promise<{ error: string | null }> {
+  const { error } = await supabase
+    .from('consultor_solucoes')
+    .update({ status: 'validada', validated_by: userId, validated_at: new Date().toISOString() })
+    .eq('id', suggestionId)
+  return { error: error?.message ?? null }
+}
+
+/** Publica a sugestão validada para o Dono (validada → exibida_dono). */
+export async function publishSuggestionToOwner(suggestionId: string): Promise<{ error: string | null }> {
+  const { error } = await supabase
+    .from('consultor_solucoes')
+    .update({ status: 'exibida_dono', shown_to_owner_at: new Date().toISOString() })
+    .eq('id', suggestionId)
+  return { error: error?.message ?? null }
+}
+
+/** Descarta a sugestão com justificativa. */
+export async function dismissSuggestion(suggestionId: string, reason: string): Promise<{ error: string | null }> {
+  if (!reason.trim()) return { error: 'Informe o motivo do descarte.' }
+  const { error } = await supabase
+    .from('consultor_solucoes')
+    .update({ status: 'descartada', dismissed_reason: reason.trim() })
+    .eq('id', suggestionId)
+  return { error: error?.message ?? null }
 }
 
 /**
@@ -81,7 +142,7 @@ export async function promoteSuggestionToPlan(input: {
 
   const { error: linkError } = await supabase
     .from('consultor_solucoes')
-    .update({ source_plano_id: plan.id })
+    .update({ source_plano_id: plan.id, converted_plano_id: plan.id, status: 'convertida' })
     .eq('id', suggestion.id)
   if (linkError) return { error: `Plano criado, mas o vínculo com a sugestão falhou: ${linkError.message}`, planId: plan.id }
 

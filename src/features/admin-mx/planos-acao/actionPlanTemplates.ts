@@ -22,6 +22,8 @@ export type ActionPlanTemplateVersion = {
   status: 'rascunho' | 'publicada' | 'arquivada'
   notas: string | null
   published_at: string | null
+  /** Itens da versão, quando carregados (usado pelos filtros avançados). */
+  itens?: ActionPlanTemplateItem[]
 }
 
 export type ActionPlanTemplate = {
@@ -101,14 +103,20 @@ export async function fetchActionPlanTemplates(): Promise<{ rows: ActionPlanTemp
   const { data: versions } = ids.length
     ? await supabase
         .from('planos_acao_template_versoes')
-        .select('id, template_id, versao, status, notas, published_at')
+        .select('id, template_id, versao, status, notas, published_at, planos_acao_template_itens(id, ordem, problema, acao, como, departamento, indicador, prioridade, prazo_dias, evidencia_requerida)')
         .in('template_id', ids)
         .order('versao', { ascending: false })
-    : { data: [] as ActionPlanTemplateVersion[] }
+    : { data: [] as Array<ActionPlanTemplateVersion & { planos_acao_template_itens?: ActionPlanTemplateItem[] }> }
 
   const byTemplate = new Map<string, ActionPlanTemplateVersion[]>()
-  for (const version of (versions ?? []) as ActionPlanTemplateVersion[]) {
-    byTemplate.set(version.template_id, [...(byTemplate.get(version.template_id) ?? []), version])
+  for (const version of (versions ?? []) as Array<ActionPlanTemplateVersion & { planos_acao_template_itens?: ActionPlanTemplateItem[] }>) {
+    const { planos_acao_template_itens: itens, ...rest } = version
+    byTemplate.set(rest.template_id, [...(byTemplate.get(rest.template_id) ?? []), { ...rest, itens: (itens ?? []).map(item => ({
+      ...item,
+      como: item.como ?? '',
+      departamento: item.departamento ?? '',
+      indicador: item.indicador ?? '',
+    })) }])
   }
 
   return {
