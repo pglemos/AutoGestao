@@ -9,6 +9,7 @@ const updateMission = mock(async () => { throw mutationError })
 const createHistory = mock(async () => ({}))
 const createActivity = mock(async () => ({}))
 const toast = mock(() => {})
+const toastApi = { info: toast, error: toast, success: toast, warning: toast }
 const sessionStorageMock = {
   getItem: mock(() => null),
   setItem: mock(() => {}),
@@ -65,7 +66,7 @@ mock.module('@/api/base44Client', () => ({
   },
 }))
 
-mock.module('@/components/ui/use-toast', () => ({ toast }))
+mock.module('@/lib/toast', () => ({ toast: toastApi }))
 
 const [
   { default: NovoClienteModal },
