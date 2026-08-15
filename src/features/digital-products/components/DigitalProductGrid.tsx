@@ -5,7 +5,7 @@ import { DigitalProductCard } from './DigitalProductCard'
 import type { ProductRecord } from '../types'
 
 export function DigitalProductGrid({ products, canManage, onEdit, onArchive }: { products: ProductRecord[]; canManage: boolean; onEdit: (product: ProductRecord) => void; onArchive: (product: ProductRecord) => void }) {
-  if (!products.length) return <MxEmptyState icon={Package} title="Nenhum produto encontrado" description={canManage ? 'Crie um produto ou ajuste os filtros do catálogo.' : 'Nenhum produto ativo foi liberado para o seu perfil.'} />
+  if (!products.length) return <MxEmptyState variant="filter" icon={Package} title="Nenhum produto encontrado" description={canManage ? 'Crie um produto ou ajuste os filtros do catálogo.' : 'Nenhum produto ativo foi liberado para o seu perfil.'} />
   return (
     <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
       <AnimatePresence mode="popLayout">

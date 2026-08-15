@@ -46,7 +46,7 @@ describe('ManagerTeamPerformance loading state', () => {
     expect(screen.getByText('Nenhum vendedor vinculado a este gerente.')).toBeTruthy()
   })
 
-  test('reproduz o estado vazio Base44 sem componente visual genérico', () => {
+  test('reproduz o estado vazio usando o EmptyState canônico', () => {
     render(
       <MemoryRouter>
         <ManagerTeamPerformance data={dashboardData(false)} storeName="Matriz" />
@@ -54,9 +54,9 @@ describe('ManagerTeamPerformance loading state', () => {
     )
 
     const message = screen.getByText('Nenhum vendedor vinculado a este gerente.')
-    const emptyState = message.parentElement
-    expect(emptyState).toHaveClass('rounded-2xl', 'border-border-subtle', 'shadow-sm', 'py-16')
-    expect(emptyState).not.toHaveClass('border-dashed')
+    const emptyState = message.closest('[data-mx-empty]')
+    expect(emptyState).toBeTruthy()
+    expect(emptyState).toHaveAttribute('data-mx-empty', 'dataset')
   })
 })
 

@@ -7,7 +7,7 @@ import { getFeedbackCompetency } from './development-filters'
 
 export function DevelopmentFeedbackTable({ feedbacks, onOpen, onShareWhatsApp }: { feedbacks: FeedbackListItem[]; onOpen: (item: FeedbackListItem) => void; onShareWhatsApp: (item: FeedbackListItem) => void }) {
   if (!feedbacks.length) {
-    return <MxEmptyState icon={MessageSquare} title="Nenhum feedback registrado no período" description="Ajuste os filtros ou registre um novo feedback para a equipe." />
+    return <MxEmptyState variant="filter" icon={MessageSquare} title="Nenhum feedback registrado no período" description="Ajuste os filtros ou registre um novo feedback para a equipe." />
   }
 
   return (

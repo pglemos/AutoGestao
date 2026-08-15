@@ -15,7 +15,7 @@ export function ConsultingClientTable({
   onArchive?: (clientId: string) => void
   onRestore?: (clientId: string) => void
 }) {
-  if (!rows.length) return <MxEmptyState title="Nenhum cliente encontrado" description="Ajuste a busca ou cadastre um novo cliente." />
+  if (!rows.length) return <MxEmptyState variant="filter" title="Nenhum cliente encontrado" description="Ajuste a busca ou cadastre um novo cliente." />
   return (
     <MxTableSurface>
       <Table className="min-w-[780px]">

@@ -3,6 +3,7 @@ import { Activity, AlertTriangle, Database, Download, ExternalLink, Server, Shie
 import { supabase } from '@/lib/supabase'
 import { Card } from '@/components/molecules/Card'
 import { Button } from '@/components/atoms/Button'
+import { EmptyState } from '@/components/atoms/EmptyState'
 import { Typography } from '@/components/atoms/Typography'
 import { Badge } from '@/components/atoms/Badge'
 import { format } from 'date-fns'
@@ -190,10 +191,7 @@ export function SistemaMxTab() {
                 {loading ? (
                     <div className="p-mx-xl text-center"><RefreshCw size={24} className="animate-spin mx-auto text-status-success-text" /></div>
                 ) : audit.length === 0 ? (
-                    <div className="p-mx-xl text-center space-y-mx-sm">
-                        <Activity size={40} className="mx-auto text-muted-foreground opacity-30" />
-                        <Typography variant="caption" tone="muted" className="">Nenhum registro de auditoria</Typography>
-                    </div>
+                    <EmptyState size="sm" variant="dataset" title="Nenhum registro de auditoria" />
                 ) : (
                     <div className="divide-y divide-border-default">
                         {audit.map(entry => (

@@ -1,6 +1,7 @@
 import { Heart, Loader2, RefreshCw, Sparkles, TrendingUp } from 'lucide-react'
 import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
+import { EmptyState } from '@/components/atoms/EmptyState'
 import { Typography } from '@/components/atoms/Typography'
 import { Card } from '@/components/molecules/Card'
 import { cn } from '@/lib/utils'
@@ -160,11 +161,7 @@ export function CulturaFelicidade({ storeId }: Props) {
         </header>
 
         {registros.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-border p-mx-md text-center">
-            <Typography variant="tiny" tone="muted" className="font-bold">
-              Nenhum registro de cultura cadastrado.
-            </Typography>
-          </div>
+          <EmptyState size="sm" variant="dataset" title="Nenhum registro de cultura cadastrado." />
         ) : (
           <ul className="space-y-mx-sm">
             {registros.map((reg) => (

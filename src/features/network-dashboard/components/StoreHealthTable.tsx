@@ -15,7 +15,7 @@ export function StoreHealthTable({ rows, sort, onSort, onOpen }: {
   onSort: (sort: NetworkSort) => void
   onOpen: (row: NetworkCockpitStore) => void
 }) {
-  if (!rows.length) return <MxEmptyState title="Nenhuma loja encontrada" description="Ajuste os filtros ou atualize os dados da rede." />
+  if (!rows.length) return <MxEmptyState variant="filter" title="Nenhuma loja encontrada" description="Ajuste os filtros ou atualize os dados da rede." />
   const changeSort = (key: keyof StoreDiagnostic) => onSort({ key, direction: sort.key === key && sort.direction === 'desc' ? 'asc' : 'desc' })
   return (
     <MxTableSurface><table className="min-w-[980px] w-full border-collapse text-sm"><thead><tr className="border-b border-border-subtle bg-surface-alt text-left text-muted-foreground">

@@ -19,7 +19,7 @@ function formatDate(value?: string | null) {
 }
 
 export function DevelopmentPdiTable({ rows, onOpenOrStart }: { rows: DevelopmentPdiRow[]; onOpenOrStart: (row: DevelopmentPdiRow) => void }) {
-  if (!rows.length) return <MxEmptyState icon={FileText} title="Nenhum vendedor encontrado" description="Ajuste os filtros para localizar os PDIs da equipe." />
+  if (!rows.length) return <MxEmptyState variant="filter" icon={FileText} title="Nenhum vendedor encontrado" description="Ajuste os filtros para localizar os PDIs da equipe." />
   return (
     <MxTableSurface>
       <Table className="min-w-[1080px]">

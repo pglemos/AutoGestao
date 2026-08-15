@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { AlertTriangle, ArrowLeft, Car, MessageCircle, Plus, Users, X, Zap } from 'lucide-react'
 import { toast } from '@/lib/toast'
+import { EmptyState } from '@/components/atoms/EmptyState'
 import { FormField } from '@/components/molecules/FormField'
 import type { Cliente } from '@/lib/schemas/crm.schema'
 import { isEtapaTerminal, toDateOnlyBR } from '@/lib/schemas/crm.schema'
@@ -244,10 +245,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
         </div>
 
         {listaCompativeis.length === 0 ? (
-          <div className="bg-white border border-border-subtle rounded-2xl p-10 text-center">
-            <p className="text-sm font-bold text-muted-foreground">Nenhum cliente compatível encontrado.</p>
-            <p className="text-xs text-muted-foreground mt-1">Verifique os veículos de interesse registrados na carteira.</p>
-          </div>
+          <EmptyState size="sm" variant="filter" title="Nenhum cliente compatível encontrado." description="Verifique os veículos de interesse registrados na carteira." />
         ) : (
           <div className="space-y-2">
             <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
@@ -316,9 +314,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
         </div>
 
         {missao.contextos.length === 0 ? (
-          <div className="bg-white border border-border-subtle rounded-2xl p-10 text-center">
-            <p className="text-sm font-bold text-muted-foreground">Nenhum cliente nesta missão no momento.</p>
-          </div>
+          <EmptyState size="sm" variant="dataset" title="Nenhum cliente nesta missão no momento." />
         ) : (
           <div>
             <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3">Clientes da missão</p>
