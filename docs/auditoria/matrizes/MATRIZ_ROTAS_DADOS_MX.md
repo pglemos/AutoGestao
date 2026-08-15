@@ -5,10 +5,10 @@
 - Rotas públicas: **8**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
-- Tabelas referenciadas pelo runtime: **143**
+- Tabelas referenciadas pelo runtime: **146**
 - RPCs referenciadas pelo runtime: **87**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **286**
+- Pares tabela/operação encontrados: **294**
 
 ## Rotas
 
@@ -138,7 +138,7 @@
 | `alerts` | 1 |
 | `artefatos_gerados_consultoria` | 1 |
 | `atendimentos` | 2 |
-| `atribuicoes_consultoria` | 8 |
+| `atribuicoes_consultoria` | 9 |
 | `atribuicoes_trilha_desenvolvimento` | 1 |
 | `aula_presencas` | 1 |
 | `aulas_ao_vivo` | 1 |
@@ -153,7 +153,7 @@
 | `catalogo_metricas_consultoria` | 3 |
 | `central_execucao_aberturas` | 3 |
 | `clientes` | 6 |
-| `clientes_consultoria` | 10 |
+| `clientes_consultoria` | 11 |
 | `clientes_oportunidades` | 1 |
 | `comportamental_perfis` | 1 |
 | `comportamental_questoes` | 1 |
@@ -219,6 +219,7 @@
 | `pdi_reviews` | 1 |
 | `pdi_sessoes` | 2 |
 | `pdis` | 4 |
+| `perfil_consultor_mx` | 2 |
 | `planejamentos_estrategicos` | 1 |
 | `planos_acao` | 7 |
 | `planos_acao_template_itens` | 1 |
@@ -227,11 +228,13 @@
 | `posicionamento_empresa` | 1 |
 | `pre_cadastros_loja` | 2 |
 | `produtos_digitais` | 2 |
-| `programas_visita_consultoria` | 3 |
+| `programas_visita_consultoria` | 4 |
 | `progresso_etapa_trilha` | 1 |
 | `progresso_treinamentos` | 3 |
 | `prospecting_schedule` | 3 |
 | `push_subscriptions` | 1 |
+| `qualificacoes_encontro_consultor` | 1 |
+| `qualificacoes_produto_consultor` | 1 |
 | `recomendacoes_desenvolvimento` | 1 |
 | `regras_entrega_loja` | 2 |
 | `regras_metas_loja` | 7 |
@@ -295,7 +298,7 @@
 | `atendimentos:select` | 2 |
 | `atribuicoes_consultoria:delete` | 1 |
 | `atribuicoes_consultoria:insert` | 2 |
-| `atribuicoes_consultoria:select` | 6 |
+| `atribuicoes_consultoria:select` | 7 |
 | `atribuicoes_consultoria:update` | 3 |
 | `atribuicoes_consultoria:upsert` | 3 |
 | `atribuicoes_trilha_desenvolvimento:select` | 1 |
@@ -321,7 +324,7 @@
 | `central_execucao_aberturas:upsert` | 2 |
 | `clientes_consultoria:delete` | 1 |
 | `clientes_consultoria:insert` | 4 |
-| `clientes_consultoria:select` | 10 |
+| `clientes_consultoria:select` | 11 |
 | `clientes_consultoria:update` | 2 |
 | `clientes_oportunidades:select` | 1 |
 | `clientes:delete` | 2 |
@@ -455,6 +458,8 @@
 | `pdis:insert` | 1 |
 | `pdis:select` | 4 |
 | `pdis:update` | 1 |
+| `perfil_consultor_mx:select` | 2 |
+| `perfil_consultor_mx:upsert` | 1 |
 | `planejamentos_estrategicos:insert` | 1 |
 | `planejamentos_estrategicos:select` | 1 |
 | `planos_acao_template_itens:delete` | 1 |
@@ -477,7 +482,7 @@
 | `produtos_digitais:update` | 1 |
 | `programas_visita_consultoria:delete` | 1 |
 | `programas_visita_consultoria:insert` | 1 |
-| `programas_visita_consultoria:select` | 3 |
+| `programas_visita_consultoria:select` | 4 |
 | `programas_visita_consultoria:update` | 1 |
 | `progresso_etapa_trilha:select` | 1 |
 | `progresso_treinamentos:select` | 3 |
@@ -485,6 +490,12 @@
 | `prospecting_schedule:select` | 3 |
 | `push_subscriptions:update` | 1 |
 | `push_subscriptions:upsert` | 1 |
+| `qualificacoes_encontro_consultor:delete` | 1 |
+| `qualificacoes_encontro_consultor:insert` | 1 |
+| `qualificacoes_encontro_consultor:select` | 1 |
+| `qualificacoes_produto_consultor:delete` | 1 |
+| `qualificacoes_produto_consultor:insert` | 1 |
+| `qualificacoes_produto_consultor:select` | 1 |
 | `recomendacoes_desenvolvimento:select` | 1 |
 | `recomendacoes_desenvolvimento:update` | 1 |
 | `regras_entrega_loja:select` | 2 |

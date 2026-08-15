@@ -35,6 +35,9 @@ export type AdminTeamMember = {
   active: boolean | null
   phone: string | null
   assignments: number
+  situacao: string | null
+  papel_interno: string | null
+  capacidade_total: number | null
 }
 
 export function useAdminTeam(): QueryState<AdminTeamMember> {
@@ -45,17 +48,28 @@ export function useAdminTeam(): QueryState<AdminTeamMember> {
       .in('role', ['administrador_geral', 'administrador_mx', 'consultor_mx'])
       .order('name', { ascending: true })
     if (error) throw new Error(error.message)
-    const { data: assignments } = await supabase
-      .from('atribuicoes_consultoria')
-      .select('user_id, active')
-      .eq('active', true)
+    const [{ data: assignments }, { data: profiles }] = await Promise.all([
+      supabase.from('atribuicoes_consultoria').select('user_id, active').eq('active', true),
+      supabase.from('perfil_consultor_mx').select('user_id, situacao, papel_interno, capacidade_online, capacidade_presencial'),
+    ])
     const counters = new Map<string, number>()
     for (const item of assignments ?? []) {
       const userId = (item as { user_id: string | null }).user_id
       if (!userId) continue
       counters.set(userId, (counters.get(userId) ?? 0) + 1)
     }
-    return (users ?? []).map(user => ({ ...user, assignments: counters.get(user.id) ?? 0 })) as AdminTeamMember[]
+    const byUser = new Map((profiles ?? []).map(profile => [profile.user_id, profile]))
+    return (users ?? []).map(user => {
+      const profile = byUser.get(user.id)
+      const capacidade = profile ? (profile.capacidade_online ?? 0) + (profile.capacidade_presencial ?? 0) : null
+      return {
+        ...user,
+        assignments: counters.get(user.id) ?? 0,
+        situacao: profile?.situacao ?? null,
+        papel_interno: profile?.papel_interno ?? null,
+        capacidade_total: capacidade,
+      }
+    }) as AdminTeamMember[]
   })
 }
 

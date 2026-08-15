@@ -9448,6 +9448,50 @@ export type Database = {
           },
         ]
       }
+      perfil_consultor_mx: {
+        Row: {
+          capacidade_online: number | null
+          capacidade_presencial: number | null
+          cidade: string | null
+          created_at: string
+          observacoes: string | null
+          papel_interno: string
+          situacao: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          capacidade_online?: number | null
+          capacidade_presencial?: number | null
+          cidade?: string | null
+          created_at?: string
+          observacoes?: string | null
+          papel_interno?: string
+          situacao?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          capacidade_online?: number | null
+          capacidade_presencial?: number | null
+          cidade?: string | null
+          created_at?: string
+          observacoes?: string | null
+          papel_interno?: string
+          situacao?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "perfil_consultor_mx_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       perfis: {
         Row: {
           area_interna_mx: boolean
@@ -10588,6 +10632,81 @@ export type Database = {
           },
           {
             foreignKeyName: "push_subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      qualificacoes_encontro_consultor: {
+        Row: {
+          created_at: string
+          id: string
+          program_key: string
+          user_id: string
+          visit_number: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          program_key: string
+          user_id: string
+          visit_number: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          program_key?: string
+          user_id?: string
+          visit_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "qualificacoes_encontro_consultor_program_key_fkey"
+            columns: ["program_key"]
+            isOneToOne: false
+            referencedRelation: "programas_visita_consultoria"
+            referencedColumns: ["program_key"]
+          },
+          {
+            foreignKeyName: "qualificacoes_encontro_consultor_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      qualificacoes_produto_consultor: {
+        Row: {
+          created_at: string
+          id: string
+          program_key: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          program_key: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          program_key?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "qualificacoes_produto_consultor_program_key_fkey"
+            columns: ["program_key"]
+            isOneToOne: false
+            referencedRelation: "programas_visita_consultoria"
+            referencedColumns: ["program_key"]
+          },
+          {
+            foreignKeyName: "qualificacoes_produto_consultor_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "usuarios"

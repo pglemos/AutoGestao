@@ -15,11 +15,14 @@ import {
   MxModulePage,
   MxSectionCard,
   MxSectionHeader,
+  MxSelect,
   MxTableSurface,
   MxToolbar,
 } from '@/components/module/MxModuleVisualPrimitives'
 import { toast } from '@/lib/toast'
 import { useConsultingClients } from '@/hooks/useConsultingClients'
+import { ConsultantProfileModal } from './equipe/ConsultantProfileModal'
+import { SITUATION_LABEL, type ConsultantSituation } from './equipe/consultantProfile'
 import { TeamMemberFormModal } from './equipe/TeamMemberFormModal'
 import {
   deactivateTeamMember,
@@ -44,6 +47,8 @@ export function AdminEquipeMxPage() {
   const [draft, setDraft] = useState<TeamMemberDraft | null>(null)
   const [assignedClientIds, setAssignedClientIds] = useState<string[]>([])
   const [submitting, setSubmitting] = useState(false)
+  const [profileMember, setProfileMember] = useState<AdminTeamMember | null>(null)
+  const [situacao, setSituacao] = useState('todas')
   const location = useLocation()
 
   const openEdit = async (member: AdminTeamMember) => {
@@ -96,15 +101,20 @@ export function AdminEquipeMxPage() {
 
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase()
-    if (!term) return rows
-    return rows.filter(member => [member.name, member.email, member.role].some(value => (value ?? '').toLowerCase().includes(term)))
-  }, [rows, search])
+    return rows.filter(member => {
+      if (situacao !== 'todas' && (member.situacao ?? 'ativo') !== situacao) return false
+      if (!term) return true
+      return [member.name, member.email, member.role].some(value => (value ?? '').toLowerCase().includes(term))
+    })
+  }, [rows, search, situacao])
 
   const metrics = useMemo(() => ({
     total: rows.length,
     ativos: rows.filter(member => member.active !== false).length,
     consultores: rows.filter(member => (member.role ?? '').startsWith('consultor')).length,
     carteiras: rows.reduce((sum, member) => sum + member.assignments, 0),
+    capacidade: rows.reduce((sum, member) => sum + (member.capacidade_total ?? 0), 0),
+    escalaveis: rows.filter(member => (member.situacao ?? 'ativo') === 'ativo' && member.active !== false).length,
   }), [rows])
 
   return (
@@ -123,9 +133,18 @@ export function AdminEquipeMxPage() {
               <MxMetricCard title="Ativos" value={metrics.ativos} detail="Com acesso liberado" icon={Users} tone="success" />
               <MxMetricCard title="Consultores" value={metrics.consultores} detail="Atendem clientes" icon={Users} tone="info" />
               <MxMetricCard title="Vínculos" value={metrics.carteiras} detail="Atribuições ativas de clientes" icon={Users} tone="violet" />
+              <MxMetricCard title="Capacidade" value={`${metrics.capacidade}h`} detail="Horas/mês declaradas pela equipe" icon={Users} tone="info" />
+              <MxMetricCard title="Disponíveis para escala" value={metrics.escalaveis} detail="Ativos e sem afastamento" icon={Users} tone="success" />
             </MxMetricGrid>
             <MxToolbar>
               <MxInput value={search} onChange={event => setSearch(event.target.value)} placeholder="Buscar por nome, e-mail ou papel" aria-label="Buscar pessoa da equipe MX" />
+              <MxSelect value={situacao} onChange={event => setSituacao(event.target.value)} aria-label="Filtrar por situação">
+                <option value="todas">Todas as situações</option>
+                <option value="ativo">Ativo</option>
+                <option value="afastado">Afastado</option>
+                <option value="ferias">Férias</option>
+                <option value="inativo">Inativo</option>
+              </MxSelect>
             </MxToolbar>
             <MxSectionCard>
               <MxSectionHeader title="Equipe interna" description={`${filtered.length} registro(s) visível(is).`} />
@@ -139,7 +158,9 @@ export function AdminEquipeMxPage() {
                           <TableHead>Papel</TableHead>
                           <TableHead>Contato</TableHead>
                           <TableHead>Clientes</TableHead>
-                          <TableHead>Status</TableHead>
+                          <TableHead>Capacidade</TableHead>
+                          <TableHead>Situação</TableHead>
+                          <TableHead>Acesso</TableHead>
                           <TableHead className="text-right">Ações</TableHead>
                         </TableRow>
                       </TableHeader>
@@ -153,9 +174,12 @@ export function AdminEquipeMxPage() {
                             <TableCell>{ROLE_LABEL[member.role ?? ''] ?? member.role ?? 'Não definido'}</TableCell>
                             <TableCell>{member.phone || '—'}</TableCell>
                             <TableCell>{member.assignments}</TableCell>
+                            <TableCell>{member.capacidade_total === null ? '—' : `${member.capacidade_total}h`}</TableCell>
+                            <TableCell>{SITUATION_LABEL[(member.situacao ?? 'ativo') as ConsultantSituation] ?? member.situacao}</TableCell>
                             <TableCell>{member.active === false ? 'Inativo' : 'Ativo'}</TableCell>
                             <TableCell className="text-right">
                               <div className="flex justify-end gap-2">
+                                <Button variant="outline" size="sm" onClick={() => setProfileMember(member)}>Perfil</Button>
                                 <Button variant="outline" size="sm" onClick={() => void openEdit(member)}>Editar</Button>
                                 <Button variant="outline" size="sm" onClick={() => void toggleActive(member)}>{member.active === false ? 'Reativar' : 'Desativar'}</Button>
                               </div>
@@ -183,6 +207,7 @@ export function AdminEquipeMxPage() {
             onClose={() => setDraft(null)}
           />
         ) : null}
+        <ConsultantProfileModal member={profileMember} onClose={() => setProfileMember(null)} onSaved={() => void refetch()} />
       </div>
     </MxModulePage>
   )
