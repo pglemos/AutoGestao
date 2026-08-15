@@ -94,6 +94,33 @@ FINAL_CANDIDATE_SHA = ______________  (preencher no freeze; ref atual = 7beed636
 - [ ] `E2E_BASE_URL=https://www.mxperformance.com.br npx playwright test src/test/perf-smoke.playwright.ts`
 - [ ] LCP/FCP/CLS dentro de tolerância; evidência em `visual-evidence/perf/`
 
+### 37.015b/37.016 — Smoke autenticado + screenshots rotas golden (BLOQUEADO no sandbox)
+**Status: BLOQUEADO — bloqueio de egress no browser do sandbox (evidência abaixo).**
+Plano de execução em CI:
+
+1. **Pré-requisitos (secrets no CI):**
+   - `E2E_ROLE_PASSWORD` (credencial única dos perfis E2E)
+   - Emails E2E: vendedor/gerente/dono/consultor_mx/admin — já em `src/test/e2e-helpers/auth.ts` e `e2e/smoke-areas.spec.ts`
+2. **Comandos (CI, com egress liberado):**
+   ```bash
+   # Smoke autenticado por perfil (37.015b)
+   E2E_ROLE_PASSWORD="$E2E_ROLE_PASSWORD" \
+   VITE_APP_URL="https://www.mxperformance.com.br" \
+   PLAYWRIGHT_SKIP_WEB_SERVER=1 \
+   npx playwright test e2e/smoke-areas.spec.ts --reporter=line
+
+   # Screenshots das rotas golden (37.016)
+   E2E_ROLE_PASSWORD="$E2E_ROLE_PASSWORD" \
+   VITE_APP_URL="https://www.mxperformance.com.br" \
+   PLAYWRIGHT_SKIP_WEB_SERVER=1 \
+   npx playwright test src/test/visual-matrix-roles.playwright.ts --project=chromium
+   ```
+3. **Evidência de bloqueio no sandbox (2026-08-15):**
+   - Browser (Chromium) ao navegar em produção: `net::ERR_CONNECTION_RESET` + `TypeError: Failed to fetch (fbhcmzzgwjdgkctlfvbo.supabase.co)` — confirmado via `page.on('console')`.
+   - `curl` para `POST /auth/v1/token?grant_type=password` → **HTTP 200** (auth backend OK; bloqueio só no contexto browser do sandbox).
+   - `e2e/smoke-areas.spec.ts` → **9 fail** todos por `main#main-content` não visível após login (login não autentica no browser).
+   - Consistente com o relato do DS1 (mesmo bloqueio).
+
 ### 37.016/37.017 — RLS matrix + rollback dry-run
 - [ ] `node scripts/rollback-dry-run.mjs --sha $FINAL_CANDIDATE_SHA` → **exit 0**
 - [ ] RLS matrix pgTAP (schema deployado ou equivalente)
