@@ -3,7 +3,6 @@ import { usePDI_MX, type PDISuggestedAction } from '@/hooks/usePDI_MX'
 import { useTeam } from '@/hooks/useTeam'
 import { useAuth } from '@/hooks/useAuth'
 import { X, Target, LayoutDashboard, Zap, ChevronLeft, ChevronRight, CheckCircle2, Sparkles, AlertCircle } from 'lucide-react'
-import { motion, AnimatePresence } from 'motion/react'
 import { Typography } from '@/components/atoms/Typography'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
@@ -13,7 +12,7 @@ import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, Radar } fro
 import { cn } from '@/lib/utils'
 import { chartTokens } from '@/lib/charts/tokens'
 import { PDI_ORIGEM_NOTA } from '@/lib/pdi-self-assessment'
-import * as Dialog from '@radix-ui/react-dialog'
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 
 export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSuccess: (sessionId?: string) => void }) {
     const { storeId } = useAuth()
@@ -255,23 +254,17 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
     ]
 
     return (
-        <Dialog.Root open onOpenChange={(open) => { if (!open) onClose() }}>
-            <Dialog.Portal forceMount>
-                <Dialog.Overlay asChild forceMount>
-                    <motion.div 
-                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[var(--mx-z-modal)] flex items-center justify-center p-mx-sm md:p-10 bg-gray-900/80 backdrop-blur-md"
-                    >
-                        <Dialog.Content asChild forceMount>
-                            <Card className="w-full max-w-mx-6xl max-h-full overflow-y-auto no-scrollbar border-none flex flex-col bg-white">
+        <Dialog open onOpenChange={(open) => { if (!open) onClose() }}>
+            <DialogContent size="xl" scrollable className="max-w-[var(--mx-overlay-size-xl)] border-none bg-white p-0">
+                <Card className="w-full max-w-full max-h-full overflow-y-auto no-scrollbar border-none flex flex-col bg-white">
                 <header className="p-mx-lg md:p-10 border-b border-border flex flex-col gap-mx-lg sticky top-mx-0 bg-white z-[var(--mx-z-sticky)] shadow-sm">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-mx-sm">
                             <div className="w-mx-xl h-mx-xl rounded-2xl bg-brand-primary text-white flex items-center justify-center shadow-sm"><Target size={24} /></div>
                             <div>
-                                <Dialog.Title asChild>
+                                <DialogTitle>
                                     <Typography variant="h2" className="tracking-tighter">Sessão PDI MX 360º</Typography>
-                                </Dialog.Title>
+                                </DialogTitle>
                                 <Typography variant="tiny" tone="brand" className="font-bold">{steps[currentStep].label}</Typography>
                             </div>
                         </div>
@@ -602,10 +595,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                     </Button>
                 </footer>
             </Card>
-                        </Dialog.Content>
-                    </motion.div>
-                </Dialog.Overlay>
-            </Dialog.Portal>
-        </Dialog.Root>
-    )
+            </DialogContent>
+        </Dialog>
+    );
 }

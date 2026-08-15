@@ -99,6 +99,8 @@ declare module '@/components/ui/dialog' {
     Div & {
       overlayClassName?: string
       showClose?: boolean
+      size?: 'sm' | 'md' | 'lg' | 'xl'
+      scrollable?: boolean
     } & React.RefAttributes<HTMLDivElement>
   >
   export const DialogHeader: React.FC<Div>

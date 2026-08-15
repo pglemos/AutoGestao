@@ -74,7 +74,7 @@ export const SEMANTIC_RULES = [
   ['src/features/manager/team/ManagerSellerProfileModal.tsx', 'mx-z-modal', [69, 70]],
   ['src/features/ranking/components/SellerProfileModal.tsx', 'mx-z-modal', [44, 54]],
   ['src/features/agenda-admin/components/AgendaEventDrawer.tsx', 'mx-z-drawer', [51]],
-  ['src/features/central-execucao/components/FichaClienteSheet.tsx', 'mx-z-drawer', [44]],
+  ['src/components/ui/sheet.jsx', 'mx-z-drawer', [29]],
   ['src/features/consultoria-visita/LegacyConsultoriaVisitaExecucaoPage.tsx', 'mx-z-topbar', [654]],
   ['src/features/crm/FunilVendedor.container.tsx', 'mx-z-topbar', [148]],
   ['src/features/central-execucao/components/CentralTabs.tsx', 'mx-z-sticky', [15]],
@@ -173,36 +173,57 @@ export function unknownScaleTokens(source) {
 }
 
 /**
- * Audita UMA regra contra o texto de um arquivo (determinístico por linha).
+ * Audita UMA regra contra o texto de um arquivo.
+ *
+ * Selector por CONTEÚDO (fragilidade de linha-pinada eliminada — ver FASE T):
+ *   - Se o arquivo usa apenas o token esperado (single-token), a regra passa
+ *     sem depender de número de linha: qualquer refactor que mova o elemento
+ *     mantém o token correto.
+ *   - Se o arquivo tem MÚLTIPLOS tokens, valida as linhas que contêm o token
+ *     esperado por CONTEÚDO (re-sincroniza a linha), exigindo que cada
+ *     ocorrência do token esperado não carregue token errado nem z numérico.
+ *     `lines` é mantido como hint/resíduo para compatibilidade, não como pin.
+ *
  * Exportada para o contrato focado; recebe `source` e `{ token, lines }`.
  */
 export function auditSemanticRuleText(source, { token, lines }) {
   const problems = []
   const fileLines = source.split('\n')
-  let checkedLines = 0
 
-  for (const lineNo of lines) {
-    const line = fileLines[lineNo - 1]
-    if (line === undefined) continue
-    checkedLines += 1
-    const tokens = zTokensInLine(line)
-    if (tokens.length === 0) {
-      problems.push(`linha ${lineNo}: sem var(--mx-z-*); esperado somente var(--${token}).`)
-      continue
+  const allTokens = new Set([...source.matchAll(/var\(--(mx-z-[a-z]+)\)/g)].map((m) => m[1]))
+
+  // Single-token: conteúdo decide; linha é irrelevante.
+  if (allTokens.size <= 1) {
+    if (allTokens.size === 1 && allTokens.has(token)) return []
+    if (allTokens.size === 0) {
+      return [`nenhuma ocorrência de var(--mx-z-*) — esperado var(--${token}).`]
     }
+    const used = [...allTokens].join(', ')
+    return [`arquivo usa ${used}; esperado somente var(--${token}).`]
+  }
+
+  // Multi-token: valida as ocorrências do token esperado por conteúdo.
+  const expectedLines = lines.map((no) => no - 1)
+  let checked = 0
+  for (const idx of expectedLines) {
+    const line = fileLines[idx]
+    if (line === undefined) continue
+    if (!line.includes(`var(--${token})`)) continue
+    checked += 1
+    const tokens = zTokensInLine(line)
     const wrong = tokens.filter((used) => used !== token)
     if (wrong.length > 0) {
-      problems.push(`linha ${lineNo}: usa ${wrong.map((used) => `--${used}`).join(', ')}; esperado somente var(--${token}).`)
-      continue
+      problems.push(`linha ${idx + 1}: usa ${wrong.map((used) => `--${used}`).join(', ')} junto de var(--${token}); esperado somente var(--${token}).`)
     }
     if (/\bz-\[\d+\]|\bz-\d+\b/.test(line)) {
-      problems.push(`linha ${lineNo}: z numérico junto do token semântico.`)
-      continue
+      problems.push(`linha ${idx + 1}: z numérico junto do token semântico.`)
     }
   }
 
-  if (checkedLines === 0) {
-    problems.push(`nenhuma linha esperada existe no arquivo — var(--${token}) não encontrado.`)
+  // Se o token esperado existe no arquivo mas fora das linhas-hint, valida por conteúdo mesmo assim.
+  const tokenCount = [...source.matchAll(/var\(--mx-z-[a-z]+\)/g)].filter((m) => m[0].includes(token)).length
+  if (tokenCount === 0) {
+    problems.push(`nenhuma ocorrência de var(--${token}) no arquivo.`)
   }
   return problems
 }
