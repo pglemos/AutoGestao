@@ -8,7 +8,7 @@
 - Tabelas referenciadas pelo runtime: **147**
 - RPCs referenciadas pelo runtime: **87**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **295**
+- Pares tabela/operação encontrados: **296**
 
 ## Rotas
 
@@ -151,7 +151,7 @@
 | `carreira_niveis` | 1 |
 | `carteira_empresa` | 1 |
 | `carteira_missoes` | 1 |
-| `catalogo_metricas_consultoria` | 3 |
+| `catalogo_metricas_consultoria` | 4 |
 | `central_execucao_aberturas` | 3 |
 | `clientes` | 6 |
 | `clientes_consultoria` | 12 |
@@ -160,7 +160,7 @@
 | `comportamental_questoes` | 1 |
 | `comportamental_respostas` | 1 |
 | `comportamental_sessoes` | 1 |
-| `conjuntos_parametros_consultoria` | 1 |
+| `conjuntos_parametros_consultoria` | 2 |
 | `consultor_solucoes` | 2 |
 | `consultoria_itens_entrega` | 1 |
 | `contatos_cliente_consultoria` | 3 |
@@ -205,7 +205,7 @@
 | `mentor_status_definitions` | 1 |
 | `mentor_transitions` | 1 |
 | `metas` | 4 |
-| `metas_metricas_cliente` | 2 |
+| `metas_metricas_cliente` | 3 |
 | `modelos_formulario_pmr` | 1 |
 | `modulos_cliente_consultoria` | 4 |
 | `modulos_produto_consultoria` | 1 |
@@ -273,7 +273,7 @@
 | `universidade_trilhas` | 1 |
 | `usuarios` | 17 |
 | `valores_indicadores_planejamento` | 1 |
-| `valores_parametros_consultoria` | 1 |
+| `valores_parametros_consultoria` | 2 |
 | `vehicle_model_catalog` | 1 |
 | `veiculos_estoque` | 4 |
 | `vendedor_nivel_carreira` | 1 |
@@ -320,7 +320,8 @@
 | `carreira_niveis:upsert` | 1 |
 | `carteira_empresa:select` | 1 |
 | `carteira_missoes:select` | 1 |
-| `catalogo_metricas_consultoria:select` | 3 |
+| `catalogo_metricas_consultoria:select` | 4 |
+| `catalogo_metricas_consultoria:update` | 1 |
 | `catalogo_metricas_consultoria:upsert` | 1 |
 | `central_execucao_aberturas:select` | 1 |
 | `central_execucao_aberturas:upsert` | 2 |
@@ -339,7 +340,7 @@
 | `comportamental_respostas:insert` | 1 |
 | `comportamental_sessoes:insert` | 1 |
 | `comportamental_sessoes:select` | 1 |
-| `conjuntos_parametros_consultoria:select` | 1 |
+| `conjuntos_parametros_consultoria:select` | 2 |
 | `consultor_solucoes:select` | 2 |
 | `consultor_solucoes:update` | 1 |
 | `consultoria_itens_entrega:select` | 1 |
@@ -422,7 +423,7 @@
 | `mentor_scripts:select` | 1 |
 | `mentor_status_definitions:select` | 1 |
 | `mentor_transitions:select` | 1 |
-| `metas_metricas_cliente:select` | 2 |
+| `metas_metricas_cliente:select` | 3 |
 | `metas_metricas_cliente:upsert` | 1 |
 | `metas:delete` | 1 |
 | `metas:insert` | 1 |
@@ -560,7 +561,7 @@
 | `usuarios:update` | 5 |
 | `usuarios:upsert` | 1 |
 | `valores_indicadores_planejamento:select` | 1 |
-| `valores_parametros_consultoria:select` | 1 |
+| `valores_parametros_consultoria:select` | 2 |
 | `valores_parametros_consultoria:upsert` | 1 |
 | `vehicle_model_catalog:select` | 1 |
 | `veiculos_estoque:insert` | 1 |

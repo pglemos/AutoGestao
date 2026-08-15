@@ -1896,42 +1896,63 @@ export type Database = {
       catalogo_metricas_consultoria: {
         Row: {
           active: boolean
+          ano_final: number | null
+          ano_inicial: number | null
           area: string
+          casas_decimais: number
           created_at: string
+          descricao: string | null
           direction: string
           formula_key: string | null
+          frequencia: string
           label: string
           metric_key: string
           sort_order: number
           source_scope: string
+          status: string
           updated_at: string
           value_type: string
+          visivel_dono: boolean
         }
         Insert: {
           active?: boolean
+          ano_final?: number | null
+          ano_inicial?: number | null
           area: string
+          casas_decimais?: number
           created_at?: string
+          descricao?: string | null
           direction?: string
           formula_key?: string | null
+          frequencia?: string
           label: string
           metric_key: string
           sort_order?: number
           source_scope?: string
+          status?: string
           updated_at?: string
           value_type?: string
+          visivel_dono?: boolean
         }
         Update: {
           active?: boolean
+          ano_final?: number | null
+          ano_inicial?: number | null
           area?: string
+          casas_decimais?: number
           created_at?: string
+          descricao?: string | null
           direction?: string
           formula_key?: string | null
+          frequencia?: string
           label?: string
           metric_key?: string
           sort_order?: number
           source_scope?: string
+          status?: string
           updated_at?: string
           value_type?: string
+          visivel_dono?: boolean
         }
         Relationships: []
       }
