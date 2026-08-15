@@ -44,6 +44,9 @@ const classRe = new RegExp(
   `(?<![\\w:-])(?:${LEGACY_CLASSES.map((c) => c.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})(?![\\w-])`,
 )
 
+/** Altura/raio/background forçados com `!important` em canônicos (11.012). */
+const IMPORTANT_RE = /!\s*(?:h-|w-|rounded|bg-|p-|m-|text-|border-)/
+
 /** Arquivos allowlisted (dívida real documentada). */
 export const DANGEROUS_OVERRIDE_ALLOWLIST = {
   'src/components/owner/actionplan/board/ValidateModal.jsx':
@@ -68,6 +71,10 @@ export const DANGEROUS_OVERRIDE_ALLOWLIST = {
     'Borda border-border-strong inline — migrar para token.',
   'src/features/universidade/components/ContentSuggestionDialog.tsx':
     'Button com bg-brand-primary inline — migrar para variant="primary".',
+  'src/features/configuracoes/components/tabs/PerfilTab.tsx':
+    'Button com !h-mx-14 (altura forçada) + bg-surface-alt — migrar para size canônico (11.012).',
+  'src/pages/LiberacaoFechamento.tsx':
+    'Button com !text-lg (texto forçado) — migrar para size/typography canônico (11.012).',
 }
 
 export function inspectDangerousOverrides(source, file = '<inline>') {
@@ -80,14 +87,25 @@ export function inspectDangerousOverrides(source, file = '<inline>') {
     if (!clsMatch) continue
     const cls = clsMatch[1]
     const hit = cls.match(classRe)
-    if (!hit) continue
-    findings.push({
-      file,
-      line: source.slice(0, m.index).split('\n').length,
-      rule: 'dangerous-override',
-      token: hit[0],
-      cls: cls.slice(0, 60),
-    })
+    const important = cls.match(IMPORTANT_RE)
+    if (hit) {
+      findings.push({
+        file,
+        line: source.slice(0, m.index).split('\n').length,
+        rule: 'dangerous-override',
+        token: hit[0],
+        cls: cls.slice(0, 60),
+      })
+    }
+    if (important) {
+      findings.push({
+        file,
+        line: source.slice(0, m.index).split('\n').length,
+        rule: 'forced-important-override',
+        token: important[0].trim(),
+        cls: cls.slice(0, 60),
+      })
+    }
   }
   return findings
 }

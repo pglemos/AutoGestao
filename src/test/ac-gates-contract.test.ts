@@ -70,6 +70,13 @@ describe('contrato AC-29.006 — overrides perigosos em canônicos', () => {
   test('allowlist documenta 11 arquivos de dívida real', () => {
     expect(Object.keys(DANGEROUS_OVERRIDE_ALLOWLIST).length).toBeGreaterThanOrEqual(11)
   })
+
+  test('RED: !h-important em Button é flagrado (11.012)', () => {
+    const src = `<Button className="!h-mx-14 px-6">Salvar</Button>`
+    expect(inspectDangerousOverrides(src, 'x/Page.tsx')).toEqual([
+      expect.objectContaining({ rule: 'forced-important-override', token: '!h-' }),
+    ])
+  })
 })
 
 describe('contrato AC-29.008 — tabs fora da family canônica', () => {
