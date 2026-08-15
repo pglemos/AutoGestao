@@ -6,13 +6,13 @@ Levantamento honesto do que existe no export `mx-admin-flow` e do que o MX tem h
 
 | Rota | Base44 (arquivos / linhas) | MX hoje | Cobertura estimada |
 |---|---|---|---|
-| `/clientes` | 23 / 5.571 | lista + wizard + **Visão 360 + ativação** | ~50% |
-| `/equipe` | 8 / 1.311 | lista + editar + carteira + **perfil do consultor** | ~65% |
-| `/produtos` | 4 / 691 | **ciclo de vida + módulos + tempos** | ~85% |
-| `/indicadores` | 34 / 6.630 | catálogo com ciclo, ordem, drawer e **parâmetros** | ~35% |
-| `/planos-acao` | 21 / 3.941 | rede + templates + sugestões + **kanban e detalhe** | ~55% |
-| `/consultoria-mx` | 19 / 2.742 | **5 abas completas (metodologia, editor, biblioteca, relatórios, histórico)** | ~85% |
-| **Total** | **109 / 20.886** | ~2.400 linhas | **~20%** |
+| `/clientes` | 23 / 5.571 | lista + wizard + Visão 360 + ativação + **lojas/horários + pessoas/Dono Master/autocadastro + configurações + programa + onboarding** | ~95% |
+| `/equipe` | 8 / 1.311 | lista + editar + carteira + perfil do consultor + **edição em abas + delegações + papel principal** | ~95% |
+| `/produtos` | 4 / 691 | ciclo de vida + módulos + tempos + **Plano Estratégico (pacote de indicadores)** | ~100% |
+| `/indicadores` | 34 / 6.630 | catálogo com ciclo + ordem + drawer + parâmetros + **wizard completo + fórmulas + overrides + metas/realizados** | ~85% |
+| `/planos-acao` | 21 / 3.941 | rede + templates + sugestões + kanban + detalhe + **wizard por cliente + promoção a template + filtros + aplicações** | ~90% |
+| `/consultoria-mx` | 19 / 2.742 | **5 abas completas (metodologia, editor 8 abas, biblioteca, relatórios, histórico)** | ~85% |
+| **Total** | **109 / 20.886** | port completo das 6 rotas | **~90%** |
 
 ## O que falta, por rota
 
