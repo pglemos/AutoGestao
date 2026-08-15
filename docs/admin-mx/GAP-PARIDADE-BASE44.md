@@ -7,8 +7,8 @@ Levantamento honesto do que existe no export `mx-admin-flow` e do que o MX tem h
 | Rota | Base44 (arquivos / linhas) | MX hoje | Cobertura estimada |
 |---|---|---|---|
 | `/clientes` | 23 / 5.571 | lista + wizard de cadastro | ~25% |
-| `/equipe` | 8 / 1.311 | lista + editar + carteira | ~30% |
-| `/produtos` | 4 / 691 | lista + criar/editar | ~20% |
+| `/equipe` | 8 / 1.311 | lista + editar + carteira + **perfil do consultor** | ~65% |
+| `/produtos` | 4 / 691 | **ciclo de vida + módulos + tempos** | ~85% |
 | `/indicadores` | 34 / 6.630 | lista + criar/editar | ~8% |
 | `/planos-acao` | 21 / 3.941 | rede + templates + sugestões | ~30% |
 | `/consultoria-mx` | 19 / 2.742 | lista de encontros | ~10% |
@@ -26,17 +26,14 @@ Levantamento honesto do que existe no export `mx-admin-flow` e do que o MX tem h
 - **Onboarding por etapas** com continuidade ("Continuar onboarding").
 
 ### `/equipe`
-- **Perfil do consultor** (411 l): programas habilitados, especialidades por encontro, clientes ativos, capacidade online/presencial, status (ativo/afastado/férias/inativo).
+- ~~Perfil do consultor: programas habilitados, especialidades por encontro, clientes ativos, capacidade, situação~~ — **feito** (migration 20260815190000).
 - **Edição de usuário em abas**: dados pessoais, papéis e visões, lojas e equipes, acesso e situação.
 - **Delegações gerenciais** com motivo e vigência.
 - **Papel principal** e visão padrão ao entrar.
 
 ### `/produtos`
-- **Ciclo de vida**: rascunho → publicado, duplicar, nova versão, excluir rascunho, exclusividade evolutiva.
-- **Aba Módulos**: matriz de liberação padrão herdada pelos clientes, obrigatoriedade, visibilidade.
-- **Aba Tempos e Capacidade**: horas online/presencial por encontro, pendências, origem do tempo.
-- **Aba Plano Estratégico**: pacote de indicadores vinculado, digitáveis vs calculáveis, competências meta.
-- Métricas: total de encontros, mín./máx. presenciais, contratos ativos.
+- ~~Ciclo de vida, aba Módulos, aba Tempos e Capacidade, métricas~~ — **feito** (migration 20260815180000).
+- Falta: **aba Plano Estratégico** (pacote de indicadores vinculado, digitáveis vs calculáveis, competências meta) — depende das tabelas de pacote de indicadores.
 
 ### `/indicadores`
 - **Catálogo completo**: ordem oficial editável, restaurar padrão MX, filtros por departamento/tipo.
@@ -66,8 +63,8 @@ Sem elas, parte do gap não fecha: qualificação de consultor por produto e por
 
 ## Ordem de execução
 
-1. `/produtos` — ciclo de vida + abas Módulos e Tempos.
-2. `/equipe` — perfil do consultor com programas, encontros e capacidade.
+1. ~~`/produtos` — ciclo de vida + abas Módulos e Tempos~~ — feito.
+2. ~~`/equipe` — perfil do consultor com programas, encontros e capacidade~~ — feito.
 3. `/clientes` — Visão 360 e ativação com checklist.
 4. `/planos-acao` — kanban, detalhe em abas, wizard por cliente.
 5. `/indicadores` — ordem, wizard, drawer, parâmetros.
