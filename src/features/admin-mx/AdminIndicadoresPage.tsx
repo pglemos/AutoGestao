@@ -25,6 +25,7 @@ import { toast } from '@/lib/toast'
 import { CreateIndicatorWizard, fromIndicatorToWizard, toIndicatorInput } from './components/CreateIndicatorWizard'
 import { FormulaTesterModal } from './components/FormulaTesterModal'
 import { ParameterFormModal } from './components/ParameterFormModal'
+import { ClientOverridesSection } from './components/ClientOverridesSection'
 import { MetasRealizadosTab } from './components/MetasRealizadosTab'
 import { IndicatorDetailDrawer } from './indicadores/IndicatorDetailDrawer'
 import {
@@ -386,54 +387,57 @@ export function AdminIndicadoresPage() {
             </MxSectionCard>
           </>
         ) : tab === 'parametros' ? (
-          <MxSectionCard>
-            <MxSectionHeader title="Parâmetros e faixas" description={parameterSet ? `Conjunto ativo: ${parameterSet}.` : 'Nenhum conjunto de parâmetros ativo.'} />
-            <div className="p-5">
-              {parameters.length ? (
-                <MxTableSurface>
-                  <Table className="min-w-[900px]">
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Indicador</TableHead>
-                        <TableHead>Meta padrão</TableHead>
-                        <TableHead>Média de mercado</TableHead>
-                        <TableHead>Melhor prática</TableHead>
-                        <TableHead>Vermelho</TableHead>
-                        <TableHead>Amarelo</TableHead>
-                        <TableHead>Verde</TableHead>
-                        <TableHead>Consistência</TableHead>
-                        <TableHead className="text-right">Ação</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {rows.filter(item => parameterByKey.has(item.metric_key)).map(item => {
-                        const parameter = parameterByKey.get(item.metric_key) as IndicatorParameter
-                        const problem = validateThresholds(parameter, item.direction)
-                        return (
-                          <TableRow key={item.metric_key}>
-                            <TableCell>
-                              <div className="font-semibold text-foreground">{item.label}</div>
-                              <div className="text-xs text-muted-foreground">{item.metric_key}</div>
-                            </TableCell>
-                            <TableCell>{parameter.target_default ?? '—'}</TableCell>
-                            <TableCell>{parameter.market_average ?? '—'}</TableCell>
-                            <TableCell>{parameter.best_practice ?? '—'}</TableCell>
-                            <TableCell>{parameter.red_threshold ?? '—'}</TableCell>
-                            <TableCell>{parameter.yellow_threshold ?? '—'}</TableCell>
-                            <TableCell>{parameter.green_threshold ?? '—'}</TableCell>
-                            <TableCell className="text-xs">{problem ?? 'OK'}</TableCell>
-                            <TableCell className="text-right">
-                              <Button variant="outline" size="sm" onClick={() => setParameterModal({ indicator: item, parameter })}>Editar</Button>
-                            </TableCell>
-                          </TableRow>
-                        )
-                      })}
-                    </TableBody>
-                  </Table>
-                </MxTableSurface>
-              ) : <MxEmptyState title="Sem parâmetros no conjunto ativo" description="Cadastre um conjunto de parâmetros da consultoria para ver as faixas aqui." />}
-            </div>
-          </MxSectionCard>
+          <>
+            <MxSectionCard>
+              <MxSectionHeader title="Parâmetros e faixas" description={parameterSet ? `Conjunto ativo: ${parameterSet}.` : 'Nenhum conjunto de parâmetros ativo.'} />
+              <div className="p-5">
+                {parameters.length ? (
+                  <MxTableSurface>
+                    <Table className="min-w-[900px]">
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Indicador</TableHead>
+                          <TableHead>Meta padrão</TableHead>
+                          <TableHead>Média de mercado</TableHead>
+                          <TableHead>Melhor prática</TableHead>
+                          <TableHead>Vermelho</TableHead>
+                          <TableHead>Amarelo</TableHead>
+                          <TableHead>Verde</TableHead>
+                          <TableHead>Consistência</TableHead>
+                          <TableHead className="text-right">Ação</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {rows.filter(item => parameterByKey.has(item.metric_key)).map(item => {
+                          const parameter = parameterByKey.get(item.metric_key) as IndicatorParameter
+                          const problem = validateThresholds(parameter, item.direction)
+                          return (
+                            <TableRow key={item.metric_key}>
+                              <TableCell>
+                                <div className="font-semibold text-foreground">{item.label}</div>
+                                <div className="text-xs text-muted-foreground">{item.metric_key}</div>
+                              </TableCell>
+                              <TableCell>{parameter.target_default ?? '—'}</TableCell>
+                              <TableCell>{parameter.market_average ?? '—'}</TableCell>
+                              <TableCell>{parameter.best_practice ?? '—'}</TableCell>
+                              <TableCell>{parameter.red_threshold ?? '—'}</TableCell>
+                              <TableCell>{parameter.yellow_threshold ?? '—'}</TableCell>
+                              <TableCell>{parameter.green_threshold ?? '—'}</TableCell>
+                              <TableCell className="text-xs">{problem ?? 'OK'}</TableCell>
+                              <TableCell className="text-right">
+                                <Button variant="outline" size="sm" onClick={() => setParameterModal({ indicator: item, parameter })}>Editar</Button>
+                              </TableCell>
+                            </TableRow>
+                          )
+                        })}
+                      </TableBody>
+                    </Table>
+                  </MxTableSurface>
+                ) : <MxEmptyState title="Sem parâmetros no conjunto ativo" description="Cadastre um conjunto de parâmetros da consultoria para ver as faixas aqui." />}
+              </div>
+            </MxSectionCard>
+            <ClientOverridesSection rows={rows} parameters={parameters} />
+          </>
         ) : (
           <MetasRealizadosTab indicators={indicatorTargets} />
         )}
