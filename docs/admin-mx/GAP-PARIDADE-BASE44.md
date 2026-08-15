@@ -11,7 +11,7 @@ Levantamento honesto do que existe no export `mx-admin-flow` e do que o MX tem h
 | `/produtos` | 4 / 691 | **ciclo de vida + módulos + tempos** | ~85% |
 | `/indicadores` | 34 / 6.630 | catálogo com ciclo, ordem, drawer e **parâmetros** | ~35% |
 | `/planos-acao` | 21 / 3.941 | rede + templates + sugestões + **kanban e detalhe** | ~55% |
-| `/consultoria-mx` | 19 / 2.742 | lista de encontros | ~10% |
+| `/consultoria-mx` | 19 / 2.742 | **5 abas completas (metodologia, editor, biblioteca, relatórios, histórico)** | ~85% |
 | **Total** | **109 / 20.886** | ~2.400 linhas | **~20%** |
 
 ## O que falta, por rota
@@ -52,11 +52,11 @@ Levantamento honesto do que existe no export `mx-admin-flow` e do que o MX tem h
 - ~~Aplicações nos clientes: acompanhamento por cliente com progresso e eficácia~~ — **feito** (ApplicationsTab com progresso ponderado pelo checklist e eficácia por score).
 
 ### `/consultoria-mx`
-- **Metodologia por produto**: versão estrutural vs metodológica, publicar, comparar versões, completude.
-- **Editor de encontro** com abas: objetivo, conteúdo (vídeo/aula), entrega, evidências, arquivos, relatório, planos de ação, guia do consultor.
-- **Biblioteca de materiais**: upload, tipos, visibilidade, utilizações, arquivar.
-- **Modelos de relatório**: seções, publicar, duplicar, arquivar.
-- **Prévia do Módulo Dono** e histórico de alterações.
+- ~~**Metodologia por produto**: versão estrutural vs metodológica, publicar, comparar versões, completude~~ — **feito**.
+- ~~**Editor de encontro** com abas: objetivo, conteúdo (vídeo/aula), entrega, evidências, arquivos, relatório, planos de ação, guia do consultor~~ — **feito**.
+- ~~**Biblioteca de materiais**: upload, tipos, visibilidade, utilizações, arquivar~~ — **feito**.
+- ~~**Modelos de relatório**: seções, publicar, duplicar, arquivar~~ — **feito**.
+- ~~**Prévia do Módulo Dono** e histórico de alterações~~ — **feito**.
 
 ## Tabelas que faltam no Supabase
 
@@ -67,6 +67,7 @@ Sem elas, parte do gap não fecha: qualificação de consultor por produto e por
 1. ~~`/produtos` — ciclo de vida + abas Módulos e Tempos~~ — feito.
 2. ~~`/equipe` — perfil do consultor com programas, encontros e capacidade~~ — feito.
 3. ~~`/clientes` — Visão 360 e ativação com checklist~~ — feito.
+<<<<<<< HEAD
 4. ~~`/planos-acao` — kanban e detalhe em abas~~ — feito.
 5. ~~`/planos-acao` — wizard por cliente, templates, sugestões ao dono e aplicações~~ — feito (branch route/admin-planos-acao).
 6. ~~`/indicadores` — ordem, drawer, parâmetros~~ — feito.
@@ -93,3 +94,9 @@ Além disso, `programas_visita_consultoria` ganhou `indicator_package_version_id
 5. Produto publicado trava edição ("o pacote é imutável, crie nova versão do produto").
 
 Lógica pura testada em `produtos/strategicPlan.test.ts` (10 testes: modo de entrada, resumo, itens congelados, validação, vínculo, filtro e agrupamento).
+
+## Fatia — `/consultoria-mx` (2026-08-15)
+
+**Migration `20260815220000_consultoria_mx_metodologia.sql`** (aplicada e registrada): 11 tabelas novas — `versoes_metodologia_produto`, `conteudo_encontro`, `guia_consultor_encontro`, `entregas_encontro`, `evidencias_encontro`, `biblioteca_materiais`, `conteudo_referencia_encontro`, `modelos_relatorio`, `vinculo_modelo_relatorio_encontro`, `vinculo_plano_acao_encontro`, `logs_auditoria_consultoria_mx` — todas com RLS interna MX, `REVOKE ALL FROM PUBLIC` e grants só `authenticated`, mais bucket `biblioteca-consultoria-mx`.
+
+A página `AdminConsultoriaMxPage` agora tem 5 abas (Visão Geral, Metodologia por Produto, Biblioteca, Modelos de Relatório, Histórico) e editor de encontro com 8 abas (Objetivo, Orientação do Consultor, Aula e Vídeo, Entrega, Evidências, Arquivos, Relatório, Planos de Ação). Lógica pura em `consultoria-mx/methodology.ts` (21 testes).
