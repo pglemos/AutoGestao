@@ -33,7 +33,7 @@ Levantamento honesto do que existe no export `mx-admin-flow` e do que o MX tem h
 
 ### `/produtos`
 - ~~Ciclo de vida, aba Módulos, aba Tempos e Capacidade, métricas~~ — **feito** (migration 20260815180000).
-- Falta: **aba Plano Estratégico** (pacote de indicadores vinculado, digitáveis vs calculáveis, competências meta) — depende das tabelas de pacote de indicadores.
+- ~~Aba Plano Estratégico (pacote de indicadores vinculado, digitáveis vs calculáveis, competências meta)~~ — **feito** (migration 20260815210000 `pacotes_indicadores_estrategicos` + `_versoes` + `_itens`; aba no drawer de produto).
 
 ### `/indicadores`
 - ~~Ordem oficial editável e filtros por área/status~~ — **feito** (falta "restaurar padrão MX").
@@ -70,3 +70,24 @@ Sem elas, parte do gap não fecha: qualificação de consultor por produto e por
 4. ~~`/planos-acao` — kanban e detalhe em abas~~ — feito (falta o wizard por cliente).
 5. ~~`/indicadores` — ordem, drawer, parâmetros~~ — feito (faltam wizard completo, fórmulas e importação de metas).
 6. `/consultoria-mx` — metodologia por produto e editor de encontro.
+
+## Fatia — `/produtos` aba Plano Estratégico (2026-08-15)
+
+**Migration `20260815210000_strategic_indicator_packages.sql`** (aplicada e registrada em `supabase_migrations`): três tabelas novas com RLS restrita à área interna MX (`eh_area_interna_mx()`), `REVOKE ALL FROM PUBLIC` e grants só para `authenticated`:
+
+| Tabela | Papel |
+|---|---|
+| `pacotes_indicadores_estrategicos` | identidade estável do pacote (chave, nome, status, versão publicada atual) |
+| `pacotes_indicadores_versoes` | versão rascunho/publicada/substituída/arquivada; índice único parcial garante **uma** publicada por pacote |
+| `pacotes_indicadores_itens` | indicadores da versão com snapshot de ordem, área, modo de entrada (manual/calculado), formato e origem |
+
+Além disso, `programas_visita_consultoria` ganhou `indicator_package_version_id` (FK para a versão publicada, ON DELETE SET NULL) — o produto vincula o pacote que define os indicadores padrão do Plano Estratégico dos clientes.
+
+**Fluxo na aba** (`ProductStrategicPlanTab` no drawer do produto):
+1. **Toggle "utiliza Plano Estratégico"** — liga/desliga `usa_plano_estrategico` (bloqueado quando o produto está publicado).
+2. **Vincular pacote** — se não há pacote, seletor de versões publicadas + "Vincular"; se não existe nenhum, "Criar pacote padrão" gera o pacote a partir do catálogo publicado, publica e vincula.
+3. **Resumo** — indicadores, digitáveis vs calculáveis (via `formula_key`), departamentos e competências meta (indicadores × 12).
+4. **Tabela por área** — busca, filtro por área, agrupamento colapsável com ordem, meta, formato e origem (direto / por dependência).
+5. Produto publicado trava edição ("o pacote é imutável, crie nova versão do produto").
+
+Lógica pura testada em `produtos/strategicPlan.test.ts` (10 testes: modo de entrada, resumo, itens congelados, validação, vínculo, filtro e agrupamento).
