@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { ArrowDown, ArrowUp, Gauge, Plus, RefreshCw, Save } from 'lucide-react'
+import { ArrowDown, ArrowUp, Calculator, Gauge, Plus, RefreshCw, RotateCcw, Save } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
@@ -22,7 +22,11 @@ import {
   MxToolbar,
 } from '@/components/module/MxModuleVisualPrimitives'
 import { toast } from '@/lib/toast'
-import { IndicatorFormModal } from './components/IndicatorFormModal'
+import { CreateIndicatorWizard, fromIndicatorToWizard, toIndicatorInput } from './components/CreateIndicatorWizard'
+import { FormulaTesterModal } from './components/FormulaTesterModal'
+import { ParameterFormModal } from './components/ParameterFormModal'
+import { ClientOverridesSection } from './components/ClientOverridesSection'
+import { MetasRealizadosTab } from './components/MetasRealizadosTab'
 import { IndicatorDetailDrawer } from './indicadores/IndicatorDetailDrawer'
 import {
   INDICATOR_STATUSES,
@@ -33,23 +37,33 @@ import {
   isUsableIndicator,
   persistIndicatorOrder,
   reorderIndicators,
+  restoreDefaultOrder,
   toggleOwnerVisibility,
   validateThresholds,
   type CatalogIndicator,
   type IndicatorParameter,
   type IndicatorStatus,
 } from './indicadores/indicatorCatalog'
-import { saveIndicator, type IndicatorInput } from './hooks/useAdminMxLists'
+import { saveIndicator } from './hooks/useAdminMxLists'
+import {
+  dependentsOfParameter,
+  fetchFormulaIndicators,
+  fetchActiveParameterSet,
+  fetchParameterValues,
+  saveParameterValue,
+  type FormulaAwareIndicator,
+} from './indicadores/indicatorData'
+import type { IndicatorWizardDraft } from './indicadores/indicatorWizard'
 
-type CatalogTab = 'catalogo' | 'parametros'
+type CatalogTab = 'catalogo' | 'parametros' | 'metas'
 
 const TABS = [
   { key: 'catalogo' as const, label: 'Catálogo de indicadores' },
   { key: 'parametros' as const, label: 'Parâmetros e faixas' },
+  { key: 'metas' as const, label: 'Metas e realizados' },
 ]
 
 const DIRECTION_LABEL: Record<string, string> = { increase: 'Maior é melhor', decrease: 'Menor é melhor' }
-const EMPTY_INDICATOR: IndicatorInput = { metric_key: '', label: '', area: '', value_type: 'number', direction: 'increase', source_scope: 'manual', active: true }
 
 export function AdminIndicadoresPage() {
   const location = useLocation()
@@ -61,8 +75,8 @@ export function AdminIndicadoresPage() {
   const [search, setSearch] = useState('')
   const [area, setArea] = useState('todas')
   const [status, setStatus] = useState('todos')
-  const [draft, setDraft] = useState<IndicatorInput>(EMPTY_INDICATOR)
-  const [formOpen, setFormOpen] = useState(false)
+  const [wizardOpen, setWizardOpen] = useState(false)
+  const [wizardInitial, setWizardInitial] = useState<Partial<IndicatorWizardDraft> | undefined>(undefined)
   const [editing, setEditing] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [detail, setDetail] = useState<CatalogIndicator | null>(null)
@@ -70,6 +84,10 @@ export function AdminIndicadoresPage() {
   const [orderKeys, setOrderKeys] = useState<string[]>([])
   const [parameters, setParameters] = useState<IndicatorParameter[]>([])
   const [parameterSet, setParameterSet] = useState<string | null>(null)
+  const [parameterSetId, setParameterSetId] = useState<string | null>(null)
+  const [formulaIndicators, setFormulaIndicators] = useState<FormulaAwareIndicator[]>([])
+  const [testerOpen, setTesterOpen] = useState(false)
+  const [parameterModal, setParameterModal] = useState<{ indicator: CatalogIndicator; parameter: IndicatorParameter | null } | null>(null)
 
   const refetch = useCallback(async () => {
     setLoading(true)
@@ -83,12 +101,19 @@ export function AdminIndicadoresPage() {
   useEffect(() => { void refetch() }, [refetch])
 
   useEffect(() => {
-    if (tab !== 'parametros' || parameters.length) return
-    void fetchIndicatorParameters().then(result => {
-      setParameters(result.rows)
-      setParameterSet(result.setName)
-    })
-  }, [tab, parameters.length])
+    if (tab !== 'parametros' || parameterSetId !== null) return
+    void (async () => {
+      const [parameterResult, setResult] = await Promise.all([
+        fetchIndicatorParameters(),
+        fetchActiveParameterSet(),
+      ])
+      setParameters(parameterResult.rows)
+      setParameterSet(parameterResult.setName)
+      setParameterSetId(setResult.set?.id ?? null)
+      const formulas = await fetchFormulaIndicators()
+      setFormulaIndicators(formulas.rows)
+    })()
+  }, [tab, parameterSetId])
 
   const areas = useMemo(() => [...new Set(rows.map(item => item.area).filter(Boolean))].sort(), [rows])
 
@@ -116,36 +141,29 @@ export function AdminIndicadoresPage() {
   }), [rows, areas])
 
   const openNew = () => {
-    setDraft(EMPTY_INDICATOR)
+    setWizardInitial(undefined)
     setEditing(false)
-    setFormOpen(true)
+    setWizardOpen(true)
   }
 
   const openEdit = (indicator: CatalogIndicator) => {
-    setDraft({
-      metric_key: indicator.metric_key,
-      label: indicator.label,
-      area: indicator.area,
-      value_type: indicator.value_type,
-      direction: indicator.direction,
-      source_scope: indicator.source_scope,
-      active: indicator.active,
-    })
+    setWizardInitial(fromIndicatorToWizard(indicator))
     setEditing(true)
-    setFormOpen(true)
+    setWizardOpen(true)
   }
 
-  const submit = async () => {
+  const submitWizard = async (draft: IndicatorWizardDraft, willPublish: boolean) => {
     if (submitting) return
     setSubmitting(true)
     try {
-      const result = await saveIndicator(draft)
+      const input = toIndicatorInput(draft)
+      const result = await saveIndicator({ ...input, active: willPublish || input.active })
       if (result.error) {
         toast.error(result.error)
         return
       }
-      toast.success(editing ? 'Indicador atualizado.' : 'Indicador criado.')
-      setFormOpen(false)
+      toast.success(editing ? 'Indicador atualizado.' : willPublish ? 'Indicador publicado.' : 'Indicador salvo como rascunho.')
+      setWizardOpen(false)
       await refetch()
     } finally {
       setSubmitting(false)
@@ -206,7 +224,64 @@ export function AdminIndicadoresPage() {
     }
   }
 
+  const restoreDefault = async () => {
+    if (submitting) return
+    setSubmitting(true)
+    try {
+      const result = await persistIndicatorOrder(restoreDefaultOrder(rows))
+      if (result.error) {
+        toast.error(result.error)
+        return
+      }
+      toast.success('Ordem padrão MX restaurada.')
+      await refetch()
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
   const parameterByKey = useMemo(() => new Map(parameters.map(item => [item.metric_key, item])), [parameters])
+
+  const saveParameter = async (values: {
+    target_default: number | null
+    market_average: number | null
+    best_practice: number | null
+    red_threshold: number | null
+    yellow_threshold: number | null
+    green_threshold: number | null
+    notes: string | null
+  }) => {
+    if (!parameterModal || !parameterSetId) return
+    setSubmitting(true)
+    try {
+      const result = await saveParameterValue({ ...values, parameterSetId, metric_key: parameterModal.indicator.metric_key })
+      if (result.error) {
+        toast.error(result.error)
+        return
+      }
+      toast.success('Parâmetros salvos no conjunto ativo.')
+      setParameterModal(null)
+      const refreshed = await fetchParameterValues(parameterSetId)
+      setParameters(refreshed.rows)
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const parameterDefaults = useMemo(() => {
+    const map: Record<string, number> = {}
+    for (const parameter of parameters) {
+      if (parameter.target_default != null) map[parameter.metric_key] = parameter.target_default
+    }
+    return map
+  }, [parameters])
+
+  const indicatorTargets = useMemo(() => rows.map(item => ({
+    code: item.metric_key,
+    name: item.label,
+    department: item.area,
+    calculado: Boolean(item.formula_expression) && item.target_calculation_mode !== 'MANUAL',
+  })), [rows])
 
   return (
     <MxModulePage id="admin-mx-indicadores" width={width} bottomClearance={bottomClearance}>
@@ -221,7 +296,9 @@ export function AdminIndicadoresPage() {
               {tab === 'catalogo' ? (
                 orderMode
                   ? <><Button variant="outline" onClick={() => { setOrderMode(false); setOrderKeys(rows.map(item => item.metric_key)) }}>Cancelar ordem</Button><Button onClick={() => void saveOrder()} disabled={submitting}><Save size={16} />Salvar ordem</Button></>
-                  : <><Button variant="outline" onClick={() => setOrderMode(true)}>Editar ordem</Button><Button onClick={openNew}><Plus size={16} />Novo indicador</Button></>
+                  : <><Button variant="outline" onClick={() => setOrderMode(true)}>Editar ordem</Button><Button variant="outline" onClick={() => void restoreDefault()} disabled={submitting}><RotateCcw size={16} />Restaurar padrão MX</Button><Button onClick={openNew}><Plus size={16} />Novo indicador</Button></>
+              ) : tab === 'parametros' ? (
+                <Button variant="outline" onClick={() => setTesterOpen(true)}><Calculator size={16} />Testar cálculo</Button>
               ) : null}
             </>
           )}
@@ -309,63 +386,88 @@ export function AdminIndicadoresPage() {
               </div>
             </MxSectionCard>
           </>
+        ) : tab === 'parametros' ? (
+          <>
+            <MxSectionCard>
+              <MxSectionHeader title="Parâmetros e faixas" description={parameterSet ? `Conjunto ativo: ${parameterSet}.` : 'Nenhum conjunto de parâmetros ativo.'} />
+              <div className="p-5">
+                {parameters.length ? (
+                  <MxTableSurface>
+                    <Table className="min-w-[900px]">
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Indicador</TableHead>
+                          <TableHead>Meta padrão</TableHead>
+                          <TableHead>Média de mercado</TableHead>
+                          <TableHead>Melhor prática</TableHead>
+                          <TableHead>Vermelho</TableHead>
+                          <TableHead>Amarelo</TableHead>
+                          <TableHead>Verde</TableHead>
+                          <TableHead>Consistência</TableHead>
+                          <TableHead className="text-right">Ação</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {rows.map(item => {
+                          const parameter = parameterByKey.get(item.metric_key) as IndicatorParameter | undefined
+                          const problem = parameter ? validateThresholds(parameter, item.direction) : null
+                          return (
+                            <TableRow key={item.metric_key}>
+                              <TableCell>
+                                <div className="font-semibold text-foreground">{item.label}</div>
+                                <div className="text-xs text-muted-foreground">{item.metric_key}</div>
+                              </TableCell>
+                              <TableCell>{parameter?.target_default ?? '—'}</TableCell>
+                              <TableCell>{parameter?.market_average ?? '—'}</TableCell>
+                              <TableCell>{parameter?.best_practice ?? '—'}</TableCell>
+                              <TableCell>{parameter?.red_threshold ?? '—'}</TableCell>
+                              <TableCell>{parameter?.yellow_threshold ?? '—'}</TableCell>
+                              <TableCell>{parameter?.green_threshold ?? '—'}</TableCell>
+                              <TableCell className="text-xs">{parameter ? (problem ?? 'OK') : '—'}</TableCell>
+                              <TableCell className="text-right">
+                                <Button variant="outline" size="sm" onClick={() => setParameterModal({ indicator: item, parameter: parameter ?? null })}>
+                                  {parameter ? 'Editar' : 'Criar'}
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          )
+                        })}
+                      </TableBody>
+                    </Table>
+                  </MxTableSurface>
+                ) : <MxEmptyState title="Catálogo vazio" description="Cadastre indicadores no catálogo para configurar os parâmetros." />}
+              </div>
+            </MxSectionCard>
+            <ClientOverridesSection rows={rows} parameters={parameters} />
+          </>
         ) : (
-          <MxSectionCard>
-            <MxSectionHeader title="Parâmetros e faixas" description={parameterSet ? `Conjunto ativo: ${parameterSet}.` : 'Nenhum conjunto de parâmetros ativo.'} />
-            <div className="p-5">
-              {parameters.length ? (
-                <MxTableSurface>
-                  <Table className="min-w-[900px]">
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Indicador</TableHead>
-                        <TableHead>Meta padrão</TableHead>
-                        <TableHead>Média de mercado</TableHead>
-                        <TableHead>Melhor prática</TableHead>
-                        <TableHead>Vermelho</TableHead>
-                        <TableHead>Amarelo</TableHead>
-                        <TableHead>Verde</TableHead>
-                        <TableHead>Consistência</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {rows.filter(item => parameterByKey.has(item.metric_key)).map(item => {
-                        const parameter = parameterByKey.get(item.metric_key) as IndicatorParameter
-                        const problem = validateThresholds(parameter, item.direction)
-                        return (
-                          <TableRow key={item.metric_key}>
-                            <TableCell>
-                              <div className="font-semibold text-foreground">{item.label}</div>
-                              <div className="text-xs text-muted-foreground">{item.metric_key}</div>
-                            </TableCell>
-                            <TableCell>{parameter.target_default ?? '—'}</TableCell>
-                            <TableCell>{parameter.market_average ?? '—'}</TableCell>
-                            <TableCell>{parameter.best_practice ?? '—'}</TableCell>
-                            <TableCell>{parameter.red_threshold ?? '—'}</TableCell>
-                            <TableCell>{parameter.yellow_threshold ?? '—'}</TableCell>
-                            <TableCell>{parameter.green_threshold ?? '—'}</TableCell>
-                            <TableCell className="text-xs">{problem ?? 'OK'}</TableCell>
-                          </TableRow>
-                        )
-                      })}
-                    </TableBody>
-                  </Table>
-                </MxTableSurface>
-              ) : <MxEmptyState title="Sem parâmetros no conjunto ativo" description="Cadastre um conjunto de parâmetros da consultoria para ver as faixas aqui." />}
-            </div>
-          </MxSectionCard>
+          <MetasRealizadosTab indicators={indicatorTargets} />
         )}
 
-        <IndicatorFormModal
-          open={formOpen}
-          editing={editing}
-          draft={draft}
-          submitting={submitting}
+        <CreateIndicatorWizard
+          open={wizardOpen}
           areas={areas}
-          onDraft={setDraft}
-          onSubmit={() => void submit()}
-          onClose={() => setFormOpen(false)}
+          initial={wizardInitial}
+          submitting={submitting}
+          onSave={(draft, willPublish) => void submitWizard(draft, willPublish)}
+          onClose={() => setWizardOpen(false)}
         />
+        <FormulaTesterModal
+          open={testerOpen}
+          indicators={formulaIndicators}
+          parameterDefaults={parameterDefaults}
+          onClose={() => setTesterOpen(false)}
+        />
+        {parameterModal ? (
+          <ParameterFormModal
+            open
+            indicator={parameterModal.indicator}
+            parameter={parameterModal.parameter}
+            submitting={submitting}
+            onSave={values => void saveParameter(values)}
+            onClose={() => setParameterModal(null)}
+          />
+        ) : null}
         <IndicatorDetailDrawer
           indicator={detail}
           busy={submitting}
