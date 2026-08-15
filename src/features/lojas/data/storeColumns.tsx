@@ -1,4 +1,4 @@
-import { Building2, Copy, Edit3, Link2, Trash2, X } from 'lucide-react'
+import { Building2, Copy, Pencil, Link2, Trash2, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { canManageStore } from '@/lib/auth/capabilities'
 import { cn, slugify } from '@/lib/utils'
@@ -196,7 +196,7 @@ export function buildStoreColumns({
                     aria-label={`Editar ${store.name}`}
                     title={`Editar ${store.name}`}
                   >
-                    <Edit3 size={16} aria-hidden="true" />
+                    <Pencil size={16} aria-hidden="true" />
                   </Button>
                   <Button
                     variant="outline"
@@ -227,7 +227,7 @@ export function buildStoreColumns({
                 aria-label={`Editar ${store.name}`}
                 title={`Editar ${store.name}`}
               >
-                <Edit3 size={16} aria-hidden="true" />
+                <Pencil size={16} aria-hidden="true" />
               </Button>
               <Button
                 variant="outline"

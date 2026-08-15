@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Edit3, KeyRound, Plus, RefreshCw, Search, Shield, Trash2, UserX, Users } from 'lucide-react'
+import { Pencil, KeyRound, Plus, RefreshCw, Search, Shield, Trash2, UserX, Users } from 'lucide-react'
 import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
@@ -555,6 +555,7 @@ export function InternalMxUsersTab() {
           </>
         ) : (
           <MxEmptyState
+            variant="filter"
             title="Nenhum usuário encontrado"
             description="Ajuste os filtros ou crie um novo cadastro global."
           />
@@ -680,7 +681,7 @@ function UserRow({
             onClick={() => onEdit(user)}
             disabled={saving}
           >
-            <Edit3 size={15} />
+            <Pencil size={15} />
           </Button>
           <Button
             size="icon"

@@ -1,4 +1,4 @@
-import { Archive, Edit3, Package } from 'lucide-react'
+import { Archive, Pencil, Package } from 'lucide-react'
 import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
 import { Typography } from '@/components/atoms/Typography'
@@ -37,7 +37,7 @@ export function DigitalProductCard({ product, canManage, onEdit, onArchive }: { 
       <div className="mt-5 border-t border-border-subtle pt-4">
         {canManage ? (
           <div className="grid grid-cols-2 gap-2">
-            <Button data-mx-requires-manage="" variant="ghost" size="sm" onClick={() => onEdit(product)}><Edit3 size={14} className="mr-2" />Editar</Button>
+            <Button data-mx-requires-manage="" variant="ghost" size="sm" onClick={() => onEdit(product)}><Pencil size={14} className="mr-2" />Editar</Button>
             <Button data-mx-requires-manage="" variant="ghost" size="sm" onClick={() => onArchive(product)} className="text-status-error-text"><Archive size={14} className="mr-2" />Arquivar</Button>
           </div>
         ) : <Badge variant="success">Disponível para seu perfil</Badge>}

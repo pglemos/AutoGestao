@@ -1,4 +1,5 @@
-import { Edit3, PlusCircle, SlidersHorizontal } from 'lucide-react'
+import { AlertMessage } from '@/components/molecules/AlertMessage'
+import { Pencil, Plus, SlidersHorizontal } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import StrategicHeader from '@/components/owner/strategic/StrategicHeader'
 import StrategicPlanTabs from '@/components/owner/strategic/StrategicPlanTabs'
@@ -50,11 +51,11 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
   if (controller.error) {
     return (
       <ConditionalPageCanvas enabled={shell === 'owner'} as="div" width="dashboard" bottomClearance="navigation" id="page-plano-estrategico" aria-label="Plano Estratégico" className={pageClass}>
-        <div className="rounded-xl border border-destructive/30 bg-card p-6" role="alert">
+        <AlertMessage tone="danger">
           <h2 className="text-lg font-semibold text-foreground">Não foi possível carregar o Plano Estratégico</h2>
           <p className="mt-2 text-sm text-muted-foreground">{controller.error}</p>
           <Button className="mt-4" onClick={() => void controller.reload()}>Tentar novamente</Button>
-        </div>
+        </AlertMessage>
       </ConditionalPageCanvas>
     )
   }
@@ -98,7 +99,7 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
                 </Button>
                 {capabilities.canEditTargets ? (
                   <Button variant="outline" size="sm" onClick={() => controller.setEditOpen(true)}>
-                    <Edit3 className="h-4 w-4" /> Editar Metas
+                    <Pencil className="h-4 w-4" /> Editar Metas
                   </Button>
                 ) : null}
                 {capabilities.canCreateActions ? (
@@ -107,7 +108,7 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
                     size="sm"
                     onClick={() => controller.setActionOpen(true)}
                   >
-                    <PlusCircle className="h-4 w-4" /> {controller.existingAction ? 'Plano criado' : 'Criar Plano de Ação'}
+                    <Plus className="h-4 w-4" /> {controller.existingAction ? 'Plano criado' : 'Criar Plano de Ação'}
                   </Button>
                 ) : null}
                 <StrategicExportMenu

@@ -1,6 +1,6 @@
 import { useMemo, useState, type FormEvent } from 'react'
 import { toast } from '@/lib/toast'
-import { Archive, Edit3, ListChecks, Plus, RefreshCw, Search, Trash2 } from 'lucide-react'
+import { Archive, Pencil, ListChecks, Plus, RefreshCw, Search, Trash2 } from 'lucide-react'
 import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
 import { EmptyState } from '@/components/atoms/EmptyState'
@@ -306,7 +306,7 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
                     {mayManage && (
                       <div className="grid grid-cols-3 gap-mx-xs sm:flex">
                         <Button variant="ghost" size="sm" onClick={() => openEditForm(option)} className="text-status-success-text">
-                          <Edit3 size={14} className="mr-2" /> EDITAR
+                          <Pencil size={14} className="mr-2" /> EDITAR
                         </Button>
                         <Button variant="ghost" size="sm" onClick={() => handleArchive(option)} className="text-muted-foreground" disabled={option.status === 'arquivado'}>
                           <Archive size={14} className="mr-2" /> ARQUIVAR

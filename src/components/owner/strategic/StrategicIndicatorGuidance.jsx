@@ -1,5 +1,5 @@
 // Direcionamento MX — recomendação por área e status, com borda lateral colorida.
-import { Lightbulb, PlusCircle } from "lucide-react";
+import { Lightbulb, Plus } from "lucide-react";
 import { getStatusFromPercentage, calculatePercentageOfTarget, STATUS_STYLES, SELECTED_MONTH_INDEX } from "./strategicUtils";
 
 const GUIDANCE_BY_AREA = {
@@ -53,7 +53,7 @@ export default function StrategicIndicatorGuidance({ series, onCreateAction }) {
               onClick={onCreateAction}
               className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
             >
-              <PlusCircle className="h-3.5 w-3.5" />
+              <Plus className="h-3.5 w-3.5" />
               Criar Plano de Ação
             </button>
           )}

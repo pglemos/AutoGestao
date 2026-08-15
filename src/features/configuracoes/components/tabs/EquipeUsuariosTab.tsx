@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Plus, Search, Trash2, Edit3, RefreshCw, Users, ShieldCheck, ShieldAlert, Building2, Mail, Download } from 'lucide-react'
+import { Plus, Search, Trash2, Pencil, RefreshCw, Users, ShieldCheck, ShieldAlert, Building2, Mail, Download } from 'lucide-react'
 import { useTeam, useStores, type TeamMember } from '@/hooks/useTeam'
 import { isAdministradorMx, isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { toast } from '@/lib/toast'
@@ -250,7 +250,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
                                                 aria-label={`Editar ${user.name}`}
                                                 className="h-mx-10 w-mx-10 rounded-2xl"
                                             >
-                                                <Edit3 size={16} />
+                                                <Pencil size={16} />
                                             </Button>
                                             <Button
                                                 variant="ghost"

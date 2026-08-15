@@ -85,7 +85,7 @@ export function CommissionHeroCard({
             aria-hidden="true"
             className="grid h-28 w-28 place-items-center rounded-full bg-status-success-surface text-status-success-text"
           >
-            <CircleDollarSign className="h-14 w-14" strokeWidth={1.5} />
+            <CircleDollarSign className="h-14 w-14" strokeWidth={1.8} />
           </span>
         </div>
       </div>

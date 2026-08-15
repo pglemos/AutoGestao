@@ -1,6 +1,6 @@
 import React, { useMemo, useState, type CSSProperties } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Star, UserPlus, X, Edit, Trash2, ChevronDown, ChevronUp, AlertCircle, HelpCircle, Users, CalendarClock } from 'lucide-react'
+import { Star, UserPlus, X, Pencil, Trash2, ChevronDown, ChevronUp, AlertCircle, HelpCircle, Users, CalendarClock } from 'lucide-react'
 import { toast } from '@/lib/toast'
 import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
@@ -642,7 +642,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 </div>
 <div className="flex shrink-0 items-center gap-1.5">
 <button type="button" onClick={() => handleEdit(row)} className="grid h-8 w-8 place-items-center rounded-lg bg-border text-mx-navy transition-colors hover:bg-surface-alt hover:text-status-success" aria-label={`Editar ${row.nomeCliente}`}>
-<Edit size={14} />
+<Pencil size={14} />
 </button>
 <button type="button" onClick={() => handleDelete(row)} className="grid h-8 w-8 place-items-center rounded-lg bg-border text-muted-foreground transition-colors hover:bg-status-error-surface hover:text-status-error" aria-label={`Excluir ${row.nomeCliente}`}>
 <Trash2 size={14} />
@@ -743,6 +743,14 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                     <React.Fragment key={row.id}>
                       <tr
                         onClick={() => toggleRowExpanded(row.id)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault()
+                            toggleRowExpanded(row.id)
+                          }
+                        }}
+                        tabIndex={0}
+                        aria-expanded={isExpanded}
                         className={`h-[52px] border-t border-border hover:bg-surface-alt transition-colors cursor-pointer ${
                           isExpanded ? 'bg-surface-alt/50' : 'bg-white'
                         }`}
@@ -775,7 +783,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                         <td className="px-4 py-3">
                           <VendaBadge value={row.vendaRealizada} />
                         </td>
-                        <td className="sticky right-0 z-[var(--mx-z-sticky)] bg-inherit px-4 py-3 shadow-mx-sticky-end" onClick={e => e.stopPropagation()}>
+                        <td role="presentation" className="sticky right-0 z-[var(--mx-z-sticky)] bg-inherit px-4 py-3 shadow-mx-sticky-end" onClick={e => e.stopPropagation()}>
                           <div className="flex items-center gap-2">
                             <button
                               type="button"
@@ -783,7 +791,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                               className="grid h-8 w-8 place-items-center rounded-lg bg-border text-mx-navy hover:bg-surface-alt hover:text-status-success transition-colors"
                               title="Editar cliente"
                             >
-                              <Edit size={14} />
+                              <Pencil size={14} />
                             </button>
                             <button
                               type="button"
@@ -797,7 +805,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                         </td>
                       </tr>
                       {isExpanded && !allowInlineQuickEdit && (
-                        <tr className="bg-surface-alt/40 border-t border-border" onClick={e => e.stopPropagation()}>
+                        <tr role="presentation" className="bg-surface-alt/40 border-t border-border" onClick={e => e.stopPropagation()}>
                           <td colSpan={10} className="px-6 py-4 text-xs leading-relaxed text-muted-foreground">
                             <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-white/65 p-4 shadow-sm">
                               <p className="max-w-[520px] font-semibold">
@@ -821,7 +829,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                       {isExpanded && allowInlineQuickEdit && (() => {
                         const draft = getInlineDraft(row)
                         return (
-                          <tr className="bg-surface-alt/40 border-t border-border" onClick={e => e.stopPropagation()}>
+                          <tr role="presentation" className="bg-surface-alt/40 border-t border-border" onClick={e => e.stopPropagation()}>
                             <td colSpan={10} className="px-6 py-4 text-xs leading-relaxed text-muted-foreground">
                               <div className="flex flex-wrap items-end gap-4 bg-white/65 p-4 rounded-xl border border-border shadow-sm">
                                 <div className="flex flex-col gap-1.5 min-w-[200px]">

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/atoms/Button';
 import { Typography } from '@/components/atoms/Typography';
-import { Calendar, RefreshCcw, ExternalLink, Clock, MapPin } from 'lucide-react';
+import { Calendar, RefreshCw, ExternalLink, Clock, MapPin } from 'lucide-react';
 import { useConsultingAgenda, type ConsultingAgendaEvent } from '@/hooks/useConsultingAgenda'
 
 interface GoogleCalendarViewProps {
@@ -68,7 +68,7 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
             onClick={refreshEvents}
             disabled={isRefreshing}
           >
-            <RefreshCcw size={16} className={isRefreshing ? 'animate-spin' : ''} />
+            <RefreshCw size={16} className={isRefreshing ? 'animate-spin' : ''} />
             Atualizar
           </Button>
         )}
@@ -112,7 +112,7 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
 
           {isRefreshing && events.length === 0 && (
             <div className="p-mx-lg text-center text-muted-foreground">
-              <RefreshCcw size={20} className="animate-spin mx-auto mb-mx-xs" />
+              <RefreshCw size={20} className="animate-spin mx-auto mb-mx-xs" />
               <Typography variant="caption">Buscando eventos...</Typography>
             </div>
           )}

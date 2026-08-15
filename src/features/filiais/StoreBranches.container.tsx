@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { Building2, Edit3, ExternalLink, Link2Off, Plus, Trash2 } from 'lucide-react'
+import { Building2, Pencil, ExternalLink, Link2Off, Plus, Trash2 } from 'lucide-react'
 import { useStoreBranches } from './useStoreBranches'
 import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
@@ -105,7 +105,7 @@ export function StoreBranches() {
                   onClick={() => page.setEditingStore(store)}
                   aria-label={`Editar cadastro de ${store.name}`}
                 >
-                  <Edit3 size={15} />
+                  <Pencil size={15} />
                   Editar
                 </Button>
                 <Button

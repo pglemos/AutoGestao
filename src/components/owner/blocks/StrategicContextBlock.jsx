@@ -2,7 +2,7 @@ import { useOwner } from "@/components/owner/OwnerContext";
 import { PHASE_LABELS } from "@/features/owner/lib/ownerStatus";
 import { greetingByHour, formatDate, formatDateTime } from "@/features/owner/lib/ownerFormatters";
 import { Badge } from "@/components/atoms/Badge";
-import { Sparkles, UserCircle, CalendarClock, RefreshCcw } from "lucide-react";
+import { Sparkles, UserCircle, CalendarClock, RefreshCw } from "lucide-react";
 
 export default function StrategicContextBlock({ cycle }) {
   const { user } = useOwner();
@@ -46,7 +46,7 @@ export default function StrategicContextBlock({ cycle }) {
             )}
             {cycle.last_review_at && (
               <span className="inline-flex items-center gap-1.5">
-                <RefreshCcw className="h-3.5 w-3.5" />
+                <RefreshCw className="h-3.5 w-3.5" />
                 Revisão: {formatDate(cycle.last_review_at)}
               </span>
             )}

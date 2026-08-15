@@ -91,7 +91,7 @@ export function ForcePasswordChange() {
               <header className="text-center space-y-mx-md">
                 <div className="relative inline-block">
                   <div className="w-mx-20 h-mx-20 rounded-2xl bg-brand-primary/10 border border-brand-primary/20 flex items-center justify-center text-status-success-text shadow-sm mx-auto relative z-[var(--mx-z-sticky)]">
-                    <ShieldCheck size={40} strokeWidth={1.5} />
+                    <ShieldCheck size={40} strokeWidth={1.8} />
                   </div>
                   <motion.div 
                     animate={{ rotate: 360 }}

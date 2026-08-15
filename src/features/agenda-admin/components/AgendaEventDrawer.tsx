@@ -3,7 +3,7 @@ import { format, parseISO } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import {
   Ban, Building2, CalendarDays, ChevronRight, ExternalLink,
-  MapPin, Play, CheckCircle2, XCircle, Trash2, Edit3, Plus, User, Video, X
+  MapPin, Play, CheckCircle2, XCircle, Trash2, Pencil, Plus, User, Video, X
 } from 'lucide-react'
 import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
@@ -64,7 +64,7 @@ export function AgendaEventDrawer({
         <button
           type="button"
           onClick={onClose}
-          className="flex h-8 w-8 items-center justify-center rounded-mx-full text-muted-foreground hover:bg-surface-alt hover:text-foreground transition-colors"
+          className="min-h-[var(--mx-touch-target-min)] min-w-[var(--mx-touch-target-min)] flex h-8 w-8 items-center justify-center rounded-mx-full text-muted-foreground hover:bg-surface-alt hover:text-foreground transition-colors"
           aria-label="Fechar painel"
         >
           <X size={18} />
@@ -132,7 +132,7 @@ export function AgendaEventDrawer({
                         className="p-1 rounded-xl text-muted-foreground hover:bg-surface-alt hover:text-status-success-text transition-colors"
                         title="Editar Visita"
                       >
-                        <Edit3 size={15} />
+                        <Pencil size={15} />
                       </button>
                       <button
                         type="button"
@@ -260,7 +260,7 @@ export function AgendaEventDrawer({
                         className="p-1 rounded-xl text-muted-foreground hover:bg-surface-alt hover:text-status-success-text transition-colors"
                         title="Editar Evento"
                       >
-                        <Edit3 size={15} />
+                        <Pencil size={15} />
                       </button>
                       <button
                         type="button"

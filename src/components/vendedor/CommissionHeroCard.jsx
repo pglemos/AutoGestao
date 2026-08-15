@@ -73,7 +73,7 @@ export default function CommissionHeroCard({ comissaoEstimada, qtdVendas, onVerC
               style={{ background: `radial-gradient(circle, ${chartTokens.success()}, transparent)`, filter: "blur(20px)" }} />
             <div className="relative w-28 h-28 rounded-full flex items-center justify-center"
               style={{ background: `linear-gradient(135deg, ${chartTokens.success()}, ${chartTokens.success()})`, boxShadow: "0 0 30px rgba(34,197,94,0.4)" }}>
-              <CircleDollarSign className="w-14 h-14 text-white" strokeWidth={1.5} />
+              <CircleDollarSign className="w-14 h-14 text-white" strokeWidth={1.8} />
             </div>
             {/* Coins decoration */}
             <div className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full flex items-center justify-center"
