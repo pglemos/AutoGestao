@@ -1,15 +1,17 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ArrowLeft, ArrowRight, Check, Plus, Trash2 } from 'lucide-react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
 import { useAuth } from '@/hooks/useAuth'
 import { DEFAULT_CONSULTING_MODULES } from '@/hooks/useConsultingModules'
+import { supabase } from '@/lib/supabase'
 import { toast } from '@/lib/toast'
 import {
   MxErrorState,
   MxField,
   MxInput,
+  MxLoadingState,
   MxModuleHeader,
   MxModulePage,
   MxSectionCard,
@@ -19,13 +21,15 @@ import {
   MxTextarea,
 } from '@/components/module/MxModuleVisualPrimitives'
 import { useAdminConsultingProducts, useAdminTeam, useStoresWithoutActiveClient } from './hooks/useAdminMxLists'
-import { createClientProgram } from './novo-cliente/createClientProgram'
+import { continueClientProgram, createClientProgram } from './novo-cliente/createClientProgram'
 import {
   NEW_CLIENT_STEPS,
   emptyNewClientDraft,
   pendingNewClientSteps,
   validateNewClientStep,
   type NewClientDraft,
+  type NewClientUnit,
+  type NewClientContact,
 } from './novo-cliente/newClientDraft'
 
 const MODALITIES = ['presencial', 'online', 'hibrido']
@@ -42,6 +46,7 @@ export function AdminNovoClientePage() {
   const { supabaseUser } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
+  const [searchParams] = useSearchParams()
   const { width, bottomClearance } = resolveRouteLayout(location.pathname)
   const products = useAdminConsultingProducts()
   const team = useAdminTeam()
@@ -49,6 +54,60 @@ export function AdminNovoClientePage() {
   const [draft, setDraft] = useState<NewClientDraft>(emptyNewClientDraft)
   const [step, setStep] = useState(1)
   const [submitting, setSubmitting] = useState(false)
+  const [loadingExisting, setLoadingExisting] = useState(false)
+  const continueId = searchParams.get('continue')
+  const isContinuation = Boolean(continueId)
+
+  useEffect(() => {
+    if (!continueId) return
+    let active = true
+    setLoadingExisting(true)
+    void (async () => {
+      const { data: client, error: clientError } = await supabase
+        .from('clientes_consultoria')
+        .select('*')
+        .eq('id', continueId)
+        .maybeSingle()
+      if (!active) return
+      if (clientError || !client) {
+        toast.error('Cliente não encontrado para continuar o onboarding.')
+        setLoadingExisting(false)
+        return
+      }
+      const [{ data: units }, { data: contacts }, { data: modules }, { data: assignments }] = await Promise.all([
+        supabase.from('unidades_cliente_consultoria').select('*').eq('client_id', client.id),
+        supabase.from('contatos_cliente_consultoria').select('*').eq('client_id', client.id),
+        supabase.from('modulos_cliente_consultoria').select('*').eq('client_id', client.id),
+        supabase.from('atribuicoes_consultoria').select('user_id').eq('client_id', client.id),
+      ])
+      if (!active) return
+      const loaded = emptyNewClientDraft()
+      loaded.name = client.name ?? ''
+      loaded.legal_name = client.legal_name ?? ''
+      loaded.cnpj = client.cnpj ?? ''
+      loaded.notes = client.notes ?? ''
+      loaded.structure_type = client.structure_type === 'REDE' ? 'REDE' : 'LOJA_UNICA'
+      loaded.primary_store_id = client.primary_store_id ?? ''
+      loaded.business_phase = client.business_phase ?? ''
+      loaded.product_name = client.product_name ?? ''
+      loaded.program_template_key = client.program_template_key ?? ''
+      loaded.modality = client.modality ?? ''
+      loaded.contract_start_date = client.contract_start_date ?? ''
+      loaded.contract_end_date = client.contract_end_date ?? ''
+      loaded.implementation_owner_id = client.implementation_owner_id ?? ''
+      loaded.units = (units ?? []).map((unit): NewClientUnit => ({ name: unit.name ?? '', city: unit.city ?? '', state: unit.state ?? '', is_primary: unit.is_primary ?? false }))
+      loaded.contacts = (contacts ?? []).map((contact): NewClientContact => ({ name: contact.name ?? '', role: contact.role ?? '', email: contact.email ?? '', phone: contact.phone ?? '', is_primary: contact.is_primary ?? false }))
+      loaded.enabled_modules = (modules ?? []).filter(item => item.enabled !== false).map(item => item.module_key)
+      loaded.consultant_ids = (assignments ?? []).map(item => item.user_id).filter(Boolean)
+      if (!loaded.units.length) loaded.units = [{ name: '', city: '', state: '', is_primary: true }]
+      if (!loaded.contacts.length) loaded.contacts = [{ name: '', role: '', email: '', phone: '', is_primary: true }]
+      setDraft(loaded)
+      const currentStep = client.onboarding_step ?? 1
+      setStep(Math.min(Math.max(currentStep, 1), 7))
+      setLoadingExisting(false)
+    })()
+    return () => { active = false }
+  }, [continueId])
 
   const errors = useMemo(() => validateNewClientStep(step, draft), [step, draft])
   const pending = useMemo(() => pendingNewClientSteps(draft), [draft])
@@ -74,6 +133,16 @@ export function AdminNovoClientePage() {
     }
     setSubmitting(true)
     try {
+      if (continueId) {
+        const result = await continueClientProgram(continueId, draft, step, supabaseUser.id)
+        if (result.error) {
+          toast.error(result.error)
+          return
+        }
+        toast.success('Onboarding atualizado. Continuidade preservada.')
+        navigate(`/consultoria/clientes/${draft.name.trim() ? (result.slug ?? '') : ''}` || '/clientes')
+        return
+      }
       const result = await createClientProgram(draft, supabaseUser.id)
       if (result.error || !result.clientId) {
         toast.error(result.error ?? 'Falha ao criar o cliente.')
@@ -91,10 +160,12 @@ export function AdminNovoClientePage() {
       <div className="w-full space-y-5">
         <MxModuleHeader
           eyebrow="Administração MX"
-          title="Novo cliente"
-          description="Cadastro completo: identificação, lojas, produto, jornada, módulos e pessoas."
+          title={isContinuation ? 'Continuar onboarding' : 'Novo cliente'}
+          description={isContinuation ? 'Retome o cadastro do cliente na etapa atual e salve o progresso.' : 'Cadastro completo: identificação, lojas, produto, jornada, módulos e pessoas.'}
           actions={<Button variant="outline" onClick={() => navigate('/clientes')}><ArrowLeft size={16} />Voltar</Button>}
         />
+
+        {loadingExisting ? <MxLoadingState label="Carregando cliente para continuar" /> : null}
 
         <MxSectionCard>
           <div className="flex flex-wrap gap-2 p-5">
@@ -290,7 +361,7 @@ export function AdminNovoClientePage() {
           <Button variant="outline" disabled={step === 1} onClick={() => setStep(current => Math.max(current - 1, 1))}><ArrowLeft size={16} />Anterior</Button>
           {step < 7
             ? <Button onClick={goNext}>Próximo<ArrowRight size={16} /></Button>
-            : <Button disabled={submitting || pending.length > 0} onClick={() => void submit()}><Check size={16} />{submitting ? 'Criando...' : 'Criar cliente'}</Button>}
+            : <Button disabled={submitting || pending.length > 0 || loadingExisting} onClick={() => void submit()}><Check size={16} />{submitting ? 'Salvando...' : isContinuation ? 'Salvar continuidade' : 'Criar cliente'}</Button>}
         </div>
       </div>
     </MxModulePage>

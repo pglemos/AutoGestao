@@ -1,5 +1,17 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { ArrowLeft, BriefcaseBusiness, CheckCircle2, RefreshCw } from 'lucide-react'
+import {
+  ArrowLeft,
+  BriefcaseBusiness,
+  Building2,
+  CheckCircle2,
+  Clock,
+  Crown,
+  Link2,
+  Pencil,
+  Plus,
+  RefreshCw,
+  UserPlus,
+} from 'lucide-react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
@@ -19,19 +31,38 @@ import {
   MxTableSurface,
 } from '@/components/module/MxModuleVisualPrimitives'
 import { useConsultingClientDetailBySlug } from '@/hooks/useConsultingClientBySlug'
+import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/lib/toast'
 import { ClientActivationModal } from './clientes/ClientActivationModal'
 import { buildClientReadiness, journeyProgress, readinessSummary } from './clientes/clientReadiness'
+import { ClientConfigTab } from './clientes/ClientConfigTab'
+import { DonoMasterCard } from './clientes/DonoMasterCard'
+import { EnrollmentLinkModal } from './clientes/EnrollmentLinkModal'
+import { PersonCreateModal } from './clientes/PersonCreateModal'
+import { ProgramCard } from './clientes/ProgramCard'
+import { StoreFormModal } from './clientes/StoreFormModal'
+import { StoreOperatingHoursEditor } from './clientes/StoreOperatingHoursEditor'
+import {
+  createClientPerson,
+  fetchClientPersons,
+  type PersonAccessRow,
+} from './clientes/personMutations'
+import { emptyPersonAccessDraft, resolveOwnerMaster, type PersonAccessDraft, type OwnerMasterResolution } from './clientes/personAccess'
+import { createEnrollmentLink, listEnrollmentLinks, type EnrollmentLinkRow } from './clientes/enrollmentMutations'
+import { buildProgramSummary } from './clientes/programSummary'
+import { emptyStoreDraft, type StoreDraft } from './clientes/storeForm'
+import { fetchUnitOperatingHours, saveClientStore, type UnitRow } from './clientes/storeMutations'
 
-type ClientTab = 'visao' | 'lojas' | 'pessoas' | 'jornada' | 'modulos'
+type ClientTab = 'visao' | 'lojas' | 'pessoas' | 'jornada' | 'modulos' | 'configuracoes'
 
 const TABS = [
   { key: 'visao' as const, label: 'Visão geral' },
-  { key: 'lojas' as const, label: 'Lojas e unidades' },
-  { key: 'pessoas' as const, label: 'Pessoas e consultores' },
-  { key: 'jornada' as const, label: 'Jornada' },
+  { key: 'lojas' as const, label: 'Empresa e lojas' },
+  { key: 'pessoas' as const, label: 'Pessoas e acessos' },
+  { key: 'jornada' as const, label: 'Programa e jornada' },
   { key: 'modulos' as const, label: 'Módulos' },
+  { key: 'configuracoes' as const, label: 'Configurações' },
 ]
 
 function formatDate(value: string | null | undefined) {
@@ -45,10 +76,26 @@ export function AdminClienteDetalhePage() {
   const location = useLocation()
   const { width, bottomClearance } = resolveRouteLayout(location.pathname)
   const { client, loading, error, refetch } = useConsultingClientDetailBySlug(clientSlug)
+  const { supabaseUser } = useAuth()
   const [tab, setTab] = useState<ClientTab>('visao')
   const [storeTaken, setStoreTaken] = useState(false)
   const [activationOpen, setActivationOpen] = useState(false)
   const [activating, setActivating] = useState(false)
+
+  // Lojas: CRUD + horários
+  const [units, setUnits] = useState<UnitRow[]>([])
+  const [storeModal, setStoreModal] = useState<{ open: boolean; initial: StoreDraft | null }>({ open: false, initial: null })
+  const [hoursUnitId, setHoursUnitId] = useState<string | null>(null)
+  const [savingStore, setSavingStore] = useState(false)
+
+  // Pessoas e acessos
+  const [persons, setPersons] = useState<PersonAccessRow[]>([])
+  const [personModal, setPersonModal] = useState(false)
+  const [personPrefill, setPersonPrefill] = useState<Partial<PersonAccessDraft> | null>(null)
+  const [savingPerson, setSavingPerson] = useState(false)
+  const [linkModal, setLinkModal] = useState(false)
+  const [links, setLinks] = useState<EnrollmentLinkRow[]>([])
+  const [savingLink, setSavingLink] = useState(false)
 
   const checkStore = useCallback(async () => {
     if (!client?.primary_store_id || !client.id) {
@@ -64,6 +111,45 @@ export function AdminClienteDetalhePage() {
   }, [client?.primary_store_id, client?.id])
 
   useEffect(() => { void checkStore() }, [checkStore])
+
+  const loadUnits = useCallback(async () => {
+    if (!client?.id) return
+    const { data, error: unitsError } = await supabase
+      .from('unidades_cliente_consultoria')
+      .select('*')
+      .eq('client_id', client.id)
+      .order('is_primary', { ascending: false })
+      .order('name', { ascending: true })
+    if (unitsError) {
+      toast.error(unitsError.message)
+      return
+    }
+    setUnits((data ?? []) as UnitRow[])
+  }, [client?.id])
+
+  const loadPersons = useCallback(async () => {
+    if (!client?.id) return
+    const { rows, error: personsError } = await fetchClientPersons(client.id)
+    if (personsError) {
+      toast.error(personsError)
+      return
+    }
+    setPersons(rows)
+  }, [client?.id])
+
+  const loadLinks = useCallback(async () => {
+    if (!client?.id) return
+    const { rows, error: linksError } = await listEnrollmentLinks(client.id)
+    if (linksError) {
+      toast.error(linksError)
+      return
+    }
+    setLinks(rows)
+  }, [client?.id])
+
+  useEffect(() => { void loadUnits() }, [loadUnits])
+  useEffect(() => { void loadPersons() }, [loadPersons])
+  useEffect(() => { void loadLinks() }, [loadLinks])
 
   const checks = useMemo(() => {
     if (!client) return []
@@ -88,6 +174,27 @@ export function AdminClienteDetalhePage() {
   const visits = client?.visits ?? []
   const totalVisits = visits.length || 0
   const progress = useMemo(() => journeyProgress(visits, totalVisits), [visits, totalVisits])
+  const programSummary = useMemo(() => buildProgramSummary({
+    product_name: client?.product_name ?? null,
+    program_template_key: (client as { program_template_key?: string | null })?.program_template_key ?? null,
+    modality: client?.modality ?? null,
+    contract_start_date: (client as { contract_start_date?: string | null })?.contract_start_date ?? null,
+    contract_end_date: (client as { contract_end_date?: string | null })?.contract_end_date ?? null,
+    visits: visits.map(visit => ({
+      visit_number: visit.visit_number,
+      status: visit.status,
+      is_onboarding: visit.visit_number <= 1,
+      consultant_name: visit.consultant?.name ?? null,
+    })),
+  }), [client, visits])
+
+  const ownerMasterResolution = useMemo<OwnerMasterResolution>(() => {
+    if (!persons.length) return { status: 'NOT_CONFIGURED', count: 0 }
+    return resolveOwnerMaster(persons)
+  }, [persons])
+
+  const onboardingStep = (client as { onboarding_step?: number | null })?.onboarding_step ?? 1
+  const onboardingCompleted = (client as { onboarding_completed?: boolean | null })?.onboarding_completed ?? false
 
   const activate = async () => {
     if (!client || activating) return
@@ -109,6 +216,58 @@ export function AdminClienteDetalhePage() {
     }
   }
 
+  const submitStore = async (draft: StoreDraft, hours: Parameters<typeof saveClientStore>[2]) => {
+    if (!client?.id || !supabaseUser) return
+    setSavingStore(true)
+    try {
+      const { error: saveError } = await saveClientStore(client.id, draft, hours, supabaseUser.id)
+      if (saveError) {
+        toast.error(saveError)
+        return
+      }
+      toast.success(draft.id ? 'Loja atualizada.' : 'Loja criada com horário padrão MX.')
+      setStoreModal({ open: false, initial: null })
+      await loadUnits()
+      await refetch()
+    } finally {
+      setSavingStore(false)
+    }
+  }
+
+  const submitPerson = async (draft: PersonAccessDraft) => {
+    if (!client?.id || !supabaseUser) return
+    setSavingPerson(true)
+    try {
+      const { error: personError } = await createClientPerson(client.id, draft, supabaseUser.id)
+      if (personError) {
+        toast.error(personError)
+        return
+      }
+      toast.success('Usuário cadastrado.')
+      setPersonModal(false)
+      setPersonPrefill(null)
+      await loadPersons()
+    } finally {
+      setSavingPerson(false)
+    }
+  }
+
+  const submitLink = async (draft: Parameters<typeof createEnrollmentLink>[3]) => {
+    if (!client?.id || !client.slug || !supabaseUser) return null
+    setSavingLink(true)
+    try {
+      const result = await createEnrollmentLink(client.id, client.slug, window.location.origin, draft, supabaseUser.id)
+      if (result.error) {
+        toast.error(result.error)
+        return null
+      }
+      await loadLinks()
+      return result.url
+    } finally {
+      setSavingLink(false)
+    }
+  }
+
   return (
     <MxModulePage id="admin-mx-cliente-detalhe" width={width} bottomClearance={bottomClearance}>
       <div className="w-full space-y-5">
@@ -120,6 +279,9 @@ export function AdminClienteDetalhePage() {
             <>
               <Button asChild variant="outline"><Link to="/clientes"><ArrowLeft size={16} />Clientes</Link></Button>
               <Button variant="outline" onClick={() => void refetch()}><RefreshCw size={16} />Atualizar</Button>
+              {client && !onboardingCompleted ? (
+                <Button asChild variant="outline"><Link to={`/clientes/novo?continue=${client.id}`}><ArrowLeft size={16} />Continuar onboarding</Link></Button>
+              ) : null}
               {client && client.status !== 'ativo'
                 ? <Button onClick={() => setActivationOpen(true)}><CheckCircle2 size={16} />Validar e ativar</Button>
                 : null}
@@ -133,8 +295,8 @@ export function AdminClienteDetalhePage() {
           <>
             <MxMetricGrid>
               <MxMetricCard title="Status" value={client.status ?? 'indefinido'} detail={summary.canActivate ? 'Pronto para ativar' : `${summary.blockers.length} impeditivo(s)`} icon={BriefcaseBusiness} tone={client.status === 'ativo' ? 'success' : 'warning'} />
-              <MxMetricCard title="Lojas" value={client.units?.length ?? 0} detail="Unidades cadastradas" icon={BriefcaseBusiness} tone="info" />
-              <MxMetricCard title="Consultores" value={(client.assignments ?? []).filter(item => item.active !== false).length} detail="Carteira ativa" icon={BriefcaseBusiness} tone="violet" />
+              <MxMetricCard title="Lojas" value={units.length ?? 0} detail="Unidades cadastradas" icon={Building2} tone="info" />
+              <MxMetricCard title="Pessoas" value={persons.length ?? 0} detail="Acessos cadastrados" icon={UserPlus} tone="violet" />
               <MxMetricCard title="Prontidão" value={`${summary.completed}/${summary.total}`} detail="Itens do checklist concluídos" icon={BriefcaseBusiness} />
             </MxMetricGrid>
 
@@ -153,6 +315,7 @@ export function AdminClienteDetalhePage() {
                     ['Fase empresarial', (client as { business_phase?: string | null }).business_phase || '—'],
                     ['Início do contrato', formatDate((client as { contract_start_date?: string | null }).contract_start_date)],
                     ['Fim do contrato', formatDate((client as { contract_end_date?: string | null }).contract_end_date)],
+                    ['Onboarding', onboardingCompleted ? 'Concluído' : `Etapa ${onboardingStep}/7`],
                     ['Etapa atual da jornada', String(client.current_visit_step ?? 0)],
                   ].map(([label, value]) => (
                     <div key={label} className="rounded-lg border border-border p-3">
@@ -180,24 +343,45 @@ export function AdminClienteDetalhePage() {
 
             {tab === 'lojas' ? (
               <MxSectionCard>
-                <MxSectionHeader title="Lojas e unidades" description={`${client.units?.length ?? 0} unidade(s) cadastrada(s).`} />
-                <div className="p-5">
-                  {client.units?.length ? (
-                    <MxTableSurface>
-                      <Table className="min-w-[560px]">
-                        <TableHeader><TableRow><TableHead>Unidade</TableHead><TableHead>Cidade</TableHead><TableHead>UF</TableHead><TableHead>Principal</TableHead></TableRow></TableHeader>
-                        <TableBody>
-                          {client.units.map(unit => (
-                            <TableRow key={unit.id}>
-                              <TableCell className="font-semibold text-foreground">{unit.name}</TableCell>
-                              <TableCell>{unit.city || '—'}</TableCell>
-                              <TableCell>{unit.state || '—'}</TableCell>
-                              <TableCell>{unit.is_primary ? 'Sim' : '—'}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </MxTableSurface>
+                <MxSectionHeader
+                  title="Empresa e lojas"
+                  description={`${units.length} unidade(s) cadastrada(s).`}
+                  actions={<Button size="sm" onClick={() => setStoreModal({ open: true, initial: null })}><Plus size={16} />Adicionar loja</Button>}
+                />
+                <div className="space-y-3 p-5">
+                  {units.length ? (
+                    units.map(unit => (
+                      <div key={unit.id} className="rounded-lg border border-border p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Building2 size={16} className="text-primary" />
+                            <span className="text-sm font-semibold text-foreground">{unit.name}</span>
+                            {unit.store_type === 'matriz' ? <span className="rounded-full bg-primary/10 px-2 py-0.5 text-caption font-medium text-primary">Matriz</span> : null}
+                            {unit.store_type === 'filial' ? <span className="rounded-full bg-status-info-bg px-2 py-0.5 text-caption font-medium text-status-info-text">Filial</span> : null}
+                            {unit.is_primary ? <span className="rounded-full bg-surface-alt px-2 py-0.5 text-caption font-medium text-muted-foreground">Principal</span> : null}
+                            {unit.status === 'inativa' ? <span className="rounded-full bg-status-warning-bg px-2 py-0.5 text-caption font-medium text-status-warning-text">Inativa</span> : null}
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Button variant="outline" size="sm" onClick={() => setStoreModal({ open: true, initial: { ...emptyStoreDraft(unit.store_type === 'matriz' ? 'matriz' : 'filial'), id: unit.id, name: unit.name, cnpj: unit.cnpj ?? '', internal_code: unit.internal_code ?? '', address_street: unit.address_street ?? '', address_city: unit.city ?? '', address_state: unit.state ?? '', address_zip: unit.address_zip ?? '', timezone: unit.timezone ?? 'America/Sao_Paulo', status: unit.status === 'inativa' ? 'inativa' : 'ativa', opening_date: unit.opening_date ?? '', notes: unit.notes ?? '', is_primary: unit.is_primary } })}>
+                              <Pencil size={14} />Editar
+                            </Button>
+                            <Button variant="outline" size="sm" onClick={() => setHoursUnitId(hoursUnitId === unit.id ? null : unit.id)}>
+                              <Clock size={14} />Horário
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="mt-2 grid gap-2 text-xs text-muted-foreground sm:grid-cols-3">
+                          {unit.city ? <div><span className="font-medium">Cidade:</span> {unit.city}{unit.state ? `, ${unit.state}` : ''}</div> : null}
+                          {unit.cnpj ? <div><span className="font-medium">CNPJ:</span> {unit.cnpj}</div> : null}
+                          {unit.working_days ? <div><span className="font-medium">Dias:</span> {unit.working_days}</div> : null}
+                        </div>
+                        {hoursUnitId === unit.id ? (
+                          <div className="mt-3 border-t border-border pt-3">
+                            <StoreOperatingHoursEditor unitId={unit.id} unitName={unit.name} origin="Visão 360 — Empresa e Lojas" />
+                          </div>
+                        ) : null}
+                      </div>
+                    ))
                   ) : <MxEmptyState title="Nenhuma unidade cadastrada" description="Cadastre as lojas do cliente para orientar a jornada." />}
                 </div>
               </MxSectionCard>
@@ -205,71 +389,105 @@ export function AdminClienteDetalhePage() {
 
             {tab === 'pessoas' ? (
               <div className="space-y-5">
+                <DonoMasterCard
+                  loading={false}
+                  resolution={ownerMasterResolution}
+                  onDefine={() => {
+                    setPersonPrefill({ papeis: ['DONO'], is_dono_master: true, visao_padrao: 'DONO', lojas_autorizadas: units.map(unit => unit.id) })
+                    setPersonModal(true)
+                  }}
+                  onEdit={() => { /* edição abre o modal de pessoa quando implementado */ }}
+                />
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-xl border border-border p-4">
+                    <div className="mb-2 flex items-center gap-2"><UserPlus size={16} className="text-primary" /><h4 className="text-sm font-medium text-foreground">Cadastro Direto</h4></div>
+                    <p className="mb-3 text-xs text-muted-foreground">Cadastre usuários manualmente com papel, loja e visão padrão.</p>
+                    <Button size="sm" onClick={() => { setPersonPrefill(null); setPersonModal(true) }}><UserPlus size={14} />Cadastrar usuário</Button>
+                  </div>
+                  <div className="rounded-xl border border-border p-4">
+                    <div className="mb-2 flex items-center gap-2"><Link2 size={16} className="text-status-info-text" /><h4 className="text-sm font-medium text-foreground">Autocadastro por Link</h4></div>
+                    <p className="mb-3 text-xs text-muted-foreground">Gere um link para que a equipe do cliente se cadastre.</p>
+                    <Button size="sm" variant="outline" onClick={() => setLinkModal(true)}><Link2 size={14} />Gerar link</Button>
+                  </div>
+                </div>
                 <MxSectionCard>
-                  <MxSectionHeader title="Contatos do cliente" description={`${client.contacts?.length ?? 0} contato(s).`} />
+                  <MxSectionHeader title={`Usuários (${persons.length})`} description="Acessos e papéis da equipe do cliente." />
                   <div className="p-5">
-                    {client.contacts?.length ? (
+                    {persons.length ? (
+                      <div className="space-y-2">
+                        {persons.map(person => (
+                          <div key={person.id} className="flex items-center justify-between rounded-lg border border-border p-3">
+                            <div className="flex items-center gap-3">
+                              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-surface-alt text-xs font-bold text-foreground">{person.nome.charAt(0) || '?'}</div>
+                              <div>
+                                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                                  {person.nome}
+                                  {person.is_dono_master ? <Crown size={12} className="text-amber-600" /> : null}
+                                </div>
+                                <div className="text-xs text-muted-foreground">{person.funcao_declarada || '—'} · {person.email}</div>
+                              </div>
+                            </div>
+                            <span className="rounded-full bg-surface-alt px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                              {person.is_dono_master ? 'Dono Master' : person.papeis.join(', ') || '—'} · {person.status === 'em_preparacao' ? 'Em preparação' : person.status === 'ativo' ? 'Ativo' : 'Inativo'}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : <MxEmptyState title="Nenhum usuário cadastrado" description="Adicione usuários diretamente ou gere um link de autocadastro." />}
+                  </div>
+                </MxSectionCard>
+                {links.length ? (
+                  <MxSectionCard>
+                    <MxSectionHeader title={`Links de autocadastro (${links.length})`} description="Validade e usos de cada link gerado." />
+                    <div className="p-5">
                       <MxTableSurface>
-                        <Table className="min-w-[640px]">
-                          <TableHeader><TableRow><TableHead>Nome</TableHead><TableHead>Cargo</TableHead><TableHead>E-mail</TableHead><TableHead>Telefone</TableHead><TableHead>Principal</TableHead></TableRow></TableHeader>
+                        <Table className="min-w-[560px]">
+                          <TableHeader><TableRow><TableHead>Perfil</TableHead><TableHead>Validade</TableHead><TableHead>Usos</TableHead><TableHead>Status</TableHead></TableRow></TableHeader>
                           <TableBody>
-                            {client.contacts.map(contact => (
-                              <TableRow key={contact.id}>
-                                <TableCell className="font-semibold text-foreground">{contact.name}</TableCell>
-                                <TableCell>{contact.role || '—'}</TableCell>
-                                <TableCell>{contact.email || '—'}</TableCell>
-                                <TableCell>{contact.phone || '—'}</TableCell>
-                                <TableCell>{contact.is_primary ? 'Sim' : '—'}</TableCell>
+                            {links.map(link => (
+                              <TableRow key={link.id}>
+                                <TableCell className="font-semibold text-foreground">{link.nome_interno || link.perfil_acesso}</TableCell>
+                                <TableCell>{link.validade_dias} dias</TableCell>
+                                <TableCell>{link.usos_consumidos}/{link.limite_usos}</TableCell>
+                                <TableCell>{link.status}</TableCell>
                               </TableRow>
                             ))}
                           </TableBody>
                         </Table>
                       </MxTableSurface>
-                    ) : <MxEmptyState title="Nenhum contato cadastrado" description="Registre ao menos o contato principal do cliente." />}
-                  </div>
-                </MxSectionCard>
-                <MxSectionCard>
-                  <MxSectionHeader title="Consultores atribuídos" description={`${(client.assignments ?? []).filter(item => item.active !== false).length} na carteira ativa.`} />
-                  <div className="p-5">
-                    {client.assignments?.length ? (
-                      <ul className="space-y-2">
-                        {client.assignments.map(assignment => (
-                          <li key={assignment.id} className="flex items-center justify-between rounded-lg border border-border p-3 text-sm">
-                            <span className="font-semibold text-foreground">{assignment.user?.name || assignment.user?.email || 'Consultor'}</span>
-                            <span className="text-xs text-muted-foreground">{assignment.assignment_role || 'responsável'} · {assignment.active === false ? 'inativo' : 'ativo'}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : <MxEmptyState title="Nenhum consultor atribuído" description="Atribua um consultor pela tela de Equipe MX." />}
-                  </div>
-                </MxSectionCard>
+                    </div>
+                  </MxSectionCard>
+                ) : null}
               </div>
             ) : null}
 
             {tab === 'jornada' ? (
-              <MxSectionCard>
-                <MxSectionHeader title="Jornada de encontros" description={`${visits.length} encontro(s) registrados.`} />
-                <div className="space-y-4 p-5">
-                  <div className="max-w-md"><MxProgress value={progress} label={`${progress}% concluído`} /></div>
-                  {visits.length ? (
-                    <MxTableSurface>
-                      <Table className="min-w-[640px]">
-                        <TableHeader><TableRow><TableHead>Encontro</TableHead><TableHead>Data</TableHead><TableHead>Modalidade</TableHead><TableHead>Status</TableHead></TableRow></TableHeader>
-                        <TableBody>
-                          {visits.map(visit => (
-                            <TableRow key={visit.id}>
-                              <TableCell className="font-semibold text-foreground">Visita {visit.visit_number}</TableCell>
-                              <TableCell>{formatDate(visit.scheduled_at)}</TableCell>
-                              <TableCell>{visit.modality || '—'}</TableCell>
-                              <TableCell>{visit.status || '—'}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </MxTableSurface>
-                  ) : <MxEmptyState title="Jornada não iniciada" description="Nenhum encontro registrado para este cliente." />}
-                </div>
-              </MxSectionCard>
+              <div className="space-y-5">
+                <ProgramCard summary={programSummary} onEditProgram={() => { setTab('visao'); void refetch() }} />
+                <MxSectionCard>
+                  <MxSectionHeader title="Jornada de encontros" description={`${visits.length} encontro(s) registrados.`} />
+                  <div className="space-y-4 p-5">
+                    <div className="max-w-md"><MxProgress value={progress} label={`${progress}% concluído`} /></div>
+                    {visits.length ? (
+                      <MxTableSurface>
+                        <Table className="min-w-[640px]">
+                          <TableHeader><TableRow><TableHead>Encontro</TableHead><TableHead>Data</TableHead><TableHead>Modalidade</TableHead><TableHead>Status</TableHead></TableRow></TableHeader>
+                          <TableBody>
+                            {visits.map(visit => (
+                              <TableRow key={visit.id}>
+                                <TableCell className="font-semibold text-foreground">{visit.visit_number === 1 ? 'Onboarding' : `Visita ${visit.visit_number}`}</TableCell>
+                                <TableCell>{formatDate(visit.scheduled_at)}</TableCell>
+                                <TableCell>{visit.modality || '—'}</TableCell>
+                                <TableCell>{visit.status || '—'}</TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </MxTableSurface>
+                    ) : <MxEmptyState title="Jornada não iniciada" description="Nenhum encontro registrado para este cliente." />}
+                  </div>
+                </MxSectionCard>
+              </div>
             ) : null}
 
             {tab === 'modulos' ? (
@@ -297,6 +515,10 @@ export function AdminClienteDetalhePage() {
               </MxSectionCard>
             ) : null}
 
+            {tab === 'configuracoes' ? (
+              <ClientConfigTab clientId={client.id} units={units.map(unit => ({ id: unit.id, name: unit.name, store_type: unit.store_type }))} updatedBy={supabaseUser?.id ?? ''} />
+            ) : null}
+
             <ClientActivationModal
               open={activationOpen}
               clientName={client.name}
@@ -304,6 +526,33 @@ export function AdminClienteDetalhePage() {
               submitting={activating}
               onSubmit={() => void activate()}
               onClose={() => setActivationOpen(false)}
+            />
+
+            <StoreFormModal
+              open={storeModal.open}
+              clientId={client.id}
+              defaultType={storeModal.initial?.store_type === 'matriz' ? 'matriz' : 'filial'}
+              initial={storeModal.initial}
+              createdBy={supabaseUser?.id ?? ''}
+              submitting={savingStore}
+              onSubmit={(draft, hours) => void submitStore(draft, hours)}
+              onClose={() => setStoreModal({ open: false, initial: null })}
+            />
+
+            <PersonCreateModal
+              open={personModal}
+              submitting={savingPerson}
+              stores={units.map(unit => ({ id: unit.id, name: unit.name }))}
+              initial={personPrefill ?? undefined}
+              onSubmit={draft => void submitPerson(draft)}
+              onClose={() => { setPersonModal(false); setPersonPrefill(null) }}
+            />
+
+            <EnrollmentLinkModal
+              open={linkModal}
+              submitting={savingLink}
+              onSubmit={draft => submitLink(draft)}
+              onClose={() => setLinkModal(false)}
             />
           </>
         )}
