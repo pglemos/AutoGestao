@@ -39,7 +39,7 @@ export function ConfirmationDialog({
           <AlertDialogDescription>{pendingConfirmation.description}</AlertDialogDescription>
           <AlertDialogFooter>
             <AlertDialogCancel
-              className="h-mx-12 rounded-2xl font-bold uppercase tracking-widest text-mx-nano"
+              className="font-semibold"
               onClick={() => onDismiss(pendingConfirmation.key)}
             >
               Cancelar
@@ -47,7 +47,6 @@ export function ConfirmationDialog({
             <Button
               type="button"
               variant="danger"
-              className="h-mx-12 rounded-2xl font-bold uppercase tracking-widest text-mx-nano"
               onClick={() => {
                 const action = pendingConfirmation.onConfirm
                 onDismiss(pendingConfirmation.key)

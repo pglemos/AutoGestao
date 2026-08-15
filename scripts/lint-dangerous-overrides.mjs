@@ -49,28 +49,18 @@ const IMPORTANT_RE = /!\s*(?:h-|w-|rounded|bg-|p-|m-|text-|border-)/
 
 /** Arquivos allowlisted (dívida real documentada). */
 export const DANGEROUS_OVERRIDE_ALLOWLIST = {
-  'src/components/owner/actionplan/board/ValidateModal.jsx':
-    'Button com bg-brand-primary inline (variante primária legada) — migrar para variant="primary".',
   'src/features/checkin/sections/CheckinCrmSection.tsx':
     'Card com shadow-mx-lg inline (dívida FASE M) — migrar para elevation token.',
   'src/features/checkin/sections/CheckinForm.tsx':
     'Card com rounded-mx-2xl inline (dívida FASE M) — migrar para radius token.',
   'src/features/consultoria-visita/LegacyConsultoriaVisitaExecucaoPage.tsx':
     'Button com bg-brand-primary inline (variante primária legada) — migrar para variant="primary".',
-  'src/features/digital-products/components/DigitalProductCard.tsx':
-    'Card com border-border-subtle inline — migrar para border token.',
-  'src/features/lojas/components/team-panel/ConfirmationDialog.tsx':
-    'Button com uppercase/tracking-widest legados — migrar para variante canônica.',
   'src/features/lojas/components/team-panel/EditMemberModal.tsx':
     'Button com uppercase legado — migrar para variante canônica.',
-  'src/features/lojas/components/team-panel/TransferConfirmationDialog.tsx':
-    'Button com uppercase/tracking-widest legados — migrar para variante canônica.',
   'src/features/mentor-comercial/ui/ExecuteNextStepPanel.tsx':
     'Borda border-border-strong inline — migrar para token.',
   'src/features/mentor-comercial/ui/GuidedStatusUpdate.tsx':
     'Borda border-border-strong inline — migrar para token.',
-  'src/features/universidade/components/ContentSuggestionDialog.tsx':
-    'Button com bg-brand-primary inline — migrar para variant="primary".',
   'src/features/configuracoes/components/tabs/PerfilTab.tsx':
     'Button com !h-mx-14 (altura forçada) + bg-surface-alt — migrar para size canônico (11.012).',
   'src/pages/LiberacaoFechamento.tsx':

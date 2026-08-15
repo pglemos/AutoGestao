@@ -18,7 +18,7 @@ import {
   MxSectionHeader,
   MxTableSurface,
 } from '@/components/module/MxModuleVisualPrimitives'
-import { useConsultingClientBySlug } from '@/hooks/useConsultingClientBySlug'
+import { useConsultingClientDetailBySlug } from '@/hooks/useConsultingClientBySlug'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/lib/toast'
 import { ClientActivationModal } from './clientes/ClientActivationModal'
@@ -44,7 +44,7 @@ export function AdminClienteDetalhePage() {
   const { clientSlug } = useParams<{ clientSlug: string }>()
   const location = useLocation()
   const { width, bottomClearance } = resolveRouteLayout(location.pathname)
-  const { client, loading, error, refetch } = useConsultingClientBySlug(clientSlug)
+  const { client, loading, error, refetch } = useConsultingClientDetailBySlug(clientSlug)
   const [tab, setTab] = useState<ClientTab>('visao')
   const [storeTaken, setStoreTaken] = useState(false)
   const [activationOpen, setActivationOpen] = useState(false)

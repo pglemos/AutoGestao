@@ -81,7 +81,7 @@ export default function ValidateModal({ action, open, onOpenChange, onConfirm })
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancelar</Button>
-          <Button onClick={handleConfirm} className="bg-brand-primary hover:bg-brand-primary-hover text-white">Aprovar conclusão</Button>
+          <Button variant="primary" onClick={handleConfirm}>Aprovar conclusão</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -5,6 +5,7 @@ import { AuthProvider, isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { Toaster } from 'sonner'
 import { MotionConfig } from 'motion/react'
 import { ErrorState } from '@/components/molecules/ErrorState'
+import { Button } from '@/components/atoms/Button'
 import { slugify } from '@/lib/utils'
 import { canAccessPath } from '@/lib/auth/routeAccess'
 
@@ -148,12 +149,12 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boole
         {import.meta.env.DEV && this.state.error && (
           <pre className="text-status-error-text text-xs bg-white/5 p-mx-md rounded-xl max-w-lg overflow-auto text-left">{this.state.error.message}</pre>
         )}
-        <button
+        <Button
           onClick={() => { this.setState({ hasError: false, error: null }); window.location.reload() }}
-          className="mt-mx-md px-8 py-3 bg-brand-primary text-white rounded-mx-full font-bold uppercase tracking-widest hover:bg-brand-primary-hover transition-colors"
+          className="mt-mx-md px-8 py-3 uppercase tracking-widest"
         >
           Recarregar
-        </button>
+        </Button>
       </div>
     )
   }
@@ -194,13 +195,11 @@ function ForbiddenRoute() {
             kind="permission"
             description={`O perfil ${role || 'indefinido'} não tem permissão para acessar ${location.pathname}. Se esse acesso faz parte da sua rotina, solicite liberação ao Admin MX ou ao gestor responsável pela unidade.`}
             action={(
-              <button
-                type="button"
+              <Button
                 onClick={() => navigate('/', { replace: true })}
-                className="inline-flex h-[var(--mx-button-height-md)] items-center rounded-[var(--mx-button-radius)] bg-primary px-[var(--mx-button-padding-inline-md)] text-[length:var(--mx-font-size-base)] font-semibold text-primary-foreground transition-colors hover:bg-brand-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2"
               >
                 Voltar para minha área
-              </button>
+              </Button>
             )}
           />
         </section>

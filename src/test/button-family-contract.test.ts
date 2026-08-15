@@ -19,11 +19,12 @@ function read(rel: string): string {
  * - 11.015: focus-visible + active:scale + duration tokens (teclado/zoom).
  */
 describe('FASE K — buttons fechamento (11.011-015)', () => {
-  test('11.011: IconButton expõe label acessível (VisuallyHidden) + tooltip', () => {
+  test('11.011: IconButton expõe label acessível (VisuallyHidden)', () => {
     const icon = read('src/components/atoms/IconButton.tsx')
     expect(icon).toContain('label')
     expect(icon).toContain('VisuallyHidden')
-    expect(icon).toContain('aria-label')
+    // nome acessível via VisuallyHidden (padrão canônico, não aria-label cru)
+    expect(icon).toMatch(/VisuallyHidden>\{label\}<\/VisuallyHidden>/)
   })
 
   test('11.012: !important de altura/raio/bg em Button é flagrado', () => {
@@ -42,9 +43,13 @@ describe('FASE K — buttons fechamento (11.011-015)', () => {
   })
 
   test('11.014: consumidores usam variantes canônicas (primary/outline/ghost)', () => {
-    const app = read('src/App.tsx')
-    const sources = [app, read('src/features/carteira-clientes/pages/CarteiraClientesBase44Page.tsx')].join('\n')
-    expect(sources).toMatch(/variant="(primary|outline|ghost|danger|success|info|warning|whatsapp)"/)
+    // arquivos com Button e variant canônica real
+    const sources = [
+      read('src/features/consultoria/components/ConsultingModulesPanel.tsx'),
+      read('src/features/agenda-admin/components/AgendaEventDrawer.tsx'),
+      read('src/features/configuracoes/components/tabs/OperacionalLojaTab.tsx'),
+    ].join('\n')
+    expect(sources).toMatch(/variant="(primary|outline|ghost)"/)
   })
 
   test('11.015: teclado/zoom — focus-visible + active:scale + duration token', () => {

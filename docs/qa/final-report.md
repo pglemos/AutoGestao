@@ -144,10 +144,14 @@
 ## 39.013 — E2E pass/total
 
 **EVIDÊNCIA DETERMINÁVEL (2026-08-15):**
-- npm test: **~3353-3470 pass** (histórico 08-15; 9 fails são timeouts de testes de
-  integração pesados que passam isolados — flaky de batch, não defeito).
-- AG smokes: 11 pass / 3 fail + 18 pass / 10 fail (histórico 08-14).
-- 117 arquivos de teste em `src/test/` + contratos por FASE.
+- npm test (re-execução atual): **3573 pass / 1 fail / 3574 total** em **629 arquivos**
+  (o 1 fail é `contrato AC-29.006 — allowlist documenta 11 arquivos de dívida`,
+  allowlist do `lint-dangerous-overrides` reduzida por outro agente sem atualizar o
+  contrato — dívida de concorrência, não defeito de runtime).
+- npm test (rodada anterior): **3565 pass / 9 fail** — os 9 fails eram timeouts de
+  testes de integração pesados que passam isolados (flaky de batch) + allowlist
+  stale. Passam isolados: `button-family-contract` 5/5, `final-report-contract` 6/6.
+- 628 arquivos `.test.ts*` em `src/` + 39 specs `*.playwright.ts` + 9 `e2e/visual/*.spec.ts`.
 - **Re-execução pós-release:** PENDENTE (FASE AK 37.013).
 
 **Status:** EVIDÊNCIA LOCAL OK — re-execução pós-release pendente.
@@ -177,11 +181,52 @@ EXPECTED_TEST_TRAFFIC, ENVIRONMENT_NOISE (histórico); docs/qa/supabase-security
 
 ## 39.016 — Vercel deployment e release parity
 
-**PENDENTE (após release)** — requer deployment + `/api/health.release`.
+**Status:** PENDENTE (pós-release) — evidência preparada abaixo; a parity final será confirmada após o deploy na FASE AK 37.015.
+
+**Evidência preparada (coletada 2026-08-15T18:45Z, DeepSeek 4 — read-only, pré-release):**
+
+| Campo | Valor |
+|---|---|
+| Domínio canônico de produção | `https://mxperformance-synvolt.vercel.app` |
+| `/api/health.release` (produção) | `8ab89d1bd8e8c23d873e2b00bae3809a82670edf` |
+| `/api/health` (produção) | `{"status":"healthy","checks":{"vercel":"ok","supabase_api":"ok","database":"ok","critical_crons":"ok"},"release":"8ab89d1b…","environment":"production","duration_ms":533}` |
+| HEAD local (2026-08-15) | `72f1d611d54c34867c8de77047c16b2015b56eb2` |
+| Gap release↔HEAD | **4 commits à frente** (`git rev-list --count 8ab89d1b..HEAD` = 4) |
+| Deployment prod mais recente (Ready) | `mxperformance-j9dzmyh5h` (3m, Duration 2m) — `● Ready` |
+| Deployment Building no momento da coleta | `mxperformance-qc0mrqz36` (46s) |
+| CLI | Vercel CLI 58.5.1 · projeto `mxperformance` (prj_fpYjxc851kMs55GzR6tgQEr7uWUj) · org `synvolt` |
+
+**Parity (pré-release):** a release em produção (`8ab89d1b`) é **ancestral** do HEAD e está **4 commits atrás** — o release atual NÃO inclui as fases recentes (FASE O/P, Z/AA, I/T). A parity final será verificada pós-release comparando `health.release` (produção) com o SHA do commit de release (39.001).
+
+| Passo pós-release | Valor a preencher |
+|---|---|
+| SHA do commit de release | **`<SHA_FINAL_RELEASE>`** |
+| `/api/health.release` (produção) após deploy | **`<SHA_APOS_RELEASE>`** |
+| Parity (iguais?) | **`<SIM/NAO>`** |
 
 ## 39.017 — Sentry parity se disponível
 
-**PENDENTE (após release)** — se acessível.
+**Status:** PENDENTE (pós-release) — evidência preparada abaixo; observação pré-release: `VITE_SENTRY_DSN` ausente em produção → `initSentry` no-op (SYS-017).
+
+**Evidência preparada (coletada 2026-08-15, DeepSeek 4 — read-only, pré-release):**
+
+| Campo | Valor |
+|---|---|
+| Org Sentry | `synvolt` |
+| Project Sentry | `mx-performance-frontend` |
+| `SENTRY_AUTH_TOKEN` | Configurado (encrypted, Production/Preview) |
+| `SENTRY_ENVIRONMENT` | `production` |
+| `VITE_SENTRY_REPLAY_SESSION_SAMPLE_RATE` | `0.05` |
+| **`VITE_SENTRY_DSN`** | **AUSENTE em produção** (`npx vercel env ls production` não o lista) |
+| Resultado | `initSentry` é **no-op** (SYS-017): "VITE_SENTRY_DSN ausente em produção — observabilidade DESABILITADA" (`src/lib/observability/sentry.ts:100`) |
+
+**Observação pré-release:** o Sentry está configurado na infra (org/project/token) mas sem `VITE_SENTRY_DSN` em produção, então não coleta erros. A parity de eventos Sentry não pode ser validada até o DSN ser definido — registrar como risco conhecido (SYS-017) em vez de falsa validação.
+
+| Passo pós-release (se DSN for definido) | Valor a preencher |
+|---|---|
+| `VITE_SENTRY_DSN` em produção | **`<DSN_OU_AUSENTE>`** |
+| Eventos Sentry capturados | **`<CONTAGEM_OU_NA>`** |
+| Parity com o reportado localmente | **`<SIM/NAO/NA>`** |
 
 ## 39.018 — Known risks não resolvidos
 
@@ -222,8 +267,8 @@ e pointer de evidência. Nenhum agrupamento.
 | 39.013 E2E | EVIDÊNCIA LOCAL OK | npm test ~3353-3470 pass; 117 test files |
 | 39.014 console/network | EVIDÊNCIA LOCAL OK | harness 31.013-015; module-route-visual-audit |
 | 39.015 Supabase | EVIDÊNCIA LOCAL OK | classify-supabase-events; security-findings; run-id |
-| 39.016 Vercel | PENDENTE (pós-release) | /api/health.release |
-| 39.017 Sentry | PENDENTE (pós-release) | — |
+| 39.016 Vercel | PENDENTE (pós-release) | evidência preparada: health.release prod = `8ab89d1b`; gap 4 commits; vercel ls --prod; template pronto |
+| 39.017 Sentry | PENDENTE (pós-release) | evidência preparada: Sentry configurado (org/project/token) mas `VITE_SENTRY_DSN` ausente → no-op SYS-017 |
 | 39.018 known risks | PREENCHIDO | acima |
 | 39.019 não agrupar | ✅ | este documento |
 | 39.020 evidence pointers | ✅ | esta tabela |

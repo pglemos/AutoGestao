@@ -100,7 +100,7 @@ export function ContentSuggestionDialog() {
 
           <div className="mt-5 flex justify-end gap-2">
             <Button type="button" variant="ghost" onClick={close}>Cancelar</Button>
-            <Button type="submit" className="rounded-xl bg-brand-primary font-bold text-white hover:bg-brand-primary-hover">
+            <Button type="submit" variant="primary">
               <Send size={15} className="mr-2" /> Enviar sugestão
             </Button>
           </div>
