@@ -45,12 +45,12 @@ export function TeamMemberFormModal(props: {
           <MxField label="E-mail"><Input type="email" value={props.draft.email} onChange={event => props.onDraft({ ...props.draft, email: event.target.value })} /></MxField>
           <MxField label="Telefone"><Input value={props.draft.phone} onChange={event => props.onDraft({ ...props.draft, phone: event.target.value })} /></MxField>
           <MxField label="Papel">
-            <MxSelect value={props.draft.role} onChange={event => props.onDraft({ ...props.draft, role: event.target.value })}>
+            <MxSelect aria-label="Papel" value={props.draft.role} onChange={event => props.onDraft({ ...props.draft, role: event.target.value })}>
               {ROLE_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
             </MxSelect>
           </MxField>
           <MxField label="Status">
-            <MxSelect value={props.draft.active ? 'ativo' : 'inativo'} onChange={event => props.onDraft({ ...props.draft, active: event.target.value === 'ativo' })}>
+            <MxSelect aria-label="Status do acesso" value={props.draft.active ? 'ativo' : 'inativo'} onChange={event => props.onDraft({ ...props.draft, active: event.target.value === 'ativo' })}>
               <option value="ativo">Ativo</option>
               <option value="inativo">Inativo</option>
             </MxSelect>

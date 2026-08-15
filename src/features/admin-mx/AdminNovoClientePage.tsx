@@ -137,7 +137,7 @@ export function AdminNovoClientePage() {
             {step === 2 ? (
               <>
                 <MxField label="Tipo de estrutura">
-                  <MxSelect value={draft.structure_type} onChange={event => patch({ structure_type: event.target.value as NewClientDraft['structure_type'] })}>
+                  <MxSelect aria-label="Tipo de estrutura" value={draft.structure_type} onChange={event => patch({ structure_type: event.target.value as NewClientDraft['structure_type'] })}>
                     <option value="LOJA_UNICA">Loja única</option>
                     <option value="REDE">Rede (matriz e filiais)</option>
                   </MxSelect>
@@ -155,7 +155,7 @@ export function AdminNovoClientePage() {
                 ))}
                 <Button type="button" variant="outline" onClick={() => patch({ units: [...draft.units, { name: '', city: '', state: '', is_primary: false }] })}><Plus size={16} />Adicionar loja</Button>
                 <MxField label="Fase empresarial" hint="Momento do negócio — orienta a priorização da jornada.">
-                  <MxSelect value={draft.business_phase} onChange={event => patch({ business_phase: event.target.value })}>
+                  <MxSelect aria-label="Fase empresarial" value={draft.business_phase} onChange={event => patch({ business_phase: event.target.value })}>
                     <option value="">Não informada</option>
                     {BUSINESS_PHASES.map(phase => <option key={phase.value} value={phase.value}>{phase.label}</option>)}
                   </MxSelect>
@@ -168,6 +168,7 @@ export function AdminNovoClientePage() {
                 <>
                   <MxField label="Produto contratado">
                     <MxSelect
+                      aria-label="Produto contratado"
                       value={draft.program_template_key}
                       onChange={event => {
                         const product = products.rows.find(item => item.program_key === event.target.value)
@@ -179,7 +180,7 @@ export function AdminNovoClientePage() {
                     </MxSelect>
                   </MxField>
                   <MxField label="Modalidade">
-                    <MxSelect value={draft.modality} onChange={event => patch({ modality: event.target.value })}>
+                    <MxSelect aria-label="Modalidade" value={draft.modality} onChange={event => patch({ modality: event.target.value })}>
                       <option value="">Selecione a modalidade</option>
                       {MODALITIES.map(item => <option key={item} value={item}>{item}</option>)}
                     </MxSelect>
@@ -196,7 +197,7 @@ export function AdminNovoClientePage() {
               team.error ? <MxErrorState description={team.error} retry={() => void team.refetch()} /> : (
                 <fieldset className="space-y-2">
                   <MxField label="Responsável MX pela implantação">
-                    <MxSelect value={draft.implementation_owner_id} onChange={event => patch({ implementation_owner_id: event.target.value })}>
+                    <MxSelect aria-label="Responsável MX pela implantação" value={draft.implementation_owner_id} onChange={event => patch({ implementation_owner_id: event.target.value })}>
                       <option value="">Selecione o responsável</option>
                       {team.rows.map(member => <option key={member.id} value={member.id}>{member.name || member.email || member.id}</option>)}
                     </MxSelect>

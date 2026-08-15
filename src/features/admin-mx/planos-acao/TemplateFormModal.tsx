@@ -54,7 +54,7 @@ export function TemplateFormModal(props: {
           <MxField label="Indicador"><Input value={props.draft.indicador} onChange={event => props.onDraft({ ...props.draft, indicador: event.target.value })} /></MxField>
           <MxField label="Produto (opcional)"><Input value={props.draft.program_key} onChange={event => props.onDraft({ ...props.draft, program_key: event.target.value })} placeholder="pmr_online" /></MxField>
           <MxField label="Status">
-            <MxSelect value={props.draft.active ? 'ativo' : 'inativo'} onChange={event => props.onDraft({ ...props.draft, active: event.target.value === 'ativo' })}>
+            <MxSelect aria-label="Status do template" value={props.draft.active ? 'ativo' : 'inativo'} onChange={event => props.onDraft({ ...props.draft, active: event.target.value === 'ativo' })}>
               <option value="ativo">Ativo</option>
               <option value="inativo">Inativo</option>
             </MxSelect>
@@ -80,7 +80,7 @@ export function TemplateFormModal(props: {
                 <MxField label="Ação"><Input value={item.acao} onChange={event => patchItem(index, { acao: event.target.value })} /></MxField>
                 <MxField label="Como" className="sm:col-span-2"><MxTextarea rows={2} value={item.como} onChange={event => patchItem(index, { como: event.target.value })} /></MxField>
                 <MxField label="Prioridade">
-                  <MxSelect value={item.prioridade} onChange={event => patchItem(index, { prioridade: event.target.value as TemplateItemPriority })}>
+                  <MxSelect aria-label={`Prioridade do item ${index + 1}`} value={item.prioridade} onChange={event => patchItem(index, { prioridade: event.target.value as TemplateItemPriority })}>
                     {PRIORITIES.map(priority => <option key={priority.value} value={priority.value}>{priority.label}</option>)}
                   </MxSelect>
                 </MxField>

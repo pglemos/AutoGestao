@@ -36,7 +36,7 @@ export function ApplyTemplateModal(props: {
           ? <MxStatusBanner tone="info">{`Versão ${published.versao} (publicada) será materializada como planos de ação da loja.`}</MxStatusBanner>
           : <MxStatusBanner tone="warning">Este template ainda não tem versão publicada.</MxStatusBanner>}
         <MxField label="Loja de destino">
-          <MxSelect value={props.storeId} onChange={event => props.onStore(event.target.value)}>
+          <MxSelect aria-label="Loja de destino" value={props.storeId} onChange={event => props.onStore(event.target.value)}>
             <option value="">Selecione a loja</option>
             {props.stores.map(store => <option key={store.id} value={store.id}>{store.name}</option>)}
           </MxSelect>

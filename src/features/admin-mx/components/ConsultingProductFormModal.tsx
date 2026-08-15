@@ -48,7 +48,7 @@ export function ConsultingProductFormModal(props: {
           />
         </MxField>
         <MxField label="Status">
-          <MxSelect value={props.draft.active ? 'ativo' : 'inativo'} onChange={event => props.onDraft({ ...props.draft, active: event.target.value === 'ativo' })}>
+          <MxSelect aria-label="Status do produto" value={props.draft.active ? 'ativo' : 'inativo'} onChange={event => props.onDraft({ ...props.draft, active: event.target.value === 'ativo' })}>
             <option value="ativo">Ativo</option>
             <option value="inativo">Inativo</option>
           </MxSelect>
