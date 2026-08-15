@@ -140,6 +140,7 @@ html [data-sonner-toaster].mx-toaster {
 
   /* --------------------------------------------------------------- campo */
   --mx-input-height: 40px;
+  --mx-input-height-lg: 56px; /* campos de destaque (título/criação) — 12.019 */
   --mx-input-radius: var(--mx-radius-sm);
   --mx-input-border-width: 1px;
   --mx-input-focus-ring-width: 2px;
