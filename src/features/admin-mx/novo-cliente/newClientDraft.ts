@@ -9,6 +9,8 @@ export type NewClientDraft = {
   notes: string
   // 2 — Estrutura e lojas
   structure_type: 'LOJA_UNICA' | 'REDE'
+  /** Loja do sistema (tabela `lojas`) que representa o cliente na operação. */
+  primary_store_id: string
   units: NewClientUnit[]
   business_phase: string
   // 3 — Produto e contrato
@@ -45,6 +47,7 @@ export function emptyNewClientDraft(): NewClientDraft {
     cnpj: '',
     notes: '',
     structure_type: 'LOJA_UNICA',
+    primary_store_id: '',
     units: [{ name: '', city: '', state: '', is_primary: true }],
     business_phase: '',
     product_name: '',

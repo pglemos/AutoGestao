@@ -26,7 +26,11 @@ export async function createClientProgram(draft: NewClientDraft, createdBy: stri
       contract_start_date: draft.contract_start_date || null,
       contract_end_date: draft.contract_end_date || null,
       slug: slug || null,
-      status: 'ativo',
+      // O banco só aceita status ativo com loja principal vinculada
+      // (clientes_consultoria_active_requires_store_check); sem loja, o cliente
+      // nasce inativo e é ativado quando a loja for vinculada.
+      primary_store_id: draft.primary_store_id || null,
+      status: draft.primary_store_id ? 'ativo' : 'inativo',
       current_visit_step: 0,
       created_by: createdBy,
     })
