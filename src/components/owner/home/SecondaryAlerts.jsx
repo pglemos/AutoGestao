@@ -1,18 +1,22 @@
 import { secondaryAlerts } from "./homeData";
 import { AlertCircle, ChevronRight } from "lucide-react";
 import { toast } from '@/lib/toast'
+import { SectionCard, SectionHeader, SectionContent } from "@/components/molecules/SectionCard";
 
 export default function SecondaryAlerts() {
 
   return (
-    <section className="rounded-2xl border border-border bg-card p-5 shadow-sm">
-      <div className="flex items-center justify-between">
-        <h2 className="text-base font-semibold text-foreground">Alertas que exigem sua atenção</h2>
-        <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-destructive px-1.5 text-xs font-semibold text-destructive-foreground">
-          {secondaryAlerts.length}
-        </span>
-      </div>
-      <div className="mt-4 space-y-2">
+    <SectionCard>
+      <SectionHeader>
+        <div className="flex items-center justify-between">
+          <h2 className="text-base font-semibold text-foreground">Alertas que exigem sua atenção</h2>
+          <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-destructive px-1.5 text-xs font-semibold text-destructive-foreground">
+            {secondaryAlerts.length}
+          </span>
+        </div>
+      </SectionHeader>
+      <SectionContent className="p-5">
+      <div className="space-y-2">
         {secondaryAlerts.map((alert) => (
           <div
             key={alert.id}
@@ -38,6 +42,7 @@ export default function SecondaryAlerts() {
       >
         Ver todos os alertas
       </button>
-    </section>
+      </SectionContent>
+    </SectionCard>
   );
 }

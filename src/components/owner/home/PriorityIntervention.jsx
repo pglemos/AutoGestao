@@ -2,6 +2,7 @@ import { useState } from "react";
 import { priorityIntervention, STATUS_STYLES } from "./homeData";
 import { AlertTriangle, Search, ClipboardList, UserCog, MessageCircle, CheckCircle2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SectionCard, SectionContent } from "@/components/molecules/SectionCard";
 import {
   Dialog,
   DialogContent,
@@ -43,7 +44,8 @@ export default function PriorityIntervention({ onTalkToConsultant }) {
   };
 
   return (
-    <section className={`rounded-2xl border-2 ${style.border} bg-card p-5 shadow-sm lg:p-6`}>
+    <SectionCard className={`border-2 ${style.border}`}>
+      <SectionContent className="p-5 lg:p-6">
       <div className="flex items-center gap-2">
         <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${style.bg}`}>
           <Zap className={`h-4 w-4 ${style.text}`} />
@@ -153,6 +155,7 @@ export default function PriorityIntervention({ onTalkToConsultant }) {
           )}
         </DialogContent>
       </Dialog>
-    </section>
+      </SectionContent>
+    </SectionCard>
   );
 }

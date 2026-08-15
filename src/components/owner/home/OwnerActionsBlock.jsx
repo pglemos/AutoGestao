@@ -3,6 +3,7 @@ import { ownerActions } from "./homeData";
 import { Clock, Check, UserCog, ChevronRight, CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from '@/lib/toast'
+import { SectionCard, SectionHeader, SectionContent } from "@/components/molecules/SectionCard";
 import {
   Dialog,
   DialogContent,
@@ -21,9 +22,12 @@ export default function OwnerActionsBlock() {
   const toggleDelegated = (i) => setDelegated((p) => ({ ...p, [i]: !p[i] }));
 
   return (
-    <section className="rounded-2xl border border-border bg-card p-5 shadow-sm">
-      <h2 className="text-base font-semibold text-foreground">Próximas ações do Dono</h2>
-      <div className="mt-4 space-y-2">
+    <SectionCard>
+      <SectionHeader>
+        <h2 className="text-base font-semibold text-foreground">Próximas ações do Dono</h2>
+      </SectionHeader>
+      <SectionContent className="p-5">
+      <div className="space-y-2">
         {ownerActions.map((action, i) => {
           const isDone = done[i];
           const isDelegated = delegated[i];
@@ -87,6 +91,7 @@ export default function OwnerActionsBlock() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </section>
+      </SectionContent>
+    </SectionCard>
   );
 }

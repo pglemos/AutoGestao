@@ -491,6 +491,31 @@ to { height: 0; }
   --color-score-good: hsl(var(--mx-chart-1));      /* 70–79  — azul info */
   --color-score-attention: hsl(var(--mx-amber-500)); /* 60–69  — ambar warning */
   --color-score-critical: hsl(var(--mx-status-error)); /* <60    — vermelho error */
+  /* Breakpoints Material Design 3 (FASE W) — geram as variantes nomeadas
+     `medium:`/`expanded:`/`large:`/`extra-large:`. `compact` é a base (>=0). */
+  --breakpoint-medium: 600px;
+  --breakpoint-expanded: 840px;
+  --breakpoint-large: 1200px;
+  --breakpoint-extra-large: 1600px;
+}
+
+/* Grid responsivo por classe de janela (FASE W): as variantes `medium:`/`expanded:`/
+   `large:`/`extra-large:` vêm dos `--breakpoint-*` MD3 no @theme acima. Um grid de
+   1→2→3→4 colunas escreve-se com classes padrão do Tailwind, sem media query manual:
+     `grid grid-cols-1 medium:grid-cols-2 expanded:grid-cols-3 large:grid-cols-4`
+   A base `compact` (>= 0) é `grid-cols-1`; `minmax(0, 1fr)` garante min-width:0
+   nos children. */
+@utility grid-cols-compact {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+@utility grid-cols-medium {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@utility grid-cols-expanded {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+@utility grid-cols-large {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 /* Mobile / PWA hardening — safe-area, tap highlight, scroll behavior */

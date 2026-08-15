@@ -1,16 +1,20 @@
 import { salesGoal } from "./homeData";
 import { Target, TrendingDown, ArrowUpRight } from "lucide-react";
 import { toast } from '@/lib/toast'
+import { SectionCard, SectionHeader, SectionContent } from "@/components/molecules/SectionCard";
 
 export default function SalesGoalBlock() {
 
   return (
-    <section className="rounded-2xl border border-border bg-card p-5 shadow-sm">
-      <div className="flex items-center gap-2">
-        <Target className="h-5 w-5 text-primary" />
-        <h2 className="text-base font-semibold text-foreground">Meta de Venda do Mês</h2>
-      </div>
-      <div className="mt-4 space-y-4">
+    <SectionCard>
+      <SectionHeader>
+        <div className="flex items-center gap-2">
+          <Target className="h-5 w-5 text-primary" />
+          <h2 className="text-base font-semibold text-foreground">Meta de Venda do Mês</h2>
+        </div>
+      </SectionHeader>
+      <SectionContent className="p-5">
+      <div className="space-y-4">
         <div>
           <div className="flex items-baseline justify-between">
             <span className="text-sm text-muted-foreground">Atingimento</span>
@@ -58,6 +62,7 @@ export default function SalesGoalBlock() {
           <ArrowUpRight className="h-3.5 w-3.5" />
         </button>
       </div>
-    </section>
+      </SectionContent>
+    </SectionCard>
   );
 }
