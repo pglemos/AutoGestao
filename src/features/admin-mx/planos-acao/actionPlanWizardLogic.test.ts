@@ -10,7 +10,7 @@ import {
   suggestTitle,
   validateWizardStep,
   type ClientActionPlanWizardForm,
-} from './clientActionPlanWizard'
+} from './actionPlanWizardLogic'
 
 function filledForm(): ClientActionPlanWizardForm {
   return {

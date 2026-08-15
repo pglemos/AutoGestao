@@ -1,3 +1,4 @@
+import { supabase } from '@/lib/supabase'
 import type { TemplateItemPriority } from './actionPlanTemplates'
 
 /**
@@ -228,4 +229,86 @@ export function buildTemplateItemsFromChecklist(
     prazo_dias: 30,
     evidencia_requerida: false,
   }))
+}
+
+/**
+ * Promove um plano de ação existente a template em rascunho. Sanea dados do
+ * cliente (nome, CNPJ, datas) e cria um rascunho na biblioteca sem publicar.
+ */
+export async function promotePlanToTemplate(input: {
+  planId: string
+  userId: string
+}): Promise<{ error: string | null; templateId: string | null }> {
+  const { data: plan, error } = await supabase
+    .from('planos_acao')
+    .select('id, codigo, departamento, indicador, problema, acao, como, prioridade, checklist, scope_id')
+    .eq('id', input.planId)
+    .maybeSingle()
+  if (error || !plan) return { error: error?.message ?? 'Plano não encontrado.', templateId: null }
+
+  const { data: client } = await supabase
+    .from('clientes_consultoria')
+    .select('name')
+    .eq('primary_store_id', plan.scope_id as string)
+    .maybeSingle()
+  const clientName = client?.name ?? ''
+
+  const items = buildTemplateItemsFromChecklist((plan.checklist as Array<Record<string, unknown>> | null) ?? [], clientName)
+  const fallbackItems = [
+    {
+      problema: sanitizeTextForTemplate(plan.problema ?? '', clientName),
+      acao: sanitizeTextForTemplate(plan.acao ?? 'Executar ação', clientName),
+      como: sanitizeTextForTemplate(plan.como ?? '', clientName),
+      departamento: '',
+      indicador: '',
+      prioridade: 'media' as TemplateItemPriority,
+      prazo_dias: 30,
+      evidencia_requerida: false,
+    },
+  ]
+
+  const title = sanitizeTextForTemplate(plan.acao ?? 'Plano de ação', clientName) || 'Plano de ação'
+  const templateKey = `pa_${plan.departamento.toLowerCase().replace(/[^a-z0-9_]/g, '_')}_${Date.now().toString(36)}`
+
+  const { data: template, error: templateError } = await supabase
+    .from('planos_acao_templates')
+    .insert({
+      template_key: templateKey,
+      nome: title,
+      departamento: plan.departamento,
+      indicador: plan.indicador || null,
+      descricao: null,
+      program_key: null,
+      active: true,
+      created_by: input.userId,
+    })
+    .select('id')
+    .single()
+  if (templateError || !template) return { error: templateError?.message ?? 'Falha ao criar o template.', templateId: null }
+
+  const { data: version, error: versionError } = await supabase
+    .from('planos_acao_template_versoes')
+    .insert({ template_id: template.id, versao: 1, status: 'rascunho', created_by: input.userId })
+    .select('id')
+    .single()
+  if (versionError || !version) return { error: versionError?.message ?? 'Falha ao criar a versão.', templateId: template.id }
+
+  const effectiveItems = items.length ? items : fallbackItems
+  const { error: itemsError } = await supabase.from('planos_acao_template_itens').insert(
+    effectiveItems.map((item, index) => ({
+      version_id: version.id,
+      ordem: index + 1,
+      problema: item.problema || 'Problema identificado na loja.',
+      acao: item.acao,
+      como: item.como || null,
+      departamento: item.departamento || plan.departamento,
+      indicador: item.indicador || plan.indicador || null,
+      prioridade: item.prioridade,
+      prazo_dias: item.prazo_dias,
+      evidencia_requerida: item.evidencia_requerida,
+    })),
+  )
+  if (itemsError) return { error: itemsError.message, templateId: template.id }
+
+  return { error: null, templateId: template.id }
 }
