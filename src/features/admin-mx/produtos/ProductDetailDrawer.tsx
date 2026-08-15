@@ -15,6 +15,7 @@ import {
 } from '@/components/module/MxModuleVisualPrimitives'
 import { Package } from 'lucide-react'
 import { toast } from '@/lib/toast'
+import { ProductStrategicPlanTab } from './ProductStrategicPlanTab'
 import {
   encounterTimeStatus,
   fetchEncounterTimes,
@@ -27,15 +28,16 @@ import {
   type ProductModule,
 } from './consultingProducts'
 
-type DetailTab = 'resumo' | 'modulos' | 'tempos'
+type DetailTab = 'resumo' | 'modulos' | 'tempos' | 'plano'
 
 const TABS = [
   { key: 'resumo' as const, label: 'Resumo' },
   { key: 'modulos' as const, label: 'Módulos' },
   { key: 'tempos' as const, label: 'Tempos e Capacidade' },
+  { key: 'plano' as const, label: 'Plano Estratégico' },
 ]
 
-export function ProductDetailDrawer(props: { product: ConsultingProduct | null; onClose: () => void }) {
+export function ProductDetailDrawer(props: { product: ConsultingProduct | null; onClose: () => void; onChanged?: () => void }) {
   const { product } = props
   const [tab, setTab] = useState<DetailTab>('resumo')
   const [modules, setModules] = useState<ProductModule[]>([])
@@ -95,7 +97,7 @@ export function ProductDetailDrawer(props: { product: ConsultingProduct | null; 
       footer={(
         <>
           <Button variant="outline" onClick={props.onClose} disabled={saving}>Fechar</Button>
-          {tab !== 'resumo' ? <Button onClick={() => void persist()} disabled={saving}>{saving ? 'Salvando...' : 'Salvar'}</Button> : null}
+          {tab === 'modulos' || tab === 'tempos' ? <Button onClick={() => void persist()} disabled={saving}>{saving ? 'Salvando...' : 'Salvar'}</Button> : null}
         </>
       )}
     >
@@ -226,6 +228,8 @@ export function ProductDetailDrawer(props: { product: ConsultingProduct | null; 
             </div>
           ) : <MxEmptyState title="Jornada sem encontros" description="Defina o total de encontros do produto para configurar os tempos." />
         ) : null}
+
+        {!loading && tab === 'plano' ? <ProductStrategicPlanTab product={product} onChanged={props.onChanged} /> : null}
       </div>
     </Modal>
   )
