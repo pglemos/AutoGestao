@@ -5,7 +5,7 @@ import {
   emptyTemplateFilters,
   templateFiltersActive,
   templateMatchesFilters,
-} from './templateFilters'
+} from './templateFilterLogic'
 
 function template(overrides: Partial<ActionPlanTemplate> = {}): ActionPlanTemplate {
   return {

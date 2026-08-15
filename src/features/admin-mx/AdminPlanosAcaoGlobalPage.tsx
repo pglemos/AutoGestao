@@ -28,18 +28,35 @@ import { ActionPlanKanban } from './planos-acao/ActionPlanKanban'
 import { ActionPlanDetailDrawer } from './planos-acao/ActionPlanDetailDrawer'
 import { boardMetrics, type BoardPlan, type PlanStatus } from './planos-acao/actionPlanBoard'
 import { ApplyTemplateModal } from './planos-acao/ApplyTemplateModal'
-import { PromoteSuggestionModal } from './planos-acao/PromoteSuggestionModal'
-import { fetchActionPlanSuggestions, isSuggestionPromoted, promoteSuggestionToPlan, type ActionPlanSuggestion } from './planos-acao/actionPlanSuggestions'
+import { ClientActionPlanWizard } from './planos-acao/ClientActionPlanWizard'
+import { NewActionChoiceModal } from './planos-acao/NewActionChoiceModal'
+import { PromoteToTemplateModal } from './planos-acao/PromoteToTemplateModal'
+import { StrategicIndicatorActionSelector } from './planos-acao/StrategicIndicatorActionSelector'
+import { SuggestToClientModal } from './planos-acao/SuggestToClientModal'
+import { SuggestionsTab } from './planos-acao/SuggestionsTab'
+import { ApplicationsTab } from './planos-acao/ApplicationsTab'
+import { TemplateFilters } from './planos-acao/TemplateFilters'
+import { emptyTemplateFilters, templateMatchesFilters, type TemplateFilterState } from './planos-acao/templateFilterLogic'
 import { TemplateFormModal } from './planos-acao/TemplateFormModal'
 import { useActionPlanTemplatesController } from './planos-acao/useActionPlanTemplates'
 import { useAdminActionPlans } from './hooks/useAdminMxLists'
+import {
+  fetchWizardClients,
+  fetchWizardIndicators,
+  fetchWizardResponsibles,
+  type WizardClient,
+  type WizardIndicator,
+  type WizardResponsible,
+} from './planos-acao/clientActionPlanWizardData'
+import { fetchActionPlanSuggestions, type ActionPlanSuggestion } from './planos-acao/actionPlanSuggestions'
 
-type PlanTab = 'planos' | 'templates' | 'sugestoes'
+type PlanTab = 'planos' | 'templates' | 'sugestoes' | 'aplicacoes'
 
 const PLAN_TABS = [
   { key: 'planos' as const, label: 'Planos da rede' },
   { key: 'templates' as const, label: 'Biblioteca de templates' },
-  { key: 'sugestoes' as const, label: 'Sugestões do motor' },
+  { key: 'sugestoes' as const, label: 'Sugestões ao Dono' },
+  { key: 'aplicacoes' as const, label: 'Aplicações nos clientes' },
 ]
 
 const CONCLUDED = new Set(['concluido', 'concluída', 'concluida', 'finalizado'])
@@ -60,11 +77,18 @@ export function AdminPlanosAcaoGlobalPage() {
   const [suggestions, setSuggestions] = useState<ActionPlanSuggestion[]>([])
   const [suggestionsError, setSuggestionsError] = useState<string | null>(null)
   const [suggestionsLoading, setSuggestionsLoading] = useState(false)
-  const [promoting, setPromoting] = useState<ActionPlanSuggestion | null>(null)
-  const [promoteDraft, setPromoteDraft] = useState({ departamento: '', indicador: '', prazo: '' })
-  const [promoteSubmitting, setPromoteSubmitting] = useState(false)
   const [view, setView] = useState<'lista' | 'kanban'>('kanban')
   const [openPlan, setOpenPlan] = useState<BoardPlan | null>(null)
+  const [choiceOpen, setChoiceOpen] = useState(false)
+  const [wizardOpen, setWizardOpen] = useState(false)
+  const [selectorOpen, setSelectorOpen] = useState(false)
+  const [suggestTemplate, setSuggestTemplate] = useState<Awaited<ReturnType<typeof useActionPlanTemplatesController>>['rows'][number] | null>(null)
+  const [suggestOpen, setSuggestOpen] = useState(false)
+  const [promoteTarget, setPromoteTarget] = useState<BoardPlan | null>(null)
+  const [templateFilters, setTemplateFilters] = useState<TemplateFilterState>(emptyTemplateFilters())
+  const [wizardClients, setWizardClients] = useState<WizardClient[]>([])
+  const [wizardIndicators, setWizardIndicators] = useState<WizardIndicator[]>([])
+  const [wizardResponsibles, setWizardResponsibles] = useState<WizardResponsible[]>([])
 
   const loadSuggestions = useCallback(async () => {
     setSuggestionsLoading(true)
@@ -78,28 +102,14 @@ export function AdminPlanosAcaoGlobalPage() {
     if (tab === 'sugestoes' && !suggestions.length && !suggestionsError) void loadSuggestions()
   }, [tab, suggestions.length, suggestionsError, loadSuggestions])
 
-  const promote = async () => {
-    if (promoteSubmitting || !promoting || !supabaseUser) return
-    setPromoteSubmitting(true)
-    try {
-      const result = await promoteSuggestionToPlan({
-        suggestion: promoting,
-        departamento: promoteDraft.departamento,
-        indicador: promoteDraft.indicador,
-        prazo: promoteDraft.prazo || null,
-        userId: supabaseUser.id,
-      })
-      if (result.error) {
-        toast.error(result.error)
-        return
-      }
-      toast.success('Sugestão virou plano de ação.')
-      setPromoting(null)
-      await Promise.all([loadSuggestions(), refetch()])
-    } finally {
-      setPromoteSubmitting(false)
-    }
-  }
+  useEffect(() => {
+    void Promise.all([fetchWizardClients(), fetchWizardIndicators(), fetchWizardResponsibles()]).then(([c, i, r]) => {
+      setWizardClients(c.rows)
+      setWizardIndicators(i.rows)
+      setWizardResponsibles(r.rows)
+    })
+  }, [])
+
   const { lojas } = useStores()
   const location = useLocation()
   const { width, bottomClearance } = resolveRouteLayout(location.pathname)
@@ -131,6 +141,11 @@ export function AdminPlanosAcaoGlobalPage() {
     scope_id: plan.scope_id,
   })), [filtered])
 
+  const filteredTemplates = useMemo(
+    () => templates.rows.filter(template => templateMatchesFilters(template, templateFilters)),
+    [templates.rows, templateFilters],
+  )
+
   const metrics = useMemo(() => {
     const board = boardMetrics(boardPlans)
     return {
@@ -141,6 +156,13 @@ export function AdminPlanosAcaoGlobalPage() {
     }
   }, [rows, boardPlans])
 
+  const openPlanById = (planId: string) => {
+    const plan = boardPlans.find(item => item.id === planId) ?? null
+    setOpenPlan(plan)
+  }
+
+  const handleNewAction = () => setChoiceOpen(true)
+
   return (
     <MxModulePage id="admin-mx-planos-acao" width={width} bottomClearance={bottomClearance}>
       <div className="w-full space-y-5">
@@ -148,61 +170,48 @@ export function AdminPlanosAcaoGlobalPage() {
           eyebrow="Administração MX"
           title="Planos de ação"
           description="Visão global dos planos de ação da rede: status, prazos e prioridade."
-          actions={tab === 'planos'
-            ? <Button variant="outline" onClick={() => void refetch()}><RefreshCw size={16} />Atualizar</Button>
-            : <><Button variant="outline" onClick={() => void templates.refetch()}><RefreshCw size={16} />Atualizar</Button><Button onClick={templates.openNew}><Plus size={16} />Novo template</Button></>}
+          actions={tab === 'planos' ? (
+            <div className="flex items-center gap-2">
+              <Button variant="outline" onClick={() => void refetch()}><RefreshCw size={16} />Atualizar</Button>
+              <Button onClick={handleNewAction}><Plus size={16} />Nova ação</Button>
+            </div>
+          ) : tab === 'templates' ? (
+            <>
+              <Button variant="outline" onClick={() => void templates.refetch()}><RefreshCw size={16} />Atualizar</Button>
+              <Button onClick={templates.openNew}><Plus size={16} />Novo template</Button>
+            </>
+          ) : tab === 'aplicacoes' ? (
+            <Button onClick={handleNewAction}><Plus size={16} />Nova ação</Button>
+          ) : <Button variant="outline" onClick={() => void loadSuggestions()}><RefreshCw size={16} />Atualizar</Button>}
         />
 
         <TabNav tabs={PLAN_TABS} activeTab={tab} onTabChange={setTab} />
 
         {tab === 'sugestoes' ? (
-          suggestionsLoading ? <MxLoadingState label="Carregando sugestões" /> : suggestionsError ? <MxErrorState description={suggestionsError} retry={() => void loadSuggestions()} /> : (
-            <MxSectionCard>
-              <MxSectionHeader title="Sugestões do motor determinístico" description={`${suggestions.filter(item => !isSuggestionPromoted(item)).length} sugestão(ões) ainda não promovida(s).`} />
-              <div className="p-5">
-                {suggestions.length ? (
-                  <MxTableSurface>
-                    <Table className="min-w-[900px]">
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Problema</TableHead>
-                          <TableHead>Recomendação</TableHead>
-                          <TableHead>Regra</TableHead>
-                          <TableHead>Escopo</TableHead>
-                          <TableHead>Prioridade</TableHead>
-                          <TableHead className="text-right">Ação</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {suggestions.map(suggestion => (
-                          <TableRow key={suggestion.id}>
-                            <TableCell className="max-w-[280px]">{suggestion.problem || '—'}</TableCell>
-                            <TableCell className="max-w-[280px]">{suggestion.recommendation || '—'}</TableCell>
-                            <TableCell className="text-xs text-muted-foreground">{suggestion.rule_code || '—'}</TableCell>
-                            <TableCell>{suggestion.scope_type || '—'}</TableCell>
-                            <TableCell>{suggestion.priority ?? '—'}</TableCell>
-                            <TableCell className="text-right">
-                              {isSuggestionPromoted(suggestion)
-                                ? <span className="text-xs text-muted-foreground">Já virou plano</span>
-                                : <Button size="sm" onClick={() => { setPromoting(suggestion); setPromoteDraft({ departamento: '', indicador: '', prazo: '' }) }}>Virar plano</Button>}
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </MxTableSurface>
-                ) : <MxEmptyState title="Nenhuma sugestão pendente" description="O motor de regras ainda não gerou recomendações para a rede." />}
-              </div>
-            </MxSectionCard>
-          )
+          <SuggestionsTab />
+        ) : tab === 'aplicacoes' ? (
+          <ApplicationsTab onOpenPlan={openPlanById} />
         ) : tab === 'templates' ? (
           templates.loading ? <MxLoadingState label="Carregando templates" /> : templates.error ? <MxErrorState description={templates.error} retry={() => void templates.refetch()} /> : (
             <MxSectionCard>
-              <MxSectionHeader title="Templates de plano de ação" description={`${templates.rows.length} template(s) na biblioteca.`} />
+              <MxSectionHeader
+                title="Templates de plano de ação"
+                description={`${filteredTemplates.length} template(s) na biblioteca.`}
+                actions={<Button variant="outline" size="sm" onClick={templates.openNew}><Plus size={16} />Novo template</Button>}
+              />
               <div className="p-5">
-                {templates.rows.length ? (
+                <div className="mb-4">
+                  <TemplateFilters
+                    templates={templates.rows}
+                    indicators={wizardIndicators}
+                    filters={templateFilters}
+                    onFilterChange={(field: keyof TemplateFilterState, value: string | boolean) => setTemplateFilters(current => ({ ...current, [field]: value }))}
+                    onClear={() => setTemplateFilters(emptyTemplateFilters())}
+                  />
+                </div>
+                {filteredTemplates.length ? (
                   <MxTableSurface>
-                    <Table className="min-w-[900px]">
+                    <Table className="min-w-[1000px]">
                       <TableHeader>
                         <TableRow>
                           <TableHead>Template</TableHead>
@@ -215,7 +224,7 @@ export function AdminPlanosAcaoGlobalPage() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {templates.rows.map(template => {
+                        {filteredTemplates.map(template => {
                           const published = template.versions.find(version => version.status === 'publicada')
                           const openDraft = template.versions.find(version => version.status === 'rascunho')
                           return (
@@ -234,6 +243,7 @@ export function AdminPlanosAcaoGlobalPage() {
                                   <Button variant="outline" size="sm" onClick={() => void templates.openEdit(template)}>Editar</Button>
                                   {openDraft ? <Button variant="outline" size="sm" onClick={() => void templates.publish(template)}>Publicar</Button> : null}
                                   {published ? <Button size="sm" onClick={() => templates.setApplying(template)}>Aplicar</Button> : null}
+                                  {published ? <Button variant="outline" size="sm" onClick={() => { setSuggestTemplate(template); setSuggestOpen(true) }}>Sugerir ao Dono</Button> : null}
                                 </div>
                               </TableCell>
                             </TableRow>
@@ -242,7 +252,13 @@ export function AdminPlanosAcaoGlobalPage() {
                       </TableBody>
                     </Table>
                   </MxTableSurface>
-                ) : <MxEmptyState title="Biblioteca vazia" description="Crie um template para padronizar planos de ação entre clientes." action={<Button onClick={templates.openNew}><Plus size={16} />Novo template</Button>} />}
+                ) : (
+                  <MxEmptyState
+                    title="Nenhum template encontrado"
+                    description="Crie um template ou ajuste os filtros para padronizar planos entre clientes."
+                    action={<Button onClick={templates.openNew}><Plus size={16} />Novo template</Button>}
+                  />
+                )}
               </div>
             </MxSectionCard>
           )
@@ -303,7 +319,10 @@ export function AdminPlanosAcaoGlobalPage() {
                             <TableCell className="w-40"><MxProgress value={plan.progresso ?? 0} label={`${plan.progresso ?? 0}%`} /></TableCell>
                             <TableCell>{plan.status || '—'}</TableCell>
                             <TableCell className="text-right">
-                              <Button variant="outline" size="sm" onClick={() => setOpenPlan(boardPlans.find(item => item.id === plan.id) ?? null)}>Abrir</Button>
+                              <div className="flex justify-end gap-2">
+                                <Button variant="outline" size="sm" onClick={() => setOpenPlan(boardPlans.find(item => item.id === plan.id) ?? null)}>Abrir</Button>
+                                <Button variant="outline" size="sm" onClick={() => setPromoteTarget(boardPlans.find(item => item.id === plan.id) ?? null)}>Virar template</Button>
+                              </div>
                             </TableCell>
                           </TableRow>
                         ))}
@@ -327,19 +346,6 @@ export function AdminPlanosAcaoGlobalPage() {
           onClose={() => templates.setFormOpen(false)}
         />
         <ActionPlanDetailDrawer plan={openPlan} onClose={() => setOpenPlan(null)} onChanged={() => void refetch()} />
-        <PromoteSuggestionModal
-          open={Boolean(promoting)}
-          suggestion={promoting}
-          departamento={promoteDraft.departamento}
-          indicador={promoteDraft.indicador}
-          prazo={promoteDraft.prazo}
-          submitting={promoteSubmitting}
-          onDepartamento={value => setPromoteDraft(current => ({ ...current, departamento: value }))}
-          onIndicador={value => setPromoteDraft(current => ({ ...current, indicador: value }))}
-          onPrazo={value => setPromoteDraft(current => ({ ...current, prazo: value }))}
-          onSubmit={() => void promote()}
-          onClose={() => setPromoting(null)}
-        />
         <ApplyTemplateModal
           open={Boolean(templates.applying)}
           template={templates.applying}
@@ -349,6 +355,43 @@ export function AdminPlanosAcaoGlobalPage() {
           onStore={templates.setApplyStoreId}
           onSubmit={() => void templates.apply()}
           onClose={() => templates.setApplying(null)}
+        />
+        <NewActionChoiceModal
+          open={choiceOpen}
+          onClose={() => setChoiceOpen(false)}
+          onUseTemplate={() => { setChoiceOpen(false); setSelectorOpen(true); }}
+          onCreateCustom={() => { setChoiceOpen(false); setWizardOpen(true); }}
+        />
+        <ClientActionPlanWizard
+          open={wizardOpen}
+          onClose={() => setWizardOpen(false)}
+          onSaved={() => void refetch()}
+        />
+        <StrategicIndicatorActionSelector
+          open={selectorOpen}
+          client={null}
+          clients={wizardClients}
+          templates={templates.rows}
+          indicators={wizardIndicators}
+          responsibles={wizardResponsibles}
+          stores={lojas.map(store => ({ id: store.id, name: store.name }))}
+          onClose={() => setSelectorOpen(false)}
+          onCreated={() => { setSelectorOpen(false); void Promise.all([refetch(), templates.refetch()]) }}
+        />
+        <SuggestToClientModal
+          open={suggestOpen}
+          template={suggestTemplate}
+          clients={wizardClients}
+          indicators={wizardIndicators}
+          onClose={() => setSuggestOpen(false)}
+          onSuggested={() => { setSuggestOpen(false); void loadSuggestions() }}
+        />
+        <PromoteToTemplateModal
+          open={Boolean(promoteTarget)}
+          planId={promoteTarget?.id ?? null}
+          planTitle={promoteTarget?.acao ?? null}
+          onClose={() => setPromoteTarget(null)}
+          onPromoted={() => void templates.refetch()}
         />
       </div>
     </MxModulePage>
