@@ -56,6 +56,16 @@ describe('FASE S — motion e transições', () => {
     }
   })
 
+  test('Button e TabNav usam transições de propriedade explícita, não transition-all (19.007)', () => {
+    const button = read('src/components/atoms/Button.tsx')
+    expect(button).not.toContain('transition-all')
+    expect(button).toMatch(/transition-\[[^\]]*background-color[^\]]*\]/)
+    expect(button).toContain('duration-fast')
+    const tabNav = read('src/components/molecules/TabNav.tsx')
+    expect(tabNav).not.toContain('transition-all')
+    expect(tabNav).toContain('transition-colors')
+  })
+
   test('molecules canônicos com hover de sombra usam transição de propriedade explícita', () => {
     const optionCard = read('src/components/molecules/OptionCard.tsx')
     expect(optionCard).not.toContain('transition-all')
@@ -74,5 +84,39 @@ describe('FASE S — motion e transições', () => {
     const modal = read('src/components/organisms/Modal.tsx')
     expect(modal).toContain('mx-overlay-surface')
     expect(modal).toContain('mx-overlay-backdrop')
+  })
+
+  test('Button tem hover e press (active) feedback com tokens (19.006)', () => {
+    const button = read('src/components/atoms/Button.tsx')
+    expect(button).toContain('hover:bg-brand-primary-hover')
+    expect(button).toContain('active:scale-[0.98]')
+    expect(button).toContain('active:duration-fast')
+  })
+
+  test('sem delays arbitrários em listas nos canônicos (19.008)', () => {
+    for (const file of ['src/components/atoms/Button.tsx', 'src/components/molecules/TabNav.tsx']) {
+      const source = read(file)
+      expect(source, `${file} tem delay arbitrário`).not.toMatch(/transitionDelay|animationDelay|delay-\[/)
+    }
+  })
+
+  test('MotionConfig reducedMotion="user" está ativo (19.009)', () => {
+    const app = read('src/App.tsx')
+    expect(app).toContain('reducedMotion="user"')
+    expect(app).toContain('<MotionConfig')
+  })
+
+  test('page transition (MotionPage) usa tokens e reduz com motion (19.004)', () => {
+    const layout = read('src/components/Layout.tsx')
+    expect(layout).toContain('<MotionPage key={location.pathname}')
+    const variants = read('src/design/motion/variants.js')
+    expect(variants).toContain('MX_MOTION')
+    expect(variants).toContain('pageVariants')
+    expect(variants).toContain('duration.normal')
+    expect(variants).toContain('easing.standard')
+    const motionIndex = read('src/design/motion/index.tsx')
+    expect(motionIndex).toContain('useReducedMotion')
+    // página usa opacity/transform, não layout (sem shift)
+    expect(variants).toContain('opacity: 0, y: 10')
   })
 })
