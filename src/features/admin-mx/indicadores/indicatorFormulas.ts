@@ -79,7 +79,6 @@ export function evaluateFormula(
       return String(value)
     })
     if (expr.includes('null')) return null
-    // eslint-disable-next-line @typescript-eslint/no-implied-eval
     const result = Function(`"use strict"; return (${expr})`)()
     return typeof result === 'number' && Number.isFinite(result) ? result : null
   } catch {
@@ -137,7 +136,6 @@ export function calculateAnnualValue(
         })
         if (expr.includes('null')) return null
         try {
-          // eslint-disable-next-line @typescript-eslint/no-implied-eval
           const result = Function(`"use strict"; return (${expr})`)()
           return typeof result === 'number' && Number.isFinite(result) ? result : null
         } catch {

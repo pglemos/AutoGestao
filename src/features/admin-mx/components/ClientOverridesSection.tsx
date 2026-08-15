@@ -176,7 +176,7 @@ export function ClientOverridesSection(props: {
                     <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
                       <SlidersHorizontal size={14} />
                       <span className="truncate">{parameter.name}</span>
-                      {custom ? <span className="rounded-full bg-warning/20 px-2 py-0.5 text-[10px] font-medium">Personalizado</span> : null}
+                      {custom ? <span className="rounded-full bg-warning/20 px-2 py-0.5 text-caption font-medium">Personalizado</span> : null}
                     </div>
                     <div className="mt-0.5 truncate font-mono text-xs text-muted-foreground">
                       Padrão MX: {parameter.default_value ?? '—'}
