@@ -42,6 +42,22 @@ const ROOT_DIR = path.resolve(__dirname, '..')
 const SRC_DIR = path.join(ROOT_DIR, 'src')
 const JSON_MODE = process.argv.includes('--json')
 
+/**
+ * KEEP por arquivo (caminho relativo). Dívida DOCUMENTADA: cada entrada é uma
+ * tela de estado fullscreen montada por rota que centraliza conteúdo com
+ * `h-screen w-screen` — clipada pelo `overflow-hidden` do `main#main-content`
+ * do shell, e o harness browser mede `scrollWidth <= clientWidth + 1` nessas
+ * rotas (prova: matriz route × viewport). São exceções DELIBERADAS, não
+ * violações ocultas: a allowlist deve ENCOLHER conforme essas telas migram
+ * para PageCanvas/tokens.
+ */
+export const ALLOWLIST = new Map([
+  [
+    'src/pages/LiberacaoFechamento.tsx',
+    'Tela de estado fullscreen (acesso restrito) centralizada com h-screen w-screen; clipada pelo main do shell; medida sem overflow no harness.',
+  ],
+])
+
 const SOURCE_EXTENSIONS = ['.tsx', '.ts', '.jsx', '.js']
 
 const VIEWPORT_WIDTH = /\b(?:min-)?w-screen\b|\b(?:min-)?w-\[100vw\]\b|\b100vw\b/
@@ -140,7 +156,8 @@ export function runHorizontalPageOverflowGate() {
       continue
     }
     const relative = path.relative(ROOT_DIR, filePath).replace(/\\/g, '/')
-    violations.push(...inspectHorizontalPageOverflow(text, relative))
+    const found = inspectHorizontalPageOverflow(text, relative).filter((v) => !ALLOWLIST.has(v.file))
+    violations.push(...found)
   }
   return violations.sort((a, b) => `${a.file}:${a.line}`.localeCompare(`${b.file}:${b.line}`))
 }
