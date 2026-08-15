@@ -98,15 +98,8 @@ CREATE TABLE IF NOT EXISTS public.versoes_pacote_indicadores_estrategicos (
   published_at timestamptz,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  UNIQUE (package_id, version_number),
-  UNIQUE (program_version_id, status) DEFERRABLE INITIALLY IMMEDIATE
+  UNIQUE (package_id, version_number)
 );
-
--- A unicidade acima impede duas versões do mesmo produto com o mesmo estado.
--- Para histórico arquivado múltiplo, removemos a restrição ampla e usamos índice
--- parcial apenas para a versão publicada vigente.
-ALTER TABLE public.versoes_pacote_indicadores_estrategicos
-  DROP CONSTRAINT IF EXISTS versoes_pacote_indicadores_estrategicos_program_version_id_status_key;
 
 CREATE UNIQUE INDEX IF NOT EXISTS versoes_pacote_indicadores_one_published_idx
   ON public.versoes_pacote_indicadores_estrategicos(program_version_id)
@@ -315,7 +308,6 @@ CREATE TABLE IF NOT EXISTS public.modelos_relatorio_encontro (
   UNIQUE (methodology_content_id)
 );
 
--- Todas as tabelas desta migration são de governança interna MX.
 DO $$
 DECLARE
   v_table text;
@@ -343,29 +335,13 @@ BEGIN
   LOOP
     EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY', v_table);
     EXECUTE format('DROP POLICY IF EXISTS %I ON public.%I', v_table || '_internal_select', v_table);
-    EXECUTE format(
-      'CREATE POLICY %I ON public.%I FOR SELECT TO authenticated USING (public.eh_area_interna_mx(auth.uid()))',
-      v_table || '_internal_select',
-      v_table
-    );
+    EXECUTE format('CREATE POLICY %I ON public.%I FOR SELECT TO authenticated USING (public.eh_area_interna_mx(auth.uid()))', v_table || '_internal_select', v_table);
     EXECUTE format('DROP POLICY IF EXISTS %I ON public.%I', v_table || '_internal_insert', v_table);
-    EXECUTE format(
-      'CREATE POLICY %I ON public.%I FOR INSERT TO authenticated WITH CHECK (public.eh_area_interna_mx(auth.uid()))',
-      v_table || '_internal_insert',
-      v_table
-    );
+    EXECUTE format('CREATE POLICY %I ON public.%I FOR INSERT TO authenticated WITH CHECK (public.eh_area_interna_mx(auth.uid()))', v_table || '_internal_insert', v_table);
     EXECUTE format('DROP POLICY IF EXISTS %I ON public.%I', v_table || '_internal_update', v_table);
-    EXECUTE format(
-      'CREATE POLICY %I ON public.%I FOR UPDATE TO authenticated USING (public.eh_area_interna_mx(auth.uid())) WITH CHECK (public.eh_area_interna_mx(auth.uid()))',
-      v_table || '_internal_update',
-      v_table
-    );
+    EXECUTE format('CREATE POLICY %I ON public.%I FOR UPDATE TO authenticated USING (public.eh_area_interna_mx(auth.uid())) WITH CHECK (public.eh_area_interna_mx(auth.uid()))', v_table || '_internal_update', v_table);
     EXECUTE format('DROP POLICY IF EXISTS %I ON public.%I', v_table || '_internal_delete', v_table);
-    EXECUTE format(
-      'CREATE POLICY %I ON public.%I FOR DELETE TO authenticated USING (public.eh_area_interna_mx(auth.uid()))',
-      v_table || '_internal_delete',
-      v_table
-    );
+    EXECUTE format('CREATE POLICY %I ON public.%I FOR DELETE TO authenticated USING (public.eh_area_interna_mx(auth.uid()))', v_table || '_internal_delete', v_table);
     EXECUTE format('REVOKE ALL ON TABLE public.%I FROM PUBLIC, anon', v_table);
     EXECUTE format('GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.%I TO authenticated', v_table);
     EXECUTE format('GRANT ALL ON TABLE public.%I TO service_role', v_table);
