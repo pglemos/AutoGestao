@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useParams, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useParams, useNavigate } from 'react-router-dom'
+import { resolveRouteLayout } from '@/design-system/page'
 import {
   ArrowLeft, CheckCircle2, Circle, Save, FileText, Send,
   AlertCircle, Info, Building2, User2, Calendar,
@@ -95,6 +96,10 @@ function isVisitOneQuantData(value: unknown): value is VisitOneQuantData {
 export default function ConsultoriaVisitaExecucao() {
   const { clientSlug, visitNumber } = useParams<{ clientSlug: string, visitNumber: string }>()
   const navigate = useNavigate()
+  const location = useLocation()
+  // Rotas wide (consultoria/clientes/:clientSlug/visitas/:visitNumber):
+  // largura e clearance vêm da metadata.
+  const { width: pageWidth, bottomClearance: pageBottomClearance } = resolveRouteLayout(location.pathname)
   const { profile } = useAuth()
   const { client, loading: clientLoading, refetch } = useConsultingClientDetailBySlug(clientSlug)
 
@@ -594,7 +599,7 @@ export default function ConsultoriaVisitaExecucao() {
   // perder margem, largura e safe area (medido no sweep da FASE AB).
   if (clientLoading || methodologyLoading) {
     return (
-      <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="w-full">
+      <PageCanvas as="div" width={pageWidth} bottomClearance={pageBottomClearance} className="w-full">
         <div className="flex w-full items-center justify-center p-mx-20" role="status" aria-busy="true">
           <Loader2 className="w-mx-8 h-mx-8 animate-spin text-status-success-text" aria-hidden="true" />
         </div>
@@ -604,7 +609,7 @@ export default function ConsultoriaVisitaExecucao() {
 
   if (!client) {
     return (
-      <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="w-full">
+      <PageCanvas as="div" width={pageWidth} bottomClearance={pageBottomClearance} className="w-full">
         <div className="p-mx-20 text-center" role="status">
           <Typography variant="h3" tone="muted">Cliente não localizado.</Typography>
         </div>
@@ -613,7 +618,7 @@ export default function ConsultoriaVisitaExecucao() {
   }
 
   return (
-    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="w-full pb-mx-xl relative z-[var(--mx-z-base)]">
+    <PageCanvas as="div" width={pageWidth} bottomClearance={pageBottomClearance} className="w-full pb-mx-xl relative z-[var(--mx-z-base)]">
       <div className="fixed !-left-full top-mx-0 overflow-hidden pointer-events-none" aria-hidden="true">
          <div id="report-template-render">
             <VisitReportTemplate

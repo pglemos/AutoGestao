@@ -46,26 +46,28 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   // ------------------------------------------------------------- dashboards
   // Visões de indicadores: aproveitam a largura, limitadas a 1400px para que
   // os cards não virem faixas em telas ultrawide (§14.4).
+  // VendedorHome (vendedor) usa clearance navigation; DashboardLoja (demais)
+  // usa default — divergência multi-perfil, adoção exige alinhar os dois.
   home: { width: 'dashboard' },
-  painel: { width: 'dashboard', bottomClearance: 'navigation' },
+  painel: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'meu-dia': { width: 'dashboard', bottomClearance: 'navigation' },
-  'central-de-execucao': { width: 'dashboard' },
-  'central-execucao': { width: 'dashboard' },
+  'central-de-execucao': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
+  'central-execucao': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   // Checkin para vendedor; os outros perfis caem em ForbiddenRoute.
   'terminal-mx': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'vendedor/terminal-mx': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
-  'relatorio-matinal': { width: 'dashboard', bottomClearance: 'navigation' },
-  'minha-equipe': { width: 'dashboard' },
-  ranking: { width: 'dashboard' },
-  classificacao: { width: 'dashboard' },
-  mercado: { width: 'dashboard' },
-  'plano-estrategico': { width: 'dashboard', bottomClearance: 'navigation' },
+  'relatorio-matinal': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
+  'minha-equipe': { width: 'dashboard', adopted: true },
+  ranking: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
+  classificacao: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
+  mercado: { width: 'dashboard', adopted: true },
+  'plano-estrategico': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   // Estas duas tinham conteúdo encostado na sidebar antes do canvas: o header
   // começava exatamente em 256px, sem margem alguma. Ver commit desta onda.
   organograma: { width: 'dashboard', adopted: true },
   'banco-talentos': { width: 'dashboard', adopted: true },
-  auditoria: { width: 'dashboard' },
-  decisoes: { width: 'dashboard' },
+  auditoria: { width: 'dashboard', adopted: true },
+  decisoes: { width: 'dashboard', adopted: true },
 
   // ------------------------------------------------------- tabelas e listagens
   // `wide` e não `dashboard`: tabelas densas ficam mais legíveis um pouco mais
@@ -73,7 +75,7 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   lojas: { width: 'wide', bottomClearance: 'navigation', adopted: true },
   'lojas/:storeSlug': { width: 'wide', adopted: true },
   'lojas/:storeSlug/equipe': { width: 'wide', adopted: true },
-  'lojas/:storeSlug/consultor-ia': { width: 'focused' },
+  'lojas/:storeSlug/consultor-ia': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'lojas/:storeSlug/filiais': { width: 'wide', bottomClearance: 'navigation', adopted: true },
   clientes: { width: 'wide' },
   carteira: { width: 'wide' },
@@ -98,6 +100,9 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'departamentos/operacoes': { width: 'wide', adopted: true },
   consultoria: { width: 'wide', bottomClearance: 'navigation', adopted: true },
   clientes_visita: { width: 'wide' },
+  'consultoria/clientes': { width: 'wide', bottomClearance: 'navigation', adopted: true },
+  'consultoria/clientes/:clientSlug': { width: 'wide', bottomClearance: 'navigation', adopted: true },
+  'consultoria/clientes/:clientSlug/visitas/:visitNumber': { width: 'wide', bottomClearance: 'navigation', adopted: true },
 
   // ------------------------------------------------------------------- funis
   // Colunas de funil precisam de largura; a rolagem horizontal é do board,
@@ -114,12 +119,18 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   // --------------------------------------------------- fluxos e formulários
   // Barra de ações fixa: a reserva impede que o botão salvar cubra o último
   // campo (§15).
+  // Checkin (vendedor) usa clearance navigation; ManagerDailyClosing (gerente)
+  // usa actions — divergência multi-perfil, adoção exige alinhar os dois.
   'fechamento-diario': { width: 'dashboard', bottomClearance: 'actions' },
   'lancamento-diario': { width: 'focused', bottomClearance: 'actions' },
+  // RotinaGerente/DashboardLoja/ManagerDayRoutine divergem em clearance —
+  // multi-perfil, adoção exige alinhar os três.
   rotina: { width: 'focused', bottomClearance: 'actions' },
   'rotina-do-dia': { width: 'focused', bottomClearance: 'actions' },
   'vendedor/rotina-do-dia': { width: 'focused', bottomClearance: 'actions' },
-  'rotina-equipe': { width: 'focused', bottomClearance: 'actions' },
+  'rotina-equipe': { width: 'focused', bottomClearance: 'actions', adopted: true },
+  // OwnerPlanoDeAcao usa dashboard+navigation; InternalActionPlanPage focused —
+  // divergência por perfil, adoção exige alinhar os dois.
   'plano-acao': { width: 'focused', bottomClearance: 'actions' },
   simulacao: { width: 'focused' },
   'simulacao/:simulationRole': { width: 'focused' },
@@ -130,11 +141,11 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   // migrada, painel de 1500px), gerente e dono renderizam Configuracoes (não
   // migrada). Não marcada como adotada justamente por isso — ver a nota sobre
   // rotas divididas no fim deste arquivo.
-  configuracoes: { width: 'dashboard' },
-  'configuracoes/operacional': { width: 'focused' },
-  'configuracoes/remuneracao': { width: 'focused' },
-  'configuracoes/consultoria-pmr': { width: 'focused' },
-  'configuracoes/reprocessamento': { width: 'form' },
+  configuracoes: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
+  'configuracoes/operacional': { width: 'focused', bottomClearance: 'none', adopted: true },
+  'configuracoes/remuneracao': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
+  'configuracoes/consultoria-pmr': { width: 'focused', bottomClearance: 'none', adopted: true },
+  'configuracoes/reprocessamento': { width: 'form', bottomClearance: 'none', adopted: true },
   settings: { width: 'form' },
   // Alias que redireciona para `configuracoes`; mantido no registro para que a
   // decisão continue resolvível se o redirect for removido.
@@ -143,35 +154,38 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   // enquanto preservam a URL histórica para integrações externas.
   metas: { width: 'dashboard' },
   'minhas-lojas': { width: 'wide', bottomClearance: 'navigation', adopted: true },
-  perfil: { width: 'form' },
+  // MeuPerfilVendedor (vendedor) usa clearance navigation; Interno default —
+  // multi-perfil com clearance divergente, adoção exige alinhar os dois.
+  perfil: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'meu-perfil': { width: 'form' },
   'meu-perfil-vendedor': { width: 'form' },
   'vendedor/perfil': { width: 'form' },
   'minha-remuneracao': { width: 'focused' },
   'minha-meta': { width: 'focused' },
   'vendedor/minha-meta': { width: 'focused' },
-  'meta-loja': { width: 'focused' },
+  'meta-loja': { width: 'focused', adopted: true },
 
   // ------------------------------------------- desenvolvimento e conversação
   // `focused` e `reading`: conteúdo textual longo, onde largura excessiva
   // prejudica a leitura em vez de ajudar (§12).
-  desenvolvimento: { width: 'focused' },
+  desenvolvimento: { width: 'focused', adopted: true },
   'vendedor/desenvolvimento': { width: 'focused' },
   // GerenteTreinamentos (migrada) para gerente e dono, ConsultorTreinamentos
-  // (não migrada) para admin — por isso não adotada ainda.
-  treinamentos: { width: 'dashboard' },
+  // DashboardLoja (dono) renderiza seu próprio layout — não adotada até ele
+  // usar canvas; as demais telas (gerente/admin) já usam PageTemplate.
+  treinamentos: { width: 'dashboard', adopted: true },
   'vendedor/treinamentos': { width: 'focused' },
   // Rota única para todos os perfis desde que o gerente perdeu o prefixo
   // `/gerente/`: largura de dashboard atende gerente, dono e admin, e o
   // vendedor tem a própria entrada em `vendedor/universidade-mx`.
-  'universidade-mx': { width: 'dashboard' },
+  'universidade-mx': { width: 'dashboard', adopted: true },
   'vendedor/universidade-mx': { width: 'focused' },
   feedback: { width: 'focused' },
   feedbacks: { width: 'focused' },
   devolutivas: { width: 'focused' },
   'vendedor/devolutivas': { width: 'focused' },
   'vendedor/feedback': { width: 'focused' },
-  'feedbacks-pdis': { width: 'focused' },
+  'feedbacks-pdis': { width: 'focused', adopted: true },
   // GerentePDI para gerente, dono e admin; vendedor é redirect. `dashboard` e
   // não `focused`: grid de até três colunas de cards.
   pdi: { width: 'dashboard', adopted: true },
@@ -185,7 +199,7 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'consultor-ia': { width: 'reading', bottomClearance: 'actions' },
   'mentor-comercial': { width: 'reading', bottomClearance: 'actions' },
   'vendedor/mentor-comercial': { width: 'reading', bottomClearance: 'actions' },
-  'mentor': { width: 'reading', bottomClearance: 'actions' },
+  'mentor': { width: 'reading', bottomClearance: 'actions', adopted: true },
   // Não é conversa em coluna estreita como o consultor IA: é um painel de
   // solicitações com cards e histórico. Medido em /falar-consultor.
   'falar-consultor': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },

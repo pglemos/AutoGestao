@@ -93,7 +93,7 @@ describe('contrato de rotas adotadas × canvas (routeLayoutMetadata adopted:true
     const result = run(
       `const DashboardLoja = lazy(() => import('@/pages/DashboardLoja'))
        ${routes(`<Route path="departamentos" element={<RoleSwitch dono={<DashboardLoja />} admin={<ForbiddenRoute />} />} />`)}`,
-      `const layouts = { departamentos: { width: 'wide', adopted: true }, decisoes: { width: 'dashboard' } }`,
+      `const layouts = { departamentos: { width: 'wide', bottomClearance: 'navigation', adopted: true }, decisoes: { width: 'dashboard' } }`,
       {
         'src/pages/DashboardLoja.tsx':
           `export { DashboardLoja, default } from '@/features/dashboard-loja/DashboardLoja.container'`,
@@ -260,5 +260,101 @@ describe('contrato de rotas adotadas × canvas (routeLayoutMetadata adopted:true
         expect.objectContaining({ rule: 'unresolved-root', route: 'x' }),
       ]),
     )
+  })
+
+  test('GREEN: wrapper que renderiza children (ScopeGuard) revela o canvas aninhado', () => {
+    const result = run(
+      `const ConsultoriaClienteDetalhe = lazy(() => import('@/pages/ConsultoriaClienteDetalhe'))
+       ${routes(`<Route path="consultoria/clientes/:clientSlug" element={<ConsultoriaClienteDetalhe />} />`)}`,
+      `const layouts = { 'consultoria/clientes/:clientSlug': { width: 'wide', bottomClearance: 'navigation', adopted: true } }`,
+      {
+        'src/pages/ConsultoriaClienteDetalhe.tsx':
+          `import { ConsultingClientScopeGuard } from '@/features/consulting-clients/ConsultingClientScopeGuard'
+           import { ScopedConsultoriaClienteDetalhe } from '@/features/consultoria-cliente/ScopedConsultoriaClienteDetalhe'
+           export default function ConsultoriaClienteDetalhe() {
+             return <ConsultingClientScopeGuard><ScopedConsultoriaClienteDetalhe /></ConsultingClientScopeGuard>
+           }`,
+        'src/features/consulting-clients/ConsultingClientScopeGuard.tsx':
+          `import { MxModulePage } from '@/components/module/MxModuleVisualPrimitives'
+           import { resolveRouteLayout } from '@/design-system/page'
+           import { useLocation } from 'react-router-dom'
+           export function ConsultingClientScopeGuard({ children }: { children: React.ReactNode }) {
+             const location = useLocation()
+             const { width: pageWidth, bottomClearance: pageBottomClearance } = resolveRouteLayout(location.pathname)
+             return <MxModulePage id="scope" width={pageWidth} bottomClearance={pageBottomClearance}>{children}</MxModulePage>
+           }`,
+        'src/features/consultoria-cliente/ScopedConsultoriaClienteDetalhe.tsx':
+          `import { MxModulePage } from '@/components/module/MxModuleVisualPrimitives'
+           import { resolveRouteLayout } from '@/design-system/page'
+           import { useLocation } from 'react-router-dom'
+           export function ScopedConsultoriaClienteDetalhe() {
+             const location = useLocation()
+             const { width: pageWidth, bottomClearance: pageBottomClearance } = resolveRouteLayout(location.pathname)
+             return <MxModulePage id="detalhe" width={pageWidth} bottomClearance={pageBottomClearance}><h1>x</h1></MxModulePage>
+           }`,
+      },
+    )
+
+    expect(result.pass).toBe(true)
+    expect(result.violations).toEqual([])
+  })
+
+  test('RED: MxModulePage sem width explícito (default dashboard) numa rota wide gera width-mismatch', () => {
+    const result = run(
+      `const ConsultingClientsPage = lazy(() => import('@/features/consulting-clients/ConsultingClientsPage'))
+       ${routes(`<Route path="consultoria/clientes" element={<ConsultingClientsPage />} />`)}`,
+      `const layouts = { 'consultoria/clientes': { width: 'wide', bottomClearance: 'navigation', adopted: true } }`,
+      {
+        'src/features/consulting-clients/ConsultingClientsPage.tsx':
+          `import { MxModulePage } from '@/components/module/MxModuleVisualPrimitives'
+           export function ConsultingClientsPage() { return <MxModulePage id="cc"><h1>c</h1></MxModulePage> }`,
+      },
+    )
+
+    expect(result.pass).toBe(false)
+    expect(result.violations).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ rule: 'width-mismatch', route: 'consultoria/clientes' }),
+      ]),
+    )
+  })
+
+  test('GREEN: ternário por role segue ambos os lados e valida cada canvas wide', () => {
+    const result = run(
+      `const ConsultoriaClientes = lazy(() => import('@/pages/ConsultoriaClientes'))
+       ${routes(`<Route path="consultoria/clientes" element={<ConsultoriaClientes />} />`)}`,
+      `const layouts = { 'consultoria/clientes': { width: 'wide', bottomClearance: 'navigation', adopted: true } }`,
+      {
+        'src/pages/ConsultoriaClientes.tsx':
+          `import { useAuth } from '@/hooks/useAuth'
+           import { ConsultingClientsPage } from '@/features/consulting-clients/ConsultingClientsPage'
+           import { ConsultantAssignedClientsPage } from '@/features/consulting-clients/ConsultantAssignedClientsPage'
+           export default function ConsultoriaClientes() {
+             const { role } = useAuth()
+             return role === 'consultor_mx' ? <ConsultantAssignedClientsPage /> : <ConsultingClientsPage />
+           }`,
+        'src/features/consulting-clients/ConsultingClientsPage.tsx':
+          `import { MxModulePage } from '@/components/module/MxModuleVisualPrimitives'
+           import { resolveRouteLayout } from '@/design-system/page'
+           import { useLocation } from 'react-router-dom'
+           export function ConsultingClientsPage() {
+             const location = useLocation()
+             const { width: pageWidth, bottomClearance: pageBottomClearance } = resolveRouteLayout(location.pathname)
+             return <MxModulePage id="cc" width={pageWidth} bottomClearance={pageBottomClearance}><h1>c</h1></MxModulePage>
+           }`,
+        'src/features/consulting-clients/ConsultantAssignedClientsPage.tsx':
+          `import { MxModulePage } from '@/components/module/MxModuleVisualPrimitives'
+           import { resolveRouteLayout } from '@/design-system/page'
+           import { useLocation } from 'react-router-dom'
+           export function ConsultantAssignedClientsPage() {
+             const location = useLocation()
+             const { width: pageWidth, bottomClearance: pageBottomClearance } = resolveRouteLayout(location.pathname)
+             return <MxModulePage id="ca" width={pageWidth} bottomClearance={pageBottomClearance}><h1>a</h1></MxModulePage>
+           }`,
+      },
+    )
+
+    expect(result.pass).toBe(true)
+    expect(result.violations).toEqual([])
   })
 })

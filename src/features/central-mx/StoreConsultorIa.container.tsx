@@ -37,7 +37,7 @@ export function StoreConsultorIa() {
 
   if (!selectedStoreId) {
     return (
-      <PageTemplate as="div" width="focused">
+      <PageTemplate as="div" width="dashboard" bottomClearance="navigation">
         <Card className="mx-auto max-w-2xl border-none bg-white">
           <EmptyState
             size="lg"

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
+import { resolveRouteLayout } from '@/design-system/page'
 import { isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { useScopedConsultingClientDetailBySlug } from '@/features/consulting-clients/hooks/useScopedConsultingClientDetailBySlug'
 import { useConsultingModules } from '@/hooks/useConsultingModules'
@@ -21,6 +22,9 @@ import { MxErrorState, MxLoadingState, MxModulePage } from '@/components/module/
 export function ScopedConsultoriaClienteDetalhe() {
   const { clientSlug } = useParams<{ clientSlug: string }>()
   const { profile } = useAuth()
+  const location = useLocation()
+  // Rotas wide (consultoria/clientes/:clientSlug): largura e clearance vêm da metadata.
+  const { width: pageWidth, bottomClearance: pageBottomClearance } = resolveRouteLayout(location.pathname)
 
   const {
     client,
@@ -108,11 +112,11 @@ export function ScopedConsultoriaClienteDetalhe() {
     [agendaTargetAudienceOptions, visitFormApi.visitForm.target_audience],
   )
 
-  if (loading || modulesLoading) return <MxModulePage id="consultoria-cliente-detalhe-loading"><MxLoadingState label="Carregando cockpit de consultoria" /></MxModulePage>
-  if (error || !client) return <MxModulePage id="consultoria-cliente-detalhe-error"><MxErrorState description={error || 'Cliente não encontrado'} /></MxModulePage>
+  if (loading || modulesLoading) return <MxModulePage id="consultoria-cliente-detalhe-loading" width={pageWidth} bottomClearance={pageBottomClearance}><MxLoadingState label="Carregando cockpit de consultoria" /></MxModulePage>
+  if (error || !client) return <MxModulePage id="consultoria-cliente-detalhe-error" width={pageWidth} bottomClearance={pageBottomClearance}><MxErrorState description={error || 'Cliente não encontrado'} /></MxModulePage>
 
   return (
-    <MxModulePage id="consultoria-cliente-detalhe" className="bg-surface-alt">
+    <MxModulePage id="consultoria-cliente-detalhe" width={pageWidth} bottomClearance={pageBottomClearance} className="bg-surface-alt">
       <ClientHeaderSection client={client} />
 
       <TabNav tabs={TABS} activeTab={activeTab} onTabChange={handleTabChange} />

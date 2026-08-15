@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { ShieldAlert } from 'lucide-react'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
+import { resolveRouteLayout } from '@/design-system/page'
 import { isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import {
   MxEmptyState,
@@ -15,6 +16,9 @@ type Props = { children: ReactNode }
 export function ConsultingClientScopeGuard({ children }: Props) {
   const { clientSlug } = useParams<{ clientSlug: string }>()
   const { role } = useAuth()
+  const location = useLocation()
+  // Rotas wide (consultoria/clientes*): largura e clearance vêm da metadata.
+  const { width: pageWidth, bottomClearance: pageBottomClearance } = resolveRouteLayout(location.pathname)
   const internal = isPerfilInternoMx(role)
   const [allowed, setAllowed] = useState(internal)
   const [loading, setLoading] = useState(!internal)
@@ -45,12 +49,12 @@ export function ConsultingClientScopeGuard({ children }: Props) {
   }, [validateScope])
 
   if (loading) {
-    return <MxModulePage id="consulting-client-scope-loading"><MxLoadingState label="Validando vínculo da consultoria" /></MxModulePage>
+    return <MxModulePage width={pageWidth} bottomClearance={pageBottomClearance} id="consulting-client-scope-loading"><MxLoadingState label="Validando vínculo da consultoria" /></MxModulePage>
   }
 
   if (error) {
     return (
-      <MxModulePage id="consulting-client-scope-error">
+      <MxModulePage width={pageWidth} bottomClearance={pageBottomClearance} id="consulting-client-scope-error">
         <MxModuleHeader eyebrow="Consultoria" title="Validação de acesso" description="Não foi possível confirmar seu vínculo com este cliente." />
         <MxErrorState description={error} retry={() => void validateScope()} />
       </MxModulePage>
@@ -59,7 +63,7 @@ export function ConsultingClientScopeGuard({ children }: Props) {
 
   if (!allowed) {
     return (
-      <MxModulePage id="consulting-client-scope-forbidden">
+      <MxModulePage width={pageWidth} bottomClearance={pageBottomClearance} id="consulting-client-scope-forbidden">
         <MxModuleHeader eyebrow="Consultoria" title="Cliente indisponível" description="O acesso é limitado aos clientes vinculados ao seu perfil." />
         <MxEmptyState icon={ShieldAlert} title="Fora do seu escopo" description="Solicite ao Administrador MX a atribuição ativa deste cliente antes de continuar." />
       </MxModulePage>

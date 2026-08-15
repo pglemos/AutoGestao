@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react'
-import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
+import { Navigate, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { LogOut } from 'lucide-react'
+import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
 import { Badge } from '@/components/atoms/Badge'
 import { MxModuleHeader, MxModulePage, MxSectionCard } from '@/components/module/MxModuleVisualPrimitives'
@@ -35,9 +36,11 @@ export function ConfiguracoesShell({
   onSignOut: () => Promise<void> | void
 }) {
   const navigate = useNavigate()
+  const location = useLocation()
   const [searchParams, setSearchParams] = useSearchParams()
   const visibleTabs = useMemo(() => getVisibleTabs(role), [role])
   const requestedTab = initialTab || searchParams.get('aba')
+  const { width: pageWidth, bottomClearance: pageBottomClearance } = resolveRouteLayout(location.pathname)
 
   const activeTab = useMemo(() => {
     if (isConfigTabKey(requestedTab) && visibleTabs.some((tab: ConfigTabDefinition) => tab.key === requestedTab)) return requestedTab
@@ -76,7 +79,7 @@ export function ConfiguracoesShell({
   }
 
   return (
-    <MxModulePage id="configuracoes" accessMode={isReadOnly ? 'read-only' : 'manage'}>
+    <MxModulePage id="configuracoes" width={pageWidth} bottomClearance={pageBottomClearance} accessMode={isReadOnly ? 'read-only' : 'manage'}>
       <div data-testid="configuracoes-shell">
         <MxModuleHeader
           title="Configurações"

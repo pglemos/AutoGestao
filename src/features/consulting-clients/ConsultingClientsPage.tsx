@@ -1,5 +1,6 @@
 import { CalendarDays, Plus, RefreshCw } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
+import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
 import { MxErrorState, MxLoadingState, MxModuleHeader, MxModulePage, MxSectionCard, MxSectionHeader } from '@/components/module/MxModuleVisualPrimitives'
 import { ConsultingClientTable } from './components/ConsultingClientTable'
@@ -14,6 +15,9 @@ type ConsultingClientsPageProps = {
 
 function AdministrativeConsultingClientsPage({ embedded = false }: ConsultingClientsPageProps) {
   const controller = useConsultingClientsController()
+  const location = useLocation()
+  // Rotas wide (consultoria/clientes): largura e clearance vêm da metadata.
+  const { width: pageWidth, bottomClearance: pageBottomClearance } = resolveRouteLayout(location.pathname)
   const content = (
     <div className="w-full space-y-5">
       <MxModuleHeader eyebrow="Gestão de clientes" title="CRM de Consultoria" description="Acompanhe clientes, evolução das visitas, módulos contratados e saúde do ritual." actions={<><Button asChild variant="outline"><Link to="/agenda"><CalendarDays size={18} />Agenda MX</Link></Button><Button variant="outline" onClick={() => void controller.refetch()}><RefreshCw size={18} />Atualizar</Button>{controller.canCreate ? <Button onClick={() => controller.setOpen(true)}><Plus size={18} />Novo cliente</Button> : null}</>} />
@@ -23,7 +27,7 @@ function AdministrativeConsultingClientsPage({ embedded = false }: ConsultingCli
   )
 
   if (embedded) return <div id="internal-consulting-clients-embedded">{content}</div>
-  return <MxModulePage id="internal-consulting-clients">{content}</MxModulePage>
+  return <MxModulePage id="internal-consulting-clients" width={pageWidth} bottomClearance={pageBottomClearance}>{content}</MxModulePage>
 }
 
 export function ConsultingClientsPage(props: ConsultingClientsPageProps) {

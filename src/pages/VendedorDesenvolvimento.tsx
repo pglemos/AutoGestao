@@ -13,7 +13,7 @@ import VendedorDesenvolvimentoPage from '@/features/vendedor-desenvolvimento/Ven
 
 export default function VendedorDesenvolvimento() {
   return (
-    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="min-h-full">
+    <PageCanvas as="div" width="focused" className="min-h-full">
       <VendedorDesenvolvimentoPage />
     </PageCanvas>
   )

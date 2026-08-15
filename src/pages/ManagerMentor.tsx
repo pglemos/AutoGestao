@@ -55,7 +55,7 @@ export default function ManagerMentor() {
   const situation = useMemo(() => resolveMentorSituation(recommendations), [recommendations])
 
   return (
-    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex min-h-full flex-col gap-5">
+    <PageCanvas as="div" width="reading" bottomClearance="actions" className="flex min-h-full flex-col gap-5">
         <header className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <div className="flex items-center gap-3">
             <span className="grid h-10 w-10 place-items-center rounded-xl bg-status-success-surface text-status-success-text"><BrainCircuit size={20} /></span>

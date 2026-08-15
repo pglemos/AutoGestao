@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { CalendarDays, RefreshCw } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
+import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
 import {
   MxErrorState,
@@ -111,9 +112,12 @@ export function ConsultantAssignedClientsPage() {
 
   const rows = useMemo(() => filterConsultingClients(clients, search), [clients, search])
   const metrics = useMemo(() => buildMetrics(rows), [rows])
+  const location = useLocation()
+  // Rotas wide (consultoria/clientes): largura e clearance vêm da metadata.
+  const { width: pageWidth, bottomClearance: pageBottomClearance } = resolveRouteLayout(location.pathname)
 
   return (
-    <MxModulePage id="consultant-assigned-clients">
+    <MxModulePage id="consultant-assigned-clients" width={pageWidth} bottomClearance={pageBottomClearance}>
       <MxModuleHeader
         eyebrow="Minha carteira consultiva"
         title="CRM de Consultoria"
