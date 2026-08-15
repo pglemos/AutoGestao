@@ -9,7 +9,7 @@ Levantamento honesto do que existe no export `mx-admin-flow` e do que o MX tem h
 | `/clientes` | 23 / 5.571 | lista + wizard + **Visão 360 + ativação** | ~50% |
 | `/equipe` | 8 / 1.311 | lista + editar + carteira + **perfil do consultor** | ~65% |
 | `/produtos` | 4 / 691 | **ciclo de vida + módulos + tempos** | ~85% |
-| `/indicadores` | 34 / 6.630 | lista + criar/editar | ~8% |
+| `/indicadores` | 34 / 6.630 | catálogo com ciclo, ordem, drawer e **parâmetros** | ~35% |
 | `/planos-acao` | 21 / 3.941 | rede + templates + sugestões + **kanban e detalhe** | ~55% |
 | `/consultoria-mx` | 19 / 2.742 | lista de encontros | ~10% |
 | **Total** | **109 / 20.886** | ~2.400 linhas | **~20%** |
@@ -36,10 +36,11 @@ Levantamento honesto do que existe no export `mx-admin-flow` e do que o MX tem h
 - Falta: **aba Plano Estratégico** (pacote de indicadores vinculado, digitáveis vs calculáveis, competências meta) — depende das tabelas de pacote de indicadores.
 
 ### `/indicadores`
-- **Catálogo completo**: ordem oficial editável, restaurar padrão MX, filtros por departamento/tipo.
-- **Wizard de criação**: código interno, unidade (7 tipos), casas decimais, direção, faixa, frequência, ano inicial/final.
-- **Drawer de detalhe**: status (rascunho→revisão→publicado→desabilitado→arquivado), visibilidade no Módulo Dono.
-- **Parâmetros e fórmulas**: criar parâmetro, testar cálculo, dependentes, override por cliente com justificativa.
+- ~~Ordem oficial editável e filtros por área/status~~ — **feito** (falta "restaurar padrão MX").
+- ~~Drawer de detalhe com ciclo de status e visibilidade no Módulo Dono~~ — **feito**.
+- ~~Leitura de parâmetros com faixas vermelho/amarelo/verde~~ — **feito** (só leitura + checagem de consistência).
+- **Wizard de criação** com casas decimais, frequência e vigência editáveis na tela (as colunas já existem no banco).
+- **Fórmulas**: criar parâmetro, testar cálculo, dependentes, override por cliente com justificativa.
 - **Metas e realizados**: cadastro rápido, importação/exportação de planilha, histórico com reversão, valor oficial, cópia de metas entre lojas.
 
 ### `/planos-acao`
@@ -67,5 +68,5 @@ Sem elas, parte do gap não fecha: qualificação de consultor por produto e por
 2. ~~`/equipe` — perfil do consultor com programas, encontros e capacidade~~ — feito.
 3. ~~`/clientes` — Visão 360 e ativação com checklist~~ — feito.
 4. ~~`/planos-acao` — kanban e detalhe em abas~~ — feito (falta o wizard por cliente).
-5. `/indicadores` — ordem, wizard, drawer, parâmetros.
+5. ~~`/indicadores` — ordem, drawer, parâmetros~~ — feito (faltam wizard completo, fórmulas e importação de metas).
 6. `/consultoria-mx` — metodologia por produto e editor de encontro.
