@@ -85,4 +85,54 @@ describe("TabNav", () => {
     fireEvent.keyDown(screen.getByRole("tab", { name: "Visão Geral" }), { key: "End" });
     expect(events[3]).toBe("files");
   });
+
+  test("FASE J 10.013-b: tab disabled fica fora da tabulação e não notifica", () => {
+    const events: string[] = [];
+    render(
+      <TabNav
+        tabs={[
+          { key: "a", label: "A" },
+          { key: "b", label: "B", disabled: true },
+          { key: "c", label: "C" },
+        ]}
+        activeTab="a"
+        onTabChange={(key) => events.push(key)}
+      />,
+    );
+
+    const b = screen.getByRole("tab", { name: "B" });
+    expect(b.getAttribute("tabindex")).toBe("-1");
+    expect(b.getAttribute("aria-disabled")).toBe("true");
+    expect(b.hasAttribute("disabled")).toBe(true);
+
+    fireEvent.click(b);
+    expect(events).toEqual([]);
+  });
+
+  test("FASE J 10.013-b: roving pula abas disabled", () => {
+    const events: string[] = [];
+    render(
+      <TabNav
+        tabs={[
+          { key: "a", label: "A" },
+          { key: "b", label: "B", disabled: true },
+          { key: "c", label: "C" },
+        ]}
+        activeTab="a"
+        onTabChange={(key) => events.push(key)}
+      />,
+    );
+
+    fireEvent.keyDown(screen.getByRole("tab", { name: "A" }), { key: "ArrowRight" });
+    // Pula a disabled B e vai para C.
+    expect(events[0]).toBe("c");
+  });
+
+  test("FASE J 10.014: scrollable troca wrap por overflow-x-auto", () => {
+    const { container } = render(<TabNav tabs={tabs} activeTab="overview" onTabChange={() => {}} scrollable />);
+    const nav = container.querySelector("nav");
+
+    expect(nav?.className).toContain("overflow-x-auto");
+    expect(nav?.className).not.toContain("flex-wrap");
+  });
 });

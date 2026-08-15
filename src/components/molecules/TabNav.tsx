@@ -79,12 +79,14 @@ export function TabNav<T extends string = string>({
   return (
     <nav
       className={cn(
-        'flex flex-wrap gap-mx-xs border-b border-border-subtle mb-mx-md overflow-visible',
+        scrollable
+          ? 'flex gap-mx-xs overflow-x-auto border-b border-border-subtle mb-mx-md whitespace-nowrap'
+          : 'flex flex-wrap gap-mx-xs border-b border-border-subtle mb-mx-md overflow-visible',
         className
       )}
       role="tablist"
     >
-      {tabs.map(({ key, label, controls }) => {
+      {tabs.map(({ key, label, controls, disabled }) => {
         const tabId = `${String(key)}-tab`
         const panelId = controls ?? `${String(key)}-panel`
 
@@ -94,16 +96,20 @@ export function TabNav<T extends string = string>({
             id={tabId}
             type="button"
             role="tab"
-            tabIndex={activeTab === key ? 0 : -1}
+            disabled={disabled}
+            aria-disabled={disabled || undefined}
+            tabIndex={disabled ? -1 : activeTab === key ? 0 : -1}
             aria-selected={activeTab === key}
             aria-controls={panelId}
-            onClick={() => onTabChange(key)}
+            onClick={() => !disabled && onTabChange(key)}
             onKeyDown={handleKeyDown}
             className={cn(
               'px-mx-md py-mx-sm text-label font-medium transition-colors border-b-2 whitespace-nowrap outline-none focus-visible:ring-[length:var(--mx-input-focus-ring-width)] focus-visible:ring-focus-ring focus-visible:ring-offset-2',
-              activeTab === key
-                ? 'border-brand-primary text-status-success-text bg-brand-primary/5'
-                : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-surface-alt'
+              disabled
+                ? 'cursor-not-allowed border-transparent text-text-disabled'
+                : activeTab === key
+                  ? 'border-brand-primary text-status-success-text bg-brand-primary/5'
+                  : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-surface-alt'
             )}
           >
             {label}
