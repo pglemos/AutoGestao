@@ -22,6 +22,8 @@ export type ActionPlanTemplateVersion = {
   status: 'rascunho' | 'publicada' | 'arquivada'
   notas: string | null
   published_at: string | null
+  /** Itens da versão, quando carregados (usado pelos filtros avançados). */
+  itens?: ActionPlanTemplateItem[]
 }
 
 export type ActionPlanTemplate = {
