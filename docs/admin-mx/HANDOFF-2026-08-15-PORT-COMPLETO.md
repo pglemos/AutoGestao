@@ -230,3 +230,15 @@ e subir os contadores em `src/lib/foundation-zero-route-matrix-contract.test.ts`
 - [ ] Corrigir o `aria-label` no atom `Select` (§4.4).
 - [ ] Remover worktrees/branches de rota após validação (§8).
 - [ ] Rotacionar credenciais expostas em chat anterior (§6).
+
+---
+
+## Adendo — execução dos itens 4.1 e 4.2 (2026-08-16)
+
+**4.1 Push — feito.** Os 57 commits foram para `origin/main` e a Vercel publicou (`fbc4c7b8` READY, depois `ce96ae78` e `639b7c4f`). Gates antes do push: typecheck 0 erros, build OK, 3.796 testes passando (a única falha é a FASE AH pré-existente, ligada ao ledger gitignored de outra sessão).
+
+**4.2 E2E clicado — feito, 8/8.** Script versionado em `scripts/e2e/admin-mx-smoke.mjs`. Cobre: Visão 360 abrindo pela lista e suas 6 abas, perfil do consultor, detalhe do produto, drawer do indicador, detalhe do plano no kanban e as 5 abas de `/consultoria-mx`. Zero erro de console e zero 4xx do Supabase.
+
+**Bug encontrado e corrigido:** o botão "Abrir" da lista de `/clientes` apontava sempre para `/consultoria/clientes/:slug` (a ficha de acompanhamento), então a Visão 360 administrativa só era alcançável digitando a URL. A tabela agora recebe `detailBasePath` e cada rota abre a sua tela (commit `ce96ae78`).
+
+**Armadilha de teste que custou três falsos negativos:** o cabeçalho fixo intercepta o clique do Playwright depois da rolagem automática — `getByRole('button').click()` reporta sucesso e o overlay não abre. Três drawers foram dados como quebrados por isso, e chegaram a receber um workaround (`useDeferredOpen`) que foi revertido depois de provar que o código estava correto. Use o helper `clicarNoMain` do script de smoke.
