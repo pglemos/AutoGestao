@@ -101,7 +101,7 @@ export function AdminIndicadoresPage() {
   useEffect(() => { void refetch() }, [refetch])
 
   useEffect(() => {
-    if (tab !== 'parametros' || parameters.length) return
+    if (tab !== 'parametros' || parameterSetId !== null) return
     void (async () => {
       const [parameterResult, setResult] = await Promise.all([
         fetchIndicatorParameters(),
@@ -113,7 +113,7 @@ export function AdminIndicadoresPage() {
       const formulas = await fetchFormulaIndicators()
       setFormulaIndicators(formulas.rows)
     })()
-  }, [tab, parameters.length])
+  }, [tab, parameterSetId])
 
   const areas = useMemo(() => [...new Set(rows.map(item => item.area).filter(Boolean))].sort(), [rows])
 
@@ -408,24 +408,26 @@ export function AdminIndicadoresPage() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {rows.filter(item => parameterByKey.has(item.metric_key)).map(item => {
-                          const parameter = parameterByKey.get(item.metric_key) as IndicatorParameter
-                          const problem = validateThresholds(parameter, item.direction)
+                        {rows.map(item => {
+                          const parameter = parameterByKey.get(item.metric_key) as IndicatorParameter | undefined
+                          const problem = parameter ? validateThresholds(parameter, item.direction) : null
                           return (
                             <TableRow key={item.metric_key}>
                               <TableCell>
                                 <div className="font-semibold text-foreground">{item.label}</div>
                                 <div className="text-xs text-muted-foreground">{item.metric_key}</div>
                               </TableCell>
-                              <TableCell>{parameter.target_default ?? '—'}</TableCell>
-                              <TableCell>{parameter.market_average ?? '—'}</TableCell>
-                              <TableCell>{parameter.best_practice ?? '—'}</TableCell>
-                              <TableCell>{parameter.red_threshold ?? '—'}</TableCell>
-                              <TableCell>{parameter.yellow_threshold ?? '—'}</TableCell>
-                              <TableCell>{parameter.green_threshold ?? '—'}</TableCell>
-                              <TableCell className="text-xs">{problem ?? 'OK'}</TableCell>
+                              <TableCell>{parameter?.target_default ?? '—'}</TableCell>
+                              <TableCell>{parameter?.market_average ?? '—'}</TableCell>
+                              <TableCell>{parameter?.best_practice ?? '—'}</TableCell>
+                              <TableCell>{parameter?.red_threshold ?? '—'}</TableCell>
+                              <TableCell>{parameter?.yellow_threshold ?? '—'}</TableCell>
+                              <TableCell>{parameter?.green_threshold ?? '—'}</TableCell>
+                              <TableCell className="text-xs">{parameter ? (problem ?? 'OK') : '—'}</TableCell>
                               <TableCell className="text-right">
-                                <Button variant="outline" size="sm" onClick={() => setParameterModal({ indicator: item, parameter })}>Editar</Button>
+                                <Button variant="outline" size="sm" onClick={() => setParameterModal({ indicator: item, parameter: parameter ?? null })}>
+                                  {parameter ? 'Editar' : 'Criar'}
+                                </Button>
                               </TableCell>
                             </TableRow>
                           )
@@ -433,7 +435,7 @@ export function AdminIndicadoresPage() {
                       </TableBody>
                     </Table>
                   </MxTableSurface>
-                ) : <MxEmptyState title="Sem parâmetros no conjunto ativo" description="Cadastre um conjunto de parâmetros da consultoria para ver as faixas aqui." />}
+                ) : <MxEmptyState title="Catálogo vazio" description="Cadastre indicadores no catálogo para configurar os parâmetros." />}
               </div>
             </MxSectionCard>
             <ClientOverridesSection rows={rows} parameters={parameters} />
