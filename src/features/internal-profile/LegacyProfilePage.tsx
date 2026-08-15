@@ -185,22 +185,22 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
               <div className="grid md:grid-cols-2 gap-10">
                 <div className="space-y-3">
                   <p className="ml-2 text-xs font-bold uppercase tracking-widest leading-none text-muted-foreground">Nome Operacional</p>
-                  <Input aria-label="Nome Operacional" value={name} onChange={e => setName(e.target.value)} className="!h-14 px-6 font-bold" />
+                  <Input aria-label="Nome Operacional" value={name} onChange={e => setName(e.target.value)} className="h-[var(--mx-input-height-lg)] px-6 font-bold" />
                 </div>
                 <div className="space-y-3">
                   <p className="ml-2 text-xs font-bold uppercase tracking-widest leading-none text-muted-foreground">E-mail Fixado</p>
-                  <Input aria-label="E-mail Fixado" value={profile.email} disabled className="!h-14 px-6 font-bold opacity-50 bg-muted" />
+                  <Input aria-label="E-mail Fixado" value={profile.email} disabled className="h-[var(--mx-input-height-lg)] px-6 font-bold opacity-50 bg-muted" />
                 </div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-10">
                 <div className="space-y-3">
                   <p className="ml-2 text-xs font-bold uppercase tracking-widest leading-none text-muted-foreground">Telefone</p>
-                  <Input value={phone} onChange={e => setPhone(e.target.value)} placeholder="(11) 99999-9999" className="!h-14 px-6 font-bold" />
+                  <Input value={phone} onChange={e => setPhone(e.target.value)} placeholder="(11) 99999-9999" className="h-[var(--mx-input-height-lg)] px-6 font-bold" />
                 </div>
                 <div className="space-y-3">
                   <p className="ml-2 text-xs font-bold uppercase tracking-widest leading-none text-muted-foreground">Cargo</p>
-                  <Input aria-label="Cargo" value={role || ''} disabled className="!h-14 px-6 font-bold opacity-50 bg-muted capitalize" />
+                  <Input aria-label="Cargo" value={role || ''} disabled className="h-[var(--mx-input-height-lg)] px-6 font-bold opacity-50 bg-muted capitalize" />
                 </div>
               </div>
 

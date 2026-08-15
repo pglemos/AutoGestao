@@ -4,9 +4,9 @@ import { useOwner } from "@/components/owner/OwnerContext";
 import { useAuth } from "@/features/owner/lib/ownerAuth";
 import { logAudit } from "@/features/owner/lib/ownerAudit";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Input } from '@/components/atoms/Input';
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from '@/components/atoms/Textarea';
 import {
   Dialog,
   DialogContent,

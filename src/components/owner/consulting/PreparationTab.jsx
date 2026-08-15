@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { CheckCircle2, Circle, Users, FileText, Play, ListChecks, Upload, Trash2, Paperclip } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from '@/components/atoms/Textarea';
 import { consultingRepository } from "./consultingRepository";
 import ParticipantsModal from "./ParticipantsModal";
 import { toast } from '@/lib/toast'

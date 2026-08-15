@@ -1,6 +1,6 @@
 // Filtros compactos da Visão Geral em uma única linha.
 import { Search, X } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Input } from '@/components/atoms/Input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { AREA_LIST } from "./strategicIndicatorCatalog";

@@ -109,7 +109,7 @@ export function CreateStoreModal({
                       onChange={e =>
                         setNewStore(p => ({ ...p, name: e.target.value.toUpperCase() }))
                       }
-                      className="!h-14 !px-6 font-bold"
+                      className="h-[var(--mx-input-height-lg)] !px-6 font-bold"
                     />
                   </div>
                   <div className="space-y-mx-xs">
@@ -141,7 +141,7 @@ export function CreateStoreModal({
                         onChange={e =>
                           setNewStore(p => ({ ...p, manager_email: e.target.value }))
                         }
-                        className="!h-14 !pl-14 !px-6 font-bold"
+                        className="h-[var(--mx-input-height-lg)] pl-12 !px-6 font-bold"
                       />
                     </div>
                     <p className="mt-mx-sm text-mx-micro text-muted-foreground">

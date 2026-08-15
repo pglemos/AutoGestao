@@ -139,7 +139,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
             <Input
               readOnly
               value={registrationLink}
-              className="!pl-14 !h-14 font-bold"
+              className="pl-12 h-[var(--mx-input-height-lg)] font-bold"
             />
           </div>
         </div>
@@ -155,7 +155,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
               required
               value={form.name}
               onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value.toUpperCase() }))}
-              className="!pl-14 !h-14 font-bold uppercase tracking-widest"
+              className="pl-12 h-[var(--mx-input-height-lg)] font-bold uppercase tracking-widest"
             />
           </div>
         </div>
@@ -170,7 +170,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
               value={form.legal_name || ''}
               onChange={(event) => setForm((prev) => ({ ...prev, legal_name: event.target.value.toUpperCase() }))}
               placeholder="RAZÃO SOCIAL DA LOJA"
-              className="!h-14 font-bold uppercase tracking-widest"
+              className="h-[var(--mx-input-height-lg)] font-bold uppercase tracking-widest"
             />
           </div>
 
@@ -183,7 +183,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
               value={form.cnpj || ''}
               onChange={(event) => setForm((prev) => ({ ...prev, cnpj: event.target.value }))}
               placeholder="00.000.000/0000-00"
-              className="!h-14 font-bold"
+              className="h-[var(--mx-input-height-lg)] font-bold"
             />
           </div>
 
@@ -198,7 +198,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
                 value={form.address || ''}
                 onChange={(event) => setForm((prev) => ({ ...prev, address: event.target.value.toUpperCase() }))}
                 placeholder="RUA, NÚMERO, BAIRRO, CIDADE/UF"
-                className="!pl-14 !h-14 font-bold uppercase"
+                className="pl-12 h-[var(--mx-input-height-lg)] font-bold uppercase"
               />
             </div>
           </div>
@@ -214,7 +214,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
                 value={form.administrative_phone || ''}
                 onChange={(event) => setForm((prev) => ({ ...prev, administrative_phone: event.target.value }))}
                 placeholder="(00) 00000-0000"
-                className="!pl-14 !h-14 font-bold"
+                className="pl-12 h-[var(--mx-input-height-lg)] font-bold"
               />
             </div>
           </div>
@@ -235,7 +235,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
               value={form.manager_email || ''}
               onChange={(event) => setForm((prev) => ({ ...prev, manager_email: event.target.value }))}
               placeholder="gestor@unidade.com.br"
-              className="!pl-14 !h-14 font-bold"
+              className="pl-12 h-[var(--mx-input-height-lg)] font-bold"
             />
           </div>
         </div>
@@ -325,7 +325,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
                       partners: (prev.partners || []).map((item, itemIndex) => itemIndex === index ? { ...item, name: event.target.value.toUpperCase() } : item),
                     }))}
                     placeholder="NOME DO SÓCIO"
-                    className="!h-12 font-bold uppercase"
+                    className="h-[var(--mx-input-height)] font-bold uppercase"
                   />
                   <Input
                     value={partner.document || ''}
@@ -334,7 +334,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
                       partners: (prev.partners || []).map((item, itemIndex) => itemIndex === index ? { ...item, document: event.target.value } : item),
                     }))}
                     placeholder="CPF / DOCUMENTO"
-                    className="!h-12 font-bold"
+                    className="h-[var(--mx-input-height)] font-bold"
                   />
                   <Input
                     value={partner.phone || ''}
@@ -343,7 +343,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
                       partners: (prev.partners || []).map((item, itemIndex) => itemIndex === index ? { ...item, phone: event.target.value } : item),
                     }))}
                     placeholder="TELEFONE DO SÓCIO"
-                    className="!h-12 font-bold"
+                    className="h-[var(--mx-input-height)] font-bold"
                   />
                   <Input
                     type="email"
@@ -353,7 +353,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
                       partners: (prev.partners || []).map((item, itemIndex) => itemIndex === index ? { ...item, email: event.target.value } : item),
                     }))}
                     placeholder="EMAIL DO SÓCIO"
-                    className="!h-12 font-bold"
+                    className="h-[var(--mx-input-height)] font-bold"
                   />
                 </div>
               </div>

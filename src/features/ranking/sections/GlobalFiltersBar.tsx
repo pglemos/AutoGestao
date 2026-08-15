@@ -38,7 +38,7 @@ export function GlobalFiltersBar({
           placeholder="LOCALIZAR VENDEDOR OU LOJA..."
           value={searchTerm}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="!pl-11 !h-mx-14 !text-mx-tiny uppercase tracking-widest font-bold"
+          className="pl-12 h-[var(--mx-input-height-lg)] !text-mx-tiny uppercase tracking-widest font-bold"
         />
       </label>
       <div data-mx-scroll-region="horizontal" className="flex items-center gap-mx-xs bg-white border border-border px-4 h-mx-14 sm:h-mx-14 rounded-xl shadow-none overflow-x-auto no-scrollbar">

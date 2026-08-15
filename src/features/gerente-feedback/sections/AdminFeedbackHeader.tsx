@@ -59,7 +59,7 @@ export function AdminFeedbackHeader({
             placeholder="BUSCAR MENTORIA..."
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="!pl-11 !h-12 !text-mx-tiny uppercase tracking-widest font-bold"
+            className="pl-12 h-[var(--mx-input-height)] !text-mx-tiny uppercase tracking-widest font-bold"
           />
         </div>
         <Button

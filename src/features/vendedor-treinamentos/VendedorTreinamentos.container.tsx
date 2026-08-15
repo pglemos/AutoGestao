@@ -13,7 +13,7 @@ import { Typography } from '@/components/atoms/Typography'
 import PageHeaderBase from '@/components/ui/PageHeader'
 import { StatCard } from '@/components/molecules/StatCard'
 import { Tabs, TabsContent as TabsContentBase, TabsList as TabsListBase, TabsTrigger as TabsTriggerBase } from '@/components/ui/tabs'
-import { Input as InputBase } from '@/components/ui/input'
+import { Input as InputBase } from '@/components/atoms/Input'
 import { Select, SelectContent as SelectContentBase, SelectItem as SelectItemBase, SelectTrigger as SelectTriggerBase, SelectValue as SelectValueBase } from '@/components/ui/select'
 import {
     useVendedorTreinamentos,

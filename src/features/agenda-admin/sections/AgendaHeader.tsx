@@ -182,7 +182,7 @@ export function AgendaHeader({
                         id="agenda-consultant-select"
                         value={consultantFilter}
                         onChange={(event) => setConsultantFilter(event.target.value)}
-                        className="!h-8 !rounded-xl text-xs"
+                        className="h-8 !rounded-xl text-xs"
                       >
                         <option value="todos">Todos os consultores</option>
                         {consultants.map((consultant) => (

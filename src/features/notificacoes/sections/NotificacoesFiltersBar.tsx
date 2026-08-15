@@ -46,7 +46,7 @@ export function NotificacoesFiltersBar({ searchTerm, setSearchTerm, filterType, 
           placeholder="Buscar notificações"
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
-          className="!h-11 !pl-10 text-sm"
+          className="h-[var(--mx-input-height)] pl-10 text-sm"
         />
       </div>
 

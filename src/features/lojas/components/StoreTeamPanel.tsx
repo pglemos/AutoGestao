@@ -421,7 +421,7 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
                     placeholder="Buscar por nome ou perfil"
                     value={searchTerm}
                     onChange={e => setSearchTerm(e.target.value)}
-                    className="!pl-12 !h-mx-14 uppercase font-bold tracking-widest text-mx-tiny"
+                    className="pl-12 h-[var(--mx-input-height-lg)] uppercase font-bold tracking-widest text-mx-tiny"
                   />
                 </div>
                 <div className="flex w-full sm:w-auto gap-mx-sm">

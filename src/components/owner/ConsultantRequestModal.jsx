@@ -4,8 +4,8 @@ import { useOwner } from "@/components/owner/OwnerContext";
 import { AlertMessage } from "@/components/molecules/AlertMessage";
 import { useAuth } from "@/features/owner/lib/ownerAuth";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
+import { Textarea } from '@/components/atoms/Textarea';
+import { Input } from '@/components/atoms/Input';
 import { Label } from "@/components/ui/label";
 import {
   Dialog,

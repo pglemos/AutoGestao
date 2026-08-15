@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from '@/components/atoms/Textarea';
 import { Label } from "@/components/ui/label";
 import { CheckCircle2, Circle } from "lucide-react";
 import { consultingRepository } from "./consultingRepository";

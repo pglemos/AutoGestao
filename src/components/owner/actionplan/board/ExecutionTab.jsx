@@ -2,8 +2,8 @@
 import { useState } from "react";
 import { toast } from '@/lib/toast'
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Input } from '@/components/atoms/Input';
+import { Textarea } from '@/components/atoms/Textarea';
 import { Plus, Check, Trash2, Lock, Unlock, MessageSquare, ListChecks } from "lucide-react";
 import { actionPlanLiveRepository } from "../actionPlanLiveRepository";
 import { getExecutionQuickActions, shouldShowProgressEditor } from "../actionPlanUiUtils";

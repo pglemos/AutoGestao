@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+import { Input } from '@/components/atoms/Input';
 import { toast } from "@/lib/toast"
 
 export default function ReagendarPendenciaModal({ oportunidade, open, onClose, onReagendada }) {
