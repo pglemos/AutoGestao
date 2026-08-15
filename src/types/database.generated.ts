@@ -19,6 +19,72 @@ export type Database = {
   }
   public: {
     Tables: {
+      acessos_cliente_consultoria: {
+        Row: {
+          client_id: string
+          created_at: string
+          created_by: string | null
+          email: string
+          funcao_declarada: string | null
+          id: string
+          is_dono_master: boolean
+          lojas_autorizadas: Json
+          nome: string
+          papeis: Json
+          status: string
+          telefone: string | null
+          updated_at: string
+          visao_padrao: string | null
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          created_by?: string | null
+          email: string
+          funcao_declarada?: string | null
+          id?: string
+          is_dono_master?: boolean
+          lojas_autorizadas?: Json
+          nome: string
+          papeis?: Json
+          status?: string
+          telefone?: string | null
+          updated_at?: string
+          visao_padrao?: string | null
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          created_by?: string | null
+          email?: string
+          funcao_declarada?: string | null
+          id?: string
+          is_dono_master?: boolean
+          lojas_autorizadas?: Json
+          nome?: string
+          papeis?: Json
+          status?: string
+          telefone?: string | null
+          updated_at?: string
+          visao_padrao?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "acessos_cliente_consultoria_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clientes_consultoria"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acessos_cliente_consultoria_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       agencies: {
         Row: {
           created_at: string | null
@@ -2264,6 +2330,8 @@ export type Database = {
           modality: string | null
           name: string
           notes: string | null
+          onboarding_completed: boolean
+          onboarding_step: number
           primary_store_id: string | null
           product_name: string | null
           program_template_key: string
@@ -2294,6 +2362,8 @@ export type Database = {
           modality?: string | null
           name: string
           notes?: string | null
+          onboarding_completed?: boolean
+          onboarding_step?: number
           primary_store_id?: string | null
           product_name?: string | null
           program_template_key?: string
@@ -2324,6 +2394,8 @@ export type Database = {
           modality?: string | null
           name?: string
           notes?: string | null
+          onboarding_completed?: boolean
+          onboarding_step?: number
           primary_store_id?: string | null
           product_name?: string | null
           program_template_key?: string
@@ -2624,6 +2696,60 @@ export type Database = {
           {
             foreignKeyName: "consulting_calendar_settings_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      configuracoes_cliente_consultoria: {
+        Row: {
+          canal_atencao: string
+          canal_critico: string
+          client_id: string
+          created_at: string
+          janela_envio: string
+          limite_vendedores: number
+          retencao_snapshots_dias: number
+          tolerancia_fechamento_min: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          canal_atencao?: string
+          canal_critico?: string
+          client_id: string
+          created_at?: string
+          janela_envio?: string
+          limite_vendedores?: number
+          retencao_snapshots_dias?: number
+          tolerancia_fechamento_min?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          canal_atencao?: string
+          canal_critico?: string
+          client_id?: string
+          created_at?: string
+          janela_envio?: string
+          limite_vendedores?: number
+          retencao_snapshots_dias?: number
+          tolerancia_fechamento_min?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "configuracoes_cliente_consultoria_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: true
+            referencedRelation: "clientes_consultoria"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "configuracoes_cliente_consultoria_updated_by_fkey"
+            columns: ["updated_by"]
             isOneToOne: false
             referencedRelation: "usuarios"
             referencedColumns: ["id"]
@@ -6018,6 +6144,53 @@ export type Database = {
           },
         ]
       }
+      horarios_funcionamento_unidade: {
+        Row: {
+          closing_time: string | null
+          created_at: string
+          day_of_week: string
+          id: string
+          is_open: boolean
+          opening_time: string | null
+          origin: string | null
+          status: string
+          unidade_id: string
+          updated_at: string
+        }
+        Insert: {
+          closing_time?: string | null
+          created_at?: string
+          day_of_week: string
+          id?: string
+          is_open?: boolean
+          opening_time?: string | null
+          origin?: string | null
+          status?: string
+          unidade_id: string
+          updated_at?: string
+        }
+        Update: {
+          closing_time?: string | null
+          created_at?: string
+          day_of_week?: string
+          id?: string
+          is_open?: boolean
+          opening_time?: string | null
+          origin?: string | null
+          status?: string
+          unidade_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "horarios_funcionamento_unidade_unidade_id_fkey"
+            columns: ["unidade_id"]
+            isOneToOne: false
+            referencedRelation: "unidades_cliente_consultoria"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       importacoes_brutas: {
         Row: {
           created_at: string | null
@@ -6639,6 +6812,66 @@ export type Database = {
             columns: ["batch_id"]
             isOneToOne: false
             referencedRelation: "lotes_importacao_consultoria"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      links_autocadastro_cliente: {
+        Row: {
+          client_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          limite_usos: number
+          nome_interno: string | null
+          perfil_acesso: string
+          status: string
+          token: string
+          updated_at: string
+          usos_consumidos: number
+          validade_dias: number
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          limite_usos?: number
+          nome_interno?: string | null
+          perfil_acesso: string
+          status?: string
+          token: string
+          updated_at?: string
+          usos_consumidos?: number
+          validade_dias?: number
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          limite_usos?: number
+          nome_interno?: string | null
+          perfil_acesso?: string
+          status?: string
+          token?: string
+          updated_at?: string
+          usos_consumidos?: number
+          validade_dias?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "links_autocadastro_cliente_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clientes_consultoria"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "links_autocadastro_cliente_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
             referencedColumns: ["id"]
           },
         ]
@@ -8800,6 +9033,212 @@ export type Database = {
           },
         ]
       }
+      pacotes_indicadores_estrategicos: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          current_published_version_id: string | null
+          descricao: string | null
+          id: string
+          nome: string
+          pacote_key: string
+          status: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          current_published_version_id?: string | null
+          descricao?: string | null
+          id?: string
+          nome: string
+          pacote_key: string
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          current_published_version_id?: string | null
+          descricao?: string | null
+          id?: string
+          nome?: string
+          pacote_key?: string
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pacotes_indicadores_estrategicos_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pacotes_indicadores_estrategicos_current_published_fkey"
+            columns: ["current_published_version_id"]
+            isOneToOne: false
+            referencedRelation: "pacotes_indicadores_versoes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pacotes_indicadores_estrategicos_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pacotes_indicadores_itens: {
+        Row: {
+          area_snapshot: string | null
+          created_at: string
+          dependency_of: string | null
+          direction_snapshot: string | null
+          formato_snapshot: string | null
+          id: string
+          inclusion_reason: string
+          input_mode_snapshot: string | null
+          is_required: boolean
+          label_snapshot: string | null
+          metric_key: string
+          ordem_snapshot: number | null
+          updated_at: string
+          version_id: string
+        }
+        Insert: {
+          area_snapshot?: string | null
+          created_at?: string
+          dependency_of?: string | null
+          direction_snapshot?: string | null
+          formato_snapshot?: string | null
+          id?: string
+          inclusion_reason?: string
+          input_mode_snapshot?: string | null
+          is_required?: boolean
+          label_snapshot?: string | null
+          metric_key: string
+          ordem_snapshot?: number | null
+          updated_at?: string
+          version_id: string
+        }
+        Update: {
+          area_snapshot?: string | null
+          created_at?: string
+          dependency_of?: string | null
+          direction_snapshot?: string | null
+          formato_snapshot?: string | null
+          id?: string
+          inclusion_reason?: string
+          input_mode_snapshot?: string | null
+          is_required?: boolean
+          label_snapshot?: string | null
+          metric_key?: string
+          ordem_snapshot?: number | null
+          updated_at?: string
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pacotes_indicadores_itens_metric_key_fkey"
+            columns: ["metric_key"]
+            isOneToOne: false
+            referencedRelation: "catalogo_metricas_consultoria"
+            referencedColumns: ["metric_key"]
+          },
+          {
+            foreignKeyName: "pacotes_indicadores_itens_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "pacotes_indicadores_versoes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pacotes_indicadores_versoes: {
+        Row: {
+          catalog_version_snapshot: string | null
+          created_at: string
+          created_by: string | null
+          departamentos_count: number
+          descricao: string | null
+          id: string
+          indicadores_calculados: number
+          indicadores_manuais: number
+          nome: string | null
+          pacote_id: string
+          published_at: string | null
+          published_by: string | null
+          status: string
+          total_indicadores: number
+          updated_at: string
+          versao: number
+        }
+        Insert: {
+          catalog_version_snapshot?: string | null
+          created_at?: string
+          created_by?: string | null
+          departamentos_count?: number
+          descricao?: string | null
+          id?: string
+          indicadores_calculados?: number
+          indicadores_manuais?: number
+          nome?: string | null
+          pacote_id: string
+          published_at?: string | null
+          published_by?: string | null
+          status?: string
+          total_indicadores?: number
+          updated_at?: string
+          versao: number
+        }
+        Update: {
+          catalog_version_snapshot?: string | null
+          created_at?: string
+          created_by?: string | null
+          departamentos_count?: number
+          descricao?: string | null
+          id?: string
+          indicadores_calculados?: number
+          indicadores_manuais?: number
+          nome?: string | null
+          pacote_id?: string
+          published_at?: string | null
+          published_by?: string | null
+          status?: string
+          total_indicadores?: number
+          updated_at?: string
+          versao?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pacotes_indicadores_versoes_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pacotes_indicadores_versoes_pacote_id_fkey"
+            columns: ["pacote_id"]
+            isOneToOne: false
+            referencedRelation: "pacotes_indicadores_estrategicos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pacotes_indicadores_versoes_published_by_fkey"
+            columns: ["published_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       password_change_challenges: {
         Row: {
           created_at: string
@@ -10304,6 +10743,7 @@ export type Database = {
           active: boolean
           created_at: string
           descricao: string | null
+          indicator_package_version_id: string | null
           max_presenciais: number | null
           min_presenciais: number | null
           modalidade: string | null
@@ -10321,6 +10761,7 @@ export type Database = {
           active?: boolean
           created_at?: string
           descricao?: string | null
+          indicator_package_version_id?: string | null
           max_presenciais?: number | null
           min_presenciais?: number | null
           modalidade?: string | null
@@ -10338,6 +10779,7 @@ export type Database = {
           active?: boolean
           created_at?: string
           descricao?: string | null
+          indicator_package_version_id?: string | null
           max_presenciais?: number | null
           min_presenciais?: number | null
           modalidade?: string | null
@@ -10352,6 +10794,13 @@ export type Database = {
           versao?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "programas_visita_consultoria_indicator_package_version_id_fkey"
+            columns: ["indicator_package_version_id"]
+            isOneToOne: false
+            referencedRelation: "pacotes_indicadores_versoes"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "programas_visita_consultoria_published_by_fkey"
             columns: ["published_by"]
@@ -13374,34 +13823,70 @@ export type Database = {
       }
       unidades_cliente_consultoria: {
         Row: {
+          address_street: string | null
+          address_zip: string | null
           city: string | null
           client_id: string
+          closing_time: string | null
+          cnpj: string | null
           created_at: string
           id: string
+          internal_code: string | null
           is_primary: boolean
           name: string
+          notes: string | null
+          opening_date: string | null
+          opening_time: string | null
           state: string | null
+          status: string
+          store_type: string | null
+          timezone: string
           updated_at: string
+          working_days: string | null
         }
         Insert: {
+          address_street?: string | null
+          address_zip?: string | null
           city?: string | null
           client_id: string
+          closing_time?: string | null
+          cnpj?: string | null
           created_at?: string
           id?: string
+          internal_code?: string | null
           is_primary?: boolean
           name: string
+          notes?: string | null
+          opening_date?: string | null
+          opening_time?: string | null
           state?: string | null
+          status?: string
+          store_type?: string | null
+          timezone?: string
           updated_at?: string
+          working_days?: string | null
         }
         Update: {
+          address_street?: string | null
+          address_zip?: string | null
           city?: string | null
           client_id?: string
+          closing_time?: string | null
+          cnpj?: string | null
           created_at?: string
           id?: string
+          internal_code?: string | null
           is_primary?: boolean
           name?: string
+          notes?: string | null
+          opening_date?: string | null
+          opening_time?: string | null
           state?: string | null
+          status?: string
+          store_type?: string | null
+          timezone?: string
           updated_at?: string
+          working_days?: string | null
         }
         Relationships: [
           {
