@@ -39,10 +39,12 @@ describe('FASE AM — relatório final', () => {
     expect(report).toContain('14 contratos a11y')
   })
 
-  test('itens pós-release marcados PENDENTE (39.016/017)', () => {
+  test('itens pós-release preenchidos após a release (39.016/017)', () => {
     const report = read('docs/qa/final-report.md')
-    expect(report).toContain('39.016 Vercel | PENDENTE')
-    expect(report).toContain('39.017 Sentry | PENDENTE')
+    // 39.016 Vercel: PREENCHIDO após release confirmada (AK 37.004-010).
+    expect(report).toContain('39.016 Vercel | PREENCHIDO')
+    // 39.017 Sentry: PREENCHIDO (N/A) — DSN ausente → no-op SYS-017.
+    expect(report).toContain('39.017 Sentry | PREENCHIDO (N/A)')
   })
 
   test('estrutura sem agrupar tasks (39.019) e pointers por task (39.020)', () => {

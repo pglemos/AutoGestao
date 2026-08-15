@@ -24,6 +24,9 @@ import { toast } from '@/lib/toast'
 import { TabNav } from '@/components/molecules/TabNav'
 import { useStores } from '@/hooks/useStores'
 import { useAuth } from '@/hooks/useAuth'
+import { ActionPlanBoard } from './planos-acao/ActionPlanBoard'
+import { ActionPlanDetailDrawer } from './planos-acao/ActionPlanDetailDrawer'
+import { boardMetrics, type BoardPlan, type PlanStatus } from './planos-acao/actionPlanBoard'
 import { ApplyTemplateModal } from './planos-acao/ApplyTemplateModal'
 import { PromoteSuggestionModal } from './planos-acao/PromoteSuggestionModal'
 import { fetchActionPlanSuggestions, isSuggestionPromoted, promoteSuggestionToPlan, type ActionPlanSuggestion } from './planos-acao/actionPlanSuggestions'
@@ -60,6 +63,8 @@ export function AdminPlanosAcaoGlobalPage() {
   const [promoting, setPromoting] = useState<ActionPlanSuggestion | null>(null)
   const [promoteDraft, setPromoteDraft] = useState({ departamento: '', indicador: '', prazo: '' })
   const [promoteSubmitting, setPromoteSubmitting] = useState(false)
+  const [view, setView] = useState<'lista' | 'kanban'>('kanban')
+  const [openPlan, setOpenPlan] = useState<BoardPlan | null>(null)
 
   const loadSuggestions = useCallback(async () => {
     setSuggestionsLoading(true)
@@ -110,15 +115,31 @@ export function AdminPlanosAcaoGlobalPage() {
     })
   }, [rows, search, status])
 
+  const boardPlans = useMemo<BoardPlan[]>(() => filtered.map(plan => ({
+    id: plan.id,
+    codigo: plan.codigo,
+    problema: plan.problema,
+    acao: plan.acao,
+    status: (plan.status ?? 'pendente') as PlanStatus,
+    prioridade: plan.prioridade,
+    prazo: plan.prazo,
+    progresso: plan.progresso,
+    departamento: plan.departamento,
+    indicador: plan.indicador,
+    responsavel_id: null,
+    concluido_at: null,
+    scope_id: plan.scope_id,
+  })), [filtered])
+
   const metrics = useMemo(() => {
-    const today = new Date().toISOString().slice(0, 10)
+    const board = boardMetrics(boardPlans)
     return {
       total: rows.length,
-      concluidos: rows.filter(plan => CONCLUDED.has((plan.status ?? '').toLowerCase())).length,
-      atrasados: rows.filter(plan => plan.prazo && plan.prazo < today && !CONCLUDED.has((plan.status ?? '').toLowerCase())).length,
+      concluidos: board.concluidas,
+      atrasados: board.atrasadas,
       criticos: rows.filter(plan => (plan.prioridade ?? '').toLowerCase() === 'alta').length,
     }
-  }, [rows])
+  }, [rows, boardPlans])
 
   return (
     <MxModulePage id="admin-mx-planos-acao" width={width} bottomClearance={bottomClearance}>
@@ -239,7 +260,17 @@ export function AdminPlanosAcaoGlobalPage() {
                 <option value="todos">Todos os status</option>
                 {statuses.map(item => <option key={item} value={item}>{item}</option>)}
               </MxSelect>
+              <MxSelect value={view} onChange={event => setView(event.target.value as 'lista' | 'kanban')} aria-label="Modo de visualização">
+                <option value="kanban">Kanban</option>
+                <option value="lista">Lista</option>
+              </MxSelect>
             </MxToolbar>
+            {view === 'kanban' ? (
+              <MxSectionCard>
+                <MxSectionHeader title="Board da rede" description={`${filtered.length} plano(s) no board. Clique num card para abrir o detalhe.`} />
+                <div className="p-5"><ActionPlanBoard plans={boardPlans} onOpen={setOpenPlan} /></div>
+              </MxSectionCard>
+            ) : (
             <MxSectionCard>
               <MxSectionHeader title="Planos de ação da rede" description={`${filtered.length} plano(s) visível(is).`} />
               <div className="p-5">
@@ -255,6 +286,7 @@ export function AdminPlanosAcaoGlobalPage() {
                           <TableHead>Prioridade</TableHead>
                           <TableHead>Progresso</TableHead>
                           <TableHead>Status</TableHead>
+                          <TableHead className="text-right">Ação</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -270,6 +302,9 @@ export function AdminPlanosAcaoGlobalPage() {
                             <TableCell>{plan.prioridade || '—'}</TableCell>
                             <TableCell className="w-40"><MxProgress value={plan.progresso ?? 0} label={`${plan.progresso ?? 0}%`} /></TableCell>
                             <TableCell>{plan.status || '—'}</TableCell>
+                            <TableCell className="text-right">
+                              <Button variant="outline" size="sm" onClick={() => setOpenPlan(boardPlans.find(item => item.id === plan.id) ?? null)}>Abrir</Button>
+                            </TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
@@ -278,6 +313,7 @@ export function AdminPlanosAcaoGlobalPage() {
                 ) : <MxEmptyState variant="filter" title="Nenhum plano encontrado" description="Ajuste a busca ou o filtro de status." />}
               </div>
             </MxSectionCard>
+            )}
           </>
         )}
 
@@ -290,6 +326,7 @@ export function AdminPlanosAcaoGlobalPage() {
           onSubmit={() => void templates.submit()}
           onClose={() => templates.setFormOpen(false)}
         />
+        <ActionPlanDetailDrawer plan={openPlan} onClose={() => setOpenPlan(null)} onChanged={() => void refetch()} />
         <PromoteSuggestionModal
           open={Boolean(promoting)}
           suggestion={promoting}
