@@ -1,0 +1,78 @@
+import { AlertCircle, CheckCircle2, FileText } from 'lucide-react'
+import { MxProgress } from '@/components/module/MxModuleVisualPrimitives'
+import { buildProgramSummary, type ProgramSummary } from './programSummary'
+
+function formatDate(value: string | null) {
+  if (!value) return '—'
+  const date = new Date(value)
+  return Number.isNaN(date.getTime()) ? '—' : date.toLocaleDateString('pt-BR')
+}
+
+export function ProgramCard(props: { summary: ProgramSummary; onEditProgram: () => void }) {
+  const summary = props.summary
+  const statusLabel = summary.configured
+    ? summary.progress > 0
+      ? 'Em execução'
+      : 'Configurado'
+    : 'Não configurado'
+
+  if (!summary.configured) {
+    return (
+      <div className="rounded-xl border border-border p-5">
+        <div className="flex items-center gap-2">
+          <FileText size={16} className="text-muted-foreground" />
+          <h4 className="text-sm font-semibold text-foreground">Programa Contratado</h4>
+        </div>
+        <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
+          <AlertCircle size={14} className="text-status-error-text" />
+          <span>Nenhum programa contratado. Configure o produto na Etapa 3 do onboarding.</span>
+        </div>
+      </div>
+    )
+  }
+
+  const info: Array<[string, string]> = [
+    ['Produto', summary.product_name ?? summary.program_template_key ?? '—'],
+    ['Modalidade', summary.modality ?? '—'],
+    ['Início', formatDate(summary.contract_start_date)],
+    ['Fim', formatDate(summary.contract_end_date)],
+    ['Encontros', `${summary.completed_visits} concluídos de ${summary.visits}`],
+    ['Onboarding', `${summary.onboarding_visits} encontro(s)`],
+    ['Consultor responsável', summary.responsible_consultant ?? '—'],
+  ]
+
+  return (
+    <div className="rounded-xl border border-border p-5">
+      <div className="mb-4 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <FileText size={16} className="text-primary" />
+          <h4 className="text-sm font-semibold text-foreground">Programa Contratado</h4>
+        </div>
+        <span className="rounded-full bg-surface-alt px-2 py-0.5 text-xs font-medium text-foreground">{statusLabel}</span>
+      </div>
+
+      <div className="grid gap-3 text-xs sm:grid-cols-2 lg:grid-cols-4">
+        {info.map(([label, value]) => (
+          <div key={label}>
+            <div className="text-muted-foreground">{label}</div>
+            <div className="font-medium text-foreground">{value}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-4">
+        <div className="mb-1 flex items-center gap-1.5 text-xs text-muted-foreground">
+          <CheckCircle2 size={12} className="text-status-success-text" />
+          Jornada vinculada: {summary.visits} encontro(s)
+        </div>
+        <MxProgress value={summary.progress} label={`${summary.progress}% concluído`} />
+      </div>
+
+      <div className="mt-4 border-t border-border pt-3">
+        <button type="button" onClick={props.onEditProgram} className="text-xs font-medium text-primary hover:underline">
+          Editar programa
+        </button>
+      </div>
+    </div>
+  )
+}
