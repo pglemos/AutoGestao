@@ -8,19 +8,18 @@ function read(rel: string): string {
 }
 
 /**
- * FASE AK — release, passos locais pré-push (37.002/004/005).
+ * FASE AK — release, passos locais (37.002/004/005).
  *
- * Passos seguros ANTES do freeze: remoto não avançou, candidato registrado,
- * bundle criado e verificado. 37.001 (working tree limpa) e 37.006+ (push)
- * ficam para depois do pouso de DS1/DS4.
+ * Estado PÓS-release: remoto avançou e foi pushado, FINAL_CANDIDATE_SHA
+ * registrado, bundle criado e verificado, working tree limpa (37.001 FEITO),
+ * push realizado (37.006), deploy READY (37.009).
  */
-describe('FASE AK — release local pré-push', () => {
-  test('37.002: remoto não avançou (local == origin/main)', () => {
-    // execSync git é interceptado no sandbox do bun; validar via doc que o
-    // fetch foi feito e local==origin (registrado em 37.002/37.004).
+describe('FASE AK — release local', () => {
+  test('37.002: remoto verificado e push realizado (HEAD == origin/main)', () => {
+    // execSync git é interceptado no sandbox do bun; validar via doc.
     const doc = read('docs/execution/release-candidate.md')
-    expect(doc).toContain('remoto NÃO avançou')
     expect(doc).toContain('local HEAD = origin/main')
+    expect(doc).toMatch(/0a37ccfbf5f6cd9f2a6c29c3933f8a14ab6d3388/)
   })
 
   test('37.004: FINAL_CANDIDATE_SHA registrado', () => {
@@ -37,16 +36,15 @@ describe('FASE AK — release local pré-push', () => {
     const shaMatch = doc.match(/FINAL_CANDIDATE_SHA = ([0-9a-f]{40})/)
     expect(shaMatch).toBeTruthy()
     const full = shaMatch![1]
-    // o bundle foi nomeado com o short de 8 chars que o git gerou (b083b6fb)
     const shaShort = full.slice(0, 8)
     const bundle = resolve(root, `artifacts/foundation-zero/release-backup/final-candidate-${shaShort}-main.bundle`)
     expect(existsSync(bundle), `bundle ${bundle}`).toBe(true)
   })
 
-  test('37.001/006 não executados (working tree em voo, sem push)', () => {
+  test('37.001/006: working tree limpa e push realizado', () => {
     const doc = read('docs/execution/release-candidate.md')
-    expect(doc).toContain('37.001 NÃO feito')
-    expect(doc).toContain('DS1/DS4 em voo')
+    expect(doc).toContain('Working tree')
+    expect(doc).toContain('LIMPA')
     expect(doc).toContain('37.006')
   })
 

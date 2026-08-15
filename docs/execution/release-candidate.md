@@ -29,6 +29,7 @@ FINAL_CANDIDATE_SHA = 0a37ccfbf5f6cd9f2a6c29c3933f8a14ab6d3388
 |---|---|---|
 | `artifacts/foundation-zero/release-backup/final-candidate-b083b6fb.bundle` (--all) | 231 MB | ✅ "complete history", sha1 |
 | `artifacts/foundation-zero/release-backup/final-candidate-b083b6fb-main.bundle` (main) | 148 MB | ✅ "complete history", sha1 |
+| `artifacts/foundation-zero/release-backup/final-candidate-0a37ccfb-main.bundle` (main) | 141 MB | ✅ "is okay" (FINAL_CANDIDATE) |
 
 > `artifacts/foundation-zero/` é **untracked** (não vai para o repo) — bundle é
 > backup local do candidato, reconstruível via `git archive`/`git clone` do bundle.
