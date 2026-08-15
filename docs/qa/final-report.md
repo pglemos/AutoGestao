@@ -3,7 +3,8 @@
 > **STATUS: ESQUELETO (DRAFT)** — preenchido apenas com o que é read-only e
 > determinável agora (2026-08-15). Itens pós-release ficam como `PENDENTE
 > (após release)` — serão completados na FASE AK.
-> **Arquivo não versionado** — aguarda o release para commit.
+> **Arquivo VERSIONADO** (commit `118ccd56`) — corrigido em 2026-08-15
+> (cross-check: SHAs/rotas/contagem atualizados p/ HEAD `f5f07279`).
 
 ---
 
@@ -12,24 +13,24 @@
 | Campo | Valor |
 |---|---|
 | SHA inicial (base da FASE AM) | `cd03df2a` (conforme instrução) |
-| SHA final (após release, 2026-08-15) | **`2f0918611a5b546c12bd04201adda22b16d6c6db`** |
-| **FINAL_CANDIDATE_SHA (AK 37.004, ledger)** | **`0a37ccfbf5f6cd9f2a6c29c3933f8a14ab6d3388`** — deploy READY em produção; SHA final real = `2f091861` (avançou 4 commits pós-candidato: planos-acao + matrizes). |
-| **SHA anterior (0a37ccfb/08f8b19c)** | **NÃO é o final** — foi candidato intermediário; o SHA final real em produção é `2f091861` (ver 37.019). |
-| SHA final (após release) | `2f0918611a5b546c12bd04201adda22b16d6c6db` — health `release` == este SHA |
+| **HEAD local (2026-08-15, verificado)** | **`f5f07279f022f6759b77661c00f91df7aa9f696c`** |
+| SHA final (report anterior) | `2f091861` — ancestral do HEAD (avançou 7 commits: admin-mx + matrix regenerada) |
+| FINAL_CANDIDATE_SHA (AK 37.004, ledger) | `0a37ccfbf5f6cd9f2a6c29c3933f8a14ab6d3388` — **não é ancestral do HEAD atual** (divergência de estado; reavaliar na FASE AK) |
+| SHA anterior (0a37ccfb/08f8b19c) | **NÃO é o final** — candidato intermediário |
 
-**Status:** PARCIAL — inicial/atual coletados; final pendente.
+**Status:** PARCIAL — inicial/HEAD coletados; final pós-release pendente (reavaliar candidate `0a37ccfb` vs HEAD `f5f07279`).
 
 ## 39.002 — Número real de rotas
 
 | Métrica | Valor | Fonte |
 |---|---|---|
-| Rotas vivas (inventário vivo 2026-08-15T17:40Z) | **114** | `artifacts/route-role-inventory/route-role-matrix.json` → `summary.routesTotal` (`audit_route_data_inventory.mjs` + `routeAccess.ts`) |
-| Protegidas | 106 | mesma fonte (`summary.routesProtected`) |
+| Rotas vivas (inventário vivo 2026-08-15T19:54Z) | **115** | `artifacts/route-role-inventory/route-role-matrix.json` → `summary.routesTotal` |
+| Protegidas | 107 | mesma fonte (`summary.routesProtected`) |
 | Públicas | 8 | mesma fonte (`summary.routesPublic`) |
 | REDIRECT | 29 | mesma fonte (`summary.redirectTotal`) |
 | FULLSCREEN | 4 | mesma fonte (`summary.fullscreenTotal`) |
 | PRINT | 1 | mesma fonte (`summary.printTotal`) |
-| **Referência histórica (ledger 03.007, 08-13)** | 109 / 101 / 8 / 30 | reconciliação 03.007 — divergência = novas rotas adicionadas entre 08-13 e 08-15 |
+| **Referência histórica (ledger 03.007, 08-13)** | 109 / 101 / 8 / 30 | reconciliação 03.007 — divergência = 6 rotas admin-mx novas adicionadas entre 08-13 e 08-15 |
 
 **Status:** PREENCHIDO (inventário vivo; nota histórica do ledger).
 
@@ -37,24 +38,24 @@
 
 | Métrica | Valor | Fonte |
 |---|---|---|
-| Combinações route×role (vivo) | **252** | `route-role-matrix.json` → `summary.routeRoleTotal` |
-| Renderings aplicáveis (vivo) | **236** | mesma fonte (`summary.standardCanvasRenderings`) |
+| Combinações route×role (vivo) | **255** | `route-role-matrix.json` → `summary.routeRoleTotal` |
+| Renderings aplicáveis (vivo) | **239** | mesma fonte (`summary.standardCanvasRenderings`) |
 | Sweep 02 (5 perfis, 1440x900) | 175 casos | `fase-ae-sweep-02` |
-| **Referência histórica (ledger 03.007, 08-13)** | 232 / 216 | reconciliação 03.007 — divergência = novas combos adicionadas |
+| **Referência histórica (ledger 03.007, 08-13)** | 232 / 216 | reconciliação 03.007 — divergência = 6 rotas admin-mx novas |
 
-**Status:** PREENCHIDO (236/252 vivo; nota histórica).
+**Status:** PREENCHIDO (239/255 vivo; nota histórica).
 
 ## 39.004 — STANDARD_CANVAS migrated/total
 
 | Métrica | Valor | Fonte |
 |---|---|---|
-| STANDARD_CANVAS (vivo) | **72** | `route-role-matrix.json` → `summary.standardCanvasTotal` |
+| STANDARD_CANVAS (vivo) | **73** | `route-role-matrix.json` → `summary.standardCanvasTotal` |
 | Gate de metadata | 0 pendentes | `lint-route-layout-metadata.mjs` (03.015) |
-| **Referência histórica (ledger 03.007, 08-13)** | 66 | reconciliação 03.007 — divergência = novas rotas STANDARD_CANVAS |
+| **Referência histórica (ledger 03.007, 08-13)** | 66 | reconciliação 03.007 — divergência = novas rotas STANDARD_CANVAS (admin-mx) |
 
 **Migração:** todas as rotas STANDARD_CANVAS resolvem layout por metadata explícita (`lint-route-layout-metadata` EXIT 0); 0 pendentes.
 
-**Status:** PREENCHIDO (72 governadas; nota histórica 66).
+**Status:** PREENCHIDO (73 governadas; nota histórica 66).
 
 ## 39.005 — PageCanvas compliant/total
 
@@ -255,8 +256,8 @@ e pointer de evidência. Nenhum agrupamento.
 
 | Task | Status | Evidence pointer |
 |---|---|---|
-| 39.001 SHA | PARCIAL | `git rev-parse HEAD` → `60bba07a`; inicial `cd03df2a` (não ancestral); final pós-release |
-| 39.002 rotas | PREENCHIDO | artifacts/route-role-inventory/route-role-matrix.* |
+| 39.001 SHA | PARCIAL | `git rev-parse HEAD` → `f5f07279`; inicial `cd03df2a` (não ancestral); final pós-release |
+| 39.002 rotas | PREENCHIDO | artifacts/route-role-inventory/route-role-matrix.* (115 vivas; 109 em 08-13) |
 | 39.003 route×role | PREENCHIDO | reconciliação 03.007 |
 | 39.004 STANDARD_CANVAS | PREENCHIDO | lint-route-layout-metadata; 03.007 |
 | 39.005 PageCanvas | PARCIAL | fase-ae-sweep-02 (histórico) |
@@ -270,8 +271,26 @@ e pointer de evidência. Nenhum agrupamento.
 | 39.013 E2E | EVIDÊNCIA LOCAL OK | npm test ~3353-3470 pass; 117 test files |
 | 39.014 console/network | EVIDÊNCIA LOCAL OK | harness 31.013-015; module-route-visual-audit |
 | 39.015 Supabase | EVIDÊNCIA LOCAL OK | classify-supabase-events; security-findings; run-id |
-| 39.016 Vercel | PREENCHIDO | health.release prod `fcbb9e72` (healthy); candidate `0a37ccfb`; HEAD `d476035f`; parity funcional |
+| 39.016 Vercel | PREENCHIDO | health.release prod = `f5f07279` = HEAD (healthy, production); parity Vercel confirmada no deploy do handoff admin-mx; AK 37.004-010 completos |
 | 39.017 Sentry | PREENCHIDO (N/A) | Sentry configurado (org/project/token) mas `VITE_SENTRY_DSN` ausente → no-op SYS-017; sem eventos |
 | 39.018 known risks | PREENCHIDO | acima |
 | 39.019 não agrupar | ✅ | este documento |
 | 39.020 evidence pointers | ✅ | esta tabela |
+
+---
+
+## Cross-check final (2026-08-15, read-only)
+
+| Métrica | Valor verificado | Fonte |
+|---|---|---|
+| Rotas vivas | **115** (109 em 08-13; +6 admin-mx) | `route-role-matrix.json` summary |
+| STANDARD_CANVAS | **73** (66 em 08-13) | mesma |
+| Renderings | **239** (216 em 08-13) | mesma |
+| route×role | **255** (232 em 08-13) | mesma |
+| HEAD local | `f5f07279` | `git rev-parse HEAD` |
+| Contagem ledger | **681 x / 15 s / 0 blank** (100% das fases de impl/auditoria marcadas; 0 blank fora de FASE 37/39 pós-release) | `progress.md` |
+
+> Nota de divergência: os números 109/216/66/232 (ledger 03.007) refletem a
+> reconciliação de 08-13; o inventário vivo de 08-15T19:54Z subiu para
+> 115/239/73/255 por novas rotas admin-mx. O report anterior (17:40Z) citava
+> 114/236/72/252 — estado intermediário. Corrigido para o vivo.

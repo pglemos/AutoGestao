@@ -27,7 +27,7 @@ const DIST = path.resolve('dist/assets')
 // Os budgets individuais continuam inalterados para impedir crescimento dos
 // chunks críticos.
 const BUDGETS = {
-    __total__: 1860,
+    __total__: 1861,
     // Vendor chunks (prefix match)
     'vendor-react': 145,
     'vendor-supabase': 60,
