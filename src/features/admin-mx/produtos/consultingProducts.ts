@@ -13,6 +13,7 @@ export type ConsultingProduct = {
   min_presenciais: number | null
   max_presenciais: number | null
   usa_plano_estrategico: boolean
+  indicator_package_version_id: string | null
   active: boolean | null
   published_at: string | null
   clients: number
@@ -87,7 +88,7 @@ export async function fetchConsultingProducts(): Promise<{ rows: ConsultingProdu
   const [{ data: products, error }, { data: clients }] = await Promise.all([
     supabase
       .from('programas_visita_consultoria')
-      .select('program_key, name, descricao, modalidade, status, versao, total_visits, min_presenciais, max_presenciais, usa_plano_estrategico, active, published_at')
+      .select('program_key, name, descricao, modalidade, status, versao, total_visits, min_presenciais, max_presenciais, usa_plano_estrategico, indicator_package_version_id, active, published_at')
       .order('name', { ascending: true }),
     supabase.from('clientes_consultoria').select('program_template_key, status'),
   ])

@@ -239,7 +239,7 @@ export function AdminProdutosConsultoriaPage() {
           onSubmit={() => void submit()}
           onClose={() => setFormOpen(false)}
         />
-        <ProductDetailDrawer product={detail} onClose={() => setDetail(null)} />
+        <ProductDetailDrawer product={detail} onClose={() => setDetail(null)} onChanged={() => void refetch()} />
       </div>
     </MxModulePage>
   )
