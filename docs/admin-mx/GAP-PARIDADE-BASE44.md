@@ -36,12 +36,12 @@ Levantamento honesto do que existe no export `mx-admin-flow` e do que o MX tem h
 - Falta: **aba Plano Estratégico** (pacote de indicadores vinculado, digitáveis vs calculáveis, competências meta) — depende das tabelas de pacote de indicadores.
 
 ### `/indicadores`
-- ~~Ordem oficial editável e filtros por área/status~~ — **feito** (falta "restaurar padrão MX").
+- ~~Ordem oficial editável e filtros por área/status~~ — **feito** (restaurar padrão MX incluso).
 - ~~Drawer de detalhe com ciclo de status e visibilidade no Módulo Dono~~ — **feito**.
 - ~~Leitura de parâmetros com faixas vermelho/amarelo/verde~~ — **feito** (só leitura + checagem de consistência).
-- **Wizard de criação** com casas decimais, frequência e vigência editáveis na tela (as colunas já existem no banco).
-- **Fórmulas**: criar parâmetro, testar cálculo, dependentes, override por cliente com justificativa.
-- **Metas e realizados**: cadastro rápido, importação/exportação de planilha, histórico com reversão, valor oficial, cópia de metas entre lojas.
+- ~~**Wizard de criação** com casas decimais, frequência e vigência editáveis na tela (as colunas já existem no banco)~~ — **feito** (CreateIndicatorWizard de 7 passos: identificação, formato, meta, fórmula, fonte do realizado, visualização, revisão; chave gerada do nome e congelada após a primeira gravação).
+- ~~**Fórmulas**: criar parâmetro, testar cálculo, dependentes, override por cliente com justificativa~~ — **feito** (FormulaTesterModal, edição/criação de parâmetro no conjunto ativo, mapa de dependentes IND/PAR, override por cliente com justificativa via `overrides_parametros_cliente` — migration 20260815220000).
+- ~~**Metas e realizados**: cadastro rápido, importação/exportação de planilha, histórico com reversão, valor oficial, cópia de metas entre lojas~~ — **feito** (aba Metas e Realizados: grade mensal por loja via RPC oficial, exportação/importação .xlsx, histórico com restauração, cópia entre lojas com prévia e política de conflito).
 
 ### `/planos-acao`
 - ~~Kanban por status~~ — **feito** (sem arrastar: transição por botão no detalhe).
