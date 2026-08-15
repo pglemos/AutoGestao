@@ -5,10 +5,10 @@
 - Rotas públicas: **8**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
-- Tabelas referenciadas pelo runtime: **140**
+- Tabelas referenciadas pelo runtime: **143**
 - RPCs referenciadas pelo runtime: **87**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **277**
+- Pares tabela/operação encontrados: **286**
 
 ## Rotas
 
@@ -153,7 +153,7 @@
 | `catalogo_metricas_consultoria` | 3 |
 | `central_execucao_aberturas` | 3 |
 | `clientes` | 6 |
-| `clientes_consultoria` | 9 |
+| `clientes_consultoria` | 10 |
 | `clientes_oportunidades` | 1 |
 | `comportamental_perfis` | 1 |
 | `comportamental_questoes` | 1 |
@@ -191,7 +191,7 @@
 | `logs_compartilhamento_whatsapp` | 1 |
 | `logs_reprocessamento` | 1 |
 | `logs_rotina_gerente` | 1 |
-| `lojas` | 19 |
+| `lojas` | 20 |
 | `manager_daily_tasks` | 1 |
 | `manager_lead_conferences` | 1 |
 | `marketing_mensal_consultoria` | 1 |
@@ -206,6 +206,8 @@
 | `metas_metricas_cliente` | 2 |
 | `modelos_formulario_pmr` | 1 |
 | `modulos_cliente_consultoria` | 4 |
+| `modulos_produto_consultoria` | 1 |
+| `modulos_sistema` | 1 |
 | `notificacoes` | 4 |
 | `opcoes_agenda_consultoria` | 1 |
 | `oportunidades` | 8 |
@@ -225,7 +227,7 @@
 | `posicionamento_empresa` | 1 |
 | `pre_cadastros_loja` | 2 |
 | `produtos_digitais` | 2 |
-| `programas_visita_consultoria` | 2 |
+| `programas_visita_consultoria` | 3 |
 | `progresso_etapa_trilha` | 1 |
 | `progresso_treinamentos` | 3 |
 | `prospecting_schedule` | 3 |
@@ -251,6 +253,7 @@
 | `store_target_plans` | 2 |
 | `story_ideas` | 2 |
 | `sugestoes_conteudo` | 1 |
+| `tempos_encontro_produto` | 1 |
 | `tokens_oauth_consultoria` | 1 |
 | `treinamento_avaliacoes` | 2 |
 | `treinamento_presencas` | 1 |
@@ -318,7 +321,7 @@
 | `central_execucao_aberturas:upsert` | 2 |
 | `clientes_consultoria:delete` | 1 |
 | `clientes_consultoria:insert` | 4 |
-| `clientes_consultoria:select` | 9 |
+| `clientes_consultoria:select` | 10 |
 | `clientes_consultoria:update` | 2 |
 | `clientes_oportunidades:select` | 1 |
 | `clientes:delete` | 2 |
@@ -398,7 +401,7 @@
 | `logs_rotina_gerente:upsert` | 1 |
 | `lojas:delete` | 1 |
 | `lojas:insert` | 1 |
-| `lojas:select` | 19 |
+| `lojas:select` | 20 |
 | `lojas:update` | 1 |
 | `manager_daily_tasks:select` | 1 |
 | `manager_daily_tasks:update` | 1 |
@@ -423,6 +426,10 @@
 | `modulos_cliente_consultoria:insert` | 2 |
 | `modulos_cliente_consultoria:select` | 3 |
 | `modulos_cliente_consultoria:upsert` | 1 |
+| `modulos_produto_consultoria:insert` | 1 |
+| `modulos_produto_consultoria:select` | 1 |
+| `modulos_produto_consultoria:upsert` | 1 |
+| `modulos_sistema:select` | 1 |
 | `notificacoes:delete` | 1 |
 | `notificacoes:insert` | 2 |
 | `notificacoes:select` | 3 |
@@ -468,8 +475,10 @@
 | `produtos_digitais:insert` | 1 |
 | `produtos_digitais:select` | 2 |
 | `produtos_digitais:update` | 1 |
-| `programas_visita_consultoria:select` | 2 |
-| `programas_visita_consultoria:upsert` | 1 |
+| `programas_visita_consultoria:delete` | 1 |
+| `programas_visita_consultoria:insert` | 1 |
+| `programas_visita_consultoria:select` | 3 |
+| `programas_visita_consultoria:update` | 1 |
 | `progresso_etapa_trilha:select` | 1 |
 | `progresso_treinamentos:select` | 3 |
 | `progresso_treinamentos:upsert` | 1 |
@@ -512,6 +521,9 @@
 | `story_ideas:select` | 2 |
 | `sugestoes_conteudo:insert` | 1 |
 | `sugestoes_conteudo:select` | 1 |
+| `tempos_encontro_produto:insert` | 1 |
+| `tempos_encontro_produto:select` | 1 |
+| `tempos_encontro_produto:upsert` | 1 |
 | `tokens_oauth_consultoria:select` | 1 |
 | `treinamento_avaliacoes:select` | 2 |
 | `treinamento_avaliacoes:upsert` | 2 |

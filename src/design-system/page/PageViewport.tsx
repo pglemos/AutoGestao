@@ -39,6 +39,10 @@ export function PageViewport({
       tabIndex={props.tabIndex ?? -1}
       className={cn(
         'min-h-0 w-full min-w-0 flex-1 overflow-y-auto overflow-x-hidden no-scrollbar bg-surface-alt text-foreground',
+        // 20.009 — o mobile header é `fixed` (72px); o scroll owner reserva
+        // `scroll-padding-top` para o foco programático/Tab não ficar oculto
+        // sob ele ao rolar até o elemento.
+        '[scroll-padding-top:var(--mx-mobile-header-height)]',
         className,
       )}
     >
