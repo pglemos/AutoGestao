@@ -1,7 +1,8 @@
 import { describe, expect, test } from 'bun:test'
-import { spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
+
+import { captureCommandOutput } from './lib/captureSubprocess'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..', '..')
@@ -9,11 +10,14 @@ const ROOT = path.resolve(__dirname, '..', '..')
 /**
  * O gate parseia todo o `src` com AST TypeScript (~8s), então o resultado é
  * computado UMA vez no escopo do módulo — os testes apenas leem o cache.
+ *
+ * C8: `spawnSync` direto teria o stdout engolido pelo bun test (blind-pass);
+ * `captureCommandOutput` grava o stdout do gate num arquivo via node e o teste
+ * lê por fs.
  */
 const gate = (() => {
-  const res = spawnSync('node', ['scripts/lint-scroll-region-focusable.mjs', '--json'], {
+  const res = captureCommandOutput('node', ['scripts/lint-scroll-region-focusable.mjs', '--json'], {
     cwd: ROOT,
-    encoding: 'utf8',
   })
   const violations = (res.stdout ? JSON.parse(res.stdout).violations : []) as Array<{
     file: string

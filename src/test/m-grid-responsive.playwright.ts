@@ -14,6 +14,7 @@ import { getE2ERolePassword, loginWithCredentials } from './e2e-helpers/auth'
  */
 const senha = () => getE2ERolePassword()
 const vendedor = process.env.E2E_SELLER_EMAIL || 'vendedor@mxgestaopreditiva.com.br'
+const dono = process.env.E2E_OWNER_EMAIL || 'dono@mxgestaopreditiva.com.br'
 
 const VIEWPORTS = [
   { name: 'mobile-320', width: 320, height: 568 },
@@ -41,6 +42,24 @@ test.describe('FASE M 13.015 — grids responsivos de cards (vendedor home)', ()
       // O grid de métricas existe (aria-label) e renderiza cards (children diretos).
       const cardCount = await metrics.locator(':scope > *').count()
       expect(cardCount, `${viewport.name}: cards de métrica`).toBeGreaterThanOrEqual(1)
+    }
+  })
+})
+
+test.describe('FASE M 13.015 — grid responsivo do cockpit do Dono (read-only)', () => {
+  test('métricas do dono renderizam sem overflow em todos os viewports', async ({ page }) => {
+    await loginWithCredentials(page, dono, senha())
+
+    for (const viewport of VIEWPORTS) {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height })
+      await page.goto('/home')
+      await page.waitForLoadState('networkidle')
+
+      // O cockpit do dono renderiza métricas (Previsão de Vendas etc.).
+      await expect(page.getByText('Previsão de Vendas').first()).toBeVisible({ timeout: 30_000 })
+
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
+      expect(overflow, `${viewport.name}: overflow horizontal ${overflow}px`).toBeLessThanOrEqual(1)
     }
   })
 })
