@@ -4,6 +4,149 @@ import { newClientSlug, onlyDigits, type NewClientDraft } from './newClientDraft
 export type CreateClientProgramResult = { clientId: string | null; slug: string | null; error: string | null }
 
 /**
+ * Continua o onboarding de um cliente existente: atualiza os campos do draft e
+ * aplica apenas o que falta nas coleções (lojas, contatos, módulos, consultores)
+ * sem apagar nada que já exista — a gravação é aditiva para não destruir
+ * vínculos já criados em sessões anteriores.
+ */
+export async function continueClientProgram(
+  clientId: string,
+  draft: NewClientDraft,
+  step: number,
+  updatedBy: string,
+): Promise<CreateClientProgramResult> {
+  const { error: clientError } = await supabase
+    .from('clientes_consultoria')
+    .update({
+      name: draft.name.trim(),
+      legal_name: draft.legal_name.trim() || null,
+      cnpj: draft.cnpj.trim() ? onlyDigits(draft.cnpj) : null,
+      notes: draft.notes.trim() || null,
+      product_name: draft.product_name.trim() || null,
+      program_template_key: draft.program_template_key.trim() || null,
+      modality: draft.modality.trim() || null,
+      structure_type: draft.structure_type,
+      business_phase: draft.business_phase.trim() || null,
+      implementation_owner_id: draft.implementation_owner_id || null,
+      contract_start_date: draft.contract_start_date || null,
+      contract_end_date: draft.contract_end_date || null,
+      primary_store_id: draft.primary_store_id || null,
+      onboarding_step: Math.min(Math.max(step, 1), 7),
+      onboarding_completed: step >= 7,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', clientId)
+  if (clientError) return { clientId: null, slug: null, error: clientError.message }
+
+  const units = draft.units.filter(unit => unit.name.trim())
+  if (units.length) {
+    for (const unit of units) {
+      const { data: existing } = await supabase
+        .from('unidades_cliente_consultoria')
+        .select('id')
+        .eq('client_id', clientId)
+        .eq('name', unit.name.trim())
+        .maybeSingle()
+      if (existing) {
+        const { error } = await supabase
+          .from('unidades_cliente_consultoria')
+          .update({ city: unit.city.trim() || null, state: unit.state.trim() || null, is_primary: unit.is_primary, updated_at: new Date().toISOString() })
+          .eq('id', existing.id)
+        if (error) return { clientId: null, slug: null, error: `Loja "${unit.name}" não atualizou: ${error.message}` }
+      } else {
+        const { error } = await supabase.from('unidades_cliente_consultoria').insert({
+          client_id: clientId,
+          name: unit.name.trim(),
+          city: unit.city.trim() || null,
+          state: unit.state.trim() || null,
+          is_primary: unit.is_primary,
+        })
+        if (error) return { clientId: null, slug: null, error: `Loja "${unit.name}" não criou: ${error.message}` }
+      }
+    }
+  }
+
+  const contacts = draft.contacts.filter(contact => contact.name.trim())
+  if (contacts.length) {
+    for (const contact of contacts) {
+      const { data: existing } = await supabase
+        .from('contatos_cliente_consultoria')
+        .select('id')
+        .eq('client_id', clientId)
+        .eq('name', contact.name.trim())
+        .maybeSingle()
+      if (existing) {
+        const { error } = await supabase
+          .from('contatos_cliente_consultoria')
+          .update({
+            role: contact.role.trim() || null,
+            email: contact.email.trim() || null,
+            phone: contact.phone.trim() || null,
+            is_primary: contact.is_primary,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', existing.id)
+        if (error) return { clientId: null, slug: null, error: error.message }
+      } else {
+        const { error } = await supabase.from('contatos_cliente_consultoria').insert({
+          client_id: clientId,
+          name: contact.name.trim(),
+          role: contact.role.trim() || null,
+          email: contact.email.trim() || null,
+          phone: contact.phone.trim() || null,
+          is_primary: contact.is_primary,
+        })
+        if (error) return { clientId: null, slug: null, error: error.message }
+      }
+    }
+  }
+
+  if (draft.enabled_modules.length) {
+    const { data: existingModules } = await supabase
+      .from('modulos_cliente_consultoria')
+      .select('module_key')
+      .eq('client_id', clientId)
+    const present = new Set((existingModules ?? []).map(item => (item as { module_key: string }).module_key))
+    const missing = draft.enabled_modules.filter(key => !present.has(key))
+    if (missing.length) {
+      const { error } = await supabase.from('modulos_cliente_consultoria').insert(
+        missing.map(moduleKey => ({
+          client_id: clientId,
+          module_key: moduleKey,
+          label: moduleKey,
+          enabled: true,
+          configured_by: updatedBy,
+          configured_at: new Date().toISOString(),
+        })),
+      )
+      if (error) return { clientId: null, slug: null, error: error.message }
+    }
+  }
+
+  if (draft.consultant_ids.length) {
+    const { data: existingAssignments } = await supabase
+      .from('atribuicoes_consultoria')
+      .select('user_id')
+      .eq('client_id', clientId)
+    const present = new Set((existingAssignments ?? []).map(item => (item as { user_id: string }).user_id))
+    const missing = draft.consultant_ids.filter(userId => !present.has(userId))
+    if (missing.length) {
+      const { error } = await supabase.from('atribuicoes_consultoria').insert(
+        missing.map((userId, index) => ({
+          client_id: clientId,
+          user_id: userId,
+          assignment_role: index === 0 ? 'responsavel' : 'apoio',
+          active: true,
+        })),
+      )
+      if (error) return { clientId: null, slug: null, error: error.message }
+    }
+  }
+
+  return { clientId, slug: draft.name.trim() ? newClientSlug(draft.name) : null, error: null }
+}
+
+/**
  * Grava o cliente e todas as suas coleções (lojas, contatos, módulos,
  * consultores). Se qualquer coleção falhar, o cliente recém-criado é arquivado
  * para não deixar cadastro pela metade na carteira.

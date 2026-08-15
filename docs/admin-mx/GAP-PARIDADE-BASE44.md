@@ -19,11 +19,11 @@ Levantamento honesto do que existe no export `mx-admin-flow` e do que o MX tem h
 ### `/clientes`
 - ~~Visão 360 com abas (lojas, pessoas, jornada, progresso, informações gerais)~~ — **feito**.
 - ~~Ativação com checklist separando impeditivo de informativo~~ — **feito** (falta o reparo de matriz).
-- **Gestão de lojas do cliente**: criar/editar loja, horário de funcionamento com padrão MX.
-- **Pessoas e acessos**: criar usuário com papéis, lojas autorizadas, Dono Master; link de autocadastro com validade e limite de usos.
-- **Configuração por cliente**: tolerância de fechamento, limite de vendedores, retenção, canais de notificação.
-- **Programa contratado**: produto, versão, modalidade, jornada vinculada, consultor responsável.
-- **Onboarding por etapas** com continuidade ("Continuar onboarding").
+- ~~**Gestão de lojas do cliente**: criar/editar loja, horário de funcionamento com padrão MX.~~ — **feito** (migration 20260815210000; StoreFormModal, StoreOperatingHoursEditor).
+- ~~**Pessoas e acessos**: criar usuário com papéis, lojas autorizadas, Dono Master; link de autocadastro com validade e limite de usos.~~ — **feito** (DonoMasterCard, PersonCreateModal, EnrollmentLinkModal; tabelas `acessos_cliente_consultoria` e `links_autocadastro_cliente`).
+- ~~**Configuração por cliente**: tolerância de fechamento, limite de vendedores, retenção, canais de notificação.~~ — **feito** (aba Configurações; tabela `configuracoes_cliente_consultoria`).
+- ~~**Programa contratado**: produto, versão, modalidade, jornada vinculada, consultor responsável.~~ — **feito** (ProgramCard na aba Programa e jornada).
+- ~~**Onboarding por etapas** com continuidade ("Continuar onboarding").~~ — **feito** (`onboarding_step`/`onboarding_completed`; wizard carrega `?continue=<id>`).
 
 ### `/equipe`
 - ~~Perfil do consultor: programas habilitados, especialidades por encontro, clientes ativos, capacidade, situação~~ — **feito** (migration 20260815190000).
