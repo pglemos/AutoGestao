@@ -5,10 +5,10 @@
 - Rotas públicas: **8**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
-- Tabelas referenciadas pelo runtime: **146**
+- Tabelas referenciadas pelo runtime: **147**
 - RPCs referenciadas pelo runtime: **87**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **294**
+- Pares tabela/operação encontrados: **295**
 
 ## Rotas
 
@@ -176,13 +176,14 @@
 | `eventos_agenda_consultoria` | 3 |
 | `eventos_agenda_executiva` | 2 |
 | `eventos_comerciais` | 10 |
-| `evidencias_planos_acao` | 1 |
+| `evidencias_planos_acao` | 2 |
 | `evidencias_visita` | 2 |
 | `evidencias-consultoria` | 2 |
 | `execution_actions` | 8 |
 | `fechamento_liberacoes` | 2 |
 | `financeiro_consultoria` | 4 |
 | `funnel_metrics` | 1 |
+| `historico_planos_acao` | 1 |
 | `historico_valores_indicadores_planejamento` | 1 |
 | `importacoes_brutas` | 1 |
 | `indice_felicidade_agregado` | 1 |
@@ -222,7 +223,7 @@
 | `pdis` | 4 |
 | `perfil_consultor_mx` | 2 |
 | `planejamentos_estrategicos` | 1 |
-| `planos_acao` | 7 |
+| `planos_acao` | 8 |
 | `planos_acao_template_itens` | 1 |
 | `planos_acao_template_versoes` | 1 |
 | `planos_acao_templates` | 1 |
@@ -372,7 +373,7 @@
 | `eventos_comerciais:upsert` | 2 |
 | `evidencias_planos_acao:delete` | 1 |
 | `evidencias_planos_acao:insert` | 1 |
-| `evidencias_planos_acao:select` | 1 |
+| `evidencias_planos_acao:select` | 2 |
 | `evidencias_visita:delete` | 1 |
 | `evidencias_visita:insert` | 1 |
 | `evidencias_visita:select` | 2 |
@@ -388,6 +389,7 @@
 | `financeiro_consultoria:update` | 2 |
 | `financeiro_consultoria:upsert` | 1 |
 | `funnel_metrics:select` | 1 |
+| `historico_planos_acao:select` | 1 |
 | `historico_valores_indicadores_planejamento:select` | 1 |
 | `importacoes_brutas:insert` | 1 |
 | `indice_felicidade_agregado:select` | 1 |
@@ -475,7 +477,7 @@
 | `planos_acao:delete` | 1 |
 | `planos_acao:insert` | 3 |
 | `planos_acao:select` | 6 |
-| `planos_acao:update` | 1 |
+| `planos_acao:update` | 2 |
 | `posicionamento_empresa:select` | 1 |
 | `pre_cadastros_loja:select` | 2 |
 | `produtos_digitais:insert` | 1 |
