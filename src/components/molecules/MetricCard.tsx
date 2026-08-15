@@ -23,6 +23,11 @@ export interface MetricCardProps extends React.HTMLAttributes<HTMLDivElement> {
     isPositive?: boolean
   }
   loading?: boolean
+  /**
+   * Card interativo (13.007): só com esta prop o hover de elevação é exibido
+   * (13.009). Cards de leitura não têm hover.
+   */
+  interactive?: boolean
 }
 
 const trendIcons: Record<TrendDirection, typeof ArrowUpRight> = {
@@ -39,7 +44,7 @@ const trendDescriptions: Record<TrendDirection, string> = {
 
 /** Card de métrica. Variação nunca é comunicada só por cor (§43.15). */
 const MetricCard = React.forwardRef<HTMLDivElement, MetricCardProps>(
-  ({ className, label, value, icon, hint, trend, loading = false, ...props }, ref) => {
+  ({ className, label, value, icon, hint, trend, loading = false, interactive = false, ...props }, ref) => {
     const TrendIcon = trend ? trendIcons[trend.direction] : null
     const positive = trend?.isPositive ?? trend?.direction === 'up'
 
@@ -49,8 +54,8 @@ const MetricCard = React.forwardRef<HTMLDivElement, MetricCardProps>(
         className={cn(
           'flex flex-col gap-[var(--mx-space-2)] rounded-[var(--mx-card-radius)] p-[var(--mx-card-padding)]',
           'border border-border bg-surface-default',
-          'shadow-[var(--mx-card-shadow)] transition-shadow duration-[var(--mx-duration-fast)]',
-          'hover:shadow-[var(--mx-card-hover-shadow)]',
+          'shadow-[var(--mx-card-shadow)] transition-[background-color,box-shadow] duration-[var(--mx-duration-fast)]',
+          interactive && 'cursor-pointer hover:shadow-[var(--mx-card-hover-shadow)] hover:bg-surface-alt',
           className,
         )}
         {...props}

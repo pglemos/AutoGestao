@@ -60,7 +60,15 @@ export const BASELINE = {
  * entrada. Depois de justificada, a métrica nova vira o piso do próximo ciclo.
  */
 export const INCREASE_ALLOWLIST = {
-  // 'route-role-matrix.routesTotal': 'Rota nova intencional X adicionada em YYYY-MM-DD — justificativa.',
+  // Módulo Administrador MX (2026-08-15): 4 rotas novas — /clientes,
+  // /consultoria-mx, /indicadores, /planos-acao — importadas do backlog do
+  // Administrador. As demais métricas sobem como consequência direta delas.
+  'route-role-matrix.routesTotal': 'Módulo Administrador MX: 4 rotas novas em 2026-08-15.',
+  'route-role-matrix.routesProtected': 'Módulo Administrador MX: as 4 rotas novas são protegidas (INTERNAL_ROLES).',
+  'route-role-matrix.routeRoleTotal': 'Consequência das 4 rotas novas do Administrador MX.',
+  'route-role-matrix.standardCanvasTotal': 'As 4 rotas novas e /equipe/admin usam canvas padrão.',
+  'route-role-matrix.standardCanvasRenderings': 'Consequência das 4 rotas novas do Administrador MX.',
+  'layout-route-inventory.routeCount': 'Consequência das 4 rotas novas do Administrador MX.',
 }
 
 function readJson(rel) {

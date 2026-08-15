@@ -1,14 +1,16 @@
 import type { ElementType, HTMLAttributes, LabelHTMLAttributes, ReactNode } from 'react'
 import type { LucideIcon } from 'lucide-react'
-import { AlertTriangle, LoaderCircle } from 'lucide-react'
+import { AlertTriangle } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { EmptyState, type EmptyStateProps as MxEmptyStateProps } from '@/components/atoms/EmptyState'
 import { Input, type InputProps } from '@/components/atoms/Input'
 import { Select, type SelectProps } from '@/components/atoms/Select'
 import { Skeleton, type SkeletonProps } from '@/components/atoms/Skeleton'
 import { Textarea, type TextareaProps } from '@/components/atoms/Textarea'
+import { LoadingState } from '@/components/molecules/LoadingState'
 import { Typography } from '@/components/atoms/Typography'
 import { Card } from '@/components/molecules/Card'
+import { SectionCard, SectionContent, SectionHeader } from '@/components/molecules/SectionCard'
 import { PageHeader } from '@/components/molecules/PageHeader'
 import { PageCanvas, type PageBottomClearance, type PageWidth } from '@/design-system/page'
 import { cn } from '@/lib/utils'
@@ -73,7 +75,7 @@ export function MxModulePage({
         data-mx-access-mode={accessMode}
         className="min-h-full"
       >
-        <div className={cn('w-full space-y-5', contentClassName)}>{children}</div>
+        <div className={cn('w-full space-y-[var(--mx-gap-section)]', contentClassName)}>{children}</div>
       </PageCanvas>
     </InternalMxTemplatePage>
   )
@@ -134,18 +136,22 @@ export function MxStatusGauge({ value, label, ariaLabel, showLabel = true }: { v
 }
 
 export function MxSectionCard({ as: Component = 'section', children, className, ...props }: { as?: ElementType; children: ReactNode; className?: string } & HTMLAttributes<HTMLElement>) {
-  return <InternalMxTemplateSection as={Component} data-mx-section-card="" className={cn('overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm', className)} {...props}>{children}</InternalMxTemplateSection>
+  return (
+    <SectionCard as={Component} data-mx-template-slot="section" className={className} {...props}>
+      {children}
+    </SectionCard>
+  )
 }
 
 export function MxSectionHeader({ title, description, actions, className }: { title: ReactNode; description?: ReactNode; actions?: ReactNode; className?: string }) {
   return (
-    <header data-mx-section-header="" data-mx-template-slot="section-header" className={cn('flex flex-col gap-3 border-b border-border-subtle p-5 sm:flex-row sm:items-center sm:justify-between', className)}>
+    <SectionHeader data-mx-template-slot="section-header" className={className}>
       <div className="min-w-0">
         <Typography as="h2" variant="h3" className="text-lg font-semibold text-foreground">{title}</Typography>
         {description ? <Typography variant="p" className="mt-1 text-sm text-muted-foreground">{description}</Typography> : null}
       </div>
       {actions ? <div className="flex flex-wrap items-center gap-2">{actions}</div> : null}
-    </header>
+    </SectionHeader>
   )
 }
 
@@ -155,7 +161,7 @@ export function MxToolbar({ children, className, ...props }: HTMLAttributes<HTML
 
 export function MxField({ label, hint, error, children, className, ...props }: { label: ReactNode; hint?: ReactNode; error?: ReactNode; children: ReactNode; className?: string } & LabelHTMLAttributes<HTMLLabelElement>) {
   return (
-    <label className={cn('flex min-w-0 flex-col gap-2', className)} {...props}>
+    <label className={cn('flex min-w-0 flex-col gap-[var(--mx-gap-form)]', className)} {...props}>
       <Typography as="span" variant="caption" className="font-medium text-muted-foreground">{label}</Typography>
       {children}
       {error ? <Typography variant="tiny" className="text-status-error-text">{error}</Typography> : hint ? <Typography variant="tiny" className="text-muted-foreground">{hint}</Typography> : null}
@@ -181,8 +187,8 @@ export function MxEmptyState({ title, description, icon: Icon, action, variant =
   )
 }
 
-export function MxLoadingState({ label = 'Carregando', className }: { label?: string; className?: string }) {
-  return <div role="status" className={cn('flex min-h-48 flex-col items-center justify-center gap-3 text-muted-foreground', className)} aria-busy="true" aria-live="polite" aria-label={label}><LoaderCircle className="animate-spin text-status-success-text motion-reduce:animate-none" size={28} aria-hidden="true" /><Typography variant="caption" className="font-medium text-muted-foreground">{label}</Typography></div>
+export function MxLoadingState({ label = 'Carregando', context, className }: { label?: string; context?: 'initial' | 'refresh' | 'pagination'; className?: string }) {
+  return <LoadingState label={label} context={context} className={className} />
 }
 
 export function MxErrorState({ title = 'Não foi possível carregar', description, retry, className }: { title?: string; description: string; retry?: () => void; className?: string }) {
@@ -201,7 +207,7 @@ export function MxStatusBanner({ tone = 'neutral', children, className, ...props
 }
 
 export function MxChartCard({ title, description, actions, children, className }: { title: ReactNode; description?: ReactNode; actions?: ReactNode; children: ReactNode; className?: string }) {
-  return <MxSectionCard className={className}><MxSectionHeader title={title} description={description} actions={actions} /><div className="p-5">{children}</div></MxSectionCard>
+  return <MxSectionCard className={className}><MxSectionHeader title={title} description={description} actions={actions} /><SectionContent>{children}</SectionContent></MxSectionCard>
 }
 
 export function MxSkeleton(props: SkeletonProps) { return <Skeleton {...props} /> }

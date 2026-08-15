@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-14T18:48:37.200Z",
+  "generatedAt": "2026-08-15T12:24:43.447Z",
   "source": "scripts/audit_route_data_inventory.mjs + src/lib/auth/routeAccess.ts",
   "roles": [
     "administrador_geral",
@@ -10,13 +10,13 @@
     "vendedor"
   ],
   "summary": {
-    "routesTotal": 109,
-    "routesProtected": 101,
+    "routesTotal": 114,
+    "routesProtected": 106,
     "routesPublic": 8,
-    "routeRoleTotal": 232,
-    "standardCanvasTotal": 66,
-    "standardCanvasRenderings": 216,
-    "redirectTotal": 30,
+    "routeRoleTotal": 252,
+    "standardCanvasTotal": 72,
+    "standardCanvasRenderings": 236,
+    "redirectTotal": 29,
     "fullscreenTotal": 4,
     "printTotal": 1,
     "ungoverned": 0,
@@ -450,20 +450,26 @@
     {
       "path": "/equipe",
       "kind": "route",
-      "surface": "REDIRECT",
+      "surface": "STANDARD_CANVAS",
       "rulePattern": "/equipe",
       "redirect": null,
-      "renderRoles": [],
+      "renderRoles": [
+        "administrador_geral",
+        "administrador_mx",
+        "consultor_mx",
+        "dono",
+        "gerente"
+      ],
       "roleStatus": {
-        "administrador_geral": "REDIRECT_ALLOWED",
-        "administrador_mx": "REDIRECT_ALLOWED",
-        "consultor_mx": "REDIRECT_ALLOWED",
-        "dono": "REDIRECT_ALLOWED",
-        "gerente": "REDIRECT_ALLOWED",
-        "vendedor": "REDIRECT_BLOCKED"
+        "administrador_geral": "RENDER_STANDARD_CANVAS",
+        "administrador_mx": "RENDER_STANDARD_CANVAS",
+        "consultor_mx": "RENDER_STANDARD_CANVAS",
+        "dono": "RENDER_STANDARD_CANVAS",
+        "gerente": "RENDER_STANDARD_CANVAS",
+        "vendedor": "FORBIDDEN"
       },
-      "applicable": false,
-      "element": "<TeamAliasRedirect />"
+      "applicable": true,
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<TeamAliasRedirect />} gerente={<TeamAliasRedirect />} dono={<TeamAliasRedirect />} admin={<AdminEquipeMxPage />} /> </Suspe"
     },
     {
       "path": "/meu-dia",
@@ -2055,7 +2061,117 @@
         "vendedor": "FORBIDDEN"
       },
       "applicable": true,
-      "element": "<Suspense fallback={<Spinner />}><ProdutosDigitais /></Suspense>"
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ProdutosDigitais />} gerente={<ProdutosDigitais />} dono={<ProdutosDigitais />} admin={<AdminProdutosConsultoriaPage />} />"
+    },
+    {
+      "path": "/clientes",
+      "kind": "route",
+      "surface": "STANDARD_CANVAS",
+      "rulePattern": "/clientes",
+      "redirect": null,
+      "renderRoles": [
+        "administrador_geral",
+        "administrador_mx",
+        "consultor_mx"
+      ],
+      "roleStatus": {
+        "administrador_geral": "RENDER_STANDARD_CANVAS",
+        "administrador_mx": "RENDER_STANDARD_CANVAS",
+        "consultor_mx": "RENDER_STANDARD_CANVAS",
+        "dono": "FORBIDDEN",
+        "gerente": "FORBIDDEN",
+        "vendedor": "FORBIDDEN"
+      },
+      "applicable": true,
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ConsultoriaClientes />} /> </Suspense>"
+    },
+    {
+      "path": "/clientes/novo",
+      "kind": "route",
+      "surface": "STANDARD_CANVAS",
+      "rulePattern": "/clientes/novo",
+      "redirect": null,
+      "renderRoles": [
+        "administrador_geral",
+        "administrador_mx",
+        "consultor_mx"
+      ],
+      "roleStatus": {
+        "administrador_geral": "RENDER_STANDARD_CANVAS",
+        "administrador_mx": "RENDER_STANDARD_CANVAS",
+        "consultor_mx": "RENDER_STANDARD_CANVAS",
+        "dono": "FORBIDDEN",
+        "gerente": "FORBIDDEN",
+        "vendedor": "FORBIDDEN"
+      },
+      "applicable": true,
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminNovoClientePage />} /> </Suspense>"
+    },
+    {
+      "path": "/consultoria-mx",
+      "kind": "route",
+      "surface": "STANDARD_CANVAS",
+      "rulePattern": "/consultoria-mx",
+      "redirect": null,
+      "renderRoles": [
+        "administrador_geral",
+        "administrador_mx",
+        "consultor_mx"
+      ],
+      "roleStatus": {
+        "administrador_geral": "RENDER_STANDARD_CANVAS",
+        "administrador_mx": "RENDER_STANDARD_CANVAS",
+        "consultor_mx": "RENDER_STANDARD_CANVAS",
+        "dono": "FORBIDDEN",
+        "gerente": "FORBIDDEN",
+        "vendedor": "FORBIDDEN"
+      },
+      "applicable": true,
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminConsultoriaMxPage />} /> </Suspense>"
+    },
+    {
+      "path": "/indicadores",
+      "kind": "route",
+      "surface": "STANDARD_CANVAS",
+      "rulePattern": "/indicadores",
+      "redirect": null,
+      "renderRoles": [
+        "administrador_geral",
+        "administrador_mx",
+        "consultor_mx"
+      ],
+      "roleStatus": {
+        "administrador_geral": "RENDER_STANDARD_CANVAS",
+        "administrador_mx": "RENDER_STANDARD_CANVAS",
+        "consultor_mx": "RENDER_STANDARD_CANVAS",
+        "dono": "FORBIDDEN",
+        "gerente": "FORBIDDEN",
+        "vendedor": "FORBIDDEN"
+      },
+      "applicable": true,
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminIndicadoresPage />} /> </Suspense>"
+    },
+    {
+      "path": "/planos-acao",
+      "kind": "route",
+      "surface": "STANDARD_CANVAS",
+      "rulePattern": "/planos-acao",
+      "redirect": null,
+      "renderRoles": [
+        "administrador_geral",
+        "administrador_mx",
+        "consultor_mx"
+      ],
+      "roleStatus": {
+        "administrador_geral": "RENDER_STANDARD_CANVAS",
+        "administrador_mx": "RENDER_STANDARD_CANVAS",
+        "consultor_mx": "RENDER_STANDARD_CANVAS",
+        "dono": "FORBIDDEN",
+        "gerente": "FORBIDDEN",
+        "vendedor": "FORBIDDEN"
+      },
+      "applicable": true,
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminPlanosAcaoGlobalPage />} /> </Suspen"
     },
     {
       "path": "/configuracoes",
@@ -2405,6 +2521,41 @@
       "surface": "STANDARD_CANVAS",
       "kind": "route",
       "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<DashboardLoja />} admin={<ForbiddenRoute />} /></Suspense>"
+    },
+    {
+      "path": "/equipe",
+      "role": "administrador_geral",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<TeamAliasRedirect />} gerente={<TeamAliasRedirect />} dono={<TeamAliasRedirect />} admin={<AdminEquipeMxPage />} /> </Suspe"
+    },
+    {
+      "path": "/equipe",
+      "role": "administrador_mx",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<TeamAliasRedirect />} gerente={<TeamAliasRedirect />} dono={<TeamAliasRedirect />} admin={<AdminEquipeMxPage />} /> </Suspe"
+    },
+    {
+      "path": "/equipe",
+      "role": "consultor_mx",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<TeamAliasRedirect />} gerente={<TeamAliasRedirect />} dono={<TeamAliasRedirect />} admin={<AdminEquipeMxPage />} /> </Suspe"
+    },
+    {
+      "path": "/equipe",
+      "role": "dono",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<TeamAliasRedirect />} gerente={<TeamAliasRedirect />} dono={<TeamAliasRedirect />} admin={<AdminEquipeMxPage />} /> </Suspe"
+    },
+    {
+      "path": "/equipe",
+      "role": "gerente",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<TeamAliasRedirect />} gerente={<TeamAliasRedirect />} dono={<TeamAliasRedirect />} admin={<AdminEquipeMxPage />} /> </Suspe"
     },
     {
       "path": "/home",
@@ -3608,35 +3759,140 @@
       "role": "administrador_geral",
       "surface": "STANDARD_CANVAS",
       "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}><ProdutosDigitais /></Suspense>"
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ProdutosDigitais />} gerente={<ProdutosDigitais />} dono={<ProdutosDigitais />} admin={<AdminProdutosConsultoriaPage />} />"
     },
     {
       "path": "/produtos",
       "role": "administrador_mx",
       "surface": "STANDARD_CANVAS",
       "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}><ProdutosDigitais /></Suspense>"
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ProdutosDigitais />} gerente={<ProdutosDigitais />} dono={<ProdutosDigitais />} admin={<AdminProdutosConsultoriaPage />} />"
     },
     {
       "path": "/produtos",
       "role": "consultor_mx",
       "surface": "STANDARD_CANVAS",
       "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}><ProdutosDigitais /></Suspense>"
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ProdutosDigitais />} gerente={<ProdutosDigitais />} dono={<ProdutosDigitais />} admin={<AdminProdutosConsultoriaPage />} />"
     },
     {
       "path": "/produtos",
       "role": "dono",
       "surface": "STANDARD_CANVAS",
       "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}><ProdutosDigitais /></Suspense>"
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ProdutosDigitais />} gerente={<ProdutosDigitais />} dono={<ProdutosDigitais />} admin={<AdminProdutosConsultoriaPage />} />"
     },
     {
       "path": "/produtos",
       "role": "gerente",
       "surface": "STANDARD_CANVAS",
       "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}><ProdutosDigitais /></Suspense>"
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ProdutosDigitais />} gerente={<ProdutosDigitais />} dono={<ProdutosDigitais />} admin={<AdminProdutosConsultoriaPage />} />"
+    },
+    {
+      "path": "/clientes",
+      "role": "administrador_geral",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ConsultoriaClientes />} /> </Suspense>"
+    },
+    {
+      "path": "/clientes",
+      "role": "administrador_mx",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ConsultoriaClientes />} /> </Suspense>"
+    },
+    {
+      "path": "/clientes",
+      "role": "consultor_mx",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ConsultoriaClientes />} /> </Suspense>"
+    },
+    {
+      "path": "/clientes/novo",
+      "role": "administrador_geral",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminNovoClientePage />} /> </Suspense>"
+    },
+    {
+      "path": "/clientes/novo",
+      "role": "administrador_mx",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminNovoClientePage />} /> </Suspense>"
+    },
+    {
+      "path": "/clientes/novo",
+      "role": "consultor_mx",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminNovoClientePage />} /> </Suspense>"
+    },
+    {
+      "path": "/consultoria-mx",
+      "role": "administrador_geral",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminConsultoriaMxPage />} /> </Suspense>"
+    },
+    {
+      "path": "/consultoria-mx",
+      "role": "administrador_mx",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminConsultoriaMxPage />} /> </Suspense>"
+    },
+    {
+      "path": "/consultoria-mx",
+      "role": "consultor_mx",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminConsultoriaMxPage />} /> </Suspense>"
+    },
+    {
+      "path": "/indicadores",
+      "role": "administrador_geral",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminIndicadoresPage />} /> </Suspense>"
+    },
+    {
+      "path": "/indicadores",
+      "role": "administrador_mx",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminIndicadoresPage />} /> </Suspense>"
+    },
+    {
+      "path": "/indicadores",
+      "role": "consultor_mx",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminIndicadoresPage />} /> </Suspense>"
+    },
+    {
+      "path": "/planos-acao",
+      "role": "administrador_geral",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminPlanosAcaoGlobalPage />} /> </Suspen"
+    },
+    {
+      "path": "/planos-acao",
+      "role": "administrador_mx",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminPlanosAcaoGlobalPage />} /> </Suspen"
+    },
+    {
+      "path": "/planos-acao",
+      "role": "consultor_mx",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminPlanosAcaoGlobalPage />} /> </Suspen"
     },
     {
       "path": "/configuracoes",

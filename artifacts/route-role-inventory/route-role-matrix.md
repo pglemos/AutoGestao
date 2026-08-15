@@ -1,16 +1,16 @@
 # MX Foundation Zero — Matriz atual route × role
 
-Gerado em 2026-08-14T18:48:37.200Z a partir do inventário AST vivo e de ROUTE_ACCESS_RULES.
+Gerado em 2026-08-15T12:24:43.447Z a partir do inventário AST vivo e de ROUTE_ACCESS_RULES.
 
 ## Denominadores
 
-- **routesTotal:** 109
-- **routesProtected:** 101
+- **routesTotal:** 114
+- **routesProtected:** 106
 - **routesPublic:** 8
-- **routeRoleTotal:** 232
-- **standardCanvasTotal:** 66
-- **standardCanvasRenderings:** 216
-- **redirectTotal:** 30
+- **routeRoleTotal:** 252
+- **standardCanvasTotal:** 72
+- **standardCanvasRenderings:** 236
+- **redirectTotal:** 29
 - **fullscreenTotal:** 4
 - **printTotal:** 1
 - **ungoverned:** 0
@@ -37,6 +37,11 @@ Gerado em 2026-08-14T18:48:37.200Z a partir do inventário AST vivo e de ROUTE_A
 | `/departamentos/financeiro` | dono | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<DashboardLoja />} admin={<ForbiddenRoute />} /></Suspense> |
 | `/departamentos/operacoes` | dono | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<DashboardLoja />} admin={<ForbiddenRoute />} /></Suspense> |
 | `/mercado` | dono | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<DashboardLoja />} admin={<ForbiddenRoute />} /></Suspense> |
+| `/equipe` | administrador_geral | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<TeamAliasRedirect />} gerente={<TeamAliasRedirect />} dono={<TeamAliasRedirect />} admin={<AdminEquipeMxPage />} /> </Suspe |
+| `/equipe` | administrador_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<TeamAliasRedirect />} gerente={<TeamAliasRedirect />} dono={<TeamAliasRedirect />} admin={<AdminEquipeMxPage />} /> </Suspe |
+| `/equipe` | consultor_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<TeamAliasRedirect />} gerente={<TeamAliasRedirect />} dono={<TeamAliasRedirect />} admin={<AdminEquipeMxPage />} /> </Suspe |
+| `/equipe` | dono | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<TeamAliasRedirect />} gerente={<TeamAliasRedirect />} dono={<TeamAliasRedirect />} admin={<AdminEquipeMxPage />} /> </Suspe |
+| `/equipe` | gerente | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<TeamAliasRedirect />} gerente={<TeamAliasRedirect />} dono={<TeamAliasRedirect />} admin={<AdminEquipeMxPage />} /> </Suspe |
 | `/home` | dono | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorHome />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<RoleRedirect />} /> </Suspense> |
 | `/home` | gerente | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorHome />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<RoleRedirect />} /> </Suspense> |
 | `/home` | vendedor | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorHome />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<RoleRedirect />} /> </Suspense> |
@@ -208,11 +213,26 @@ Gerado em 2026-08-14T18:48:37.200Z a partir do inventário AST vivo e de ROUTE_A
 | `/consultoria/clientes/:clientSlug/visitas/:visitNumber` | administrador_geral | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}><ConsultoriaVisitaExecucao /></Suspense> |
 | `/consultoria/clientes/:clientSlug/visitas/:visitNumber` | administrador_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}><ConsultoriaVisitaExecucao /></Suspense> |
 | `/consultoria/clientes/:clientSlug/visitas/:visitNumber` | consultor_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}><ConsultoriaVisitaExecucao /></Suspense> |
-| `/produtos` | administrador_geral | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}><ProdutosDigitais /></Suspense> |
-| `/produtos` | administrador_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}><ProdutosDigitais /></Suspense> |
-| `/produtos` | consultor_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}><ProdutosDigitais /></Suspense> |
-| `/produtos` | dono | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}><ProdutosDigitais /></Suspense> |
-| `/produtos` | gerente | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}><ProdutosDigitais /></Suspense> |
+| `/produtos` | administrador_geral | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ProdutosDigitais />} gerente={<ProdutosDigitais />} dono={<ProdutosDigitais />} admin={<AdminProdutosConsultoriaPage />} /> |
+| `/produtos` | administrador_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ProdutosDigitais />} gerente={<ProdutosDigitais />} dono={<ProdutosDigitais />} admin={<AdminProdutosConsultoriaPage />} /> |
+| `/produtos` | consultor_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ProdutosDigitais />} gerente={<ProdutosDigitais />} dono={<ProdutosDigitais />} admin={<AdminProdutosConsultoriaPage />} /> |
+| `/produtos` | dono | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ProdutosDigitais />} gerente={<ProdutosDigitais />} dono={<ProdutosDigitais />} admin={<AdminProdutosConsultoriaPage />} /> |
+| `/produtos` | gerente | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ProdutosDigitais />} gerente={<ProdutosDigitais />} dono={<ProdutosDigitais />} admin={<AdminProdutosConsultoriaPage />} /> |
+| `/clientes` | administrador_geral | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ConsultoriaClientes />} /> </Suspense> |
+| `/clientes` | administrador_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ConsultoriaClientes />} /> </Suspense> |
+| `/clientes` | consultor_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ConsultoriaClientes />} /> </Suspense> |
+| `/clientes/novo` | administrador_geral | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminNovoClientePage />} /> </Suspense> |
+| `/clientes/novo` | administrador_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminNovoClientePage />} /> </Suspense> |
+| `/clientes/novo` | consultor_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminNovoClientePage />} /> </Suspense> |
+| `/consultoria-mx` | administrador_geral | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminConsultoriaMxPage />} /> </Suspense> |
+| `/consultoria-mx` | administrador_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminConsultoriaMxPage />} /> </Suspense> |
+| `/consultoria-mx` | consultor_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminConsultoriaMxPage />} /> </Suspense> |
+| `/indicadores` | administrador_geral | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminIndicadoresPage />} /> </Suspense> |
+| `/indicadores` | administrador_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminIndicadoresPage />} /> </Suspense> |
+| `/indicadores` | consultor_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminIndicadoresPage />} /> </Suspense> |
+| `/planos-acao` | administrador_geral | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminPlanosAcaoGlobalPage />} /> </Suspen |
+| `/planos-acao` | administrador_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminPlanosAcaoGlobalPage />} /> </Suspen |
+| `/planos-acao` | consultor_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminPlanosAcaoGlobalPage />} /> </Suspen |
 | `/configuracoes` | administrador_geral | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorConfiguracoes />} gerente={<Configuracoes />} dono={<Configuracoes />} admin={<Configuracoes />} /> </Suspense> |
 | `/configuracoes` | administrador_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorConfiguracoes />} gerente={<Configuracoes />} dono={<Configuracoes />} admin={<Configuracoes />} /> </Suspense> |
 | `/configuracoes` | consultor_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorConfiguracoes />} gerente={<Configuracoes />} dono={<Configuracoes />} admin={<Configuracoes />} /> </Suspense> |
@@ -279,7 +299,7 @@ Gerado em 2026-08-14T18:48:37.200Z a partir do inventário AST vivo e de ROUTE_A
 | `/departamentos/operacoes` | STANDARD_CANVAS | `/departamentos/*` | FORBIDDEN | FORBIDDEN | FORBIDDEN | RENDER_STANDARD_CANVAS | FORBIDDEN | FORBIDDEN |
 | `/mercado` | STANDARD_CANVAS | `/mercado` | FORBIDDEN | FORBIDDEN | FORBIDDEN | RENDER_STANDARD_CANVAS | FORBIDDEN | FORBIDDEN |
 | `/team` | REDIRECT | `/team` | REDIRECT_ALLOWED | REDIRECT_ALLOWED | REDIRECT_ALLOWED | REDIRECT_ALLOWED | REDIRECT_ALLOWED | REDIRECT_BLOCKED |
-| `/equipe` | REDIRECT | `/equipe` | REDIRECT_ALLOWED | REDIRECT_ALLOWED | REDIRECT_ALLOWED | REDIRECT_ALLOWED | REDIRECT_ALLOWED | REDIRECT_BLOCKED |
+| `/equipe` | STANDARD_CANVAS | `/equipe` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN |
 | `/meu-dia` | REDIRECT | `/meu-dia` | REDIRECT_BLOCKED | REDIRECT_BLOCKED | REDIRECT_BLOCKED | REDIRECT_BLOCKED | REDIRECT_BLOCKED | REDIRECT_ALLOWED |
 | `/home` | STANDARD_CANVAS | `/home` | FORBIDDEN | FORBIDDEN | FORBIDDEN | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS |
 | `/minha-remuneracao` | REDIRECT | `/minha-remuneracao` | REDIRECT_BLOCKED | REDIRECT_BLOCKED | REDIRECT_BLOCKED | REDIRECT_BLOCKED | REDIRECT_BLOCKED | REDIRECT_ALLOWED |
@@ -356,6 +376,11 @@ Gerado em 2026-08-14T18:48:37.200Z a partir do inventário AST vivo e de ROUTE_A
 | `/consultoria/clientes/:clientSlug` | STANDARD_CANVAS | `/consultoria/*` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN | FORBIDDEN | FORBIDDEN |
 | `/consultoria/clientes/:clientSlug/visitas/:visitNumber` | STANDARD_CANVAS | `/consultoria/*` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN | FORBIDDEN | FORBIDDEN |
 | `/produtos` | STANDARD_CANVAS | `/produtos` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN |
+| `/clientes` | STANDARD_CANVAS | `/clientes` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN | FORBIDDEN | FORBIDDEN |
+| `/clientes/novo` | STANDARD_CANVAS | `/clientes/novo` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN | FORBIDDEN | FORBIDDEN |
+| `/consultoria-mx` | STANDARD_CANVAS | `/consultoria-mx` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN | FORBIDDEN | FORBIDDEN |
+| `/indicadores` | STANDARD_CANVAS | `/indicadores` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN | FORBIDDEN | FORBIDDEN |
+| `/planos-acao` | STANDARD_CANVAS | `/planos-acao` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN | FORBIDDEN | FORBIDDEN |
 | `/configuracoes` | STANDARD_CANVAS | `/configuracoes` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS |
 | `/configuracoes/remuneracao` | STANDARD_CANVAS | `/configuracoes/remuneracao` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN |
 | `/configuracoes/operacional` | STANDARD_CANVAS | `/configuracoes/operacional` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN | FORBIDDEN | FORBIDDEN |
@@ -369,9 +394,9 @@ Gerado em 2026-08-14T18:48:37.200Z a partir do inventário AST vivo e de ROUTE_A
 
 ## Totais de status
 
-- **administrador_geral:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":23,"PUBLIC":8,"REDIRECT_ALLOWED":12,"REDIRECT_BLOCKED":18,"RENDER_FULLSCREEN":3,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":41}
-- **administrador_mx:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":23,"PUBLIC":8,"REDIRECT_ALLOWED":12,"REDIRECT_BLOCKED":18,"RENDER_FULLSCREEN":3,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":41}
-- **consultor_mx:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":23,"PUBLIC":8,"REDIRECT_ALLOWED":12,"REDIRECT_BLOCKED":18,"RENDER_FULLSCREEN":3,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":41}
-- **dono:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":23,"PUBLIC":8,"REDIRECT_ALLOWED":12,"REDIRECT_BLOCKED":18,"RENDER_FULLSCREEN":1,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":43}
-- **gerente:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":37,"PUBLIC":8,"REDIRECT_ALLOWED":12,"REDIRECT_BLOCKED":18,"RENDER_FULLSCREEN":1,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":29}
-- **vendedor:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":45,"PUBLIC":8,"REDIRECT_ALLOWED":28,"REDIRECT_BLOCKED":4,"RENDER_FULLSCREEN":0,"RENDER_PRINT":0,"RENDER_STANDARD_CANVAS":21}
+- **administrador_geral:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":23,"PUBLIC":8,"REDIRECT_ALLOWED":11,"REDIRECT_BLOCKED":18,"RENDER_FULLSCREEN":3,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":47}
+- **administrador_mx:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":23,"PUBLIC":8,"REDIRECT_ALLOWED":11,"REDIRECT_BLOCKED":18,"RENDER_FULLSCREEN":3,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":47}
+- **consultor_mx:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":23,"PUBLIC":8,"REDIRECT_ALLOWED":11,"REDIRECT_BLOCKED":18,"RENDER_FULLSCREEN":3,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":47}
+- **dono:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":28,"PUBLIC":8,"REDIRECT_ALLOWED":11,"REDIRECT_BLOCKED":18,"RENDER_FULLSCREEN":1,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":44}
+- **gerente:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":42,"PUBLIC":8,"REDIRECT_ALLOWED":11,"REDIRECT_BLOCKED":18,"RENDER_FULLSCREEN":1,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":30}
+- **vendedor:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":51,"PUBLIC":8,"REDIRECT_ALLOWED":28,"REDIRECT_BLOCKED":3,"RENDER_FULLSCREEN":0,"RENDER_PRINT":0,"RENDER_STANDARD_CANVAS":21}

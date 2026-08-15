@@ -1,14 +1,28 @@
 import * as React from 'react'
 import { cn } from '@/lib/utils'
 
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  /**
+   * Card clicável (13.007): ganha hover de elevação e cursor pointer. Só cards
+   * interativos exibem hover (13.009).
+   */
+  interactive?: boolean
+  /** Card selecionado (13.008): anel de destaque semântico. */
+  selected?: boolean
+}
+
 /** Família de card. Aparência única — sem variação por perfil (§8.5). */
-const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
+const Card = React.forwardRef<HTMLDivElement, CardProps>(
+  ({ className, interactive, selected, ...props }, ref) => (
     <div
       ref={ref}
       data-mx-card=""
+      data-interactive={interactive ? '' : undefined}
+      data-selected={selected ? '' : undefined}
       className={cn(
         'relative overflow-hidden rounded-[var(--mx-card-radius)] border border-border-subtle bg-white shadow-[var(--mx-card-shadow)] transition-colors',
+        interactive && 'cursor-pointer transition-[background-color,box-shadow] hover:shadow-[var(--mx-card-hover-shadow)] hover:bg-surface-alt',
+        selected && 'border-status-info ring-2 ring-status-info/30',
         className,
       )}
       {...props}
