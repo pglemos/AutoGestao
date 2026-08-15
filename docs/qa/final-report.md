@@ -12,10 +12,10 @@
 | Campo | Valor |
 |---|---|
 | SHA inicial (base da FASE AM) | `cd03df2a` (conforme instrução) |
-| SHA atual (HEAD, 2026-08-15 atualizado) | `d1ad4ef192c758449bff2c1cf880cc8317694c00` |
-| **Observação** | `cd03df2a` **NÃO é ancestral** do HEAD atual — o working tree foi reescrito/rebaseado desde o início. O SHA inicial real deve ser confirmado na release (FASE AK). |
-| **FINAL_CANDIDATE_SHA do release-candidate.md** | `b083b6fb0c8bf63337db2d58b6a1f60307fc3cea` — **34 commits atrás** do HEAD atual (`git rev-list --count b083b6fb..HEAD` = 34); as fases Z/AA/AF/I/T/etc. NÃO estão no candidato registrado. O candidato final deve ser re-avaliado no freeze (37.001/37.004). |
-| SHA final (após release) | **PENDENTE (após release)** |
+| SHA final (após release, 2026-08-15) | **`2f0918611a5b546c12bd04201adda22b16d6c6db`** |
+| **FINAL_CANDIDATE_SHA (AK 37.004, ledger)** | **`0a37ccfbf5f6cd9f2a6c29c3933f8a14ab6d3388`** — deploy READY em produção; SHA final real = `2f091861` (avançou 4 commits pós-candidato: planos-acao + matrizes). |
+| **SHA anterior (0a37ccfb/08f8b19c)** | **NÃO é o final** — foi candidato intermediário; o SHA final real em produção é `2f091861` (ver 37.019). |
+| SHA final (após release) | `2f0918611a5b546c12bd04201adda22b16d6c6db` — health `release` == este SHA |
 
 **Status:** PARCIAL — inicial/atual coletados; final pendente.
 

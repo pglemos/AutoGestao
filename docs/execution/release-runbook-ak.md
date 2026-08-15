@@ -136,6 +136,10 @@ npm run verify:db-types   # regenera + git diff --exit-code
 
 - `docs/qa/session-diff-review.md` apontamentos: **2 migrations sem reversal
   devem ter rollbacks criados ANTES do release** (38.005).
+- **SHA final (release 2026-08-15):** `2f0918611a5b546c12bd04201adda22b16d6c6db`.
+  O SHA anterior (`0a37ccfb`, e o `08f8b19c` intermediário) **NÃO é o final** —
+  foram candidatos/estados intermediários; o SHA final real em produção é
+  `2f091861` (confirmado via health `release`). Não rotular SHA anterior de final.
 
 ## 37.020 — Spec coverage final
 
