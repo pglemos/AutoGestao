@@ -46,6 +46,12 @@ export const ROUTE_ACCESS_RULES = [
   { pattern: '/simulacao', roles: INTERNAL_ROLES, capability: 'simulate_role' },
   { pattern: '/simulacao/*', roles: INTERNAL_ROLES, capability: 'simulate_role' },
   { pattern: '/agenda', roles: INTERNAL_ROLES },
+  // Módulo Administrador MX: carteira, jornada, catálogo e planos de ação.
+  { pattern: '/clientes', roles: INTERNAL_ROLES },
+  { pattern: '/clientes/novo', roles: INTERNAL_ROLES },
+  { pattern: '/consultoria-mx', roles: INTERNAL_ROLES },
+  { pattern: '/indicadores', roles: INTERNAL_ROLES },
+  { pattern: '/planos-acao', roles: INTERNAL_ROLES },
   { pattern: '/consultoria', roles: [...INTERNAL_ROLES, 'dono'] },
   { pattern: '/consultoria/*', roles: INTERNAL_ROLES },
   { pattern: '/configuracoes/consultoria-pmr', roles: INTERNAL_ROLES },

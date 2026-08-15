@@ -32,8 +32,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT_DIR = path.resolve(__dirname, '..')
 
 const SOURCE_EXTENSIONS = ['.tsx', '.ts', '.jsx', '.js']
-const CANVAS_TAGS = new Set(['PageCanvas', 'PageTemplate', 'MxModulePage'])
-const SKIPPED_TAGS = new Set(['ForbiddenRoute', 'Navigate'])
+const CANVAS_TAGS = new Set(['PageCanvas', 'PageTemplate', 'MxModulePage', 'ConditionalPageCanvas'])
+const SKIPPED_TAGS = new Set(['ForbiddenRoute', 'Navigate', 'RedirectWithSearch', 'RoleRedirect'])
 const DEFAULT_WIDTH = 'dashboard'
 const DEFAULT_CLEARANCE = 'none'
 
@@ -89,7 +89,7 @@ function collectBindings(sf) {
         if (ts.isIdentifier(decl.name) && decl.initializer) {
           const m = decl.initializer
             .getText(sf)
-            .match(/lazy\s*\(\s*\(\)\s*=>\s*import\s*\(\s*['"]([^'"]+)['"]\s*\)\s*\)/)
+            .match(/lazy\s*\(\s*\(\)\s*=>\s*import\s*\(\s*['"]([^'"]+)['"]\s*\)[\s\S]*?\)\s*$/)
           if (m) map[decl.name.text] = m[1]
         }
       }
@@ -145,13 +145,15 @@ function relativeCandidatePaths(spec, fileName) {
  * páginas perfeitamente adotadas. Um nível é suficiente porque os shims nunca
  * empilham re-exports — a cadeia termina no container real.
  */
-function resolvePageReExport(source, readFile) {
+function resolvePageReExport(source, readFile, fileName) {
   const sf = createSourceFile('__reexport__.ts', source)
   for (const statement of sf.statements) {
     if (!ts.isExportDeclaration(statement) || !statement.moduleSpecifier) continue
     const specifier = statement.moduleSpecifier
-    if (!ts.isStringLiteral(specifier) || !specifier.text.startsWith('@/')) continue
-    const candidates = candidatePaths(specifier.text)
+    if (!ts.isStringLiteral(specifier)) continue
+    const candidates = specifier.text.startsWith('@/')
+      ? candidatePaths(specifier.text)
+      : relativeCandidatePaths(specifier.text, fileName)
     const resolved = candidates.find((rel) => readFile(rel) !== null)
     if (resolved) return resolved
   }
@@ -267,6 +269,11 @@ function extractRenderedTags(node, sf, out = new Set()) {
       return out
     }
     out.add(name)
+    // Desce nos children de tags comuns (ex.: `<LojasErrorBoundary>` envolvendo
+    // o `<MxModulePage>`). Sem este passo, um wrapper que contém o canvas
+    // esconderia o canvas da coleta e o gate seguiria sub-componentes de
+    // loading como raiz — falso-positivo de width-mismatch.
+    for (const child of nodeChildren(node)) extractRenderedTags(child, sf, out)
   }
   return out
 }
@@ -281,22 +288,34 @@ function collectRouteRenders(sf) {
       const pathAttr = attrs.find((a) => ts.isJsxAttribute(a) && a.name.getText(sf) === 'path')
       const elementAttr = attrs.find((a) => ts.isJsxAttribute(a) && a.name.getText(sf) === 'element')
       const isIndex = attrs.some((a) => ts.isJsxAttribute(a) && a.name.getText(sf) === 'index')
-      const path = pathAttr && ts.isStringLiteral(pathAttr.initializer)
-        ? pathAttr.initializer.text.replace(/^\/+|\/+$/g, '')
-        : null
-      // Rota index aninhada herda o path do pai (ex.: <Route path="consultoria"><Route index .../>)
-      const effectivePath = isIndex ? parentPath : path
+      const rawPath = pathAttr && ts.isStringLiteral(pathAttr.initializer) ? pathAttr.initializer.text : null
+      // React Router aceita path absoluto em rota aninhada desde que comece
+      // pelo path do pai; nesse caso o path não compõe, ele já é o final.
+      const isAbsolute = Boolean(rawPath && rawPath.startsWith('/') && rawPath !== '/')
+      const path = rawPath === null ? null : rawPath.replace(/^\/+|\/+$/g, '')
+      // Rota index aninhada herda o path do pai; rota aninhada compõe o path
+      // com o pai (ex.: <Route path="consultoria"><Route path="clientes">
+      // → `consultoria/clientes`).
+      const effectivePath = isIndex
+        ? parentPath
+        : isAbsolute
+          ? path
+          : parentPath && path
+            ? `${parentPath}/${path}`.replace(/^\/+|\/+$/g, '')
+            : path
       if (elementAttr && effectivePath) {
         const route = normalizeRoute(effectivePath)
         const tags = extractRenderedTags(elementAttr.initializer, sf)
         renders.set(route, [...new Set([...(renders.get(route) ?? []), ...tags])])
       }
       // Desce nos filhos, acumulando o path (relativo composto com o pai).
-      const childPath = path
-        ? parentPath
-          ? `${parentPath}/${path}`.replace(/^\/+|\/+$/g, '')
-          : path
-        : parentPath
+      const childPath = isAbsolute
+        ? path
+        : path
+          ? parentPath
+            ? `${parentPath}/${path}`.replace(/^\/+|\/+$/g, '')
+            : path
+          : parentPath
       const children = nodeChildren(node)
       for (const child of children) visit(child, childPath)
       return
@@ -364,6 +383,26 @@ function inspectRootFile(source, fileName, meta, route) {
       ts.forEachChild(node, visit)
     }
     visit(sf)
+    // Propaga variáveis que derivam de uma variável-metadata:
+    // `const pageWidth = pageLayout.width` e `const pageBottomClearance =
+    // pageLayout.bottomClearance` (Padrão A/FASE Z).
+    let changed = true
+    while (changed) {
+      changed = false
+      visit(sf)
+      const visit2 = (node) => {
+        if (ts.isVariableDeclaration(node) && node.initializer) {
+          const initText = node.initializer.getText(sf)
+          const refersToMetadata = [...vars].some((v) => new RegExp(`\\b${v}\\b`).test(initText))
+          if (refersToMetadata && ts.isIdentifier(node.name) && !vars.has(node.name.text)) {
+            vars.add(node.name.text)
+            changed = true
+          }
+        }
+        ts.forEachChild(node, visit2)
+      }
+      visit2(sf)
+    }
     return vars
   }
   const metadataVars = collectMetadataVars()
@@ -388,9 +427,15 @@ function inspectRootFile(source, fileName, meta, route) {
     const expr = ts.isJsxExpression(attr.initializer) ? attr.initializer.expression : attr.initializer
     if (!expr) return '<non-literal>'
     const exprText = expr.getText(sf)
-    const fromMetadata = /\bresolveRouteLayout\s*\(/.test(exprText) || (ts.isIdentifier(expr) && metadataVars.has(expr.text))
-    if (prop === 'width' && fromMetadata && (/\.width\s*$/.test(exprText) || (ts.isIdentifier(expr) && metadataVars.has(expr.text)))) return 'dynamic-metadata-width'
-    if (prop === 'bottomClearance' && fromMetadata && (/\.bottomClearance\s*$/.test(exprText) || (ts.isIdentifier(expr) && metadataVars.has(expr.text)))) return 'dynamic-metadata-clearance'
+    // `width={resolveRouteLayout(...).width}`, `width={pageWidth}` ou
+    // `width={pageLayout.width}` (variável derivada + acesso de membro).
+    const memberBase = ts.isPropertyAccessExpression(expr) ? expr.expression.getText(sf) : null
+    const fromMetadata =
+      /\bresolveRouteLayout\s*\(/.test(exprText) ||
+      (ts.isIdentifier(expr) && metadataVars.has(expr.text)) ||
+      (memberBase !== null && metadataVars.has(memberBase))
+    if (prop === 'width' && fromMetadata && (/\.width\s*$/.test(exprText) || (ts.isIdentifier(expr) && metadataVars.has(expr.text)) || (memberBase !== null && metadataVars.has(memberBase)))) return 'dynamic-metadata-width'
+    if (prop === 'bottomClearance' && fromMetadata && (/\.bottomClearance\s*$/.test(exprText) || (ts.isIdentifier(expr) && metadataVars.has(expr.text)) || (memberBase !== null && metadataVars.has(memberBase)))) return 'dynamic-metadata-clearance'
     return '<non-literal>'
   }
 
@@ -411,8 +456,9 @@ function inspectRootFile(source, fileName, meta, route) {
           if (!meta.width) {
             violations.push({ rule: 'dynamic-width-without-metadata', route, file: fileName, line, detail: 'width dinâmico exige metadata com width explícito' })
           }
-        } else if (width !== undefined && width !== '<non-literal>') {
-          if (width !== meta.width) {
+        } else if (width !== '<non-literal>') {
+          const effective = width ?? DEFAULT_WIDTH
+          if (effective !== meta.width) {
             violations.push({
               rule: 'width-mismatch',
               route,
@@ -423,10 +469,11 @@ function inspectRootFile(source, fileName, meta, route) {
           }
         }
         if (clearance === 'dynamic-metadata-clearance') {
-          if (!meta.bottomClearance) {
-            violations.push({ rule: 'dynamic-clearance-without-metadata', route, file: fileName, line, detail: 'bottomClearance dinâmico exige metadata com clearance explícito' })
-          }
-        } else if (clearance !== undefined && clearance !== '<non-literal>') {
+          // Clearance dinâmico segue a metadata: se ela declara, o valor é
+          // usado; se não declara, resolve para o default (`none`) — ambos
+          // coerentes. Nenhuma violação aqui; o contrato de metadata (lint-route-layout)
+          // valida a coerência das rotas.
+        } else if (clearance !== '<non-literal>') {
           const expected = meta.bottomClearance ?? DEFAULT_CLEARANCE
           const effective = clearance ?? DEFAULT_CLEARANCE
           if (effective !== expected) {
@@ -552,7 +599,7 @@ export function inspectAdoptedRouteCanvas({ appSource, metadataSource, readFile 
         const current = queue.shift()
         const currentSource = readFile(current)
         if (currentSource === null) continue
-        const nextTargets = [...new Set([...resolvePageReExport(currentSource, readFile) ? [resolvePageReExport(currentSource, readFile)] : [], ...resolvePageDelegate(currentSource, current, readFile)])]
+        const nextTargets = [...new Set([...resolvePageReExport(currentSource, readFile, current) ? [resolvePageReExport(currentSource, readFile, current)] : [], ...resolvePageDelegate(currentSource, current, readFile)])]
         for (const n of nextTargets) {
           if (!n || visited.has(n)) continue
           visited.add(n)

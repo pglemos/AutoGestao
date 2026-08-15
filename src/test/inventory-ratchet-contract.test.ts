@@ -56,7 +56,8 @@ describe('contrato AC-29.017 — inventories como ratchet (só diminuem)', () =>
   test('INCREASE_ALLOWLIST só contém métricas com aumento real atual', () => {
     const metrics = collectInventoryMetrics()
     for (const metric of Object.keys(INCREASE_ALLOWLIST)) {
-      expect(BASELINE, `métrica desconhecida: ${metric}`).toHaveProperty(metric)
+      // toHaveProperty trataria o ponto da chave como caminho aninhado.
+      expect(Object.keys(BASELINE), `métrica desconhecida: ${metric}`).toContain(metric)
       expect(metrics[metric], `sem aumento real: ${metric}`).toBeGreaterThan(BASELINE[metric])
     }
   })

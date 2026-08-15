@@ -2224,11 +2224,15 @@ export type Database = {
       }
       clientes_consultoria: {
         Row: {
+          business_phase: string | null
           cnpj: string | null
+          contract_end_date: string | null
+          contract_start_date: string | null
           created_at: string
           created_by: string | null
           current_visit_step: number | null
           id: string
+          implementation_owner_id: string | null
           legacy_migrated_at: string | null
           legacy_migrated_by: string | null
           legacy_migration_summary: string | null
@@ -2246,14 +2250,19 @@ export type Database = {
           source_import_key: string | null
           source_payload: Json
           status: string
+          structure_type: string | null
           updated_at: string
         }
         Insert: {
+          business_phase?: string | null
           cnpj?: string | null
+          contract_end_date?: string | null
+          contract_start_date?: string | null
           created_at?: string
           created_by?: string | null
           current_visit_step?: number | null
           id?: string
+          implementation_owner_id?: string | null
           legacy_migrated_at?: string | null
           legacy_migrated_by?: string | null
           legacy_migration_summary?: string | null
@@ -2271,14 +2280,19 @@ export type Database = {
           source_import_key?: string | null
           source_payload?: Json
           status?: string
+          structure_type?: string | null
           updated_at?: string
         }
         Update: {
+          business_phase?: string | null
           cnpj?: string | null
+          contract_end_date?: string | null
+          contract_start_date?: string | null
           created_at?: string
           created_by?: string | null
           current_visit_step?: number | null
           id?: string
+          implementation_owner_id?: string | null
           legacy_migrated_at?: string | null
           legacy_migrated_by?: string | null
           legacy_migration_summary?: string | null
@@ -2296,9 +2310,17 @@ export type Database = {
           source_import_key?: string | null
           source_payload?: Json
           status?: string
+          structure_type?: string | null
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "clientes_consultoria_implementation_owner_id_fkey"
+            columns: ["implementation_owner_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "clientes_consultoria_legacy_migrated_by_fkey"
             columns: ["legacy_migrated_by"]
@@ -9759,6 +9781,173 @@ export type Database = {
           },
         ]
       }
+      planos_acao_template_itens: {
+        Row: {
+          acao: string
+          como: string | null
+          created_at: string
+          departamento: string | null
+          evidencia_requerida: boolean
+          id: string
+          indicador: string | null
+          ordem: number
+          prazo_dias: number | null
+          prioridade: Database["public"]["Enums"]["action_priority"]
+          problema: string
+          updated_at: string
+          version_id: string
+        }
+        Insert: {
+          acao: string
+          como?: string | null
+          created_at?: string
+          departamento?: string | null
+          evidencia_requerida?: boolean
+          id?: string
+          indicador?: string | null
+          ordem?: number
+          prazo_dias?: number | null
+          prioridade?: Database["public"]["Enums"]["action_priority"]
+          problema: string
+          updated_at?: string
+          version_id: string
+        }
+        Update: {
+          acao?: string
+          como?: string | null
+          created_at?: string
+          departamento?: string | null
+          evidencia_requerida?: boolean
+          id?: string
+          indicador?: string | null
+          ordem?: number
+          prazo_dias?: number | null
+          prioridade?: Database["public"]["Enums"]["action_priority"]
+          problema?: string
+          updated_at?: string
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "planos_acao_template_itens_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "planos_acao_template_versoes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      planos_acao_template_versoes: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          notas: string | null
+          published_at: string | null
+          published_by: string | null
+          status: string
+          template_id: string
+          updated_at: string
+          versao: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          notas?: string | null
+          published_at?: string | null
+          published_by?: string | null
+          status?: string
+          template_id: string
+          updated_at?: string
+          versao: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          notas?: string | null
+          published_at?: string | null
+          published_by?: string | null
+          status?: string
+          template_id?: string
+          updated_at?: string
+          versao?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "planos_acao_template_versoes_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "planos_acao_template_versoes_published_by_fkey"
+            columns: ["published_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "planos_acao_template_versoes_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "planos_acao_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      planos_acao_templates: {
+        Row: {
+          active: boolean
+          created_at: string
+          created_by: string | null
+          departamento: string
+          descricao: string | null
+          id: string
+          indicador: string | null
+          nome: string
+          program_key: string | null
+          template_key: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          created_by?: string | null
+          departamento: string
+          descricao?: string | null
+          id?: string
+          indicador?: string | null
+          nome: string
+          program_key?: string | null
+          template_key: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          created_by?: string | null
+          departamento?: string
+          descricao?: string | null
+          id?: string
+          indicador?: string | null
+          nome?: string
+          program_key?: string | null
+          template_key?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "planos_acao_templates_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       posicionamento_empresa: {
         Row: {
           diferenciais: string | null
@@ -14626,7 +14815,7 @@ export type Database = {
         Returns: Json
       }
       carteira_iniciar_missao_v2: {
-        Args: { p_idempotency_key: string; p_payload: Json }
+        Args: { p_idempotency_key?: string; p_payload: Json }
         Returns: Json
       }
       carteira_listar_campanhas: {

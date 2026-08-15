@@ -1,14 +1,14 @@
 # Matriz reproduzível de rotas, autorização e dados
 
-- Rotas declaradas em `src/App.tsx`: **109**
-- Rotas protegidas: **101**
+- Rotas declaradas em `src/App.tsx`: **114**
+- Rotas protegidas: **106**
 - Rotas públicas: **8**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
-- Tabelas referenciadas pelo runtime: **136**
+- Tabelas referenciadas pelo runtime: **140**
 - RPCs referenciadas pelo runtime: **87**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **263**
+- Pares tabela/operação encontrados: **277**
 
 ## Rotas
 
@@ -36,7 +36,7 @@
 | `/departamentos/operacoes` | route | protegida | — | `/departamentos/*` | vendedor, gerente, admin | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<DashboardLoja />} admin={<ForbiddenRoute />} /></Suspense>` |
 | `/mercado` | route | protegida | — | `/mercado` | vendedor, gerente, admin | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<DashboardLoja />} admin={<ForbiddenRoute />} /></Suspense>` |
 | `/team` | route | protegida | — | `/team` | — | `<TeamAliasRedirect />` |
-| `/equipe` | route | protegida | — | `/equipe` | — | `<TeamAliasRedirect />` |
+| `/equipe` | route | protegida | — | `/equipe` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<TeamAliasRedirect />} gerente={<TeamAliasRedirect />} dono={<TeamAliasRedirect />} admin={<AdminEquipeMxPage />} /> </Suspe` |
 | `/meu-dia` | route | protegida | `/home` | `/meu-dia` | — | `<RedirectWithSearch to="/home" />` |
 | `/home` | route | protegida | — | `/home` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorHome />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<RoleRedirect />} /> </Suspense>` |
 | `/minha-remuneracao` | route | protegida | `/home` | `/minha-remuneracao` | — | `<RedirectWithSearch to="/home" />` |
@@ -112,7 +112,12 @@
 | `/consultoria/clientes` | route | protegida | — | `/consultoria/*` | — | `<Suspense fallback={<Spinner />}><ConsultoriaClientes /></Suspense>` |
 | `/consultoria/clientes/:clientSlug` | route | protegida | — | `/consultoria/*` | — | `<Suspense fallback={<Spinner />}><ConsultoriaClienteDetalhe /></Suspense>` |
 | `/consultoria/clientes/:clientSlug/visitas/:visitNumber` | route | protegida | — | `/consultoria/*` | — | `<Suspense fallback={<Spinner />}><ConsultoriaVisitaExecucao /></Suspense>` |
-| `/produtos` | route | protegida | — | `/produtos` | — | `<Suspense fallback={<Spinner />}><ProdutosDigitais /></Suspense>` |
+| `/produtos` | route | protegida | — | `/produtos` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ProdutosDigitais />} gerente={<ProdutosDigitais />} dono={<ProdutosDigitais />} admin={<AdminProdutosConsultoriaPage />} />` |
+| `/clientes` | route | protegida | — | `/clientes` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ConsultoriaClientes />} /> </Suspense>` |
+| `/clientes/novo` | route | protegida | — | `/clientes/novo` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminNovoClientePage />} /> </Suspense>` |
+| `/consultoria-mx` | route | protegida | — | `/consultoria-mx` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminConsultoriaMxPage />} /> </Suspense>` |
+| `/indicadores` | route | protegida | — | `/indicadores` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminIndicadoresPage />} /> </Suspense>` |
+| `/planos-acao` | route | protegida | — | `/planos-acao` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminPlanosAcaoGlobalPage />} /> </Suspen` |
 | `/configuracoes` | route | protegida | — | `/configuracoes` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorConfiguracoes />} gerente={<Configuracoes />} dono={<Configuracoes />} admin={<Configuracoes />} /> </Suspense>` |
 | `/configuracoes/remuneracao` | route | protegida | — | `/configuracoes/remuneracao` | — | `<Suspense fallback={<Spinner />}><Configuracoes initialTab="remuneracao" /></Suspense>` |
 | `/configuracoes/operacional` | route | protegida | — | `/configuracoes/operacional` | — | `<Suspense fallback={<Spinner />}><OperationalSettings /></Suspense>` |
@@ -133,7 +138,7 @@
 | `alerts` | 1 |
 | `artefatos_gerados_consultoria` | 1 |
 | `atendimentos` | 2 |
-| `atribuicoes_consultoria` | 5 |
+| `atribuicoes_consultoria` | 8 |
 | `atribuicoes_trilha_desenvolvimento` | 1 |
 | `aula_presencas` | 1 |
 | `aulas_ao_vivo` | 1 |
@@ -145,18 +150,19 @@
 | `carreira_niveis` | 1 |
 | `carteira_empresa` | 1 |
 | `carteira_missoes` | 1 |
-| `catalogo_metricas_consultoria` | 2 |
+| `catalogo_metricas_consultoria` | 3 |
 | `central_execucao_aberturas` | 3 |
 | `clientes` | 6 |
-| `clientes_consultoria` | 7 |
+| `clientes_consultoria` | 9 |
 | `clientes_oportunidades` | 1 |
 | `comportamental_perfis` | 1 |
 | `comportamental_questoes` | 1 |
 | `comportamental_respostas` | 1 |
 | `comportamental_sessoes` | 1 |
 | `conjuntos_parametros_consultoria` | 1 |
-| `consultor_solucoes` | 1 |
-| `contatos_cliente_consultoria` | 2 |
+| `consultor_solucoes` | 2 |
+| `consultoria_itens_entrega` | 1 |
+| `contatos_cliente_consultoria` | 3 |
 | `cultura_resultado_registros` | 1 |
 | `d1_audit_log` | 2 |
 | `departamentos_mx` | 2 |
@@ -197,9 +203,9 @@
 | `mentor_status_definitions` | 1 |
 | `mentor_transitions` | 1 |
 | `metas` | 4 |
-| `metas_metricas_cliente` | 1 |
+| `metas_metricas_cliente` | 2 |
 | `modelos_formulario_pmr` | 1 |
-| `modulos_cliente_consultoria` | 3 |
+| `modulos_cliente_consultoria` | 4 |
 | `notificacoes` | 4 |
 | `opcoes_agenda_consultoria` | 1 |
 | `oportunidades` | 8 |
@@ -212,11 +218,14 @@
 | `pdi_sessoes` | 2 |
 | `pdis` | 4 |
 | `planejamentos_estrategicos` | 1 |
-| `planos_acao` | 4 |
+| `planos_acao` | 7 |
+| `planos_acao_template_itens` | 1 |
+| `planos_acao_template_versoes` | 1 |
+| `planos_acao_templates` | 1 |
 | `posicionamento_empresa` | 1 |
 | `pre_cadastros_loja` | 2 |
 | `produtos_digitais` | 2 |
-| `programas_visita_consultoria` | 1 |
+| `programas_visita_consultoria` | 2 |
 | `progresso_etapa_trilha` | 1 |
 | `progresso_treinamentos` | 3 |
 | `prospecting_schedule` | 3 |
@@ -250,11 +259,11 @@
 | `treinamento_tarefas` | 1 |
 | `treinamentos` | 4 |
 | `trilhas_desenvolvimento` | 1 |
-| `unidades_cliente_consultoria` | 2 |
+| `unidades_cliente_consultoria` | 3 |
 | `universidade_aulas` | 1 |
 | `universidade_certificacoes` | 1 |
 | `universidade_trilhas` | 1 |
-| `usuarios` | 15 |
+| `usuarios` | 17 |
 | `valores_indicadores_planejamento` | 1 |
 | `valores_parametros_consultoria` | 1 |
 | `vehicle_model_catalog` | 1 |
@@ -263,7 +272,7 @@
 | `vendedor_perfil` | 4 |
 | `vendedores_loja` | 8 |
 | `vinculos_loja` | 17 |
-| `visitas_consultoria` | 8 |
+| `visitas_consultoria` | 9 |
 
 ## Operações por tabela
 
@@ -282,8 +291,9 @@
 | `atendimentos:insert` | 1 |
 | `atendimentos:select` | 2 |
 | `atribuicoes_consultoria:delete` | 1 |
-| `atribuicoes_consultoria:select` | 4 |
-| `atribuicoes_consultoria:update` | 2 |
+| `atribuicoes_consultoria:insert` | 2 |
+| `atribuicoes_consultoria:select` | 6 |
+| `atribuicoes_consultoria:update` | 3 |
 | `atribuicoes_consultoria:upsert` | 3 |
 | `atribuicoes_trilha_desenvolvimento:select` | 1 |
 | `atribuicoes_trilha_desenvolvimento:upsert` | 1 |
@@ -302,13 +312,14 @@
 | `carreira_niveis:upsert` | 1 |
 | `carteira_empresa:select` | 1 |
 | `carteira_missoes:select` | 1 |
-| `catalogo_metricas_consultoria:select` | 2 |
+| `catalogo_metricas_consultoria:select` | 3 |
+| `catalogo_metricas_consultoria:upsert` | 1 |
 | `central_execucao_aberturas:select` | 1 |
 | `central_execucao_aberturas:upsert` | 2 |
 | `clientes_consultoria:delete` | 1 |
-| `clientes_consultoria:insert` | 3 |
-| `clientes_consultoria:select` | 7 |
-| `clientes_consultoria:update` | 1 |
+| `clientes_consultoria:insert` | 4 |
+| `clientes_consultoria:select` | 9 |
+| `clientes_consultoria:update` | 2 |
 | `clientes_oportunidades:select` | 1 |
 | `clientes:delete` | 2 |
 | `clientes:insert` | 2 |
@@ -321,8 +332,10 @@
 | `comportamental_sessoes:insert` | 1 |
 | `comportamental_sessoes:select` | 1 |
 | `conjuntos_parametros_consultoria:select` | 1 |
-| `consultor_solucoes:select` | 1 |
-| `contatos_cliente_consultoria:insert` | 2 |
+| `consultor_solucoes:select` | 2 |
+| `consultor_solucoes:update` | 1 |
+| `consultoria_itens_entrega:select` | 1 |
+| `contatos_cliente_consultoria:insert` | 3 |
 | `contatos_cliente_consultoria:select` | 2 |
 | `cultura_resultado_registros:select` | 1 |
 | `d1_audit_log:insert` | 2 |
@@ -400,14 +413,14 @@
 | `mentor_scripts:select` | 1 |
 | `mentor_status_definitions:select` | 1 |
 | `mentor_transitions:select` | 1 |
-| `metas_metricas_cliente:select` | 1 |
+| `metas_metricas_cliente:select` | 2 |
 | `metas_metricas_cliente:upsert` | 1 |
 | `metas:delete` | 1 |
 | `metas:insert` | 1 |
 | `metas:select` | 4 |
 | `metas:update` | 1 |
 | `modelos_formulario_pmr:select` | 1 |
-| `modulos_cliente_consultoria:insert` | 1 |
+| `modulos_cliente_consultoria:insert` | 2 |
 | `modulos_cliente_consultoria:select` | 3 |
 | `modulos_cliente_consultoria:upsert` | 1 |
 | `notificacoes:delete` | 1 |
@@ -437,16 +450,26 @@
 | `pdis:update` | 1 |
 | `planejamentos_estrategicos:insert` | 1 |
 | `planejamentos_estrategicos:select` | 1 |
+| `planos_acao_template_itens:delete` | 1 |
+| `planos_acao_template_itens:insert` | 1 |
+| `planos_acao_template_itens:select` | 1 |
+| `planos_acao_template_versoes:insert` | 1 |
+| `planos_acao_template_versoes:select` | 1 |
+| `planos_acao_template_versoes:update` | 1 |
+| `planos_acao_templates:insert` | 1 |
+| `planos_acao_templates:select` | 1 |
+| `planos_acao_templates:update` | 1 |
 | `planos_acao:delete` | 1 |
-| `planos_acao:insert` | 1 |
-| `planos_acao:select` | 4 |
+| `planos_acao:insert` | 3 |
+| `planos_acao:select` | 6 |
 | `planos_acao:update` | 1 |
 | `posicionamento_empresa:select` | 1 |
 | `pre_cadastros_loja:select` | 2 |
 | `produtos_digitais:insert` | 1 |
 | `produtos_digitais:select` | 2 |
 | `produtos_digitais:update` | 1 |
-| `programas_visita_consultoria:select` | 1 |
+| `programas_visita_consultoria:select` | 2 |
+| `programas_visita_consultoria:upsert` | 1 |
 | `progresso_etapa_trilha:select` | 1 |
 | `progresso_treinamentos:select` | 3 |
 | `progresso_treinamentos:upsert` | 1 |
@@ -501,14 +524,14 @@
 | `treinamentos:insert` | 1 |
 | `treinamentos:select` | 3 |
 | `trilhas_desenvolvimento:select` | 1 |
-| `unidades_cliente_consultoria:insert` | 2 |
+| `unidades_cliente_consultoria:insert` | 3 |
 | `unidades_cliente_consultoria:select` | 2 |
 | `universidade_aulas:select` | 1 |
 | `universidade_certificacoes:select` | 1 |
 | `universidade_trilhas:select` | 1 |
 | `usuarios:delete` | 1 |
-| `usuarios:select` | 13 |
-| `usuarios:update` | 4 |
+| `usuarios:select` | 14 |
+| `usuarios:update` | 5 |
 | `usuarios:upsert` | 1 |
 | `valores_indicadores_planejamento:select` | 1 |
 | `valores_parametros_consultoria:select` | 1 |
@@ -530,7 +553,7 @@
 | `vinculos_loja:update` | 1 |
 | `visitas_consultoria:delete` | 2 |
 | `visitas_consultoria:insert` | 5 |
-| `visitas_consultoria:select` | 8 |
+| `visitas_consultoria:select` | 9 |
 | `visitas_consultoria:update` | 4 |
 
 ## RPCs

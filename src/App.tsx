@@ -67,6 +67,12 @@ const Lojas = lazy(() => import('@/pages/Lojas'))
 const StoreBranches = lazy(() => import('@/pages/StoreBranches'))
 const ConsultorTreinamentos = lazy(() => import('@/pages/ConsultorTreinamentos'))
 const ProdutosDigitais = lazy(() => import('@/pages/ProdutosDigitais'))
+const AdminNovoClientePage = lazy(() => import('@/features/admin-mx/AdminNovoClientePage'))
+const AdminEquipeMxPage = lazy(() => import('@/features/admin-mx/AdminEquipeMxPage'))
+const AdminProdutosConsultoriaPage = lazy(() => import('@/features/admin-mx/AdminProdutosConsultoriaPage'))
+const AdminIndicadoresPage = lazy(() => import('@/features/admin-mx/AdminIndicadoresPage'))
+const AdminPlanosAcaoGlobalPage = lazy(() => import('@/features/admin-mx/AdminPlanosAcaoGlobalPage'))
+const AdminConsultoriaMxPage = lazy(() => import('@/features/admin-mx/AdminConsultoriaMxPage'))
 const ConsultorNotificacoes = lazy(() => import('@/pages/ConsultorNotificacoes'))
 const Configuracoes = lazy(() => import('@/pages/Configuracoes'))
 const OperationalSettings = lazy(() => import('@/pages/OperationalSettings'))
@@ -320,7 +326,9 @@ export default function App() {
                 <Route path="departamentos/operacoes" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<DashboardLoja />} admin={<ForbiddenRoute />} /></Suspense>} />
                 <Route path="mercado" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<DashboardLoja />} admin={<ForbiddenRoute />} /></Suspense>} />
                 <Route path="team" element={<TeamAliasRedirect />} />
-                <Route path="equipe" element={<TeamAliasRedirect />} />
+                <Route path="equipe" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<TeamAliasRedirect />} gerente={<TeamAliasRedirect />} dono={<TeamAliasRedirect />} admin={<AdminEquipeMxPage />} />
+                </Suspense>} />
 
                 <Route path="meu-dia" element={<RedirectWithSearch to="/home" />} />
                 <Route path="home" element={<Suspense fallback={<Spinner />}>
@@ -463,11 +471,30 @@ export default function App() {
                 <Route path="agenda" element={<Suspense fallback={<Spinner />}><AgendaAdmin /></Suspense>} />
                 <Route path="consultoria">
                   <Route index element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerConsultoria />} admin={<InternalConsultingPage />} /></Suspense>} />
-                  <Route path="clientes" element={<Suspense fallback={<Spinner />}><ConsultoriaClientes /></Suspense>} />
-                  <Route path="clientes/:clientSlug" element={<Suspense fallback={<Spinner />}><ConsultoriaClienteDetalhe /></Suspense>} />
-                  <Route path="clientes/:clientSlug/visitas/:visitNumber" element={<Suspense fallback={<Spinner />}><ConsultoriaVisitaExecucao /></Suspense>} />
+                  {/* Paths absolutos: o segmento cru "clientes" também é usado pela rota
+                      administrativa /clientes, e o inventário de rotas indexa por segmento. */}
+                  <Route path="/consultoria/clientes" element={<Suspense fallback={<Spinner />}><ConsultoriaClientes /></Suspense>} />
+                  <Route path="/consultoria/clientes/:clientSlug" element={<Suspense fallback={<Spinner />}><ConsultoriaClienteDetalhe /></Suspense>} />
+                  <Route path="/consultoria/clientes/:clientSlug/visitas/:visitNumber" element={<Suspense fallback={<Spinner />}><ConsultoriaVisitaExecucao /></Suspense>} />
                 </Route>
-                <Route path="produtos" element={<Suspense fallback={<Spinner />}><ProdutosDigitais /></Suspense>} />
+                <Route path="produtos" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ProdutosDigitais />} gerente={<ProdutosDigitais />} dono={<ProdutosDigitais />} admin={<AdminProdutosConsultoriaPage />} />
+                </Suspense>} />
+                <Route path="clientes" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ConsultoriaClientes />} />
+                </Suspense>} />
+                <Route path="clientes/novo" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminNovoClientePage />} />
+                </Suspense>} />
+                <Route path="consultoria-mx" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminConsultoriaMxPage />} />
+                </Suspense>} />
+                <Route path="indicadores" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminIndicadoresPage />} />
+                </Suspense>} />
+                <Route path="planos-acao" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminPlanosAcaoGlobalPage />} />
+                </Suspense>} />
                 <Route path="configuracoes" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<VendedorConfiguracoes />} gerente={<Configuracoes />} dono={<Configuracoes />} admin={<Configuracoes />} />
                 </Suspense>} />

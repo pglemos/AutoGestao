@@ -20,8 +20,8 @@ describe('Foundation Zero route × role matrix', () => {
   test('is generated from the live route audit and contains no governance gap', () => {
     execFileSync('bun', ['scripts/generate_foundation_zero_route_matrix.ts'], { stdio: 'pipe' })
     const matrix = JSON.parse(readFileSync(artifactPath, 'utf8')) as RouteMatrix
-    expect(matrix.summary.routesTotal).toBe(109)
-    expect(matrix.summary.routesProtected).toBe(101)
+    expect(matrix.summary.routesTotal).toBe(114)
+    expect(matrix.summary.routesProtected).toBe(106)
     expect(matrix.summary.routesPublic).toBe(8)
     expect(matrix.summary.routeRoleTotal).toBeGreaterThan(0)
     expect(matrix.summary.ungoverned).toBe(0)
@@ -30,7 +30,7 @@ describe('Foundation Zero route × role matrix', () => {
 
   test('does not silently lose route rows or role status columns', () => {
     const matrix = JSON.parse(readFileSync(artifactPath, 'utf8')) as RouteMatrix
-    expect(matrix.rows).toHaveLength(109)
+    expect(matrix.rows).toHaveLength(114)
     for (const row of matrix.rows) {
       expect(Object.keys(row.roleStatus)).toEqual([
         'administrador_geral',
@@ -53,11 +53,17 @@ describe('Foundation Zero route × role matrix', () => {
       }>
     }
 
-    for (const path of ['/team', '/equipe', '/consultor-ia']) {
+    for (const path of ['/team', '/consultor-ia']) {
       const row = matrix.rows.find(candidate => candidate.path === path)
       expect(row?.surface).toBe('REDIRECT')
       expect(Object.values(row?.roleStatus ?? {}).some(status => status.startsWith('REDIRECT_'))).toBe(true)
     }
+
+    // /equipe é híbrida: admin MX abre a Equipe MX; os demais perfis seguem
+    // redirecionados para a equipe da loja.
+    const team = matrix.rows.find(candidate => candidate.path === '/equipe')
+    expect(team?.surface).toBe('STANDARD_CANVAS')
+    expect(team?.roleStatus.administrador_mx).toBe('RENDER_STANDARD_CANVAS')
 
     expect(matrix.rows.find(row => row.path === '/dono/*')?.surface).toBe('FULLSCREEN')
     expect(matrix.rows.find(row => row.path === '/treinamentos')?.surface).toBe('STANDARD_CANVAS')

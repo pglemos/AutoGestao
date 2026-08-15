@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-13T00:39:50.611Z",
-  "baselineSha": "7bd5803f6ed4b930cb2cb522c195c9eeeaff8f70",
-  "routeCount": 107,
+  "generatedAt": "2026-08-15T12:29:52.323Z",
+  "baselineSha": "663c75a67cec825163dc764416ed1209ca5ac83b",
+  "routeCount": 112,
   "routes": [
     {
       "path": "/",
@@ -143,7 +143,9 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "wide"
+        "width": "wide",
+        "bottomClearance": "navigation",
+        "adopted": true
       }
     },
     {
@@ -162,7 +164,9 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "dashboard"
+        "width": "dashboard",
+        "bottomClearance": "navigation",
+        "adopted": true
       }
     },
     {
@@ -181,7 +185,9 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "dashboard"
+        "width": "dashboard",
+        "bottomClearance": "navigation",
+        "adopted": true
       }
     },
     {
@@ -199,6 +205,47 @@
       "metadata": {
         "width": "dashboard",
         "source": "default"
+      }
+    },
+    {
+      "path": "/clientes",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:ConsultoriaClientes"
+      ],
+      "files": [
+        "src/pages/ConsultoriaClientes.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/clientes/novo",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:AdminNovoClientePage"
+      ],
+      "files": [
+        "src/features/admin-mx/AdminNovoClientePage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "wide",
+        "bottomClearance": "navigation",
+        "adopted": true
       }
     },
     {
@@ -235,7 +282,9 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "focused"
+        "width": "focused",
+        "bottomClearance": "none",
+        "adopted": true
       }
     },
     {
@@ -251,7 +300,9 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "focused"
+        "width": "focused",
+        "bottomClearance": "none",
+        "adopted": true
       }
     },
     {
@@ -267,7 +318,9 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "focused"
+        "width": "dashboard",
+        "bottomClearance": "navigation",
+        "adopted": true
       }
     },
     {
@@ -286,7 +339,9 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "form"
+        "width": "form",
+        "bottomClearance": "none",
+        "adopted": true
       }
     },
     {
@@ -325,6 +380,27 @@
       }
     },
     {
+      "path": "/consultoria-mx",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:AdminConsultoriaMxPage"
+      ],
+      "files": [
+        "src/features/admin-mx/AdminConsultoriaMxPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "wide",
+        "bottomClearance": "navigation",
+        "adopted": true
+      }
+    },
+    {
       "path": "/consultoria/clientes",
       "renderCount": 1,
       "routes": [
@@ -337,8 +413,9 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "dashboard",
-        "source": "default"
+        "width": "wide",
+        "bottomClearance": "navigation",
+        "adopted": true
       }
     },
     {
@@ -354,8 +431,9 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "dashboard",
-        "source": "default"
+        "width": "wide",
+        "bottomClearance": "navigation",
+        "adopted": true
       }
     },
     {
@@ -371,8 +449,9 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "dashboard",
-        "source": "default"
+        "width": "wide",
+        "bottomClearance": "navigation",
+        "adopted": true
       }
     },
     {
@@ -431,8 +510,8 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "dashboard",
-        "source": "default"
+        "width": "wide",
+        "adopted": true
       }
     },
     {
@@ -451,8 +530,8 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "dashboard",
-        "source": "default"
+        "width": "wide",
+        "adopted": true
       }
     },
     {
@@ -471,8 +550,8 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "dashboard",
-        "source": "default"
+        "width": "wide",
+        "adopted": true
       }
     },
     {
@@ -491,8 +570,8 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "dashboard",
-        "source": "default"
+        "width": "wide",
+        "adopted": true
       }
     },
     {
@@ -511,8 +590,8 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "dashboard",
-        "source": "default"
+        "width": "wide",
+        "adopted": true
       }
     },
     {
@@ -531,8 +610,8 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "dashboard",
-        "source": "default"
+        "width": "wide",
+        "adopted": true
       }
     },
     {
@@ -593,11 +672,16 @@
     },
     {
       "path": "/equipe",
-      "renderCount": 1,
+      "renderCount": 4,
       "routes": [
-        "*:TeamAliasRedirect"
+        "vendedor:TeamAliasRedirect",
+        "gerente:TeamAliasRedirect",
+        "dono:TeamAliasRedirect",
+        "admin:AdminEquipeMxPage"
       ],
-      "files": [],
+      "files": [
+        "src/features/admin-mx/AdminEquipeMxPage.tsx"
+      ],
       "canvas": 0,
       "template": 0,
       "structural": 0,
@@ -620,7 +704,7 @@
       ],
       "canvas": 3,
       "template": 0,
-      "structural": 1,
+      "structural": 0,
       "metadata": {
         "width": "dashboard",
         "bottomClearance": "navigation",
@@ -645,7 +729,8 @@
       "structural": 1,
       "metadata": {
         "width": "dashboard",
-        "bottomClearance": "actions"
+        "bottomClearance": "actions",
+        "adopted": true
       }
     },
     {
@@ -694,7 +779,8 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "focused"
+        "width": "focused",
+        "adopted": true
       }
     },
     {
@@ -793,6 +879,26 @@
       }
     },
     {
+      "path": "/indicadores",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:AdminIndicadoresPage"
+      ],
+      "files": [
+        "src/features/admin-mx/AdminIndicadoresPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
       "path": "/lancamento-diario",
       "renderCount": 1,
       "routes": [
@@ -873,7 +979,8 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "wide"
+        "width": "wide",
+        "adopted": true
       }
     },
     {
@@ -892,7 +999,9 @@
       "template": 6,
       "structural": 1,
       "metadata": {
-        "width": "focused"
+        "width": "dashboard",
+        "bottomClearance": "navigation",
+        "adopted": true
       }
     },
     {
@@ -911,7 +1020,8 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "wide"
+        "width": "wide",
+        "adopted": true
       }
     },
     {
@@ -930,7 +1040,9 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "wide"
+        "width": "wide",
+        "bottomClearance": "navigation",
+        "adopted": true
       }
     },
     {
@@ -950,7 +1062,8 @@
       "structural": 1,
       "metadata": {
         "width": "reading",
-        "bottomClearance": "actions"
+        "bottomClearance": "actions",
+        "adopted": true
       }
     },
     {
@@ -1004,7 +1117,8 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "focused"
+        "width": "focused",
+        "adopted": true
       }
     },
     {
@@ -1102,7 +1216,8 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "dashboard"
+        "width": "dashboard",
+        "adopted": true
       }
     },
     {
@@ -1149,7 +1264,9 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "wide"
+        "width": "wide",
+        "bottomClearance": "navigation",
+        "adopted": true
       }
     },
     {
@@ -1303,7 +1420,30 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "dashboard"
+        "width": "dashboard",
+        "bottomClearance": "navigation",
+        "adopted": true
+      }
+    },
+    {
+      "path": "/planos-acao",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:AdminPlanosAcaoGlobalPage"
+      ],
+      "files": [
+        "src/features/admin-mx/AdminPlanosAcaoGlobalPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "wide",
+        "bottomClearance": "navigation",
+        "adopted": true
       }
     },
     {
@@ -1342,12 +1482,16 @@
     },
     {
       "path": "/produtos",
-      "renderCount": 1,
+      "renderCount": 4,
       "routes": [
-        "*:ProdutosDigitais"
+        "vendedor:ProdutosDigitais",
+        "gerente:ProdutosDigitais",
+        "dono:ProdutosDigitais",
+        "admin:AdminProdutosConsultoriaPage"
       ],
       "files": [
-        "src/features/digital-products/DigitalProductsPage.tsx"
+        "src/features/digital-products/DigitalProductsPage.tsx",
+        "src/features/admin-mx/AdminProdutosConsultoriaPage.tsx"
       ],
       "canvas": 0,
       "template": 0,
@@ -1387,7 +1531,9 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "dashboard"
+        "width": "dashboard",
+        "bottomClearance": "navigation",
+        "adopted": true
       }
     },
     {
@@ -1426,7 +1572,9 @@
       "template": 6,
       "structural": 0,
       "metadata": {
-        "width": "wide"
+        "width": "wide",
+        "bottomClearance": "navigation",
+        "adopted": true
       }
     },
     {
@@ -1442,7 +1590,9 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "wide"
+        "width": "wide",
+        "bottomClearance": "navigation",
+        "adopted": true
       }
     },
     {
@@ -1458,7 +1608,9 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "wide"
+        "width": "wide",
+        "bottomClearance": "navigation",
+        "adopted": true
       }
     },
     {
@@ -1531,7 +1683,8 @@
       "structural": 0,
       "metadata": {
         "width": "focused",
-        "bottomClearance": "actions"
+        "bottomClearance": "actions",
+        "adopted": true
       }
     },
     {
@@ -1675,7 +1828,8 @@
       "template": 6,
       "structural": 1,
       "metadata": {
-        "width": "dashboard"
+        "width": "dashboard",
+        "adopted": true
       }
     },
     {
