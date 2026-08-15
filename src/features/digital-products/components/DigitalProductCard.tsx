@@ -2,7 +2,7 @@ import { Archive, Pencil, Package } from 'lucide-react'
 import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
 import { Typography } from '@/components/atoms/Typography'
-import { Card } from '@/components/molecules/Card'
+import { Card, CardContent } from '@/components/molecules/Card'
 import { getRoleLabel } from '../lib/digitalProductCatalog'
 import type { ProductAudience, ProductRecord } from '../types'
 
@@ -14,7 +14,8 @@ function badgeVariant(status?: string | null): 'success' | 'warning' | 'ghost' {
 
 export function DigitalProductCard({ product, canManage, onEdit, onArchive }: { product: ProductRecord; canManage: boolean; onEdit: (product: ProductRecord) => void; onArchive: (product: ProductRecord) => void }) {
   return (
-    <Card className="flex h-full flex-col border border-border-subtle bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
+    <Card className="flex h-full flex-col">
+      <CardContent className="flex h-full flex-col">
       <div className="flex items-start justify-between gap-3 border-b border-border-subtle pb-4">
         <div className="flex min-w-0 items-start gap-3">
           <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-status-success-surface text-status-success-text"><Package size={20} aria-hidden="true" /></span>
@@ -42,6 +43,7 @@ export function DigitalProductCard({ product, canManage, onEdit, onArchive }: { 
           </div>
         ) : <Badge variant="success">Disponível para seu perfil</Badge>}
       </div>
+      </CardContent>
     </Card>
   )
 }

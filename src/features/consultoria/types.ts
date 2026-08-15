@@ -118,6 +118,8 @@ export interface ConsultingVisit {
   client_id: string
   visit_number: number
   scheduled_at: string
+  /** Data efetiva da visita (quando concluída/executada). Campo do banco. */
+  effective_visit_date?: string | null
   duration_hours: number
   modality: string
   status: 'agendada' | 'concluida' | 'cancelada' | 'em_andamento'

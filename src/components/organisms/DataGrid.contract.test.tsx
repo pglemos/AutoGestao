@@ -167,4 +167,25 @@ describe('contrato FASE N — DataGrid canônico', () => {
     expect(screen.getByRole('button', { name: 'Próxima página' })).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Página anterior' })).toBeTruthy()
   })
+
+  test('14.015 — 320px: table tem min-width 760px com scroll local (não estoura a página)', () => {
+    render(<DataGrid columns={columns} data={rows} label="Contrato" />)
+    // O ScrollableRegion recebe o aria-label e declara o scroll local.
+    const region = screen.getByRole('region', { name: 'Contrato' })
+    expect(region).toHaveAttribute('data-mx-scroll-region', '')
+    expect(region).toHaveAttribute('tabindex', '0')
+    // A table dentro tem min-width 760px (o overflow fica local, não na página).
+    const table = region.querySelector('table')
+    expect(table).not.toBeNull()
+    expect(table!.className).toContain('min-w-[760px]')
+  })
+
+  test('14.015 — teclado: rows com onRowClick são focusáveis (tabIndex 0)', () => {
+    render(<DataGrid columns={columns} data={rows} label="Contrato" onRowClick={() => undefined} />)
+    const bodyRows = screen.getAllByRole('row').slice(1)
+    for (const row of bodyRows) {
+      expect(row.getAttribute('tabindex')).toBe('0')
+      expect(row.getAttribute('role')).toBe('button')
+    }
+  })
 })
