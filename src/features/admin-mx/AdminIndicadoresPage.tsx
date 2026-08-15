@@ -23,9 +23,9 @@ import { toast } from '@/lib/toast'
 import { IndicatorFormModal } from './components/IndicatorFormModal'
 import { saveIndicator, useAdminIndicators, type AdminIndicator, type IndicatorInput } from './hooks/useAdminMxLists'
 
-const DIRECTION_LABEL: Record<string, string> = { up: 'Maior é melhor', down: 'Menor é melhor', neutral: 'Neutro' }
+const DIRECTION_LABEL: Record<string, string> = { increase: 'Maior é melhor', decrease: 'Menor é melhor' }
 
-const EMPTY_INDICATOR: IndicatorInput = { metric_key: '', label: '', area: '', value_type: '', direction: '', source_scope: '', active: true }
+const EMPTY_INDICATOR: IndicatorInput = { metric_key: '', label: '', area: '', value_type: 'number', direction: 'increase', source_scope: 'manual', active: true }
 
 export function AdminIndicadoresPage() {
   const { rows, loading, error, refetch } = useAdminIndicators()

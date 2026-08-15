@@ -202,7 +202,7 @@ export function AdminNovoClientePage() {
                     </MxSelect>
                   </MxField>
                   <legend className="text-sm text-muted-foreground">Consultores da jornada (o primeiro marcado vira responsável pela carteira).</legend>
-                  {team.rows.filter(member => (member.role ?? '').startsWith('consultor') || member.role === 'admin').map(member => (
+                  {team.rows.filter(member => member.role === 'consultor_mx' || member.role === 'administrador_mx').map(member => (
                     <label key={member.id} className="flex items-center gap-2 text-sm">
                       <input
                         type="checkbox"

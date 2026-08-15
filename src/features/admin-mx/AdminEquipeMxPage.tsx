@@ -32,10 +32,9 @@ import {
 import { useAdminTeam, type AdminTeamMember } from './hooks/useAdminMxLists'
 
 const ROLE_LABEL: Record<string, string> = {
-  admin: 'Administrador MX',
-  consultor: 'Consultor MX',
+  administrador_geral: 'Administrador geral',
+  administrador_mx: 'Administrador MX',
   consultor_mx: 'Consultor MX',
-  gerente_mx: 'Gerente MX',
 }
 
 export function AdminEquipeMxPage() {

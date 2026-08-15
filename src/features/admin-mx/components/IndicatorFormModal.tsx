@@ -4,23 +4,29 @@ import { Modal } from '@/components/organisms/Modal'
 import { MxField, MxSelect } from '@/components/module/MxModuleVisualPrimitives'
 import type { IndicatorInput } from '../hooks/useAdminMxLists'
 
+// Valores aceitos pelos CHECKs de catalogo_metricas_consultoria.
 const VALUE_TYPES = [
   { value: 'number', label: 'Número' },
-  { value: 'currency', label: 'Moeda' },
   { value: 'percent', label: 'Percentual' },
-  { value: 'ratio', label: 'Razão' },
+  { value: 'currency', label: 'Moeda' },
 ]
 
 const DIRECTIONS = [
-  { value: 'up', label: 'Maior é melhor' },
-  { value: 'down', label: 'Menor é melhor' },
-  { value: 'neutral', label: 'Neutro' },
+  { value: 'increase', label: 'Maior é melhor' },
+  { value: 'decrease', label: 'Menor é melhor' },
 ]
 
 const SOURCE_SCOPES = [
-  { value: 'cliente', label: 'Cliente' },
-  { value: 'loja', label: 'Loja' },
-  { value: 'vendedor', label: 'Vendedor' },
+  { value: 'manual', label: 'Lançamento manual' },
+  { value: 'computed', label: 'Calculado' },
+  { value: 'sales', label: 'Vendas' },
+  { value: 'marketing', label: 'Marketing' },
+  { value: 'inventory', label: 'Estoque' },
+  { value: 'dre', label: 'DRE' },
+  { value: 'daily_tracking', label: 'Acompanhamento diário' },
+  { value: 'diagnostic', label: 'Diagnóstico' },
+  { value: 'target', label: 'Metas' },
+  { value: 'training', label: 'Treinamento' },
 ]
 
 export function IndicatorFormModal(props: {
@@ -65,19 +71,16 @@ export function IndicatorFormModal(props: {
         </MxField>
         <MxField label="Tipo de valor">
           <MxSelect value={props.draft.value_type} onChange={event => props.onDraft({ ...props.draft, value_type: event.target.value })}>
-            <option value="">Não definido</option>
             {VALUE_TYPES.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}
           </MxSelect>
         </MxField>
         <MxField label="Leitura">
           <MxSelect value={props.draft.direction} onChange={event => props.onDraft({ ...props.draft, direction: event.target.value })}>
-            <option value="">Não definida</option>
             {DIRECTIONS.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}
           </MxSelect>
         </MxField>
         <MxField label="Escopo da fonte">
           <MxSelect value={props.draft.source_scope} onChange={event => props.onDraft({ ...props.draft, source_scope: event.target.value })}>
-            <option value="">Não definido</option>
             {SOURCE_SCOPES.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}
           </MxSelect>
         </MxField>

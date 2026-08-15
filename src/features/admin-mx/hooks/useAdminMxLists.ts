@@ -42,7 +42,7 @@ export function useAdminTeam(): QueryState<AdminTeamMember> {
     const { data: users, error } = await supabase
       .from('usuarios')
       .select('id, name, email, role, active, phone')
-      .in('role', ['admin', 'consultor', 'consultor_mx', 'gerente_mx'])
+      .in('role', ['administrador_geral', 'administrador_mx', 'consultor_mx'])
       .order('name', { ascending: true })
     if (error) throw new Error(error.message)
     const { data: assignments } = await supabase
@@ -141,21 +141,44 @@ export type IndicatorInput = {
   active: boolean
 }
 
+// O catálogo é NOT NULL em area/value_type/direction/source_scope e tem CHECK
+// nos dois últimos — os valores abaixo são os aceitos pelo banco.
+export const INDICATOR_DIRECTIONS = ['increase', 'decrease'] as const
+export const INDICATOR_VALUE_TYPES = ['number', 'percent', 'currency'] as const
+export const INDICATOR_SOURCE_SCOPES = [
+  'manual', 'computed', 'sales', 'marketing', 'inventory', 'dre', 'daily_tracking', 'diagnostic', 'target', 'training',
+] as const
+
+/** Erro bloqueante do indicador, ou null. Espelha os NOT NULL e CHECKs da tabela. */
+export function validateIndicatorInput(input: IndicatorInput): string | null {
+  const key = input.metric_key.trim()
+  if (!key) return 'Informe a chave da métrica.'
+  if (!/^[a-z0-9_]+$/.test(key)) return 'A chave aceita apenas minúsculas, números e underline.'
+  if (!input.label.trim()) return 'Informe o nome do indicador.'
+  if (!input.area.trim()) return 'Informe a área do indicador.'
+  if (!INDICATOR_DIRECTIONS.includes(input.direction as (typeof INDICATOR_DIRECTIONS)[number])) {
+    return 'Selecione a direção de leitura do indicador.'
+  }
+  if (!INDICATOR_VALUE_TYPES.includes(input.value_type as (typeof INDICATOR_VALUE_TYPES)[number])) {
+    return 'Selecione o tipo de valor do indicador.'
+  }
+  return null
+}
+
 /** Cria ou atualiza um indicador do catálogo pela chave da métrica. */
 export async function saveIndicator(input: IndicatorInput): Promise<{ error: string | null }> {
+  const invalid = validateIndicatorInput(input)
+  if (invalid) return { error: invalid }
   const key = input.metric_key.trim()
-  if (!key) return { error: 'Informe a chave da métrica.' }
-  if (!/^[a-z0-9_]+$/.test(key)) return { error: 'A chave aceita apenas minúsculas, números e underline.' }
-  if (!input.label.trim()) return { error: 'Informe o nome do indicador.' }
   const { error } = await supabase
     .from('catalogo_metricas_consultoria')
     .upsert({
       metric_key: key,
       label: input.label.trim(),
-      area: input.area.trim() || null,
-      value_type: input.value_type || null,
-      direction: input.direction || null,
-      source_scope: input.source_scope || null,
+      area: input.area.trim(),
+      value_type: input.value_type,
+      direction: input.direction,
+      source_scope: input.source_scope || 'manual',
       active: input.active,
     }, { onConflict: 'metric_key' })
   return { error: error?.message ?? null }
