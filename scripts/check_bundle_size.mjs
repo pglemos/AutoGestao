@@ -26,8 +26,15 @@ const DIST = path.resolve('dist/assets')
 // 3,07 KB medidos da administração global, mantendo margem inferior a 1%.
 // Os budgets individuais continuam inalterados para impedir crescimento dos
 // chunks críticos.
+//
+// 2026-08-15 — Módulo Administrador MX completo (6 rotas): clientes, equipe,
+// produtos, indicadores, planos-acao e consultoria-mx foram portados do Base44
+// (wizard 7 passos, Visão 360, editor de encontro em 8 abas, biblioteca, metas
+// com import/export xlsx). O total sobe de 1861 → 2097 KB gzip. vendor-export
+// cresceu porque a importação/exportação de metas do módulo de indicadores usa
+// o `xlsx` já existente no projeto (chunk dedicado de exportação), 110 → 140 KB.
 const BUDGETS = {
-    __total__: 1861,
+    __total__: 2097,
     // Vendor chunks (prefix match)
     'vendor-react': 145,
     'vendor-supabase': 60,
@@ -35,7 +42,7 @@ const BUDGETS = {
     'vendor-ui': 70,
     'vendor-jspdf': 145,
     'vendor-html2canvas': 110,
-    'vendor-export': 110,
+    'vendor-export': 140,
     'vendor-utils': 25,
     // Entry app chunk
     index: 240,
