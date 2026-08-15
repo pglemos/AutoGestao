@@ -1362,6 +1362,65 @@ export type Database = {
           },
         ]
       }
+      biblioteca_materiais: {
+        Row: {
+          category: string | null
+          content_type: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          file_asset_name: string | null
+          file_asset_path: string | null
+          id: string
+          program_key: string | null
+          source_url: string | null
+          status: string
+          title: string
+          updated_at: string
+          visibility: string
+        }
+        Insert: {
+          category?: string | null
+          content_type?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          file_asset_name?: string | null
+          file_asset_path?: string | null
+          id?: string
+          program_key?: string | null
+          source_url?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          visibility?: string
+        }
+        Update: {
+          category?: string | null
+          content_type?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          file_asset_name?: string | null
+          file_asset_path?: string | null
+          id?: string
+          program_key?: string | null
+          source_url?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          visibility?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "biblioteca_materiais_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cadencia_estado_cliente: {
         Row: {
           cliente_id: string
@@ -1969,6 +2028,7 @@ export type Database = {
           created_at: string
           descricao: string | null
           direction: string
+          formula_expression: string | null
           formula_key: string | null
           frequencia: string
           label: string
@@ -1976,6 +2036,7 @@ export type Database = {
           sort_order: number
           source_scope: string
           status: string
+          target_calculation_mode: string
           updated_at: string
           value_type: string
           visivel_dono: boolean
@@ -1989,6 +2050,7 @@ export type Database = {
           created_at?: string
           descricao?: string | null
           direction?: string
+          formula_expression?: string | null
           formula_key?: string | null
           frequencia?: string
           label: string
@@ -1996,6 +2058,7 @@ export type Database = {
           sort_order?: number
           source_scope?: string
           status?: string
+          target_calculation_mode?: string
           updated_at?: string
           value_type?: string
           visivel_dono?: boolean
@@ -2009,6 +2072,7 @@ export type Database = {
           created_at?: string
           descricao?: string | null
           direction?: string
+          formula_expression?: string | null
           formula_key?: string | null
           frequencia?: string
           label?: string
@@ -2016,6 +2080,7 @@ export type Database = {
           sort_order?: number
           source_scope?: string
           status?: string
+          target_calculation_mode?: string
           updated_at?: string
           value_type?: string
           visivel_dono?: boolean
@@ -3376,6 +3441,156 @@ export type Database = {
           },
         ]
       }
+      conteudo_encontro: {
+        Row: {
+          can_be_anticipated: boolean
+          client_observation: string | null
+          created_at: string
+          expected_result: string | null
+          id: string
+          methodology_version_id: string
+          objective: string | null
+          owner_visibility: boolean
+          prerequisites: string | null
+          reason: string | null
+          recommended_participant_roles: string | null
+          required_participant_roles: string | null
+          status: string
+          updated_at: string
+          visit_number: number
+        }
+        Insert: {
+          can_be_anticipated?: boolean
+          client_observation?: string | null
+          created_at?: string
+          expected_result?: string | null
+          id?: string
+          methodology_version_id: string
+          objective?: string | null
+          owner_visibility?: boolean
+          prerequisites?: string | null
+          reason?: string | null
+          recommended_participant_roles?: string | null
+          required_participant_roles?: string | null
+          status?: string
+          updated_at?: string
+          visit_number: number
+        }
+        Update: {
+          can_be_anticipated?: boolean
+          client_observation?: string | null
+          created_at?: string
+          expected_result?: string | null
+          id?: string
+          methodology_version_id?: string
+          objective?: string | null
+          owner_visibility?: boolean
+          prerequisites?: string | null
+          reason?: string | null
+          recommended_participant_roles?: string | null
+          required_participant_roles?: string | null
+          status?: string
+          updated_at?: string
+          visit_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conteudo_encontro_methodology_version_id_fkey"
+            columns: ["methodology_version_id"]
+            isOneToOne: false
+            referencedRelation: "versoes_metodologia_produto"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conteudo_referencia_encontro: {
+        Row: {
+          biblioteca_material_id: string | null
+          category: string | null
+          content_type: string
+          created_at: string
+          description: string | null
+          display_order: number
+          duration_minutes: number | null
+          id: string
+          learning_content_id: string | null
+          learning_content_name: string | null
+          methodology_version_id: string
+          required: boolean
+          source_url: string | null
+          status: string
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+          visibility: string
+          visit_number: number
+        }
+        Insert: {
+          biblioteca_material_id?: string | null
+          category?: string | null
+          content_type?: string
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          duration_minutes?: number | null
+          id?: string
+          learning_content_id?: string | null
+          learning_content_name?: string | null
+          methodology_version_id: string
+          required?: boolean
+          source_url?: string | null
+          status?: string
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string
+          visibility?: string
+          visit_number: number
+        }
+        Update: {
+          biblioteca_material_id?: string | null
+          category?: string | null
+          content_type?: string
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          duration_minutes?: number | null
+          id?: string
+          learning_content_id?: string | null
+          learning_content_name?: string | null
+          methodology_version_id?: string
+          required?: boolean
+          source_url?: string | null
+          status?: string
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string
+          visibility?: string
+          visit_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conteudo_referencia_encontro_biblioteca_material_id_fkey"
+            columns: ["biblioteca_material_id"]
+            isOneToOne: false
+            referencedRelation: "biblioteca_materiais"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conteudo_referencia_encontro_learning_content_id_fkey"
+            columns: ["learning_content_id"]
+            isOneToOne: false
+            referencedRelation: "universidade_aulas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conteudo_referencia_encontro_methodology_version_id_fkey"
+            columns: ["methodology_version_id"]
+            isOneToOne: false
+            referencedRelation: "versoes_metodologia_produto"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       critical_cron_job: {
         Row: {
           active: boolean
@@ -3905,6 +4120,66 @@ export type Database = {
           table_name?: string
         }
         Relationships: []
+      }
+      delegacoes_gerenciais: {
+        Row: {
+          autorizado_por: string | null
+          created_at: string
+          id: string
+          loja_id: string
+          loja_nome: string
+          motivo: string | null
+          nivel_acesso: string
+          status: string
+          updated_at: string
+          user_id: string
+          valid_from: string | null
+          valid_until: string
+        }
+        Insert: {
+          autorizado_por?: string | null
+          created_at?: string
+          id?: string
+          loja_id: string
+          loja_nome: string
+          motivo?: string | null
+          nivel_acesso: string
+          status?: string
+          updated_at?: string
+          user_id: string
+          valid_from?: string | null
+          valid_until: string
+        }
+        Update: {
+          autorizado_por?: string | null
+          created_at?: string
+          id?: string
+          loja_id?: string
+          loja_nome?: string
+          motivo?: string | null
+          nivel_acesso?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+          valid_from?: string | null
+          valid_until?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delegacoes_gerenciais_loja_id_fkey"
+            columns: ["loja_id"]
+            isOneToOne: false
+            referencedRelation: "lojas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delegacoes_gerenciais_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       departamento_biblioteca: {
         Row: {
@@ -4598,6 +4873,74 @@ export type Database = {
           },
         ]
       }
+      entregas_encontro: {
+        Row: {
+          confirmation_required: boolean
+          created_at: string
+          deadline_offset_days: number
+          delivery_moment: string
+          description: string | null
+          display_order: number
+          execution_instruction: string | null
+          file_allowed: boolean
+          file_required: boolean
+          id: string
+          methodology_version_id: string
+          recommended_responsible_role: string | null
+          required: boolean
+          status: string
+          title: string
+          updated_at: string
+          visit_number: number
+        }
+        Insert: {
+          confirmation_required?: boolean
+          created_at?: string
+          deadline_offset_days?: number
+          delivery_moment?: string
+          description?: string | null
+          display_order?: number
+          execution_instruction?: string | null
+          file_allowed?: boolean
+          file_required?: boolean
+          id?: string
+          methodology_version_id: string
+          recommended_responsible_role?: string | null
+          required?: boolean
+          status?: string
+          title: string
+          updated_at?: string
+          visit_number: number
+        }
+        Update: {
+          confirmation_required?: boolean
+          created_at?: string
+          deadline_offset_days?: number
+          delivery_moment?: string
+          description?: string | null
+          display_order?: number
+          execution_instruction?: string | null
+          file_allowed?: boolean
+          file_required?: boolean
+          id?: string
+          methodology_version_id?: string
+          recommended_responsible_role?: string | null
+          required?: boolean
+          status?: string
+          title?: string
+          updated_at?: string
+          visit_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "entregas_encontro_methodology_version_id_fkey"
+            columns: ["methodology_version_id"]
+            isOneToOne: false
+            referencedRelation: "versoes_metodologia_produto"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       espelhos_agenda_google_usuario: {
         Row: {
           created_at: string
@@ -5200,6 +5543,74 @@ export type Database = {
             columns: ["seller_user_id"]
             isOneToOne: false
             referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      evidencias_encontro: {
+        Row: {
+          allowed_formats: string | null
+          client_guidance: string | null
+          created_at: string
+          deadline_offset_days: number
+          description: string | null
+          display_order: number
+          evidence_type: string
+          file_limit: number
+          id: string
+          methodology_version_id: string
+          name: string
+          recommended_responsible_role: string | null
+          recommended_validator_role: string | null
+          required: boolean
+          status: string
+          updated_at: string
+          visit_number: number
+        }
+        Insert: {
+          allowed_formats?: string | null
+          client_guidance?: string | null
+          created_at?: string
+          deadline_offset_days?: number
+          description?: string | null
+          display_order?: number
+          evidence_type?: string
+          file_limit?: number
+          id?: string
+          methodology_version_id: string
+          name: string
+          recommended_responsible_role?: string | null
+          recommended_validator_role?: string | null
+          required?: boolean
+          status?: string
+          updated_at?: string
+          visit_number: number
+        }
+        Update: {
+          allowed_formats?: string | null
+          client_guidance?: string | null
+          created_at?: string
+          deadline_offset_days?: number
+          description?: string | null
+          display_order?: number
+          evidence_type?: string
+          file_limit?: number
+          id?: string
+          methodology_version_id?: string
+          name?: string
+          recommended_responsible_role?: string | null
+          recommended_validator_role?: string | null
+          required?: boolean
+          status?: string
+          updated_at?: string
+          visit_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "evidencias_encontro_methodology_version_id_fkey"
+            columns: ["methodology_version_id"]
+            isOneToOne: false
+            referencedRelation: "versoes_metodologia_produto"
             referencedColumns: ["id"]
           },
         ]
@@ -5976,6 +6387,74 @@ export type Database = {
             columns: ["updated_by"]
             isOneToOne: false
             referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guia_consultor_encontro: {
+        Row: {
+          attention_points: string | null
+          completion_criteria: string | null
+          created_at: string
+          data_to_review: string | null
+          facilitation_script: string | null
+          id: string
+          internal_objective: string | null
+          methodological_notes: string | null
+          methodology_version_id: string
+          post_meeting_guidance: string | null
+          preparation_checklist: Json
+          preparation_instructions: string | null
+          required_decisions: string | null
+          status: string
+          suggested_questions: string | null
+          updated_at: string
+          visit_number: number
+        }
+        Insert: {
+          attention_points?: string | null
+          completion_criteria?: string | null
+          created_at?: string
+          data_to_review?: string | null
+          facilitation_script?: string | null
+          id?: string
+          internal_objective?: string | null
+          methodological_notes?: string | null
+          methodology_version_id: string
+          post_meeting_guidance?: string | null
+          preparation_checklist?: Json
+          preparation_instructions?: string | null
+          required_decisions?: string | null
+          status?: string
+          suggested_questions?: string | null
+          updated_at?: string
+          visit_number: number
+        }
+        Update: {
+          attention_points?: string | null
+          completion_criteria?: string | null
+          created_at?: string
+          data_to_review?: string | null
+          facilitation_script?: string | null
+          id?: string
+          internal_objective?: string | null
+          methodological_notes?: string | null
+          methodology_version_id?: string
+          post_meeting_guidance?: string | null
+          preparation_checklist?: Json
+          preparation_instructions?: string | null
+          required_decisions?: string | null
+          status?: string
+          suggested_questions?: string | null
+          updated_at?: string
+          visit_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guia_consultor_encontro_methodology_version_id_fkey"
+            columns: ["methodology_version_id"]
+            isOneToOne: false
+            referencedRelation: "versoes_metodologia_produto"
             referencedColumns: ["id"]
           },
         ]
@@ -6986,6 +7465,53 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "audit_logs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      logs_auditoria_consultoria_mx: {
+        Row: {
+          action: string
+          created_at: string
+          id: string
+          origin: string
+          resource: string
+          user_id: string | null
+          user_name: string | null
+          user_role: string | null
+          value_after: string | null
+          value_before: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          id?: string
+          origin?: string
+          resource: string
+          user_id?: string | null
+          user_name?: string | null
+          user_role?: string | null
+          value_after?: string | null
+          value_before?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          id?: string
+          origin?: string
+          resource?: string
+          user_id?: string | null
+          user_name?: string | null
+          user_role?: string | null
+          value_after?: string | null
+          value_before?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "logs_auditoria_consultoria_mx_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "usuarios"
@@ -8397,6 +8923,72 @@ export type Database = {
         }
         Relationships: []
       }
+      modelos_relatorio: {
+        Row: {
+          compatible_encounters: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          instructions: string | null
+          name: string
+          product_key: string | null
+          published_at: string | null
+          published_by: string | null
+          sections: Json
+          status: string
+          updated_at: string
+          version_number: string
+        }
+        Insert: {
+          compatible_encounters?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          instructions?: string | null
+          name: string
+          product_key?: string | null
+          published_at?: string | null
+          published_by?: string | null
+          sections?: Json
+          status?: string
+          updated_at?: string
+          version_number?: string
+        }
+        Update: {
+          compatible_encounters?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          instructions?: string | null
+          name?: string
+          product_key?: string | null
+          published_at?: string | null
+          published_by?: string | null
+          sections?: Json
+          status?: string
+          updated_at?: string
+          version_number?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "modelos_relatorio_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "modelos_relatorio_published_by_fkey"
+            columns: ["published_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       modulos_cliente_consultoria: {
         Row: {
           client_id: string
@@ -9061,6 +9653,76 @@ export type Database = {
             columns: ["usuario_id"]
             isOneToOne: false
             referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      overrides_parametros_cliente: {
+        Row: {
+          client_id: string
+          created_at: string
+          created_by: string | null
+          default_value_snapshot: number | null
+          id: string
+          metric_key: string
+          month: number | null
+          override_value: number
+          parameter_set_id: string | null
+          reason: string
+          reference_year: number
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          created_by?: string | null
+          default_value_snapshot?: number | null
+          id?: string
+          metric_key: string
+          month?: number | null
+          override_value: number
+          parameter_set_id?: string | null
+          reason: string
+          reference_year: number
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          created_by?: string | null
+          default_value_snapshot?: number | null
+          id?: string
+          metric_key?: string
+          month?: number | null
+          override_value?: number
+          parameter_set_id?: string | null
+          reason?: string
+          reference_year?: number
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "overrides_parametros_cliente_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clientes_consultoria"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "overrides_parametros_cliente_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "overrides_parametros_cliente_parameter_set_id_fkey"
+            columns: ["parameter_set_id"]
+            isOneToOne: false
+            referencedRelation: "conjuntos_parametros_consultoria"
             referencedColumns: ["id"]
           },
         ]
@@ -14129,23 +14791,38 @@ export type Database = {
         Row: {
           assigned_at: string | null
           assigned_by: string | null
+          change_reason: string | null
           id: string
+          is_primary: boolean
           role_id: string
+          status: string
           user_id: string
+          valid_from: string | null
+          valid_until: string | null
         }
         Insert: {
           assigned_at?: string | null
           assigned_by?: string | null
+          change_reason?: string | null
           id?: string
+          is_primary?: boolean
           role_id: string
+          status?: string
           user_id: string
+          valid_from?: string | null
+          valid_until?: string | null
         }
         Update: {
           assigned_at?: string | null
           assigned_by?: string | null
+          change_reason?: string | null
           id?: string
+          is_primary?: boolean
           role_id?: string
+          status?: string
           user_id?: string
+          valid_from?: string | null
+          valid_until?: string | null
         }
         Relationships: [
           {
@@ -14161,10 +14838,14 @@ export type Database = {
         Row: {
           active: boolean | null
           avatar_url: string | null
+          birth_date: string | null
           created_at: string | null
           deactivated_at: string | null
           deactivation_reason: string | null
+          declared_function: string | null
+          default_view: string | null
           email: string
+          entry_date: string | null
           id: string
           is_venda_loja: boolean | null
           merge_reason: string | null
@@ -14172,8 +14853,11 @@ export type Database = {
           merged_into_id: string | null
           must_change_password: boolean | null
           name: string
+          notes: string | null
           notification_preferences: Json | null
           phone: string | null
+          preferred_name: string | null
+          relationship_consent: boolean
           role: string
           role_id: string | null
           updated_at: string | null
@@ -14181,10 +14865,14 @@ export type Database = {
         Insert: {
           active?: boolean | null
           avatar_url?: string | null
+          birth_date?: string | null
           created_at?: string | null
           deactivated_at?: string | null
           deactivation_reason?: string | null
+          declared_function?: string | null
+          default_view?: string | null
           email: string
+          entry_date?: string | null
           id: string
           is_venda_loja?: boolean | null
           merge_reason?: string | null
@@ -14192,8 +14880,11 @@ export type Database = {
           merged_into_id?: string | null
           must_change_password?: boolean | null
           name: string
+          notes?: string | null
           notification_preferences?: Json | null
           phone?: string | null
+          preferred_name?: string | null
+          relationship_consent?: boolean
           role?: string
           role_id?: string | null
           updated_at?: string | null
@@ -14201,10 +14892,14 @@ export type Database = {
         Update: {
           active?: boolean | null
           avatar_url?: string | null
+          birth_date?: string | null
           created_at?: string | null
           deactivated_at?: string | null
           deactivation_reason?: string | null
+          declared_function?: string | null
+          default_view?: string | null
           email?: string
+          entry_date?: string | null
           id?: string
           is_venda_loja?: boolean | null
           merge_reason?: string | null
@@ -14212,8 +14907,11 @@ export type Database = {
           merged_into_id?: string | null
           must_change_password?: boolean | null
           name?: string
+          notes?: string | null
           notification_preferences?: Json | null
           phone?: string | null
+          preferred_name?: string | null
+          relationship_consent?: boolean
           role?: string
           role_id?: string | null
           updated_at?: string | null
@@ -14811,6 +15509,290 @@ export type Database = {
             columns: ["store_id"]
             isOneToOne: false
             referencedRelation: "lojas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      versoes_metodologia_produto: {
+        Row: {
+          change_summary: string | null
+          created_at: string
+          created_by: string | null
+          effective_from: string | null
+          effective_until: string | null
+          encounters_configured: number
+          encounters_pending: number
+          files_count: number
+          id: string
+          methodology_version_number: string
+          product_name: string | null
+          product_version_number: number | null
+          program_key: string
+          published_at: string | null
+          published_by: string | null
+          report_templates_count: number
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+          videos_count: number
+        }
+        Insert: {
+          change_summary?: string | null
+          created_at?: string
+          created_by?: string | null
+          effective_from?: string | null
+          effective_until?: string | null
+          encounters_configured?: number
+          encounters_pending?: number
+          files_count?: number
+          id?: string
+          methodology_version_number: string
+          product_name?: string | null
+          product_version_number?: number | null
+          program_key: string
+          published_at?: string | null
+          published_by?: string | null
+          report_templates_count?: number
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          videos_count?: number
+        }
+        Update: {
+          change_summary?: string | null
+          created_at?: string
+          created_by?: string | null
+          effective_from?: string | null
+          effective_until?: string | null
+          encounters_configured?: number
+          encounters_pending?: number
+          files_count?: number
+          id?: string
+          methodology_version_number?: string
+          product_name?: string | null
+          product_version_number?: number | null
+          program_key?: string
+          published_at?: string | null
+          published_by?: string | null
+          report_templates_count?: number
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          videos_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "versoes_metodologia_produto_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "versoes_metodologia_produto_program_key_fkey"
+            columns: ["program_key"]
+            isOneToOne: false
+            referencedRelation: "programas_visita_consultoria"
+            referencedColumns: ["program_key"]
+          },
+          {
+            foreignKeyName: "versoes_metodologia_produto_published_by_fkey"
+            columns: ["published_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "versoes_metodologia_produto_reviewed_by_fkey"
+            columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vinculo_modelo_relatorio_encontro: {
+        Row: {
+          action_plan_creation_allowed: boolean
+          attachment_allowed: boolean
+          attachment_required: boolean
+          author_role: string | null
+          created_at: string
+          default_title: string | null
+          id: string
+          methodology_version_id: string
+          publication_deadline_days: number
+          report_required: boolean
+          report_template_id: string | null
+          report_template_name: string | null
+          status: string
+          updated_at: string
+          validator_role: string | null
+          visibility: string
+          visit_number: number
+        }
+        Insert: {
+          action_plan_creation_allowed?: boolean
+          attachment_allowed?: boolean
+          attachment_required?: boolean
+          author_role?: string | null
+          created_at?: string
+          default_title?: string | null
+          id?: string
+          methodology_version_id: string
+          publication_deadline_days?: number
+          report_required?: boolean
+          report_template_id?: string | null
+          report_template_name?: string | null
+          status?: string
+          updated_at?: string
+          validator_role?: string | null
+          visibility?: string
+          visit_number: number
+        }
+        Update: {
+          action_plan_creation_allowed?: boolean
+          attachment_allowed?: boolean
+          attachment_required?: boolean
+          author_role?: string | null
+          created_at?: string
+          default_title?: string | null
+          id?: string
+          methodology_version_id?: string
+          publication_deadline_days?: number
+          report_required?: boolean
+          report_template_id?: string | null
+          report_template_name?: string | null
+          status?: string
+          updated_at?: string
+          validator_role?: string | null
+          visibility?: string
+          visit_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vinculo_modelo_relatorio_encontro_methodology_version_id_fkey"
+            columns: ["methodology_version_id"]
+            isOneToOne: false
+            referencedRelation: "versoes_metodologia_produto"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vinculo_modelo_relatorio_encontro_report_template_id_fkey"
+            columns: ["report_template_id"]
+            isOneToOne: false
+            referencedRelation: "modelos_relatorio"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vinculo_plano_acao_encontro: {
+        Row: {
+          action_plan_template_name: string | null
+          action_plan_template_version_id: string | null
+          created_at: string
+          display_order: number
+          id: string
+          methodology_version_id: string
+          recommendation_enabled: boolean
+          status: string
+          updated_at: string
+          visit_number: number
+        }
+        Insert: {
+          action_plan_template_name?: string | null
+          action_plan_template_version_id?: string | null
+          created_at?: string
+          display_order?: number
+          id?: string
+          methodology_version_id: string
+          recommendation_enabled?: boolean
+          status?: string
+          updated_at?: string
+          visit_number: number
+        }
+        Update: {
+          action_plan_template_name?: string | null
+          action_plan_template_version_id?: string | null
+          created_at?: string
+          display_order?: number
+          id?: string
+          methodology_version_id?: string
+          recommendation_enabled?: boolean
+          status?: string
+          updated_at?: string
+          visit_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vinculo_plano_acao_encontro_action_plan_template_version_i_fkey"
+            columns: ["action_plan_template_version_id"]
+            isOneToOne: false
+            referencedRelation: "planos_acao_template_versoes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vinculo_plano_acao_encontro_methodology_version_id_fkey"
+            columns: ["methodology_version_id"]
+            isOneToOne: false
+            referencedRelation: "versoes_metodologia_produto"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vinculos_equipe_loja: {
+        Row: {
+          assignment_type: string
+          created_at: string
+          id: string
+          is_primary: boolean
+          loja_id: string
+          loja_nome: string
+          status: string
+          updated_at: string
+          user_id: string
+          valid_from: string | null
+          valid_until: string | null
+        }
+        Insert: {
+          assignment_type?: string
+          created_at?: string
+          id?: string
+          is_primary?: boolean
+          loja_id: string
+          loja_nome: string
+          status?: string
+          updated_at?: string
+          user_id: string
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Update: {
+          assignment_type?: string
+          created_at?: string
+          id?: string
+          is_primary?: boolean
+          loja_id?: string
+          loja_nome?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vinculos_equipe_loja_loja_id_fkey"
+            columns: ["loja_id"]
+            isOneToOne: false
+            referencedRelation: "lojas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vinculos_equipe_loja_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
             referencedColumns: ["id"]
           },
         ]
