@@ -19,6 +19,72 @@ export type Database = {
   }
   public: {
     Tables: {
+      acessos_cliente_consultoria: {
+        Row: {
+          client_id: string
+          created_at: string
+          created_by: string | null
+          email: string
+          funcao_declarada: string | null
+          id: string
+          is_dono_master: boolean
+          lojas_autorizadas: Json
+          nome: string
+          papeis: Json
+          status: string
+          telefone: string | null
+          updated_at: string
+          visao_padrao: string | null
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          created_by?: string | null
+          email: string
+          funcao_declarada?: string | null
+          id?: string
+          is_dono_master?: boolean
+          lojas_autorizadas?: Json
+          nome: string
+          papeis?: Json
+          status?: string
+          telefone?: string | null
+          updated_at?: string
+          visao_padrao?: string | null
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          created_by?: string | null
+          email?: string
+          funcao_declarada?: string | null
+          id?: string
+          is_dono_master?: boolean
+          lojas_autorizadas?: Json
+          nome?: string
+          papeis?: Json
+          status?: string
+          telefone?: string | null
+          updated_at?: string
+          visao_padrao?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "acessos_cliente_consultoria_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clientes_consultoria"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "acessos_cliente_consultoria_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       agencies: {
         Row: {
           created_at: string | null
@@ -1296,6 +1362,65 @@ export type Database = {
           },
         ]
       }
+      biblioteca_materiais: {
+        Row: {
+          category: string | null
+          content_type: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          file_asset_name: string | null
+          file_asset_path: string | null
+          id: string
+          program_key: string | null
+          source_url: string | null
+          status: string
+          title: string
+          updated_at: string
+          visibility: string
+        }
+        Insert: {
+          category?: string | null
+          content_type?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          file_asset_name?: string | null
+          file_asset_path?: string | null
+          id?: string
+          program_key?: string | null
+          source_url?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          visibility?: string
+        }
+        Update: {
+          category?: string | null
+          content_type?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          file_asset_name?: string | null
+          file_asset_path?: string | null
+          id?: string
+          program_key?: string | null
+          source_url?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          visibility?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "biblioteca_materiais_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cadencia_estado_cliente: {
         Row: {
           cliente_id: string
@@ -1903,6 +2028,7 @@ export type Database = {
           created_at: string
           descricao: string | null
           direction: string
+          formula_expression: string | null
           formula_key: string | null
           frequencia: string
           label: string
@@ -1910,6 +2036,7 @@ export type Database = {
           sort_order: number
           source_scope: string
           status: string
+          target_calculation_mode: string
           updated_at: string
           value_type: string
           visivel_dono: boolean
@@ -1923,6 +2050,7 @@ export type Database = {
           created_at?: string
           descricao?: string | null
           direction?: string
+          formula_expression?: string | null
           formula_key?: string | null
           frequencia?: string
           label: string
@@ -1930,6 +2058,7 @@ export type Database = {
           sort_order?: number
           source_scope?: string
           status?: string
+          target_calculation_mode?: string
           updated_at?: string
           value_type?: string
           visivel_dono?: boolean
@@ -1943,6 +2072,7 @@ export type Database = {
           created_at?: string
           descricao?: string | null
           direction?: string
+          formula_expression?: string | null
           formula_key?: string | null
           frequencia?: string
           label?: string
@@ -1950,6 +2080,7 @@ export type Database = {
           sort_order?: number
           source_scope?: string
           status?: string
+          target_calculation_mode?: string
           updated_at?: string
           value_type?: string
           visivel_dono?: boolean
@@ -2264,6 +2395,8 @@ export type Database = {
           modality: string | null
           name: string
           notes: string | null
+          onboarding_completed: boolean
+          onboarding_step: number
           primary_store_id: string | null
           product_name: string | null
           program_template_key: string
@@ -2294,6 +2427,8 @@ export type Database = {
           modality?: string | null
           name: string
           notes?: string | null
+          onboarding_completed?: boolean
+          onboarding_step?: number
           primary_store_id?: string | null
           product_name?: string | null
           program_template_key?: string
@@ -2324,6 +2459,8 @@ export type Database = {
           modality?: string | null
           name?: string
           notes?: string | null
+          onboarding_completed?: boolean
+          onboarding_step?: number
           primary_store_id?: string | null
           product_name?: string | null
           program_template_key?: string
@@ -2630,6 +2767,60 @@ export type Database = {
           },
         ]
       }
+      configuracoes_cliente_consultoria: {
+        Row: {
+          canal_atencao: string
+          canal_critico: string
+          client_id: string
+          created_at: string
+          janela_envio: string
+          limite_vendedores: number
+          retencao_snapshots_dias: number
+          tolerancia_fechamento_min: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          canal_atencao?: string
+          canal_critico?: string
+          client_id: string
+          created_at?: string
+          janela_envio?: string
+          limite_vendedores?: number
+          retencao_snapshots_dias?: number
+          tolerancia_fechamento_min?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          canal_atencao?: string
+          canal_critico?: string
+          client_id?: string
+          created_at?: string
+          janela_envio?: string
+          limite_vendedores?: number
+          retencao_snapshots_dias?: number
+          tolerancia_fechamento_min?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "configuracoes_cliente_consultoria_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: true
+            referencedRelation: "clientes_consultoria"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "configuracoes_cliente_consultoria_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       conjuntos_parametros_consultoria: {
         Row: {
           active: boolean
@@ -2673,7 +2864,9 @@ export type Database = {
       }
       consultor_solucoes: {
         Row: {
+          converted_plano_id: string | null
           created_at: string
+          dismissed_reason: string | null
           id: string
           metadata: Json | null
           priority: Database["public"]["Enums"]["action_priority"]
@@ -2684,11 +2877,17 @@ export type Database = {
           rule_version: string
           scope_id: string | null
           scope_type: Database["public"]["Enums"]["score_scope_type"]
+          shown_to_owner_at: string | null
           source_alert_id: string | null
           source_plano_id: string | null
+          status: string
+          validated_at: string | null
+          validated_by: string | null
         }
         Insert: {
+          converted_plano_id?: string | null
           created_at?: string
+          dismissed_reason?: string | null
           id?: string
           metadata?: Json | null
           priority?: Database["public"]["Enums"]["action_priority"]
@@ -2699,11 +2898,17 @@ export type Database = {
           rule_version: string
           scope_id?: string | null
           scope_type: Database["public"]["Enums"]["score_scope_type"]
+          shown_to_owner_at?: string | null
           source_alert_id?: string | null
           source_plano_id?: string | null
+          status?: string
+          validated_at?: string | null
+          validated_by?: string | null
         }
         Update: {
+          converted_plano_id?: string | null
           created_at?: string
+          dismissed_reason?: string | null
           id?: string
           metadata?: Json | null
           priority?: Database["public"]["Enums"]["action_priority"]
@@ -2714,10 +2919,21 @@ export type Database = {
           rule_version?: string
           scope_id?: string | null
           scope_type?: Database["public"]["Enums"]["score_scope_type"]
+          shown_to_owner_at?: string | null
           source_alert_id?: string | null
           source_plano_id?: string | null
+          status?: string
+          validated_at?: string | null
+          validated_by?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "consultor_solucoes_converted_plano_id_fkey"
+            columns: ["converted_plano_id"]
+            isOneToOne: false
+            referencedRelation: "planos_acao"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "consultor_solucoes_source_alert_id_fkey"
             columns: ["source_alert_id"]
@@ -2730,6 +2946,13 @@ export type Database = {
             columns: ["source_plano_id"]
             isOneToOne: false
             referencedRelation: "planos_acao"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultor_solucoes_validated_by_fkey"
+            columns: ["validated_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
             referencedColumns: ["id"]
           },
         ]
@@ -3214,6 +3437,156 @@ export type Database = {
             columns: ["client_id"]
             isOneToOne: false
             referencedRelation: "clientes_consultoria"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conteudo_encontro: {
+        Row: {
+          can_be_anticipated: boolean
+          client_observation: string | null
+          created_at: string
+          expected_result: string | null
+          id: string
+          methodology_version_id: string
+          objective: string | null
+          owner_visibility: boolean
+          prerequisites: string | null
+          reason: string | null
+          recommended_participant_roles: string | null
+          required_participant_roles: string | null
+          status: string
+          updated_at: string
+          visit_number: number
+        }
+        Insert: {
+          can_be_anticipated?: boolean
+          client_observation?: string | null
+          created_at?: string
+          expected_result?: string | null
+          id?: string
+          methodology_version_id: string
+          objective?: string | null
+          owner_visibility?: boolean
+          prerequisites?: string | null
+          reason?: string | null
+          recommended_participant_roles?: string | null
+          required_participant_roles?: string | null
+          status?: string
+          updated_at?: string
+          visit_number: number
+        }
+        Update: {
+          can_be_anticipated?: boolean
+          client_observation?: string | null
+          created_at?: string
+          expected_result?: string | null
+          id?: string
+          methodology_version_id?: string
+          objective?: string | null
+          owner_visibility?: boolean
+          prerequisites?: string | null
+          reason?: string | null
+          recommended_participant_roles?: string | null
+          required_participant_roles?: string | null
+          status?: string
+          updated_at?: string
+          visit_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conteudo_encontro_methodology_version_id_fkey"
+            columns: ["methodology_version_id"]
+            isOneToOne: false
+            referencedRelation: "versoes_metodologia_produto"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conteudo_referencia_encontro: {
+        Row: {
+          biblioteca_material_id: string | null
+          category: string | null
+          content_type: string
+          created_at: string
+          description: string | null
+          display_order: number
+          duration_minutes: number | null
+          id: string
+          learning_content_id: string | null
+          learning_content_name: string | null
+          methodology_version_id: string
+          required: boolean
+          source_url: string | null
+          status: string
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+          visibility: string
+          visit_number: number
+        }
+        Insert: {
+          biblioteca_material_id?: string | null
+          category?: string | null
+          content_type?: string
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          duration_minutes?: number | null
+          id?: string
+          learning_content_id?: string | null
+          learning_content_name?: string | null
+          methodology_version_id: string
+          required?: boolean
+          source_url?: string | null
+          status?: string
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string
+          visibility?: string
+          visit_number: number
+        }
+        Update: {
+          biblioteca_material_id?: string | null
+          category?: string | null
+          content_type?: string
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          duration_minutes?: number | null
+          id?: string
+          learning_content_id?: string | null
+          learning_content_name?: string | null
+          methodology_version_id?: string
+          required?: boolean
+          source_url?: string | null
+          status?: string
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string
+          visibility?: string
+          visit_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conteudo_referencia_encontro_biblioteca_material_id_fkey"
+            columns: ["biblioteca_material_id"]
+            isOneToOne: false
+            referencedRelation: "biblioteca_materiais"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conteudo_referencia_encontro_learning_content_id_fkey"
+            columns: ["learning_content_id"]
+            isOneToOne: false
+            referencedRelation: "universidade_aulas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conteudo_referencia_encontro_methodology_version_id_fkey"
+            columns: ["methodology_version_id"]
+            isOneToOne: false
+            referencedRelation: "versoes_metodologia_produto"
             referencedColumns: ["id"]
           },
         ]
@@ -4440,6 +4813,74 @@ export type Database = {
           },
         ]
       }
+      entregas_encontro: {
+        Row: {
+          confirmation_required: boolean
+          created_at: string
+          deadline_offset_days: number
+          delivery_moment: string
+          description: string | null
+          display_order: number
+          execution_instruction: string | null
+          file_allowed: boolean
+          file_required: boolean
+          id: string
+          methodology_version_id: string
+          recommended_responsible_role: string | null
+          required: boolean
+          status: string
+          title: string
+          updated_at: string
+          visit_number: number
+        }
+        Insert: {
+          confirmation_required?: boolean
+          created_at?: string
+          deadline_offset_days?: number
+          delivery_moment?: string
+          description?: string | null
+          display_order?: number
+          execution_instruction?: string | null
+          file_allowed?: boolean
+          file_required?: boolean
+          id?: string
+          methodology_version_id: string
+          recommended_responsible_role?: string | null
+          required?: boolean
+          status?: string
+          title: string
+          updated_at?: string
+          visit_number: number
+        }
+        Update: {
+          confirmation_required?: boolean
+          created_at?: string
+          deadline_offset_days?: number
+          delivery_moment?: string
+          description?: string | null
+          display_order?: number
+          execution_instruction?: string | null
+          file_allowed?: boolean
+          file_required?: boolean
+          id?: string
+          methodology_version_id?: string
+          recommended_responsible_role?: string | null
+          required?: boolean
+          status?: string
+          title?: string
+          updated_at?: string
+          visit_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "entregas_encontro_methodology_version_id_fkey"
+            columns: ["methodology_version_id"]
+            isOneToOne: false
+            referencedRelation: "versoes_metodologia_produto"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       espelhos_agenda_google_usuario: {
         Row: {
           created_at: string
@@ -5042,6 +5483,74 @@ export type Database = {
             columns: ["seller_user_id"]
             isOneToOne: false
             referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      evidencias_encontro: {
+        Row: {
+          allowed_formats: string | null
+          client_guidance: string | null
+          created_at: string
+          deadline_offset_days: number
+          description: string | null
+          display_order: number
+          evidence_type: string
+          file_limit: number
+          id: string
+          methodology_version_id: string
+          name: string
+          recommended_responsible_role: string | null
+          recommended_validator_role: string | null
+          required: boolean
+          status: string
+          updated_at: string
+          visit_number: number
+        }
+        Insert: {
+          allowed_formats?: string | null
+          client_guidance?: string | null
+          created_at?: string
+          deadline_offset_days?: number
+          description?: string | null
+          display_order?: number
+          evidence_type?: string
+          file_limit?: number
+          id?: string
+          methodology_version_id: string
+          name: string
+          recommended_responsible_role?: string | null
+          recommended_validator_role?: string | null
+          required?: boolean
+          status?: string
+          updated_at?: string
+          visit_number: number
+        }
+        Update: {
+          allowed_formats?: string | null
+          client_guidance?: string | null
+          created_at?: string
+          deadline_offset_days?: number
+          description?: string | null
+          display_order?: number
+          evidence_type?: string
+          file_limit?: number
+          id?: string
+          methodology_version_id?: string
+          name?: string
+          recommended_responsible_role?: string | null
+          recommended_validator_role?: string | null
+          required?: boolean
+          status?: string
+          updated_at?: string
+          visit_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "evidencias_encontro_methodology_version_id_fkey"
+            columns: ["methodology_version_id"]
+            isOneToOne: false
+            referencedRelation: "versoes_metodologia_produto"
             referencedColumns: ["id"]
           },
         ]
@@ -5822,6 +6331,74 @@ export type Database = {
           },
         ]
       }
+      guia_consultor_encontro: {
+        Row: {
+          attention_points: string | null
+          completion_criteria: string | null
+          created_at: string
+          data_to_review: string | null
+          facilitation_script: string | null
+          id: string
+          internal_objective: string | null
+          methodological_notes: string | null
+          methodology_version_id: string
+          post_meeting_guidance: string | null
+          preparation_checklist: Json
+          preparation_instructions: string | null
+          required_decisions: string | null
+          status: string
+          suggested_questions: string | null
+          updated_at: string
+          visit_number: number
+        }
+        Insert: {
+          attention_points?: string | null
+          completion_criteria?: string | null
+          created_at?: string
+          data_to_review?: string | null
+          facilitation_script?: string | null
+          id?: string
+          internal_objective?: string | null
+          methodological_notes?: string | null
+          methodology_version_id: string
+          post_meeting_guidance?: string | null
+          preparation_checklist?: Json
+          preparation_instructions?: string | null
+          required_decisions?: string | null
+          status?: string
+          suggested_questions?: string | null
+          updated_at?: string
+          visit_number: number
+        }
+        Update: {
+          attention_points?: string | null
+          completion_criteria?: string | null
+          created_at?: string
+          data_to_review?: string | null
+          facilitation_script?: string | null
+          id?: string
+          internal_objective?: string | null
+          methodological_notes?: string | null
+          methodology_version_id?: string
+          post_meeting_guidance?: string | null
+          preparation_checklist?: Json
+          preparation_instructions?: string | null
+          required_decisions?: string | null
+          status?: string
+          suggested_questions?: string | null
+          updated_at?: string
+          visit_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guia_consultor_encontro_methodology_version_id_fkey"
+            columns: ["methodology_version_id"]
+            isOneToOne: false
+            referencedRelation: "versoes_metodologia_produto"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       historico_metas: {
         Row: {
           changed_at: string | null
@@ -6014,6 +6591,53 @@ export type Database = {
             columns: ["loja_id"]
             isOneToOne: false
             referencedRelation: "lojas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      horarios_funcionamento_unidade: {
+        Row: {
+          closing_time: string | null
+          created_at: string
+          day_of_week: string
+          id: string
+          is_open: boolean
+          opening_time: string | null
+          origin: string | null
+          status: string
+          unidade_id: string
+          updated_at: string
+        }
+        Insert: {
+          closing_time?: string | null
+          created_at?: string
+          day_of_week: string
+          id?: string
+          is_open?: boolean
+          opening_time?: string | null
+          origin?: string | null
+          status?: string
+          unidade_id: string
+          updated_at?: string
+        }
+        Update: {
+          closing_time?: string | null
+          created_at?: string
+          day_of_week?: string
+          id?: string
+          is_open?: boolean
+          opening_time?: string | null
+          origin?: string | null
+          status?: string
+          unidade_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "horarios_funcionamento_unidade_unidade_id_fkey"
+            columns: ["unidade_id"]
+            isOneToOne: false
+            referencedRelation: "unidades_cliente_consultoria"
             referencedColumns: ["id"]
           },
         ]
@@ -6643,6 +7267,66 @@ export type Database = {
           },
         ]
       }
+      links_autocadastro_cliente: {
+        Row: {
+          client_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          limite_usos: number
+          nome_interno: string | null
+          perfil_acesso: string
+          status: string
+          token: string
+          updated_at: string
+          usos_consumidos: number
+          validade_dias: number
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          limite_usos?: number
+          nome_interno?: string | null
+          perfil_acesso: string
+          status?: string
+          token: string
+          updated_at?: string
+          usos_consumidos?: number
+          validade_dias?: number
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          limite_usos?: number
+          nome_interno?: string | null
+          perfil_acesso?: string
+          status?: string
+          token?: string
+          updated_at?: string
+          usos_consumidos?: number
+          validade_dias?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "links_autocadastro_cliente_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clientes_consultoria"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "links_autocadastro_cliente_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       logs_acesso_sensivel: {
         Row: {
           created_at: string
@@ -6721,6 +7405,53 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "audit_logs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      logs_auditoria_consultoria_mx: {
+        Row: {
+          action: string
+          created_at: string
+          id: string
+          origin: string
+          resource: string
+          user_id: string | null
+          user_name: string | null
+          user_role: string | null
+          value_after: string | null
+          value_before: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          id?: string
+          origin?: string
+          resource: string
+          user_id?: string | null
+          user_name?: string | null
+          user_role?: string | null
+          value_after?: string | null
+          value_before?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          id?: string
+          origin?: string
+          resource?: string
+          user_id?: string | null
+          user_name?: string | null
+          user_role?: string | null
+          value_after?: string | null
+          value_before?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "logs_auditoria_consultoria_mx_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "usuarios"
@@ -8132,6 +8863,72 @@ export type Database = {
         }
         Relationships: []
       }
+      modelos_relatorio: {
+        Row: {
+          compatible_encounters: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          instructions: string | null
+          name: string
+          product_key: string | null
+          published_at: string | null
+          published_by: string | null
+          sections: Json
+          status: string
+          updated_at: string
+          version_number: string
+        }
+        Insert: {
+          compatible_encounters?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          instructions?: string | null
+          name: string
+          product_key?: string | null
+          published_at?: string | null
+          published_by?: string | null
+          sections?: Json
+          status?: string
+          updated_at?: string
+          version_number?: string
+        }
+        Update: {
+          compatible_encounters?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          instructions?: string | null
+          name?: string
+          product_key?: string | null
+          published_at?: string | null
+          published_by?: string | null
+          sections?: Json
+          status?: string
+          updated_at?: string
+          version_number?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "modelos_relatorio_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "modelos_relatorio_published_by_fkey"
+            columns: ["published_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       modulos_cliente_consultoria: {
         Row: {
           client_id: string
@@ -8794,6 +9591,282 @@ export type Database = {
           {
             foreignKeyName: "organograma_nos_usuario_id_fkey"
             columns: ["usuario_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      overrides_parametros_cliente: {
+        Row: {
+          client_id: string
+          created_at: string
+          created_by: string | null
+          default_value_snapshot: number | null
+          id: string
+          metric_key: string
+          month: number | null
+          override_value: number
+          parameter_set_id: string | null
+          reason: string
+          reference_year: number
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          created_by?: string | null
+          default_value_snapshot?: number | null
+          id?: string
+          metric_key: string
+          month?: number | null
+          override_value: number
+          parameter_set_id?: string | null
+          reason: string
+          reference_year: number
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          created_by?: string | null
+          default_value_snapshot?: number | null
+          id?: string
+          metric_key?: string
+          month?: number | null
+          override_value?: number
+          parameter_set_id?: string | null
+          reason?: string
+          reference_year?: number
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "overrides_parametros_cliente_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clientes_consultoria"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "overrides_parametros_cliente_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "overrides_parametros_cliente_parameter_set_id_fkey"
+            columns: ["parameter_set_id"]
+            isOneToOne: false
+            referencedRelation: "conjuntos_parametros_consultoria"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pacotes_indicadores_estrategicos: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          current_published_version_id: string | null
+          descricao: string | null
+          id: string
+          nome: string
+          pacote_key: string
+          status: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          current_published_version_id?: string | null
+          descricao?: string | null
+          id?: string
+          nome: string
+          pacote_key: string
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          current_published_version_id?: string | null
+          descricao?: string | null
+          id?: string
+          nome?: string
+          pacote_key?: string
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pacotes_indicadores_estrategicos_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pacotes_indicadores_estrategicos_current_published_fkey"
+            columns: ["current_published_version_id"]
+            isOneToOne: false
+            referencedRelation: "pacotes_indicadores_versoes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pacotes_indicadores_estrategicos_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pacotes_indicadores_itens: {
+        Row: {
+          area_snapshot: string | null
+          created_at: string
+          dependency_of: string | null
+          direction_snapshot: string | null
+          formato_snapshot: string | null
+          id: string
+          inclusion_reason: string
+          input_mode_snapshot: string | null
+          is_required: boolean
+          label_snapshot: string | null
+          metric_key: string
+          ordem_snapshot: number | null
+          updated_at: string
+          version_id: string
+        }
+        Insert: {
+          area_snapshot?: string | null
+          created_at?: string
+          dependency_of?: string | null
+          direction_snapshot?: string | null
+          formato_snapshot?: string | null
+          id?: string
+          inclusion_reason?: string
+          input_mode_snapshot?: string | null
+          is_required?: boolean
+          label_snapshot?: string | null
+          metric_key: string
+          ordem_snapshot?: number | null
+          updated_at?: string
+          version_id: string
+        }
+        Update: {
+          area_snapshot?: string | null
+          created_at?: string
+          dependency_of?: string | null
+          direction_snapshot?: string | null
+          formato_snapshot?: string | null
+          id?: string
+          inclusion_reason?: string
+          input_mode_snapshot?: string | null
+          is_required?: boolean
+          label_snapshot?: string | null
+          metric_key?: string
+          ordem_snapshot?: number | null
+          updated_at?: string
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pacotes_indicadores_itens_metric_key_fkey"
+            columns: ["metric_key"]
+            isOneToOne: false
+            referencedRelation: "catalogo_metricas_consultoria"
+            referencedColumns: ["metric_key"]
+          },
+          {
+            foreignKeyName: "pacotes_indicadores_itens_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "pacotes_indicadores_versoes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pacotes_indicadores_versoes: {
+        Row: {
+          catalog_version_snapshot: string | null
+          created_at: string
+          created_by: string | null
+          departamentos_count: number
+          descricao: string | null
+          id: string
+          indicadores_calculados: number
+          indicadores_manuais: number
+          nome: string | null
+          pacote_id: string
+          published_at: string | null
+          published_by: string | null
+          status: string
+          total_indicadores: number
+          updated_at: string
+          versao: number
+        }
+        Insert: {
+          catalog_version_snapshot?: string | null
+          created_at?: string
+          created_by?: string | null
+          departamentos_count?: number
+          descricao?: string | null
+          id?: string
+          indicadores_calculados?: number
+          indicadores_manuais?: number
+          nome?: string | null
+          pacote_id: string
+          published_at?: string | null
+          published_by?: string | null
+          status?: string
+          total_indicadores?: number
+          updated_at?: string
+          versao: number
+        }
+        Update: {
+          catalog_version_snapshot?: string | null
+          created_at?: string
+          created_by?: string | null
+          departamentos_count?: number
+          descricao?: string | null
+          id?: string
+          indicadores_calculados?: number
+          indicadores_manuais?: number
+          nome?: string | null
+          pacote_id?: string
+          published_at?: string | null
+          published_by?: string | null
+          status?: string
+          total_indicadores?: number
+          updated_at?: string
+          versao?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pacotes_indicadores_versoes_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pacotes_indicadores_versoes_pacote_id_fkey"
+            columns: ["pacote_id"]
+            isOneToOne: false
+            referencedRelation: "pacotes_indicadores_estrategicos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pacotes_indicadores_versoes_published_by_fkey"
+            columns: ["published_by"]
             isOneToOne: false
             referencedRelation: "usuarios"
             referencedColumns: ["id"]
@@ -9695,6 +10768,7 @@ export type Database = {
           delegated_by: string | null
           delegation_note: string | null
           departamento: string
+          efficacy_indicator: string | null
           eficacia_nota: string | null
           eficacia_score: number | null
           evidence_required: boolean
@@ -9712,6 +10786,7 @@ export type Database = {
           origem: Database["public"]["Enums"]["action_origin"]
           origem_ref_id: string | null
           origem_ref_table: string | null
+          participants: string | null
           prazo: string | null
           prioridade: Database["public"]["Enums"]["action_priority"]
           problema: string
@@ -9719,6 +10794,7 @@ export type Database = {
           progresso: number
           projected_date: string | null
           realized_impact: string | null
+          reference_year: number | null
           reopen_note: string | null
           reopen_reason: string | null
           requires_owner: boolean
@@ -9761,6 +10837,7 @@ export type Database = {
           delegated_by?: string | null
           delegation_note?: string | null
           departamento: string
+          efficacy_indicator?: string | null
           eficacia_nota?: string | null
           eficacia_score?: number | null
           evidence_required?: boolean
@@ -9778,6 +10855,7 @@ export type Database = {
           origem: Database["public"]["Enums"]["action_origin"]
           origem_ref_id?: string | null
           origem_ref_table?: string | null
+          participants?: string | null
           prazo?: string | null
           prioridade?: Database["public"]["Enums"]["action_priority"]
           problema: string
@@ -9785,6 +10863,7 @@ export type Database = {
           progresso?: number
           projected_date?: string | null
           realized_impact?: string | null
+          reference_year?: number | null
           reopen_note?: string | null
           reopen_reason?: string | null
           requires_owner?: boolean
@@ -9827,6 +10906,7 @@ export type Database = {
           delegated_by?: string | null
           delegation_note?: string | null
           departamento?: string
+          efficacy_indicator?: string | null
           eficacia_nota?: string | null
           eficacia_score?: number | null
           evidence_required?: boolean
@@ -9844,6 +10924,7 @@ export type Database = {
           origem?: Database["public"]["Enums"]["action_origin"]
           origem_ref_id?: string | null
           origem_ref_table?: string | null
+          participants?: string | null
           prazo?: string | null
           prioridade?: Database["public"]["Enums"]["action_priority"]
           problema?: string
@@ -9851,6 +10932,7 @@ export type Database = {
           progresso?: number
           projected_date?: string | null
           realized_impact?: string | null
+          reference_year?: number | null
           reopen_note?: string | null
           reopen_reason?: string | null
           requires_owner?: boolean
@@ -10304,6 +11386,7 @@ export type Database = {
           active: boolean
           created_at: string
           descricao: string | null
+          indicator_package_version_id: string | null
           max_presenciais: number | null
           min_presenciais: number | null
           modalidade: string | null
@@ -10321,6 +11404,7 @@ export type Database = {
           active?: boolean
           created_at?: string
           descricao?: string | null
+          indicator_package_version_id?: string | null
           max_presenciais?: number | null
           min_presenciais?: number | null
           modalidade?: string | null
@@ -10338,6 +11422,7 @@ export type Database = {
           active?: boolean
           created_at?: string
           descricao?: string | null
+          indicator_package_version_id?: string | null
           max_presenciais?: number | null
           min_presenciais?: number | null
           modalidade?: string | null
@@ -10352,6 +11437,13 @@ export type Database = {
           versao?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "programas_visita_consultoria_indicator_package_version_id_fkey"
+            columns: ["indicator_package_version_id"]
+            isOneToOne: false
+            referencedRelation: "pacotes_indicadores_versoes"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "programas_visita_consultoria_published_by_fkey"
             columns: ["published_by"]
@@ -13374,34 +14466,70 @@ export type Database = {
       }
       unidades_cliente_consultoria: {
         Row: {
+          address_street: string | null
+          address_zip: string | null
           city: string | null
           client_id: string
+          closing_time: string | null
+          cnpj: string | null
           created_at: string
           id: string
+          internal_code: string | null
           is_primary: boolean
           name: string
+          notes: string | null
+          opening_date: string | null
+          opening_time: string | null
           state: string | null
+          status: string
+          store_type: string | null
+          timezone: string
           updated_at: string
+          working_days: string | null
         }
         Insert: {
+          address_street?: string | null
+          address_zip?: string | null
           city?: string | null
           client_id: string
+          closing_time?: string | null
+          cnpj?: string | null
           created_at?: string
           id?: string
+          internal_code?: string | null
           is_primary?: boolean
           name: string
+          notes?: string | null
+          opening_date?: string | null
+          opening_time?: string | null
           state?: string | null
+          status?: string
+          store_type?: string | null
+          timezone?: string
           updated_at?: string
+          working_days?: string | null
         }
         Update: {
+          address_street?: string | null
+          address_zip?: string | null
           city?: string | null
           client_id?: string
+          closing_time?: string | null
+          cnpj?: string | null
           created_at?: string
           id?: string
+          internal_code?: string | null
           is_primary?: boolean
           name?: string
+          notes?: string | null
+          opening_date?: string | null
+          opening_time?: string | null
           state?: string | null
+          status?: string
+          store_type?: string | null
+          timezone?: string
           updated_at?: string
+          working_days?: string | null
         }
         Relationships: [
           {
@@ -14289,6 +15417,233 @@ export type Database = {
           },
         ]
       }
+      versoes_metodologia_produto: {
+        Row: {
+          change_summary: string | null
+          created_at: string
+          created_by: string | null
+          effective_from: string | null
+          effective_until: string | null
+          encounters_configured: number
+          encounters_pending: number
+          files_count: number
+          id: string
+          methodology_version_number: string
+          product_name: string | null
+          product_version_number: number | null
+          program_key: string
+          published_at: string | null
+          published_by: string | null
+          report_templates_count: number
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+          videos_count: number
+        }
+        Insert: {
+          change_summary?: string | null
+          created_at?: string
+          created_by?: string | null
+          effective_from?: string | null
+          effective_until?: string | null
+          encounters_configured?: number
+          encounters_pending?: number
+          files_count?: number
+          id?: string
+          methodology_version_number: string
+          product_name?: string | null
+          product_version_number?: number | null
+          program_key: string
+          published_at?: string | null
+          published_by?: string | null
+          report_templates_count?: number
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          videos_count?: number
+        }
+        Update: {
+          change_summary?: string | null
+          created_at?: string
+          created_by?: string | null
+          effective_from?: string | null
+          effective_until?: string | null
+          encounters_configured?: number
+          encounters_pending?: number
+          files_count?: number
+          id?: string
+          methodology_version_number?: string
+          product_name?: string | null
+          product_version_number?: number | null
+          program_key?: string
+          published_at?: string | null
+          published_by?: string | null
+          report_templates_count?: number
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          videos_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "versoes_metodologia_produto_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "versoes_metodologia_produto_program_key_fkey"
+            columns: ["program_key"]
+            isOneToOne: false
+            referencedRelation: "programas_visita_consultoria"
+            referencedColumns: ["program_key"]
+          },
+          {
+            foreignKeyName: "versoes_metodologia_produto_published_by_fkey"
+            columns: ["published_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "versoes_metodologia_produto_reviewed_by_fkey"
+            columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vinculo_modelo_relatorio_encontro: {
+        Row: {
+          action_plan_creation_allowed: boolean
+          attachment_allowed: boolean
+          attachment_required: boolean
+          author_role: string | null
+          created_at: string
+          default_title: string | null
+          id: string
+          methodology_version_id: string
+          publication_deadline_days: number
+          report_required: boolean
+          report_template_id: string | null
+          report_template_name: string | null
+          status: string
+          updated_at: string
+          validator_role: string | null
+          visibility: string
+          visit_number: number
+        }
+        Insert: {
+          action_plan_creation_allowed?: boolean
+          attachment_allowed?: boolean
+          attachment_required?: boolean
+          author_role?: string | null
+          created_at?: string
+          default_title?: string | null
+          id?: string
+          methodology_version_id: string
+          publication_deadline_days?: number
+          report_required?: boolean
+          report_template_id?: string | null
+          report_template_name?: string | null
+          status?: string
+          updated_at?: string
+          validator_role?: string | null
+          visibility?: string
+          visit_number: number
+        }
+        Update: {
+          action_plan_creation_allowed?: boolean
+          attachment_allowed?: boolean
+          attachment_required?: boolean
+          author_role?: string | null
+          created_at?: string
+          default_title?: string | null
+          id?: string
+          methodology_version_id?: string
+          publication_deadline_days?: number
+          report_required?: boolean
+          report_template_id?: string | null
+          report_template_name?: string | null
+          status?: string
+          updated_at?: string
+          validator_role?: string | null
+          visibility?: string
+          visit_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vinculo_modelo_relatorio_encontro_methodology_version_id_fkey"
+            columns: ["methodology_version_id"]
+            isOneToOne: false
+            referencedRelation: "versoes_metodologia_produto"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vinculo_modelo_relatorio_encontro_report_template_id_fkey"
+            columns: ["report_template_id"]
+            isOneToOne: false
+            referencedRelation: "modelos_relatorio"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vinculo_plano_acao_encontro: {
+        Row: {
+          action_plan_template_name: string | null
+          action_plan_template_version_id: string | null
+          created_at: string
+          display_order: number
+          id: string
+          methodology_version_id: string
+          recommendation_enabled: boolean
+          status: string
+          updated_at: string
+          visit_number: number
+        }
+        Insert: {
+          action_plan_template_name?: string | null
+          action_plan_template_version_id?: string | null
+          created_at?: string
+          display_order?: number
+          id?: string
+          methodology_version_id: string
+          recommendation_enabled?: boolean
+          status?: string
+          updated_at?: string
+          visit_number: number
+        }
+        Update: {
+          action_plan_template_name?: string | null
+          action_plan_template_version_id?: string | null
+          created_at?: string
+          display_order?: number
+          id?: string
+          methodology_version_id?: string
+          recommendation_enabled?: boolean
+          status?: string
+          updated_at?: string
+          visit_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vinculo_plano_acao_encontro_action_plan_template_version_i_fkey"
+            columns: ["action_plan_template_version_id"]
+            isOneToOne: false
+            referencedRelation: "planos_acao_template_versoes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vinculo_plano_acao_encontro_methodology_version_id_fkey"
+            columns: ["methodology_version_id"]
+            isOneToOne: false
+            referencedRelation: "versoes_metodologia_produto"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vinculos_loja: {
         Row: {
           created_at: string | null
@@ -14860,6 +16215,7 @@ export type Database = {
           delegated_by: string | null
           delegation_note: string | null
           departamento: string
+          efficacy_indicator: string | null
           eficacia_nota: string | null
           eficacia_score: number | null
           evidence_required: boolean
@@ -14877,6 +16233,7 @@ export type Database = {
           origem: Database["public"]["Enums"]["action_origin"]
           origem_ref_id: string | null
           origem_ref_table: string | null
+          participants: string | null
           prazo: string | null
           prioridade: Database["public"]["Enums"]["action_priority"]
           problema: string
@@ -14884,6 +16241,7 @@ export type Database = {
           progresso: number
           projected_date: string | null
           realized_impact: string | null
+          reference_year: number | null
           reopen_note: string | null
           reopen_reason: string | null
           requires_owner: boolean
@@ -14935,6 +16293,7 @@ export type Database = {
           delegated_by: string | null
           delegation_note: string | null
           departamento: string
+          efficacy_indicator: string | null
           eficacia_nota: string | null
           eficacia_score: number | null
           evidence_required: boolean
@@ -14952,6 +16311,7 @@ export type Database = {
           origem: Database["public"]["Enums"]["action_origin"]
           origem_ref_id: string | null
           origem_ref_table: string | null
+          participants: string | null
           prazo: string | null
           prioridade: Database["public"]["Enums"]["action_priority"]
           problema: string
@@ -14959,6 +16319,7 @@ export type Database = {
           progresso: number
           projected_date: string | null
           realized_impact: string | null
+          reference_year: number | null
           reopen_note: string | null
           reopen_reason: string | null
           requires_owner: boolean
@@ -15563,6 +16924,7 @@ export type Database = {
           delegated_by: string | null
           delegation_note: string | null
           departamento: string
+          efficacy_indicator: string | null
           eficacia_nota: string | null
           eficacia_score: number | null
           evidence_required: boolean
@@ -15580,6 +16942,7 @@ export type Database = {
           origem: Database["public"]["Enums"]["action_origin"]
           origem_ref_id: string | null
           origem_ref_table: string | null
+          participants: string | null
           prazo: string | null
           prioridade: Database["public"]["Enums"]["action_priority"]
           problema: string
@@ -15587,6 +16950,7 @@ export type Database = {
           progresso: number
           projected_date: string | null
           realized_impact: string | null
+          reference_year: number | null
           reopen_note: string | null
           reopen_reason: string | null
           requires_owner: boolean
@@ -15650,6 +17014,7 @@ export type Database = {
           delegated_by: string | null
           delegation_note: string | null
           departamento: string
+          efficacy_indicator: string | null
           eficacia_nota: string | null
           eficacia_score: number | null
           evidence_required: boolean
@@ -15667,6 +17032,7 @@ export type Database = {
           origem: Database["public"]["Enums"]["action_origin"]
           origem_ref_id: string | null
           origem_ref_table: string | null
+          participants: string | null
           prazo: string | null
           prioridade: Database["public"]["Enums"]["action_priority"]
           problema: string
@@ -15674,6 +17040,7 @@ export type Database = {
           progresso: number
           projected_date: string | null
           realized_impact: string | null
+          reference_year: number | null
           reopen_note: string | null
           reopen_reason: string | null
           requires_owner: boolean
@@ -15738,6 +17105,7 @@ export type Database = {
           delegated_by: string | null
           delegation_note: string | null
           departamento: string
+          efficacy_indicator: string | null
           eficacia_nota: string | null
           eficacia_score: number | null
           evidence_required: boolean
@@ -15755,6 +17123,7 @@ export type Database = {
           origem: Database["public"]["Enums"]["action_origin"]
           origem_ref_id: string | null
           origem_ref_table: string | null
+          participants: string | null
           prazo: string | null
           prioridade: Database["public"]["Enums"]["action_priority"]
           problema: string
@@ -15762,6 +17131,7 @@ export type Database = {
           progresso: number
           projected_date: string | null
           realized_impact: string | null
+          reference_year: number | null
           reopen_note: string | null
           reopen_reason: string | null
           requires_owner: boolean
