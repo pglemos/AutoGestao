@@ -2028,6 +2028,7 @@ export type Database = {
           created_at: string
           descricao: string | null
           direction: string
+          formula_expression: string | null
           formula_key: string | null
           frequencia: string
           label: string
@@ -2035,6 +2036,7 @@ export type Database = {
           sort_order: number
           source_scope: string
           status: string
+          target_calculation_mode: string
           updated_at: string
           value_type: string
           visivel_dono: boolean
@@ -2048,6 +2050,7 @@ export type Database = {
           created_at?: string
           descricao?: string | null
           direction?: string
+          formula_expression?: string | null
           formula_key?: string | null
           frequencia?: string
           label: string
@@ -2055,6 +2058,7 @@ export type Database = {
           sort_order?: number
           source_scope?: string
           status?: string
+          target_calculation_mode?: string
           updated_at?: string
           value_type?: string
           visivel_dono?: boolean
@@ -2068,6 +2072,7 @@ export type Database = {
           created_at?: string
           descricao?: string | null
           direction?: string
+          formula_expression?: string | null
           formula_key?: string | null
           frequencia?: string
           label?: string
@@ -2075,6 +2080,7 @@ export type Database = {
           sort_order?: number
           source_scope?: string
           status?: string
+          target_calculation_mode?: string
           updated_at?: string
           value_type?: string
           visivel_dono?: boolean
@@ -4114,6 +4120,66 @@ export type Database = {
           table_name?: string
         }
         Relationships: []
+      }
+      delegacoes_gerenciais: {
+        Row: {
+          autorizado_por: string | null
+          created_at: string
+          id: string
+          loja_id: string
+          loja_nome: string
+          motivo: string | null
+          nivel_acesso: string
+          status: string
+          updated_at: string
+          user_id: string
+          valid_from: string | null
+          valid_until: string
+        }
+        Insert: {
+          autorizado_por?: string | null
+          created_at?: string
+          id?: string
+          loja_id: string
+          loja_nome: string
+          motivo?: string | null
+          nivel_acesso: string
+          status?: string
+          updated_at?: string
+          user_id: string
+          valid_from?: string | null
+          valid_until: string
+        }
+        Update: {
+          autorizado_por?: string | null
+          created_at?: string
+          id?: string
+          loja_id?: string
+          loja_nome?: string
+          motivo?: string | null
+          nivel_acesso?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+          valid_from?: string | null
+          valid_until?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delegacoes_gerenciais_loja_id_fkey"
+            columns: ["loja_id"]
+            isOneToOne: false
+            referencedRelation: "lojas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delegacoes_gerenciais_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       departamento_biblioteca: {
         Row: {
@@ -9591,6 +9657,76 @@ export type Database = {
           },
         ]
       }
+      overrides_parametros_cliente: {
+        Row: {
+          client_id: string
+          created_at: string
+          created_by: string | null
+          default_value_snapshot: number | null
+          id: string
+          metric_key: string
+          month: number | null
+          override_value: number
+          parameter_set_id: string | null
+          reason: string
+          reference_year: number
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          created_by?: string | null
+          default_value_snapshot?: number | null
+          id?: string
+          metric_key: string
+          month?: number | null
+          override_value: number
+          parameter_set_id?: string | null
+          reason: string
+          reference_year: number
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          created_by?: string | null
+          default_value_snapshot?: number | null
+          id?: string
+          metric_key?: string
+          month?: number | null
+          override_value?: number
+          parameter_set_id?: string | null
+          reason?: string
+          reference_year?: number
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "overrides_parametros_cliente_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clientes_consultoria"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "overrides_parametros_cliente_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "overrides_parametros_cliente_parameter_set_id_fkey"
+            columns: ["parameter_set_id"]
+            isOneToOne: false
+            referencedRelation: "conjuntos_parametros_consultoria"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pacotes_indicadores_estrategicos: {
         Row: {
           created_at: string
@@ -14655,23 +14791,38 @@ export type Database = {
         Row: {
           assigned_at: string | null
           assigned_by: string | null
+          change_reason: string | null
           id: string
+          is_primary: boolean
           role_id: string
+          status: string
           user_id: string
+          valid_from: string | null
+          valid_until: string | null
         }
         Insert: {
           assigned_at?: string | null
           assigned_by?: string | null
+          change_reason?: string | null
           id?: string
+          is_primary?: boolean
           role_id: string
+          status?: string
           user_id: string
+          valid_from?: string | null
+          valid_until?: string | null
         }
         Update: {
           assigned_at?: string | null
           assigned_by?: string | null
+          change_reason?: string | null
           id?: string
+          is_primary?: boolean
           role_id?: string
+          status?: string
           user_id?: string
+          valid_from?: string | null
+          valid_until?: string | null
         }
         Relationships: [
           {
@@ -14687,10 +14838,14 @@ export type Database = {
         Row: {
           active: boolean | null
           avatar_url: string | null
+          birth_date: string | null
           created_at: string | null
           deactivated_at: string | null
           deactivation_reason: string | null
+          declared_function: string | null
+          default_view: string | null
           email: string
+          entry_date: string | null
           id: string
           is_venda_loja: boolean | null
           merge_reason: string | null
@@ -14698,8 +14853,11 @@ export type Database = {
           merged_into_id: string | null
           must_change_password: boolean | null
           name: string
+          notes: string | null
           notification_preferences: Json | null
           phone: string | null
+          preferred_name: string | null
+          relationship_consent: boolean
           role: string
           role_id: string | null
           updated_at: string | null
@@ -14707,10 +14865,14 @@ export type Database = {
         Insert: {
           active?: boolean | null
           avatar_url?: string | null
+          birth_date?: string | null
           created_at?: string | null
           deactivated_at?: string | null
           deactivation_reason?: string | null
+          declared_function?: string | null
+          default_view?: string | null
           email: string
+          entry_date?: string | null
           id: string
           is_venda_loja?: boolean | null
           merge_reason?: string | null
@@ -14718,8 +14880,11 @@ export type Database = {
           merged_into_id?: string | null
           must_change_password?: boolean | null
           name: string
+          notes?: string | null
           notification_preferences?: Json | null
           phone?: string | null
+          preferred_name?: string | null
+          relationship_consent?: boolean
           role?: string
           role_id?: string | null
           updated_at?: string | null
@@ -14727,10 +14892,14 @@ export type Database = {
         Update: {
           active?: boolean | null
           avatar_url?: string | null
+          birth_date?: string | null
           created_at?: string | null
           deactivated_at?: string | null
           deactivation_reason?: string | null
+          declared_function?: string | null
+          default_view?: string | null
           email?: string
+          entry_date?: string | null
           id?: string
           is_venda_loja?: boolean | null
           merge_reason?: string | null
@@ -14738,8 +14907,11 @@ export type Database = {
           merged_into_id?: string | null
           must_change_password?: boolean | null
           name?: string
+          notes?: string | null
           notification_preferences?: Json | null
           phone?: string | null
+          preferred_name?: string | null
+          relationship_consent?: boolean
           role?: string
           role_id?: string | null
           updated_at?: string | null
@@ -15564,6 +15736,63 @@ export type Database = {
             columns: ["methodology_version_id"]
             isOneToOne: false
             referencedRelation: "versoes_metodologia_produto"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vinculos_equipe_loja: {
+        Row: {
+          assignment_type: string
+          created_at: string
+          id: string
+          is_primary: boolean
+          loja_id: string
+          loja_nome: string
+          status: string
+          updated_at: string
+          user_id: string
+          valid_from: string | null
+          valid_until: string | null
+        }
+        Insert: {
+          assignment_type?: string
+          created_at?: string
+          id?: string
+          is_primary?: boolean
+          loja_id: string
+          loja_nome: string
+          status?: string
+          updated_at?: string
+          user_id: string
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Update: {
+          assignment_type?: string
+          created_at?: string
+          id?: string
+          is_primary?: boolean
+          loja_id?: string
+          loja_nome?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vinculos_equipe_loja_loja_id_fkey"
+            columns: ["loja_id"]
+            isOneToOne: false
+            referencedRelation: "lojas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vinculos_equipe_loja_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
             referencedColumns: ["id"]
           },
         ]
