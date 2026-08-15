@@ -74,7 +74,7 @@ export default function DisciplinaModal({ open, onClose }) {
             </div>
             <button
               onClick={onClose}
-              className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-muted transition-colors flex-shrink-0 mt-0.5"
+              className="min-h-[var(--mx-touch-target-min)] min-w-[var(--mx-touch-target-min)] w-8 h-8 flex items-center justify-center rounded-lg hover:bg-muted transition-colors flex-shrink-0 mt-0.5"
             >
               <X className="w-4 h-4 text-muted-foreground" />
             </button>

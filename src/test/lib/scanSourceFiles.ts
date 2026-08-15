@@ -83,3 +83,28 @@ export function scanSourceFiles(options: ScanOptions = {}): SourceFile[] {
 
   return out
 }
+
+/** Exclusões canônicas de runtime usadas pelos contratos de migração (substituem
+ * os globs do `rg` antigo). Base44, testes, stories, tokens e index.css ficam fora. */
+export const RUNTIME_EXCLUDED = [
+  '**/base44-reference/**',
+  '**/*.test.*',
+  '**/*.spec.*',
+  '**/*.playwright.*',
+  '**/_stories/**',
+  '**/design-system/tokens/**',
+  '**/index.css',
+  '**/WhatsApp*',
+  '**/RetornoWhatsApp*',
+]
+
+/** Arquivos de runtime (fs) cujas linhas casam o padrão — C8: substitui `rg -l`. */
+export function runtimeFilesWith(pattern: RegExp, extraExcluded: string[] = []): string[] {
+  const matches: string[] = []
+  for (const { rel, lines } of scanSourceFiles({
+    extraExcluded: [...RUNTIME_EXCLUDED, ...extraExcluded],
+  })) {
+    if (lines.some((line) => pattern.test(line))) matches.push(rel)
+  }
+  return matches.sort()
+}

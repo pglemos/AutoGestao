@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useOutletContext, useSearchParams } from "react-router-dom";
 import { Calendar, CheckCircle2, Clock3, FileCheck, TrendingUp, Users, Video } from "lucide-react";
+import { AlertMessage } from "@/components/molecules/AlertMessage";
 import { useOwner } from "@/components/owner/OwnerContext";
 import { useOwnerConsultingProgram } from "@/features/dashboard-loja/hooks/useOwnerConsultingProgram";
 import { Button } from "@/components/ui/button";
@@ -68,11 +69,11 @@ export default function Consultoria() {
   if (error) {
     return (
       <PageCanvas as="div" id="page-consultoria" aria-label="Consultoria" width="wide" bottomClearance="navigation" className="flex min-h-0 flex-1 flex-col space-y-6">
-        <section className="rounded-xl border border-destructive/30 bg-card p-6" role="alert">
+        <AlertMessage tone="danger">
           <h1 className="text-lg font-semibold text-foreground">Não foi possível carregar a Consultoria</h1>
           <p className="mt-2 text-sm text-muted-foreground">{error}</p>
           <Button className="mt-4" onClick={() => void refresh()}>Tentar novamente</Button>
-        </section>
+        </AlertMessage>
       </PageCanvas>
     );
   }

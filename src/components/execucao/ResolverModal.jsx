@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/lib/toast"
 import moment from "moment";
 
 const OPCOES_POR_TIPO = {
@@ -40,7 +40,6 @@ function formatCurrency(raw) {
 }
 
 export default function ResolverModal({ oportunidade, open, onClose, onResolvida }) {
-  const { toast } = useToast();
   const [resultado, setResultado] = useState("");
   const [obs, setObs] = useState("");
   const [novaData, setNovaData] = useState("");
@@ -116,12 +115,12 @@ export default function ResolverModal({ oportunidade, open, onClose, onResolvida
         }
       }
 
-      toast({ title: ehVenda ? "Venda registrada!" : "Oportunidade resolvida." });
+      toast.info(ehVenda ? "Venda registrada!" : "Oportunidade resolvida.");
       onResolvida(oportunidade.id, novoStatus, novaData || null);
       onClose();
     } catch (e) {
       console.error(e);
-      toast({ title: "Erro ao resolver. Tente novamente." });
+      toast.info("Erro ao resolver. Tente novamente.");
     }
     setSaving(false);
   };

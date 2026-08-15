@@ -11,11 +11,11 @@ export default function CalculationDetailsDrawer({ open, onClose, calcResult, pe
 
   return (
     <div className="fixed inset-0 z-[var(--mx-z-overlay)] flex items-end sm:items-center justify-center">
-      <div className="absolute inset-0 bg-surface-overlay/50 backdrop-blur-sm" onClick={onClose} />
+      <div role="presentation" className="absolute inset-0 bg-surface-overlay/50 backdrop-blur-sm" onClick={onClose} />
       <div className="relative bg-white rounded-t-2xl sm:rounded-2xl w-full sm:max-w-lg max-h-[85vh] overflow-y-auto shadow-2xl">
         <div className="sticky top-0 bg-white border-b border-border-subtle px-6 py-4 flex items-center justify-between">
           <h2 className="text-base font-bold text-mx-navy">Detalhamento do Cálculo</h2>
-          <button onClick={onClose} className="w-8 h-8 rounded-full hover:bg-muted flex items-center justify-center">
+          <button onClick={onClose} className="min-h-[var(--mx-touch-target-min)] min-w-[var(--mx-touch-target-min)] w-8 h-8 rounded-full hover:bg-muted flex items-center justify-center">
             <X className="w-4 h-4 text-muted-foreground" />
           </button>
         </div>

@@ -199,7 +199,7 @@ export default function FunilVendedor() {
                   type="button"
                   aria-pressed={periodKey === value}
                   onClick={() => setPeriodKey(value as PeriodKey)}
-                  className={`rounded-lg px-3 py-1.5 text-caption font-semibold transition-all ${periodKey === value ? 'bg-white text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+                  className={`rounded-lg px-3 py-1.5 text-caption font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring ${periodKey === value ? 'bg-white text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
                 >
                   {label}
                 </button>

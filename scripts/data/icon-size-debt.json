@@ -169,6 +169,11 @@
     "src/pages/Terms.tsx": "size fora da escala semantica {12,14,16,20,24} — divida 21.003.'],",
     "src/pages/VendedorAjuda.tsx": "size fora da escala semantica {12,14,16,20,24} — divida 21.003.'],",
     "src/pages/VendedorConfiguracoes.tsx": "size fora da escala semantica {12,14,16,20,24} — divida 21.003.'],",
-    "src/pages/VendedorHome.tsx": "size fora da escala semantica {12,14,16,20,24} — divida 21.003.'],"
+    "src/pages/VendedorHome.tsx": "size fora da escala semantica {12,14,16,20,24} — divida 21.003.'],",
+    "src/features/admin-mx/AdminConsultoriaMxPage.tsx": "Perfis admin-mx do batch 2026-08-15 — size=18 fora do canônico {12,14,16,20,24}; dívida 21.003 (coorte de migração).",
+    "src/features/admin-mx/AdminEquipeMxPage.tsx": "Perfis admin-mx do batch 2026-08-15 — size=18 fora do canônico; dívida 21.003.",
+    "src/features/admin-mx/AdminIndicadoresPage.tsx": "Perfis admin-mx do batch 2026-08-15 — size=18 fora do canônico; dívida 21.003.",
+    "src/features/admin-mx/AdminPlanosAcaoGlobalPage.tsx": "Perfis admin-mx do batch 2026-08-15 — size=18 fora do canônico; dívida 21.003.",
+    "src/features/admin-mx/AdminProdutosConsultoriaPage.tsx": "Perfis admin-mx do batch 2026-08-15 — size=18 fora do canônico; dívida 21.003."
   }
 }

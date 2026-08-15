@@ -1,3 +1,4 @@
+import { AlertMessage } from '@/components/molecules/AlertMessage'
 import { useConsultingJourney } from './useConsultingJourney'
 import { ConsultingJourneyTimeline } from './components/ConsultingJourneyTimeline'
 import { ConsultingMeetingDialog } from './components/ConsultingMeetingDialog'
@@ -14,7 +15,7 @@ export function ConsultingJourneyWorkspace() {
   const nextVisit = snapshot?.visits.find(visit => visit.visitNumber === snapshot.nextVisitNumber) || null
 
   if (controller.loading) return <div className="space-y-4" aria-busy="true"><div className="h-20 animate-pulse rounded-xl bg-muted" /><div className="h-64 animate-pulse rounded-xl bg-muted" /></div>
-  if (controller.error) return <section className="rounded-xl border border-destructive/30 bg-card p-5" role="alert"><h2 className="font-semibold text-foreground">Não foi possível carregar a Consultoria</h2><p className="mt-2 text-sm text-muted-foreground">{controller.error}</p><button type="button" onClick={() => void controller.reload()} className="mt-4 rounded-lg bg-primary px-3 py-2 text-sm text-primary-foreground">Tentar novamente</button></section>
+  if (controller.error) return <AlertMessage tone="danger" title="Não foi possível carregar a Consultoria" action={<button type="button" onClick={() => void controller.reload()} className="rounded-lg bg-primary px-3 py-2 text-sm text-primary-foreground">Tentar novamente</button>}>{controller.error}</AlertMessage>
   if (!snapshot) return <section className="rounded-xl border border-dashed border-border bg-card p-6"><h2 className="font-semibold text-foreground">Nenhum programa vinculado</h2><p className="mt-2 text-sm text-muted-foreground">A loja selecionada ainda não possui uma jornada ativa persistida.</p></section>
 
   return (

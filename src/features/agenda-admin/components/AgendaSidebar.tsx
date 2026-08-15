@@ -59,7 +59,7 @@ export function AgendaSidebar({
           type="button"
           onClick={onToggleCollapse}
           title="Expandir painel lateral"
-          className="flex h-8 w-8 items-center justify-center rounded-xl border border-border bg-white text-muted-foreground hover:bg-surface-alt hover:text-foreground transition-colors shadow-2xs"
+          className="min-h-[var(--mx-touch-target-min)] min-w-[var(--mx-touch-target-min)] flex h-8 w-8 items-center justify-center rounded-xl border border-border bg-white text-muted-foreground hover:bg-surface-alt hover:text-foreground transition-colors shadow-2xs"
         >
           <PanelLeftOpen size={16} />
         </button>

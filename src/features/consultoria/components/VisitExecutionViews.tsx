@@ -5,7 +5,7 @@ import {
   ShieldAlert, Presentation
 } from 'lucide-react'
 import { toast } from '@/lib/toast'
-import { Card } from '@/components/molecules/Card'
+import { Card, CardContent } from '@/components/molecules/Card'
 import { Typography } from '@/components/atoms/Typography'
 import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
@@ -20,18 +20,21 @@ export function VisitTwoExecution({ clientId, clientSlug }: { clientId: string, 
   const { latestPlan } = useConsultingStrategicPlan(clientId)
   return (
     <div className="space-y-mx-lg">
-      <Card className="p-mx-lg border border-status-error/30 bg-status-error/5 shadow-sm rounded-2xl">
-        <div className="flex items-center gap-mx-sm mb-mx-xs">
-          <ShieldAlert className="w-mx-6 h-mx-6 text-status-error-text" />
-          <Typography variant="h3" className="text-status-error-text">Trava Metodológica</Typography>
-        </div>
-        <Typography variant="p" className="text-status-error-text text-sm">
-          Sem o formulário de ACOMPANHAMENTO DIÁRIO (SGAP) instalado no celular dos vendedores e a rotina validada, o trabalho não avança.
-        </Typography>
+      <Card className="border border-status-error/30 bg-status-error/5">
+        <CardContent>
+          <div className="flex items-center gap-mx-sm mb-mx-xs">
+            <ShieldAlert className="w-mx-6 h-mx-6 text-status-error-text" />
+            <Typography variant="h3" className="text-status-error-text">Trava Metodológica</Typography>
+          </div>
+          <Typography variant="p" className="text-status-error-text text-sm">
+            Sem o formulário de ACOMPANHAMENTO DIÁRIO (SGAP) instalado no celular dos vendedores e a rotina validada, o trabalho não avança.
+          </Typography>
+        </CardContent>
       </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg">
-        <Card className="p-mx-lg bg-white border shadow-sm flex flex-col justify-center gap-mx-md">
+        <Card className="border bg-white">
+          <CardContent>
           <div className="flex items-center gap-mx-sm">
             <div className="p-mx-xs bg-brand-primary/10 rounded-xl text-status-success-text"><Zap className="w-mx-5 h-mx-5" /></div>
             <Typography variant="h3">Ferramentas de Gestão</Typography>
@@ -44,9 +47,11 @@ export function VisitTwoExecution({ clientId, clientSlug }: { clientId: string, 
             <div className="flex items-center gap-mx-sm"><BarChart3 className="w-mx-4 h-mx-4" />Validar SGAP Diário</div>
             <ExternalLink className="w-mx-4 h-mx-4 opacity-50" />
           </Button>
+          </CardContent>
         </Card>
 
-        <Card className="p-mx-lg bg-surface-alt/30 border shadow-sm flex flex-col items-center justify-center text-center">
+        <Card className="border bg-surface-alt/30">
+          <CardContent className="flex flex-col items-center justify-center text-center">
           {latestPlan ? (
             <div className="space-y-mx-xs">
               <div className="w-mx-12 h-mx-12 bg-white rounded-mx-full flex items-center justify-center mx-auto shadow-sm border border-border">
@@ -63,6 +68,7 @@ export function VisitTwoExecution({ clientId, clientSlug }: { clientId: string, 
               <Typography variant="p" className="text-sm font-bold">Aguardando registro do P.E. no sistema</Typography>
             </div>
           )}
+          </CardContent>
         </Card>
       </div>
     </div>
@@ -71,7 +77,8 @@ export function VisitTwoExecution({ clientId, clientSlug }: { clientId: string, 
 
 export function VisitThreeExecution() {
   return (
-    <Card className="p-mx-lg shadow-sm border bg-white">
+    <Card className="border bg-white">
+      <CardContent>
       <div className="flex items-center gap-mx-sm mb-mx-md">
         <div className="p-mx-xs bg-brand-primary/10 rounded-xl text-status-success-text"><Clock size={20} /></div>
         <Typography variant="h3" className="text-lg">Ritual de Rotinas (Disciplina)</Typography>
@@ -90,6 +97,7 @@ export function VisitThreeExecution() {
           </ul>
         </div>
       </div>
+      </CardContent>
     </Card>
   )
 }
@@ -128,7 +136,8 @@ export function VisitFourExecution({ storeId, onGenerateSummary }: { storeId: st
   }
 
   return (
-    <Card className="p-mx-lg border bg-white">
+    <Card className="border bg-white">
+      <CardContent>
       <div className="flex items-center gap-mx-sm mb-mx-md">
         <div className="p-mx-xs bg-brand-primary/10 rounded-xl text-status-success-text"><TrendingUp size={20} /></div>
         <Typography variant="h3" className="text-lg">Visita 4: Ritual de Devolutiva e Funil</Typography>
@@ -183,6 +192,7 @@ export function VisitFourExecution({ storeId, onGenerateSummary }: { storeId: st
           <Button className="flex-1 h-mx-12 text-sm" variant="primary" onClick={save} loading={s} icon={<CheckCircle2 size={16} />}>SALVAR FEEDBACK NO CRM</Button>
         </div>
       </div>
+      </CardContent>
     </Card>
   )
 }
@@ -230,7 +240,8 @@ export function VisitFiveExecution({ storeId, onGenerateSummary }: { storeId: st
   }
 
   return (
-    <Card className="p-mx-lg border bg-white">
+    <Card className="border bg-white">
+      <CardContent>
       <div className="flex items-center gap-mx-sm mb-mx-md">
         <div className="p-mx-xs bg-brand-primary/10 rounded-xl text-status-success-text"><Award size={20} /></div>
         <Typography variant="h3" className="text-lg">Visita 5: Plano de Desenvolvimento Individual (PDI)</Typography>
@@ -270,6 +281,7 @@ export function VisitFiveExecution({ storeId, onGenerateSummary }: { storeId: st
         </div>
       </div>
       <Button className="w-full mt-mx-md h-mx-12" variant="primary" onClick={handleSave} loading={isSaving} icon={<Award size={16} />}>SALVAR PDI NO SISTEMA</Button>
+      </CardContent>
     </Card>
   )
 }
@@ -292,7 +304,8 @@ export function VisitSixExecution({ onGenerateSummary }: { onGenerateSummary: (t
   }
 
   return (
-    <Card className="p-mx-lg border bg-white">
+    <Card className="border bg-white">
+      <CardContent>
       <div className="flex items-center gap-mx-sm mb-mx-md">
         <div className="p-mx-xs bg-brand-primary/10 rounded-xl text-status-success-text"><Presentation size={20} /></div>
         <Typography variant="h3" className="text-lg">Visita 6: Posicionamento de Marketing, Conteúdo e Tráfego Pago</Typography>
@@ -326,6 +339,7 @@ export function VisitSixExecution({ onGenerateSummary }: { onGenerateSummary: (t
         <Textarea value={plan.notes} onChange={e => setPlan({ ...plan, notes: e.target.value })} placeholder="Pendências, materiais necessários ou decisões do proprietário" className="min-h-mx-20" />
       </div>
       <Button className="w-full h-mx-12" variant="primary" onClick={handleSave} icon={<Presentation size={16} />}>REGISTRAR PLANO DE MARKETING</Button>
+      </CardContent>
     </Card>
   )
 }
@@ -348,7 +362,8 @@ export function VisitSevenExecution({ onGenerateSummary }: { onGenerateSummary: 
   }
 
   return (
-    <Card className="p-mx-lg border bg-white">
+    <Card className="border bg-white">
+      <CardContent>
       <div className="flex items-center gap-mx-sm mb-mx-md">
         <div className="p-mx-xs bg-brand-primary/10 rounded-xl text-status-success-text"><Rocket size={20} /></div>
         <Typography variant="h3" className="text-lg">Visita 7: Análise das Implementações e Plano de Ação Trimestral</Typography>
@@ -387,6 +402,7 @@ export function VisitSevenExecution({ onGenerateSummary }: { onGenerateSummary: 
       </div>
 
       <Button className="w-full mt-mx-md h-mx-12" variant="primary" onClick={save} icon={<Target size={16} />}>REGISTRAR ANÁLISE E PLANO TRIMESTRAL</Button>
+      </CardContent>
     </Card>
   )
 }
@@ -412,7 +428,8 @@ export function VisitEightExecution({ onGenerateSummary }: { onGenerateSummary: 
   }
 
   return (
-    <Card className="p-mx-lg border bg-white">
+    <Card className="border bg-white">
+      <CardContent>
       <div className="flex items-center gap-mx-sm mb-mx-md">
         <div className="p-mx-xs bg-brand-primary/10 rounded-xl text-status-success-text"><Clock size={20} /></div>
         <Typography variant="h3" className="text-lg">Acompanhamento Mensal</Typography>
@@ -451,6 +468,7 @@ export function VisitEightExecution({ onGenerateSummary }: { onGenerateSummary: 
       </div>
 
       <Button className="w-full mt-mx-md h-mx-12" variant="primary" onClick={save} icon={<Target size={16} />}>REGISTRAR ACOMPANHAMENTO</Button>
+      </CardContent>
     </Card>
   )
 }

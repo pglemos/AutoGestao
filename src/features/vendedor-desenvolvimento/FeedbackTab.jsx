@@ -5,13 +5,12 @@ import { StatCard } from "@/components/molecules/StatCard";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/atoms/EmptyState";
 import { Textarea } from "@/components/atoms/Textarea";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/lib/toast"
 import { MessageSquare, ThumbsUp, TrendingUp, Clock, CheckCircle2 } from "lucide-react";
 import moment from "moment";
 import { ScrollableRegion } from "@/design-system/page/ScrollableRegion";
 
 export default function FeedbackPage({ hideHeader = false }) {
-  const { toast } = useToast();
   const [feedbacks, setFeedbacks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [comments, setComments] = useState({});
@@ -29,11 +28,11 @@ export default function FeedbackPage({ hideHeader = false }) {
         acknowledged_date: new Date().toISOString()
       });
     } catch (error) {
-      toast({ title: "Não foi possível confirmar o feedback.", description: "Tente novamente.", variant: "destructive" });
+      toast.error("Não foi possível confirmar o feedback.", { description: "Tente novamente." });
       return;
     }
     setFeedbacks(prev => prev.map(f => f.id === id ? { ...f, acknowledged: true, user_comment: comment, acknowledged_date: new Date().toISOString() } : f));
-    toast({ title: "Feedback confirmado!", description: "Seu líder foi notificado." });
+    toast.info("Feedback confirmado!", { description: "Seu líder foi notificado."  });
   };
 
   const feedbackBadge = (f) => (f.hasAttentionPoints

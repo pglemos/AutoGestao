@@ -21,7 +21,7 @@ const MXScoreCardInner = React.forwardRef<HTMLDivElement, MXScoreCardProps>(
       <Card
         ref={ref}
         className={cn(
-          "p-mx-lg border-none shadow-sm group hover:shadow-sm transition-all bg-white",
+          "p-mx-lg border-none shadow-sm group hover:shadow-sm transition-[box-shadow] bg-white",
           isHighlight && "ring-2 ring-brand-primary/20 shadow-mx-glow-brand",
           className
         )}

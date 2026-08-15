@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState, type ComponentType, type PropsWithChildren } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { AlertMessage } from '@/components/molecules/AlertMessage'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
-import { useToast } from '@/components/ui/use-toast'
+import { toast } from "@/lib/toast"
 import { useIsMobile } from '@/hooks/useIsMobile'
 import ActionPlanHeader from '@/components/owner/actionplan/ActionPlanHeader'
 import ActionPlanTabs from '@/components/owner/actionplan/ActionPlanTabs'
@@ -71,7 +72,6 @@ export function ActionPlanWorkspace({
   const controller = useActionPlanController()
   const location = useLocation()
   const navigate = useNavigate()
-  const { toast } = useToast()
   const isMobile = useIsMobile()
   const user = useMemo(() => ({
     id: controller.actorId,
@@ -104,10 +104,8 @@ export function ActionPlanWorkspace({
     navigate({ pathname: location.pathname, search: clearActionPlanLaunchContext(location.search) }, { replace: true })
   }, [location.pathname, location.search, navigate])
 
-  const notifyError = (title: string, cause: unknown) => toast({
-    title,
+  const notifyError = (title: string, cause: unknown) => toast.error(title, {
     description: cause instanceof Error ? cause.message : 'Erro desconhecido',
-    variant: 'destructive',
   })
 
   const openDrawer = (action: ActionPlanItem, initialTab = 'resumo') => {
@@ -118,7 +116,7 @@ export function ActionPlanWorkspace({
 
   const handleExport = () => {
     exportActionsCSV(controller.filteredActions)
-    toast({ title: 'Exportação concluída.' })
+    toast.info('Exportação concluída.')
   }
 
   const handleNewAction = (date = '') => {
@@ -141,7 +139,7 @@ export function ActionPlanWorkspace({
       setNewActionOpen(false)
       setNewActionInitialDate('')
       setNewActionInitialValues(undefined)
-      toast({ title: 'Ação criada com sucesso.' })
+      toast.info('Ação criada com sucesso.')
       if (created && typeof created === 'object' && 'id' in created) openDrawer(created as ActionPlanItem)
     } catch (cause) {
       notifyError('Não foi possível criar a ação.', cause)
@@ -152,7 +150,7 @@ export function ActionPlanWorkspace({
     try {
       await controller.approveAction(id, { ...payload, approvedBy: controller.actorName })
       setApproveAction(null)
-      toast({ title: 'Ação aprovada com sucesso.' })
+      toast.info('Ação aprovada com sucesso.')
     } catch (cause) { notifyError('Não foi possível aprovar a ação.', cause) }
   }
 
@@ -160,7 +158,7 @@ export function ActionPlanWorkspace({
     try {
       await controller.delegateAction(id, { ...payload, delegatedBy: controller.actorName })
       setDelegateAction(null)
-      toast({ title: 'Ação delegada com sucesso.' })
+      toast.info('Ação delegada com sucesso.')
     } catch (cause) { notifyError('Não foi possível delegar a ação.', cause) }
   }
 
@@ -168,20 +166,20 @@ export function ActionPlanWorkspace({
     try {
       await controller.updateAction(id, payload)
       setEditAction(null)
-      toast({ title: 'Ação atualizada com sucesso.' })
+      toast.info('Ação atualizada com sucesso.')
     } catch (cause) { notifyError('Não foi possível atualizar a ação.', cause) }
   }
 
   const handleUpdateDeadline = async (id: string, payload: Record<string, unknown>) => {
     try {
       await controller.updateDueDate(id, { ...payload, rescheduledBy: controller.actorName })
-      toast({ title: 'Prazo atualizado com sucesso.' })
+      toast.info('Prazo atualizado com sucesso.')
     } catch (cause) { notifyError('Não foi possível atualizar o prazo.', cause) }
   }
 
   const handleDeleteRequest = (action: ActionPlanItem) => {
     if (!controller.permissions.canDeletePermanently) {
-      toast({ title: 'Exclusão não permitida para este perfil.', variant: 'destructive' })
+      toast.error('Exclusão não permitida para este perfil.')
       return
     }
     setDeleteCandidate(action)
@@ -192,7 +190,7 @@ export function ActionPlanWorkspace({
       await controller.deleteAction(action.id)
       setDeleteCandidate(null)
       if (drawerAction?.id === action.id) setDrawerOpen(false)
-      toast({ title: 'Ação excluída definitivamente.' })
+      toast.info('Ação excluída definitivamente.')
     } catch (cause) { notifyError('Não foi possível excluir a ação.', cause) }
   }
 
@@ -249,7 +247,7 @@ export function ActionPlanWorkspace({
       case 'start':
         try {
           await controller.startAction(action.id, { startedBy: controller.actorName })
-          toast({ title: operationLabels.start })
+          toast.info(operationLabels.start)
         } catch (cause) { notifyError('Não foi possível iniciar a ação.', cause) }
         return
       case 'viewImpact': openDrawer(action, 'historico'); return
@@ -262,7 +260,7 @@ export function ActionPlanWorkspace({
   const handleMoveTo = async (action: ActionPlanItem, destination: ActionPlanStatus) => {
     const resolution = controller.resolveTransition(action.status, destination)
     if (resolution.kind === 'forbidden') {
-      toast({ title: 'Transição não permitida.', variant: 'destructive' })
+      toast.error('Transição não permitida.')
       return
     }
     if (resolution.kind === 'direct') {
@@ -293,14 +291,14 @@ export function ActionPlanWorkspace({
         case 'duplicate': {
           const duplicated = await controller.duplicateAction(id, { ...payload, createdBy: controller.actorName })
           setActiveModal({ type: null, action: null })
-          toast({ title: 'Ação duplicada com sucesso.' })
+          toast.info('Ação duplicada com sucesso.')
           if (duplicated && typeof duplicated === 'object' && 'id' in duplicated) openDrawer(duplicated as ActionPlanItem)
           return
         }
         default: return
       }
       setActiveModal({ type: null, action: null })
-      toast({ title: operationLabels[modalType as ActionTransitionOperation] || 'Operação persistida.' })
+      toast.info(operationLabels[modalType as ActionTransitionOperation] || 'Operação persistida.')
     } catch (cause) { notifyError('Não foi possível atualizar a ação.', cause) }
   }
 
@@ -310,9 +308,9 @@ export function ActionPlanWorkspace({
       <ActionPlanTabs tab={controller.tab} onTabChange={controller.setTab} />
 
       {controller.error ? (
-        <div className="rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive" role="alert">
+        <AlertMessage tone="danger">
           Não foi possível carregar o Plano de Ação: {controller.error}
-        </div>
+        </AlertMessage>
       ) : null}
 
       {controller.tab === 'acoes' ? (

@@ -151,9 +151,21 @@ function DataGridInner<T extends { id: string | number }>({
                   variants={rowVariants}
                   exit={{ opacity: 0, transition: { duration: duration.fast } }}
                   onClick={() => onRowClick?.(item)}
+                  onKeyDown={
+                    onRowClick
+                      ? (event: React.KeyboardEvent) => {
+                          if (event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault()
+                            onRowClick?.(item)
+                          }
+                        }
+                      : undefined
+                  }
+                  role={onRowClick ? 'button' : undefined}
+                  tabIndex={onRowClick ? 0 : undefined}
                   className={cn(
                     'group h-16 transition-colors hover:bg-surface-alt',
-                    onRowClick && 'cursor-pointer',
+                    onRowClick && 'cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mx-action/40 focus-visible:ring-inset',
                     rowClassName,
                   )}
                 >
@@ -188,6 +200,18 @@ function DataGridInner<T extends { id: string | number }>({
               variants={rowVariants}
               exit={{ opacity: 0, y: 6, transition: { duration: duration.fast } }}
               onClick={() => onRowClick?.(item)}
+              onKeyDown={
+                onRowClick
+                  ? (event: React.KeyboardEvent) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault()
+                        onRowClick?.(item)
+                      }
+                    }
+                  : undefined
+              }
+              role={onRowClick ? 'button' : undefined}
+              tabIndex={onRowClick ? 0 : undefined}
             >
               <Card className={cn(
                 'border border-border-subtle p-4 shadow-sm',

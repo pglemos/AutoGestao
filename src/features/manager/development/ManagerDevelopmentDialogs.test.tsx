@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from 'bun:test'
-import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import type { FeedbackListItem } from '@/features/gerente-feedback/lib/helpers'
 import { Modal } from '@/components/organisms/Modal'
 import { DevelopmentTeamCompetencyMap } from './DevelopmentTeamCompetencyMap'
@@ -7,11 +7,20 @@ import { DevelopmentTeamCompetencyMap } from './DevelopmentTeamCompetencyMap'
 /**
  * Flake conhecido (story-OPS): timeouts de foco/cleanup em execuções cheias.
  * O Modal restaura o foco via `requestAnimationFrame` no `onCloseAutoFocus`; sob
- * carga, o `waitFor` default (1s) estoura. Endurecemos com timeout explícito e
- * envolvemos as transições em `act` para sincronizar efeitos/RAF antes da
- * asserção. Nenhuma mudança no componente.
+ * carga, o RAF real do jsdom atrasa e o `waitFor` com timeout estoura. Em vez
+ * de depender de tempo real, aguardamos frames do RAF de forma determinística.
  */
-const FOCUS_TIMEOUT = 5000
+const waitForNextFrame = () =>
+  new Promise<void>((resolve) => {
+    requestAnimationFrame(() => resolve())
+  })
+
+/** Espera alguns frames para o RAF do onCloseAutoFocus disparar (determinístico). */
+const flushFrames = async (count = 5) => {
+  for (let i = 0; i < count; i += 1) {
+    await waitForNextFrame()
+  }
+}
 
 const resetDom = () => {
   cleanup()
@@ -71,7 +80,8 @@ describe('Desenvolvimento manager dialogs', () => {
       rerender = view.rerender
     })
     const close = screen.getByRole('button', { name: 'Fechar modal' })
-    await waitFor(() => expect(document.activeElement).toBe(close), { timeout: FOCUS_TIMEOUT })
+    await act(async () => { await flushFrames() })
+    expect(document.activeElement).toBe(close)
 
     fireEvent.keyDown(close, { key: 'Escape' })
     expect(onClose).toHaveBeenCalledTimes(1)
@@ -85,7 +95,8 @@ describe('Desenvolvimento manager dialogs', () => {
         </Modal>,
       )
     })
-    await waitFor(() => expect(document.activeElement).toBe(trigger), { timeout: FOCUS_TIMEOUT })
+    await act(async () => { await flushFrames() })
+    expect(document.activeElement).toBe(trigger)
   })
 
   test('prende foco, fecha por Escape e devolve foco no mapa da equipe', async () => {
@@ -101,7 +112,8 @@ describe('Desenvolvimento manager dialogs', () => {
       rerender = view.rerender
     })
     const close = screen.getByRole('button', { name: 'Fechar modal' })
-    await waitFor(() => expect(document.activeElement).toBe(close), { timeout: FOCUS_TIMEOUT })
+    await act(async () => { await flushFrames() })
+    expect(document.activeElement).toBe(close)
 
     fireEvent.keyDown(close, { key: 'Escape' })
     expect(onClose).toHaveBeenCalledTimes(1)
@@ -109,6 +121,7 @@ describe('Desenvolvimento manager dialogs', () => {
     await act(async () => {
       rerender(<DevelopmentTeamCompetencyMap open={false} pdis={[]} onClose={onClose} />)
     })
-    await waitFor(() => expect(document.activeElement).toBe(trigger), { timeout: FOCUS_TIMEOUT })
+    await act(async () => { await flushFrames() })
+    expect(document.activeElement).toBe(trigger)
   })
 })

@@ -240,9 +240,9 @@ export default function ConsultorTreinamentos() {
                                         <Typography variant="tiny" as="span">+12</Typography>
                                     </div>
                                 </div>
-                                <Button asChild size="icon" variant="outline" className="w-mx-xl h-mx-xl hover:bg-brand-primary-hover text-white group-hover:scale-110 transition-transform" aria-label="Ação">
-                                    <a href={t.video_url} target="_blank" rel="noopener noreferrer">
-                                        <ExternalLink size={20} />
+                                <Button asChild size="icon" variant="outline" className="w-mx-xl h-mx-xl hover:bg-brand-primary-hover text-white group-hover:scale-110 transition-transform">
+                                    <a href={t.video_url} target="_blank" rel="noopener noreferrer" aria-label={`Assistir treinamento: ${t.title}`}>
+                                        <ExternalLink size={20} aria-hidden="true" />
                                     </a>
                                 </Button>
                             </footer>

@@ -54,7 +54,7 @@ export function OptionCard({
       }}
       className={cn(
         'flex items-center justify-between p-mx-md rounded-[var(--mx-card-radius)] bg-surface-alt border border-border select-none',
-        'hover:bg-white hover:shadow-[var(--mx-card-hover-shadow)] transition-all cursor-pointer group',
+        'hover:bg-white hover:shadow-[var(--mx-card-hover-shadow)] transition-[background-color,box-shadow] cursor-pointer group',
         disabled && 'opacity-50 cursor-not-allowed hover:bg-surface-alt hover:shadow-none',
         className,
       )}

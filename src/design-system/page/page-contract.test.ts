@@ -118,7 +118,7 @@ describe('registro de layout por rota', () => {
   it('trata rota não migrada como não adotada', () => {
     // Enquanto a rota não tiver perdido o padding próprio, o shell não pode
     // envolvê-la no PageCanvas: os dois paddings somariam.
-    expect(isRouteAdopted('ranking')).toBe(false)
+    expect(isRouteAdopted('plano-acao')).toBe(false)
     expect(isRouteAdopted('rota-que-nao-existe')).toBe(false)
   })
 

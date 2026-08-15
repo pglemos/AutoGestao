@@ -7,7 +7,6 @@ import {
   Clock, Users, RefreshCw, Gift, Shield, Truck, MoreVertical,
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useToast } from "@/components/ui/use-toast";
 import moment from "moment/min/moment-with-locales";
 import ResolverModal from "./ResolverModal";
 import NovaAtividadeModal from "./NovaAtividadeModal";
@@ -296,7 +295,6 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
 // ── Main Component ─────────────────────────────────────────────────────────────
 
 export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile, profile, onGoToRotina }) {
-  const { toast } = useToast();
   const hoje = useMemo(() => moment().format("YYYY-MM-DD"), []);
 
   const [oportunidades, setOportunidades] = useState([]);

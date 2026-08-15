@@ -46,6 +46,33 @@ describe('lint-z-index — semântica determinística por ocorrência', () => {
     const source = '<div className="z-[var(--mx-z-modal)] z-[var(--mx-z-popover)]" />'
     expect(auditSemanticRuleText(source, { token: 'mx-z-modal', lines: [1] })).toHaveLength(1)
   })
+
+  test('single-token: refactor que move a linha NÃO quebra (selector por conteúdo)', () => {
+    const source = [
+      '// header',
+      'import { x } from "./x"',
+      'const PADDING = 4',
+      '',
+      'export const T = () => <span className="z-[var(--mx-z-tooltip)]">t</span>',
+    ].join('\n')
+    // hint aponta linha 1; o token está na linha 5 — não deve quebrar.
+    expect(auditSemanticRuleText(source, { token: 'mx-z-tooltip', lines: [1] })).toEqual([])
+  })
+
+  test('multi-token: token esperado fora da linha-hint é achado por conteúdo', () => {
+    const source = [
+      'const overlay = "z-[var(--mx-z-overlay)]"',
+      'const popover = "z-[var(--mx-z-popover)]"',
+      'const tooltip = "z-[var(--mx-z-tooltip)]"',
+    ].join('\n')
+    // hint aponta linha 99; popover está na linha 2 — não deve quebrar.
+    expect(auditSemanticRuleText(source, { token: 'mx-z-popover', lines: [99] })).toEqual([])
+  })
+
+  test('single-token com token errado continua sendo problema', () => {
+    const source = 'export const B = () => <span className="z-[var(--mx-z-modal)]">t</span>'
+    expect(auditSemanticRuleText(source, { token: 'mx-z-tooltip', lines: [1] })).toHaveLength(1)
+  })
 })
 
 describe('lint-z-index — escala fechada de tokens (var(--mx-z-*))', () => {

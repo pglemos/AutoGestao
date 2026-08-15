@@ -15,7 +15,7 @@ import {
 import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
 import { Typography } from '@/components/atoms/Typography'
-import { Card } from '@/components/molecules/Card'
+import { Card, CardContent } from '@/components/molecules/Card'
 import { cn } from '@/lib/utils'
 import {
   useDepartamentoDashboard,
@@ -113,13 +113,15 @@ export function DepartamentoDashboard({ storeId, code, periodLabel, period }: Pr
         ))}
         {top4.length < 4 &&
           Array.from({ length: 4 - top4.length }).map((_, idx) => (
-            <Card key={`empty-${idx}`} className="border border-dashed p-mx-md">
+            <Card key={`empty-${idx}`} className="border border-dashed">
+              <CardContent>
               <Typography variant="tiny" tone="muted" className="font-bold">
                 Sem KPI registrado
               </Typography>
               <Typography variant="p" tone="muted" className="mt-mx-sm font-bold normal-case">
                 Catálogo de departamento ainda sem snapshot deste indicador.
               </Typography>
+              </CardContent>
             </Card>
           ))}
       </div>
@@ -248,7 +250,8 @@ function ScoreCard({ tone, value }: { tone: string; value: string }) {
     muted: 'border-border bg-surface-alt text-muted-foreground',
   }
   return (
-    <Card className={cn('rounded-2xl border p-mx-md', toneClass[tone])}>
+    <Card className={cn('border', toneClass[tone])}>
+      <CardContent>
       <Typography variant="caption" className="">
         Índice de eficiência
       </Typography>
@@ -258,6 +261,7 @@ function ScoreCard({ tone, value }: { tone: string; value: string }) {
       <Typography variant="tiny" className="block font-bold normal-case tracking-normal">
         Média ponderada dos atingimentos KPI (cap 150% por indicador).
       </Typography>
+      </CardContent>
     </Card>
   )
 }
@@ -282,7 +286,8 @@ function KpiCard({ kpi }: { kpi: DepartamentoKpi }) {
     muted: 'border-border bg-surface-alt text-muted-foreground',
   }
   return (
-    <Card className={cn('rounded-2xl border p-mx-md', toneClass[tone])}>
+    <Card className={cn('border', toneClass[tone])}>
+      <CardContent>
       <Typography variant="caption" className="">
         {kpi.indicador_code}
       </Typography>
@@ -293,6 +298,7 @@ function KpiCard({ kpi }: { kpi: DepartamentoKpi }) {
         Meta {kpi.meta == null ? '—' : Number(kpi.meta).toLocaleString('pt-BR')} •{' '}
         {achievement == null ? 'sem dado' : `${Math.round(achievement)}%`}
       </Typography>
+      </CardContent>
     </Card>
   )
 }
@@ -311,7 +317,8 @@ function SectionBlock({
   children: React.ReactNode
 }) {
   return (
-    <Card className="p-mx-md">
+    <Card>
+      <CardContent>
       <header className="mb-mx-sm flex items-center gap-mx-xs">
         <div className="rounded-2xl bg-brand-primary-subtle p-mx-xs text-status-success-text">
           <Icon size={18} aria-hidden="true" />
@@ -329,6 +336,7 @@ function SectionBlock({
       ) : (
         children
       )}
+      </CardContent>
     </Card>
   )
 }

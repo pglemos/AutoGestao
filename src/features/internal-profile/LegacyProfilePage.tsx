@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { User, Key, ChevronRight, ShieldCheck, RefreshCw, X, LogOut, Camera } from 'lucide-react'
 import { Badge } from '@/components/atoms/Badge'
+import { AlertMessage } from '@/components/molecules/AlertMessage'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { useAuth } from '@/hooks/useAuth'
@@ -305,11 +306,11 @@ export default function Perfil() {
   if (!profile) {
     return (
       <PageCanvas as="div" width="dashboard" bottomClearance="navigation" id="page-perfil" className="flex min-h-0 flex-1 flex-col space-y-6" aria-label="Meu Perfil">
-        <div className="rounded-xl border border-destructive/30 bg-card p-6" role="alert">
+        <AlertMessage tone="danger">
           <h2 className="text-lg font-semibold text-foreground">Não foi possível carregar o perfil</h2>
           <p className="mt-2 text-sm text-muted-foreground">Perfil não encontrado. Tente novamente ou entre em contato com o suporte.</p>
           <Button className="mt-4" onClick={() => window.location.reload()}>Tentar novamente</Button>
-        </div>
+        </AlertMessage>
       </PageCanvas>
     )
   }

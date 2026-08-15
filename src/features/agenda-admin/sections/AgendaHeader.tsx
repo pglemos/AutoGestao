@@ -91,7 +91,7 @@ export function AgendaHeader({
               type="button"
               onClick={onPrevMonth}
               aria-label="Anterior"
-              className="flex h-8 w-8 items-center justify-center rounded-xl text-muted-foreground hover:bg-surface-alt hover:text-foreground transition-colors"
+              className="min-h-[var(--mx-touch-target-min)] min-w-[var(--mx-touch-target-min)] flex h-8 w-8 items-center justify-center rounded-xl text-muted-foreground hover:bg-surface-alt hover:text-foreground transition-colors"
             >
               <ChevronLeft size={18} />
             </button>
@@ -106,7 +106,7 @@ export function AgendaHeader({
               type="button"
               onClick={onNextMonth}
               aria-label="Próximo"
-              className="flex h-8 w-8 items-center justify-center rounded-xl text-muted-foreground hover:bg-surface-alt hover:text-foreground transition-colors"
+              className="min-h-[var(--mx-touch-target-min)] min-w-[var(--mx-touch-target-min)] flex h-8 w-8 items-center justify-center rounded-xl text-muted-foreground hover:bg-surface-alt hover:text-foreground transition-colors"
             >
               <ChevronRight size={18} />
             </button>

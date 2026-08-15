@@ -605,7 +605,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
   return (
     <>
       {/* Overlay */}
-      <div className="fixed inset-0 z-[var(--mx-z-drawer)] bg-surface-overlay/50" onClick={onClose} />
+      <div role="presentation" className="fixed inset-0 z-[var(--mx-z-drawer)] bg-surface-overlay/50" onClick={onClose} />
 
       {/* Drawer */}
       <div className="fixed inset-0 z-[var(--mx-z-overlay)] flex items-stretch sm:items-start sm:justify-end pointer-events-none">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { base44 } from "@/features/owner/ownerRepository";
 import { useOwner } from "@/components/owner/OwnerContext";
+import { AlertMessage } from "@/components/molecules/AlertMessage";
 import { useAuth } from "@/features/owner/lib/ownerAuth";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -199,9 +200,7 @@ export default function ConsultantRequestModal() {
             </div>
 
             {submitError && (
-              <p role="alert" className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-                {submitError}
-              </p>
+              <AlertMessage tone="danger">{submitError}</AlertMessage>
             )}
 
             <DialogFooter>

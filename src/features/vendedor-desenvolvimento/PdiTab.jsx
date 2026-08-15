@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/lib/toast"
 import { Trophy, Target, Star, Plus, Calendar } from "lucide-react";
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer } from "recharts";
 import { useAuth } from "@/hooks/useAuth";
@@ -42,7 +42,6 @@ const behavCompetencies = [
 ];
 
 export default function PDIPage({ hideHeader = false }) {
-  const { toast } = useToast();
   const { role } = useAuth();
   const canEdit = canManagePDI(role);
   const [pdi, setPdi] = useState(null);
@@ -74,9 +73,9 @@ export default function PDIPage({ hideHeader = false }) {
         const created = await base44.entities.PDI.create(data);
         setPdi(created);
       }
-      toast({ title: "PDI salvo!" });
+      toast.info("PDI salvo!");
     } catch (error) {
-      toast({ title: "Erro ao salvar PDI", variant: "destructive" });
+      toast.error("Erro ao salvar PDI");
     } finally {
       setSaving(false);
     }
@@ -89,9 +88,9 @@ export default function PDIPage({ hideHeader = false }) {
       setActions(prev => [created, ...prev]);
       setNewAction({ action: "", competency: "", description: "", deadline: "", status: "Pendente", progress: 0 });
       setDialogOpen(false);
-      toast({ title: "Ação criada!" });
+      toast.info("Ação criada!");
     } catch (error) {
-      toast({ title: "Erro ao criar ação", variant: "destructive" });
+      toast.error("Erro ao criar ação");
     }
   };
 
@@ -101,7 +100,7 @@ export default function PDIPage({ hideHeader = false }) {
       await base44.entities.ActionPlan.update(id, { status, progress });
       setActions(prev => prev.map(a => a.id === id ? { ...a, status, progress } : a));
     } catch (error) {
-      toast({ title: "Erro ao atualizar ação", variant: "destructive" });
+      toast.error("Erro ao atualizar ação");
     }
   };
 

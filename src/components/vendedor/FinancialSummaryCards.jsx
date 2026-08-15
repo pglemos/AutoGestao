@@ -1,25 +1,19 @@
 import React from "react";
 import { DollarSign, Layers, Award, Gift } from "lucide-react";
 import { formatBRL } from "@/components/vendedor/formatBRL";
+import { StatCard } from "@/components/molecules/StatCard";
 
-function SummaryCard({ icon: IconComp, iconColor, iconBg, label, value, sub }) {
+function SummaryCard({ icon: IconComp, tone, label, value, sub }) {
   const Icon = IconComp;
   const isZero = !value || value === 0;
   return (
-    <div className="bg-white rounded-2xl p-5 border border-border-subtle shadow-sm hover:shadow-md transition-shadow">
-      <div className="flex items-start justify-between mb-3">
-        <div className={`w-10 h-10 rounded-xl ${iconBg} flex items-center justify-center`}>
-          <Icon className={`w-5 h-5 ${iconColor}`} />
-        </div>
-      </div>
-      <p className="text-xs font-medium text-muted-foreground mb-1">{label}</p>
-      <p className={`text-2xl font-bold tabular-nums ${isZero ? "text-text-disabled" : "text-mx-navy"}`}>
-        {formatBRL(value)}
-      </p>
-      <p className={`text-xs mt-1.5 ${isZero ? "text-text-disabled" : "text-muted-foreground"}`}>
-        {isZero ? "Ainda não conquistado neste período" : sub}
-      </p>
-    </div>
+    <StatCard
+      icon={<Icon />}
+      tone={tone}
+      label={label}
+      value={<span className={`text-2xl font-bold tabular-nums ${isZero ? "text-text-disabled" : "text-mx-navy"}`}>{formatBRL(value)}</span>}
+      detail={isZero ? "Ainda não conquistado neste período" : sub}
+    />
   );
 }
 
@@ -38,22 +32,22 @@ export default function FinancialSummaryCards({ calcResult }) {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       <SummaryCard
-        icon={DollarSign} iconColor="text-status-success-text" iconBg="bg-status-success-surface"
+        icon={DollarSign} tone="green"
         label="Comissão confirmada" value={comissao}
         sub={`${qtdVendas} veículo${qtdVendas !== 1 ? "s" : ""} vendido${qtdVendas !== 1 ? "s" : ""} no período`}
       />
       <SummaryCard
-        icon={Layers} iconColor="text-mx-blue" iconBg="bg-mx-blue/10"
+        icon={Layers} tone="blue"
         label="Faixa atual" value={faixaAtual?.valor || 0}
         sub={faixaLabel}
       />
       <SummaryCard
-        icon={Award} iconColor="text-status-warning-text" iconBg="bg-status-warning-surface"
+        icon={Award} tone="orange"
         label="Premiações atingidas" value={premiacoesTotal}
         sub={`${premiacoesAtingidas?.length || 0} prêmio${premiacoesAtingidas?.length !== 1 ? "s" : ""} desbloqueado${premiacoesAtingidas?.length !== 1 ? "s" : ""}`}
       />
       <SummaryCard
-        icon={Gift} iconColor="text-status-info-text" iconBg="bg-status-info-surface"
+        icon={Gift} tone="blue"
         label="Bônus confirmados" value={bonificacoesConfirmadas}
         sub="Bonificações já garantidas"
       />

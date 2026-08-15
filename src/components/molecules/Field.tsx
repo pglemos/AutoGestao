@@ -47,7 +47,7 @@ const Field = React.forwardRef<HTMLDivElement, FieldProps>(
       .join(' ') || undefined
 
     return (
-      <div ref={ref} className={cn('space-y-mx-xs w-full', className)}>
+      <div ref={ref} className={cn('w-full space-y-[var(--mx-gap-form)]', className)}>
         <Label htmlFor={fieldId} required={required} className="ml-2">{label}</Label>
         {children({
           id: fieldId,

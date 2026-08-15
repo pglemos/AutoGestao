@@ -82,7 +82,7 @@ describe('Base44 1:1 visual source parity', () => {
         expect(runtime, `${filename} runtime token: ${token}`).toContain(token)
       }
       expect(runtime).toContain('finally')
-      expect(runtime).toContain('toast({')
+      expect(runtime).toMatch(/toast\.(error|info)\(/)
     })
   }
 
@@ -101,7 +101,7 @@ describe('Base44 1:1 visual source parity', () => {
     expect(reference).toContain('sticky bottom-0 bg-white border-t border-slate-100')
     expect(runtime).toContain('sticky bottom-0 bg-white border-t border-border-subtle')
     expect(runtime).toContain('finally')
-    expect(runtime).toContain('toast({')
+    expect(runtime).toMatch(/toast\.(error|info)\(/)
 
     expect(reference).toContain('@/components/ui/sheet')
     expect(runtime).toContain('@/components/ui/dialog')

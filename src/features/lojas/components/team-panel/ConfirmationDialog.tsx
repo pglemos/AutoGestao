@@ -1,6 +1,7 @@
 import type { RefObject } from 'react'
 import {
   AlertDialog,
+  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -37,14 +38,12 @@ export function ConfirmationDialog({
           <AlertDialogTitle>{pendingConfirmation.title}</AlertDialogTitle>
           <AlertDialogDescription>{pendingConfirmation.description}</AlertDialogDescription>
           <AlertDialogFooter>
-            <Button
-              type="button"
-              variant="outline"
+            <AlertDialogCancel
               className="h-mx-12 rounded-2xl font-bold uppercase tracking-widest text-mx-nano"
               onClick={() => onDismiss(pendingConfirmation.key)}
             >
               Cancelar
-            </Button>
+            </AlertDialogCancel>
             <Button
               type="button"
               variant="danger"

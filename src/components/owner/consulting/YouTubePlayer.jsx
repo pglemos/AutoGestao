@@ -278,6 +278,23 @@ export default function YouTubePlayer({ videoId, lessonId, userId = "demo", init
     }
   };
 
+  const handleSeekKeyboard = (e) => {
+    if (!playerRef.current) return;
+    const dur = playerRef.current.getDuration() || 0;
+    if (dur <= 0) return;
+    const STEP = 5; // segundos por seta
+    let next = null;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowUp') next = Math.min(dur, currentTime + STEP);
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') next = Math.max(0, currentTime - STEP);
+    else if (e.key === 'Home') next = 0;
+    else if (e.key === 'End') next = dur;
+    if (next !== null) {
+      e.preventDefault();
+      playerRef.current.seekTo(next, true);
+      setCurrentTime(next);
+    }
+  };
+
   if (error) {
     return (
       <div className="flex aspect-video w-full flex-col items-center justify-center rounded-lg border border-border bg-muted/30 text-center">
@@ -323,7 +340,15 @@ export default function YouTubePlayer({ videoId, lessonId, userId = "demo", init
             <span className="tabular-nums">{formatTime(currentTime)}</span>
             <div
               className="group relative h-1.5 flex-1 cursor-pointer rounded-full bg-muted"
+              role="slider"
+              tabIndex={0}
+              aria-label="Posição do vídeo"
+              aria-valuemin={0}
+              aria-valuemax={Math.round(duration)}
+              aria-valuenow={Math.round(currentTime)}
+              aria-valuetext={`${formatTime(currentTime)} de ${formatTime(duration)}`}
               onClick={handleSeek}
+              onKeyDown={handleSeekKeyboard}
             >
               <div
                 className="absolute left-0 top-0 h-full rounded-full bg-primary transition-all"

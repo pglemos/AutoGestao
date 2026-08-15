@@ -4,7 +4,7 @@ import { toast } from '@/lib/toast'
 import { Button } from '@/components/atoms/Button'
 import { Badge } from '@/components/atoms/Badge'
 import { Typography } from '@/components/atoms/Typography'
-import { Card } from '@/components/molecules/Card'
+import { Card, CardContent } from '@/components/molecules/Card'
 import { isAdministradorMx, isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { useGoogleCalendar } from '@/hooks/useGoogleCalendar'
 import { useConsultingDriveFiles, type ConsultingDriveFile } from '@/hooks/useConsultingDriveFiles'
@@ -91,15 +91,18 @@ export function ConsultingDriveFilesView({ clientId, visits = [] }: { clientId: 
 
   if (!canUseFiles) {
     return (
-      <Card className="p-mx-xl border-dashed text-center">
-        <Typography variant="h3" className="">Acesso restrito</Typography>
+      <Card className="border-dashed text-center">
+        <CardContent>
+          <Typography variant="h3" className="">Acesso restrito</Typography>
+        </CardContent>
       </Card>
     )
   }
 
   return (
     <section className="space-y-mx-lg animate-in fade-in slide-in-from-bottom-4 duration-500 pb-mx-xl">
-      <Card className="p-mx-lg bg-white border">
+      <Card className="bg-white border">
+        <CardContent>
         <div className="flex flex-col gap-mx-md lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-mx-md min-w-0">
             <div className="h-mx-12 w-mx-12 rounded-2xl bg-brand-primary/10 text-status-success-text flex items-center justify-center shrink-0">
@@ -208,6 +211,7 @@ export function ConsultingDriveFilesView({ clientId, visits = [] }: { clientId: 
             ))}
           </div>
         )}
+        </CardContent>
       </Card>
     </section>
   )

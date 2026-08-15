@@ -10,6 +10,7 @@ const AC_GATES: Record<string, string> = {
   'lint:route-layout': 'node scripts/lint-route-layout-metadata.mjs',
   'lint:adopted-route-canvas': 'node scripts/lint-adopted-route-canvas.mjs',
   'lint:overlay-geometry': 'node scripts/lint-overlay-geometry.mjs',
+  'lint:no-css-role-gating': 'node scripts/lint-no-css-role-gating.mjs',
 }
 
 describe('cadeia de lint Foundation Zero', () => {

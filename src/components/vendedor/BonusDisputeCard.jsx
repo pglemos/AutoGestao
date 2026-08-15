@@ -1,6 +1,7 @@
 import React from "react";
 import { Gift, Shield, Clock, CheckCircle2 } from "lucide-react";
 import { formatBRL } from "@/components/vendedor/formatBRL";
+import { Card, CardContent } from "@/components/molecules/Card";
 
 const TIPO_STATUS = {
   "Melhor vendedor do mês": "disputa",
@@ -21,51 +22,55 @@ const STATUS_CONFIG = {
 export default function BonusDisputeCard({ bonificacoes }) {
   if (!bonificacoes || bonificacoes.length === 0) {
     return (
-      <div className="bg-white rounded-2xl p-6 border border-border-subtle shadow-sm">
-        <div className="flex items-center gap-2 mb-4">
-          <Gift className="w-4 h-4 text-status-info-text" />
-          <span className="text-status-info-text text-xs font-semibold uppercase tracking-widest">Bônus em Disputa</span>
-        </div>
-        <div className="text-center py-4">
-          <p className="text-muted-foreground text-sm">Nenhuma bonificação em disputa no momento.</p>
-        </div>
-      </div>
+      <Card>
+        <CardContent className="p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <Gift className="w-4 h-4 text-status-info-text" />
+            <span className="text-status-info-text text-xs font-semibold uppercase tracking-widest">Bônus em Disputa</span>
+          </div>
+          <div className="text-center py-4">
+            <p className="text-muted-foreground text-sm">Nenhuma bonificação em disputa no momento.</p>
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
-    <div className="bg-white rounded-2xl p-6 border border-border-subtle shadow-sm">
-      <div className="flex items-center gap-2 mb-4">
-        <Gift className="w-4 h-4 text-status-info-text" />
-        <span className="text-status-info-text text-xs font-semibold uppercase tracking-widest">Bônus em Disputa</span>
-      </div>
+    <Card>
+      <CardContent className="p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <Gift className="w-4 h-4 text-status-info-text" />
+          <span className="text-status-info-text text-xs font-semibold uppercase tracking-widest">Bônus em Disputa</span>
+        </div>
 
-      <div className="space-y-3">
-        {bonificacoes.map((bon, i) => {
-          const statusKey = TIPO_STATUS[bon.tipo] || "ativa";
-          const cfg = STATUS_CONFIG[statusKey];
-          const Icon = cfg.icon;
-          return (
-            <div key={i} className={`flex items-start justify-between p-3 rounded-xl ${cfg.bg} border ${cfg.border}`}>
-              <div className="flex-1">
-                <p className="text-sm font-semibold text-foreground">{bon.nome}</p>
-                {bon.criterio && <p className="text-xs text-muted-foreground mt-0.5">{bon.criterio}</p>}
-                <div className={`flex items-center gap-1 mt-1.5 ${cfg.color}`}>
-                  <Icon className="w-3 h-3" />
-                  <span className="text-xs font-medium">{cfg.label}</span>
+        <div className="space-y-3">
+          {bonificacoes.map((bon, i) => {
+            const statusKey = TIPO_STATUS[bon.tipo] || "ativa";
+            const cfg = STATUS_CONFIG[statusKey];
+            const Icon = cfg.icon;
+            return (
+              <div key={i} className={`flex items-start justify-between p-3 rounded-xl ${cfg.bg} border ${cfg.border}`}>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-foreground">{bon.nome}</p>
+                  {bon.criterio && <p className="text-xs text-muted-foreground mt-0.5">{bon.criterio}</p>}
+                  <div className={`flex items-center gap-1 mt-1.5 ${cfg.color}`}>
+                    <Icon className="w-3 h-3" />
+                    <span className="text-xs font-medium">{cfg.label}</span>
+                  </div>
+                </div>
+                <div className="text-right ml-3">
+                  <p className="text-sm font-bold text-foreground">{formatBRL(bon.valor)}</p>
                 </div>
               </div>
-              <div className="text-right ml-3">
-                <p className="text-sm font-bold text-foreground">{formatBRL(bon.valor)}</p>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
 
-      <p className="text-muted-foreground text-xs mt-4">
-        Bônus em disputa não são somados ao salário previsto até confirmação.
-      </p>
-    </div>
+        <p className="text-muted-foreground text-xs mt-4">
+          Bônus em disputa não são somados ao salário previsto até confirmação.
+        </p>
+      </CardContent>
+    </Card>
   );
 }

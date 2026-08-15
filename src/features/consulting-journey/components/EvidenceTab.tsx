@@ -1,3 +1,4 @@
+import { AlertMessage } from '@/components/molecules/AlertMessage'
 import type { ChangeEvent } from 'react'
 import { useState } from 'react'
 import type { ConsultingJourneyController } from '../useConsultingJourney'
@@ -54,7 +55,7 @@ export function EvidenceTab({ visit, controller }: { visit: ConsultingJourneyVis
           {mode === 'text' ? <textarea value={text} onChange={(event: ChangeEvent<HTMLTextAreaElement>) => setText(event.target.value)} rows={4} placeholder="Descreva a evidência" className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm" /> : null}
           <textarea value={note} onChange={(event: ChangeEvent<HTMLTextAreaElement>) => setNote(event.target.value)} rows={2} placeholder="Observação opcional" className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm" />
           {previousId ? <p className="text-xs text-status-warning-text">Este envio substituirá a evidência selecionada.</p> : null}
-          {error ? <p className="text-sm text-destructive" role="alert">{error}</p> : null}
+          {error ? <AlertMessage tone="danger">{error}</AlertMessage> : null}
           <button type="button" disabled={controller.mutating} onClick={() => void submit()} className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50">Enviar evidência</button>
         </div>
       </section>

@@ -55,7 +55,7 @@ mock.module('@/api/base44Client', () => ({
   },
 }))
 
-mock.module('@/components/ui/use-toast', () => ({ toast: mock(() => {}) }))
+mock.module('@/lib/toast', () => ({ toast: { info: mock(() => {}), error: mock(() => {}), success: mock(() => {}), warning: mock(() => {}) } }))
 
 function normalizeLocalScriptAdapter(root: HTMLElement) {
   const headings = Array.from(root.querySelectorAll('p')).filter((element) =>
@@ -234,6 +234,65 @@ const COLOR_MIGRATION_MAP: Record<string, string> = {
   'bg-[#25D366]': 'bg-status-success',
 }
 
+// FASE L — migração dos campos para atoms/Input e atoms/Textarea. A referência
+// congelada mantém ui/input/ui/textarea (classes cruas). Normaliza a classe
+// canônica para o lexema antigo. As classes são as renderizadas pelos atoms
+// (com os tokens) e o alvo é a classe crua que a referência produz.
+const FORM_MIGRATION_MAP: Record<string, string> = {
+  // FASE L — campos migram para atoms/Input e atoms/Textarea. A referência
+  // congelada mantém ui/input/ui/textarea. Normalização token-por-token (aplicada
+  // APENAS via normalizeFormFieldClass, quando a classe tem tokens --mx-*).
+  'placeholder:text-text-disabled': 'placeholder:text-muted-foreground',
+  'focus-visible:border-primary focus-visible:ring-[length:var(--mx-input-focus-ring-width)] focus-visible:ring-focus-ring/25':
+    'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
+  'h-[var(--mx-input-height)]': 'h-9',
+  'min-h-[var(--mx-textarea-min-height)]': 'min-h-[120px]',
+  'rounded-[var(--mx-input-radius)]': 'rounded-xl',
+  'border-[length:var(--mx-input-border-width)] border-solid border-border': 'border border-input',
+  'bg-surface-default': 'bg-transparent',
+  'text-text-primary': 'text-foreground',
+  'shadow-none': 'shadow-sm',
+  'px-3 py-3': 'px-3 py-1',
+  'px-3 py-2': 'px-3 py-1',
+  'font-normal': '',
+  'outline-none transition': 'transition-colors',
+  'disabled:bg-surface-alt disabled:text-text-disabled': 'disabled:opacity-50',
+  'read-only:cursor-default read-only:bg-surface-alt read-only:text-text-disabled': '',
+  'resize-y': '',
+  ' text-foreground': '',
+}
+
+/** Normaliza a classe de um <input>/<textarea> migrado (atoms) para a da referência (ui/). Idempotente: sem tokens canônicos, retorna intacta. */
+function normalizeFormFieldClass(className: string, isTextarea: boolean): string {
+  if (!className.includes('--mx-')) return className
+  let out = className
+    .replace('resize-none', '')
+    .replace(/\s{2,}/g, ' ')
+    .trim()
+  for (const [canonical, legacy] of Object.entries(FORM_MIGRATION_MAP)) {
+    out = out.split(canonical).join(legacy)
+  }
+  if (!isTextarea) {
+    // Input canônico usa text-sm; a referência (ui/input) usa text-base md:text-sm
+    // e `rounded-xl` vêm do className do consumidor, no final da classe.
+    out = out.replace('text-sm', 'text-base md:text-sm')
+    out = out.replace('file:bg-transparent file:text-sm file:font-medium', 'file:bg-transparent file:text-sm file:font-medium file:text-foreground')
+    out = out.replace(' rounded-xl', '')
+    out = out.replace(/md:text-sm/, '')
+    out = out.replace(/\s{2,}/g, ' ').trim()
+    out = `${out} md:text-sm rounded-xl`
+  } else {
+    // Textarea: remove tokens órfãos do atoms e alinha ao formato da referência.
+    out = out.replace('flex min-h-[120px] w-full', 'w-full')
+    out = out.replace('px-3 py-1', 'px-3 py-2')
+    // Substitui a cauda canônica (foco/disabled/placeholder) pelo formato da ref.
+    out = out.replace(/ shadow-sm.*$/, ' resize-none focus:outline-none focus:ring-1 focus:ring-ring')
+  }
+  // Espaços residuais de remoções.
+  out = out.replace(/\s{2,}/g, ' ').trim()
+  return out
+}
+
 function normalizeDom(html: string) {
   let out = html
     .replace(/radix-[^"\s]+/g, 'radix-id')
@@ -248,6 +307,14 @@ function normalizeDom(html: string) {
   for (const [raw, token] of Object.entries(COLOR_MIGRATION_MAP)) {
     out = out.replaceAll(raw, token)
   }
+  // FASE L — campos migrados (atoms/Input, atoms/Textarea) têm classes
+  // canônicas que divergem da referência (ui/input, ui/textarea). O normalizador
+  // por elemento é idempotente: só age quando a classe tem tokens `--mx-*`.
+  out = out.replace(/<input class="([^"]+)"/g, (_match, cls: string) => `<input class="${normalizeFormFieldClass(cls, false)}"`)
+  out = out.replace(/<textarea class="([^"]+)"/g, (_match, cls: string) => `<textarea class="${normalizeFormFieldClass(cls, true)}"`)
+  // Ordem de atributos: atoms/Textarea emite class antes de placeholder/rows; a
+  // referência emite depois. Normaliza para `class` primeiro (runtime).
+  out = out.replace(/(<textarea) (placeholder="[^"]*") (rows="\d+") (class="[^"]*")/g, '$1 $4 $2 $3')
   // WhatsAppRoteiro: o nome e o objetivo do cliente usam text-foreground no
   // runtime (contraste intencional) enquanto a referência usa muted.
   out = out.replaceAll('text-sm font-bold text-muted-foreground', 'text-sm font-bold text-foreground')

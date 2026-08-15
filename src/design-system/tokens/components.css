@@ -23,6 +23,12 @@
     100dvh - var(--mx-space-8) - env(safe-area-inset-top, 0px) -
       env(safe-area-inset-bottom, 0px)
   );
+  /* FASE O 15.004 — sizes semânticos de overlay somente onde usados
+     (container widths MD3: compact=448, medium=512, expanded=640, large=896). */
+  --mx-overlay-size-sm: 28rem;       /* 448px — confirmação/alert */
+  --mx-overlay-size-md: 32rem;       /* 512px — padrão (default) */
+  --mx-overlay-size-lg: 40rem;       /* 640px — formulários médios */
+  --mx-overlay-size-xl: 56rem;       /* 896px — tabelas/dashboards */
   --mx-overlay-surface: var(--mx-color-surface-elevated);
   --mx-overlay-border: var(--mx-color-border);
   --mx-overlay-shadow: var(--mx-shadow-2xl);
@@ -190,6 +196,7 @@ html [data-sonner-toaster].mx-toaster {
   --mx-font-size-metric-lg: 30px;
 
   /* ---------------------------------------------------------------- ícones */
+  --mx-icon-size-2xs: 12px;
   --mx-icon-size-xs: 14px;
   --mx-icon-size-sm: 16px;
   --mx-icon-size-md: 20px;

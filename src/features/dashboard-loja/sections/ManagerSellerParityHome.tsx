@@ -503,7 +503,16 @@ function TeamFocus({ team, showAll, onSellerClick, onViewAll }: {
 
 function TeamFocusRow({ seller, onClick }: { seller: ManagerTeamFocusItem; onClick: () => void }) {
   return (
-    <tr onClick={onClick} className="cursor-pointer border-b border-border-subtle transition-colors hover:bg-surface-alt">
+    <tr
+      onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          onClick()
+        }
+      }}
+      tabIndex={0}
+      className="cursor-pointer border-b border-border-subtle transition-colors hover:bg-surface-alt">
       <td className="py-2.5 pr-3"><SellerIdentity seller={seller} /></td>
       <td className="px-2 text-center text-foreground">{seller.appointmentsToday}</td>
       <td className="px-2 text-center text-foreground">{formatSales(seller.salesForecastToday)}</td>

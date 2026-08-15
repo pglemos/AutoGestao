@@ -513,6 +513,13 @@ function TeamFocus({
               <tr
                 key={item.sellerId}
                 onClick={onSellerClick}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    onSellerClick()
+                  }
+                }}
+                tabIndex={0}
                 className="cursor-pointer hover:bg-surface-alt"
               >
                 <td className="px-4 py-3 font-medium text-foreground">{item.sellerName}</td>

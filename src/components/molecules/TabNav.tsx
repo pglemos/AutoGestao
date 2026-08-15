@@ -5,6 +5,7 @@ export interface TabNavItem<T extends string = string> {
   key: T
   label: string
   controls?: string
+  disabled?: boolean
 }
 
 interface TabNavProps<T extends string = string> {
@@ -12,33 +13,45 @@ interface TabNavProps<T extends string = string> {
   activeTab: T
   onTabChange: (tab: T) => void
   className?: string
+  /** Scroll horizontal em vez de quebra de linha em mobile (10.014). */
+  scrollable?: boolean
 }
 
 /**
- * Tablist underline canônico (FASE J 10.011/10.013).
+ * Tablist underline canônico (FASE J 10.011/10.013/10.014).
  *
  * Padrão ARIA tabs com roving tabindex: apenas a aba ativa está na ordem de
  * tabulação (`tabIndex=0`), as demais ficam fora (`tabIndex=-1`) e as setas
  * (esquerda/direita, Home/End) movem a seleção e o foco — quem navega por
  * teclado não atravessa N abas para trocar de painel.
+ *
+ * Tabs `disabled` ficam fora da navegação (roving pula) e do clique.
+ * `scrollable` troca o wrap por `overflow-x-auto` (padrão de tabs em mobile
+ * com muitas abas).
  */
 export function TabNav<T extends string = string>({
   tabs,
   activeTab,
   onTabChange,
   className,
+  scrollable = false,
 }: TabNavProps<T>) {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
     const currentIndex = tabs.findIndex((tab) => tab.key === activeTab)
 
     const moveTo = (nextIndex: number) => {
-      const normalized = (nextIndex + tabs.length) % tabs.length
-      const target = tabs[normalized]
-      if (!target) return
-      onTabChange(target.key)
-      // Roving tabindex: foca a aba recém-ativa. O DOM já contém todos os
-      // botões (só o `tabIndex` muda), então a busca síncrona é segura.
-      document.getElementById(`${String(target.key)}-tab`)?.focus()
+      let index = nextIndex
+      // Roving pulando abas disabled: anda até achar uma aba habilitada.
+      for (let step = 0; step < tabs.length; step += 1) {
+        const normalized = (index + tabs.length) % tabs.length
+        const target = tabs[normalized]
+        if (!target?.disabled) {
+          onTabChange(target.key)
+          document.getElementById(`${String(target.key)}-tab`)?.focus()
+          return
+        }
+        index += nextIndex > 0 ? 1 : -1
+      }
     }
 
     switch (event.key) {
@@ -87,7 +100,7 @@ export function TabNav<T extends string = string>({
             onClick={() => onTabChange(key)}
             onKeyDown={handleKeyDown}
             className={cn(
-              'px-mx-md py-mx-sm text-label font-medium transition-all border-b-2 whitespace-nowrap',
+              'px-mx-md py-mx-sm text-label font-medium transition-colors border-b-2 whitespace-nowrap outline-none focus-visible:ring-[length:var(--mx-input-focus-ring-width)] focus-visible:ring-focus-ring focus-visible:ring-offset-2',
               activeTab === key
                 ? 'border-brand-primary text-status-success-text bg-brand-primary/5'
                 : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-surface-alt'

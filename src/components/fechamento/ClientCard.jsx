@@ -632,6 +632,14 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
       <React.Fragment key={c.id}>
         <tr
           onClick={() => canEdit && setExpandedId(isExpanded ? null : c.id)}
+          onKeyDown={(e) => {
+            if (canEdit && (e.key === 'Enter' || e.key === ' ')) {
+              e.preventDefault()
+              setExpandedId(isExpanded ? null : c.id)
+            }
+          }}
+          tabIndex={canEdit ? 0 : undefined}
+          aria-expanded={canEdit ? isExpanded : undefined}
           className={`border-b border-border-subtle transition-colors group ${
             rowDim ? "opacity-40 cursor-default"
             : isExpanded ? "bg-status-info-surface/30 cursor-pointer"
@@ -671,7 +679,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
           </td>
           <td className="px-4 py-3"><Badge label={saleDisplay} className={SALE_STYLE[saleDisplay] || "bg-muted text-muted-foreground"} /></td>
           <td className="px-4 py-3">
-            <div className="flex items-center gap-1.5" onClick={e => e.stopPropagation()}>
+            <div role="presentation" className="flex items-center gap-1.5" onClick={e => e.stopPropagation()}>
               <button onClick={(e) => canEdit && openEdit(c, e)} disabled={!canEdit}
                 className={`p-1.5 rounded-lg transition-colors ${canEdit ? "hover:bg-status-info-surface text-status-info-text" : "text-text-disabled cursor-not-allowed"}`}>
                 <Pencil className="w-3.5 h-3.5" />

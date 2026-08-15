@@ -23,7 +23,10 @@ const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
             <li key={index} className="flex items-center gap-mx-xs">
               {index > 0 && <ChevronRight size={14} className="text-muted-foreground" aria-hidden="true" />}
               {item.to && index < items.length - 1 ? (
-                <NavLink to={item.to} className="hover:text-foreground transition-colors">
+                <NavLink
+                  to={item.to}
+                  className="hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-[length:var(--mx-input-focus-ring-width)] focus-visible:ring-focus-ring focus-visible:ring-offset-2"
+                >
                   {item.label}
                 </NavLink>
               ) : (

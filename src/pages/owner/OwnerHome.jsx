@@ -1,6 +1,7 @@
 import { Component, useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { useOwner } from "@/components/owner/OwnerContext";
+import { AlertMessage } from "@/components/molecules/AlertMessage";
 import HomeHeader from "@/components/owner/home/HomeHeader";
 import MainIndicators from "@/components/owner/home/MainIndicators";
 import PriorityIntervention from "@/components/owner/home/PriorityIntervention";
@@ -26,7 +27,7 @@ class OwnerHomeErrorBoundary extends Component {
     if (this.state.hasError) {
       return (
         <div id="page-home" aria-label="Início — erro" className="flex min-h-0 flex-1 flex-col items-center justify-center p-6">
-          <div className="max-w-md rounded-xl border border-destructive/30 bg-card p-6 text-center" role="alert">
+          <AlertMessage tone="danger" className="max-w-md text-center">
             <h1 className="text-lg font-semibold text-foreground">Algo deu errado</h1>
             <p className="mt-2 text-sm text-muted-foreground">
               Não foi possível carregar a página inicial. Tente recarregar a página.
@@ -38,7 +39,7 @@ class OwnerHomeErrorBoundary extends Component {
             >
               Recarregar
             </button>
-          </div>
+          </AlertMessage>
         </div>
       );
     }

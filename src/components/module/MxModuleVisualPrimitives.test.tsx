@@ -79,7 +79,11 @@ describe('MxModuleVisualPrimitives', () => {
     expect(html).toContain('bg-surface-alt')
     expect(html).toContain('data-mx-page-canvas=""')
     expect(html).toContain('data-mx-page-width="dashboard"')
-    expect(html).toContain('space-y-5')
+    // §10.015: o empilhamento Header→Toolbar→Tabs→Content usa o token
+    // semântico --mx-gap-section (24px desktop / 16px compacto), nunca o
+    // degrau cru space-y-5 (20px) que não existe na escala.
+    expect(html).toContain('space-y-[var(--mx-gap-section)]')
+    expect(html).not.toContain('space-y-5')
     // §7.6: a margem lateral e o padding vertical pertencem ao container
     // canônico (PageCanvas / --mx-page-*), não a `px-4`/`py-6` cravados no
     // módulo. A div-filha direta do MxModulePage é o ponto de regressão: se

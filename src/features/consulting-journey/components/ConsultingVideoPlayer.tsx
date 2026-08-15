@@ -1,3 +1,4 @@
+import { AlertMessage } from '@/components/molecules/AlertMessage'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { calculateLessonProgress } from '../consultingJourneyRules'
 import { createConsultingVideoTracker } from '../consultingVideoTracker'
@@ -236,7 +237,7 @@ export function ConsultingVideoPlayer({
         <div className="flex items-center justify-between text-xs text-muted-foreground"><span>{Math.round(progress.percentage)}% efetivamente assistido</span><span>{progress.completed ? 'Aula concluída' : 'Conclusão em 90%'}</span></div>
         <div className="h-2 overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress.percentage}><div className="h-full bg-primary transition-[width]" style={{ width: `${progress.percentage}%` }} /></div>
       </div>
-      {error ? <p className="text-sm text-destructive" role="alert">{error}</p> : null}
+      {error ? <AlertMessage tone="danger">{error}</AlertMessage> : null}
     </div>
   )
 }
