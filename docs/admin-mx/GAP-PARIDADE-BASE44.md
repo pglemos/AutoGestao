@@ -1,0 +1,74 @@
+# Gap de paridade com o Base44 — módulo Administrador
+
+Levantamento honesto do que existe no export `mx-admin-flow` e do que o MX tem hoje, por rota. Base: inventário de telas, ações e entidades extraído do próprio código do Base44.
+
+## Tamanho do gap
+
+| Rota | Base44 (arquivos / linhas) | MX hoje | Cobertura estimada |
+|---|---|---|---|
+| `/clientes` | 23 / 5.571 | lista + wizard de cadastro | ~25% |
+| `/equipe` | 8 / 1.311 | lista + editar + carteira | ~30% |
+| `/produtos` | 4 / 691 | lista + criar/editar | ~20% |
+| `/indicadores` | 34 / 6.630 | lista + criar/editar | ~8% |
+| `/planos-acao` | 21 / 3.941 | rede + templates + sugestões | ~30% |
+| `/consultoria-mx` | 19 / 2.742 | lista de encontros | ~10% |
+| **Total** | **109 / 20.886** | ~2.400 linhas | **~20%** |
+
+## O que falta, por rota
+
+### `/clientes`
+- **Visão 360** (`ClienteDetalhe`, 563 l): abas de lojas, usuários, jornada, progresso, informações gerais, contato principal.
+- **Ativação com checklist** (`ActivationModal`): prontidão, itens impeditivos vs informativos, reparo de matriz.
+- **Gestão de lojas do cliente**: criar/editar loja, horário de funcionamento com padrão MX.
+- **Pessoas e acessos**: criar usuário com papéis, lojas autorizadas, Dono Master; link de autocadastro com validade e limite de usos.
+- **Configuração por cliente**: tolerância de fechamento, limite de vendedores, retenção, canais de notificação.
+- **Programa contratado**: produto, versão, modalidade, jornada vinculada, consultor responsável.
+- **Onboarding por etapas** com continuidade ("Continuar onboarding").
+
+### `/equipe`
+- **Perfil do consultor** (411 l): programas habilitados, especialidades por encontro, clientes ativos, capacidade online/presencial, status (ativo/afastado/férias/inativo).
+- **Edição de usuário em abas**: dados pessoais, papéis e visões, lojas e equipes, acesso e situação.
+- **Delegações gerenciais** com motivo e vigência.
+- **Papel principal** e visão padrão ao entrar.
+
+### `/produtos`
+- **Ciclo de vida**: rascunho → publicado, duplicar, nova versão, excluir rascunho, exclusividade evolutiva.
+- **Aba Módulos**: matriz de liberação padrão herdada pelos clientes, obrigatoriedade, visibilidade.
+- **Aba Tempos e Capacidade**: horas online/presencial por encontro, pendências, origem do tempo.
+- **Aba Plano Estratégico**: pacote de indicadores vinculado, digitáveis vs calculáveis, competências meta.
+- Métricas: total de encontros, mín./máx. presenciais, contratos ativos.
+
+### `/indicadores`
+- **Catálogo completo**: ordem oficial editável, restaurar padrão MX, filtros por departamento/tipo.
+- **Wizard de criação**: código interno, unidade (7 tipos), casas decimais, direção, faixa, frequência, ano inicial/final.
+- **Drawer de detalhe**: status (rascunho→revisão→publicado→desabilitado→arquivado), visibilidade no Módulo Dono.
+- **Parâmetros e fórmulas**: criar parâmetro, testar cálculo, dependentes, override por cliente com justificativa.
+- **Metas e realizados**: cadastro rápido, importação/exportação de planilha, histórico com reversão, valor oficial, cópia de metas entre lojas.
+
+### `/planos-acao`
+- **Kanban** por status com arrastar.
+- **Wizard de plano por cliente** com ações ponderadas, participantes, indicador de eficácia.
+- **Drawer de detalhe** com abas: resumo, execução, evidências, histórico e impacto; alterar prazo com motivo; concluir com data efetiva.
+- **Templates**: wizard completo, filtros, detalhe com versões, promover plano existente a padrão, desabilitar/reativar/arquivar.
+- **Sugestões ao dono**: validar, publicar, descartar, visualizar como dono.
+- **Aplicações nos clientes**: acompanhamento por cliente com progresso e eficácia.
+
+### `/consultoria-mx`
+- **Metodologia por produto**: versão estrutural vs metodológica, publicar, comparar versões, completude.
+- **Editor de encontro** com abas: objetivo, conteúdo (vídeo/aula), entrega, evidências, arquivos, relatório, planos de ação, guia do consultor.
+- **Biblioteca de materiais**: upload, tipos, visibilidade, utilizações, arquivar.
+- **Modelos de relatório**: seções, publicar, duplicar, arquivar.
+- **Prévia do Módulo Dono** e histórico de alterações.
+
+## Tabelas que faltam no Supabase
+
+Sem elas, parte do gap não fecha: qualificação de consultor por produto e por encontro, reserva de capacidade, referência de capacidade por produto, versões de metodologia, conteúdo/entrega/evidência/relatório por encontro, pacotes de indicadores versionados, parâmetros estratégicos e overrides por cliente, lotes de importação de metas, sugestões ao dono.
+
+## Ordem de execução
+
+1. `/produtos` — ciclo de vida + abas Módulos e Tempos.
+2. `/equipe` — perfil do consultor com programas, encontros e capacidade.
+3. `/clientes` — Visão 360 e ativação com checklist.
+4. `/planos-acao` — kanban, detalhe em abas, wizard por cliente.
+5. `/indicadores` — ordem, wizard, drawer, parâmetros.
+6. `/consultoria-mx` — metodologia por produto e editor de encontro.
