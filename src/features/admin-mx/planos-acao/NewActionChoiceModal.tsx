@@ -23,7 +23,7 @@ export function NewActionChoiceModal(props: {
           <div className="flex items-center gap-2">
             <FileCheck size={16} className="text-primary" />
             <span className="font-medium text-foreground">Usar template</span>
-            <span className="ml-auto rounded-full bg-primary px-2 py-0.5 text-[10px] font-medium text-white">Recomendado</span>
+            <span className="ml-auto rounded-full bg-primary px-2 py-0.5 text-caption font-medium text-white">Recomendado</span>
           </div>
           <p className="text-xs text-muted-foreground">Selecione uma orientação da metodologia MX e adapte responsáveis, prazos e metas para este cliente.</p>
         </button>
