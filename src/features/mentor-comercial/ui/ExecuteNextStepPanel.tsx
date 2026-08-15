@@ -16,6 +16,7 @@
 import React from 'react'
 import {
   Sheet,
+  SheetBody,
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -155,7 +156,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
         </div>
 
         {/* Conteúdo com Scroll */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5">
+        <SheetBody className="p-4 sm:p-6 space-y-5">
           {/* Card 1: Ficha do Cliente & Dados Origem */}
           <div className="bg-white rounded-lg border border-border p-4 shadow-sm space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
@@ -325,7 +326,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
               </div>
             )}
           </div>
-        </div>
+        </SheetBody>
 
         {/* Rodapé Fixo de Ações Operacionais */}
         <div className="bg-white border-t border-border p-4 sm:p-5 shrink-0 space-y-3 shadow-lg">

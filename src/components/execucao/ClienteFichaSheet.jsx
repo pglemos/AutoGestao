@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetBody, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Phone, MessageCircle, Car, User, Calendar, FileText, X } from "lucide-react";
 import moment from "moment";
 
@@ -54,11 +54,12 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
 
   return (
     <Sheet open={open} onOpenChange={v => !v && onClose()}>
-      <SheetContent className="w-full sm:max-w-md overflow-y-auto">
+      <SheetContent className="w-full sm:max-w-md">
         <SheetHeader>
           <SheetTitle className="text-mx-navy">Ficha do Cliente</SheetTitle>
         </SheetHeader>
 
+        <SheetBody>
         {loading && (
           <div className="flex items-center justify-center h-48">
             <div className="w-6 h-6 border-4 border-border border-t-status-info rounded-full animate-spin" />
@@ -151,6 +152,7 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
             </div>
           </div>
         )}
+        </SheetBody>
       </SheetContent>
     </Sheet>
   );

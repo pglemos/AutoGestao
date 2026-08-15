@@ -25,6 +25,7 @@ import BoardModals from "@/components/owner/actionplan/board/BoardModals";
 import CalendarView from "@/components/owner/actionplan/calendar/CalendarView";
 import {
   Sheet,
+  SheetBody,
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -520,10 +521,11 @@ export default function PlanoDeAcao() {
 
       {/* Mobile filters drawer */}
       <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
-        <SheetContent side="left" className="w-[85vw] sm:max-w-md overflow-y-auto">
+        <SheetContent side="left" className="w-[85vw] sm:max-w-md">
           <SheetHeader>
             <SheetTitle>Filtros</SheetTitle>
           </SheetHeader>
+          <SheetBody>
           <div className="mt-4">
             <ExecutiveFilters
               filters={filters}
@@ -534,6 +536,7 @@ export default function PlanoDeAcao() {
               responsiblePeople={responsiblePeople}
             />
           </div>
+          </SheetBody>
         </SheetContent>
       </Sheet>
 

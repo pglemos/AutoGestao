@@ -1,5 +1,6 @@
 import {
   Sheet,
+  SheetBody,
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -18,7 +19,7 @@ export default function DetailDrawer({ open, onOpenChange, title, description, c
           <SheetTitle className="text-base">{title}</SheetTitle>
           {description && <SheetDescription>{description}</SheetDescription>}
         </SheetHeader>
-        <div className="flex-1 overflow-y-auto p-5">{children}</div>
+        <SheetBody className="p-5">{children}</SheetBody>
         {footer && <div className="border-t border-border p-4">{footer}</div>}
       </SheetContent>
     </Sheet>

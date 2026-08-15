@@ -69,6 +69,9 @@ Executar o contrato Foundation Zero no estado real do `main`, consolidando a fun
 
 - 2026-08-15: FASE AF — Viewport Matrix completo (32.001-32.025) em single-writer (DeepSeek 4). Fechados os 3 itens restantes (32.023 prefers-reduced-motion, 32.024 safe-area, 32.025 portrait/landscape tablet) com evidência de harness real: `reduced-motion` **82 PASS/0 FAIL/20 SKIP**, `safe-area-mobile` **102 PASS/0 FAIL**, `768x1024` portrait (39 PASS) + `1024x768` landscape (90 PASS). Runs de limpeza dos viewports 1279x900/1280x800/1440x900/zoom-200 nas 29 rotas representativas (runIds fase-af-{vp}-ds4-20260815); todos os 8 fails residuais de runs interrompidos (rotina/treinamentos/universidade-mx/ranking/devolutivas/performance-vendedor/meta-loja) recapturados isolados → PASS (flake de sessão main=0 / axe navigation race). Contagem final: **1824 PASS / 0 FAIL / 32 SKIP** (24 viewports+modos, 29 rotas × 5 perfis); 32 skip = consultor_mx sem credencial E2E. Todos os 24 itens 32.001-32.025 fechados no ledger. Gates: tsc 0, contratos verdes, diff limpo. Sem commit (fila DS6).
 
+- 2026-08-15: FASE I (09.007-010, 09.016-021) + FASE T (20.009-011) em single-writer (DeepSeek 4). **FASE I:** PageCanvas já implementava safe-area lateral `max(gutter, inset)`, safe-area bottom+clearance, padding por viewport e centralização `margin-inline:auto` — faltava evidência; criado `src/test/page-canvas-invariants-contract.test.ts` (9 testes) que fixa esses invariantes + clearance de ações/navegação + sticky com token `--mx-z-sticky` + PageTemplate sem 2º scroller. 09.016 (safe-area simulada) coberto pelo harness FASE AF 32.024; 09.017/018 (bottom nav/fixed actions) via clearance tokens + harness; 09.019/020 (curtas/longas/sticky) via harness FASE AF/W sem overflow. **FASE T:** 20.009 — **correção real**: `PageViewport` (scroll owner) ganhou `[scroll-padding-top:var(--mx-mobile-header-height)]` para o mobile header fixo (72px) não ocultar foco; 20.010 — SkipLink/AppShellFrame + PageViewport passiva (tabIndex -1); 20.011 — Modal canônico já tinha focus restore (`previouslyFocusedElementRef` + `onCloseAutoFocus`). Contrato `src/test/focus-interaction-contract.test.ts` (5 testes). Validação: contratos novos 14/14, suíte completa **3538 pass / 0 fail**, tsc 0 erros, gates da fatia verdes (page-roots, single-scroll-owner, horizontal-overflow, adopted-route-canvas, no-css-role-gating), diff limpo. `lint-overlay-geometry` bloqueado por allowlist stale de 2 drawers de OUTRO agente (FASE O), fora do escopo. Sem commit (fila DS6).
+
+
 
 
 
@@ -144,6 +147,9 @@ Executar o contrato Foundation Zero no estado real do `main`, consolidando a fun
 - `scripts/lint-no-css-role-gating.mjs`
 - `src/test/no-css-role-gating-contract.test.ts`
 - `src/test/seller-routes-canonical-contract.test.ts`
+- `src/test/page-canvas-invariants-contract.test.ts`
+- `src/test/focus-interaction-contract.test.ts`
+- `src/design-system/page/PageViewport.tsx`
 - `src/test/foundation-zero-lint-chain-contract.test.ts`
 - `docs/reports/layout-route-inventory.json`
 - `src/design-system/page/routeLayoutMetadata.ts`

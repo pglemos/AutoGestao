@@ -114,6 +114,9 @@ html [data-sonner-toaster].mx-toaster {
   max-height: 100%;
   overflow-y: auto;
   overscroll-behavior: contain;
+  /* FASE P 16.006 — safe-area: o conteúdo rola acima da home indicator
+     sem ser coberto (móvel/PWA). */
+  padding-bottom: max(env(safe-area-inset-bottom, 0px), var(--mx-space-2, 8px));
 }
 
 @media (prefers-reduced-motion: reduce) {

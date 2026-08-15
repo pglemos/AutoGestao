@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type ComponentType, type PropsWithChildren } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { AlertMessage } from '@/components/molecules/AlertMessage'
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
+import { Sheet, SheetBody, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { toast } from "@/lib/toast"
 import { useIsMobile } from '@/hooks/useIsMobile'
 import ActionPlanHeader from '@/components/owner/actionplan/ActionPlanHeader'
@@ -52,6 +52,7 @@ const TypedSheetContent = SheetContent as ComponentType<PropsWithChildren<{
 }>>
 const TypedSheetHeader = SheetHeader as ComponentType<PropsWithChildren<{ className?: string }>>
 const TypedSheetTitle = SheetTitle as ComponentType<PropsWithChildren<{ className?: string }>>
+const TypedSheetBody = SheetBody as ComponentType<PropsWithChildren<{ className?: string }>>
 
 const operationLabels: Partial<Record<ActionTransitionOperation, string>> = {
   start: 'Ação iniciada.',
@@ -389,8 +390,9 @@ export function ActionPlanWorkspace({
       ) : null}
 
       <TypedSheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
-        <TypedSheetContent side="left" className="w-[85vw] overflow-y-auto sm:max-w-md">
+        <TypedSheetContent side="left" className="w-[85vw] sm:max-w-md">
           <TypedSheetHeader><TypedSheetTitle>Filtros</TypedSheetTitle></TypedSheetHeader>
+          <TypedSheetBody>
           <div className="mt-4">
             <ExecutiveFilters
               filters={controller.filters}
@@ -401,6 +403,7 @@ export function ActionPlanWorkspace({
               responsiblePeople={controller.responsiblePeople as never[]}
             />
           </div>
+          </TypedSheetBody>
         </TypedSheetContent>
       </TypedSheet>
 

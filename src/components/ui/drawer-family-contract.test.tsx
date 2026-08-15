@@ -106,4 +106,34 @@ describe('contrato FASE P — drawer/sheet family canônica', () => {
     walk(join(root, 'src'))
     expect(hits).toEqual([])
   })
+
+  test('16.006 — mx-overlay-body aplica safe-area inferior (não cobre a home indicator)', () => {
+    const css = read('src/design-system/tokens/components.css')
+    expect(css).toContain('env(safe-area-inset-bottom')
+    expect(css).toContain('.mx-overlay-body')
+    // O padding inferior do body garante que o último conteúdo rola acima da
+    // home indicator, e a folga mínima é o token de espaço (8px).
+    expect(css).toContain('max(env(safe-area-inset-bottom, 0px), var(--mx-space-2, 8px))')
+  })
+
+  test('16.016 — consumidores de ui/sheet usam SheetBody (único scroll owner, sem overflow-y-auto no Content)', () => {
+    const consumers = [
+      'src/components/owner/DetailDrawer.jsx',
+      'src/features/action-plan/ActionPlanWorkspace.tsx',
+      'src/components/execucao/ClienteFichaSheet.jsx',
+      'src/pages/owner/PlanoDeAcao.jsx',
+      'src/features/network-dashboard/components/NetworkDrilldownDrawer.tsx',
+      'src/features/central-execucao/components/FichaClienteSheet.tsx',
+      'src/features/mentor-comercial/ui/ExecuteNextStepPanel.tsx',
+      'src/components/owner/actionplan/calendar/CalendarView.jsx',
+    ]
+    for (const f of consumers) {
+      const src = read(f)
+      // Importa SheetBody (scroll owner canônico).
+      expect(src, f).toContain('SheetBody')
+      // Nenhum SheetContent com overflow-y-auto cru (o scroll é do SheetBody);
+      // overflow-y-auto no SheetBody é redundância inofensiva (o CSS já põe).
+      expect(src, f).not.toMatch(/<SheetContent[^>]*overflow-y-auto/)
+    }
+  })
 })

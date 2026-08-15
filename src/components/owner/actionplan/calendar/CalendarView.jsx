@@ -4,6 +4,7 @@ import { toast } from '@/lib/toast'
 import { useIsMobile } from "@/hooks/useIsMobile";
 import {
   Sheet,
+  SheetBody,
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -249,10 +250,11 @@ export default function CalendarView({
 
       {/* Mobile filters drawer */}
       <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
-        <SheetContent side="left" className="w-[85vw] sm:max-w-md overflow-y-auto">
+        <SheetContent side="left" className="w-[85vw] sm:max-w-md">
           <SheetHeader>
             <SheetTitle>Filtros</SheetTitle>
           </SheetHeader>
+          <SheetBody>
           <div className="mt-4">
             <ExecutiveFilters
               filters={filters}
@@ -263,18 +265,21 @@ export default function CalendarView({
               responsiblePeople={responsiblePeople}
             />
           </div>
+          </SheetBody>
         </SheetContent>
       </Sheet>
 
       {/* Mobile day details drawer */}
       <Sheet open={isMobile && mobileDetailsOpen} onOpenChange={setMobileDetailsOpen}>
-        <SheetContent side="bottom" className="h-[80vh] overflow-y-auto">
+        <SheetContent side="bottom" className="h-[80vh]">
           <SheetHeader>
             <SheetTitle>Detalhes do dia</SheetTitle>
           </SheetHeader>
+          <SheetBody>
           <div className="mt-4">
             <CalendarSidebar {...sidebarProps} />
           </div>
+          </SheetBody>
         </SheetContent>
       </Sheet>
 

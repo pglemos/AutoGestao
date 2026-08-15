@@ -1,6 +1,6 @@
 import type { ComponentType, PropsWithChildren } from 'react'
 import { Button } from '@/components/atoms/Button'
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
+import { Sheet, SheetBody, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import type { NetworkCockpitStore, PersonEvolution } from '../types'
 import { PersonEvolutionList } from './PersonEvolutionList'
 import { SourceTrace } from './SourceTrace'
@@ -16,6 +16,7 @@ const TypedSheetContent = SheetContent as ComponentType<PropsWithChildren<{
   side?: 'top' | 'right' | 'bottom' | 'left'
   className?: string
 }>>
+const TypedSheetBody = SheetBody as ComponentType<PropsWithChildren<{ className?: string }>>
 const TypedSheetHeader = SheetHeader as ComponentType<PropsWithChildren<{ className?: string }>>
 const TypedSheetTitle = SheetTitle as ComponentType<PropsWithChildren<{ className?: string }>>
 
@@ -28,8 +29,9 @@ export function NetworkDrilldownDrawer({ store, open, onOpenChange, onNavigate, 
 }) {
   return (
     <TypedSheet open={open} onOpenChange={onOpenChange}>
-      <TypedSheetContent side="right" className="w-full overflow-y-auto sm:max-w-3xl">
+      <TypedSheetContent side="right" className="w-full sm:max-w-3xl">
         <TypedSheetHeader><TypedSheetTitle>{store?.name || 'Detalhes da loja'}</TypedSheetTitle></TypedSheetHeader>
+        <TypedSheetBody>
         {store ? (
           <div className="mt-5 space-y-4">
             <div className="flex flex-wrap gap-2">
@@ -46,6 +48,7 @@ export function NetworkDrilldownDrawer({ store, open, onOpenChange, onNavigate, 
             <SourceTrace sources={store.sources} />
           </div>
         ) : null}
+        </TypedSheetBody>
       </TypedSheetContent>
     </TypedSheet>
   )

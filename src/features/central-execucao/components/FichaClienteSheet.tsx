@@ -47,7 +47,7 @@ export function FichaClienteSheet({
           </div>
         </SheetHeader>
 
-        <SheetBody className="min-h-0 flex-1 overflow-y-auto p-5">
+        <SheetBody className="min-h-0 flex-1 p-5">
           {loading ? (
             <div className="space-y-3">
               {[0, 1, 2].map(item => <div key={item} className="h-24 animate-pulse rounded-2xl bg-muted" />)}
