@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'bun:test'
-import { execFileSync } from 'node:child_process'
+
+import { scanSourceFiles } from './lib/scanSourceFiles'
 
 /**
  * FASE G — 07.009
@@ -13,26 +14,22 @@ import { execFileSync } from 'node:child_process'
  * arquivos de teste/spec/story.
  */
 const EXCLUDED = [
-  ':!src/base44-reference/**',
-  ':!src/**/*.test.*',
-  ':!src/**/*.spec.*',
-  ':!src/**/*.stories.*',
+  '**/base44-reference/**',
+  '**/*.test.*',
+  '**/*.spec.*',
+  '**/*.stories.*',
 ]
 
 function grepArbitraryPixelRadius(): string[] {
-  try {
-    const output = execFileSync(
-      'git',
-      ['grep', '--untracked', '-n', '-E', String.raw`rounded(-[a-z]+)?-\[[0-9]+px\]`, '--', 'src', ...EXCLUDED],
-      { encoding: 'utf8' },
-    )
-    return output.trim().split('\n').filter(Boolean)
-  } catch (error) {
-    // git grep sai com 1 quando não há match — esse é o estado desejado.
-    const status = (error as { status?: number }).status
-    if (status === 1) return []
-    throw error
+  // C8: varredura 100% fs — um `git grep` aqui retornaria vazio sob bun test
+  // (stdout de subprocesso engolido), fazendo o guard passar vacuamente.
+  const hits: string[] = []
+  for (const { rel, lines } of scanSourceFiles({ extraExcluded: EXCLUDED })) {
+    lines.forEach((line, idx) => {
+      if (/rounded(-[a-z]+)?-\[[0-9]+px\]/.test(line)) hits.push(`${rel}:${idx + 1}:${line.trim()}`)
+    })
   }
+  return hits
 }
 
 describe('07.009 radius arbitrário em pixel', () => {

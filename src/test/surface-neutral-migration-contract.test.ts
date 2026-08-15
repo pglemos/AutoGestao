@@ -1,46 +1,30 @@
 import { describe, expect, test } from 'bun:test'
-import { execFileSync } from 'node:child_process'
 
 import { applySurfaceNeutralRules } from '../../scripts/migrate-surface-neutral.mjs'
+import { scanSourceFiles } from './lib/scanSourceFiles'
+
+const SRC_EXCLUDED = [
+  '**/base44-reference/**',
+  '**/*.test.*',
+  '**/*.spec.*',
+  '**/*.playwright.*',
+  '**/_stories/**',
+  '**/design-system/tokens/**',
+  '**/index.css',
+  '**/WhatsApp*',
+  '**/RetornoWhatsApp*',
+]
 
 describe('07.017 surface-neutral migration', () => {
   test('runtime has no bg-gray/slate-200/300 utilities outside exceptions', () => {
-    let matches = ''
-    try {
-      matches = execFileSync(
-        'rg',
-        [
-          '-l',
-          'bg-(gray|slate)-(200|300)',
-          'src',
-          '--glob',
-          '*.{css,ts,tsx,js,jsx,mjs}',
-          '--glob',
-          '!**/base44-reference/**',
-          '--glob',
-          '!**/*.test.*',
-          '--glob',
-          '!**/*.spec.*',
-          '--glob',
-          '!**/*.playwright.*',
-          '--glob',
-          '!**/_stories/**',
-          '--glob',
-          '!**/design-system/tokens/**',
-          '--glob',
-          '!**/index.css',
-          '--glob',
-          '!**/WhatsApp*',
-          '--glob',
-          '!**/RetornoWhatsApp*',
-        ],
-        { encoding: 'utf8' },
-      ).trim()
-    } catch (error) {
-      if (error?.status !== 1) throw error
+    // C8: varredura 100% fs — um `rg` aqui retornaria vazio sob bun test
+    // (stdout de subprocesso engolido), fazendo o teste passar vacuamente.
+    const matches: string[] = []
+    for (const { rel, lines } of scanSourceFiles({ extraExcluded: SRC_EXCLUDED })) {
+      if (lines.some((line) => /bg-(gray|slate)-(200|300)/.test(line))) matches.push(rel)
     }
 
-    expect(matches).toBe('')
+    expect(matches).toEqual([])
   })
 
   test('maps all neutral surface shades to bg-muted', () => {

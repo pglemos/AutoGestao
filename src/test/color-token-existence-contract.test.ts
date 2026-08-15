@@ -1,7 +1,8 @@
 import { describe, expect, test } from 'bun:test'
-import { execFileSync } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
+
+import { scanSourceFiles } from './lib/scanSourceFiles'
 
 /**
  * Token de cor fantasma — guard de CLASSE.
@@ -28,33 +29,18 @@ function declaredColorTokens(): Set<string> {
 }
 
 function referencedColorTokens(): Map<string, string> {
-  let output = ''
-  try {
-    output = execFileSync(
-      'git',
-      [
-        'grep',
-        '--untracked',
-        '-n',
-        '-o',
-        '-E',
-        String.raw`var\(--color-[a-z0-9-]+\)`,
-        '--',
-        'src',
-        ':!src/base44-reference/**',
-        ':!src/**/*.test.*',
-      ],
-      { encoding: 'utf8' },
-    )
-  } catch (error) {
-    if ((error as { status?: number }).status !== 1) throw error
-  }
-
+  // C8: varredura 100% fs — um `git grep -o` aqui retornaria vazio sob bun test
+  // (stdout de subprocesso engolido), fazendo o guard passar vacuamente.
   const referenced = new Map<string, string>()
-  for (const line of output.trim().split('\n').filter(Boolean)) {
-    const token = line.slice(line.lastIndexOf('var(') + 4, line.lastIndexOf(')'))
-    const where = line.slice(0, line.indexOf(':', line.indexOf(':') + 1))
-    if (!referenced.has(token)) referenced.set(token, where)
+  for (const { rel, lines } of scanSourceFiles({
+    extraExcluded: ['**/base44-reference/**', '**/*.test.*'],
+  })) {
+    lines.forEach((line, idx) => {
+      for (const match of line.matchAll(/var\((--color-[a-z0-9-]+)\)/g)) {
+        const token = match[1]
+        if (!referenced.has(token)) referenced.set(token, `${rel}:${idx + 1}`)
+      }
+    })
   }
   return referenced
 }

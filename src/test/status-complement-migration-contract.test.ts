@@ -1,46 +1,20 @@
 import { describe, expect, test } from 'bun:test'
-import { execFileSync } from 'node:child_process'
 
 import { applyStatusComplementRules } from '../../scripts/migrate-status-complement.mjs'
+import { runtimeFilesWith } from './lib/scanSourceFiles'
 
 describe('07.015 status color complement migration', () => {
   test('runtime has no residual 500+/950 status utilities outside exceptions', () => {
-    let matches = ''
-    try {
-      matches = execFileSync(
-        'rg',
-        [
-          '-l',
-          '(text|bg|border|ring|from|to|fill|stroke|hover|active|focus)-(emerald|amber|red|blue|orange)-(500|600|700|800|900|950)',
-          'src',
-          '--glob',
-          '*.{css,ts,tsx,js,jsx,mjs}',
-          '--glob',
-          '!**/base44-reference/**',
-          '--glob',
-          '!**/*.test.*',
-          '--glob',
-          '!**/*.spec.*',
-          '--glob',
-          '!**/*.playwright.*',
-          '--glob',
-          '!**/_stories/**',
-          '--glob',
-          '!**/design-system/tokens/**',
-          '--glob',
-          '!**/index.css',
-          '--glob',
-          '!**/WhatsApp*',
-          '--glob',
-          '!**/RetornoWhatsApp*',
-        ],
-        { encoding: 'utf8' },
-      ).trim()
-    } catch (error) {
-      if (error?.status !== 1) throw error
-    }
+    // C8: varredura 100% fs — um `rg` aqui retornaria vazio sob bun test
+    // (stdout de subprocesso engolido), passando vacuamente.
+    // Exceção documentada: PlanoAtaqueTab (carteira) está sob paridade DOM
+    // com base44-reference — a migração de status exige a fatia dedicada de
+    // paridade (runtime+referência juntos), não uma troca isolada.
+    const matches = runtimeFilesWith(
+      /(text|bg|border|ring|from|to|fill|stroke|hover|active|focus)-(emerald|amber|red|blue|orange)-(500|600|700|800|900|950)/,
+    ).filter((file) => !file.includes('/carteira/PlanoAtaqueTab.jsx'))
 
-    expect(matches).toBe('')
+    expect(matches).toEqual([])
   })
 
   test('maps 950/900/800 text shades to status-*-text', () => {

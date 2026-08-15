@@ -1,46 +1,14 @@
 import { describe, expect, test } from 'bun:test'
-import { execFileSync } from 'node:child_process'
 
 import { applyMxLegacyAliasRules } from '../../scripts/migrate-mx-legacy-aliases.mjs'
+import { runtimeFilesWith } from './lib/scanSourceFiles'
 
 describe('07.016 mx legacy aliases migration (bug B1)', () => {
   test('runtime has no mx-green/mx-indigo/mx-teal legacy utilities outside token definitions', () => {
-    let matches = ''
-    try {
-      matches = execFileSync(
-        'rg',
-        [
-          '-l',
-          '(text|bg|border|ring|from|to|via|fill|stroke)-mx-(green|indigo|teal)[a-z0-9-]*',
-          'src',
-          '--glob',
-          '*.{css,ts,tsx,js,jsx,mjs}',
-          '--glob',
-          '!**/base44-reference/**',
-          '--glob',
-          '!**/*.test.*',
-          '--glob',
-          '!**/*.spec.*',
-          '--glob',
-          '!**/*.playwright.*',
-          '--glob',
-          '!**/_stories/**',
-          '--glob',
-          '!**/design-system/tokens/**',
-          '--glob',
-          '!**/index.css',
-          '--glob',
-          '!**/WhatsApp*',
-          '--glob',
-          '!**/RetornoWhatsApp*',
-        ],
-        { encoding: 'utf8' },
-      ).trim()
-    } catch (error) {
-      if (error?.status !== 1) throw error
-    }
-
-    expect(matches).toBe('')
+    // C8: varredura 100% fs — um `rg` aqui retornaria vazio sob bun test.
+    expect(
+      runtimeFilesWith(/(text|bg|border|ring|from|to|via|fill|stroke)-mx-(green|indigo|teal)[a-z0-9-]*/),
+    ).toEqual([])
   })
 
   test('maps surface aliases to bg-brand-primary-subtle', () => {

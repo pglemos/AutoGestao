@@ -1,47 +1,12 @@
 import { describe, expect, test } from 'bun:test'
-import { execFileSync } from 'node:child_process'
 
 import { applySurfaceAltRules } from '../../scripts/migrate-surface-alt.mjs'
+import { runtimeFilesWith } from './lib/scanSourceFiles'
 
 describe('07.019 surface-alt migration', () => {
   test('runtime has no bg-gray/slate-50/100 utilities outside exceptions', () => {
-    let matches = ''
-    try {
-      matches = execFileSync(
-        'rg',
-        [
-          '-P',
-          '-l',
-          'bg-(gray|slate)-(50|100)(?!\\d)',
-          'src',
-          '--glob',
-          '*.{css,ts,tsx,js,jsx,mjs}',
-          '--glob',
-          '!**/base44-reference/**',
-          '--glob',
-          '!**/*.test.*',
-          '--glob',
-          '!**/*.spec.*',
-          '--glob',
-          '!**/*.playwright.*',
-          '--glob',
-          '!**/_stories/**',
-          '--glob',
-          '!**/design-system/tokens/**',
-          '--glob',
-          '!**/index.css',
-          '--glob',
-          '!**/WhatsApp*',
-          '--glob',
-          '!**/RetornoWhatsApp*',
-        ],
-        { encoding: 'utf8' },
-      ).trim()
-    } catch (error) {
-      if (error?.status !== 1) throw error
-    }
-
-    expect(matches).toBe('')
+    // C8: varredura 100% fs — um `rg -P` aqui retornaria vazio sob bun test.
+    expect(runtimeFilesWith(/bg-(gray|slate)-(50|100)(?!\d)/)).toEqual([])
   })
 
   test('maps 50 shades to bg-surface-alt and 100 shades to bg-muted', () => {

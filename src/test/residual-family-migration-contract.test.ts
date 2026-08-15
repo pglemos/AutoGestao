@@ -1,44 +1,14 @@
 import { describe, expect, test } from 'bun:test'
-import { execFileSync } from 'node:child_process'
 
 import { applyResidualFamilyRules } from '../../scripts/migrate-residual-families.mjs'
+import { runtimeFilesWith } from './lib/scanSourceFiles'
 
 describe('07.010 residual color family migration', () => {
   test('runtime has no legacy green/indigo/sky/cyan/teal/yellow utilities outside whatsapp', () => {
-    let matches = ''
-    try {
-      matches = execFileSync(
-        'rg',
-        [
-          '-l',
-          '(text|bg|border|ring|from|to|fill|stroke)-(green|indigo|sky|cyan|teal|yellow)-[0-9]+',
-          'src',
-          '--glob',
-          '*.{css,ts,tsx,js,jsx,mjs}',
-          '--glob',
-          '!**/base44-reference/**',
-          '--glob',
-          '!**/*.test.*',
-          '--glob',
-          '!**/*.spec.*',
-          '--glob',
-          '!**/_stories/**',
-          '--glob',
-          '!**/design-system/tokens/**',
-          '--glob',
-          '!**/index.css',
-          '--glob',
-          '!**/WhatsApp*',
-          '--glob',
-          '!**/RetornoWhatsApp*',
-        ],
-        { encoding: 'utf8' },
-      ).trim()
-    } catch (error) {
-      if (error?.status !== 1) throw error
-    }
-
-    expect(matches).toBe('')
+    // C8: varredura 100% fs — um `rg` aqui retornaria vazio sob bun test.
+    expect(
+      runtimeFilesWith(/(text|bg|border|ring|from|to|fill|stroke)-(green|indigo|sky|cyan|teal|yellow)-[0-9]+/),
+    ).toEqual([])
   })
 
   test('maps green to the brand-primary family', () => {

@@ -1,63 +1,20 @@
 import { describe, expect, test } from 'bun:test'
-import { execFileSync } from 'node:child_process'
 
 import { applyPurpleLegacyRules } from '../../scripts/migrate-purple-legacy.mjs'
+import { runtimeFilesWith } from './lib/scanSourceFiles'
 
 describe('07.007 purple/violet color migration', () => {
   test('runtime has no legacy purple style utilities or purple button hex', () => {
-    let matches = ''
-    try {
-      matches = execFileSync(
-        'rg',
-        [
-          '-i',
-          '-n',
-          '--pcre2',
-          '#6d28d9|#7c3aed|shadow-(?:purple|violet)-|(?:bg|text|border|ring|from|to|fill|stroke|divide|accent)-(?:purple|violet)(?:-|/)',
-          'src',
-          '--glob',
-          '*.{css,ts,tsx,js,jsx}',
-          '--glob',
-          '!**/base44-reference/**',
-          '--glob',
-          '!**/*.test.*',
-          '--glob',
-          '!**/*.spec.*',
-        ],
-        { encoding: 'utf8' },
-      ).trim()
-    } catch (error) {
-      if (error?.status !== 1) throw error
-    }
-
-    expect(matches).toBe('')
+    // C8: varredura 100% fs — um `rg --pcre2 -i` aqui retornaria vazio sob bun test.
+    expect(
+      runtimeFilesWith(
+        /#6d28d9|#7c3aed|shadow-(?:purple|violet)-|(?:bg|text|border|ring|from|to|fill|stroke|divide|accent)-(?:purple|violet)(?:-|\/)/i,
+      ),
+    ).toEqual([])
   })
 
   test('runtime has no temporary accent-purple token references', () => {
-    let matches = ''
-    try {
-      matches = execFileSync(
-        'rg',
-        [
-          '-l',
-          'accent-purple',
-          'src',
-          '--glob',
-          '*.{css,ts,tsx,js,jsx,mjs}',
-          '--glob',
-          '!**/base44-reference/**',
-          '--glob',
-          '!**/*.test.*',
-          '--glob',
-          '!**/*.spec.*',
-        ],
-        { encoding: 'utf8' },
-      ).trim()
-    } catch (error) {
-      if (error?.status !== 1) throw error
-    }
-
-    expect(matches).toBe('')
+    expect(runtimeFilesWith(/accent-purple/)).toEqual([])
   })
 
   test('converges legacy and temporary accent aliases to the canonical info family', () => {

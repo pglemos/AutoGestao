@@ -4,6 +4,8 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { test, expect } from 'bun:test';
 
+import { scanSourceFiles } from './lib/scanSourceFiles';
+
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const guidelinePath = join(root, '.superpowers/mx-foundation-zero/typography/guideline-t4.md');
 
@@ -33,14 +35,22 @@ const ALLOWLIST_PATTERNS = [
 ];
 
 function tsxFiles(): string[] {
-  try {
-    return execSync(
-      `rg -l "uppercase|tracking-|text-\\[|text-2xl|text-3xl|text-4xl|text-5xl|text-6xl" src --glob '*.{tsx,ts,jsx}' -g '!**/*.test.*' -g '!**/*.playwright.ts' -g '!**/_stories/**' -g '!**/base44-reference/**' 2>/dev/null || true`,
-      { cwd: root, encoding: 'utf-8' }
-    ).split('\n').filter(Boolean);
-  } catch {
-    return [];
+  // C8: varredura 100% fs — um `rg` aqui retornaria vazio sob bun test
+  // (stdout de subprocesso engolido), fazendo o gate passar vacuamente.
+  const hits: string[] = []
+  for (const { rel, lines } of scanSourceFiles({
+    extraExcluded: [
+      '**/*.test.*',
+      '**/*.playwright.ts',
+      '**/_stories/**',
+      '**/base44-reference/**',
+    ],
+  })) {
+    if (lines.some((line) => /uppercase|tracking-|text-\[|text-2xl|text-3xl|text-4xl|text-5xl|text-6xl/.test(line))) {
+      hits.push(rel)
+    }
   }
+  return hits
 }
 
 export function runTypographyGate(): number {

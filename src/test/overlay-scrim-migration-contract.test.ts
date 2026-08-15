@@ -1,46 +1,12 @@
 import { describe, expect, test } from 'bun:test'
-import { execFileSync } from 'node:child_process'
 
 import { applyOverlayScrimRules } from '../../scripts/migrate-overlay-scrim.mjs'
+import { runtimeFilesWith } from './lib/scanSourceFiles'
 
 describe('07.018 overlay-scrim migration', () => {
   test('runtime has no bg-black utilities outside exceptions', () => {
-    let matches = ''
-    try {
-      matches = execFileSync(
-        'rg',
-        [
-          '-l',
-          'bg-black',
-          'src',
-          '--glob',
-          '*.{css,ts,tsx,js,jsx,mjs}',
-          '--glob',
-          '!**/base44-reference/**',
-          '--glob',
-          '!**/*.test.*',
-          '--glob',
-          '!**/*.spec.*',
-          '--glob',
-          '!**/*.playwright.*',
-          '--glob',
-          '!**/_stories/**',
-          '--glob',
-          '!**/design-system/tokens/**',
-          '--glob',
-          '!**/index.css',
-          '--glob',
-          '!**/WhatsApp*',
-          '--glob',
-          '!**/RetornoWhatsApp*',
-        ],
-        { encoding: 'utf8' },
-      ).trim()
-    } catch (error) {
-      if (error?.status !== 1) throw error
-    }
-
-    expect(matches).toBe('')
+    // C8: varredura 100% fs — um `rg` aqui retornaria vazio sob bun test.
+    expect(runtimeFilesWith(/bg-black/)).toEqual([])
   })
 
   test('maps solid and opacity scrims to bg-surface-overlay', () => {
