@@ -24,7 +24,7 @@ import { toast } from '@/lib/toast'
 import { TabNav } from '@/components/molecules/TabNav'
 import { useStores } from '@/hooks/useStores'
 import { useAuth } from '@/hooks/useAuth'
-import { ActionPlanBoard } from './planos-acao/ActionPlanBoard'
+import { ActionPlanKanban } from './planos-acao/ActionPlanKanban'
 import { ActionPlanDetailDrawer } from './planos-acao/ActionPlanDetailDrawer'
 import { boardMetrics, type BoardPlan, type PlanStatus } from './planos-acao/actionPlanBoard'
 import { ApplyTemplateModal } from './planos-acao/ApplyTemplateModal'
@@ -268,7 +268,7 @@ export function AdminPlanosAcaoGlobalPage() {
             {view === 'kanban' ? (
               <MxSectionCard>
                 <MxSectionHeader title="Board da rede" description={`${filtered.length} plano(s) no board. Clique num card para abrir o detalhe.`} />
-                <div className="p-5"><ActionPlanBoard plans={boardPlans} onOpen={setOpenPlan} /></div>
+                <div className="p-5"><ActionPlanKanban plans={boardPlans} onOpen={setOpenPlan} /></div>
               </MxSectionCard>
             ) : (
             <MxSectionCard>

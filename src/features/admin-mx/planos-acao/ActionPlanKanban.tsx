@@ -8,7 +8,7 @@ function formatDate(value: string | null) {
   return Number.isNaN(date.getTime()) ? 'sem prazo' : date.toLocaleDateString('pt-BR')
 }
 
-export function ActionPlanBoard(props: { plans: BoardPlan[]; onOpen: (plan: BoardPlan) => void }) {
+export function ActionPlanKanban(props: { plans: BoardPlan[]; onOpen: (plan: BoardPlan) => void }) {
   const groups = useMemo(() => groupPlansByColumn(props.plans), [props.plans])
 
   if (!props.plans.length) {
