@@ -259,7 +259,7 @@ export function AdminClienteDetalhePage() {
                           {visits.map(visit => (
                             <TableRow key={visit.id}>
                               <TableCell className="font-semibold text-foreground">Visita {visit.visit_number}</TableCell>
-                              <TableCell>{formatDate(visit.effective_visit_date ?? visit.scheduled_at)}</TableCell>
+                              <TableCell>{formatDate(visit.scheduled_at)}</TableCell>
                               <TableCell>{visit.modality || '—'}</TableCell>
                               <TableCell>{visit.status || '—'}</TableCell>
                             </TableRow>
