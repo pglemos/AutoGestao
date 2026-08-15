@@ -6,7 +6,7 @@ Levantamento honesto do que existe no export `mx-admin-flow` e do que o MX tem h
 
 | Rota | Base44 (arquivos / linhas) | MX hoje | Cobertura estimada |
 |---|---|---|---|
-| `/clientes` | 23 / 5.571 | lista + wizard de cadastro | ~25% |
+| `/clientes` | 23 / 5.571 | lista + wizard + **Visão 360 + ativação** | ~50% |
 | `/equipe` | 8 / 1.311 | lista + editar + carteira + **perfil do consultor** | ~65% |
 | `/produtos` | 4 / 691 | **ciclo de vida + módulos + tempos** | ~85% |
 | `/indicadores` | 34 / 6.630 | lista + criar/editar | ~8% |
@@ -17,8 +17,8 @@ Levantamento honesto do que existe no export `mx-admin-flow` e do que o MX tem h
 ## O que falta, por rota
 
 ### `/clientes`
-- **Visão 360** (`ClienteDetalhe`, 563 l): abas de lojas, usuários, jornada, progresso, informações gerais, contato principal.
-- **Ativação com checklist** (`ActivationModal`): prontidão, itens impeditivos vs informativos, reparo de matriz.
+- ~~Visão 360 com abas (lojas, pessoas, jornada, progresso, informações gerais)~~ — **feito**.
+- ~~Ativação com checklist separando impeditivo de informativo~~ — **feito** (falta o reparo de matriz).
 - **Gestão de lojas do cliente**: criar/editar loja, horário de funcionamento com padrão MX.
 - **Pessoas e acessos**: criar usuário com papéis, lojas autorizadas, Dono Master; link de autocadastro com validade e limite de usos.
 - **Configuração por cliente**: tolerância de fechamento, limite de vendedores, retenção, canais de notificação.
@@ -65,7 +65,7 @@ Sem elas, parte do gap não fecha: qualificação de consultor por produto e por
 
 1. ~~`/produtos` — ciclo de vida + abas Módulos e Tempos~~ — feito.
 2. ~~`/equipe` — perfil do consultor com programas, encontros e capacidade~~ — feito.
-3. `/clientes` — Visão 360 e ativação com checklist.
+3. ~~`/clientes` — Visão 360 e ativação com checklist~~ — feito.
 4. `/planos-acao` — kanban, detalhe em abas, wizard por cliente.
 5. `/indicadores` — ordem, wizard, drawer, parâmetros.
 6. `/consultoria-mx` — metodologia por produto e editor de encontro.
