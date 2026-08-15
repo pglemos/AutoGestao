@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { BrainCircuit } from 'lucide-react'
+import { BrainCircuit, RefreshCw } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { getDiasInfo } from '@/lib/calculations'
 import { useDashboardLojaData } from '@/features/dashboard-loja/hooks/useDashboardLojaData'
@@ -10,6 +10,7 @@ import { ManagerMentorRecommendations } from '@/features/manager/mentor/ManagerM
 import { ManagerMentorStatusCard } from '@/features/manager/mentor/ManagerMentorStatusCard'
 import { buildMentorRecommendations, resolveMentorSituation } from '@/features/manager/mentor/manager-mentor-rules'
 import { PageCanvas } from '@/design-system/page'
+import { PageFooterActions } from '@/components/molecules/PageFooterActions'
 
 export default function ManagerMentor() {
   const { storeId, activeStoreId, membership } = useAuth()
@@ -93,6 +94,18 @@ export default function ManagerMentor() {
           <p className="mt-2 text-sm font-medium text-status-info-text">Orientações baseadas em regras oficiais</p>
           <p className="mt-1 text-xs text-status-info-text">O Mentor não inventa números nem executa ações no lugar do gerente.</p>
         </section>
+
+        <PageFooterActions>
+          <button
+            type="button"
+            onClick={() => void deterministic.refresh?.()}
+            disabled={deterministic.loading}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-primary px-6 py-2.5 text-body-sm font-bold text-white transition-colors hover:bg-brand-primary-hover focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mx-action/20 disabled:opacity-50 sm:w-auto"
+          >
+            <RefreshCw size={16} className={deterministic.loading ? 'animate-spin' : ''} aria-hidden="true" />
+            Atualizar recomendações
+          </button>
+        </PageFooterActions>
     </PageCanvas>
   )
 }
