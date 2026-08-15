@@ -46,6 +46,25 @@ const preview: Preview = {
       element: '#storybook-root',
       manual: false,
     },
+    viewport: {
+      viewports: {
+        mobile: {
+          name: 'Mobile 390px',
+          styles: { width: '390px', height: '844px' },
+          type: 'mobile',
+        },
+        tablet: {
+          name: 'Tablet 768px',
+          styles: { width: '768px', height: '1024px' },
+          type: 'tablet',
+        },
+        desktop: {
+          name: 'Desktop 1440px',
+          styles: { width: '1440px', height: '900px' },
+          type: 'desktop',
+        },
+      },
+    },
     layout: 'centered',
   },
   tags: ['autodocs'],
