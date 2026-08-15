@@ -18,8 +18,7 @@ import {
   MxStatusBanner,
   MxTextarea,
 } from '@/components/module/MxModuleVisualPrimitives'
-import { useStores } from '@/hooks/useStores'
-import { useAdminConsultingProducts, useAdminTeam } from './hooks/useAdminMxLists'
+import { useAdminConsultingProducts, useAdminTeam, useStoresWithoutActiveClient } from './hooks/useAdminMxLists'
 import { createClientProgram } from './novo-cliente/createClientProgram'
 import {
   NEW_CLIENT_STEPS,
@@ -46,7 +45,7 @@ export function AdminNovoClientePage() {
   const { width, bottomClearance } = resolveRouteLayout(location.pathname)
   const products = useAdminConsultingProducts()
   const team = useAdminTeam()
-  const { lojas } = useStores()
+  const availableStores = useStoresWithoutActiveClient()
   const [draft, setDraft] = useState<NewClientDraft>(emptyNewClientDraft)
   const [step, setStep] = useState(1)
   const [submitting, setSubmitting] = useState(false)
@@ -156,10 +155,10 @@ export function AdminNovoClientePage() {
                   </div>
                 ))}
                 <Button type="button" variant="outline" onClick={() => patch({ units: [...draft.units, { name: '', city: '', state: '', is_primary: false }] })}><Plus size={16} />Adicionar loja</Button>
-                <MxField label="Loja principal no sistema" hint="Sem loja vinculada o cliente é criado inativo — o banco exige loja para ativar.">
+                <MxField label="Loja principal no sistema" hint="Só aparecem lojas sem cliente ativo. Sem vínculo, o cliente é criado inativo.">
                   <MxSelect aria-label="Loja principal no sistema" value={draft.primary_store_id} onChange={event => patch({ primary_store_id: event.target.value })}>
                     <option value="">Sem loja vinculada (cliente inativo)</option>
-                    {lojas.map(store => <option key={store.id} value={store.id}>{store.name}</option>)}
+                    {availableStores.rows.map(store => <option key={store.id} value={store.id}>{store.name}</option>)}
                   </MxSelect>
                 </MxField>
                 <MxField label="Fase empresarial" hint="Momento do negócio — orienta a priorização da jornada.">
@@ -267,7 +266,7 @@ export function AdminNovoClientePage() {
                   ['CNPJ', draft.cnpj || '—'],
                   ['Estrutura', draft.structure_type === 'LOJA_UNICA' ? 'Loja única' : 'Rede'],
                   ['Lojas', String(draft.units.filter(unit => unit.name.trim()).length)],
-                  ['Loja principal', lojas.find(store => store.id === draft.primary_store_id)?.name || 'Sem vínculo — cliente nasce inativo'],
+                  ['Loja principal', availableStores.rows.find(store => store.id === draft.primary_store_id)?.name || 'Sem vínculo — cliente nasce inativo'],
                   ['Fase empresarial', BUSINESS_PHASES.find(phase => phase.value === draft.business_phase)?.label || '—'],
                   ['Produto', draft.product_name || '—'],
                   ['Modalidade', draft.modality || '—'],

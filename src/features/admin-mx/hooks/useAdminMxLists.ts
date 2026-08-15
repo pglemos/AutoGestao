@@ -102,6 +102,30 @@ export async function saveConsultingProduct(input: ConsultingProductInput): Prom
   return { error: error?.message ?? null }
 }
 
+export type AvailableStore = { id: string; name: string }
+
+/**
+ * Lojas que ainda podem receber um cliente: o índice parcial
+ * `clientes_consultoria_one_active_per_store_uidx` só admite um cliente ativo
+ * por loja, então oferecer as ocupadas garantiria um 409 na gravação.
+ */
+export function useStoresWithoutActiveClient(): QueryState<AvailableStore> {
+  return useSupabaseList<AvailableStore>('lojas disponíveis', async () => {
+    const [{ data: stores, error }, { data: taken }] = await Promise.all([
+      supabase.from('lojas').select('id, name').order('name', { ascending: true }),
+      supabase.from('clientes_consultoria').select('primary_store_id, status'),
+    ])
+    if (error) throw new Error(error.message)
+    const busy = new Set(
+      (taken ?? [])
+        .filter(client => ['ativo', 'ativa', 'active'].includes(String(client.status ?? '').toLowerCase()))
+        .map(client => client.primary_store_id)
+        .filter((id): id is string => Boolean(id)),
+    )
+    return (stores ?? []).filter(store => !busy.has(store.id)) as AvailableStore[]
+  })
+}
+
 export type AdminIndicator = {
   metric_key: string
   label: string | null

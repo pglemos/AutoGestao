@@ -37,7 +37,17 @@ export async function createClientProgram(draft: NewClientDraft, createdBy: stri
     .select('id, slug')
     .single()
 
-  if (insertError || !client) return { clientId: null, slug: null, error: insertError?.message ?? 'Falha ao criar o cliente.' }
+  if (insertError || !client) {
+    // 23505 no índice parcial = a loja já tem um cliente ativo.
+    const duplicateStore = insertError?.code === '23505' && insertError.message.includes('one_active_per_store')
+    return {
+      clientId: null,
+      slug: null,
+      error: duplicateStore
+        ? 'Esta loja já tem um cliente ativo na consultoria. Escolha outra loja ou deixe sem vínculo.'
+        : insertError?.message ?? 'Falha ao criar o cliente.',
+    }
+  }
 
   const rollback = async (message: string): Promise<CreateClientProgramResult> => {
     await supabase.from('clientes_consultoria').update({ status: 'arquivado' }).eq('id', client.id)
