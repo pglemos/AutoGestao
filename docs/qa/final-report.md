@@ -12,8 +12,9 @@
 | Campo | Valor |
 |---|---|
 | SHA inicial (base da FASE AM) | `cd03df2a` (conforme instrução) |
-| SHA atual (HEAD, 2026-08-15) | `60bba07a37dc2952b8e8e346504f07079105b9cd` |
+| SHA atual (HEAD, 2026-08-15 atualizado) | `d1ad4ef192c758449bff2c1cf880cc8317694c00` |
 | **Observação** | `cd03df2a` **NÃO é ancestral** do HEAD atual — o working tree foi reescrito/rebaseado desde o início. O SHA inicial real deve ser confirmado na release (FASE AK). |
+| **FINAL_CANDIDATE_SHA do release-candidate.md** | `b083b6fb0c8bf63337db2d58b6a1f60307fc3cea` — **34 commits atrás** do HEAD atual (`git rev-list --count b083b6fb..HEAD` = 34); as fases Z/AA/AF/I/T/etc. NÃO estão no candidato registrado. O candidato final deve ser re-avaliado no freeze (37.001/37.004). |
 | SHA final (após release) | **PENDENTE (após release)** |
 
 **Status:** PARCIAL — inicial/atual coletados; final pendente.
@@ -112,8 +113,8 @@
 ## 39.010 — Viewport cases pass/total
 
 **EVIDÊNCIA DETERMINÁVEL (2026-08-15):**
-- FASE AF Viewport Matrix: **464 PASS em 25 rotas** × 8 viewports (commit `62c3529e`, `docs/execution/2026-08-14-viewport-matrix.md`).
-- FASE W: 320/390/768/1280/1440 cobertos por `playwright.config.ts` (visual-desktop/tablet/mobile/mobile-360/mobile-412).
+- FASE AF Viewport Matrix completa: **1824 PASS / 0 FAIL / 32 SKIP** (24 viewports+modos: 320/360/390/412/599/600/639/640/768/839/840/1023/1024/1199/1200/1279/1280/1440/1599/1600/1920 + zoom-200/reduced-motion/safe-area) em 29 rotas × 5 perfis (runIds `fase-af-{vp}-ds4-20260815`); 32 skip = consultor_mx sem credencial.
+- FASE W: 320/390/768/1280/1440 cobertos por `playwright.config.ts` (visual-desktop/tablet/mobile/mobile-360/mobile-412) + 925 capturas harness (10 breakpoints de borda).
 - `shell-contract.playwright.ts`: 320px sem overflow global, 390 drawer, 1440 desktop.
 - **Re-execução pós-release:** PENDENTE (FASE AK 37.012).
 
