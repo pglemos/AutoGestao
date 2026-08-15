@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { motion } from 'motion/react'
 import { RefreshCw, ShieldCheck, Sparkles, WifiOff } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
@@ -8,16 +9,20 @@ import { CheckinHeader } from './sections/CheckinHeader'
 import { CheckinForm } from './sections/CheckinForm'
 import { CheckinErrorBoundary } from './components/CheckinErrorBoundary'
 import { useCheckinPage } from './hooks/useCheckinPage'
-import { PageCanvas } from '@/design-system/page'
+import { PageCanvas, resolveRouteLayout } from '@/design-system/page'
 
 /**
  * Checkin.container — orquestra a tela de Fechamento Diário (UX-001 / ADR-0050).
  * Mantém estados intermediários (loading, sem permissão) e compõe header/form.
  */
-export function Checkin() {
-    const { role } = useAuth()
-    const ctx = useCheckinPage()
-    const {
+ export function Checkin() {
+     const { role } = useAuth()
+     const ctx = useCheckinPage()
+     const location = useLocation()
+     // /fechamento-diario (vendedor) usa clearance actions; /terminal-mx usa
+     // navigation — clearance resolvido da metadata da rota (FASE Z).
+     const pageBottomClearance = resolveRouteLayout(location.pathname).bottomClearance
+     const {
         hookLoading,
         referenceDate,
         checkinLoadError,
@@ -92,7 +97,7 @@ const previousCard = ctx.activeClosingContext.previousCard
 
   return (
     <div className="relative min-h-full w-full min-w-0 bg-surface-alt no-scrollbar">
-      <PageCanvas width="dashboard" bottomClearance="navigation" className="flex flex-col gap-4">
+      <PageCanvas width="dashboard" bottomClearance={pageBottomClearance} className="flex flex-col gap-4">
             {checkinLoadError && (
                 <div role="alert" className="rounded-2xl border border-status-error/20 bg-status-error-surface px-mx-md py-mx-sm text-sm font-bold text-status-error-text">
                     {checkinLoadError}

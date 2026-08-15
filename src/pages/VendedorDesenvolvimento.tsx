@@ -8,12 +8,16 @@
 //
 // A referência continua congelada e serve de comparação; o comportamento vive
 // aqui, sob os primitives do Foundation Zero.
-import { PageCanvas } from '@/design-system/page'
+import { useLocation } from 'react-router-dom'
+import { PageCanvas, resolveRouteLayout } from '@/design-system/page'
 import VendedorDesenvolvimentoPage from '@/features/vendedor-desenvolvimento/VendedorDesenvolvimentoPage.jsx'
 
 export default function VendedorDesenvolvimento() {
+  const location = useLocation()
+  // /desenvolvimento e /devolutivas: width/clearance da metadata da rota.
+  const pageLayout = resolveRouteLayout(location.pathname)
   return (
-    <PageCanvas as="div" width="focused" className="min-h-full">
+    <PageCanvas as="div" width={pageLayout.width} bottomClearance={pageLayout.bottomClearance} className="min-h-full">
       <VendedorDesenvolvimentoPage />
     </PageCanvas>
   )

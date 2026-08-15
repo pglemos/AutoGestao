@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useState, type ComponentProps } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useDashboardLojaData } from '@/features/dashboard-loja/hooks/useDashboardLojaData'
 import { ManagerHomeReturnLink } from '@/features/manager/home/ManagerHomeReturnLink'
 import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/lib/toast'
-import { PageCanvas } from '@/design-system/page'
+import { PageCanvas, resolveRouteLayout } from '@/design-system/page'
 import {
   buildManagerRoutineNavigationPath,
   calculateManagerRoutineDaysLate,
@@ -56,6 +56,9 @@ type CanonicalManagerTaskRow = {
 
 export function ManagerDayRoutineCanonical() {
   const navigate = useNavigate()
+  const location = useLocation()
+  // /rotina é focused/navigation (FASE Z); width/clearance da metadata.
+  const pageLayout = resolveRouteLayout(location.pathname)
   const { profile, storeId, membership } = useAuth()
   const dashboard = useDashboardLojaData({
     selectedStoreId: storeId,
@@ -267,7 +270,7 @@ export function ManagerDayRoutineCanonical() {
     : null
 
   return (
-    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-5">
+    <PageCanvas as="div" width={pageLayout.width} bottomClearance={pageLayout.bottomClearance} className="flex flex-col gap-5">
       <ManagerDayRoutineView
         returnLink={<ManagerHomeReturnLink />}
         referenceDate={referenceDate}

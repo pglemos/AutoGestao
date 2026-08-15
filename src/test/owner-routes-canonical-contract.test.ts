@@ -79,6 +79,50 @@ describe('FASE Y — rotas do Dono usam o mesmo sistema (25.003)', () => {
   })
 })
 
+describe('FASE Z — rotas do Gerente usam o mesmo sistema (26.x)', () => {
+  test('/home Gerente resolve width/clearance da metadata via DashboardLoja dinâmico', () => {
+    const dashboard = read('src/features/dashboard-loja/DashboardLoja.container.tsx')
+    expect(dashboard).toContain('resolveRouteLayout(location.pathname)')
+    expect(dashboard).toContain('bottomClearance={pageBottomClearance}')
+    const meta = read('src/design-system/page/routeLayoutMetadata.ts')
+    expect(meta).toMatch(/home:\s*\{ width: 'dashboard', bottomClearance: 'navigation', adopted: true \}/)
+  })
+
+  test('/fechamento-diario usa ManagerDailyClosing (PageCanvas actions) e Checkin resolve clearance da metadata', () => {
+    const closing = read('src/features/manager/daily-closing/ManagerDailyClosing.container.tsx')
+    expect(closing).toContain('PageCanvas')
+    expect(closing).toContain('bottomClearance="actions"')
+    const checkin = read('src/features/checkin/Checkin.container.tsx')
+    expect(checkin).toContain('resolveRouteLayout(location.pathname).bottomClearance')
+    const meta = read('src/design-system/page/routeLayoutMetadata.ts')
+    expect(meta).toMatch(/'fechamento-diario': \{ width: 'dashboard', bottomClearance: 'actions', adopted: true \}/)
+  })
+
+  test('/rotina Gerente usa ManagerDayRoutineCanonical com width/clearance da metadata', () => {
+    const rotina = read('src/features/manager/day-routine/ManagerDayRoutineCanonical.container.tsx')
+    expect(rotina).toContain('PageCanvas')
+    expect(rotina).toContain('width={pageLayout.width}')
+    const meta = read('src/design-system/page/routeLayoutMetadata.ts')
+    expect(meta).toMatch(/rotina:\s*\{ width: 'focused', bottomClearance: 'navigation', adopted: true \}/)
+  })
+
+  test('/devolutivas é focused/navigation para todos os perfis (paridade Dono/Gerente)', () => {
+    for (const f of [
+      'src/features/gerente-feedback/containers/AdminFeedback.container.tsx',
+      'src/features/gerente-feedback/containers/StoreFeedback.container.tsx',
+      'src/features/gerente-feedback/sections/FeedbackLoadingSkeleton.tsx',
+    ]) {
+      const page = read(f)
+      expect(page).toContain('resolveRouteLayout')
+      expect(page).toContain('width={pageLayout.width}')
+    }
+    const vendedor = read('src/pages/VendedorDesenvolvimento.tsx')
+    expect(vendedor).toContain('width={pageLayout.width}')
+    const meta = read('src/design-system/page/routeLayoutMetadata.ts')
+    expect(meta).toMatch(/devolutivas:\s*\{ width: 'focused', bottomClearance: 'navigation', adopted: true \}/)
+  })
+})
+
 describe('FASE Y/Z — sem drift regressivo (25.010)', () => {
   test('shell emite main#main-content único e monta Dono sem shell separado', () => {
     const shell = read('src/components/MxSidebarShell.tsx')

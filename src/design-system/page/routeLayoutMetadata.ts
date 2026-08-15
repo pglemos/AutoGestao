@@ -46,9 +46,9 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   // ------------------------------------------------------------- dashboards
   // Visões de indicadores: aproveitam a largura, limitadas a 1400px para que
   // os cards não virem faixas em telas ultrawide (§14.4).
-  // VendedorHome (vendedor) usa clearance navigation; DashboardLoja (demais)
-  // usa default — divergência multi-perfil, adoção exige alinhar os dois.
-  home: { width: 'dashboard' },
+   // VendedorHome (vendedor) usa clearance navigation; DashboardLoja (demais)
+   // resolve clearance da metadata (FASE Z, paridade Dono/Gerente).
+   home: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   painel: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'meu-dia': { width: 'dashboard', bottomClearance: 'navigation' },
   'central-de-execucao': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
@@ -77,7 +77,8 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'lojas/:storeSlug/equipe': { width: 'wide', adopted: true },
   'lojas/:storeSlug/consultor-ia': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'lojas/:storeSlug/filiais': { width: 'wide', bottomClearance: 'navigation', adopted: true },
-  clientes: { width: 'wide' },
+  // /clientes é a lista administrativa da carteira consultiva (admin MX).
+  clientes: { width: 'wide', bottomClearance: 'navigation', adopted: true },
   carteira: { width: 'wide' },
   'carteira-clientes': { width: 'wide', bottomClearance: 'navigation', adopted: true },
   'vendedor/carteira': { width: 'wide', bottomClearance: 'navigation' },
@@ -104,6 +105,13 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'consultoria/clientes/:clientSlug': { width: 'wide', bottomClearance: 'navigation', adopted: true },
   'consultoria/clientes/:clientSlug/visitas/:visitNumber': { width: 'wide', bottomClearance: 'navigation', adopted: true },
 
+  // ------------------------------------------------- administração MX (admin)
+  // Listas densas do módulo Administrador: mesma largura do CRM de consultoria.
+  'clientes/novo': { width: 'wide', bottomClearance: 'navigation', adopted: true },
+  'consultoria-mx': { width: 'wide', bottomClearance: 'navigation', adopted: true },
+  indicadores: { width: 'wide', bottomClearance: 'navigation', adopted: true },
+  'planos-acao': { width: 'wide', bottomClearance: 'navigation', adopted: true },
+
   // ------------------------------------------------------------------- funis
   // Colunas de funil precisam de largura; a rolagem horizontal é do board,
   // não da página (§14.5).
@@ -119,13 +127,12 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   // --------------------------------------------------- fluxos e formulários
   // Barra de ações fixa: a reserva impede que o botão salvar cubra o último
   // campo (§15).
-  // Checkin (vendedor) usa clearance navigation; ManagerDailyClosing (gerente)
-  // usa actions — divergência multi-perfil, adoção exige alinhar os dois.
-  'fechamento-diario': { width: 'dashboard', bottomClearance: 'actions' },
+   // Checkin (vendedor) resolve clearance da metadata (actions em
+   // fechamento-diario, navigation em terminal-mx); ManagerDailyClosing usa actions.
+   'fechamento-diario': { width: 'dashboard', bottomClearance: 'actions', adopted: true },
   'lancamento-diario': { width: 'focused', bottomClearance: 'actions' },
-  // RotinaGerente/DashboardLoja/ManagerDayRoutine divergem em clearance —
-  // multi-perfil, adoção exige alinhar os três.
-  rotina: { width: 'focused', bottomClearance: 'actions' },
+   // RotinaGerente/DashboardLoja usam clearance da metadata — navigation.
+   rotina: { width: 'focused', bottomClearance: 'navigation', adopted: true },
   'rotina-do-dia': { width: 'focused', bottomClearance: 'actions' },
   'vendedor/rotina-do-dia': { width: 'focused', bottomClearance: 'actions' },
   'rotina-equipe': { width: 'focused', bottomClearance: 'actions', adopted: true },
@@ -181,9 +188,9 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'universidade-mx': { width: 'dashboard', adopted: true },
   'vendedor/universidade-mx': { width: 'focused' },
   feedback: { width: 'focused' },
-  feedbacks: { width: 'focused' },
-  devolutivas: { width: 'focused' },
-  'vendedor/devolutivas': { width: 'focused' },
+   feedbacks: { width: 'focused' },
+   devolutivas: { width: 'focused', bottomClearance: 'navigation', adopted: true },
+   'vendedor/devolutivas': { width: 'focused' },
   'vendedor/feedback': { width: 'focused' },
   'feedbacks-pdis': { width: 'focused', adopted: true },
   // GerentePDI para gerente, dono e admin; vendedor é redirect. `dashboard` e

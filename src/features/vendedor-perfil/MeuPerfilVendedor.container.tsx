@@ -85,7 +85,7 @@ export default function MeuPerfilVendedorContainer() {
 
     if (loading) {
         return (
-            <PageTemplate as="div" width="dashboard" className="flex flex-col gap-mx-xl" aria-busy="true">
+            <PageTemplate as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-xl" aria-busy="true">
                 <Skeleton className="h-16 w-full max-w-md" />
                 <div className="grid grid-cols-1 gap-mx-lg lg:grid-cols-2">
                     {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-48 w-full" />)}
