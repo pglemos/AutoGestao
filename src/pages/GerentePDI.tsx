@@ -117,7 +117,7 @@ export default function GerentePDI() {
                                 name="pdi-search"
                                 placeholder="BUSCAR PLANO..." value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="!pl-11 !h-12 text-caption font-bold"
+                                className="pl-12 text-caption font-bold"
                             />
                         </div>
                         <Button variant="outline" size="icon" onClick={handleRefresh} aria-label="Atualizar lista de PDIs" className="h-mx-xl w-mx-xl bg-white hover:bg-surface-alt">

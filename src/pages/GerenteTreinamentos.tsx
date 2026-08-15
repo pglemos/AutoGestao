@@ -245,7 +245,7 @@ export default function GerenteTreinamentos() {
                                 <Input 
                                     placeholder="BUSCAR CONTEÚDO..." value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="!pl-11 !h-12 text-caption font-bold"
+                                    className="pl-12 text-caption font-bold"
                                 />
                             </div>
                         </div>

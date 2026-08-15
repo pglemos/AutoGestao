@@ -56,3 +56,23 @@ describe('FASE I — PageCanvas é o único dono da geometria (09.007-010/018)',
     expect(canvas).toContain('data-mx-page-clearance={bottomClearance}')
   })
 })
+
+describe('FASE I — sticky com token e sem segundo scroller (09.020/021)', () => {
+  test('sticky elements usam o token de elevação, não z-index arbitrário', () => {
+    const tokens = read('src/design-system/tokens/components.css')
+    expect(tokens).toContain('--mx-z-sticky: 10')
+    const liveFloor = read('src/features/ranking/components/LiveFloor.tsx')
+    expect(liveFloor).toContain('var(--mx-z-sticky)')
+  })
+
+  test('PageTemplate não cria segundo scroll owner (delega ao PageViewport)', () => {
+    const template = read('src/components/templates/PageTemplate.tsx')
+    expect(template).toContain('PageCanvas')
+    expect(template).not.toMatch(/overflow-y-(auto|scroll)/)
+  })
+
+  test('rotas com bottom navigation declaram clearance navigation', () => {
+    const meta = read('src/design-system/page/routeLayoutMetadata.ts')
+    expect(meta).toContain("bottomClearance: 'navigation'")
+  })
+})

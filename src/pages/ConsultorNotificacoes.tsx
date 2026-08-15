@@ -106,7 +106,7 @@ export default function ConsultorNotificacoes() {
                                     <div className="space-y-mx-lg">
                                         <div className="space-y-mx-sm">
                                             <Typography variant="caption" tone="muted" className="ml-2">Assunto Estratégico</Typography>
-                                            <Input value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} placeholder="Ex: Alerta de Ritmo Semanal" required className="!h-14 px-6 font-bold" />
+                                            <Input value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} placeholder="Ex: Alerta de Ritmo Semanal" required className="h-[var(--mx-input-height-lg)] px-6 font-bold" />
                                         </div>
                                         <div className="space-y-mx-sm">
                                             <Typography variant="caption" tone="muted" className="ml-2">Corpo da Mensagem</Typography>

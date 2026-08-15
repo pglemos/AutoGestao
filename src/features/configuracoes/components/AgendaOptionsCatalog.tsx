@@ -250,7 +250,7 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
               placeholder="BUSCAR OPÇÃO..."
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
-              className="!h-mx-10 !pl-11 !text-mx-tiny uppercase tracking-widest"
+              className="text-mx-tiny uppercase tracking-widest"
             />
           </div>
         </div>

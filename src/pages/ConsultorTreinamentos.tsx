@@ -109,7 +109,7 @@ export default function ConsultorTreinamentos() {
                                     <div className="space-y-mx-lg">
                                         <div className="space-y-mx-sm">
                                             <Typography variant="caption" tone="muted" className="ml-2">Título da Aula</Typography>
-                                            <Input value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} placeholder="Ex: Masterizando o Script de Fechamento" required className="!h-14 px-6 font-bold" />
+                                            <Input value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} placeholder="Ex: Masterizando o Script de Fechamento" required className="h-[var(--mx-input-height-lg)] px-6 font-bold" />
                                         </div>
                                         <div className="space-y-mx-sm">
                                             <Typography variant="caption" tone="muted" className="ml-2">Ementa / Descrição</Typography>
@@ -124,7 +124,7 @@ export default function ConsultorTreinamentos() {
                                     <div className="space-y-mx-10">
                                         <div className="space-y-mx-sm">
                                             <Typography variant="caption" tone="muted" className="ml-2">URL do Material (Vídeo)</Typography>
-                                            <Input value={form.video_url} onChange={e => setForm(p => ({ ...p, video_url: e.target.value }))} placeholder="https://youtube.com/v/..." required className="!h-14 px-6 font-medium" />
+                                            <Input value={form.video_url} onChange={e => setForm(p => ({ ...p, video_url: e.target.value }))} placeholder="https://youtube.com/v/..." required className="h-[var(--mx-input-height-lg)] px-6 font-medium" />
                                         </div>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
                                             <div className="space-y-mx-sm">
@@ -156,12 +156,12 @@ export default function ConsultorTreinamentos() {
                                             )}
                                             <div className="space-y-mx-sm">
                                                 <Typography variant="caption" tone="muted" className="ml-2">Duração / XP</Typography>
-                                                <Input aria-label="Duração / XP" type="number" value={String(form.duration_minutes)} onChange={e => setForm(p => ({ ...p, duration_minutes: Number(e.target.value) || 15 }))} className="!h-14 px-6 font-bold" />
+                                                <Input aria-label="Duração / XP" type="number" value={String(form.duration_minutes)} onChange={e => setForm(p => ({ ...p, duration_minutes: Number(e.target.value) || 15 }))} className="h-[var(--mx-input-height-lg)] px-6 font-bold" />
                                             </div>
                                         </div>
                                         <div className="space-y-mx-sm">
                                             <Typography variant="caption" tone="muted" className="ml-2">Notas de Curadoria</Typography>
-                                            <Input value={form.curation_notes} onChange={e => setForm(p => ({ ...p, curation_notes: e.target.value }))} placeholder="Fonte, specialist, fornecedor ou revisão necessária" className="!h-14 px-6 font-bold" />
+                                            <Input value={form.curation_notes} onChange={e => setForm(p => ({ ...p, curation_notes: e.target.value }))} placeholder="Fonte, specialist, fornecedor ou revisão necessária" className="h-[var(--mx-input-height-lg)] px-6 font-bold" />
                                         </div>
                                     </div>
                                 </div>
