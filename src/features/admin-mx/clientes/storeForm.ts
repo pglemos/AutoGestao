@@ -17,6 +17,8 @@ export type StoreDraft = {
   status: StoreStatus
   opening_date: string
   notes: string
+  /** Loja principal da empresa — não permite trocar o tipo. */
+  is_primary: boolean
 }
 
 export const BRAZILIAN_UFS = [
@@ -39,6 +41,7 @@ export function emptyStoreDraft(type: StoreType = 'filial'): StoreDraft {
     status: 'ativa',
     opening_date: '',
     notes: '',
+    is_primary: type === 'matriz',
   }
 }
 

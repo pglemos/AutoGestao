@@ -80,6 +80,6 @@ export function enrollmentLinkRemainingUses(input: {
   createdAt: string
   now?: Date
 }): number {
-  if (resolveEnrollmentLinkStatus(input) !== 'ativo') return 0
+  if (resolveEnrollmentLinkStatus({ ...input, status: 'ativo' }) !== 'ativo') return 0
   return Math.max(0, input.limiteUsos - input.usosConsumidos)
 }

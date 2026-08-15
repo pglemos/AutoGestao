@@ -40,8 +40,16 @@ export function buildDefaultOperatingHours(): OperatingHoursMap {
   ) as OperatingHoursMap
 }
 
+/** Linha de horário vinda do banco, com tipos soltos para tolerar nulos. */
+export type StoredOperatingHourRow = {
+  day_of_week?: string | null
+  is_open?: boolean | null
+  opening_time?: string | null
+  closing_time?: string | null
+}
+
 /** Normaliza uma lista vinda do banco para o mapa do editor. */
-export function mapHoursToEditor(rows: Array<Partial<OperatingHourEntry> & { day_of_week?: string }>): OperatingHoursMap {
+export function mapHoursToEditor(rows: StoredOperatingHourRow[]): OperatingHoursMap {
   const base = buildDefaultOperatingHours()
   for (const row of rows ?? []) {
     const day = (row.day_of_week ?? '') as OperatingHourDay
