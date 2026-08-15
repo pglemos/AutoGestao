@@ -8168,6 +8168,53 @@ export type Database = {
           },
         ]
       }
+      modulos_produto_consultoria: {
+        Row: {
+          created_at: string
+          etapa: string | null
+          id: string
+          incluido: boolean
+          label: string
+          module_key: string
+          obrigatorio: boolean
+          program_key: string
+          updated_at: string
+          visibilidade: string
+        }
+        Insert: {
+          created_at?: string
+          etapa?: string | null
+          id?: string
+          incluido?: boolean
+          label: string
+          module_key: string
+          obrigatorio?: boolean
+          program_key: string
+          updated_at?: string
+          visibilidade?: string
+        }
+        Update: {
+          created_at?: string
+          etapa?: string | null
+          id?: string
+          incluido?: boolean
+          label?: string
+          module_key?: string
+          obrigatorio?: boolean
+          program_key?: string
+          updated_at?: string
+          visibilidade?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "modulos_produto_consultoria_program_key_fkey"
+            columns: ["program_key"]
+            isOneToOne: false
+            referencedRelation: "programas_visita_consultoria"
+            referencedColumns: ["program_key"]
+          },
+        ]
+      }
       modulos_sistema: {
         Row: {
           codigo: string
@@ -10191,28 +10238,63 @@ export type Database = {
         Row: {
           active: boolean
           created_at: string
+          descricao: string | null
+          max_presenciais: number | null
+          min_presenciais: number | null
+          modalidade: string | null
           name: string
           program_key: string
+          published_at: string | null
+          published_by: string | null
+          status: string
           total_visits: number
           updated_at: string
+          usa_plano_estrategico: boolean
+          versao: number
         }
         Insert: {
           active?: boolean
           created_at?: string
+          descricao?: string | null
+          max_presenciais?: number | null
+          min_presenciais?: number | null
+          modalidade?: string | null
           name: string
           program_key: string
+          published_at?: string | null
+          published_by?: string | null
+          status?: string
           total_visits?: number
           updated_at?: string
+          usa_plano_estrategico?: boolean
+          versao?: number
         }
         Update: {
           active?: boolean
           created_at?: string
+          descricao?: string | null
+          max_presenciais?: number | null
+          min_presenciais?: number | null
+          modalidade?: string | null
           name?: string
           program_key?: string
+          published_at?: string | null
+          published_by?: string | null
+          status?: string
           total_visits?: number
           updated_at?: string
+          usa_plano_estrategico?: boolean
+          versao?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "programas_visita_consultoria_published_by_fkey"
+            columns: ["published_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       progresso_etapa_trilha: {
         Row: {
@@ -12638,6 +12720,50 @@ export type Database = {
           trace_id?: string | null
         }
         Relationships: []
+      }
+      tempos_encontro_produto: {
+        Row: {
+          created_at: string
+          horas_online: number | null
+          horas_presencial: number | null
+          id: string
+          observacao: string | null
+          origem: string
+          program_key: string
+          updated_at: string
+          visit_number: number
+        }
+        Insert: {
+          created_at?: string
+          horas_online?: number | null
+          horas_presencial?: number | null
+          id?: string
+          observacao?: string | null
+          origem?: string
+          program_key: string
+          updated_at?: string
+          visit_number: number
+        }
+        Update: {
+          created_at?: string
+          horas_online?: number | null
+          horas_presencial?: number | null
+          id?: string
+          observacao?: string | null
+          origem?: string
+          program_key?: string
+          updated_at?: string
+          visit_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tempos_encontro_produto_program_key_fkey"
+            columns: ["program_key"]
+            isOneToOne: false
+            referencedRelation: "programas_visita_consultoria"
+            referencedColumns: ["program_key"]
+          },
+        ]
       }
       tokens_oauth_consultoria: {
         Row: {
