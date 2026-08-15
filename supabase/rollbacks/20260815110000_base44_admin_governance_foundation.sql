@@ -1,3 +1,4 @@
+-- DOWN
 -- Rollback: 20260815110000_base44_admin_governance_foundation.sql
 -- Seguro enquanto esta fundação ainda não tiver dados produtivos dependentes.
 -- A ordem abaixo respeita as FKs internas da camada de governança.
