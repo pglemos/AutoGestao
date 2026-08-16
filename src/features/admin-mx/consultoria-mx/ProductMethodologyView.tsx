@@ -51,8 +51,13 @@ export function ProductMethodologyView(props: {
   }, [product.program_key, product.total_visits])
 
   useEffect(() => {
-    const draft = product.versions.find(version => version.status === 'rascunho') ?? product.versions.find(version => version.status === 'em_revisao')
-    setDraftVersion(draft ? { id: draft.id, status: draft.status, methodology_version_number: draft.methodology_version_number } : null)
+    // Sem rascunho aberto, a tela abre a versão publicada em leitura: dizer
+    // "nenhuma versão metodológica" com 12 encontros configurados escondia o
+    // conteúdo publicado e sugeria recriar o que já existe.
+    const editable = product.versions.find(version => version.status === 'rascunho')
+      ?? product.versions.find(version => version.status === 'em_revisao')
+    const current = editable ?? product.versions.find(version => version.status === 'publicado')
+    setDraftVersion(current ? { id: current.id, status: current.status, methodology_version_number: current.methodology_version_number } : null)
     void loadEncounters()
   }, [product, loadEncounters])
 
@@ -107,6 +112,11 @@ export function ProductMethodologyView(props: {
           )}
           {draftVersion?.status === 'rascunho' && (
             <Button size="sm" onClick={() => void publishDraft()}>Publicar Metodologia</Button>
+          )}
+          {draftVersion?.status === 'publicado' && (
+            <Button size="sm" variant="outline" onClick={() => void createDraft()} disabled={creating}>
+              <Plus size={16} />{creating ? 'Criando...' : 'Nova Versão'}
+            </Button>
           )}
           {!draftVersion && (
             <Button size="sm" onClick={() => void createDraft()} disabled={creating}>
