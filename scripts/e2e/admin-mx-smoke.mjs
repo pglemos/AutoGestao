@@ -29,8 +29,10 @@ async function dlg(){ return page.locator('[role="dialog"]').first().innerText()
 
 // 1. /clientes → Visão 360 + abas
 errs.length=0
-await page.goto(`${BASE}/clientes`,{waitUntil:'domcontentloaded'}); await page.waitForTimeout(4500)
-await clicarNoMain('Abrir')
+await page.goto(`${BASE}/clientes`,{waitUntil:'domcontentloaded'}); await page.waitForTimeout(6000)
+// A carteira administrativa rotula o link como "Abrir Visão 360"; o CRM antigo
+// usa só "Abrir". O smoke serve as duas.
+await clicarNoMain('Abrir Visão 360') || await clicarNoMain('Abrir')
 const url=page.url().replace(BASE,''); const a360=await abas()
 check('/clientes → Visão 360 pela lista', url.startsWith('/clientes/') && a360.length>=5, `${url.slice(0,30)} abas=${a360.length}`)
 let okAbas=true

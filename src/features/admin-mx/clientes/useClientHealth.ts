@@ -44,8 +44,10 @@ export function useClientHealth(clientId: string | undefined, storeId: string | 
         supabase.from('resultados_metricas_cliente').select('id, reference_date').eq('client_id', clientId).order('reference_date', { ascending: false }).limit(400),
         supabase.from('itens_plano_acao').select('id, updated_at').eq('client_id', clientId),
         storeId
-          ? supabase.from('lancamentos_diarios').select('id, data').eq('loja_id', storeId).order('data', { ascending: false }).limit(400)
-          : Promise.resolve({ data: [] as Array<{ id: string; data: string | null }> }),
+          // A tabela usa store_id/date; loja_id/data devolvia 400 e a fonte
+          // aparecia como "sem dado" mesmo com lançamento na loja.
+          ? supabase.from('lancamentos_diarios').select('id, date').eq('store_id', storeId).order('date', { ascending: false }).limit(400)
+          : Promise.resolve({ data: [] as Array<{ id: string; date: string | null }> }),
         supabase.from('consultoria_itens_entrega').select('id, updated_at, status').eq('client_id', clientId),
         supabase.from('logs_auditoria').select('id, action, entity, entity_id, created_at, user_id').eq('entity_id', clientId).order('created_at', { ascending: false }).limit(40),
         supabase.from('historico_planos_acao').select('id, event_type, event_note, changed_at, changed_by, plano_id').order('changed_at', { ascending: false }).limit(40),
@@ -69,7 +71,7 @@ export function useClientHealth(clientId: string | undefined, storeId: string | 
 
       setSources([
         classifyDataSource({ key: 'visitas', label: 'Encontros da jornada', rows: visits.data?.length ?? 0, lastAt: first(visits.data, 'scheduled_at') }),
-        classifyDataSource({ key: 'lancamentos', label: 'Lançamentos diários da loja', rows: launches.data?.length ?? 0, lastAt: first(launches.data, 'data') }),
+        classifyDataSource({ key: 'lancamentos', label: 'Lançamentos diários da loja', rows: launches.data?.length ?? 0, lastAt: first(launches.data, 'date') }),
         classifyDataSource({ key: 'metas', label: 'Metas de indicadores', rows: targets.data?.length ?? 0, lastAt: first(targets.data, 'updated_at') }),
         classifyDataSource({ key: 'resultados', label: 'Resultados de indicadores', rows: results.data?.length ?? 0, lastAt: first(results.data, 'reference_date') }),
         classifyDataSource({ key: 'planos', label: 'Itens de plano de ação', rows: plans.data?.length ?? 0, lastAt: first(plans.data, 'updated_at') }),
