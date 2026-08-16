@@ -5,10 +5,10 @@
 - Rotas públicas: **8**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
-- Tabelas referenciadas pelo runtime: **170**
+- Tabelas referenciadas pelo runtime: **172**
 - RPCs referenciadas pelo runtime: **88**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **362**
+- Pares tabela/operação encontrados: **364**
 
 ## Rotas
 
@@ -165,7 +165,7 @@
 | `configuracoes_cliente_consultoria` | 1 |
 | `conjuntos_parametros_consultoria` | 3 |
 | `consultor_solucoes` | 3 |
-| `consultoria_itens_entrega` | 1 |
+| `consultoria_itens_entrega` | 2 |
 | `contatos_cliente_consultoria` | 4 |
 | `conteudo_encontro` | 1 |
 | `conteudo_referencia_encontro` | 1 |
@@ -192,14 +192,15 @@
 | `financeiro_consultoria` | 4 |
 | `funnel_metrics` | 1 |
 | `guia_consultor_encontro` | 1 |
-| `historico_planos_acao` | 1 |
+| `historico_planos_acao` | 2 |
 | `historico_valores_indicadores_planejamento` | 2 |
 | `horarios_funcionamento_unidade` | 1 |
 | `importacoes_brutas` | 1 |
 | `indice_felicidade_agregado` | 1 |
-| `itens_plano_acao` | 2 |
-| `lancamentos_diarios` | 15 |
+| `itens_plano_acao` | 3 |
+| `lancamentos_diarios` | 16 |
 | `links_autocadastro_cliente` | 1 |
+| `logs_auditoria` | 1 |
 | `logs_auditoria_consultoria_mx` | 1 |
 | `logs_auditoria_loja` | 2 |
 | `logs_compartilhamento_whatsapp` | 1 |
@@ -217,7 +218,7 @@
 | `mentor_status_definitions` | 1 |
 | `mentor_transitions` | 1 |
 | `metas` | 4 |
-| `metas_metricas_cliente` | 3 |
+| `metas_metricas_cliente` | 4 |
 | `modelos_formulario_pmr` | 1 |
 | `modelos_relatorio` | 1 |
 | `modulos_cliente_consultoria` | 7 |
@@ -263,7 +264,7 @@
 | `remuneracao_planos` | 3 |
 | `remuneracao_regras` | 1 |
 | `respostas_formulario_pmr` | 1 |
-| `resultados_metricas_cliente` | 1 |
+| `resultados_metricas_cliente` | 2 |
 | `reunioes_google_meet_atas` | 1 |
 | `roles` | 1 |
 | `routine_activity_templates` | 2 |
@@ -290,7 +291,7 @@
 | `universidade_certificacoes` | 1 |
 | `universidade_trilhas` | 1 |
 | `user_roles` | 1 |
-| `usuarios` | 20 |
+| `usuarios` | 21 |
 | `valores_indicadores_planejamento` | 2 |
 | `valores_parametros_consultoria` | 3 |
 | `vehicle_model_catalog` | 1 |
@@ -303,7 +304,8 @@
 | `vinculo_plano_acao_encontro` | 1 |
 | `vinculos_equipe_loja` | 1 |
 | `vinculos_loja` | 17 |
-| `visitas_consultoria` | 10 |
+| `visitas_consultoria` | 11 |
+| `vw_jornada_alem_do_contratado` | 1 |
 
 ## Operações por tabela
 
@@ -375,7 +377,7 @@
 | `consultor_solucoes:insert` | 1 |
 | `consultor_solucoes:select` | 2 |
 | `consultor_solucoes:update` | 1 |
-| `consultoria_itens_entrega:select` | 1 |
+| `consultoria_itens_entrega:select` | 2 |
 | `contatos_cliente_consultoria:insert` | 3 |
 | `contatos_cliente_consultoria:select` | 4 |
 | `contatos_cliente_consultoria:update` | 1 |
@@ -439,7 +441,7 @@
 | `funnel_metrics:select` | 1 |
 | `guia_consultor_encontro:select` | 1 |
 | `guia_consultor_encontro:upsert` | 1 |
-| `historico_planos_acao:select` | 1 |
+| `historico_planos_acao:select` | 2 |
 | `historico_valores_indicadores_planejamento:select` | 2 |
 | `horarios_funcionamento_unidade:insert` | 1 |
 | `horarios_funcionamento_unidade:select` | 1 |
@@ -447,9 +449,9 @@
 | `importacoes_brutas:insert` | 1 |
 | `indice_felicidade_agregado:select` | 1 |
 | `itens_plano_acao:insert` | 2 |
-| `itens_plano_acao:select` | 1 |
+| `itens_plano_acao:select` | 2 |
 | `itens_plano_acao:update` | 1 |
-| `lancamentos_diarios:select` | 15 |
+| `lancamentos_diarios:select` | 16 |
 | `links_autocadastro_cliente:insert` | 1 |
 | `links_autocadastro_cliente:select` | 1 |
 | `links_autocadastro_cliente:update` | 1 |
@@ -457,6 +459,7 @@
 | `logs_auditoria_consultoria_mx:select` | 1 |
 | `logs_auditoria_loja:insert` | 1 |
 | `logs_auditoria_loja:select` | 1 |
+| `logs_auditoria:select` | 1 |
 | `logs_compartilhamento_whatsapp:insert` | 1 |
 | `logs_reprocessamento:insert` | 1 |
 | `logs_reprocessamento:select` | 1 |
@@ -480,7 +483,7 @@
 | `mentor_scripts:select` | 1 |
 | `mentor_status_definitions:select` | 1 |
 | `mentor_transitions:select` | 1 |
-| `metas_metricas_cliente:select` | 3 |
+| `metas_metricas_cliente:select` | 4 |
 | `metas_metricas_cliente:upsert` | 1 |
 | `metas:delete` | 1 |
 | `metas:insert` | 1 |
@@ -593,7 +596,7 @@
 | `respostas_formulario_pmr:insert` | 1 |
 | `respostas_formulario_pmr:select` | 1 |
 | `respostas_formulario_pmr:update` | 1 |
-| `resultados_metricas_cliente:select` | 1 |
+| `resultados_metricas_cliente:select` | 2 |
 | `resultados_metricas_cliente:upsert` | 1 |
 | `reunioes_google_meet_atas:select` | 1 |
 | `roles:select` | 1 |
@@ -634,7 +637,7 @@
 | `user_roles:select` | 1 |
 | `user_roles:update` | 1 |
 | `usuarios:delete` | 1 |
-| `usuarios:select` | 17 |
+| `usuarios:select` | 18 |
 | `usuarios:update` | 6 |
 | `usuarios:upsert` | 1 |
 | `valores_indicadores_planejamento:select` | 2 |
@@ -669,8 +672,9 @@
 | `vinculos_loja:update` | 1 |
 | `visitas_consultoria:delete` | 2 |
 | `visitas_consultoria:insert` | 5 |
-| `visitas_consultoria:select` | 10 |
+| `visitas_consultoria:select` | 11 |
 | `visitas_consultoria:update` | 4 |
+| `vw_jornada_alem_do_contratado:select` | 1 |
 
 ## RPCs
 

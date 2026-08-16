@@ -13616,6 +13616,76 @@ export type Database = {
           },
         ]
       }
+      snapshots_ativacao_cliente: {
+        Row: {
+          activated_at: string
+          activated_by: string | null
+          checklist: Json
+          client_id: string
+          consultores: number
+          contatos: number
+          created_at: string
+          id: string
+          modulos: number
+          primary_store_id: string | null
+          product_name: string | null
+          program_key: string | null
+          unidades: number
+        }
+        Insert: {
+          activated_at?: string
+          activated_by?: string | null
+          checklist?: Json
+          client_id: string
+          consultores?: number
+          contatos?: number
+          created_at?: string
+          id?: string
+          modulos?: number
+          primary_store_id?: string | null
+          product_name?: string | null
+          program_key?: string | null
+          unidades?: number
+        }
+        Update: {
+          activated_at?: string
+          activated_by?: string | null
+          checklist?: Json
+          client_id?: string
+          consultores?: number
+          contatos?: number
+          created_at?: string
+          id?: string
+          modulos?: number
+          primary_store_id?: string | null
+          product_name?: string | null
+          program_key?: string | null
+          unidades?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "snapshots_ativacao_cliente_activated_by_fkey"
+            columns: ["activated_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snapshots_ativacao_cliente_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clientes_consultoria"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snapshots_ativacao_cliente_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
+          },
+        ]
+      }
       snapshots_estoque_consultoria: {
         Row: {
           active_stock: number | null
@@ -17392,9 +17462,17 @@ export type Database = {
           solucao_id: string
         }[]
       }
+      consumir_convite_autocadastro: {
+        Args: { p_token: string }
+        Returns: boolean
+      }
       contar_vendedores_ativos_loja: {
         Args: { p_store_id: string }
         Returns: number
+      }
+      convite_autocadastro_valido: {
+        Args: { p_token: string }
+        Returns: boolean
       }
       create_pdi_session_bundle: { Args: { p_payload: Json }; Returns: string }
       criar_agendamento_crm: { Args: { p_payload: Json }; Returns: Json }
@@ -17729,6 +17807,13 @@ export type Database = {
           p_type: string
         }
         Returns: Json
+      }
+      expirar_convites_autocadastro: {
+        Args: never
+        Returns: {
+          esgotados: number
+          expirados: number
+        }[]
       }
       expirar_delegacoes_vencidas: { Args: never; Returns: number }
       exportar_contatos_cadastros_mx: {
