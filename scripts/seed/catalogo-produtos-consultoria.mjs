@@ -81,6 +81,18 @@ for (const produto of PRODUTOS) {
         objective = excluded.objective, reason = excluded.reason,
         required_participant_roles = excluded.required_participant_roles, updated_at = now();
     `)
+    // Estrutura do produto: é ela que nomeia os encontros na jornada da tela
+    // de metodologia (etapas_modelo_visita_consultoria), separada do conteúdo
+    // metodológico versionado.
+    await sql(`
+      insert into public.etapas_modelo_visita_consultoria
+        (program_key, visit_number, objective, target, duration, active)
+      values (${lit(produto.program_key)}, ${encontro.n}, ${lit(encontro.motivo)}, ${lit(encontro.alvo)},
+              ${lit(encontro.formato_ou_tempo || null)}, true)
+      on conflict (program_key, visit_number) do update set
+        objective = excluded.objective, target = excluded.target,
+        duration = excluded.duration, updated_at = now();
+    `)
     // Modalidade prevista do encontro vira hora presencial ou online.
     const presencial = String(encontro.formato_ou_tempo).toLowerCase().includes('presencial')
     await sql(`
