@@ -47,6 +47,14 @@ export function useClientHealth(clientId: string | undefined, storeId: string | 
         supabase.from('historico_planos_acao').select('id, event_type, event_note, changed_at, changed_by, plano_id').order('changed_at', { ascending: false }).limit(40),
       ])
 
+      // Jornada além do contratado: sintoma de produto mal vinculado, não de
+      // excesso de execução. A view existe justamente para a equipe ver isso.
+      const { data: overrun } = await supabase
+        .from('vw_jornada_alem_do_contratado')
+        .select('contratadas, maior_encontro')
+        .eq('client_id', clientId)
+        .maybeSingle()
+
       const first = <T extends Record<string, unknown>>(rows: T[] | null | undefined, field: string) =>
         rows?.length ? (rows[0][field] as string | null) ?? null : null
 
@@ -57,6 +65,23 @@ export function useClientHealth(clientId: string | undefined, storeId: string | 
         classifyDataSource({ key: 'resultados', label: 'Resultados de indicadores', rows: results.data?.length ?? 0, lastAt: first(results.data, 'reference_date') }),
         classifyDataSource({ key: 'planos', label: 'Itens de plano de ação', rows: plans.data?.length ?? 0, lastAt: first(plans.data, 'updated_at') }),
         classifyDataSource({ key: 'entregas', label: 'Entregas dos encontros', rows: evidences.data?.length ?? 0, lastAt: first(evidences.data, 'updated_at') }),
+        overrun
+          ? {
+              key: 'jornada-contratada',
+              label: 'Jornada dentro do contratado',
+              rows: overrun.maior_encontro ?? 0,
+              lastAt: null,
+              status: 'desatualizado' as const,
+              detail: `Encontro ${overrun.maior_encontro} registrado com ${overrun.contratadas} contratado(s) — revise o produto vinculado.`,
+            }
+          : {
+              key: 'jornada-contratada',
+              label: 'Jornada dentro do contratado',
+              rows: 0,
+              lastAt: null,
+              status: 'ok' as const,
+              detail: 'Nenhum encontro além do total contratado.',
+            },
       ])
 
       const userIds = [...new Set([

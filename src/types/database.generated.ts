@@ -77,6 +77,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "acessos_cliente_consultoria_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
+          },
+          {
             foreignKeyName: "acessos_cliente_consultoria_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
@@ -628,6 +635,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "arquivos_drive_consultoria_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
+          },
+          {
             foreignKeyName: "arquivos_drive_consultoria_deleted_by_fkey"
             columns: ["deleted_by"]
             isOneToOne: false
@@ -704,6 +718,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "clientes_consultoria"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consulting_generated_artifacts_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "consulting_generated_artifacts_generated_by_fkey"
@@ -821,6 +842,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "clientes_consultoria"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consulting_assignments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "consulting_assignments_user_id_fkey"
@@ -2376,6 +2404,7 @@ export type Database = {
       }
       clientes_consultoria: {
         Row: {
+          activated_at: string | null
           business_phase: string | null
           cnpj: string | null
           contract_end_date: string | null
@@ -2400,14 +2429,18 @@ export type Database = {
           primary_store_id: string | null
           product_name: string | null
           program_template_key: string
+          scheduled_activation_at: string | null
           slug: string
           source_import_key: string | null
           source_payload: Json
           status: string
           structure_type: string | null
+          suspended_at: string | null
+          suspended_reason: string | null
           updated_at: string
         }
         Insert: {
+          activated_at?: string | null
           business_phase?: string | null
           cnpj?: string | null
           contract_end_date?: string | null
@@ -2432,14 +2465,18 @@ export type Database = {
           primary_store_id?: string | null
           product_name?: string | null
           program_template_key?: string
+          scheduled_activation_at?: string | null
           slug: string
           source_import_key?: string | null
           source_payload?: Json
           status?: string
           structure_type?: string | null
+          suspended_at?: string | null
+          suspended_reason?: string | null
           updated_at?: string
         }
         Update: {
+          activated_at?: string | null
           business_phase?: string | null
           cnpj?: string | null
           contract_end_date?: string | null
@@ -2464,11 +2501,14 @@ export type Database = {
           primary_store_id?: string | null
           product_name?: string | null
           program_template_key?: string
+          scheduled_activation_at?: string | null
           slug?: string
           source_import_key?: string | null
           source_payload?: Json
           status?: string
           structure_type?: string | null
+          suspended_at?: string | null
+          suspended_reason?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -2492,6 +2532,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "clientes_consultoria"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "clientes_consultoria_merged_into_id_fkey"
+            columns: ["merged_into_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "consulting_clients_created_by_fkey"
@@ -2759,6 +2806,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "consulting_calendar_settings_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
+          },
+          {
             foreignKeyName: "consulting_calendar_settings_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
@@ -2811,6 +2865,13 @@ export type Database = {
             isOneToOne: true
             referencedRelation: "clientes_consultoria"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "configuracoes_cliente_consultoria_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: true
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "configuracoes_cliente_consultoria_updated_by_fkey"
@@ -3081,6 +3142,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "consultoria_itens_entrega_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
+          },
+          {
             foreignKeyName: "consultoria_itens_entrega_completed_by_fkey"
             columns: ["completed_by"]
             isOneToOne: false
@@ -3185,6 +3253,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "consultoria_participantes_encontro_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
+          },
+          {
             foreignKeyName: "consultoria_participantes_encontro_confirmed_by_fkey"
             columns: ["confirmed_by"]
             isOneToOne: false
@@ -3273,6 +3348,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "clientes_consultoria"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultoria_progresso_aula_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "consultoria_progresso_aula_lesson_id_fkey"
@@ -3368,6 +3450,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "consultoria_solicitacoes_antecipacao_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
+          },
+          {
             foreignKeyName: "consultoria_solicitacoes_antecipacao_requested_by_fkey"
             columns: ["requested_by"]
             isOneToOne: false
@@ -3438,6 +3527,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "clientes_consultoria"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consulting_client_contacts_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
           },
         ]
       }
@@ -4776,6 +4872,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "documentos_loja_cliente_consultoria_id_fkey"
+            columns: ["cliente_consultoria_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
+          },
+          {
             foreignKeyName: "documentos_loja_enviado_por_fkey"
             columns: ["enviado_por"]
             isOneToOne: false
@@ -4863,6 +4966,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "clientes_consultoria"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consulting_sales_entries_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "consulting_sales_entries_created_by_fkey"
@@ -5029,6 +5139,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "clientes_consultoria"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consulting_google_oauth_states_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "consulting_google_oauth_states_user_id_fkey"
@@ -6300,6 +6417,13 @@ export type Database = {
             referencedRelation: "clientes_consultoria"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "consulting_financials_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
+          },
         ]
       }
       funnel_metrics: {
@@ -6785,6 +6909,114 @@ export type Database = {
           },
         ]
       }
+      inscricoes_autocadastro_cliente: {
+        Row: {
+          client_id: string
+          created_at: string
+          data_nascimento: string | null
+          email: string
+          equipe_aprovada: string | null
+          funcao_declarada: string | null
+          id: string
+          link_id: string | null
+          loja_aprovada_id: string | null
+          loja_id: string | null
+          merged_into_id: string | null
+          motivo_devolucao: string | null
+          motivo_rejeicao: string | null
+          nome: string
+          papeis_aprovados: Json
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          telefone: string | null
+          updated_at: string
+          visao_padrao: string | null
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          data_nascimento?: string | null
+          email: string
+          equipe_aprovada?: string | null
+          funcao_declarada?: string | null
+          id?: string
+          link_id?: string | null
+          loja_aprovada_id?: string | null
+          loja_id?: string | null
+          merged_into_id?: string | null
+          motivo_devolucao?: string | null
+          motivo_rejeicao?: string | null
+          nome: string
+          papeis_aprovados?: Json
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          telefone?: string | null
+          updated_at?: string
+          visao_padrao?: string | null
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          data_nascimento?: string | null
+          email?: string
+          equipe_aprovada?: string | null
+          funcao_declarada?: string | null
+          id?: string
+          link_id?: string | null
+          loja_aprovada_id?: string | null
+          loja_id?: string | null
+          merged_into_id?: string | null
+          motivo_devolucao?: string | null
+          motivo_rejeicao?: string | null
+          nome?: string
+          papeis_aprovados?: Json
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          telefone?: string | null
+          updated_at?: string
+          visao_padrao?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inscricoes_autocadastro_cliente_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clientes_consultoria"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inscricoes_autocadastro_cliente_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
+          },
+          {
+            foreignKeyName: "inscricoes_autocadastro_cliente_link_id_fkey"
+            columns: ["link_id"]
+            isOneToOne: false
+            referencedRelation: "links_autocadastro_cliente"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inscricoes_autocadastro_cliente_merged_into_id_fkey"
+            columns: ["merged_into_id"]
+            isOneToOne: false
+            referencedRelation: "inscricoes_autocadastro_cliente"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inscricoes_autocadastro_cliente_reviewed_by_fkey"
+            columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       integration_error_log: {
         Row: {
           correlation_id: string | null
@@ -7067,6 +7299,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "clientes_consultoria"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consulting_action_items_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "consulting_action_items_created_by_fkey"
@@ -7377,6 +7616,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "clientes_consultoria"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "links_autocadastro_cliente_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "links_autocadastro_cliente_created_by_fkey"
@@ -8220,6 +8466,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "consulting_marketing_monthly_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
+          },
+          {
             foreignKeyName: "consulting_marketing_monthly_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
@@ -8719,6 +8972,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "consulting_client_metric_targets_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
+          },
+          {
             foreignKeyName: "consulting_client_metric_targets_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
@@ -9036,6 +9296,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "clientes_consultoria"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consulting_client_modules_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "consulting_client_modules_configured_by_fkey"
@@ -9712,6 +9979,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "overrides_parametros_cliente_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
+          },
+          {
             foreignKeyName: "overrides_parametros_cliente_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
@@ -10019,6 +10293,13 @@ export type Database = {
             isOneToOne: true
             referencedRelation: "clientes_consultoria"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pastas_drive_consultoria_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: true
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "pastas_drive_consultoria_created_by_fkey"
@@ -10793,6 +11074,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "clientes_consultoria"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consulting_strategic_plans_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "consulting_strategic_plans_generated_by_fkey"
@@ -12542,6 +12830,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "consulting_pmr_form_responses_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
+          },
+          {
             foreignKeyName: "consulting_pmr_form_responses_submitted_by_fkey"
             columns: ["submitted_by"]
             isOneToOne: false
@@ -12608,6 +12903,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "clientes_consultoria"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consulting_client_metric_results_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "consulting_client_metric_results_created_by_fkey"
@@ -12690,6 +12992,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "clientes_consultoria"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reunioes_google_meet_atas_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
           },
         ]
       }
@@ -13359,6 +13668,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "consulting_inventory_snapshots_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
+          },
+          {
             foreignKeyName: "consulting_inventory_snapshots_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
@@ -13399,6 +13715,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "clientes_consultoria"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consulting_client_metric_snapshots_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "consulting_client_metric_snapshots_created_by_fkey"
@@ -13474,6 +13797,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "clientes_consultoria"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "solicitacoes_consultoria_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "solicitacoes_consultoria_consultant_user_id_fkey"
@@ -13878,6 +14208,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "clientes_consultoria"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subpastas_drive_consultoria_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "subpastas_drive_consultoria_pasta_id_fkey"
@@ -14598,6 +14935,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "clientes_consultoria"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consulting_client_units_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
           },
         ]
       }
@@ -15988,6 +16332,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "consulting_visits_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
+          },
+          {
             foreignKeyName: "visitas_consultoria_consultor_auxiliar_id_fkey"
             columns: ["auxiliary_consultant_id"]
             isOneToOne: false
@@ -16205,6 +16556,17 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      vw_jornada_alem_do_contratado: {
+        Row: {
+          client_id: string | null
+          client_name: string | null
+          contratadas: number | null
+          encontros_registrados: number | null
+          maior_encontro: number | null
+          program_template_key: string | null
+        }
+        Relationships: []
       }
     }
     Functions: {
@@ -17320,6 +17682,10 @@ export type Database = {
       }
       current_user_role_code: { Args: { uid?: string }; Returns: string }
       current_user_role_codes: { Args: { uid?: string }; Returns: string[] }
+      delegacao_gerencial_ativa: {
+        Args: { p_loja_id: string; p_user_id: string }
+        Returns: boolean
+      }
       dismiss_alert: {
         Args: { p_alert_id: string; p_reason?: string }
         Returns: {
@@ -17364,6 +17730,7 @@ export type Database = {
         }
         Returns: Json
       }
+      expirar_delegacoes_vencidas: { Args: never; Returns: number }
       exportar_contatos_cadastros_mx: {
         Args: never
         Returns: {
@@ -17384,6 +17751,7 @@ export type Database = {
           type: Database["public"]["Enums"]["alert_type"]
         }[]
       }
+      gerar_jornada_cliente: { Args: { p_client_id: string }; Returns: number }
       gerar_recomendacoes_desenvolvimento_feedback: {
         Args: { p_feedback_id: string }
         Returns: number
