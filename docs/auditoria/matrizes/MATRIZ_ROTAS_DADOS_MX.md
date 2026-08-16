@@ -140,7 +140,7 @@
 | `alerts` | 1 |
 | `artefatos_gerados_consultoria` | 1 |
 | `atendimentos` | 2 |
-| `atribuicoes_consultoria` | 10 |
+| `atribuicoes_consultoria` | 11 |
 | `atribuicoes_trilha_desenvolvimento` | 1 |
 | `aula_presencas` | 1 |
 | `aulas_ao_vivo` | 1 |
@@ -156,7 +156,7 @@
 | `catalogo_metricas_consultoria` | 7 |
 | `central_execucao_aberturas` | 3 |
 | `clientes` | 6 |
-| `clientes_consultoria` | 17 |
+| `clientes_consultoria` | 18 |
 | `clientes_oportunidades` | 1 |
 | `comportamental_perfis` | 1 |
 | `comportamental_questoes` | 1 |
@@ -205,7 +205,7 @@
 | `logs_compartilhamento_whatsapp` | 1 |
 | `logs_reprocessamento` | 1 |
 | `logs_rotina_gerente` | 1 |
-| `lojas` | 24 |
+| `lojas` | 25 |
 | `manager_daily_tasks` | 1 |
 | `manager_lead_conferences` | 1 |
 | `marketing_mensal_consultoria` | 1 |
@@ -220,8 +220,8 @@
 | `metas_metricas_cliente` | 3 |
 | `modelos_formulario_pmr` | 1 |
 | `modelos_relatorio` | 1 |
-| `modulos_cliente_consultoria` | 5 |
-| `modulos_produto_consultoria` | 1 |
+| `modulos_cliente_consultoria` | 6 |
+| `modulos_produto_consultoria` | 2 |
 | `modulos_sistema` | 1 |
 | `notificacoes` | 4 |
 | `opcoes_agenda_consultoria` | 1 |
@@ -326,8 +326,8 @@
 | `atendimentos:select` | 2 |
 | `atribuicoes_consultoria:delete` | 1 |
 | `atribuicoes_consultoria:insert` | 2 |
-| `atribuicoes_consultoria:select` | 9 |
-| `atribuicoes_consultoria:update` | 3 |
+| `atribuicoes_consultoria:select` | 10 |
+| `atribuicoes_consultoria:update` | 4 |
 | `atribuicoes_consultoria:upsert` | 3 |
 | `atribuicoes_trilha_desenvolvimento:select` | 1 |
 | `atribuicoes_trilha_desenvolvimento:upsert` | 1 |
@@ -356,8 +356,8 @@
 | `central_execucao_aberturas:upsert` | 2 |
 | `clientes_consultoria:delete` | 1 |
 | `clientes_consultoria:insert` | 4 |
-| `clientes_consultoria:select` | 17 |
-| `clientes_consultoria:update` | 3 |
+| `clientes_consultoria:select` | 18 |
+| `clientes_consultoria:update` | 4 |
 | `clientes_oportunidades:select` | 1 |
 | `clientes:delete` | 2 |
 | `clientes:insert` | 2 |
@@ -465,7 +465,7 @@
 | `logs_rotina_gerente:upsert` | 1 |
 | `lojas:delete` | 1 |
 | `lojas:insert` | 1 |
-| `lojas:select` | 24 |
+| `lojas:select` | 25 |
 | `lojas:update` | 1 |
 | `manager_daily_tasks:select` | 1 |
 | `manager_daily_tasks:update` | 1 |
@@ -492,10 +492,10 @@
 | `modelos_relatorio:update` | 1 |
 | `modelos_relatorio:upsert` | 1 |
 | `modulos_cliente_consultoria:insert` | 2 |
-| `modulos_cliente_consultoria:select` | 5 |
-| `modulos_cliente_consultoria:upsert` | 1 |
+| `modulos_cliente_consultoria:select` | 6 |
+| `modulos_cliente_consultoria:upsert` | 2 |
 | `modulos_produto_consultoria:insert` | 1 |
-| `modulos_produto_consultoria:select` | 1 |
+| `modulos_produto_consultoria:select` | 2 |
 | `modulos_produto_consultoria:upsert` | 1 |
 | `modulos_sistema:select` | 1 |
 | `notificacoes:delete` | 1 |

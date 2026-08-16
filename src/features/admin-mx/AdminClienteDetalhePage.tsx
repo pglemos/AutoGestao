@@ -35,6 +35,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/lib/toast'
 import { ClientActivationModal } from './clientes/ClientActivationModal'
+import { runClientRepair, type RepairKey } from './clientes/clientRepairs'
 import { buildClientReadiness, journeyProgress, readinessSummary } from './clientes/clientReadiness'
 import { ClientConfigTab } from './clientes/ClientConfigTab'
 import { DonoMasterCard } from './clientes/DonoMasterCard'
@@ -195,6 +196,27 @@ export function AdminClienteDetalhePage() {
 
   const onboardingStep = (client as { onboarding_step?: number | null })?.onboarding_step ?? 1
   const onboardingCompleted = (client as { onboarding_completed?: boolean | null })?.onboarding_completed ?? false
+
+  const [repairing, setRepairing] = useState<RepairKey | null>(null)
+
+  const repair = async (key: RepairKey) => {
+    if (repairing || !client?.id || !supabaseUser) return
+    setRepairing(key)
+    try {
+      const result = await runClientRepair({
+        key,
+        clientId: client.id,
+        clientName: client.name,
+        programKey: client.program_template_key ?? null,
+        userId: supabaseUser.id,
+      })
+      if (result.repaired) toast.success(result.message)
+      else toast.error(result.message)
+      if (result.repaired) await refetch()
+    } finally {
+      setRepairing(null)
+    }
+  }
 
   const activate = async () => {
     if (!client || activating) return
@@ -525,6 +547,8 @@ export function AdminClienteDetalhePage() {
               checks={checks}
               submitting={activating}
               onSubmit={() => void activate()}
+              onRepair={key => void repair(key)}
+              repairing={repairing}
               onClose={() => setActivationOpen(false)}
             />
 

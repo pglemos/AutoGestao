@@ -1,9 +1,13 @@
 import { Button } from '@/components/atoms/Button'
+import { REPAIRABLE_CHECKS, type RepairKey } from './clientRepairs'
 import { Modal } from '@/components/organisms/Modal'
 import { MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
 import { readinessSummary, type ReadinessCheck } from './clientReadiness'
 
 export function ClientActivationModal(props: {
+  /** Reparo automático do check; ausente = botão não aparece. */
+  onRepair?: (key: RepairKey) => void
+  repairing?: string | null
   open: boolean
   clientName: string
   checks: ReadinessCheck[]
@@ -43,9 +47,21 @@ export function ClientActivationModal(props: {
                   <div className="font-medium text-foreground">{check.label}</div>
                   <div className="text-xs text-muted-foreground">{check.detail}</div>
                 </div>
-                <span className={check.ok ? 'text-xs font-semibold text-status-success-text' : 'text-xs font-semibold text-status-error-text'}>
-                  {check.ok ? 'OK' : 'Pendente'}
-                </span>
+                <div className="flex shrink-0 items-center gap-2">
+                  {!check.ok && props.onRepair && (REPAIRABLE_CHECKS as string[]).includes(check.key) ? (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={Boolean(props.repairing)}
+                      onClick={() => props.onRepair?.(check.key as RepairKey)}
+                    >
+                      {props.repairing === check.key ? 'Reparando...' : 'Reparar'}
+                    </Button>
+                  ) : null}
+                  <span className={check.ok ? 'text-xs font-semibold text-status-success-text' : 'text-xs font-semibold text-status-error-text'}>
+                    {check.ok ? 'OK' : 'Pendente'}
+                  </span>
+                </div>
               </li>
             ))}
           </ul>
