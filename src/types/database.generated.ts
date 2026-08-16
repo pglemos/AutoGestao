@@ -18781,6 +18781,15 @@ export type Database = {
         Returns: undefined
       }
       run_store_target_plan_refresh_clock: { Args: never; Returns: undefined }
+      saldo_presencial_cliente: {
+        Args: { p_client_id: string }
+        Returns: {
+          contratadas: number
+          disponiveis: number
+          minimas: number
+          usadas: number
+        }[]
+      }
       salvar_metas_indicador_planejamento: {
         Args: {
           p_indicator_code: string
