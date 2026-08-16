@@ -28,6 +28,7 @@ import {
   MxProgress,
   MxSectionCard,
   MxSectionHeader,
+  MxStatusBanner,
   MxTableSurface,
 } from '@/components/module/MxModuleVisualPrimitives'
 import { useConsultingClientDetailBySlug } from '@/hooks/useConsultingClientBySlug'
@@ -498,6 +499,13 @@ export function AdminClienteDetalhePage() {
                   <MxSectionHeader title="Jornada de encontros" description={`${visits.length} encontro(s) registrados.`} />
                   <div className="space-y-4 p-5">
                     <div className="max-w-md"><MxProgress value={progress} label={`${progress}% concluído`} /></div>
+                    {health.presence ? (
+                      <MxStatusBanner tone={health.presence.disponiveis === 0 ? 'warning' : 'info'}>
+                        {health.presence.contratadas === null
+                          ? `Encontros presenciais: ${health.presence.usadas} marcado(s) · produto sem faixa definida.`
+                          : `Encontros presenciais: ${health.presence.usadas} de ${health.presence.contratadas} · ${health.presence.disponiveis} disponível(is)${health.presence.minimas ? ` · mínimo contratado ${health.presence.minimas}` : ''}.`}
+                      </MxStatusBanner>
+                    ) : null}
                     {visits.length ? (
                       <MxTableSurface>
                         <Table className="min-w-[640px]">

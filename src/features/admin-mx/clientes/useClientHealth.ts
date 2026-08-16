@@ -2,9 +2,12 @@ import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { classifyDataSource, mergeTimeline, type DataSourceHealth, type TimelineEvent } from './clientProgress'
 
+export type PresenceBalance = { contratadas: number | null; minimas: number | null; usadas: number; disponiveis: number | null }
+
 type State = {
   sources: DataSourceHealth[]
   timeline: TimelineEvent[]
+  presence: PresenceBalance | null
   loading: boolean
   error: string | null
   refetch: () => Promise<void>
@@ -20,6 +23,7 @@ type State = {
  */
 export function useClientHealth(clientId: string | undefined, storeId: string | null): State {
   const [sources, setSources] = useState<DataSourceHealth[]>([])
+  const [presence, setPresence] = useState<PresenceBalance | null>(null)
   const [timeline, setTimeline] = useState<TimelineEvent[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -49,6 +53,11 @@ export function useClientHealth(clientId: string | undefined, storeId: string | 
 
       // Jornada além do contratado: sintoma de produto mal vinculado, não de
       // excesso de execução. A view existe justamente para a equipe ver isso.
+      // Saldo presencial: o produto define a faixa; sem faixa, a função devolve
+      // disponíveis = null e a tela mostra "sem limite definido".
+      const { data: balance } = await supabase.rpc('saldo_presencial_cliente', { p_client_id: clientId })
+      setPresence(Array.isArray(balance) && balance.length ? (balance[0] as PresenceBalance) : null)
+
       const { data: overrun } = await supabase
         .from('vw_jornada_alem_do_contratado')
         .select('contratadas, maior_encontro')
@@ -128,5 +137,5 @@ export function useClientHealth(clientId: string | undefined, storeId: string | 
 
   useEffect(() => { void refetch() }, [refetch])
 
-  return { sources, timeline, loading, error, refetch }
+  return { sources, timeline, presence, loading, error, refetch }
 }
