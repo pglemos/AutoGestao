@@ -1167,6 +1167,408 @@ export type Database = {
         }
         Relationships: []
       }
+      backup_faxina_entregas_20260816232414: {
+        Row: {
+          client_id: string | null
+          completed_at: string | null
+          completed_by: string | null
+          created_at: string | null
+          description: string | null
+          due_at: string | null
+          evidence_id: string | null
+          id: string | null
+          item_type: string | null
+          lesson_id: string | null
+          note: string | null
+          required: boolean | null
+          responsible_user_id: string | null
+          sort_order: number | null
+          source_key: string | null
+          status: string | null
+          store_id: string | null
+          title: string | null
+          updated_at: string | null
+          visit_id: string | null
+        }
+        Insert: {
+          client_id?: string | null
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_at?: string | null
+          evidence_id?: string | null
+          id?: string | null
+          item_type?: string | null
+          lesson_id?: string | null
+          note?: string | null
+          required?: boolean | null
+          responsible_user_id?: string | null
+          sort_order?: number | null
+          source_key?: string | null
+          status?: string | null
+          store_id?: string | null
+          title?: string | null
+          updated_at?: string | null
+          visit_id?: string | null
+        }
+        Update: {
+          client_id?: string | null
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_at?: string | null
+          evidence_id?: string | null
+          id?: string | null
+          item_type?: string | null
+          lesson_id?: string | null
+          note?: string | null
+          required?: boolean | null
+          responsible_user_id?: string | null
+          sort_order?: number | null
+          source_key?: string | null
+          status?: string | null
+          store_id?: string | null
+          title?: string | null
+          updated_at?: string | null
+          visit_id?: string | null
+        }
+        Relationships: []
+      }
+      backup_faxina_entregas_20260816232456: {
+        Row: {
+          client_id: string | null
+          completed_at: string | null
+          completed_by: string | null
+          created_at: string | null
+          description: string | null
+          due_at: string | null
+          evidence_id: string | null
+          id: string | null
+          item_type: string | null
+          lesson_id: string | null
+          note: string | null
+          required: boolean | null
+          responsible_user_id: string | null
+          sort_order: number | null
+          source_key: string | null
+          status: string | null
+          store_id: string | null
+          title: string | null
+          updated_at: string | null
+          visit_id: string | null
+        }
+        Insert: {
+          client_id?: string | null
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_at?: string | null
+          evidence_id?: string | null
+          id?: string | null
+          item_type?: string | null
+          lesson_id?: string | null
+          note?: string | null
+          required?: boolean | null
+          responsible_user_id?: string | null
+          sort_order?: number | null
+          source_key?: string | null
+          status?: string | null
+          store_id?: string | null
+          title?: string | null
+          updated_at?: string | null
+          visit_id?: string | null
+        }
+        Update: {
+          client_id?: string | null
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_at?: string | null
+          evidence_id?: string | null
+          id?: string | null
+          item_type?: string | null
+          lesson_id?: string | null
+          note?: string | null
+          required?: boolean | null
+          responsible_user_id?: string | null
+          sort_order?: number | null
+          source_key?: string | null
+          status?: string | null
+          store_id?: string | null
+          title?: string | null
+          updated_at?: string | null
+          visit_id?: string | null
+        }
+        Relationships: []
+      }
+      backup_faxina_visitas_20260816232414: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          analysis_period_end: string | null
+          analysis_period_preset: string | null
+          analysis_period_start: string | null
+          anticipation_override: boolean | null
+          auxiliary_consultant_id: string | null
+          checklist_data: Json | null
+          client_id: string | null
+          confidentiality_level: string | null
+          consultant_id: string | null
+          consultant_name_manual: string | null
+          created_at: string | null
+          duration_hours: number | null
+          effective_visit_date: string | null
+          estoque_disponivel: string | null
+          executive_summary: string | null
+          feedback_client: string | null
+          google_event_id: string | null
+          google_event_id_central: string | null
+          google_meet_link: string | null
+          google_synced_at: string | null
+          id: string | null
+          leads_mes: string | null
+          lesson_id: string | null
+          materiais: Json | null
+          meta_mensal: string | null
+          modality: string | null
+          next_cycle_goal: string | null
+          objective: string | null
+          product_name: string | null
+          projecao: string | null
+          scheduled_at: string | null
+          source_import_key: string | null
+          source_payload: Json | null
+          source_visit_code: string | null
+          status: string | null
+          target_audience: string | null
+          updated_at: string | null
+          visit_number: number | null
+          visit_reason: string | null
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          analysis_period_end?: string | null
+          analysis_period_preset?: string | null
+          analysis_period_start?: string | null
+          anticipation_override?: boolean | null
+          auxiliary_consultant_id?: string | null
+          checklist_data?: Json | null
+          client_id?: string | null
+          confidentiality_level?: string | null
+          consultant_id?: string | null
+          consultant_name_manual?: string | null
+          created_at?: string | null
+          duration_hours?: number | null
+          effective_visit_date?: string | null
+          estoque_disponivel?: string | null
+          executive_summary?: string | null
+          feedback_client?: string | null
+          google_event_id?: string | null
+          google_event_id_central?: string | null
+          google_meet_link?: string | null
+          google_synced_at?: string | null
+          id?: string | null
+          leads_mes?: string | null
+          lesson_id?: string | null
+          materiais?: Json | null
+          meta_mensal?: string | null
+          modality?: string | null
+          next_cycle_goal?: string | null
+          objective?: string | null
+          product_name?: string | null
+          projecao?: string | null
+          scheduled_at?: string | null
+          source_import_key?: string | null
+          source_payload?: Json | null
+          source_visit_code?: string | null
+          status?: string | null
+          target_audience?: string | null
+          updated_at?: string | null
+          visit_number?: number | null
+          visit_reason?: string | null
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          analysis_period_end?: string | null
+          analysis_period_preset?: string | null
+          analysis_period_start?: string | null
+          anticipation_override?: boolean | null
+          auxiliary_consultant_id?: string | null
+          checklist_data?: Json | null
+          client_id?: string | null
+          confidentiality_level?: string | null
+          consultant_id?: string | null
+          consultant_name_manual?: string | null
+          created_at?: string | null
+          duration_hours?: number | null
+          effective_visit_date?: string | null
+          estoque_disponivel?: string | null
+          executive_summary?: string | null
+          feedback_client?: string | null
+          google_event_id?: string | null
+          google_event_id_central?: string | null
+          google_meet_link?: string | null
+          google_synced_at?: string | null
+          id?: string | null
+          leads_mes?: string | null
+          lesson_id?: string | null
+          materiais?: Json | null
+          meta_mensal?: string | null
+          modality?: string | null
+          next_cycle_goal?: string | null
+          objective?: string | null
+          product_name?: string | null
+          projecao?: string | null
+          scheduled_at?: string | null
+          source_import_key?: string | null
+          source_payload?: Json | null
+          source_visit_code?: string | null
+          status?: string | null
+          target_audience?: string | null
+          updated_at?: string | null
+          visit_number?: number | null
+          visit_reason?: string | null
+        }
+        Relationships: []
+      }
+      backup_faxina_visitas_20260816232456: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          analysis_period_end: string | null
+          analysis_period_preset: string | null
+          analysis_period_start: string | null
+          anticipation_override: boolean | null
+          auxiliary_consultant_id: string | null
+          checklist_data: Json | null
+          client_id: string | null
+          confidentiality_level: string | null
+          consultant_id: string | null
+          consultant_name_manual: string | null
+          created_at: string | null
+          duration_hours: number | null
+          effective_visit_date: string | null
+          estoque_disponivel: string | null
+          executive_summary: string | null
+          feedback_client: string | null
+          google_event_id: string | null
+          google_event_id_central: string | null
+          google_meet_link: string | null
+          google_synced_at: string | null
+          id: string | null
+          leads_mes: string | null
+          lesson_id: string | null
+          materiais: Json | null
+          meta_mensal: string | null
+          modality: string | null
+          next_cycle_goal: string | null
+          objective: string | null
+          product_name: string | null
+          projecao: string | null
+          scheduled_at: string | null
+          source_import_key: string | null
+          source_payload: Json | null
+          source_visit_code: string | null
+          status: string | null
+          target_audience: string | null
+          updated_at: string | null
+          visit_number: number | null
+          visit_reason: string | null
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          analysis_period_end?: string | null
+          analysis_period_preset?: string | null
+          analysis_period_start?: string | null
+          anticipation_override?: boolean | null
+          auxiliary_consultant_id?: string | null
+          checklist_data?: Json | null
+          client_id?: string | null
+          confidentiality_level?: string | null
+          consultant_id?: string | null
+          consultant_name_manual?: string | null
+          created_at?: string | null
+          duration_hours?: number | null
+          effective_visit_date?: string | null
+          estoque_disponivel?: string | null
+          executive_summary?: string | null
+          feedback_client?: string | null
+          google_event_id?: string | null
+          google_event_id_central?: string | null
+          google_meet_link?: string | null
+          google_synced_at?: string | null
+          id?: string | null
+          leads_mes?: string | null
+          lesson_id?: string | null
+          materiais?: Json | null
+          meta_mensal?: string | null
+          modality?: string | null
+          next_cycle_goal?: string | null
+          objective?: string | null
+          product_name?: string | null
+          projecao?: string | null
+          scheduled_at?: string | null
+          source_import_key?: string | null
+          source_payload?: Json | null
+          source_visit_code?: string | null
+          status?: string | null
+          target_audience?: string | null
+          updated_at?: string | null
+          visit_number?: number | null
+          visit_reason?: string | null
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          analysis_period_end?: string | null
+          analysis_period_preset?: string | null
+          analysis_period_start?: string | null
+          anticipation_override?: boolean | null
+          auxiliary_consultant_id?: string | null
+          checklist_data?: Json | null
+          client_id?: string | null
+          confidentiality_level?: string | null
+          consultant_id?: string | null
+          consultant_name_manual?: string | null
+          created_at?: string | null
+          duration_hours?: number | null
+          effective_visit_date?: string | null
+          estoque_disponivel?: string | null
+          executive_summary?: string | null
+          feedback_client?: string | null
+          google_event_id?: string | null
+          google_event_id_central?: string | null
+          google_meet_link?: string | null
+          google_synced_at?: string | null
+          id?: string | null
+          leads_mes?: string | null
+          lesson_id?: string | null
+          materiais?: Json | null
+          meta_mensal?: string | null
+          modality?: string | null
+          next_cycle_goal?: string | null
+          objective?: string | null
+          product_name?: string | null
+          projecao?: string | null
+          scheduled_at?: string | null
+          source_import_key?: string | null
+          source_payload?: Json | null
+          source_visit_code?: string | null
+          status?: string | null
+          target_audience?: string | null
+          updated_at?: string | null
+          visit_number?: number | null
+          visit_reason?: string | null
+        }
+        Relationships: []
+      }
       backup_is_venda_loja_20260805: {
         Row: {
           reverted_at: string
@@ -1179,6 +1581,48 @@ export type Database = {
         Update: {
           reverted_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      backup_modality_20260816225018: {
+        Row: {
+          client_id: string | null
+          id: string | null
+          modality: string | null
+          status: string | null
+          visit_number: number | null
+        }
+        Insert: {
+          client_id?: string | null
+          id?: string | null
+          modality?: string | null
+          status?: string | null
+          visit_number?: number | null
+        }
+        Update: {
+          client_id?: string | null
+          id?: string | null
+          modality?: string | null
+          status?: string | null
+          visit_number?: number | null
+        }
+        Relationships: []
+      }
+      backup_program_key_20260816223341: {
+        Row: {
+          id: string | null
+          product_name: string | null
+          program_template_key: string | null
+        }
+        Insert: {
+          id?: string | null
+          product_name?: string | null
+          program_template_key?: string | null
+        }
+        Update: {
+          id?: string | null
+          product_name?: string | null
+          program_template_key?: string | null
         }
         Relationships: []
       }
@@ -1209,6 +1653,48 @@ export type Database = {
           evento_id?: string | null
           oport_competencia_antiga?: string | null
           oportunidade_id?: string | null
+        }
+        Relationships: []
+      }
+      backup_visit_number_20260816230009: {
+        Row: {
+          client_id: string | null
+          id: string | null
+          scheduled_at: string | null
+          visit_number: number | null
+        }
+        Insert: {
+          client_id?: string | null
+          id?: string | null
+          scheduled_at?: string | null
+          visit_number?: number | null
+        }
+        Update: {
+          client_id?: string | null
+          id?: string | null
+          scheduled_at?: string | null
+          visit_number?: number | null
+        }
+        Relationships: []
+      }
+      backup_visit_number_20260816231826: {
+        Row: {
+          client_id: string | null
+          id: string | null
+          scheduled_at: string | null
+          visit_number: number | null
+        }
+        Insert: {
+          client_id?: string | null
+          id?: string | null
+          scheduled_at?: string | null
+          visit_number?: number | null
+        }
+        Update: {
+          client_id?: string | null
+          id?: string | null
+          scheduled_at?: string | null
+          visit_number?: number | null
         }
         Relationships: []
       }
@@ -16276,6 +16762,7 @@ export type Database = {
           estoque_disponivel: string | null
           executive_summary: string | null
           feedback_client: string | null
+          fora_do_contrato: boolean
           google_event_id: string | null
           google_event_id_central: string | null
           google_meet_link: string | null
@@ -16319,6 +16806,7 @@ export type Database = {
           estoque_disponivel?: string | null
           executive_summary?: string | null
           feedback_client?: string | null
+          fora_do_contrato?: boolean
           google_event_id?: string | null
           google_event_id_central?: string | null
           google_meet_link?: string | null
@@ -16362,6 +16850,7 @@ export type Database = {
           estoque_disponivel?: string | null
           executive_summary?: string | null
           feedback_client?: string | null
+          fora_do_contrato?: boolean
           google_event_id?: string | null
           google_event_id_central?: string | null
           google_meet_link?: string | null
@@ -17228,6 +17717,7 @@ export type Database = {
           estoque_disponivel: string | null
           executive_summary: string | null
           feedback_client: string | null
+          fora_do_contrato: boolean
           google_event_id: string | null
           google_event_id_central: string | null
           google_meet_link: string | null
