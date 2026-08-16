@@ -16,6 +16,14 @@ export interface ConsultingClient {
   legacy_migrated_at?: string | null
   legacy_migrated_by?: string | null
   created_by: string | null
+  // Cadastro administrativo (módulo Administrador MX).
+  structure_type?: string | null
+  business_phase?: string | null
+  implementation_owner_id?: string | null
+  contract_start_date?: string | null
+  contract_end_date?: string | null
+  onboarding_step?: number | null
+  onboarding_completed?: boolean | null
   last_visit_at?: string | null
   created_at: string
   updated_at: string

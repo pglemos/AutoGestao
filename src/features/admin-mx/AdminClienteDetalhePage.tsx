@@ -35,6 +35,9 @@ import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/lib/toast'
 import { ClientActivationModal } from './clientes/ClientActivationModal'
+import { ClientDadosTab, ClientHistoricoTab, ClientImplantacaoTab } from './clientes/ClientHealthTabs'
+import { buildProgressBars } from './clientes/clientProgress'
+import { useClientHealth } from './clientes/useClientHealth'
 import { runClientRepair, type RepairKey } from './clientes/clientRepairs'
 import { buildClientReadiness, journeyProgress, readinessSummary } from './clientes/clientReadiness'
 import { ClientConfigTab } from './clientes/ClientConfigTab'
@@ -55,15 +58,19 @@ import { buildProgramSummary } from './clientes/programSummary'
 import { emptyStoreDraft, type StoreDraft } from './clientes/storeForm'
 import { fetchUnitOperatingHours, saveClientStore, type UnitRow } from './clientes/storeMutations'
 
-type ClientTab = 'visao' | 'lojas' | 'pessoas' | 'jornada' | 'modulos' | 'configuracoes'
+type ClientTab = 'visao' | 'lojas' | 'pessoas' | 'jornada' | 'implantacao' | 'modulos' | 'configuracoes' | 'dados' | 'historico'
 
+// Ordem da especificação do módulo: as oito abas da Visão 360.
 const TABS = [
   { key: 'visao' as const, label: 'Visão geral' },
   { key: 'lojas' as const, label: 'Empresa e lojas' },
   { key: 'pessoas' as const, label: 'Pessoas e acessos' },
   { key: 'jornada' as const, label: 'Programa e jornada' },
-  { key: 'modulos' as const, label: 'Módulos' },
+  { key: 'implantacao' as const, label: 'Implantação e aderência' },
+  { key: 'modulos' as const, label: 'Estratégia e operação' },
   { key: 'configuracoes' as const, label: 'Configurações' },
+  { key: 'dados' as const, label: 'Dados e integridade' },
+  { key: 'historico' as const, label: 'Histórico e auditoria' },
 ]
 
 function formatDate(value: string | null | undefined) {
@@ -172,6 +179,7 @@ export function AdminClienteDetalhePage() {
   }, [client, storeTaken])
 
   const summary = useMemo(() => readinessSummary(checks), [checks])
+  const health = useClientHealth(client?.id, client?.primary_store_id ?? null)
   const visits = client?.visits ?? []
   const totalVisits = visits.length || 0
   const progress = useMemo(() => journeyProgress(visits, totalVisits), [visits, totalVisits])
@@ -510,6 +518,28 @@ export function AdminClienteDetalhePage() {
                   </div>
                 </MxSectionCard>
               </div>
+            ) : null}
+
+            {tab === 'implantacao' ? (
+              <ClientImplantacaoTab
+                bars={buildProgressBars({
+                  onboardingStep: client.onboarding_step ?? null,
+                  onboardingCompleted: client.onboarding_completed ?? null,
+                  modulesEnabled: (client.modules ?? []).filter(module => module.enabled !== false).length,
+                  modulesTotal: (client.modules ?? []).length,
+                  visitsDone: visits.filter(visit => visit.status === 'concluida').length,
+                  visitsTotal: totalVisits,
+                })}
+                blockers={checks.filter(check => !check.ok).map(check => `${check.label} — ${check.detail}`)}
+              />
+            ) : null}
+
+            {tab === 'dados' ? (
+              <ClientDadosTab sources={health.sources} loading={health.loading} error={health.error} onRetry={() => void health.refetch()} />
+            ) : null}
+
+            {tab === 'historico' ? (
+              <ClientHistoricoTab events={health.timeline} loading={health.loading} error={health.error} onRetry={() => void health.refetch()} />
             ) : null}
 
             {tab === 'modulos' ? (
