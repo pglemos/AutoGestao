@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { Clock, Plus, X } from 'lucide-react'
+import { Clock, Eye, Plus, X } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { MxField, MxSelect, MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
 import { toast } from '@/lib/toast'
-import { todayIso, USER_STATUS_OPTIONS, USER_STATUS_LABELS, validateDelegation, type ManagerDelegationDraft } from './userEdit'
+import { isDelegationActive, todayIso, USER_STATUS_OPTIONS, USER_STATUS_LABELS, validateDelegation, type ManagerDelegationDraft } from './userEdit'
 import { createDelegation, endDelegation, saveUserAccess, type AvailableStore } from './userEditMutations'
 
 export function UserAccessTab(props: {
@@ -18,9 +18,9 @@ export function UserAccessTab(props: {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [showDeleg, setShowDeleg] = useState(false)
-  const [delegForm, setDelegForm] = useState({ store_id: '', access_level: '', valid_from: '', valid_until: '', reason: '' })
+  const [delegForm, setDelegForm] = useState({ store_id: '', access_level: '', valid_from: '', valid_until: '', reason: '', authorized_by: '' })
 
-  const activeDelegations = delegations.filter(d => d.status === 'ATIVO')
+  const activeDelegations = delegations.filter(d => isDelegationActive(d))
 
   const saveStatus = async (newStatus: string) => {
     setSaving(true)
@@ -47,7 +47,7 @@ export function UserAccessTab(props: {
       valid_from: delegForm.valid_from,
       valid_until: delegForm.valid_until,
       reason: delegForm.reason,
-      authorized_by: 'Administrador MX',
+      authorized_by: delegForm.authorized_by,
       status: 'ATIVO',
     }
     const errors = validateDelegation(draft)
@@ -65,7 +65,7 @@ export function UserAccessTab(props: {
       }
       onDelegations([...delegations, { ...draft, valid_from: draft.valid_from || todayIso() }])
       toast.success('Delegação criada.')
-      setDelegForm({ store_id: '', access_level: '', valid_from: '', valid_until: '', reason: '' })
+      setDelegForm({ store_id: '', access_level: '', valid_from: '', valid_until: '', reason: '', authorized_by: '' })
       setShowDeleg(false)
     } finally {
       setSaving(false)
@@ -161,6 +161,12 @@ export function UserAccessTab(props: {
               placeholder="Motivo"
               className="h-[var(--mx-input-height)] w-full rounded-[var(--mx-input-radius)] border border-border bg-surface-default px-3 text-sm text-text-primary outline-none focus-visible:border-primary"
             />
+            <input
+              value={delegForm.authorized_by}
+              onChange={event => setDelegForm(f => ({ ...f, authorized_by: event.target.value }))}
+              placeholder="Autorizador"
+              className="h-[var(--mx-input-height)] w-full rounded-[var(--mx-input-radius)] border border-border bg-surface-default px-3 text-sm text-text-primary outline-none focus-visible:border-primary"
+            />
             <div className="flex items-center gap-2">
               <Button size="sm" disabled={saving} onClick={() => void createDeleg()}>{saving ? 'Salvando...' : 'Confirmar'}</Button>
               <Button variant="ghost" size="sm" onClick={() => setShowDeleg(false)}>Cancelar</Button>
@@ -178,7 +184,13 @@ export function UserAccessTab(props: {
                   <div>
                     <span className="text-sm font-medium text-foreground">{delegation.store_name}</span>
                     <span className="ml-2 text-xs text-muted-foreground">{delegation.access_level} · até {delegation.valid_until}</span>
+                    {delegation.authorized_by ? (
+                      <div className="text-xs text-muted-foreground">Autorizado por {delegation.authorized_by}{delegation.reason ? ` · ${delegation.reason}` : ''}</div>
+                    ) : null}
                   </div>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-status-info-surface px-2 py-0.5 text-caption font-medium text-status-info-text">
+                    <Eye size={12} /> Acessar Visão Gerencial
+                  </span>
                 </div>
                 <button type="button" aria-label={`Encerrar delegação de ${delegation.store_name}`} disabled={saving} className="rounded-lg p-1 text-muted-foreground hover:bg-status-error-surface hover:text-status-error focus-visible:ring-2 focus-visible:ring-status-error/40 focus-visible:outline-none" onClick={() => void endDeleg(delegation)}>
                   <X size={14} />

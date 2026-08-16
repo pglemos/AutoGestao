@@ -262,7 +262,7 @@ export async function createDelegation(userId: string, draft: ManagerDelegationD
     valid_from: draft.valid_from || null,
     valid_until: draft.valid_until,
     motivo: draft.reason.trim() || null,
-    autorizado_por: 'Administrador MX',
+    autorizado_por: draft.authorized_by.trim() || 'Administrador MX',
     status: 'ativo',
   })
   return { error: error?.message ?? null }
