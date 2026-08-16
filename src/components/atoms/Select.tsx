@@ -29,6 +29,10 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
   ({ className, variant, label, id, children, 'aria-label': ariaLabel, ...props }, ref) => {
     const generatedId = React.useId()
     const fieldId = id || generatedId
+    // Sem rótulo próprio nem aria-labelledby, o nome acessível vem do <label>
+    // que envolve o campo (MxField). Um aria-label genérico aqui venceria esse
+    // rótulo e anunciaria "Seleção" no lugar do nome real do campo.
+    const resolvedAriaLabel = ariaLabel ?? label
     const selectElement = (
       <div className="relative">
         <select
@@ -36,7 +40,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           className={cn(selectVariants({ variant }), className)}
           ref={ref}
           {...props}
-          aria-label={ariaLabel ?? label ?? 'Seleção'}
+          aria-label={resolvedAriaLabel}
         >
           {children}
         </select>
