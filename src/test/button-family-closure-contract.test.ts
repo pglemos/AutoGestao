@@ -40,11 +40,13 @@ describe('FASE K 11.011-11.015 — fechamento de Button/IconButton', () => {
     expect(btn).toContain('danger:')
   })
 
-  test('11.011 — icon-only exige aria-label (a11y), não tooltip obrigatório', () => {
+  test('11.011 — icon-only exige aria-label (a11y) e expõe tooltip opcional', () => {
     const iconBtn = read('src/components/atoms/IconButton.tsx')
     const gate = read('scripts/lint-icon-only-action.mjs')
     expect(iconBtn).toContain('label')
     expect(iconBtn).toContain('VisuallyHidden')
+    expect(iconBtn).toContain('tooltip')
+    expect(iconBtn).toContain('<Tooltip')
     expect(gate).toContain('ALLOWLIST')
   })
 

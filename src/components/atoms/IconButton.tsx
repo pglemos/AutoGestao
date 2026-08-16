@@ -2,6 +2,7 @@ import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import { Spinner } from '@/components/atoms/Spinner'
+import { Tooltip } from '@/components/atoms/Tooltip'
 import { VisuallyHidden } from '@/components/atoms/VisuallyHidden'
 
 const iconButtonVariants = cva(
@@ -42,6 +43,8 @@ export interface IconButtonProps
   /** Nome acessível — obrigatório, botão de ícone não tem texto visível (§14). */
   label: string
   loading?: boolean
+  /** Texto do tooltip (affordance visual opcional). Não substitui `label`. */
+  tooltip?: string
 }
 
 /**
@@ -49,28 +52,37 @@ export interface IconButtonProps
  *
  * Bloqueia clique durante `loading`, prevenindo submissão duplicada (§13.1).
  * O tooltip não substitui o nome acessível — `label` é sempre renderizado
- * para leitores de tela.
+ * para leitores de tela. Quando `tooltip` é informado, o botão ganha
+ * affordance visual no hover/focus (11.011).
  */
 const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
-  ({ className, variant, size, icon, label, loading = false, disabled, type, ...props }, ref) => (
-    <button
-      ref={ref}
-      type={type ?? 'button'}
-      disabled={disabled || loading}
-      aria-busy={loading || undefined}
-      className={cn(iconButtonVariants({ variant, size }), className)}
-      {...props}
-    >
-      {loading ? (
-        <Spinner size={size === 'lg' ? 'md' : 'sm'} label="" />
-      ) : (
-        <span aria-hidden className="contents">
-          {icon}
-        </span>
-      )}
-      <VisuallyHidden>{label}</VisuallyHidden>
-    </button>
-  ),
+  ({ className, variant, size, icon, label, loading = false, disabled, type, tooltip, ...props }, ref) => {
+    const button = (
+      <button
+        ref={ref}
+        type={type ?? 'button'}
+        disabled={disabled || loading}
+        aria-busy={loading || undefined}
+        className={cn(iconButtonVariants({ variant, size }), className)}
+        {...props}
+      >
+        {loading ? (
+          <Spinner size={size === 'lg' ? 'md' : 'sm'} label="" />
+        ) : (
+          <span aria-hidden className="contents">
+            {icon}
+          </span>
+        )}
+        <VisuallyHidden>{label}</VisuallyHidden>
+      </button>
+    )
+
+    if (tooltip) {
+      return <Tooltip content={tooltip}>{button}</Tooltip>
+    }
+
+    return button
+  },
 )
 IconButton.displayName = 'IconButton'
 
