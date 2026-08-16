@@ -34,29 +34,52 @@ export function buildInternalMxNavigation(
   role: UserRole,
   counts: InternalMxNavigationCounts = {},
 ): MxSidebarNavSection[] {
+  // Três grupos da especificação do módulo Administrador (Operação MX,
+  // Produto e Metodologia, Plataforma e Governança). Os itens de rede e
+  // conteúdo continuam acessíveis dentro do grupo a que pertencem — o consultor
+  // MX usa essas telas todo dia e tirá-las do menu seria regressão.
   const sections: MxSidebarNavSection[] = [
     {
-      key: 'network',
-      label: 'Rede e Gestão',
+      key: 'operacao-mx',
+      label: 'Operação MX',
       items: [
-        { key: 'dashboard', label: 'Painel Geral', path: '/painel', icon: LayoutDashboard },
+        { key: 'dashboard', label: 'Início', path: '/painel', icon: LayoutDashboard },
+        { key: 'admin-clients', label: 'Clientes MX', path: '/clientes', icon: BriefcaseBusiness, activePaths: ['/clientes', '/clientes/novo'] },
+        { key: 'admin-consulting', label: 'Consultoria MX', path: '/consultoria-mx', icon: CalendarDays },
+        { key: 'consulting', label: 'Carteira consultiva', path: '/consultoria/clientes', icon: BriefcaseBusiness, activePaths: ['/consultoria', '/consultoria/clientes'] },
+        { key: 'admin-team', label: 'Equipe MX', path: '/equipe', icon: User },
+        { key: 'university', label: 'Universidade MX', path: '/universidade-mx', icon: GraduationCap },
         { key: 'stores', label: 'Lojas', path: '/lojas', icon: Building2 },
-        { key: 'strategic-plan', label: 'Plano Estratégico', path: '/plano-estrategico', icon: TrendingUp },
-        { key: 'action-plan', label: 'Plano de Ação', path: '/plano-acao', icon: ClipboardList },
-        { key: 'consulting', label: 'Consultoria', path: '/consultoria/clientes', icon: BriefcaseBusiness, activePaths: ['/consultoria', '/consultoria/clientes'] },
         { key: 'agenda', label: 'Agenda', path: '/agenda', icon: CalendarDays },
       ],
     },
     {
-      key: 'admin-mx',
-      label: 'Administração MX',
+      key: 'produto-metodologia',
+      label: 'Produto e Metodologia',
       items: [
-        { key: 'admin-clients', label: 'Clientes', path: '/clientes', icon: BriefcaseBusiness, activePaths: ['/clientes', '/clientes/novo'] },
-        { key: 'admin-team', label: 'Equipe MX', path: '/equipe', icon: User },
         { key: 'admin-products', label: 'Produtos de Consultoria', path: '/produtos', icon: Package },
-        { key: 'admin-indicators', label: 'Indicadores', path: '/indicadores', icon: Gauge },
-        { key: 'admin-action-plans', label: 'Planos de Ação', path: '/planos-acao', icon: ClipboardList },
-        { key: 'admin-consulting', label: 'Consultoria MX', path: '/consultoria-mx', icon: CalendarDays },
+        { key: 'admin-indicators', label: 'Indicadores e Parâmetros', path: '/indicadores', icon: Gauge },
+        { key: 'admin-action-plans', label: 'Planos de Ação e Playbooks', path: '/planos-acao', icon: ClipboardList },
+        { key: 'strategic-plan', label: 'Plano Estratégico', path: '/plano-estrategico', icon: TrendingUp },
+        { key: 'action-plan', label: 'Plano de Ação do Cliente', path: '/plano-acao', icon: ClipboardList },
+        { key: 'ranking', label: 'Ranking', path: '/classificacao', icon: Trophy },
+        { key: 'feedback', label: 'Devolutivas e PDI', path: '/devolutivas', icon: MessageSquare },
+        { key: 'training', label: 'Desenvolvimento', path: '/treinamentos', icon: GraduationCap },
+      ],
+    },
+    {
+      key: 'plataforma-governanca',
+      label: 'Plataforma e Governança',
+      items: [
+        { key: 'notifications', label: 'Notificações', path: '/notificacoes', icon: Bell, badge: clampBadge(counts.unreadNotifications) },
+        { key: 'morning-report', label: 'Relatório Matinal', path: '/relatorio-matinal', icon: ClipboardList },
+        { key: 'sales-performance', label: 'Performance de Vendas', path: '/relatorios/performance-vendas', icon: TrendingUp },
+        { key: 'seller-performance', label: 'Performance por Vendedor', path: '/relatorios/performance-vendedor', icon: User },
+        { key: 'diagnostics', label: 'Segurança e Auditoria', path: '/auditoria', icon: Database },
+        { key: 'reprocessing', label: 'Dados e Conciliação', path: '/configuracoes/reprocessamento', icon: Database },
+        { key: 'operational-settings', label: 'Configuração Operacional', path: '/configuracoes/operacional', icon: SlidersHorizontal },
+        { key: 'pmr-settings', label: 'Parâmetros PMR', path: '/configuracoes/consultoria-pmr', icon: Database },
+        { key: 'settings', label: 'Configurações da Plataforma', path: '/configuracoes', icon: Settings },
       ],
     },
     {
@@ -66,36 +89,6 @@ export function buildInternalMxNavigation(
         { key: 'simulation-seller', label: 'Vendedor', path: '/simulacao/vendedor', icon: User, activePaths: ['/simulacao', '/simulacao/vendedor'] },
         { key: 'simulation-manager', label: 'Gerente', path: '/simulacao/gerente', icon: MonitorPlay },
         { key: 'simulation-owner', label: 'Dono', path: '/simulacao/dono', icon: Building2 },
-      ],
-    },
-    {
-      key: 'content',
-      label: 'Rotina e Conteúdo',
-      items: [
-        { key: 'ranking', label: 'Ranking', path: '/classificacao', icon: Trophy },
-        { key: 'feedback', label: 'Devolutivas/PDI', path: '/devolutivas', icon: MessageSquare },
-        { key: 'training', label: 'Desenvolvimento', path: '/treinamentos', icon: GraduationCap },
-        { key: 'notifications', label: 'Notificações', path: '/notificacoes', icon: Bell, badge: clampBadge(counts.unreadNotifications) },
-      ],
-    },
-    {
-      key: 'reports',
-      label: 'Relatórios e Diagnóstico',
-      items: [
-        { key: 'morning-report', label: 'Relatório Matinal', path: '/relatorio-matinal', icon: ClipboardList },
-        { key: 'sales-performance', label: 'Performance de Vendas', path: '/relatorios/performance-vendas', icon: TrendingUp },
-        { key: 'seller-performance', label: 'Performance por Vendedor', path: '/relatorios/performance-vendedor', icon: User },
-        { key: 'diagnostics', label: 'Diagnóstico Operacional', path: '/auditoria', icon: Database },
-      ],
-    },
-    {
-      key: 'settings',
-      label: 'Configurações',
-      items: [
-        { key: 'operational-settings', label: 'Configuração Operacional', path: '/configuracoes/operacional', icon: SlidersHorizontal },
-        { key: 'pmr-settings', label: 'Parâmetros PMR', path: '/configuracoes/consultoria-pmr', icon: Database },
-        { key: 'reprocessing', label: 'Reprocessamento', path: '/configuracoes/reprocessamento', icon: TrendingUp },
-        { key: 'settings', label: 'Configurações', path: '/configuracoes', icon: Settings },
       ],
     },
   ]

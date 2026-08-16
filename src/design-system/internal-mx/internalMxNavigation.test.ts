@@ -8,19 +8,19 @@ describe('navegação interna MX', () => {
     test(`${role} recebe o mesmo mapa visual filtrado por autorização`, () => {
       const sections = buildInternalMxNavigation(role, { unreadNotifications: 7 })
       const items = sections.flatMap((section) => section.items)
+      // Três grupos da especificação do módulo Administrador + Simulação.
       expect(sections.map((section) => section.label)).toEqual([
-        'Rede e Gestão',
-        'Administração MX',
+        'Operação MX',
+        'Produto e Metodologia',
+        'Plataforma e Governança',
         'Simulação',
-        'Rotina e Conteúdo',
-        'Relatórios e Diagnóstico',
-        'Configurações',
       ])
       expect(items.some((item) => item.path === '/painel')).toBe(true)
       expect(items.some((item) => item.path === '/plano-estrategico')).toBe(true)
       expect(items.some((item) => item.path === '/plano-acao')).toBe(true)
       expect(items.some((item) => item.path === '/consultoria/clientes')).toBe(true)
       expect(items.some((item) => item.path === '/clientes')).toBe(true)
+      expect(items.some((item) => item.path === '/universidade-mx')).toBe(true)
       expect(items.some((item) => item.path === '/indicadores')).toBe(true)
       expect(items.some((item) => item.path === '/planos-acao')).toBe(true)
       expect(items.some((item) => item.path === '/consultoria-mx')).toBe(true)
