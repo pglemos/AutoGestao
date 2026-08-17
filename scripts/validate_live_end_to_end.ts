@@ -3,7 +3,7 @@ import { config as loadEnv } from 'dotenv'
 
 loadEnv({ quiet: true })
 
-const BASE_URL = (process.env.E2E_BASE_URL || process.env.VITE_APP_URL || 'https://mxperformance.vercel.app').replace(/\/$/, '')
+const BASE_URL = (process.env.E2E_BASE_URL || process.env.VITE_APP_URL || 'https://mxperformance.com.br').replace(/\/$/, '')
 const AUTH_EMAIL = process.env.E2E_AUTH_EMAIL
 const AUTH_PASSWORD = process.env.E2E_AUTH_PASSWORD
 

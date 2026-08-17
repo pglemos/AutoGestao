@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Camera, Key, LogOut, RefreshCw, Save, ShieldCheck } from 'lucide-react'
+import { Camera, Key, LogOut, RefreshCw, Save, ShieldCheck, User } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { getAvatarDisplayUrl } from '@/lib/avatar'
@@ -19,7 +19,7 @@ export function InternalProfilePage() {
   if (!state.profile) return <MxModulePage id="internal-profile-loading" bottomClearance="navigation"><MxLoadingState label="Carregando perfil" /></MxModulePage>
   return (
     <MxModulePage id="internal-profile" bottomClearance="navigation">
-      <MxModuleHeader eyebrow="Conta" title="Meu Perfil" description="Dados pessoais, foto e segurança da conta MX." actions={<><Button variant="outline" onClick={() => void state.signOut()}><LogOut size={18} />Sair</Button><Button onClick={() => void state.save()} disabled={!state.canEdit || state.saving}>{state.saving ? <RefreshCw size={18} className="animate-spin motion-reduce:animate-none" /> : <Save size={18} />}Salvar</Button></>} />
+      <MxModuleHeader icon={User} eyebrow="Conta" title="Meu Perfil" description="Dados pessoais, foto e segurança da conta MX." actions={<><Button variant="outline" onClick={() => void state.signOut()}><LogOut size={18} />Sair</Button><Button onClick={() => void state.save()} disabled={!state.canEdit || state.saving}>{state.saving ? <RefreshCw size={18} className="animate-spin motion-reduce:animate-none" /> : <Save size={18} />}Salvar</Button></>} />
       {!state.canEdit ? <MxStatusBanner tone="warning">Este perfil está disponível somente para leitura.</MxStatusBanner> : null}
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
         <MxSectionCard className="lg:col-span-4"><MxSectionHeader title="Identidade" description="Imagem e contexto do perfil atual." /><div className="flex flex-col items-center gap-4 p-5 text-center"><ProfileAvatar url={getAvatarDisplayUrl(state.profile.avatar_url, state.profile.name, { size: 256, background: '0D3B2E', color: 'fff' })} name={state.profile.name} /><div><strong className="block text-lg text-foreground">{state.profile.name}</strong><span className="text-sm text-muted-foreground">{state.role}</span></div><input ref={state.fileInputRef} type="file" accept="image/png,image/jpeg,image/webp" className="hidden" aria-label="Selecionar avatar" onChange={event => { const file = event.target.files?.[0] || null; state.setPendingAvatarFile(file); if (file) void state.uploadAvatar(file) }} /><Button variant="outline" onClick={() => state.fileInputRef.current?.click()} disabled={!state.canEdit || state.uploading}><Camera size={18} />{state.uploading ? 'Enviando...' : 'Alterar avatar'}</Button>{state.pendingAvatarFile ? <Button variant="outline" onClick={() => void state.uploadAvatar()} disabled={state.uploading}>Tentar novamente</Button> : null}</div></MxSectionCard>

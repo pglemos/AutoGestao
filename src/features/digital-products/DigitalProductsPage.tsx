@@ -1,3 +1,4 @@
+import { Package } from 'lucide-react'
 import { MxErrorState, MxLoadingState, MxModuleHeader, MxModulePage, MxSectionCard, MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
 import { useDigitalProductsController } from './hooks/useDigitalProductsController'
 import { DigitalProductMetrics } from './components/DigitalProductMetrics'
@@ -11,7 +12,7 @@ export function DigitalProductsPage() {
   if (controller.loading) {
     return (
       <MxModulePage id="produtos-digitais" width="wide" bottomClearance="navigation" accessMode={controller.canManage ? 'manage' : 'read-only'}>
-        <MxModuleHeader title="Produtos Digitais" description="Catálogo de produtos e materiais liberados por público." />
+        <MxModuleHeader icon={Package} title="Produtos Digitais" description="Catálogo de produtos e materiais liberados por público." />
         <MxSectionCard><MxLoadingState label="Sincronizando produtos" /></MxSectionCard>
       </MxModulePage>
     )
@@ -20,7 +21,7 @@ export function DigitalProductsPage() {
   if (controller.loadError) {
     return (
       <MxModulePage id="produtos-digitais" width="wide" bottomClearance="navigation" accessMode={controller.canManage ? 'manage' : 'read-only'}>
-        <MxModuleHeader title="Produtos Digitais" description="Catálogo de produtos e materiais liberados por público." />
+        <MxModuleHeader icon={Package} title="Produtos Digitais" description="Catálogo de produtos e materiais liberados por público." />
         <MxSectionCard><MxErrorState description={controller.loadError} retry={() => void controller.fetchProducts()} /></MxSectionCard>
       </MxModulePage>
     )
@@ -29,6 +30,7 @@ export function DigitalProductsPage() {
   return (
     <MxModulePage id="produtos-digitais" width="wide" bottomClearance="navigation" accessMode={controller.canManage ? 'manage' : 'read-only'}>
       <MxModuleHeader
+        icon={Package}
         title="Produtos Digitais"
         description={controller.canManage ? 'Administre publicação, público e ordem do catálogo operacional.' : 'Consulte os produtos ativos liberados para o seu perfil.'}
         eyebrow={controller.canManage ? 'Governança de catálogo' : 'Catálogo disponível'}
