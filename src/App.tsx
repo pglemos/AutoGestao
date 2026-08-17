@@ -8,6 +8,7 @@ import { ErrorState } from '@/components/molecules/ErrorState'
 import { Button } from '@/components/atoms/Button'
 import { slugify } from '@/lib/utils'
 import { canAccessPath } from '@/lib/auth/routeAccess'
+import { resolveManagerLegacyPath } from '@/lib/navigation/managerLegacyPaths'
 
 // Pages — Lazy loaded
 const OAuthHome = lazy(() => import('@/pages/OAuthHome'))
@@ -77,6 +78,10 @@ const AdminProdutosConsultoriaPage = lazy(() => import('@/features/admin-mx/Admi
 const AdminIndicadoresPage = lazy(() => import('@/features/admin-mx/AdminIndicadoresPage'))
 const AdminPlanosAcaoGlobalPage = lazy(() => import('@/features/admin-mx/AdminPlanosAcaoGlobalPage'))
 const AdminConsultoriaMxPage = lazy(() => import('@/features/admin-mx/AdminConsultoriaMxPage'))
+const AdminScoresAlertasPage = lazy(() => import('@/features/admin-mx/AdminScoresAlertasPage'))
+const AdminDadosConciliacaoPage = lazy(() => import('@/features/admin-mx/AdminDadosConciliacaoPage'))
+const AdminSegurancaAuditoriaPage = lazy(() => import('@/features/admin-mx/AdminSegurancaAuditoriaPage'))
+const AdminSuporteIncidentesPage = lazy(() => import('@/features/admin-mx/AdminSuporteIncidentesPage'))
 const ConsultorNotificacoes = lazy(() => import('@/pages/ConsultorNotificacoes'))
 const Configuracoes = lazy(() => import('@/pages/Configuracoes'))
 const OperationalSettings = lazy(() => import('@/pages/OperationalSettings'))
@@ -233,6 +238,12 @@ const OWNER_LEGACY_PATHS: Record<string, string> = {
   'universidade': '/universidade-mx',
 }
 
+/** O prefixo `/gerente/` saiu do produto; mantém links antigos vivos em vez de 404. */
+function ManagerLegacyPathRedirect() {
+  const location = useLocation()
+  return <Navigate to={`${resolveManagerLegacyPath(location.pathname)}${location.search}`} replace />
+}
+
 /** As telas do Dono passaram a viver na raiz; mantém links antigos vivos. */
 function OwnerLegacyPathRedirect() {
   const location = useLocation()
@@ -313,6 +324,7 @@ export default function App() {
               <Route path="/privacy" element={<Suspense fallback={<Spinner />}><Privacy /></Suspense>} />
               <Route path="/terms" element={<Suspense fallback={<Spinner />}><Terms /></Suspense>} />
               <Route path="/dono/*" element={<OwnerLegacyPathRedirect />} />
+              <Route path="/gerente/*" element={<ManagerLegacyPathRedirect />} />
               <Route path="/" element={<ProtectedRoute><Suspense fallback={<Spinner />}><AppShell /></Suspense></ProtectedRoute>}>
                 <Route path="settings" element={<Navigate to="/configuracoes" replace />} />
                 <Route path="plano-estrategico" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerPlanoEstrategico />} admin={<InternalStrategicPlanPage />} /></Suspense>} />
@@ -514,6 +526,24 @@ export default function App() {
                 <Route path="relatorios/performance-vendedor" element={<Suspense fallback={<Spinner />}><SellerPerformance /></Suspense>} />
                 <Route path="auditoria" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<AiDiagnostics />} dono={<ForbiddenRoute />} admin={<AiDiagnostics />} />
+                </Suspense>} />
+                <Route path="scores" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminScoresAlertasPage />} />
+                </Suspense>} />
+                <Route path="scores-alertas" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminScoresAlertasPage />} />
+                </Suspense>} />
+                <Route path="dados" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminDadosConciliacaoPage />} />
+                </Suspense>} />
+                <Route path="dados-conciliacao" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminDadosConciliacaoPage />} />
+                </Suspense>} />
+                <Route path="seguranca" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminSegurancaAuditoriaPage />} />
+                </Suspense>} />
+                <Route path="suporte" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminSuporteIncidentesPage />} />
                 </Suspense>} />
                 <Route path="*" element={<Suspense fallback={<Spinner />}><NotFound /></Suspense>} />
               </Route>

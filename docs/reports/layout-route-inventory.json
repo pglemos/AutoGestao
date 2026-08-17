@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-15T18:52:59.454Z",
-  "baselineSha": "9e2c3fb41eff5d2292c7c0621f44a701ea46ddb6",
-  "routeCount": 113,
+  "generatedAt": "2026-08-17T07:26:15.335Z",
+  "baselineSha": "526fd95e64ec11d47abc43caf6d75399051957e7",
+  "routeCount": 120,
   "routes": [
     {
       "path": "/",
@@ -214,10 +214,10 @@
         "vendedor:ForbiddenRoute",
         "gerente:ForbiddenRoute",
         "dono:ForbiddenRoute",
-        "admin:ConsultoriaClientes"
+        "admin:InternalClientsPage"
       ],
       "files": [
-        "src/pages/ConsultoriaClientes.tsx"
+        "src/features/internal-mx-planning/InternalClientsPage.tsx"
       ],
       "canvas": 0,
       "template": 0,
@@ -469,6 +469,47 @@
       "canvas": 0,
       "template": 0,
       "structural": 0,
+      "metadata": {
+        "width": "wide",
+        "bottomClearance": "navigation",
+        "adopted": true
+      }
+    },
+    {
+      "path": "/dados",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:AdminDadosConciliacaoPage"
+      ],
+      "files": [
+        "src/features/admin-mx/AdminDadosConciliacaoPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 1,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/dados-conciliacao",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:AdminDadosConciliacaoPage"
+      ],
+      "files": [
+        "src/features/admin-mx/AdminDadosConciliacaoPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 1,
       "metadata": {
         "width": "wide",
         "bottomClearance": "navigation",
@@ -879,6 +920,21 @@
       }
     },
     {
+      "path": "/gerente/*",
+      "renderCount": 1,
+      "routes": [
+        "*:ManagerLegacyPathRedirect"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
       "path": "/home",
       "renderCount": 4,
       "routes": [
@@ -1082,9 +1138,8 @@
       "template": 0,
       "structural": 1,
       "metadata": {
-        "width": "reading",
-        "bottomClearance": "actions",
-        "adopted": true
+        "width": "dashboard",
+        "source": "default"
       }
     },
     {
@@ -1337,7 +1392,7 @@
         "*:PainelConsultor"
       ],
       "files": [
-        "src/features/network-dashboard/NetworkDashboardPage.tsx"
+        "src/pages/PainelConsultor.tsx"
       ],
       "canvas": 0,
       "template": 0,
@@ -1460,7 +1515,7 @@
       ],
       "canvas": 0,
       "template": 0,
-      "structural": 2,
+      "structural": 0,
       "metadata": {
         "width": "wide",
         "bottomClearance": "navigation",
@@ -1709,6 +1764,67 @@
       }
     },
     {
+      "path": "/scores",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:AdminScoresAlertasPage"
+      ],
+      "files": [
+        "src/features/admin-mx/AdminScoresAlertasPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/scores-alertas",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:AdminScoresAlertasPage"
+      ],
+      "files": [
+        "src/features/admin-mx/AdminScoresAlertasPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "bottomClearance": "navigation",
+        "adopted": true
+      }
+    },
+    {
+      "path": "/seguranca",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:AdminSegurancaAuditoriaPage"
+      ],
+      "files": [
+        "src/features/admin-mx/AdminSegurancaAuditoriaPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
       "path": "/settings",
       "renderCount": 1,
       "routes": [
@@ -1754,6 +1870,26 @@
       "structural": 0,
       "metadata": {
         "width": "focused"
+      }
+    },
+    {
+      "path": "/suporte",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:AdminSuporteIncidentesPage"
+      ],
+      "files": [
+        "src/features/admin-mx/AdminSuporteIncidentesPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
       }
     },
     {
@@ -1824,7 +1960,7 @@
         "src/pages/ConsultorTreinamentos.tsx"
       ],
       "canvas": 5,
-      "template": 6,
+      "template": 0,
       "structural": 1,
       "metadata": {
         "width": "dashboard",
@@ -1846,10 +1982,11 @@
         "src/pages/ConsultorTreinamentos.tsx"
       ],
       "canvas": 5,
-      "template": 6,
+      "template": 0,
       "structural": 1,
       "metadata": {
         "width": "dashboard",
+        "bottomClearance": "navigation",
         "adopted": true
       }
     },

@@ -108,6 +108,12 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   // Listas densas do módulo Administrador: mesma largura do CRM de consultoria.
   'clientes/:clientSlug': { width: 'wide', bottomClearance: 'navigation', adopted: true },
   'clientes/novo': { width: 'wide', bottomClearance: 'navigation', adopted: true },
+  scores: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
+  'scores-alertas': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
+  dados: { width: 'wide', bottomClearance: 'navigation', adopted: true },
+  'dados-conciliacao': { width: 'wide', bottomClearance: 'navigation', adopted: true },
+  seguranca: { width: 'wide', bottomClearance: 'navigation', adopted: true },
+  suporte: { width: 'wide', bottomClearance: 'navigation', adopted: true },
   'consultoria-mx': { width: 'wide', bottomClearance: 'navigation', adopted: true },
   indicadores: { width: 'wide', bottomClearance: 'navigation', adopted: true },
   'planos-acao': { width: 'wide', bottomClearance: 'navigation', adopted: true },

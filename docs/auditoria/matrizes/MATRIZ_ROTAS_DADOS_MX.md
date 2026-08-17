@@ -1,8 +1,8 @@
 # Matriz reproduzível de rotas, autorização e dados
 
-- Rotas declaradas em `src/App.tsx`: **115**
-- Rotas protegidas: **107**
-- Rotas públicas: **8**
+- Rotas declaradas em `src/App.tsx`: **122**
+- Rotas protegidas: **113**
+- Rotas públicas: **9**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
 - Tabelas referenciadas pelo runtime: **174**
@@ -22,6 +22,7 @@
 | `/privacy` | route | pública | — | n/a | — | `<Suspense fallback={<Spinner />}><Privacy /></Suspense>` |
 | `/terms` | route | pública | — | n/a | — | `<Suspense fallback={<Spinner />}><Terms /></Suspense>` |
 | `/dono/*` | route | pública | — | n/a | — | `<OwnerLegacyPathRedirect />` |
+| `/gerente/*` | route | pública | — | n/a | — | `<ManagerLegacyPathRedirect />` |
 | `/` | container | protegida | — | n/a | — | `<ProtectedRoute><Suspense fallback={<Spinner />}><AppShell /></Suspense></ProtectedRoute>` |
 | `/settings` | route | protegida | `/configuracoes` | `/settings` | — | `<Navigate to="/configuracoes" replace />` |
 | `/plano-estrategico` | route | protegida | — | `/plano-estrategico` | vendedor, gerente | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerPlanoEstrategico />} admin={<InternalStrategicPlanPage />} /></S` |
@@ -128,6 +129,12 @@
 | `/relatorios/performance-vendas` | route | protegida | — | `/relatorios/performance-vendas` | — | `<Suspense fallback={<Spinner />}><SalesPerformance /></Suspense>` |
 | `/relatorios/performance-vendedor` | route | protegida | — | `/relatorios/performance-vendedor` | — | `<Suspense fallback={<Spinner />}><SellerPerformance /></Suspense>` |
 | `/auditoria` | route | protegida | — | `/auditoria` | vendedor, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<AiDiagnostics />} dono={<ForbiddenRoute />} admin={<AiDiagnostics />} /> </Suspense>` |
+| `/scores` | route | protegida | — | `/scores` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminScoresAlertasPage />} /> </Suspense>` |
+| `/scores-alertas` | route | protegida | — | `/scores-alertas` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminScoresAlertasPage />} /> </Suspense>` |
+| `/dados` | route | protegida | — | `/dados` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminDadosConciliacaoPage />} /> </Suspen` |
+| `/dados-conciliacao` | route | protegida | — | `/dados-conciliacao` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminDadosConciliacaoPage />} /> </Suspen` |
+| `/seguranca` | route | protegida | — | `/seguranca` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminSegurancaAuditoriaPage />} /> </Susp` |
+| `/suporte` | route | protegida | — | `/suporte` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminSuporteIncidentesPage />} /> </Suspe` |
 | `/*` | fallback | protegida | — | n/a | — | `<Suspense fallback={<Spinner />}><NotFound /></Suspense>` |
 
 ## Tabelas
@@ -156,7 +163,7 @@
 | `catalogo_metricas_consultoria` | 7 |
 | `central_execucao_aberturas` | 3 |
 | `clientes` | 6 |
-| `clientes_consultoria` | 20 |
+| `clientes_consultoria` | 24 |
 | `clientes_oportunidades` | 1 |
 | `comportamental_perfis` | 1 |
 | `comportamental_questoes` | 1 |
@@ -360,7 +367,7 @@
 | `central_execucao_aberturas:upsert` | 2 |
 | `clientes_consultoria:delete` | 1 |
 | `clientes_consultoria:insert` | 4 |
-| `clientes_consultoria:select` | 20 |
+| `clientes_consultoria:select` | 24 |
 | `clientes_consultoria:update` | 5 |
 | `clientes_oportunidades:select` | 1 |
 | `clientes:delete` | 2 |

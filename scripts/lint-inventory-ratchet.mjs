@@ -69,6 +69,11 @@ export const INCREASE_ALLOWLIST = {
   'route-role-matrix.standardCanvasTotal': 'As 4 rotas novas e /equipe/admin usam canvas padrão.',
   'route-role-matrix.standardCanvasRenderings': 'Consequência das 4 rotas novas do Administrador MX.',
   'layout-route-inventory.routeCount': 'Consequência das 4 rotas novas do Administrador MX.',
+  // Alias legado `/gerente/*` (2026-08-17): o prefixo saiu do produto mas
+  // sobrevive em links antigos, que caíam em 404. Vira redirect para a rota
+  // canônica na raiz, no mesmo formato público de `/dono/*` — o redirect não
+  // expõe conteúdo, apenas navega para o destino, que segue protegido.
+  'route-role-matrix.routesPublic': 'Alias legado /gerente/* em 2026-08-17, simétrico a /dono/*.',
 }
 
 function readJson(rel) {
