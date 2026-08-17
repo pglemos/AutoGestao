@@ -6,7 +6,7 @@
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
 - Tabelas referenciadas pelo runtime: **172**
-- RPCs referenciadas pelo runtime: **88**
+- RPCs referenciadas pelo runtime: **89**
 - Edge Functions invocadas pelo runtime: **14**
 - Pares tabela/operação encontrados: **364**
 
@@ -749,6 +749,7 @@
 | `rejeitar_regularizacao_fechamento` | 1 |
 | `resolve_alert` | 1 |
 | `restaurar_metas_indicador_planejamento` | 2 |
+| `saldo_presencial_cliente` | 1 |
 | `salvar_metas_indicador_planejamento` | 2 |
 | `save_manager_lead_conference` | 1 |
 | `send_broadcast_notification` | 1 |

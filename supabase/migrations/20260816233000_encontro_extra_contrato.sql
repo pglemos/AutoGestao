@@ -21,7 +21,8 @@ CREATE INDEX IF NOT EXISTS idx_visitas_fora_do_contrato
   WHERE fora_do_contrato;
 
 -- A contagem contratual ignora os extras.
-CREATE OR REPLACE VIEW public.vw_jornada_alem_do_contratado AS
+CREATE OR REPLACE VIEW public.vw_jornada_alem_do_contratado
+WITH (security_invoker = true) AS
 SELECT
   c.id                AS client_id,
   c.name              AS client_name,

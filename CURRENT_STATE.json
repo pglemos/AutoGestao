@@ -1,27 +1,28 @@
 {
-  "timestamp": "2026-08-10T18:52:30-03:00",
+  "timestamp": "2026-08-16T21:04:30-03:00",
   "project": "MX Gestao Preditiva / MX Performance",
   "environment": "production",
   "git": {
     "branch": "main",
-    "initial_sha": "6dd20eb2f56f8e522f18f197ee985511e413fb03",
-    "final_sha": "89f493c9ef97499e4a276667725d712638a171c0",
-    "baseline_tag": "v3-master-baseline",
-    "bundle_backup": "../MXGESTAOPREDITIVA-v3-baseline.bundle",
-    "working_tree": "clean"
+    "initial_sha": "1ebe5d48eab2eee08feffbd01d289c2d3f910d49",
+    "baseline_tag": "pre-mx-v5-20260816-203016",
+    "bundle_backup": "../MXGESTAOPREDITIVA-pre-mx-v5-20260816-203016.bundle",
+    "working_tree": "in_sync"
   },
   "vercel": {
     "url": "https://www.mxperformance.com.br",
-    "health_status": "healthy",
-    "production_release": "89f493c9ef97499e4a276667725d712638a171c0"
+    "project_id": "prj_fpYjxc851kMs55GzR6tgQEr7uWUj",
+    "team_id": "team_9kUTSaoIkwnAVxy9nXMcAnej",
+    "health_status": "healthy"
   },
   "supabase": {
     "project_id": "fbhcmzzgwjdgkctlfvbo",
     "region": "sa-east-1",
-    "status": "ACTIVE_HEALTHY"
+    "status": "ACTIVE_HEALTHY",
+    "security_advisors_errors": 0
   },
   "sentry": {
     "project": "mx-performance",
-    "release": "89f493c9ef97499e4a276667725d712638a171c0"
+    "status": "ACTIVE"
   }
 }

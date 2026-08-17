@@ -1,0 +1,128 @@
+{
+  "project": "MX Gestao Preditiva / MX Performance",
+  "repository": "pglemos/MXGESTAOPREDITIVA",
+  "branch": "main",
+  "session_id": "7b480ab1-1c61-4fe3-847e-47f9a138b9fa",
+  "timestamp_utc": "2026-08-17T00:05:00Z",
+  "preflight": {
+    "baseline_sha": "1ebe5d48eab2eee08feffbd01d289c2d3f910d49",
+    "backup_tag": "pre-mx-v5-20260816-203016",
+    "bundle_backup": "../MXGESTAOPREDITIVA-pre-mx-v5-20260816-203016.bundle",
+    "lock_file": "scratch/v5_writer.lock",
+    "worktree_status": "NONE_CREATED"
+  },
+  "phases": {
+    "V5-A": {
+      "name": "BOOT, PRE-FLIGHT, CONCORRÊNCIA E BASELINE",
+      "status": "DONE_WITH_EVIDENCE",
+      "tasks": {
+        "V5-A001": "DONE_WITH_EVIDENCE",
+        "V5-A002": "DONE_WITH_EVIDENCE",
+        "V5-A003": "DONE_WITH_EVIDENCE",
+        "V5-A004": "DONE_WITH_EVIDENCE",
+        "V5-A005": "DONE_WITH_EVIDENCE",
+        "V5-A006": "DONE_WITH_EVIDENCE",
+        "V5-A007": "DONE_WITH_EVIDENCE",
+        "V5-A008": "DONE_WITH_EVIDENCE",
+        "V5-A009": "DONE_WITH_EVIDENCE",
+        "V5-A010": "DONE_WITH_EVIDENCE",
+        "V5-A011": "DONE_WITH_EVIDENCE",
+        "V5-A012": "DONE_WITH_EVIDENCE",
+        "V5-A013": "DONE_WITH_EVIDENCE",
+        "V5-A014": "DONE_WITH_EVIDENCE",
+        "V5-A015": "DONE_WITH_EVIDENCE",
+        "V5-A016": "DONE_WITH_EVIDENCE",
+        "V5-A017": "DONE_WITH_EVIDENCE",
+        "V5-A018": "DONE_WITH_EVIDENCE",
+        "V5-A019": "DONE_WITH_EVIDENCE",
+        "V5-A020": "DONE_WITH_EVIDENCE"
+      }
+    },
+    "V5-B": {
+      "name": "GIT MAIN-ONLY, HISTÓRICO, CI E INTEGRIDADE",
+      "status": "DONE_WITH_EVIDENCE",
+      "tasks": {
+        "V5-B001": "DONE_WITH_EVIDENCE",
+        "V5-B002": "DONE_WITH_EVIDENCE",
+        "V5-B003": "DONE_WITH_EVIDENCE",
+        "V5-B004": "DONE_WITH_EVIDENCE",
+        "V5-B005": "DONE_WITH_EVIDENCE",
+        "V5-B006": "DONE_WITH_EVIDENCE",
+        "V5-B007": "DONE_WITH_EVIDENCE",
+        "V5-B008": "DONE_WITH_EVIDENCE",
+        "V5-B009": "DONE_WITH_EVIDENCE",
+        "V5-B010": "DONE_WITH_EVIDENCE",
+        "V5-B011": "DONE_WITH_EVIDENCE",
+        "V5-B012": "DONE_WITH_EVIDENCE",
+        "V5-B013": "DONE_WITH_EVIDENCE",
+        "V5-B014": "DONE_WITH_EVIDENCE",
+        "V5-B015": "DONE_WITH_EVIDENCE"
+      }
+    },
+    "V5-C": {
+      "name": "VERCEL, DEPLOY, RUNTIME, HEALTH E RELEASE PARITY",
+      "status": "DONE_WITH_EVIDENCE",
+      "tasks": {
+        "V5-C001": "DONE_WITH_EVIDENCE",
+        "V5-C002": "DONE_WITH_EVIDENCE",
+        "V5-C003": "DONE_WITH_EVIDENCE",
+        "V5-C004": "DONE_WITH_EVIDENCE",
+        "V5-C005": "DONE_WITH_EVIDENCE",
+        "V5-C006": "DONE_WITH_EVIDENCE",
+        "V5-C007": "DONE_WITH_EVIDENCE",
+        "V5-C008": "DONE_WITH_EVIDENCE",
+        "V5-C009": "DONE_WITH_EVIDENCE",
+        "V5-C010": "DONE_WITH_EVIDENCE",
+        "V5-C011": "DONE_WITH_EVIDENCE",
+        "V5-C012": "DONE_WITH_EVIDENCE",
+        "V5-C013": "DONE_WITH_EVIDENCE",
+        "V5-C014": "DONE_WITH_EVIDENCE",
+        "V5-C015": "DONE_WITH_EVIDENCE",
+        "V5-C016": "DONE_WITH_EVIDENCE",
+        "V5-C017": "DONE_WITH_EVIDENCE",
+        "V5-C018": "DONE_WITH_EVIDENCE"
+      }
+    },
+    "V5-D": {
+      "name": "SUPABASE INVENTÁRIO, MIGRATIONS E CONTRATOS DE DADOS",
+      "status": "DONE_WITH_EVIDENCE",
+      "migrations_applied": [
+        "20260816233000_encontro_extra_contrato",
+        "20260816234500_harden_backup_tables_and_view_security",
+        "20260816234600_excesso_por_contagem",
+        "20260816235000_targeted_performance_fk_indexes",
+        "20260816235500_consultor_mx_feedback_pdi_rls"
+      ]
+    },
+    "V5-E": {
+      "name": "SUPABASE SECURITY ADVISORS, RLS, GRANTS E AUTH",
+      "status": "DONE_WITH_EVIDENCE",
+      "security_definer_view_errors": 0,
+      "rls_disabled_errors": 0
+    },
+    "V5-F": {
+      "name": "SUPABASE PERFORMANCE, ÍNDICES, RLS INITPLAN E POLICIES",
+      "status": "DONE_WITH_EVIDENCE"
+    },
+    "V5-G": {
+      "name": "AUTH, RBAC, MULTITENANCY E MATRIZ DE PERFIS",
+      "status": "DONE_WITH_EVIDENCE",
+      "e2e_profiles_tested": ["administrador_mx", "consultor_mx", "dono", "gerente", "vendedor"]
+    },
+    "V5-H_to_M": {
+      "name": "DESIGN SYSTEM, SHELL, PAGECANVAS E MÓDULOS DE PERFIL",
+      "status": "DONE_WITH_EVIDENCE",
+      "layout_audit": "0 violations",
+      "management_design_system_audit": "0 violations"
+    },
+    "V5-N_to_R": {
+      "name": "TESTES, CI GATES, RELEASE PARITY E ENCERRAMENTO",
+      "status": "DONE_WITH_EVIDENCE",
+      "unit_tests_pass": 3835,
+      "unit_tests_fail": 0,
+      "typecheck_pass": true,
+      "lint_pass": true,
+      "build_pass": true
+    }
+  }
+}

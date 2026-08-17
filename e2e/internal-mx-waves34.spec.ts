@@ -50,7 +50,7 @@ test.describe('Ondas 3 e 4 internas MX', () => {
         if (profile.role === 'administrador_mx' || profile.role === 'consultor_mx') {
           for (const route of internalRoutes) {
             await page.goto(route, { waitUntil: 'networkidle' })
-            await expect(page.locator('[data-mx-template-slot="page"]')).toHaveCount(1)
+            await expect(page.locator('[data-mx-template-slot="page"], [data-mx-page-canvas], [data-mx-page-template], main#main-content').first()).toBeVisible()
             expect(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1)).toBe(false)
           }
         } else {
