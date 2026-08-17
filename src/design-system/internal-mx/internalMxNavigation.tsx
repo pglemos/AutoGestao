@@ -9,7 +9,6 @@ import {
   LayoutDashboard,
   MessageSquare,
   MonitorPlay,
-  Gauge,
   Package,
   Settings,
   SlidersHorizontal,
@@ -34,22 +33,30 @@ export function buildInternalMxNavigation(
   role: UserRole,
   counts: InternalMxNavigationCounts = {},
 ): MxSidebarNavSection[] {
-  // Três grupos da especificação do módulo Administrador (Operação MX,
-  // Produto e Metodologia, Plataforma e Governança). Os itens de rede e
-  // conteúdo continuam acessíveis dentro do grupo a que pertencem — o consultor
-  // MX usa essas telas todo dia e tirá-las do menu seria regressão.
+  // Cada domínio operacional possui uma única entrada canônica. As antigas
+  // rotas permanecem somente como aliases de compatibilidade no AppShell.
   const sections: MxSidebarNavSection[] = [
     {
       key: 'operacao-mx',
       label: 'Operação MX',
       items: [
         { key: 'dashboard', label: 'Início', path: '/painel', icon: LayoutDashboard },
-        { key: 'admin-clients', label: 'Clientes MX', path: '/clientes', icon: BriefcaseBusiness, activePaths: ['/clientes', '/clientes/novo'] },
-        { key: 'admin-consulting', label: 'Consultoria MX', path: '/consultoria-mx', icon: CalendarDays },
-        { key: 'consulting', label: 'Carteira consultiva', path: '/consultoria/clientes', icon: BriefcaseBusiness, activePaths: ['/consultoria', '/consultoria/clientes'] },
-        { key: 'admin-team', label: 'Equipe MX', path: '/equipe', icon: User },
+        {
+          key: 'admin-clients',
+          label: 'Clientes MX',
+          path: '/clientes',
+          icon: BriefcaseBusiness,
+          activePaths: ['/clientes', '/clientes/novo', '/lojas'],
+        },
+        {
+          key: 'admin-consulting',
+          label: 'Consultoria MX',
+          path: '/consultoria',
+          icon: CalendarDays,
+          activePaths: ['/consultoria', '/consultoria-mx', '/consultoria/clientes'],
+        },
+        { key: 'admin-team', label: 'Equipe MX', path: '/equipe', icon: User, activePaths: ['/equipe', '/team'] },
         { key: 'university', label: 'Universidade MX', path: '/universidade-mx', icon: GraduationCap },
-        { key: 'stores', label: 'Lojas', path: '/lojas', icon: Building2 },
         { key: 'agenda', label: 'Agenda', path: '/agenda', icon: CalendarDays },
       ],
     },
@@ -58,10 +65,20 @@ export function buildInternalMxNavigation(
       label: 'Produto e Metodologia',
       items: [
         { key: 'admin-products', label: 'Produtos de Consultoria', path: '/produtos', icon: Package },
-        { key: 'admin-indicators', label: 'Indicadores e Parâmetros', path: '/indicadores', icon: Gauge },
-        { key: 'admin-action-plans', label: 'Planos de Ação e Playbooks', path: '/planos-acao', icon: ClipboardList },
-        { key: 'strategic-plan', label: 'Plano Estratégico', path: '/plano-estrategico', icon: TrendingUp },
-        { key: 'action-plan', label: 'Plano de Ação do Cliente', path: '/plano-acao', icon: ClipboardList },
+        {
+          key: 'strategic-plan',
+          label: 'Plano Estratégico',
+          path: '/plano-estrategico',
+          icon: TrendingUp,
+          activePaths: ['/plano-estrategico', '/indicadores'],
+        },
+        {
+          key: 'action-plan',
+          label: 'Planos de Ação',
+          path: '/plano-acao',
+          icon: ClipboardList,
+          activePaths: ['/plano-acao', '/planos-acao'],
+        },
         { key: 'ranking', label: 'Ranking', path: '/classificacao', icon: Trophy },
         { key: 'feedback', label: 'Devolutivas e PDI', path: '/devolutivas', icon: MessageSquare },
         { key: 'training', label: 'Desenvolvimento', path: '/treinamentos', icon: GraduationCap },

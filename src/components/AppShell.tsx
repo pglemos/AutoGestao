@@ -1,5 +1,7 @@
-import { useAuth } from '@/hooks/useAuth'
+import { Navigate, useLocation } from 'react-router-dom'
+import { isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { AppShellFrame } from '@/design-system/shell/AppShellFrame'
+import { resolveInternalMxCanonicalRoute } from '@/lib/navigation/internalMxCanonicalRoutes'
 import Layout from './Layout'
 
 /**
@@ -11,6 +13,12 @@ import Layout from './Layout'
  */
 export default function AppShell() {
   const { role } = useAuth()
+  const location = useLocation()
+
+  if (isPerfilInternoMx(role)) {
+    const canonicalRoute = resolveInternalMxCanonicalRoute(location.pathname, location.search)
+    if (canonicalRoute) return <Navigate to={canonicalRoute} replace />
+  }
 
   return (
     <AppShellFrame role={role}>

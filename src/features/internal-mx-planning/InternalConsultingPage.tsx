@@ -1,24 +1,44 @@
+import AdminConsultoriaMxPage from '@/features/admin-mx/AdminConsultoriaMxPage'
+import { useInternalMxDomainTabs } from '@/design-system/internal-mx/InternalMxDomainTabs'
 import { ConsultingJourneyWorkspace } from '@/features/consulting-journey/ConsultingJourneyWorkspace'
 import { ConsultingClientsPage } from '@/features/consulting-clients/ConsultingClientsPage'
 import { InternalMxPlanningShell, useInternalPlanningStore } from './InternalMxPlanningShell'
 
+type ConsultingMode = 'operacao' | 'clientes' | 'metodologia'
+
+const CONSULTING_TABS = [
+  { key: 'operacao' as const, label: 'Operação' },
+  { key: 'clientes' as const, label: 'Clientes' },
+  { key: 'metodologia' as const, label: 'Metodologia' },
+]
+
 export default function InternalConsultingPage() {
   const store = useInternalPlanningStore()
+  const domain = useInternalMxDomainTabs<ConsultingMode>({ tabs: CONSULTING_TABS, fallback: 'operacao' })
+
+  if (domain.active === 'metodologia') {
+    return (
+      <>
+        {domain.tabs}
+        <AdminConsultoriaMxPage />
+      </>
+    )
+  }
 
   return (
-    <InternalMxPlanningShell
-      title="Consultoria"
-      description="Acompanhe a jornada da loja selecionada e administre a carteira global de clientes consultivos."
-      store={store}
-    >
-      <ConsultingJourneyWorkspace />
-      <section className="mt-8 border-t border-border pt-6">
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold text-foreground">Carteira global de Consultoria</h2>
-          <p className="text-sm text-muted-foreground">Clientes, atribuições, módulos, visitas, evidências e dados financeiros.</p>
-        </div>
-        <ConsultingClientsPage embedded />
-      </section>
-    </InternalMxPlanningShell>
+    <>
+      {domain.tabs}
+      <InternalMxPlanningShell
+        title="Consultoria MX"
+        description={domain.active === 'clientes'
+          ? 'Administre a carteira global de clientes, atribuições, módulos, visitas, evidências e dados financeiros.'
+          : 'Acompanhe a jornada e a execução consultiva da loja selecionada.'}
+        store={store}
+      >
+        {domain.active === 'clientes'
+          ? <ConsultingClientsPage embedded />
+          : <ConsultingJourneyWorkspace />}
+      </InternalMxPlanningShell>
+    </>
   )
 }
