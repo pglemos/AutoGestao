@@ -14,6 +14,10 @@ export type PortfolioClient = {
   contract_end_date: string | null
   onboarding_step: number | null
   onboarding_completed: boolean | null
+  suspended_at: string | null
+  suspended_reason: string | null
+  activated_at: string | null
+  scheduled_activation_at: string | null
   units: number
   users: number
   visitsDone: number

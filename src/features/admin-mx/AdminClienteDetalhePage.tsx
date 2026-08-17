@@ -12,7 +12,7 @@ import {
   RefreshCw,
   UserPlus,
 } from 'lucide-react'
-import { Link, useLocation, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
 import { TabNav } from '@/components/molecules/TabNav'
@@ -86,7 +86,11 @@ export function AdminClienteDetalhePage() {
   const { width, bottomClearance } = resolveRouteLayout(location.pathname)
   const { client, loading, error, refetch } = useConsultingClientDetailBySlug(clientSlug)
   const { supabaseUser } = useAuth()
-  const [tab, setTab] = useState<ClientTab>('visao')
+  const [searchParams] = useSearchParams()
+  const requestedTab = searchParams.get('tab')
+  const [tab, setTabState] = useState<ClientTab>(requestedTab && TABS.some(entry => entry.key === requestedTab) ? requestedTab as ClientTab : 'visao')
+
+  const setTab = (next: ClientTab) => setTabState(next)
   const [storeTaken, setStoreTaken] = useState(false)
   const [activationOpen, setActivationOpen] = useState(false)
   const [activating, setActivating] = useState(false)

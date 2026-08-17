@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { AlertTriangle, Building2, CalendarClock, CheckCircle2, ClipboardList, Plus, RefreshCw, Rocket } from 'lucide-react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/organisms/Table'
@@ -19,6 +19,15 @@ import {
   MxTableSurface,
   MxToolbar,
 } from '@/components/module/MxModuleVisualPrimitives'
+import { useAuth } from '@/hooks/useAuth'
+import { toast } from '@/lib/toast'
+import { ClientActionsMenu, CLIENT_ACTION_LABELS, type ClientAction } from './clientes/ClientActionsMenu'
+import { EnrollmentLinkModal } from './clientes/EnrollmentLinkModal'
+import { ScheduleActivationModal } from './clientes/ScheduleActivationModal'
+import { SuspendClientModal } from './clientes/SuspendClientModal'
+import { createEnrollmentLink } from './clientes/enrollmentMutations'
+import type { EnrollmentLinkDraft } from './clientes/enrollmentLink'
+import { reactivateClient, scheduleActivation, suspendClient } from './clientes/lifecycleMutations'
 import {
   EMPTY_PORTFOLIO_FILTERS,
   PORTFOLIO_BUCKET_LABEL,
@@ -55,7 +64,14 @@ export function AdminClientesPage() {
   const { rows, loading, error, refetch } = useClientPortfolio()
   const [filters, setFilters] = useState<PortfolioFilters>(EMPTY_PORTFOLIO_FILTERS)
   const location = useLocation()
+  const navigate = useNavigate()
+  const { supabaseUser } = useAuth()
   const { width, bottomClearance } = resolveRouteLayout(location.pathname)
+
+  const [suspendTarget, setSuspendTarget] = useState<(typeof rows)[number] | null>(null)
+  const [scheduleTarget, setScheduleTarget] = useState<(typeof rows)[number] | null>(null)
+  const [linkTarget, setLinkTarget] = useState<(typeof rows)[number] | null>(null)
+  const [submitting, setSubmitting] = useState(false)
 
   const counters = useMemo(() => portfolioCounters(rows), [rows])
   const filtered = useMemo(() => filterPortfolio(rows, filters), [rows, filters])
@@ -70,6 +86,86 @@ export function AdminClientesPage() {
   }, [rows])
 
   const patch = (values: Partial<PortfolioFilters>) => setFilters(current => ({ ...current, ...values }))
+
+  const handleAction = (client: (typeof rows)[number], action: ClientAction) => {
+    const base = `/clientes/${client.slug || client.id}`
+    switch (action) {
+      case 'abrir_visao360':
+        navigate(base)
+        break
+      case 'continuar_onboarding':
+        navigate(`/clientes/novo?continue=${client.id}`)
+        break
+      case 'gerar_link_autocadastro':
+        setLinkTarget(client)
+        break
+      case 'adicionar_pessoa':
+        navigate(`${base}?tab=pessoas`)
+        break
+      case 'abrir_jornada':
+        navigate(`${base}?tab=jornada`)
+        break
+      case 'abrir_auditoria':
+        navigate(`${base}?tab=historico`)
+        break
+      case 'programar_ativacao':
+        setScheduleTarget(client)
+        break
+      case 'suspender':
+        setSuspendTarget(client)
+        break
+      case 'validar_cadastros':
+        navigate(`${base}?tab=pessoas`)
+        break
+    }
+  }
+
+  const doSuspend = async (reason: string) => {
+    if (!suspendTarget || !supabaseUser) return null
+    setSubmitting(true)
+    const result = await suspendClient({ clientId: suspendTarget.id, reason, suspendedBy: supabaseUser.id })
+    setSubmitting(false)
+    if (result.error) return result.error
+    toast.success('Cliente suspenso.')
+    setSuspendTarget(null)
+    await refetch()
+    return null
+  }
+
+  const doSchedule = async (scheduledFor: string) => {
+    if (!scheduleTarget || !supabaseUser) return null
+    setSubmitting(true)
+    const result = await scheduleActivation({ clientId: scheduleTarget.id, scheduledFor, scheduledBy: supabaseUser.id })
+    setSubmitting(false)
+    if (result.error) return result.error
+    toast.success('Ativação programada.')
+    setScheduleTarget(null)
+    await refetch()
+    return null
+  }
+
+  const doReactivate = async (client: (typeof rows)[number]) => {
+    if (!supabaseUser) return
+    setSubmitting(true)
+    const result = await reactivateClient({ clientId: client.id, activatedBy: supabaseUser.id })
+    setSubmitting(false)
+    if (result.error) {
+      toast.error(result.error)
+      return
+    }
+    toast.success('Cliente reativado.')
+    await refetch()
+  }
+
+  const doCreateEnrollmentLink = async (draft: EnrollmentLinkDraft) => {
+    if (!linkTarget || !supabaseUser) return null
+    const result = await createEnrollmentLink(linkTarget.id, linkTarget.slug || '', location.pathname, draft, supabaseUser.id)
+    if (result.error) {
+      toast.error(result.error)
+      return null
+    }
+    return result.url
+  }
 
   return (
     <MxModulePage id="admin-mx-clientes" width={width} bottomClearance={bottomClearance}>
@@ -171,9 +267,12 @@ export function AdminClientesPage() {
                               </TableCell>
                               <TableCell>{isActive(client) ? 'Ativo' : 'Inativo'}</TableCell>
                               <TableCell className="text-right">
-                                <Button asChild variant="outline" size="sm">
-                                  <Link to={`/clientes/${client.slug || client.id}`}>Abrir Visão 360</Link>
-                                </Button>
+                                <div className="flex items-center justify-end gap-2">
+                                  {client.suspended_at ? (
+                                    <Button variant="outline" size="sm" onClick={() => void doReactivate(client)} disabled={submitting}>Reativar</Button>
+                                  ) : null}
+                                  <ClientActionsMenu client={client} onAction={action => handleAction(client, action)} />
+                                </div>
                               </TableCell>
                             </TableRow>
                           )
@@ -194,6 +293,27 @@ export function AdminClientesPage() {
           </>
         )}
       </div>
+
+      <SuspendClientModal
+        open={Boolean(suspendTarget)}
+        clientName={suspendTarget?.name ?? ''}
+        submitting={submitting}
+        onSubmit={doSuspend}
+        onClose={() => setSuspendTarget(null)}
+      />
+      <ScheduleActivationModal
+        open={Boolean(scheduleTarget)}
+        clientName={scheduleTarget?.name ?? ''}
+        submitting={submitting}
+        onSubmit={doSchedule}
+        onClose={() => setScheduleTarget(null)}
+      />
+      <EnrollmentLinkModal
+        open={Boolean(linkTarget)}
+        submitting={submitting}
+        onSubmit={doCreateEnrollmentLink}
+        onClose={() => setLinkTarget(null)}
+      />
     </MxModulePage>
   )
 }
