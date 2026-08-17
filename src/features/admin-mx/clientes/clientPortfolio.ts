@@ -18,6 +18,8 @@ export type PortfolioClient = {
   suspended_reason: string | null
   activated_at: string | null
   scheduled_activation_at: string | null
+  primary_store_city: string | null
+  main_contact_name: string | null
   units: number
   users: number
   visitsDone: number
@@ -139,10 +141,16 @@ export function filterPortfolio(rows: PortfolioClient[], filters: PortfolioFilte
     if (filters.product !== 'todos' && (client.product_name ?? '') !== filters.product) return false
     if (filters.owner !== 'todos' && (client.implementation_owner_id ?? '') !== filters.owner) return false
     if (!term) return true
-    const byName = [client.name, client.product_name, client.implementation_owner_name]
-      .some(value => (value ?? '').toLowerCase().includes(term))
+    const byString = [
+      client.name,
+      client.slug,
+      client.product_name,
+      client.implementation_owner_name,
+      client.primary_store_city,
+      client.main_contact_name,
+    ].some(value => (value ?? '').toLowerCase().includes(term))
     const byCnpj = digits.length >= 3 && (client.cnpj ?? '').replace(/\D/g, '').includes(digits)
-    return byName || byCnpj
+    return byString || byCnpj
   })
 }
 

@@ -60,7 +60,6 @@ export function ScheduleActivationModal(props: {
             min={today}
             value={scheduledFor}
             onChange={event => setScheduledFor(event.target.value)}
-            autoFocus
           />
         </MxField>
       </div>

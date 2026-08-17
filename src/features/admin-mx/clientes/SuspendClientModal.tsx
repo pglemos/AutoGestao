@@ -57,7 +57,6 @@ export function SuspendClientModal(props: {
             value={reason}
             onChange={event => setReason(event.target.value)}
             placeholder="Ex.: inadimplência, pausa contratual"
-            autoFocus
           />
         </MxField>
       </div>

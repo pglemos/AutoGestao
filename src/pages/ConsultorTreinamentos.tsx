@@ -13,10 +13,11 @@ import { Badge } from '@/components/atoms/Badge'
 import { Typography } from '@/components/atoms/Typography'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
+import { Select } from '@/components/atoms/Select'
+import { Textarea } from '@/components/atoms/Textarea'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/molecules/Card'
-import { PageHeading } from '@/components/molecules/PageHeading'
+import { MxModuleHeader, MxModulePage } from '@/components/module/MxModuleVisualPrimitives'
 import { AulasAoVivoSection } from '@/features/universidade/sections/AulasAoVivoSection'
-import { PageTemplate } from '@/components/templates/PageTemplate'
 
 const types = ['prospeccao', 'agendamento', 'atendimento', 'apresentacao', 'financiamento', 'carro_de_troca', 'fechamento', 'funil', 'rotina_diaria', 'crm', 'institucional', 'gestao', 'pre-vendas']
 const audiences = ['vendedor', 'gerente', 'dono', 'todos']
@@ -54,18 +55,21 @@ export default function ConsultorTreinamentos() {
     }
 
     if (loading) return (
-        <div className="h-full w-full flex flex-col items-center justify-center bg-surface-alt">
-            <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-status-success-text mb-6" />
-            <Typography variant="caption" tone="muted" className="animate-pulse">Auditando Academy...</Typography>
-        </div>
+        <MxModulePage id="consultor-treinamentos-loading" width="dashboard">
+            <MxModuleHeader eyebrow="Academy MX" title="Curadoria Academy" description="Auditando conteúdo..." />
+            <div className="flex items-center justify-center py-mx-2xl">
+                <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-status-success-text" />
+            </div>
+        </MxModulePage>
     )
 
     return (
-        <PageTemplate as="div" width="dashboard" className="flex flex-col gap-mx-lg">
+        <MxModulePage id="consultor-treinamentos" width="dashboard">
             
-            <PageHeading
+            <MxModuleHeader
+                eyebrow="Academy MX"
                 title={<span>Curadoria <span className="text-status-success-text">Academy</span></span>}
-                subtitle="GESTÃO DE CONHECIMENTO & ALTA PERFORMANCE"
+                description="GESTÃO DE CONHECIMENTO & ALTA PERFORMANCE"
                 actions={
                     <div className="flex items-center gap-mx-sm shrink-0">
                         <Button 
@@ -73,7 +77,7 @@ export default function ConsultorTreinamentos() {
                             size="icon" 
                             onClick={() => {setIsRefetching(true); refetch().then(()=>setIsRefetching(false))}} 
                             aria-label="Atualizar" 
-                            className="w-mx-xl h-mx-xl rounded-xl shadow-sm border border-border-subtle bg-white hover:bg-surface-alt"
+                            className="w-mx-xl h-mx-xl"
                         >
                             <RefreshCw size={20} className={cn(isRefetching && "animate-spin")} />
                         </Button>
@@ -113,10 +117,10 @@ export default function ConsultorTreinamentos() {
                                         </div>
                                         <div className="space-y-mx-sm">
                                             <Typography variant="caption" tone="muted" className="ml-2">Ementa / Descrição</Typography>
-                                            <textarea 
+                                            <Textarea 
                                                 value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
-                                                className="w-full bg-surface-alt border border-border-subtle rounded-xl p-mx-md text-sm font-bold text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-brand-primary focus:ring-8 focus:ring-brand-primary/5 transition-all resize-none shadow-none h-mx-xl"
                                                 placeholder="Descreva detalhadamente os objetivos desta aula..."
+                                                rows={4}
                                             />
                                         </div>
                                     </div>
@@ -129,29 +133,29 @@ export default function ConsultorTreinamentos() {
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
                                             <div className="space-y-mx-sm">
                                                 <Typography variant="caption" tone="muted" className="ml-2">Pilar de Vendas</Typography>
-                                                <select aria-label="Pilar de Vendas" value={form.type} onChange={e => setForm(p => ({ ...p, type: e.target.value }))} className="w-full h-mx-14 bg-surface-alt border border-border-subtle rounded-xl px-6 text-sm font-bold text-foreground focus:border-brand-primary transition-all appearance-none cursor-pointer shadow-none">
+                                                <Select aria-label="Pilar de Vendas" value={form.type} onChange={e => setForm(p => ({ ...p, type: e.target.value }))}>
                                                     {types.map(t => <option key={t} value={t}>{t.toUpperCase()}</option>)}
-                                                </select>
+                                                </Select>
                                             </div>
                                             <div className="space-y-mx-sm">
                                                 <Typography variant="caption" tone="muted" className="ml-2">Público Alvo</Typography>
-                                                <select aria-label="Público Alvo" value={form.target_audience} onChange={e => setForm(p => ({ ...p, target_audience: e.target.value }))} className="w-full h-mx-14 bg-surface-alt border border-border-subtle rounded-xl px-6 text-sm font-bold text-foreground focus:border-brand-primary transition-all appearance-none cursor-pointer shadow-none">
+                                                <Select aria-label="Público Alvo" value={form.target_audience} onChange={e => setForm(p => ({ ...p, target_audience: e.target.value }))}>
                                                     {audiences.map(a => <option key={a} value={a}>{a.toUpperCase()}</option>)}
-                                                </select>
+                                                </Select>
                                             </div>
                                             <div className="space-y-mx-sm">
                                                 <Typography variant="caption" tone="muted" className="ml-2">Origem / Curadoria</Typography>
-                                                <select aria-label="Origem / Curadoria" value={form.source_kind} onChange={e => setForm(p => ({ ...p, source_kind: e.target.value }))} className="w-full h-mx-14 bg-surface-alt border border-border-subtle rounded-xl px-6 text-sm font-bold text-foreground focus:border-brand-primary transition-all appearance-none cursor-pointer shadow-none">
+                                                <Select aria-label="Origem / Curadoria" value={form.source_kind} onChange={e => setForm(p => ({ ...p, source_kind: e.target.value }))}>
                                                     {sources.map(source => <option key={source} value={source}>{source.toUpperCase()}</option>)}
-                                                </select>
+                                                </Select>
                                             </div>
                                             {form.source_kind === 'loja_institucional' && (
                                                 <div className="space-y-mx-sm">
                                                     <Typography variant="caption" tone="muted" className="ml-2">Loja vinculada</Typography>
-                                                    <select aria-label="Loja vinculada" value={form.store_id} onChange={e => setForm(p => ({ ...p, store_id: e.target.value, type: 'institucional' }))} className="w-full h-mx-14 bg-surface-alt border border-border-subtle rounded-xl px-6 text-sm font-bold text-foreground focus:border-brand-primary transition-all appearance-none cursor-pointer shadow-none">
+                                                    <Select aria-label="Loja vinculada" value={form.store_id} onChange={e => setForm(p => ({ ...p, store_id: e.target.value, type: 'institucional' }))}>
                                                         <option value="">SELECIONE A LOJA</option>
                                                         {lojas.map(loja => <option key={loja.id} value={loja.id}>{loja.name.toUpperCase()}</option>)}
-                                                    </select>
+                                                    </Select>
                                                 </div>
                                             )}
                                             <div className="space-y-mx-sm">
@@ -201,7 +205,7 @@ export default function ConsultorTreinamentos() {
             )}
 
             {/* Academy Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-mx-lg pb-32" aria-live="polite">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-mx-lg" aria-live="polite">
                 {treinamentos.map((t, i) => (
                     <motion.article key={t.id} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.05 }}>
                         <Card className="border bg-white p-mx-md hover:shadow-sm transition-all relative flex flex-col">
@@ -250,6 +254,6 @@ export default function ConsultorTreinamentos() {
                     </motion.article>
                 ))}
             </div>
-        </PageTemplate>
+        </MxModulePage>
     )
 }

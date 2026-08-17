@@ -14,13 +14,12 @@ import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { Avatar } from '@/components/atoms/Avatar'
 import { Card, CardHeader } from '@/components/molecules/Card'
-import { SellerPageHeader } from '@/components/seller/SellerPageHeader'
+import { MxModuleHeader, MxModulePage } from '@/components/module/MxModuleVisualPrimitives'
 import { toast } from '@/lib/toast'
 import { useAuth } from '@/hooks/useAuth'
 import { AulasAoVivoSection } from '@/features/universidade/sections/AulasAoVivoSection'
 import { ManagerUniversityReference } from '@/features/manager/development/ManagerUniversityReference'
 import { ContentSuggestionDialog } from '@/features/universidade/components/ContentSuggestionDialog'
-import { PageTemplate } from '@/components/templates/PageTemplate'
 import { ScrollableRegion } from '@/design-system/page/ScrollableRegion'
 
 export default function GerenteTreinamentos() {
@@ -199,31 +198,21 @@ export default function GerenteTreinamentos() {
     )
 
     if (isLoading && !isRefetching) return (
-        <PageTemplate as="div" width="dashboard" className="flex flex-col gap-mx-lg" scrollerClassName="animate-in fade-in duration-500" aria-busy="true" aria-live="polite">
-            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border pb-mx-lg">
-                <div className="space-y-mx-xs">
-                    <div className="h-mx-10 w-mx-64 bg-border-default rounded animate-pulse" />
-                    <div className="h-mx-xs w-mx-48 bg-border-default rounded animate-pulse" />
-                </div>
-                <div className="flex gap-mx-sm">
-                    <div className="h-mx-14 w-mx-64 rounded-mx-full bg-border-default animate-pulse" />
-                    <div className="h-mx-14 w-mx-48 rounded-mx-full bg-border-default animate-pulse" />
-                </div>
-            </header>
-
+        <MxModulePage id="gerente-treinamentos-loading" width="dashboard">
+            <MxModuleHeader eyebrow="Desenvolvimento" title="Universidade MX" description="Carregando treinamentos..." />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-mx-lg">
                 {[1,2,3].map(i => <div key={i} className="h-mx-64 rounded-2xl bg-white animate-pulse" />)}
             </div>
-        </PageTemplate>
+        </MxModulePage>
     )
 
     return (
-        <PageTemplate as="div" width="dashboard" className="flex flex-col gap-mx-lg">
+        <MxModulePage id="gerente-treinamentos" width="dashboard">
             
-            <SellerPageHeader
-                icon={GraduationCap}
+            <MxModuleHeader
+                eyebrow={isOwner ? 'Rede MX' : 'Desenvolvimento'}
                 title={isOwner ? 'Treinamentos da Rede' : 'Universidade MX'}
-                subtitle={isOwner ? 'Absorção e curadoria da rede' : 'Desenvolvimento gerencial e acompanhamento da equipe'}
+                description={isOwner ? 'Absorção e curadoria da rede' : 'Desenvolvimento gerencial e acompanhamento da equipe'}
                 actions={(
                         <div className="flex flex-wrap items-center gap-2">
                             <ContentSuggestionDialog />
@@ -237,7 +226,7 @@ export default function GerenteTreinamentos() {
             />
 
             <div className="flex items-center gap-mx-sm w-full sm:w-auto sm:self-end">
-                            <Button variant="outline" size="icon" onClick={handleRefresh} aria-label="Atualizar" className="h-mx-xl w-mx-xl bg-white hover:bg-surface-alt">
+                            <Button variant="outline" size="icon" onClick={handleRefresh} aria-label="Atualizar" className="h-mx-xl w-mx-xl">
                                 <RefreshCw size={20} className={cn(isRefetching && "animate-spin")} />
                             </Button>
                             <div className="relative group flex-1 sm:flex-none">
@@ -250,7 +239,7 @@ export default function GerenteTreinamentos() {
                             </div>
                         </div>
 
-            <div className="flex-1 min-h-0 pb-32" aria-live="polite">
+            <div className="flex-1 min-h-0" aria-live="polite">
                 {!isOwner && (
                     <Card className="mb-mx-lg border border-status-info/20 bg-status-info-surface p-mx-md">
                         <Typography variant="h3" className="text-status-info-text">Desenvolvimento do gerente</Typography>
@@ -424,6 +413,6 @@ export default function GerenteTreinamentos() {
                 </AnimatePresence>
             </div>
 
-        </PageTemplate>
+        </MxModulePage>
     )
 }

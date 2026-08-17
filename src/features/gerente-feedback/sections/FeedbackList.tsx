@@ -28,7 +28,7 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.01 }}
             >
-              <Card className="border p-mx-md h-full flex flex-col justify-between group hover:shadow-sm transition-all bg-white relative overflow-hidden">
+              <Card className="p-mx-md h-full flex flex-col justify-between group hover:shadow-sm transition-all relative overflow-hidden">
                 <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-mx-lg -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" />
                 <article>
                   <header className="flex items-start justify-between mb-8 border-b border-border-subtle pb-6 relative z-[var(--mx-z-sticky)]">
@@ -36,8 +36,8 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
                       <div
                         className={
                           variant === 'admin'
-                            ? 'w-mx-xl h-mx-xl rounded-xl bg-surface-alt border border-border-subtle flex items-center justify-center font-bold text-foreground text-sm group-hover:bg-brand-primary group-hover:text-white transition-all shadow-none uppercase'
-                            : 'w-mx-xl h-mx-xl rounded-xl bg-surface-alt border border-border-subtle flex items-center justify-center font-bold text-sm group-hover:bg-brand-primary group-hover:text-white transition-all shadow-none uppercase'
+                            ? 'w-mx-xl h-mx-xl rounded-[var(--mx-radius-xl)] bg-surface-alt border border-border-subtle flex items-center justify-center font-bold text-foreground text-sm group-hover:bg-brand-primary group-hover:text-white transition-all shadow-none uppercase'
+                            : 'w-mx-xl h-mx-xl rounded-[var(--mx-radius-xl)] bg-surface-alt border border-border-subtle flex items-center justify-center font-bold text-sm group-hover:bg-brand-primary group-hover:text-white transition-all shadow-none uppercase'
                         }
                       >
                         {sellerName.substring(0, 2)}
@@ -71,7 +71,7 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
                   </header>
                   <div className="space-y-mx-md relative z-[var(--mx-z-sticky)]">
                     {f.caso_motivo && (
-                      <div className="p-mx-md bg-status-warning-surface rounded-xl border border-status-warning/10">
+                      <div className="p-mx-md bg-status-warning-surface rounded-[var(--mx-radius-xl)] border border-status-warning/10">
                         <Typography
                           variant="tiny"
                           tone="warning"
@@ -87,7 +87,7 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
                         </Typography>
                       </div>
                     )}
-                    <div className="p-mx-md bg-surface-alt rounded-xl group-hover:bg-white group-hover:shadow-sm transition-all">
+                    <div className="p-mx-md bg-surface-alt rounded-[var(--mx-radius-xl)] group-hover:bg-white group-hover:shadow-sm transition-all">
                       {showActionHeader ? (
                         <header className="flex items-center justify-between mb-4 border-b border-border/10 pb-3">
                           <Typography

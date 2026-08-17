@@ -1,8 +1,8 @@
 import { MessageSquare, Plus, RefreshCw, Search } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
-import { SellerPageHeader } from '@/components/seller/SellerPageHeader'
 import { TabNavPill, type TabNavPillItem } from '@/components/molecules/TabNavPill'
+import { MxModuleHeader } from '@/components/module/MxModuleVisualPrimitives'
 import { cn } from '@/lib/utils'
 import type { FeedbackTab } from '../lib/helpers'
 
@@ -35,7 +35,11 @@ export function StoreFeedbackHeader({
   onOpenForm,
 }: Props) {
   return (
-    <SellerPageHeader icon={MessageSquare} title={isOwner ? 'Devolutivas da Rede' : 'Feedbacks'} subtitle={isOwner ? 'Acompanhe qualidade e cobranças semanais' : 'Rotina semanal obrigatória'} actions={<div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-mx-sm shrink-0 w-full xl:w-auto max-w-full">
+    <MxModuleHeader
+      eyebrow={isOwner ? 'Rede' : 'Vendedores'}
+      title={isOwner ? 'Devolutivas da Rede' : 'Feedbacks'}
+      description={isOwner ? 'Acompanhe qualidade e cobranças semanais' : 'Rotina semanal obrigatória'}
+      actions={<div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-mx-sm shrink-0 w-full xl:w-auto max-w-full">
         <TabNavPill
           tabs={FEEDBACK_TABS}
           activeTab={activeTab}

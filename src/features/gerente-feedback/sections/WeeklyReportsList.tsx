@@ -23,8 +23,8 @@ export function WeeklyReportsList({ reports, variant = 'admin' }: Props) {
           <Card
             className={
               variant === 'admin'
-                ? 'rounded-xl border border-border-subtle p-mx-md hover:shadow-sm transition-all h-full shadow-sm bg-white relative overflow-hidden flex flex-col'
-                : 'rounded-xl border border-border-subtle p-mx-md hover:shadow-sm transition-all h-full shadow-sm bg-white flex flex-col'
+                ? 'h-full hover:shadow-sm transition-all shadow-sm relative overflow-hidden flex flex-col'
+                : 'h-full hover:shadow-sm transition-all shadow-sm flex flex-col'
             }
           >
             {variant === 'admin' ? (
@@ -49,7 +49,7 @@ function ReportHeader({ report }: { report: WeeklyFeedbackReport }) {
   return (
     <div className="flex items-center justify-between mb-10 relative z-[var(--mx-z-sticky)]">
       <div className="flex items-center gap-mx-sm">
-        <div className="w-mx-14 h-mx-14 rounded-xl bg-brand-primary text-white flex items-center justify-center shadow-sm">
+        <div className="w-mx-14 h-mx-14 rounded-[var(--mx-radius-xl)] bg-brand-primary text-white flex items-center justify-center shadow-sm">
           <Calendar size={24} />
         </div>
         <div>
@@ -91,7 +91,7 @@ function ReportMetrics({
           : 'grid grid-cols-1 sm:grid-cols-2 gap-mx-md py-8 border-y border-border-subtle relative z-[var(--mx-z-sticky)]'
       }
     >
-      <div className="bg-surface-alt rounded-xl p-mx-md shadow-mx-inner text-center">
+      <div className="bg-surface-alt rounded-[var(--mx-radius-xl)] p-mx-md shadow-mx-inner text-center">
         <Typography
           variant="tiny"
           tone="muted"
@@ -110,7 +110,7 @@ function ReportMetrics({
           {report.weekly_goal}v
         </Typography>
       </div>
-      <div className="bg-surface-alt rounded-xl p-mx-md shadow-mx-inner text-center">
+      <div className="bg-surface-alt rounded-[var(--mx-radius-xl)] p-mx-md shadow-mx-inner text-center">
         <Typography
           variant="tiny"
           tone="muted"

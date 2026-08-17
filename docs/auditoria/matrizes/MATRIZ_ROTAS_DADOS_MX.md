@@ -5,10 +5,10 @@
 - Rotas públicas: **8**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
-- Tabelas referenciadas pelo runtime: **172**
+- Tabelas referenciadas pelo runtime: **174**
 - RPCs referenciadas pelo runtime: **89**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **366**
+- Pares tabela/operação encontrados: **370**
 
 ## Rotas
 
@@ -134,7 +134,7 @@
 
 | Recurso | Arquivos consumidores |
 |---|---:|
-| `acessos_cliente_consultoria` | 2 |
+| `acessos_cliente_consultoria` | 3 |
 | `agenda_estrategica_marketing` | 1 |
 | `agendamentos` | 10 |
 | `alerts` | 1 |
@@ -156,7 +156,7 @@
 | `catalogo_metricas_consultoria` | 7 |
 | `central_execucao_aberturas` | 3 |
 | `clientes` | 6 |
-| `clientes_consultoria` | 19 |
+| `clientes_consultoria` | 20 |
 | `clientes_oportunidades` | 1 |
 | `comportamental_perfis` | 1 |
 | `comportamental_questoes` | 1 |
@@ -197,6 +197,8 @@
 | `horarios_funcionamento_unidade` | 1 |
 | `importacoes_brutas` | 1 |
 | `indice_felicidade_agregado` | 1 |
+| `inscricoes_autocadastro_cliente` | 1 |
+| `internal_mx_admin_audit` | 2 |
 | `itens_plano_acao` | 3 |
 | `lancamentos_diarios` | 16 |
 | `links_autocadastro_cliente` | 1 |
@@ -311,8 +313,8 @@
 
 | Recurso | Arquivos consumidores |
 |---|---:|
-| `acessos_cliente_consultoria:insert` | 1 |
-| `acessos_cliente_consultoria:select` | 2 |
+| `acessos_cliente_consultoria:insert` | 2 |
+| `acessos_cliente_consultoria:select` | 3 |
 | `acessos_cliente_consultoria:update` | 1 |
 | `agenda_estrategica_marketing:select` | 1 |
 | `agendamentos:delete` | 1 |
@@ -358,8 +360,8 @@
 | `central_execucao_aberturas:upsert` | 2 |
 | `clientes_consultoria:delete` | 1 |
 | `clientes_consultoria:insert` | 4 |
-| `clientes_consultoria:select` | 19 |
-| `clientes_consultoria:update` | 4 |
+| `clientes_consultoria:select` | 20 |
+| `clientes_consultoria:update` | 5 |
 | `clientes_oportunidades:select` | 1 |
 | `clientes:delete` | 2 |
 | `clientes:insert` | 2 |
@@ -448,6 +450,10 @@
 | `horarios_funcionamento_unidade:update` | 1 |
 | `importacoes_brutas:insert` | 1 |
 | `indice_felicidade_agregado:select` | 1 |
+| `inscricoes_autocadastro_cliente:select` | 1 |
+| `inscricoes_autocadastro_cliente:update` | 1 |
+| `internal_mx_admin_audit:insert` | 2 |
+| `internal_mx_admin_audit:select` | 1 |
 | `itens_plano_acao:insert` | 2 |
 | `itens_plano_acao:select` | 2 |
 | `itens_plano_acao:update` | 1 |

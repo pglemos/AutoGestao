@@ -23,11 +23,8 @@ export function AdminFeedbackContainer() {
     )
   }
 
-  // Margem lateral pelos tokens de página (§7.3): com `px-4 lg:px-8` a tela
-  // ficava em 16px até 1024px, inclusive na faixa tablet onde a régua pede
-  // 24px, e divergia das outras dezoito áreas internas.
   return (
-    <PageCanvas as="div" width={pageLayout.width} bottomClearance={pageLayout.bottomClearance} id="page-devolutivas" className="flex min-h-0 flex-1 flex-col space-y-6" aria-label="Devolutivas">
+    <PageCanvas as="div" id="page-devolutivas" width={pageLayout.width} bottomClearance={pageLayout.bottomClearance}>
       <FeedbackErrorBoundary sectionName="Cabeçalho">
         <AdminFeedbackHeader
           activeTab={vm.activeTab}

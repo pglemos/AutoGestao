@@ -18,7 +18,7 @@ export function StoreFeedbackContainer() {
   if (vm.isLoading) return <FeedbackLoadingSkeleton ariaLabel="Carregando devolutivas" />
 
   return (
-    <PageCanvas as="div" width={pageLayout.width} bottomClearance={pageLayout.bottomClearance} id="page-devolutivas" className="flex min-h-0 flex-1 flex-col space-y-6" aria-label="Devolutivas">
+    <PageCanvas as="div" id="page-devolutivas" width={pageLayout.width} bottomClearance={pageLayout.bottomClearance}>
       <FeedbackErrorBoundary sectionName="Cabeçalho">
         <StoreFeedbackHeader
           isOwner={vm.isOwner}
