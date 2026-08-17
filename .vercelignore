@@ -15,6 +15,7 @@ ARQUIVOS_MX
 .antigravity
 .ai
 .claude
+.claude_backup
 .aiox
 venv
 storybook-static
@@ -26,3 +27,12 @@ provas-google-meet-*
 whatsapp-service
 supabase/.temp
 *.DS_Store
+artifacts
+.graphify
+.superpowers
+node-compile-cache
+.opencode
+visual-evidence
+squads
+.wwebjs_auth
+tmp
