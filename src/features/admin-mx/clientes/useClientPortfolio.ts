@@ -41,16 +41,30 @@ export function useClientPortfolio(): State {
       }
 
       const [units, visits, modules, assignments, access, owners, programs] = await Promise.all([
-        supabase.from('unidades_cliente_consultoria').select('client_id').in('client_id', ids),
+        supabase.from('unidades_cliente_consultoria').select('client_id, is_primary, city').in('client_id', ids),
         supabase.from('visitas_consultoria').select('client_id, status').in('client_id', ids),
         supabase.from('modulos_cliente_consultoria').select('client_id, enabled').in('client_id', ids),
         supabase.from('atribuicoes_consultoria').select('client_id, active').in('client_id', ids),
-        supabase.from('acessos_cliente_consultoria').select('client_id, status').in('client_id', ids),
+        supabase.from('acessos_cliente_consultoria').select('client_id, status, nome, is_dono_master').in('client_id', ids),
         supabase.from('usuarios').select('id, name'),
         supabase.from('programas_visita_consultoria').select('program_key, total_visits'),
       ])
 
       const unitCount = countBy(units.data ?? [], row => row.client_id)
+      const primaryUnitCity = new Map<string, string>()
+      for (const row of (units.data ?? [])) {
+        if (row.is_primary && row.city && !primaryUnitCity.has(row.client_id)) {
+          primaryUnitCity.set(row.client_id, row.city)
+        }
+      }
+      const primaryContact = new Map<string, string>()
+      for (const row of (access.data ?? [])) {
+        if (String(row.status ?? 'ativo') !== 'inativo' && row.nome) {
+          if (!primaryContact.has(row.client_id) || row.is_dono_master) {
+            primaryContact.set(row.client_id, row.nome)
+          }
+        }
+      }
       const doneCount = countBy((visits.data ?? []).filter(row => String(row.status ?? '') === 'concluida'), row => row.client_id)
       const visitCount = countBy(visits.data ?? [], row => row.client_id)
       const moduleCount = countBy((modules.data ?? []).filter(row => row.enabled !== false), row => row.client_id)
@@ -62,6 +76,8 @@ export function useClientPortfolio(): State {
       setRows((clients ?? []).map(client => ({
         ...client,
         implementation_owner_name: client.implementation_owner_id ? ownerNames.get(client.implementation_owner_id) ?? null : null,
+        primary_store_city: primaryUnitCity.get(client.id) ?? null,
+        main_contact_name: primaryContact.get(client.id) ?? null,
         units: unitCount.get(client.id) ?? 0,
         users: userCount.get(client.id) ?? 0,
         visitsDone: doneCount.get(client.id) ?? 0,

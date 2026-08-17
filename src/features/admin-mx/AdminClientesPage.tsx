@@ -201,7 +201,7 @@ export function AdminClientesPage() {
               <MxInput
                 value={filters.search}
                 onChange={event => patch({ search: event.target.value })}
-                placeholder="Buscar por cliente, CNPJ, produto ou responsável"
+                placeholder="Buscar por nome, CNPJ, cidade, contato, produto ou responsável"
                 aria-label="Buscar cliente na carteira"
               />
               <MxSelect aria-label="Filtrar por situação" value={filters.bucket} onChange={event => patch({ bucket: event.target.value as PortfolioFilters['bucket'] })}>

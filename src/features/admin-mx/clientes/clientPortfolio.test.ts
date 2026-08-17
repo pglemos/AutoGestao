@@ -20,6 +20,7 @@ function client(overrides: Partial<PortfolioClient> = {}): PortfolioClient {
     status: 'ativo', business_phase: 'CRESCIMENTO', product_name: 'PMR 7', program_template_key: 'pmr_7',
     structure_type: 'LOJA_UNICA', primary_store_id: 's1', implementation_owner_id: 'u1',
     implementation_owner_name: 'Ana', contract_end_date: null, onboarding_step: 7, onboarding_completed: true,
+    primary_store_city: 'São Paulo', main_contact_name: 'Carlos Dono',
     units: 1, users: 4, visitsDone: 7, visitsTotal: 7, modulesEnabled: 3, assignments: 1,
     ...overrides,
   }
@@ -108,6 +109,13 @@ describe('rótulos e filtros', () => {
     expect(filterPortfolio(rows, { ...EMPTY_PORTFOLIO_FILTERS, search: 'beta' }, HOJE)).toHaveLength(1)
     expect(filterPortfolio(rows, { ...EMPTY_PORTFOLIO_FILTERS, search: 'Ana' }, HOJE)).toHaveLength(1)
     expect(filterPortfolio(rows, { ...EMPTY_PORTFOLIO_FILTERS, search: '99888' }, HOJE)).toHaveLength(1)
+  })
+
+  test('busca por cidade, contato principal e slug', () => {
+    const rows = [client(), client({ id: 'c2', name: 'Gamma', slug: 'gamma-slug', primary_store_city: 'Recife', main_contact_name: 'Marina Diretora' })]
+    expect(filterPortfolio(rows, { ...EMPTY_PORTFOLIO_FILTERS, search: 'Recife' }, HOJE)).toHaveLength(1)
+    expect(filterPortfolio(rows, { ...EMPTY_PORTFOLIO_FILTERS, search: 'Marina' }, HOJE)).toHaveLength(1)
+    expect(filterPortfolio(rows, { ...EMPTY_PORTFOLIO_FILTERS, search: 'gamma' }, HOJE)).toHaveLength(1)
   })
 
   test('filtro por card e por fase', () => {
