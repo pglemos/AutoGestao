@@ -28,6 +28,7 @@ import {
 import { useFocusTrap } from '@/hooks/useFocusTrap'
 import { ContentSuggestionDialog } from '@/features/universidade/components/ContentSuggestionDialog'
 import { PageCanvas } from '@/design-system/page'
+import { PageHeading } from '@/components/molecules/PageHeading'
 import { ScrollableRegion } from '@/design-system/page/ScrollableRegion'
 
 type Trainings = ReturnType<typeof useTrainings>['treinamentos']
@@ -230,22 +231,16 @@ export function buildTeamRows(teamProgress: TeamProgress, trainingCount: number)
 
 function UniversityHeader() {
   return (
-    <header className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
-      <div className="flex flex-col items-stretch gap-3 md:flex-row md:items-center">
-        <span className="grid h-10 w-10 place-items-center rounded-xl bg-status-success-surface text-status-success-text">
-          <GraduationCap size={20} />
-        </span>
-        <div>
-          <h1 className="text-xl font-bold text-foreground">Universidade MX</h1>
-          <p className="text-sm text-muted-foreground">
-            Desenvolva suas habilidades de liderança e acompanhe a evolução da sua equipe.
-          </p>
-        </div>
+    <PageHeading
+      icon={GraduationCap}
+      title="Universidade MX"
+      subtitle="Desenvolva suas habilidades de liderança e acompanhe a evolução da sua equipe."
+      actions={
         <div className="w-full shrink-0 md:ml-auto md:w-auto">
           <ContentSuggestionDialog />
         </div>
-      </div>
-    </header>
+      }
+    />
   )
 }
 

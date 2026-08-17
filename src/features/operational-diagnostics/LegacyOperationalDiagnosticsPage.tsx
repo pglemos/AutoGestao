@@ -115,6 +115,7 @@ export default function AiDiagnostics() {
     return (
       <PageCanvas width="dashboard" className="flex flex-col gap-mx-lg">
         <PageHeading
+          icon={Zap}
           title={<span>Diagnóstico <span className="text-status-success-text">Operacional</span></span>}
           subtitle="Leitura de funil MX 20/60/33"
           actions={(

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { UserCheck } from 'lucide-react'
 import { PageHeading } from '@/components/molecules/PageHeading'
 import { TabNav, type TabNavItem } from '@/components/molecules/TabNav'
 import { TesteComportamental } from './components/TesteComportamental'
@@ -18,6 +19,7 @@ export default function ComportamentalPage() {
   return (
     <PageCanvas as="div" width="dashboard" className="flex flex-col gap-mx-lg">
       <PageHeading
+        icon={UserCheck}
         title="Teste Comportamental & Banco de Talentos"
         subtitle="APLIQUE O TESTE NO ONBOARDING E CONSTRUA O BANCO DE PERFIS VENCEDORES"
       />

@@ -22,6 +22,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/lib/toast'
 import { PageCanvas } from '@/design-system/page'
+import { PageHeading } from '@/components/molecules/PageHeading'
 import {
   buildOwnerConsultantInitialMessage,
   buildOwnerConsultantInitialSubject,
@@ -234,19 +235,16 @@ export default function FalarConsultorDono() {
 
   return (
     <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-lg">
-      <header className="flex flex-col gap-mx-sm border-b border-border-subtle pb-mx-lg">
-        <div className="flex flex-wrap items-center justify-between gap-mx-md">
-          <div className="min-w-0">
-            <Typography variant="h1" className="text-3xl md:text-4xl">Falar com Consultor</Typography>
-            <Typography variant="p" tone="muted" className="mt-mx-xs">
-              Envie uma solicitação contextual, acompanhe o histórico e acione o consultor responsável pela loja.
-            </Typography>
-          </div>
+      <PageHeading
+        icon={MessageCircle}
+        title="Falar com Consultor"
+        subtitle="Envie uma solicitação contextual, acompanhe o histórico e acione o consultor responsável pela loja."
+        actions={
           <Button type="button" variant="outline" className="bg-white" onClick={() => void loadConsultingData()} disabled={loading}>
             <RefreshCw size={17} className={loading ? 'animate-spin' : ''} /> Atualizar
           </Button>
-        </div>
-      </header>
+        }
+      />
 
       {loadError && (
         <div role="alert" className="rounded-2xl border border-status-warning/20 bg-status-warning-surface p-mx-md text-sm font-bold text-status-warning-text">

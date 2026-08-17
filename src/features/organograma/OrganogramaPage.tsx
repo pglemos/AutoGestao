@@ -25,6 +25,7 @@ export default function OrganogramaPage() {
   return (
     <PageCanvas as="div" width="dashboard" className="flex flex-col gap-mx-lg">
       <PageHeading
+        icon={Network}
         title="Organograma & Plano de Carreira"
         subtitle="ESTRUTURA HIERÁRQUICA DA EMPRESA E A TRILHA DE EVOLUÇÃO POR CARGO"
         actions={

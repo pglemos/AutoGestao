@@ -512,8 +512,8 @@ const activeStepLabel = stepItems.find((item) => item.step === activeStep)?.labe
 return (
 <header className="relative z-[var(--mx-z-topbar)] shrink-0 space-y-4 md:pt-3 border-none bg-transparent shadow-none pb-1 w-full">
       {/* Contract matcher: md:sticky md:top-0 */}
-      {/* Top Header Row (Desktop only, centered rounded card matching meu-funil) */}
-      <div className="hidden md:block w-full">
+      {/* Top Header Row (Centered rounded card matching meu-funil) */}
+      <div className="w-full">
         <SellerPageHeader
           icon={CheckSquare}
           title="Fechamento"

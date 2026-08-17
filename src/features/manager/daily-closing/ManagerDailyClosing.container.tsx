@@ -30,6 +30,7 @@ import { useNotifications } from "@/hooks/useData";
 import { supabase } from "@/lib/supabase";
 import { calculateReferenceDate } from "@/hooks/checkins/types";
 import { PageCanvas } from "@/design-system/page";
+import { PageHeading } from "@/components/molecules/PageHeading";
 import { ScrollableRegion } from "@/design-system/page/ScrollableRegion";
 import { Skeleton } from "@/components/atoms/Skeleton";
 import { Modal } from "@/components/organisms/Modal";
@@ -392,15 +393,20 @@ export default function ManagerDailyClosing() {
         <ManagerHomeReturnLink />
         <section className="bg-white rounded-mx-2xl border border-border-subtle shadow-sm p-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div className="max-w-xl">
-              <h1 className="text-xl font-bold text-foreground">
-                Fechamento Diário
-              </h1>
-              <p className="text-sm text-muted-foreground mt-0.5">
-                Acompanhe o movimento comercial informado pelos vendedores,
-                regularize fechamentos fora do horário e corrija volumes
-                oficiais de leads.
-              </p>
+            <div className="flex items-center gap-3 max-w-xl">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-status-info-surface text-status-info-text">
+                <CalendarClock size={20} />
+              </span>
+              <div>
+                <h1 className="text-xl font-bold text-foreground">
+                  Fechamento Diário
+                </h1>
+                <p className="text-sm text-muted-foreground mt-0.5">
+                  Acompanhe o movimento comercial informado pelos vendedores,
+                  regularize fechamentos fora do horário e corrija volumes
+                  oficiais de leads.
+                </p>
+              </div>
             </div>
             <div className="flex flex-wrap sm:flex-nowrap items-end gap-2.5 shrink-0">
               <Field label="Data">

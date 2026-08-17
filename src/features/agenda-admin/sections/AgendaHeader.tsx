@@ -86,6 +86,9 @@ export function AgendaHeader({
     <InternalMxTemplateHeader className="flex shrink-0 flex-col gap-3 rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-wrap items-center gap-3">
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-status-info-surface text-status-info-text">
+            <CalendarDays size={20} />
+          </span>
           <div className="flex items-center gap-1">
             <button
               type="button"

@@ -1,4 +1,6 @@
+import { Building2 } from 'lucide-react'
 import { AlertMessage } from '@/components/molecules/AlertMessage'
+import { PageHeading } from '@/components/molecules/PageHeading'
 import { useConsultingJourney } from './useConsultingJourney'
 import { ConsultingJourneyTimeline } from './components/ConsultingJourneyTimeline'
 import { ConsultingMeetingDialog } from './components/ConsultingMeetingDialog'
@@ -20,10 +22,16 @@ export function ConsultingJourneyWorkspace() {
 
   return (
     <div className="space-y-5 pb-12">
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div><p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Programa contratado</p><h1 className="mt-1 text-2xl font-bold text-foreground">{snapshot.programName}</h1><p className="mt-1 text-sm text-muted-foreground">{snapshot.visitsCompleted} de {snapshot.totalVisits} encontros concluídos.</p><p className="mt-2 max-w-2xl text-sm text-muted-foreground"><strong>{snapshot.programRules.label}:</strong> {snapshot.programRules.description}</p></div>
-        <span className={`w-fit rounded-full px-3 py-1 text-xs font-medium ${controller.realtimeStatus === 'connected' ? 'bg-status-success-surface text-status-success-text' : 'bg-status-warning-surface text-status-warning-text'}`}>{controller.realtimeStatus === 'connected' ? 'Atualização em tempo real' : 'Reconectando dados'}</span>
-      </header>
+      <PageHeading
+        icon={Building2}
+        title={snapshot.programName}
+        subtitle={`${snapshot.visitsCompleted} de ${snapshot.totalVisits} encontros concluídos. ${snapshot.programRules.label}: ${snapshot.programRules.description}`}
+        actions={
+          <span className={`w-fit rounded-full px-3 py-1 text-xs font-medium ${controller.realtimeStatus === 'connected' ? 'bg-status-success-surface text-status-success-text' : 'bg-status-warning-surface text-status-warning-text'}`}>
+            {controller.realtimeStatus === 'connected' ? 'Atualização em tempo real' : 'Reconectando dados'}
+          </span>
+        }
+      />
       <section className="rounded-2xl border border-primary/20 bg-primary/5 p-4">
         <p className="text-xs font-semibold uppercase tracking-wide text-primary">Próximo passo</p>
         <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">

@@ -5,6 +5,7 @@ import { RANKING_PERIODOS, useStoreRankingPageData, type RankedVendedor } from '
 import { ManagerRankingComparison } from '@/features/ranking/manager/ManagerRankingComparison'
 import { ManagerRankingPodium } from '@/features/ranking/manager/ManagerRankingPodium'
 import { PageCanvas } from '@/design-system/page'
+import { PageHeading } from '@/components/molecules/PageHeading'
 import { ScrollableRegion } from '@/design-system/page/ScrollableRegion'
 
 type Criterion = 'geral' | 'vendas' | 'conversao' | 'rotina'
@@ -52,12 +53,36 @@ export function ManagerRankingReference() {
 
   return (
     <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-5">
-        <header className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div><h1 className="text-xl font-bold text-foreground">Ranking</h1><p className="mt-0.5 text-sm text-muted-foreground">Acompanhe a classificação da equipe por resultado, conversão e execução.</p></div>
-            <div className="flex flex-wrap gap-2"><input id="manager-ranking-reference-month" name="referenceMonth" type="month" value={selectedMonth} onChange={(event) => setSelectedMonth(event.target.value)} aria-label="Mês do ranking" className="rounded-xl border border-border px-3 py-2 text-sm" />{RANKING_PERIODOS.map(periodo => <button key={periodo} type="button" onClick={() => data.setPeriodo(periodo)} aria-pressed={data.periodo === periodo} className={`rounded-xl border px-3 py-2 text-sm transition-colors ${data.periodo === periodo ? 'border-status-success bg-brand-primary font-semibold text-white' : 'border-border bg-white text-muted-foreground hover:bg-surface-alt'}`}>{periodo}</button>)}{data.unidades.length > 1 && <select id="manager-ranking-store" name="store" value={data.unidade} onChange={(event) => data.setUnidade(event.target.value)} aria-label="Unidade do ranking" className="rounded-xl border border-border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-status-success"><option value="todas">Todas as unidades</option>{data.unidades.map(unidade => <option key={unidade} value={unidade}>{unidade}</option>)}</select>}<select id="manager-ranking-criterion" name="criterion" value={criterion} onChange={(event) => setCriterion(event.target.value as Criterion)} aria-label="Critério do ranking" className="rounded-xl border border-border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-status-success"><option value="geral">Pontuação geral</option><option value="vendas">Vendas</option><option value="conversao">Conversão</option><option value="rotina">Rotina</option></select><button type="button" onClick={() => void data.handleRefresh()} aria-label="Atualizar ranking" className="grid h-10 w-10 place-items-center rounded-xl border border-border text-muted-foreground hover:bg-surface-alt"><RefreshCw size={16} className={data.isRefetching ? 'animate-spin' : ''} /></button></div>
-          </div>
-        </header>
+        <PageHeading
+          icon={Trophy}
+          title="Ranking"
+          subtitle="Acompanhe a classificação da equipe por resultado, conversão e execução."
+          actions={
+            <div className="flex flex-wrap gap-2">
+              <input id="manager-ranking-reference-month" name="referenceMonth" type="month" value={selectedMonth} onChange={(event) => setSelectedMonth(event.target.value)} aria-label="Mês do ranking" className="rounded-xl border border-border px-3 py-2 text-sm" />
+              {RANKING_PERIODOS.map(periodo => (
+                <button key={periodo} type="button" onClick={() => data.setPeriodo(periodo)} aria-pressed={data.periodo === periodo} className={`rounded-xl border px-3 py-2 text-sm transition-colors ${data.periodo === periodo ? 'border-status-success bg-brand-primary font-semibold text-white' : 'border-border bg-white text-muted-foreground hover:bg-surface-alt'}`}>
+                  {periodo}
+                </button>
+              ))}
+              {data.unidades.length > 1 && (
+                <select id="manager-ranking-store" name="store" value={data.unidade} onChange={(event) => data.setUnidade(event.target.value)} aria-label="Unidade do ranking" className="rounded-xl border border-border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-status-success">
+                  <option value="todas">Todas as unidades</option>
+                  {data.unidades.map(unidade => <option key={unidade} value={unidade}>{unidade}</option>)}
+                </select>
+              )}
+              <select id="manager-ranking-criterion" name="criterion" value={criterion} onChange={(event) => setCriterion(event.target.value as Criterion)} aria-label="Critério do ranking" className="rounded-xl border border-border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-status-success">
+                <option value="geral">Pontuação geral</option>
+                <option value="vendas">Vendas</option>
+                <option value="conversao">Conversão</option>
+                <option value="rotina">Rotina</option>
+              </select>
+              <button type="button" onClick={() => void data.handleRefresh()} aria-label="Atualizar ranking" className="grid h-10 w-10 place-items-center rounded-xl border border-border text-muted-foreground hover:bg-surface-alt">
+                <RefreshCw size={16} className={data.isRefetching ? 'animate-spin' : ''} />
+              </button>
+            </div>
+          }
+        />
 
         {data.error && <div role="alert" className="rounded-xl border border-status-error/30 bg-status-error-surface px-4 py-3 text-sm font-medium text-status-error-text">{data.error}</div>}
 

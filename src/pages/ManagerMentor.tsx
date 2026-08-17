@@ -10,6 +10,7 @@ import { ManagerMentorRecommendations } from '@/features/manager/mentor/ManagerM
 import { ManagerMentorStatusCard } from '@/features/manager/mentor/ManagerMentorStatusCard'
 import { buildMentorRecommendations, resolveMentorSituation } from '@/features/manager/mentor/manager-mentor-rules'
 import { PageCanvas } from '@/design-system/page'
+import { PageHeading } from '@/components/molecules/PageHeading'
 import { PageFooterActions } from '@/components/molecules/PageFooterActions'
 
 export default function ManagerMentor() {
@@ -57,15 +58,11 @@ export default function ManagerMentor() {
 
   return (
     <PageCanvas as="div" width="reading" bottomClearance="actions" className="flex min-h-full flex-col gap-5">
-        <header className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
-          <div className="flex items-center gap-3">
-            <span className="grid h-10 w-10 place-items-center rounded-xl bg-status-success-surface text-status-success-text"><BrainCircuit size={20} /></span>
-            <div>
-              <h1 className="text-xl font-bold text-foreground">Mentor Gerencial</h1>
-              <p className="mt-0.5 text-sm text-muted-foreground">Área de apoio à gestão. Recomendações baseadas em regras e indicadores da operação.</p>
-            </div>
-          </div>
-        </header>
+        <PageHeading
+          icon={BrainCircuit}
+          title="Mentor Gerencial"
+          subtitle="Área de apoio à gestão. Recomendações baseadas em regras e indicadores da operação."
+        />
 
         {data.loading ? (
           <div className="flex justify-center py-16" aria-busy="true">

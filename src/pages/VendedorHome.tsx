@@ -22,6 +22,7 @@ import { useAgendamentos } from '@/features/crm/hooks/useAgendamentos'
 import DeterministicActionsPanel from '@/features/deterministic-actions/DeterministicActionsPanel'
 import { useDeterministicActions } from '@/features/deterministic-actions/useDeterministicActions'
 import { PageCanvas } from '@/design-system/page'
+import { PageHeading } from '@/components/molecules/PageHeading'
 
 function saudacao() {
   const h = new Date().getHours()
@@ -119,14 +120,11 @@ export default function VendedorHomePage() {
 
   return (
     <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-5 text-foreground">
-        <header className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <h1 className="text-xl font-bold text-foreground">
-                {saudacao()}, {firstName}! 👋
-              </h1>
-              <p className="mt-0.5 text-sm text-muted-foreground">Acompanhe sua rotina e resultados do dia.</p>
-            </div>
+        <PageHeading
+          icon={Target}
+          title={`${saudacao()}, ${firstName}! 👋`}
+          subtitle="Acompanhe sua rotina e resultados do dia."
+          actions={
             <div className="flex flex-wrap items-center gap-2">
               <div className="hidden text-right sm:block">
                 <p className="text-sm font-semibold text-foreground">{weekday}</p>
@@ -166,8 +164,8 @@ export default function VendedorHomePage() {
                 </button>
               </div>
             </div>
-          </div>
-        </header>
+          }
+        />
 
         <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Métricas do dia">
           <article className="flex min-h-[140px] flex-col justify-between rounded-2xl bg-gradient-to-br from-brand-primary to-status-success p-5 text-white shadow-md">

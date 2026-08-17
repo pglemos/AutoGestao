@@ -74,6 +74,7 @@ export function RotinaHeader({
       )}
 
       <PageHeading
+        icon={Zap}
         title={<>Centro de <span className="text-status-success-text">Comando</span></>}
         subtitle="GESTÃO DE UNIDADE • CICLO OPERACIONAL MX"
         actions={(

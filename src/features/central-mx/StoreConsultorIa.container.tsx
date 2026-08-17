@@ -1,10 +1,11 @@
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, Building2 } from 'lucide-react'
+import { ArrowLeft, Building2, Sparkles } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { EmptyState } from '@/components/atoms/EmptyState'
 import { Typography } from '@/components/atoms/Typography'
 import { Card } from '@/components/molecules/Card'
+import { PageHeading } from '@/components/molecules/PageHeading'
 import { useAuth } from '@/hooks/useAuth'
 import { useStores } from '@/hooks/useStores'
 import { slugify } from '@/lib/utils'
@@ -61,24 +62,18 @@ export function StoreConsultorIa() {
   }
 
   return (
-  <PageTemplate as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-md">
-        <header className="flex flex-col gap-mx-md border-b border-border-subtle pb-mx-lg lg:flex-row lg:items-start lg:justify-between">
-          <div className="min-w-0">
-            <Typography variant="h1" className="text-3xl md:text-4xl">
-              Consultor IA
-            </Typography>
-            <Typography variant="p" tone="muted" className="mt-1 text-base font-bold">
-              Prioridades da unidade, orientações registradas e recomendações de ação.
-            </Typography>
-            <Typography variant="tiny" tone="muted" className="mt-mx-xs block">
-              {selectedStore?.name || 'Unidade MX'}
-            </Typography>
-          </div>
+    <PageTemplate as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-md">
+      <PageHeading
+        icon={Sparkles}
+        title="Consultor IA"
+        subtitle={`Prioridades da unidade, orientações registradas e recomendações de ação. ${selectedStore?.name ? `(${selectedStore.name})` : ''}`}
+        actions={
           <Button type="button" variant="outline" className="h-mx-11 w-fit bg-white" onClick={() => navigate(backPath)}>
             <ArrowLeft size={16} />
             Voltar para loja
           </Button>
-        </header>
+        }
+      />
 
         <DashboardErrorBoundary sectionName="ConsultorIaStoreSection">
           <ConsultorIaStoreSection storeId={selectedStoreId} />

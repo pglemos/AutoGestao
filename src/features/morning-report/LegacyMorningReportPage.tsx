@@ -21,6 +21,7 @@ import { Skeleton } from '@/components/atoms/Skeleton'
 import { SkeletonStats, SkeletonList } from '@/components/atoms/skeletons'
 import { Avatar } from '@/components/atoms/Avatar'
 import { Card, CardHeader, CardTitle } from '@/components/molecules/Card'
+import { PageHeading } from '@/components/molecules/PageHeading'
 import { isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 import type { DailyCheckin, Store } from '@/types/database'
@@ -295,28 +296,25 @@ function AdminMorningReport() {
 
     return (
         <div className="w-full flex flex-col gap-mx-lg p-mx-lg bg-surface-alt">
-            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border pb-10 shrink-0">
-                <div className="flex flex-col gap-mx-tiny">
-                    <div className="flex items-center gap-mx-sm">
-                        <div className="w-mx-xs h-mx-10 bg-brand-primary rounded-mx-full shadow-sm" aria-hidden="true" />
-                        <Typography variant="h1">Matinal <Typography as="span" className="">Rede MX</Typography></Typography>
+            <PageHeading
+                icon={Target}
+                title="Relatório Matinal"
+                subtitle={`Visão Administrativa • Todas as Unidades • ${range.label}`}
+                actions={
+                    <div className="flex flex-wrap items-center gap-mx-sm shrink-0">
+                        <Button variant="outline" size="icon" onClick={handleRefresh} disabled={isRefetching} className="h-mx-xl w-mx-xl bg-white" aria-label="Sincronizar">
+                            <RefreshCw size={20} className={cn(isRefetching && "animate-spin")} aria-hidden="true" />
+                        </Button>
+                        <Button variant="outline" onClick={handleDownloadXlsx} className="h-mx-xl px-6 rounded-mx-full bg-white">
+                            <FileDown size={16} className="mr-2" aria-hidden="true" /> <Typography variant="tiny" as="span" className="">PLANILHA</Typography>
+                        </Button>
+                        <Button variant="outline" onClick={handleSendEmail} className="h-mx-xl px-8 rounded-mx-full" disabled={isSendingEmail}>
+                            {isSendingEmail ? <RefreshCw size={16} className="animate-spin mr-2" aria-hidden="true" /> : <Mail size={16} className="mr-2" aria-hidden="true" />}
+                            <Typography variant="tiny" as="span" className="">DIREÇÃO MX</Typography>
+                        </Button>
                     </div>
-                    <Typography variant="caption" className="pl-mx-md">Visão Administrativa • Todas as Unidades • {range.label}</Typography>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-mx-sm shrink-0">
-                    <Button variant="outline" size="icon" onClick={handleRefresh} disabled={isRefetching} className="h-mx-xl w-mx-xl bg-white" aria-label="Sincronizar">
-                        <RefreshCw size={20} className={cn(isRefetching && "animate-spin")} aria-hidden="true" />
-                    </Button>
-                    <Button variant="outline" onClick={handleDownloadXlsx} className="h-mx-xl px-6 rounded-mx-full bg-white">
-                        <FileDown size={16} className="mr-2" aria-hidden="true" /> <Typography variant="tiny" as="span" className="">PLANILHA</Typography>
-                    </Button>
-                    <Button variant="outline" onClick={handleSendEmail} className="h-mx-xl px-8 rounded-mx-full" disabled={isSendingEmail}>
-                        {isSendingEmail ? <RefreshCw size={16} className="animate-spin mr-2" aria-hidden="true" /> : <Mail size={16} className="mr-2" aria-hidden="true" />}
-                        <Typography variant="tiny" as="span" className="">DIREÇÃO MX</Typography>
-                    </Button>
-                </div>
-            </header>
+                }
+            />
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-mx-lg shrink-0">
                 <Card className="p-mx-lg md:p-10 group relative overflow-hidden border-none bg-white">

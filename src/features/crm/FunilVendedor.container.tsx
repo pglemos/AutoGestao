@@ -145,20 +145,21 @@ export function FunilVendedor() {
 
   return (
     <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex min-h-full flex-col gap-mx-lg">
-        <header className="relative z-[var(--mx-z-topbar)] shrink-0 border-b border-border/60 bg-surface-alt pb-3 pt-2 shadow-mx-lg md:sticky md:top-0 md:pt-3">
-          <PageHeading
-            title="Funil de Vendas"
-            subtitle="Com sua conversão atual, veja o que precisa produzir para atingir a meta."
-            actions={(
-              <label className="inline-flex h-11 items-center gap-mx-sm rounded-xl border border-border-subtle bg-white px-mx-md text-sm font-semibold shadow-mx-xs">
-                <Filter size={16} />
-                <select className="bg-transparent font-semibold outline-none" value={period} onChange={(event) => setPeriod(event.target.value as PeriodKey)} aria-label="Período do funil">
-                  {PERIOD_OPTIONS.map((option) => <option key={option.key} value={option.key}>{option.label}</option>)}
-                </select>
-              </label>
-            )}
-          />
-        </header>
+      <header className="relative z-[var(--mx-z-topbar)] shrink-0">
+        <PageHeading
+          icon={Filter}
+          title="Funil de Vendas"
+          subtitle="Com sua conversão atual, veja o que precisa produzir para atingir a meta."
+          actions={(
+            <label className="inline-flex h-11 items-center gap-mx-sm rounded-xl border border-border-subtle bg-white px-mx-md text-sm font-semibold shadow-mx-xs">
+              <Filter size={16} />
+              <select className="bg-transparent font-semibold outline-none" value={period} onChange={(event) => setPeriod(event.target.value as PeriodKey)} aria-label="Período do funil">
+                {PERIOD_OPTIONS.map((option) => <option key={option.key} value={option.key}>{option.label}</option>)}
+              </select>
+            </label>
+          )}
+        />
+      </header>
 
         <section aria-label="Filtro de período">
           <div className="inline-flex flex-wrap gap-mx-xs rounded-xl border border-border-subtle bg-white p-mx-xs shadow-sm">
