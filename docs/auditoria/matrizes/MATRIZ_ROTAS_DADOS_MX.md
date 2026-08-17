@@ -8,7 +8,7 @@
 - Tabelas referenciadas pelo runtime: **172**
 - RPCs referenciadas pelo runtime: **89**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **364**
+- Pares tabela/operação encontrados: **366**
 
 ## Rotas
 
@@ -206,7 +206,7 @@
 | `logs_compartilhamento_whatsapp` | 1 |
 | `logs_reprocessamento` | 1 |
 | `logs_rotina_gerente` | 1 |
-| `lojas` | 25 |
+| `lojas` | 26 |
 | `manager_daily_tasks` | 1 |
 | `manager_lead_conferences` | 1 |
 | `marketing_mensal_consultoria` | 1 |
@@ -239,7 +239,7 @@
 | `pdi_reviews` | 1 |
 | `pdi_sessoes` | 2 |
 | `pdis` | 4 |
-| `perfil_consultor_mx` | 3 |
+| `perfil_consultor_mx` | 4 |
 | `planejamentos_estrategicos` | 1 |
 | `planos_acao` | 11 |
 | `planos_acao_template_itens` | 3 |
@@ -291,7 +291,7 @@
 | `universidade_certificacoes` | 1 |
 | `universidade_trilhas` | 1 |
 | `user_roles` | 1 |
-| `usuarios` | 21 |
+| `usuarios` | 22 |
 | `valores_indicadores_planejamento` | 2 |
 | `valores_parametros_consultoria` | 3 |
 | `vehicle_model_catalog` | 1 |
@@ -302,7 +302,7 @@
 | `versoes_metodologia_produto` | 1 |
 | `vinculo_modelo_relatorio_encontro` | 1 |
 | `vinculo_plano_acao_encontro` | 1 |
-| `vinculos_equipe_loja` | 1 |
+| `vinculos_equipe_loja` | 2 |
 | `vinculos_loja` | 17 |
 | `visitas_consultoria` | 11 |
 | `vw_jornada_alem_do_contratado` | 1 |
@@ -468,7 +468,7 @@
 | `logs_rotina_gerente:upsert` | 1 |
 | `lojas:delete` | 1 |
 | `lojas:insert` | 1 |
-| `lojas:select` | 25 |
+| `lojas:select` | 26 |
 | `lojas:update` | 1 |
 | `manager_daily_tasks:select` | 1 |
 | `manager_daily_tasks:update` | 1 |
@@ -537,6 +537,7 @@
 | `pdis:insert` | 1 |
 | `pdis:select` | 4 |
 | `pdis:update` | 1 |
+| `perfil_consultor_mx:insert` | 1 |
 | `perfil_consultor_mx:select` | 3 |
 | `perfil_consultor_mx:upsert` | 1 |
 | `planejamentos_estrategicos:insert` | 1 |
@@ -636,8 +637,9 @@
 | `user_roles:insert` | 1 |
 | `user_roles:select` | 1 |
 | `user_roles:update` | 1 |
-| `usuarios:delete` | 1 |
-| `usuarios:select` | 18 |
+| `usuarios:delete` | 2 |
+| `usuarios:insert` | 1 |
+| `usuarios:select` | 19 |
 | `usuarios:update` | 6 |
 | `usuarios:upsert` | 1 |
 | `valores_indicadores_planejamento:select` | 2 |
@@ -663,7 +665,7 @@
 | `vinculo_plano_acao_encontro:insert` | 1 |
 | `vinculo_plano_acao_encontro:select` | 1 |
 | `vinculo_plano_acao_encontro:update` | 1 |
-| `vinculos_equipe_loja:insert` | 1 |
+| `vinculos_equipe_loja:insert` | 2 |
 | `vinculos_equipe_loja:select` | 1 |
 | `vinculos_equipe_loja:update` | 1 |
 | `vinculos_loja:delete` | 1 |
