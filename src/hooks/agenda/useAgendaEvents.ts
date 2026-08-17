@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { isAdminMasterMxProfile } from '@/lib/agenda/admin-master'
-import { PMR_FOLLOW_UP_VISIT } from '@/lib/consultoria/pmr-visit-rules'
 import type {
   AgendaClient,
   AgendaConsultant,
@@ -62,7 +61,6 @@ export function useAgendaEvents(): UseAgendaEventsReturn {
           client:clientes_consultoria!client_id(name, slug, status, modality)
         `)
       .gte('visit_number', 1)
-      .lte('visit_number', PMR_FOLLOW_UP_VISIT)
       .order('scheduled_at', { ascending: true })
 
     let eventsQuery = supabase
