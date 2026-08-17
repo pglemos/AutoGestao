@@ -36,6 +36,7 @@ export function isSubmittedClosing(checkin: DailyCheckin | null) {
   if (!checkin?.submitted_at) return false
   const hasDeclaredMovement = [
     checkin.leads_prev_day,
+    checkin.leads_net_prev_day,
     checkin.agd_cart_prev_day,
     checkin.agd_net_prev_day,
     checkin.agd_cart_today,
@@ -44,6 +45,9 @@ export function isSubmittedClosing(checkin: DailyCheckin | null) {
     checkin.vnd_cart_prev_day,
     checkin.vnd_net_prev_day,
     checkin.visit_prev_day,
+    checkin.visitas_porta_prev_day,
+    checkin.visitas_cart_prev_day,
+    checkin.visitas_net_prev_day,
   ].some(value => Number(value || 0) > 0)
   const hasZeroJustification = Boolean(checkin.zero_reason?.trim())
   if (!hasDeclaredMovement && !hasZeroJustification) return false

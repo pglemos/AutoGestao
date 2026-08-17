@@ -296,12 +296,6 @@ const activeClosingContext = useMemo(
         }
     }, [historicalCheckin, changedFields.size, selectedDate])
 
-    const declaredForm = useMemo<CheckinForm>(() => ({
-        ...form,
-        leads: Number(form.leads_cart) + Number(form.leads_net),
-        visitas: Number(form.visitas_porta) + Number(form.visitas_cart) + Number(form.visitas_net),
-    }), [form])
-
     const crmDailyCounters = useMemo(() => {
         const dataD1 = addDaysDateOnly(selectedDate, 1)
         const isD1Negotiation = (cliente: ClienteRow) =>
@@ -320,6 +314,15 @@ const activeClosingContext = useMemo(
             vnd_net: clientesList.filter(cliente => cliente.canal === 'Internet' && cliente.vendaRealizada === 'Sim').length,
         }
     }, [clientesList, selectedDate])
+
+    const declaredForm = useMemo<CheckinForm>(() => ({
+        ...form,
+        vnd_porta: Math.max(Number(form.vnd_porta ?? 0), crmDailyCounters.vnd_porta),
+        vnd_cart: Math.max(Number(form.vnd_cart ?? 0), crmDailyCounters.vnd_cart),
+        vnd_net: Math.max(Number(form.vnd_net ?? 0), crmDailyCounters.vnd_net),
+        leads: Number(form.leads_cart) + Number(form.leads_net),
+        visitas: Number(form.visitas_porta) + Number(form.visitas_cart) + Number(form.visitas_net),
+    }), [crmDailyCounters, form])
 
     const effectiveForm = useMemo<CheckinForm>(() => {
         const next: CheckinForm = {
@@ -806,6 +809,11 @@ const fechamentoConcluido = metricScope === 'daily'
         // após o sucesso do submit, sem esperar o próximo render de data.
         if (metricScope === 'daily' && selectedDate === yesterdaySP) {
             fetchCheckinByDate(yesterdaySP, 'daily').then(setPreviousCheckin)
+        }
+        if (metricScope === 'daily') {
+            fetchCheckinByDate(selectedDate, 'daily').then(res => {
+                if (res) setHistoricalCheckin(res)
+            })
         }
 
         // Score/penalidade/liberação agora são persistidos pelo servidor

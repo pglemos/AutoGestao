@@ -161,6 +161,11 @@ describe('CheckinHeader — Histórico com 7 estados e ações por estado (MX-22
         expect(headerSource).toContain('const date = previousCard.date')
         expect(headerSource).toContain('checkins.find(c => c.reference_date === date && c.metric_scope')
     })
+
+    test('historyRows inclui leads_net_prev_day e visitas por canal na exibição do histórico', () => {
+        expect(headerSource).toContain('(checkin.leads_prev_day || 0) + (checkin.leads_net_prev_day || 0)')
+        expect(headerSource).toContain('checkin.visitas_porta_prev_day != null')
+    })
 })
 
 // Produção Zero (2026-08-10): o modal aceita escolher a data do fechamento

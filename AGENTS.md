@@ -92,3 +92,36 @@ Rules:
 - For review impact on changed files, use `graphify review-delta --graph .graphify/graph.json` instead of generic traversal
 - Read `.graphify/GRAPH_REPORT.md` only for broad architecture review or when `query` / `path` / `explain` do not surface enough context
 - After modifying code files in this session, run `npx graphify hook-rebuild` to keep the graph current
+
+<!-- AIOX-MANAGED-START: browser-validation -->
+## Browser Validation (agent-browser)
+
+Toda vez que qualquer agente desenvolver, criar, editar ou testar qualquer coisa de UI (`src/`, `public/`, `index.html`, `vite.config.ts`), ele DEVE validar os fluxos e capturar evidencia visual em desktop e mobile usando **agent-browser** (abre Chrome real via Chrome for Testing).
+
+### Hooks pre-definidos (automaticos)
+
+- **Claude Code Stop hook** (`.claude/hooks/agent-browser-validate.cjs`): apos o agente terminar a resposta, se houver mudancas de UI, dispara `scripts/agent-browser-validate.mjs` em background (nao bloqueia a resposta). Desative com `AGENT_BROWSER_AUTOVALIDATE=0`.
+- **OpenCode plugin** (`.opencode/plugins/agent-browser.js`): ao detectar edicoes de UI, roda a validacao automatica no fim da sessao (`session.idle`).
+- **Comandos slash**: `/browser-validate` (Claude Code e OpenCode) para validacao manual.
+
+### Comandos
+
+- `npm run browser:validate` — valida com defaults (URL `http://localhost:3457`)
+- `npm run browser:validate:flow` — valida com flow padrao (`scripts/browser-flows/default.flow.json`)
+- `npm run browser:validate:a11y` — adiciona auditoria de acessibilidade
+- `npm run browser:shots` — so captura visual desktop+mobile
+- `npm run browser:open` — abre o app no Chrome
+- `npm run browser:mcp` — MCP server do agent-browser
+
+### Evidencia
+
+Resultado fica em `visual-evidence/agent-browser/<label-timestamp>/` (`summary.json`, `summary.md`, `desktop.png`, `mobile.png`). Nao conclua story/task de UI sem `summary.status == "passed"`.
+
+### MCP
+
+O servidor `agent-browser` esta disponivel para os agentes:
+- opencode: `.opencode/opencode.json`
+- Claude Code: `.mcp.json`
+
+Use as tools `agent_browser_open`, `agent_browser_snapshot`, `agent_browser_screenshot`, `agent_browser_set_viewport` (ex.: `1440 900`) / `agent_browser_set_device` (ex.: `iPhone 15`) para testar fluxos em desktop ou mobile.
+<!-- AIOX-MANAGED-END: browser-validation -->

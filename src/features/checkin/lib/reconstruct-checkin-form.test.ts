@@ -52,6 +52,7 @@ describe('reconstructCheckinFormFromHistorical (P0-02)', () => {
 
         expect(form.leads_cart).toBe(6)
         expect(form.leads_net).toBe(4)
+        expect(form.leads).toBe(10)
         expect(form.visitas_porta).toBe(2)
         expect(form.visitas_cart).toBe(3)
         expect(form.visitas_net).toBe(4)

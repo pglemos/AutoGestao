@@ -24,7 +24,7 @@ export function reconstructCheckinFormFromHistorical(historicalCheckin: DailyChe
         && historicalCheckin.visitas_porta_prev_day !== undefined
 
     const form: CheckinForm = {
-        leads: historicalCheckin.leads_prev_day || 0,
+        leads: (historicalCheckin.leads_prev_day || 0) + (historicalCheckin.leads_net_prev_day || 0),
         leads_cart: historicalCheckin.leads_prev_day || 0,
         leads_net: historicalCheckin.leads_net_prev_day || 0,
         agd_cart_prev: historicalCheckin.agd_cart_prev_day || 0,

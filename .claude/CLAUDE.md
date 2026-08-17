@@ -354,3 +354,15 @@ npm run trace -- workflow-name
 
 ---
 *Synkra AIOX Claude Code Configuration v2.0*
+
+<!-- AIOX-MANAGED-START: browser-validation -->
+## Browser Validation (obrigatorio para mudancas de UI)
+
+Toda vez que qualquer agente **desenvolver, criar, editar ou testar** qualquer coisa de UI (`src/`, `public/`, `index.html`, `vite.config.ts`), DEVE validar fluxos e capturar evidencia visual desktop + mobile usando **agent-browser** (abre Chrome real).
+
+1. Rode `npm run browser:validate:flow` (valida fluxo padrao) ou `npm run browser:validate:a11y` (com acessibilidade).
+2. Verifique a evidencia em `visual-evidence/agent-browser/<label-timestamp>/` (`summary.json`, `desktop.png`, `mobile.png`).
+3. Nao conclua a task sem `summary.status == "passed"`. Corrija falhas e revalide.
+4. Hooks automaticos: Claude Code Stop hook (`.claude/hooks/agent-browser-validate.cjs`) e OpenCode plugin (`.opencode/plugins/agent-browser.js`). Desative com `AGENT_BROWSER_AUTOVALIDATE=0`.
+5. MCP para controle direto do Chrome: servidor `agent-browser` em `.mcp.json` (tools `agent_browser_*`). Use `agent_browser_set_viewport 1440 900` (desktop) ou `agent_browser_set_device "iPhone 15"` (mobile).
+<!-- AIOX-MANAGED-END: browser-validation -->

@@ -241,4 +241,43 @@ describe('resolveActiveClosingContext', () => {
     expect(context.mainDate).toBe('2026-07-09')
     expect(context.previousCard?.date).toBe('2026-07-08')
   })
+
+  test('reconhece fechamento submetido quando vendedor teve apenas leads de internet (leads_net_prev_day > 0)', () => {
+    const internetOnlyClosing = {
+      ...emptySubmittedClosing('2026-08-14'),
+      leads_net_prev_day: 14,
+    } as DailyCheckin
+
+    const ctx = resolveActiveClosingContext({
+      today: '2026-08-15',
+      yesterday: '2026-08-14',
+      now: new Date('2026-08-15T11:00:00.000Z'),
+      yesterdayClosing: internetOnlyClosing,
+      todayClosing: null,
+    })
+
+    expect(ctx.mainDate).toBe('2026-08-15')
+    expect(ctx.mainLabel).toBe('Hoje')
+    expect(ctx.previousCard?.type).toBe('previous_done')
+  })
+
+  test('reconhece fechamento submetido quando vendedor teve visitas por canal (visitas_net/cart/porta > 0)', () => {
+    const visitChannelClosing = {
+      ...emptySubmittedClosing('2026-08-14'),
+      visitas_net_prev_day: 3,
+    } as DailyCheckin
+
+    const ctx = resolveActiveClosingContext({
+      today: '2026-08-15',
+      yesterday: '2026-08-14',
+      now: new Date('2026-08-15T11:00:00.000Z'),
+      yesterdayClosing: visitChannelClosing,
+      todayClosing: null,
+    })
+
+    expect(ctx.mainDate).toBe('2026-08-15')
+    expect(ctx.mainLabel).toBe('Hoje')
+    expect(ctx.previousCard?.type).toBe('previous_done')
+  })
 })
+

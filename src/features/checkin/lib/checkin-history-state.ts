@@ -118,10 +118,16 @@ export function latestRequestForCheckin(
 export function latestRequestForDate(
   requests: CheckinCorrectionRequest[],
   referenceDate: string,
+  checkinsList?: DailyCheckin[],
 ): CheckinCorrectionRequest | null {
   const forDate = requests.filter(r => {
     const reqDate = (r.requested_values as Record<string, unknown>)?.reference_date
-    return reqDate === referenceDate
+    if (reqDate === referenceDate) return true
+    if (checkinsList && r.checkin_id) {
+      const match = checkinsList.find(c => c.id === r.checkin_id)
+      if (match?.reference_date === referenceDate) return true
+    }
+    return false
   })
   if (forDate.length === 0) return null
   return forDate.reduce((latest, r) =>

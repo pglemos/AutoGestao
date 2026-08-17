@@ -112,10 +112,11 @@ const { requestCorrection, fetchOwnRequests, loading: auditorLoading } = useChec
       const date = addDaysDateOnly(todaySP, -i)
       const isToday = i === 0
       const checkin = checkins.find(c => c.reference_date === date && c.metric_scope === 'daily')
+        ?? checkins.find(c => c.reference_date === date)
       // Fallback: buscar solicitação por data quando não existe checkin 'daily'
       // (ex: produção zero retroativa que criou placeholder 'historical')
       const latestRequest = latestRequestForCheckin(ownRequests, checkin?.id)
-        ?? latestRequestForDate(ownRequests, date)
+        ?? latestRequestForDate(ownRequests, date, checkins)
       const state = resolveHistoryRowState({ date, checkin: checkin ?? null, latestRequest, now: new Date(), isToday })
 
       if (checkin) {
@@ -136,8 +137,10 @@ const { requestCorrection, fetchOwnRequests, loading: auditorLoading } = useChec
           minute: '2-digit',
         }) : '—'
 
-        const leads = checkin.leads_prev_day || 0
-        const atend = checkin.visit_prev_day || 0
+        const leads = (checkin.leads_prev_day || 0) + (checkin.leads_net_prev_day || 0)
+        const atend = (checkin.visitas_porta_prev_day != null || checkin.visitas_cart_prev_day != null || checkin.visitas_net_prev_day != null)
+          ? (checkin.visitas_porta_prev_day || 0) + (checkin.visitas_cart_prev_day || 0) + (checkin.visitas_net_prev_day || 0)
+          : (checkin.visit_prev_day || 0)
         const agend = (checkin.agd_cart_today || 0) + (checkin.agd_net_today || 0)
 
         list.push({
@@ -222,6 +225,7 @@ const { requestCorrection, fetchOwnRequests, loading: auditorLoading } = useChec
     const finalized = previousCard.type === 'previous_done'
 
     const checkin = checkins.find(c => c.reference_date === date && c.metric_scope === 'daily')
+      ?? checkins.find(c => c.reference_date === date)
 
     const row = {
       date,
@@ -230,8 +234,10 @@ const { requestCorrection, fetchOwnRequests, loading: auditorLoading } = useChec
       score: '—',
       time: '—',
       sales: checkin ? (checkin.vnd_porta_prev_day || 0) + (checkin.vnd_cart_prev_day || 0) + (checkin.vnd_net_prev_day || 0) : 0,
-      leads: checkin ? checkin.leads_prev_day || 0 : 0,
-      atend: checkin ? checkin.visit_prev_day || 0 : 0,
+      leads: checkin ? (checkin.leads_prev_day || 0) + (checkin.leads_net_prev_day || 0) : 0,
+      atend: checkin ? ((checkin.visitas_porta_prev_day != null || checkin.visitas_cart_prev_day != null || checkin.visitas_net_prev_day != null)
+        ? (checkin.visitas_porta_prev_day || 0) + (checkin.visitas_cart_prev_day || 0) + (checkin.visitas_net_prev_day || 0)
+        : (checkin.visit_prev_day || 0)) : 0,
       agend: checkin ? (checkin.agd_cart_today || 0) + (checkin.agd_net_today || 0) : 0,
       vendas: checkin ? (checkin.vnd_porta_prev_day || 0) + (checkin.vnd_cart_prev_day || 0) + (checkin.vnd_net_prev_day || 0) : 0,
     }
