@@ -13,7 +13,7 @@
 - [ ] Confirmar remoto sincronizado: `git rev-parse origin/main` == local
 
 ```
-FINAL_CANDIDATE_SHA = ______________  (preencher no freeze; ref atual = 7beed636)
+FINAL_CANDIDATE_SHA = 0a37ccfbf5f6cd9f2a6c29c3933f8a14ab6d3388  (preencher no freeze; ref atual = 7beed636)
 ```
 
 ---

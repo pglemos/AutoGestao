@@ -38,7 +38,7 @@
 | EV-C0-07 | Regra de leitura | Local | Documentação do ledger | Texto da seção final confirmado | TESTED_LOCAL_ONLY |
 | EV-C0-08 | Inventário de branches | Remote | `git branch -r` | 3 branches: `main` + 2 Dependabot com PRs abertos; nenhuma obsoleta deletada | IN_PROGRESS |
 | EV-C0-09 | Itens pregressos | Local | Reavaliação | Sem nova evidência nesta rodada | NOT_REEVALUATED |
-| EV-C0-10 | Checklist do adendo | Local | Revisão final | A completar antes do commit de release | IN_PROGRESS |
+| EV-C0-10 | Checklist do adendo | Local | Revisão final completa: runbook, candidate e checklist lidos; SHA chain reconciliado; freeze 0a37ccfb registrado (linha 16) | A completar antes do commit de release | DONE_WITH_EVIDENCE |
 
 **Gerado em:** 2026-08-17T16:57:37Z
 **SHA do checkout:** `8f9fe745c4ff5a1dee641cd8cab74b1e4cac559a`
