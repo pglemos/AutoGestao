@@ -297,14 +297,64 @@ export const TRANSICAO = {
  * @returns {{ patch, novoPassoLabel, criarAgendamento }}
  */
 export function aplicarTransicao(proximoPassoAtual, resultado) {
+  const agora = new Date().toISOString();
+  const hoje = moment().format("YYYY-MM-DD");
+
+  // Venda realizada / Comprou sempre fecha a oportunidade como Vendida/ganho
+  if (resultado === "Venda realizada" || resultado === "Comprou" || resultado === "Venda concluída") {
+    return {
+      patch: {
+        ultima_acao_em: agora,
+        ultimo_contato: agora,
+        ultimo_resultado_contato: resultado,
+        situacao_atual: "Venda realizada",
+        temperatura: "Quente",
+        proximo_passo: null,
+        objetivo_atual: null,
+        proxima_acao_data: null,
+        status_oportunidade: "Vendida",
+        status_comercial: "Vendido",
+        vendido: true,
+        situacao_oportunidade: "Decisão",
+        ativo: false,
+      },
+      novoPassoLabel: null,
+      criarAgendamento: false,
+    };
+  }
+
   const codigo = detectarCodigo(proximoPassoAtual);
   const mapa = TRANSICAO[codigo] || {};
   const regra = mapa[resultado];
 
-  const agora = new Date().toISOString();
-  const hoje = moment().format("YYYY-MM-DD");
-
   if (!regra) {
+    // Fallback universal para perda caso o passo atual não tenha a regra explícita
+    if (
+      resultado === "Perdeu interesse" ||
+      resultado === "Sem interesse" ||
+      resultado === "Desistiu" ||
+      resultado === "Definitivamente perdido" ||
+      resultado === "Venda perdida"
+    ) {
+      return {
+        patch: {
+          ultima_acao_em: agora,
+          ultimo_contato: agora,
+          ultimo_resultado_contato: resultado,
+          situacao_atual: "Venda perdida",
+          temperatura: "Frio",
+          proximo_passo: null,
+          objetivo_atual: null,
+          proxima_acao_data: null,
+          status_oportunidade: "Encerrada",
+          status_comercial: "Perdido",
+          ativo: false,
+        },
+        novoPassoLabel: null,
+        criarAgendamento: false,
+      };
+    }
+
     // Sem regra específica: apenas registra o resultado e mantém o passo
     return {
       patch: { ultima_acao_em: agora, ultimo_contato: agora, ultimo_resultado_contato: resultado },

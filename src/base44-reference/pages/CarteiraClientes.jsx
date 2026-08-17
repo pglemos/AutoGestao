@@ -137,7 +137,15 @@ export default function CarteiraClientes() {
     if (proximoPasso) update.proximo_passo = proximoPasso;
     if (statusComercial) update.status_comercial = statusComercial;
 
-    if (novaSituacao === "Venda realizada" || novaSituacao === "Venda perdida" || novaSituacao === "Cadência encerrada") {
+    if (novaSituacao === "Venda realizada") {
+      update.status_comercial = "Vendido";
+      update.vendido = true;
+      update.etapa = "ganho";
+      update.ativo = false;
+      update.proximo_passo = null;
+      update.proxima_acao = null;
+      update.proxima_acao_data = null;
+    } else if (novaSituacao === "Venda perdida" || novaSituacao === "Cadência encerrada") {
       update.ativo = false;
       update.proximo_passo = null;
       update.proxima_acao = null;

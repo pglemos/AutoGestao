@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { CalendarDays, RefreshCw } from 'lucide-react'
+import { Building2, CalendarDays, RefreshCw } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
@@ -119,6 +119,7 @@ export function ConsultantAssignedClientsPage() {
   return (
     <MxModulePage id="consultant-assigned-clients" width={pageWidth} bottomClearance={pageBottomClearance}>
       <MxModuleHeader
+        icon={Building2}
         eyebrow="Minha carteira consultiva"
         title="CRM de Consultoria"
         description="Acesso limitado aos clientes com atribuição ativa para o seu perfil."

@@ -7,11 +7,32 @@ describe('regressões observadas na reunião da Carteira', () => {
   test('normaliza aliases acentuados e não cai no resultado genérico', () => {
     expect(detectarCodigo('Confirmar visita amanhã')).toBe('PP08')
     expect(detectarCodigo('Converter financiamento aprovado')).toBe('PP18')
+    expect(detectarCodigo('Conduzir para fechamento')).toBe('PP18')
+    expect(detectarCodigo('Conduzir para o fechamento')).toBe('PP18')
+    expect(detectarCodigo('Conduzir fechamento')).toBe('PP18')
   })
 
   test('venda realizada fecha a oportunidade e remove o próximo passo', () => {
     const result = aplicarTransicao('Converter financiamento aprovado', 'Venda realizada')
     expect(result.patch).toMatchObject({
+      situacao_atual: 'Venda realizada',
+      status_comercial: 'Vendido',
+      ativo: false,
+      proximo_passo: null,
+      proxima_acao_data: null,
+    })
+
+    const resultMentor = aplicarTransicao('Conduzir para fechamento', 'Venda realizada')
+    expect(resultMentor.patch).toMatchObject({
+      situacao_atual: 'Venda realizada',
+      status_comercial: 'Vendido',
+      ativo: false,
+      proximo_passo: null,
+      proxima_acao_data: null,
+    })
+
+    const resultQualquer = aplicarTransicao('Passo não mapeado qualquer', 'Venda realizada')
+    expect(resultQualquer.patch).toMatchObject({
       situacao_atual: 'Venda realizada',
       status_comercial: 'Vendido',
       ativo: false,

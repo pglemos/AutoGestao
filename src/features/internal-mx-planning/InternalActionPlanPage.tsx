@@ -1,3 +1,4 @@
+import { ClipboardList } from 'lucide-react'
 import AdminPlanosAcaoGlobalPage from '@/features/admin-mx/AdminPlanosAcaoGlobalPage'
 import { useInternalMxDomainTabs } from '@/design-system/internal-mx/InternalMxDomainTabs'
 import { ActionPlanWorkspace } from '@/features/action-plan/ActionPlanWorkspace'
@@ -27,6 +28,7 @@ export default function InternalActionPlanPage() {
     <>
       {domain.tabs}
       <InternalMxPlanningShell
+        icon={ClipboardList}
         title="Planos de Ação"
         description="Administre ações, responsáveis, prazos, evidências, validações e impacto da loja selecionada."
         store={store}

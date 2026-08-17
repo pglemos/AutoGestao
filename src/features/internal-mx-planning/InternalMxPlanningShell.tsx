@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
-import { Building2, RefreshCw } from 'lucide-react'
+import { Building2, RefreshCw, type LucideIcon } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
@@ -57,6 +57,7 @@ export function InternalMxPlanningShell({
   title,
   description,
   eyebrow = 'Gestão global MX',
+  icon,
   store,
   onRefresh,
   refreshing = false,
@@ -65,6 +66,7 @@ export function InternalMxPlanningShell({
   title: string
   description: string
   eyebrow?: string
+  icon?: LucideIcon
   store: ReturnType<typeof useInternalPlanningStore>
   onRefresh?: () => void
   refreshing?: boolean
@@ -92,6 +94,7 @@ export function InternalMxPlanningShell({
   const content = (
     <MxModulePage id={`internal-${title.toLocaleLowerCase('pt-BR').replaceAll(' ', '-')}`} width={pageWidth} bottomClearance={pageBottomClearance}>
       <MxModuleHeader
+        icon={icon}
         eyebrow={eyebrow}
         title={title}
         description={description}

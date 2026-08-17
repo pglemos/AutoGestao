@@ -581,30 +581,28 @@ function StoreMorningReport() {
 
     return (
         <div className="w-full flex flex-col gap-mx-lg p-mx-lg bg-surface-alt">
-            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border pb-10 shrink-0">
-                <div className="flex flex-col gap-mx-tiny">
-                    <div className="flex items-center gap-mx-sm">
-                        <div className="w-mx-xs h-mx-10 bg-brand-primary rounded-mx-full shadow-sm" aria-hidden="true" />
-                        <Typography variant="h1">Matinal <Typography as="span" className="">Oficial</Typography></Typography>
+            <PageHeading
+                icon={Activity}
+                title="Matinal Oficial"
+                subtitle={`Unidade Operacional • Ritual D+1 • ${referenceDateLabel}`}
+                actions={
+                    <div className="flex flex-wrap items-center gap-mx-sm shrink-0">
+                        <Button variant="outline" size="icon" onClick={handleRefresh} disabled={isRefetching} className="h-mx-xl w-mx-xl bg-white" aria-label="Sincronizar">
+                            <RefreshCw size={20} className={cn(isRefetching && "animate-spin")} aria-hidden="true" />
+                        </Button>
+                        <Button variant="outline" onClick={handleDownloadXlsx} className="h-mx-xl px-6 rounded-mx-full bg-white">
+                            <FileDown size={16} className="mr-2" aria-hidden="true" /> <Typography variant="tiny" as="span" className="">PLANILHA</Typography>
+                        </Button>
+                        <Button onClick={handleShareWhatsApp} className="h-mx-xl px-8 rounded-mx-full bg-status-success hover:bg-status-success/90">
+                            <MessageCircle size={16} className="mr-2 fill-white/20" aria-hidden="true" /> <Typography variant="tiny" as="span" tone="white" className="">WHATSAPP</Typography>
+                        </Button>
+                        <Button variant="outline" onClick={handleSendEmail} className="h-mx-xl px-8 rounded-mx-full" disabled={isSendingEmail}>
+                            {isSendingEmail ? <RefreshCw size={16} className="animate-spin mr-2" aria-hidden="true" /> : <Mail size={16} className="mr-2" aria-hidden="true" />}
+                            <Typography variant="tiny" as="span" className="">DIREÇÃO MX</Typography>
+                        </Button>
                     </div>
-                    <Typography variant="caption" className="pl-mx-md">Unidade Operacional • Ritual D+1 • {referenceDateLabel}</Typography>
-                </div>
-                <div className="flex flex-wrap items-center gap-mx-sm shrink-0">
-                    <Button variant="outline" size="icon" onClick={handleRefresh} disabled={isRefetching} className="h-mx-xl w-mx-xl bg-white" aria-label="Sincronizar">
-                        <RefreshCw size={20} className={cn(isRefetching && "animate-spin")} aria-hidden="true" />
-                    </Button>
-                    <Button variant="outline" onClick={handleDownloadXlsx} className="h-mx-xl px-6 rounded-mx-full bg-white">
-                        <FileDown size={16} className="mr-2" aria-hidden="true" /> <Typography variant="tiny" as="span" className="">PLANILHA</Typography>
-                    </Button>
-                    <Button onClick={handleShareWhatsApp} className="h-mx-xl px-8 rounded-mx-full bg-status-success hover:bg-status-success/90">
-                        <MessageCircle size={16} className="mr-2 fill-white/20" aria-hidden="true" /> <Typography variant="tiny" as="span" tone="white" className="">WHATSAPP</Typography>
-                    </Button>
-                    <Button variant="outline" onClick={handleSendEmail} className="h-mx-xl px-8 rounded-mx-full" disabled={isSendingEmail}>
-                        {isSendingEmail ? <RefreshCw size={16} className="animate-spin mr-2" aria-hidden="true" /> : <Mail size={16} className="mr-2" aria-hidden="true" />}
-                        <Typography variant="tiny" as="span" className="">DIREÇÃO MX</Typography>
-                    </Button>
-                </div>
-            </header>
+                }
+            />
 
             {reportAudit && (
                 <div role="status" className={cn(

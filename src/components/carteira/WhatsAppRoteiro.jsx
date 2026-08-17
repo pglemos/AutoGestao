@@ -12,6 +12,8 @@ import {
 } from "@/features/carteira-clientes/lib/proximoPassoMx";
 import ScriptIA from "./ScriptIA";
 import { toast } from "@/lib/toast";
+import { formatCurrencyInput, parseCurrencyInput } from "@/lib/currency-mask";
+import moment from "moment";
 
 const COR_MAP = {
   green:  { sel: "bg-green-50 border-green-400 text-green-700",    base: "bg-white border-border hover:bg-green-50 hover:border-green-300" },
@@ -34,6 +36,14 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
   const [salvando, setSalvando] = useState(false);
   const [historico, setHistorico] = useState([]);
   const [mostrarRegistro, setMostrarRegistro] = useState(false);
+
+  // Campos específicos de venda
+  const [veiculoComprado, setVeiculoComprado] = useState("");
+  const [valorVenda, setValorVenda] = useState("");
+  const [dataVenda, setDataVenda] = useState("");
+  const [placaVeiculo, setPlacaVeiculo] = useState("");
+  const [financiamento, setFinanciamento] = useState("Não se aplica");
+  const [dataEntregaPrevista, setDataEntregaPrevista] = useState("");
 
   const { objetivo, proximoPasso } = cliente ? calcularObjetivoEProximoPasso(cliente) : { objetivo: "", proximoPasso: "" };
   const situacao = cliente?.situacao_atual || cliente?.momento || "—";
@@ -61,31 +71,46 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
       setObservacao("");
       setMostrarRegistro(!!autoExpandirRegistro);
       setHistorico([]);
+
+      // Inicializa dados da venda com base no cliente existente
+      const valorBase = cliente?.valor_venda || cliente?.valor_negociado || "";
+      setValorVenda(valorBase ? formatCurrencyInput(String(valorBase)) : "");
+      setVeiculoComprado(cliente?.veiculo_comprado || cliente?.veiculo_interesse || "");
+      setDataVenda(moment().format("YYYY-MM-DD"));
+      setPlacaVeiculo(cliente?.placa_veiculo || "");
+      setFinanciamento(cliente?.financiamento || "Não se aplica");
+      setDataEntregaPrevista(cliente?.data_entrega_prevista ? String(cliente.data_entrega_prevista).slice(0, 16) : "");
+
       if (cliente?.id) {
         base44.entities.CarteiraHistorico.filter({ cliente_id: cliente.id }, "-created_date", 5)
           .then(h => setHistorico(h || []))
           .catch(() => {});
       }
     }
-  }, [open, cliente?.id, autoExpandirRegistro]);
+  }, [open, cliente, autoExpandirRegistro]);
 
   const precisaMotivo = resultado === "Perdeu interesse" || resultado === "Definitivamente perdido";
   const precisaDataVisita = resultado === "Agendou visita" || resultado === "Prefere videochamada" || resultado === "Pediu para remarcar";
+  const isVenda = resultado === "Venda realizada" || resultado === "Comprou" || resultado === "Venda concluída";
+  const vendaInvalida = isVenda && (!veiculoComprado?.trim() || !valorVenda || parseCurrencyInput(valorVenda) <= 0 || !dataVenda);
 
   function registrarSaidaWhatsApp() {
     if (!cliente) return;
-    sessionStorage.setItem(WA_KEY, JSON.stringify({
-      clienteId: cliente.id,
-      clienteNome: cliente.nome,
-      proximoPasso: passoAtual,
-      ts: Date.now(),
-      origem: "script_ia_whatsapp",
-    }));
+    if (typeof sessionStorage !== "undefined") {
+      sessionStorage.setItem(WA_KEY, JSON.stringify({
+        clienteId: cliente.id,
+        clienteNome: cliente.nome,
+        proximoPasso: passoAtual,
+        ts: Date.now(),
+        origem: "script_ia_whatsapp",
+      }));
+    }
   }
 
   async function registrar() {
     if (!resultado || !cliente) return;
     if (precisaDataVisita && !novaDataVisita) return;
+    if (vendaInvalida) return;
     setSalvando(true);
     const { patch, novoPassoLabel, criarAgendamento } = aplicarTransicao(passoAtual, resultado);
 
@@ -94,9 +119,32 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
     // AtividadeExecucao gerava um segundo registro em agendamentos.
     if (novaDataVisita && criarAgendamento) patch.visita_agendada_em = novaDataVisita;
 
+    if (isVenda) {
+      const parsedValor = parseCurrencyInput(valorVenda);
+      patch.veiculo_comprado = veiculoComprado?.trim() || cliente.veiculo_interesse;
+      patch.veiculo_interesse = veiculoComprado?.trim() || cliente.veiculo_interesse;
+      patch.valor_venda = parsedValor;
+      patch.valor_negociado = parsedValor;
+      patch.data_venda = dataVenda || moment().format("YYYY-MM-DD");
+      if (placaVeiculo?.trim()) patch.placa_veiculo = placaVeiculo.trim().toUpperCase();
+      if (financiamento) patch.financiamento = financiamento;
+      if (dataEntregaPrevista) patch.data_entrega_prevista = dataEntregaPrevista;
+      patch.situacao_atual = "Venda realizada";
+      patch.status_comercial = "Vendido";
+      patch.status_oportunidade = "Vendida";
+      patch.vendido = true;
+      patch.etapa = "ganho";
+      patch.ativo = false;
+      patch.proximo_passo = null;
+      patch.proxima_acao = null;
+      patch.proxima_acao_data = null;
+    }
+
     patch.historico = {
-      tipo: "Resultado registrado",
-      descricao: `Passo executado: ${passoAtual}. Resultado: ${resultado}.${observacao ? " " + observacao : ""}${novoPassoLabel ? ` → Próximo: ${novoPassoLabel}` : ""}`,
+      tipo: isVenda ? "Venda realizada" : "Resultado registrado",
+      descricao: isVenda
+        ? `Venda concluída: ${veiculoComprado || cliente.veiculo_interesse || "Veículo"} por ${valorVenda || "R$ 0,00"}.${placaVeiculo ? ` Placa: ${placaVeiculo}.` : ""}${observacao ? " " + observacao : ""}`
+        : `Passo executado: ${passoAtual}. Resultado: ${resultado}.${observacao ? " " + observacao : ""}${novoPassoLabel ? ` → Próximo: ${novoPassoLabel}` : ""}`,
       resultado,
       momento_anterior: situacao,
       momento_novo: patch.situacao_atual || situacao,
@@ -112,7 +160,9 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
       setSalvando(false);
     }
 
-    sessionStorage.removeItem(WA_KEY);
+    if (typeof sessionStorage !== "undefined") {
+      sessionStorage.removeItem(WA_KEY);
+    }
     onResultadoRegistrado(persistido);
     onClose();
   }
@@ -207,6 +257,76 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
                 </div>
               </div>
 
+              {/* Dados da Venda Concluída */}
+              {isVenda && (
+                <div className="space-y-3 p-3.5 bg-brand-primary-subtle border border-brand-primary/30 rounded-2xl">
+                  <div className="flex items-center gap-1.5 text-xs font-black text-brand-primary-hover uppercase tracking-wide">
+                    <span>🏆</span> Dados da Venda Concluída
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <div className="sm:col-span-2">
+                      <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Veículo Vendido *</label>
+                      <input
+                        value={veiculoComprado}
+                        onChange={e => setVeiculoComprado(e.target.value.toUpperCase())}
+                        placeholder="Ex: T-CROSS HIGHLINE 2024"
+                        className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-status-info/40 font-medium"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Valor da Venda *</label>
+                      <input
+                        value={valorVenda}
+                        onChange={e => setValorVenda(formatCurrencyInput(e.target.value))}
+                        placeholder="R$ 68.900,00"
+                        className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-status-info/40 font-semibold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Data da Venda *</label>
+                      <input
+                        type="date"
+                        value={dataVenda}
+                        onChange={e => setDataVenda(e.target.value)}
+                        className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-status-info/40"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Placa do Veículo</label>
+                      <input
+                        value={placaVeiculo}
+                        onChange={e => setPlacaVeiculo(e.target.value.toUpperCase())}
+                        placeholder="Ex: ABC-1234"
+                        maxLength={8}
+                        className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-status-info/40"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Financiamento</label>
+                      <select
+                        value={financiamento}
+                        onChange={e => setFinanciamento(e.target.value)}
+                        className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm"
+                      >
+                        <option value="Não se aplica">Não se aplica</option>
+                        <option value="Aprovado">Aprovado</option>
+                        <option value="Em análise">Em análise</option>
+                        <option value="Recusado">Recusado</option>
+                      </select>
+                    </div>
+                    <div className="sm:col-span-2">
+                      <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Previsão de Entrega</label>
+                      <input
+                        type="datetime-local"
+                        value={dataEntregaPrevista}
+                        onChange={e => setDataEntregaPrevista(e.target.value)}
+                        className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-status-info/40"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {precisaMotivo && (
                 <div>
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Motivo da perda</p>
@@ -246,10 +366,10 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
                 <Button variant="outline" onClick={onClose} className="flex-1 rounded-xl">Cancelar</Button>
                 <Button
                   onClick={registrar}
-                  disabled={!resultado || salvando || (precisaMotivo && !motivoPerda) || (precisaDataVisita && !novaDataVisita)}
-                  className="flex-1 rounded-xl bg-status-info text-status-info-foreground"
+                  disabled={!resultado || salvando || (precisaMotivo && !motivoPerda) || (precisaDataVisita && !novaDataVisita) || (isVenda && vendaInvalida)}
+                  className={`flex-1 rounded-xl ${isVenda ? "bg-status-success hover:bg-status-success text-white" : "bg-status-info text-status-info-foreground"}`}
                 >
-                  {salvando ? "Salvando..." : "Registrar resultado"}
+                  {salvando ? "Salvando..." : isVenda ? "Confirmar venda" : "Registrar resultado"}
                 </Button>
               </div>
             </div>

@@ -10,6 +10,7 @@ import moment from "moment/min/moment-with-locales";
 import { toast } from "@/lib/toast";
 import { useAuth } from "@/hooks/useAuth";
 import { CancelarVendaModal } from "@/features/crm/components/CancelarVendaModal";
+import { formatCurrencyInput } from "@/lib/currency-mask";
 
 moment.locale("pt-br");
 import {
@@ -248,7 +249,15 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
         {campo("placa_veiculo", "Placa do Veículo", false, "text", "Ex: ABC-1234")}
         {campo("veiculo_comprado", "Veículo Comprado / Vendido", false, "text", "Ex: HB20 1.0 COMFORT 2024")}
         {campo("data_venda", "Data da Venda", false, "date")}
-        {campo("valor_venda", "Valor da Venda", false, "text", "R$ 68.900,00")}
+        <div>
+          <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Valor da Venda</label>
+          <Input
+            type="text"
+            value={form.valor_venda || ""}
+            onChange={e => setForm(p => ({ ...p, valor_venda: formatCurrencyInput(e.target.value) }))}
+            placeholder="R$ 68.900,00"
+          />
+        </div>
         {campo("data_entrega_prevista", "Data e Hora Entrega Prevista", true, "datetime-local")}
       </div>
 
@@ -349,17 +358,26 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
   async function salvarEdicao() {
     setSalvando(true);
     const { objetivo, proximoPasso } = calcularObjetivoEProximoPasso(form);
+    const isVenda = form.situacao_atual === "Venda realizada";
     const atualizado = {
       ...form,
-      objetivo_atual: form.objetivo_atual || objetivo,
-      proximo_passo: form.proximo_passo || proximoPasso,
+      objetivo_atual: isVenda ? null : (form.objetivo_atual || objetivo),
+      proximo_passo: isVenda ? null : (form.proximo_passo || proximoPasso),
+      proxima_acao_data: isVenda ? null : form.proxima_acao_data,
       historico: {
-        tipo: "Ficha atualizada",
-        descricao: "Dados do cliente editados manualmente.",
+        tipo: isVenda ? "Venda realizada" : "Ficha atualizada",
+        descricao: isVenda ? "Venda confirmada através da edição da ficha." : "Dados do cliente editados manualmente.",
         momento_anterior: cliente?.situacao_atual,
         momento_novo: form.situacao_atual,
       },
     };
+
+    if (isVenda) {
+      atualizado.status_comercial = "Vendido";
+      atualizado.vendido = true;
+      atualizado.etapa = "ganho";
+      atualizado.ativo = false;
+    }
 
     let persistido;
     try {

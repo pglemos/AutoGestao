@@ -1,3 +1,4 @@
+import { Sparkles } from 'lucide-react'
 import AdminConsultoriaMxPage from '@/features/admin-mx/AdminConsultoriaMxPage'
 import { useInternalMxDomainTabs } from '@/design-system/internal-mx/InternalMxDomainTabs'
 import { ConsultingJourneyWorkspace } from '@/features/consulting-journey/ConsultingJourneyWorkspace'
@@ -29,6 +30,7 @@ export default function InternalConsultingPage() {
     <>
       {domain.tabs}
       <InternalMxPlanningShell
+        icon={Sparkles}
         title="Consultoria MX"
         description={domain.active === 'clientes'
           ? 'Administre a carteira global de clientes, atribuições, módulos, visitas, evidências e dados financeiros.'

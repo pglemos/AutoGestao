@@ -1,3 +1,4 @@
+import { Target } from 'lucide-react'
 import AdminIndicadoresPage from '@/features/admin-mx/AdminIndicadoresPage'
 import { useInternalMxDomainTabs } from '@/design-system/internal-mx/InternalMxDomainTabs'
 import { StrategicPlanWorkspace } from '@/features/strategic-plan/StrategicPlanWorkspace'
@@ -27,6 +28,7 @@ export default function InternalStrategicPlanPage() {
     <>
       {domain.tabs}
       <InternalMxPlanningShell
+        icon={Target}
         title="Plano Estratégico"
         description="Acompanhe os 45 indicadores, metas, comparativos e ações da loja selecionada."
         store={store}

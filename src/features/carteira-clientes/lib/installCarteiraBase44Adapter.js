@@ -8,6 +8,7 @@ import {
 import { carteiraMutationCoordinator } from './carteira-mutation-coordinator'
 import { readSimulationContext } from '@/hooks/auth/authHelpers'
 import { cancelarVendaRpc } from '@/features/crm/lib/cancelarVenda'
+import { parseCurrencyInput } from '@/lib/currency-mask'
 
 const INSTALLED_KEY = '__mxCarteiraBase44AdapterInstalled'
 const missionCache = new Map()
@@ -152,15 +153,20 @@ export function buildRpcPayload(data, clientId, executionContext) {
   } else if (nextActionDate !== undefined && nextActionDate !== null && nextActionDate !== '') {
     payload.proxima_acao_em = String(nextActionDate).slice(0, 10)
   }
-  put(payload, 'potencial_negocio', data.valor_negociado ?? data.potencial_negocio)
+  const parsedValorVenda = data.valor_venda != null && data.valor_venda !== ''
+    ? (typeof data.valor_venda === 'number' ? data.valor_venda : parseCurrencyInput(String(data.valor_venda)))
+    : null
+  const valorFinal = parsedValorVenda ?? data.valor_negociado ?? data.potencial_negocio
+
+  put(payload, 'potencial_negocio', valorFinal)
   put(payload, 'observacoes', data.observacoes ?? data.origem_detalhada)
   put(payload, 'do_not_contact', data.do_not_contact)
   put(payload, 'do_not_contact_reason', data.do_not_contact_reason)
   put(payload, 'reactivation_at', data.reactivation_at)
   put(payload, 'nova_oportunidade', data.nova_oportunidade)
 
-  put(payload, 'veiculo_interesse', data.veiculo_interesse)
-  put(payload, 'valor_negociado', data.valor_negociado)
+  put(payload, 'veiculo_interesse', data.veiculo_comprado || data.veiculo_interesse)
+  put(payload, 'valor_negociado', valorFinal)
   if (data.situacao_atual !== undefined || data.momento !== undefined || data.status_comercial !== undefined) {
     payload.etapa = situationToStage(data)
   }
@@ -175,9 +181,9 @@ export function buildRpcPayload(data, clientId, executionContext) {
   put(payload, 'motivo_perda', data.motivo_perda)
   put(payload, 'origem_detalhada', data.origem_detalhada)
   put(payload, 'placa_veiculo', data.placa_veiculo)
-  put(payload, 'veiculo_comprado', data.veiculo_comprado)
+  put(payload, 'veiculo_comprado', data.veiculo_comprado || data.veiculo_interesse)
   put(payload, 'data_venda', data.data_venda)
-  put(payload, 'valor_venda', data.valor_venda)
+  put(payload, 'valor_venda', parsedValorVenda ?? undefined)
   put(payload, 'preferencia_modalidade', data.preferencia_modalidade ?? data.modalidade)
   put(payload, 'urgencia_compra', data.urgencia_compra ?? data.urgencia)
 

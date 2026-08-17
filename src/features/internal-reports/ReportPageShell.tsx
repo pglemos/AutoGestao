@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import type { LucideIcon } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
 import {
@@ -11,6 +12,7 @@ import {
 
 export function ReportPageShell(props: {
   id?: string
+  icon?: LucideIcon
   eyebrow?: ReactNode
   title: ReactNode
   description?: ReactNode
@@ -36,6 +38,7 @@ export function ReportPageShell(props: {
     <MxModulePage id={props.id ?? 'internal-report'} width={pageWidth} bottomClearance={pageBottomClearance}>
       {props.header ?? (
         <MxModuleHeader
+          icon={props.icon}
           eyebrow={props.eyebrow}
           title={props.title}
           description={props.description}

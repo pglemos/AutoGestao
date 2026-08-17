@@ -25,6 +25,12 @@ const PASSO_ALIASES = {
   'enviar resumo do atendimento': 'PP10',
   'retomar proposta': 'PP12',
   'converter financiamento aprovado': 'PP18',
+  'conduzir para fechamento': 'PP18',
+  'conduzir para o fechamento': 'PP18',
+  'conduzir fechamento': 'PP18',
+  'fechar negociacao': 'PP14',
+  'fechar venda': 'PP14',
+  'confirmar venda': 'PP14',
   'reativar cliente antigo': 'PP16',
   'pedir indicacao': 'PP14',
   'acompanhar garantia': 'PP14',
@@ -70,6 +76,30 @@ export function getResultados(proximoPasso) {
 }
 
 export function aplicarTransicao(proximoPassoAtual, resultado) {
+  const isVenda = resultado === 'Venda realizada' || resultado === 'Comprou' || resultado === 'Venda concluída'
+  if (isVenda) {
+    const agora = new Date().toISOString()
+    return {
+      patch: {
+        ultima_acao_em: agora,
+        ultimo_contato: agora,
+        ultimo_resultado_contato: resultado,
+        situacao_atual: 'Venda realizada',
+        temperatura: 'Quente',
+        proximo_passo: null,
+        objetivo_atual: null,
+        proxima_acao_data: null,
+        status_oportunidade: 'Vendida',
+        status_comercial: 'Vendido',
+        vendido: true,
+        situacao_oportunidade: 'Decisão',
+        ativo: false,
+      },
+      novoPassoLabel: null,
+      criarAgendamento: false,
+    }
+  }
+
   if (detectarCodigo(proximoPassoAtual) !== 'PP18') {
     const transition = aplicarTransicaoBase(proximoPassoAtual, resultado)
     if (transition.patch?.ativo !== false) return transition

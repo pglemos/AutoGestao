@@ -11,6 +11,7 @@ export default function AdminMorningReportPage() {
   return (
     <ReportPageShell
       id="morning-report"
+      icon={Activity}
       eyebrow="Relatórios e diagnóstico"
       title="Relatório matinal"
       description="Consolidação diária da rede, fechamentos, volume e disciplina operacional."
