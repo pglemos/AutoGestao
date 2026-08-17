@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { format, isSameDay, isToday, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -12,6 +12,12 @@ interface MiniCalendarProps {
 
 export function MiniCalendar({ selectedDate, onDateSelect, hasEventsOnDate }: MiniCalendarProps) {
   const [currentMonth, setCurrentMonth] = useState<Date>(() => selectedDate || new Date())
+
+  useEffect(() => {
+    if (selectedDate && !isSameMonth(selectedDate, currentMonth)) {
+      setCurrentMonth(selectedDate)
+    }
+  }, [selectedDate])
 
   const monthStart = startOfMonth(currentMonth)
   const monthEnd = endOfMonth(monthStart)

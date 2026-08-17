@@ -34,6 +34,7 @@ export function AgendaAdmin() {
 
   const page = useAgendaAdminPage(calendarViewMode)
   const {
+    allVisits, allScheduleEvents,
     visits, clients, consultants, products, scheduleEvents,
     metrics, loading, error,
     dateFilter, setDateFilter, statusFilter, setStatusFilter,
@@ -41,6 +42,7 @@ export function AgendaAdmin() {
     activeFilters, clearFilters, refetch,
     calendarMonth, calendarDays, visitsByDate,
     goToPrevMonth, goToNextMonth, goToToday,
+    navigateToDate,
     createVisit, updateVisit, updateVisitStatus, deleteVisit,
     createScheduleEvent, updateScheduleEvent, deleteScheduleEvent,
     getNextVisitNumber, canViewAllAgendas,
@@ -124,7 +126,77 @@ export function AgendaAdmin() {
     setSelectedDate(dateFilter === 'hoje' ? new Date() : null)
   }, [dateFilter])
 
-  // Search filter
+  const handleDateSelect = (date: Date | null) => {
+    setSelectedDate(date)
+    if (date) {
+      navigateToDate(date)
+    }
+  }
+
+  // All visits & events filtered by consultant, status, and search query (without date interval restriction)
+  // Used for full-month MiniCalendar event dots and selected-day Drawer
+  const allFilteredVisits = useMemo(() => {
+    let filtered = allVisits
+
+    if (consultantFilter !== 'todos') {
+      filtered = filtered.filter((v) => (
+        v.consultant_id === consultantFilter ||
+        v.auxiliary_consultant_id === consultantFilter
+      ))
+    }
+
+    if (statusFilter !== 'todos') {
+      filtered = filtered.filter((v) => v.status === statusFilter)
+    }
+
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim()
+      filtered = filtered.filter(
+        (v) =>
+          v.client_name?.toLowerCase().includes(q) ||
+          v.consultant?.name?.toLowerCase().includes(q) ||
+          v.objective?.toLowerCase().includes(q) ||
+          v.visit_reason?.toLowerCase().includes(q) ||
+          v.product_name?.toLowerCase().includes(q) ||
+          String(v.visit_number).includes(q),
+      )
+    }
+
+    return filtered
+  }, [allVisits, consultantFilter, statusFilter, searchQuery])
+
+  const allFilteredEvents = useMemo(() => {
+    let filtered = allScheduleEvents
+
+    if (consultantFilter !== 'todos') {
+      filtered = filtered.filter((event) => event.responsible_user_id === consultantFilter)
+    }
+
+    if (statusFilter !== 'todos') {
+      if (statusFilter === 'em_andamento') return []
+      const eventStatus = statusFilter === 'cancelada'
+        ? 'cancelado'
+        : statusFilter === 'concluida'
+          ? 'concluido'
+          : 'agendado'
+      filtered = filtered.filter((event) => event.status === eventStatus)
+    }
+
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim()
+      filtered = filtered.filter(
+        (e) =>
+          e.title?.toLowerCase().includes(q) ||
+          e.responsible_name?.toLowerCase().includes(q) ||
+          e.topic?.toLowerCase().includes(q) ||
+          e.product_name?.toLowerCase().includes(q),
+      )
+    }
+
+    return filtered
+  }, [allScheduleEvents, consultantFilter, statusFilter, searchQuery])
+
+  // Search filter for visible range
   const searchFilteredVisits = useMemo(() => {
     if (!searchQuery.trim()) return visits
     const q = searchQuery.toLowerCase().trim()
@@ -152,17 +224,30 @@ export function AgendaAdmin() {
   }, [scheduleEvents, searchQuery])
 
   const selectedDayVisits = useMemo(
-    () => (!selectedDate ? [] : searchFilteredVisits.filter((v) => isSameDay(parseISO(v.scheduled_at), selectedDate))),
-    [selectedDate, searchFilteredVisits],
+    () => (!selectedDate ? [] : allFilteredVisits.filter((v) => isSameDay(parseISO(v.scheduled_at), selectedDate))),
+    [selectedDate, allFilteredVisits],
   )
   const selectedDayEvents = useMemo(
-    () => (!selectedDate ? [] : searchFilteredEvents.filter((e) => isSameDay(parseISO(e.starts_at), selectedDate))),
-    [selectedDate, searchFilteredEvents],
+    () => (!selectedDate ? [] : allFilteredEvents.filter((e) => isSameDay(parseISO(e.starts_at), selectedDate))),
+    [selectedDate, allFilteredEvents],
   )
+
+  const allEventsByDate = useMemo(() => {
+    const map: Record<string, boolean> = {}
+    for (const v of allFilteredVisits) {
+      const key = format(parseISO(v.scheduled_at), 'yyyy-MM-dd')
+      map[key] = true
+    }
+    for (const e of allFilteredEvents) {
+      const key = format(parseISO(e.starts_at), 'yyyy-MM-dd')
+      map[key] = true
+    }
+    return map
+  }, [allFilteredVisits, allFilteredEvents])
 
   const hasEventsOnDate = (date: Date) => {
     const key = format(date, 'yyyy-MM-dd')
-    return Boolean(visitsByDate[key] && visitsByDate[key].length > 0)
+    return Boolean(allEventsByDate[key])
   }
 
   const productSelectOptions = useMemo(() => {
@@ -373,7 +458,7 @@ export function AgendaAdmin() {
         {/* Left Sidebar Navigation */}
         <AgendaSidebar
           selectedDate={selectedDate}
-          onDateSelect={(date) => setSelectedDate(date)}
+          onDateSelect={handleDateSelect}
           hasEventsOnDate={hasEventsOnDate}
           consultants={consultants}
           consultantFilter={consultantFilter}
@@ -405,7 +490,7 @@ export function AgendaAdmin() {
               <AgendaErrorBoundary sectionName="calendar">
                 <AgendaCalendarView
                   calendarDays={calendarDays} visitsByDate={visitsByDate}
-                  selectedDate={selectedDate} onDateSelect={setSelectedDate}
+                  selectedDate={selectedDate} onDateSelect={handleDateSelect}
                   monthLabel={monthLabel}
                   onPrevMonth={goToPrevMonth} onNextMonth={goToNextMonth}
                   onTodayClick={() => { goToToday(); setDateFilter('hoje'); setCalendarViewMode('day') }}

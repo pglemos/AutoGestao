@@ -21,6 +21,12 @@ export function useAgendaAdminPage(viewMode?: 'day' | 'week' | 'month' | 'list')
   const [dayAnchor, setDayAnchor] = useState<Date>(() => new Date())
   const [weekAnchor, setWeekAnchor] = useState<Date>(() => new Date())
 
+  const navigateToDate = (date: Date) => {
+    setDayAnchor(date)
+    setWeekAnchor(date)
+    setCalendarMonth({ year: date.getFullYear(), month: date.getMonth() })
+  }
+
   const filters = useAgendaFilters({
     visits: events.visits,
     scheduleEvents: events.scheduleEvents,
@@ -51,6 +57,8 @@ export function useAgendaAdminPage(viewMode?: 'day' | 'week' | 'month' | 'list')
   })
 
   return {
+    allVisits: events.visits,
+    allScheduleEvents: events.scheduleEvents,
     visits: filters.filteredVisits,
     scheduleEvents: filters.filteredScheduleEvents,
     clients: events.clients,
@@ -75,6 +83,7 @@ export function useAgendaAdminPage(viewMode?: 'day' | 'week' | 'month' | 'list')
     goToPrevMonth: view.goToPrevMonth,
     goToNextMonth: view.goToNextMonth,
     goToToday: view.goToToday,
+    navigateToDate,
     createVisit: crud.createVisit,
     updateVisit: crud.updateVisit,
     updateVisitStatus: crud.updateVisitStatus,
