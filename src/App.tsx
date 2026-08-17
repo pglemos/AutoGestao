@@ -44,6 +44,7 @@ const DashboardLoja = lazy(() => import('@/pages/DashboardLoja'))
 const InternalActionPlanPage = lazy(() => import('@/features/internal-mx-planning/InternalActionPlanPage'))
 const InternalStrategicPlanPage = lazy(() => import('@/features/internal-mx-planning/InternalStrategicPlanPage'))
 const InternalConsultingPage = lazy(() => import('@/features/internal-mx-planning/InternalConsultingPage'))
+const InternalClientsPage = lazy(() => import('@/features/internal-mx-planning/InternalClientsPage'))
 const AppShell = lazy(() => import('@/components/AppShell'))
 const OwnerPlanoEstrategico = lazy(() => import('@/pages/owner/PlanoEstrategico'))
 const OwnerPlanoDeAcao = lazy(() => import('@/pages/owner/PlanoDeAcao'))
@@ -244,7 +245,7 @@ function OwnerLegacyPathRedirect() {
 
 function TeamAliasRedirect() {
   const { role, membership } = useAuth()
-  if (isPerfilInternoMx(role)) return <Navigate to="/lojas" replace />
+  if (isPerfilInternoMx(role)) return <Navigate to="/equipe" replace />
   if (role === 'dono') return <Navigate to="/home" replace />
   if (role === 'gerente' && membership?.store?.name) {
     return <RedirectWithSearch to="/minha-equipe" />
@@ -482,7 +483,7 @@ export default function App() {
                   <RoleSwitch vendedor={<ProdutosDigitais />} gerente={<ProdutosDigitais />} dono={<ProdutosDigitais />} admin={<AdminProdutosConsultoriaPage />} />
                 </Suspense>} />
                 <Route path="clientes" element={<Suspense fallback={<Spinner />}>
-                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminClientesPage />} />
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalClientsPage />} />
                 </Suspense>} />
                 <Route path="clientes/novo" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminNovoClientePage />} />

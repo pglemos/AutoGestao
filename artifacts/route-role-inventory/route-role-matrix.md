@@ -1,6 +1,6 @@
 # MX Foundation Zero — Matriz atual route × role
 
-Gerado em 2026-08-17T05:55:25.879Z a partir do inventário AST vivo e de ROUTE_ACCESS_RULES.
+Gerado em 2026-08-17T06:35:59.818Z a partir do inventário AST vivo e de ROUTE_ACCESS_RULES.
 
 ## Denominadores
 
@@ -218,9 +218,9 @@ Gerado em 2026-08-17T05:55:25.879Z a partir do inventário AST vivo e de ROUTE_A
 | `/produtos` | consultor_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ProdutosDigitais />} gerente={<ProdutosDigitais />} dono={<ProdutosDigitais />} admin={<AdminProdutosConsultoriaPage />} /> |
 | `/produtos` | dono | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ProdutosDigitais />} gerente={<ProdutosDigitais />} dono={<ProdutosDigitais />} admin={<AdminProdutosConsultoriaPage />} /> |
 | `/produtos` | gerente | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ProdutosDigitais />} gerente={<ProdutosDigitais />} dono={<ProdutosDigitais />} admin={<AdminProdutosConsultoriaPage />} /> |
-| `/clientes` | administrador_geral | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminClientesPage />} /> </Suspense> |
-| `/clientes` | administrador_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminClientesPage />} /> </Suspense> |
-| `/clientes` | consultor_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminClientesPage />} /> </Suspense> |
+| `/clientes` | administrador_geral | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalClientsPage />} /> </Suspense> |
+| `/clientes` | administrador_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalClientsPage />} /> </Suspense> |
+| `/clientes` | consultor_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalClientsPage />} /> </Suspense> |
 | `/clientes/novo` | administrador_geral | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminNovoClientePage />} /> </Suspense> |
 | `/clientes/novo` | administrador_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminNovoClientePage />} /> </Suspense> |
 | `/clientes/novo` | consultor_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminNovoClientePage />} /> </Suspense> |

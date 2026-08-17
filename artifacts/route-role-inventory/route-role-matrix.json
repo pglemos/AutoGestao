@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-17T05:55:25.879Z",
+  "generatedAt": "2026-08-17T06:35:59.818Z",
   "source": "scripts/audit_route_data_inventory.mjs + src/lib/auth/routeAccess.ts",
   "roles": [
     "administrador_geral",
@@ -2083,7 +2083,7 @@
         "vendedor": "FORBIDDEN"
       },
       "applicable": true,
-      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminClientesPage />} /> </Suspense>"
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalClientsPage />} /> </Suspense>"
     },
     {
       "path": "/clientes/novo",
@@ -3816,21 +3816,21 @@
       "role": "administrador_geral",
       "surface": "STANDARD_CANVAS",
       "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminClientesPage />} /> </Suspense>"
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalClientsPage />} /> </Suspense>"
     },
     {
       "path": "/clientes",
       "role": "administrador_mx",
       "surface": "STANDARD_CANVAS",
       "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminClientesPage />} /> </Suspense>"
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalClientsPage />} /> </Suspense>"
     },
     {
       "path": "/clientes",
       "role": "consultor_mx",
       "surface": "STANDARD_CANVAS",
       "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminClientesPage />} /> </Suspense>"
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalClientsPage />} /> </Suspense>"
     },
     {
       "path": "/clientes/novo",
