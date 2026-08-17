@@ -4,6 +4,7 @@ import {
   canRemoveStoreAssignment,
   compatibleViews,
   emptyUserPersonal,
+  isDelegationActive,
   planDeactivation,
   planPrimaryAssignment,
   validateDelegation,
@@ -112,20 +113,28 @@ describe('vínculo de loja', () => {
 })
 
 describe('delegação gerencial', () => {
-  test('exige loja e data final', () => {
+  test('exige loja, data final e autorizador', () => {
     const errors = validateDelegation({ store_id: '', store_name: '', access_level: '', valid_from: '', valid_until: '', reason: '', authorized_by: '', status: 'ATIVO' })
     expect(errors).toContain('Loja é obrigatória.')
     expect(errors).toContain('Data final é obrigatória.')
+    expect(errors).toContain('Autorizador é obrigatório.')
   })
 
   test('recusa vigência invertida', () => {
-    const errors = validateDelegation({ store_id: 's', store_name: 'x', access_level: 'gerente', valid_from: '2026-09-01', valid_until: '2026-08-01', reason: '', authorized_by: '', status: 'ATIVO' })
+    const errors = validateDelegation({ store_id: 's', store_name: 'x', access_level: 'gerente', valid_from: '2026-09-01', valid_until: '2026-08-01', reason: '', authorized_by: 'Admin', status: 'ATIVO' })
     expect(errors[0]).toContain('não pode ser anterior')
   })
 
   test('aceita delegação válida', () => {
     const errors = validateDelegation({ store_id: 's', store_name: 'x', access_level: 'gerente', valid_from: '', valid_until: '2026-12-31', reason: 'Férias', authorized_by: 'Admin', status: 'ATIVO' })
     expect(errors).toEqual([])
+  })
+
+  test('isDelegationActive respeita status e vigência', () => {
+    expect(isDelegationActive({ status: 'ATIVO', valid_until: '2026-12-31', valid_from: '2026-01-01' }, '2026-08-15')).toBe(true)
+    expect(isDelegationActive({ status: 'ENCERRADO', valid_until: '2026-12-31', valid_from: '' }, '2026-08-15')).toBe(false)
+    expect(isDelegationActive({ status: 'ATIVO', valid_until: '2026-08-01', valid_from: '' }, '2026-08-15')).toBe(false)
+    expect(isDelegationActive({ status: 'ATIVO', valid_until: '2026-12-31', valid_from: '2026-09-01' }, '2026-08-15')).toBe(false)
   })
 })
 

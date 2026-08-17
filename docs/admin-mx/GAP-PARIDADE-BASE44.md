@@ -28,8 +28,9 @@ Levantamento honesto do que existe no export `mx-admin-flow` e do que o MX tem h
 ### `/equipe`
 - ~~Perfil do consultor: programas habilitados, especialidades por encontro, clientes ativos, capacidade, situação~~ — **feito** (migration 20260815190000).
 - ~~Edição de usuário em abas: dados pessoais, papéis e visões, lojas e equipes, acesso e situação~~ — **feito** (UserEditModal, 4 abas; migration 20260815220000).
-- ~~Delegações gerenciais com motivo e vigência~~ — **feito** (`delegacoes_gerenciais`, aba Acesso e Situação).
+- ~~Delegações gerenciais com motivo e vigência~~ — **feito** (`delegacoes_gerenciais`, aba Acesso e Situação; autorizador, status e "Acessar Visão Gerencial" quando ativa).
 - ~~Papel principal e visão padrão ao entrar~~ — **feito** (`user_roles.is_primary` + `usuarios.default_view`).
+- ~~Adicionar Membro (criar MxConsultant/UserProfile)~~ — **feito** (MemberCreateModal grava `usuarios` + `perfil_consultor_mx` + loja principal).
 
 ### `/produtos`
 - ~~Ciclo de vida, aba Módulos, aba Tempos e Capacidade, métricas~~ — **feito** (migration 20260815180000).

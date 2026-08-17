@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { RefreshCw, Users } from 'lucide-react'
+import { Plus, RefreshCw, Users } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
@@ -23,6 +23,7 @@ import { toast } from '@/lib/toast'
 import { useConsultingClients } from '@/hooks/useConsultingClients'
 import { ConsultantProfileModal } from './equipe/ConsultantProfileModal'
 import { SITUATION_LABEL, type ConsultantSituation } from './equipe/consultantProfile'
+import { MemberCreateModal } from './equipe/MemberCreateModal'
 import { TeamMemberFormModal } from './equipe/TeamMemberFormModal'
 import { UserEditModal } from './equipe/UserEditModal'
 import {
@@ -33,6 +34,7 @@ import {
   syncMemberAssignments,
   type TeamMemberDraft,
 } from './equipe/teamMutations'
+import { fetchAvailableStores } from './equipe/userEditMutations'
 import { useAdminTeam, type AdminTeamMember } from './hooks/useAdminMxLists'
 
 const ROLE_LABEL: Record<string, string> = {
@@ -50,8 +52,19 @@ export function AdminEquipeMxPage() {
   const [submitting, setSubmitting] = useState(false)
   const [profileMember, setProfileMember] = useState<AdminTeamMember | null>(null)
   const [editMember, setEditMember] = useState<AdminTeamMember | null>(null)
+  const [showCreate, setShowCreate] = useState(false)
+  const [stores, setStores] = useState<Array<{ id: string; name: string }>>([])
   const [situacao, setSituacao] = useState('todas')
   const location = useLocation()
+
+  const openCreate = async () => {
+    setShowCreate(true)
+    try {
+      setStores(await fetchAvailableStores())
+    } catch {
+      setStores([])
+    }
+  }
 
   const openEdit = async (member: AdminTeamMember) => {
     setDraft({
@@ -126,7 +139,12 @@ export function AdminEquipeMxPage() {
           eyebrow="Administração MX"
           title="Equipe MX"
           description="Consultores e administradores internos, papéis e carteiras atribuídas."
-          actions={<Button variant="outline" onClick={() => void refetch()}><RefreshCw size={16} />Atualizar</Button>}
+          actions={(
+            <>
+              <Button variant="outline" onClick={() => void refetch()}><RefreshCw size={16} />Atualizar</Button>
+              <Button onClick={() => void openCreate()}><Plus size={16} />Adicionar Membro</Button>
+            </>
+          )}
         />
         {loading ? <MxLoadingState label="Carregando equipe" /> : error ? <MxErrorState description={error} retry={() => void refetch()} /> : (
           <>
@@ -212,6 +230,12 @@ export function AdminEquipeMxPage() {
         ) : null}
         <ConsultantProfileModal member={profileMember} onClose={() => setProfileMember(null)} onSaved={() => void refetch()} />
         <UserEditModal member={editMember} onClose={() => setEditMember(null)} onSaved={() => void refetch()} />
+        <MemberCreateModal
+          open={showCreate}
+          stores={stores}
+          onClose={() => setShowCreate(false)}
+          onSaved={() => void refetch()}
+        />
       </div>
     </MxModulePage>
   )

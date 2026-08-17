@@ -197,7 +197,17 @@ export function validateDelegation(draft: ManagerDelegationDraft): string[] {
   if (draft.valid_until && draft.valid_from && draft.valid_until < draft.valid_from) {
     errors.push('A vigência final não pode ser anterior à inicial.')
   }
+  if (!draft.authorized_by.trim()) errors.push('Autorizador é obrigatório.')
   return errors
+}
+
+/** Uma delegação é ativa quando o status está ativo e a vigência cobre hoje. */
+export function isDelegationActive(draft: Pick<ManagerDelegationDraft, 'status' | 'valid_until' | 'valid_from'>, today = todayIso()): boolean {
+  if (draft.status !== 'ATIVO') return false
+  if (!draft.valid_until) return false
+  if (draft.valid_until < today) return false
+  if (draft.valid_from && draft.valid_from > today) return false
+  return true
 }
 
 export type UserAccessDraft = {
