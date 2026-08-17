@@ -104,6 +104,12 @@ html [data-sonner-toaster].mx-toaster {
   box-shadow: var(--mx-overlay-shadow);
 }
 
+.mx-overlay-surface.overflow-y-auto,
+.mx-overlay-surface.overflow-auto,
+.mx-overlay-surface.mx-overlay-body {
+  overflow-y: auto;
+}
+
 .mx-overlay-surface[data-mx-overlay-layer='drawer'] {
   --mx-overlay-radius: 0px;
 }

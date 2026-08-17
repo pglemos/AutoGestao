@@ -56,6 +56,24 @@ describe('MX overlay contract', () => {
     expect(screen.getByRole('button', { name: 'Fechar diálogo' }).className).toContain('mx-overlay-close')
   })
 
+  test('DialogContent with overflow-y-auto enables scrollable body contract without clipping', () => {
+    render(
+      <Dialog open onOpenChange={() => undefined}>
+        <DialogContent className="max-w-md max-h-[92vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Executar próximo passo</DialogTitle>
+          </DialogHeader>
+          <div data-testid="long-form">Conteúdo longo de formulário</div>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    const dialog = screen.getByRole('dialog', { name: 'Executar próximo passo' })
+    expect(dialog).toHaveAttribute('data-mx-overlay-scroll', 'body')
+    expect(dialog.className).toContain('mx-overlay-body')
+    expect(dialog.className).not.toContain('overflow-hidden')
+  })
+
   test('Sheet has the same body, safe-area and close-button contract', () => {
     render(
       <Sheet open onOpenChange={() => undefined}>

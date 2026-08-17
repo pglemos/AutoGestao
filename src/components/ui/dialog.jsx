@@ -25,38 +25,41 @@ const DialogOverlay = React.forwardRef(({ className, ...props }, ref) => (
 ))
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 
-const DialogContent = React.forwardRef(({ className, children, overlayClassName, showClose = true, size = "md", scrollable = false, ...props }, ref) => (
-  <DialogPortal>
-    <DialogOverlay className={overlayClassName} />
-    <DialogPrimitive.Content
-      ref={ref}
-      data-mx-overlay="dialog"
-      data-mx-overlay-layer="modal"
-      data-mx-overlay-size={size}
-      data-mx-overlay-scroll={scrollable ? "body" : undefined}
-      className={cn(
-        "mx-overlay-surface fixed left-[var(--mx-overlay-compact-gutter)] right-[var(--mx-overlay-compact-gutter)] top-[50%] flex w-auto translate-y-[-50%] flex-col gap-[var(--mx-overlay-gap)] p-[var(--mx-overlay-padding)] duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:left-[50%] sm:-translate-x-1/2 sm:right-auto sm:w-full",
-        {
-          "sm:max-w-[var(--mx-overlay-size-sm)]": size === "sm",
-          "sm:max-w-[var(--mx-overlay-size-md)]": size === "md",
-          "sm:max-w-[var(--mx-overlay-size-lg)]": size === "lg",
-          "sm:max-w-[var(--mx-overlay-size-xl)]": size === "xl",
-        }[size],
-        scrollable ? "mx-overlay-body" : "overflow-hidden",
-        className
-      )}
-      {...props}>
-      {children}
-      {showClose && (
-        <DialogPrimitive.Close
-          aria-label="Fechar diálogo"
-          className="mx-overlay-close absolute right-[var(--mx-overlay-compact-gutter)] top-[var(--mx-overlay-compact-gutter)] rounded-[var(--mx-overlay-close-radius)] opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-          <X className="h-4 w-4" />
-        </DialogPrimitive.Close>
-      )}
-    </DialogPrimitive.Content>
-  </DialogPortal>
-))
+const DialogContent = React.forwardRef(({ className, children, overlayClassName, showClose = true, size = "md", scrollable = false, ...props }, ref) => {
+  const isScrollable = scrollable || (typeof className === 'string' && /\boverflow-(?:y-)?(?:auto|scroll)\b/.test(className))
+  return (
+    <DialogPortal>
+      <DialogOverlay className={overlayClassName} />
+      <DialogPrimitive.Content
+        ref={ref}
+        data-mx-overlay="dialog"
+        data-mx-overlay-layer="modal"
+        data-mx-overlay-size={size}
+        data-mx-overlay-scroll={isScrollable ? "body" : undefined}
+        className={cn(
+          "mx-overlay-surface fixed left-[var(--mx-overlay-compact-gutter)] right-[var(--mx-overlay-compact-gutter)] top-[50%] flex w-auto translate-y-[-50%] flex-col gap-[var(--mx-overlay-gap)] p-[var(--mx-overlay-padding)] duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:left-[50%] sm:-translate-x-1/2 sm:right-auto sm:w-full",
+          {
+            "sm:max-w-[var(--mx-overlay-size-sm)]": size === "sm",
+            "sm:max-w-[var(--mx-overlay-size-md)]": size === "md",
+            "sm:max-w-[var(--mx-overlay-size-lg)]": size === "lg",
+            "sm:max-w-[var(--mx-overlay-size-xl)]": size === "xl",
+          }[size],
+          isScrollable ? "mx-overlay-body" : "overflow-hidden",
+          className
+        )}
+        {...props}>
+        {children}
+        {showClose && (
+          <DialogPrimitive.Close
+            aria-label="Fechar diálogo"
+            className="mx-overlay-close absolute right-[var(--mx-overlay-compact-gutter)] top-[var(--mx-overlay-compact-gutter)] rounded-[var(--mx-overlay-close-radius)] opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+            <X className="h-4 w-4" />
+          </DialogPrimitive.Close>
+        )}
+      </DialogPrimitive.Content>
+    </DialogPortal>
+  )
+})
 DialogContent.displayName = DialogPrimitive.Content.displayName
 
 const DialogHeader = ({
