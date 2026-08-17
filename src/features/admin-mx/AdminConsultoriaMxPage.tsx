@@ -1,4 +1,4 @@
-import { BookOpen, RefreshCw } from 'lucide-react'
+import { FileText, History as HistoryIcon, Plus, RefreshCw } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
@@ -16,6 +16,7 @@ export function AdminConsultoriaMxPage() {
   const controller = useConsultoriaMxController()
   const location = useLocation()
   const { width, bottomClearance } = resolveRouteLayout(location.pathname)
+  const go = (tab: ConsultoriaMxTab) => () => controller.setTab(tab)
 
   return (
     <MxModulePage id="admin-mx-consultoria" width={width} bottomClearance={bottomClearance}>
@@ -24,7 +25,25 @@ export function AdminConsultoriaMxPage() {
           eyebrow="Administração MX"
           title="Consultoria MX"
           description="Configure a metodologia, os conteúdos e as entregas padrão de cada encontro da consultoria."
-          actions={<Button variant="outline" onClick={() => void controller.refetch()}><RefreshCw size={16} />Atualizar</Button>}
+          actions={
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" onClick={go('produtos')} aria-label="Configurar produto">
+                <FileText size={14} />Configurar Produto
+              </Button>
+              <Button variant="outline" size="sm" onClick={go('biblioteca')} aria-label="Adicionar material">
+                <Plus size={14} />Adicionar Material
+              </Button>
+              <Button variant="outline" size="sm" onClick={go('relatorios')} aria-label="Criar modelo de relatório">
+                <FileText size={14} />Criar Modelo de Relatório
+              </Button>
+              <Button variant="outline" size="sm" onClick={go('historico')} aria-label="Abrir histórico">
+                <HistoryIcon size={14} />Abrir Histórico
+              </Button>
+              <Button variant="outline" onClick={() => void controller.refetch()} aria-label="Atualizar metodologia">
+                <RefreshCw size={16} />Atualizar
+              </Button>
+            </div>
+          }
         />
 
         <TabNav
