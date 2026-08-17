@@ -350,7 +350,7 @@ function LayoutContent() {
     // todos os perfis — inclusive os que já veem o visual aprovado no resto do
     // produto. O modo é fornecido aqui explicitamente.
     return (
-        <div className="min-h-screen bg-gray-900 flex items-center justify-center p-mx-lg">
+        <div className="min-h-screen bg-surface-alt text-foreground flex items-center justify-center p-mx-lg">
           <ForcePasswordChange />
         </div>
     )

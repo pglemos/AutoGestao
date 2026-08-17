@@ -139,16 +139,16 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boole
   render() {
     if (!this.state.hasError) return this.props.children
     return (
-      <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center gap-mx-lg p-mx-xl">
+      <div className="min-h-screen bg-surface-alt text-foreground flex flex-col items-center justify-center gap-mx-lg p-mx-xl">
         <div className="w-mx-2xl h-mx-2xl rounded-2xl bg-brand-primary/10 flex items-center justify-center">
           <span className="text-status-success-text font-bold text-4xl">MX</span>
         </div>
-        <h1 className="text-white text-xl font-bold uppercase tracking-wider">Algo deu errado</h1>
-        <p className="text-white/50 text-sm text-center max-w-md">
+        <h1 className="text-foreground text-xl font-bold uppercase tracking-wider">Algo deu errado</h1>
+        <p className="text-muted-foreground text-sm text-center max-w-md">
           A aplicação encontrou um erro inesperado. Tente recarregar a página.
         </p>
         {import.meta.env.DEV && this.state.error && (
-          <pre className="text-status-error-text text-xs bg-white/5 p-mx-md rounded-xl max-w-lg overflow-auto text-left">{this.state.error.message}</pre>
+          <pre className="text-status-error-text text-xs bg-white p-mx-md rounded-xl border border-border max-w-lg overflow-auto text-left">{this.state.error.message}</pre>
         )}
         <Button
           onClick={() => { this.setState({ hasError: false, error: null }); window.location.reload() }}
@@ -167,7 +167,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isSimulationRoute = location.pathname === '/simulacao' || location.pathname.startsWith('/simulacao/')
   const routeAccessRole = isSimulationRoute ? baseRole || role : role
 
-  if (loading || !initialized) return <div className="h-screen flex items-center justify-center bg-gray-900"><Spinner /></div>
+  if (loading || !initialized) return <div className="h-screen flex items-center justify-center bg-surface-alt text-foreground"><Spinner /></div>
   if (!profile) {
     if (import.meta.env.DEV) console.warn('Audit Warn [ProtectedRoute]: No profile found, redirecting to login.')
     return <Navigate to="/login" state={{ from: location }} replace />
@@ -264,7 +264,7 @@ function PublicHome() {
   const { profile, loading, initialized } = useAuth()
 
   if (loading || !initialized) {
-    return <div className="h-screen flex items-center justify-center bg-background"><Spinner /></div>
+    return <div className="h-screen flex items-center justify-center bg-surface-alt text-foreground"><Spinner /></div>
   }
 
   if (profile) return <RoleRedirect />

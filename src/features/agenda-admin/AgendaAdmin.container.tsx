@@ -324,7 +324,7 @@ export function AgendaAdmin() {
   }
 
   return (
-    <PageTemplate as="div" width="wide" surface="plain" className="flex h-full w-full flex-col">
+    <PageTemplate as="div" width="wide" className="flex h-full w-full flex-col">
       {/* Unified Top Header */}
       <AgendaErrorBoundary sectionName="header">
         <AgendaHeader

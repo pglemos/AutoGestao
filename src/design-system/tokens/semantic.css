@@ -268,9 +268,9 @@ form input[aria-hidden="true"] {
  * seja imperceptível.
  */
 :root {
-  --mx-page-bg: hsl(var(--mx-gray-50));
+  --mx-page-bg: hsl(var(--mx-color-surface-muted));
   --mx-surface: hsl(var(--mx-neutral-0));
-  --mx-surface-muted: hsl(var(--mx-gray-50));
+  --mx-surface-muted: hsl(var(--mx-color-surface-muted));
   --mx-border: hsl(var(--mx-gray-100));
   --mx-border-strong: hsl(var(--mx-gray-200));
   --mx-text: hsl(var(--mx-gray-800));
