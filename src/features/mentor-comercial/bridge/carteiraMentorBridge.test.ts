@@ -272,6 +272,28 @@ describe('script oficial com renderização estrita', () => {
     expect(v.veiculo).toBeNull()
   })
 
+  it('extrai data e hora de visita_agendada_em para montar mensagens de confirmação de agendamento', () => {
+    const clienteAgendado = {
+      situacao_atual: 'Visita agendada',
+      nome: 'JOAO PAULO',
+      veiculo_interesse: 'RENEGADE T270',
+      visita_agendada_em: '2026-08-18T14:30:00',
+    }
+    const v = variaveisDoCliente(clienteAgendado)
+    expect(v.data).toBe('18/08')
+    expect(v.hora).toBe('14:30')
+    expect(v.nome).toBe('JOAO PAULO')
+    expect(v.veiculo).toBe('RENEGADE T270')
+
+    const r = scriptOficialParaCliente(clienteAgendado)
+    expect(r?.motivo).toBe('RESOLVED')
+    expect(r?.scriptReady).toBe(true)
+    expect(r?.allowWhatsApp).toBe(true)
+    expect(r?.texto).toContain('JOAO PAULO')
+    expect(r?.texto).toContain('RENEGADE T270')
+    expect(r?.texto).toContain('14:30')
+  })
+
   it('cliente nulo não quebra', () => {
     expect(scriptOficialParaCliente(null)?.motivo).toBe('SEM_MAPEAMENTO')
   })

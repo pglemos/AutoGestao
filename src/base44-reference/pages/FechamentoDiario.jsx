@@ -41,7 +41,11 @@ export default function FechamentoDiario() {
 
   // Se antes de 12h01, permite trabalhar no fechamento de ontem; após 12h01 usa hoje
   const yesterdayStatus = checkYesterdayStatus();
-  const closingDate = yesterdayStatus !== "expired" ? yesterdayStr : todayStr;
+  const [selectedDate, setSelectedDate] = useState(() => {
+    return yesterdayStatus === "expired" ? todayStr : yesterdayStr;
+  });
+
+  const closingDate = selectedDate;
   const isWorkingOnYesterday = closingDate === yesterdayStr;
 
   const [dailyClose, setDailyClose] = useState(null);
@@ -77,15 +81,39 @@ export default function FechamentoDiario() {
     return totalMin < 9 * 60 + 31;
   }
 
-  const loadData = async () => {
+  const loadData = async (targetDate = selectedDate) => {
+    setLoading(true);
+    const isTargetYesterday = targetDate === yesterdayStr;
     const [closes, lib, me] = await Promise.all([
-      base44.entities.DailyClose.filter({ date: closingDate }).catch(() => []),
-      yesterdayStatus === "blocked"
+      base44.entities.DailyClose.filter({ date: targetDate }).catch(() => []),
+      isTargetYesterday && yesterdayStatus === "blocked"
         ? base44.entities.LiberacaoFechamento.filter({ data_fechamento: yesterdayStr, status_solicitacao: "Liberado" }).catch(() => [])
         : Promise.resolve([]),
       base44.auth.me().catch(() => null),
     ]);
-    setDailyClose(closes[0] || null);
+
+    const currentClose = closes[0] || null;
+
+    // Se ontem já foi finalizado e o usuário acabou de abrir em yesterdayStr, auto-muda para hoje
+    if (targetDate === yesterdayStr && currentClose?.finalizado) {
+      const todayCloses = await base44.entities.DailyClose.filter({ date: todayStr }).catch(() => []);
+      setSelectedDate(todayStr);
+      setDailyClose(todayCloses[0] || null);
+      setLiberado(false);
+      setCurrentUser(me);
+      setLoading(false);
+      if (me) {
+        const eventos = await base44.entities.EventoComercial.filter({
+          vendedor_id: me.id,
+          data_evento: todayStr,
+        }).catch(() => []);
+        setTotalGarantiasDia(eventos.filter(e => e.tipo_evento === "garantia_registrada").length);
+        setTotalQualificadosDia(eventos.filter(e => e.tipo_evento === "cliente_qualificado").length);
+      }
+      return;
+    }
+
+    setDailyClose(currentClose);
     setLiberado(lib.length > 0);
     setCurrentUser(me);
     setLoading(false);
@@ -93,10 +121,26 @@ export default function FechamentoDiario() {
     if (me) {
       const eventos = await base44.entities.EventoComercial.filter({
         vendedor_id: me.id,
-        data_evento: closingDate,
+        data_evento: targetDate,
       }).catch(() => []);
       setTotalGarantiasDia(eventos.filter(e => e.tipo_evento === "garantia_registrada").length);
       setTotalQualificadosDia(eventos.filter(e => e.tipo_evento === "cliente_qualificado").length);
+    }
+  };
+
+  const handleDateChange = (newDate) => {
+    setSelectedDate(newDate);
+    loadData(newDate);
+  };
+
+  const handleDailyCloseUpdate = (updated) => {
+    setDailyClose(updated);
+    if (updated?.finalizado && selectedDate === yesterdayStr) {
+      toast({
+        title: "Fechamento de ontem concluído!",
+        description: "Alternando automaticamente para o fechamento de hoje.",
+      });
+      handleDateChange(todayStr);
     }
   };
 
@@ -256,22 +300,43 @@ export default function FechamentoDiario() {
   const displayDow = moment(displayDate).format("dddd");
 
   return (
- <div className="min-h-screen bg-[#F8FAFC] p-3 font-body sm:p-6">
+    <div className="min-h-screen bg-[#F8FAFC] p-3 font-body sm:p-6">
       {/* ── Topbar ── */}
- <div className="flex min-h-16 w-full flex-col justify-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm sm:px-6 lg:flex-row lg:items-center lg:justify-between">
-        {/* Lado esquerdo: título + data */}
-        <div className="flex items-center gap-2 sm:gap-5 min-w-0 flex-1 overflow-hidden">
- <CalendarDays className="h-5 w-5 shrink-0 text-blue-700" />
- <h1 className="text-[18px] sm:text-[22px] font-black text-slate-900 tracking-tight uppercase flex-shrink-0">Fechamento</h1>
-          <div className="hidden sm:flex items-center gap-1.5 text-[13px] bg-slate-50 border border-[#E5E7EB] rounded-lg px-3 py-1.5">
-            <CalendarDays className="w-4 h-4 text-[#005BFF]" />
-            <span className="font-semibold text-[#0F172A]">{displayLabel}</span>
-            <span className="text-[#64748B] capitalize">({displayDow})</span>
+      <div className="flex min-h-16 w-full flex-col justify-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm sm:px-6 lg:flex-row lg:items-center lg:justify-between">
+        {/* Lado esquerdo: título + data + seletor de data */}
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1 flex-wrap">
+          <CalendarDays className="h-5 w-5 shrink-0 text-blue-700" />
+          <h1 className="text-[18px] sm:text-[22px] font-black text-slate-900 tracking-tight uppercase flex-shrink-0">Fechamento</h1>
+          
+          {/* Seletor Hoje / Ontem */}
+          <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-xl border border-slate-200">
+            <button
+              type="button"
+              onClick={() => handleDateChange(todayStr)}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                selectedDate === todayStr
+                  ? "bg-white text-blue-600 shadow-sm"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              <CalendarDays className="w-3.5 h-3.5" />
+              <span>Hoje ({moment(todayStr).format("DD/MM")})</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleDateChange(yesterdayStr)}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                selectedDate === yesterdayStr
+                  ? "bg-white text-blue-600 shadow-sm"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              <span>Ontem ({moment(yesterdayStr).format("DD/MM")})</span>
+            </button>
           </div>
-          {/* Mobile: data compacta */}
-          <div className="flex sm:hidden items-center gap-1 text-[11px] bg-slate-50 border border-[#E5E7EB] rounded-lg px-2 py-1 flex-shrink-0">
-            <CalendarDays className="w-3 h-3 text-[#005BFF]" />
-            <span className="font-semibold text-[#0F172A]">{moment(displayDate).format("DD/MM")}</span>
+
+          <div className="hidden sm:flex items-center gap-1.5 text-[12px] bg-slate-50 border border-[#E5E7EB] rounded-lg px-2.5 py-1 text-slate-600 capitalize">
+            {displayDow}
           </div>
         </div>
         {/* Lado direito: botões */}
@@ -307,9 +372,9 @@ export default function FechamentoDiario() {
         </div>
       </div>
 
-<div className="space-y-4 pt-4 sm:space-y-5">
+      <div className="space-y-4 pt-4 sm:space-y-5">
         {/* Alerta discreto: fechamento anterior pendente após 12h01 — apenas desktop */}
-        {yesterdayStatus === "expired" && (
+        {yesterdayStatus === "expired" && selectedDate === todayStr && (
           <div className="hidden sm:flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
             <AlertTriangle className="w-4 h-4 text-[#F59E0B] flex-shrink-0" />
             <p className="text-[13px] font-medium text-[#92400E]">
@@ -334,7 +399,7 @@ export default function FechamentoDiario() {
             d1Editavel={d1Editavel}
             onAuditLog={handleAuditLog}
             dailyClose={dailyClose}
-            onDailyCloseUpdate={(updated) => setDailyClose(updated)}
+            onDailyCloseUpdate={handleDailyCloseUpdate}
             onClientsChange={setClients}
             totalLeads={totalLeads}
             totalAtend={totalAtend}
@@ -388,7 +453,7 @@ export default function FechamentoDiario() {
             liberado={liberado}
             penalizado={false}
             dailyClose={dailyClose}
-            onDailyCloseUpdate={(updated) => setDailyClose(updated)}
+            onDailyCloseUpdate={handleDailyCloseUpdate}
           />
         </div>
       </div>

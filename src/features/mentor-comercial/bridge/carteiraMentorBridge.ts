@@ -398,35 +398,79 @@ export type ScriptOficial = {
     | 'TERMINAL_TECNICO'
 }
 
+function extractDateAndHour(raw: unknown): { data: string | null; hora: string | null } {
+  if (!raw || typeof raw !== 'string') return { data: null, hora: null }
+  const s = raw.trim()
+  if (!s) return { data: null, hora: null }
+
+  let data: string | null = null
+  let hora: string | null = null
+
+  // Trata formato ISO: "2026-08-18T14:30:00", "2026-08-18 14:30", "2026-08-18"
+  const isoMatch = s.match(/^(\d{4})-(\d{2})-(\d{2})(?:[T\s](\d{2}):(\d{2}))?/)
+  if (isoMatch) {
+    const [, , mm, dd, hh, min] = isoMatch
+    data = `${dd}/${mm}`
+    if (hh !== undefined && min !== undefined) {
+      hora = `${hh}:${min}`
+    }
+  } else {
+    // Trata formato brasileiro: "18/08/2026 14:30", "18/08 14:30", "18/08/2026 às 14:30"
+    const brMatch = s.match(/^(\d{2})\/(\d{2})(?:\/\d{2,4})?(?:[T\sàs\s]+(\d{2}):(\d{2}))?/)
+    if (brMatch) {
+      const [, dd, mm, hh, min] = brMatch
+      data = `${dd}/${mm}`
+      if (hh !== undefined && min !== undefined) {
+        hora = `${hh}:${min}`
+      }
+    }
+  }
+
+  return { data, hora }
+}
+
 /**
  * Variáveis do script a partir do cliente da Carteira.
  *
- * Só entra o que o registro realmente tem. Nada é preenchido com valor plausível:
- * a heurística anterior chegava a mandar `{opcao1}` como "10h" e `{opcao2}` como
- * "14h", oferecendo ao cliente horários que ninguém combinou. Faltando variável, o
- * renderer bloqueia o envio (§30).
+ * Só entra o que o registro realmente tem. Extrai de campos normalizados
+ * e campos reais de agendamento (visita_agendada_em, proxima_acao_data, etc.).
+ * Faltando variável, o renderer bloqueia o envio (§30).
  */
 export function variaveisDoCliente(
   cliente: (ClienteCarteira & Record<string, unknown>) | null | undefined,
 ): ScriptVariables {
   if (!cliente) return {}
   const str = (v: unknown): string | null => (typeof v === 'string' && v.trim() ? v : null)
+
+  const rawVisit =
+    cliente.visita_agendada_em ||
+    cliente.proxima_acao_data ||
+    cliente.agendamento_data_hora ||
+    cliente.appointment_datetime ||
+    cliente.appointment_at ||
+    cliente.proxima_visita_em ||
+    cliente.visita_data_hora ||
+    cliente.data_agendamento ||
+    cliente.data_entrega_prevista
+
+  const extracted = typeof rawVisit === 'string' ? extractDateAndHour(rawVisit) : { data: null, hora: null }
+
   return {
     nome: str(cliente.nome) ?? str(cliente.cliente_nome),
-    veiculo: str(cliente.veiculo_interesse) ?? str(cliente.veiculo),
+    veiculo: str(cliente.veiculo_interesse) ?? str(cliente.veiculo) ?? str(cliente.veiculo_comprado),
     vendedor: str(cliente.vendedor_nome) ?? str(cliente.responsavel),
     loja: str(cliente.loja_nome),
-    data: str(cliente.visita_data) ?? str(cliente.data_visita),
-    hora: str(cliente.visita_hora) ?? str(cliente.hora_visita),
-    valorAvaliacao: str(cliente.valor_avaliacao),
-    nomeIndicador: str(cliente.nome_indicador),
-    motivoRealDoContato: str(cliente.motivo_contato),
-    resumoNecessidade: str(cliente.resumo_necessidade),
-    opcao1: str(cliente.opcao_horario_1),
-    opcao2: str(cliente.opcao_horario_2),
-    listaPendencias: str(cliente.lista_pendencias),
+    data: str(cliente.visita_data) ?? str(cliente.data_visita) ?? str(cliente.data) ?? extracted.data,
+    hora: str(cliente.visita_hora) ?? str(cliente.hora_visita) ?? str(cliente.proxima_acao_horario) ?? str(cliente.hora) ?? extracted.hora,
+    valorAvaliacao: str(cliente.valor_avaliacao) ?? str(cliente.valor_troca),
+    nomeIndicador: str(cliente.nome_indicador) ?? str(cliente.indicado_por),
+    motivoRealDoContato: str(cliente.motivo_contato) ?? str(cliente.motivo_real_do_contato) ?? str(cliente.motivo),
+    resumoNecessidade: str(cliente.resumo_necessidade) ?? str(cliente.necessidade),
+    opcao1: str(cliente.opcao_horario_1) ?? str(cliente.opcao1),
+    opcao2: str(cliente.opcao_horario_2) ?? str(cliente.opcao2),
+    listaPendencias: str(cliente.lista_pendencias) ?? str(cliente.pendencias),
     tipoDecisor: str(cliente.tipo_decisor),
-    dataRetorno: str(cliente.data_retorno),
+    dataRetorno: str(cliente.data_retorno) ?? (str(cliente.proxima_acao_data) ? extracted.data : null),
   }
 }
 
