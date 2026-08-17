@@ -39,6 +39,8 @@ export function OverviewTab(props: {
       pendingEncounters: versions.reduce((acc, v) => acc + v.encounters_pending, 0),
       pendingChanges: versions.filter(v => v.status === 'rascunho' || v.status === 'em_revisao').length,
       drafts: versions.filter(v => v.status === 'rascunho'),
+      publishedVideos: versions.reduce((acc, v) => acc + (v.videos_count ?? 0), 0),
+      publishedFiles: versions.reduce((acc, v) => acc + (v.files_count ?? 0), 0),
     }
   }, [props.rows])
 
@@ -46,6 +48,7 @@ export function OverviewTab(props: {
     { label: 'Produtos com metodologia publicada', value: summary.publishedProducts, icon: CheckCircle2, tone: 'success' as const, action: () => props.onNavigate('produtos') },
     { label: 'Encontros configurados', value: summary.configuredEncounters, icon: BookOpen, tone: 'info' as const, action: () => props.onNavigate('produtos') },
     { label: 'Encontros com pendência', value: summary.pendingEncounters, icon: Video, tone: 'warning' as const, action: () => props.onNavigate('produtos') },
+    { label: 'Vídeos publicados', value: summary.publishedVideos, icon: Video, tone: 'info' as const, action: () => props.onNavigate('biblioteca') },
     { label: 'Materiais publicados', value: libraryCount.published, icon: FileText, tone: 'warning' as const, action: () => props.onNavigate('biblioteca') },
     { label: 'Aulas da Universidade', value: 0, icon: GraduationCap, tone: 'violet' as const, action: () => props.onNavigate('biblioteca') },
     { label: 'Arquivos na biblioteca', value: libraryCount.total, icon: FileText, tone: 'warning' as const, action: () => props.onNavigate('biblioteca') },
