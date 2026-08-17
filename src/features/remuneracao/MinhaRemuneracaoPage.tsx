@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { AlertTriangle, Calendar, ChevronDown, RefreshCw } from 'lucide-react'
+import { AlertTriangle, Calendar, Coins, RefreshCw } from 'lucide-react'
+import { PageHeading } from '@/components/molecules/PageHeading'
 import { useMinhaRemuneracaoDashboard } from './hooks/useMinhaRemuneracaoDashboard'
 import { CommissionHeroCard } from './components/dashboard/CommissionHeroCard'
 import { MilestoneCard } from './components/dashboard/MilestoneCard'
@@ -53,21 +54,19 @@ export default function MinhaRemuneracaoPage() {
 
   return (
     <PageTemplate as="div" width="dashboard" bottomClearance="navigation" className="flex min-w-0 flex-col gap-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4">
-          <div>
-            <h1 className="text-2xl lg:text-3xl font-bold text-foreground">{saudacaoPorHora()}, {userName}! 🚀</h1>
-            <p className="text-muted-foreground text-sm mt-0.5">Foque no que importa. Venda mais e ganhe mais.</p>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <button className="flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-colors shadow-sm bg-white/5 border border-white/10 text-muted-foreground hover:bg-white/10">
-                <Calendar className="w-4 h-4 text-muted-foreground" />
+        <PageHeading
+          icon={Coins}
+          title={`${saudacaoPorHora()}, ${userName}! 🚀`}
+          subtitle="Foque no que importa. Venda mais e ganhe mais."
+          actions={
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 rounded-xl border border-border bg-white px-4 py-2 text-sm font-medium text-muted-foreground shadow-sm">
+                <Calendar className="w-4 h-4 text-status-success-text" />
                 Este mês
-                <ChevronDown className="w-3.5 h-3.5 text-muted-foreground transition-transform" />
-              </button>
+              </div>
             </div>
-          </div>
-        </div>
+          }
+        />
 
         {!data.disponivel && (
           <div className="flex items-center gap-2 rounded-xl px-4 py-3" style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.2)' }}>

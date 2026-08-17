@@ -1,4 +1,5 @@
 import { Target } from 'lucide-react'
+import { PageHeading } from '@/components/molecules/PageHeading'
 
 function formatHeaderDate(date: Date) {
   const weekday = new Intl.DateTimeFormat('pt-BR', {
@@ -22,21 +23,19 @@ export function CentralHeader({ date = new Date() }: { date?: Date }) {
   const formatted = formatHeaderDate(date)
 
   return (
-    <header className="sticky top-0 z-[var(--mx-z-topbar)] flex h-16 items-center justify-between border-b border-border bg-white px-5 sm:px-6">
-      <div className="flex min-w-0 items-center gap-3">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-status-info to-blue-400">
-          <Target className="h-4 w-4 text-white" aria-hidden="true" />
+    <PageHeading
+      icon={Target}
+      title="Rotina do Dia"
+      subtitle="Organize e execute seu dia com foco."
+      actions={
+        <div className="hidden text-right sm:block">
+          <p className="text-body-sm font-bold text-foreground">{formatted.weekday}</p>
+          <p className="text-[12px] text-muted-foreground">{formatted.fullDate}</p>
         </div>
-        <div className="min-w-0">
-          <h1 className="truncate text-[20px] font-bold leading-none tracking-tight text-foreground">Rotina do Dia</h1>
-          <p className="mt-0.5 truncate text-caption font-medium text-muted-foreground">Organize e execute seu dia com foco</p>
-        </div>
-      </div>
-
-      <div className="hidden text-right sm:block">
-        <p className="text-body-sm font-bold text-foreground">{formatted.weekday}</p>
-        <p className="text-[12px] text-muted-foreground">{formatted.fullDate}</p>
-      </div>
-    </header>
+      }
+    />
   )
 }
+
+export default CentralHeader
+

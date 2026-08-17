@@ -97,6 +97,7 @@ export default function MeuPerfilVendedorContainer() {
     return (
         <PageTemplate as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-lg">
             <PageHeading
+                icon={UserCircle}
                 title="Meu Perfil"
                 subtitle="Gerencie suas informações pessoais e profissionais"
                 actions={

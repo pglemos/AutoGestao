@@ -1,38 +1,41 @@
 import { Link } from 'react-router-dom'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Building2 } from 'lucide-react'
 import { Badge } from '@/components/atoms/Badge'
-import { Typography } from '@/components/atoms/Typography'
+import { PageHeader } from '@/components/molecules/PageHeader'
 import type { ConsultingClientDetail } from '@/features/consultoria/types'
 
 type Props = { client: ConsultingClientDetail }
 
 export function ClientHeaderSection({ client }: Props) {
   return (
-    <header className="flex justify-between items-center mb-mx-md">
-      <div className="flex items-center gap-mx-md">
-        <Link
-          to="/consultoria/clientes"
-          className="p-mx-xs bg-white rounded-xl border border-border hover:bg-surface-alt transition-colors shadow-sm"
-        >
-          <ArrowLeft className="w-mx-5 h-mx-5" />
-        </Link>
-        <div>
-          <div className="flex items-center gap-mx-xs">
-            <Typography variant="h1" className="text-2xl text-foreground">{client.name}</Typography>
-            <Badge
-              variant={client.status === 'ativo' ? 'success' : 'outline'}
-              className="h-mx-5 text-mx-micro"
-            >
-              {client.status}
-            </Badge>
-          </div>
-          <Typography variant="tiny" tone="muted" className="">
-            Módulo de Gestão Preditiva MX
-          </Typography>
+    <PageHeader
+      icon={Building2}
+      breadcrumb={
+        <div className="mb-2">
+          <Link
+            to="/consultoria/clientes"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            Voltar para clientes
+          </Link>
         </div>
-      </div>
-    </header>
+      }
+      title={
+        <div className="flex items-center gap-2">
+          <span>{client.name}</span>
+          <Badge
+            variant={client.status === 'ativo' ? 'success' : 'outline'}
+            className="h-5 text-xs font-medium"
+          >
+            {client.status}
+          </Badge>
+        </div>
+      }
+      description="Módulo de Gestão Preditiva MX"
+    />
   )
 }
 
 export default ClientHeaderSection
+
