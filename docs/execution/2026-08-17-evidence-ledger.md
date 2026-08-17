@@ -21,7 +21,7 @@
 | EV-ST-02 | Migration `20260809205000_fix_consulting_evidence_storage_rls_definer.sql` | Produção | Aplicada via `supabase db push --linked --yes` | DONE_WITH_EVIDENCE |
 | EV-ST-03 | Função `public.pode_ler_evidencia_consultoria(text, uuid)` | Produção | `SECURITY DEFINER`; `search_path=public`; sem `PUBLIC EXECUTE`; `EXECUTE` para `authenticated` | DONE_WITH_EVIDENCE |
 | EV-ST-04 | Store UUID `467a19d1-af51-4b4f-9b05-d67187a2a759` | Produção | Consultoria vinculada ao store correto; leitura validada pós-migration | TESTED_PRODUCTION |
-| EV-CHK-01 | WIP checkin | Local | `git status --short`: 14 modificados + 5 untracked (19 entradas); não commitado; gates locais passando (EV-REL-15) | IN_PROGRESS |
+| EV-CHK-01 | WIP checkin | Local | `git status --short` pós commit `d3a92142` (20 arquivos, +777/-15): árvore limpa; gates locais passando (EV-REL-15) | DONE_WITH_EVIDENCE |
 | EV-CHK-02 | `DI-12-dashboard-local-claude.md` | — | Não encontrado (`**/DI-12*` → sem resultados); não citar como evidência | NOT_REEVALUATED |
 | EV-CHK-03 | Spec 1060 linhas | — | Nenhum artefato de 1060 linhas em `conductor/` (`spec.md`=46, `migration-legacy-to-aiox/spec.md`=22, `modulo-pdi/spec.md`=64) | NOT_REEVALUATED |
 
