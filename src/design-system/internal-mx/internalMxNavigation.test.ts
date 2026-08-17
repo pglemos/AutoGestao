@@ -18,12 +18,15 @@ describe('navegação interna MX', () => {
       expect(items.some((item) => item.path === '/painel')).toBe(true)
       expect(items.some((item) => item.path === '/plano-estrategico')).toBe(true)
       expect(items.some((item) => item.path === '/plano-acao')).toBe(true)
-      expect(items.some((item) => item.path === '/consultoria/clientes')).toBe(true)
+      expect(items.some((item) => item.path === '/consultoria')).toBe(true)
       expect(items.some((item) => item.path === '/clientes')).toBe(true)
       expect(items.some((item) => item.path === '/universidade-mx')).toBe(true)
-      expect(items.some((item) => item.path === '/indicadores')).toBe(true)
-      expect(items.some((item) => item.path === '/planos-acao')).toBe(true)
-      expect(items.some((item) => item.path === '/consultoria-mx')).toBe(true)
+      // Rotas legadas não possuem entrada própria: são aliases de compatibilidade
+      // resolvidos no AppShell, nunca itens concorrentes na navegação canônica.
+      expect(items.some((item) => item.path === '/indicadores')).toBe(false)
+      expect(items.some((item) => item.path === '/planos-acao')).toBe(false)
+      expect(items.some((item) => item.path === '/consultoria-mx')).toBe(false)
+      expect(items.some((item) => item.path === '/consultoria/clientes')).toBe(false)
       // /produtos agora é o catálogo de consultoria para o interno MX.
       expect(items.filter((item) => item.path === '/produtos')).toHaveLength(1)
       expect(items.find((item) => item.path === '/produtos')?.label).toBe('Produtos de Consultoria')
