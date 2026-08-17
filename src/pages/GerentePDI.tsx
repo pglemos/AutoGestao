@@ -82,16 +82,11 @@ export default function GerentePDI() {
             aria-live="polite"
             aria-label="Carregando PDI"
         >
-            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border pb-10">
-                <div className="space-y-mx-xs">
-                    <Skeleton className="h-mx-10 w-mx-64" />
-                    <Skeleton className="h-mx-xs w-mx-48" />
-                </div>
-                <div className="flex gap-mx-sm">
-                    <Skeleton className="h-mx-14 w-mx-14 rounded-2xl" />
-                    <Skeleton className="h-mx-14 w-mx-48 rounded-2xl" />
-                </div>
-            </header>
+            <SellerPageHeader
+                icon={TrendingUp}
+                title={isOwner ? 'PDI da Rede' : 'Evolução do Vendedor'}
+                subtitle="Carregando planos de desenvolvimento..."
+            />
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-mx-lg">
                 <Skeleton className="h-mx-64 rounded-2xl" />

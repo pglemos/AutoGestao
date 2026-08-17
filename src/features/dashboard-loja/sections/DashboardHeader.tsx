@@ -224,45 +224,50 @@ export function DashboardHeader({
 
   return (
     <>
-      <header className="flex flex-col xl:flex-row xl:items-end justify-between gap-mx-md md:gap-mx-lg border-b border-border pb-10 shrink-0">
-        <div className="flex flex-col gap-mx-xs text-center xl:text-left min-w-0">
-          <Typography variant="tiny" tone="brand" className="opacity-60 text-mx-tiny">
-            Status de Unidade
-          </Typography>
-          <div className="flex items-center justify-center lg:justify-start gap-mx-sm">
-            <div className="h-mx-10 w-mx-xs shrink-0 rounded-mx-full bg-brand-primary shadow-sm" aria-hidden="true" />
-            <Typography variant="h1" className="max-w-full text-3xl sm:text-5xl tracking-tighter break-words">
-              {storeName}
-            </Typography>
+      <header data-mx-module-header="" className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
+        <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+          <div className="flex min-w-0 items-start gap-3">
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-status-success-surface text-status-success-text">
+              <Building2 size={20} />
+            </span>
+            <div className="min-w-0">
+              <Typography variant="tiny" tone="brand" className="opacity-60 text-mx-tiny">
+                Status de Unidade
+              </Typography>
+              <h1 className="text-xl font-bold text-foreground sm:text-2xl break-words">
+                {storeName}
+              </h1>
+            </div>
           </div>
-        </div>
 
-        <div className="flex flex-wrap items-center justify-center xl:justify-end gap-mx-sm shrink-0 w-full xl:w-auto max-w-full">
-          {isOwner && selectableStores.length > 1 && (
-            <label htmlFor="owner-store-select" className="flex w-full flex-col gap-mx-tiny rounded-xl border border-border-subtle bg-white px-mx-md py-mx-xs shadow-sm sm:w-mx-sidebar-expanded">
-              <span className="text-mx-micro font-bold uppercase tracking-widest text-muted-foreground">Trocar unidade</span>
-              <select
-                aria-label="Trocar unidade"
-                id="owner-store-select"
-                name="owner-store-select"
-                value={selectedStoreId || ''}
-                onChange={event => navigateToStore(event.target.value)}
-                className="min-w-0 bg-transparent text-sm font-bold uppercase text-foreground outline-none"
-              >
-                {selectableStores.map(store => (
-                  <option key={store.id} value={store.id}>{store.name}</option>
-                ))}
-              </select>
-            </label>
-          )}
-          <TabNavPill tabs={LOJA_TABS} activeTab={activeTab} onTabChange={onTabChange} className="mx-store-dashboard-tabs max-w-full overflow-x-auto" buttonClassName="h-mx-8 sm:h-mx-10 px-2 sm:px-6 shrink-0" aria-label="Abas da loja" />
+          <div className="flex flex-wrap items-center gap-2">
+            {isOwner && selectableStores.length > 1 && (
+              <label htmlFor="owner-store-select" className="relative min-w-48">
+                <Building2 size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                <select
+                  aria-label="Trocar unidade"
+                  id="owner-store-select"
+                  name="owner-store-select"
+                  value={selectedStoreId || ''}
+                  onChange={event => navigateToStore(event.target.value)}
+                  className="h-10 w-full appearance-none rounded-xl border border-border bg-white pl-9 pr-8 text-sm font-semibold text-foreground outline-none focus:ring-2 focus:ring-status-success"
+                >
+                  {selectableStores.map(store => (
+                    <option key={store.id} value={store.id}>{store.name}</option>
+                  ))}
+                </select>
+                <ChevronDown size={15} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              </label>
+            )}
+            <TabNavPill tabs={LOJA_TABS} activeTab={activeTab} onTabChange={onTabChange} className="mx-store-dashboard-tabs max-w-full overflow-x-auto" buttonClassName="h-mx-8 sm:h-mx-10 px-2 sm:px-6 shrink-0" aria-label="Abas da loja" />
 
-          {activeTab === 'performance' && (
-            <Button variant="outline" onClick={onRefresh} aria-label={`Atualizar performance. ${lastSyncLabel}`} title={lastSyncLabel} className="h-mx-10 sm:h-mx-14 bg-white px-mx-md hover:bg-surface-alt">
-              <RefreshCw size={18} className={cn(isRefetching && 'animate-spin')} />
-              Atualizar
-            </Button>
-          )}
+            {activeTab === 'performance' && (
+              <Button variant="outline" onClick={onRefresh} aria-label={`Atualizar performance. ${lastSyncLabel}`} title={lastSyncLabel} className="h-10 bg-white px-mx-md hover:bg-surface-alt">
+                <RefreshCw size={15} className={cn(isRefetching && 'animate-spin')} />
+                Atualizar
+              </Button>
+            )}
+          </div>
         </div>
       </header>
 

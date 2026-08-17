@@ -2,8 +2,18 @@ import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import { Spinner } from '@/components/atoms/Spinner'
-import { Tooltip } from '@/components/atoms/Tooltip'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { VisuallyHidden } from '@/components/atoms/VisuallyHidden'
+
+// `ui/tooltip.jsx` é JavaScript: sem as props declaradas, o TS não enxerga
+// `children`/`side`/`sideOffset` no forwardRef. O cast documenta o contrato
+// usado aqui (mesmo padrão do `HelpTooltip`).
+const Content = TooltipContent as unknown as React.ComponentType<{
+  children: React.ReactNode
+  side?: 'top' | 'right' | 'bottom' | 'left'
+  sideOffset?: number
+  className?: string
+}>
 
 const iconButtonVariants = cva(
   cn(
@@ -57,12 +67,14 @@ export interface IconButtonProps
  */
 const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
   ({ className, variant, size, icon, label, loading = false, disabled, type, tooltip, ...props }, ref) => {
+    const [open, setOpen] = React.useState(false)
     const button = (
       <button
         ref={ref}
         type={type ?? 'button'}
         disabled={disabled || loading}
         aria-busy={loading || undefined}
+        aria-label={tooltip ? undefined : label}
         className={cn(iconButtonVariants({ variant, size }), className)}
         {...props}
       >
@@ -78,7 +90,20 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
     )
 
     if (tooltip) {
-      return <Tooltip content={tooltip}>{button}</Tooltip>
+      // Tooltip canônico (Radix, `ui/tooltip`): suporta hover, foco por
+      // teclado e clique/toque via estado controlado — mesmo contrato do
+      // `HelpTooltip` (11.011). O nome acessível continua sendo `label`
+      // (visually hidden), nunca o tooltip.
+      return (
+        <TooltipProvider delayDuration={50}>
+          <Tooltip open={open} onOpenChange={setOpen}>
+            <TooltipTrigger asChild>{button}</TooltipTrigger>
+            <Content side="top" sideOffset={6} className="max-w-[280px] pointer-events-none">
+              {tooltip}
+            </Content>
+          </Tooltip>
+        </TooltipProvider>
+      )
     }
 
     return button

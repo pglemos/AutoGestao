@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { execSync } from 'node:child_process'
+import { scanSourceFiles } from './lib/scanSourceFiles'
 
 const root = process.cwd()
 const read = (rel: string) => readFileSync(join(root, rel), 'utf8')
@@ -33,13 +33,14 @@ describe('FASE K — tooltip canônico é Radix via HelpTooltip (11.011)', () =>
   })
 
   test('atoms/Tooltip (CSS puro) não é usado em produção', () => {
-    // 100% fs: varre src/** sem node_modules/.graphify.
-    const out = execSync(`grep -rl "atoms/Tooltip" src --include="*.tsx" --include="*.jsx" || true`, {
-      cwd: root,
-      encoding: 'utf8',
-    }).split('\n').filter(Boolean)
-    const prod = out.filter((f) => !f.includes('test') && !f.includes('_stories'))
-    expect(prod).toEqual([])
+    // Varredura 100% fs via scanSourceFiles: determinística no sandbox do bun
+    // e na CI (subprocessos via execSync são engolidos/instáveis — ver
+    // src/test/lib/scanSourceFiles.ts).
+    const prod = scanSourceFiles({
+      roots: ['src'],
+      extraExcluded: ['**/*.test.*', '**/*.spec.*', '**/*.stories.*'],
+    }).filter((f) => f.lines.some((line) => line.includes('atoms/Tooltip')))
+    expect(prod.map((f) => f.rel)).toEqual([])
   })
 })
 

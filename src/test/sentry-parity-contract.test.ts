@@ -34,7 +34,7 @@ describe('FASE AK 37.018 — Sentry parity', () => {
   })
 
   test('bloqueio do Sentry documentado no ledger (37.018/39.017)', () => {
-    const ledger = read('.superpowers/mx-foundation-zero/progress.md')
+    const ledger = read('docs/audit/2026-08-15-foundation-zero-release-evidence.md')
     expect(ledger).toContain('37.018')
     expect(ledger).toContain('VITE_SENTRY_DSN')
     expect(ledger).toContain('observabilidade DESABILITADA')

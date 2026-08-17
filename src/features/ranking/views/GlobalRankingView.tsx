@@ -37,6 +37,7 @@ export function GlobalRankingView() {
     <RankingErrorBoundary sectionName="Ranking Global">
       <MxModulePage id="global-ranking" bottomClearance="navigation" className="min-h-full w-full min-w-0 pb-32">
         <MxModuleHeader
+          icon={Trophy}
           title="Ranking Global"
           description={`${data.lojas.length} UNIDADES • ${data.totalVendedores} VENDEDORES • PERFORMANCE EM TEMPO REAL`}
           actions={(

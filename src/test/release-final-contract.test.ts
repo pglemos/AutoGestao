@@ -15,7 +15,7 @@ function read(rel: string): string {
  */
 describe('FASE AH — 34.007-011 BLOCKED com motivo', () => {
   test('34.007-011 marcados como BLOQUEADO no ledger', () => {
-    const ledger = read('.superpowers/mx-foundation-zero/progress.md')
+    const ledger = read('docs/audit/2026-08-15-foundation-zero-release-evidence.md')
     expect(ledger).toContain('34.007')
     expect(ledger).toContain('34.011')
     // conta os itens 34.007-011 com BLOQUEADO na descrição (pode estar em qualquer posição)
@@ -28,7 +28,7 @@ describe('FASE AH — 34.007-011 BLOCKED com motivo', () => {
   })
 
   test('motivo do bloqueio: nenhum bug de schema/RPC confirmado', () => {
-    const ledger = read('.superpowers/mx-foundation-zero/progress.md')
+    const ledger = read('docs/audit/2026-08-15-foundation-zero-release-evidence.md')
     expect(ledger).toContain('nenhum bug de schema/RPC confirmado')
     expect(ledger).toContain('sem ocorrência ativa confirmada')
     expect(ledger).toContain('docs/audit/2026-08-10-supabase-log-triaging-and-classification.md')

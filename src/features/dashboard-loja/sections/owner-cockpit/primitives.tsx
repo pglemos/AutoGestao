@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { CalendarDays, CircleHelp, Search } from 'lucide-react'
+import { CalendarDays, CircleHelp, LayoutDashboard, Search } from 'lucide-react'
 import { Typography } from '@/components/atoms/Typography'
 import { Card } from '@/components/molecules/Card'
 import { chartTokens } from '@/lib/charts/tokens'
@@ -8,10 +8,7 @@ import { toneClasses, toneHex, vividIconClasses, type KpiTone } from './types'
 import { greeting, scoreStatus, scoreTone } from './format'
 
 /**
- * Header dedicado do módulo Dono — não usa o PageHeading canônico do app
- * (subtítulo em caps + ações à direita) porque o Base44 de referência usa
- * título+subtítulo em case normal e o chip de período numa linha própria
- * abaixo, não ao lado do título.
+ * Header dedicado do módulo Dono — estilo canônico de card elevado.
  */
 export function OwnerCockpitHeader({
   name,
@@ -21,17 +18,24 @@ export function OwnerCockpitHeader({
   periodLabel: string
 }) {
   return (
-    <header className="flex items-start justify-between gap-4 border-b border-border pb-mx-md sm:pb-mx-lg">
-      <div>
-        <h1 className="text-2xl font-bold leading-tight text-foreground sm:text-3xl md:text-[2rem]">
-          {greeting()}, <span className="text-status-success-text">{name.split(' ')[0]}</span>!
-        </h1>
-        <p className="mt-mx-tiny text-sm font-medium text-muted-foreground">Aqui está o panorama da sua loja hoje.</p>
-      </div>
-      <div className="flex shrink-0 items-center gap-mx-sm">
-        <div className="inline-flex h-mx-11 items-center gap-mx-xs rounded-mx-full border border-border-subtle bg-white px-mx-md shadow-sm">
-          <CalendarDays size={16} className="text-muted-foreground" />
-          <Typography variant="tiny" className="">{periodLabel}</Typography>
+    <header data-mx-module-header="" className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex min-w-0 items-start gap-3">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-status-success-surface text-status-success-text">
+            <LayoutDashboard size={20} />
+          </span>
+          <div className="min-w-0">
+            <h1 className="text-xl font-bold text-foreground sm:text-2xl break-words">
+              {greeting()}, <span className="text-status-success-text">{name.split(' ')[0]}</span>!
+            </h1>
+            <p className="mt-1 text-sm font-medium text-muted-foreground">Aqui está o panorama da sua loja hoje.</p>
+          </div>
+        </div>
+        <div className="flex shrink-0 items-center gap-mx-sm">
+          <div className="inline-flex h-mx-10 items-center gap-mx-xs rounded-xl border border-border bg-surface-alt px-mx-md shadow-xs">
+            <CalendarDays size={16} className="text-muted-foreground" />
+            <Typography variant="tiny">{periodLabel}</Typography>
+          </div>
         </div>
       </div>
     </header>

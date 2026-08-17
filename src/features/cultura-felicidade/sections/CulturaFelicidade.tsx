@@ -4,6 +4,7 @@ import { Button } from '@/components/atoms/Button'
 import { EmptyState } from '@/components/atoms/EmptyState'
 import { Typography } from '@/components/atoms/Typography'
 import { Card } from '@/components/molecules/Card'
+import { PageHeading } from '@/components/molecules/PageHeading'
 import { cn } from '@/lib/utils'
 import { useCulturaFelicidade, type CulturaTipo } from '../hooks/useCulturaFelicidade'
 
@@ -50,25 +51,17 @@ export function CulturaFelicidade({ storeId }: Props) {
 
   return (
     <section className="space-y-mx-lg" aria-label="Cultura e Felicidade">
-      <header className="flex flex-col gap-mx-xs md:flex-row md:items-center md:justify-between">
-        <div className="flex items-center gap-mx-sm">
-          <div className="rounded-2xl bg-brand-primary p-mx-sm text-pure-white shadow-sm">
-            <Heart size={22} aria-hidden="true" />
-          </div>
-          <div>
-            <Typography variant="h2" className="tracking-tight">
-              Cultura + Felicidade
-            </Typography>
-            <Typography variant="tiny" tone="muted" className="block font-bold normal-case tracking-normal">
-              Cultura de Resultado (N11) • Índice de Felicidade RH (N12) — ata 2026-05-22.
-            </Typography>
-          </div>
-        </div>
-        <Button type="button" variant="ghost" size="sm" onClick={refresh} disabled={loading}>
-          {loading ? <Loader2 size={16} className="animate-spin" /> : <RefreshCw size={16} />}
-          <span className="ml-1">Atualizar</span>
-        </Button>
-      </header>
+      <PageHeading
+        icon={Heart}
+        title="Cultura + Felicidade"
+        subtitle="Cultura de Resultado (N11) · Índice de Felicidade RH (N12)"
+        actions={
+          <Button type="button" variant="outline" size="sm" onClick={refresh} disabled={loading}>
+            {loading ? <Loader2 size={16} className="animate-spin" /> : <RefreshCw size={16} />}
+            <span className="ml-1">Atualizar</span>
+          </Button>
+        }
+      />
 
       {error && (
         <div className="rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">

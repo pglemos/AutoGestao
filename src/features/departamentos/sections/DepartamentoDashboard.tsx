@@ -16,6 +16,7 @@ import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
 import { Typography } from '@/components/atoms/Typography'
 import { Card, CardContent } from '@/components/molecules/Card'
+import { PageHeading } from '@/components/molecules/PageHeading'
 import { cn } from '@/lib/utils'
 import {
   useDepartamentoDashboard,
@@ -78,25 +79,17 @@ export function DepartamentoDashboard({ storeId, code, periodLabel, period }: Pr
 
   return (
     <section className="space-y-mx-md" aria-label={`Dashboard ${def.name}`}>
-      <header className="flex flex-col gap-mx-xs md:flex-row md:items-center md:justify-between">
-        <div className="flex items-center gap-mx-sm">
-          <div className="rounded-2xl bg-brand-primary p-mx-sm text-pure-white shadow-sm">
-            <def.icon size={22} aria-hidden="true" />
-          </div>
-          <div>
-            <Typography variant="h2" className="tracking-tight">
-              Departamento {def.name}
-            </Typography>
-            <Typography variant="tiny" tone="muted" className="block font-bold normal-case tracking-normal">
-              Visão {periodLabel} • base `departamentos_mx` + KPIs do catálogo (.docx §270).
-            </Typography>
-          </div>
-        </div>
-        <Button type="button" variant="ghost" size="sm" onClick={refresh} disabled={loading}>
-          {loading ? <Loader2 size={16} className="animate-spin" /> : <RefreshCw size={16} />}
-          <span className="ml-1">Atualizar</span>
-        </Button>
-      </header>
+      <PageHeading
+        icon={def.icon}
+        title={`Departamento ${def.name}`}
+        subtitle={`Visão ${periodLabel} · KPIs do catálogo`}
+        actions={
+          <Button type="button" variant="outline" size="sm" onClick={refresh} disabled={loading}>
+            {loading ? <Loader2 size={16} className="animate-spin" /> : <RefreshCw size={16} />}
+            <span className="ml-1">Atualizar</span>
+          </Button>
+        }
+      />
 
       {error && (
         <div className="rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">
