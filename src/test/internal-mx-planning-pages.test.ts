@@ -26,14 +26,10 @@ describe('páginas de planejamento do módulo interno MX', () => {
     expect(read(pages.consulting)).toContain('ConsultingJourneyWorkspace')
   })
 
-  test('não cria PageCanvas aninhado ao incorporar o CRM de consultoria', () => {
+  test('não cria PageCanvas aninhado ao renderizar a consultoria', () => {
     const consultingPage = read(pages.consulting)
-    const clientsPage = read('src/features/consulting-clients/ConsultingClientsPage.tsx')
-
-    expect(consultingPage).toContain('<ConsultingClientsPage embedded />')
+    expect(consultingPage).toContain('<ConsultingJourneyWorkspace />')
     expect(consultingPage).not.toContain('className="-mx-4 lg:-mx-6"')
-    expect(clientsPage).toContain('embedded?: boolean')
-    expect(clientsPage).toContain('if (embedded)')
   })
 
   test('mantém overlays nos próprios workspaces acima da navegação', () => {

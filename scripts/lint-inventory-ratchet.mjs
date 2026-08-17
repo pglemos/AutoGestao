@@ -74,6 +74,7 @@ export const INCREASE_ALLOWLIST = {
   // canônica na raiz, no mesmo formato público de `/dono/*` — o redirect não
   // expõe conteúdo, apenas navega para o destino, que segue protegido.
   'route-role-matrix.routesPublic': 'Alias legado /gerente/* em 2026-08-17, simétrico a /dono/*.',
+  'route-role-matrix.redirectTotal': 'Unificação Lojas e Clientes: /lojas e /consultoria/clientes redirecionam diretamente para /clientes.',
 }
 
 function readJson(rel) {

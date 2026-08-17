@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-17T21:44:42.567Z",
+  "generatedAt": "2026-08-17T22:17:14.114Z",
   "source": "scripts/audit_route_data_inventory.mjs + src/lib/auth/routeAccess.ts",
   "roles": [
     "administrador_geral",
@@ -13,10 +13,10 @@
     "routesTotal": 122,
     "routesProtected": 113,
     "routesPublic": 9,
-    "routeRoleTotal": 273,
-    "standardCanvasTotal": 79,
-    "standardCanvasRenderings": 257,
-    "redirectTotal": 29,
+    "routeRoleTotal": 267,
+    "standardCanvasTotal": 77,
+    "standardCanvasRenderings": 251,
+    "redirectTotal": 31,
     "fullscreenTotal": 4,
     "printTotal": 1,
     "ungoverned": 0,
@@ -1865,24 +1865,20 @@
     {
       "path": "/lojas",
       "kind": "route",
-      "surface": "STANDARD_CANVAS",
+      "surface": "REDIRECT",
       "rulePattern": "/lojas",
-      "redirect": null,
-      "renderRoles": [
-        "administrador_geral",
-        "administrador_mx",
-        "consultor_mx"
-      ],
+      "redirect": "/clientes",
+      "renderRoles": [],
       "roleStatus": {
-        "administrador_geral": "RENDER_STANDARD_CANVAS",
-        "administrador_mx": "RENDER_STANDARD_CANVAS",
-        "consultor_mx": "RENDER_STANDARD_CANVAS",
-        "dono": "FORBIDDEN",
-        "gerente": "FORBIDDEN",
-        "vendedor": "FORBIDDEN"
+        "administrador_geral": "REDIRECT_ALLOWED",
+        "administrador_mx": "REDIRECT_ALLOWED",
+        "consultor_mx": "REDIRECT_ALLOWED",
+        "dono": "REDIRECT_BLOCKED",
+        "gerente": "REDIRECT_BLOCKED",
+        "vendedor": "REDIRECT_BLOCKED"
       },
-      "applicable": true,
-      "element": "<Suspense fallback={<Spinner />}><Lojas /></Suspense>"
+      "applicable": false,
+      "element": "<Navigate to=\"/clientes\" replace />"
     },
     {
       "path": "/simulacao",
@@ -1994,24 +1990,20 @@
     {
       "path": "/consultoria/clientes",
       "kind": "route",
-      "surface": "STANDARD_CANVAS",
+      "surface": "REDIRECT",
       "rulePattern": "/consultoria/*",
-      "redirect": null,
-      "renderRoles": [
-        "administrador_geral",
-        "administrador_mx",
-        "consultor_mx"
-      ],
+      "redirect": "/clientes",
+      "renderRoles": [],
       "roleStatus": {
-        "administrador_geral": "RENDER_STANDARD_CANVAS",
-        "administrador_mx": "RENDER_STANDARD_CANVAS",
-        "consultor_mx": "RENDER_STANDARD_CANVAS",
-        "dono": "FORBIDDEN",
-        "gerente": "FORBIDDEN",
-        "vendedor": "FORBIDDEN"
+        "administrador_geral": "REDIRECT_ALLOWED",
+        "administrador_mx": "REDIRECT_ALLOWED",
+        "consultor_mx": "REDIRECT_ALLOWED",
+        "dono": "REDIRECT_BLOCKED",
+        "gerente": "REDIRECT_BLOCKED",
+        "vendedor": "REDIRECT_BLOCKED"
       },
-      "applicable": true,
-      "element": "<Suspense fallback={<Spinner />}><ConsultoriaClientes /></Suspense>"
+      "applicable": false,
+      "element": "<Navigate to=\"/clientes\" replace />"
     },
     {
       "path": "/consultoria/clientes/:clientSlug",
@@ -3752,27 +3744,6 @@
       "element": "<Suspense fallback={<Spinner />}><PainelConsultor /></Suspense>"
     },
     {
-      "path": "/lojas",
-      "role": "administrador_geral",
-      "surface": "STANDARD_CANVAS",
-      "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}><Lojas /></Suspense>"
-    },
-    {
-      "path": "/lojas",
-      "role": "administrador_mx",
-      "surface": "STANDARD_CANVAS",
-      "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}><Lojas /></Suspense>"
-    },
-    {
-      "path": "/lojas",
-      "role": "consultor_mx",
-      "surface": "STANDARD_CANVAS",
-      "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}><Lojas /></Suspense>"
-    },
-    {
       "path": "/simulacao",
       "role": "administrador_geral",
       "surface": "FULLSCREEN",
@@ -3862,27 +3833,6 @@
       "surface": "STANDARD_CANVAS",
       "kind": "index",
       "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerConsultoria />} admin={<InternalConsultingPage />} /></Suspense>"
-    },
-    {
-      "path": "/consultoria/clientes",
-      "role": "administrador_geral",
-      "surface": "STANDARD_CANVAS",
-      "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}><ConsultoriaClientes /></Suspense>"
-    },
-    {
-      "path": "/consultoria/clientes",
-      "role": "administrador_mx",
-      "surface": "STANDARD_CANVAS",
-      "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}><ConsultoriaClientes /></Suspense>"
-    },
-    {
-      "path": "/consultoria/clientes",
-      "role": "consultor_mx",
-      "surface": "STANDARD_CANVAS",
-      "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}><ConsultoriaClientes /></Suspense>"
     },
     {
       "path": "/consultoria/clientes/:clientSlug",

@@ -26,7 +26,7 @@ describe('contrato AC-29.017 — inventories como ratchet (só diminuem)', () =>
   })
 
   test('aumento de métrica SEM justificativa viola o ratchet', () => {
-    const metrics = { ...collectInventoryMetrics(), 'route-role-matrix.redirectTotal': 99 }
+    const metrics = { ...collectInventoryMetrics(), 'route-role-matrix.fullscreenTotal': 99 }
     // Simula o gate com uma métrica inflada acima do baseline.
     const problems = []
     for (const [metric, baseline] of Object.entries(BASELINE)) {
@@ -35,7 +35,7 @@ describe('contrato AC-29.017 — inventories como ratchet (só diminuem)', () =>
         problems.push(metric)
       }
     }
-    expect(problems).toContain('route-role-matrix.redirectTotal')
+    expect(problems).toContain('route-role-matrix.fullscreenTotal')
   })
 
   test('queda de métrica fecha o orçamento (não viola)', () => {

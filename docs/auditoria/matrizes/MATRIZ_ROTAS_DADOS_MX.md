@@ -104,13 +104,13 @@
 | `/minhas-lojas` | route | protegida | — | `/minhas-lojas` | vendedor, gerente, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerStoresNetworkPage />} admin={<ForbiddenRoute />} /> </Suspense>` |
 | `/rotina` | route | protegida | — | `/rotina` | vendedor | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<OwnerRoutineRoute />} admin={<RotinaGerente />} /> </Suspense>` |
 | `/painel` | route | protegida | — | `/painel` | — | `<Suspense fallback={<Spinner />}><PainelConsultor /></Suspense>` |
-| `/lojas` | route | protegida | — | `/lojas` | — | `<Suspense fallback={<Spinner />}><Lojas /></Suspense>` |
+| `/lojas` | route | protegida | `/clientes` | `/lojas` | — | `<Navigate to="/clientes" replace />` |
 | `/simulacao` | route | protegida | — | `/simulacao` | — | `<Suspense fallback={<Spinner />}><Simulacao /></Suspense>` |
 | `/simulacao/:simulationRole` | route | protegida | — | `/simulacao/*` | — | `<Suspense fallback={<Spinner />}><Simulacao /></Suspense>` |
 | `/agenda` | route | protegida | — | `/agenda` | — | `<Suspense fallback={<Spinner />}><AgendaAdmin /></Suspense>` |
 | `/consultoria` | container | protegida | — | `/consultoria` | — | `(grupo)` |
 | `/consultoria` | index | protegida | — | `/consultoria` | vendedor, gerente | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerConsultoria />} admin={<InternalConsultingPage />} /></Suspense>` |
-| `/consultoria/clientes` | route | protegida | — | `/consultoria/*` | — | `<Suspense fallback={<Spinner />}><ConsultoriaClientes /></Suspense>` |
+| `/consultoria/clientes` | route | protegida | `/clientes` | `/consultoria/*` | — | `<Navigate to="/clientes" replace />` |
 | `/consultoria/clientes/:clientSlug` | route | protegida | — | `/consultoria/*` | — | `<Suspense fallback={<Spinner />}><ConsultoriaClienteDetalhe /></Suspense>` |
 | `/consultoria/clientes/:clientSlug/visitas/:visitNumber` | route | protegida | — | `/consultoria/*` | — | `<Suspense fallback={<Spinner />}><ConsultoriaVisitaExecucao /></Suspense>` |
 | `/produtos` | route | protegida | — | `/produtos` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ProdutosDigitais />} gerente={<ProdutosDigitais />} dono={<ProdutosDigitais />} admin={<AdminProdutosConsultoriaPage />} />` |

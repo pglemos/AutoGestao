@@ -479,15 +479,13 @@ export default function App() {
                 </Suspense>} />
 
                 <Route path="painel" element={<Suspense fallback={<Spinner />}><PainelConsultor /></Suspense>} />
-                <Route path="lojas" element={<Suspense fallback={<Spinner />}><Lojas /></Suspense>} />
+                <Route path="lojas" element={<Navigate to="/clientes" replace />} />
                 <Route path="simulacao" element={<Suspense fallback={<Spinner />}><Simulacao /></Suspense>} />
                 <Route path="simulacao/:simulationRole" element={<Suspense fallback={<Spinner />}><Simulacao /></Suspense>} />
                 <Route path="agenda" element={<Suspense fallback={<Spinner />}><AgendaAdmin /></Suspense>} />
                 <Route path="consultoria">
                   <Route index element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerConsultoria />} admin={<InternalConsultingPage />} /></Suspense>} />
-                  {/* Paths absolutos: o segmento cru "clientes" também é usado pela rota
-                      administrativa /clientes, e o inventário de rotas indexa por segmento. */}
-                  <Route path="/consultoria/clientes" element={<Suspense fallback={<Spinner />}><ConsultoriaClientes /></Suspense>} />
+                  <Route path="/consultoria/clientes" element={<Navigate to="/clientes" replace />} />
                   <Route path="/consultoria/clientes/:clientSlug" element={<Suspense fallback={<Spinner />}><ConsultoriaClienteDetalhe /></Suspense>} />
                   <Route path="/consultoria/clientes/:clientSlug/visitas/:visitNumber" element={<Suspense fallback={<Spinner />}><ConsultoriaVisitaExecucao /></Suspense>} />
                 </Route>

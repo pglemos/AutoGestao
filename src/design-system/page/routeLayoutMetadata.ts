@@ -71,7 +71,7 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
 
   // ------------------------------------------------------- tabelas e listagens
   // `wide` e não `dashboard`: tabelas densas e listagens.
-  lojas: { width: 'wide', bottomClearance: 'navigation', adopted: true },
+  lojas: { width: 'wide', bottomClearance: 'navigation' },
   'lojas/:storeSlug': { width: 'wide', adopted: true },
   'lojas/:storeSlug/equipe': { width: 'wide', adopted: true },
   'lojas/:storeSlug/consultor-ia': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
@@ -100,7 +100,7 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'departamentos/operacoes': { width: 'wide', adopted: true },
   consultoria: { width: 'wide', bottomClearance: 'navigation', adopted: true },
   clientes_visita: { width: 'wide' },
-  'consultoria/clientes': { width: 'wide', bottomClearance: 'navigation', adopted: true },
+  'consultoria/clientes': { width: 'wide', bottomClearance: 'navigation' },
   'consultoria/clientes/:clientSlug': { width: 'wide', bottomClearance: 'navigation', adopted: true },
   'consultoria/clientes/:clientSlug/visitas/:visitNumber': { width: 'wide', bottomClearance: 'navigation', adopted: true },
 

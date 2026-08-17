@@ -1,8 +1,8 @@
 export const INTERNAL_MX_CANONICAL_ALIASES = {
   '/team': '/equipe',
-  '/lojas': '/clientes?mode=lojas',
+  '/lojas': '/clientes',
   '/consultoria-mx': '/consultoria?mode=metodologia',
-  '/consultoria/clientes': '/consultoria?mode=clientes',
+  '/consultoria/clientes': '/clientes',
   '/indicadores': '/plano-estrategico?mode=catalogo',
   '/planos-acao': '/plano-acao?mode=biblioteca',
 } as const

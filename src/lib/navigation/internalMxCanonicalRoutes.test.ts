@@ -4,9 +4,9 @@ import { resolveInternalMxCanonicalRoute } from './internalMxCanonicalRoutes'
 describe('resolveInternalMxCanonicalRoute', () => {
   test('unifies duplicated Admin/Consultor MX entry routes', () => {
     expect(resolveInternalMxCanonicalRoute('/team')).toBe('/equipe')
-    expect(resolveInternalMxCanonicalRoute('/lojas')).toBe('/clientes?mode=lojas')
+    expect(resolveInternalMxCanonicalRoute('/lojas')).toBe('/clientes')
     expect(resolveInternalMxCanonicalRoute('/consultoria-mx')).toBe('/consultoria?mode=metodologia')
-    expect(resolveInternalMxCanonicalRoute('/consultoria/clientes')).toBe('/consultoria?mode=clientes')
+    expect(resolveInternalMxCanonicalRoute('/consultoria/clientes')).toBe('/clientes')
     expect(resolveInternalMxCanonicalRoute('/indicadores')).toBe('/plano-estrategico?mode=catalogo')
     expect(resolveInternalMxCanonicalRoute('/planos-acao')).toBe('/plano-acao?mode=biblioteca')
   })
