@@ -1,4 +1,4 @@
-import { ArrowLeft, Calendar, Filter, RefreshCw, Search, SlidersHorizontal, Zap } from 'lucide-react'
+import { ArrowLeft, Calendar, Filter, RefreshCw, Search, SlidersHorizontal, Users, Zap } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
@@ -36,6 +36,7 @@ export function SellerPerformancePage() {
   return (
     <MxModulePage id="seller-performance" width="wide" bottomClearance="navigation">
       <MxModuleHeader
+        icon={Users}
         eyebrow="Relatórios e diagnóstico"
         title="Performance por Vendedor"
         description="Leitura individual e comparativa com filtro de período, acompanhamento em tempo real e ordenação de equipe."

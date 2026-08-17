@@ -81,7 +81,7 @@ export function MxModulePage({
   )
 }
 
-export function MxModuleHeader({ title, description, eyebrow, actions, className }: { title: ReactNode; description?: ReactNode; eyebrow?: ReactNode; actions?: ReactNode; className?: string }) {
+export function MxModuleHeader({ title, description, eyebrow, actions, className, icon }: { title: ReactNode; description?: ReactNode; eyebrow?: ReactNode; actions?: ReactNode; className?: string; icon?: LucideIcon }) {
   return (
     <PageHeader
       data-mx-module-header=""
@@ -92,6 +92,7 @@ export function MxModuleHeader({ title, description, eyebrow, actions, className
       description={description}
       eyebrow={eyebrow}
       actions={actions}
+      icon={icon}
       titleVariant="h2"
       descriptionVariant="p"
       className={className}

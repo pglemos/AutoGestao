@@ -287,6 +287,7 @@ export function AdminIndicadoresPage() {
     <MxModulePage id="admin-mx-indicadores" width={width} bottomClearance={bottomClearance}>
       <div className="w-full space-y-5">
         <MxModuleHeader
+          icon={Gauge}
           eyebrow="Administração MX"
           title="Indicadores e parâmetros"
           description="Catálogo oficial da consultoria: ciclo de vida, ordem, visibilidade no Módulo Dono e faixas de referência."

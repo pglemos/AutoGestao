@@ -307,6 +307,7 @@ export function AdminClienteDetalhePage() {
     <MxModulePage id="admin-mx-cliente-detalhe" width={width} bottomClearance={bottomClearance}>
       <div className="w-full space-y-5">
         <MxModuleHeader
+          icon={Building2}
           eyebrow="Administração MX"
           title={client?.name ?? 'Cliente'}
           description={client ? `${client.legal_name || 'Sem razão social'} · ${client.product_name || 'Produto não definido'}` : 'Visão 360 do cliente na consultoria.'}

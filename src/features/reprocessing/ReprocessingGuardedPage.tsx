@@ -1,4 +1,4 @@
-import { ShieldAlert } from 'lucide-react'
+import { RefreshCw, ShieldAlert } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { MxEmptyState, MxModuleHeader, MxModulePage } from '@/components/module/MxModuleVisualPrimitives'
 import LegacyReprocessamentoPage from './LegacyReprocessamentoPage'
@@ -10,6 +10,7 @@ export default function ReprocessingGuardedPage() {
     return (
       <MxModulePage width="form" id="reprocessing-forbidden">
         <MxModuleHeader
+          icon={RefreshCw}
           eyebrow="Configurações"
           title="Reprocessamento"
           description="Execuções controladas e recuperação operacional."

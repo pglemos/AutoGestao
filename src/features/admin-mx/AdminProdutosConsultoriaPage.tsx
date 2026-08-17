@@ -157,6 +157,7 @@ export function AdminProdutosConsultoriaPage() {
     <MxModulePage id="admin-mx-produtos" width={width} bottomClearance={bottomClearance}>
       <div className="w-full space-y-5">
         <MxModuleHeader
+          icon={Package}
           eyebrow="Administração MX"
           title="Produtos de consultoria"
           description="Programas comercializados: ciclo de vida, módulos herdados pelos clientes e capacidade por encontro."

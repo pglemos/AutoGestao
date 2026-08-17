@@ -1,4 +1,4 @@
-import { FileText, History as HistoryIcon, Plus, RefreshCw } from 'lucide-react'
+import { FileText, History as HistoryIcon, Plus, RefreshCw, Sparkles } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
@@ -22,6 +22,7 @@ export function AdminConsultoriaMxPage() {
     <MxModulePage id="admin-mx-consultoria" width={width} bottomClearance={bottomClearance}>
       <div className="w-full space-y-5">
         <MxModuleHeader
+          icon={Sparkles}
           eyebrow="Administração MX"
           title="Consultoria MX"
           description="Configure a metodologia, os conteúdos e as entregas padrão de cada encontro da consultoria."

@@ -1,4 +1,4 @@
-import { RefreshCw, Wifi, WifiOff } from 'lucide-react'
+import { LayoutDashboard, RefreshCw, Wifi, WifiOff } from 'lucide-react'
 import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
 import { MxModuleHeader } from '@/components/module/MxModuleVisualPrimitives'
@@ -11,6 +11,7 @@ export function NetworkDashboardHeader({ refreshing, lastUpdatedAt, realtimeStat
 }) {
   return (
     <MxModuleHeader
+      icon={LayoutDashboard}
       eyebrow="Rede e gestão"
       title="Painel Geral"
       description={lastUpdatedAt ? `Visão consolidada da rede. Atualizado às ${lastUpdatedAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}.` : 'Visão consolidada da rede, disciplina operacional e prioridades.'}

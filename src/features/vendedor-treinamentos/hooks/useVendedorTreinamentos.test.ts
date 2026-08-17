@@ -47,7 +47,7 @@ describe('VendedorTreinamentos — contrato visual anterior', () => {
     const containerSource = readFileSync(new URL('../VendedorTreinamentos.container.tsx', import.meta.url), 'utf8')
 
     test('preserva cabeçalho, cinco indicadores compactos, abas pill e recomendados do layout original', () => {
-        expect(containerSource).toContain('<PageHeader title="Treinamentos"')
+        expect(containerSource).toMatch(/<(SellerPageHeader|PageHeader)[^>]*title="Treinamentos"/)
         expect(containerSource).toContain('grid grid-cols-2 lg:grid-cols-5 gap-4')
         expect(containerSource).toContain('TabsList className="bg-white border border-border-subtle rounded-xl p-1"')
         expect(containerSource).toContain('Recomendado para Você')

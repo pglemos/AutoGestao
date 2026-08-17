@@ -167,6 +167,7 @@ export function AdminPlanosAcaoGlobalPage() {
     <MxModulePage id="admin-mx-planos-acao" width={width} bottomClearance={bottomClearance}>
       <div className="w-full space-y-5">
         <MxModuleHeader
+          icon={ClipboardList}
           eyebrow="Administração MX"
           title="Planos de ação"
           description="Visão global dos planos de ação da rede: status, prazos e prioridade."

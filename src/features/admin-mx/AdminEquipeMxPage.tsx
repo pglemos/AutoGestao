@@ -136,6 +136,7 @@ export function AdminEquipeMxPage() {
     <MxModulePage id="admin-mx-equipe" width={width} bottomClearance={bottomClearance}>
       <div className="w-full space-y-5">
         <MxModuleHeader
+          icon={Users}
           eyebrow="Administração MX"
           title="Equipe MX"
           description="Consultores e administradores internos, papéis e carteiras atribuídas."

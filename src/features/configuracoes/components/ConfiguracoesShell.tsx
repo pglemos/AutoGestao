@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { Navigate, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import { LogOut } from 'lucide-react'
+import { LogOut, Settings } from 'lucide-react'
 import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
 import { Badge } from '@/components/atoms/Badge'
@@ -82,6 +82,7 @@ export function ConfiguracoesShell({
     <MxModulePage id="configuracoes" width={pageWidth} bottomClearance={pageBottomClearance} accessMode={isReadOnly ? 'read-only' : 'manage'}>
       <div data-testid="configuracoes-shell">
         <MxModuleHeader
+          icon={Settings}
           title="Configurações"
           description="Conta, rede, governança e sistema em um único centro de controle."
           eyebrow={

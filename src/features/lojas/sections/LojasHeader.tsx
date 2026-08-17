@@ -1,4 +1,4 @@
-import { Plus, RefreshCw, Search } from 'lucide-react'
+import { Building2, Plus, RefreshCw, Search } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { TabNavPill } from '@/components/molecules/TabNavPill'
 import { Button } from '@/components/atoms/Button'
@@ -40,6 +40,7 @@ export function LojasHeader({
   return (
     <>
       <MxModuleHeader
+        icon={Building2}
         eyebrow={isOwner ? 'Visão executiva' : 'Administração da rede'}
         title={isOwner ? 'Visão executiva da rede' : 'Gestão de lojas'}
         description={

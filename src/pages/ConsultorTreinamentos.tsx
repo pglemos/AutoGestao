@@ -56,7 +56,7 @@ export default function ConsultorTreinamentos() {
 
     if (loading) return (
         <MxModulePage id="consultor-treinamentos-loading" width="dashboard" bottomClearance="navigation">
-            <MxModuleHeader eyebrow="Academy MX" title="Curadoria Academy" description="Auditando conteúdo..." />
+            <MxModuleHeader icon={GraduationCap} eyebrow="Academy MX" title="Curadoria Academy" description="Auditando conteúdo..." />
             <div className="flex items-center justify-center py-mx-2xl">
                 <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-status-success-text" />
             </div>
@@ -67,6 +67,7 @@ export default function ConsultorTreinamentos() {
         <MxModulePage id="consultor-treinamentos" width="dashboard" bottomClearance="navigation">
             
             <MxModuleHeader
+                icon={GraduationCap}
                 eyebrow="Academy MX"
                 title={<span>Curadoria <span className="text-status-success-text">Academy</span></span>}
                 description="GESTÃO DE CONHECIMENTO & ALTA PERFORMANCE"

@@ -3,6 +3,7 @@ import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
 import { Typography } from '@/components/atoms/Typography'
 import { Card } from '@/components/molecules/Card'
+import { PageHeading } from '@/components/molecules/PageHeading'
 import { ConditionalPageCanvas } from '@/design-system/page'
 import { cn } from '@/lib/utils'
 import { useVendedorPerfil } from '@/features/crm/hooks/useVendedorPerfil'
@@ -77,25 +78,17 @@ export function UniversidadeMx({ userId, embedded = false }: Props) {
 
   return (
     <ConditionalPageCanvas enabled={!embedded} as="section" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-lg" aria-label="Universidade MX">
-      <header className="flex flex-col gap-mx-xs md:flex-row md:items-center md:justify-between">
-        <div className="flex items-center gap-mx-sm">
-          <div className="rounded-2xl bg-brand-primary p-mx-sm text-pure-white shadow-sm">
-            <GraduationCap size={22} aria-hidden="true" />
-          </div>
-          <div>
-            <Typography variant="h2" className="font-bold tracking-tight">
-              Universidade MX
-            </Typography>
-            <Typography variant="tiny" tone="muted" className="block font-bold normal-case tracking-normal">
-              Biblioteca • Trilhas • Aulas ao vivo • Certificações (`.docx §340`).
-            </Typography>
-          </div>
-        </div>
-        <Button type="button" variant="ghost" size="sm" onClick={refresh} disabled={loading}>
-          {loading ? <Loader2 size={16} className="animate-spin" /> : <RefreshCw size={16} />}
-          <span className="ml-1">Atualizar</span>
-        </Button>
-      </header>
+      <PageHeading
+        icon={GraduationCap}
+        title="Universidade MX"
+        subtitle="Biblioteca · Trilhas · Aulas ao vivo · Certificações"
+        actions={
+          <Button type="button" variant="outline" size="sm" onClick={refresh} disabled={loading}>
+            {loading ? <Loader2 size={16} className="animate-spin" /> : <RefreshCw size={16} />}
+            <span className="ml-1">Atualizar</span>
+          </Button>
+        }
+      />
 
       {error && (
         <div className="rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">

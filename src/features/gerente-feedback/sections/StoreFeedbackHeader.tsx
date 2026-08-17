@@ -36,6 +36,7 @@ export function StoreFeedbackHeader({
 }: Props) {
   return (
     <MxModuleHeader
+      icon={MessageSquare}
       eyebrow={isOwner ? 'Rede' : 'Vendedores'}
       title={isOwner ? 'Devolutivas da Rede' : 'Feedbacks'}
       description={isOwner ? 'Acompanhe qualidade e cobranças semanais' : 'Rotina semanal obrigatória'}

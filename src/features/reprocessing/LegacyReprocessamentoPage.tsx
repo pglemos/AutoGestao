@@ -305,6 +305,7 @@ export default function Reprocessamento() {
   return (
     <MxModulePage width="form">
       <MxModuleHeader
+        icon={RefreshCw}
         title="Reprocessamento"
         description="Valide, importe e acompanhe lotes de dados com histórico auditável por unidade."
         actions={(

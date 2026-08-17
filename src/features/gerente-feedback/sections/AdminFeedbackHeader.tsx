@@ -1,4 +1,4 @@
-import { Plus, RefreshCw, Search } from 'lucide-react'
+import { MessageSquare, Plus, RefreshCw, Search } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { Typography } from '@/components/atoms/Typography'
@@ -33,6 +33,7 @@ export function AdminFeedbackHeader({
 }: Props) {
   return (
     <MxModuleHeader
+      icon={MessageSquare}
       eyebrow="ADMIN — VISÃO DA REDE • METODOLOGIA MX"
       title="Gestão de Devolutivas"
       actions={

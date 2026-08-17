@@ -165,6 +165,7 @@ export function StoreBranches() {
   return (
     <MxModulePage width="wide" bottomClearance="navigation" accessMode={page.canManage ? 'manage' : 'read-only'}>
       <MxModuleHeader
+        icon={Building2}
         eyebrow="Administração da rede"
         title={`Filiais de ${matriz.name}`}
         description="Cada filial é uma loja completa vinculada a esta matriz. A hierarquia tem um nível: uma filial não pode ter filiais próprias."

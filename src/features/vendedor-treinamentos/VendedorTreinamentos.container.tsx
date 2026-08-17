@@ -5,12 +5,12 @@ import {
 import { toast } from '@/lib/toast'
 import {
     BookOpen, Star, BarChart3, CheckCircle2, ClipboardCheck, Search, Play,
-    Video, Calendar, Download, MessageSquare, X,
+    Video, Calendar, Download, GraduationCap, MessageSquare, X,
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { Card } from '@/components/molecules/Card'
 import { Typography } from '@/components/atoms/Typography'
-import PageHeaderBase from '@/components/ui/PageHeader'
+import { SellerPageHeader } from '@/components/seller/SellerPageHeader'
 import { StatCard } from '@/components/molecules/StatCard'
 import { Tabs, TabsContent as TabsContentBase, TabsList as TabsListBase, TabsTrigger as TabsTriggerBase } from '@/components/ui/tabs'
 import { Input as InputBase } from '@/components/atoms/Input'
@@ -43,7 +43,6 @@ const LEVEL_COLORS: Record<string, string> = {
 
 // Os componentes visuais legados são JavaScript e não expõem props TypeScript.
 // Os aliases mantêm o layout anterior tipado sem alterar os componentes globais.
-const PageHeader = PageHeaderBase as ComponentType<{ title: string; subtitle?: string; children?: ReactNode }>
 const TabsList = TabsListBase as ComponentType<PropsWithChildren<{ className?: string }>>
 const TabsTrigger = TabsTriggerBase as ComponentType<PropsWithChildren<{ value: string; className?: string }>>
 const TabsContent = TabsContentBase as ComponentType<PropsWithChildren<{ value: string; className?: string }>>
@@ -207,9 +206,12 @@ export default function VendedorTreinamentosContainer() {
 
     return (
         <PageTemplate as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-8" scrollerClassName="font-body">
-            <PageHeader title="Treinamentos" subtitle="Desenvolva suas habilidades de vendas">
-                <ContentSuggestionDialog />
-            </PageHeader>
+            <SellerPageHeader
+                icon={GraduationCap}
+                title="Treinamentos"
+                subtitle="Desenvolva suas habilidades de vendas"
+                actions={<ContentSuggestionDialog />}
+            />
 
             <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
                 <StatCard label="Minha Trilha" value={nivelMaturidade} detail={nivelMaturidadeLabel} icon={<Star />} tone="blue" />

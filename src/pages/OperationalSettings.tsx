@@ -124,6 +124,7 @@ export default function OperationalSettings() {
   return (
     <MxModulePage accessMode={accessMode} width="focused">
       <MxModuleHeader
+        icon={SlidersHorizontal}
         eyebrow="Governança por unidade"
         title="Configuração operacional"
         description="Controle listas de distribuição e regras reais de projeção sem expor ações administrativas a perfis de consulta."

@@ -172,6 +172,7 @@ export function AdminClientesPage() {
     <MxModulePage id="admin-mx-clientes" width={width} bottomClearance={bottomClearance}>
       <div className="w-full space-y-5">
         <MxModuleHeader
+          icon={Building2}
           eyebrow="Administração MX"
           title="Clientes MX"
           description="Carteira administrativa: fase, estrutura, jornada, responsável e a próxima ação de cada cliente."

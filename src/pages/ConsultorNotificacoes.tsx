@@ -70,6 +70,7 @@ export default function ConsultorNotificacoes() {
     return (
         <MxModulePage id="consultor-central-mensagens">
             <MxModuleHeader
+                icon={Bell}
                 title={<>Central de <span className="text-status-success-text">Mensagens</span></>}
                 description="COMUNICAÇÃO ESTRATÉGICA DE REDE"
                 actions={(

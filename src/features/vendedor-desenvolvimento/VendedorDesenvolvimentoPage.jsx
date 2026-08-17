@@ -23,24 +23,29 @@ export default function VendedorDesenvolvimentoPage() {
   }, [searchParams]);
 
   return (
-<div className="w-full min-w-0 bg-surface-alt">
-<SellerPageHeader icon={BookOpen} title={tab === "feedback" ? "FEEDBACK" : "PDI"} actions={(
-<div className="flex flex-wrap gap-1 rounded-xl bg-surface-muted p-1">
-{TABS.map(t => (
-<button
-key={t.key}
-onClick={() => setTab(t.key)}
-className={`rounded-lg px-5 py-2 text-sm font-semibold transition-colors ${
-tab === t.key
-? "bg-white text-status-info-text shadow-sm"
-: "text-muted-foreground hover:text-foreground"
-}`}
->
-{t.label}
-</button>
-))}
-</div>
-)} />
+    <div className="w-full min-w-0 bg-surface-alt">
+      <SellerPageHeader
+        icon={BookOpen}
+        title={tab === "feedback" ? "Feedback" : "PDI"}
+        subtitle="Acompanhe seus feedbacks e plano de desenvolvimento."
+        actions={(
+          <div className="flex flex-wrap gap-1 rounded-xl bg-surface-muted p-1">
+            {TABS.map(t => (
+              <button
+                key={t.key}
+                onClick={() => setTab(t.key)}
+                className={`rounded-lg px-5 py-2 text-sm font-semibold transition-colors ${
+                  tab === t.key
+                    ? "bg-white text-status-info-text shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+        )}
+      />
 
 <div className="pt-4">
         {tab === "feedback" && <FeedbackTab hideHeader />}

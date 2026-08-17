@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ArrowLeft, ArrowRight, Check, Plus, Trash2 } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, Plus, Trash2, UserPlus } from 'lucide-react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
@@ -159,6 +159,7 @@ export function AdminNovoClientePage() {
     <MxModulePage id="admin-mx-novo-cliente" width={width} bottomClearance={bottomClearance}>
       <div className="w-full space-y-5">
         <MxModuleHeader
+          icon={UserPlus}
           eyebrow="Administração MX"
           title={isContinuation ? 'Continuar onboarding' : 'Novo cliente'}
           description={isContinuation ? 'Retome o cadastro do cliente na etapa atual e salve o progresso.' : 'Cadastro completo: identificação, lojas, produto, jornada, módulos e pessoas.'}
