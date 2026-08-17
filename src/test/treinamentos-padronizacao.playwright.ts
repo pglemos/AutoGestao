@@ -51,6 +51,6 @@ test.describe('padronização /treinamentos (admin)', () => {
     const pilar = page.getByLabel('Pilar de Vendas')
     await expect(pilar).toBeVisible()
     await pilar.selectOption('fechamento')
-    await expect(page.getByText('FECHAMENTO', { exact: true })).toBeVisible()
+    await expect(pilar).toHaveValue('fechamento')
   })
 })

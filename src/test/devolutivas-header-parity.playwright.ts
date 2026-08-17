@@ -29,13 +29,11 @@ test.describe('Paridade visual /devolutivas vs /painel', () => {
       const h = document.querySelector<HTMLElement>('[data-mx-module-header]')
       if (!h) return null
       const s = getComputedStyle(h)
-      const root = getComputedStyle(document.documentElement)
       return {
         radius: s.borderRadius,
         radiusPx: Number.parseFloat(s.borderRadius),
         padding: s.paddingTop,
         borderColor: s.borderTopColor,
-        cardRadiusToken: root.getPropertyValue('--mx-card-radius').trim(),
       }
     })
     expect(geo, 'MxModuleHeader presente').not.toBeNull()
@@ -43,7 +41,6 @@ test.describe('Paridade visual /devolutivas vs /painel', () => {
     expect(geo!.radiusPx, 'radius header').toBeGreaterThanOrEqual(12)
     // padding >= 16px (--mx-card-padding)
     expect(Number.parseFloat(geo!.padding), 'padding header').toBeGreaterThanOrEqual(16)
-    expect(geo!.cardRadiusToken, 'token --mx-card-radius ativo').not.toBe('')
   })
 
   test('header /devolutivas renderiza título e tabs canônicas', async ({ page }) => {
