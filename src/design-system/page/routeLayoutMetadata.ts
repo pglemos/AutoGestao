@@ -70,8 +70,7 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   decisoes: { width: 'dashboard', adopted: true },
 
   // ------------------------------------------------------- tabelas e listagens
-  // `wide` e não `dashboard`: tabelas densas ficam mais legíveis um pouco mais
-  // estreitas, porque a linha de leitura horizontal encurta.
+  // `wide` e não `dashboard`: tabelas densas e listagens.
   lojas: { width: 'wide', bottomClearance: 'navigation', adopted: true },
   'lojas/:storeSlug': { width: 'wide', adopted: true },
   'lojas/:storeSlug/equipe': { width: 'wide', adopted: true },
@@ -128,42 +127,30 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   // --------------------------------------------------- fluxos e formulários
   // Barra de ações fixa: a reserva impede que o botão salvar cubra o último
   // campo (§15).
-   // Checkin (vendedor) resolve clearance da metadata (actions em
-   // fechamento-diario, navigation em terminal-mx); ManagerDailyClosing usa actions.
-   'fechamento-diario': { width: 'dashboard', bottomClearance: 'actions', adopted: true },
+  // Checkin (vendedor) resolve clearance da metadata (actions em
+  // fechamento-diario, navigation em terminal-mx); ManagerDailyClosing usa actions.
+  'fechamento-diario': { width: 'dashboard', bottomClearance: 'actions', adopted: true },
   'lancamento-diario': { width: 'focused', bottomClearance: 'actions' },
-   // RotinaGerente/DashboardLoja usam clearance da metadata — navigation.
-   rotina: { width: 'focused', bottomClearance: 'navigation', adopted: true },
+  // RotinaGerente/DashboardLoja usam clearance da metadata — navigation.
+  rotina: { width: 'focused', bottomClearance: 'navigation', adopted: true },
   'rotina-do-dia': { width: 'focused', bottomClearance: 'actions' },
   'vendedor/rotina-do-dia': { width: 'focused', bottomClearance: 'actions' },
   'rotina-equipe': { width: 'focused', bottomClearance: 'actions', adopted: true },
-  // OwnerPlanoDeAcao usa dashboard+navigation; InternalActionPlanPage focused —
-  // divergência por perfil, adoção exige alinhar os dois.
   'plano-acao': { width: 'focused', bottomClearance: 'actions' },
   simulacao: { width: 'focused' },
   'simulacao/:simulationRole': { width: 'focused' },
   reprocessamento: { width: 'form' },
 
   // -------------------------------------------------- configurações e perfil
-  // Dividida por RoleSwitch: vendedor renderiza VendedorConfiguracoes (já
-  // migrada, painel de 1500px), gerente e dono renderizam Configuracoes (não
-  // migrada). Não marcada como adotada justamente por isso — ver a nota sobre
-  // rotas divididas no fim deste arquivo.
   configuracoes: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'configuracoes/operacional': { width: 'focused', bottomClearance: 'none', adopted: true },
   'configuracoes/remuneracao': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'configuracoes/consultoria-pmr': { width: 'focused', bottomClearance: 'none', adopted: true },
   'configuracoes/reprocessamento': { width: 'form', bottomClearance: 'none', adopted: true },
   settings: { width: 'form' },
-  // Alias que redireciona para `configuracoes`; mantido no registro para que a
-  // decisão continue resolvível se o redirect for removido.
   'vendedor/configuracoes': { width: 'dashboard', bottomClearance: 'navigation' },
-  // Redirects legados continuam classificados para não depender do default
-  // enquanto preservam a URL histórica para integrações externas.
   metas: { width: 'dashboard' },
   'minhas-lojas': { width: 'wide', bottomClearance: 'navigation', adopted: true },
-  // MeuPerfilVendedor (vendedor) usa clearance navigation; Interno default —
-  // multi-perfil com clearance divergente, adoção exige alinhar os dois.
   perfil: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'meu-perfil': { width: 'form' },
   'meu-perfil-vendedor': { width: 'form' },
@@ -174,32 +161,20 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'meta-loja': { width: 'focused', adopted: true },
 
   // ------------------------------------------- desenvolvimento e conversação
-  // `focused` e `reading`: conteúdo textual longo, onde largura excessiva
-  // prejudica a leitura em vez de ajudar (§12).
   desenvolvimento: { width: 'focused', adopted: true },
   'vendedor/desenvolvimento': { width: 'focused' },
-  // GerenteTreinamentos (migrada) para gerente e dono, ConsultorTreinamentos
-  // DashboardLoja (dono) renderiza seu próprio layout — não adotada até ele
-  // usar canvas; as demais telas (gerente/admin) já usam PageTemplate.
-  treinamentos: { width: 'dashboard', adopted: true },
+  treinamentos: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'vendedor/treinamentos': { width: 'focused' },
-  // Rota única para todos os perfis desde que o gerente perdeu o prefixo
-  // `/gerente/`: largura de dashboard atende gerente, dono e admin, e o
-  // vendedor tem a própria entrada em `vendedor/universidade-mx`.
-  'universidade-mx': { width: 'dashboard', adopted: true },
+  'universidade-mx': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'vendedor/universidade-mx': { width: 'focused' },
   feedback: { width: 'focused' },
-   feedbacks: { width: 'focused' },
-   devolutivas: { width: 'focused', bottomClearance: 'navigation', adopted: true },
-   'vendedor/devolutivas': { width: 'focused' },
+  feedbacks: { width: 'focused' },
+  devolutivas: { width: 'focused', bottomClearance: 'navigation', adopted: true },
+  'vendedor/devolutivas': { width: 'focused' },
   'vendedor/feedback': { width: 'focused' },
   'feedbacks-pdis': { width: 'focused', adopted: true },
-  // GerentePDI para gerente, dono e admin; vendedor é redirect. `dashboard` e
-  // não `focused`: grid de até três colunas de cards.
   pdi: { width: 'dashboard', adopted: true },
   'pdi/:id/print': { width: 'reading', bottomClearance: 'none' },
-  // `dashboard`, não `reading`: a tela tem grid de três colunas e vivia em
-  // max-w-[1500px]. A largura de leitura estreita quebraria o layout aprovado.
   ajuda: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
 
   // Conversação com IA: coluna estreita, porque diálogo é leitura sequencial
@@ -207,7 +182,7 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'consultor-ia': { width: 'reading', bottomClearance: 'actions' },
   'mentor-comercial': { width: 'reading', bottomClearance: 'actions' },
   'vendedor/mentor-comercial': { width: 'reading', bottomClearance: 'actions' },
-  'mentor': { width: 'reading', bottomClearance: 'actions', adopted: true },
+  mentor: { width: 'reading', bottomClearance: 'actions', adopted: true },
   // Não é conversa em coluna estreita como o consultor IA: é um painel de
   // solicitações com cards e histórico. Medido em /falar-consultor.
   'falar-consultor': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },

@@ -42,6 +42,7 @@ import {
   type PortfolioFilters,
 } from './clientes/clientPortfolio'
 import { useClientPortfolio } from './clientes/useClientPortfolio'
+import { InscricoesPendentesPanel } from './clientes/InscricoesPendentesPanel'
 
 const PHASE_LABEL: Record<string, string> = {
   ESTRUTURACAO: 'Estruturação',
@@ -196,6 +197,8 @@ export function AdminClientesPage() {
                 />
               ))}
             </MxMetricGrid>
+
+            <InscricoesPendentesPanel />
 
             <MxToolbar>
               <MxInput

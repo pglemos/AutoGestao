@@ -198,7 +198,7 @@ export default function GerenteTreinamentos() {
     )
 
     if (isLoading && !isRefetching) return (
-        <MxModulePage id="gerente-treinamentos-loading" width="dashboard">
+        <MxModulePage id="gerente-treinamentos-loading" width="dashboard" bottomClearance="navigation">
             <MxModuleHeader eyebrow="Desenvolvimento" title="Universidade MX" description="Carregando treinamentos..." />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-mx-lg">
                 {[1,2,3].map(i => <div key={i} className="h-mx-64 rounded-2xl bg-white animate-pulse" />)}
@@ -207,7 +207,7 @@ export default function GerenteTreinamentos() {
     )
 
     return (
-        <MxModulePage id="gerente-treinamentos" width="dashboard">
+        <MxModulePage id="gerente-treinamentos" width="dashboard" bottomClearance="navigation">
             
             <MxModuleHeader
                 eyebrow={isOwner ? 'Rede MX' : 'Desenvolvimento'}

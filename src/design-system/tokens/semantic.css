@@ -301,8 +301,8 @@ form input[aria-hidden="true"] {
      (formulário, leitura, dashboard), nunca por um número solto na página. */
   --mx-page-width-fluid: 100%;
   --mx-page-width-dashboard: 1400px;
-  --mx-page-width-wide: 1280px;
-  --mx-page-width-focused: 960px;
+  --mx-page-width-wide: 1400px;
+  --mx-page-width-focused: 1400px;
   --mx-page-width-form: 768px;
   --mx-page-width-reading: 720px;
 
