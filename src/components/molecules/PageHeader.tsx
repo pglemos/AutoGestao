@@ -49,10 +49,14 @@ const PageHeader = React.forwardRef<HTMLElement, PageHeaderProps>(
       >
         {breadcrumb && <div className="w-full">{breadcrumb}</div>}
         <div className="flex min-w-0 items-center gap-3">
-          {Icon && <Icon className="h-5 w-5 shrink-0 text-status-info-text" aria-hidden="true" />}
+          {Icon && (
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-[var(--mx-radius-xl)] bg-status-success-surface text-status-success-text">
+              <Icon className="h-5 w-5" aria-hidden="true" />
+            </span>
+          )}
           <div className="min-w-0 flex-1">
             {eyebrow && <Typography variant="caption" className="mb-1 block font-semibold text-status-success-text">{eyebrow}</Typography>}
-            <Typography as="h1" variant={titleVariant} className={cn('break-words', titleClassName)}>{title}</Typography>
+            <Typography as="h1" variant={titleVariant} className={cn('break-words font-bold', titleClassName)}>{title}</Typography>
             {description && (
               <Typography variant={descriptionVariant} tone="muted" className={descriptionClassName}>{description}</Typography>
             )}
