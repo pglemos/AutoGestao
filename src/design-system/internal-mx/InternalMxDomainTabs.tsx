@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { TabNav, type TabNavItem } from '@/components/molecules/TabNav'
 
-export function InternalMxDomainTabs<T extends string>({
+export function useInternalMxDomainTabs<T extends string>({
   tabs,
   fallback,
   modeParam = 'mode',
