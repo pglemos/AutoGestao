@@ -201,8 +201,90 @@ export function resultadoParaMomento(resultado) {
   return { momento: r.situacao, temperatura: r.temperatura };
 }
 
+// ─── PRIORIZAÇÃO DETERMINÍSTICA DO DIA ──────────────────────────────────────
+export function isPosVenda30Dias(cliente, refDate = new Date()) {
+  if (!cliente) return false;
+  const s = cliente.situacao_atual || cliente.momento || "";
+  const isVendido = cliente.vendido || cliente.status_comercial === "Vendido" || s === "Venda realizada" || s === "Comprou" || s === "Pós-venda ativo";
+  if (!isVendido && !cliente.data_venda) return false;
+
+  const dataVenda = cliente.data_venda || (isVendido ? cliente.created_date : null);
+  if (!dataVenda) return false;
+
+  const mRef = moment(refDate).startOf("day");
+  const mVenda = moment(dataVenda).startOf("day");
+  if (!mVenda.isValid()) return false;
+
+  const dias = mRef.diff(mVenda, "days");
+  // Cliente comprou há 30 dias (janela ativa de 30 a 45 dias pós-venda para pedido de indicação)
+  return dias >= 30 && dias <= 45;
+}
+
+export function isRecompra1Ano(cliente, refDate = new Date()) {
+  if (!cliente) return false;
+  const s = cliente.situacao_atual || cliente.momento || "";
+  const isVendido = cliente.vendido || cliente.status_comercial === "Vendido" || s === "Venda realizada" || s === "Comprou" || s === "Pós-venda ativo" || s === "Oportunidade futura";
+  if (!isVendido && !cliente.data_venda) return false;
+
+  const dataVenda = cliente.data_venda || (isVendido ? cliente.created_date : null);
+  if (!dataVenda) return false;
+
+  const mRef = moment(refDate).startOf("day");
+  const mVenda = moment(dataVenda).startOf("day");
+  if (!mVenda.isValid()) return false;
+
+  const dias = mRef.diff(mVenda, "days");
+  // 1 ano após a venda (janela de 360 a 380 dias para campanha de recompra com bônus)
+  return dias >= 360 && dias <= 380;
+}
+
+export function isAgendamentoHoje(cliente, refDate = new Date()) {
+  if (!cliente) return false;
+  const s = cliente.situacao_atual || cliente.momento || "";
+  if (SITUACOES_ENCERRADAS_SEM_VENDA.includes(s)) return false;
+  const mRef = moment(refDate).startOf("day");
+
+  if (cliente.visita_agendada_em) {
+    const mVisita = moment(cliente.visita_agendada_em).startOf("day");
+    if (mVisita.isValid() && mVisita.isSame(mRef, "day")) return true;
+  }
+  if (s === "Visita hoje") return true;
+  if ((s === "Visita agendada" || s === "Visita a confirmar") && cliente.proxima_acao_data) {
+    const mProx = moment(cliente.proxima_acao_data).startOf("day");
+    if (mProx.isValid() && mProx.isSame(mRef, "day")) return true;
+  }
+  return false;
+}
+
+export function isPrioridadeSistema(cliente, refDate = new Date()) {
+  if (!cliente) return false;
+  const s = cliente.situacao_atual || cliente.momento || "";
+  if (SITUACOES_ENCERRADAS_SEM_VENDA.includes(s)) return false;
+
+  if (s === "Cliente respondeu" || s === "Aguardando ação do vendedor") return true;
+  if (s === "Financiamento aprovado sem compra" || s === "Pronto para fechamento") return true;
+
+  if (cliente.proxima_acao_data) {
+    const mProx = moment(cliente.proxima_acao_data).startOf("day");
+    const mRef = moment(refDate).startOf("day");
+    if (mProx.isValid() && (mProx.isSame(mRef, "day") || mProx.isBefore(mRef, "day"))) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 // ─── LÓGICA AUTOMÁTICA: SITUAÇÃO → OBJETIVO + PRÓXIMO PASSO ─────────────────
 export function calcularObjetivoEProximoPasso(cliente) {
+  // Regras prioritárias de pós-venda (30 dias) e recompra (1 ano)
+  if (isPosVenda30Dias(cliente)) {
+    return { objetivo: "Pedir indicação", proximoPasso: "Pedir indicação" };
+  }
+  if (isRecompra1Ano(cliente)) {
+    return { objetivo: "Criar recompra/troca futura", proximoPasso: "Campanha de recompra (1 ano da compra)" };
+  }
+
   // MOTOR SUBSTITUÍDO (parcial). Para as situações legadas com mapeamento PROVADO
   // contra a matriz v1, objetivo e próximo passo vêm do catálogo oficial.
   //
@@ -295,6 +377,16 @@ export function explicacaoCliente(cliente) {
     return "Este cliente precisa de atenção e desenvolvimento comercial.";
   }
 
+  if (isPosVenda30Dias(cliente)) {
+    return "Cliente comprou há 30 dias. Momento ideal para saber da experiência com o carro e pedir 2 contatos de indicação.";
+  }
+  if (isRecompra1Ano(cliente)) {
+    return "Cliente comprou há 1 ano (aniversário de compra). Agradeça pela confiança e ofereça a campanha com bônus de recompra/troca.";
+  }
+  if (isAgendamentoHoje(cliente)) {
+    return "Cliente com visita agendada para hoje! Prioridade máxima para confirmar presença e realizar atendimento.";
+  }
+
   const s = cliente.situacao_atual || cliente.momento || "";
   const dias = cliente.ultimo_contato
     ? moment().diff(moment(cliente.ultimo_contato), "days")
@@ -336,17 +428,10 @@ export function explicacaoCliente(cliente) {
 
 // ─── SCORE DO CLIENTE ────────────────────────────────────────────────────────
 export function calcularScore(cliente) {
-  // MOTOR SUBSTITUÍDO. A heurística de deduções a partir de 100 saiu; o score
-  // agora são os cinco pilares oficiais da aba `07 Score_Prioridade`
-  // (Status 15, Próximo passo 20, Execução 30, Cadência 20, Histórico 15).
-  //
-  // A assinatura e o formato de retorno { score, motivos } são os mesmos de antes,
-  // de propósito: nenhuma das oito telas da Carteira precisa mudar.
   return calcularScoreOficial(cliente);
 }
 
 export function classificacaoScore(score) {
-  // Faixas vêm do motor oficial; as cores continuam sendo decisão da tela.
   const label = classificacaoScoreOficial(score);
   const CORES = {
     "Excelente": "text-status-success-text bg-brand-primary-subtle",
@@ -359,13 +444,10 @@ export function classificacaoScore(score) {
 
 // ─── PRIORIDADE COMERCIAL ────────────────────────────────────────────────────
 export function calcularPrioridade(cliente) {
-  // MOTOR SUBSTITUÍDO. O mapa improvisado de potencial e os limiares próprios
-  // saíram. Agora é a fórmula oficial do §32:
-  //   índice = urgência*0.45 + potencial*0.35 + risco*0.20
-  // com os overrides de piso (cliente respondeu, ação vencida >24h, visita hoje,
-  // financiamento aprovado, pronto para fechamento).
-  //
-  // Continua devolvendo o rótulo em português que as telas já consomem.
+  if (!cliente) return "Baixa";
+  if (isAgendamentoHoje(cliente)) return "Máxima";
+  if (isPosVenda30Dias(cliente)) return "Alta";
+  if (isRecompra1Ano(cliente)) return "Alta";
   return calcularPrioridadeOficial(cliente);
 }
 
@@ -477,9 +559,15 @@ export const SCRIPTS_BIBLIOTECA = {
   },
   "Pedir indicação": {
     id: "S13",
-    titulo: "Pós-venda e indicação",
-    objetivo: "Relacionamento e indicação",
-    texto: `Oi, {nome}! Tudo bem com o {veiculo}?\n\nPassando para saber se está tudo certo e se você ficou satisfeito com a compra.\n\nSe lembrar de alguém que também esteja procurando carro, pode me indicar. Vou atender com o mesmo cuidado.`,
+    titulo: "Pós-venda e indicação (30 dias)",
+    objetivo: "Saber da experiência e pedir 2 contatos de indicação",
+    texto: `Olá {nome}! Tudo bem?\n\nEstou passando aqui para saber como foi a compra e como está sendo a experiência com o {veiculo}.\n\nPosso te pedir um favor? Me ajuda muito se você puder me indicar 2 contatos de pessoas que você sabe que têm interesse em comprar ou trocar de carro. Qualquer pessoa, só me mandar o contato que eu desembolo aqui!`,
+  },
+  "Campanha de recompra (1 ano da compra)": {
+    id: "S18b",
+    titulo: "Campanha de recompra e troca (1 ano)",
+    objetivo: "Agradecer compra e oferecer bônus de recompra",
+    texto: `Olá {nome}! Tudo bem?\n\nLembrei de você hoje! Faz 1 ano que você comprou seu {veiculo} conosco. Agradeço demais pela confiança!\n\nEstamos com uma campanha especial com bônus de recompra para clientes que já compraram com a gente. Como está sua disponibilidade para batermos um papo hoje?`,
   },
   "Acompanhar garantia": {
     id: "S14",

@@ -487,6 +487,44 @@ export function scriptOficialParaCliente(
   tentativa = 1,
 ): ScriptOficial | null {
   const situacao = cliente?.situacao_atual || cliente?.momento || null
+
+  // Casos prioritários de 30 dias (indicação pós-venda) e 1 ano (recompra com bônus)
+  const agora = new Date()
+  const dataVenda = (cliente as Record<string, unknown>)?.data_venda as string | undefined
+  if (dataVenda) {
+    const diffDias = diasEntre(dataVenda, agora)
+    if (diffDias !== null && diffDias >= 30 && diffDias <= 45) {
+      const template = `Olá {nome}! Tudo bem?\n\nEstou passando aqui para saber como foi a compra e como está sendo a experiência com o {veiculo}.\n\nPosso te pedir um favor? Me ajuda muito se você puder me indicar 2 contatos de pessoas que você sabe que têm interesse em comprar ou trocar de carro. Qualquer pessoa, só me mandar o contato que eu desembolo aqui!`
+      const vars = variaveisDoCliente(cliente)
+      if (!vars.veiculo) vars.veiculo = 'carro'
+      const render = renderScript(template, vars, { scriptId: 'SCR-POSVENDA-INDICACAO-30D' })
+      return {
+        scriptId: 'SCR-POSVENDA-INDICACAO-30D',
+        texto: render.text,
+        scriptReady: render.scriptReady,
+        missingVariables: render.missingVariables,
+        allowWhatsApp: render.allowWhatsApp,
+        isInternal: false,
+        motivo: 'RESOLVED',
+      }
+    }
+    if (diffDias !== null && diffDias >= 360 && diffDias <= 380) {
+      const template = `Olá {nome}! Tudo bem?\n\nLembrei de você hoje! Faz 1 ano que você comprou seu {veiculo} conosco. Agradeço demais pela confiança!\n\nEstamos com uma campanha especial com bônus de recompra para clientes que já compraram com a gente. Como está sua disponibilidade para batermos um papo hoje?`
+      const vars = variaveisDoCliente(cliente)
+      if (!vars.veiculo) vars.veiculo = 'carro'
+      const render = renderScript(template, vars, { scriptId: 'SCR-RECOMPRA-BONUS-1ANO' })
+      return {
+        scriptId: 'SCR-RECOMPRA-BONUS-1ANO',
+        texto: render.text,
+        scriptReady: render.scriptReady,
+        missingVariables: render.missingVariables,
+        allowWhatsApp: render.allowWhatsApp,
+        isInternal: false,
+        motivo: 'RESOLVED',
+      }
+    }
+  }
+
   // Terminal técnico não tem script comercial nenhum, por definição.
   if (ehTerminalTecnico(situacao)) {
     return {

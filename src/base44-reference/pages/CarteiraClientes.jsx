@@ -114,7 +114,12 @@ export default function CarteiraClientes() {
   }, [clientes, modoAtaqueAtivo]);
 
   // Registrar resultado a partir do modal de retorno WhatsApp
-  async function handleRetornoWaConfirmar(resultadoLabel) {
+  async function handleRetornoWaConfirmar(resultadoData) {
+    const resultadoLabel = typeof resultadoData === "string" ? resultadoData : resultadoData?.resultado;
+    const dataVisita = typeof resultadoData === "object" ? resultadoData?.dataVisita : null;
+    const modalidade = typeof resultadoData === "object" ? resultadoData?.modalidade : null;
+    const veiculo = typeof resultadoData === "object" ? resultadoData?.veiculo : null;
+
     setRetornoWaResultado(resultadoLabel);
     if (!retornoWaCliente) return;
     sessionStorage.removeItem(WA_KEY);
@@ -137,6 +142,18 @@ export default function CarteiraClientes() {
     if (proximoPasso) update.proximo_passo = proximoPasso;
     if (statusComercial) update.status_comercial = statusComercial;
 
+    if (dataVisita) {
+      update.visita_agendada_em = dataVisita;
+      update.proxima_acao_data = dataVisita;
+      update.situacao_atual = "Visita agendada";
+      update.status_comercial = "Agendado";
+      update.proximo_passo = "Confirmar visita";
+      update.objetivo_atual = "Confirmar visita";
+      update.temperatura = "Quente";
+    }
+    if (modalidade) update.preferencia_modalidade = modalidade;
+    if (veiculo) update.veiculo_interesse = veiculo;
+
     if (novaSituacao === "Venda realizada") {
       update.status_comercial = "Vendido";
       update.vendido = true;
@@ -152,11 +169,13 @@ export default function CarteiraClientes() {
       update.proxima_acao_data = null;
     }
     update.historico = {
-      tipo: "Resultado registrado",
-      descricao: `Resultado via retorno WhatsApp: ${resultadoLabel}.`,
+      tipo: dataVisita ? "Visita agendada" : "Resultado registrado",
+      descricao: dataVisita
+        ? `Agendamento registrado via retorno WhatsApp: ${resultadoLabel} para ${new Date(dataVisita).toLocaleString('pt-BR')}.${modalidade ? ` Modalidade: ${modalidade}.` : ''}`
+        : `Resultado via retorno WhatsApp: ${resultadoLabel}.`,
       resultado: resultadoLabel,
       momento_anterior: retornoWaCliente.situacao_atual,
-      momento_novo: novaSituacao || retornoWaCliente.situacao_atual,
+      momento_novo: update.situacao_atual || retornoWaCliente.situacao_atual,
     };
 
     let persistido;

@@ -88,6 +88,13 @@ const VARIACOES_ESPECIFICAS = {
     ({ nome, veiculoTxt }) => `Oi, ${nome}! Queria saber se ficou alguma dúvida sobre a proposta para ${veiculoTxt}. O que posso ajustar para você?`,
     ({ nome, veiculoTxt }) => `${nome}, posso revisar com você a proposta para ${veiculoTxt} e ver o que falta para decidir?`,
   ],
+  "Pedir indicação": [
+    ({ nome, veiculoTxt }) => `Olá ${nome}! Tudo bem?\n\nEstou passando aqui para saber como foi a compra e como está sendo a experiência com ${veiculoTxt}.\n\nPosso te pedir um favor? Me ajuda muito se você puder me indicar 2 contatos de pessoas que você sabe que têm interesse em comprar ou trocar de carro. Qualquer pessoa, só me mandar o contato que eu desembolo aqui!`,
+    ({ nome, veiculoTxt }) => `Oi ${nome}! Tudo bem? Como está a experiência com ${veiculoTxt}?\n\nSe puder me indicar 2 amigos ou conhecidos que queiram trocar de carro, me avisa! Vou dar um atendimento especial pra eles.`,
+  ],
+  "Campanha de recompra (1 ano da compra)": [
+    ({ nome, veiculoTxt }) => `Olá ${nome}! Tudo bem?\n\nLembrei de você hoje! Faz 1 ano que você comprou ${veiculoTxt} conosco. Agradeço demais pela confiança!\n\nEstamos com uma campanha especial com bônus de recompra para clientes que já compraram com a gente. Como está sua disponibilidade para batermos um papo hoje?`,
+  ],
 };
 
 function primeiroNome(nome) {

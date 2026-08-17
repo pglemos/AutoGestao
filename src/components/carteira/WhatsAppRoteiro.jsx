@@ -16,13 +16,13 @@ import { formatCurrencyInput, parseCurrencyInput } from "@/lib/currency-mask";
 import moment from "moment";
 
 const COR_MAP = {
-  green:  { sel: "bg-green-50 border-green-400 text-green-700",    base: "bg-white border-border hover:bg-green-50 hover:border-green-300" },
+  green:  { sel: "bg-brand-primary-subtle border-brand-primary/40 text-brand-primary-hover", base: "bg-white border-border hover:bg-brand-primary-subtle hover:border-brand-primary/30" },
   red:    { sel: "bg-status-error-surface border-status-error/50 text-status-error-text",          base: "bg-white border-border hover:bg-status-error-surface hover:border-status-error/40" },
   slate:  { sel: "bg-slate-100 border-slate-400 text-foreground",   base: "bg-white border-border hover:bg-slate-50" },
   blue:   { sel: "bg-status-info-surface border-status-info/50 text-status-info-text",       base: "bg-white border-border hover:bg-status-info-surface hover:border-status-info/40" },
   orange: { sel: "bg-status-warning-surface border-orange-400 text-status-warning-text", base: "bg-white border-border hover:bg-status-warning-surface hover:border-status-warning/40" },
-  teal:   { sel: "bg-teal-50 border-teal-400 text-teal-700",       base: "bg-white border-border hover:bg-teal-50 hover:border-teal-300" },
-  yellow: { sel: "bg-yellow-50 border-yellow-400 text-yellow-700", base: "bg-white border-border hover:bg-yellow-50 hover:border-yellow-300" },
+  teal:   { sel: "bg-brand-primary-subtle border-brand-primary/40 text-brand-primary", base: "bg-white border-border hover:bg-brand-primary-subtle hover:border-brand-primary/30" },
+  yellow: { sel: "bg-status-warning-surface border-status-warning/50 text-status-warning-text", base: "bg-white border-border hover:bg-status-warning-surface hover:border-status-warning/40" },
 };
 
 // Chave no sessionStorage para detecção de retorno do WhatsApp

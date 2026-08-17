@@ -6,6 +6,7 @@ import {
   calcularObjetivoEProximoPasso, calcularScore, calcularPrioridade,
   classificacaoScore, tempColor, prioridadeColor, explicacaoCliente,
   SITUACOES_ENCERRADAS_SEM_VENDA,
+  isPosVenda30Dias, isRecompra1Ano, isAgendamentoHoje, isPrioridadeSistema,
 } from "./carteiraUtils";
 
 // ─── DIAS DA SEMANA ────────────────────────────────────────────────────────────
@@ -38,12 +39,21 @@ function isVencido(dateStr) {
 // ─── LÓGICA DOS CARDS DE AGENDA ───────────────────────────────────────────────
 function filtrarHoje(c) {
   if (!c) return false;
-  const proxData = c.proxima_acao_data;
-  const visitaData = c.visita_agendada_em;
-  if (isVencido(proxData)) return true;
-  if (isMesmodia(proxData, 0)) return true;
-  if (isMesmodia(visitaData, 0)) return true;
-  if (!proxData) return true;
+  const s = c.situacao_atual || c.momento || "";
+  if (SITUACOES_ENCERRADAS_SEM_VENDA.includes(s)) return false;
+
+  // 1. Agendamento de visita para hoje (Prioridade Máxima)
+  if (isAgendamentoHoje(c)) return true;
+
+  // 2. Pós-venda 30 dias (Pedido de Indicação após 30 dias da venda)
+  if (isPosVenda30Dias(c)) return true;
+
+  // 3. Recompra 1 ano (365 dias da data da venda com bônus de troca)
+  if (isRecompra1Ano(c)) return true;
+
+  // 4. Prioridades reais do sistema (respostas pendentes, financiamento aprovado, ações com data hoje/vencida)
+  if (isPrioridadeSistema(c)) return true;
+
   return false;
 }
 
@@ -67,9 +77,21 @@ function filtrarDia(offset) {
 function ordenarHoje(lista) {
   const ordP = { "Máxima": 0, "Alta": 1, "Média": 2, "Baixa": 3 };
   return [...lista].sort((a, b) => {
-    const aVenc = isVencido(a.proxima_acao_data) ? 0 : isMesmodia(a.proxima_acao_data, 0) ? 1 : isMesmodia(a.visita_agendada_em, 0) ? 2 : 3;
-    const bVenc = isVencido(b.proxima_acao_data) ? 0 : isMesmodia(b.proxima_acao_data, 0) ? 1 : isMesmodia(b.visita_agendada_em, 0) ? 2 : 3;
+    // 1. Agendamento hoje é prioridade topo absoluto
+    const aAgend = isAgendamentoHoje(a) ? 0 : 1;
+    const bAgend = isAgendamentoHoje(b) ? 0 : 1;
+    if (aAgend !== bAgend) return aAgend - bAgend;
+
+    // 2. Pós-venda 30d e Recompra 1 ano
+    const aEspecial = (isPosVenda30Dias(a) || isRecompra1Ano(a)) ? 0 : 1;
+    const bEspecial = (isPosVenda30Dias(b) || isRecompra1Ano(b)) ? 0 : 1;
+    if (aEspecial !== bEspecial) return aEspecial - bEspecial;
+
+    // 3. Vencidos e hoje
+    const aVenc = isVencido(a.proxima_acao_data) ? 0 : isMesmodia(a.proxima_acao_data, 0) ? 1 : 2;
+    const bVenc = isVencido(b.proxima_acao_data) ? 0 : isMesmodia(b.proxima_acao_data, 0) ? 1 : 2;
     if (aVenc !== bVenc) return aVenc - bVenc;
+
     return (ordP[calcularPrioridade(a)] ?? 3) - (ordP[calcularPrioridade(b)] ?? 3);
   });
 }
@@ -101,9 +123,11 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
   const explicacao = explicacaoCliente(cliente);
   const situacao = cliente.situacao_atual || cliente.momento || "—";
   const canal = cliente.canal_comercial || cliente.canal_origem || "—";
-  // Oportunidade encerrada sem venda (perdida, cancelada, cadência encerrada)
-  // não tem próximo passo a executar: o passo antigo morreu com ela.
   const encerradoSemVenda = SITUACOES_ENCERRADAS_SEM_VENDA.includes(situacao);
+
+  const ehAgendamentoHoje = isAgendamentoHoje(cliente);
+  const ehPosVenda30d = isPosVenda30Dias(cliente);
+  const ehRecompra1a = isRecompra1Ano(cliente);
 
   // Calcular iniciais com proteção contra espaços em branco
   const nomeLimpo = (cliente.nome || "").trim();
@@ -122,10 +146,13 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
             <div className="w-9 h-9 rounded-full bg-status-info-surface flex items-center justify-center text-xs font-black text-status-info-text shrink-0">{iniciais}</div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-mx-navy truncate">{cliente.nome}</p>
-              <p className="text-caption text-muted-foreground truncate">{canal} · {cliente.veiculo_interesse || "Sem veículo"}</p>
+              <p className="text-caption text-muted-foreground truncate">{canal} · {cliente.veiculo_interesse || cliente.veiculo_comprado || "Sem veículo"}</p>
             </div>
           </div>
           <div className="flex items-center gap-1 flex-shrink-0 flex-wrap justify-end">
+            {ehAgendamentoHoje && <span className="text-caption font-bold px-1.5 py-0.5 rounded-full bg-status-info-surface text-status-info-text border border-status-info/30">📅 Visita Hoje</span>}
+            {ehPosVenda30d && <span className="text-caption font-bold px-1.5 py-0.5 rounded-full bg-status-warning-surface text-status-warning-text border border-status-warning/40">⭐ Indicação 30d</span>}
+            {ehRecompra1a && <span className="text-caption font-bold px-1.5 py-0.5 rounded-full bg-brand-primary-subtle text-brand-primary border border-brand-primary/30">🔁 Recompra 1 ano</span>}
             <span className={`text-caption font-bold px-1.5 py-0.5 rounded-full border ${tempColor(cliente.temperatura)}`}>{cliente.temperatura}</span>
             <span className={`text-caption font-bold px-1.5 py-0.5 rounded-full ${prioridadeColor(prioridade)}`}>{prioridade}</span>
           </div>
@@ -163,11 +190,14 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
           <div className="min-w-0">
             <p className="text-sm font-bold text-mx-navy truncate">{cliente.nome}</p>
             <p className="text-caption text-muted-foreground truncate">{canal}</p>
-            <p className="text-caption text-muted-foreground truncate">{cliente.veiculo_interesse || "Sem veículo"}</p>
+            <p className="text-caption text-muted-foreground truncate">{cliente.veiculo_interesse || cliente.veiculo_comprado || "Sem veículo"}</p>
           </div>
         </div>
         <div className="px-4 py-3.5 w-52 shrink-0 space-y-1.5">
           <div className="flex items-center gap-1.5 flex-wrap">
+            {ehAgendamentoHoje && <span className="text-caption font-bold px-1.5 py-0.5 rounded-full bg-status-info-surface text-status-info-text border border-status-info/30">📅 Visita Hoje</span>}
+            {ehPosVenda30d && <span className="text-caption font-bold px-1.5 py-0.5 rounded-full bg-status-warning-surface text-status-warning-text border border-status-warning/40">⭐ Indicação 30d</span>}
+            {ehRecompra1a && <span className="text-caption font-bold px-1.5 py-0.5 rounded-full bg-brand-primary-subtle text-brand-primary border border-brand-primary/30">🔁 Recompra 1 ano</span>}
             <span className={`text-caption font-bold px-1.5 py-0.5 rounded-full border ${tempColor(cliente.temperatura)}`}>{cliente.temperatura}</span>
             <span className={`text-caption font-bold px-1.5 py-0.5 rounded-full ${prioridadeColor(prioridade)}`}>{prioridade}</span>
           </div>
@@ -393,13 +423,21 @@ export default function CarteiraAtivaTab({ clientes = [], onNovoCliente: _onNovo
       const s = c.situacao_atual || c.momento || "";
       return c.ativo !== false && !isComprador(c) && !SITUACOES_ENCERRADAS_SEM_VENDA.includes(s);
     });
+
+    const hojeClientes = safeClientes.filter(c => {
+      if (!c) return false;
+      const s = c.situacao_atual || c.momento || "";
+      if (c.ativo === false || SITUACOES_ENCERRADAS_SEM_VENDA.includes(s)) return false;
+      return (!isComprador(c) || isPosVenda30Dias(c) || isRecompra1Ano(c)) && filtrarHoje(c);
+    });
+
     return {
-      hoje: activeN.filter(CARDS[0].filtro).length,
+      hoje: hojeClientes.length,
       amanha: activeN.filter(CARDS[1].filtro).length,
       d2: activeN.filter(CARDS[2].filtro).length,
       d3: activeN.filter(CARDS[3].filtro).length,
       compraram: safeClientes.filter(isComprador).length,
-      todos: safeClientes.filter(c => c && c.ativo !== false).length,
+      todos: safeClientes.filter(c => c && c.ativo !== false && !SITUACOES_ENCERRADAS_SEM_VENDA.includes(c.situacao_atual || c.momento || "")).length,
     };
   }, [safeClientes, CARDS, isComprador]);
 
@@ -410,7 +448,14 @@ export default function CarteiraAtivaTab({ clientes = [], onNovoCliente: _onNovo
     if (cardAtivo === "compraram") {
       lista = lista.filter(isComprador);
     } else if (cardAtivo === "todos") {
-      lista = lista.filter(c => c && c.ativo !== false);
+      lista = lista.filter(c => c && c.ativo !== false && !SITUACOES_ENCERRADAS_SEM_VENDA.includes(c.situacao_atual || c.momento || ""));
+    } else if (cardAtivo === "hoje") {
+      lista = lista.filter(c => {
+        if (!c) return false;
+        const s = c.situacao_atual || c.momento || "";
+        if (c.ativo === false || SITUACOES_ENCERRADAS_SEM_VENDA.includes(s)) return false;
+        return (!isComprador(c) || isPosVenda30Dias(c) || isRecompra1Ano(c)) && filtrarHoje(c);
+      });
     } else {
       lista = lista.filter(c => {
         if (!c) return false;

@@ -9,6 +9,7 @@ export type PageHeadingProps = {
   actions?: ReactNode
   breadcrumb?: ReactNode
   icon?: LucideIcon
+  className?: string
 }
 
 export function PageHeading({
@@ -17,6 +18,7 @@ export function PageHeading({
   actions,
   breadcrumb,
   icon: Icon = LayoutDashboard,
+  className,
 }: PageHeadingProps) {
   // Mantém a API histórica usada pelas páginas internas, mas a geometria é
   // única: todos os headers passam pelo mesmo organismo canônico.
@@ -30,6 +32,7 @@ export function PageHeading({
       actions={actions}
       titleVariant="h2"
       descriptionVariant="p"
+      className={className}
     />
   )
 }
