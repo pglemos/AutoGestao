@@ -17,6 +17,7 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/organisms/Table'
 import { toast } from '@/lib/toast'
 import { MONTH_LABELS, buildDependentsMap, computeValueMap, getFormatConfig, formatDisplay } from '../indicadores/indicatorFormulas'
+import { diagnoseEmptyImport } from '../indicadores/importDiagnosis'
 import {
   buildMonthlyGrid,
   buildStoreCopyMutations,
@@ -526,19 +527,22 @@ function TargetImportModal(props: {
   onImported: () => void
 }) {
   const [changes, setChanges] = useState<Array<{ indicatorCode: string; month: number; newValue: number | null; action: string }>>([])
+  const [problem, setProblem] = useState<string | null>(null)
   const [importing, setImporting] = useState(false)
 
   useEffect(() => {
     let active = true
     void (async () => {
       try {
-        const { readXlsxRows } = await import('@/lib/xlsx-reader')
+        const { readXlsxTable } = await import('@/lib/xlsx-reader')
         const buffer = await props.file.arrayBuffer()
-        const matrix = readXlsxRows(buffer)
+        const { headers, rows: matrix } = readXlsxTable(buffer)
         const monthKeys = MONTH_LABELS.map((label, index) => ({ label, month: index + 1 }))
         const next: Array<{ indicatorCode: string; month: number; newValue: number | null; action: string }> = []
+        const codesInFile: string[] = []
         for (const row of matrix) {
           const code = String(row['Código'] ?? '').trim()
+          if (code) codesInFile.push(code)
           const indicator = props.indicators.find(item => item.code === code)
           if (!indicator || indicator.calculado) continue
           for (const { label, month } of monthKeys) {
@@ -549,7 +553,9 @@ function TargetImportModal(props: {
             next.push({ indicatorCode: code, month, newValue: value, action: 'UPDATE' })
           }
         }
-        if (active) setChanges(next)
+        if (!active) return
+        setChanges(next)
+        setProblem(next.length > 0 ? null : diagnoseEmptyImport({ headers, matrix, codesInFile, indicators: props.indicators }))
       } catch (cause) {
         if (active) toast.error(cause instanceof Error ? cause.message : 'Não foi possível ler a planilha.')
       }
@@ -591,7 +597,11 @@ function TargetImportModal(props: {
       )}
     >
       <div className="mt-5 space-y-4">
-        <MxStatusBanner tone="info">{props.file.name} · {changes.length} célula(s) de meta detectada(s).</MxStatusBanner>
+        <MxStatusBanner tone={problem ? 'warning' : 'info'}>
+          {problem
+            ? `${props.file.name} · nenhuma meta importada. ${problem}`
+            : `${props.file.name} · ${changes.length} célula(s) de meta detectada(s).`}
+        </MxStatusBanner>
         <div className="max-h-72 overflow-auto rounded-lg border border-border">
           <Table className="min-w-[520px]">
             <TableHeader>

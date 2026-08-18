@@ -98,12 +98,22 @@ const firstSheetPath = (files: Record<string, Uint8Array>) => {
   return Object.keys(files).find(name => name.startsWith('xl/worksheets/') && name.endsWith('.xml'))
 }
 
+export type XlsxTable = {
+  /** Cabeçalhos na ordem em que aparecem na primeira linha. */
+  headers: string[]
+  rows: Array<Record<string, unknown>>
+}
+
 /**
  * Converte a primeira planilha do arquivo em registros chaveados pelo
- * cabeçalho. Lança `Error` com mensagem em português quando o arquivo não é
- * um .xlsx legível.
+ * cabeçalho, devolvendo também os cabeçalhos lidos — necessários para explicar
+ * ao usuário por que uma planilha não gerou nenhum registro (coluna renomeada,
+ * aba errada, arquivo de outro relatório).
+ *
+ * Lança `Error` com mensagem em português quando o arquivo não é um .xlsx
+ * legível.
  */
-export function readXlsxRows(buffer: ArrayBuffer): Array<Record<string, unknown>> {
+export function readXlsxTable(buffer: ArrayBuffer): XlsxTable {
   let files: Record<string, Uint8Array>
   try {
     files = unzipSync(new Uint8Array(buffer))
@@ -130,10 +140,10 @@ export function readXlsxRows(buffer: ArrayBuffer): Array<Record<string, unknown>
   }
 
   const [header, ...body] = rows
-  if (!header) return []
+  if (!header) return { headers: [], rows: [] }
 
   const headers = header.map(value => String(value ?? '').trim())
-  return body
+  const records = body
     .filter(row => row.some(value => value !== undefined && value !== ''))
     .map(row => {
       const record: Record<string, unknown> = {}
@@ -142,4 +152,11 @@ export function readXlsxRows(buffer: ArrayBuffer): Array<Record<string, unknown>
       })
       return record
     })
+
+  return { headers: headers.filter(name => name !== ''), rows: records }
+}
+
+/** Atalho para quem só precisa dos registros. */
+export function readXlsxRows(buffer: ArrayBuffer): Array<Record<string, unknown>> {
+  return readXlsxTable(buffer).rows
 }
