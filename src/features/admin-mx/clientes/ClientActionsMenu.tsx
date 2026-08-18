@@ -22,11 +22,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { CLIENT_LIFECYCLE_LABELS, clientActionsFor, resolveClientLifecycle, type ClientAction, type ClientLifecycleRow } from './clientLifecycle'
+import { clientActionsFor, type ClientAction, type ClientLifecycleRow } from './clientLifecycle'
 export type { ClientAction }
 
 export const CLIENT_ACTION_LABELS: Record<ClientAction, string> = {
@@ -65,14 +63,11 @@ const ACTION_ICONS: Record<ClientAction, typeof Compass> = {
 
 const Base44DropdownContent = DropdownMenuContent as unknown as ComponentType<{ children: ReactNode; align?: 'end'; className?: string }>
 const Base44DropdownItem = DropdownMenuItem as unknown as ComponentType<{ children: ReactNode; className?: string; role?: 'menuitem'; onSelect: () => void; 'data-action'?: string }>
-const Base44DropdownLabel = DropdownMenuLabel as unknown as ComponentType<{ children: ReactNode; className?: string }>
-const Base44DropdownSeparator = DropdownMenuSeparator as unknown as ComponentType<Record<string, never>>
 
 export function ClientActionsMenu(props: {
   client: ClientLifecycleRow & { name?: string }
   onAction: (action: ClientAction) => void
 }) {
-  const lifecycle = resolveClientLifecycle(props.client)
   const actions = useMemo(() => clientActionsFor(props.client), [props.client])
 
   return (
@@ -83,10 +78,6 @@ export function ClientActionsMenu(props: {
         </Button>
       </DropdownMenuTrigger>
       <Base44DropdownContent align="end" className="w-64">
-        <Base44DropdownLabel className="text-caption font-medium text-muted-foreground uppercase tracking-wider px-2 py-1.5">
-          Status: {CLIENT_LIFECYCLE_LABELS[lifecycle]}
-        </Base44DropdownLabel>
-        <Base44DropdownSeparator />
         {actions.map(action => {
           const Icon = ACTION_ICONS[action] ?? Compass
           const isDestructive = action === 'arquivar_loja'

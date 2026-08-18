@@ -377,7 +377,7 @@ export function PortfolioOverviewTab({
                     <TableHead className="w-[160px]">Jornada Consultiva</TableHead>
                     <TableHead className="w-[160px]">Equipe & Presença</TableHead>
                     <TableHead className="w-[160px]">Responsável MX</TableHead>
-                    <TableHead className="w-[180px]">Situação & Ação</TableHead>
+                    <TableHead className="w-[180px]">Próxima Ação</TableHead>
                     <TableHead className="w-[140px] text-right">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -477,24 +477,23 @@ export function PortfolioOverviewTab({
                           <div className="text-caption text-muted-foreground">{structureLabel(client)}</div>
                         </TableCell>
 
-                        {/* 6. Situação & Próxima Ação */}
+                        {/* 6. Próxima Ação */}
                         <TableCell>
                           <div className="space-y-1">
-                            <div className="flex items-center gap-1.5">
-                              <Badge variant={clientActive ? 'success' : 'outline'} className="text-caption">
-                                {clientActive ? 'Ativo' : 'Inativo'}
+                            {client.suspended_at ? (
+                              <Badge variant="danger" className="text-caption">
+                                Suspenso
                               </Badge>
-                              {client.suspended_at && (
-                                <Badge variant="danger" className="text-caption">
-                                  Suspenso
-                                </Badge>
-                              )}
-                            </div>
-                            <div className="text-xs text-muted-foreground line-clamp-1" title={nextAction(client)}>
+                            ) : !clientActive ? (
+                              <Badge variant="outline" className="text-caption">
+                                Inativo
+                              </Badge>
+                            ) : null}
+                            <div className="text-xs text-foreground font-medium line-clamp-1" title={nextAction(client)}>
                               {nextAction(client)}
                             </div>
                             {blockers.length > 1 && (
-                              <span className="text-caption font-medium text-status-error-text">
+                              <span className="text-caption font-medium text-status-error-text block">
                                 +{blockers.length - 1} pendência(s)
                               </span>
                             )}
@@ -562,9 +561,11 @@ export function PortfolioOverviewTab({
                             </p>
                           </div>
                         </div>
-                        <Badge variant={clientActive ? 'success' : 'outline'}>
-                          {clientActive ? 'Ativo' : 'Inativo'}
-                        </Badge>
+                        {client.suspended_at ? (
+                          <Badge variant="danger">Suspenso</Badge>
+                        ) : !clientActive ? (
+                          <Badge variant="outline">Inativo</Badge>
+                        ) : null}
                       </div>
 
                       {/* Details Grid */}
