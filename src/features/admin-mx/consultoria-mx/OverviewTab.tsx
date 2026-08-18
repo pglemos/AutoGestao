@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/atoms/Button'
 import { MxMetricCard, MxMetricGrid, MxSectionCard, MxSectionHeader, MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
 import { METHODOLOGY_STATUS } from './methodology'
-import { fetchLibraryMaterials, fetchReportTemplates } from './consultoriaMxData'
+import { fetchLibraryMaterials, fetchReportTemplates, fetchUniversityLessons } from './consultoriaMxData'
 import type { ProductWithMethodology } from './consultoriaMxData'
 import { useEffect, useState } from 'react'
 import type { ConsultoriaMxTab } from './useConsultoriaMx'
@@ -16,10 +16,15 @@ export function OverviewTab(props: {
   const navigate = useNavigate()
   const [libraryCount, setLibraryCount] = useState<{ total: number; published: number }>({ total: 0, published: 0 })
   const [reportCount, setReportCount] = useState<{ total: number; published: number }>({ total: 0, published: 0 })
+  const [lessonsCount, setLessonsCount] = useState(0)
 
   useEffect(() => {
     void (async () => {
-      const [library, reports] = await Promise.all([fetchLibraryMaterials(), fetchReportTemplates()])
+      const [library, reports, lessons] = await Promise.all([
+        fetchLibraryMaterials(),
+        fetchReportTemplates(),
+        fetchUniversityLessons(),
+      ])
       setLibraryCount({
         total: library.rows.length,
         published: library.rows.filter(item => item.status === 'publicado').length,
@@ -28,6 +33,7 @@ export function OverviewTab(props: {
         total: reports.rows.length,
         published: reports.rows.filter(item => item.status === 'publicado').length,
       })
+      setLessonsCount(lessons.rows.length)
     })()
   }, [])
 
@@ -50,7 +56,7 @@ export function OverviewTab(props: {
     { label: 'Encontros com pendência', value: summary.pendingEncounters, icon: Video, tone: 'warning' as const, action: () => props.onNavigate('produtos') },
     { label: 'Vídeos publicados', value: summary.publishedVideos, icon: Video, tone: 'info' as const, action: () => props.onNavigate('biblioteca') },
     { label: 'Materiais publicados', value: libraryCount.published, icon: FileText, tone: 'warning' as const, action: () => props.onNavigate('biblioteca') },
-    { label: 'Aulas da Universidade', value: 0, icon: GraduationCap, tone: 'violet' as const, action: () => props.onNavigate('biblioteca') },
+    { label: 'Aulas da Universidade', value: lessonsCount, icon: GraduationCap, tone: 'violet' as const, action: () => props.onNavigate('biblioteca') },
     { label: 'Arquivos na biblioteca', value: libraryCount.total, icon: FileText, tone: 'warning' as const, action: () => props.onNavigate('biblioteca') },
     { label: 'Modelos de relatório', value: reportCount.published, icon: FileBarChart, tone: 'info' as const, action: () => props.onNavigate('relatorios') },
     { label: 'Alterações aguardando publicação', value: summary.pendingChanges, icon: BookOpen, tone: 'neutral' as const, action: () => props.onNavigate('produtos') },

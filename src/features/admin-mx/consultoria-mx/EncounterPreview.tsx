@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { AlertCircle, BookOpen, CheckCircle2, FileBarChart, FileText, Video, Zap } from 'lucide-react'
+import { AlertCircle, BookOpen, CheckCircle2, FileBarChart, FileText, Users, Video, Zap } from 'lucide-react'
 import { Modal } from '@/components/organisms/Modal'
 import { MxLoadingState, MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
-import { CONTENT_TYPES } from './methodology'
+import { CONTENT_TYPES, splitRoles } from './methodology'
 import { fetchEncounterEditorData } from './consultoriaMxData'
 
 export function EncounterPreview(props: {
@@ -30,20 +30,56 @@ export function EncounterPreview(props: {
   const evidence = (data?.evidence ?? []).filter(item => item.status !== 'arquivado')
   const actionPlans = (data?.actionPlans ?? []).filter(item => item.status === 'ativo')
 
+  const title = data?.content?.objective
+    ? `Encontro ${props.visitNumber}: ${data.content.objective} — ${props.productName}`
+    : `Encontro ${props.visitNumber}: ${props.productName}`
+
   return (
-    <Modal open onClose={props.onClose} title={`Encontro ${props.visitNumber}: ${props.productName}`} description="Prévia do Módulo Dono" size="2xl">
+    <Modal open onClose={props.onClose} title={title} description="Prévia do Módulo Dono" size="2xl">
       <div className="space-y-5">
         {error && <MxStatusBanner tone="danger">{error}</MxStatusBanner>}
         <div className="rounded-lg border border-status-warning/30 bg-status-warning-surface px-5 py-2 text-center text-xs font-medium text-status-warning-text">
-          PRÉVIA DO MÓDULO DONO — METODOLOGIA AINDA NÃO PUBLICADA
+          PRÉVIA DO MÓDULO DONO — VISUALIZAÇÃO COMO CLIENTE
         </div>
         {!data ? <MxLoadingState label="Carregando prévia" /> : (
           <>
             <PreviewSection icon={BookOpen} title="Objetivo">
               {data.content?.objective ? <p className="text-sm text-foreground">{data.content.objective}</p> : <Empty />}
+              {data.content?.reason && <div className="mt-2 text-xs text-muted-foreground"><span className="font-medium">Justificativa: </span>{data.content.reason}</div>}
               {data.content?.expected_result && <div className="mt-2 text-xs text-muted-foreground"><span className="font-medium">Resultado esperado: </span>{data.content.expected_result}</div>}
               {data.content?.client_observation && <div className="mt-2 text-xs text-muted-foreground"><span className="font-medium">Observação: </span>{data.content.client_observation}</div>}
             </PreviewSection>
+
+            {(data.content?.required_participant_roles || data.content?.recommended_participant_roles) && (
+              <PreviewSection icon={Users} title="Participantes">
+                {data.content?.required_participant_roles && (
+                  <div className="mb-2">
+                    <span className="text-xs font-medium text-foreground">Obrigatórios: </span>
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      {splitRoles(data.content.required_participant_roles).map(role => (
+                        <span key={role} className="rounded-full bg-brand-primary/10 px-2 py-0.5 text-xs font-medium text-brand-primary">{role}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {data.content?.recommended_participant_roles && (
+                  <div>
+                    <span className="text-xs font-medium text-muted-foreground">Recomendados: </span>
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      {splitRoles(data.content.recommended_participant_roles).map(role => (
+                        <span key={role} className="rounded-full bg-surface-alt px-2 py-0.5 text-xs text-muted-foreground">{role}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </PreviewSection>
+            )}
+
+            {data.content?.prerequisites && (
+              <PreviewSection icon={FileText} title="Pré-requisitos">
+                <p className="text-sm text-foreground">{data.content.prerequisites}</p>
+              </PreviewSection>
+            )}
 
             <PreviewSection icon={Video} title="Aula e Vídeo">
               {contentRefs.filter(ref => ref.content_type !== 'FILE').length === 0 ? <Empty /> : (

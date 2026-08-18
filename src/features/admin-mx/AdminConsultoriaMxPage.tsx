@@ -27,21 +27,21 @@ export function AdminConsultoriaMxPage() {
           title="Consultoria MX"
           description="Configure a metodologia, os conteúdos e as entregas padrão de cada encontro da consultoria."
           actions={
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <Button variant="outline" size="sm" onClick={go('produtos')} aria-label="Configurar produto">
                 <FileText size={14} />Configurar Produto
               </Button>
-              <Button variant="outline" size="sm" onClick={go('biblioteca')} aria-label="Adicionar material">
+              <Button variant="outline" size="sm" onClick={controller.navigateToAddMaterial} aria-label="Adicionar material">
                 <Plus size={14} />Adicionar Material
               </Button>
-              <Button variant="outline" size="sm" onClick={go('relatorios')} aria-label="Criar modelo de relatório">
+              <Button variant="outline" size="sm" onClick={controller.navigateToCreateReportTemplate} aria-label="Criar modelo de relatório">
                 <FileText size={14} />Criar Modelo de Relatório
               </Button>
               <Button variant="outline" size="sm" onClick={go('historico')} aria-label="Abrir histórico">
                 <HistoryIcon size={14} />Abrir Histórico
               </Button>
-              <Button variant="outline" onClick={() => void controller.refetch()} aria-label="Atualizar metodologia">
-                <RefreshCw size={16} />Atualizar
+              <Button variant="outline" size="sm" onClick={() => void controller.refetch()} disabled={controller.loading} aria-label="Atualizar metodologia">
+                <RefreshCw size={14} className={controller.loading ? 'animate-spin' : ''} />Atualizar
               </Button>
             </div>
           }

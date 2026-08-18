@@ -125,7 +125,16 @@ export function EncounterEditor(props: {
       </div>
 
       <TabNav
-        tabs={ENCOUNTER_INNER_TABS.map(tab => ({ key: tab.id, label: tab.label }))}
+        tabs={ENCOUNTER_INNER_TABS.map(tab => {
+          let count: number | null = null
+          if (tab.id === 'aula') count = data.contentRefs.filter(ref => ref.content_type !== 'FILE').length
+          if (tab.id === 'entrega') count = data.deliverables.length
+          if (tab.id === 'evidencias') count = data.evidence.length
+          if (tab.id === 'arquivos') count = data.contentRefs.filter(ref => ref.content_type === 'FILE').length
+          if (tab.id === 'planos') count = data.actionPlans.length
+          const label = count !== null && count > 0 ? `${tab.label} (${count})` : tab.label
+          return { key: tab.id, label }
+        })}
         activeTab={activeInner}
         onTabChange={setActiveInner}
         scrollable
