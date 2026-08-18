@@ -1,4 +1,4 @@
-import { Calendar, Globe, Webhook, ExternalLink, ShieldCheck, Database, Zap } from 'lucide-react'
+import { Calendar, Globe, Webhook, ExternalLink, ShieldCheck } from 'lucide-react'
 import { Card } from '@/components/molecules/Card'
 import { Button } from '@/components/atoms/Button'
 import { Typography } from '@/components/atoms/Typography'
@@ -31,20 +31,6 @@ export function IntegracoesTab() {
                     desc="Coordenação central de visitas e eventos da rede"
                     badge="Operacional"
                     route="/agenda"
-                />
-                <IntegrationCard
-                    icon={<Database size={22} />}
-                    title="Reprocessamento de Dados"
-                    desc="Reimportação manual de dados brutos por loja"
-                    badge="Manual"
-                    route="/configuracoes/reprocessamento"
-                />
-                <IntegrationCard
-                    icon={<Zap size={22} />}
-                    title="Auditoria de Funil"
-                    desc="Diagnóstico heurístico da rede com benchmarks MX"
-                    badge="MX"
-                    route="/auditoria"
                 />
                 <IntegrationCard
                     icon={<ShieldCheck size={22} />}

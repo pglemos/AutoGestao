@@ -92,8 +92,8 @@ describe('registro de layout por rota', () => {
   it('prefere a rota mais específica, independente da ordem de declaração', () => {
     // A subrota tem decisão própria e não herda a do prefixo.
     expect(resolveRouteLayout('configuracoes').width).toBe('dashboard')
-    expect(resolveRouteLayout('configuracoes/operacional').width).toBe('focused')
-    expect(resolveRouteLayout('configuracoes/reprocessamento').width).toBe('form')
+    expect(resolveRouteLayout('configuracoes/remuneracao').width).toBe('dashboard')
+    expect(resolveRouteLayout('configuracoes/consultoria-pmr').width).toBe('focused')
   })
 
   it('normaliza barras iniciais e finais', () => {

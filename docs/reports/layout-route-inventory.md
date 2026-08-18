@@ -1,8 +1,8 @@
 # Inventário de Rotas — Layout
 
-- Gerado em: 2026-08-17T07:26:15.335Z
-- Baseline SHA: `526fd95e64ec11d47abc43caf6d75399051957e7`
-- Total de rotas: 120
+- Gerado em: 2026-08-18T18:08:15.367Z
+- Baseline SHA: `b629ddad11d6528be022f9e1e51cebf09e9ebecf`
+- Total de rotas: 117
 
 | Path | Rota p/ perfil | Arquivo(s) | Canvas | Template | Estrutural | Width | Clearance | Adotada |
 |---|---|---|---|---|---|---|---|---|
@@ -10,7 +10,6 @@
 | /* | *:NotFound | `src/pages/NotFound.tsx` | 0 | 0 | 2 | dashboard | — | não |
 | /agenda | *:AgendaAdmin | `src/features/agenda-admin/AgendaAdmin.container.tsx` | 0 | 4 | 0 | dashboard | — | não |
 | /ajuda | vendedor:VendedorAjuda, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:ForbiddenRoute | `src/pages/VendedorAjuda.tsx` | 0 | 4 | 0 | dashboard | — | não |
-| /auditoria | vendedor:ForbiddenRoute, gerente:AiDiagnostics, dono:ForbiddenRoute, admin:AiDiagnostics | `src/pages/AiDiagnostics.tsx` | 0 | 0 | 0 | dashboard | — | não |
 | /banco-talentos | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:Comportamental, admin:Comportamental | `src/features/comportamental/ComportamentalPage.tsx` | 3 | 0 | 0 | dashboard | — | sim |
 | /carteira | *:RedirectWithSearch | — | 0 | 0 | 0 | dashboard | — | não |
 | /carteira-clientes | vendedor:CarteiraClientes, gerente:CarteiraClientes, dono:CarteiraClientes, admin:CarteiraClientes | `src/features/carteira-clientes/pages/CarteiraClientesBase44Page.tsx` | 3 | 0 | 0 | wide | navigation | sim |
@@ -22,13 +21,11 @@
 | /clientes/novo | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:AdminNovoClientePage | `src/features/admin-mx/AdminNovoClientePage.tsx` | 0 | 0 | 0 | wide | navigation | sim |
 | /configuracoes | vendedor:VendedorConfiguracoes, gerente:Configuracoes, dono:Configuracoes, admin:Configuracoes | `src/pages/VendedorConfiguracoes.tsx`<br>`src/pages/Configuracoes.tsx` | 0 | 4 | 0 | dashboard | — | não |
 | /configuracoes/consultoria-pmr | *:ConsultoriaParametros | `src/pages/ConsultoriaParametros.tsx` | 0 | 0 | 0 | focused | none | sim |
-| /configuracoes/operacional | *:OperationalSettings | `src/pages/OperationalSettings.tsx` | 0 | 0 | 0 | focused | none | sim |
 | /configuracoes/remuneracao | *:Configuracoes | `src/pages/Configuracoes.tsx` | 0 | 0 | 0 | dashboard | navigation | sim |
-| /configuracoes/reprocessamento | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:Reprocessamento | `src/features/reprocessing/ReprocessingGuardedPage.tsx` | 0 | 0 | 0 | form | none | sim |
 | /consultor-ia | *:ConsultorIaAliasRedirect | — | 0 | 0 | 0 | reading | actions | não |
 | /consultoria | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:OwnerConsultoria, admin:InternalConsultingPage | `src/features/internal-mx-planning/InternalConsultingPage.tsx` | 0 | 0 | 0 | dashboard | — | não |
 | /consultoria-mx | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:AdminConsultoriaMxPage | `src/features/admin-mx/AdminConsultoriaMxPage.tsx` | 0 | 0 | 0 | wide | navigation | sim |
-| /consultoria/clientes | *:ConsultoriaClientes | `src/pages/ConsultoriaClientes.tsx` | 0 | 0 | 0 | wide | navigation | sim |
+| /consultoria/clientes | *:Navigate | — | 0 | 0 | 0 | wide | navigation | não |
 | /consultoria/clientes/:clientSlug | *:ConsultoriaClienteDetalhe | `src/pages/ConsultoriaClienteDetalhe.tsx` | 0 | 0 | 0 | wide | navigation | sim |
 | /consultoria/clientes/:clientSlug/visitas/:visitNumber | *:ConsultoriaVisitaExecucao | `src/pages/ConsultoriaVisitaExecucao.tsx` | 0 | 0 | 0 | wide | navigation | sim |
 | /dados | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:AdminDadosConciliacaoPage | `src/features/admin-mx/AdminDadosConciliacaoPage.tsx` | 0 | 0 | 1 | dashboard | — | não |
@@ -60,7 +57,7 @@
 | /lancamento-diario | *:RedirectWithSearch | — | 0 | 0 | 0 | focused | actions | não |
 | /liberacao-fechamento | *:LiberacaoFechamento | `src/pages/LiberacaoFechamento.tsx` | 0 | 0 | 2 | wide | — | não |
 | /login | *:Login | `src/pages/Login.tsx` | 0 | 0 | 2 | dashboard | — | não |
-| /lojas | *:Lojas | `src/features/lojas/Lojas.container.tsx` | 0 | 0 | 0 | dashboard | — | não |
+| /lojas | *:Navigate | — | 0 | 0 | 0 | dashboard | — | não |
 | /lojas/:storeSlug | vendedor:ForbiddenRoute, gerente:DashboardLoja, dono:DashboardLoja, admin:DashboardLoja | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 5 | 0 | 0 | wide | — | sim |
 | /lojas/:storeSlug/consultor-ia | vendedor:StoreConsultorIa, gerente:StoreConsultorIa, dono:StoreConsultorIa, admin:StoreConsultorIa | `src/features/central-mx/StoreConsultorIa.container.tsx` | 0 | 6 | 1 | dashboard | navigation | sim |
 | /lojas/:storeSlug/equipe | vendedor:ForbiddenRoute, gerente:DashboardLoja, dono:DashboardLoja, admin:DashboardLoja | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 5 | 0 | 0 | wide | — | sim |

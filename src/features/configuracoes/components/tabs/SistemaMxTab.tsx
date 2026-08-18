@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Activity, AlertTriangle, Database, Download, ExternalLink, Server, ShieldCheck, Cpu, RefreshCw } from 'lucide-react'
+import { Activity, AlertTriangle, Database, Download, ExternalLink, Server, Cpu, RefreshCw } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { Card } from '@/components/molecules/Card'
 import { Button } from '@/components/atoms/Button'
@@ -144,27 +144,6 @@ export function SistemaMxTab() {
 
             {/* Operações críticas */}
             <div className="grid md:grid-cols-4 gap-mx-md">
-                <CriticalOpCard
-                    icon={<RefreshCw size={22} />}
-                    label="Reprocessamento"
-                    desc="Reimportar dados brutos de uma loja"
-                    route="/configuracoes/reprocessamento"
-                    severity="warning"
-                />
-                <CriticalOpCard
-                    icon={<Cpu size={22} />}
-                    label="Auditoria de Funil"
-                    desc="Diagnóstico heurístico MX 20/60/33"
-                    route="/auditoria"
-                    severity="info"
-                />
-                <CriticalOpCard
-                    icon={<ShieldCheck size={22} />}
-                    label="Configuração Operacional"
-                    desc="Página dedicada de parâmetros por loja"
-                    route="/configuracoes/operacional"
-                    severity="info"
-                />
                 <ExportContactsCard
                     exporting={exportingContacts}
                     onExport={handleExportContacts}

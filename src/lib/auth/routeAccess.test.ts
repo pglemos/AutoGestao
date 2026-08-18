@@ -30,7 +30,7 @@ describe('route access matrix', () => {
   })
 
   it('keeps admin-only modules closed to store roles', () => {
-    for (const route of ['/painel', '/agenda', '/consultoria/clientes', '/configuracoes/operacional', '/configuracoes/reprocessamento']) {
+    for (const route of ['/painel', '/agenda', '/consultoria/clientes']) {
       expect(canAccessPath(route, 'administrador_geral')).toBe(true)
       expect(canAccessPath(route, 'vendedor')).toBe(false)
       expect(canAccessPath(route, 'gerente')).toBe(false)
@@ -144,14 +144,6 @@ describe('route access matrix', () => {
     expect(canAccessPath('/relatorios/performance-vendedor?id=abc', 'vendedor')).toBe(false)
   })
 
-  it('matches known role redirects for the audit diagnostics route', () => {
-    expect(canAccessPath('/auditoria', 'administrador_mx')).toBe(true)
-    expect(canAccessPath('/auditoria', 'consultor_mx')).toBe(true)
-    expect(canAccessPath('/auditoria', 'gerente')).toBe(true)
-    expect(canAccessPath('/auditoria', 'dono')).toBe(false)
-    expect(canAccessPath('/auditoria', 'vendedor')).toBe(false)
-  })
-
   it('denies unknown authenticated routes by default', () => {
     expect(getRouteAccessRule('/rota-inexistente')).toBeNull()
     expect(canAccessPath('/rota-inexistente', 'vendedor')).toBe(false)
@@ -164,7 +156,6 @@ describe('route access matrix', () => {
     expect(canAccessPath('/configuracoes', 'vendedor')).toBe(true)
     expect(canAccessPath('/settings', 'dono')).toBe(true)
     expect(canAccessPath('/settings', 'vendedor')).toBe(false)
-    expect(canAccessPath('/configuracoes/operacional', 'vendedor')).toBe(false)
     expect(canAccessPath('/produtos', 'gerente')).toBe(true)
     expect(canAccessPath('/produtos', 'vendedor')).toBe(false)
     expect(canAccessPath('/pdi/abc/print', 'gerente')).toBe(true)
@@ -247,7 +238,6 @@ describe('route access matrix', () => {
     expect(canAccessPath('/meu-perfil-vendedor', 'gerente')).toBe(false)
     expect(canAccessPath('/vendedor/perfil', 'gerente')).toBe(false)
     expect(canAccessPath('/configuracoes', 'vendedor')).toBe(true)
-    expect(canAccessPath('/configuracoes/operacional', 'vendedor')).toBe(false)
   })
 
   it('keeps seller funnel aliases exclusive to the seller flow rendered by App', () => {

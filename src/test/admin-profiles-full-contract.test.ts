@@ -34,9 +34,7 @@ const ADMIN_EXCLUSIVE_ROUTES = [
   '/consultoria-mx',
   '/indicadores',
   '/planos-acao',
-  '/configuracoes/operacional',
   '/configuracoes/consultoria-pmr',
-  '/configuracoes/reprocessamento',
 ]
 
 /** Páginas dos painéis admin e o primitive canônico que devem usar. */
@@ -56,8 +54,6 @@ const ADMIN_PAGES: Array<[string, string]> = [
   ['src/features/agenda-admin/AgendaAdmin.container.tsx', 'PageTemplate'],
   // 28.008/28.009/28.010: Configurações, Reprocessamento, Auditoria.
   ['src/features/configuracoes/components/ConfiguracoesShell.tsx', 'MxModulePage'],
-  ['src/features/reprocessing/LegacyReprocessamentoPage.tsx', 'MxModulePage'],
-  ['src/features/operational-diagnostics/OperationalDiagnosticsPage.tsx', 'MxModulePage'],
 ]
 
 describe('FASE AB — perfis administrador', () => {

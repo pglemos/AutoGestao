@@ -39,7 +39,7 @@ const MANAGER_ROUTES = [
   '/rotina-equipe', '/minha-equipe',
   '/meta-loja', '/mentor', '/feedbacks-pdis',
   // `/metas` saiu: virou redirecionamento para `/meta-loja`, já coberta acima.
-  '/funil-vendas', '/falar-consultor', '/auditoria',
+  '/funil-vendas', '/falar-consultor',
 ] as const
 
 const OWNER_ROUTES = [
@@ -57,10 +57,10 @@ const OWNER_ROUTES = [
 const INTERNAL_SHARED_ROUTES = [
   ...SHARED_LEADERSHIP_ROUTES, ...STORE_LEADERSHIP_ROUTES, '/plano-acao', '/painel', '/simulacao', '/simulacao/vendedor',
   '/simulacao/gerente', '/simulacao/dono', '/lojas', '/agenda', '/consultoria',
-  '/consultoria/clientes', '/configuracoes/operacional', '/configuracoes/consultoria-pmr',
-  '/configuracoes/reprocessamento', '/rotina',
+  '/consultoria/clientes', '/configuracoes/consultoria-pmr',
+  '/rotina',
   '/rotina-equipe', '/minha-equipe', '/meta-loja', '/mentor',
-  '/feedbacks-pdis', '/auditoria',
+  '/feedbacks-pdis',
   '/organograma', '/banco-talentos',
 ] as const
 

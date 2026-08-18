@@ -79,10 +79,7 @@ const AdminDadosConciliacaoPage = lazy(() => import('@/features/admin-mx/AdminDa
 const AdminSegurancaAuditoriaPage = lazy(() => import('@/features/admin-mx/AdminSegurancaAuditoriaPage'))
 const AdminSuporteIncidentesPage = lazy(() => import('@/features/admin-mx/AdminSuporteIncidentesPage'))
 const Configuracoes = lazy(() => import('@/pages/Configuracoes'))
-const OperationalSettings = lazy(() => import('@/pages/OperationalSettings'))
 const ConsultoriaParametros = lazy(() => import('@/pages/ConsultoriaParametros'))
-const Reprocessamento = lazy(() => import('@/pages/Reprocessamento'))
-const AiDiagnostics = lazy(() => import('@/pages/AiDiagnostics'))
 const MorningReport = lazy(() => import('@/pages/MorningReport'))
 const SalesPerformance = lazy(() => import('@/pages/SalesPerformance'))
 const SellerPerformance = lazy(() => import('@/pages/SellerPerformance'))
@@ -507,17 +504,10 @@ export default function App() {
                   <RoleSwitch vendedor={<VendedorConfiguracoes />} gerente={<Configuracoes />} dono={<Configuracoes />} admin={<Configuracoes />} />
                 </Suspense>} />
                 <Route path="configuracoes/remuneracao" element={<Suspense fallback={<Spinner />}><Configuracoes initialTab="remuneracao" /></Suspense>} />
-                <Route path="configuracoes/operacional" element={<Suspense fallback={<Spinner />}><OperationalSettings /></Suspense>} />
                 <Route path="configuracoes/consultoria-pmr" element={<Suspense fallback={<Spinner />}><ConsultoriaParametros /></Suspense>} />
-                <Route path="configuracoes/reprocessamento" element={<Suspense fallback={<Spinner />}>
-                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<Reprocessamento />} />
-                </Suspense>} />
                 <Route path="relatorio-matinal" element={<Suspense fallback={<Spinner />}><MorningReport /></Suspense>} />
                 <Route path="relatorios/performance-vendas" element={<Suspense fallback={<Spinner />}><SalesPerformance /></Suspense>} />
                 <Route path="relatorios/performance-vendedor" element={<Suspense fallback={<Spinner />}><SellerPerformance /></Suspense>} />
-                <Route path="auditoria" element={<Suspense fallback={<Spinner />}>
-                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<AiDiagnostics />} dono={<ForbiddenRoute />} admin={<AiDiagnostics />} />
-                </Suspense>} />
                 <Route path="scores" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminScoresAlertasPage />} />
                 </Suspense>} />

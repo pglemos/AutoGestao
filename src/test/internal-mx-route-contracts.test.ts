@@ -70,11 +70,8 @@ const routePaths = [
   'relatorio-matinal',
   'relatorios/performance-vendas',
   'relatorios/performance-vendedor',
-  'auditoria',
   'configuracoes',
-  'configuracoes/operacional',
   'configuracoes/consultoria-pmr',
-  'configuracoes/reprocessamento',
 ]
 
 describe('contrato do módulo interno MX', () => {

@@ -6,14 +6,6 @@ const root = process.cwd()
 const read = (path: string) => readFileSync(join(root, path), 'utf8')
 
 describe('Onda 1: fundação, permissões e testes', () => {
-  test('Configuração Operacional usa página canônica e modo somente leitura explícito', () => {
-    const page = read('src/pages/OperationalSettings.tsx')
-    expect(page).toContain('MxModulePage accessMode={accessMode}')
-    expect(page).toContain('data-mx-requires-manage')
-    expect(page).toContain('readOnlyMessage')
-    expect(page).not.toContain('PageHeading')
-  })
-
   test('Parâmetros PMR usa página canônica e bloqueia mutação para consulta', () => {
     const page = read('src/features/consultoria/components/ConsultingParametersView.tsx')
     const hook = read('src/hooks/useConsultingParameters.ts')

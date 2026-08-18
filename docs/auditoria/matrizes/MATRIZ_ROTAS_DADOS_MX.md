@@ -1,14 +1,14 @@
 # Matriz reproduzível de rotas, autorização e dados
 
-- Rotas declaradas em `src/App.tsx`: **122**
-- Rotas protegidas: **113**
+- Rotas declaradas em `src/App.tsx`: **119**
+- Rotas protegidas: **110**
 - Rotas públicas: **9**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
 - Tabelas referenciadas pelo runtime: **174**
 - RPCs referenciadas pelo runtime: **89**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **370**
+- Pares tabela/operação encontrados: **376**
 
 ## Rotas
 
@@ -122,13 +122,10 @@
 | `/planos-acao` | route | protegida | — | `/planos-acao` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminPlanosAcaoGlobalPage />} /> </Suspen` |
 | `/configuracoes` | route | protegida | — | `/configuracoes` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorConfiguracoes />} gerente={<Configuracoes />} dono={<Configuracoes />} admin={<Configuracoes />} /> </Suspense>` |
 | `/configuracoes/remuneracao` | route | protegida | — | `/configuracoes/remuneracao` | — | `<Suspense fallback={<Spinner />}><Configuracoes initialTab="remuneracao" /></Suspense>` |
-| `/configuracoes/operacional` | route | protegida | — | `/configuracoes/operacional` | — | `<Suspense fallback={<Spinner />}><OperationalSettings /></Suspense>` |
 | `/configuracoes/consultoria-pmr` | route | protegida | — | `/configuracoes/consultoria-pmr` | — | `<Suspense fallback={<Spinner />}><ConsultoriaParametros /></Suspense>` |
-| `/configuracoes/reprocessamento` | route | protegida | — | `/configuracoes/reprocessamento` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<Reprocessamento />} /> </Suspense>` |
 | `/relatorio-matinal` | route | protegida | — | `/relatorio-matinal` | — | `<Suspense fallback={<Spinner />}><MorningReport /></Suspense>` |
 | `/relatorios/performance-vendas` | route | protegida | — | `/relatorios/performance-vendas` | — | `<Suspense fallback={<Spinner />}><SalesPerformance /></Suspense>` |
 | `/relatorios/performance-vendedor` | route | protegida | — | `/relatorios/performance-vendedor` | — | `<Suspense fallback={<Spinner />}><SellerPerformance /></Suspense>` |
-| `/auditoria` | route | protegida | — | `/auditoria` | vendedor, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<AiDiagnostics />} dono={<ForbiddenRoute />} admin={<AiDiagnostics />} /> </Suspense>` |
 | `/scores` | route | protegida | — | `/scores` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminScoresAlertasPage />} /> </Suspense>` |
 | `/scores-alertas` | route | protegida | — | `/scores-alertas` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminScoresAlertasPage />} /> </Suspense>` |
 | `/dados` | route | protegida | — | `/dados` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminDadosConciliacaoPage />} /> </Suspen` |
@@ -250,7 +247,7 @@
 | `pdis` | 4 |
 | `perfil_consultor_mx` | 4 |
 | `planejamentos_estrategicos` | 1 |
-| `planos_acao` | 11 |
+| `planos_acao` | 12 |
 | `planos_acao_template_itens` | 3 |
 | `planos_acao_template_versoes` | 4 |
 | `planos_acao_templates` | 3 |
@@ -390,8 +387,10 @@
 | `contatos_cliente_consultoria:insert` | 3 |
 | `contatos_cliente_consultoria:select` | 4 |
 | `contatos_cliente_consultoria:update` | 1 |
+| `conteudo_encontro:insert` | 1 |
 | `conteudo_encontro:select` | 1 |
 | `conteudo_encontro:upsert` | 1 |
+| `conteudo_referencia_encontro:insert` | 1 |
 | `conteudo_referencia_encontro:select` | 1 |
 | `conteudo_referencia_encontro:update` | 1 |
 | `conteudo_referencia_encontro:upsert` | 1 |
@@ -413,6 +412,7 @@
 | `devolutivas:update` | 2 |
 | `devolutivas:upsert` | 1 |
 | `entradas_vendas_consultoria:select` | 1 |
+| `entregas_encontro:insert` | 1 |
 | `entregas_encontro:select` | 1 |
 | `entregas_encontro:update` | 1 |
 | `entregas_encontro:upsert` | 1 |
@@ -427,6 +427,7 @@
 | `eventos_comerciais:select` | 9 |
 | `eventos_comerciais:update` | 1 |
 | `eventos_comerciais:upsert` | 2 |
+| `evidencias_encontro:insert` | 1 |
 | `evidencias_encontro:select` | 1 |
 | `evidencias_encontro:update` | 1 |
 | `evidencias_encontro:upsert` | 1 |
@@ -448,6 +449,7 @@
 | `financeiro_consultoria:update` | 2 |
 | `financeiro_consultoria:upsert` | 1 |
 | `funnel_metrics:select` | 1 |
+| `guia_consultor_encontro:insert` | 1 |
 | `guia_consultor_encontro:select` | 1 |
 | `guia_consultor_encontro:upsert` | 1 |
 | `historico_planos_acao:select` | 2 |
@@ -565,8 +567,8 @@
 | `planos_acao_templates:select` | 3 |
 | `planos_acao_templates:update` | 1 |
 | `planos_acao:delete` | 1 |
-| `planos_acao:insert` | 4 |
-| `planos_acao:select` | 9 |
+| `planos_acao:insert` | 5 |
+| `planos_acao:select` | 10 |
 | `planos_acao:update` | 2 |
 | `posicionamento_empresa:select` | 1 |
 | `pre_cadastros_loja:select` | 2 |
@@ -672,6 +674,7 @@
 | `versoes_metodologia_produto:insert` | 1 |
 | `versoes_metodologia_produto:select` | 1 |
 | `versoes_metodologia_produto:update` | 1 |
+| `vinculo_modelo_relatorio_encontro:insert` | 1 |
 | `vinculo_modelo_relatorio_encontro:select` | 1 |
 | `vinculo_modelo_relatorio_encontro:update` | 1 |
 | `vinculo_modelo_relatorio_encontro:upsert` | 1 |

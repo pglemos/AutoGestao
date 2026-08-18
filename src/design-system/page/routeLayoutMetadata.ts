@@ -66,7 +66,6 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   // começava exatamente em 256px, sem margem alguma. Ver commit desta onda.
   organograma: { width: 'dashboard', adopted: true },
   'banco-talentos': { width: 'dashboard', adopted: true },
-  auditoria: { width: 'dashboard', adopted: true },
   decisoes: { width: 'dashboard', adopted: true },
 
   // ------------------------------------------------------- tabelas e listagens
@@ -145,14 +144,11 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'plano-acao': { width: 'focused', bottomClearance: 'actions' },
   simulacao: { width: 'focused' },
   'simulacao/:simulationRole': { width: 'focused' },
-  reprocessamento: { width: 'form' },
 
   // -------------------------------------------------- configurações e perfil
   configuracoes: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
-  'configuracoes/operacional': { width: 'focused', bottomClearance: 'none', adopted: true },
   'configuracoes/remuneracao': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'configuracoes/consultoria-pmr': { width: 'focused', bottomClearance: 'none', adopted: true },
-  'configuracoes/reprocessamento': { width: 'form', bottomClearance: 'none', adopted: true },
   settings: { width: 'form' },
   'vendedor/configuracoes': { width: 'dashboard', bottomClearance: 'navigation' },
   metas: { width: 'dashboard' },

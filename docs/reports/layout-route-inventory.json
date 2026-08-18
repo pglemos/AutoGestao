@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-17T07:26:15.335Z",
-  "baselineSha": "526fd95e64ec11d47abc43caf6d75399051957e7",
-  "routeCount": 120,
+  "generatedAt": "2026-08-18T18:08:15.367Z",
+  "baselineSha": "b629ddad11d6528be022f9e1e51cebf09e9ebecf",
+  "routeCount": 117,
   "routes": [
     {
       "path": "/",
@@ -66,26 +66,6 @@
       ],
       "canvas": 0,
       "template": 4,
-      "structural": 0,
-      "metadata": {
-        "width": "dashboard",
-        "source": "default"
-      }
-    },
-    {
-      "path": "/auditoria",
-      "renderCount": 4,
-      "routes": [
-        "vendedor:ForbiddenRoute",
-        "gerente:AiDiagnostics",
-        "dono:ForbiddenRoute",
-        "admin:AiDiagnostics"
-      ],
-      "files": [
-        "src/pages/AiDiagnostics.tsx"
-      ],
-      "canvas": 0,
-      "template": 0,
       "structural": 0,
       "metadata": {
         "width": "dashboard",
@@ -309,24 +289,6 @@
       }
     },
     {
-      "path": "/configuracoes/operacional",
-      "renderCount": 1,
-      "routes": [
-        "*:OperationalSettings"
-      ],
-      "files": [
-        "src/pages/OperationalSettings.tsx"
-      ],
-      "canvas": 0,
-      "template": 0,
-      "structural": 0,
-      "metadata": {
-        "width": "focused",
-        "bottomClearance": "none",
-        "adopted": true
-      }
-    },
-    {
       "path": "/configuracoes/remuneracao",
       "renderCount": 1,
       "routes": [
@@ -341,27 +303,6 @@
       "metadata": {
         "width": "dashboard",
         "bottomClearance": "navigation",
-        "adopted": true
-      }
-    },
-    {
-      "path": "/configuracoes/reprocessamento",
-      "renderCount": 4,
-      "routes": [
-        "vendedor:ForbiddenRoute",
-        "gerente:ForbiddenRoute",
-        "dono:ForbiddenRoute",
-        "admin:Reprocessamento"
-      ],
-      "files": [
-        "src/features/reprocessing/ReprocessingGuardedPage.tsx"
-      ],
-      "canvas": 0,
-      "template": 0,
-      "structural": 0,
-      "metadata": {
-        "width": "form",
-        "bottomClearance": "none",
         "adopted": true
       }
     },
@@ -425,18 +366,15 @@
       "path": "/consultoria/clientes",
       "renderCount": 1,
       "routes": [
-        "*:ConsultoriaClientes"
+        "*:Navigate"
       ],
-      "files": [
-        "src/pages/ConsultoriaClientes.tsx"
-      ],
+      "files": [],
       "canvas": 0,
       "template": 0,
       "structural": 0,
       "metadata": {
         "width": "wide",
-        "bottomClearance": "navigation",
-        "adopted": true
+        "bottomClearance": "navigation"
       }
     },
     {
@@ -1027,11 +965,9 @@
       "path": "/lojas",
       "renderCount": 1,
       "routes": [
-        "*:Lojas"
+        "*:Navigate"
       ],
-      "files": [
-        "src/features/lojas/Lojas.container.tsx"
-      ],
+      "files": [],
       "canvas": 0,
       "template": 0,
       "structural": 0,
