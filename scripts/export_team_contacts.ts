@@ -1,9 +1,9 @@
 #!/usr/bin/env tsx
 import { createClient } from '@supabase/supabase-js'
 import * as dotenv from 'dotenv'
-import { mkdirSync } from 'node:fs'
+import { mkdirSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
-import * as XLSX from 'xlsx'
+import { buildXlsxWorkbook } from '../src/lib/export'
 import {
   buildTeamContactRows,
   buildTeamContactsWorkbook,
@@ -84,16 +84,13 @@ async function main() {
     referenceDate: new Date().toISOString().slice(0, 10),
   })
   const sheets = buildTeamContactsWorkbook(rows)
-  const workbook = XLSX.utils.book_new()
-
-  for (const sheet of sheets) {
-    const worksheet = XLSX.utils.json_to_sheet(sheet.rows, { header: sheet.headers })
-    worksheet['!cols'] = sheet.headers.map((header) => ({ wch: Math.max(12, Math.min(32, header.length + 8)) }))
-    XLSX.utils.book_append_sheet(workbook, worksheet, sheet.name)
-  }
 
   mkdirSync(dirname(outPath), { recursive: true })
-  XLSX.writeFile(workbook, outPath)
+  writeFileSync(outPath, buildXlsxWorkbook(sheets.map((sheet) => ({
+    name: sheet.name,
+    headers: [...sheet.headers],
+    rows: sheet.rows.map((row) => ({ ...row })),
+  }))))
   console.log(`Planilha gerada: ${outPath}`)
   console.log(`Contatos exportados: ${rows.length}`)
 }

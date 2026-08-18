@@ -121,7 +121,7 @@ export function MetasRealizadosTab(props: {
 
   const exportXlsx = async () => {
     try {
-      const XLSX = (await import('xlsx')).default
+      const { exportWorkbookToExcel } = await import('@/lib/export')
       const matrix = props.indicators.map(indicator => {
         const values = Array.from({ length: 12 }, (_, index) => grid[indicator.code]?.[index + 1]?.meta ?? null)
         return {
@@ -132,15 +132,25 @@ export function MetasRealizadosTab(props: {
           ...Object.fromEntries(MONTH_LABELS.map((label, index) => [label, values[index]])),
         }
       })
-      const sheet = XLSX.utils.json_to_sheet(matrix)
-      const workbook = XLSX.utils.book_new()
-      XLSX.utils.book_append_sheet(workbook, sheet, 'METAS')
-      const configSheet = XLSX.utils.json_to_sheet([
-        { Chave: 'view_type', Valor: 'TARGET' },
-        { Chave: 'reference_year', Valor: String(year) },
-      ])
-      XLSX.utils.book_append_sheet(workbook, configSheet, 'MX_CONFIG')
-      XLSX.writeFile(workbook, `METAS_${year}_${storeId.slice(0, 8)}.xlsx`)
+      const exported = exportWorkbookToExcel(
+        [
+          {
+            name: 'METAS',
+            headers: ['Código', 'Indicador', 'Departamento', 'Tipo', ...MONTH_LABELS],
+            rows: matrix,
+          },
+          {
+            name: 'MX_CONFIG',
+            headers: ['Chave', 'Valor'],
+            rows: [
+              { Chave: 'view_type', Valor: 'TARGET' },
+              { Chave: 'reference_year', Valor: String(year) },
+            ],
+          },
+        ],
+        `METAS_${year}_${storeId.slice(0, 8)}`,
+      )
+      if (!exported) throw new Error('Não foi possível exportar.')
       toast.success('Planilha exportada.')
     } catch (cause) {
       toast.error(cause instanceof Error ? cause.message : 'Não foi possível exportar.')
@@ -522,12 +532,9 @@ function TargetImportModal(props: {
     let active = true
     void (async () => {
       try {
-        const XLSX = (await import('xlsx')).default
+        const { readXlsxRows } = await import('@/lib/xlsx-reader')
         const buffer = await props.file.arrayBuffer()
-        const workbook = XLSX.read(buffer, { type: 'array' })
-        const sheet = workbook.Sheets[workbook.SheetNames[0]]
-        if (!sheet) return
-        const matrix = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet)
+        const matrix = readXlsxRows(buffer)
         const monthKeys = MONTH_LABELS.map((label, index) => ({ label, month: index + 1 }))
         const next: Array<{ indicatorCode: string; month: number; newValue: number | null; action: string }> = []
         for (const row of matrix) {

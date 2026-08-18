@@ -137,7 +137,6 @@ export default defineConfig({
           if (id.includes('date-fns') || id.includes('clsx') || id.includes('tailwind-merge')) return 'vendor-utils';
           if (id.includes('lucide-react') || id.includes('motion') || id.includes('sonner')) return 'vendor-ui';
           if (id.includes('recharts')) return 'vendor-charts';
-          if (id.includes('xlsx')) return 'vendor-export';
           if (id.includes('html2canvas')) return 'vendor-html2canvas';
           if (id.includes('jspdf')) return 'vendor-jspdf';
           if (id.includes('@supabase/supabase-js')) return 'vendor-supabase';
