@@ -133,7 +133,44 @@ serve((req) => withSentry('store-pre-registration', req, async () => {
 
     if (error) return jsonResponse({ success: false, error: error.message }, 500)
 
-    const store = (stores || []).find((item: any) => slugify(item.name) === storeSlug)
+    let store = (stores || []).find((item: any) => slugify(item.name) === storeSlug)
+
+    if (!store) {
+      const { data: clients } = await adminClient
+        .from('clientes_consultoria')
+        .select('id, name, slug, primary_store_id')
+        .or(`slug.eq.${storeSlug},name.ilike.%${storeSlug.replace(/-/g, ' ')}%`)
+        .limit(1)
+
+      const client = clients?.[0]
+      if (client?.primary_store_id) {
+        const { data: linkedStore } = await adminClient
+          .from('lojas')
+          .select('id, name, active')
+          .eq('id', client.primary_store_id)
+          .maybeSingle()
+        if (linkedStore?.active) {
+          store = linkedStore
+        }
+      } else if (client) {
+        const { data: createdLoja } = await adminClient
+          .from('lojas')
+          .insert({
+            name: client.name,
+            active: true,
+          })
+          .select('id, name')
+          .single()
+        if (createdLoja) {
+          await adminClient
+            .from('clientes_consultoria')
+            .update({ primary_store_id: createdLoja.id, status: 'ativo' })
+            .eq('id', client.id)
+          store = createdLoja
+        }
+      }
+    }
+
     if (!store) return jsonResponse({ success: false, error: 'Loja não localizada' }, 404)
 
     return jsonResponse({

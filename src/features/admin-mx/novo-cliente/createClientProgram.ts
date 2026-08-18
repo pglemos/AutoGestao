@@ -215,6 +215,28 @@ export async function createClientProgram(draft: NewClientDraft, createdBy: stri
     if (error) return rollback(`Cliente criado, mas as lojas falharam: ${error.message}`)
   }
 
+  if (!draft.primary_store_id) {
+    const primaryUnit = units.find(unit => unit.is_primary) ?? units[0]
+    const storeName = primaryUnit?.name.trim() || draft.name.trim()
+    const { data: createdStore } = await supabase
+      .from('lojas')
+      .insert({
+        name: storeName,
+        legal_name: draft.legal_name.trim() || storeName,
+        cnpj: draft.cnpj.trim() ? onlyDigits(draft.cnpj) : null,
+        active: true,
+      })
+      .select('id')
+      .single()
+
+    if (createdStore?.id) {
+      await supabase
+        .from('clientes_consultoria')
+        .update({ primary_store_id: createdStore.id, status: 'ativo' })
+        .eq('id', client.id)
+    }
+  }
+
   const contacts = draft.contacts.filter(contact => contact.name.trim())
   if (contacts.length) {
     const { error } = await supabase.from('contatos_cliente_consultoria').insert(

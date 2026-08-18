@@ -87,6 +87,33 @@ export async function saveClientStore(
     .single()
   if (error) return { error: error.message }
 
+  // Garante vínculo com a tabela lojas se o cliente não tiver loja principal
+  const { data: client } = await supabase
+    .from('clientes_consultoria')
+    .select('id, primary_store_id, legal_name, cnpj')
+    .eq('id', clientId)
+    .single()
+
+  if (client && (!client.primary_store_id || draft.store_type === 'matriz')) {
+    const { data: storeRow } = await supabase
+      .from('lojas')
+      .insert({
+        name: draft.name.trim(),
+        legal_name: client.legal_name || draft.name.trim(),
+        cnpj: draft.cnpj.trim() ? onlyDigits(draft.cnpj) : client.cnpj || null,
+        active: true,
+      })
+      .select('id')
+      .single()
+
+    if (storeRow?.id && !client.primary_store_id) {
+      await supabase
+        .from('clientes_consultoria')
+        .update({ primary_store_id: storeRow.id, status: 'ativo' })
+        .eq('id', clientId)
+    }
+  }
+
   const { error: hoursError } = await supabase.from('horarios_funcionamento_unidade').insert(
     Object.entries(hours).map(([day, entry]) => ({
       unidade_id: created.id,

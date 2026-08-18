@@ -160,7 +160,7 @@
 | `catalogo_metricas_consultoria` | 7 |
 | `central_execucao_aberturas` | 3 |
 | `clientes` | 6 |
-| `clientes_consultoria` | 25 |
+| `clientes_consultoria` | 26 |
 | `clientes_oportunidades` | 1 |
 | `comportamental_perfis` | 1 |
 | `comportamental_questoes` | 1 |
@@ -212,7 +212,7 @@
 | `logs_compartilhamento_whatsapp` | 1 |
 | `logs_reprocessamento` | 1 |
 | `logs_rotina_gerente` | 1 |
-| `lojas` | 26 |
+| `lojas` | 28 |
 | `manager_daily_tasks` | 1 |
 | `manager_lead_conferences` | 1 |
 | `marketing_mensal_consultoria` | 1 |
@@ -364,8 +364,8 @@
 | `central_execucao_aberturas:upsert` | 2 |
 | `clientes_consultoria:delete` | 1 |
 | `clientes_consultoria:insert` | 4 |
-| `clientes_consultoria:select` | 24 |
-| `clientes_consultoria:update` | 6 |
+| `clientes_consultoria:select` | 25 |
+| `clientes_consultoria:update` | 7 |
 | `clientes_oportunidades:select` | 1 |
 | `clientes:delete` | 2 |
 | `clientes:insert` | 2 |
@@ -482,8 +482,8 @@
 | `logs_rotina_gerente:select` | 1 |
 | `logs_rotina_gerente:upsert` | 1 |
 | `lojas:delete` | 1 |
-| `lojas:insert` | 1 |
-| `lojas:select` | 26 |
+| `lojas:insert` | 3 |
+| `lojas:select` | 28 |
 | `lojas:update` | 1 |
 | `manager_daily_tasks:select` | 1 |
 | `manager_daily_tasks:update` | 1 |
