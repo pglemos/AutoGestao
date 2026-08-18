@@ -37,7 +37,7 @@
     "audit:management-design-system": "node --test scripts/management-route-manifest.test.mjs scripts/audit-management-design-system.test.mjs && node scripts/audit-management-design-system.mjs",
     "audit:layout-contract": "node scripts/audit-page-layout-contract.mjs",
     "lint:a11y": "eslint 'src/**/*.{ts,tsx}'",
-    "typecheck": "bun test src/test/ranking-live-search-scroll-contract.test.ts && tsc --noEmit",
+    "typecheck": "tsc --noEmit",
     "test": "bun test --isolate --max-concurrency=1 src/lib src/benchmarks src/hooks src/components src/features src/pages src/design-system src/test src/api",
     "test:e2e": "playwright test",
     "test:foundation-zero:harness": "tsx scripts/foundation_zero_harness.ts",
