@@ -215,18 +215,13 @@ export type PublishedPlanTemplate = {
   department: string | null
 }
 
-const METHODOLOGY_VERSION_COLUMNS = [
-  'id', 'program_key', 'product_name', 'product_version_number', 'methodology_version_number',
-  'status', 'effective_from', 'effective_until', 'change_summary',
-  'encounters_configured', 'encounters_pending', 'videos_count', 'files_count', 'report_templates_count',
-  'published_at', 'created_at',
-]
+const METHODOLOGY_VERSION_COLUMNS = 'id,program_key,product_name,product_version_number,methodology_version_number,status,effective_from,effective_until,change_summary,encounters_configured,encounters_pending,videos_count,files_count,report_templates_count,published_at,created_at' as const
 
 /** Produtos com suas versões metodológicas — alimenta Visão Geral e Metodologia por Produto. */
 export async function fetchProductsWithMethodology(): Promise<{ rows: ProductWithMethodology[]; error: string | null }> {
   const [{ data: products, error }, { data: versions }] = await Promise.all([
     supabase.from('programas_visita_consultoria').select('program_key, name, status, versao, total_visits, modalidade').order('name', { ascending: true }),
-    supabase.from('versoes_metodologia_produto').select(METHODOLOGY_VERSION_COLUMNS.join(',')).order('created_at', { ascending: false }),
+    supabase.from('versoes_metodologia_produto').select(METHODOLOGY_VERSION_COLUMNS).order('created_at', { ascending: false }),
   ])
   if (error) return { rows: [], error: error.message }
 
@@ -311,7 +306,7 @@ export async function createMethodologyVersion(
       encounters_pending: totalEncounters,
       created_by: userId,
     })
-    .select(METHODOLOGY_VERSION_COLUMNS.join(','))
+    .select(METHODOLOGY_VERSION_COLUMNS)
     .single()
 
   if (error || !newVersion) return { version: null, error: error?.message ?? 'Falha ao criar a versão.' }
