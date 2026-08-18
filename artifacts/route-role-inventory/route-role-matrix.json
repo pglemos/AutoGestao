@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-18T00:06:16.805Z",
+  "generatedAt": "2026-08-18T00:48:23.663Z",
   "source": "scripts/audit_route_data_inventory.mjs + src/lib/auth/routeAccess.ts",
   "roles": [
     "administrador_geral",

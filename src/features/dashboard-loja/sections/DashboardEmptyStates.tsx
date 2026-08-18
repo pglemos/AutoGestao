@@ -71,7 +71,7 @@ export function OwnerStoreUnavailable({ requestedStoreForbidden, storeResolution
           }
           nextStep="Volte para a visão executiva da rede e escolha uma loja ativa. Se a loja foi renomeada ou criada recentemente, solicite ao Admin MX revisar seu vínculo."
           action={
-            <Button onClick={() => navigate('/lojas', { replace: true })} className="rounded-mx-full bg-gray-900 px-mx-xl">
+            <Button onClick={() => navigate('/minhas-lojas', { replace: true })} className="rounded-mx-full bg-gray-900 px-mx-xl">
               Voltar para minhas lojas
             </Button>
           }

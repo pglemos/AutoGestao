@@ -6,7 +6,7 @@ import { EmptyState } from '@/components/atoms/EmptyState'
 import { Typography } from '@/components/atoms/Typography'
 import { Card } from '@/components/molecules/Card'
 import { PageHeading } from '@/components/molecules/PageHeading'
-import { useAuth } from '@/hooks/useAuth'
+import { isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { useStores } from '@/hooks/useStores'
 import { slugify } from '@/lib/utils'
 import { DashboardErrorBoundary } from '@/features/dashboard-loja/components/DashboardErrorBoundary'
@@ -29,7 +29,7 @@ export function StoreConsultorIa() {
     resolving,
   } = useStoreResolution({ activeStores, storesLoading })
 
-  const fallbackPath = role === 'vendedor' ? '/home' : role === 'gerente' ? '/classificacao' : '/lojas'
+  const fallbackPath = role === 'vendedor' ? '/home' : role === 'gerente' ? '/classificacao' : isPerfilInternoMx(role) ? '/clientes' : '/minhas-lojas'
   const backPath = selectedStore?.name ? `/lojas/${slugify(selectedStore.name)}` : fallbackPath
 
   if (resolving || storesLoading) {

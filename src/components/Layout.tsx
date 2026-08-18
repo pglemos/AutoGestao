@@ -258,15 +258,15 @@ function LayoutContent() {
 
   const storeDashboardPath = membership?.store?.name
     ? `/lojas/${slugify(membership.store.name)}`
-    : role === 'gerente' ? '/classificacao' : '/lojas'
+    : role === 'gerente' ? '/classificacao' : '/clientes'
   const storeTeamPath = role === 'gerente'
     ? '/equipe'
-    : storeDashboardPath === '/lojas'
-      ? '/lojas'
+    : storeDashboardPath === '/clientes'
+      ? '/clientes'
       : `${storeDashboardPath}${storeDashboardPath.includes('?') ? '&' : '?'}tab=equipe`
   const storeConsultorIaPath = storeDashboardPath.startsWith('/lojas/')
     ? `${storeDashboardPath}/consultor-ia`
-    : '/lojas'
+    : '/clientes'
   const categories = React.useMemo(() => {
     const baseCategories = role ? (navConfig[role] || []) : []
     const ownerStoreCount = role === 'dono' ? vinculos_loja.length : 0

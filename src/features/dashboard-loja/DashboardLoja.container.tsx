@@ -132,7 +132,7 @@ export function DashboardLoja() {
     )
   }
   if (!resolving && !storesLoading && !selectedStoreId && (isPerfilInternoMx(role) || role === 'dono')) {
-    return <Navigate to="/lojas" replace />
+    return <Navigate to={isPerfilInternoMx(role) ? '/clientes' : '/minhas-lojas'} replace />
   }
   if (resolving || (storesLoading && isPerfilInternoMx(role) && !selectedStoreId)) {
     return <ResolvingStoreSpinner />
