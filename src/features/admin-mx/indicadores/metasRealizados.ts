@@ -386,3 +386,35 @@ export function annualize(
   if (policy === 'LAST_VALID_MONTH') return valid[valid.length - 1]
   return sumMonthly(values) ?? valid.reduce((sum, value) => sum + value, 0)
 }
+
+/**
+ * Agrupa as alterações de uma importação em uma chamada por indicador.
+ *
+ * A RPC `salvar_metas_indicador_planejamento` substitui os 12 meses do ano de
+ * uma vez. Enviar uma chamada por célula, com os outros 11 meses nulos, apaga
+ * o que não estava na planilha — e, para duas células do mesmo indicador, a
+ * segunda chamada desfaz a primeira. Por isso os meses ausentes precisam ser
+ * preenchidos com o valor que já está gravado.
+ */
+export function buildImportSaveBatches(params: {
+  changes: Array<{ indicatorCode: string; month: number; newValue: number | null }>
+  currentValues: Array<{ indicator_code: string; month: number; value: number | null }>
+}): Array<{ indicatorCode: string; values: Array<number | null> }> {
+  const byIndicator = new Map<string, Array<number | null>>()
+
+  for (const change of params.changes) {
+    if (change.month < 1 || change.month > 12) continue
+    let values = byIndicator.get(change.indicatorCode)
+    if (!values) {
+      values = Array.from({ length: 12 }, (_, index) => (
+        params.currentValues.find(value =>
+          value.indicator_code === change.indicatorCode && value.month === index + 1,
+        )?.value ?? null
+      ))
+      byIndicator.set(change.indicatorCode, values)
+    }
+    values[change.month - 1] = change.newValue
+  }
+
+  return [...byIndicator].map(([indicatorCode, values]) => ({ indicatorCode, values }))
+}

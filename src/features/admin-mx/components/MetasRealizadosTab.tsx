@@ -19,6 +19,7 @@ import { toast } from '@/lib/toast'
 import { MONTH_LABELS, buildDependentsMap, computeValueMap, getFormatConfig, formatDisplay } from '../indicadores/indicatorFormulas'
 import { diagnoseEmptyImport } from '../indicadores/importDiagnosis'
 import {
+  buildImportSaveBatches,
   buildMonthlyGrid,
   buildStoreCopyMutations,
   previewStoreTargetsCopy,
@@ -275,6 +276,7 @@ export function MetasRealizadosTab(props: {
         <TargetImportModal
           open
           file={file}
+          lojaId={storeId}
           indicators={props.indicators}
           currentValues={rows.map(row => ({ indicator_code: row.indicator_code, month: row.month, value: row.meta }))}
           year={year}
@@ -520,6 +522,7 @@ function PlanningHistoryDrawer(props: {
 function TargetImportModal(props: {
   open: boolean
   file: File
+  lojaId: string
   indicators: TargetIndicator[]
   currentValues: Array<{ indicator_code: string; month: number; value: number | null }>
   year: number
@@ -564,21 +567,33 @@ function TargetImportModal(props: {
   }, [props.file, props.indicators])
 
   const apply = async () => {
-    setImporting(true)
-    let applied = 0
-    for (const change of changes) {
-      if (change.action !== 'UPDATE') continue
-      const result = await saveIndicatorTargets({
-        lojaId: '',
-        indicatorCode: change.indicatorCode,
-        year: props.year,
-        values: Array.from({ length: 12 }, (_, index) => index + 1 === change.month ? change.newValue : null),
-      })
-      if (!result.error) applied++
+    if (!props.lojaId) {
+      toast.error('Selecione a loja antes de importar.')
+      return
     }
-    if (applied === changes.length) toast.success(`${applied} células importadas.`)
-    else toast.error('Algumas células não puderam ser importadas.')
+    setImporting(true)
+    const batches = buildImportSaveBatches({
+      changes: changes.filter(change => change.action === 'UPDATE'),
+      currentValues: props.currentValues,
+    })
+    let appliedCells = 0
+    const failures: string[] = []
+    for (const batch of batches) {
+      const result = await saveIndicatorTargets({
+        lojaId: props.lojaId,
+        indicatorCode: batch.indicatorCode,
+        year: props.year,
+        values: batch.values,
+      })
+      if (result.error) failures.push(`${batch.indicatorCode}: ${result.error}`)
+      else appliedCells += changes.filter(change => change.action === 'UPDATE' && change.indicatorCode === batch.indicatorCode).length
+    }
     setImporting(false)
+    if (failures.length === 0) {
+      toast.success(`${appliedCells} células importadas.`)
+    } else {
+      toast.error(`${failures.length} indicador(es) não importado(s). ${failures[0]}`)
+    }
     props.onImported()
   }
 
