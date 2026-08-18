@@ -37,7 +37,7 @@ export function useConsultoriaMxController() {
 
   const audit = useCallback(async (resource: string, action: string, valueAfter?: string, valueBefore?: string) => {
     if (!supabaseUser) return
-    const userName = profile?.nome || supabaseUser.user_metadata?.nome || supabaseUser.user_metadata?.full_name || supabaseUser.email || 'Usuário MX'
+    const userName = profile?.name || supabaseUser.user_metadata?.nome || supabaseUser.user_metadata?.full_name || supabaseUser.email || 'Usuário MX'
     await writeAuditLog({
       userId: supabaseUser.id,
       userName,
@@ -123,8 +123,7 @@ export function useConsultoriaMxController() {
     navigateToAddMaterial,
     navigateToCreateReportTemplate,
     userId: supabaseUser?.id ?? null,
-    userName: profile?.nome ?? supabaseUser?.email ?? null,
+    userName: profile?.name ?? supabaseUser?.email ?? null,
     userRole: role ?? 'administrador_mx',
   }
 }
-
