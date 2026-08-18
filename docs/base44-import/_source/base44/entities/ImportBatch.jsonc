@@ -1,0 +1,110 @@
+{
+  "name": "ImportBatch",
+  "type": "object",
+  "properties": {
+    "client_account_id": {
+      "type": "string"
+    },
+    "strategic_plan_cycle_id": {
+      "type": "string"
+    },
+    "view_type": {
+      "type": "string",
+      "enum": [
+        "TARGET",
+        "ACTUAL",
+        "PREVIOUS_YEAR"
+      ]
+    },
+    "reference_year": {
+      "type": "number"
+    },
+    "store_id": {
+      "type": "string"
+    },
+    "scope_type": {
+      "type": "string",
+      "default": "CONSOLIDADO"
+    },
+    "file_name": {
+      "type": "string"
+    },
+    "file_url": {
+      "type": "string"
+    },
+    "template_version": {
+      "type": "string"
+    },
+    "template_hash": {
+      "type": "string"
+    },
+    "imported_by": {
+      "type": "string"
+    },
+    "imported_at": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "VALIDANDO",
+        "IMPORTADO",
+        "IMPORTADO_COM_AVISOS",
+        "REJEITADO",
+        "REVERTIDO"
+      ],
+      "default": "VALIDANDO"
+    },
+    "quality": {
+      "type": "string",
+      "enum": [
+        "DECLARADO",
+        "OFICIAL"
+      ],
+      "default": "DECLARADO"
+    },
+    "changes_count": {
+      "type": "number",
+      "default": 0
+    },
+    "cells_updated": {
+      "type": "number",
+      "default": 0
+    },
+    "cells_ignored": {
+      "type": "number",
+      "default": 0
+    },
+    "cells_cleared": {
+      "type": "number",
+      "default": 0
+    },
+    "warnings": {
+      "type": "string"
+    },
+    "errors": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "reverted_at": {
+      "type": "string"
+    },
+    "reverted_by": {
+      "type": "string"
+    },
+    "revert_reason": {
+      "type": "string"
+    },
+    "snapshot_before": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "client_account_id",
+    "view_type",
+    "reference_year",
+    "file_name"
+  ]
+}

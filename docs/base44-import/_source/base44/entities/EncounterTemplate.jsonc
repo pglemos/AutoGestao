@@ -1,0 +1,46 @@
+{
+  "name": "EncounterTemplate",
+  "type": "object",
+  "properties": {
+    "product_id": {
+      "type": "string"
+    },
+    "encounter_number": {
+      "type": "number"
+    },
+    "title": {
+      "type": "string"
+    },
+    "objective": {
+      "type": "string"
+    },
+    "default_modality": {
+      "type": "string",
+      "enum": [
+        "ONLINE",
+        "PRESENCIAL",
+        "A_DEFINIR"
+      ]
+    },
+    "target_audience": {
+      "type": "string"
+    },
+    "checklist_items": {
+      "type": "string"
+    },
+    "evidence_items": {
+      "type": "string"
+    },
+    "report_model": {
+      "type": "string"
+    },
+    "duration_hours": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "product_id",
+    "encounter_number",
+    "title"
+  ]
+}

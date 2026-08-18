@@ -1,0 +1,209 @@
+{
+  "name": "JourneyEncounter",
+  "type": "object",
+  "properties": {
+    "client_account_id": {
+      "type": "string"
+    },
+    "contract_id": {
+      "type": "string"
+    },
+    "product_id": {
+      "type": "string"
+    },
+    "product_version": {
+      "type": "string"
+    },
+    "encounter_number": {
+      "type": "number"
+    },
+    "encounter_type": {
+      "type": "string",
+      "enum": [
+        "ONBOARDING",
+        "CONSULTIVO"
+      ],
+      "default": "CONSULTIVO"
+    },
+    "is_onboarding": {
+      "type": "boolean",
+      "default": false
+    },
+    "counts_as_contractual_encounter": {
+      "type": "boolean",
+      "default": true
+    },
+    "consumes_in_person_visit": {
+      "type": "boolean",
+      "default": false
+    },
+    "title": {
+      "type": "string"
+    },
+    "objective": {
+      "type": "string"
+    },
+    "modality": {
+      "type": "string",
+      "enum": [
+        "ONLINE",
+        "PRESENCIAL",
+        "A_DEFINIR"
+      ],
+      "default": "A_DEFINIR"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "NAO_INICIADO",
+        "PRONTO_PARA_AGENDAR",
+        "AGENDADO",
+        "EM_PREPARACAO",
+        "EM_ANDAMENTO",
+        "AGUARDANDO_CLIENTE",
+        "AGUARDANDO_VALIDACAO",
+        "CONCLUIDO",
+        "REAGENDADO",
+        "PAUSADO",
+        "CANCELADO",
+        "NAO_APLICAVEL"
+      ],
+      "default": "NAO_INICIADO"
+    },
+    "scheduled_at": {
+      "type": "string"
+    },
+    "completed_at": {
+      "type": "string"
+    },
+    "responsible_consultant_id": {
+      "type": "string"
+    },
+    "responsible_consultant_name": {
+      "type": "string"
+    },
+    "support_consultants": {
+      "type": "string"
+    },
+    "validator_id": {
+      "type": "string"
+    },
+    "validator_name": {
+      "type": "string"
+    },
+    "target_audience": {
+      "type": "string"
+    },
+    "checklist_items": {
+      "type": "string"
+    },
+    "evidence_items": {
+      "type": "string"
+    },
+    "deliveries": {
+      "type": "string"
+    },
+    "is_presential": {
+      "type": "boolean",
+      "default": false
+    },
+    "scope": {
+      "type": "string",
+      "enum": [
+        "EMPRESA",
+        "TODAS_LOJAS",
+        "LOJAS_SELECIONADAS",
+        "LOJA_ESPECIFICA"
+      ],
+      "default": "EMPRESA"
+    },
+    "store_ids": {
+      "type": "string"
+    },
+    "duration_hours": {
+      "type": "number"
+    },
+    "default_time_hours": {
+      "type": "number"
+    },
+    "applied_time_hours": {
+      "type": "number"
+    },
+    "time_source": {
+      "type": "string",
+      "enum": [
+        "PADRAO_PLANILHA",
+        "PERSONALIZADO_CLIENTE",
+        "PERSONALIZADO_ENCONTRO",
+        "SEM_TEMPO_PADRAO",
+        "A_DEFINIR"
+      ],
+      "default": "A_DEFINIR"
+    },
+    "time_override_reason": {
+      "type": "string"
+    },
+    "time_overridden_by": {
+      "type": "string"
+    },
+    "time_overridden_at": {
+      "type": "string"
+    },
+    "period_estimate": {
+      "type": "string"
+    },
+    "observations": {
+      "type": "string"
+    },
+    "config_origin": {
+      "type": "string",
+      "enum": [
+        "HERDADO_CLIENTE",
+        "HERDADO_ETAPA",
+        "PERSONALIZADO_ENCONTRO"
+      ],
+      "default": "HERDADO_CLIENTE"
+    },
+    "is_customized": {
+      "type": "boolean",
+      "default": false
+    },
+    "meeting_link": {
+      "type": "string"
+    },
+    "report_notes": {
+      "type": "string"
+    },
+    "maximum_time_hours": {
+      "type": "number"
+    },
+    "consulting_time_parameter_id": {
+      "type": "string"
+    },
+    "time_parameter_version": {
+      "type": "string"
+    },
+    "time_status": {
+      "type": "string",
+      "enum": [
+        "PADRAO_PLANILHA",
+        "PERSONALIZADO_CLIENTE",
+        "PERSONALIZADO_ENCONTRO",
+        "SEM_TEMPO_PADRAO",
+        "PENDENTE_TEMPO"
+      ],
+      "default": "PENDENTE_TEMPO"
+    },
+    "capacity_reference_period": {
+      "type": "string"
+    },
+    "time_snapshot_created_at": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "client_account_id",
+    "encounter_number",
+    "title"
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "name": "ClientAccount",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "short_name": {
+      "type": "string"
+    },
+    "primary_legal_entity_id": {
+      "type": "string"
+    },
+    "cnpj": {
+      "type": "string"
+    },
+    "structure_type": {
+      "type": "string",
+      "enum": [
+        "LOJA_UNICA",
+        "GRUPO",
+        "REDE"
+      ],
+      "default": "LOJA_UNICA"
+    },
+    "lifecycle_status": {
+      "type": "string",
+      "enum": [
+        "RASCUNHO",
+        "COLETA_DADOS",
+        "EM_CONFIGURACAO",
+        "EM_VALIDACAO",
+        "PRONTO_PARA_ATIVAR",
+        "ATIVACAO_PROGRAMADA",
+        "ATIVO_EM_IMPLANTACAO",
+        "ATIVO",
+        "SUSPENSO",
+        "ENCERRADO"
+      ],
+      "default": "RASCUNHO"
+    },
+    "business_phase": {
+      "type": "string",
+      "enum": [
+        "NAO_DEFINIDA",
+        "SOBREVIVENCIA",
+        "ORGANIZACAO",
+        "CRESCIMENTO",
+        "ESCALA",
+        "CONSOLIDACAO"
+      ],
+      "default": "NAO_DEFINIDA"
+    },
+    "business_phase_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "business_phase_responsible": {
+      "type": "string"
+    },
+    "business_phase_responsible_id": {
+      "type": "string"
+    },
+    "business_phase_justification": {
+      "type": "string"
+    },
+    "main_contact_name": {
+      "type": "string"
+    },
+    "main_contact_email": {
+      "type": "string"
+    },
+    "main_contact_phone": {
+      "type": "string"
+    },
+    "main_contact_role": {
+      "type": "string",
+      "enum": [
+        "SOCIO",
+        "PROPRIETARIO",
+        "DIRETOR",
+        "GERENTE_GERAL"
+      ]
+    },
+    "commercial_owner_mx": {
+      "type": "string"
+    },
+    "commercial_owner_mx_id": {
+      "type": "string"
+    },
+    "implementation_owner_mx": {
+      "type": "string"
+    },
+    "implementation_owner_mx_id": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "planned_start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "commercial_origin": {
+      "type": "string",
+      "enum": [
+        "TRAFEGO_PAGO",
+        "INSTAGRAM",
+        "INDICACAO",
+        "YOUTUBE",
+        "PROSPECCAO",
+        "CLIENTE_ANTIGO",
+        "OUTROS"
+      ]
+    },
+    "commercial_origin_detail": {
+      "type": "string"
+    },
+    "activated_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "suspended_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "onboarding_step": {
+      "type": "number",
+      "default": 1
+    },
+    "onboarding_completed": {
+      "type": "boolean",
+      "default": false
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

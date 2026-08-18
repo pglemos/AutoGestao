@@ -1,0 +1,79 @@
+{
+  "name": "ClientStrategicParameterOverride",
+  "type": "object",
+  "properties": {
+    "client_account_id": {
+      "type": "string"
+    },
+    "strategic_plan_cycle_id": {
+      "type": "string"
+    },
+    "reference_year": {
+      "type": "number"
+    },
+    "parameter_definition_id": {
+      "type": "string"
+    },
+    "parameter_code": {
+      "type": "string"
+    },
+    "parameter_name": {
+      "type": "string"
+    },
+    "month": {
+      "type": "number"
+    },
+    "override_value": {
+      "type": "number"
+    },
+    "default_value_snapshot": {
+      "type": "number"
+    },
+    "source_version": {
+      "type": "string"
+    },
+    "application_scope": {
+      "type": "string",
+      "enum": [
+        "ANO_INTEIRO",
+        "MESES_SELECIONADOS",
+        "SOMENTE_ESTE_MES"
+      ],
+      "default": "ANO_INTEIRO"
+    },
+    "applied_months": {
+      "type": "string"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ATIVO",
+        "SUBSTITUIDO",
+        "ENCERRADO"
+      ],
+      "default": "ATIVO"
+    },
+    "effective_from": {
+      "type": "string",
+      "format": "date"
+    },
+    "effective_until": {
+      "type": "string",
+      "format": "date"
+    },
+    "created_by": {
+      "type": "string"
+    },
+    "updated_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "client_account_id",
+    "parameter_definition_id",
+    "override_value"
+  ]
+}

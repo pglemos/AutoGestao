@@ -1,0 +1,65 @@
+{
+  "name": "StrategicIndicatorPackageItem",
+  "type": "object",
+  "properties": {
+    "package_version_id": {
+      "type": "string"
+    },
+    "indicator_definition_id": {
+      "type": "string"
+    },
+    "indicator_code": {
+      "type": "string"
+    },
+    "indicator_name": {
+      "type": "string"
+    },
+    "inclusion_reason": {
+      "type": "string",
+      "enum": [
+        "DIRECT_SELECTION",
+        "DEPARTMENT_SELECTION",
+        "FORMULA_DEPENDENCY"
+      ],
+      "default": "DIRECT_SELECTION"
+    },
+    "is_required": {
+      "type": "boolean",
+      "default": true
+    },
+    "official_order_snapshot": {
+      "type": "number"
+    },
+    "department_snapshot": {
+      "type": "string"
+    },
+    "target_input_mode_snapshot": {
+      "type": "string"
+    },
+    "actual_value_mode_snapshot": {
+      "type": "string"
+    },
+    "format_snapshot": {
+      "type": "string"
+    },
+    "dependency_of": {
+      "type": "string"
+    },
+    "unit_entry_mode_snapshot": {
+      "type": "string"
+    },
+    "unit_rollup_method_snapshot": {
+      "type": "string"
+    },
+    "weight_indicator_id_snapshot": {
+      "type": "string"
+    },
+    "weight_indicator_code_snapshot": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "package_version_id",
+    "indicator_definition_id"
+  ]
+}

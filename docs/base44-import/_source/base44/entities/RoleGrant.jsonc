@@ -1,0 +1,58 @@
+{
+  "name": "RoleGrant",
+  "type": "object",
+  "properties": {
+    "user_profile_id": {
+      "type": "string"
+    },
+    "client_account_id": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "DONO_MASTER",
+        "DONO_SOCIO",
+        "DIRETOR",
+        "GERENTE_COMERCIAL",
+        "VENDEDOR",
+        "MARKETING",
+        "PRODUTO_ESTOQUE",
+        "FINANCEIRO_ADMINISTRATIVO",
+        "RH",
+        "OPERACOES"
+      ]
+    },
+    "is_primary": {
+      "type": "boolean",
+      "default": false
+    },
+    "valid_from": {
+      "type": "string",
+      "format": "date"
+    },
+    "valid_until": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ATIVO",
+        "ENCERRADO",
+        "INATIVO"
+      ],
+      "default": "ATIVO"
+    },
+    "granted_by": {
+      "type": "string"
+    },
+    "change_reason": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "user_profile_id",
+    "role"
+  ]
+}

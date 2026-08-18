@@ -1,0 +1,47 @@
+{
+  "name": "ClientOnboardingStageInstance",
+  "type": "object",
+  "properties": {
+    "client_journey_id": {
+      "type": "string"
+    },
+    "encounter_instance_id": {
+      "type": "string"
+    },
+    "stage_template_id": {
+      "type": "string"
+    },
+    "client_account_id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "NAO_INICIADO",
+        "EM_ANDAMENTO",
+        "AGUARDANDO_CLIENTE",
+        "AGUARDANDO_MX",
+        "CONCLUIDO"
+      ],
+      "default": "NAO_INICIADO"
+    },
+    "responsible_user_id": {
+      "type": "string"
+    },
+    "responsible_user_name": {
+      "type": "string"
+    },
+    "completed_at": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "evidence_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "stage_template_id"
+  ]
+}

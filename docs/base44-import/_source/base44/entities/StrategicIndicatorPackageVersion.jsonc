@@ -1,0 +1,64 @@
+{
+  "name": "StrategicIndicatorPackageVersion",
+  "type": "object",
+  "properties": {
+    "package_id": {
+      "type": "string"
+    },
+    "version_number": {
+      "type": "string",
+      "default": "1"
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "DRAFT",
+        "PUBLISHED",
+        "SUPERSEDED",
+        "ARCHIVED"
+      ],
+      "default": "DRAFT"
+    },
+    "catalog_version_snapshot": {
+      "type": "string"
+    },
+    "total_indicators": {
+      "type": "number",
+      "default": 0
+    },
+    "manual_target_indicators": {
+      "type": "number",
+      "default": 0
+    },
+    "calculated_target_indicators": {
+      "type": "number",
+      "default": 0
+    },
+    "departments_count": {
+      "type": "number",
+      "default": 0
+    },
+    "departments_snapshot": {
+      "type": "string"
+    },
+    "published_by": {
+      "type": "string"
+    },
+    "published_at": {
+      "type": "string"
+    },
+    "created_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "package_id",
+    "version_number"
+  ]
+}

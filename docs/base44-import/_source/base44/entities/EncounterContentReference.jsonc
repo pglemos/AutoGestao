@@ -1,0 +1,98 @@
+{
+  "name": "EncounterContentReference",
+  "type": "object",
+  "properties": {
+    "methodology_version_id": {
+      "type": "string"
+    },
+    "encounter_template_id": {
+      "type": "string"
+    },
+    "product_id": {
+      "type": "string"
+    },
+    "content_type": {
+      "type": "string",
+      "enum": [
+        "VIDEO",
+        "YOUTUBE",
+        "VIMEO",
+        "EXTERNAL_LINK",
+        "UNIVERSITY_LESSON",
+        "FILE"
+      ],
+      "default": "VIDEO"
+    },
+    "file_asset_id": {
+      "type": "string"
+    },
+    "file_asset_name": {
+      "type": "string"
+    },
+    "learning_content_id": {
+      "type": "string"
+    },
+    "learning_content_version_id": {
+      "type": "string"
+    },
+    "learning_content_name": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "display_order": {
+      "type": "number",
+      "default": 1
+    },
+    "required": {
+      "type": "boolean",
+      "default": true
+    },
+    "duration_minutes": {
+      "type": "number"
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "thumbnail_url": {
+      "type": "string"
+    },
+    "visibility": {
+      "type": "string",
+      "enum": [
+        "INTERNAL_ONLY",
+        "OWNER_AND_TEAM",
+        "ENCOUNTER_PARTICIPANTS",
+        "AUTHORIZED_USERS"
+      ],
+      "default": "OWNER_AND_TEAM"
+    },
+    "category": {
+      "type": "string"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RASCUNHO",
+        "EM_REVISAO",
+        "PUBLICADO",
+        "ARQUIVADO"
+      ],
+      "default": "RASCUNHO"
+    }
+  },
+  "required": [
+    "methodology_version_id",
+    "encounter_template_id",
+    "content_type",
+    "title"
+  ]
+}

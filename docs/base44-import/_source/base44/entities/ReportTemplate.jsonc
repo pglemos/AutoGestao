@@ -1,0 +1,50 @@
+{
+  "name": "ReportTemplate",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "product_id": {
+      "type": "string"
+    },
+    "compatible_encounters": {
+      "type": "string"
+    },
+    "sections": {
+      "type": "string"
+    },
+    "instructions": {
+      "type": "string"
+    },
+    "version_number": {
+      "type": "string",
+      "default": "1.0"
+    },
+    "is_demo": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RASCUNHO",
+        "PUBLICADO",
+        "ARQUIVADO"
+      ],
+      "default": "RASCUNHO"
+    },
+    "created_by": {
+      "type": "string"
+    },
+    "published_at": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

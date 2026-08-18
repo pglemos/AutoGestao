@@ -1,0 +1,118 @@
+{
+  "name": "ConsultingTimeParameter",
+  "type": "object",
+  "properties": {
+    "consulting_product_id": {
+      "type": "string"
+    },
+    "product_name": {
+      "type": "string"
+    },
+    "product_version_id": {
+      "type": "string"
+    },
+    "encounter_template_id": {
+      "type": "string"
+    },
+    "encounter_number": {
+      "type": "number"
+    },
+    "encounter_title": {
+      "type": "string"
+    },
+    "modality": {
+      "type": "string",
+      "enum": [
+        "ONLINE",
+        "PRESENCIAL"
+      ]
+    },
+    "maximum_time_hours": {
+      "type": "number"
+    },
+    "minimum_time_hours": {
+      "type": "number"
+    },
+    "reference_type": {
+      "type": "string",
+      "enum": [
+        "ENCONTRO",
+        "PREPARACAO",
+        "DESDOLOCAMENTO",
+        "RELATORIO",
+        "ACOMPANHAMENTO",
+        "PROGRAMA_COMPLETO"
+      ],
+      "default": "ENCONTRO"
+    },
+    "source_time_text": {
+      "type": "string"
+    },
+    "source_file": {
+      "type": "string"
+    },
+    "source_sheet": {
+      "type": "string"
+    },
+    "source_row": {
+      "type": "number"
+    },
+    "source_version": {
+      "type": "string"
+    },
+    "imported_at": {
+      "type": "string"
+    },
+    "imported_by": {
+      "type": "string"
+    },
+    "time_data_status": {
+      "type": "string",
+      "enum": [
+        "IMPORTADO",
+        "DEFINIDO_MANUALMENTE",
+        "PENDENTE_MODALIDADE",
+        "PENDENTE_TEMPO",
+        "INCONSISTENTE",
+        "NAO_APLICAVEL"
+      ],
+      "default": "IMPORTADO"
+    },
+    "effective_from": {
+      "type": "string",
+      "format": "date"
+    },
+    "effective_until": {
+      "type": "string",
+      "format": "date"
+    },
+    "version_number": {
+      "type": "string"
+    },
+    "source_document": {
+      "type": "string"
+    },
+    "published_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "published_by": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RASCUNHO",
+        "ATIVO",
+        "SUBSTITUIDO",
+        "ARQUIVADO",
+        "PENDENTE_REVISAO"
+      ],
+      "default": "RASCUNHO"
+    }
+  },
+  "required": [
+    "consulting_product_id",
+    "modality"
+  ]
+}

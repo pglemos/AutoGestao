@@ -1,0 +1,69 @@
+{
+  "name": "ConsultantEncounterQualification",
+  "type": "object",
+  "properties": {
+    "consultant_profile_id": {
+      "type": "string"
+    },
+    "consultant_name": {
+      "type": "string"
+    },
+    "consulting_product_id": {
+      "type": "string"
+    },
+    "product_name": {
+      "type": "string"
+    },
+    "product_version_id": {
+      "type": "string"
+    },
+    "encounter_template_id": {
+      "type": "string"
+    },
+    "encounter_number": {
+      "type": "number"
+    },
+    "encounter_title": {
+      "type": "string"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "qualification_level": {
+      "type": "string",
+      "enum": [
+        "EM_FORMACAO",
+        "HABILITADO_APOIO",
+        "HABILITADO_RESPONSAVEL",
+        "HABILITADO_VALIDADOR"
+      ],
+      "default": "HABILITADO_RESPONSAVEL"
+    },
+    "valid_from": {
+      "type": "string",
+      "format": "date"
+    },
+    "valid_until": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ATIVO",
+        "SUSPENSO",
+        "EXPIRADO"
+      ],
+      "default": "ATIVO"
+    },
+    "granted_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "consultant_profile_id",
+    "consulting_product_id",
+    "encounter_template_id"
+  ]
+}

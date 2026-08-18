@@ -1,0 +1,95 @@
+{
+  "name": "ActionPlanTemplateItem",
+  "type": "object",
+  "properties": {
+    "action_plan_template_version_id": {
+      "type": "string"
+    },
+    "item_order": {
+      "type": "number",
+      "default": 1
+    },
+    "title": {
+      "type": "string"
+    },
+    "action_description": {
+      "type": "string"
+    },
+    "execution_instructions": {
+      "type": "string"
+    },
+    "how_to_execute": {
+      "type": "string"
+    },
+    "checklist": {
+      "type": "string"
+    },
+    "recommended_responsible_role": {
+      "type": "string"
+    },
+    "recommended_participant_roles": {
+      "type": "string"
+    },
+    "deadline_offset_days": {
+      "type": "number",
+      "default": 0
+    },
+    "is_required": {
+      "type": "boolean",
+      "default": true
+    },
+    "evidence_required": {
+      "type": "boolean",
+      "default": false
+    },
+    "evidence_type": {
+      "type": "string"
+    },
+    "completion_criteria": {
+      "type": "string"
+    },
+    "weight_basis_points": {
+      "type": "number",
+      "default": 0
+    },
+    "weight_percentage_display": {
+      "type": "string"
+    },
+    "support_material_type": {
+      "type": "string",
+      "enum": [
+        "NONE",
+        "FILE",
+        "UNIVERSITY_LESSON"
+      ],
+      "default": "NONE"
+    },
+    "file_asset_id": {
+      "type": "string"
+    },
+    "file_asset_name": {
+      "type": "string"
+    },
+    "learning_content_id": {
+      "type": "string"
+    },
+    "learning_content_version_id": {
+      "type": "string"
+    },
+    "learning_content_name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ATIVO",
+        "INATIVO"
+      ],
+      "default": "ATIVO"
+    }
+  },
+  "required": [
+    "action_plan_template_version_id",
+    "title"
+  ]
+}

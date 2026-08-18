@@ -1,0 +1,55 @@
+{
+  "name": "StoreOperatingHour",
+  "type": "object",
+  "properties": {
+    "store_id": {
+      "type": "string"
+    },
+    "day_of_week": {
+      "type": "string",
+      "enum": [
+        "MONDAY",
+        "TUESDAY",
+        "WEDNESDAY",
+        "THURSDAY",
+        "FRIDAY",
+        "SATURDAY",
+        "SUNDAY"
+      ]
+    },
+    "is_open": {
+      "type": "boolean",
+      "default": true
+    },
+    "opening_time": {
+      "type": "string"
+    },
+    "closing_time": {
+      "type": "string"
+    },
+    "valid_from": {
+      "type": "string",
+      "format": "date"
+    },
+    "valid_until": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ATIVO",
+        "INATIVO",
+        "SUBSTITUIDO"
+      ],
+      "default": "ATIVO"
+    },
+    "origin": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "store_id",
+    "day_of_week"
+  ]
+}

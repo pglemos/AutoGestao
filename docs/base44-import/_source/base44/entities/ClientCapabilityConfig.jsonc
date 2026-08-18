@@ -1,0 +1,82 @@
+{
+  "name": "ClientCapabilityConfig",
+  "type": "object",
+  "properties": {
+    "client_account_id": {
+      "type": "string"
+    },
+    "product_id": {
+      "type": "string"
+    },
+    "module_code": {
+      "type": "string"
+    },
+    "module_label": {
+      "type": "string"
+    },
+    "menu_code": {
+      "type": "string"
+    },
+    "menu_label": {
+      "type": "string"
+    },
+    "included": {
+      "type": "boolean",
+      "default": true
+    },
+    "is_mandatory": {
+      "type": "boolean",
+      "default": false
+    },
+    "release_stage": {
+      "type": "string",
+      "enum": [
+        "ETAPA_1",
+        "ETAPA_2",
+        "ETAPA_3",
+        "NA_ATIVACAO",
+        "MANUAL",
+        "A_DEFINIR"
+      ]
+    },
+    "visibility": {
+      "type": "string",
+      "enum": [
+        "ATIVO",
+        "EM_BREVE",
+        "VISIVEL_BLOQUEADO",
+        "OCULTO"
+      ]
+    },
+    "technical_status": {
+      "type": "string",
+      "enum": [
+        "DISPONIVEL",
+        "EM_HOMOLOGACAO",
+        "EM_DESENVOLVIMENTO",
+        "TEMPORARIAMENTE_INDISPONIVEL"
+      ]
+    },
+    "is_customized": {
+      "type": "boolean",
+      "default": false
+    },
+    "origin": {
+      "type": "string",
+      "enum": [
+        "PADRAO_PRODUTO",
+        "PERSONALIZADO_CLIENTE"
+      ],
+      "default": "PADRAO_PRODUTO"
+    },
+    "display_order": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "client_account_id",
+    "module_code",
+    "menu_code"
+  ]
+}

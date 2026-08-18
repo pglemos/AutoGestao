@@ -1,0 +1,73 @@
+{
+  "name": "EncounterReportTemplate",
+  "type": "object",
+  "properties": {
+    "methodology_version_id": {
+      "type": "string"
+    },
+    "encounter_template_id": {
+      "type": "string"
+    },
+    "report_template_id": {
+      "type": "string"
+    },
+    "report_template_name": {
+      "type": "string"
+    },
+    "report_required": {
+      "type": "boolean",
+      "default": false
+    },
+    "default_title": {
+      "type": "string"
+    },
+    "author_role": {
+      "type": "string"
+    },
+    "validator_role": {
+      "type": "string"
+    },
+    "publication_deadline_days": {
+      "type": "number",
+      "default": 7
+    },
+    "visibility": {
+      "type": "string",
+      "enum": [
+        "INTERNAL_ONLY",
+        "OWNER_AND_TEAM",
+        "ENCOUNTER_PARTICIPANTS"
+      ],
+      "default": "OWNER_AND_TEAM"
+    },
+    "attachment_allowed": {
+      "type": "boolean",
+      "default": true
+    },
+    "attachment_required": {
+      "type": "boolean",
+      "default": false
+    },
+    "action_plan_creation_allowed": {
+      "type": "boolean",
+      "default": true
+    },
+    "is_demo": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RASCUNHO",
+        "PUBLICADO",
+        "ARQUIVADO"
+      ],
+      "default": "RASCUNHO"
+    }
+  },
+  "required": [
+    "methodology_version_id",
+    "encounter_template_id"
+  ]
+}

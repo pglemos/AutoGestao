@@ -1,0 +1,109 @@
+{
+  "name": "FileAsset",
+  "type": "object",
+  "properties": {
+    "client_account_id": {
+      "type": "string"
+    },
+    "store_id": {
+      "type": "string"
+    },
+    "program_id": {
+      "type": "string"
+    },
+    "journey_id": {
+      "type": "string"
+    },
+    "encounter_id": {
+      "type": "string"
+    },
+    "lesson_id": {
+      "type": "string"
+    },
+    "action_plan_id": {
+      "type": "string"
+    },
+    "action_item_id": {
+      "type": "string"
+    },
+    "strategic_plan_cycle_id": {
+      "type": "string"
+    },
+    "file_name": {
+      "type": "string"
+    },
+    "original_file_name": {
+      "type": "string"
+    },
+    "mime_type": {
+      "type": "string"
+    },
+    "file_size": {
+      "type": "number"
+    },
+    "storage_url": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "MATERIAL_APOIO",
+        "PLANILHA",
+        "APRESENTACAO",
+        "DOCUMENTO",
+        "MODELO",
+        "ATA",
+        "RELATORIO",
+        "IMAGEM",
+        "VIDEO",
+        "OUTRO"
+      ],
+      "default": "MATERIAL_APOIO"
+    },
+    "description": {
+      "type": "string"
+    },
+    "visibility": {
+      "type": "string",
+      "enum": [
+        "EQUIPE_MX",
+        "DONO_E_EQUIPE_MX",
+        "USUARIOS_AUTORIZADOS",
+        "PARTICIPANTES_ENCONTRO",
+        "RESPONSAVEL_ACAO"
+      ],
+      "default": "DONO_E_EQUIPE_MX"
+    },
+    "version_number": {
+      "type": "string",
+      "default": "1"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RASCUNHO",
+        "PUBLICADO",
+        "SUBSTITUIDO",
+        "ARQUIVADO"
+      ],
+      "default": "RASCUNHO"
+    },
+    "origin": {
+      "type": "string"
+    },
+    "uploaded_by": {
+      "type": "string"
+    },
+    "uploaded_at": {
+      "type": "string"
+    },
+    "published_at": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "client_account_id",
+    "file_name",
+    "storage_url"
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "name": "IndicatorActualSnapshot",
+  "type": "object",
+  "properties": {
+    "client_account_id": {
+      "type": "string"
+    },
+    "store_id": {
+      "type": "string"
+    },
+    "strategic_plan_cycle_id": {
+      "type": "string"
+    },
+    "strategic_plan_unit_scope_id": {
+      "type": "string"
+    },
+    "indicator_definition_id": {
+      "type": "string"
+    },
+    "indicator_code": {
+      "type": "string"
+    },
+    "indicator_name": {
+      "type": "string"
+    },
+    "view_type": {
+      "type": "string",
+      "enum": [
+        "ACTUAL",
+        "PREVIOUS_YEAR"
+      ]
+    },
+    "reference_year": {
+      "type": "number"
+    },
+    "month": {
+      "type": "number"
+    },
+    "scope_type": {
+      "type": "string",
+      "enum": [
+        "STORE",
+        "COMPANY"
+      ],
+      "default": "STORE"
+    },
+    "manual_value": {
+      "type": "number"
+    },
+    "calculated_value": {
+      "type": "number"
+    },
+    "effective_value": {
+      "type": "number"
+    },
+    "value_mode": {
+      "type": "string",
+      "enum": [
+        "MANUAL_OFFICIAL",
+        "AUTO_CALCULATED",
+        "MANUAL_OVERRIDE"
+      ],
+      "default": "AUTO_CALCULATED"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "MANUAL",
+        "IMPORT",
+        "INTERNAL_MODULE",
+        "EXTERNAL_INTEGRATION",
+        "CALCULATION"
+      ],
+      "default": "MANUAL"
+    },
+    "source_reference": {
+      "type": "string"
+    },
+    "quality_state": {
+      "type": "string",
+      "enum": [
+        "NAO_AVALIADA",
+        "CONFIRMADA",
+        "PENDENTE_VALIDACAO",
+        "INCONSISTENTE"
+      ],
+      "default": "NAO_AVALIADA"
+    },
+    "calculation_status": {
+      "type": "string",
+      "enum": [
+        "CALCULATED",
+        "WITHOUT_BASE",
+        "MISSING_PARAMETER",
+        "INVALID_FORMULA",
+        "TECHNICAL_ERROR"
+      ]
+    },
+    "calculation_error": {
+      "type": "string"
+    },
+    "calculated_at": {
+      "type": "string"
+    },
+    "formula_snapshot": {
+      "type": "string"
+    },
+    "observations": {
+      "type": "string"
+    },
+    "updated_by": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "client_account_id",
+    "indicator_definition_id",
+    "view_type",
+    "reference_year",
+    "month"
+  ]
+}

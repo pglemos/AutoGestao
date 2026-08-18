@@ -1,4 +1,6 @@
 export * from './strategicPlan.types'
+export * from './unitPolicy'
+export * from './unitConsolidation'
 export * from './strategicPlanRepositoryAdapter'
 export * from './strategicPlanPreferences'
 export * from './useStrategicPlanController'

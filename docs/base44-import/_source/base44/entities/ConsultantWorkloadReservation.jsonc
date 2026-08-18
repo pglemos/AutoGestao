@@ -1,0 +1,108 @@
+{
+  "name": "ConsultantWorkloadReservation",
+  "type": "object",
+  "properties": {
+    "consultant_profile_id": {
+      "type": "string"
+    },
+    "consultant_name": {
+      "type": "string"
+    },
+    "client_account_id": {
+      "type": "string"
+    },
+    "client_account_name": {
+      "type": "string"
+    },
+    "client_consulting_journey_id": {
+      "type": "string"
+    },
+    "journey_stage_instance_id": {
+      "type": "string"
+    },
+    "journey_encounter_instance_id": {
+      "type": "string"
+    },
+    "product_id": {
+      "type": "string"
+    },
+    "product_name": {
+      "type": "string"
+    },
+    "encounter_number": {
+      "type": "number"
+    },
+    "encounter_title": {
+      "type": "string"
+    },
+    "modality": {
+      "type": "string",
+      "enum": [
+        "ONLINE",
+        "PRESENCIAL",
+        "A_DEFINIR"
+      ],
+      "default": "A_DEFINIR"
+    },
+    "maximum_time_hours": {
+      "type": "number"
+    },
+    "applied_time_hours": {
+      "type": "number"
+    },
+    "default_time_hours": {
+      "type": "number"
+    },
+    "time_source": {
+      "type": "string",
+      "enum": [
+        "PADRAO_PLANILHA",
+        "PERSONALIZADO_CLIENTE",
+        "PERSONALIZADO_ENCONTRO",
+        "SEM_TEMPO_PADRAO",
+        "A_DEFINIR"
+      ],
+      "default": "A_DEFINIR"
+    },
+    "travel_reserved_hours": {
+      "type": "number",
+      "default": 0
+    },
+    "allocation_type": {
+      "type": "string",
+      "enum": [
+        "CONFIRMADA",
+        "RESERVADA",
+        "A_DEFINIR"
+      ],
+      "default": "A_DEFINIR"
+    },
+    "reference_month": {
+      "type": "string"
+    },
+    "planned_date": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ATIVA",
+        "CONCLUIDA",
+        "CANCELADA",
+        "TRANSFERIDA",
+        "LIBERADA",
+        "PENDENTE_TEMPO"
+      ],
+      "default": "ATIVA"
+    },
+    "consulting_time_parameter_id": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "consultant_profile_id"
+  ]
+}

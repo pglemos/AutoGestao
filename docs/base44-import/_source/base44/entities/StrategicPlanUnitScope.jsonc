@@ -1,0 +1,64 @@
+{
+  "name": "StrategicPlanUnitScope",
+  "type": "object",
+  "properties": {
+    "strategic_plan_cycle_id": {
+      "type": "string"
+    },
+    "client_account_id": {
+      "type": "string"
+    },
+    "store_id": {
+      "type": "string"
+    },
+    "store_type": {
+      "type": "string",
+      "enum": [
+        "MATRIZ",
+        "FILIAL"
+      ],
+      "default": "MATRIZ"
+    },
+    "store_name_snapshot": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "FUTURE",
+        "INACTIVE",
+        "CLOSED",
+        "NOT_APPLICABLE"
+      ],
+      "default": "ACTIVE"
+    },
+    "effective_from": {
+      "type": "string",
+      "format": "date"
+    },
+    "effective_until": {
+      "type": "string",
+      "format": "date"
+    },
+    "is_required": {
+      "type": "boolean",
+      "default": true
+    },
+    "display_order": {
+      "type": "number",
+      "default": 99
+    },
+    "created_by": {
+      "type": "string"
+    },
+    "updated_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "strategic_plan_cycle_id",
+    "client_account_id",
+    "store_id"
+  ]
+}

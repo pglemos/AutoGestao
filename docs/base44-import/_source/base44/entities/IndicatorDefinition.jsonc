@@ -1,0 +1,279 @@
+{
+  "name": "IndicatorDefinition",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "normalized_name": {
+      "type": "string"
+    },
+    "aliases": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "department": {
+      "type": "string",
+      "enum": [
+        "COMERCIAL",
+        "MARKETING",
+        "PRODUTO_ESTOQUE",
+        "PESSOAS_RH",
+        "FINANCEIRO",
+        "OPERACOES",
+        "PRODUTO"
+      ]
+    },
+    "category": {
+      "type": "string"
+    },
+    "unit": {
+      "type": "string"
+    },
+    "value_format": {
+      "type": "string",
+      "enum": [
+        "INTEGER",
+        "DECIMAL",
+        "CURRENCY_BRL",
+        "PERCENTAGE",
+        "SCORE_0_5",
+        "RATIO",
+        "INVENTORY_TURNOVER"
+      ],
+      "default": "INTEGER"
+    },
+    "unit_code": {
+      "type": "string"
+    },
+    "unit_label": {
+      "type": "string"
+    },
+    "input_decimal_places": {
+      "type": "number",
+      "default": 2
+    },
+    "display_decimal_places": {
+      "type": "number",
+      "default": 2
+    },
+    "annual_display_decimal_places": {
+      "type": "number"
+    },
+    "prefix": {
+      "type": "string"
+    },
+    "suffix": {
+      "type": "string"
+    },
+    "annual_suffix": {
+      "type": "string"
+    },
+    "minimum_value": {
+      "type": "number"
+    },
+    "maximum_value": {
+      "type": "number"
+    },
+    "allow_negative": {
+      "type": "boolean",
+      "default": false
+    },
+    "trim_trailing_zeros": {
+      "type": "boolean",
+      "default": true
+    },
+    "monthly_format": {
+      "type": "string"
+    },
+    "annual_format": {
+      "type": "string"
+    },
+    "format_version": {
+      "type": "number",
+      "default": 1
+    },
+    "default_direction": {
+      "type": "string",
+      "enum": [
+        "AUMENTAR",
+        "DIMINUIR",
+        "MANTER",
+        "FAIXA"
+      ],
+      "default": "AUMENTAR"
+    },
+    "frequency": {
+      "type": "string",
+      "default": "MENSAL"
+    },
+    "default_scope": {
+      "type": "string",
+      "default": "EMPRESA"
+    },
+    "target_calculation_mode": {
+      "type": "string",
+      "enum": [
+        "MANUAL",
+        "CALCULATED_LOCKED",
+        "CALCULATED_ADJUSTABLE"
+      ],
+      "default": "MANUAL"
+    },
+    "input_mode": {
+      "type": "string",
+      "enum": [
+        "MANUAL",
+        "CALCULATED"
+      ],
+      "default": "MANUAL"
+    },
+    "formula_type": {
+      "type": "string",
+      "enum": [
+        "NONE",
+        "DIRECT_FORMULA",
+        "PARAMETERIZED_FORMULA"
+      ],
+      "default": "NONE"
+    },
+    "formula_expression": {
+      "type": "string"
+    },
+    "parameter_codes": {
+      "type": "string"
+    },
+    "is_parameterized": {
+      "type": "boolean",
+      "default": false
+    },
+    "global_display_order": {
+      "type": "number",
+      "default": 999
+    },
+    "department_display_order": {
+      "type": "number",
+      "default": 99
+    },
+    "annual_aggregation": {
+      "type": "string",
+      "enum": [
+        "SUM_MONTHS",
+        "AVERAGE_MONTHS",
+        "LAST_VALID_MONTH",
+        "RECALCULATE_FROM_ANNUAL_BASES",
+        "RECALCULATE_FROM_LAST_PERIOD_BASES"
+      ],
+      "default": "SUM_MONTHS"
+    },
+    "annual_formula": {
+      "type": "string"
+    },
+    "actual_source": {
+      "type": "string"
+    },
+    "decimal_places": {
+      "type": "number",
+      "default": 2
+    },
+    "valid_range": {
+      "type": "string"
+    },
+    "effective_from_year": {
+      "type": "number",
+      "default": 2025
+    },
+    "effective_until_year": {
+      "type": "number"
+    },
+    "is_standard": {
+      "type": "boolean",
+      "default": true
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "default_owner_visibility": {
+      "type": "boolean",
+      "default": true
+    },
+    "display_order": {
+      "type": "number",
+      "default": 99
+    },
+    "order_updated_at": {
+      "type": "string"
+    },
+    "order_updated_by": {
+      "type": "string"
+    },
+    "previous_display_order": {
+      "type": "number"
+    },
+    "order_change_reason": {
+      "type": "string"
+    },
+    "catalog_order_version": {
+      "type": "number",
+      "default": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RASCUNHO",
+        "EM_REVISAO",
+        "PUBLICADO",
+        "DESABILITADO_PARA_NOVOS_PLANOS",
+        "ARQUIVADO"
+      ],
+      "default": "RASCUNHO"
+    },
+    "unit_entry_mode": {
+      "type": "string",
+      "enum": [
+        "PER_UNIT_REQUIRED",
+        "PER_UNIT_OPTIONAL",
+        "COMPANY_ONLY",
+        "SHARED_COMPANY_VALUE"
+      ],
+      "default": "PER_UNIT_REQUIRED"
+    },
+    "unit_rollup_method": {
+      "type": "string",
+      "enum": [
+        "SUM",
+        "RECALCULATE_FROM_BASES",
+        "WEIGHTED_AVERAGE",
+        "AVERAGE_VALID_VALUES",
+        "LAST_VALID_VALUE",
+        "SHARED_NO_SUM",
+        "COMPANY_VALUE",
+        "MANUAL_CONSOLIDATED"
+      ],
+      "default": "SUM"
+    },
+    "weight_indicator_id": {
+      "type": "string"
+    },
+    "weight_indicator_code": {
+      "type": "string"
+    },
+    "created_by": {
+      "type": "string"
+    },
+    "updated_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "code",
+    "name",
+    "department"
+  ]
+}

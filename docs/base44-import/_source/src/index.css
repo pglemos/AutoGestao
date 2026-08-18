@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 152 70% 31%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 152 70% 31%;
+    --chart-1: 152 70% 31%;
+    --chart-2: 217 91% 60%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.75rem;
+    --font-heading: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --sidebar-background: 210 40% 16%;
+    --sidebar-foreground: 210 20% 90%;
+    --sidebar-primary: 152 70% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 30% 22%;
+    --sidebar-accent-foreground: 210 20% 95%;
+    --sidebar-border: 210 30% 20%;
+    --sidebar-ring: 152 70% 45%;
+
+    /* MX Colors */
+    --mx-green: #198653;
+    --mx-blue: #2563EB;
+    --mx-navy: #102A3E;
+    --mx-critical: #EF4444;
+    --mx-warning: #F59E0B;
+    --mx-positive: #198653;
+    --mx-info: #2563EB;
+    --mx-consultive: #7C3AED;
+  }
+
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --sidebar-background: 210 40% 10%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+/* Sidebar transitions */
+.sidebar-transition { transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+
+/* Status badges */
+.status-ativo { @apply bg-green-100 text-green-800; }
+.status-atencao { @apply bg-yellow-100 text-yellow-800; }
+.status-critico { @apply bg-red-100 text-red-800; }
+.status-inativo { @apply bg-gray-100 text-gray-600; }

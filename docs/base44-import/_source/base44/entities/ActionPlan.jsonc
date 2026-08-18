@@ -1,0 +1,207 @@
+{
+  "name": "ActionPlan",
+  "type": "object",
+  "properties": {
+    "client_account_id": {
+      "type": "string"
+    },
+    "client_account_name": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "problem": {
+      "type": "string"
+    },
+    "action": {
+      "type": "string"
+    },
+    "how": {
+      "type": "string"
+    },
+    "responsible": {
+      "type": "string"
+    },
+    "responsible_id": {
+      "type": "string"
+    },
+    "participants": {
+      "type": "string"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "NAO_INICIADA",
+        "EM_ANDAMENTO",
+        "ATRASADA",
+        "CONCLUIDA",
+        "VALIDANDO_EFICACIA",
+        "PAUSADA",
+        "CANCELADA",
+        "AGUARDANDO_DECISAO"
+      ],
+      "default": "NAO_INICIADA"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "CRITICA",
+        "ALTA",
+        "ATENCAO",
+        "BAIXA",
+        "EVOLUCAO"
+      ],
+      "default": "ATENCAO"
+    },
+    "origin": {
+      "type": "string",
+      "enum": [
+        "MANUAL",
+        "TEMPLATE_MX",
+        "SUGESTAO_DONO",
+        "PLANEJAMENTO_ESTRATEGICO",
+        "ALERTA",
+        "SCORE",
+        "CONSULTOR",
+        "ENCONTRO_CONSULTORIA",
+        "DADOS_CONCILIACAO",
+        "VISITA",
+        "PLANEJAMENTO"
+      ],
+      "default": "MANUAL"
+    },
+    "department": {
+      "type": "string"
+    },
+    "strategic_target_id": {
+      "type": "string"
+    },
+    "strategic_plan_cycle_id": {
+      "type": "string"
+    },
+    "indicator_definition_id": {
+      "type": "string"
+    },
+    "indicator_name": {
+      "type": "string"
+    },
+    "store_id": {
+      "type": "string"
+    },
+    "store_name": {
+      "type": "string"
+    },
+    "expected_impact": {
+      "type": "string"
+    },
+    "estimated_financial_impact": {
+      "type": "number"
+    },
+    "budget": {
+      "type": "number"
+    },
+    "evidence_required": {
+      "type": "boolean",
+      "default": false
+    },
+    "requires_owner_decision": {
+      "type": "boolean",
+      "default": false
+    },
+    "efficacy": {
+      "type": "string",
+      "enum": [
+        "NAO_AVALIADA",
+        "EFICAZ",
+        "PARCIALMENTE_EFICAZ",
+        "INEFICAZ"
+      ],
+      "default": "NAO_AVALIADA"
+    },
+    "efficacy_notes": {
+      "type": "string"
+    },
+    "efficacy_indicator_id": {
+      "type": "string"
+    },
+    "efficacy_initial_value": {
+      "type": "number"
+    },
+    "efficacy_result_value": {
+      "type": "number"
+    },
+    "evidence_url": {
+      "type": "string"
+    },
+    "evidence_notes": {
+      "type": "string"
+    },
+    "action_cycle_id": {
+      "type": "string"
+    },
+    "action_plan_template_id": {
+      "type": "string"
+    },
+    "action_plan_template_version_id": {
+      "type": "string"
+    },
+    "template_snapshot": {
+      "type": "string"
+    },
+    "reference_year": {
+      "type": "number"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "application_request_id": {
+      "type": "string"
+    },
+    "kanban_column": {
+      "type": "string",
+      "enum": [
+        "NAO_INICIADA",
+        "EM_ANDAMENTO",
+        "ATRASADA",
+        "CONCLUIDA"
+      ]
+    },
+    "kanban_position": {
+      "type": "number",
+      "default": 0
+    },
+    "started_at": {
+      "type": "string"
+    },
+    "completed_at": {
+      "type": "string"
+    },
+    "completed_by": {
+      "type": "string"
+    },
+    "duplicate_of_id": {
+      "type": "string"
+    },
+    "reconcile_status": {
+      "type": "string",
+      "enum": [
+        "ATIVO",
+        "DUPLICATE_RECONCILED",
+        "PARTIAL"
+      ],
+      "default": "ATIVO"
+    }
+  },
+  "required": [
+    "title",
+    "responsible"
+  ]
+}

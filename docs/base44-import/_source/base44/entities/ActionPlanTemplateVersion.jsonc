@@ -1,0 +1,162 @@
+{
+  "name": "ActionPlanTemplateVersion",
+  "type": "object",
+  "properties": {
+    "action_plan_template_id": {
+      "type": "string"
+    },
+    "version_number": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "department_id": {
+      "type": "string",
+      "enum": [
+        "COMERCIAL",
+        "MARKETING",
+        "PRODUTO_ESTOQUE",
+        "PESSOAS_RH",
+        "FINANCEIRO",
+        "OPERACOES"
+      ]
+    },
+    "primary_indicator_id": {
+      "type": "string"
+    },
+    "primary_indicator_code": {
+      "type": "string"
+    },
+    "primary_indicator_name": {
+      "type": "string"
+    },
+    "improvement_direction": {
+      "type": "string",
+      "enum": [
+        "AUMENTAR",
+        "DIMINUIR",
+        "MANTER",
+        "FAIXA",
+        "CORRIGIR_PROCESSO"
+      ],
+      "default": "AUMENTAR"
+    },
+    "problem": {
+      "type": "string"
+    },
+    "objective": {
+      "type": "string"
+    },
+    "when_to_apply": {
+      "type": "string"
+    },
+    "default_priority": {
+      "type": "string",
+      "enum": [
+        "CRITICA",
+        "ATENCAO",
+        "EVOLUCAO"
+      ]
+    },
+    "default_responsible_role": {
+      "type": "string"
+    },
+    "recommended_deadline_days": {
+      "type": "number"
+    },
+    "effectiveness_indicator_id": {
+      "type": "string"
+    },
+    "effectiveness_indicator_name": {
+      "type": "string"
+    },
+    "effectiveness_window_days": {
+      "type": "number"
+    },
+    "effectiveness_criteria": {
+      "type": "string"
+    },
+    "evidence_policy": {
+      "type": "string"
+    },
+    "evidence_required": {
+      "type": "boolean",
+      "default": false
+    },
+    "evidence_types": {
+      "type": "string"
+    },
+    "manual_application_enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "owner_suggestion_enabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "owner_suggestion_title": {
+      "type": "string"
+    },
+    "owner_suggestion_problem": {
+      "type": "string"
+    },
+    "owner_suggestion_impact": {
+      "type": "string"
+    },
+    "owner_suggestion_recommendation": {
+      "type": "string"
+    },
+    "owner_suggestion_button_text": {
+      "type": "string"
+    },
+    "suggestion_trigger_type": {
+      "type": "string",
+      "enum": [
+        "MANUAL",
+        "INDICATOR_BELOW_TARGET",
+        "INDICATOR_ABOVE_LIMIT",
+        "NEGATIVE_TREND",
+        "ACTIVE_ALERT",
+        "CRITICAL_SCORE"
+      ]
+    },
+    "action_count": {
+      "type": "number",
+      "default": 0
+    },
+    "total_weight_basis_points": {
+      "type": "number",
+      "default": 10000
+    },
+    "change_summary": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RASCUNHO",
+        "EM_REVISAO",
+        "PUBLICADO",
+        "ARQUIVADO"
+      ],
+      "default": "RASCUNHO"
+    },
+    "created_by": {
+      "type": "string"
+    },
+    "published_by": {
+      "type": "string"
+    },
+    "published_at": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "action_plan_template_id",
+    "version_number"
+  ]
+}

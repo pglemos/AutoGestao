@@ -1,0 +1,62 @@
+{
+  "name": "AlertInstance",
+  "type": "object",
+  "properties": {
+    "client_account_id": {
+      "type": "string"
+    },
+    "client_account_name": {
+      "type": "string"
+    },
+    "alert_type": {
+      "type": "string",
+      "enum": [
+        "CRITICO",
+        "ATENCAO",
+        "POSITIVO",
+        "CONSULTIVO"
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "problem": {
+      "type": "string"
+    },
+    "impact": {
+      "type": "string"
+    },
+    "recommendation": {
+      "type": "string"
+    },
+    "responsible": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ATIVO",
+        "EM_ANDAMENTO",
+        "RESOLVIDO",
+        "IGNORADO"
+      ],
+      "default": "ATIVO"
+    },
+    "origin": {
+      "type": "string"
+    },
+    "department": {
+      "type": "string"
+    },
+    "detected_at": {
+      "type": "string"
+    },
+    "resolved_at": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "alert_type"
+  ]
+}

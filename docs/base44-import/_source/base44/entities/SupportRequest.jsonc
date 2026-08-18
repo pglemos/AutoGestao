@@ -1,0 +1,73 @@
+{
+  "name": "SupportRequest",
+  "type": "object",
+  "properties": {
+    "client_account_id": {
+      "type": "string"
+    },
+    "client_account_name": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "TECNICO",
+        "FUNCIONAL",
+        "ACESSO",
+        "DADOS",
+        "CONSULTORIA",
+        "OUTRO"
+      ]
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "CRITICO",
+        "ALTO",
+        "MEDIO",
+        "BAIXO"
+      ],
+      "default": "MEDIO"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ABERTO",
+        "EM_ATENDIMENTO",
+        "AGUARDANDO_CLIENTE",
+        "RESOLVIDO",
+        "FECHADO",
+        "CANCELADO"
+      ],
+      "default": "ABERTO"
+    },
+    "assigned_to": {
+      "type": "string"
+    },
+    "requester_name": {
+      "type": "string"
+    },
+    "requester_email": {
+      "type": "string"
+    },
+    "resolution_notes": {
+      "type": "string"
+    },
+    "resolved_at": {
+      "type": "string"
+    },
+    "sla_hours": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "title",
+    "category"
+  ]
+}

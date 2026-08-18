@@ -1,0 +1,45 @@
+{
+  "name": "ProductOnboardingStageTemplate",
+  "type": "object",
+  "properties": {
+    "product_version_id": {
+      "type": "string"
+    },
+    "encounter_template_id": {
+      "type": "string"
+    },
+    "stage_order": {
+      "type": "number"
+    },
+    "stage_name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "is_required": {
+      "type": "boolean",
+      "default": true
+    },
+    "responsible_role": {
+      "type": "string"
+    },
+    "evidence_required": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ATIVO",
+        "INATIVO",
+        "ARQUIVADO"
+      ],
+      "default": "ATIVO"
+    }
+  },
+  "required": [
+    "stage_name",
+    "stage_order"
+  ]
+}

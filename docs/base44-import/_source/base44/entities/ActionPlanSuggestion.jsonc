@@ -1,0 +1,115 @@
+{
+  "name": "ActionPlanSuggestion",
+  "type": "object",
+  "properties": {
+    "client_account_id": {
+      "type": "string"
+    },
+    "client_account_name": {
+      "type": "string"
+    },
+    "store_id": {
+      "type": "string"
+    },
+    "store_name": {
+      "type": "string"
+    },
+    "strategic_plan_cycle_id": {
+      "type": "string"
+    },
+    "indicator_definition_id": {
+      "type": "string"
+    },
+    "indicator_code": {
+      "type": "string"
+    },
+    "indicator_name": {
+      "type": "string"
+    },
+    "department_id": {
+      "type": "string"
+    },
+    "action_plan_template_id": {
+      "type": "string"
+    },
+    "action_plan_template_version_id": {
+      "type": "string"
+    },
+    "action_plan_template_name": {
+      "type": "string"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "MANUAL",
+        "INDICATOR_BELOW_TARGET",
+        "INDICATOR_ABOVE_LIMIT",
+        "NEGATIVE_TREND",
+        "ACTIVE_ALERT",
+        "CRITICAL_SCORE"
+      ],
+      "default": "MANUAL"
+    },
+    "source_reference_id": {
+      "type": "string"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "expected_impact": {
+      "type": "string"
+    },
+    "owner_suggestion_title": {
+      "type": "string"
+    },
+    "owner_suggestion_problem": {
+      "type": "string"
+    },
+    "owner_suggestion_impact": {
+      "type": "string"
+    },
+    "owner_suggestion_recommendation": {
+      "type": "string"
+    },
+    "owner_suggestion_button_text": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "PENDENTE_VALIDACAO",
+        "VALIDADA",
+        "EXIBIDA_DONO",
+        "CONVERTIDA",
+        "DESCARTADA",
+        "EXPIRADA"
+      ],
+      "default": "PENDENTE_VALIDACAO"
+    },
+    "validated_by_consultant_id": {
+      "type": "string"
+    },
+    "validated_by_consultant_name": {
+      "type": "string"
+    },
+    "validated_at": {
+      "type": "string"
+    },
+    "shown_to_owner_at": {
+      "type": "string"
+    },
+    "converted_action_plan_id": {
+      "type": "string"
+    },
+    "dismissed_reason": {
+      "type": "string"
+    },
+    "created_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "client_account_id",
+    "action_plan_template_id"
+  ]
+}

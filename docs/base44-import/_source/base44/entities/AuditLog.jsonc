@@ -1,0 +1,56 @@
+{
+  "name": "AuditLog",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "user_role": {
+      "type": "string"
+    },
+    "client_account_id": {
+      "type": "string"
+    },
+    "client_account_name": {
+      "type": "string"
+    },
+    "store_id": {
+      "type": "string"
+    },
+    "resource": {
+      "type": "string"
+    },
+    "resource_id": {
+      "type": "string"
+    },
+    "action": {
+      "type": "string"
+    },
+    "value_before": {
+      "type": "string"
+    },
+    "value_after": {
+      "type": "string"
+    },
+    "justification": {
+      "type": "string"
+    },
+    "origin": {
+      "type": "string"
+    },
+    "environment": {
+      "type": "string",
+      "default": "PROTOTIPO"
+    },
+    "ip_address": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "action",
+    "resource"
+  ]
+}

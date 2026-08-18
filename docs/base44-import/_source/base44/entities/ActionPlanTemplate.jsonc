@@ -1,0 +1,113 @@
+{
+  "name": "ActionPlanTemplate",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "short_description": {
+      "type": "string"
+    },
+    "department_id": {
+      "type": "string",
+      "enum": [
+        "COMERCIAL",
+        "MARKETING",
+        "PRODUTO_ESTOQUE",
+        "PESSOAS_RH",
+        "FINANCEIRO",
+        "OPERACOES"
+      ]
+    },
+    "primary_indicator_id": {
+      "type": "string"
+    },
+    "primary_indicator_code": {
+      "type": "string"
+    },
+    "primary_indicator_name": {
+      "type": "string"
+    },
+    "problem": {
+      "type": "string"
+    },
+    "objective": {
+      "type": "string"
+    },
+    "when_to_apply": {
+      "type": "string"
+    },
+    "default_priority": {
+      "type": "string",
+      "enum": [
+        "CRITICA",
+        "ATENCAO",
+        "EVOLUCAO"
+      ],
+      "default": "ATENCAO"
+    },
+    "default_responsible_role": {
+      "type": "string"
+    },
+    "recommended_deadline_days": {
+      "type": "number",
+      "default": 30
+    },
+    "suggestion_enabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "manual_application_enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RASCUNHO",
+        "EM_REVISAO",
+        "PUBLICADO",
+        "DESABILITADO",
+        "ARQUIVADO"
+      ],
+      "default": "RASCUNHO"
+    },
+    "current_version": {
+      "type": "string"
+    },
+    "effective_from_year": {
+      "type": "number"
+    },
+    "effective_until_year": {
+      "type": "number"
+    },
+    "actions_count": {
+      "type": "number",
+      "default": 0
+    },
+    "applications_count": {
+      "type": "number",
+      "default": 0
+    },
+    "disabled_reason": {
+      "type": "string"
+    },
+    "disabled_at": {
+      "type": "string"
+    },
+    "created_by": {
+      "type": "string"
+    },
+    "updated_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "code",
+    "title",
+    "department_id"
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "name": "EncounterReport",
+  "type": "object",
+  "properties": {
+    "client_account_id": {
+      "type": "string"
+    },
+    "journey_encounter_instance_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "executive_summary": {
+      "type": "string"
+    },
+    "diagnosis": {
+      "type": "string"
+    },
+    "decisions": {
+      "type": "string"
+    },
+    "recommendations": {
+      "type": "string"
+    },
+    "next_steps": {
+      "type": "string"
+    },
+    "linked_action_plan_id": {
+      "type": "string"
+    },
+    "author_consultant_id": {
+      "type": "string"
+    },
+    "author_consultant_name": {
+      "type": "string"
+    },
+    "validator_id": {
+      "type": "string"
+    },
+    "report_file_asset_id": {
+      "type": "string"
+    },
+    "version_number": {
+      "type": "string",
+      "default": "1"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RASCUNHO",
+        "EM_REVISAO",
+        "PUBLICADO",
+        "SUBSTITUIDO",
+        "ARQUIVADO"
+      ],
+      "default": "RASCUNHO"
+    },
+    "visibility": {
+      "type": "string",
+      "default": "DONO_E_EQUIPE_MX"
+    },
+    "published_at": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "client_account_id",
+    "journey_encounter_instance_id",
+    "title"
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "name": "EncounterMethodologyContent",
+  "type": "object",
+  "properties": {
+    "methodology_version_id": {
+      "type": "string"
+    },
+    "encounter_template_id": {
+      "type": "string"
+    },
+    "product_id": {
+      "type": "string"
+    },
+    "encounter_number": {
+      "type": "number"
+    },
+    "encounter_title": {
+      "type": "string"
+    },
+    "objective": {
+      "type": "string"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "expected_result": {
+      "type": "string"
+    },
+    "required_participant_roles": {
+      "type": "string"
+    },
+    "recommended_participant_roles": {
+      "type": "string"
+    },
+    "prerequisites": {
+      "type": "string"
+    },
+    "client_observation": {
+      "type": "string"
+    },
+    "owner_visibility": {
+      "type": "boolean",
+      "default": true
+    },
+    "can_be_anticipated": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_demo": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "NAO_INICIADO",
+        "EM_CONFIGURACAO",
+        "COM_PENDENCIA",
+        "PRONTO_REVISAO",
+        "PUBLICADO"
+      ],
+      "default": "NAO_INICIADO"
+    }
+  },
+  "required": [
+    "methodology_version_id",
+    "encounter_template_id"
+  ]
+}

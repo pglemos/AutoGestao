@@ -1,0 +1,60 @@
+{
+  "name": "StoreAssignment",
+  "type": "object",
+  "properties": {
+    "user_profile_id": {
+      "type": "string"
+    },
+    "client_account_id": {
+      "type": "string"
+    },
+    "store_id": {
+      "type": "string"
+    },
+    "store_name": {
+      "type": "string"
+    },
+    "assignment_type": {
+      "type": "string",
+      "enum": [
+        "RESPONSAVEL_PRINCIPAL",
+        "CORRESPONSAVEL",
+        "ACESSO_ADICIONAL",
+        "USUARIO_OPERACIONAL",
+        "SUBSTITUICAO_TEMPORARIA"
+      ],
+      "default": "USUARIO_OPERACIONAL"
+    },
+    "is_primary": {
+      "type": "boolean",
+      "default": false
+    },
+    "team": {
+      "type": "string"
+    },
+    "valid_from": {
+      "type": "string",
+      "format": "date"
+    },
+    "valid_until": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ATIVO",
+        "ENCERRADO",
+        "INATIVO"
+      ],
+      "default": "ATIVO"
+    },
+    "view_scope": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "user_profile_id",
+    "store_id"
+  ]
+}

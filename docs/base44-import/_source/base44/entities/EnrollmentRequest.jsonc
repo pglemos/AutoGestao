@@ -1,0 +1,60 @@
+{
+  "name": "EnrollmentRequest",
+  "type": "object",
+  "properties": {
+    "client_account_id": {
+      "type": "string"
+    },
+    "store_id": {
+      "type": "string"
+    },
+    "store_name": {
+      "type": "string"
+    },
+    "full_name": {
+      "type": "string"
+    },
+    "birth_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "declared_function": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "AGUARDANDO_VALIDACAO",
+        "APROVADO",
+        "DEVOLVIDO",
+        "REJEITADO",
+        "MESCLADO"
+      ],
+      "default": "AGUARDANDO_VALIDACAO"
+    },
+    "submitted_at": {
+      "type": "string"
+    },
+    "reviewed_by": {
+      "type": "string"
+    },
+    "review_notes": {
+      "type": "string"
+    },
+    "relationship_consent": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "full_name",
+    "email",
+    "client_account_id"
+  ]
+}

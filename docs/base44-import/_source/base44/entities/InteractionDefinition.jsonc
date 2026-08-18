@@ -1,0 +1,89 @@
+{
+  "name": "InteractionDefinition",
+  "type": "object",
+  "properties": {
+    "screen_code": {
+      "type": "string"
+    },
+    "screen_label": {
+      "type": "string"
+    },
+    "element_code": {
+      "type": "string"
+    },
+    "element_label": {
+      "type": "string"
+    },
+    "element_type": {
+      "type": "string",
+      "enum": [
+        "BUTTON",
+        "CARD",
+        "TAB",
+        "ROW",
+        "LINK",
+        "ICON",
+        "MENU_ITEM",
+        "CHECKBOX",
+        "SELECT"
+      ]
+    },
+    "action_type": {
+      "type": "string",
+      "enum": [
+        "NAVIGATE",
+        "OPEN_MODAL",
+        "MUTATE_DATA",
+        "APPLY_FILTER",
+        "DOWNLOAD_OR_EXPORT",
+        "SIMULATE",
+        "DISABLED"
+      ]
+    },
+    "source_route": {
+      "type": "string"
+    },
+    "destination_route": {
+      "type": "string"
+    },
+    "modal_name": {
+      "type": "string"
+    },
+    "entity_name": {
+      "type": "string"
+    },
+    "required_permission": {
+      "type": "string"
+    },
+    "expected_result": {
+      "type": "string"
+    },
+    "audit_event": {
+      "type": "string"
+    },
+    "implementation_status": {
+      "type": "string",
+      "enum": [
+        "FUNCIONAL",
+        "SIMULADO",
+        "BLOQUEADO",
+        "FUTURO",
+        "COM_ERRO"
+      ],
+      "default": "FUNCIONAL"
+    },
+    "prototype_behavior": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "screen_code",
+    "element_code",
+    "element_label",
+    "action_type",
+    "implementation_status"
+  ]
+}

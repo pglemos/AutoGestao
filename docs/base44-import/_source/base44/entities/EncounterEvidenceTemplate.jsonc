@@ -1,0 +1,81 @@
+{
+  "name": "EncounterEvidenceTemplate",
+  "type": "object",
+  "properties": {
+    "methodology_version_id": {
+      "type": "string"
+    },
+    "encounter_template_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "required": {
+      "type": "boolean",
+      "default": true
+    },
+    "evidence_type": {
+      "type": "string",
+      "enum": [
+        "ARQUIVO",
+        "IMAGEM",
+        "LINK",
+        "PLANILHA",
+        "RELATORIO",
+        "COMENTARIO",
+        "CHECKLIST",
+        "INDICADOR",
+        "CONFIRMACAO",
+        "REUNIAO",
+        "OUTRO"
+      ],
+      "default": "ARQUIVO"
+    },
+    "recommended_responsible_role": {
+      "type": "string"
+    },
+    "recommended_validator_role": {
+      "type": "string"
+    },
+    "deadline_offset_days": {
+      "type": "number",
+      "default": 0
+    },
+    "file_limit": {
+      "type": "number",
+      "default": 1
+    },
+    "allowed_formats": {
+      "type": "string"
+    },
+    "client_guidance": {
+      "type": "string"
+    },
+    "display_order": {
+      "type": "number",
+      "default": 1
+    },
+    "is_demo": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RASCUNHO",
+        "PUBLICADO",
+        "ARQUIVADO"
+      ],
+      "default": "RASCUNHO"
+    }
+  },
+  "required": [
+    "methodology_version_id",
+    "encounter_template_id",
+    "name"
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "name": "ClientStrategicIndicator",
+  "type": "object",
+  "properties": {
+    "strategic_plan_cycle_id": {
+      "type": "string"
+    },
+    "client_account_id": {
+      "type": "string"
+    },
+    "store_id": {
+      "type": "string"
+    },
+    "indicator_definition_id": {
+      "type": "string"
+    },
+    "indicator_code": {
+      "type": "string"
+    },
+    "indicator_name": {
+      "type": "string"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "visible_to_owner": {
+      "type": "boolean",
+      "default": true
+    },
+    "direction_override": {
+      "type": "string"
+    },
+    "scope_type": {
+      "type": "string",
+      "enum": [
+        "EMPRESA",
+        "LOJA",
+        "LOJAS_SELECIONADAS"
+      ],
+      "default": "EMPRESA"
+    },
+    "display_order": {
+      "type": "number",
+      "default": 99
+    },
+    "target_calculation_mode": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ATIVO",
+        "OCULTO",
+        "ARQUIVADO"
+      ],
+      "default": "ATIVO"
+    },
+    "origin_type": {
+      "type": "string",
+      "enum": [
+        "PRODUCT_PACKAGE",
+        "PRODUCT_DEPENDENCY",
+        "CLIENT_CUSTOMIZATION"
+      ],
+      "default": "PRODUCT_PACKAGE"
+    },
+    "origin_reference_id": {
+      "type": "string"
+    },
+    "package_version_id": {
+      "type": "string"
+    },
+    "package_item_id": {
+      "type": "string"
+    },
+    "unit_entry_mode": {
+      "type": "string",
+      "enum": [
+        "PER_UNIT_REQUIRED",
+        "PER_UNIT_OPTIONAL",
+        "COMPANY_ONLY",
+        "SHARED_COMPANY_VALUE"
+      ]
+    },
+    "unit_rollup_method": {
+      "type": "string",
+      "enum": [
+        "SUM",
+        "RECALCULATE_FROM_BASES",
+        "WEIGHTED_AVERAGE",
+        "AVERAGE_VALID_VALUES",
+        "LAST_VALID_VALUE",
+        "SHARED_NO_SUM",
+        "COMPANY_VALUE",
+        "MANUAL_CONSOLIDATED"
+      ]
+    },
+    "weight_indicator_id": {
+      "type": "string"
+    },
+    "weight_indicator_code": {
+      "type": "string"
+    },
+    "added_by": {
+      "type": "string"
+    },
+    "added_at": {
+      "type": "string"
+    },
+    "created_by": {
+      "type": "string"
+    },
+    "updated_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "strategic_plan_cycle_id",
+    "client_account_id",
+    "indicator_definition_id"
+  ]
+}

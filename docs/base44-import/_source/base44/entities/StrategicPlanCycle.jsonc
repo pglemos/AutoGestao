@@ -1,0 +1,67 @@
+{
+  "name": "StrategicPlanCycle",
+  "type": "object",
+  "properties": {
+    "client_account_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "year": {
+      "type": "number"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RASCUNHO",
+        "EM_CONFIGURACAO",
+        "EM_REVISAO",
+        "PUBLICADO",
+        "ENCERRADO",
+        "ARQUIVADO"
+      ],
+      "default": "RASCUNHO"
+    },
+    "phase": {
+      "type": "string"
+    },
+    "responsible_consultant_id": {
+      "type": "string"
+    },
+    "responsible_consultant_name": {
+      "type": "string"
+    },
+    "version_number": {
+      "type": "string",
+      "default": "1"
+    },
+    "published_by": {
+      "type": "string"
+    },
+    "published_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "closed_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "client_account_id",
+    "name",
+    "year"
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "name": "LearningContent",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "content_type": {
+      "type": "string",
+      "enum": [
+        "VIDEO",
+        "DOCUMENTO",
+        "AULA_AO_VIVO",
+        "AVALIACAO",
+        "PODCAST",
+        "LEITURA"
+      ]
+    },
+    "trail_level": {
+      "type": "string",
+      "enum": [
+        "N1",
+        "N2",
+        "N3",
+        "N4"
+      ]
+    },
+    "target_profile": {
+      "type": "string"
+    },
+    "program_relevance": {
+      "type": "string"
+    },
+    "duration_minutes": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RASCUNHO",
+        "PUBLICADO",
+        "ARQUIVADO"
+      ],
+      "default": "RASCUNHO"
+    },
+    "url": {
+      "type": "string"
+    },
+    "thumbnail_url": {
+      "type": "string"
+    },
+    "author": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "string"
+    },
+    "live_date": {
+      "type": "string"
+    },
+    "enrollments_count": {
+      "type": "number",
+      "default": 0
+    },
+    "completions_count": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "title",
+    "content_type"
+  ]
+}

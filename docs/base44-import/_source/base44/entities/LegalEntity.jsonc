@@ -1,0 +1,69 @@
+{
+  "name": "LegalEntity",
+  "type": "object",
+  "properties": {
+    "client_account_id": {
+      "type": "string"
+    },
+    "legal_name": {
+      "type": "string"
+    },
+    "cnpj": {
+      "type": "string"
+    },
+    "trade_name": {
+      "type": "string"
+    },
+    "is_primary": {
+      "type": "boolean",
+      "default": true
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ATIVO",
+        "INATIVO",
+        "PENDENTE"
+      ],
+      "default": "ATIVO"
+    },
+    "postal_code": {
+      "type": "string"
+    },
+    "street": {
+      "type": "string"
+    },
+    "number": {
+      "type": "string"
+    },
+    "no_number": {
+      "type": "boolean",
+      "default": false
+    },
+    "complement": {
+      "type": "string"
+    },
+    "neighborhood": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string",
+      "default": "Brasil"
+    },
+    "address_street": {
+      "type": "string"
+    },
+    "address_zip": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "legal_name"
+  ]
+}

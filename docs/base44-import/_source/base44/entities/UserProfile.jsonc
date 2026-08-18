@@ -1,0 +1,92 @@
+{
+  "name": "UserProfile",
+  "type": "object",
+  "properties": {
+    "auth_user_id": {
+      "type": "string"
+    },
+    "full_name": {
+      "type": "string"
+    },
+    "preferred_name": {
+      "type": "string"
+    },
+    "birth_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "photo": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "user_type": {
+      "type": "string",
+      "enum": [
+        "MX_INTERNAL",
+        "CLIENT_USER"
+      ],
+      "default": "CLIENT_USER"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "EM_PREPARACAO",
+        "CONVITE_PENDENTE",
+        "CONVIDADO",
+        "ATIVO",
+        "AFASTADO",
+        "FERIAS",
+        "SUSPENSO",
+        "DESATIVADO"
+      ],
+      "default": "EM_PREPARACAO"
+    },
+    "client_account_id": {
+      "type": "string"
+    },
+    "store_id": {
+      "type": "string"
+    },
+    "declared_function": {
+      "type": "string"
+    },
+    "mx_role": {
+      "type": "string"
+    },
+    "entry_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "default_view": {
+      "type": "string",
+      "enum": [
+        "DONO",
+        "GERENCIAL",
+        "VENDEDOR",
+        "DEPARTAMENTAL"
+      ]
+    },
+    "relationship_consent": {
+      "type": "boolean",
+      "default": false
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "full_name",
+    "email"
+  ]
+}

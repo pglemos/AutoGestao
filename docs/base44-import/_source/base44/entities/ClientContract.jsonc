@@ -1,0 +1,67 @@
+{
+  "name": "ClientContract",
+  "type": "object",
+  "properties": {
+    "client_account_id": {
+      "type": "string"
+    },
+    "contract_number": {
+      "type": "string"
+    },
+    "product_id": {
+      "type": "string"
+    },
+    "product_name": {
+      "type": "string"
+    },
+    "product_version": {
+      "type": "string"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RASCUNHO",
+        "ATIVO",
+        "SUSPENSO",
+        "ENCERRADO",
+        "RENOVADO"
+      ],
+      "default": "RASCUNHO"
+    },
+    "total_encounters": {
+      "type": "number"
+    },
+    "contracted_presential_visits": {
+      "type": "number",
+      "default": 0
+    },
+    "presential_visits_used": {
+      "type": "number",
+      "default": 0
+    },
+    "responsible_consultant_id": {
+      "type": "string"
+    },
+    "responsible_consultant_name": {
+      "type": "string"
+    },
+    "contract_document_url": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "client_account_id",
+    "product_id"
+  ]
+}

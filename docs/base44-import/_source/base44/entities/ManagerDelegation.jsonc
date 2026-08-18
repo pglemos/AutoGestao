@@ -1,0 +1,48 @@
+{
+  "name": "ManagerDelegation",
+  "type": "object",
+  "properties": {
+    "user_profile_id": {
+      "type": "string"
+    },
+    "client_account_id": {
+      "type": "string"
+    },
+    "store_id": {
+      "type": "string"
+    },
+    "store_name": {
+      "type": "string"
+    },
+    "access_level": {
+      "type": "string"
+    },
+    "valid_from": {
+      "type": "string",
+      "format": "date"
+    },
+    "valid_until": {
+      "type": "string",
+      "format": "date"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "authorized_by": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ATIVO",
+        "ENCERRADO",
+        "INATIVO"
+      ],
+      "default": "ATIVO"
+    }
+  },
+  "required": [
+    "user_profile_id",
+    "valid_until"
+  ]
+}

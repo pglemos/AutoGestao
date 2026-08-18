@@ -1,0 +1,59 @@
+{
+  "name": "ConsultantEncounterGuide",
+  "type": "object",
+  "properties": {
+    "methodology_version_id": {
+      "type": "string"
+    },
+    "encounter_template_id": {
+      "type": "string"
+    },
+    "internal_objective": {
+      "type": "string"
+    },
+    "preparation_instructions": {
+      "type": "string"
+    },
+    "data_to_review": {
+      "type": "string"
+    },
+    "suggested_questions": {
+      "type": "string"
+    },
+    "facilitation_script": {
+      "type": "string"
+    },
+    "attention_points": {
+      "type": "string"
+    },
+    "required_decisions": {
+      "type": "string"
+    },
+    "completion_criteria": {
+      "type": "string"
+    },
+    "post_meeting_guidance": {
+      "type": "string"
+    },
+    "methodological_notes": {
+      "type": "string"
+    },
+    "preparation_checklist": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "NAO_INICIADO",
+        "EM_CONFIGURACAO",
+        "PRONTO_REVISAO",
+        "PUBLICADO"
+      ],
+      "default": "NAO_INICIADO"
+    }
+  },
+  "required": [
+    "methodology_version_id",
+    "encounter_template_id"
+  ]
+}

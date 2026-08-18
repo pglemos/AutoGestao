@@ -1,0 +1,107 @@
+{
+  "name": "StrategicTarget",
+  "type": "object",
+  "properties": {
+    "strategic_plan_cycle_id": {
+      "type": "string"
+    },
+    "client_account_id": {
+      "type": "string"
+    },
+    "store_id": {
+      "type": "string"
+    },
+    "store_name": {
+      "type": "string"
+    },
+    "indicator_definition_id": {
+      "type": "string"
+    },
+    "indicator_name": {
+      "type": "string"
+    },
+    "indicator_code": {
+      "type": "string"
+    },
+    "indicator_area": {
+      "type": "string"
+    },
+    "scope_type": {
+      "type": "string",
+      "enum": [
+        "EMPRESA",
+        "LOJA",
+        "LOJAS_SELECIONADAS"
+      ],
+      "default": "EMPRESA"
+    },
+    "target_direction": {
+      "type": "string",
+      "enum": [
+        "AUMENTAR",
+        "REDUZIR",
+        "MANTER",
+        "FAIXA"
+      ],
+      "default": "AUMENTAR"
+    },
+    "aggregation_policy": {
+      "type": "string",
+      "enum": [
+        "SOMA",
+        "MEDIA_PONDERADA",
+        "RECALCULO_PELAS_BASES",
+        "VALOR_CENTRAL",
+        "COMPARTILHADO",
+        "NAO_CONSOLIDAVEL"
+      ],
+      "default": "SOMA"
+    },
+    "display_format": {
+      "type": "string",
+      "enum": [
+        "INTEIRO",
+        "DECIMAL",
+        "PERCENTUAL",
+        "MOEDA",
+        "DIAS",
+        "RAZAO"
+      ],
+      "default": "INTEIRO"
+    },
+    "unit": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RASCUNHO",
+        "PUBLICADO",
+        "ARQUIVADO"
+      ],
+      "default": "RASCUNHO"
+    },
+    "version_number": {
+      "type": "string",
+      "default": "1"
+    },
+    "observation": {
+      "type": "string"
+    },
+    "created_by": {
+      "type": "string"
+    },
+    "published_by": {
+      "type": "string"
+    },
+    "published_at": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": [
+    "strategic_plan_cycle_id",
+    "client_account_id",
+    "indicator_definition_id"
+  ]
+}

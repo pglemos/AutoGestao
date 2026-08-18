@@ -1,0 +1,106 @@
+{
+  "name": "Store",
+  "type": "object",
+  "properties": {
+    "client_account_id": {
+      "type": "string"
+    },
+    "legal_entity_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "short_name": {
+      "type": "string"
+    },
+    "internal_code": {
+      "type": "string"
+    },
+    "store_type": {
+      "type": "string",
+      "enum": [
+        "MATRIZ",
+        "FILIAL"
+      ],
+      "default": "MATRIZ"
+    },
+    "is_primary": {
+      "type": "boolean",
+      "default": false
+    },
+    "timezone": {
+      "type": "string",
+      "default": "America/Sao_Paulo"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "EM_CONFIGURACAO",
+        "ATIVA",
+        "INATIVA",
+        "ARQUIVADA"
+      ],
+      "default": "ATIVA"
+    },
+    "cnpj": {
+      "type": "string"
+    },
+    "legal_name": {
+      "type": "string"
+    },
+    "trade_name": {
+      "type": "string"
+    },
+    "address_street": {
+      "type": "string"
+    },
+    "address_city": {
+      "type": "string"
+    },
+    "address_state": {
+      "type": "string"
+    },
+    "address_zip": {
+      "type": "string"
+    },
+    "opening_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "working_days": {
+      "type": "string"
+    },
+    "opening_time": {
+      "type": "string"
+    },
+    "closing_time": {
+      "type": "string"
+    },
+    "created_from": {
+      "type": "string"
+    },
+    "inherited_location": {
+      "type": "boolean",
+      "default": false
+    },
+    "inherited_cnpj": {
+      "type": "boolean",
+      "default": false
+    },
+    "responsible_manager_id": {
+      "type": "string"
+    },
+    "responsible_manager_name": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "client_account_id",
+    "name",
+    "store_type"
+  ]
+}

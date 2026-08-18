@@ -1,0 +1,205 @@
+// Políticas de unidade e consolidação por indicador.
+//
+// unit_entry_mode — onde o valor é cadastrado:
+//   PER_UNIT_REQUIRED    cada unidade ativa precisa ter valor
+//   PER_UNIT_OPTIONAL    pode existir valor em apenas algumas unidades
+//   COMPANY_ONLY         cadastrado somente no consolidado da empresa
+//   SHARED_COMPANY_VALUE cadastrado uma vez, exibido nas unidades, sem soma
+//
+// unit_rollup_method — como o consolidado do cliente é obtido:
+//   SUM                    soma dos valores das unidades
+//   RECALCULATE_FROM_BASES recalcula pela fórmula sobre as bases já consolidadas
+//   WEIGHTED_AVERAGE       média ponderada por um indicador-peso
+//   AVERAGE_VALID_VALUES   média simples dos valores válidos
+//   LAST_VALID_VALUE       último valor válido
+//   SHARED_NO_SUM          valor compartilhado entre unidades
+//   COMPANY_VALUE          valor empresarial centralizado
+//   MANUAL_CONSOLIDATED    consolidado digitado à mão
+
+export type UnitEntryMode =
+  | 'PER_UNIT_REQUIRED'
+  | 'PER_UNIT_OPTIONAL'
+  | 'COMPANY_ONLY'
+  | 'SHARED_COMPANY_VALUE'
+
+export type UnitRollupMethod =
+  | 'SUM'
+  | 'RECALCULATE_FROM_BASES'
+  | 'WEIGHTED_AVERAGE'
+  | 'AVERAGE_VALID_VALUES'
+  | 'LAST_VALID_VALUE'
+  | 'SHARED_NO_SUM'
+  | 'COMPANY_VALUE'
+  | 'MANUAL_CONSOLIDATED'
+
+export type UnitPolicy = {
+  unit_entry_mode: UnitEntryMode | null
+  unit_rollup_method: UnitRollupMethod | null
+  weight_indicator_code: string | null
+}
+
+type PolicyDefault = {
+  unit_entry_mode: UnitEntryMode
+  unit_rollup_method: UnitRollupMethod
+  weight_indicator_code?: string
+}
+
+export const UNIT_ENTRY_MODES: Record<UnitEntryMode, { label: string; short: string }> = {
+  PER_UNIT_REQUIRED: { label: 'Por unidade (obrigatório)', short: 'Por unidade' },
+  PER_UNIT_OPTIONAL: { label: 'Por unidade (opcional)', short: 'Opcional' },
+  COMPANY_ONLY: { label: 'Somente empresa', short: 'Empresa' },
+  SHARED_COMPANY_VALUE: { label: 'Valor compartilhado', short: 'Compartilhado' },
+}
+
+export const UNIT_ROLLUP_METHODS: Record<UnitRollupMethod, { label: string; short: string }> = {
+  SUM: { label: 'Soma das unidades', short: 'Soma' },
+  RECALCULATE_FROM_BASES: { label: 'Recálculo pelas bases', short: 'Recálculo' },
+  WEIGHTED_AVERAGE: { label: 'Média ponderada', short: 'Ponderada' },
+  AVERAGE_VALID_VALUES: { label: 'Média dos valores válidos', short: 'Média' },
+  LAST_VALID_VALUE: { label: 'Último valor válido', short: 'Último' },
+  SHARED_NO_SUM: { label: 'Compartilhado (não somar)', short: 'Compartilhado' },
+  COMPANY_VALUE: { label: 'Valor empresarial', short: 'Empresa' },
+  MANUAL_CONSOLIDATED: { label: 'Consolidado manual', short: 'Manual' },
+}
+
+const sum = (unit_entry_mode: UnitEntryMode = 'PER_UNIT_REQUIRED'): PolicyDefault => ({
+  unit_entry_mode,
+  unit_rollup_method: 'SUM',
+})
+
+const recalc = (): PolicyDefault => ({
+  unit_entry_mode: 'PER_UNIT_REQUIRED',
+  unit_rollup_method: 'RECALCULATE_FROM_BASES',
+})
+
+const weighted = (weight_indicator_code: string): PolicyDefault => ({
+  unit_entry_mode: 'PER_UNIT_OPTIONAL',
+  unit_rollup_method: 'WEIGHTED_AVERAGE',
+  weight_indicator_code,
+})
+
+const companyOnly = (): PolicyDefault => ({
+  unit_entry_mode: 'COMPANY_ONLY',
+  unit_rollup_method: 'COMPANY_VALUE',
+})
+
+export const UNIT_POLICY_DEFAULTS = {
+  // Aditivos — somar unidades é correto.
+  SALES_WALKIN: sum(),
+  SALES_REFERRAL: sum(),
+  SALES_COMPANY_PORTFOLIO: sum(),
+  SALES_SELLER_PORTFOLIO: sum(),
+  SALES_INTERNET: sum(),
+  SALES_OTHER: sum(),
+  SELLER_COUNT: sum(),
+  LEADS_RECEIVED: sum(),
+  VEHICLES_APPRAISED: sum(),
+  SALES_WITH_TRADE: sum(),
+  APPROVED_CREDIT_APPLICATIONS: sum(),
+  PAID_CREDIT_APPLICATIONS: sum(),
+  APPOINTMENTS_VOLUME: sum(),
+  VISITS_VOLUME: sum(),
+  INTERNET_INVESTMENT: sum(),
+  AFTER_SALES_VOLUME: sum(),
+  EMPLOYEE_COUNT: sum(),
+  ACTIVE_INVENTORY: sum(),
+  INVENTORY_TOTAL: sum(),
+  INVENTORY_OVER_90_VOLUME: sum(),
+  CONTRIBUTION_MARGIN: sum(),
+  ADDITIONAL_REVENUE: sum(),
+
+  // Percentuais, razões e médias — somar produz número plausível e errado.
+  SALES_TOTAL: recalc(),
+  SALES_PER_SELLER: recalc(),
+  LEADS_PER_SELLER: recalc(),
+  TRADE_SALES_PERCENTAGE: recalc(),
+  FINANCED_SALES_PERCENTAGE: recalc(),
+  APPOINTMENTS_PER_INTERNET_SALE: recalc(),
+  LEAD_TO_APPOINTMENT_CONVERSION: recalc(),
+  APPOINTMENT_TO_VISIT_CONVERSION: recalc(),
+  VISIT_TO_SALE_CONVERSION: recalc(),
+  INTERNET_COST_PER_SALE: recalc(),
+  INVENTORY_TURNOVER: recalc(),
+  INVENTORY_OVER_90_PERCENTAGE: recalc(),
+  NET_PROFIT: recalc(),
+  AVERAGE_SALES_MARGIN: recalc(),
+  AFTER_SALES_PERCENTAGE: recalc(),
+
+  // Médias ponderadas por um indicador-peso.
+  INVENTORY_AVERAGE_TICKET: weighted('INVENTORY_TOTAL'),
+  INVENTORY_AVERAGE_MARGIN: weighted('INVENTORY_TOTAL'),
+  AVERAGE_AFTER_SALES_COST: weighted('AFTER_SALES_VOLUME'),
+
+  // Centralizados na empresa.
+  INSTAGRAM_FOLLOWERS: companyOnly(),
+  GOOGLE_BUSINESS_RATING: companyOnly(),
+  CONTENT_QUALITY: companyOnly(),
+  TOTAL_EXPENSE: companyOnly(),
+  AVERAGE_PREPARATION_COST: companyOnly(),
+} satisfies Record<string, PolicyDefault>
+
+type ClientIndicatorPolicySource = {
+  unit_entry_mode?: string | null
+  unit_rollup_method?: string | null
+  weight_indicator_code?: string | null
+}
+
+type PackageItemPolicySource = {
+  unit_entry_mode_snapshot?: string | null
+  unit_rollup_method_snapshot?: string | null
+  weight_indicator_code_snapshot?: string | null
+}
+
+/**
+ * Resolve a política efetiva de um indicador.
+ *
+ * Hierarquia: override do cliente > snapshot do pacote > catálogo > padrão do módulo.
+ * Sem nenhuma fonte, devolve política indefinida — nunca assume soma, porque somar
+ * um percentual passa despercebido.
+ */
+export function resolveUnitPolicy(
+  indicatorCode: string,
+  clientIndicator?: ClientIndicatorPolicySource | null,
+  packageItem?: PackageItemPolicySource | null,
+  indicatorDef?: ClientIndicatorPolicySource | null,
+): UnitPolicy {
+  if (clientIndicator?.unit_entry_mode && clientIndicator?.unit_rollup_method) {
+    return {
+      unit_entry_mode: clientIndicator.unit_entry_mode as UnitEntryMode,
+      unit_rollup_method: clientIndicator.unit_rollup_method as UnitRollupMethod,
+      weight_indicator_code: clientIndicator.weight_indicator_code ?? null,
+    }
+  }
+
+  if (packageItem?.unit_entry_mode_snapshot && packageItem?.unit_rollup_method_snapshot) {
+    return {
+      unit_entry_mode: packageItem.unit_entry_mode_snapshot as UnitEntryMode,
+      unit_rollup_method: packageItem.unit_rollup_method_snapshot as UnitRollupMethod,
+      weight_indicator_code: packageItem.weight_indicator_code_snapshot ?? null,
+    }
+  }
+
+  if (indicatorDef?.unit_entry_mode && indicatorDef?.unit_rollup_method) {
+    return {
+      unit_entry_mode: indicatorDef.unit_entry_mode as UnitEntryMode,
+      unit_rollup_method: indicatorDef.unit_rollup_method as UnitRollupMethod,
+      weight_indicator_code: indicatorDef.weight_indicator_code ?? null,
+    }
+  }
+
+  const fallback = (UNIT_POLICY_DEFAULTS as Record<string, PolicyDefault | undefined>)[indicatorCode]
+  if (fallback) {
+    return {
+      unit_entry_mode: fallback.unit_entry_mode,
+      unit_rollup_method: fallback.unit_rollup_method,
+      weight_indicator_code: fallback.weight_indicator_code ?? null,
+    }
+  }
+
+  return { unit_entry_mode: null, unit_rollup_method: null, weight_indicator_code: null }
+}
+
+/** Política incompleta bloqueia a publicação do plano. */
+export function isUnitPolicyDefined(policy: Partial<UnitPolicy> | null | undefined): boolean {
+  return Boolean(policy?.unit_entry_mode && policy?.unit_rollup_method)
+}

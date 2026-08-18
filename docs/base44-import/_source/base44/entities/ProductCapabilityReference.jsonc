@@ -1,0 +1,84 @@
+{
+  "name": "ProductCapabilityReference",
+  "type": "object",
+  "properties": {
+    "product_id": {
+      "type": "string"
+    },
+    "product_name": {
+      "type": "string"
+    },
+    "product_version": {
+      "type": "string"
+    },
+    "module_code": {
+      "type": "string"
+    },
+    "module_label": {
+      "type": "string"
+    },
+    "menu_code": {
+      "type": "string"
+    },
+    "menu_label": {
+      "type": "string"
+    },
+    "default_included": {
+      "type": "boolean",
+      "default": true
+    },
+    "is_mandatory": {
+      "type": "boolean",
+      "default": false
+    },
+    "default_release_stage": {
+      "type": "string",
+      "enum": [
+        "ETAPA_1",
+        "ETAPA_2",
+        "ETAPA_3",
+        "NA_ATIVACAO",
+        "MANUAL",
+        "A_DEFINIR"
+      ],
+      "default": "NA_ATIVACAO"
+    },
+    "default_visibility": {
+      "type": "string",
+      "enum": [
+        "ATIVO",
+        "EM_BREVE",
+        "VISIVEL_BLOQUEADO",
+        "OCULTO"
+      ],
+      "default": "ATIVO"
+    },
+    "technical_status": {
+      "type": "string",
+      "enum": [
+        "DISPONIVEL",
+        "EM_HOMOLOGACAO",
+        "EM_DESENVOLVIMENTO",
+        "TEMPORARIAMENTE_INDISPONIVEL"
+      ],
+      "default": "DISPONIVEL"
+    },
+    "display_order": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ATIVO",
+        "INATIVO"
+      ],
+      "default": "ATIVO"
+    }
+  },
+  "required": [
+    "product_id",
+    "module_code",
+    "menu_code"
+  ]
+}

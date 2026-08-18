@@ -1,0 +1,94 @@
+{
+  "name": "MxConsultant",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "photo": {
+      "type": "string"
+    },
+    "mx_role": {
+      "type": "string",
+      "enum": [
+        "CONSULTOR_MX",
+        "CONSULTOR_ESPECIALISTA",
+        "COORDENADOR_CONSULTORIA",
+        "ADMINISTRADOR_IMPLANTACAO",
+        "ADMINISTRADOR_PRINCIPAL",
+        "ADMINISTRADOR_PRODUTO",
+        "ADMINISTRADOR_DADOS",
+        "SUPORTE_MX",
+        "GESTAO_MX"
+      ]
+    },
+    "specialties": {
+      "type": "string"
+    },
+    "enabled_programs": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ATIVO",
+        "AFASTADO",
+        "FERIAS",
+        "INATIVO"
+      ],
+      "default": "ATIVO"
+    },
+    "capacity_percent": {
+      "type": "number",
+      "default": 0
+    },
+    "active_clients_count": {
+      "type": "number",
+      "default": 0
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "online_available_hours": {
+      "type": "number",
+      "default": 0
+    },
+    "online_allocated_hours": {
+      "type": "number",
+      "default": 0
+    },
+    "online_reserved_hours": {
+      "type": "number",
+      "default": 0
+    },
+    "in_person_available_hours": {
+      "type": "number",
+      "default": 0
+    },
+    "in_person_allocated_hours": {
+      "type": "number",
+      "default": 0
+    },
+    "in_person_reserved_hours": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "full_name",
+    "email",
+    "mx_role"
+  ]
+}

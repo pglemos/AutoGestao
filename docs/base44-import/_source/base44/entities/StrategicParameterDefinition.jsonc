@@ -1,0 +1,83 @@
+{
+  "name": "StrategicParameterDefinition",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "department": {
+      "type": "string",
+      "enum": [
+        "COMERCIAL",
+        "MARKETING",
+        "PRODUTO_ESTOQUE",
+        "PESSOAS_RH",
+        "FINANCEIRO",
+        "OPERACOES"
+      ]
+    },
+    "unit": {
+      "type": "string"
+    },
+    "value_format": {
+      "type": "string",
+      "enum": [
+        "INTEGER",
+        "DECIMAL",
+        "CURRENCY_BRL",
+        "PERCENTAGE",
+        "SCORE_0_5",
+        "RATIO",
+        "INVENTORY_TURNOVER"
+      ],
+      "default": "INTEGER"
+    },
+    "default_value": {
+      "type": "number"
+    },
+    "monthly_defaults": {
+      "type": "string"
+    },
+    "indicator_codes": {
+      "type": "string"
+    },
+    "allows_client_override": {
+      "type": "boolean",
+      "default": true
+    },
+    "allows_store_override": {
+      "type": "boolean",
+      "default": false
+    },
+    "allows_monthly_values": {
+      "type": "boolean",
+      "default": false
+    },
+    "effective_from_year": {
+      "type": "number",
+      "default": 2025
+    },
+    "effective_until_year": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ATIVO",
+        "INATIVO",
+        "ARQUIVADO"
+      ],
+      "default": "ATIVO"
+    }
+  },
+  "required": [
+    "code",
+    "name"
+  ]
+}

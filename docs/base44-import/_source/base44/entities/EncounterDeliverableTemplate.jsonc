@@ -1,0 +1,75 @@
+{
+  "name": "EncounterDeliverableTemplate",
+  "type": "object",
+  "properties": {
+    "methodology_version_id": {
+      "type": "string"
+    },
+    "encounter_template_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "execution_instruction": {
+      "type": "string"
+    },
+    "required": {
+      "type": "boolean",
+      "default": true
+    },
+    "recommended_responsible_role": {
+      "type": "string"
+    },
+    "deadline_offset_days": {
+      "type": "number",
+      "default": 0
+    },
+    "delivery_moment": {
+      "type": "string",
+      "enum": [
+        "ANTES",
+        "DURANTE",
+        "DEPOIS"
+      ],
+      "default": "DURANTE"
+    },
+    "file_allowed": {
+      "type": "boolean",
+      "default": false
+    },
+    "file_required": {
+      "type": "boolean",
+      "default": false
+    },
+    "confirmation_required": {
+      "type": "boolean",
+      "default": false
+    },
+    "display_order": {
+      "type": "number",
+      "default": 1
+    },
+    "is_demo": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RASCUNHO",
+        "PUBLICADO",
+        "ARQUIVADO"
+      ],
+      "default": "RASCUNHO"
+    }
+  },
+  "required": [
+    "methodology_version_id",
+    "encounter_template_id",
+    "title"
+  ]
+}

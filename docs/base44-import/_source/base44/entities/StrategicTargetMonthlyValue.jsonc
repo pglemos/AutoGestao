@@ -1,0 +1,108 @@
+{
+  "name": "StrategicTargetMonthlyValue",
+  "type": "object",
+  "properties": {
+    "strategic_target_id": {
+      "type": "string"
+    },
+    "strategic_plan_cycle_id": {
+      "type": "string"
+    },
+    "client_account_id": {
+      "type": "string"
+    },
+    "indicator_definition_id": {
+      "type": "string"
+    },
+    "indicator_code": {
+      "type": "string"
+    },
+    "year": {
+      "type": "number"
+    },
+    "month": {
+      "type": "number"
+    },
+    "store_id": {
+      "type": "string"
+    },
+    "scope_type": {
+      "type": "string",
+      "enum": [
+        "STORE",
+        "COMPANY"
+      ],
+      "default": "STORE"
+    },
+    "strategic_plan_unit_scope_id": {
+      "type": "string"
+    },
+    "target_value": {
+      "type": "number"
+    },
+    "calculated_value": {
+      "type": "number"
+    },
+    "applied_value": {
+      "type": "number"
+    },
+    "is_overridden": {
+      "type": "boolean",
+      "default": false
+    },
+    "override_reason": {
+      "type": "string"
+    },
+    "parameter_snapshot": {
+      "type": "string"
+    },
+    "parameter_source": {
+      "type": "string"
+    },
+    "formula_snapshot": {
+      "type": "string"
+    },
+    "published_value": {
+      "type": "number"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "MANUAL",
+        "IMPORT",
+        "CALCULATION"
+      ],
+      "default": "MANUAL"
+    },
+    "import_batch_id": {
+      "type": "string"
+    },
+    "version_number": {
+      "type": "string",
+      "default": "1"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RASCUNHO",
+        "PUBLICADO",
+        "ARQUIVADO"
+      ],
+      "default": "RASCUNHO"
+    },
+    "updated_by": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "published_at": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "strategic_target_id",
+    "year",
+    "month"
+  ]
+}

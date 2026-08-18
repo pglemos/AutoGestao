@@ -1,0 +1,93 @@
+{
+  "name": "ConsultingProduct",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "code": {
+      "type": "string"
+    },
+    "program": {
+      "type": "string",
+      "enum": [
+        "PMR",
+        "PMR_PLUS",
+        "PPA"
+      ]
+    },
+    "modality_variant": {
+      "type": "string",
+      "enum": [
+        "ONLINE",
+        "HIBRIDO",
+        "PRESENCIAL",
+        "FLEXIVEL"
+      ]
+    },
+    "version_number": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RASCUNHO",
+        "EM_REVISAO",
+        "PUBLICADO",
+        "SUSPENSO_NOVAS_CONTRATACOES",
+        "ARQUIVADO"
+      ],
+      "default": "RASCUNHO"
+    },
+    "total_encounters": {
+      "type": "number"
+    },
+    "min_presential_visits": {
+      "type": "number",
+      "default": 0
+    },
+    "max_presential_visits": {
+      "type": "number"
+    },
+    "evolution_group": {
+      "type": "string",
+      "default": "CONSULTORIA_EVOLUTIVA_PRINCIPAL"
+    },
+    "description": {
+      "type": "string"
+    },
+    "change_summary": {
+      "type": "string"
+    },
+    "published_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "published_by": {
+      "type": "string"
+    },
+    "effective_from": {
+      "type": "string",
+      "format": "date"
+    },
+    "active_contracts_count": {
+      "type": "number",
+      "default": 0
+    },
+    "uses_strategic_plan": {
+      "type": "boolean",
+      "default": true
+    },
+    "indicator_package_version_id": {
+      "type": "string"
+    },
+    "indicator_package_name": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "program",
+    "version_number"
+  ]
+}
