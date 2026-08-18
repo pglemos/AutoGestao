@@ -123,19 +123,23 @@ export async function continueClientProgram(
     }
   }
 
-  if (draft.consultant_ids.length) {
+  const consultantIdsToAssign = draft.consultant_ids.length > 0
+    ? draft.consultant_ids
+    : draft.implementation_owner_id ? [draft.implementation_owner_id] : []
+
+  if (consultantIdsToAssign.length) {
     const { data: existingAssignments } = await supabase
       .from('atribuicoes_consultoria')
       .select('user_id')
       .eq('client_id', clientId)
     const present = new Set((existingAssignments ?? []).map(item => (item as { user_id: string }).user_id))
-    const missing = draft.consultant_ids.filter(userId => !present.has(userId))
+    const missing = consultantIdsToAssign.filter(userId => !present.has(userId))
     if (missing.length) {
       const { error } = await supabase.from('atribuicoes_consultoria').insert(
         missing.map((userId, index) => ({
           client_id: clientId,
           user_id: userId,
-          assignment_role: index === 0 ? 'responsavel' : 'apoio',
+          assignment_role: index === 0 && !present.size ? 'responsavel' : 'auxiliar',
           active: true,
         })),
       )
@@ -240,12 +244,16 @@ export async function createClientProgram(draft: NewClientDraft, createdBy: stri
     if (error) return rollback(`Cliente criado, mas os módulos falharam: ${error.message}`)
   }
 
-  if (draft.consultant_ids.length) {
+  const consultantIdsToAssign = draft.consultant_ids.length > 0
+    ? draft.consultant_ids
+    : draft.implementation_owner_id ? [draft.implementation_owner_id] : []
+
+  if (consultantIdsToAssign.length) {
     const { error } = await supabase.from('atribuicoes_consultoria').insert(
-      draft.consultant_ids.map((userId, index) => ({
+      consultantIdsToAssign.map((userId, index) => ({
         client_id: client.id,
         user_id: userId,
-        assignment_role: index === 0 ? 'responsavel' : 'apoio',
+        assignment_role: index === 0 ? 'responsavel' : 'auxiliar',
         active: true,
       })),
     )

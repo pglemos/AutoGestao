@@ -46,6 +46,7 @@ import { DonoMasterCard } from './clientes/DonoMasterCard'
 import { EnrollmentLinkModal } from './clientes/EnrollmentLinkModal'
 import { PersonCreateModal } from './clientes/PersonCreateModal'
 import { ProgramCard } from './clientes/ProgramCard'
+import { ProgramEditModal } from './clientes/ProgramEditModal'
 import { StoreFormModal } from './clientes/StoreFormModal'
 import { StoreOperatingHoursEditor } from './clientes/StoreOperatingHoursEditor'
 import {
@@ -56,8 +57,10 @@ import {
 import { emptyPersonAccessDraft, resolveOwnerMaster, type PersonAccessDraft, type OwnerMasterResolution } from './clientes/personAccess'
 import { createEnrollmentLink, listEnrollmentLinks, type EnrollmentLinkRow } from './clientes/enrollmentMutations'
 import { buildProgramSummary } from './clientes/programSummary'
+import { saveClientProgram, type ProgramDraft } from './clientes/programMutations'
 import { emptyStoreDraft, type StoreDraft } from './clientes/storeForm'
 import { fetchUnitOperatingHours, saveClientStore, type UnitRow } from './clientes/storeMutations'
+import { useAdminConsultingProducts, useAdminTeam } from './hooks/useAdminMxLists'
 
 type ClientTab = 'visao' | 'lojas' | 'pessoas' | 'jornada' | 'implantacao' | 'modulos' | 'configuracoes' | 'dados' | 'historico'
 
@@ -86,6 +89,8 @@ export function AdminClienteDetalhePage() {
   const { width, bottomClearance } = resolveRouteLayout(location.pathname)
   const { client, loading, error, refetch } = useConsultingClientDetailBySlug(clientSlug)
   const { supabaseUser } = useAuth()
+  const products = useAdminConsultingProducts()
+  const team = useAdminTeam()
   const [searchParams] = useSearchParams()
   const requestedTab = searchParams.get('tab')
   const [tab, setTabState] = useState<ClientTab>(requestedTab && TABS.some(entry => entry.key === requestedTab) ? requestedTab as ClientTab : 'visao')
@@ -94,6 +99,10 @@ export function AdminClienteDetalhePage() {
   const [storeTaken, setStoreTaken] = useState(false)
   const [activationOpen, setActivationOpen] = useState(false)
   const [activating, setActivating] = useState(false)
+
+  // Programa contratado
+  const [programModalOpen, setProgramModalOpen] = useState(false)
+  const [savingProgram, setSavingProgram] = useState(false)
 
   // Lojas: CRUD + horários
   const [units, setUnits] = useState<UnitRow[]>([])
@@ -188,19 +197,44 @@ export function AdminClienteDetalhePage() {
   const visits = client?.visits ?? []
   const totalVisits = visits.length || 0
   const progress = useMemo(() => journeyProgress(visits, totalVisits), [visits, totalVisits])
+  const responsibleConsultant = useMemo(() => {
+    const primary = client?.assignments?.find(a => a.active && a.assignment_role === 'responsavel')?.user?.name
+    if (primary) return primary
+    const anyActive = client?.assignments?.find(a => a.active)?.user?.name
+    if (anyActive) return anyActive
+    return team.rows.find(u => u.id === (client as { implementation_owner_id?: string | null })?.implementation_owner_id)?.name ?? null
+  }, [client?.assignments, team.rows, client])
+
   const programSummary = useMemo(() => buildProgramSummary({
     product_name: client?.product_name ?? null,
     program_template_key: (client as { program_template_key?: string | null })?.program_template_key ?? null,
     modality: client?.modality ?? null,
     contract_start_date: (client as { contract_start_date?: string | null })?.contract_start_date ?? null,
     contract_end_date: (client as { contract_end_date?: string | null })?.contract_end_date ?? null,
+    responsible_consultant: responsibleConsultant,
     visits: visits.map(visit => ({
       visit_number: visit.visit_number,
       status: visit.status,
       is_onboarding: visit.visit_number <= 1,
       consultant_name: visit.consultant?.name ?? null,
     })),
-  }), [client, visits])
+  }), [client, visits, responsibleConsultant])
+
+  const programInitialDraft = useMemo<ProgramDraft>(() => {
+    const assignments = client?.assignments ?? []
+    const responsible = assignments.find(a => a.active && a.assignment_role === 'responsavel')?.user_id ?? ''
+    const auxiliaries = assignments.filter(a => a.active && a.assignment_role !== 'responsavel').map(a => a.user_id)
+    return {
+      product_name: client?.product_name ?? '',
+      program_template_key: (client as { program_template_key?: string | null })?.program_template_key ?? '',
+      modality: client?.modality ?? '',
+      contract_start_date: (client as { contract_start_date?: string | null })?.contract_start_date ?? '',
+      contract_end_date: (client as { contract_end_date?: string | null })?.contract_end_date ?? '',
+      implementation_owner_id: (client as { implementation_owner_id?: string | null })?.implementation_owner_id ?? '',
+      responsible_consultant_id: responsible,
+      auxiliary_consultant_ids: auxiliaries,
+    }
+  }, [client])
 
   const ownerMasterResolution = useMemo<OwnerMasterResolution>(() => {
     if (!persons.length) return { status: 'NOT_CONFIGURED', count: 0 }
@@ -300,6 +334,23 @@ export function AdminClienteDetalhePage() {
       return result.url
     } finally {
       setSavingLink(false)
+    }
+  }
+
+  const submitProgram = async (draft: ProgramDraft) => {
+    if (!client?.id) return
+    setSavingProgram(true)
+    try {
+      const result = await saveClientProgram(client.id, draft)
+      if (result.error) {
+        toast.error(result.error)
+        return
+      }
+      toast.success('Programa contratado atualizado com sucesso.')
+      setProgramModalOpen(false)
+      await refetch()
+    } finally {
+      setSavingProgram(false)
     }
   }
 
@@ -499,7 +550,7 @@ export function AdminClienteDetalhePage() {
 
             {tab === 'jornada' ? (
               <div className="space-y-5">
-                <ProgramCard summary={programSummary} onEditProgram={() => { setTab('visao'); void refetch() }} />
+                <ProgramCard summary={programSummary} onEditProgram={() => setProgramModalOpen(true)} />
                 <MxSectionCard>
                   <MxSectionHeader title="Jornada de encontros" description={`${visits.length} encontro(s) registrados.`} />
                   <div className="space-y-4 p-5">
@@ -593,6 +644,16 @@ export function AdminClienteDetalhePage() {
               onRepair={key => void repair(key)}
               repairing={repairing}
               onClose={() => setActivationOpen(false)}
+            />
+
+            <ProgramEditModal
+              open={programModalOpen}
+              initial={programInitialDraft}
+              submitting={savingProgram}
+              products={products.rows}
+              team={team.rows}
+              onSubmit={draft => void submitProgram(draft)}
+              onClose={() => setProgramModalOpen(false)}
             />
 
             <StoreFormModal

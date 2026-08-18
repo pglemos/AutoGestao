@@ -10,6 +10,7 @@ export type ProgramSummaryInput = {
     is_onboarding?: boolean | null
     consultant_name?: string | null
   }>
+  responsible_consultant?: string | null
 }
 
 export type ProgramSummary = {
@@ -36,7 +37,7 @@ export function buildProgramSummary(input: ProgramSummaryInput): ProgramSummary 
     ['concluida', 'concluído', 'concluido', 'realizada'].includes(String(visit.status ?? '').toLowerCase()),
   ).length
   const onboarding = visits.filter(visit => visit.is_onboarding === true).length
-  const consultant = visits.find(visit => visit.consultant_name)?.consultant_name ?? null
+  const consultant = visits.find(visit => visit.consultant_name)?.consultant_name ?? input.responsible_consultant ?? null
   const configured = Boolean(
     (input.product_name ?? '').trim() || (input.program_template_key ?? '').trim(),
   )
@@ -55,3 +56,4 @@ export function buildProgramSummary(input: ProgramSummaryInput): ProgramSummary 
     responsible_consultant: consultant,
   }
 }
+

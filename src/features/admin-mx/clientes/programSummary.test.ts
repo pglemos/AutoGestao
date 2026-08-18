@@ -34,4 +34,21 @@ describe('programa contratado — lógica pura', () => {
     expect(summary.configured).toBe(true)
     expect(summary.product_name).toBeNull()
   })
+
+  test('usa consultor responsável atribuído quando a jornada não possui visitas', () => {
+    const summary = buildProgramSummary({
+      product_name: 'PMR - 7 Visitas',
+      program_template_key: 'pmr_7',
+      modality: 'presencial',
+      contract_start_date: '2026-08-20',
+      contract_end_date: '2026-12-10',
+      responsible_consultant: 'Daniel',
+      visits: [],
+    })
+    expect(summary.configured).toBe(true)
+    expect(summary.responsible_consultant).toBe('Daniel')
+    expect(summary.visits).toBe(0)
+    expect(summary.progress).toBe(0)
+  })
 })
+
