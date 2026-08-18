@@ -1,6 +1,6 @@
 # MX Foundation Zero — Matriz atual route × role
 
-Gerado em 2026-08-18T18:10:09.157Z a partir do inventário AST vivo e de ROUTE_ACCESS_RULES.
+Gerado em 2026-08-18T18:12:08.779Z a partir do inventário AST vivo e de ROUTE_ACCESS_RULES.
 
 ## Denominadores
 
