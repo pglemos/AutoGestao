@@ -15,14 +15,19 @@ export type { ClientAction }
 
 export const CLIENT_ACTION_LABELS: Record<ClientAction, string> = {
   abrir_visao360: 'Abrir Visão 360',
+  acessar_workspace: 'Acessar Workspace da Loja',
+  gerenciar_equipe: 'Gerenciar Equipe de Vendedores',
+  editar_loja: 'Editar Dados & Metas da Loja',
+  copiar_link_cadastro: 'Copiar link pré-cadastro (Vendedores)',
   continuar_onboarding: 'Continuar onboarding',
   gerar_link_autocadastro: 'Gerar link de autocadastro',
   adicionar_pessoa: 'Adicionar pessoa',
-  abrir_jornada: 'Abrir jornada',
+  abrir_jornada: 'Abrir jornada consultiva',
   validar_cadastros: 'Validar cadastros',
   programar_ativacao: 'Programar ativação',
   suspender: 'Suspender',
   abrir_auditoria: 'Abrir auditoria',
+  arquivar_loja: 'Excluir / Arquivar loja',
 }
 
 const Base44DropdownContent = DropdownMenuContent as unknown as ComponentType<{ children: ReactNode; align?: 'end'; className?: string }>

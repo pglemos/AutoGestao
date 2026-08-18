@@ -36,7 +36,7 @@ describe('Mentor Comercial — Regras de Prioridade e Scripts dos Áudios', () =
         proxima_acao_data: '2026-08-17T14:30:00',
       }
       expect(isAgendamentoHoje(clienteVisitaHoje, refHoje)).toBe(true)
-      expect(calcularPrioridade(clienteVisitaHoje)).toBe('Máxima')
+      expect(calcularPrioridade(clienteVisitaHoje, refHoje)).toBe('Máxima')
     })
   })
 

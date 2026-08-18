@@ -443,12 +443,12 @@ export function classificacaoScore(score) {
 }
 
 // ─── PRIORIDADE COMERCIAL ────────────────────────────────────────────────────
-export function calcularPrioridade(cliente) {
+export function calcularPrioridade(cliente, agora = new Date()) {
   if (!cliente) return "Baixa";
-  if (isAgendamentoHoje(cliente)) return "Máxima";
-  if (isPosVenda30Dias(cliente)) return "Alta";
-  if (isRecompra1Ano(cliente)) return "Alta";
-  return calcularPrioridadeOficial(cliente);
+  if (isAgendamentoHoje(cliente, agora)) return "Máxima";
+  if (isPosVenda30Dias(cliente, agora)) return "Alta";
+  if (isRecompra1Ano(cliente, agora)) return "Alta";
+  return calcularPrioridadeOficial(cliente, agora);
 }
 
 // ─── CORES ───────────────────────────────────────────────────────────────────

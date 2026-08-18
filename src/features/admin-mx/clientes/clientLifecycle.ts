@@ -35,6 +35,10 @@ export const CLIENT_LIFECYCLE_LABELS: Record<ClientLifecycle, string> = {
 
 export type ClientAction =
   | 'abrir_visao360'
+  | 'acessar_workspace'
+  | 'gerenciar_equipe'
+  | 'editar_loja'
+  | 'copiar_link_cadastro'
   | 'continuar_onboarding'
   | 'gerar_link_autocadastro'
   | 'adicionar_pessoa'
@@ -43,6 +47,7 @@ export type ClientAction =
   | 'programar_ativacao'
   | 'suspender'
   | 'abrir_auditoria'
+  | 'arquivar_loja'
 
 /**
  * Ações do menu da lista conforme o lifecycle (Base44 ClientesMX.jsx 160-195):
@@ -53,11 +58,17 @@ export type ClientAction =
  */
 export function clientActionsFor(client: ClientLifecycleRow): ClientAction[] {
   const lifecycle = resolveClientLifecycle(client)
-  const actions: ClientAction[] = ['abrir_visao360']
+  const actions: ClientAction[] = [
+    'abrir_visao360',
+    'acessar_workspace',
+    'gerenciar_equipe',
+    'editar_loja',
+    'copiar_link_cadastro',
+  ]
   if (!client.onboarding_completed) actions.push('continuar_onboarding')
   actions.push('gerar_link_autocadastro', 'adicionar_pessoa', 'abrir_jornada')
   if (lifecycle === 'pronto_para_ativar' || lifecycle === 'em_configuracao') actions.push('programar_ativacao')
   if (lifecycle === 'ativo' || lifecycle === 'ativacao_programada') actions.push('suspender')
-  actions.push('abrir_auditoria')
+  actions.push('abrir_auditoria', 'arquivar_loja')
   return actions
 }
