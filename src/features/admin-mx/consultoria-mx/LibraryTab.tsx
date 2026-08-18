@@ -32,6 +32,13 @@ export function LibraryTab(props: {
 
   useEffect(() => { void load() }, [])
 
+  useEffect(() => {
+    if (props.controller.openAddMaterial) {
+      setShowAdd(true)
+      props.controller.setOpenAddMaterial(false)
+    }
+  }, [props.controller])
+
   const filtered = items.filter(item => {
     if (search && !(item.title.toLowerCase().includes(search.toLowerCase()) || (item.description ?? '').toLowerCase().includes(search.toLowerCase()))) return false
     if (filterType && item.content_type !== filterType) return false

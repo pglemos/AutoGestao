@@ -240,20 +240,66 @@ export async function fetchProductsWithMethodology(): Promise<{ rows: ProductWit
   }
 }
 
-/** Estrutura da jornada de um produto (EncounterTemplate no Base44). */
-export async function fetchProductEncounters(programKey: string): Promise<{ rows: StructuralEncounter[]; error: string | null }> {
-  const { data, error } = await supabase
-    .from('etapas_modelo_visita_consultoria')
-    .select('visit_number, objective, duration, target, active')
-    .eq('program_key', programKey)
-    .order('visit_number', { ascending: true })
-  if (error) return { rows: [], error: error.message }
-  return { rows: (data ?? []) as StructuralEncounter[], error: null }
+/** Estrutura da jornada de um produto com objetivos da versão (se informada). */
+export async function fetchProductEncounters(programKey: string, versionId?: string | null): Promise<{ rows: StructuralEncounter[]; error: string | null }> {
+  const [etapasResult, contentResult] = await Promise.all([
+    supabase
+      .from('etapas_modelo_visita_consultoria')
+      .select('visit_number, objective, duration, target, active')
+      .eq('program_key', programKey)
+      .order('visit_number', { ascending: true }),
+    versionId
+      ? supabase
+          .from('conteudo_encontro')
+          .select('visit_number, objective')
+          .eq('methodology_version_id', versionId)
+      : Promise.resolve({ data: null, error: null }),
+  ])
+
+  if (etapasResult.error) return { rows: [], error: etapasResult.error.message }
+
+  const contentByVisit = new Map<number, string>()
+  if (contentResult.data) {
+    for (const item of contentResult.data) {
+      if (item.objective && item.objective.trim()) {
+        contentByVisit.set(item.visit_number, item.objective.trim())
+      }
+    }
+  }
+
+  const merged = ((etapasResult.data ?? []) as StructuralEncounter[]).map(etapa => ({
+    ...etapa,
+    objective: contentByVisit.get(etapa.visit_number) || etapa.objective,
+  }))
+
+  return { rows: merged, error: null }
 }
 
-/** Cria a próxima versão metodológica de um produto (rascunho). */
-export async function createMethodologyVersion(programKey: string, productName: string, productVersion: number, methodologyVersionNumber: string, totalEncounters: number, userId: string): Promise<{ version: MethodologyVersion | null; error: string | null }> {
-  const { data, error } = await supabase
+/** Cria a próxima versão metodológica de um produto (rascunho), clonando conteúdos da versão base se houver. */
+export async function createMethodologyVersion(
+  programKey: string,
+  productName: string,
+  productVersion: number,
+  methodologyVersionNumber: string,
+  totalEncounters: number,
+  userId: string,
+  sourceVersionId?: string | null
+): Promise<{ version: MethodologyVersion | null; error: string | null }> {
+  // Se não foi informada a versão base explicitamente, busca a versão publicada atual
+  let baseId = sourceVersionId
+  if (!baseId) {
+    const { data: latestPublished } = await supabase
+      .from('versoes_metodologia_produto')
+      .select('id')
+      .eq('program_key', programKey)
+      .eq('status', 'publicado')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+    baseId = latestPublished?.id ?? null
+  }
+
+  const { data: newVersion, error } = await supabase
     .from('versoes_metodologia_produto')
     .insert({
       program_key: programKey,
@@ -267,8 +313,126 @@ export async function createMethodologyVersion(programKey: string, productName: 
     })
     .select(METHODOLOGY_VERSION_COLUMNS.join(','))
     .single()
-  if (error || !data) return { version: null, error: error?.message ?? 'Falha ao criar a versão.' }
-  return { version: data as unknown as MethodologyVersion, error: null }
+
+  if (error || !newVersion) return { version: null, error: error?.message ?? 'Falha ao criar a versão.' }
+
+  const newVersionId = newVersion.id
+
+  // Se existe versão base, clona todos os módulos e conteúdos
+  if (baseId) {
+    try {
+      const [
+        { data: contents },
+        { data: guides },
+        { data: refs },
+        { data: deliverables },
+        { data: evidence },
+        { data: reportRefs },
+        { data: actionPlans },
+      ] = await Promise.all([
+        supabase.from('conteudo_encontro').select('*').eq('methodology_version_id', baseId),
+        supabase.from('guia_consultor_encontro').select('*').eq('methodology_version_id', baseId),
+        supabase.from('conteudo_referencia_encontro').select('*').eq('methodology_version_id', baseId).neq('status', 'arquivado'),
+        supabase.from('entregas_encontro').select('*').eq('methodology_version_id', baseId).neq('status', 'arquivado'),
+        supabase.from('evidencias_encontro').select('*').eq('methodology_version_id', baseId).neq('status', 'arquivado'),
+        supabase.from('vinculo_modelo_relatorio_encontro').select('*').eq('methodology_version_id', baseId).neq('status', 'arquivado'),
+        supabase.from('vinculo_plano_acao_encontro').select('*').eq('methodology_version_id', baseId).eq('status', 'ativo'),
+      ])
+
+      const now = new Date().toISOString()
+
+      if (contents && contents.length > 0) {
+        await supabase.from('conteudo_encontro').insert(
+          contents.map(({ id: _id, created_at: _c, updated_at: _u, ...rest }) => ({
+            ...rest,
+            methodology_version_id: newVersionId,
+            status: 'rascunho',
+            created_at: now,
+            updated_at: now,
+          }))
+        )
+      }
+
+      if (guides && guides.length > 0) {
+        await supabase.from('guia_consultor_encontro').insert(
+          guides.map(({ id: _id, created_at: _c, updated_at: _u, ...rest }) => ({
+            ...rest,
+            methodology_version_id: newVersionId,
+            status: 'rascunho',
+            created_at: now,
+            updated_at: now,
+          }))
+        )
+      }
+
+      if (refs && refs.length > 0) {
+        await supabase.from('conteudo_referencia_encontro').insert(
+          refs.map(({ id: _id, created_at: _c, updated_at: _u, ...rest }) => ({
+            ...rest,
+            methodology_version_id: newVersionId,
+            status: 'rascunho',
+            created_at: now,
+            updated_at: now,
+          }))
+        )
+      }
+
+      if (deliverables && deliverables.length > 0) {
+        await supabase.from('entregas_encontro').insert(
+          deliverables.map(({ id: _id, created_at: _c, updated_at: _u, ...rest }) => ({
+            ...rest,
+            methodology_version_id: newVersionId,
+            status: 'rascunho',
+            created_at: now,
+            updated_at: now,
+          }))
+        )
+      }
+
+      if (evidence && evidence.length > 0) {
+        await supabase.from('evidencias_encontro').insert(
+          evidence.map(({ id: _id, created_at: _c, updated_at: _u, ...rest }) => ({
+            ...rest,
+            methodology_version_id: newVersionId,
+            status: 'rascunho',
+            created_at: now,
+            updated_at: now,
+          }))
+        )
+      }
+
+      if (reportRefs && reportRefs.length > 0) {
+        await supabase.from('vinculo_modelo_relatorio_encontro').insert(
+          reportRefs.map(({ id: _id, created_at: _c, updated_at: _u, ...rest }) => ({
+            ...rest,
+            methodology_version_id: newVersionId,
+            status: 'rascunho',
+            created_at: now,
+            updated_at: now,
+          }))
+        )
+      }
+
+      if (actionPlans && actionPlans.length > 0) {
+        await supabase.from('vinculo_plano_acao_encontro').insert(
+          actionPlans.map(({ id: _id, created_at: _c, updated_at: _u, ...rest }) => ({
+            ...rest,
+            methodology_version_id: newVersionId,
+            status: 'ativo',
+            created_at: now,
+            updated_at: now,
+          }))
+        )
+      }
+
+      // Recalcula contadores
+      await refreshMethodologyCounters(newVersionId, totalEncounters)
+    } catch {
+      // Falhas no clone não impedem a criação do rascunho
+    }
+  }
+
+  return { version: newVersion as unknown as MethodologyVersion, error: null }
 }
 
 /** Publica um rascunho e marca a versão publicada anterior como substituída. */
@@ -737,6 +901,7 @@ export async function fetchAuditLogs(): Promise<{ rows: AuditEntry[]; error: str
 
 export async function writeAuditLog(entry: {
   userId: string
+  userName?: string | null
   userRole: string
   resource: string
   action: string
@@ -747,6 +912,7 @@ export async function writeAuditLog(entry: {
   try {
     await supabase.from('logs_auditoria_consultoria_mx').insert({
       user_id: entry.userId,
+      user_name: entry.userName ?? null,
       user_role: entry.userRole,
       resource: entry.resource,
       action: entry.action,

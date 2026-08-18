@@ -28,6 +28,13 @@ export function ReportTemplatesTab(props: {
 
   useEffect(() => { void load() }, [])
 
+  useEffect(() => {
+    if (props.controller.openCreateReportTemplate) {
+      setEdit('new')
+      props.controller.setOpenCreateReportTemplate(false)
+    }
+  }, [props.controller])
+
   const publish = async (template: ReportTemplate) => {
     if (!props.controller.userId) return
     const result = await publishReportTemplate(template.id, props.controller.userId)

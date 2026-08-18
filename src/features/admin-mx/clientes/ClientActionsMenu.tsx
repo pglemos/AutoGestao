@@ -49,7 +49,7 @@ export function ClientActionsMenu(props: {
           <MoreHorizontal size={16} />
         </Button>
       </DropdownMenuTrigger>
-      <Base44DropdownContent align="end" className="w-56">
+      <Base44DropdownContent align="end" className="w-64">
         <Base44DropdownLabel>Lifecycle: {CLIENT_LIFECYCLE_LABELS[lifecycle]}</Base44DropdownLabel>
         <Base44DropdownSeparator />
         {actions.map(action => (
@@ -57,7 +57,11 @@ export function ClientActionsMenu(props: {
             key={action}
             role="menuitem"
             onSelect={() => props.onAction(action)}
-            className="gap-2 text-sm"
+            className={
+              action === 'arquivar_loja'
+                ? 'cursor-pointer gap-2 text-sm text-status-error-text focus:bg-status-error-surface focus:text-status-error-text'
+                : 'cursor-pointer gap-2 text-sm'
+            }
             data-action={action}
           >
             {CLIENT_ACTION_LABELS[action]}

@@ -115,13 +115,19 @@ describe('methodology — nomes e papéis', () => {
     expect(splitRoles('Dono, Gerente,  ')).toEqual(['Dono', 'Gerente'])
   })
 
+  test('splitRoles normaliza sinônimos e conjunções', () => {
+    expect(splitRoles('Proprietário e Marketing')).toEqual(['Dono', 'Marketing'])
+    expect(splitRoles('Vendedor / Gerente')).toEqual(['Vendedor', 'Gerente'])
+    expect(splitRoles('Todos')).toEqual(['Dono', 'Gerente Geral', 'Vendedor', 'Marketing'])
+  })
+
   test('joinRoles recompõe a lista', () => {
     expect(joinRoles(['Dono', 'Gerente'])).toBe('Dono, Gerente')
   })
 
   test('toggleRole adiciona e remove', () => {
-    expect(toggleRole('Dono', 'Gerente')).toBe('Dono, Gerente')
     expect(toggleRole('Dono, Gerente', 'Dono')).toBe('Gerente')
+    expect(toggleRole('Gerente', 'Dono')).toBe('Gerente, Dono')
   })
 })
 

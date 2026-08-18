@@ -292,7 +292,7 @@ export function InscricoesPendentesPanel() {
         open={devolveTarget !== null}
         onClose={() => { setDevolveTarget(null); setDevolveMotivo('') }}
         title="Devolver inscrição"
-        description={devolveTarget ? `Devoluer cadastro de ${devolveTarget.nome} para revisão.` : 'Devoluer cadastro para revisão.'}
+        description={devolveTarget ? `Devolver cadastro de ${devolveTarget.nome} para revisão.` : 'Devolver cadastro para revisão.'}
         footer={
           <div className="flex w-full flex-col gap-2 sm:flex-row sm:justify-end sm:gap-mx-sm">
             <Button variant="outline" size="sm" onClick={() => { setDevolveTarget(null); setDevolveMotivo('') }} disabled={submitting}>

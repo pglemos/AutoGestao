@@ -282,7 +282,7 @@ form input[aria-hidden="true"] {
   --mx-accent-soft: hsl(var(--mx-color-primary-subtle));
   /* Superfícies elevada e de sobreposição — valores herdados dos templates
      byte a byte; o mapping do @theme passa a ler o semântico, não o tpl. */
-  --mx-surface-elevated: hsl(var(--mx-tpl-surface-elevated));
+  --mx-surface-elevated: hsl(var(--mx-color-surface-elevated));
   --mx-surface-overlay: hsl(var(--mx-tpl-surface-overlay));
 }
 

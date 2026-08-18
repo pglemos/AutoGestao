@@ -142,6 +142,16 @@ export function AdminClientesPage() {
 
   const patch = (values: Partial<PortfolioFilters>) => setFilters(current => ({ ...current, ...values }))
 
+  const hasActiveFilters = useMemo(() => {
+    return (
+      Boolean(filters.search.trim()) ||
+      filters.bucket !== 'todos' ||
+      filters.phase !== 'todas' ||
+      filters.product !== 'todos' ||
+      filters.owner !== 'todos'
+    )
+  }, [filters])
+
   const handleCopyLink = (name: string) => {
     const link = getPreRegistrationLink(name)
     if (navigator.clipboard?.writeText) {
@@ -414,7 +424,7 @@ export function AdminClientesPage() {
                         Cards Operacionais
                       </Button>
                     </div>
-                    {filters !== EMPTY_PORTFOLIO_FILTERS ? (
+                    {hasActiveFilters ? (
                       <Button variant="outline" size="sm" onClick={() => setFilters(EMPTY_PORTFOLIO_FILTERS)}>
                         Limpar filtros
                       </Button>

@@ -219,8 +219,8 @@ to { height: 0; }
   --color-text-tertiary: hsl(var(--mx-color-text-secondary));
   --color-text-label: hsl(var(--mx-color-text-secondary));
 
-  --color-surface-overlay: hsl(var(--mx-surface-overlay));
-  --color-surface-elevated: hsl(var(--mx-surface-elevated));
+  --color-surface-overlay: hsl(var(--mx-tpl-surface-overlay));
+  --color-surface-elevated: hsl(var(--mx-color-surface-elevated));
 
   /* Brand action states — deriva da família semântica canônica (T4.9). */
   --color-brand-primary-active: hsl(var(--mx-color-primary-active));

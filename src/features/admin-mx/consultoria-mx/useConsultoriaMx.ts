@@ -15,13 +15,15 @@ export type ConsultoriaMxTab = 'visao' | 'produtos' | 'biblioteca' | 'relatorios
 export type ConsultoriaMxController = ReturnType<typeof useConsultoriaMxController>
 
 export function useConsultoriaMxController() {
-  const { supabaseUser, role } = useAuth()
+  const { supabaseUser, profile, role } = useAuth()
   const [rows, setRows] = useState<ProductWithMethodology[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [tab, setTab] = useState<ConsultoriaMxTab>('visao')
   const [creating, setCreating] = useState(false)
   const [publishing, setPublishing] = useState<string | null>(null)
+  const [openAddMaterial, setOpenAddMaterial] = useState(false)
+  const [openCreateReportTemplate, setOpenCreateReportTemplate] = useState(false)
 
   const refetch = useCallback(async () => {
     setLoading(true)
@@ -35,8 +37,10 @@ export function useConsultoriaMxController() {
 
   const audit = useCallback(async (resource: string, action: string, valueAfter?: string, valueBefore?: string) => {
     if (!supabaseUser) return
+    const userName = profile?.nome || supabaseUser.user_metadata?.nome || supabaseUser.user_metadata?.full_name || supabaseUser.email || 'Usuário MX'
     await writeAuditLog({
       userId: supabaseUser.id,
+      userName,
       userRole: role ?? 'administrador_mx',
       resource,
       action,
@@ -44,10 +48,10 @@ export function useConsultoriaMxController() {
       valueBefore,
       origin: 'Consultoria MX',
     })
-  }, [supabaseUser, role])
+  }, [supabaseUser, profile, role])
 
-  const createVersion = async (product: ProductWithMethodology, methodologyVersionNumber: string) => {
-    if (creating || !supabaseUser) return
+  const createVersion = async (product: ProductWithMethodology, methodologyVersionNumber: string, sourceVersionId?: string | null) => {
+    if (creating || !supabaseUser) return null
     setCreating(true)
     try {
       const result = await createMethodologyVersion(
@@ -57,6 +61,7 @@ export function useConsultoriaMxController() {
         methodologyVersionNumber,
         product.total_visits ?? 0,
         supabaseUser.id,
+        sourceVersionId
       )
       if (result.error) {
         toast.error(result.error)
@@ -72,7 +77,7 @@ export function useConsultoriaMxController() {
   }
 
   const publish = async (version: MethodologyVersion, productName: string | null) => {
-    if (publishing || !supabaseUser) return
+    if (publishing || !supabaseUser) return false
     setPublishing(version.id)
     try {
       const result = await publishMethodologyVersion(version, supabaseUser.id)
@@ -89,6 +94,16 @@ export function useConsultoriaMxController() {
     }
   }
 
+  const navigateToAddMaterial = () => {
+    setTab('biblioteca')
+    setOpenAddMaterial(true)
+  }
+
+  const navigateToCreateReportTemplate = () => {
+    setTab('relatorios')
+    setOpenCreateReportTemplate(true)
+  }
+
   return {
     rows,
     loading,
@@ -101,7 +116,15 @@ export function useConsultoriaMxController() {
     createVersion,
     publish,
     audit,
+    openAddMaterial,
+    setOpenAddMaterial,
+    openCreateReportTemplate,
+    setOpenCreateReportTemplate,
+    navigateToAddMaterial,
+    navigateToCreateReportTemplate,
     userId: supabaseUser?.id ?? null,
+    userName: profile?.nome ?? supabaseUser?.email ?? null,
     userRole: role ?? 'administrador_mx',
   }
 }
+

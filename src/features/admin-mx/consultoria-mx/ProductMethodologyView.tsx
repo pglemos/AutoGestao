@@ -26,15 +26,32 @@ export function ProductMethodologyView(props: {
   onBack: () => void
 }) {
   const { product, controller } = props
-  const [draftVersion, setDraftVersion] = useState<{ id: string; status: string; methodology_version_number: string } | null>(null)
+  const [selectedVersionId, setSelectedVersionId] = useState<string | null>(null)
   const [encounters, setEncounters] = useState<EncounterItem[]>([])
   const [selectedEncounter, setSelectedEncounter] = useState<number | null>(null)
   const [creating, setCreating] = useState(false)
   const [showPreview, setShowPreview] = useState(false)
   const [summary, setSummary] = useState<{ percent: number; status: string; pending: number; checks: Record<string, boolean> } | null>(null)
 
+  // Determina a versão ativa
+  const activeVersion = useMemo(() => {
+    if (selectedVersionId) {
+      const found = product.versions.find(v => v.id === selectedVersionId)
+      if (found) return found
+    }
+    const editable = product.versions.find(version => version.status === 'rascunho')
+      ?? product.versions.find(version => version.status === 'em_revisao')
+    return editable ?? product.versions.find(version => version.status === 'publicado') ?? product.versions[0] ?? null
+  }, [product.versions, selectedVersionId])
+
+  const draftVersion = useMemo(() => {
+    return activeVersion
+      ? { id: activeVersion.id, status: activeVersion.status, methodology_version_number: activeVersion.methodology_version_number }
+      : null
+  }, [activeVersion])
+
   const loadEncounters = useCallback(async () => {
-    const result = await fetchProductEncounters(product.program_key)
+    const result = await fetchProductEncounters(product.program_key, draftVersion?.id ?? null)
     if (result.rows.length === 0 && product.total_visits) {
       const generated = Array.from({ length: product.total_visits }, (_, index) => ({
         visit_number: index + 1,
@@ -48,28 +65,27 @@ export function ProductMethodologyView(props: {
     }
     setEncounters(result.rows)
     setSelectedEncounter(current => current ?? (result.rows[0]?.visit_number ?? null))
-  }, [product.program_key, product.total_visits])
+  }, [product.program_key, product.total_visits, draftVersion?.id])
 
   useEffect(() => {
-    // Sem rascunho aberto, a tela abre a versão publicada em leitura: dizer
-    // "nenhuma versão metodológica" com 12 encontros configurados escondia o
-    // conteúdo publicado e sugeria recriar o que já existe.
-    const editable = product.versions.find(version => version.status === 'rascunho')
-      ?? product.versions.find(version => version.status === 'em_revisao')
-    const current = editable ?? product.versions.find(version => version.status === 'publicado')
-    setDraftVersion(current ? { id: current.id, status: current.status, methodology_version_number: current.methodology_version_number } : null)
     void loadEncounters()
-  }, [product, loadEncounters])
+  }, [loadEncounters])
 
   const published = product.versions.find(version => version.status === 'publicado')
 
   const createDraft = async () => {
+    if (creating) return
     setCreating(true)
     try {
-      const version = await controller.createVersion(product, nextMethodologyVersion(published?.methodology_version_number ?? null))
+      const version = await controller.createVersion(
+        product,
+        nextMethodologyVersion(published?.methodology_version_number ?? null),
+        draftVersion?.id || published?.id || null
+      )
       if (version) {
-        setDraftVersion({ id: version.id, status: version.status, methodology_version_number: version.methodology_version_number })
+        setSelectedVersionId(version.id)
         void refreshMethodologyCounters(version.id, encounters.length)
+        void loadEncounters()
       }
     } finally {
       setCreating(false)
@@ -81,7 +97,9 @@ export function ProductMethodologyView(props: {
     const version = product.versions.find(item => item.id === draftVersion.id)
     if (!version) return
     const ok = await controller.publish(version, product.name)
-    if (ok) setDraftVersion(null)
+    if (ok) {
+      void loadEncounters()
+    }
   }
 
   const summaryRows = useMemo(() => [
@@ -91,6 +109,7 @@ export function ProductMethodologyView(props: {
     { icon: FileText, label: 'Entrega', ok: summary?.checks.deliverable ?? false },
     { icon: AlertCircle, label: 'Evidência', ok: summary?.checks.evidence ?? false },
     { icon: FileBarChart, label: 'Relatório', ok: summary?.checks.report ?? false },
+    { icon: Eye, label: 'Visibilidade no Dono', ok: summary?.checks.visibility ?? false },
     { icon: Video, label: 'Conteúdo', ok: summary?.checks.contentReviewed ?? false },
   ], [summary])
 
@@ -104,7 +123,21 @@ export function ProductMethodologyView(props: {
             <div className="text-xs text-muted-foreground">v{product.versao} · {encounters.length} encontros</div>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {product.versions.length > 1 && (
+            <select
+              value={draftVersion?.id ?? ''}
+              onChange={event => setSelectedVersionId(event.target.value)}
+              className="rounded-lg border border-border bg-background px-2.5 py-1 text-xs text-foreground outline-none"
+              aria-label="Selecionar versão da metodologia"
+            >
+              {product.versions.map(v => (
+                <option key={v.id} value={v.id}>
+                  v{v.methodology_version_number} — {METHODOLOGY_STATUS[v.status as keyof typeof METHODOLOGY_STATUS]?.label ?? v.status}
+                </option>
+              ))}
+            </select>
+          )}
           {draftVersion && (
             <MxStatusBanner tone={METHODOLOGY_STATUS[draftVersion.status as keyof typeof METHODOLOGY_STATUS]?.tone ?? 'neutral'}>
               Metodologia v{draftVersion.methodology_version_number} — {METHODOLOGY_STATUS[draftVersion.status as keyof typeof METHODOLOGY_STATUS]?.label ?? draftVersion.status}
@@ -134,22 +167,23 @@ export function ProductMethodologyView(props: {
           <Button onClick={() => void createDraft()} disabled={creating}><Plus size={16} />{creating ? 'Criando...' : 'Criar Versão Metodológica'}</Button>
         </div>
       ) : (
-        <div className="grid gap-4 lg:grid-cols-[220px_1fr_260px]">
+        <div className="grid gap-4 lg:grid-cols-[240px_1fr_270px]">
           <div className="rounded-xl border border-border bg-surface-alt/40 p-3">
             <div className="px-1 pb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Jornada</div>
-            <div className="space-y-1">
+            <div className="max-h-[640px] space-y-1 overflow-y-auto pr-1">
               {encounters.map(encounter => (
                 <button
                   key={encounter.visit_number}
+                  type="button"
                   onClick={() => setSelectedEncounter(encounter.visit_number)}
-                  className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left transition-all ${selectedEncounter === encounter.visit_number ? 'bg-brand-primary text-white' : 'text-foreground hover:bg-surface-alt'}`}
+                  className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left transition-all ${selectedEncounter === encounter.visit_number ? 'bg-brand-primary text-white shadow-sm' : 'text-foreground hover:bg-surface-alt'}`}
                 >
                   <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold ${selectedEncounter === encounter.visit_number ? 'bg-white/20 text-white' : 'bg-surface-alt text-muted-foreground'}`}>
                     {encounter.visit_number}
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="truncate text-xs font-medium">{encounterDisplayName(encounter.visit_number)}</div>
-                    <div className={`truncate text-caption ${selectedEncounter === encounter.visit_number ? 'text-white/70' : 'text-muted-foreground'}`}>{encounter.objective || 'Sem título'}</div>
+                    <div className={`truncate text-caption ${selectedEncounter === encounter.visit_number ? 'text-white/80' : 'text-muted-foreground'}`}>{encounter.objective || 'Sem título'}</div>
                   </div>
                 </button>
               ))}
@@ -171,6 +205,7 @@ export function ProductMethodologyView(props: {
                 totalEncounters={encounters.length}
                 onCountersChanged={() => {
                   if (draftVersion?.id) void refreshMethodologyCounters(draftVersion.id, encounters.length)
+                  void loadEncounters()
                 }}
               />
             ) : (
@@ -183,13 +218,13 @@ export function ProductMethodologyView(props: {
               <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Completude</div>
               {summary ? (
                 <>
-                  <div className="mb-2 flex items-center gap-2">
+                  <div className="mb-2 flex items-center justify-between gap-2">
                     <MxStatusBanner tone={ENCOUNTER_COMPLETENESS[summary.status as keyof typeof ENCOUNTER_COMPLETENESS]?.tone ?? 'neutral'}>
                       {ENCOUNTER_COMPLETENESS[summary.status as keyof typeof ENCOUNTER_COMPLETENESS]?.label ?? '—'}
                     </MxStatusBanner>
-                    <span className="text-xs text-muted-foreground">{summary.percent}%</span>
+                    <span className="text-xs font-semibold text-foreground">{summary.percent}%</span>
                   </div>
-                  <MxProgress value={summary.percent} label={`${summary.percent}%`} />
+                  <MxProgress value={summary.percent} />
                 </>
               ) : <p className="text-xs text-muted-foreground">Carregando...</p>}
             </div>
@@ -200,9 +235,9 @@ export function ProductMethodologyView(props: {
                 <div className="space-y-1.5">
                   {summaryRows.map(row => (
                     <div key={row.label} className="flex items-center gap-2 text-xs">
-                      <row.icon size={12} className={row.ok ? 'text-status-success-text' : 'text-muted-foreground/40'} />
+                      <row.icon size={13} className={row.ok ? 'text-status-success-text shrink-0' : 'text-muted-foreground/40 shrink-0'} />
                       <span className={row.ok ? 'text-foreground' : 'text-muted-foreground'}>{row.label}</span>
-                      <span className={`ml-auto text-xs ${row.ok ? 'text-status-success-text' : 'text-muted-foreground'}`}>{row.ok ? '✓' : '○'}</span>
+                      <span className={`ml-auto text-xs font-semibold ${row.ok ? 'text-status-success-text' : 'text-muted-foreground'}`}>{row.ok ? '✓' : '○'}</span>
                     </div>
                   ))}
                 </div>
@@ -247,3 +282,4 @@ export function ProductMethodologyView(props: {
     </div>
   )
 }
+

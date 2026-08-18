@@ -1,5 +1,7 @@
-// Regras puras da rota Consultoria MX (admin) — sem import de supabase.
-// Espelha src/lib/consultingMxConstants.js do Base44, adaptado ao MX.
+/**
+ * Regras puras da rota Consultoria MX (admin) — sem import de supabase.
+ * Espelha src/lib/consultingMxConstants.js do Base44, adaptado ao MX.
+ */
 
 export const METHODOLOGY_TABS = [
   { id: 'visao', label: 'Visão Geral' },
@@ -10,14 +12,14 @@ export const METHODOLOGY_TABS = [
 ] as const
 
 export const ENCOUNTER_INNER_TABS = [
-  { id: 'objetivo', label: 'Objetivo' },
-  { id: 'orientacao', label: 'Orientação do Consultor' },
-  { id: 'aula', label: 'Aula e Vídeo' },
-  { id: 'entrega', label: 'Entrega' },
-  { id: 'evidencias', label: 'Evidências' },
-  { id: 'arquivos', label: 'Arquivos' },
-  { id: 'relatorio', label: 'Relatório' },
-  { id: 'planos', label: 'Planos de Ação' },
+  { id: 'objetivo', label: 'Objetivo', shortLabel: 'Objetivo' },
+  { id: 'orientacao', label: 'Orientação do Consultor', shortLabel: 'Orientação' },
+  { id: 'aula', label: 'Aula e Vídeo', shortLabel: 'Aulas' },
+  { id: 'entrega', label: 'Entrega', shortLabel: 'Entregas' },
+  { id: 'evidencias', label: 'Evidências', shortLabel: 'Evidências' },
+  { id: 'arquivos', label: 'Arquivos', shortLabel: 'Arquivos' },
+  { id: 'relatorio', label: 'Relatório', shortLabel: 'Relatório' },
+  { id: 'planos', label: 'Planos de Ação', shortLabel: 'Planos' },
 ] as const
 
 export type MethodologyTabId = (typeof METHODOLOGY_TABS)[number]['id']
@@ -29,7 +31,8 @@ export const PARTICIPANT_ROLES = [
 ] as const
 
 export const RESPONSIBLE_ROLES = [
-  'Dono', 'Diretor', 'Gerente', 'Departamento', 'Consultor MX', 'Outro',
+  'Dono', 'Diretor', 'Gerente Geral', 'Gerente Comercial', 'Gerente', 'Vendedor',
+  'Marketing', 'Financeiro', 'Operações', 'Consultor MX', 'Outro',
 ] as const
 
 export const CONTENT_TYPES: Record<string, { label: string; tone: 'danger' | 'info' | 'violet' | 'warning' | 'neutral' }> = {
@@ -55,9 +58,17 @@ export const DELIVERY_MOMENTS: Record<string, string> = {
 }
 
 export const EVIDENCE_TYPES: Record<string, string> = {
-  ARQUIVO: 'Arquivo', IMAGEM: 'Imagem', LINK: 'Link', PLANILHA: 'Planilha',
-  RELATORIO: 'Relatório', COMENTARIO: 'Comentário estruturado', CHECKLIST: 'Checklist',
-  INDICADOR: 'Indicador oficial', CONFIRMACAO: 'Confirmação', REUNIAO: 'Reunião', OUTRO: 'Outro',
+  ARQUIVO: 'Arquivo',
+  IMAGEM: 'Imagem',
+  LINK: 'Link',
+  PLANILHA: 'Planilha',
+  RELATORIO: 'Relatório',
+  COMENTARIO: 'Comentário estruturado',
+  CHECKLIST: 'Checklist',
+  INDICADOR: 'Indicador oficial',
+  CONFIRMACAO: 'Confirmação',
+  REUNIAO: 'Reunião',
+  OUTRO: 'Outro',
 }
 
 export const FILE_CATEGORIES = [
@@ -193,20 +204,43 @@ export function validateReportTemplateName(name: string): string | null {
   return name.trim() ? null : 'Informe o nome do modelo de relatório.'
 }
 
-/** Extrai papéis de uma string separada por vírgula. */
+/** Normaliza um nome de papel para o padrão canônico do MX quando necessário. */
+export function canonicalizeRole(role: string): string {
+  const clean = role.trim()
+  const lower = clean.toLowerCase()
+  if (lower === 'proprietario' || lower === 'proprietário') return 'Dono'
+  if (lower === 'vendedores') return 'Vendedor'
+  if (lower === 'diretoria') return 'Diretor'
+  if (lower === 'operacoes') return 'Operações'
+  if (lower === 'rh' || lower === 'pessoas') return 'Pessoas - RH'
+  if (lower === 'produto' || lower === 'estoque') return 'Produto e Estoque'
+  if (lower === 'consultor') return 'Consultor MX'
+  return clean
+}
+
+/** Extrai papéis de uma string separada por vírgula, ponto-e-vírgula, barra ou 'e'. */
 export function splitRoles(value: string | null | undefined): string[] {
-  return (value ?? '').split(',').map(part => part.trim()).filter(Boolean)
+  if (!value || !value.trim()) return []
+  if (value.trim().toLowerCase() === 'todos') {
+    return ['Dono', 'Gerente Geral', 'Vendedor', 'Marketing']
+  }
+  const parts = value
+    .split(/[,;/]|\be\b/i)
+    .map(part => canonicalizeRole(part))
+    .filter(Boolean)
+  return [...new Set(parts)]
 }
 
 /** Converte uma lista de papéis em string separada por vírgula. */
 export function joinRoles(roles: string[]): string {
-  return roles.join(', ')
+  return roles.map(canonicalizeRole).filter(Boolean).join(', ')
 }
 
 /** Toggle de papel numa lista, como no Base44 (ObjectiveTab.toggleRole). */
 export function toggleRole(current: string | null | undefined, role: string): string {
+  const canonical = canonicalizeRole(role)
   const roles = splitRoles(current)
-  const next = roles.includes(role) ? roles.filter(r => r !== role) : [...roles, role]
+  const next = roles.includes(canonical) ? roles.filter(r => r !== canonical) : [...roles, canonical]
   return joinRoles(next)
 }
 
@@ -230,3 +264,4 @@ export function parsePreparationChecklist(raw: unknown): Array<{ name: string; d
     responsible: String(item?.responsible ?? ''),
   }))
 }
+

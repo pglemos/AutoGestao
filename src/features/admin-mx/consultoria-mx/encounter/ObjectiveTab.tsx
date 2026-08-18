@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Check, Save } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { MxField, MxStatusBanner, MxTextarea } from '@/components/module/MxModuleVisualPrimitives'
-import { PARTICIPANT_ROLES, toggleRole } from '../methodology'
+import { PARTICIPANT_ROLES, splitRoles, toggleRole } from '../methodology'
 import { saveEncounterContent, type EncounterContent } from '../consultoriaMxData'
 import type { ConsultoriaMxController } from '../useConsultoriaMx'
 
@@ -100,7 +100,7 @@ export function ObjectiveTab(props: {
         <Button onClick={() => void save()} disabled={saving}>
           {saving ? 'Salvando...' : saved ? <><Check size={16} />Salvo</> : <><Save size={16} />Salvar</>}
         </Button>
-        {saved && <span className="text-xs text-status-success-text">Conteúdo salvo.</span>}
+        {saved && <span className="text-xs text-status-success-text">Conteúdo salvo com sucesso.</span>}
       </div>
     </div>
   )
@@ -112,7 +112,7 @@ function RoleToggleGroup(props: {
   activeTone: 'brand' | 'info'
   onToggle: (role: string) => void
 }) {
-  const current = props.roles.split(',').map(part => part.trim()).filter(Boolean)
+  const current = splitRoles(props.roles)
   return (
     <div>
       <div className="mb-2 text-xs font-medium text-foreground">{props.label}</div>
@@ -125,6 +125,7 @@ function RoleToggleGroup(props: {
           return (
             <button
               key={role}
+              type="button"
               onClick={() => props.onToggle(role)}
               className={`rounded-full border px-2.5 py-1 text-xs transition-all ${active ? activeClass : 'border-border text-muted-foreground hover:bg-surface-alt'}`}
             >
@@ -136,3 +137,4 @@ function RoleToggleGroup(props: {
     </div>
   )
 }
+
