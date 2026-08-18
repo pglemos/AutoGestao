@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { toast } from '@/lib/toast'
 import {
-  applyTemplateToStore,
   emptyTemplateDraft,
   fetchActionPlanTemplates,
   fetchTemplateItems,
@@ -11,6 +10,11 @@ import {
   type ActionPlanTemplate,
   type TemplateDraft,
 } from './actionPlanTemplates'
+import {
+  applyTemplateToStoreIdempotent,
+  buildTemplateApplicationStorageKey,
+  createTemplateApplicationRequestId,
+} from './templateApplicationIdempotency'
 
 export function useActionPlanTemplatesController() {
   const { supabaseUser } = useAuth()
@@ -23,6 +27,7 @@ export function useActionPlanTemplatesController() {
   const [submitting, setSubmitting] = useState(false)
   const [applying, setApplying] = useState<ActionPlanTemplate | null>(null)
   const [applyStoreId, setApplyStoreId] = useState('')
+  const applicationRequestIds = useRef(new Map<string, string>())
 
   const refetch = useCallback(async () => {
     setLoading(true)
@@ -92,6 +97,40 @@ export function useActionPlanTemplatesController() {
     await refetch()
   }
 
+  const getApplicationRequestId = (versionId: string, storeId: string) => {
+    const storageKey = buildTemplateApplicationStorageKey(versionId, storeId)
+    const inMemory = applicationRequestIds.current.get(storageKey)
+    if (inMemory) return { requestId: inMemory, storageKey }
+
+    let persisted: string | null = null
+    try {
+      persisted = window.sessionStorage.getItem(storageKey)
+    } catch {
+      // O Map em memória continua garantindo idempotência durante esta sessão React.
+    }
+
+    const requestId = persisted || createTemplateApplicationRequestId()
+    applicationRequestIds.current.set(storageKey, requestId)
+    if (!persisted) {
+      try {
+        window.sessionStorage.setItem(storageKey, requestId)
+      } catch {
+        // Storage indisponível não impede a aplicação; o Map mantém retries locais estáveis.
+      }
+    }
+
+    return { requestId, storageKey }
+  }
+
+  const clearApplicationRequestId = (storageKey: string) => {
+    applicationRequestIds.current.delete(storageKey)
+    try {
+      window.sessionStorage.removeItem(storageKey)
+    } catch {
+      // Nenhuma ação: o banco já confirmou a aplicação e a chave pode expirar com a sessão.
+    }
+  }
+
   const apply = async () => {
     if (submitting || !supabaseUser || !applying) return
     const version = applying.versions.find(item => item.status === 'publicada')
@@ -103,14 +142,27 @@ export function useActionPlanTemplatesController() {
       toast.error('Selecione a loja de destino.')
       return
     }
+
+    const { requestId, storageKey } = getApplicationRequestId(version.id, applyStoreId)
     setSubmitting(true)
     try {
-      const result = await applyTemplateToStore({ versionId: version.id, storeId: applyStoreId, userId: supabaseUser.id })
+      const result = await applyTemplateToStoreIdempotent({
+        versionId: version.id,
+        storeId: applyStoreId,
+        userId: supabaseUser.id,
+        requestId,
+      })
       if (result.error) {
         toast.error(result.error)
         return
       }
-      toast.success(`${result.created} ação(ões) criada(s) na loja.`)
+
+      clearApplicationRequestId(storageKey)
+      toast.success(
+        result.replayed
+          ? 'Aplicação já confirmada. Nenhuma ação foi duplicada.'
+          : `${result.created} ação(ões) criada(s) na loja.`,
+      )
       setApplying(null)
       setApplyStoreId('')
     } finally {
