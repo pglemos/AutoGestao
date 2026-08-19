@@ -666,11 +666,11 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
           <td className="px-4 py-3">
             <div className="flex items-center gap-1.5" onClick={e => e.stopPropagation()}>
               <button onClick={(e) => canEdit && openEdit(c, e)} disabled={!canEdit}
-                className={`p-1.5 rounded-lg transition-colors ${canEdit ? "hover:bg-blue-50 text-[#005BFF]" : "text-slate-200 cursor-not-allowed"}`}>
+                className={`p-1.5 rounded-lg transition-colors ${canEdit ? "text-[#005BFF] hover:bg-blue-50" : "text-slate-300 cursor-not-allowed"}`}>
                 <Pencil className="w-3.5 h-3.5" />
               </button>
               <button onClick={(e) => { e.stopPropagation(); canDelete && setDeleteConfirm({ id: c.id, name: c.nome }); }} disabled={!canDelete}
-                className={`p-1.5 rounded-lg transition-colors ${canDelete ? "hover:bg-red-50 text-[#EF4444]" : "text-slate-200 cursor-not-allowed"}`}>
+                className={`p-1.5 rounded-lg transition-colors ${canDelete ? "text-[#EF4444] hover:bg-red-50" : "text-slate-300 cursor-not-allowed"}`}>
                 <Trash2 className="w-3.5 h-3.5" />
               </button>
             </div>

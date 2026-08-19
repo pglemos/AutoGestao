@@ -325,6 +325,7 @@ export function AdminClientesPage() {
                 onAction={handleAction}
                 onCopyLink={handleCopyLink}
                 onEditStore={setEditingStore}
+                onRefetch={refetchAll}
               />
             )}
 

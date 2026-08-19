@@ -38,7 +38,7 @@ body.mxp-active::before{
   opacity:.6;mix-blend-mode:overlay;
 }
 
-.mxp-cursor{position:fixed;top:0;left:0;width:8px;height:8px;border-radius:99px;background:var(--mx);pointer-events:none;z-index:1000;transform:translate(-50%,-50%);transition:width .25s, height .25s, background .25s;mix-blend-mode:difference;display:none}
+.mxp-cursor{position:fixed;top:0;left:0;width:8px;height:8px;border-radius:99px;background:var(--mx);pointer-events:none;z-index:1000;transform:translate(-50%,-50%);transition:transform .25s, background .25s;mix-blend-mode:difference;display:none}
 .mxp-cursor.on{display:block}
 .mxp-cursor.lg{width:54px;height:54px;background:var(--mx);mix-blend-mode:normal;opacity:.18}
 
@@ -90,7 +90,7 @@ body.mxp-active::before{
 .mxp-root .btn-ghost:hover{color:#062012;border-color:var(--mx)}
 .mxp-root .btn-ghost:hover::before{transform:translateY(0)}
 
-.mxp-scroll-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--mx),var(--mx-glow));width:0;z-index:90;transition:width .15s linear;box-shadow:0 0 12px var(--mx)}
+.mxp-scroll-progress{position:fixed;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--mx),var(--mx-glow));transform:scaleX(0);transform-origin:left;z-index:90;transition:transform .15s linear;box-shadow:0 0 12px var(--mx)}
 
 .mxp-root .hero{position:relative;min-height:100vh;padding:140px 0 80px;overflow:hidden;display:flex;align-items:center}
 .mxp-root .hero-bg{position:absolute;inset:0;pointer-events:none;z-index:0}

@@ -294,7 +294,7 @@ export default function Remuneracao() {
                                   <button className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors" title="Visualizar"><Eye className="w-3.5 h-3.5" /></button>
                                   {write && <button className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors" title="Editar"><Pencil className="w-3.5 h-3.5" /></button>}
                                   {write && p.status === "Ativa" && (
-                                    <button className="p-1.5 rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-500 transition-colors" title="Inativar" onClick={() => inativarPolitica(p)}>
+                                    <button className="p-1.5 rounded-lg text-slate-500 hover:bg-red-50 hover:text-red-700 transition-colors" title="Inativar" onClick={() => inativarPolitica(p)}>
                                       <Ban className="w-3.5 h-3.5" />
                                     </button>
                                   )}

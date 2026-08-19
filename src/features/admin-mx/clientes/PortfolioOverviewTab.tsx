@@ -27,6 +27,7 @@ import {
 } from '@/components/module/MxModuleVisualPrimitives'
 import type { Store } from '@/types/database'
 import { ClientActionsMenu, type ClientAction } from './ClientActionsMenu'
+import { PendenciasModal } from './PendenciasModal'
 import {
   EMPTY_PORTFOLIO_FILTERS,
   PORTFOLIO_BUCKET_LABEL,
@@ -72,6 +73,7 @@ export interface PortfolioOverviewTabProps {
   onAction: (client: PortfolioClient, action: ClientAction) => void
   onCopyLink: (name: string) => void
   onEditStore: (store: Store) => void
+  onRefetch: () => void
 }
 
 export function PortfolioOverviewTab({
@@ -81,10 +83,20 @@ export function PortfolioOverviewTab({
   onAction,
   onCopyLink,
   onEditStore,
+  onRefetch,
 }: PortfolioOverviewTabProps) {
   const navigate = useNavigate()
   const [filters, setFilters] = useState<PortfolioFilters>(EMPTY_PORTFOLIO_FILTERS)
   const [viewMode, setViewMode] = useState<'tabela' | 'cards'>('tabela')
+  const [pendenciasClient, setPendenciasClient] = useState<PortfolioClient | null>(null)
+
+  const openPendencias = (client: PortfolioClient) => {
+    setPendenciasClient(client)
+  }
+
+  const closePendencias = () => {
+    setPendenciasClient(null)
+  }
 
   const counters = useMemo(() => portfolioCounters(rows), [rows])
   const filtered = useMemo(() => filterPortfolio(rows, filters), [rows, filters])
@@ -491,13 +503,22 @@ export function PortfolioOverviewTab({
                                 Inativo
                               </Badge>
                             ) : null}
-                            <div className="text-xs text-foreground font-medium line-clamp-1" title={nextAction(client)}>
+                            <button
+                              type="button"
+                              onClick={() => openPendencias(client)}
+                              className="text-xs text-foreground font-medium line-clamp-1 hover:text-brand-primary focus-visible:text-brand-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-primary/30 text-left w-full"
+                              title={nextAction(client)}
+                            >
                               {nextAction(client)}
-                            </div>
+                            </button>
                             {blockers.length > 1 && (
-                              <span className="text-caption font-medium text-status-error-text block">
+                              <button
+                                type="button"
+                                onClick={() => openPendencias(client)}
+                                className="text-caption font-medium text-status-error-text block hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-status-error/30"
+                              >
                                 +{blockers.length - 1} pendência(s)
-                              </span>
+                              </button>
                             )}
                           </div>
                         </TableCell>
@@ -668,6 +689,14 @@ export function PortfolioOverviewTab({
           )}
         </div>
       </MxSectionCard>
+
+      <PendenciasModal
+        open={Boolean(pendenciasClient)}
+        clientId={pendenciasClient?.id ?? ''}
+        clientName={pendenciasClient?.name ?? ''}
+        onClose={closePendencias}
+        onRefetch={onRefetch}
+      />
     </div>
   )
 }

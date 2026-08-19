@@ -109,10 +109,10 @@ export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch
       onClose={onClose}
       title={`Pendências — ${clientName}`}
       size="lg"
-      closeOnEscape={!loading && !repairing}
+      closeOnEscape={Boolean(!loading && !repairing)}
       footer={
         <>
-          <Button variant="outline" onClick={onClose} disabled={loading || repairing}>Fechar</Button>
+          <Button variant="outline" onClick={onClose} disabled={loading || Boolean(repairing)}>Fechar</Button>
         </>
       }
     >
