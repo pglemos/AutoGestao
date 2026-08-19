@@ -89,6 +89,8 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
     owner: plano.responsavel_id || 'Responsável da unidade',
     origin: plano.origem,
     due: plano.prazo ? new Date(`${plano.prazo}T12:00:00`).toLocaleDateString('pt-BR') : 'Sem prazo',
+    dueDate: plano.prazo ?? null,
+    statusCode: plano.status,
     status: plano.status === 'concluido' ? 'Concluída' : plano.status === 'em_andamento' ? 'Em andamento' : plano.status === 'atrasado' ? 'Atrasada' : plano.status === 'validando_eficacia' ? 'Validando eficácia' : 'Pendente',
     efficacy: plano.eficacia_score == null ? 'Pendente' : `${plano.eficacia_score}%`,
     evidence: plano.eficacia_nota || 'Sem evidência registrada',

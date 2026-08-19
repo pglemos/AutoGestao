@@ -5,15 +5,15 @@ import { Card } from '@/components/molecules/Card'
 import { Typography } from '@/components/atoms/Typography'
 import { cn } from '@/lib/utils'
 import { toneClasses, type ActionRow } from './types'
+import {
+  KANBAN_COLUMN_LABEL,
+  KANBAN_COLUMN_ORDER,
+  deriveActionKanbanColumn,
+} from '@/features/action-plan/actionPlanKanbanColumn'
 import { SectionTitle } from './primitives'
 
-const KANBAN_COLUMNS: { status: string; label: string }[] = [
-  { status: 'Pendente', label: 'Pendente' },
-  { status: 'Em andamento', label: 'Em andamento' },
-  { status: 'Validando eficácia', label: 'Validando eficácia' },
-  { status: 'Atrasada', label: 'Atrasada' },
-  { status: 'Concluída', label: 'Concluída' },
-]
+// As colunas vêm da derivação central: uma ação cujo prazo venceu aparece em
+// Atrasada mesmo que o status gravado ainda diga Pendente.
 
 export function ActionPlanView({
   actions,
@@ -139,13 +139,15 @@ export function ActionPlanView({
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-mx-md md:grid-cols-2 xl:grid-cols-5">
-          {KANBAN_COLUMNS.map((column) => {
-            const columnActions = filteredActions.filter(action => action.status === column.status)
+          {KANBAN_COLUMN_ORDER.map((column) => {
+            const columnActions = filteredActions.filter(
+              action => deriveActionKanbanColumn(action.statusCode, action.dueDate) === column,
+            )
             return (
-              <div key={column.status} className="flex flex-col gap-mx-sm">
+              <div key={column} className="flex flex-col gap-mx-sm">
                 <div className="flex items-center justify-between px-mx-xs">
                   <Typography variant="tiny" className="">
-                    {column.label}
+                    {KANBAN_COLUMN_LABEL[column]}
                   </Typography>
                   <span className="rounded-mx-full bg-surface-alt px-mx-sm py-mx-tiny text-mx-tiny font-bold text-muted-foreground">
                     {columnActions.length}

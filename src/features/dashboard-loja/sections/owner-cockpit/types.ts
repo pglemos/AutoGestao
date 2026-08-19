@@ -47,6 +47,10 @@ export type ActionRow = {
   owner: string
   origin: string
   due: string
+  /** Prazo em ISO, sem formatação: a coluna do kanban é derivada dele. */
+  dueDate: string | null
+  /** Status como está no banco. `status` guarda o rótulo já traduzido. */
+  statusCode: string
   status: string
   efficacy: string
   evidence: string

@@ -242,6 +242,12 @@ export function actionFromEngine(action: CentralMxActionPlanItem): ActionRow {
     owner: action.responsibleLabel,
     origin: actionOriginLabel(action.origin),
     due: action.dueLabel,
+    // O engine expõe apenas o prazo já formatado (`dueLabel`), sem a data ISO.
+    // Sem ela a coluna do kanban cai no status gravado — que é o comportamento
+    // antigo. Derivar a data a partir do rótulo seria adivinhação; expor o ISO
+    // no engine é o conserto certo.
+    dueDate: null,
+    statusCode: action.status,
     status: actionStatusLabel(action.status),
     efficacy: action.efficacyScore == null ? 'Pendente' : `${action.efficacyScore}%`,
     evidence: action.evidenceLabel,
