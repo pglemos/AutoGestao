@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase'
+import { activeUnits, fetchClientOfStore, fetchClientUnits, type ClientUnit } from '@/features/strategic-plan'
 import { fetchTemplateItems, resolveItemDueDate, type ActionPlanTemplateItem } from './actionPlanTemplates'
 
 const APPLICATION_STORAGE_PREFIX = 'mx:action-template-apply'
@@ -26,23 +27,100 @@ export function createTemplateApplicationRequestId(): string {
 
 async function resolveConfirmedReplay(input: {
   versionId: string
-  storeId: string
+  storeIds: string[]
   requestId: string
   items: PersistedTemplateItem[]
 }): Promise<boolean> {
   const { data, error } = await supabase
     .from('planos_acao')
-    .select('id, transition_metadata')
+    .select('id, scope_id, transition_metadata')
     .eq('scope_type', 'store')
-    .eq('scope_id', input.storeId)
+    .in('scope_id', input.storeIds)
     .eq('origem_ref_id', input.versionId)
     .eq('origem_ref_table', 'planos_acao_template_versoes')
     .contains('transition_metadata', { template_application_request_id: input.requestId })
 
   if (error) return false
 
-  const materializedItemIds = new Set((data ?? []).map(row => metadataItemId(row.transition_metadata)).filter((value): value is string => Boolean(value)))
-  return input.items.every(item => materializedItemIds.has(item.id))
+  // Um replay só é replay se TODAS as unidades da requisição tiverem TODOS os
+  // itens materializados. Confirmar por unidade isolada esconderia uma aplicação
+  // que parou no meio.
+  const materialized = new Set(
+    (data ?? [])
+      .map(row => {
+        const itemId = metadataItemId(row.transition_metadata)
+        return itemId ? `${row.scope_id}|${itemId}` : null
+      })
+      .filter((value): value is string => Boolean(value)),
+  )
+  return input.storeIds.every(storeId => input.items.every(item => materialized.has(`${storeId}|${item.id}`)))
+}
+
+/**
+ * Monta as linhas de `planos_acao` de uma aplicação.
+ *
+ * Um plano padrão é aplicado ao cliente, não a uma loja avulsa: cada unidade
+ * ativa recebe a sua materialização dos mesmos itens, todas compartilhando o
+ * mesmo `template_application_request_id`. É uma aplicação lógica com N
+ * materializações — o trabalho é executado na loja, mas a decisão é do cliente.
+ *
+ * O escopo continua `store` porque `score_scope_type` não tem valor de cliente;
+ * o vínculo com o cliente se lê pela hierarquia matriz/filial das unidades.
+ */
+export function buildTemplateApplicationRows(input: {
+  items: PersistedTemplateItem[]
+  storeIds: string[]
+  versionId: string
+  requestId: string
+  userId: string
+  appliedAt: Date
+}) {
+  const rows = []
+  for (const storeId of input.storeIds) {
+    for (const item of input.items) {
+      rows.push({
+        scope_type: 'store' as const,
+        scope_id: storeId,
+        departamento: item.departamento || 'Geral',
+        indicador: item.indicador || 'Não definido',
+        problema: item.problema,
+        acao: item.acao,
+        como: item.como || null,
+        prazo: resolveItemDueDate(input.appliedAt, item.prazo_dias),
+        prioridade: item.prioridade,
+        origem: 'consultor' as const,
+        origem_ref_id: input.versionId,
+        origem_ref_table: 'planos_acao_template_versoes',
+        evidence_required: item.evidencia_requerida,
+        created_by: input.userId,
+        transition_metadata: {
+          template_application_request_id: input.requestId,
+          template_item_id: item.id,
+        },
+      })
+    }
+  }
+  return rows
+}
+
+/**
+ * Unidades que devem receber a aplicação de um plano padrão a partir da loja
+ * escolhida: todas as unidades ativas do cliente dono dela.
+ *
+ * Loja sem cliente vinculado aplica só nela mesma — é o comportamento anterior,
+ * preservado para não travar quem ainda não tem cliente cadastrado.
+ */
+export async function resolveApplicationTargets(
+  storeId: string,
+): Promise<{ units: ClientUnit[]; storeIds: string[]; clientId: string | null }> {
+  const client = await fetchClientOfStore(storeId)
+  if (!client.clientId) return { units: [], storeIds: [storeId], clientId: null }
+
+  const result = await fetchClientUnits(client.clientId)
+  const actives = activeUnits(result.units)
+  if (actives.length === 0) return { units: [], storeIds: [storeId], clientId: client.clientId }
+
+  return { units: actives, storeIds: actives.map(unit => unit.id), clientId: client.clientId }
 }
 
 /**
@@ -51,13 +129,17 @@ async function resolveConfirmedReplay(input: {
  * após timeout recebe 23505 e só é tratado como replay se todos os itens da
  * requisição anterior puderem ser comprovados no banco.
  */
-export async function applyTemplateToStoreIdempotent(input: {
+export async function applyTemplateToStoresIdempotent(input: {
   versionId: string
-  storeId: string
+  storeIds: string[]
   userId: string
   requestId: string
   appliedAt?: Date
 }): Promise<{ error: string | null; created: number; replayed: boolean }> {
+  if (input.storeIds.length === 0) {
+    return { error: 'Nenhuma unidade de destino para aplicar.', created: 0, replayed: false }
+  }
+
   const rawItems = await fetchTemplateItems(input.versionId)
   if (!rawItems.length) return { error: 'A versão selecionada não tem itens.', created: 0, replayed: false }
   if (!rawItems.every(isPersistedTemplateItem)) {
@@ -65,41 +147,45 @@ export async function applyTemplateToStoreIdempotent(input: {
   }
 
   const items = rawItems as PersistedTemplateItem[]
-  const appliedAt = input.appliedAt ?? new Date()
-  const { error } = await supabase.from('planos_acao').insert(
-    items.map(item => ({
-      scope_type: 'store' as const,
-      scope_id: input.storeId,
-      departamento: item.departamento || 'Geral',
-      indicador: item.indicador || 'Não definido',
-      problema: item.problema,
-      acao: item.acao,
-      como: item.como || null,
-      prazo: resolveItemDueDate(appliedAt, item.prazo_dias),
-      prioridade: item.prioridade,
-      origem: 'consultor' as const,
-      origem_ref_id: input.versionId,
-      origem_ref_table: 'planos_acao_template_versoes',
-      evidence_required: item.evidencia_requerida,
-      created_by: input.userId,
-      transition_metadata: {
-        template_application_request_id: input.requestId,
-        template_item_id: item.id,
-      },
-    })),
-  )
+  const rows = buildTemplateApplicationRows({
+    items,
+    storeIds: input.storeIds,
+    versionId: input.versionId,
+    requestId: input.requestId,
+    userId: input.userId,
+    appliedAt: input.appliedAt ?? new Date(),
+  })
 
-  if (!error) return { error: null, created: items.length, replayed: false }
+  const { error } = await supabase.from('planos_acao').insert(rows)
+
+  if (!error) return { error: null, created: rows.length, replayed: false }
 
   if (error.code === '23505') {
     const replayConfirmed = await resolveConfirmedReplay({
       versionId: input.versionId,
-      storeId: input.storeId,
+      storeIds: input.storeIds,
       requestId: input.requestId,
       items,
     })
-    if (replayConfirmed) return { error: null, created: items.length, replayed: true }
+    if (replayConfirmed) return { error: null, created: rows.length, replayed: true }
   }
 
   return { error: error.message, created: 0, replayed: false }
+}
+
+/** Aplicação a uma única unidade. Mantida para chamadas que já resolveram o destino. */
+export async function applyTemplateToStoreIdempotent(input: {
+  versionId: string
+  storeId: string
+  userId: string
+  requestId: string
+  appliedAt?: Date
+}): Promise<{ error: string | null; created: number; replayed: boolean }> {
+  return applyTemplateToStoresIdempotent({
+    versionId: input.versionId,
+    storeIds: [input.storeId],
+    userId: input.userId,
+    requestId: input.requestId,
+    appliedAt: input.appliedAt,
+  })
 }

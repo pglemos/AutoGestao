@@ -11,7 +11,8 @@ import {
   type TemplateDraft,
 } from './actionPlanTemplates'
 import {
-  applyTemplateToStoreIdempotent,
+  applyTemplateToStoresIdempotent,
+  resolveApplicationTargets,
   buildTemplateApplicationStorageKey,
   createTemplateApplicationRequestId,
 } from './templateApplicationIdempotency'
@@ -146,9 +147,12 @@ export function useActionPlanTemplatesController() {
     const { requestId, storageKey } = getApplicationRequestId(version.id, applyStoreId)
     setSubmitting(true)
     try {
-      const result = await applyTemplateToStoreIdempotent({
+      // Um plano padrão é decisão do cliente: aplica em todas as unidades ativas
+      // dele, não só na loja escolhida no seletor.
+      const targets = await resolveApplicationTargets(applyStoreId)
+      const result = await applyTemplateToStoresIdempotent({
         versionId: version.id,
-        storeId: applyStoreId,
+        storeIds: targets.storeIds,
         userId: supabaseUser.id,
         requestId,
       })
@@ -158,10 +162,13 @@ export function useActionPlanTemplatesController() {
       }
 
       clearApplicationRequestId(storageKey)
+      const destino = targets.storeIds.length > 1
+        ? `${targets.storeIds.length} unidades do cliente`
+        : 'loja'
       toast.success(
         result.replayed
           ? 'Aplicação já confirmada. Nenhuma ação foi duplicada.'
-          : `${result.created} ação(ões) criada(s) na loja.`,
+          : `${result.created} ação(ões) criada(s) em ${destino}.`,
       )
       setApplying(null)
       setApplyStoreId('')

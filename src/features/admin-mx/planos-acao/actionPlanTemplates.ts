@@ -229,34 +229,29 @@ export async function publishTemplateVersion(templateId: string, versionId: stri
 /**
  * Materializa os itens de uma versão publicada como planos de ação de uma loja.
  */
+/**
+ * Aplica uma versão publicada a partir de uma loja escolhida.
+ *
+ * Delega para o caminho idempotente e de escopo de cliente: o destino real são
+ * todas as unidades ativas do cliente dono da loja. Antes, esta função gravava
+ * numa única loja enquanto a tela dizia "criada(s) no cliente".
+ */
 export async function applyTemplateToStore(input: {
   versionId: string
   storeId: string
   userId: string
   appliedAt?: Date
 }): Promise<{ error: string | null; created: number }> {
-  const items = await fetchTemplateItems(input.versionId)
-  if (!items.length) return { error: 'A versão selecionada não tem itens.', created: 0 }
+  const { applyTemplateToStoresIdempotent, createTemplateApplicationRequestId, resolveApplicationTargets } =
+    await import('./templateApplicationIdempotency')
 
-  const appliedAt = input.appliedAt ?? new Date()
-  const { error } = await supabase.from('planos_acao').insert(
-    items.map(item => ({
-      scope_type: 'store' as const,
-      scope_id: input.storeId,
-      departamento: item.departamento || 'Geral',
-      indicador: item.indicador || 'Não definido',
-      problema: item.problema,
-      acao: item.acao,
-      como: item.como || null,
-      prazo: resolveItemDueDate(appliedAt, item.prazo_dias),
-      prioridade: item.prioridade,
-      origem: 'consultor' as const,
-      origem_ref_id: input.versionId,
-      origem_ref_table: 'planos_acao_template_versoes',
-      evidence_required: item.evidencia_requerida,
-      created_by: input.userId,
-    })),
-  )
-  if (error) return { error: error.message, created: 0 }
-  return { error: null, created: items.length }
+  const targets = await resolveApplicationTargets(input.storeId)
+  const result = await applyTemplateToStoresIdempotent({
+    versionId: input.versionId,
+    storeIds: targets.storeIds,
+    userId: input.userId,
+    requestId: createTemplateApplicationRequestId(),
+    appliedAt: input.appliedAt,
+  })
+  return { error: result.error, created: result.created }
 }
