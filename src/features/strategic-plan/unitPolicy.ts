@@ -266,3 +266,45 @@ export function resolveUnitPolicy(
 export function isUnitPolicyDefined(policy: Partial<UnitPolicy> | null | undefined): boolean {
   return Boolean(policy?.unit_entry_mode && policy?.unit_rollup_method)
 }
+
+// ─── Fórmulas de consolidação ────────────────────────────────────────────────
+//
+// No catálogo MX todos os 50 indicadores são de entrada manual: o usuário digita
+// o percentual da unidade, não uma fórmula. Isso serve para o lançamento por
+// loja, mas não responde qual é o número do cliente — somar percentuais é errado
+// e a média simples ignora o peso de cada unidade.
+//
+// Estas fórmulas existem só para a consolidação: recompõem o indicador a partir
+// das bases já consolidadas. Não alteram o cadastro, que segue manual por unidade.
+//
+// Só constam as composições inequívocas a partir do próprio catálogo. Indicadores
+// cuja base não existe no catálogo — `stock_over_90_rate` (falta o volume acima de
+// 90 dias), `active_sellers_rate` (falta o contador de ativos), `crm_follow_up_rate`,
+// `stock_turnover`, `gross_margin_rate`, `fixed_expense_rate`,
+// `training_completion_rate` — ficam de fora de propósito: chutar o denominador
+// produziria um número plausível e errado, que é exatamente o que este módulo
+// existe para evitar.
+
+export const CONSOLIDATION_FORMULAS: Record<string, string> = {
+  goal_achievement_rate: 'IND("sales_total") / IND("sales_goal")',
+  avg_sales_per_seller: 'IND("sales_total") / IND("seller_count")',
+  avg_leads_per_seller: 'IND("leads_received") / IND("seller_count")',
+  appointments_per_sale: 'IND("appointments") / IND("sales_total")',
+  lead_to_appointment_rate: 'IND("appointments") / IND("leads_received")',
+  appointment_to_visit_rate: 'IND("visits") / IND("appointments")',
+  visit_to_sale_rate: 'IND("sales_total") / IND("visits")',
+  internet_sales_share: 'IND("sales_internet") / IND("sales_total")',
+  internet_cost_per_sale: 'IND("internet_investment") / IND("sales_internet")',
+  cost_per_lead: 'IND("internet_investment") / IND("leads_received")',
+  trade_in_to_sales_rate: 'IND("trade_in_volume") / IND("sales_total")',
+  no_show_rate: '(IND("appointments") - IND("visits")) / IND("appointments")',
+}
+
+/** Fórmula de consolidação de um indicador, quando o catálogo não traz uma. */
+export function resolveConsolidationFormula(
+  indicatorCode: string,
+  catalogFormula?: string | null,
+): string | null {
+  if (catalogFormula) return catalogFormula
+  return CONSOLIDATION_FORMULAS[indicatorCode] ?? null
+}

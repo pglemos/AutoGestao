@@ -191,3 +191,54 @@ describe('consolidateClientPlanning', () => {
     expect(result.meta.integrityByMonth[5].VISITS_VOLUME.status).toBe(CONSOLIDATION_STATUS.COMPLETO)
   })
 })
+
+describe('fórmulas de consolidação para o catálogo MX', () => {
+  // O catálogo MX é todo manual: nenhum indicador traz fórmula. Sem as fórmulas
+  // do módulo, todo percentual do cliente sairia vazio.
+  const units = buildClientUnits('matriz', stores)
+  const mxIndicators = [
+    { code: 'visits' },
+    { code: 'sales_total' },
+    { code: 'visit_to_sale_rate' },
+    { code: 'appointments' },
+    { code: 'no_show_rate' },
+  ]
+  const mxPolicies = resolvePolicies(mxIndicators)
+
+  const mxRow = (loja_id: string, indicator_code: string, realizado: number): PlanningValueRow => ({
+    loja_id, indicator_code, year: 2026, month: 1, meta: null, realizado, ano_anterior: null,
+  })
+
+  test('conversão do cliente sai da razão das bases, não da média das lojas', () => {
+    const result = consolidateClientPlanning({
+      rows: [
+        mxRow('matriz', 'visits', 100), mxRow('matriz', 'sales_total', 10),
+        mxRow('filialA', 'visits', 300), mxRow('filialA', 'sales_total', 90),
+        mxRow('filialB', 'visits', 0), mxRow('filialB', 'sales_total', 0),
+      ],
+      units, indicators: mxIndicators, policies: mxPolicies,
+    })
+    expect(result.realizado.valueMap.visit_to_sale_rate[1]).toBeCloseTo(0.25, 10)
+  })
+
+  test('no-show usa agendamentos menos comparecimentos', () => {
+    const result = consolidateClientPlanning({
+      rows: [
+        mxRow('matriz', 'appointments', 100), mxRow('matriz', 'visits', 60),
+        mxRow('filialA', 'appointments', 100), mxRow('filialA', 'visits', 80),
+        mxRow('filialB', 'appointments', 0), mxRow('filialB', 'visits', 0),
+      ],
+      units, indicators: mxIndicators, policies: mxPolicies,
+    })
+    // (200 - 140) / 200 = 30%
+    expect(result.realizado.valueMap.no_show_rate[1]).toBeCloseTo(0.3, 10)
+  })
+
+  test('indicador derivado sem base declarada continua sem valor', () => {
+    const semBase = [{ code: 'stock_over_90_rate' }]
+    const result = consolidateClientPlanning({
+      rows: [], units, indicators: semBase, policies: resolvePolicies(semBase),
+    })
+    expect(result.realizado.valueMap.stock_over_90_rate[1]).toBeNull()
+  })
+})

@@ -14,7 +14,7 @@ import {
   type IndicatorIntegrity,
   type ValueRecord,
 } from './unitConsolidation'
-import { resolveUnitPolicy, type UnitPolicy } from './unitPolicy'
+import { resolveConsolidationFormula, resolveUnitPolicy, type UnitPolicy } from './unitPolicy'
 import type { ClientUnit } from './clientUnits'
 
 /** Linha de `valores_indicadores_planejamento`. */
@@ -41,12 +41,24 @@ export type ConsolidatedClientPlanning = Record<PlanningSeries, ConsolidatedSeri
 const SERIES: PlanningSeries[] = ['meta', 'realizado', 'ano_anterior']
 
 /**
+ * Completa o roster com a fórmula de consolidação de cada indicador derivado.
+ *
+ * O catálogo MX não traz fórmula — todos os indicadores são de entrada manual.
+ * Sem isto, todo percentual sairia do consolidado como "sem base".
+ */
+export function withConsolidationFormulas(indicators: ConsolidationIndicator[]): ConsolidationIndicator[] {
+  return indicators.map(indicator => ({
+    ...indicator,
+    formula_expression: resolveConsolidationFormula(indicator.code, indicator.formula_expression),
+  }))
+}
+
+/**
  * Resolve a política de cada indicador do roster.
  *
- * O catálogo MX (`catalogo_metricas_consultoria`) ainda não carrega colunas de
- * política de unidade, então a resolução cai nos padrões do módulo. Quando as
- * colunas existirem, basta passá-las em `indicatorDefs` — a hierarquia já
- * prefere o catálogo ao padrão.
+ * O catálogo MX não carrega colunas de política de unidade, então a resolução
+ * cai nos padrões do módulo. Quando as colunas existirem, basta passá-las em
+ * `indicatorDefs` — a hierarquia já prefere o catálogo ao padrão.
  */
 export function resolvePolicies(
   indicators: ConsolidationIndicator[],
@@ -97,7 +109,7 @@ function toValueRecords(
 export function consolidateClientPlanning({
   rows,
   units,
-  indicators,
+  indicators: rosterIndicators,
   policies,
   params = {},
   blankPolicy = null,
@@ -109,6 +121,7 @@ export function consolidateClientPlanning({
   params?: Record<string, number | null | undefined>
   blankPolicy?: BlankPolicy | null
 }): ConsolidatedClientPlanning {
+  const indicators = withConsolidationFormulas(rosterIndicators)
   const active = units.filter(unit => unit.active)
   const unitIds = new Set(active.map(unit => unit.id))
 
