@@ -137,6 +137,25 @@ describe('decideProductPackage — cada recusa é distinguível', () => {
   })
 })
 
+describe('diffRosterAgainstPackage — vocabulário do plano vs do pacote', () => {
+  // O pacote guarda `metric_key` (sales_volume); a série do plano carrega `id`
+  // e `code` apresentáveis (SP-001) além de `metricCode`. Comparar com o campo
+  // de apresentação faz todo plano parecer 100% divergente — e o aviso ao
+  // usuário viraria ruído permanente.
+  const pacote = ['sales_volume', 'leads_total', 'gross_margin_rate']
+
+  test('plano descrito pelo código canônico confere com o pacote', () => {
+    expect(diffRosterAgainstPackage(pacote, pacote).aligned).toBe(true)
+  })
+
+  test('plano descrito pelo código de apresentação diverge por inteiro', () => {
+    const resultado = diffRosterAgainstPackage(['SP-001', 'SP-002', 'SP-003'], pacote)
+    expect(resultado.aligned).toBe(false)
+    expect(resultado.missing).toHaveLength(3)
+    expect(resultado.extra).toHaveLength(3)
+  })
+})
+
 describe('diffRosterAgainstPackage', () => {
   test('plano alinhado ao pacote', () => {
     expect(diffRosterAgainstPackage(['a', 'b'], ['b', 'a'])).toEqual({ missing: [], extra: [], aligned: true })

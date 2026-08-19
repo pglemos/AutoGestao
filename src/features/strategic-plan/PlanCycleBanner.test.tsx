@@ -9,6 +9,7 @@ function mockState(overrides: Partial<PlanCycleState> = {}): PlanCycleState {
     cycle: null,
     readiness: null,
     summary: null,
+    packageAlignment: null,
     loading: false,
     transitioning: false,
     error: null,
@@ -26,6 +27,43 @@ function mockState(overrides: Partial<PlanCycleState> = {}): PlanCycleState {
 // alcança o que o caso anterior deixou no document.body. O cleanup não é global
 // porque boa parte da suíte renderiza uma vez e consulta em vários casos.
 afterEach(cleanup)
+
+describe('PlanCycleBanner — plano contra o pacote contratado', () => {
+  it('avisa quando faltam indicadores do pacote', () => {
+    render(
+      <PlanCycleBanner
+        state={mockState({ packageAlignment: { missing: ['SP-010', 'SP-011'], extra: [], aligned: false } })}
+        year={2026}
+      />
+    )
+    expect(screen.getByText(/faltam 2 indicador/i)).toBeTruthy()
+  })
+
+  it('avisa quando o plano tem indicadores fora do pacote', () => {
+    render(
+      <PlanCycleBanner
+        state={mockState({ packageAlignment: { missing: [], extra: ['SP-099'], aligned: false } })}
+        year={2026}
+      />
+    )
+    expect(screen.getByText(/sobram 1 fora do pacote/i)).toBeTruthy()
+  })
+
+  it('cala quando o plano confere com o pacote', () => {
+    render(
+      <PlanCycleBanner
+        state={mockState({ packageAlignment: { missing: [], extra: [], aligned: true } })}
+        year={2026}
+      />
+    )
+    expect(screen.queryByText(/fora do pacote contratado/i)).toBeNull()
+  })
+
+  it('cala quando o pacote não pôde ser resolvido', () => {
+    render(<PlanCycleBanner state={mockState({ packageAlignment: null })} year={2026} />)
+    expect(screen.queryByText(/fora do pacote contratado/i)).toBeNull()
+  })
+})
 
 describe('PlanCycleBanner', () => {
   it('não renderiza nada se clientId for nulo', () => {

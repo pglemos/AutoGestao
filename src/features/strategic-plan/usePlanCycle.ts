@@ -12,6 +12,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { fetchClientOfStore, fetchClientProductPackage } from './clientPlanningRepository'
+import { diffRosterAgainstPackage } from './clientProductPackage'
 import { ensureCycle, fetchCurrentCycle, transitionCycle, type PlanCycle } from './planCycleRepository'
 import {
   validatePlanReadiness,
@@ -26,6 +27,11 @@ export type PlanCycleState = {
   readiness: PlanReadiness | null
   /** Texto curto para o banner — derivado de `readinessSummary`. */
   summary: string | null
+  /**
+   * Plano medido contra o roster do produto contratado. `null` quando o pacote
+   * não pôde ser resolvido ou o plano ainda não carregou.
+   */
+  packageAlignment: { missing: string[]; extra: string[]; aligned: boolean } | null
   loading: boolean
   transitioning: boolean
   error: string | null
@@ -93,6 +99,8 @@ export function usePlanCycle(input: {
 
   const [clientId, setClientId] = useState<string | null>(null)
   const [packageVersionId, setPackageVersionId] = useState<string | null>(null)
+  /** Roster do produto contratado. `null` enquanto não resolvido ou se bloqueado. */
+  const [packageIndicatorCodes, setPackageIndicatorCodes] = useState<string[] | null>(null)
   const [cycle, setCycle] = useState<PlanCycle | null>(null)
   const [loading, setLoading] = useState(false)
   const [transitioning, setTransitioning] = useState(false)
@@ -128,10 +136,12 @@ export function usePlanCycle(input: {
       const cid = clientResult.clientId
       setClientId(cid)
 
-      // Versão do pacote para congelar no ciclo quando ele for criado.
+      // Versão do pacote para congelar no ciclo quando ele for criado, e o
+      // roster contratado, que é contra quem a prontidão precisa ser medida.
       const pkg = await fetchClientProductPackage(cid)
       if (!active) return
       setPackageVersionId(pkg.ok ? pkg.resolution.packageVersion.id : null)
+      setPackageIndicatorCodes(pkg.ok ? pkg.resolution.indicatorCodes : null)
 
       // Ciclo vigente (não revisado) do cliente/ano.
       const cycleResult = await fetchCurrentCycle(cid, year)
@@ -162,6 +172,22 @@ export function usePlanCycle(input: {
   }, [storeId, series])
 
   const summary = readiness ? readinessSummary(readiness) : null
+
+  /**
+   * O plano confere com o produto contratado?
+   *
+   * A prontidão acima mede o que a tela carregou; esta medida compara com o
+   * pacote do contrato. Sem ela um plano a que faltam indicadores do pacote —
+   * ou que ficou para trás quando o pacote mudou de versão — se declara pronto.
+   */
+  const packageAlignment = useMemo(() => {
+    if (!packageIndicatorCodes || series.length === 0) return null
+    // O pacote guarda `metric_key`, que corresponde a `metricCode` — não a
+    // `code`. A série carrega os dois, e comparar pelo campo errado acusaria
+    // divergência total em todo plano. Mesma regra de `canonicalIndicatorCode`.
+    const planCodes = series.map(s => String(s.metricCode || s.code))
+    return diffRosterAgainstPackage(planCodes, packageIndicatorCodes)
+  }, [packageIndicatorCodes, series])
 
   // ─── Ações ────────────────────────────────────────────────────────────────
   const initCycle = useCallback(async () => {
@@ -202,6 +228,7 @@ export function usePlanCycle(input: {
     cycle,
     readiness,
     summary,
+    packageAlignment,
     loading,
     transitioning,
     error,

@@ -58,6 +58,29 @@ function CycleBadge({ status }: { status: PlanCycleStatus }) {
 
 // ─── Lista de pendências ──────────────────────────────────────────────────────
 
+/**
+ * Divergência entre o plano e o pacote do produto contratado.
+ *
+ * Fica fora da lista de pendências porque não é falta de preenchimento: é o
+ * plano tratando um conjunto de indicadores diferente do que o cliente comprou,
+ * normalmente porque o pacote ganhou uma versão nova depois que o plano nasceu.
+ */
+function PackageAlignmentNotice({ state }: { state: PlanCycleState }) {
+  const { packageAlignment } = state
+  if (!packageAlignment || packageAlignment.aligned) return null
+
+  const { missing, extra } = packageAlignment
+  return (
+    <p className="mt-2 text-xs text-status-warning-text">
+      Plano fora do pacote contratado:
+      {missing.length > 0 && ` faltam ${missing.length} indicador(es)`}
+      {missing.length > 0 && extra.length > 0 && ' e'}
+      {extra.length > 0 && ` sobram ${extra.length} fora do pacote`}
+      .
+    </p>
+  )
+}
+
 function PendingIssues({ state }: { state: PlanCycleState }) {
   const [open, setOpen] = useState(false)
   const { readiness } = state
@@ -239,6 +262,7 @@ export function PlanCycleBanner({ state, year }: PlanCycleBannerProps) {
 
       {/* Pendências expansíveis — só aparecem na fase de validação */}
       {cycle?.status === 'em_validacao' && <PendingIssues state={state} />}
+      <PackageAlignmentNotice state={state} />
     </div>
   )
 }
