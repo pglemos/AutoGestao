@@ -6,6 +6,7 @@
 
 import { supabase } from '@/lib/supabase'
 import { buildClientUnits, type ClientUnit } from './clientUnits'
+import { decideProductPackage, type ProductPackageResolution } from './clientProductPackage'
 import type { PlanningValueRow } from './clientPlanningConsolidation'
 
 /** Unidades ativas e encerradas de um cliente, matriz primeiro. */
@@ -59,6 +60,53 @@ export async function fetchClientOfStore(
 
   if (clientError) return { clientId: null, matrizId, error: clientError.message }
   return { clientId: client?.id ?? null, matrizId, error: null }
+}
+
+/**
+ * Resolve o pacote de indicadores do cliente pelo produto contratado.
+ *
+ * O elo é `clientes_consultoria.program_template_key` → `programas_visita_consultoria.program_key`.
+ */
+export async function fetchClientProductPackage(clientId: string): Promise<ProductPackageResolution> {
+  const { data: client, error: clientError } = await supabase
+    .from('clientes_consultoria')
+    .select('program_template_key')
+    .eq('id', clientId)
+    .maybeSingle()
+
+  if (clientError || !client?.program_template_key) {
+    return decideProductPackage({ programKey: null, product: null, packageVersion: null, items: [] })
+  }
+
+  const programKey = client.program_template_key
+
+  const { data: product } = await supabase
+    .from('programas_visita_consultoria')
+    .select('program_key, name, status, usa_plano_estrategico, indicator_package_version_id')
+    .eq('program_key', programKey)
+    .maybeSingle()
+
+  if (!product?.indicator_package_version_id) {
+    return decideProductPackage({ programKey, product: product ?? null, packageVersion: null, items: [] })
+  }
+
+  const { data: packageVersion } = await supabase
+    .from('pacotes_indicadores_versoes')
+    .select('id, nome, status, versao, total_indicadores')
+    .eq('id', product.indicator_package_version_id)
+    .maybeSingle()
+
+  const { data: items } = await supabase
+    .from('pacotes_indicadores_itens')
+    .select('id, version_id, metric_key, label_snapshot, area_snapshot, input_mode_snapshot, ordem_snapshot, is_required, inclusion_reason')
+    .eq('version_id', product.indicator_package_version_id)
+
+  return decideProductPackage({
+    programKey,
+    product,
+    packageVersion: packageVersion ?? null,
+    items: items ?? [],
+  })
 }
 
 /** Valores de planejamento de todas as unidades informadas, num ano. */
