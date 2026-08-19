@@ -2,6 +2,8 @@ import { describe, expect, test } from 'bun:test'
 import {
   activationBlockers,
   clientBuckets,
+  clientStoreIds,
+  clientTeamStat,
   filterPortfolio,
   isRenewalNear,
   journeyLabel,
@@ -25,6 +27,57 @@ function client(overrides: Partial<PortfolioClient> = {}): PortfolioClient {
     ...overrides,
   }
 }
+
+describe('equipe do cliente somada nas lojas dele', () => {
+  const lojas = [
+    { id: 's1', parent_loja_id: null },
+    { id: 's2', parent_loja_id: 's1' },
+    { id: 's3', parent_loja_id: 's1' },
+    { id: 'outra', parent_loja_id: null },
+  ]
+
+  test('reúne a loja principal e as filiais dela', () => {
+    expect(clientStoreIds(client(), lojas)).toEqual(['s1', 's2', 's3'])
+  })
+
+  test('cliente sem loja principal não reivindica loja nenhuma', () => {
+    expect(clientStoreIds(client({ primary_store_id: null }), lojas)).toEqual([])
+  })
+
+  test('soma os vendedores das unidades em vez de olhar só a matriz', () => {
+    const stats = {
+      s1: { sellers: 4, checkedIn: 2, disciplinePct: 50 },
+      s2: { sellers: 6, checkedIn: 6, disciplinePct: 100 },
+      outra: { sellers: 99, checkedIn: 0, disciplinePct: 0 },
+    }
+    expect(clientTeamStat(['s1', 's2', 's3'], stats)).toEqual({
+      sellers: 10,
+      checkedIn: 8,
+      disciplinePct: 80,
+    })
+  })
+
+  test('presença pesa por vendedor, não pela média das porcentagens', () => {
+    // 1 de 1 numa loja e 0 de 19 na outra é 5%, não 50%.
+    const stats = {
+      s1: { sellers: 1, checkedIn: 1, disciplinePct: 100 },
+      s2: { sellers: 19, checkedIn: 0, disciplinePct: 0 },
+    }
+    expect(clientTeamStat(['s1', 's2'], stats).disciplinePct).toBe(5)
+  })
+
+  test('cliente sem loja conhecida fica em zero, sem quebrar', () => {
+    expect(clientTeamStat([], {})).toEqual({ sellers: 0, checkedIn: 0, disciplinePct: 0 })
+  })
+
+  test('ignora loja que não está no mapa de estatísticas', () => {
+    expect(clientTeamStat(['s1', 'inexistente'], { s1: { sellers: 3, checkedIn: 3, disciplinePct: 100 } })).toEqual({
+      sellers: 3,
+      checkedIn: 3,
+      disciplinePct: 100,
+    })
+  })
+})
 
 describe('impedimentos de ativação', () => {
   test('cliente completo não tem bloqueio', () => {

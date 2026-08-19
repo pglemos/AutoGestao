@@ -31,6 +31,8 @@ import {
   EMPTY_PORTFOLIO_FILTERS,
   PORTFOLIO_BUCKET_LABEL,
   activationBlockers,
+  clientStoreIds,
+  clientTeamStat,
   filterPortfolio,
   isActive,
   journeyLabel,
@@ -66,7 +68,7 @@ const METRIC_BUCKETS: Array<{
 export interface PortfolioOverviewTabProps {
   rows: PortfolioClient[]
   lojas: Store[]
-  stats: Record<string, { sellers: number; disciplinePct: number }>
+  stats: Record<string, { sellers: number; checkedIn?: number; disciplinePct: number }>
   onAction: (client: PortfolioClient, action: ClientAction) => void
   onCopyLink: (name: string) => void
   onEditStore: (store: Store) => void
@@ -384,7 +386,7 @@ export function PortfolioOverviewTab({
                 <TableBody>
                   {filtered.map(client => {
                     const blockers = activationBlockers(client)
-                    const stat = stats[client.id]
+                    const stat = clientTeamStat(clientStoreIds(client, lojas), stats)
                     const storeSlug = client.slug || client.id
                     const clientActive = isActive(client)
                     const progressPct =
@@ -456,10 +458,10 @@ export function PortfolioOverviewTab({
                           <div className="space-y-1">
                             <div className="flex items-center gap-1.5">
                               <Users size={14} className="text-muted-foreground" />
-                              <span className="font-semibold text-foreground">{stat ? stat.sellers : client.users}</span>
+                              <span className="font-semibold text-foreground">{stat.sellers}</span>
                               <span className="text-xs text-muted-foreground">vendedores</span>
                             </div>
-                            {stat && stat.sellers > 0 ? (
+                            {stat.sellers > 0 ? (
                               <div className="text-caption text-muted-foreground">
                                 <span className="font-medium text-status-success-text">{stat.disciplinePct}%</span> presença hoje
                               </div>
@@ -615,10 +617,10 @@ export function PortfolioOverviewTab({
                       <div className="flex items-center justify-between text-xs px-1">
                         <div className="flex items-center gap-1.5">
                           <Users size={14} className="text-muted-foreground" />
-                          <span className="font-semibold text-foreground">{stat ? stat.sellers : client.users}</span>
+                          <span className="font-semibold text-foreground">{stat.sellers}</span>
                           <span className="text-muted-foreground">vendedores</span>
                         </div>
-                        {stat && stat.sellers > 0 ? (
+                        {stat.sellers > 0 ? (
                           <div className="font-medium text-foreground">
                             <span className="text-status-success-text">{stat.disciplinePct}%</span> presença hoje
                           </div>

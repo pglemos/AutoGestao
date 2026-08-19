@@ -61,6 +61,52 @@ export function activationBlockers(client: PortfolioClient): string[] {
   return blockers
 }
 
+/**
+ * Lojas que respondem por um cliente: a principal e as filiais penduradas nela.
+ *
+ * A carteira vive em `clientes_consultoria` e a operação vive em `lojas`; a
+ * única ponte entre as duas é `primary_store_id` mais a hierarquia
+ * `parent_loja_id`. `unidades_cliente_consultoria` não serve aqui — não guarda
+ * referência para `lojas`, então não dá para contar equipe por ela.
+ */
+export function clientStoreIds(
+  client: Pick<PortfolioClient, 'primary_store_id'>,
+  lojas: ReadonlyArray<{ id: string; parent_loja_id?: string | null }>,
+): string[] {
+  const primary = client.primary_store_id
+  if (!primary) return []
+  const branches = lojas.filter((loja) => loja.parent_loja_id === primary).map((loja) => loja.id)
+  return [primary, ...branches]
+}
+
+export type StoreTeamStat = { sellers: number; checkedIn?: number; disciplinePct: number }
+
+/**
+ * Soma a equipe do cliente nas lojas dele.
+ *
+ * A presença é recalculada sobre os totais somados em vez de tirar a média das
+ * porcentagens: uma loja com 1 vendedor presente não vale o mesmo que uma com
+ * 20, e a média das médias diria que vale.
+ */
+export function clientTeamStat(
+  storeIds: readonly string[],
+  stats: Readonly<Record<string, StoreTeamStat>>,
+): { sellers: number; checkedIn: number; disciplinePct: number } {
+  let sellers = 0
+  let checkedIn = 0
+  for (const storeId of storeIds) {
+    const stat = stats[storeId]
+    if (!stat) continue
+    sellers += stat.sellers
+    checkedIn += stat.checkedIn ?? Math.round((stat.disciplinePct / 100) * stat.sellers)
+  }
+  return {
+    sellers,
+    checkedIn,
+    disciplinePct: sellers > 0 ? Math.min(100, Math.round((checkedIn / sellers) * 100)) : 0,
+  }
+}
+
 export function isRenewalNear(client: PortfolioClient, today = new Date(), days = 60) {
   if (!client.contract_end_date) return false
   const end = new Date(`${client.contract_end_date}T00:00:00`)
