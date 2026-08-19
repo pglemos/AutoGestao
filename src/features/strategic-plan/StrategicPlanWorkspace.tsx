@@ -18,6 +18,7 @@ import FiltersDrawer from '@/components/owner/strategic/FiltersDrawer'
 import DisplayModeSelector from '@/components/owner/strategic/DisplayModeSelector'
 import { usePlanningWorkspace } from '@/features/planning-workspace'
 import { ConditionalPageCanvas } from '@/design-system/page'
+import { PlanCycleBanner } from './PlanCycleBanner'
 import { useStrategicPlanController, type StrategicPlanController } from './useStrategicPlanController'
 
 export function StrategicPlanWorkspace({ onUpdated }: { onUpdated?: (at: Date) => void }) {
@@ -74,6 +75,7 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
     <ConditionalPageCanvas enabled={shell === 'owner'} as="div" width="dashboard" bottomClearance="navigation" id="page-plano-estrategico" aria-label="Plano Estratégico" className={pageClass}>
       <div className="space-y-4">
         {shell === 'owner' ? <StrategicHeader /> : null}
+        <PlanCycleBanner state={controller.planCycle} year={controller.year} />
         <StrategicPlanTabs tab={controller.tab} onTabChange={controller.setTab} />
 
         {controller.tab === 'resumo' && controller.indicator ? (

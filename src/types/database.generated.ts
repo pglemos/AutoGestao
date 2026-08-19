@@ -2758,6 +2758,94 @@ export type Database = {
           },
         ]
       }
+      ciclos_plano_estrategico: {
+        Row: {
+          client_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          package_version_id: string | null
+          published_at: string | null
+          published_by: string | null
+          revised_from_id: string | null
+          status: string
+          updated_at: string
+          version_number: number
+          year: number
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          package_version_id?: string | null
+          published_at?: string | null
+          published_by?: string | null
+          revised_from_id?: string | null
+          status?: string
+          updated_at?: string
+          version_number?: number
+          year: number
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          package_version_id?: string | null
+          published_at?: string | null
+          published_by?: string | null
+          revised_from_id?: string | null
+          status?: string
+          updated_at?: string
+          version_number?: number
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ciclos_plano_estrategico_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clientes_consultoria"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ciclos_plano_estrategico_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "vw_jornada_alem_do_contratado"
+            referencedColumns: ["client_id"]
+          },
+          {
+            foreignKeyName: "ciclos_plano_estrategico_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ciclos_plano_estrategico_package_version_id_fkey"
+            columns: ["package_version_id"]
+            isOneToOne: false
+            referencedRelation: "pacotes_indicadores_versoes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ciclos_plano_estrategico_published_by_fkey"
+            columns: ["published_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ciclos_plano_estrategico_revised_from_id_fkey"
+            columns: ["revised_from_id"]
+            isOneToOne: false
+            referencedRelation: "ciclos_plano_estrategico"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clientes: {
         Row: {
           canal_origem: Database["public"]["Enums"]["crm_canal"] | null
@@ -5678,8 +5766,10 @@ export type Database = {
           checklist_template: Json
           created_at: string
           duration: string | null
+          escopo: string | null
           evidence_required: string | null
           id: string
+          modalidade: string | null
           objective: string
           program_key: string
           target: string | null
@@ -5691,8 +5781,10 @@ export type Database = {
           checklist_template?: Json
           created_at?: string
           duration?: string | null
+          escopo?: string | null
           evidence_required?: string | null
           id?: string
+          modalidade?: string | null
           objective: string
           program_key: string
           target?: string | null
@@ -5704,8 +5796,10 @@ export type Database = {
           checklist_template?: Json
           created_at?: string
           duration?: string | null
+          escopo?: string | null
           evidence_required?: string | null
           id?: string
+          modalidade?: string | null
           objective?: string
           program_key?: string
           target?: string | null
@@ -8487,51 +8581,112 @@ export type Database = {
       }
       lojas: {
         Row: {
+          activated_at: string | null
           active: boolean | null
           address: string | null
           administrative_phone: string | null
+          business_phase: string | null
           cnpj: string | null
+          contract_end_date: string | null
+          contract_start_date: string | null
           created_at: string | null
+          current_visit_step: number | null
           id: string
+          implementation_owner_id: string | null
           legal_name: string | null
           manager_email: string | null
+          modality: string | null
           name: string
+          notes: string | null
+          onboarding_completed: boolean | null
+          onboarding_step: number | null
           parent_loja_id: string | null
           partners: Json
+          product_name: string | null
+          program_template_key: string | null
+          scheduled_activation_at: string | null
+          slug: string | null
           source_mode: string | null
+          status: string | null
+          structure_type: string | null
+          suspended_at: string | null
+          suspended_reason: string | null
           updated_at: string | null
         }
         Insert: {
+          activated_at?: string | null
           active?: boolean | null
           address?: string | null
           administrative_phone?: string | null
+          business_phase?: string | null
           cnpj?: string | null
+          contract_end_date?: string | null
+          contract_start_date?: string | null
           created_at?: string | null
+          current_visit_step?: number | null
           id?: string
+          implementation_owner_id?: string | null
           legal_name?: string | null
           manager_email?: string | null
+          modality?: string | null
           name: string
+          notes?: string | null
+          onboarding_completed?: boolean | null
+          onboarding_step?: number | null
           parent_loja_id?: string | null
           partners?: Json
+          product_name?: string | null
+          program_template_key?: string | null
+          scheduled_activation_at?: string | null
+          slug?: string | null
           source_mode?: string | null
+          status?: string | null
+          structure_type?: string | null
+          suspended_at?: string | null
+          suspended_reason?: string | null
           updated_at?: string | null
         }
         Update: {
+          activated_at?: string | null
           active?: boolean | null
           address?: string | null
           administrative_phone?: string | null
+          business_phase?: string | null
           cnpj?: string | null
+          contract_end_date?: string | null
+          contract_start_date?: string | null
           created_at?: string | null
+          current_visit_step?: number | null
           id?: string
+          implementation_owner_id?: string | null
           legal_name?: string | null
           manager_email?: string | null
+          modality?: string | null
           name?: string
+          notes?: string | null
+          onboarding_completed?: boolean | null
+          onboarding_step?: number | null
           parent_loja_id?: string | null
           partners?: Json
+          product_name?: string | null
+          program_template_key?: string | null
+          scheduled_activation_at?: string | null
+          slug?: string | null
           source_mode?: string | null
+          status?: string | null
+          structure_type?: string | null
+          suspended_at?: string | null
+          suspended_reason?: string | null
           updated_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "lojas_implementation_owner_id_fkey"
+            columns: ["implementation_owner_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "lojas_parent_loja_id_fkey"
             columns: ["parent_loja_id"]
@@ -18887,6 +19042,10 @@ export type Database = {
         }
         Returns: string
       }
+      mapear_area_metrica_para_departamento: {
+        Args: { p_area: string }
+        Returns: string
+      }
       modulo_cliente_consultoria_habilitado: {
         Args: { p_cliente_id: string; p_modulo_chave: string }
         Returns: boolean
@@ -19416,6 +19575,7 @@ export type Database = {
         Args: { p_loja_id: string; p_papeis: string[]; uid?: string }
         Returns: boolean
       }
+      unaccent: { Args: { "": string }; Returns: string }
       update_d1_confirmation: {
         Args: {
           p_appointment_id: string

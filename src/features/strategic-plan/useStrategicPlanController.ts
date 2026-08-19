@@ -8,6 +8,7 @@ import {
 } from '@/components/owner/strategic/strategicUtils'
 import { strategicPlanDataSource } from './strategicPlanRepositoryAdapter'
 import { readStrategicRouteState, resolveInitialStrategicDisplayMode, writeStrategicRouteState } from './strategicPlanPreferences'
+import { usePlanCycle, type PlanCycleState } from './usePlanCycle'
 import type {
   StrategicDisplayMode,
   StrategicPlanRepository,
@@ -46,6 +47,7 @@ export type StrategicPlanController = {
   handleCardClick: (id: string) => void
   handleRowClick: (id: string) => void
   handleSaved: () => Promise<void>
+  planCycle: PlanCycleState
 }
 
 export function useStrategicPlanController(options: {
@@ -54,7 +56,7 @@ export function useStrategicPlanController(options: {
   onUpdated?: (at: Date) => void
   useRealtime?: typeof usePlanningRealtime
 } = {}): StrategicPlanController {
-  const { storeId } = usePlanningWorkspace()
+  const { storeId, actor, capabilities } = usePlanningWorkspace()
   const repository = options.repository ?? strategicPlanDataSource
   const year = options.year ?? REFERENCE_YEAR
   const onUpdated = options.onUpdated
@@ -82,6 +84,14 @@ export function useStrategicPlanController(options: {
   const [actionOpen, setActionOpen] = useState(false)
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
+
+  const planCycle = usePlanCycle({
+    storeId,
+    year,
+    userId: actor.id,
+    canManageCycle: capabilities.canEditTargets,
+    series,
+  })
 
   const reload = useCallback(async () => {
     const requestId = ++requestSequence.current
@@ -210,5 +220,6 @@ export function useStrategicPlanController(options: {
     handleCardClick,
     handleRowClick,
     handleSaved,
+    planCycle,
   }
 }

@@ -68,6 +68,7 @@ export type CentralMxActionPlanItem = {
   responsibleLabel: string
   responsibleId: string | null
   dueLabel: string
+  dueDate: string | null
   status: ActionPlanStatus
   efficacyScore: number | null
   efficacyNote: string | null
@@ -404,9 +405,14 @@ function buildAlerts(input: CentralMxEngineInput, indicators: CentralMxIndicator
 }
 
 function buildActionPlanItems(input: CentralMxEngineInput, alerts: ExecutiveAlert[]): CentralMxActionPlanItem[] {
+  const now = new Date()
+  const todayIso = now.toISOString().slice(0, 10)
+  const in7DaysIso = new Date(now.getTime() + 7 * 86400000).toISOString().slice(0, 10)
+
   return alerts.map((alert, index) => {
     const department = (alert.metadata?.department as MxDepartmentCode | undefined) || 'comercial'
     const priority: ActionPlanPriority = alert.type === 'critical' ? 'critica' : alert.type === 'warning' ? 'alta' : 'media'
+    const isCritical = alert.type === 'critical'
     return {
       id: `${input.storeId}:${alert.metadata?.sourceIndicator || 'alert'}:${index}`,
       scopeType: alert.scopeType,
@@ -418,7 +424,8 @@ function buildActionPlanItems(input: CentralMxEngineInput, alerts: ExecutiveAler
       how: alert.recommendation,
       responsibleLabel: department === 'comercial' || department === 'operacional' ? 'Gerente comercial' : 'Diretor / responsável do departamento',
       responsibleId: null,
-      dueLabel: alert.type === 'critical' ? 'Hoje' : '7 dias',
+      dueLabel: isCritical ? 'Hoje' : '7 dias',
+      dueDate: isCritical ? todayIso : in7DaysIso,
       status: alert.type === 'positive' ? 'validando_eficacia' : 'pendente',
       efficacyScore: alert.type === 'positive' ? 80 : null,
       efficacyNote: alert.type === 'positive' ? 'Manter acompanhamento.' : null,

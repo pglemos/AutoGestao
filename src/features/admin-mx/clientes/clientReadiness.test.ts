@@ -22,16 +22,22 @@ function input(overrides: Partial<ClientReadinessInput> = {}): ClientReadinessIn
 
 describe('checklist de prontidão do cliente', () => {
   test('cliente completo pode ser ativado', () => {
-    const summary = readinessSummary(buildClientReadiness(input()))
+    const checks = buildClientReadiness(input())
+    const summary = readinessSummary(checks)
     expect(summary.canActivate).toBe(true)
     expect(summary.blockers).toEqual([])
     expect(summary.warnings).toEqual([])
+    expect(checks.every(c => c.evaluationStatus === 'VALID')).toBe(true)
   })
 
-  test('sem loja principal a ativação é bloqueada', () => {
-    const summary = readinessSummary(buildClientReadiness(input({ primary_store_id: null })))
+  test('sem loja principal a ativação é bloqueada com status INVALID e rota', () => {
+    const checks = buildClientReadiness(input({ primary_store_id: null }))
+    const summary = readinessSummary(checks)
     expect(summary.canActivate).toBe(false)
-    expect(summary.blockers.map(item => item.key)).toContain('loja-principal')
+    const check = checks.find(item => item.key === 'loja-principal')
+    expect(check?.ok).toBe(false)
+    expect(check?.evaluationStatus).toBe('INVALID')
+    expect(check?.correctionRoute).toBe('/admin/clientes')
   })
 
   test('loja ocupada por outro cliente ativo bloqueia', () => {
@@ -56,9 +62,15 @@ describe('checklist de prontidão do cliente', () => {
     expect(summary.warnings.map(item => item.key).sort()).toEqual(['cnpj', 'contrato'])
   })
 
-  test('módulo sem flag explícita conta como liberado', () => {
-    const summary = readinessSummary(buildClientReadiness(input({ modules: [{ enabled: null }] })))
-    expect(summary.canActivate).toBe(true)
+  test('avalia checks adicionais de dono master e jornada gerada quando presentes', () => {
+    const checks = buildClientReadiness(input({
+      owner_master: { email: 'dono@empresa.com', valid: true },
+      journey_generated: true,
+    }))
+    expect(checks.map(c => c.key)).toContain('dono-master')
+    expect(checks.map(c => c.key)).toContain('jornada-gerada')
+    expect(checks.find(c => c.key === 'dono-master')?.ok).toBe(true)
+    expect(checks.find(c => c.key === 'jornada-gerada')?.ok).toBe(true)
   })
 })
 

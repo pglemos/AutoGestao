@@ -1,11 +1,20 @@
 export type ReadinessSeverity = 'impeditivo' | 'informativo'
 
+export type CheckEvaluationStatus =
+  | 'VALID'
+  | 'INVALID'
+  | 'WARNING'
+  | 'NOT_APPLICABLE'
+  | 'TECHNICAL_ERROR'
+
 export type ReadinessCheck = {
   key: string
   label: string
   severity: ReadinessSeverity
   ok: boolean
   detail: string
+  evaluationStatus?: CheckEvaluationStatus
+  correctionRoute?: string
 }
 
 export type ClientReadinessInput = {
@@ -23,6 +32,9 @@ export type ClientReadinessInput = {
   assignments: Array<{ active: boolean | null }>
   /** Outro cliente já ativo na mesma loja bloqueia a ativação (índice parcial). */
   storeTakenByOtherClient: boolean
+  owner_master?: { id?: string | null; name?: string | null; email?: string | null; valid?: boolean | null } | null
+  journey_generated?: boolean | null
+  strategic_plan_ready?: boolean | null
 }
 
 /**
@@ -40,12 +52,14 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
   const enabledModules = input.modules.filter(module => module.enabled !== false)
   const activeAssignments = input.assignments.filter(assignment => assignment.active !== false)
 
-  return [
+  const checks: ReadinessCheck[] = [
     {
       key: 'loja-principal',
       label: 'Loja principal vinculada',
       severity: 'impeditivo',
       ok: Boolean(input.primary_store_id),
+      evaluationStatus: input.primary_store_id ? 'VALID' : 'INVALID',
+      correctionRoute: '/admin/clientes',
       detail: input.primary_store_id ? 'Cliente vinculado a uma loja do sistema.' : 'Sem loja principal o cliente não pode ficar ativo.',
     },
     {
@@ -53,6 +67,8 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       label: 'Loja sem outro cliente ativo',
       severity: 'impeditivo',
       ok: !input.storeTakenByOtherClient,
+      evaluationStatus: !input.storeTakenByOtherClient ? 'VALID' : 'INVALID',
+      correctionRoute: '/admin/clientes',
       detail: input.storeTakenByOtherClient ? 'Já existe outro cliente ativo nesta loja.' : 'A loja aceita este cliente.',
     },
     {
@@ -60,6 +76,8 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       label: 'Produto contratado',
       severity: 'impeditivo',
       ok: Boolean((input.product_name ?? '').trim() || (input.program_template_key ?? '').trim()),
+      evaluationStatus: (input.product_name ?? '').trim() || (input.program_template_key ?? '').trim() ? 'VALID' : 'INVALID',
+      correctionRoute: '/admin/produtos',
       detail: 'Define a jornada de encontros do cliente.',
     },
     {
@@ -67,6 +85,8 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       label: 'Consultor responsável',
       severity: 'impeditivo',
       ok: activeAssignments.length > 0,
+      evaluationStatus: activeAssignments.length > 0 ? 'VALID' : 'INVALID',
+      correctionRoute: '/admin/equipe',
       detail: activeAssignments.length ? `${activeAssignments.length} consultor(es) na carteira.` : 'Nenhum consultor atribuído.',
     },
     {
@@ -74,6 +94,8 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       label: 'Módulos liberados',
       severity: 'impeditivo',
       ok: enabledModules.length > 0,
+      evaluationStatus: enabledModules.length > 0 ? 'VALID' : 'INVALID',
+      correctionRoute: '/admin/clientes',
       detail: enabledModules.length ? `${enabledModules.length} módulo(s) liberado(s).` : 'Sem módulo liberado o cliente entra sem acesso.',
     },
     {
@@ -81,6 +103,8 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       label: 'Estrutura de lojas cadastrada',
       severity: 'informativo',
       ok: namedUnits.length > 0,
+      evaluationStatus: namedUnits.length > 0 ? 'VALID' : 'WARNING',
+      correctionRoute: '/admin/clientes',
       detail: namedUnits.length ? `${namedUnits.length} unidade(s) cadastrada(s).` : 'Nenhuma unidade cadastrada.',
     },
     {
@@ -88,6 +112,8 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       label: 'Contato principal',
       severity: 'informativo',
       ok: Boolean(primaryContact),
+      evaluationStatus: primaryContact ? 'VALID' : 'WARNING',
+      correctionRoute: '/admin/clientes',
       detail: primaryContact ? `${primaryContact.name}` : 'Nenhum contato principal definido.',
     },
     {
@@ -95,6 +121,8 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       label: 'CNPJ informado',
       severity: 'informativo',
       ok: Boolean((input.cnpj ?? '').trim()),
+      evaluationStatus: (input.cnpj ?? '').trim() ? 'VALID' : 'WARNING',
+      correctionRoute: '/admin/clientes',
       detail: 'Necessário para emissão e conciliação.',
     },
     {
@@ -102,6 +130,8 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       label: 'Início de contrato',
       severity: 'informativo',
       ok: Boolean(input.contract_start_date),
+      evaluationStatus: input.contract_start_date ? 'VALID' : 'WARNING',
+      correctionRoute: '/admin/clientes',
       detail: 'Base para a contagem da jornada.',
     },
     {
@@ -109,9 +139,38 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       label: 'Responsável MX pela implantação',
       severity: 'informativo',
       ok: Boolean(input.implementation_owner_id),
+      evaluationStatus: input.implementation_owner_id ? 'VALID' : 'WARNING',
+      correctionRoute: '/admin/equipe',
       detail: 'Quem responde pelo onboarding.',
     },
   ]
+
+  if (input.owner_master !== undefined && input.owner_master !== null) {
+    const isOwnerValid = Boolean(input.owner_master.valid !== false && input.owner_master.email)
+    checks.push({
+      key: 'dono-master',
+      label: 'Dono Master válido',
+      severity: 'informativo',
+      ok: isOwnerValid,
+      evaluationStatus: isOwnerValid ? 'VALID' : 'WARNING',
+      correctionRoute: '/admin/equipe',
+      detail: isOwnerValid ? `Dono Master: ${input.owner_master.email}` : 'Vínculo ou e-mail de Dono Master inconsistente.',
+    })
+  }
+
+  if (input.journey_generated !== undefined && input.journey_generated !== null) {
+    checks.push({
+      key: 'jornada-gerada',
+      label: 'Jornada gerada',
+      severity: 'informativo',
+      ok: Boolean(input.journey_generated),
+      evaluationStatus: input.journey_generated ? 'VALID' : 'WARNING',
+      correctionRoute: '/admin/consultoria-mx',
+      detail: input.journey_generated ? 'Jornada de encontros materializada.' : 'Encontros da jornada ainda não foram gerados.',
+    })
+  }
+
+  return checks
 }
 
 export function readinessSummary(checks: ReadinessCheck[]) {
