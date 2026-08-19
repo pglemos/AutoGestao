@@ -76,13 +76,26 @@ export function emptyUserPersonal(): UserPersonalDraft {
   }
 }
 
-/** Erros bloqueantes dos dados pessoais — espelha os campos obrigatórios do Base44. */
-export function validateUserPersonal(draft: UserPersonalDraft): string[] {
+/**
+ * Erros bloqueantes dos dados pessoais — espelha os campos obrigatórios do Base44.
+ *
+ * A data de nascimento é obrigatória para quem entra agora, mas não pode ser
+ * cobrada de quem já está cadastrado sem ela: os 489 usuários da base vieram de
+ * importação sem esse campo, e exigi-lo na edição desabilitava o botão de salvar
+ * para todos eles — nenhum usuário era editável. Só bloqueia, então, quando o
+ * cadastro já tinha data e o formulário a apagou.
+ */
+export function validateUserPersonal(
+  draft: UserPersonalDraft,
+  options: { birthDateAlreadyOnRecord?: boolean } = {},
+): string[] {
   const errors: string[] = []
   if (!draft.full_name.trim()) errors.push('Nome completo é obrigatório.')
   if (!draft.email.trim()) errors.push('E-mail é obrigatório.')
   else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(draft.email.trim())) errors.push('E-mail inválido.')
-  if (!draft.birth_date) errors.push('Data de nascimento é obrigatória.')
+  if (!draft.birth_date && options.birthDateAlreadyOnRecord) {
+    errors.push('Data de nascimento é obrigatória.')
+  }
   return errors
 }
 

@@ -74,13 +74,13 @@ export function UserEditModal(props: {
 
   if (!member) return null
 
-  const personalErrors = validateUserPersonal(personal)
+  const personalErrors = validateUserPersonal(personal, { birthDateAlreadyOnRecord: Boolean(detail?.birth_date) })
   const updatePersonal = (field: keyof UserPersonalDraft, value: string | boolean) =>
     setPersonal(current => ({ ...current, [field]: value }))
 
   const submit = async () => {
     if (!detail || saving) return
-    const errors = validateUserPersonal(personal)
+    const errors = validateUserPersonal(personal, { birthDateAlreadyOnRecord: Boolean(detail?.birth_date) })
     if (errors.length) {
       setTab('pessoais')
       toast.error(errors[0])

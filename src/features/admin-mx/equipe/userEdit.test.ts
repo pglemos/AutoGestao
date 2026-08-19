@@ -41,11 +41,21 @@ describe('dados pessoais', () => {
     expect(validateUserPersonal(personal())).toEqual([])
   })
 
-  test('cobra nome, e-mail e data de nascimento', () => {
-    const errors = validateUserPersonal(personal({ full_name: '  ', email: '', birth_date: '' }))
+  test('cobra nome e e-mail', () => {
+    const errors = validateUserPersonal(personal({ full_name: '  ', email: '' }))
     expect(errors).toContain('Nome completo é obrigatório.')
     expect(errors).toContain('E-mail é obrigatório.')
+  })
+
+  test('cobra a data de nascimento quando o cadastro já tinha uma e ela foi apagada', () => {
+    const errors = validateUserPersonal(personal({ birth_date: '' }), { birthDateAlreadyOnRecord: true })
     expect(errors).toContain('Data de nascimento é obrigatória.')
+  })
+
+  test('não cobra data de nascimento de cadastro que nunca teve uma', () => {
+    // Os 489 usuários da base vieram de importação sem o campo; cobrá-lo aqui
+    // desabilitava o salvar para todos eles.
+    expect(validateUserPersonal(personal({ birth_date: '' }))).toEqual([])
   })
 
   test('recusa e-mail malformado', () => {
