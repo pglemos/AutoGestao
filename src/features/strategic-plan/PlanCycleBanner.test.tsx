@@ -1,5 +1,5 @@
-import { describe, expect, it, mock } from 'bun:test'
-import { render, screen } from '@testing-library/react'
+import { afterEach, describe, expect, it, mock } from 'bun:test'
+import { cleanup, render, screen } from '@testing-library/react'
 import React from 'react'
 import { PlanCycleBanner } from './PlanCycleBanner'
 import type { PlanCycleState } from './usePlanCycle'
@@ -21,6 +21,11 @@ function mockState(overrides: Partial<PlanCycleState> = {}): PlanCycleState {
     ...overrides,
   }
 }
+
+// Este arquivo afirma ausência de botão, e sem desmontar entre casos a consulta
+// alcança o que o caso anterior deixou no document.body. O cleanup não é global
+// porque boa parte da suíte renderiza uma vez e consulta em vários casos.
+afterEach(cleanup)
 
 describe('PlanCycleBanner', () => {
   it('não renderiza nada se clientId for nulo', () => {

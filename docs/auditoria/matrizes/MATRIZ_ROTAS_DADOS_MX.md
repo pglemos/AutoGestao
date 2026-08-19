@@ -5,10 +5,10 @@
 - Rotas públicas: **9**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
-- Tabelas referenciadas pelo runtime: **174**
+- Tabelas referenciadas pelo runtime: **175**
 - RPCs referenciadas pelo runtime: **89**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **376**
+- Pares tabela/operação encontrados: **379**
 
 ## Rotas
 
@@ -159,8 +159,9 @@
 | `carteira_missoes` | 1 |
 | `catalogo_metricas_consultoria` | 7 |
 | `central_execucao_aberturas` | 3 |
+| `ciclos_plano_estrategico` | 1 |
 | `clientes` | 6 |
-| `clientes_consultoria` | 26 |
+| `clientes_consultoria` | 27 |
 | `clientes_oportunidades` | 1 |
 | `comportamental_perfis` | 1 |
 | `comportamental_questoes` | 1 |
@@ -212,7 +213,7 @@
 | `logs_compartilhamento_whatsapp` | 1 |
 | `logs_reprocessamento` | 1 |
 | `logs_rotina_gerente` | 1 |
-| `lojas` | 28 |
+| `lojas` | 29 |
 | `manager_daily_tasks` | 1 |
 | `manager_lead_conferences` | 1 |
 | `marketing_mensal_consultoria` | 1 |
@@ -236,8 +237,8 @@
 | `organograma_nos` | 1 |
 | `overrides_parametros_cliente` | 1 |
 | `pacotes_indicadores_estrategicos` | 1 |
-| `pacotes_indicadores_itens` | 1 |
-| `pacotes_indicadores_versoes` | 1 |
+| `pacotes_indicadores_itens` | 2 |
+| `pacotes_indicadores_versoes` | 2 |
 | `pdi_avaliacoes_competencia` | 1 |
 | `pdi_metas` | 1 |
 | `pdi_niveis_cargo` | 1 |
@@ -247,14 +248,14 @@
 | `pdis` | 4 |
 | `perfil_consultor_mx` | 4 |
 | `planejamentos_estrategicos` | 1 |
-| `planos_acao` | 12 |
+| `planos_acao` | 11 |
 | `planos_acao_template_itens` | 3 |
 | `planos_acao_template_versoes` | 4 |
 | `planos_acao_templates` | 3 |
 | `posicionamento_empresa` | 1 |
 | `pre_cadastros_loja` | 2 |
 | `produtos_digitais` | 2 |
-| `programas_visita_consultoria` | 7 |
+| `programas_visita_consultoria` | 8 |
 | `progresso_etapa_trilha` | 1 |
 | `progresso_treinamentos` | 3 |
 | `prospecting_schedule` | 3 |
@@ -298,7 +299,7 @@
 | `universidade_trilhas` | 1 |
 | `user_roles` | 1 |
 | `usuarios` | 22 |
-| `valores_indicadores_planejamento` | 2 |
+| `valores_indicadores_planejamento` | 3 |
 | `valores_parametros_consultoria` | 3 |
 | `vehicle_model_catalog` | 1 |
 | `veiculos_estoque` | 4 |
@@ -362,9 +363,12 @@
 | `catalogo_metricas_consultoria:upsert` | 1 |
 | `central_execucao_aberturas:select` | 1 |
 | `central_execucao_aberturas:upsert` | 2 |
+| `ciclos_plano_estrategico:insert` | 1 |
+| `ciclos_plano_estrategico:select` | 1 |
+| `ciclos_plano_estrategico:update` | 1 |
 | `clientes_consultoria:delete` | 1 |
 | `clientes_consultoria:insert` | 4 |
-| `clientes_consultoria:select` | 25 |
+| `clientes_consultoria:select` | 26 |
 | `clientes_consultoria:update` | 7 |
 | `clientes_oportunidades:select` | 1 |
 | `clientes:delete` | 2 |
@@ -483,7 +487,7 @@
 | `logs_rotina_gerente:upsert` | 1 |
 | `lojas:delete` | 1 |
 | `lojas:insert` | 3 |
-| `lojas:select` | 28 |
+| `lojas:select` | 29 |
 | `lojas:update` | 1 |
 | `manager_daily_tasks:select` | 1 |
 | `manager_daily_tasks:update` | 1 |
@@ -538,9 +542,9 @@
 | `pacotes_indicadores_estrategicos:select` | 1 |
 | `pacotes_indicadores_estrategicos:update` | 1 |
 | `pacotes_indicadores_itens:insert` | 1 |
-| `pacotes_indicadores_itens:select` | 1 |
+| `pacotes_indicadores_itens:select` | 2 |
 | `pacotes_indicadores_versoes:insert` | 1 |
-| `pacotes_indicadores_versoes:select` | 1 |
+| `pacotes_indicadores_versoes:select` | 2 |
 | `pacotes_indicadores_versoes:update` | 1 |
 | `pdi_avaliacoes_competencia:select` | 1 |
 | `pdi_metas:select` | 1 |
@@ -567,7 +571,7 @@
 | `planos_acao_templates:select` | 3 |
 | `planos_acao_templates:update` | 1 |
 | `planos_acao:delete` | 1 |
-| `planos_acao:insert` | 5 |
+| `planos_acao:insert` | 4 |
 | `planos_acao:select` | 10 |
 | `planos_acao:update` | 2 |
 | `posicionamento_empresa:select` | 1 |
@@ -577,7 +581,7 @@
 | `produtos_digitais:update` | 1 |
 | `programas_visita_consultoria:delete` | 1 |
 | `programas_visita_consultoria:insert` | 1 |
-| `programas_visita_consultoria:select` | 6 |
+| `programas_visita_consultoria:select` | 7 |
 | `programas_visita_consultoria:update` | 2 |
 | `progresso_etapa_trilha:select` | 1 |
 | `progresso_treinamentos:select` | 3 |
@@ -657,7 +661,7 @@
 | `usuarios:select` | 19 |
 | `usuarios:update` | 6 |
 | `usuarios:upsert` | 1 |
-| `valores_indicadores_planejamento:select` | 2 |
+| `valores_indicadores_planejamento:select` | 3 |
 | `valores_parametros_consultoria:select` | 3 |
 | `valores_parametros_consultoria:upsert` | 2 |
 | `vehicle_model_catalog:select` | 1 |
