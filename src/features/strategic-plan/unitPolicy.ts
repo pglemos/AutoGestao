@@ -136,6 +136,69 @@ export const UNIT_POLICY_DEFAULTS = {
   CONTENT_QUALITY: companyOnly(),
   TOTAL_EXPENSE: companyOnly(),
   AVERAGE_PREPARATION_COST: companyOnly(),
+
+  // ── Vocabulário do catálogo MX (`catalogo_metricas_consultoria.metric_key`) ──
+  // Os códigos acima vêm do catálogo Base44; o catálogo em produção usa outros.
+  // Sem estas entradas, todo indicador MX ficaria sem política — e portanto sem
+  // consolidado.
+
+  // Contagens e valores aditivos.
+  sales_goal: sum(),
+  sales_total: sum(),
+  sales_door_flow: sum(),
+  sales_referral: sum(),
+  sales_company_wallet: sum(),
+  sales_seller_wallet: sum(),
+  sales_internet: sum(),
+  sales_other: sum(),
+  seller_count: sum(),
+  leads_received: sum(),
+  appointments: sum(),
+  visits: sum(),
+  internet_investment: sum(),
+  inventory_investment: sum(),
+  stock_total: sum(),
+  active_stock: sum(),
+  trade_in_volume: sum(),
+  gross_revenue: sum(),
+  net_revenue: sum(),
+  net_profit: sum(),
+  preparation_cost: sum(),
+  post_sale_cost: sum(),
+
+  // Taxas, razões e médias por vendedor: recalculadas sobre as bases.
+  goal_achievement_rate: recalc(),
+  active_sellers_rate: recalc(),
+  avg_sales_per_seller: recalc(),
+  avg_leads_per_seller: recalc(),
+  appointments_per_sale: recalc(),
+  lead_to_appointment_rate: recalc(),
+  internet_sales_share: recalc(),
+  appointment_to_visit_rate: recalc(),
+  visit_to_sale_rate: recalc(),
+  no_show_rate: recalc(),
+  crm_follow_up_rate: recalc(),
+  internet_cost_per_sale: recalc(),
+  cost_per_lead: recalc(),
+  stock_turnover: recalc(),
+  stock_over_90_rate: recalc(),
+  trade_in_to_sales_rate: recalc(),
+  gross_margin_rate: recalc(),
+  fixed_expense_rate: recalc(),
+  training_completion_rate: recalc(),
+
+  // Médias de estoque e de margem: ponderadas pelo volume correspondente.
+  avg_stock_price: weighted('stock_total'),
+  avg_stock_km: weighted('stock_total'),
+  avg_fipe_delta: weighted('stock_total'),
+  avg_stock_age_days: weighted('stock_total'),
+  trade_in_avg_margin: weighted('trade_in_volume'),
+  avg_margin: weighted('sales_total'),
+
+  // Presença digital: medida para a empresa, não por unidade.
+  instagram_followers: companyOnly(),
+  google_rating: companyOnly(),
+  content_quality: companyOnly(),
 } satisfies Record<string, PolicyDefault>
 
 type ClientIndicatorPolicySource = {

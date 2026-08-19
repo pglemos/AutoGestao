@@ -31,12 +31,19 @@ import {
 import {
   applyStoreCopyMutations,
   canManageStoreTargets,
+  fetchFormulaIndicators,
   fetchPlanningHistory,
   fetchStorePlanningValues,
   restorePlanningHistory,
   saveIndicatorTargets,
   type PlanningHistoryRow,
 } from '../indicadores/indicatorData'
+import {
+  CONSOLIDATED_SCOPE,
+  CONSOLIDATION_STATUS,
+  useClientScope,
+  type ConsolidationIndicator,
+} from '@/features/strategic-plan'
 
 type StoreOption = { id: string; name: string }
 
@@ -56,6 +63,8 @@ export function MetasRealizadosTab(props: {
   const [copyOpen, setCopyOpen] = useState(false)
   const [historyFor, setHistoryFor] = useState<string | null>(null)
   const [file, setFile] = useState<File | null>(null)
+  const [scope, setScope] = useState<string>('')
+  const [formulas, setFormulas] = useState<Record<string, string | null>>({})
 
   const refetch = useCallback(async () => {
     if (!storeId) {
@@ -91,7 +100,50 @@ export function MetasRealizadosTab(props: {
 
   useEffect(() => { void refetch() }, [refetch])
 
+  useEffect(() => {
+    let active = true
+    void (async () => {
+      const result = await fetchFormulaIndicators()
+      if (!active) return
+      const byCode: Record<string, string | null> = {}
+      for (const row of result.rows) byCode[row.metric_key] = row.formula_expression
+      setFormulas(byCode)
+    })()
+    return () => { active = false }
+  }, [])
+
+  // Sem a fórmula, um indicador derivado não tem como ser recalculado sobre as
+  // bases consolidadas — sairia como "sem base" no consolidado do cliente.
+  const consolidationIndicators = useMemo<ConsolidationIndicator[]>(
+    () => props.indicators.map(indicator => ({
+      code: indicator.code,
+      formula_expression: formulas[indicator.code] ?? null,
+    })),
+    [props.indicators, formulas],
+  )
+
+  const clientScope = useClientScope(storeId, year, consolidationIndicators)
+  const isConsolidated = scope === CONSOLIDATED_SCOPE && clientScope.supportsConsolidated
+
+  // Trocar de loja invalida um escopo consolidado que talvez não exista no cliente novo.
+  useEffect(() => {
+    if (scope === CONSOLIDATED_SCOPE && !clientScope.loading && !clientScope.supportsConsolidated) setScope('')
+  }, [scope, clientScope.loading, clientScope.supportsConsolidated])
+
   const grid = useMemo(() => buildMonthlyGrid(rows, props.indicators.map(item => item.code)), [rows, props.indicators])
+
+  const consolidatedGrid = clientScope.consolidated?.meta.valueMap ?? {}
+  const consolidatedIntegrity = clientScope.consolidated?.meta.integrityByMonth ?? {}
+
+  const partialMonths = useMemo(() => {
+    if (!isConsolidated) return 0
+    const months = new Set<number>()
+    for (const [month, byCode] of Object.entries(consolidatedIntegrity)) {
+      const partial = Object.values(byCode).some(item => item.status === CONSOLIDATION_STATUS.PARCIAL)
+      if (partial) months.add(Number(month))
+    }
+    return months.size
+  }, [isConsolidated, consolidatedIntegrity])
 
   const saveIndicator = async (code: string) => {
     setSavingKey(code)
@@ -169,8 +221,8 @@ export function MetasRealizadosTab(props: {
             <div className="flex flex-wrap items-center gap-2">
               <Button variant="outline" onClick={() => void refetch()}><RefreshCw size={16} />Atualizar</Button>
               <Button variant="outline" onClick={() => void exportXlsx()}><Download size={16} />Exportar planilha</Button>
-              <Button variant="outline" onClick={() => setCopyOpen(true)}><Copy size={16} />Copiar entre lojas</Button>
-              <Button variant="outline" onClick={() => document.getElementById('metas-import-file')?.click()}><Upload size={16} />Importar planilha</Button>
+              <Button variant="outline" onClick={() => setCopyOpen(true)} disabled={isConsolidated}><Copy size={16} />Copiar entre lojas</Button>
+              <Button variant="outline" onClick={() => document.getElementById('metas-import-file')?.click()} disabled={isConsolidated}><Upload size={16} />Importar planilha</Button>
               <input id="metas-import-file" type="file" accept=".xlsx" className="hidden" onChange={event => setFile(event.target.files?.[0] ?? null)} />
             </div>
           )}
@@ -188,7 +240,26 @@ export function MetasRealizadosTab(props: {
                 {[year - 1, year, year + 1].map(item => <option key={item} value={String(item)}>{item}</option>)}
               </MxSelect>
             </MxField>
+            {clientScope.supportsConsolidated ? (
+              <MxField label="Escopo">
+                <MxSelect aria-label="Escopo" value={scope} onChange={event => setScope(event.target.value)}>
+                  <option value="">Somente esta unidade</option>
+                  <option value={CONSOLIDATED_SCOPE}>
+                    Consolidado do cliente ({clientScope.units.filter(unit => unit.active).length} unidades)
+                  </option>
+                </MxSelect>
+              </MxField>
+            ) : null}
           </div>
+
+          {isConsolidated ? (
+            <MxStatusBanner tone={partialMonths > 0 ? 'warning' : 'neutral'}>
+              {partialMonths > 0
+                ? `Consolidado de ${clientScope.units.filter(unit => unit.active).length} unidades. ${partialMonths} ${partialMonths === 1 ? 'mês tem' : 'meses têm'} unidade sem lançamento — o total mostra apenas o que foi cadastrado.`
+                : `Consolidado de ${clientScope.units.filter(unit => unit.active).length} unidades. Percentuais e médias são recalculados sobre as bases, não somados.`}
+              {' '}A edição de metas continua sendo por unidade.
+            </MxStatusBanner>
+          ) : null}
 
           {loading ? <MxLoadingState label="Carregando metas" /> : error ? <MxErrorState description={error} retry={() => void refetch()} /> : (
             <div className="overflow-x-auto">
@@ -212,11 +283,20 @@ export function MetasRealizadosTab(props: {
                           </TableCell>
                           {MONTH_LABELS.map((_label, index) => {
                             const month = index + 1
-                            const value = grid[indicator.code]?.[month]?.meta ?? null
+                            const value = isConsolidated
+                              ? consolidatedGrid[indicator.code]?.[month] ?? null
+                              : grid[indicator.code]?.[month]?.meta ?? null
+                            const integrity = isConsolidated ? consolidatedIntegrity[month]?.[indicator.code] : undefined
                             return (
                               <TableCell key={month} className="text-right">
-                                {indicator.calculado ? (
-                                  <span className="text-xs text-muted-foreground">{formatDisplay(value, config)}</span>
+                                {isConsolidated || indicator.calculado ? (
+                                  <span
+                                    className="text-xs text-muted-foreground"
+                                    title={integrity?.explanation || undefined}
+                                  >
+                                    {formatDisplay(value, config)}
+                                    {integrity?.status === CONSOLIDATION_STATUS.PARCIAL ? ' *' : ''}
+                                  </span>
                                 ) : (
                                   <Input
                                     className="w-20 text-right"
@@ -230,7 +310,7 @@ export function MetasRealizadosTab(props: {
                           <TableCell className="text-right">
                             <div className="flex justify-end gap-1">
                               <Button variant="outline" size="sm" onClick={() => setHistoryFor(indicator.code)} disabled={savingKey === indicator.code}><History size={14} /></Button>
-                              {!indicator.calculado ? (
+                              {!indicator.calculado && !isConsolidated ? (
                                 <Button variant="outline" size="sm" onClick={() => void saveIndicator(indicator.code)} disabled={savingKey === indicator.code}>
                                   {savingKey === indicator.code ? <RefreshCw size={14} className="animate-spin" /> : <Save size={14} />}
                                 </Button>

@@ -31,6 +31,36 @@ export async function fetchClientUnits(clientId: string): Promise<{ units: Clien
   return { units: buildClientUnits(matrizId, stores ?? []), error: null }
 }
 
+/**
+ * Cliente e matriz aos quais uma loja pertence.
+ *
+ * A loja selecionada pode ser uma filial: a matriz é o seu `parent_loja_id`, e é
+ * a matriz que o cliente aponta em `primary_store_id`.
+ */
+export async function fetchClientOfStore(
+  storeId: string,
+): Promise<{ clientId: string | null; matrizId: string | null; error: string | null }> {
+  const { data: store, error: storeError } = await supabase
+    .from('lojas')
+    .select('id, parent_loja_id')
+    .eq('id', storeId)
+    .maybeSingle()
+
+  if (storeError) return { clientId: null, matrizId: null, error: storeError.message }
+  if (!store) return { clientId: null, matrizId: null, error: null }
+
+  const matrizId = store.parent_loja_id ?? store.id
+
+  const { data: client, error: clientError } = await supabase
+    .from('clientes_consultoria')
+    .select('id')
+    .eq('primary_store_id', matrizId)
+    .maybeSingle()
+
+  if (clientError) return { clientId: null, matrizId, error: clientError.message }
+  return { clientId: client?.id ?? null, matrizId, error: null }
+}
+
 /** Valores de planejamento de todas as unidades informadas, num ano. */
 export async function fetchUnitsPlanningValues(
   unitIds: string[],

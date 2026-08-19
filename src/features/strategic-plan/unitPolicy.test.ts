@@ -141,3 +141,47 @@ describe('isUnitPolicyDefined', () => {
     expect(isUnitPolicyDefined(null)).toBe(false)
   })
 })
+
+describe('vocabulário do catálogo MX', () => {
+  // O catálogo em produção usa metric_key próprio; sem estas entradas todo
+  // indicador MX ficaria sem política e o consolidado sairia vazio.
+  const MX_CODES = [
+    'sales_goal', 'sales_total', 'goal_achievement_rate', 'sales_door_flow', 'sales_referral',
+    'sales_company_wallet', 'sales_seller_wallet', 'sales_internet', 'sales_other', 'seller_count',
+    'avg_sales_per_seller', 'active_sellers_rate', 'leads_received', 'avg_leads_per_seller',
+    'appointments', 'visits', 'appointments_per_sale', 'lead_to_appointment_rate',
+    'internet_sales_share', 'appointment_to_visit_rate', 'visit_to_sale_rate', 'no_show_rate',
+    'crm_follow_up_rate', 'internet_investment', 'internet_cost_per_sale', 'cost_per_lead',
+    'avg_stock_price', 'avg_stock_km', 'avg_fipe_delta', 'inventory_investment',
+    'instagram_followers', 'google_rating', 'content_quality', 'stock_total', 'active_stock',
+    'stock_turnover', 'stock_over_90_rate', 'avg_stock_age_days', 'trade_in_volume',
+    'trade_in_to_sales_rate', 'trade_in_avg_margin', 'gross_revenue', 'net_revenue', 'net_profit',
+    'avg_margin', 'gross_margin_rate', 'preparation_cost', 'post_sale_cost', 'fixed_expense_rate',
+    'training_completion_rate',
+  ]
+
+  test('todo indicador do catálogo MX tem política declarada', () => {
+    const semPolitica = MX_CODES.filter(code => !isUnitPolicyDefined(resolveUnitPolicy(code)))
+    expect(semPolitica).toEqual([])
+  })
+
+  test('nenhuma taxa do catálogo MX é somada entre unidades', () => {
+    for (const code of MX_CODES.filter(item => /_rate$|_share$|^avg_|_per_/.test(item))) {
+      expect(resolveUnitPolicy(code).unit_rollup_method).not.toBe('SUM')
+    }
+  })
+
+  test('médias de estoque são ponderadas pelo volume de estoque', () => {
+    expect(resolveUnitPolicy('avg_stock_price')).toMatchObject({
+      unit_rollup_method: 'WEIGHTED_AVERAGE',
+      weight_indicator_code: 'stock_total',
+    })
+    expect(resolveUnitPolicy('trade_in_avg_margin').weight_indicator_code).toBe('trade_in_volume')
+  })
+
+  test('presença digital é medida na empresa, não por unidade', () => {
+    for (const code of ['instagram_followers', 'google_rating', 'content_quality']) {
+      expect(resolveUnitPolicy(code).unit_entry_mode).toBe('COMPANY_ONLY')
+    }
+  })
+})
