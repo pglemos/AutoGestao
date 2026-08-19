@@ -154,11 +154,27 @@ describe('diffRosterAgainstPackage — vocabulário do plano vs do pacote', () =
     expect(resultado.missing).toHaveLength(3)
     expect(resultado.extra).toHaveLength(3)
   })
+
+  test('divergência quase total se declara disjunta, para não virar aviso diário', () => {
+    // O caso real de hoje: a tela fala sales_volume/leads_total e o pacote fala
+    // sales_total/leads_received. O consultor não reconcilia isso pela tela.
+    const tela = ['sales_volume', 'leads_total', 'lead_to_schedule_rate', 'daily_sales_rhythm']
+    const contratado = ['sales_total', 'leads_received', 'lead_to_appointment_rate', 'sales_door_flow']
+    expect(diffRosterAgainstPackage(tela, contratado).disjoint).toBe(true)
+  })
+
+  test('divergência parcial continua acionável e não é disjunta', () => {
+    const tela = ['sales_volume', 'leads_total', 'gross_margin_rate']
+    const contratado = ['sales_volume', 'leads_total', 'gross_margin_rate', 'turnover_rate']
+    const r = diffRosterAgainstPackage(tela, contratado)
+    expect(r.disjoint).toBe(false)
+    expect(r.missing).toEqual(['turnover_rate'])
+  })
 })
 
 describe('diffRosterAgainstPackage', () => {
   test('plano alinhado ao pacote', () => {
-    expect(diffRosterAgainstPackage(['a', 'b'], ['b', 'a'])).toEqual({ missing: [], extra: [], aligned: true })
+    expect(diffRosterAgainstPackage(['a', 'b'], ['b', 'a'])).toEqual({ missing: [], extra: [], aligned: true, disjoint: false })
   })
 
   test('indicador que o pacote passou a exigir aparece como faltante', () => {

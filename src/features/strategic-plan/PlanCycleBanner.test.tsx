@@ -32,7 +32,7 @@ describe('PlanCycleBanner — plano contra o pacote contratado', () => {
   it('avisa quando faltam indicadores do pacote', () => {
     render(
       <PlanCycleBanner
-        state={mockState({ packageAlignment: { missing: ['SP-010', 'SP-011'], extra: [], aligned: false } })}
+        state={mockState({ packageAlignment: { missing: ['SP-010', 'SP-011'], extra: [], aligned: false, disjoint: false } })}
         year={2026}
       />
     )
@@ -42,7 +42,7 @@ describe('PlanCycleBanner — plano contra o pacote contratado', () => {
   it('avisa quando o plano tem indicadores fora do pacote', () => {
     render(
       <PlanCycleBanner
-        state={mockState({ packageAlignment: { missing: [], extra: ['SP-099'], aligned: false } })}
+        state={mockState({ packageAlignment: { missing: [], extra: ['SP-099'], aligned: false, disjoint: false } })}
         year={2026}
       />
     )
@@ -52,7 +52,21 @@ describe('PlanCycleBanner — plano contra o pacote contratado', () => {
   it('cala quando o plano confere com o pacote', () => {
     render(
       <PlanCycleBanner
-        state={mockState({ packageAlignment: { missing: [], extra: [], aligned: true } })}
+        state={mockState({ packageAlignment: { missing: [], extra: [], aligned: true, disjoint: false } })}
+        year={2026}
+      />
+    )
+    expect(screen.queryByText(/fora do pacote contratado/i)).toBeNull()
+  })
+
+  it('cala quando plano e pacote são taxonomias distintas', () => {
+    // Divergência total é problema de plataforma, não de configuração do
+    // cliente; o aviso apareceria em todo cliente sem nada a fazer.
+    render(
+      <PlanCycleBanner
+        state={mockState({
+          packageAlignment: { missing: ['sales_total'], extra: ['sales_volume'], aligned: false, disjoint: true },
+        })}
         year={2026}
       />
     )

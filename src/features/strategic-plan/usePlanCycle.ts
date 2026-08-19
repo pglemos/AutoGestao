@@ -31,7 +31,7 @@ export type PlanCycleState = {
    * Plano medido contra o roster do produto contratado. `null` quando o pacote
    * não pôde ser resolvido ou o plano ainda não carregou.
    */
-  packageAlignment: { missing: string[]; extra: string[]; aligned: boolean } | null
+  packageAlignment: { missing: string[]; extra: string[]; aligned: boolean; disjoint: boolean } | null
   loading: boolean
   transitioning: boolean
   error: string | null

@@ -126,10 +126,20 @@ export function decideProductPackage(input: {
 export function diffRosterAgainstPackage(
   planIndicatorCodes: string[],
   packageIndicatorCodes: string[],
-): { missing: string[]; extra: string[]; aligned: boolean } {
+): { missing: string[]; extra: string[]; aligned: boolean; disjoint: boolean } {
   const inPackage = new Set(packageIndicatorCodes)
   const inPlan = new Set(planIndicatorCodes)
   const missing = packageIndicatorCodes.filter(code => !inPlan.has(code))
   const extra = planIndicatorCodes.filter(code => !inPackage.has(code))
-  return { missing, extra, aligned: missing.length === 0 && extra.length === 0 }
+  const shared = planIndicatorCodes.filter(code => inPackage.has(code)).length
+
+  // Divergência quase total não é cliente mal configurado: é o plano e o pacote
+  // falando taxonomias diferentes (`sales_volume` na tela contra `sales_total`
+  // no pacote, e assim por diante). Avisar o consultor não resolveria nada —
+  // ele não tem como reconciliar isso pela tela — e o aviso apareceria em todo
+  // cliente, todo dia. Quem trata disso é a unificação da taxonomia.
+  const universe = new Set([...planIndicatorCodes, ...packageIndicatorCodes]).size
+  const disjoint = universe > 0 && shared / universe < 0.2
+
+  return { missing, extra, aligned: missing.length === 0 && extra.length === 0, disjoint }
 }

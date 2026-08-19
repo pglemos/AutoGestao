@@ -67,7 +67,7 @@ function CycleBadge({ status }: { status: PlanCycleStatus }) {
  */
 function PackageAlignmentNotice({ state }: { state: PlanCycleState }) {
   const { packageAlignment } = state
-  if (!packageAlignment || packageAlignment.aligned) return null
+  if (!packageAlignment || packageAlignment.aligned || packageAlignment.disjoint) return null
 
   const { missing, extra } = packageAlignment
   return (
