@@ -59,9 +59,8 @@ export function VisitCard({
 
   return (
     <Card className={cn(
-      'p-mx-md border-none shadow-sm bg-white hover:shadow-sm transition-all group overflow-hidden',
-      isExpired && 'border-l-4 border-l-status-warning',
-      visit.status === 'em_andamento' && 'border-l-4 border-l-status-info',
+      'p-mx-md border shadow-sm bg-white hover:shadow-sm transition-all group overflow-hidden',
+      isExpired ? 'border-status-warning/40 bg-status-warning-surface/30' : visit.status === 'em_andamento' ? 'border-status-info/40 bg-status-info-surface/30' : 'border-border',
       className,
     )}>
       <div className="flex flex-col sm:flex-row sm:items-center gap-mx-md min-w-0">

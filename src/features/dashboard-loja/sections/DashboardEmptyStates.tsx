@@ -10,12 +10,22 @@ import { PageCanvas } from '@/design-system/page'
 /** Spinner "Identificando Unidade" — usado durante store resolution. */
 export function ResolvingStoreSpinner() {
   return (
-    <div className="h-full w-full flex flex-col items-center justify-center bg-surface-alt" role="status" aria-busy="true" aria-live="polite">
-      <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-status-success-text mb-6" aria-hidden="true" />
-      <Typography variant="caption" tone="muted" className="animate-pulse">
-        Identificando Unidade...
-      </Typography>
-    </div>
+    <PageCanvas width="dashboard" bottomClearance="navigation" className="flex min-h-full flex-col gap-mx-lg" role="status" aria-busy="true" aria-live="polite" aria-label="Identificando unidade">
+      <div className="flex items-center gap-mx-md rounded-2xl border border-border-subtle bg-white p-mx-lg">
+        <RefreshCw className="h-mx-8 w-mx-8 animate-spin text-status-success-text" aria-hidden="true" />
+        <div className="min-w-0 flex-1 space-y-mx-xs">
+          <Skeleton className="h-mx-8 w-56" />
+          <Typography variant="caption" tone="muted" className="animate-pulse">Identificando unidade...</Typography>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 gap-mx-lg sm:grid-cols-2 xl:grid-cols-4">
+        {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-mx-xl rounded-2xl" />)}
+      </div>
+      <div className="grid min-h-[320px] grid-cols-1 gap-mx-lg xl:grid-cols-[minmax(0,1.4fr)_minmax(320px,1fr)]">
+        <Skeleton className="h-full min-h-[320px] rounded-2xl" />
+        <Skeleton className="h-full min-h-[320px] rounded-2xl" />
+      </div>
+    </PageCanvas>
   )
 }
 

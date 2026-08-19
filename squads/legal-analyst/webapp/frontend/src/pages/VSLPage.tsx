@@ -131,7 +131,7 @@ export default function VSLPage({ onAccessApp }: VSLPageProps) {
             </div>
             <span className="text-lg font-bold tracking-tight">Legal Analyst</span>
           </div>
-          <div className="hidden md:flex items-center gap-8 text-sm text-gray-400">
+          <div className="hidden md:flex items-center gap-8 ui-base text-gray-400">
             <a href="#como-funciona" className="hover:text-white transition">Como Funciona</a>
             <a href="#agentes" className="hover:text-white transition">Agentes</a>
             <a href="#pricing" className="hover:text-white transition">Planos</a>
@@ -145,7 +145,7 @@ export default function VSLPage({ onAccessApp }: VSLPageProps) {
         </nav>
 
         <div className="relative z-10 max-w-5xl mx-auto px-6 pt-16 pb-24 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-status-warning/10 border border-status-warning/20 text-amber-400 text-sm mb-8">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-status-warning/10 border border-status-warning/20 text-amber-400 ui-sm mb-8">
             <Zap className="w-4 h-4" />
             <span>15 Agentes de IA Especializados em Direito Brasileiro</span>
           </div>
@@ -180,7 +180,7 @@ export default function VSLPage({ onAccessApp }: VSLPageProps) {
             </button>
           </div>
 
-          <div className="flex items-center justify-center gap-8 text-sm text-gray-500">
+          <div className="flex items-center justify-center gap-8 ui-sm text-gray-500">
             <div className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-green-500" />
               <span>LGPD Compliant</span>
@@ -202,19 +202,19 @@ export default function VSLPage({ onAccessApp }: VSLPageProps) {
         <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           <div>
             <div className="text-3xl font-bold text-amber-400">15</div>
-            <div className="text-sm text-gray-500 mt-1">Agentes IA</div>
+            <div className="ui-sm text-gray-500 mt-1">Agentes IA</div>
           </div>
           <div>
             <div className="text-3xl font-bold text-amber-400">6</div>
-            <div className="text-sm text-gray-500 mt-1">Fases Automaticas</div>
+            <div className="ui-sm text-gray-500 mt-1">Fases Automaticas</div>
           </div>
           <div>
             <div className="text-3xl font-bold text-amber-400">95%</div>
-            <div className="text-sm text-gray-500 mt-1">Reducao de Tempo</div>
+            <div className="ui-sm text-gray-500 mt-1">Reducao de Tempo</div>
           </div>
           <div>
             <div className="text-3xl font-bold text-amber-400">CNJ</div>
-            <div className="text-sm text-gray-500 mt-1">100% Conforme</div>
+            <div className="ui-sm text-gray-500 mt-1">100% Conforme</div>
           </div>
         </div>
       </section>
@@ -308,8 +308,8 @@ export default function VSLPage({ onAccessApp }: VSLPageProps) {
                   className="text-2xl mb-2"
                   dangerouslySetInnerHTML={{ __html: agent.icon }}
                 />
-                <div className="font-semibold text-sm">{agent.name}</div>
-                <div className="text-xs text-gray-500 mt-1">{agent.role}</div>
+                <div className="font-semibold ui-sm">{agent.name}</div>
+                <div className="ui-xs text-gray-500 mt-1">{agent.role}</div>
               </div>
             ))}
           </div>
@@ -394,8 +394,8 @@ export default function VSLPage({ onAccessApp }: VSLPageProps) {
                 </div>
                 <p className="text-gray-300 mb-4 leading-relaxed italic">"{t.text}"</p>
                 <div>
-                  <div className="font-semibold text-sm">{t.name}</div>
-                  <div className="text-xs text-gray-500">{t.role}</div>
+                  <div className="font-semibold ui-sm">{t.name}</div>
+                  <div className="ui-xs text-gray-500">{t.role}</div>
                 </div>
               </div>
             ))}
@@ -416,7 +416,7 @@ export default function VSLPage({ onAccessApp }: VSLPageProps) {
           </div>
 
           <div className="mb-8 max-w-md mx-auto">
-            <label className="text-sm text-gray-400 block mb-2">Seu email para acesso:</label>
+            <label className="ui-sm text-gray-400 block mb-2">Seu email para acesso:</label>
             <input
               type="email"
               value={email}
@@ -440,7 +440,7 @@ export default function VSLPage({ onAccessApp }: VSLPageProps) {
                       }`}
                     >
                       {isPopular && (
-                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-status-warning text-black text-xs font-bold">
+                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-status-warning text-black ui-xs font-bold">
                           MAIS POPULAR
                         </div>
                       )}
@@ -488,7 +488,7 @@ export default function VSLPage({ onAccessApp }: VSLPageProps) {
                     }`}
                   >
                     {plan.popular && (
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-status-warning text-black text-xs font-bold">
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-status-warning text-black ui-xs font-bold">
                         MAIS POPULAR
                       </div>
                     )}
@@ -579,7 +579,7 @@ export default function VSLPage({ onAccessApp }: VSLPageProps) {
 
       {/* ============ FOOTER ============ */}
       <footer className="border-t border-white/5 py-8 px-6">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 ui-sm text-gray-500">
           <div className="flex items-center gap-2">
             <Scale className="w-4 h-4 text-amber-400" />
             <span>Legal Analyst Squad</span>

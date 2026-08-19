@@ -18,7 +18,7 @@ export default function KanbanBoard({ actions, sortBy, onQuickAction, onDelete, 
           const style = STATUS_STYLES[col.value];
           return (
             <div key={col.value} className="flex w-[85vw] shrink-0 snap-start flex-col sm:w-[280px] md:w-[300px] lg:w-auto lg:flex-1 lg:shrink lg:min-w-0">
-              <div className={`rounded-t-lg border-t-2 ${style.border} ${style.bg} px-3 py-2`}>
+              <div className={`rounded-t-lg border border-b-0 border-border ${style.bg} px-3 py-2.5`}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
                     <span className={`h-2 w-2 rounded-full ${style.dot}`} />

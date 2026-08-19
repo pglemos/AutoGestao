@@ -151,13 +151,15 @@ export default function PDIPage({ hideHeader = false }) {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { label: "Curto Prazo", sublabel: "1 Ano", key: "short_term_goal", color: "border-brand-primary" },
-            { label: "Médio Prazo", sublabel: "2 Anos", key: "medium_term_goal", color: "border-mx-blue" },
-            { label: "Longo Prazo", sublabel: "3 Anos", key: "long_term_goal", color: "border-mx-amber" },
+            { label: "Curto Prazo", sublabel: "1 Ano", key: "short_term_goal", badgeColor: "bg-brand-primary/10 text-brand-primary" },
+            { label: "Médio Prazo", sublabel: "2 Anos", key: "medium_term_goal", badgeColor: "bg-status-info/10 text-status-info-text" },
+            { label: "Longo Prazo", sublabel: "3 Anos", key: "long_term_goal", badgeColor: "bg-status-warning/10 text-status-warning-text" },
           ].map(goal => (
-            <div key={goal.key} className={`border-l-4 ${goal.color} pl-4`}>
-              <p className="text-xs text-muted-foreground uppercase tracking-wider">{goal.label}</p>
-              <p className="text-xs text-muted-foreground">{goal.sublabel}</p>
+            <div key={goal.key} className="rounded-xl border border-border bg-surface-alt/40 p-4">
+              <div className="flex items-center justify-between gap-2 mb-1">
+                <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${goal.badgeColor}`}>{goal.label}</span>
+                <span className="text-xs text-muted-foreground">{goal.sublabel}</span>
+              </div>
               <Textarea
                 value={currentPDI[goal.key] || ""}
                 onChange={e => {

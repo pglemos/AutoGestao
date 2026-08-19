@@ -13,6 +13,7 @@ type AttachmentItem = {
 type BuildExecutiveVisitReportInput = {
   clientName?: string | null
   visitNumber: number
+  totalVisits?: number | null
   objective?: string | null
   consultantName?: string | null
   visitDate?: string | null
@@ -33,13 +34,13 @@ type BuildExecutiveVisitReportInput = {
 const cleanText = (value?: string | null) => value?.trim() || ''
 
 const formatDate = (date?: string | null) => {
-  if (!date) return 'Data nao informada'
+  if (!date) return 'Data não informada'
   const parsed = new Date(`${date}T00:00:00`)
   if (Number.isNaN(parsed.getTime())) return date
   return parsed.toLocaleDateString('pt-BR')
 }
 
-const appendTextSection = (lines: string[], title: string, content?: string | null, fallback = 'Nao informado') => {
+const appendTextSection = (lines: string[], title: string, content?: string | null, fallback = 'Não informado') => {
   lines.push(`--- ${title} ---`)
   lines.push(cleanText(content) || fallback)
   lines.push('')
@@ -66,24 +67,24 @@ export function buildExecutiveVisitReport(input: BuildExecutiveVisitReportInput)
   })
 
   const lines = [
-    `RELATORIO EXECUTIVO MX - ${getPmrVisitDisplayLabel(input.visitNumber).toUpperCase()}`,
-    input.objective ? `Objetivo: ${input.objective}` : 'Objetivo: Nao informado',
-    `Cliente: ${input.clientName || 'Cliente nao informado'}`,
+    `RELATÓRIO EXECUTIVO MX - ${getPmrVisitDisplayLabel(input.visitNumber, input.totalVisits).toUpperCase()}`,
+    input.objective ? `Objetivo: ${input.objective}` : 'Objetivo: Não informado',
+    `Cliente: ${input.clientName || 'Cliente não informado'}`,
     `Consultor: ${input.consultantName || 'Consultor MX'}`,
     `Data: ${formatDate(input.visitDate)}`,
-    `Periodo analisado: ${period}`,
+    `Período analisado: ${period}`,
     '',
-    '--- RESULTADO DO PERIODO ---',
-    `Meta: ${input.monthlyGoal || '0'} | Projecao: ${input.projection || '0'} | Leads: ${input.leads || '0'} | Estoque: ${input.inventory || '0'}`,
+    '--- RESULTADO DO PERÍODO ---',
+    `Meta: ${input.monthlyGoal || '0'} | Projeção: ${input.projection || '0'} | Leads: ${input.leads || '0'} | Estoque: ${input.inventory || '0'}`,
     '',
   ]
 
-  appendTextSection(lines, 'PONTOS POSITIVOS E ALINHAMENTOS', input.executiveSummary, 'Resumo executivo ainda nao preenchido')
-  appendTextSection(lines, 'PONTOS A MELHORAR', input.feedbackClient, 'Devolutiva ao cliente ainda nao preenchida')
-  appendListSection(lines, 'TAREFAS CONCLUIDAS', completedTasks)
-  appendListSection(lines, 'TAREFAS E PROXIMOS PASSOS', pendingTasks)
-  appendTextSection(lines, 'FOCO DO PROXIMO CICLO', input.nextCycleGoal, 'A definir')
-  appendListSection(lines, 'ANEXOS E EVIDENCIAS', attachments)
+  appendTextSection(lines, 'PONTOS POSITIVOS E ALINHAMENTOS', input.executiveSummary, 'Resumo executivo ainda não preenchido')
+  appendTextSection(lines, 'PONTOS A MELHORAR', input.feedbackClient, 'Devolutiva ao cliente ainda não preenchida')
+  appendListSection(lines, 'TAREFAS CONCLUÍDAS', completedTasks)
+  appendListSection(lines, 'TAREFAS E PRÓXIMOS PASSOS', pendingTasks)
+  appendTextSection(lines, 'FOCO DO PRÓXIMO CICLO', input.nextCycleGoal, 'A definir')
+  appendListSection(lines, 'ANEXOS E EVIDÊNCIAS', attachments)
 
   lines.push('Gerado via MX PERFORMANCE')
 

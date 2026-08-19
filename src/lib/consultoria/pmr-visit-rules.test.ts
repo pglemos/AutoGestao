@@ -23,6 +23,14 @@ describe('pmr visit rules', () => {
     expect(isPmrSchedulableVisitNumber(9)).toBe(false)
   })
 
+  test('preserves visits 8 and 9 in an explicit PMR 9 journey', () => {
+    expect(isPmrMainCycleVisitNumber(8, 9)).toBe(true)
+    expect(isPmrSchedulableVisitNumber(9, 9)).toBe(true)
+    expect(isPmrFollowUpVisitNumber(8, 9)).toBe(false)
+    expect(getPmrVisitDisplayLabel(8, 9)).toBe('Visita 8/9')
+    expect(getPmrVisitDisplayLabel(9, 9)).toBe('Visita 9/9')
+  })
+
   test('labels follow-up without showing 8/7', () => {
     expect(getPmrVisitDisplayLabel(3)).toBe('Visita 3/7')
     expect(getPmrVisitDisplayLabel(8)).toBe('Acompanhamento Mensal')

@@ -124,6 +124,7 @@ export function OwnerRoutineView({
       <SectionTitle
         title="Rotina do Dia"
         subtitle="O que precisa da atenção do Dono hoje, sem transformar a diretoria em uma lista infinita de tarefas."
+        headingLevel="h1"
       />
 
       <div className="grid grid-cols-1 gap-mx-md md:grid-cols-3">
@@ -331,6 +332,7 @@ export function OwnerDecisionCenter({
       <SectionTitle
         title="Central de Decisões"
         subtitle="Prioridades que dependem de aprovação, direção ou intervenção do Dono."
+        headingLevel="h1"
       />
 
       <div className="grid grid-cols-1 gap-mx-md md:grid-cols-3">

@@ -37,11 +37,11 @@ describe('visit analysis period', () => {
   })
 
   test('formats report fallback and selected period', () => {
-    expect(formatVisitAnalysisPeriodLabel({})).toBe('Periodo nao informado')
+    expect(formatVisitAnalysisPeriodLabel({})).toBe('Período não informado')
     expect(formatVisitAnalysisPeriodLabel({
       preset: 'previous_month',
       start: '2026-04-01',
       end: '2026-04-30',
-    })).toBe('Mes anterior: 2026-04-01 a 2026-04-30')
+    })).toBe('Mês anterior: 2026-04-01 a 2026-04-30')
   })
 })

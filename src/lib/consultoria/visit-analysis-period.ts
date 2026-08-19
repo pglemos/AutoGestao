@@ -19,8 +19,8 @@ export const VISIT_ANALYSIS_PERIOD_PRESETS: Array<{
   value: VisitAnalysisPeriodPreset
   label: string
 }> = [
-  { value: 'current_month', label: 'Mes atual' },
-  { value: 'previous_month', label: 'Mes anterior' },
+  { value: 'current_month', label: 'Mês atual' },
+  { value: 'previous_month', label: 'Mês anterior' },
   { value: 'current_quarter', label: 'Trimestre atual' },
   { value: 'previous_quarter', label: 'Trimestre anterior' },
   { value: 'custom', label: 'Personalizado' },
@@ -65,7 +65,7 @@ export function getVisitAnalysisPeriodFromPreset(
 }
 
 export function getVisitAnalysisPeriodPresetLabel(preset?: string | null) {
-  return VISIT_ANALYSIS_PERIOD_PRESETS.find((item) => item.value === preset)?.label || 'Periodo manual'
+  return VISIT_ANALYSIS_PERIOD_PRESETS.find((item) => item.value === preset)?.label || 'Período manual'
 }
 
 export function formatVisitAnalysisPeriodLabel(input: {
@@ -73,7 +73,7 @@ export function formatVisitAnalysisPeriodLabel(input: {
   start?: string | null
   end?: string | null
 }) {
-  if (!input.start || !input.end) return 'Periodo nao informado'
+  if (!input.start || !input.end) return 'Período não informado'
   return `${getVisitAnalysisPeriodPresetLabel(input.preset)}: ${input.start} a ${input.end}`
 }
 

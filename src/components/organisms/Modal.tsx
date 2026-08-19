@@ -117,9 +117,9 @@ export function Modal({
             <div className="min-w-0">
               <Dialog.Title asChild>
                 <h2 className={cn(
-                  "text-lg",
+                  "truncate text-lg",
                   "font-semibold leading-6 text-foreground",
-                )}>{title}</h2>
+                )} title={title}>{title}</h2>
               </Dialog.Title>
               {description && (
                 <Dialog.Description asChild>

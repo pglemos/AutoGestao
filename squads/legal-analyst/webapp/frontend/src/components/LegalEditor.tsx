@@ -109,14 +109,14 @@ export default function LegalEditor({
       {/* Header toolbar */}
       <div className="border-b border-white/5 px-4 py-3">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-white flex items-center gap-2">
+          <h2 className="ui-sm font-semibold text-white flex items-center gap-2">
             <FileText className="w-4 h-4 text-legal-gold" />
             Editor de Pecas Processuais
           </h2>
           <div className="flex gap-2">
             <button
               onClick={() => onReport([])}
-              className="btn-secondary text-xs flex items-center gap-1"
+              className="btn-secondary ui-xs flex items-center gap-1"
             >
               <FileText className="w-3 h-3" />
               Relatorio
@@ -124,7 +124,7 @@ export default function LegalEditor({
             <button
               onClick={handleDraft}
               disabled={isLoading}
-              className="btn-gold text-xs flex items-center gap-1"
+              className="btn-gold ui-xs flex items-center gap-1"
             >
               {isLoading ? (
                 <Loader2 className="w-3 h-3 animate-spin" />
@@ -138,14 +138,14 @@ export default function LegalEditor({
 
         {/* Piece type selector */}
         <div className="flex items-center gap-3">
-          <label className="text-[10px] text-gray-500 uppercase tracking-wider shrink-0">
+          <label className="ui-xs text-gray-500 uppercase tracking-wider shrink-0">
             Tipo de Peca
           </label>
           <div className="relative flex-1">
             <select
               value={pieceType}
               onChange={(e) => setPieceType(e.target.value)}
-              className="input-field text-xs py-1.5 appearance-none pr-8"
+              className="input-field ui-sm py-1.5 appearance-none pr-8"
             >
               {PIECE_TYPES.map((t) => (
                 <option key={t.value} value={t.value}>
@@ -219,11 +219,11 @@ export default function LegalEditor({
                 className="border-b border-white/5 px-4 py-2"
               >
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] text-gray-500">Remissao:</span>
+                  <span className="ui-xs text-gray-500">Remissao:</span>
                   <select
                     value={refDocId}
                     onChange={(e) => setRefDocId(e.target.value)}
-                    className="input-field text-xs py-1 w-40"
+                    className="input-field ui-sm py-1 w-40"
                   >
                     <option value="">Doc. ID</option>
                     {documents.map((d) => (
@@ -236,7 +236,7 @@ export default function LegalEditor({
                     value={refPage}
                     onChange={(e) => setRefPage(e.target.value)}
                     placeholder="Fl."
-                    className="input-field text-xs py-1 w-16"
+                    className="input-field ui-sm py-1 w-16"
                     type="number"
                   />
                   <button
@@ -244,7 +244,7 @@ export default function LegalEditor({
                       insertReference(refDocId, refPage ? parseInt(refPage) : undefined)
                     }
                     disabled={!refDocId}
-                    className="btn-primary text-xs px-2 py-1"
+                    className="btn-primary ui-xs px-2 py-1"
                   >
                     Inserir
                   </button>
@@ -302,7 +302,7 @@ Use a barra de ferramentas para inserir referencias e recortes do processo."
           />
 
           {/* Status bar */}
-          <div className="border-t border-white/5 px-4 py-1.5 flex items-center gap-4 text-[10px] text-gray-600">
+          <div className="border-t border-white/5 px-4 py-1.5 flex items-center gap-4 ui-xs text-gray-600">
             <span>{content.split(/\s+/).filter(Boolean).length} palavras</span>
             <span>{content.length} caracteres</span>
             {selectedClips.length > 0 && (
@@ -323,7 +323,7 @@ Use a barra de ferramentas para inserir referencias e recortes do processo."
               value={considerations}
               onChange={(e) => setConsiderations(e.target.value)}
               placeholder="Suas consideracoes sobre o caso, estrategia preferida, pontos de atencao..."
-              className="input-field text-xs resize-none"
+              className="input-field ui-sm resize-none"
               rows={4}
             />
           </div>
@@ -336,7 +336,7 @@ Use a barra de ferramentas para inserir referencias e recortes do processo."
               value={instructions}
               onChange={(e) => setInstructions(e.target.value)}
               placeholder="Instrucoes especificas para a geracao da peca (tom, enfase, argumentos preferidos...)"
-              className="input-field text-xs resize-none"
+              className="input-field ui-sm resize-none"
               rows={4}
             />
           </div>
@@ -406,7 +406,7 @@ Use a barra de ferramentas para inserir referencias e recortes do processo."
                       )}
                       <span className="text-gray-300 truncate">{clip.label}</span>
                     </div>
-                    <div className="text-gray-600 mt-0.5">
+                    <div className="text-gray-600 mt-0.5 ui-xs">
                       Doc. {clip.doc_id}, fl. {clip.page_start}
                     </div>
                   </button>

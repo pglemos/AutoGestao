@@ -49,7 +49,7 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
           </div>
           <div>
             <Typography variant="h3" className="font-bold">
-              Gestao de Agendas
+              Gestão de Agendas
             </Typography>
             <Typography variant="caption" className="">
               Sincronizacao com Google Calendar API

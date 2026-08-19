@@ -68,8 +68,6 @@ export function OwnerHome({
           }}
           icon={<CalendarCheck2 size={20} />}
           tone={forecastIsHealthy ? 'success' : 'warning'}
-          chart="bars"
-          seed={5}
         />
         <OwnerKpiCard
           title="Lucro Bruto"
@@ -77,8 +75,6 @@ export function OwnerHome({
           detail={grossProfit === undefined ? 'DRE pendente' : marginPercent === null ? 'Margem pendente' : `Margem ${formatPercent(marginPercent)}`}
           icon={<DollarSign size={20} />}
           tone={grossProfit === undefined ? 'muted' : 'success'}
-          chart="line"
-          seed={1}
           showStatusDot={grossProfit !== undefined}
         />
         <OwnerKpiCard
@@ -88,8 +84,6 @@ export function OwnerHome({
           icon={<ShoppingCart size={20} />}
           tone="purple"
           statusTone={data.metrics.attainment >= 100 ? 'success' : data.metrics.attainment >= 60 ? 'warning' : 'danger'}
-          chart="bars"
-          seed={3}
         />
         <OwnerKpiCard
           title="Estoque"
@@ -97,8 +91,6 @@ export function OwnerHome({
           detail={`${formatInteger(data.inventory?.agingOver90 ?? 0)} acima de 90 dias`}
           icon={<Box size={20} />}
           tone={(data.inventory?.agingOver90 ?? 0) > 0 ? 'warning' : 'success'}
-          chart="line"
-          seed={4}
           showStatusDot
         />
         <MXScoreCompact score={mxScore} />

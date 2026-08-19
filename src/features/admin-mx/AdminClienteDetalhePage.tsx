@@ -40,7 +40,7 @@ import { ClientDadosTab, ClientHistoricoTab, ClientImplantacaoTab } from './clie
 import { buildProgressBars } from './clientes/clientProgress'
 import { useClientHealth } from './clientes/useClientHealth'
 import { runClientRepair, type RepairKey } from './clientes/clientRepairs'
-import { buildClientReadiness, journeyProgress, readinessSummary } from './clientes/clientReadiness'
+import { buildClientReadiness, readinessSummary } from './clientes/clientReadiness'
 import { ClientConfigTab } from './clientes/ClientConfigTab'
 import { DonoMasterCard } from './clientes/DonoMasterCard'
 import { EnrollmentLinkModal } from './clientes/EnrollmentLinkModal'
@@ -57,6 +57,7 @@ import {
 import { emptyPersonAccessDraft, resolveOwnerMaster, type PersonAccessDraft, type OwnerMasterResolution } from './clientes/personAccess'
 import { createEnrollmentLink, listEnrollmentLinks, type EnrollmentLinkRow } from './clientes/enrollmentMutations'
 import { buildProgramSummary } from './clientes/programSummary'
+import { buildClientJourney } from './clientes/clientJourney'
 import { saveClientProgram, type ProgramDraft } from './clientes/programMutations'
 import { emptyStoreDraft, type StoreDraft } from './clientes/storeForm'
 import { fetchUnitOperatingHours, saveClientStore, type UnitRow } from './clientes/storeMutations'
@@ -81,6 +82,15 @@ function formatDate(value: string | null | undefined) {
   if (!value) return '—'
   const date = new Date(value)
   return Number.isNaN(date.getTime()) ? '—' : date.toLocaleDateString('pt-BR')
+}
+
+function formatClientStatus(value: string | null | undefined) {
+  const normalized = String(value ?? '').trim().toLowerCase()
+  if (normalized === 'ativo' || normalized === 'active') return 'Ativo'
+  if (normalized === 'inativo' || normalized === 'inactive') return 'Inativo'
+  if (normalized === 'em_implantacao') return 'Em implantação'
+  if (normalized === 'bloqueado') return 'Bloqueado'
+  return value?.trim() || 'Indefinido'
 }
 
 export function AdminClienteDetalhePage() {
@@ -195,8 +205,13 @@ export function AdminClienteDetalhePage() {
   const summary = useMemo(() => readinessSummary(checks), [checks])
   const health = useClientHealth(client?.id, client?.primary_store_id ?? null)
   const visits = client?.visits ?? []
-  const totalVisits = visits.length || 0
-  const progress = useMemo(() => journeyProgress(visits, totalVisits), [visits, totalVisits])
+  const journey = useMemo(() => buildClientJourney({
+    programKey: client?.program_template_key,
+    programTotal: client?.journey_total_visits,
+    visits,
+  }), [client?.journey_total_visits, client?.program_template_key, visits])
+  const totalVisits = journey.totalVisits
+  const progress = journey.progress
   const responsibleConsultant = useMemo(() => {
     const primary = client?.assignments?.find(a => a.active && a.assignment_role === 'responsavel')?.user?.name
     if (primary) return primary
@@ -211,6 +226,7 @@ export function AdminClienteDetalhePage() {
     modality: client?.modality ?? null,
     contract_start_date: (client as { contract_start_date?: string | null })?.contract_start_date ?? null,
     contract_end_date: (client as { contract_end_date?: string | null })?.contract_end_date ?? null,
+    program_total_visits: client?.journey_total_visits ?? null,
     responsible_consultant: responsibleConsultant,
     visits: visits.map(visit => ({
       visit_number: visit.visit_number,
@@ -381,13 +397,21 @@ export function AdminClienteDetalhePage() {
         ) : (
           <>
             <MxMetricGrid>
-              <MxMetricCard title="Status" value={client.status ?? 'indefinido'} detail={summary.canActivate ? 'Pronto para ativar' : `${summary.blockers.length} impeditivo(s)`} icon={BriefcaseBusiness} tone={client.status === 'ativo' ? 'success' : 'warning'} />
+              <MxMetricCard
+                title="Status"
+                value={formatClientStatus(client.status)}
+                detail={summary.canActivate
+                  ? client.status === 'ativo' ? 'Ativo e pronto para operar' : 'Pronto para ativar'
+                  : `${summary.blockers.length} impeditivo(s)`}
+                icon={BriefcaseBusiness}
+                tone={client.status === 'ativo' ? 'success' : 'warning'}
+              />
               <MxMetricCard title="Lojas" value={units.length ?? 0} detail="Unidades cadastradas" icon={Building2} tone="info" />
               <MxMetricCard title="Pessoas" value={persons.length ?? 0} detail="Acessos cadastrados" icon={UserPlus} tone="violet" />
               <MxMetricCard title="Prontidão" value={`${summary.completed}/${summary.total}`} detail="Itens do checklist concluídos" icon={BriefcaseBusiness} />
             </MxMetricGrid>
 
-            <TabNav tabs={TABS} activeTab={tab} onTabChange={setTab} />
+            <TabNav tabs={TABS} activeTab={tab} onTabChange={setTab} scrollable />
 
             {tab === 'visao' ? (
               <MxSectionCard>
@@ -403,7 +427,7 @@ export function AdminClienteDetalhePage() {
                     ['Início do contrato', formatDate((client as { contract_start_date?: string | null }).contract_start_date)],
                     ['Fim do contrato', formatDate((client as { contract_end_date?: string | null }).contract_end_date)],
                     ['Onboarding', onboardingCompleted ? 'Concluído' : `Etapa ${onboardingStep}/7`],
-                    ['Etapa atual da jornada', String(client.current_visit_step ?? 0)],
+                    ['Ciclo da jornada', totalVisits > 0 ? `${journey.completedVisits}/${totalVisits}` : '—'],
                   ].map(([label, value]) => (
                     <div key={label} className="rounded-lg border border-border p-3">
                       <dt className="text-xs text-muted-foreground">{label}</dt>

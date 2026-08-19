@@ -431,7 +431,7 @@ export default function Login() {
                             MX <span className="text-status-success-text">PERFORMANCE</span>
                         </h1>
                         <p className="text-white/60 text-label font-bold mb-16" style={{ letterSpacing: '0.3em' }}>
-                            Sistema de Gestao de Elite
+                            Sistema de Gestão de Elite
                         </p>
                     </motion.div>
 
@@ -444,7 +444,7 @@ export default function Login() {
                     >
                         {[
                             { icon: TrendingUp, text: 'Performance em tempo real de toda rede' },
-                            { icon: Zap, text: 'Rituais de gestao padronizados' },
+                            { icon: Zap, text: 'Rituais de gestão padronizados' },
                             { icon: ShieldCheck, text: 'Controle preditivo de resultados' },
                         ].map(({ icon: Icon, text }) => (
                             <div key={text} className="flex items-center gap-mx-sm group">
@@ -646,7 +646,7 @@ export default function Login() {
                     </form>
 
                     <div className="mt-8 pt-6 border-t border-border text-center">
-                        <span className="text-muted-foreground text-xs font-medium">Acesso restrito a usuarios autorizados</span>
+                        <span className="text-muted-foreground text-xs font-medium">Acesso restrito a usuários autorizados</span>
                     </div>
                 </motion.div>
             </div>

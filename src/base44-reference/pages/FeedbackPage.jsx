@@ -64,7 +64,7 @@ export default function FeedbackPage({ hideHeader = false }) {
           <h3 className="text-base font-semibold text-mx-navy mb-4">Feedbacks Pendentes</h3>
           <div className="space-y-4">
             {pending.map(f => (
-              <div key={f.id} className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 border-l-4 border-l-mx-amber">
+              <div key={f.id} className="bg-white rounded-2xl p-6 shadow-sm border border-status-warning/40">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">

@@ -26,7 +26,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 import { cn, slugify } from '@/lib/utils'
 import { downloadHtmlAsPdf } from '@/lib/pdf/downloadHtmlAsPdf'
-import { getPmrVisitDisplayLabel, isPmrSchedulableVisitNumber } from '@/lib/consultoria/pmr-visit-rules'
+import { getPmrVisitDisplayLabel, isPmrSchedulableVisitNumber, PMR_FOLLOW_UP_VISIT } from '@/lib/consultoria/pmr-visit-rules'
 import {
   getVisitAnalysisPeriodFromPreset,
   isValidVisitAnalysisPeriod,
@@ -41,7 +41,7 @@ import { VisitOneHighFidelity } from '@/features/consultoria/components/VisitOne
 import {
   VisitTwoExecution, VisitThreeExecution, VisitFourExecution,
   VisitFiveExecution, VisitSixExecution, VisitSevenExecution,
-  VisitEightExecution,
+  VisitEightExecution, VisitCustomExecution,
   VisitChecklist
 } from '@/features/consultoria/components/VisitExecutionViews'
 import { VisitReportTemplate } from '@/features/consultoria/components/VisitReportTemplate'
@@ -66,12 +66,12 @@ type VisitDraftPayload = Partial<ConsultingVisit> & {
 
 const VISIT_FLOW_STEPS = [
   'Contexto',
-  'Periodo',
+  'Período',
   'Metodologia',
   'Registros',
-  'Evidencias',
+  'Evidências',
   'Resumo',
-  'Finalizacao',
+  'Finalização',
 ]
 
 function getErrorMessage(err: unknown) {
@@ -107,10 +107,11 @@ export default function ConsultoriaVisitaExecucao() {
   const [fallbackStoreId, setFallbackStoreId] = useState('')
   const resolvedStoreId = client?.primary_store_id || client?.store_id || fallbackStoreId || ''
 
-  const { steps, loading: methodologyLoading } = useConsultingMethodology(client?.program_template_key || 'pmr_7')
+  const { steps, loading: methodologyLoading } = useConsultingMethodology(client?.program_template_key || '')
   const { templates, responsesByTemplate, saveResponse } = usePmrDiagnostics(clientId)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const visitNum = parseInt(visitNumber || '1')
+  const journeyTotalVisits = client?.journey_total_visits ?? 0
   const step = useMemo(() => steps.find(s => s.visit_number === visitNum), [steps, visitNum])
   const visit = useMemo(() => client?.visits?.find(v => v.visit_number === visitNum), [client, visitNum])
 
@@ -158,11 +159,11 @@ export default function ConsultoriaVisitaExecucao() {
   }, [client])
 
   useEffect(() => {
-    if (!client?.slug || isPmrSchedulableVisitNumber(visitNum)) return
-    const normalizedVisit = visitNum < 1 ? 1 : 8
-    toast.info('PMR opera com visitas de 1 a 7 e acompanhamento mensal. Redirecionando para a etapa válida.')
+    if (!client?.slug || !client.program_template_key || journeyTotalVisits < 1 || isPmrSchedulableVisitNumber(visitNum, journeyTotalVisits)) return
+    const normalizedVisit = visitNum < 1 ? 1 : journeyTotalVisits > 7 ? journeyTotalVisits : PMR_FOLLOW_UP_VISIT
+    toast.info(`Esta jornada opera com visitas de 1 a ${journeyTotalVisits}${journeyTotalVisits <= 7 ? ' e acompanhamento mensal' : ''}. Redirecionando para a etapa válida.`)
     navigate(`/consultoria/clientes/${client.slug}/visitas/${normalizedVisit}`, { replace: true })
-  }, [client?.slug, navigate, visitNum])
+  }, [client?.program_template_key, client?.slug, journeyTotalVisits, navigate, visitNum])
 
   const [checklist, setChecklist] = useState<ChecklistItem[]>([])
   const [executiveSummary, setExecutiveSummary] = useState('')
@@ -417,8 +418,8 @@ export default function ConsultoriaVisitaExecucao() {
 
   const handleSave = async (complete: boolean = false) => {
     if (!clientId || !visitNum) return
-    if (!isPmrSchedulableVisitNumber(visitNum)) {
-      toast.error('O PMR trabalha com visitas de 1 a 7 e acompanhamento mensal.')
+    if (!isPmrSchedulableVisitNumber(visitNum, journeyTotalVisits)) {
+      toast.error('Esta etapa não pertence à jornada contratada deste cliente.')
       return
     }
     if (isUploading) {
@@ -554,6 +555,7 @@ export default function ConsultoriaVisitaExecucao() {
     return buildExecutiveVisitReport({
       clientName: client?.name,
       visitNumber: visitNum,
+      totalVisits: journeyTotalVisits,
       objective: step?.objective,
       consultantName: headerBase.consultant_name,
       visitDate: headerBase.visit_date,
@@ -618,8 +620,12 @@ export default function ConsultoriaVisitaExecucao() {
   }
 
   return (
-    <PageCanvas as="div" width={pageWidth} bottomClearance={pageBottomClearance} className="w-full pb-mx-xl relative z-[var(--mx-z-base)]">
-      <div className="fixed !-left-full top-mx-0 overflow-hidden pointer-events-none" aria-hidden="true">
+    <PageCanvas as="div" width={pageWidth} bottomClearance={pageBottomClearance} className="w-full min-w-0 overflow-x-hidden pb-mx-xl relative z-[var(--mx-z-base)]">
+      <div
+        className="fixed top-mx-0 overflow-hidden pointer-events-none"
+        style={{ left: '-10000px', width: '210mm' }}
+        aria-hidden="true"
+      >
          <div id="report-template-render">
             <VisitReportTemplate
               client={client}
@@ -656,14 +662,14 @@ export default function ConsultoriaVisitaExecucao() {
          </div>
       </div>
 
-      <div className="sticky top-mx-0 z-[var(--mx-z-topbar)] bg-surface-alt/80 backdrop-blur-xl px-mx-md py-mx-sm flex flex-col md:flex-row md:items-center justify-between gap-mx-sm mb-mx-md print:hidden border-b border-border-subtle shadow-sm transition-all">
+      <div className="lg:sticky lg:top-mx-0 lg:z-[var(--mx-z-topbar)] bg-surface-alt/95 lg:bg-surface-alt/80 lg:backdrop-blur-xl px-mx-md py-mx-sm flex flex-col md:flex-row md:items-center justify-between gap-mx-sm mb-mx-md print:hidden border-b border-border-subtle shadow-sm transition-all">
         <div className="flex items-center gap-mx-md">
           <Link to={`/consultoria/clientes/${client?.slug}`} className="p-mx-xs border border-border-subtle rounded-2xl hover:bg-white hover:shadow-sm transition-all text-muted-foreground bg-white/50 backdrop-blur-sm shadow-sm group">
             <ArrowLeft className="w-mx-5 h-mx-5 group-hover:-translate-x-1 transition-transform" />
           </Link>
           <div>
             <div className="flex items-center gap-mx-sm">
-               <Typography variant="h1" className="text-2xl text-foreground tracking-tighter">{getPmrVisitDisplayLabel(visitNum)}</Typography>
+               <Typography variant="h1" className="text-2xl text-foreground tracking-tighter">{getPmrVisitDisplayLabel(visitNum, journeyTotalVisits)}</Typography>
                <div className={cn(
                  "px-mx-sm py-0.5 rounded-mx-full text-mx-nano font-bold tracking-mx-widest uppercase shadow-sm border",
                  visit?.status === 'concluida' ? "bg-status-success/10 text-status-success border-status-success/20" : "bg-mx-orange-500/10 text-mx-orange-600 border-mx-orange-200 animate-pulse"
@@ -699,9 +705,9 @@ export default function ConsultoriaVisitaExecucao() {
         </div>
       </div>
 
-      <div className="w-full px-mx-md lg:px-mx-xl grid grid-cols-1 lg:grid-cols-3 gap-mx-lg print:block print:p-0">
+      <div className="w-full min-w-0 px-mx-md lg:px-mx-xl grid grid-cols-1 lg:grid-cols-3 gap-mx-lg print:block print:p-0">
 
-        <div className="lg:col-span-2 space-y-mx-lg">
+        <div className="min-w-0 lg:col-span-2 space-y-mx-lg">
 
           <div className="rounded-2xl border border-border bg-white p-mx-md shadow-sm">
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-mx-sm">
@@ -725,9 +731,9 @@ export default function ConsultoriaVisitaExecucao() {
               <div className="flex items-center gap-mx-sm border-b border-border-subtle pb-mx-md">
                 <div className="p-mx-xs bg-brand-primary/10 rounded-xl text-status-success-text"><Calendar size={20} /></div>
                 <div>
-                  <Typography variant="h3" className="text-lg">Periodo de Analise</Typography>
+                  <Typography variant="h3" className="text-lg">Período de análise</Typography>
                   <Typography variant="tiny" tone="muted" className="font-bold">
-                    Define o recorte usado na conversa e no relatorio
+                    Define o recorte usado na conversa e no relatório
                   </Typography>
                 </div>
               </div>
@@ -742,7 +748,7 @@ export default function ConsultoriaVisitaExecucao() {
                   ))}
                 </Select>
                 <div className="space-y-mx-xs">
-                  <Typography as="label" variant="caption" className="">Inicio</Typography>
+                  <Typography as="label" variant="caption" className="">Início</Typography>
                   <DatePicker
                     value={analysisPeriodStart}
                     onChange={(event) => {
@@ -778,7 +784,8 @@ export default function ConsultoriaVisitaExecucao() {
              {visitNum === 5 && <VisitFiveExecution storeId={resolvedStoreId} onGenerateSummary={(t) => setExecutiveSummary(prev => prev + '\n' + t)} />}
              {visitNum === 6 && <VisitSixExecution onGenerateSummary={(t) => setExecutiveSummary(prev => prev + '\n' + t)} />}
              {visitNum === 7 && <VisitSevenExecution onGenerateSummary={(t) => setExecutiveSummary(prev => prev + '\n' + t)} />}
-             {visitNum === 8 && <VisitEightExecution onGenerateSummary={(t) => setExecutiveSummary(prev => prev + '\n' + t)} />}
+             {visitNum === 8 && journeyTotalVisits <= 7 && <VisitEightExecution onGenerateSummary={(t) => setExecutiveSummary(prev => prev + '\n' + t)} />}
+             {visitNum > 7 && journeyTotalVisits > 7 && step && <VisitCustomExecution visitNumber={visitNum} objective={step.objective} onGenerateSummary={(t) => setExecutiveSummary(prev => prev + '\n' + t)} />}
 
              <div className="mt-mx-lg pt-mx-lg border-t border-border-subtle">
                 <Typography variant="tiny" tone="muted" className="mb-mx-sm block">Checklist de Tarefas</Typography>
@@ -854,7 +861,7 @@ export default function ConsultoriaVisitaExecucao() {
           </div>
         </div>
 
-        <div className="lg:col-span-1 space-y-mx-lg print:hidden">
+        <div className="min-w-0 lg:col-span-1 space-y-mx-lg print:hidden">
           <Card className="p-mx-lg border bg-white overflow-hidden relative">
             <div className="absolute top-mx-0 right-mx-0 p-mx-md opacity-mx-5"><Info size={80} /></div>
             <Typography variant="tiny" tone="muted" className="mb-mx-md block">Informações da Etapa</Typography>

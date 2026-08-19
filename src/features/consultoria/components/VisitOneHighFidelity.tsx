@@ -42,13 +42,20 @@ export function VisitOneHighFidelity({ clientId, clientSlug, data, onChange }: {
   return (
     <div className="space-y-mx-lg animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Navegação de Contexto */}
-      <div className="flex bg-white/50 backdrop-blur-sm p-mx-xs rounded-2xl border border-border shadow-mx-inner">
+      <div
+        data-mx-scroll-region="visit-one-tabs"
+        className="max-w-full overflow-x-auto overscroll-x-contain rounded-2xl border border-border bg-white/50 p-mx-xs shadow-mx-inner"
+      >
+        <div className="flex min-w-max">
         {VISIT_ONE_TABS.map((t) => (
           <button
             key={t.id}
+            type="button"
+            role="tab"
+            aria-selected={tab === t.id}
             onClick={() => setTab(t.id)}
             className={cn(
-              "flex-1 flex items-center justify-center gap-mx-xs py-mx-sm px-mx-md rounded-xl text-xs font-bold uppercase tracking-mx-wider transition-all",
+              "min-h-[44px] min-w-max flex-none items-center justify-center gap-mx-xs rounded-xl px-mx-md py-mx-sm text-xs font-bold uppercase tracking-mx-wider transition-all md:flex-1",
               tab === t.id ? "bg-brand-primary text-white shadow-sm" : "text-muted-foreground hover:text-foreground hover:bg-white"
             )}
           >
@@ -56,6 +63,7 @@ export function VisitOneHighFidelity({ clientId, clientSlug, data, onChange }: {
             {t.label}
           </button>
         ))}
+        </div>
       </div>
 
       {tab === 'dashboards' && <VisitOneDashboards data={data} onChange={onChange} />}

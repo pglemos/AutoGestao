@@ -167,6 +167,7 @@ export default function MxSidebarShell({
 }: MxSidebarShellProps) {
   const [collapsed, setCollapsed] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [mobileProfileOpen, setMobileProfileOpen] = useState(false)
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({})
   const location = useLocation()
   const navigate = useNavigate()
@@ -233,11 +234,12 @@ export default function MxSidebarShell({
   }, [activeNavItem, navSections])
 
   useEffect(() => {
-    if (!mobileOpen) return
+    if (!mobileOpen && !mobileProfileOpen) return
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key !== 'Escape') return
       setMobileOpen(false)
+      setMobileProfileOpen(false)
     }
 
     // Capture, não bubble: com o drawer aberto o keydown de Escape chega ao
@@ -246,15 +248,17 @@ export default function MxSidebarShell({
     // teclado (medido com contador nas duas fases, FASE H 08.013).
     document.addEventListener('keydown', handleKeyDown, true)
     return () => document.removeEventListener('keydown', handleKeyDown, true)
-  }, [mobileOpen])
+  }, [mobileOpen, mobileProfileOpen])
 
   const goTo = (path: string) => {
     setMobileOpen(false)
+    setMobileProfileOpen(false)
     navigate(path)
   }
 
   const signOut = () => {
     setMobileOpen(false)
+    setMobileProfileOpen(false)
     void onSignOut()
   }
 
@@ -308,6 +312,7 @@ export default function MxSidebarShell({
         aria-label={item.label}
         aria-current={active ? 'page' : false}
         onClick={() => setMobileOpen(false)}
+        title={item.label}
         className={cn(
           SIDEBAR.nestedItem,
           active ? SIDEBAR.nestedItemActive : SIDEBAR.nestedItemIdle,
@@ -360,7 +365,7 @@ export default function MxSidebarShell({
           <NavItemIcon icon={item.icon} className={SIDEBAR.itemIcon} />
           {!isCollapsed ? (
             <>
-              <span className={SIDEBAR.itemLabel}>{item.label}</span>
+              <span className={SIDEBAR.itemLabel} title={item.label}>{item.label}</span>
               <ChevronDown
                 className={cn(
                   SIDEBAR.groupChevron,
@@ -427,7 +432,7 @@ export default function MxSidebarShell({
               <p className={SIDEBAR.brandTitle}>
                 MX PERFORMANCE
               </p>
-              <p className={SIDEBAR.brandModule}>
+              <p className={SIDEBAR.brandModule} title={moduleLabel}>
                 {moduleLabel}
               </p>
             </div>
@@ -460,7 +465,7 @@ export default function MxSidebarShell({
         {navSections.map((section) => (
           <section key={section.key ?? section.label} className={SIDEBAR.section}>
             {!isCollapsed && section.label !== 'MENU' ? (
-              <p className={SIDEBAR.sectionLabel}>
+              <p className={SIDEBAR.sectionLabel} title={section.label}>
                 {section.label}
               </p>
             ) : null}
@@ -519,7 +524,7 @@ export default function MxSidebarShell({
             Menu
           </span>
           <span className="hidden min-w-0 leading-tight min-[500px]:block">
-            <span className="block truncate text-caption font-bold uppercase tracking-[0.12em] text-status-success-text">
+            <span title={moduleLabel} className="block truncate text-caption font-bold uppercase tracking-[0.12em] text-status-success-text">
               {moduleLabel}
             </span>
           </span>
@@ -527,16 +532,38 @@ export default function MxSidebarShell({
         <div className="pointer-events-none min-w-0 max-w-[42vw] truncate px-1 text-center text-sm font-bold text-foreground">
           {mobileTitle}
         </div>
-        <div className="flex items-center justify-self-end gap-2">
+        <div className="relative flex items-center justify-self-end gap-2">
           <NotificationBellButton variant="light" />
           <button
             type="button"
             aria-label={`Abrir perfil de ${displayName}`}
-            onClick={() => goTo(profilePath)}
+            aria-haspopup="menu"
+            aria-expanded={mobileProfileOpen}
+            onClick={() => setMobileProfileOpen((value) => !value)}
             className="grid h-[var(--mx-mobile-header-touch-target)] w-[var(--mx-mobile-header-touch-target)] place-items-center rounded-full bg-status-success-surface text-caption font-bold uppercase text-status-success-text ring-1 ring-status-success/20 outline-none focus-visible:ring-2 focus-visible:ring-status-success/30"
           >
             {initials}
           </button>
+          {mobileProfileOpen ? (
+            <div
+              role="menu"
+              aria-label="Opções do perfil"
+              className="absolute right-0 top-[calc(100%+0.5rem)] z-[var(--mx-z-popover)] w-56 rounded-[var(--mx-radius-2xl)] border border-border-subtle bg-white p-2 shadow-[var(--mx-shadow-xl)]"
+            >
+              <button type="button" role="menuitem" onClick={() => goTo(profilePath)} className="flex min-h-11 w-full items-center gap-3 rounded-[var(--mx-radius-xl)] px-3 text-left text-sm font-semibold text-foreground hover:bg-surface-alt focus-visible:ring-2 focus-visible:ring-status-success/30">
+                <UserRound size={20} aria-hidden="true" /> Meu Perfil
+              </button>
+              <button type="button" role="menuitem" onClick={() => goTo(settingsPath)} className="flex min-h-11 w-full items-center gap-3 rounded-[var(--mx-radius-xl)] px-3 text-left text-sm font-semibold text-foreground hover:bg-surface-alt focus-visible:ring-2 focus-visible:ring-status-success/30">
+                <Settings size={20} aria-hidden="true" /> Preferências
+              </button>
+              <button type="button" role="menuitem" onClick={() => goTo(notificationsPath)} className="flex min-h-11 w-full items-center gap-3 rounded-[var(--mx-radius-xl)] px-3 text-left text-sm font-semibold text-foreground hover:bg-surface-alt focus-visible:ring-2 focus-visible:ring-status-success/30">
+                <Bell size={20} aria-hidden="true" /> Notificações
+              </button>
+              <button type="button" role="menuitem" onClick={signOut} className="flex min-h-11 w-full items-center gap-3 rounded-[var(--mx-radius-xl)] px-3 text-left text-sm font-semibold text-status-error-text hover:bg-status-error-surface focus-visible:ring-2 focus-visible:ring-status-success/30">
+                <LogOut size={20} aria-hidden="true" /> Sair
+              </button>
+            </div>
+          ) : null}
         </div>
       </header>
 

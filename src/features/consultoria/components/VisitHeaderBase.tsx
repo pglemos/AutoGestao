@@ -26,15 +26,15 @@ export function VisitHeaderBase({ data, onChange, clientName }: Props) {
         <Users className="w-mx-20 h-mx-20 text-status-success-text" />
       </div>
 
-      <div className="relative z-[var(--mx-z-sticky)]">
-        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-mx-md mb-mx-lg border-b border-border-subtle pb-mx-md">
+      <div className="relative z-[var(--mx-z-sticky)] min-w-0">
+        <div className="flex min-w-0 flex-col lg:flex-row lg:items-start justify-between gap-mx-md mb-mx-lg border-b border-border-subtle pb-mx-md">
           <div className="min-w-0">
             <Typography variant="tiny" tone="muted" className="mb-0 block opacity-60">Identificação do Cliente</Typography>
             <Typography variant="h1" className="text-2xl sm:text-3xl lg:text-4xl leading-tight break-words">
               {clientName}
             </Typography>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-mx-md w-full lg:w-auto">
+          <div className="grid min-w-0 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-mx-md w-full lg:w-auto">
             <div className="space-y-mx-xs">
               <Typography variant="tiny" tone="muted" className="font-bold">Consultor</Typography>
               <Input aria-label="Consultor" id="header-consultant" name="header-consultant" value={data.consultant_name} onChange={e => onChange({ consultant_name: e.target.value })} className="h-mx-10 bg-surface-alt/50 border border-border-subtle focus:bg-white focus:border-brand-primary font-bold transition-all shadow-sm" />

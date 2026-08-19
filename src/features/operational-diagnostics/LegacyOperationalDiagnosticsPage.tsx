@@ -127,7 +127,7 @@ export default function AiDiagnostics() {
                 </Badge>
               </div>
               <Button size="icon" onClick={handleScan} disabled={isScanning} className="w-mx-2xl h-mx-2xl hover:bg-brand-primary-hover text-white active:scale-95 transition-all" aria-label="Reiniciar diagnóstico operacional">
-                <Zap size={32} className={cn(isScanning ? 'animate-bounce' : 'fill-white')} aria-hidden="true" />
+                <Zap size={32} className={cn(isScanning ? 'animate-pulse text-status-warning-text' : 'fill-white')} aria-hidden="true" />
               </Button>
             </div>
           )}

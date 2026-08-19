@@ -120,7 +120,7 @@ export default function PDFViewer({
         <h3 className="text-sm font-medium text-gray-400 mb-2">
           Nenhum documento carregado
         </h3>
-        <p className="text-xs text-gray-600 max-w-[240px]">
+        <p className="ui-xs text-gray-600 max-w-[240px]">
           Envie um PDF pelo chat para iniciar a analise. Use o botao de upload ou
           arraste o arquivo.
         </p>
@@ -136,7 +136,7 @@ export default function PDFViewer({
           <button
             key={doc.doc_id}
             onClick={() => onSelectDoc(doc)}
-            className={`shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+            className={`shrink-0 px-3 py-1.5 rounded-lg ui-sm font-medium transition-all ${
               activeDoc?.doc_id === doc.doc_id
                 ? "bg-brand-600/20 text-brand-300 border border-brand-500/20"
                 : "text-gray-500 hover:text-gray-300 hover:bg-white/5"
@@ -145,7 +145,7 @@ export default function PDFViewer({
             <span className="flex items-center gap-1.5">
               <FileText className="w-3 h-3" />
               <span className="truncate max-w-[120px]">{doc.filename}</span>
-              <span className="badge-gray text-[9px]">{doc.doc_id}</span>
+              <span className="badge-gray ui-xs">{doc.doc_id}</span>
             </span>
           </button>
         ))}
@@ -163,7 +163,7 @@ export default function PDFViewer({
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="text-xs text-gray-400 min-w-[80px] text-center">
+            <span className="ui-sm text-gray-400 min-w-[80px] text-center">
               Fl. <strong className="text-white">{activePage}</strong> /{" "}
               {activeDoc.total_pages}
             </span>
@@ -212,7 +212,7 @@ export default function PDFViewer({
             </button>
 
             {/* Doc metadata */}
-            <div className="ml-auto flex items-center gap-2 text-[10px] text-gray-600">
+            <div className="ml-auto flex items-center gap-2 ui-xs text-gray-600">
               {activeDoc.process_number && (
                 <span className="badge-gold">{activeDoc.process_number}</span>
               )}
@@ -237,9 +237,9 @@ export default function PDFViewer({
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                     placeholder="Buscar no documento..."
-                    className="input-field text-xs py-1.5"
+                    className="input-field ui-sm py-1.5"
                   />
-                  <button onClick={handleSearch} className="btn-secondary text-xs px-3">
+                  <button onClick={handleSearch} className="btn-secondary ui-xs px-3">
                     Buscar
                   </button>
                 </div>
@@ -249,7 +249,7 @@ export default function PDFViewer({
                       <button
                         key={i}
                         onClick={() => onPageChange(r.page)}
-                        className="w-full text-left px-2 py-1.5 rounded bg-white/5 hover:bg-white/10 text-xs"
+                        className="w-full text-left px-2 py-1.5 rounded bg-white/5 hover:bg-white/10 ui-sm"
                       >
                         <span className="text-brand-300">Fl. {r.page}</span>
                         <span className="text-gray-500 ml-2 truncate">
@@ -273,21 +273,21 @@ export default function PDFViewer({
                 className="border-b border-white/5 px-3 py-3"
               >
                 <div className="glass-panel-light p-3">
-                  <div className="text-xs text-gray-400 mb-2 font-medium">
+                  <div className="ui-sm text-gray-400 mb-2 font-medium">
                     Recortar pagina {activePage}
                   </div>
                   <input
                     value={clipLabel}
                     onChange={(e) => setClipLabel(e.target.value)}
                     placeholder="Label do recorte (ex: Clausula 5.2)"
-                    className="input-field text-xs py-1.5 mb-2"
+                    className="input-field ui-sm py-1.5 mb-2"
                   />
                   <div className="flex gap-2">
-                    <button onClick={handleClipPage} className="btn-primary text-xs flex-1">
+                    <button onClick={handleClipPage} className="btn-primary ui-xs flex-1">
                       <Scissors className="w-3 h-3 mr-1 inline" />
                       Recortar Texto
                     </button>
-                    <button onClick={handleClipImage} className="btn-gold text-xs flex-1">
+                    <button onClick={handleClipImage} className="btn-gold ui-xs flex-1">
                       <Image className="w-3 h-3 mr-1 inline" />
                       Capturar Imagem
                     </button>
@@ -322,10 +322,10 @@ export default function PDFViewer({
                         />
                       ) : (
                         <div className="w-full aspect-[3/4] bg-white/5 flex items-center justify-center">
-                          <span className="text-[10px] text-gray-600">{pn}</span>
+                          <span className="ui-xs text-gray-600">{pn}</span>
                         </div>
                       )}
-                      <div className="text-[9px] text-gray-500 text-center py-0.5">
+                      <div className="ui-xs text-gray-500 text-center py-0.5">
                         {pn}
                       </div>
                     </button>
@@ -347,7 +347,7 @@ export default function PDFViewer({
                 <div className="max-w-3xl mx-auto">
                   {/* Page header */}
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs text-gray-500">
+                    <span className="ui-sm text-gray-500">
                       Fl. {pageContent.page_number} | {pageContent.word_count} palavras
                     </span>
                     <div className="flex gap-1">
@@ -375,7 +375,7 @@ export default function PDFViewer({
                   {/* Page images */}
                   {pageContent.images.length > 0 && (
                     <div className="mt-4 space-y-3">
-                      <span className="text-xs text-gray-500 font-medium">
+                      <span className="ui-sm text-gray-500 font-medium">
                         Imagens na pagina
                       </span>
                       <div className="grid grid-cols-2 gap-3">
@@ -390,7 +390,7 @@ export default function PDFViewer({
                               className="w-full"
                             />
                             <div className="px-2 py-1 bg-white/5 flex items-center justify-between">
-                              <span className="text-[10px] text-gray-500">
+                              <span className="ui-xs text-gray-500">
                                 Imagem {idx + 1}
                               </span>
                               <button
@@ -402,7 +402,7 @@ export default function PDFViewer({
                                     label: `Imagem ${idx + 1}, fl. ${activePage}`,
                                   })
                                 }
-                                className="text-[10px] text-brand-400 hover:text-brand-300"
+                                className="ui-xs text-brand-400 hover:text-brand-300"
                               >
                                 Recortar
                               </button>
@@ -420,7 +420,7 @@ export default function PDFViewer({
                       animate={{ opacity: 1, y: 0 }}
                       className="fixed bottom-24 right-8 glass-panel p-3 flex items-center gap-2 shadow-2xl"
                     >
-                      <span className="text-xs text-gray-400 max-w-[200px] truncate">
+                      <span className="ui-sm text-gray-400 max-w-[200px] truncate">
                         "{selectedText}"
                       </span>
                       <button
@@ -433,7 +433,7 @@ export default function PDFViewer({
                           });
                           setSelectedText("");
                         }}
-                        className="btn-primary text-xs px-2 py-1"
+                        className="btn-primary ui-xs px-2 py-1"
                       >
                         Recortar
                       </button>
@@ -456,7 +456,7 @@ export default function PDFViewer({
             {/* Clips sidebar */}
             {clips.length > 0 && (
               <div className="w-56 border-l border-white/5 overflow-y-auto p-3">
-                <h4 className="text-[11px] uppercase tracking-wider text-gray-500 font-medium mb-3">
+                <h4 className="ui-xs uppercase tracking-wider text-gray-500 font-medium mb-3">
                   Recortes ({clips.length})
                 </h4>
                 <div className="space-y-2">
@@ -466,23 +466,23 @@ export default function PDFViewer({
                       className="glass-panel-light p-2.5 rounded-lg"
                     >
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-[10px] font-mono text-brand-300">
+                        <span className="ui-xs font-mono text-brand-300">
                           {clip.clip_id}
                         </span>
-                        <span className="badge-gray text-[9px]">
+                        <span className="badge-gray ui-xs">
                           fl. {clip.page_start}
                         </span>
                       </div>
-                      <div className="text-[11px] text-gray-400 font-medium mb-1">
+                      <div className="ui-xs text-gray-400 font-medium mb-1">
                         {clip.label}
                       </div>
                       {clip.content_text && (
-                        <div className="text-[10px] text-gray-600 line-clamp-3">
+                        <div className="ui-xs text-gray-600 line-clamp-3">
                           {clip.content_text}
                         </div>
                       )}
                       {clip.image_path && (
-                        <div className="mt-1 text-[10px] text-emerald-400 flex items-center gap-1">
+                        <div className="mt-1 ui-xs text-emerald-400 flex items-center gap-1">
                           <Image className="w-3 h-3" />
                           Imagem capturada
                         </div>

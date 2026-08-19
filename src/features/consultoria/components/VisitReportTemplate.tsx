@@ -29,7 +29,7 @@ export function VisitReportTemplate({ client, visit, headerBase, quantData }: Pr
   const attachments = visit.attachments || []
   const imageAttachments = attachments.filter((att) => att.content_type?.includes('image') && att.storage_path)
   const documentAttachments = attachments.filter((att) => !att.content_type?.includes('image') || !att.storage_path)
-  const visitLabel = getPmrVisitDisplayLabel(visit.visit_number)
+  const visitLabel = getPmrVisitDisplayLabel(visit.visit_number, client.journey_total_visits)
   const analysisPeriodLabel = formatVisitAnalysisPeriodLabel({
     preset: visit.analysis_period_preset,
     start: visit.analysis_period_start,
@@ -80,7 +80,7 @@ export function VisitReportTemplate({ client, visit, headerBase, quantData }: Pr
           <div style={{ fontSize: '10px', color: colors.textMuted, fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '4px' }}>Data da Auditoria</div>
           <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#000000' }}>{formattedDate}</div>
           <div style={{ fontSize: '14px', color: '#333333' }}>Consultor: {headerBase.consultant_name || 'Consultor MX'}</div>
-          <div style={{ fontSize: '12px', color: colors.textMuted, marginTop: '6px' }}>Periodo analisado: {analysisPeriodLabel}</div>
+          <div style={{ fontSize: '12px', color: colors.textMuted, marginTop: '6px' }}>Período analisado: {analysisPeriodLabel}</div>
         </div>
       </section>
 

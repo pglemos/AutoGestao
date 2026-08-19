@@ -105,7 +105,7 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
   if (section === 'departamentos') {
     return <DepartmentsView departments={departments} selectedDepartmentCode={selectedDepartmentCode} />
   }
-  if (section === 'mercado') return <BenchmarkingView data={data} mxScore={mxScore} marginPercent={marginPercent} />
+  if (section === 'mercado') return <BenchmarkingView data={data} mxScore={mxScore} marginPercent={marginPercent} headingLevel="h1" />
 
   const universityContent = (
     <>

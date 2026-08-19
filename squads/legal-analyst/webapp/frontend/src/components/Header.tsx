@@ -27,11 +27,11 @@ export default function Header({ sessionPhase, sessionTitle }: HeaderProps) {
           <Scale className="w-4 h-4 text-white" />
         </div>
         <div>
-          <h1 className="text-sm font-semibold text-white tracking-tight">
+          <h1 className="ui-sm font-semibold text-white tracking-tight">
             Legal Analyst Squad
           </h1>
           {sessionTitle && (
-            <p className="text-[11px] text-gray-500 truncate max-w-[200px]">
+            <p className="ui-xs text-gray-500 truncate max-w-[200px]">
               {sessionTitle}
             </p>
           )}
@@ -44,7 +44,7 @@ export default function Header({ sessionPhase, sessionTitle }: HeaderProps) {
       </div>
 
       <div className="flex items-center gap-2">
-        <span className="text-[11px] text-gray-500 mr-2">v1.0.0</span>
+        <span className="ui-xs text-gray-500 mr-2">v1.0.0</span>
         <button
           onClick={() => setIsDark(!isDark)}
           className="p-1.5 rounded-lg hover:bg-white/5 text-gray-400 transition-colors"

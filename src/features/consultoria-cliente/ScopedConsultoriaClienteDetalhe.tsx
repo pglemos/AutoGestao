@@ -45,7 +45,7 @@ export function ScopedConsultoriaClienteDetalhe() {
   const [fallbackStoreId, setFallbackStoreId] = useState('')
   const resolvedStoreId = client?.primary_store_id || client?.store_id || fallbackStoreId || ''
   const { loading: modulesLoading } = useConsultingModules(clientId)
-  const { steps: methodologySteps } = useConsultingMethodology(client?.program_template_key || 'pmr_7')
+  const { steps: methodologySteps } = useConsultingMethodology(client?.program_template_key || '')
 
   const { activeTab, handleTabChange } = useActiveTab()
 
@@ -119,7 +119,7 @@ export function ScopedConsultoriaClienteDetalhe() {
     <MxModulePage id="consultoria-cliente-detalhe" width={pageWidth} bottomClearance={pageBottomClearance} className="bg-surface-alt">
       <ClientHeaderSection client={client} />
 
-      <TabNav tabs={TABS} activeTab={activeTab} onTabChange={handleTabChange} />
+      <TabNav tabs={TABS} activeTab={activeTab} onTabChange={handleTabChange} scrollable />
 
       <section id={`${activeTab}-panel`} role="tabpanel" aria-labelledby={`${activeTab}-tab`}>
         <TabContentRouter

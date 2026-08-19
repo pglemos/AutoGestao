@@ -178,46 +178,46 @@ export const formatVisitDraftForGroup = (input: FormatVisitDraftInput) => {
   const feedbackClient = cleanText(input.feedbackClient || '')
   const date = formatDate(input.visitDate)
   const modality = cleanText(input.modality || 'ONLINE ou PRESENCIAL').toUpperCase()
-  const consultantName = cleanText(input.consultantName || 'Nao informado')
+  const consultantName = cleanText(input.consultantName || 'Não informado')
   const companyName = cleanText(input.clientName || 'Cliente')
 
   const lines = [
     `RELATÓRIO DE VISITA TÉCNICA - MÉTODO MX (${modality})`,
     `Empresa: ${companyName}`,
-    `Data da Reunião: ${date || 'Nao informado'}`,
+    `Data da reunião: ${date || 'Não informado'}`,
     `Consultor: ${consultantName}`,
   ]
 
   appendMxSection(
     lines,
     '🎯 OBJETIVO DA REUNIÃO',
-    cleanText(input.objective || '') || `Registrar os alinhamentos da visita ${input.visitNumber} e definir proximos passos operacionais.`
+    cleanText(input.objective || '') || `Registrar os alinhamentos da visita ${input.visitNumber} e definir próximos passos operacionais.`
   )
 
   appendMxSection(
     lines,
     '💰 1. RAIO-X FINANCEIRO E DE ESTOQUE (ONDE ESTÁ O DINHEIRO)',
-    done.length ? 'Pontos validados ou alinhados durante a reuniao:' : 'Dados financeiros e de estoque ainda precisam ser preenchidos ou validados para um raio-x completo.',
+    done.length ? 'Pontos validados ou alinhados durante a reunião:' : 'Dados financeiros e de estoque ainda precisam ser preenchidos ou validados para um raio-x completo.',
     done
   )
 
   appendMxSection(
     lines,
     '⚠️ 2. DIAGNÓSTICO DO FUNIL (ONDE ESTÁ O VAZAMENTO)',
-    attention.length ? 'Pontos de atencao identificados no fluxo operacional:' : 'Nenhum gargalo numerico foi informado no registro da visita. Validar leads, agendamentos, visitas e vendas antes do envio final.',
+    attention.length ? 'Pontos de atenção identificados no fluxo operacional:' : 'Nenhum gargalo numérico foi informado no registro da visita. Validar leads, agendamentos, visitas e vendas antes do envio final.',
     attention
   )
 
   appendMxSection(
     lines,
     '👥 3. GESTÃO DE EQUIPE E COMPORTAMENTO',
-    feedbackClient || 'Registrar percepcoes de gestao, foco da equipe, comportamento comercial e combinados com a lideranca da loja.'
+    feedbackClient || 'Registrar percepções de gestão, foco da equipe, comportamento comercial e combinados com a liderança da loja.'
   )
 
   appendMxSection(
     lines,
     '🚀 4. PLANO DE AÇÃO URGENTE E INEGOCIÁVEL',
-    actions.length ? 'Acoes priorizadas para execucao imediata:' : 'Nenhuma acao pendente foi informada. Definir responsaveis e prazos antes de compartilhar.',
+    actions.length ? 'Ações priorizadas para execução imediata:' : 'Nenhuma ação pendente foi informada. Definir responsáveis e prazos antes de compartilhar.',
     actions.map((item, index) => `${index + 1}. ${item}`)
   )
 
@@ -225,22 +225,22 @@ export const formatVisitDraftForGroup = (input: FormatVisitDraftInput) => {
   lines.push(`Consultor MX ${consultantName}`)
   lines.push('________________________________________')
   lines.push('📱 TEXTO PARA ENVIAR NO GRUPO DE WHATSAPP DA LOJA')
-  lines.push(`Assunto: Relatorio de Reuniao Gerencial e Plano de Acao - ${companyName}${date ? ` (${date})` : ''}`)
+  lines.push(`Assunto: Relatório de reunião gerencial e plano de ação - ${companyName}${date ? ` (${date})` : ''}`)
   lines.push('')
-  lines.push(`Fala, equipe! Finalizamos o acompanhamento da ${companyName} e o relatorio oficial ja esta estruturado para revisao.`)
+  lines.push(`Fala, equipe! Finalizamos o acompanhamento da ${companyName} e o relatório oficial já está estruturado para revisão.`)
 
   if (attention.length) {
     lines.push(`O ponto critico identificado foi: ${attention[0]}.`)
   } else if (done.length) {
-    lines.push(`O principal alinhamento da reuniao foi: ${done[0]}.`)
+    lines.push(`O principal alinhamento da reunião foi: ${done[0]}.`)
   }
 
   if (actions.length) {
-    lines.push(`Plano de acao imediato: ${actions.slice(0, 3).map((item, index) => `${index + 1}. ${item}`).join(' ')}`)
+    lines.push(`Plano de ação imediato: ${actions.slice(0, 3).map((item, index) => `${index + 1}. ${item}`).join(' ')}`)
   }
 
-  if (nextCycleGoal) lines.push(`Foco do proximo ciclo: ${nextCycleGoal}`)
-  lines.push('Leiam o relatorio com atencao, validem os pontos e vamos executar com disciplina.')
+  if (nextCycleGoal) lines.push(`Foco do próximo ciclo: ${nextCycleGoal}`)
+  lines.push('Leiam o relatório com atenção, validem os pontos e vamos executar com disciplina.')
 
   const result = lines.join('\n').replace(/\n{3,}/g, '\n\n').trim()
 
@@ -248,6 +248,6 @@ export const formatVisitDraftForGroup = (input: FormatVisitDraftInput) => {
 
   return [
     ...lines,
-    'Resumo ainda sem detalhes suficientes. Registre o que foi feito, pendencias e proximos passos antes de enviar ao grupo.',
+    'Resumo ainda sem detalhes suficientes. Registre o que foi feito, pendências e próximos passos antes de enviar ao grupo.',
   ].join('\n').replace(/\n{3,}/g, '\n\n').trim()
 }

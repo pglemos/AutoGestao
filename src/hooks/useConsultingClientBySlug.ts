@@ -21,10 +21,12 @@ import {
 } from '@/lib/schemas/consulting-client.schema'
 import { validateLegacyVisitCompletionInput } from '@/lib/consultoria/legacy-visit-completion'
 import { isPmrSchedulableVisitNumber } from '@/lib/consultoria/pmr-visit-rules'
+import { buildClientJourney, isClientVisitInScope } from '@/features/admin-mx/clientes/clientJourney'
 
 type VisitRowIdentity = {
   id: string
   visit_number: number
+  status: string | null
 }
 
 type VisitEvidenceRow = {
@@ -82,7 +84,7 @@ export function useConsultingClientDetailBySlug(slug?: string) {
 
     const clientId = clientData.id
 
-    const [unitsRes, contactsRes, assignmentsRes, visitsRes, financialsRes, modulesRes, usersRes, inventoryRes] = await Promise.all([
+    const [unitsRes, contactsRes, assignmentsRes, visitsRes, financialsRes, modulesRes, usersRes, inventoryRes, programRes] = await Promise.all([
       supabase.from('unidades_cliente_consultoria').select('*').eq('client_id', clientId).order('is_primary', { ascending: false }).order('name', { ascending: true }),
       supabase.from('contatos_cliente_consultoria').select('*').eq('client_id', clientId).order('is_primary', { ascending: false }).order('name', { ascending: true }),
       supabase.from('atribuicoes_consultoria').select('*, user:usuarios(id,name,email,role)').eq('client_id', clientId).order('created_at', { ascending: true }),
@@ -95,9 +97,17 @@ export function useConsultingClientDetailBySlug(slug?: string) {
       supabase.from('modulos_cliente_consultoria').select('*').eq('client_id', clientId).order('module_key', { ascending: true }),
       supabase.from('usuarios').select('id,name,email,role').eq('active', true).order('name', { ascending: true }),
       supabase.from('snapshots_estoque_consultoria').select('*').eq('client_id', clientId).order('reference_month', { ascending: false }),
+      clientData.program_template_key
+        ? supabase.from('programas_visita_consultoria').select('program_key,total_visits').eq('program_key', clientData.program_template_key).maybeSingle()
+        : Promise.resolve({ data: null, error: null }),
     ])
 
-    const visitRows = ((visitsRes.data || []) as VisitRowIdentity[]).filter((visit) => isPmrSchedulableVisitNumber(visit.visit_number))
+    const journey = buildClientJourney({
+      programKey: clientData.program_template_key,
+      programTotal: programRes.data?.total_visits,
+      visits: (visitsRes.data || []) as VisitRowIdentity[],
+    })
+    const visitRows = ((visitsRes.data || []) as VisitRowIdentity[]).filter((visit) => isClientVisitInScope(visit.visit_number, journey.totalVisits))
     const visitIds = visitRows.map((visit) => visit.id).filter(Boolean)
     const { data: evidenceRows } = visitIds.length
       ? await supabase.from('evidencias_visita').select('*').in('visita_id', visitIds)
@@ -133,6 +143,8 @@ export function useConsultingClientDetailBySlug(slug?: string) {
       financials: parseConsultingFinancialArray(financialsRes.data || []),
       modules: parseConsultingClientModuleArray(modulesRes.data || []),
       inventory_snapshots: (inventoryRes.data || []) as ConsultingInventorySnapshot[],
+      journey_completed_visits: journey.completedVisits,
+      journey_total_visits: journey.totalVisits,
     }
 
     setClient(detail)
@@ -304,8 +316,8 @@ export function useConsultingClientDetailBySlug(slug?: string) {
     if (!supabaseUser || !clientId || !canManage) {
       return { error: 'Apenas administradores MX podem criar visitas manualmente.' }
     }
-    if (!isPmrSchedulableVisitNumber(input.visit_number)) {
-      return { error: 'O PMR trabalha com visitas de 1 a 7 e acompanhamento mensal.' }
+    if (!isPmrSchedulableVisitNumber(input.visit_number, client?.journey_total_visits)) {
+      return { error: 'A etapa selecionada não pertence à jornada contratada deste cliente.' }
     }
 
     const payload = {
@@ -349,7 +361,7 @@ export function useConsultingClientDetailBySlug(slug?: string) {
 
     await fetchClient()
     return { error: null }
-  }, [canManage, clientId, fetchClient, supabaseUser])
+  }, [canManage, client?.journey_total_visits, clientId, fetchClient, supabaseUser])
 
   const completeLegacyVisits = useCallback(async (input: {
     visitNumbers: number[]

@@ -70,7 +70,33 @@ export default function StrategicPlanOverview({ repository, onCardClick, onRowCl
         <div className="flex flex-wrap items-center justify-between gap-2"><h3 className="text-sm font-semibold">Indicadores Estratégicos</h3><div className="flex items-center gap-2"><Button variant="ghost" size="sm" onClick={() => setExpanded(Object.fromEntries(AREA_LIST.map(area => [area, true])))}>Expandir todas</Button><Button variant="ghost" size="sm" onClick={() => setExpanded({})}>Recolher todas</Button><ViewSelector value={view} onChange={setView} /></div></div>
         <StrategicPlanOverviewFilters search={search} onSearchChange={setSearch} area={areaFilter} onAreaChange={setAreaFilter} result={resultFilter} onResultChange={setResultFilter} onClear={clearFilters} total={allSeries.length} filtered={filtered.length} />
       </div>
-      <div className="rounded-xl border border-border bg-card shadow-sm"><div className="overflow-x-auto"><TooltipProvider><table className="w-full min-w-[900px] border-collapse text-sm"><thead><tr className="border-b bg-surface-alt"><th className="sticky left-0 z-[var(--mx-z-sticky)] min-w-[220px] bg-surface-alt px-3 py-2 text-left text-xs font-semibold">Indicador</th>{MONTHS.map((month, index) => <th key={month} className={`px-2 py-2 text-center text-xs font-semibold ${index === SELECTED_MONTH_INDEX ? 'border-b-2 border-status-info/50 bg-status-info-surface text-status-info-text' : 'text-muted-foreground'}`}>{month}</th>)}<th className="bg-muted px-3 py-2 text-center text-xs font-semibold">{getConsolidatedLabel('sum', SELECTED_MONTH_INDEX)}</th></tr></thead><tbody>
+      <div className="rounded-xl border border-border bg-card shadow-sm">
+        <div className="overflow-x-auto" data-mx-scroll-region="horizontal" tabIndex={0} aria-label="Tabela de Indicadores Estratégicos">
+          <TooltipProvider>
+            <table className="w-full min-w-[900px] border-collapse text-sm">
+              <thead>
+                <tr className="border-b bg-surface-alt">
+                  <th className="sticky left-0 z-[var(--mx-z-sticky)] min-w-[220px] bg-surface-alt px-3 py-2 text-left text-xs font-semibold">
+                    Indicador
+                  </th>
+                  {MONTHS.map((month, index) => (
+                    <th
+                      key={month}
+                      className={`px-2 py-2 text-center text-xs font-semibold ${
+                        index === SELECTED_MONTH_INDEX
+                          ? 'bg-status-info-surface text-status-info-text font-bold'
+                          : 'text-muted-foreground'
+                      }`}
+                    >
+                      {month}
+                    </th>
+                  ))}
+                  <th className="bg-muted px-3 py-2 text-center text-xs font-semibold">
+                    {getConsolidatedLabel('sum', SELECTED_MONTH_INDEX)}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
         {AREA_LIST.map(area => {
           const indicators = filtered.filter(series => series.area === area)
           if (!indicators.length) return null

@@ -1,0 +1,9 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [
+      "docs/base44-import/_source/**"
+    ],
+    "ignoreValues": []
+  }
+}

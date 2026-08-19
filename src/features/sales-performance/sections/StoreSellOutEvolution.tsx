@@ -7,6 +7,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
+import { useEffect, useState } from 'react'
 import { Badge } from '@/components/atoms/Badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/molecules/Card'
 import { Typography } from '@/components/atoms/Typography'
@@ -15,6 +16,12 @@ type Point = { month: string; sales: number }
 type Props = { chartData: Point[] }
 
 export function StoreSellOutEvolution({ chartData }: Props) {
+  const [chartReady, setChartReady] = useState(false)
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setChartReady(true))
+    return () => cancelAnimationFrame(frame)
+  }, [])
+
   return (
     <Card className="h-full border-none bg-white overflow-hidden">
       <CardHeader className="bg-surface-alt/30 border-b border-border p-mx-10 flex flex-row items-center justify-between">
@@ -32,9 +39,9 @@ export function StoreSellOutEvolution({ chartData }: Props) {
           LIVE MATRIX
         </Badge>
       </CardHeader>
-      <CardContent className="p-mx-10" style={{ height: 'var(--height-mx-chart)' }}>
-        {chartData.length > 0 ? (
-          <ResponsiveContainer width="100%" height="100%">
+      <CardContent className="min-h-[280px] min-w-0 p-mx-10" style={{ height: 'var(--height-mx-chart, 280px)' }}>
+        {chartData.length > 0 ? chartReady ? (
+          <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={280} initialDimension={{ width: 320, height: 280 }}>
             <AreaChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
@@ -91,6 +98,8 @@ export function StoreSellOutEvolution({ chartData }: Props) {
               />
             </AreaChart>
           </ResponsiveContainer>
+        ) : (
+          <div className="grid h-full min-h-[280px] place-items-center" role="status" aria-label="Preparando gráfico"><div className="h-full min-h-[240px] w-full animate-pulse rounded-xl bg-muted" /></div>
         ) : (
           <div className="flex items-center justify-center h-full">
             <Typography variant="caption" tone="muted">

@@ -70,10 +70,10 @@ export default function Sidebar({
               <span>{label}</span>
             )}
             {!collapsed && view === "documents" && documentCount > 0 && (
-              <span className="ml-auto badge-blue text-[10px]">{documentCount}</span>
+              <span className="ml-auto badge-blue ui-xs">{documentCount}</span>
             )}
             {!collapsed && view === "agents" && (
-              <span className="ml-auto badge-gray text-[10px]">{agentCount}</span>
+              <span className="ml-auto badge-gray ui-xs">{agentCount}</span>
             )}
           </button>
         ))}
@@ -83,7 +83,7 @@ export default function Sidebar({
       {!collapsed && (
         <div className="flex-1 px-2 mt-4 overflow-y-auto">
           <div className="flex items-center justify-between px-3 mb-2">
-            <span className="text-[11px] uppercase tracking-wider text-gray-500 font-medium">
+            <span className="ui-xs uppercase tracking-wider text-gray-500 font-medium">
               Sessoes
             </span>
             <button
@@ -99,14 +99,14 @@ export default function Sidebar({
               <button
                 key={s.session_id}
                 onClick={() => onLoadSession(s.session_id)}
-                className={`w-full text-left px-3 py-2 rounded-lg text-xs transition-all ${
+                className={`w-full text-left px-3 py-2 rounded-lg ui-sm transition-all ${
                   s.session_id === activeSessionId
                     ? "bg-white/10 text-white"
                     : "text-gray-500 hover:text-gray-300 hover:bg-white/5"
                 }`}
               >
                 <div className="truncate font-medium">{s.title}</div>
-                <div className="flex items-center gap-1 mt-0.5 text-[10px] text-gray-600">
+                <div className="flex items-center gap-1 mt-0.5 ui-xs text-gray-600">
                   <Clock className="w-3 h-3" />
                   {new Date(s.created_at).toLocaleDateString("pt-BR")}
                   <span className="ml-auto">{s.message_count} msgs</span>

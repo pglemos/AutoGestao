@@ -1,4 +1,4 @@
-import { Flag } from 'lucide-react'
+import { Flag, Trophy } from 'lucide-react'
 import { RankingAvatar } from './RankingAvatar'
 import type { RankedVendedor } from '../../hooks/useStoreRankingPageData'
 
@@ -9,66 +9,116 @@ type Props = {
 }
 
 function formatVendas(v: number) {
-  return `${v} vendas`
+  return `${v} venda${v === 1 ? '' : 's'}`
 }
 
 export function CorridaPeriodo({ vendedores, meta, meuId }: Props) {
   const maxVal = Math.max(...vendedores.map(v => v.vendas), meta, 1)
   const liderVal = Math.max(...vendedores.map(v => v.vendas), 0)
 
-  return (
-    <div className="bg-white rounded-2xl border border-border shadow-sm p-5 flex-1">
-      <div className="flex items-center gap-2 mb-1">
-        <Flag className="w-5 h-5 text-foreground" />
-        <h2 className="text-body font-bold text-foreground">Corrida do Período</h2>
-      </div>
-      <p className="text-[12px] text-muted-foreground mb-4">
-        Meta de volume: <span className="font-bold text-status-success-text">{formatVendas(meta)}</span>
-      </p>
+  // Agrupa vendedores por volume de vendas para calcular offsets sem colisão
+  const groupsByVendas = new Map<number, RankedVendedor[]>()
+  vendedores.forEach(v => {
+    const list = groupsByVendas.get(v.vendas) || []
+    list.push(v)
+    groupsByVendas.set(v.vendas, list)
+  })
 
-      <div className="relative px-4">
-        <div className="relative h-16 bg-gradient-to-r from-slate-100 to-slate-50 rounded-xl border border-border overflow-visible">
+  return (
+    <div className="bg-white rounded-2xl border border-border shadow-sm p-5 flex-1 flex flex-col justify-between">
+      <div>
+        <div className="flex items-center justify-between gap-2 mb-1">
+          <div className="flex items-center gap-2">
+            <Flag className="w-5 h-5 text-status-success-text" />
+            <h2 className="text-body font-bold text-foreground">Corrida do Período</h2>
+          </div>
+          <span className="text-[12px] font-semibold text-muted-foreground bg-surface-alt px-2.5 py-1 rounded-lg border border-border">
+            Meta da loja: <strong className="text-foreground">{formatVendas(meta)}</strong>
+          </span>
+        </div>
+        <p className="text-[12px] text-muted-foreground mb-6">
+          Acompanhe o avanço em tempo real de cada vendedor rumo à meta do período.
+        </p>
+      </div>
+
+      <div className="relative px-2 pt-10 pb-2">
+        {/* Pista de corrida */}
+        <div className="relative h-14 bg-gradient-to-r from-slate-100 via-slate-50 to-emerald-50/40 rounded-2xl border border-border overflow-visible">
+          {/* Faixa de progresso do líder */}
           <div
-            className="absolute left-0 top-0 h-full rounded-l-xl"
+            className="absolute left-0 top-0 h-full rounded-2xl transition-all duration-700"
             style={{
-              width: `${Math.min(100, (liderVal / maxVal) * 100)}%`,
-              background: 'linear-gradient(90deg, rgba(0,168,150,0.15), rgba(0,168,150,0.05))',
+              width: `${Math.min(100, Math.max(6, (liderVal / maxVal) * 100))}%`,
+              background: 'linear-gradient(90deg, rgba(0,168,150,0.18), rgba(0,168,150,0.06))',
             }}
           />
-          <div className="absolute right-0 top-0 h-full w-1 bg-brand-primary/50 rounded-r-xl opacity-60" />
 
+          {/* Linha de chegada */}
+          <div className="absolute right-0 top-0 h-full w-2 bg-gradient-to-b from-brand-primary to-emerald-600 rounded-r-2xl opacity-70 flex items-center justify-center">
+            <Trophy className="w-3 h-3 text-white -ml-0.5 opacity-90" />
+          </div>
+
+          {/* Marcadores dos corredores (com prevenção de colisão) */}
           {vendedores.map(v => {
-            const pct = Math.min(100, (v.vendas / maxVal) * 100)
+            const sameGroup = groupsByVendas.get(v.vendas) || [v]
+            const indexInGroup = sameGroup.findIndex(item => item.id === v.id)
+            const groupSize = sameGroup.length
             const isMe = v.id === meuId
+
+            // Calcula porcentagem base e dispersão horizontal para evitar sobreposição
+            const basePct = (v.vendas / maxVal) * 100
+            // Clampa entre 5% e 90% para não vazar da pista
+            const clampedPct = Math.max(6, Math.min(88, basePct))
+            const spacing = groupSize > 1 ? 42 : 0
+            const offsetPx = (indexInGroup - (groupSize - 1) / 2) * spacing
+
             return (
               <div
                 key={v.id}
-                className="absolute flex flex-col items-center"
-                style={{ left: `calc(${pct}% - 20px)`, top: '-28px' }}
+                className={`absolute flex flex-col items-center transition-all duration-500 ${isMe ? 'z-30' : 'z-10 hover:z-20'}`}
+                style={{
+                  left: `clamp(24px, calc(${clampedPct}% + ${offsetPx}px), calc(100% - 28px))`,
+                  top: '-34px',
+                  transform: 'translateX(-50%)',
+                }}
               >
-                <p className={`text-caption font-bold mb-0.5 text-center whitespace-nowrap ${isMe ? 'text-status-info-text' : 'text-muted-foreground'}`}>
-                  {v.nome?.split(' ')[0]}
-                  <br />
-                  <span className={isMe ? 'text-status-info-text' : 'text-muted-foreground'}>{formatVendas(v.vendas)}</span>
-                </p>
-                <RankingAvatar
-                  nome={v.nome}
-                  foto={v.foto}
-                  size={36}
-                  gradient={isMe ? 'linear-gradient(135deg,var(--color-chart-2),var(--color-chart-2))' : undefined}
-                  border={isMe ? '3px solid var(--color-chart-2)' : undefined}
-                />
+                {/* Nome e vendas do vendedor */}
+                <div className={`mb-1 px-1.5 py-0.5 rounded-md text-center whitespace-nowrap shadow-xs text-[11px] font-bold transition-transform ${
+                  isMe
+                    ? 'bg-brand-primary text-white border border-brand-primary/40'
+                    : 'bg-white text-foreground border border-border'
+                }`}>
+                  <span>{v.nome?.split(' ')[0]}</span>
+                  <span className={`block text-[10px] font-medium ${isMe ? 'text-white/90' : 'text-muted-foreground'}`}>
+                    {formatVendas(v.vendas)}
+                  </span>
+                </div>
+
+                {/* Avatar do vendedor */}
+                <div className={`rounded-full transition-transform hover:scale-110 ${isMe ? 'ring-2 ring-brand-primary ring-offset-2' : ''}`}>
+                  <RankingAvatar
+                    nome={v.nome}
+                    foto={v.foto}
+                    size={34}
+                    border={isMe ? '2px solid var(--color-brand-primary)' : '2px solid var(--color-border-default)'}
+                  />
+                </div>
+
+                {/* Tag VOCÊ */}
                 {isMe && (
-                  <span className="mt-0.5 text-caption font-bold text-white bg-status-info px-1.5 py-0.5 rounded-full">VOCÊ</span>
+                  <span className="mt-1 text-[9px] font-extrabold tracking-wider text-white bg-brand-primary px-1.5 py-0.2 rounded-full uppercase shadow-xs">
+                    VOCÊ
+                  </span>
                 )}
               </div>
             )
           })}
         </div>
 
-        <div className="flex justify-between mt-1 px-0">
-          <span className="text-caption text-muted-foreground">0%</span>
-          <span className="text-caption text-muted-foreground">100%</span>
+        {/* Marcadores de escala 0% e 100% */}
+        <div className="flex justify-between mt-2 px-1">
+          <span className="text-[11px] font-medium text-muted-foreground">Largada (0 vendas)</span>
+          <span className="text-[11px] font-bold text-brand-primary">Chegada ({meta} vendas)</span>
         </div>
       </div>
     </div>

@@ -80,7 +80,7 @@ function ActionDetail({ action, onOpenAction, onUpdateDeadline, onTalkToConsulta
 
   return (
     <div className="mt-3 space-y-3">
-      <div className={`rounded-lg border-l-2 p-3 ${deptStyle.border || "border-border"} ${deptStyle.bg || "bg-surface-alt"}`}>
+      <div className={`rounded-xl border border-border p-3.5 ${deptStyle.bg || "bg-surface-alt"}`}>
         <div className="flex items-center justify-between">
           <span className="text-sm font-semibold text-foreground">{action.code}</span>
           <span className={`rounded-full px-2 py-0.5 text-caption font-medium ${statusStyle.badge || ""}`}>

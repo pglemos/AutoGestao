@@ -22,12 +22,9 @@ export function HeroSection({ heroVapourRef, consoleRef }: Props) {
                 <span>Tire a loja do</span>
               </span>
               <span className="mask vapour-line">
-                <span
-                  ref={heroVapourRef}
-                  id="hero-vapour"
-                  className="vapour-host"
-                >
-                  improviso.
+                <span id="hero-vapour" className="vapour-host">
+                  <span className="vapour-static">improviso.</span>
+                  <span ref={heroVapourRef} className="vapour-canvas-layer" aria-hidden="true" />
                 </span>
               </span>
             </h1>
@@ -122,11 +119,6 @@ export function HeroSection({ heroVapourRef, consoleRef }: Props) {
             </div>
             <div className="ticker">
               <div className="ticker-track">
-                <span><b>09:14</b> Vendedor 03 lançou D-1</span>
-                <span><b>09:18</b> Carteira +12 agendamentos</span>
-                <span><b>09:22</b> Gargalo: agend → visita</span>
-                <span><b>09:26</b> Devolutiva enviada · R. Almeida</span>
-                <span><b>09:31</b> Janela de lançamento encerrada</span>
                 <span><b>09:14</b> Vendedor 03 lançou D-1</span>
                 <span><b>09:18</b> Carteira +12 agendamentos</span>
                 <span><b>09:22</b> Gargalo: agend → visita</span>

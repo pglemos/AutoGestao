@@ -40,7 +40,7 @@ export function ConsultoriaClienteDetalhe() {
   const [fallbackStoreId, setFallbackStoreId] = useState('')
   const resolvedStoreId = client?.primary_store_id || client?.store_id || fallbackStoreId || ''
   const { loading: modulesLoading } = useConsultingModules(clientId)
-  const { steps: methodologySteps } = useConsultingMethodology(client?.program_template_key || 'pmr_7')
+  const { steps: methodologySteps } = useConsultingMethodology(client?.program_template_key || '')
 
   const { activeTab, handleTabChange } = useActiveTab()
 
@@ -114,7 +114,7 @@ export function ConsultoriaClienteDetalhe() {
     <div className="w-full flex flex-col gap-mx-lg p-mx-lg bg-surface-alt">
       <ClientHeaderSection client={client} />
 
-      <TabNav tabs={TABS} activeTab={activeTab} onTabChange={handleTabChange} />
+      <TabNav tabs={TABS} activeTab={activeTab} onTabChange={handleTabChange} scrollable />
 
       <section id={`${activeTab}-panel`} role="tabpanel" aria-labelledby={`${activeTab}-tab`}>
         <TabContentRouter

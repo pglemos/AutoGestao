@@ -25,9 +25,9 @@ function EventCard({ action, provided, isDragging }) {
       ref={provided?.innerRef}
       {...provided?.draggableProps}
       {...provided?.dragHandleProps}
-      className={`mb-1 rounded border-l-2 bg-white px-1.5 py-1 text-xs shadow-sm transition-shadow ${
+      className={`mb-1 rounded border bg-card px-1.5 py-1 text-xs shadow-xs transition-shadow ${
         deptStyle.border || "border-border"
-      } ${late ? "border-l-red-500" : ""} ${isDragging ? "shadow-md opacity-70" : ""} cursor-grab hover:shadow-md`}
+      } ${late ? "border-status-error/50 bg-status-error-surface/30" : ""} ${isDragging ? "shadow-md opacity-70" : ""} cursor-grab hover:shadow-sm`}
       title={`${action.code} — ${action.title}`}
     >
       <div className="flex items-center gap-1">

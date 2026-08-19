@@ -37,9 +37,11 @@ export default function Terms() {
 
                     <CardContent className="p-mx-10 md:p-20 space-y-mx-14">
                         <div className="space-y-mx-10">
-                            <Typography variant="p" className="text-label font-bold border-l-4 border-brand-primary pl-8 italic">
-                                "O acesso contínuo e a utilização do sistema MX PERFORMANCE caracterizam concordância incondicional com as diretrizes e protocolos de segurança aqui estipulados."
-                            </Typography>
+                            <div className="rounded-xl border border-brand-primary/20 bg-brand-primary-subtle p-5">
+                                <Typography variant="p" className="text-label font-bold text-foreground italic">
+                                    "O acesso contínuo e a utilização do sistema MX PERFORMANCE caracterizam concordância incondicional com as diretrizes e protocolos de segurança aqui estipulados."
+                                </Typography>
+                            </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg">
                                 <Card className="bg-surface-alt p-mx-10 border-none shadow-mx-inner group hover:bg-white hover:shadow-sm transition-all">

@@ -4,12 +4,17 @@ import { Card } from '@/components/molecules/Card'
 import { Badge } from '@/components/atoms/Badge'
 import { Typography } from '@/components/atoms/Typography'
 import type { ConsultingClientDetail } from '@/features/consultoria/types'
+import { buildClientJourney } from '@/features/admin-mx/clientes/clientJourney'
 
 type Props = { client: ConsultingClientDetail }
 
 export function OverviewSection({ client }: Props) {
   const lastFin = client.financials?.[0]
-  const finishedVisits = client.visits?.filter((v) => v.status === 'concluida').length || 0
+  const journey = buildClientJourney({
+    programKey: client.program_template_key,
+    programTotal: client.journey_total_visits,
+    visits: client.visits ?? [],
+  })
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -46,7 +51,7 @@ export function OverviewSection({ client }: Props) {
           </div>
           <div className="flex justify-between">
             <Typography variant="p" className="font-bold">Ciclo de Visitas</Typography>
-            <Typography variant="h3" className="">{finishedVisits} / 7</Typography>
+            <Typography variant="h3" className="">{journey.completedVisits} / {journey.totalVisits || '—'}</Typography>
           </div>
         </div>
       </Card>

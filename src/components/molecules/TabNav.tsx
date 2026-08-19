@@ -80,7 +80,7 @@ export function TabNav<T extends string = string>({
     <nav
       className={cn(
         scrollable
-          ? 'flex gap-mx-xs overflow-x-auto border-b border-border-subtle mb-mx-md whitespace-nowrap'
+          ? 'relative flex max-w-full gap-mx-xs overflow-x-auto overscroll-x-contain border-b border-border-subtle mb-mx-md whitespace-nowrap pr-mx-md [scrollbar-width:thin]'
           : 'flex flex-wrap gap-mx-xs border-b border-border-subtle mb-mx-md overflow-visible',
         className
       )}
@@ -104,7 +104,7 @@ export function TabNav<T extends string = string>({
             onClick={() => !disabled && onTabChange(key)}
             onKeyDown={handleKeyDown}
             className={cn(
-              'px-mx-md py-mx-sm text-label font-medium transition-colors border-b-2 whitespace-nowrap outline-none focus-visible:ring-[length:var(--mx-input-focus-ring-width)] focus-visible:ring-focus-ring focus-visible:ring-offset-2',
+              'inline-flex min-h-[44px] items-center px-mx-md py-mx-sm text-label font-medium transition-colors border-b-2 whitespace-nowrap outline-none focus-visible:ring-[length:var(--mx-input-focus-ring-width)] focus-visible:ring-focus-ring focus-visible:ring-offset-2',
               disabled
                 ? 'cursor-not-allowed border-transparent text-text-disabled'
                 : activeTab === key

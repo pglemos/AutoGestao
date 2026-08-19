@@ -9,6 +9,8 @@ export interface ConsultingClient {
   notes: string | null
   modality?: 'Presencial' | 'Online'
   current_visit_step?: number
+  journey_completed_visits?: number
+  journey_total_visits?: number
   program_template_key?: string
   store_id: string | null
   primary_store_id: string | null

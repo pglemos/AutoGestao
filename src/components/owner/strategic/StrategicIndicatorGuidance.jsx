@@ -35,7 +35,7 @@ export default function StrategicIndicatorGuidance({ series, onCreateAction }) {
   }
 
   return (
-    <div className={`flex h-full flex-col rounded-xl border border-border bg-card p-4 shadow-sm border-l-4 ${statusStyle.border}`}>
+    <div className="flex h-full flex-col rounded-xl border border-border bg-card p-4 shadow-xs">
       <div className="mb-2 flex items-center gap-2">
         <div className={`flex h-7 w-7 items-center justify-center rounded-lg ${statusStyle.bg}`}>
           <Lightbulb className={`h-4 w-4 ${statusStyle.text}`} />

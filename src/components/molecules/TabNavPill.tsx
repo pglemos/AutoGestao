@@ -109,7 +109,7 @@ export function TabNavPill<T extends string = string>({
             </>
           ) : label}
           {badge !== undefined && badge > 0 && (
-            <span className="absolute -top-1 -right-1 w-mx-xs h-mx-xs bg-status-error text-status-error-foreground rounded-full flex items-center justify-center text-mx-tiny shadow-sm border-2 border-white animate-bounce">
+            <span className="absolute -top-1 -right-1 w-mx-xs h-mx-xs bg-status-error text-status-error-foreground rounded-full flex items-center justify-center text-mx-tiny shadow-sm border-2 border-white">
               {badge}
             </span>
           )}

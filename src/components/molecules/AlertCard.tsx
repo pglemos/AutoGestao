@@ -44,7 +44,7 @@ const typeConfig: Record<
   critical: {
     Icon: AlertCircle,
     iconColor: 'text-status-error-text',
-    border: 'border-l-status-error',
+    border: 'border-status-error/30',
     bgSurface: 'bg-status-error-surface',
     title: 'Crítico',
     ariaRole: 'alert',
@@ -53,7 +53,7 @@ const typeConfig: Record<
   warning: {
     Icon: AlertTriangle,
     iconColor: 'text-status-warning-text',
-    border: 'border-l-status-warning',
+    border: 'border-status-warning/30',
     bgSurface: 'bg-status-warning-surface',
     title: 'Atenção',
     ariaRole: 'status',
@@ -62,7 +62,7 @@ const typeConfig: Record<
   positive: {
     Icon: CheckCircle2,
     iconColor: 'text-status-success-text',
-    border: 'border-l-status-success',
+    border: 'border-status-success/30',
     bgSurface: 'bg-status-success-surface',
     title: 'Positivo',
     ariaRole: 'status',
@@ -71,7 +71,7 @@ const typeConfig: Record<
   consultive: {
     Icon: Lightbulb,
     iconColor: 'text-alert-consultive',
-    border: 'border-l-alert-consultive',
+    border: 'border-alert-consultive/30',
     bgSurface: 'bg-alert-consultive-surface',
     title: 'Consultivo',
     ariaRole: 'status',
@@ -90,7 +90,7 @@ export const AlertCard = React.forwardRef<HTMLDivElement, AlertCardProps>(
         role={cfg.ariaRole}
         aria-live={cfg.ariaLive}
         className={cn(
-          'rounded-[var(--mx-card-radius)] border border-border border-l-4 bg-white shadow-[var(--mx-card-shadow)] p-mx-lg transition-shadow hover:shadow-[var(--mx-card-shadow)]',
+          'rounded-[var(--mx-card-radius)] border bg-white shadow-[var(--mx-card-shadow)] p-mx-lg transition-shadow hover:shadow-[var(--mx-card-shadow)]',
           cfg.border,
           cfg.bgSurface,
           className

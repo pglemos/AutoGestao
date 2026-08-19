@@ -120,86 +120,20 @@ export function OwnerKpiCard({
         {value}
       </p>
       {detail && <p className="mt-0.5 text-xs text-muted-foreground">{detail}</p>}
-      <div className="mt-2 flex items-end justify-between gap-2">
+      <div className="mt-3 flex items-center justify-between gap-2 border-t border-border/60 pt-2">
         {trend ? (
-          <p
-            className={cn('text-xs font-medium', toneClasses[trend.tone].text)}
+          <span
+            className={cn('inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium', toneClasses[trend.tone].soft, toneClasses[trend.tone].text)}
             aria-label={`Tendência: ${trend.label}`}
           >
             {trend.label}
-          </p>
+          </span>
         ) : (
-          <span />
+          <span className="text-xs text-muted-foreground">Período ativo</span>
         )}
-        <div className="h-8 w-16 shrink-0" aria-hidden="true">
-          <SimpleSparkline tone={effectiveStatusTone} variant={chart} seed={seed} />
-        </div>
+        <span className={cn('h-1.5 w-1.5 rounded-full', statusDotClasses[effectiveStatusTone])} aria-hidden="true" />
       </div>
     </article>
-  )
-}
-
-function SimpleSparkline({
-  tone,
-  variant = 'line',
-  seed = 0,
-}: {
-  tone: KpiTone
-  variant?: 'line' | 'bars'
-  seed?: number
-}) {
-  const colorClass = {
-    success: 'text-status-success-text',
-    info: 'text-status-info-text',
-    warning: 'text-status-warning-text',
-    danger: 'text-status-error-text',
-    muted: 'text-muted-foreground',
-    brand: 'text-status-success-text',
-    purple: 'text-status-info-text',
-  }[tone]
-
-  const raw = Array.from({ length: 8 }, (_, i) => {
-    const v = 12 + Math.sin((i + seed) * 1.1) * 5 + Math.cos((i + seed) * 0.7) * 4
-    return Math.max(4, Math.min(26, v + (seed % 3) * i * 0.4))
-  })
-
-  if (variant === 'bars') {
-    const max = Math.max(...raw)
-    return (
-      <svg viewBox="0 0 100 30" className="h-8 w-full" preserveAspectRatio="none" aria-hidden="true">
-        {raw.map((h, i) => {
-          const barW = 10
-          const barH = (h / max) * 26
-          const x = i * 13 + 1
-          const y = 30 - barH
-          return <rect key={i} x={x} y={y} width={barW} height={barH} rx={1.5} className={colorClass} fill="currentColor" opacity={0.85} />
-        })}
-      </svg>
-    )
-  }
-
-  const min = Math.min(...raw)
-  const dataRange = Math.max(Math.max(...raw) - min, 1)
-  const points = raw
-    .map((v, i) => {
-      const x = (i / (raw.length - 1)) * 100
-      const y = 28 - ((v - min) / dataRange) * 24 - 2
-      return `${x},${y}`
-    })
-    .join(' ')
-
-  return (
-    <svg viewBox="0 0 100 30" className="h-8 w-full" preserveAspectRatio="none" aria-hidden="true">
-      <polyline
-        points={points}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        className={colorClass}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   )
 }
 
@@ -297,10 +231,10 @@ export function OwnerSemiGauge({ value, muted = false }: { value: number; muted?
   )
 }
 
-export function SectionTitle({ title, subtitle }: { title: string; subtitle: string }) {
+export function SectionTitle({ title, subtitle, headingLevel = 'h2' }: { title: string; subtitle: string; headingLevel?: 'h1' | 'h2' }) {
   return (
     <div>
-      <Typography variant="h2" className="text-2xl md:text-3xl">{title}</Typography>
+      <Typography as={headingLevel} variant="h2" className="text-2xl md:text-3xl">{title}</Typography>
       <Typography variant="p" tone="muted" className="mt-1 font-bold">{subtitle}</Typography>
     </div>
   )

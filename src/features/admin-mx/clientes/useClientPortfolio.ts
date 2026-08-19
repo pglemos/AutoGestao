@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { PortfolioClient } from './clientPortfolio'
+import { buildClientJourney } from './clientJourney'
 
 type State = { rows: PortfolioClient[]; loading: boolean; error: string | null; refetch: () => Promise<void> }
 
@@ -42,7 +43,7 @@ export function useClientPortfolio(): State {
 
       const [units, visits, modules, assignments, access, owners, programs] = await Promise.all([
         supabase.from('unidades_cliente_consultoria').select('client_id, is_primary, city').in('client_id', ids),
-        supabase.from('visitas_consultoria').select('client_id, status').in('client_id', ids),
+        supabase.from('visitas_consultoria').select('client_id, visit_number, status').in('client_id', ids),
         supabase.from('modulos_cliente_consultoria').select('client_id, enabled').in('client_id', ids),
         supabase.from('atribuicoes_consultoria').select('client_id, user_id, assignment_role, active').in('client_id', ids),
         supabase.from('acessos_cliente_consultoria').select('client_id, status, nome, is_dono_master').in('client_id', ids),
@@ -65,8 +66,6 @@ export function useClientPortfolio(): State {
           }
         }
       }
-      const doneCount = countBy((visits.data ?? []).filter(row => String(row.status ?? '') === 'concluida'), row => row.client_id)
-      const visitCount = countBy(visits.data ?? [], row => row.client_id)
       const moduleCount = countBy((modules.data ?? []).filter(row => row.enabled !== false), row => row.client_id)
       const assignmentCount = countBy((assignments.data ?? []).filter(row => row.active !== false), row => row.client_id)
       const userCount = countBy((access.data ?? []).filter(row => String(row.status ?? 'ativo') !== 'inativo'), row => row.client_id)
@@ -80,10 +79,15 @@ export function useClientPortfolio(): State {
         if (row.active === false || row.assignment_role !== 'responsavel' || !row.user_id) continue
         if (!responsibleId.has(row.client_id)) responsibleId.set(row.client_id, row.user_id)
       }
-      const programTotals = new Map((programs.data ?? []).map(row => [row.program_key, row.total_visits ?? 0]))
+      const programTotals = new Map((programs.data ?? []).map(row => [row.program_key, row.total_visits]))
 
       setRows((clients ?? []).map(client => {
         const ownerId = responsibleId.get(client.id) ?? client.implementation_owner_id
+        const journey = buildClientJourney({
+          programKey: client.program_template_key,
+          programTotal: programTotals.get(client.program_template_key ?? ''),
+          visits: (visits.data ?? []).filter(visit => visit.client_id === client.id),
+        })
         return {
         ...client,
         // O id acompanha o nome para o filtro por responsável continuar casando
@@ -94,9 +98,8 @@ export function useClientPortfolio(): State {
         main_contact_name: primaryContact.get(client.id) ?? null,
         units: unitCount.get(client.id) ?? 0,
         users: userCount.get(client.id) ?? 0,
-        visitsDone: doneCount.get(client.id) ?? 0,
-        // Jornada prevista vem do produto; sem produto, cai no que já existe de visita.
-        visitsTotal: programTotals.get(client.program_template_key ?? '') ?? visitCount.get(client.id) ?? 0,
+        visitsDone: journey.completedVisits,
+        visitsTotal: journey.totalVisits,
         modulesEnabled: moduleCount.get(client.id) ?? 0,
         assignments: assignmentCount.get(client.id) ?? 0,
         }

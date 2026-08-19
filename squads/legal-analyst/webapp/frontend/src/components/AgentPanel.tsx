@@ -107,12 +107,12 @@ export default function AgentPanel({
       {/* Header */}
       <div className="border-b border-white/5 px-4 py-3">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-white">Agentes do Squad</h2>
+          <h2 className="ui-sm font-semibold text-white">Agentes do Squad</h2>
           <div className="flex gap-2">
             <span className="badge-gold">{agents.length} agentes</span>
             <button
               onClick={() => setShowCreate(!showCreate)}
-              className="btn-primary text-xs px-3 py-1.5 flex items-center gap-1"
+              className="btn-primary ui-xs px-3 py-1.5 flex items-center gap-1"
             >
               <Plus className="w-3 h-3" />
               Criar via Skill
@@ -127,7 +127,7 @@ export default function AgentPanel({
             value={query}
             onChange={(e) => handleSearch(e.target.value)}
             placeholder="Buscar agentes por nome, expertise, dominio..."
-            className="input-field pl-10 text-xs py-2"
+            className="input-field pl-10 ui-sm py-2"
           />
         </div>
       </div>
@@ -159,51 +159,51 @@ export default function AgentPanel({
 
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <div>
-                  <label className="text-[10px] text-gray-500 uppercase tracking-wider mb-1 block">
+                  <label className="ui-xs text-gray-500 uppercase tracking-wider mb-1 block">
                     Nome do Agente
                   </label>
                   <input
                     value={newName}
                     onChange={(e) => setNewName(e.target.value)}
                     placeholder="ex: Tributario Analyst"
-                    className="input-field text-xs py-2"
+                    className="input-field ui-sm py-2"
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] text-gray-500 uppercase tracking-wider mb-1 block">
+                  <label className="ui-xs text-gray-500 uppercase tracking-wider mb-1 block">
                     Funcao/Role
                   </label>
                   <input
                     value={newRole}
                     onChange={(e) => setNewRole(e.target.value)}
                     placeholder="ex: Analista Tributario"
-                    className="input-field text-xs py-2"
+                    className="input-field ui-sm py-2"
                   />
                 </div>
               </div>
 
               <div className="mb-3">
-                <label className="text-[10px] text-gray-500 uppercase tracking-wider mb-1 block">
+                <label className="ui-xs text-gray-500 uppercase tracking-wider mb-1 block">
                   Expertise / Dominio
                 </label>
                 <textarea
                   value={newExpertise}
                   onChange={(e) => setNewExpertise(e.target.value)}
                   placeholder="Descreva a expertise do agente..."
-                  className="input-field text-xs py-2 resize-none"
+                  className="input-field ui-sm py-2 resize-none"
                   rows={2}
                 />
               </div>
 
               <div className="grid grid-cols-3 gap-3 mb-3">
                 <div>
-                  <label className="text-[10px] text-gray-500 uppercase tracking-wider mb-1 block">
+                  <label className="ui-xs text-gray-500 uppercase tracking-wider mb-1 block">
                     Tier
                   </label>
                   <select
                     value={newTier}
                     onChange={(e) => setNewTier(e.target.value)}
-                    className="input-field text-xs py-2"
+                    className="input-field ui-sm py-2"
                   >
                     <option value="tier_0">Tier 0 - Triagem</option>
                     <option value="tier_1">Tier 1 - Pesquisa</option>
@@ -212,24 +212,24 @@ export default function AgentPanel({
                   </select>
                 </div>
                 <div>
-                  <label className="text-[10px] text-gray-500 uppercase tracking-wider mb-1 block">
+                  <label className="ui-xs text-gray-500 uppercase tracking-wider mb-1 block">
                     Estilo
                   </label>
                   <input
                     value={newStyle}
                     onChange={(e) => setNewStyle(e.target.value)}
-                    className="input-field text-xs py-2"
+                    className="input-field ui-sm py-2"
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] text-gray-500 uppercase tracking-wider mb-1 block">
+                  <label className="ui-xs text-gray-500 uppercase tracking-wider mb-1 block">
                     Comandos (virgula)
                   </label>
                   <input
                     value={newCommands}
                     onChange={(e) => setNewCommands(e.target.value)}
                     placeholder="analisar, validar"
-                    className="input-field text-xs py-2"
+                    className="input-field ui-sm py-2"
                   />
                 </div>
               </div>
@@ -268,10 +268,10 @@ export default function AgentPanel({
                 <div key={tier}>
                   <div className="flex items-center gap-2 mb-2">
                     <TierIcon className={`w-3.5 h-3.5 ${config.color.split(" ")[0]}`} />
-                    <span className="text-[11px] uppercase tracking-wider text-gray-500 font-medium">
+                    <span className="ui-xs uppercase tracking-wider text-gray-500 font-medium">
                       {config.label}
                     </span>
-                    <span className="text-[10px] text-gray-600">
+                    <span className="ui-xs text-gray-600">
                       ({grouped[tier].length})
                     </span>
                   </div>
@@ -294,22 +294,22 @@ export default function AgentPanel({
                           className="w-full flex items-center gap-3 px-3 py-2.5 text-left"
                         >
                           <div
-                            className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold ${config.color}`}
+                            className={`w-7 h-7 rounded-lg flex items-center justify-center ui-sm font-bold ${config.color}`}
                           >
                             {agent.icon || (
                               <Bot className="w-3.5 h-3.5" />
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="text-xs font-medium text-white truncate">
+                            <div className="ui-sm font-medium text-white truncate">
                               @{agent.agent_id}
                             </div>
-                            <div className="text-[10px] text-gray-500 truncate">
+                            <div className="ui-xs text-gray-500 truncate">
                               {agent.title}
                             </div>
                           </div>
                           {agent.is_custom && (
-                            <span className="badge-gold text-[9px]">Custom</span>
+                            <span className="badge-gold ui-xs">Custom</span>
                           )}
                           {expandedAgent === agent.agent_id ? (
                             <ChevronUp className="w-3.5 h-3.5 text-gray-500" />
@@ -336,7 +336,7 @@ export default function AgentPanel({
                                 {agent.expertise_domains.length > 0 && (
                                   <div className="flex flex-wrap gap-1 mb-2">
                                     {agent.expertise_domains.map((d, i) => (
-                                      <span key={i} className="badge-gray text-[9px]">
+                                      <span key={i} className="badge-gray ui-xs">
                                         {String(d)}
                                       </span>
                                     ))}
@@ -345,13 +345,13 @@ export default function AgentPanel({
 
                                 {agent.commands.length > 0 && (
                                   <div className="mb-2">
-                                    <span className="text-[10px] text-gray-500 block mb-1">
+                                    <span className="ui-xs text-gray-500 block mb-1">
                                       Comandos:
                                     </span>
                                     {agent.commands.map((cmd, i) => (
                                       <span
                                         key={i}
-                                        className="inline-block mr-1 mb-1 px-1.5 py-0.5 rounded bg-white/5 text-[10px] text-brand-300 font-mono"
+                                        className="inline-block mr-1 mb-1 px-1.5 py-0.5 rounded bg-white/5 ui-xs text-brand-300 font-mono"
                                       >
                                         *{cmd.name}
                                       </span>
@@ -361,7 +361,7 @@ export default function AgentPanel({
 
                                 <button
                                   onClick={() => onSelectAgent(agent.agent_id)}
-                                  className="btn-primary text-xs w-full mt-1"
+                                  className="btn-primary ui-xs w-full mt-1"
                                 >
                                   Acionar @{agent.agent_id}
                                 </button>

@@ -109,8 +109,8 @@ export function useVisitForm({ client, methodologySteps, profileId, upsertVisit 
   const handleSubmitManualVisit = async (event: React.FormEvent) => {
     event.preventDefault()
     const visitNumber = Number(visitForm.visit_number)
-    if (!isPmrSchedulableVisitNumber(visitNumber)) {
-      toast.error('Selecione uma visita entre V1 e V7 ou acompanhamento mensal.')
+    if (!client || !isPmrSchedulableVisitNumber(visitNumber, client.journey_total_visits)) {
+      toast.error('Selecione uma etapa válida da jornada contratada.')
       return
     }
     if (!visitForm.scheduled_at || !visitForm.scheduled_time) {

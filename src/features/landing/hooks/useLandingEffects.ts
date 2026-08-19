@@ -218,7 +218,7 @@ export function useLandingEffects() {
       const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
       const heroEl = heroVapourRef.current
       if (heroEl && window.MXTextEffects) {
-        const computed = getComputedStyle(heroEl.parentElement!.parentElement!)
+        const computed = getComputedStyle(heroEl.closest('.hero-title') ?? heroEl)
         const px = parseFloat(computed.fontSize) || 110
         heroEl.style.height = px * 1.05 + 'px'
         heroEl.style.width = '100%'
@@ -237,8 +237,9 @@ export function useLandingEffects() {
             fadeInDuration: 0.8,
             waitDuration: 1.8,
           })
+          heroEl.parentElement?.classList.add('vapour-enhanced')
         } else {
-          heroEl.textContent = 'improviso.'
+          heroEl.replaceChildren()
         }
       }
       const particleEl = particleStageRef.current

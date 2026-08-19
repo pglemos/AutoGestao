@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { buildClientJourney } from '@/features/admin-mx/clientes/clientJourney'
 
 export type OwnerConsultingProgramSummary = {
   clientId: string
@@ -51,17 +52,33 @@ export function useOwnerConsultingProgram(
         .rpc('get_owner_consulting_program_summary', { p_store_id: storeId })
         .maybeSingle<RpcRow>()
       if (rpcError) throw rpcError
+      let journey = data
+        ? buildClientJourney({ programKey: data.program_key, programTotal: data.total_visits, visits: [] })
+        : null
+      if (data?.client_id) {
+        const { data: visitRows, error: visitsError } = await supabase
+          .from('visitas_consultoria')
+          .select('visit_number, status')
+          .eq('client_id', data.client_id)
+        if (!visitsError) {
+          journey = buildClientJourney({
+            programKey: data.program_key,
+            programTotal: data.total_visits,
+            visits: visitRows ?? [],
+          })
+        }
+      }
       setProgram(
         data
           ? {
               clientId: data.client_id,
               programKey: data.program_key,
               programName: data.program_name,
-              totalVisits: data.total_visits,
+              totalVisits: journey?.totalVisits ?? data.total_visits,
               clientStatus: data.client_status,
               clientModality: data.client_modality,
-              visitsCompleted: data.visits_completed,
-              nextVisitNumber: data.next_visit_number,
+              visitsCompleted: journey?.completedVisits ?? data.visits_completed,
+              nextVisitNumber: journey?.nextVisitNumber ?? data.next_visit_number,
               nextVisitScheduledAt: data.next_visit_scheduled_at,
               nextVisitObjective: data.next_visit_objective,
               nextVisitMeetLink: data.next_visit_meet_link,

@@ -50,7 +50,7 @@ export function VisitFormModal({
       open={open}
       onClose={onClose}
       title={visitForm.visit_id ? 'Editar visita manual' : 'Criar visita manual'}
-      description="Admin master MX pode selecionar V1 a V7 ou acompanhamento mensal para este cliente"
+      description={`Admin master MX pode selecionar qualquer etapa da jornada contratada${client.journey_total_visits && client.journey_total_visits <= 7 ? ' ou acompanhamento mensal' : ''}.`}
       size="xl"
       footer={
         <>
@@ -73,7 +73,7 @@ export function VisitFormModal({
               const existingVisit = client.visits?.find((visit) => visit.visit_number === step.visit_number)
               return (
                 <option key={step.id} value={step.visit_number}>
-                  {getPmrVisitDisplayLabel(step.visit_number)} - {existingVisit ? 'editar agendada' : 'criar manual'}
+                  {getPmrVisitDisplayLabel(step.visit_number, client.journey_total_visits)} - {existingVisit ? 'editar agendada' : 'criar manual'}
                 </option>
               )
             })}

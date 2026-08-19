@@ -29,14 +29,16 @@ export default function Privacy() {
                             <Lock size={32} strokeWidth={2} />
                         </div>
                         <Typography variant="h1" tone="white" className="text-display mb-4 relative z-[var(--mx-z-sticky)]">Política de <span className="text-status-success-text">Privacidade</span></Typography>
-                        <Typography variant="tiny" tone="white" className="max-w-xl mx-auto opacity-60 relative z-[var(--mx-z-sticky)] block">MX PERFORMANCE - PROTECAO & TRATAMENTO DE DADOS</Typography>
+                        <Typography variant="tiny" tone="white" className="max-w-xl mx-auto opacity-60 relative z-[var(--mx-z-sticky)] block">MX PERFORMANCE - PROTEÇÃO E TRATAMENTO DE DADOS</Typography>
                     </header>
 
                     <CardContent className="p-mx-10 md:p-20 space-y-mx-14">
                         <div className="space-y-mx-10">
-                            <Typography variant="p" className="text-label font-bold border-l-4 border-brand-primary pl-8">
-                                O MX PERFORMANCE e uma plataforma da MX Consultoria para gestao de visitas, rotinas comerciais e sincronizacao autorizada com o Google Calendar.
-                            </Typography>
+                            <div className="rounded-xl border border-brand-primary/20 bg-brand-primary-subtle p-5">
+                                <Typography variant="p" className="text-label font-bold text-foreground">
+                                    O MX PERFORMANCE é uma plataforma da MX Consultoria para gestão de visitas, rotinas comerciais e sincronização autorizada com o Google Calendar.
+                                </Typography>
+                            </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg">
                                 <Card className="bg-surface-alt p-mx-10 border-none group hover:bg-white hover:shadow-sm transition-all">
@@ -45,7 +47,7 @@ export default function Privacy() {
                                     </div>
                                     <Typography variant="h2" className="mb-4">Coleta de Métricas</Typography>
                                     <Typography variant="caption" tone="muted" className="leading-relaxed opacity-60">
-                                        Registramos dados operacionais informados pelos usuarios, como visitas, lojas, equipe, metas, indicadores e historico de acompanhamento.
+                                        Registramos dados operacionais informados pelos usuários, como visitas, lojas, equipe, metas, indicadores e histórico de acompanhamento.
                                     </Typography>
                                 </Card>
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import {
   CheckCircle2, Zap, Target, ExternalLink, BarChart3,
   Clock, TrendingUp, Award, Rocket,
-  ShieldAlert, Presentation
+  ShieldAlert, Presentation, ClipboardCheck
 } from 'lucide-react'
 import { toast } from '@/lib/toast'
 import { Card, CardContent } from '@/components/molecules/Card'
@@ -419,10 +419,10 @@ export function VisitEightExecution({ onGenerateSummary }: { onGenerateSummary: 
 
   const save = () => {
     if (!review.periodResult || !review.nextActions) {
-      return toast.error('Preencha resultado do periodo e proximas acoes')
+      return toast.error('Preencha o resultado do período e as próximas ações.')
     }
 
-    onGenerateSummary(`--- ACOMPANHAMENTO MENSAL ---\nResultado do periodo: ${review.periodResult}\nPendencias revisadas: ${review.pendingActions || 'A registrar'}\nPontos positivos: ${review.positives || 'A registrar'}\nPontos a melhorar: ${review.improvements || 'A registrar'}\nProximas acoes: ${review.nextActions}\nProxima data: ${review.nextDate || 'A definir'}`)
+    onGenerateSummary(`--- ACOMPANHAMENTO MENSAL ---\nResultado do período: ${review.periodResult}\nPendências revisadas: ${review.pendingActions || 'A registrar'}\nPontos positivos: ${review.positives || 'A registrar'}\nPontos a melhorar: ${review.improvements || 'A registrar'}\nPróximas ações: ${review.nextActions}\nPróxima data: ${review.nextDate || 'A definir'}`)
     toast.success('Acompanhamento mensal registrado!')
     setReview({ periodResult: '', pendingActions: '', positives: '', improvements: '', nextActions: '', nextDate: '' })
   }
@@ -438,16 +438,16 @@ export function VisitEightExecution({ onGenerateSummary }: { onGenerateSummary: 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg">
         <div className="space-y-mx-md">
           <div className="space-y-mx-xs">
-            <Typography variant="tiny" className="font-bold">Resultado do periodo</Typography>
-            <Textarea value={review.periodResult} onChange={e => setReview({ ...review, periodResult: e.target.value })} className="min-h-mx-24 text-sm" placeholder="Indicadores, fatos relevantes e evolucao observada" />
+            <Typography variant="tiny" className="font-bold">Resultado do período</Typography>
+            <Textarea value={review.periodResult} onChange={e => setReview({ ...review, periodResult: e.target.value })} className="min-h-mx-24 text-sm" placeholder="Indicadores, fatos relevantes e evolução observada" />
           </div>
           <div className="space-y-mx-xs">
-            <Typography variant="tiny" className="font-bold">Pendencias do plano de acao</Typography>
+            <Typography variant="tiny" className="font-bold">Pendências do plano de ação</Typography>
             <Textarea value={review.pendingActions} onChange={e => setReview({ ...review, pendingActions: e.target.value })} className="min-h-mx-20 text-sm" placeholder="O que ficou pendente, atrasado ou sem dono claro" />
           </div>
           <div className="space-y-mx-xs">
             <Typography variant="tiny" className="font-bold">Pontos positivos</Typography>
-            <Textarea value={review.positives} onChange={e => setReview({ ...review, positives: e.target.value })} className="min-h-mx-20 text-sm" placeholder="O que evoluiu no periodo" />
+            <Textarea value={review.positives} onChange={e => setReview({ ...review, positives: e.target.value })} className="min-h-mx-20 text-sm" placeholder="O que evoluiu no período" />
           </div>
         </div>
 
@@ -457,8 +457,8 @@ export function VisitEightExecution({ onGenerateSummary }: { onGenerateSummary: 
             <Textarea value={review.improvements} onChange={e => setReview({ ...review, improvements: e.target.value })} className="min-h-mx-20 text-sm" placeholder="Gargalos, riscos e ajustes" />
           </div>
           <div className="space-y-mx-xs">
-            <Typography variant="tiny" className="font-bold">Proximas acoes e responsaveis</Typography>
-            <Textarea value={review.nextActions} onChange={e => setReview({ ...review, nextActions: e.target.value })} className="min-h-mx-24 text-sm" placeholder="Acoes, responsaveis e prazos" />
+            <Typography variant="tiny" className="font-bold">Próximas ações e responsáveis</Typography>
+            <Textarea value={review.nextActions} onChange={e => setReview({ ...review, nextActions: e.target.value })} className="min-h-mx-24 text-sm" placeholder="Ações, responsáveis e prazos" />
           </div>
           <div className="space-y-mx-xs">
             <Typography variant="tiny" className="font-bold">Proxima data</Typography>
@@ -468,6 +468,49 @@ export function VisitEightExecution({ onGenerateSummary }: { onGenerateSummary: 
       </div>
 
       <Button className="w-full mt-mx-md h-mx-12" variant="primary" onClick={save} icon={<Target size={16} />}>REGISTRAR ACOMPANHAMENTO</Button>
+      </CardContent>
+    </Card>
+  )
+}
+
+export function VisitCustomExecution({
+  visitNumber,
+  objective,
+  onGenerateSummary,
+}: {
+  visitNumber: number
+  objective: string
+  onGenerateSummary: (text: string) => void
+}) {
+  const [notes, setNotes] = useState('')
+
+  const save = () => {
+    if (!notes.trim()) return toast.error('Registre os principais resultados e próximos passos.')
+    onGenerateSummary(`--- VISITA ${visitNumber}: ${objective} ---\n${notes.trim()}`)
+    toast.success(`Visita ${visitNumber} registrada.`)
+    setNotes('')
+  }
+
+  return (
+    <Card className="border bg-white">
+      <CardContent>
+        <div className="mb-mx-md flex items-center gap-mx-sm">
+          <div className="rounded-xl bg-brand-primary/10 p-mx-xs text-status-success-text"><ClipboardCheck size={20} /></div>
+          <div className="min-w-0">
+            <Typography variant="h3" className="text-lg">Visita {visitNumber}: {objective}</Typography>
+            <Typography variant="tiny" tone="muted" className="mt-1 block">Registre a execução da etapa e deixe a evidência textual no CRM.</Typography>
+          </div>
+        </div>
+        <Textarea
+          aria-label={`Registro da visita ${visitNumber}`}
+          value={notes}
+          onChange={event => setNotes(event.target.value)}
+          placeholder="Resultados, decisões, responsáveis e próximos passos..."
+          className="min-h-mx-40 text-sm"
+        />
+        <Button className="mt-mx-md h-mx-12 w-full" variant="primary" onClick={save} icon={<CheckCircle2 size={16} />}>
+          REGISTRAR EXECUÇÃO
+        </Button>
       </CardContent>
     </Card>
   )

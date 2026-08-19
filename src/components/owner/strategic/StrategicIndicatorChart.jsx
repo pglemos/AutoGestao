@@ -1,5 +1,5 @@
 // Gráfico de linhas: Meta (tracejada), Resultado Atual (cor da área + área preenchida), Ano Anterior.
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
 import { MONTHS, SELECTED_MONTH_INDEX, REFERENCE_YEAR, formatCellValue, calculatePercentageOfTarget, getStatusFromPercentage, STATUS_STYLES, AREA_HEX } from "./strategicUtils";
 import { chartTokens } from "@/lib/charts/tokens"
@@ -49,6 +49,11 @@ function ChartTooltip({ active, payload, label, displayFormat, decimalPlaces, se
 
 export default function StrategicIndicatorChart({ series, height = 360 }) {
   const [hidden, setHidden] = useState({ meta: false, atual: false, anterior: false });
+  const [chartReady, setChartReady] = useState(false);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setChartReady(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
   if (!series) return null;
   const { targetValues, currentValues, previousYearValues, displayFormat, decimalPlaces, name, area } = series;
   const areaHex = AREA_HEX[area] || chartTokens.success();
@@ -70,7 +75,7 @@ export default function StrategicIndicatorChart({ series, height = 360 }) {
   const seriesColors = { meta: META_COLOR, atual: areaHex, anterior: ANTERIOR_COLOR };
 
   return (
-    <div className="flex flex-col rounded-xl border border-border bg-card shadow-sm" style={{ height }}>
+    <div className="flex min-h-[320px] min-w-0 flex-col rounded-xl border border-border bg-card shadow-sm" style={{ height: Math.max(Number(height) || 0, 320) }}>
       <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
         <div>
           <h4 className="text-sm font-semibold text-foreground">Evolução do indicador</h4>
@@ -94,8 +99,8 @@ export default function StrategicIndicatorChart({ series, height = 360 }) {
         ))}
       </div>
 
-      <div className="flex-1 px-2 pb-2">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="flex-1 px-2 pb-2 min-w-0 min-h-[220px]">
+        {chartReady ? <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={220} initialDimension={{ width: 320, height: 220 }}>
           <LineChart data={data} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
             <ReferenceLine x={MONTHS[idx]} stroke={areaHex} strokeOpacity={0.25} strokeWidth={6} />
             <CartesianGrid strokeDasharray="3 3" stroke={chartTokens.grid()} vertical={false} />
@@ -112,7 +117,7 @@ export default function StrategicIndicatorChart({ series, height = 360 }) {
             <Line type="monotone" dataKey="atual" stroke={areaHex} strokeWidth={3} dot={{ r: 3, fill: areaHex }} connectNulls={false} />
             <Line type="monotone" dataKey="anterior" stroke={ANTERIOR_COLOR} strokeWidth={2} dot={false} connectNulls />
           </LineChart>
-        </ResponsiveContainer>
+        </ResponsiveContainer> : <div className="grid h-full min-h-[220px] place-items-center" role="status" aria-label="Preparando gráfico"><div className="h-full min-h-[180px] w-full animate-pulse rounded-lg bg-muted" /></div>}
       </div>
     </div>
   );

@@ -22,7 +22,7 @@ import {
   type ConsultingMethodologyStep,
   type ConsultingVisitProgram,
 } from '@/lib/schemas/consulting-client.schema'
-import { isPmrMainCycleVisitNumber, isPmrSchedulableVisitNumber } from '@/lib/consultoria/pmr-visit-rules'
+import { buildClientJourney, isClientVisitInScope, isCompletedClientVisit } from '@/features/admin-mx/clientes/clientJourney'
 
 type ConsultingAssignableUser = {
   id: string
@@ -67,10 +67,13 @@ export function useConsultingClients() {
     setLoading(true)
     setError(null)
 
-    const { data, error: fetchError } = await supabase
-      .from('clientes_consultoria')
-      .select('*, visitas_consultoria(visit_number, status, created_at, effective_visit_date)')
-      .order('name', { ascending: true })
+    const [{ data, error: fetchError }, { data: programRows }] = await Promise.all([
+      supabase
+        .from('clientes_consultoria')
+        .select('*, visitas_consultoria(visit_number, status, created_at, effective_visit_date)')
+        .order('name', { ascending: true }),
+      supabase.from('programas_visita_consultoria').select('program_key, total_visits'),
+    ])
 
     if (fetchError) {
       setError(fetchError.message)
@@ -78,15 +81,23 @@ export function useConsultingClients() {
     } else {
       try {
         const clientRows = (data || []) as unknown as ConsultingClientWithVisits[]
+        const programTotals = new Map((programRows ?? []).map(program => [program.program_key, program.total_visits]))
         const clientsWithLastVisit = clientRows.map(client => {
-          const finishedVisits = (client.visitas_consultoria || [])
-            .filter(v => isPmrMainCycleVisitNumber(v.visit_number))
-            .filter(v => v.status === 'concluida')
-            .sort((a, b) => new Date(b.effective_visit_date || b.created_at).getTime() - new Date(a.effective_visit_date || a.created_at).getTime())
+          const journey = buildClientJourney({
+            programKey: client.program_template_key,
+            programTotal: programTotals.get(client.program_template_key ?? ''),
+            visits: client.visitas_consultoria || [],
+          })
+          const finishedVisits = journey.contractedVisits
+            .filter(v => isCompletedClientVisit(v.status))
+            .sort((a, b) => new Date(String(b.effective_visit_date ?? b.created_at ?? '')).getTime() - new Date(String(a.effective_visit_date ?? a.created_at ?? '')).getTime())
           
           const lastVisit = finishedVisits[0]
           return {
             ...client,
+            current_visit_step: journey.completedVisits,
+            journey_completed_visits: journey.completedVisits,
+            journey_total_visits: journey.totalVisits,
             last_visit_at: lastVisit ? (lastVisit.effective_visit_date || lastVisit.created_at) : null
           }
         })
@@ -273,6 +284,19 @@ export function useConsultingClientDetail(clientId?: string) {
       return
     }
 
+    const programRes = clientRes.data?.program_template_key
+      ? await supabase
+          .from('programas_visita_consultoria')
+          .select('program_key,total_visits')
+          .eq('program_key', clientRes.data.program_template_key)
+          .maybeSingle()
+      : { data: null }
+    const journey = buildClientJourney({
+      programKey: clientRes.data?.program_template_key,
+      programTotal: programRes.data?.total_visits,
+      visits: (visitsRes.data || []) as unknown as ConsultingVisit[],
+    })
+
     const detail = clientRes.data
       ? {
           ...(clientRes.data as ConsultingClient),
@@ -281,7 +305,9 @@ export function useConsultingClientDetail(clientId?: string) {
           contacts: parseConsultingClientContactArray(contactsRes.data || []),
           assignments: parseConsultingAssignmentArray(assignmentsRes.data || []),
           visits: ((visitsRes.data || []) as unknown as ConsultingVisit[])
-            .filter(visit => isPmrSchedulableVisitNumber(visit.visit_number)),
+            .filter(visit => isClientVisitInScope(visit.visit_number, journey.totalVisits)),
+          journey_completed_visits: journey.completedVisits,
+          journey_total_visits: journey.totalVisits,
           financials: parseConsultingFinancialArray(financialsRes.data || []),
           modules: parseConsultingClientModuleArray(modulesRes.data || []),
         } as ConsultingClientDetail
@@ -458,20 +484,27 @@ export function useConsultingClientDetail(clientId?: string) {
 }
 
 export function useConsultingMethodology(programKey = 'pmr_7') {
-  const effectiveProgramKey = programKey === 'pmr_9' ? 'pmr_7' : programKey
+  const normalizedProgramKey = programKey.trim()
   const [steps, setSteps] = useState<ConsultingMethodologyStep[]>([])
   const [program, setProgram] = useState<ConsultingVisitProgram | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchSteps() {
+      if (!normalizedProgramKey) {
+        setSteps([])
+        setProgram(null)
+        setLoading(false)
+        return
+      }
+
       setLoading(true)
       const [programRes, templateRes] = await Promise.all([
-        supabase.from('programas_visita_consultoria').select('*').eq('program_key', effectiveProgramKey).maybeSingle(),
+        supabase.from('programas_visita_consultoria').select('*').eq('program_key', normalizedProgramKey).maybeSingle(),
         supabase
           .from('etapas_modelo_visita_consultoria')
           .select('*')
-          .eq('program_key', effectiveProgramKey)
+          .eq('program_key', normalizedProgramKey)
           .eq('active', true)
           .order('visit_number', { ascending: true }),
       ])
@@ -484,17 +517,19 @@ export function useConsultingMethodology(programKey = 'pmr_7') {
 
       if (templateRes.data && templateRes.data.length > 0) {
         setSteps(parseConsultingMethodologyStepArray(templateRes.data || []))
-      } else {
+      } else if (normalizedProgramKey === 'pmr_7') {
         const { data } = await supabase
           .from('etapas_metodologia_consultoria')
           .select('*')
           .order('visit_number', { ascending: true })
         setSteps(parseConsultingMethodologyStepArray(data || []))
+      } else {
+        setSteps([])
       }
       setLoading(false)
     }
     fetchSteps()
-  }, [effectiveProgramKey])
+  }, [normalizedProgramKey])
 
   return { steps, program, loading }
 }

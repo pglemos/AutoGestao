@@ -45,7 +45,7 @@ export default function OAuthHome() {
               </h1>
 
               <p className="mt-mx-lg text-lg sm:text-xl leading-relaxed text-muted-foreground max-w-2xl">
-                Plataforma operacional da MX Consultoria para organizar visitas, agendas comerciais e rotinas de acompanhamento com sincronizacao autorizada ao Google Calendar.
+                Plataforma operacional da MX Consultoria para organizar visitas, agendas comerciais e rotinas de acompanhamento com sincronização autorizada ao Google Calendar.
               </p>
 
               <div className="mt-mx-2xl flex flex-col sm:flex-row gap-mx-sm">
@@ -79,7 +79,7 @@ export default function OAuthHome() {
                   <div>
                     <h2 className="text-h4 font-bold">Eventos de visitas</h2>
                     <p className="mt-mx-xs text-sm leading-relaxed text-white/65">
-                      Criacao, edicao e consulta de eventos autorizados para sincronizar a agenda central da MX e agendas de usuarios conectados.
+                      Criação, edição e consulta de eventos autorizados para sincronizar a agenda central da MX e agendas de usuários conectados.
                     </p>
                   </div>
                 </div>
@@ -91,7 +91,7 @@ export default function OAuthHome() {
                   <div>
                     <h2 className="text-h4 font-bold">Acesso restrito</h2>
                     <p className="mt-mx-xs text-sm leading-relaxed text-white/65">
-                      Uso exclusivo de usuarios autorizados pela MX Consultoria, com autenticação e permissoes internas.
+                      Uso exclusivo de usuários autorizados pela MX Consultoria, com autenticação e permissões internas.
                     </p>
                   </div>
                 </div>

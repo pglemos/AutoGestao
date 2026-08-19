@@ -144,6 +144,29 @@ export function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKe
           </div>
         </div>
       )}
+
+      {meta && !metaBatida && (
+        <div className="mt-4 pt-4 border-t border-border flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2 text-caption text-muted-foreground">
+            <Target className="w-4 h-4 text-brand-primary shrink-0" />
+            <span>Acelere o ritmo focando nas oportunidades prioritárias da Carteira e Showroom.</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Link
+              to="/central-execucao"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-border bg-white text-caption font-bold text-foreground hover:bg-surface-alt transition-colors"
+            >
+              Rotina do Dia →
+            </Link>
+            <Link
+              to="/carteira-clientes"
+              className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-xl bg-brand-primary text-white text-caption font-bold hover:bg-brand-primary-hover shadow-xs transition-colors"
+            >
+              Mentor Comercial →
+            </Link>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -236,6 +259,15 @@ export function EsforcoNecessarioCard({ channels, faltam }: { channels: ChannelF
                 {principalEffort.qualificados != null && principalEffort.qualificados > 0 && <AlavancaItem label="Qualificados" valor={principalEffort.qualificados} />}
               </>
             )}
+            <div className="mt-3 pt-2.5 border-t border-current/10 flex items-center justify-between">
+              <span className="text-[11px] text-muted-foreground">Recomendação MX:</span>
+              <Link
+                to={canalPrincipal === 'Carteira' ? '/carteira-clientes' : '/central-execucao'}
+                className="text-[12px] font-bold text-brand-primary-hover hover:underline inline-flex items-center gap-1"
+              >
+                {canalPrincipal === 'Carteira' ? 'Abrir Mentor Comercial (Carteira) →' : 'Executar na Rotina do Dia →'}
+              </Link>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">

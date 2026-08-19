@@ -104,6 +104,8 @@ export function HojeTab({
         <EstadoVazio
           filtered={actions.length > 0 && filter !== 'todos'}
           filterLabel={filterLabel}
+          pendingCount={pendingCount}
+          onOpenPending={onOpenPending}
           onClearFilter={() => setFilter('todos')}
           onOpenRoutine={onOpenRoutine}
           onCreate={onCreate}

@@ -130,7 +130,7 @@ function Highlight({ label, name, value, icon: Icon, tone, help }: { label: stri
 
 function RankingRow({ seller, index }: { seller: RankedVendedor; index: number }) {
   const attainment = seller.meta > 0 ? Math.round((seller.vendas / seller.meta) * 100) : null
-  const rowTone = index === 0 ? 'border-l-4 border-status-warning/50 bg-status-warning-surface' : index === 1 ? 'border-l-4 border-border-strong bg-surface-alt' : index === 2 ? 'border-l-4 border-status-warning bg-status-warning-surface' : ''
+  const rowTone = index === 0 ? 'bg-status-warning-surface/60 font-medium' : index === 1 ? 'bg-surface-alt/80 font-medium' : index === 2 ? 'bg-status-warning-surface/40 font-medium' : ''
   const positionTone = index === 0 ? 'bg-status-warning/50 text-status-warning-foreground' : index === 1 ? 'bg-gray-400 text-status-warning-foreground' : index === 2 ? 'bg-status-warning text-status-warning-foreground' : 'bg-muted text-muted-foreground'
   const barTone = attainment === null ? 'bg-muted' : attainment >= 80 ? 'bg-status-success' : attainment >= 50 ? 'bg-status-warning' : 'bg-status-error'
   const textTone = attainment === null ? 'text-muted-foreground' : attainment >= 80 ? 'text-status-success-text' : attainment >= 50 ? 'text-status-warning-text' : 'text-status-error-text'

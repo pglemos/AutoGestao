@@ -1,9 +1,12 @@
+import { buildClientJourney, isCompletedClientVisit } from './clientJourney'
+
 export type ProgramSummaryInput = {
   product_name: string | null
   program_template_key: string | null
   modality: string | null
   contract_start_date: string | null
   contract_end_date: string | null
+  program_total_visits?: number | null
   visits: Array<{
     visit_number: number | null
     status: string | null
@@ -33,14 +36,24 @@ export type ProgramSummary = {
  */
 export function buildProgramSummary(input: ProgramSummaryInput): ProgramSummary {
   const visits = input.visits ?? []
-  const completed = visits.filter(visit =>
-    ['concluida', 'concluído', 'concluido', 'realizada'].includes(String(visit.status ?? '').toLowerCase()),
-  ).length
-  const onboarding = visits.filter(visit => visit.is_onboarding === true).length
   const consultant = visits.find(visit => visit.consultant_name)?.consultant_name ?? input.responsible_consultant ?? null
   const configured = Boolean(
     (input.product_name ?? '').trim() || (input.program_template_key ?? '').trim(),
   )
+  const journey = configured
+    ? buildClientJourney({
+        programKey: input.program_template_key,
+        programTotal: input.program_total_visits,
+        visits,
+      })
+    : null
+  const contractedVisits = journey?.contractedVisits ?? []
+  const completed = contractedVisits.filter(visit => isCompletedClientVisit(visit.status)).length
+  const onboarding = contractedVisits.filter(visit => {
+    const source = visits.find(candidate => candidate.visit_number === visit.visit_number)
+    return source?.is_onboarding === true
+  }).length
+  const registeredVisits = contractedVisits.length
 
   return {
     configured,
@@ -49,11 +62,10 @@ export function buildProgramSummary(input: ProgramSummaryInput): ProgramSummary 
     modality: input.modality ?? null,
     contract_start_date: input.contract_start_date ?? null,
     contract_end_date: input.contract_end_date ?? null,
-    visits: visits.length,
+    visits: registeredVisits,
     completed_visits: completed,
     onboarding_visits: onboarding,
-    progress: visits.length > 0 ? Math.min(100, Math.round((completed / visits.length) * 100)) : 0,
+    progress: registeredVisits > 0 ? Math.min(100, Math.round((completed / registeredVisits) * 100)) : 0,
     responsible_consultant: consultant,
   }
 }
-

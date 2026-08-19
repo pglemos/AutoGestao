@@ -52,6 +52,8 @@ export const ConsultingClientSchema = z.object({
   notes: z.string().nullable(),
   modality: z.enum(['Presencial', 'Online']).optional(),
   current_visit_step: z.number().optional(),
+  journey_completed_visits: z.number().optional(),
+  journey_total_visits: z.number().optional(),
   program_template_key: z.string().optional(),
   store_id: z.string().uuid().nullable().optional(),
   primary_store_id: z.string().uuid().nullable().optional(),

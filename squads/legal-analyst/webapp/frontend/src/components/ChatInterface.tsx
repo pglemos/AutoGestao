@@ -142,7 +142,7 @@ export default function ChatInterface({
                 style={{ animationDelay: "0.6s" }}
               />
             </div>
-            <span className="text-xs text-gray-500">Processando...</span>
+            <span className="ui-sm text-gray-500">Processando...</span>
           </motion.div>
         )}
       </div>
@@ -157,7 +157,7 @@ export default function ChatInterface({
             className="mx-4 mb-2 px-3 py-2 rounded-lg bg-status-error/10 border border-status-error/20 flex items-center gap-2"
           >
             <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
-            <span className="text-xs text-red-300 flex-1">{error}</span>
+            <span className="ui-sm text-red-300 flex-1">{error}</span>
             <button onClick={onDismissError}>
               <X className="w-3.5 h-3.5 text-red-400" />
             </button>
@@ -174,7 +174,7 @@ export default function ChatInterface({
             exit={{ opacity: 0, y: 8 }}
             className="mx-4 mb-2 glass-panel p-2"
           >
-            <div className="text-[10px] text-gray-500 px-2 py-1 uppercase tracking-wider">
+            <div className="ui-xs text-gray-500 px-2 py-1 uppercase tracking-wider">
               Comandos
             </div>
             {filteredCommands.map(({ cmd, desc, icon: Icon }) => (
@@ -190,7 +190,7 @@ export default function ChatInterface({
                 <Icon className="w-4 h-4 text-gray-500" />
                 <div>
                   <span className="text-sm text-brand-300 font-mono">{cmd}</span>
-                  <span className="text-xs text-gray-500 ml-2">{desc}</span>
+                  <span className="ui-sm text-gray-500 ml-2">{desc}</span>
                 </div>
               </button>
             ))}
@@ -209,7 +209,7 @@ export default function ChatInterface({
           >
             <div className="glass-panel p-3">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs text-gray-400 font-medium">
+                <span className="ui-sm text-gray-400 font-medium">
                   Consideracoes do Advogado
                 </span>
                 <button
@@ -223,7 +223,7 @@ export default function ChatInterface({
                 value={considerations}
                 onChange={(e) => setConsiderations(e.target.value)}
                 placeholder="Adicione suas consideracoes, estrategia preferida, pontos de atencao..."
-                className="input-field text-xs resize-none"
+                className="input-field ui-base resize-none"
                 rows={3}
               />
             </div>
@@ -278,7 +278,7 @@ export default function ChatInterface({
           {/* Document count indicator */}
           {documentCount > 0 && (
             <div className="pb-1">
-              <span className="badge-gold text-[10px]">
+              <span className="badge-gold ui-xs">
                 <Paperclip className="w-3 h-3 mr-1" />
                 {documentCount} doc{documentCount > 1 ? "s" : ""}
               </span>
@@ -298,15 +298,15 @@ export default function ChatInterface({
         </div>
 
         <div className="flex items-center justify-center mt-2 gap-4">
-          <span className="text-[10px] text-gray-600">
+          <span className="ui-xs text-gray-600">
             Shift+Enter para nova linha
           </span>
-          <span className="text-[10px] text-gray-700">|</span>
-          <span className="text-[10px] text-gray-600">
+          <span className="ui-xs text-gray-700">|</span>
+          <span className="ui-xs text-gray-600">
             * para comandos
           </span>
-          <span className="text-[10px] text-gray-700">|</span>
-          <span className="text-[10px] text-gray-600">
+          <span className="ui-xs text-gray-700">|</span>
+          <span className="ui-xs text-gray-600">
             @agente para direcionar
           </span>
         </div>

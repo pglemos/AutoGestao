@@ -281,5 +281,5 @@
   --mx-easing-standard: cubic-bezier(0.2, 0, 0, 1);
   --mx-easing-enter: cubic-bezier(0, 0, 0, 1);
   --mx-easing-exit: cubic-bezier(0.3, 0, 1, 1);
-  --mx-easing-emphasized: cubic-bezier(0.2, 0, 0, 1.2);
+  --mx-easing-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
 }

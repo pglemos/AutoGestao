@@ -30,7 +30,7 @@ export function VisitsSection({
         <div className="flex flex-col gap-mx-sm sm:flex-row sm:items-center sm:justify-between">
           <div>
             <Typography variant="h3" className="">Agenda manual do cliente</Typography>
-            <Typography variant="tiny" tone="muted">Crie ou ajuste diretamente qualquer visita V1 a V7.</Typography>
+            <Typography variant="tiny" tone="muted">Crie ou ajuste qualquer etapa da jornada contratada.</Typography>
           </div>
           <div className="flex flex-wrap gap-mx-xs">
             <Button

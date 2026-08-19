@@ -204,17 +204,19 @@ export function PriorityIntervention({
         </ul>
       </div>
 
-      <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
-        <Button type="button" variant="outline" onClick={() => navigate(alert.ctaTo)}>
-          <Search size={16} /> {alert.ctaLabel}
-        </Button>
-        <Button type="button" variant="outline" onClick={() => navigate(ownerPath('plano-acao'))}>
-          <ClipboardList size={16} /> Criar plano de ação
-        </Button>
-        <Button type="button" variant="outline" onClick={() => navigate(ownerPath('departamentos'))}>
-          <Users size={16} /> Delegar ao gerente
-        </Button>
-        <Button type="button" onClick={onOpenConsultant}>
+      <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <Button type="button" onClick={() => navigate(alert.ctaTo)} className="gap-2 font-semibold">
+            <Search size={16} /> {alert.ctaLabel}
+          </Button>
+          <Button type="button" variant="outline" onClick={() => navigate(ownerPath('plano-acao'))} className="gap-2">
+            <ClipboardList size={16} /> Criar plano de ação
+          </Button>
+          <Button type="button" variant="outline" onClick={() => navigate(ownerPath('departamentos'))} className="gap-2">
+            <Users size={16} /> Delegar ao gerente
+          </Button>
+        </div>
+        <Button type="button" variant="ghost" onClick={onOpenConsultant} className="gap-2 text-status-success-text hover:bg-status-success-surface hover:text-status-success-text">
           <MessageCircle size={16} /> Falar com Consultor
         </Button>
       </div>

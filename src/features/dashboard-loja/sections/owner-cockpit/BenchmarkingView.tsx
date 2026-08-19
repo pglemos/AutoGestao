@@ -10,10 +10,12 @@ export function BenchmarkingView({
   data,
   mxScore,
   marginPercent,
+  headingLevel,
 }: {
   data: DashboardData
   mxScore: number | null
   marginPercent: number | null
+  headingLevel?: 'h1' | 'h2'
 }) {
   const [region, setRegion] = useState('Sul')
   const [size, setSize] = useState('Médio')
@@ -88,7 +90,7 @@ export function BenchmarkingView({
 
   return (
     <div className="space-y-mx-md">
-      <SectionTitle title="Benchmarking" subtitle={`Compare sua loja com dados reais do recorte ${peerGroup}.`} />
+      <SectionTitle title="Benchmarking" subtitle={`Compare sua loja com dados reais do recorte ${peerGroup}.`} headingLevel={headingLevel} />
       <Card className="p-mx-lg">
         <div className="grid grid-cols-1 gap-mx-sm md:grid-cols-4">
           {Object.entries(filterOptions).map(([label, { current, set, options }]) => (

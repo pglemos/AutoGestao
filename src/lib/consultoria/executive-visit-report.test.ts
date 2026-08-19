@@ -27,10 +27,10 @@ describe('executive visit report', () => {
     })
 
     expect(report).toContain('ACOMPANHAMENTO MENSAL')
-    expect(report.indexOf('--- RESULTADO DO PERIODO ---')).toBeLessThan(report.indexOf('--- PONTOS POSITIVOS E ALINHAMENTOS ---'))
-    expect(report.indexOf('--- PONTOS A MELHORAR ---')).toBeLessThan(report.indexOf('--- TAREFAS CONCLUIDAS ---'))
-    expect(report.indexOf('--- TAREFAS E PROXIMOS PASSOS ---')).toBeLessThan(report.indexOf('--- FOCO DO PROXIMO CICLO ---'))
-    expect(report).toContain('Mes anterior: 2026-04-01 a 2026-04-30')
+    expect(report.indexOf('--- RESULTADO DO PERÍODO ---')).toBeLessThan(report.indexOf('--- PONTOS POSITIVOS E ALINHAMENTOS ---'))
+    expect(report.indexOf('--- PONTOS A MELHORAR ---')).toBeLessThan(report.indexOf('--- TAREFAS CONCLUÍDAS ---'))
+    expect(report.indexOf('--- TAREFAS E PRÓXIMOS PASSOS ---')).toBeLessThan(report.indexOf('--- FOCO DO PRÓXIMO CICLO ---'))
+    expect(report).toContain('Mês anterior: 2026-04-01 a 2026-04-30')
     expect(report).toContain('- relatorio.pdf')
   })
 
@@ -41,8 +41,8 @@ describe('executive visit report', () => {
       attachments: [],
     })
 
-    expect(report).toContain('Periodo analisado: Periodo nao informado')
-    expect(report).toContain('Resumo executivo ainda nao preenchido')
+    expect(report).toContain('Período analisado: Período não informado')
+    expect(report).toContain('Resumo executivo ainda não preenchido')
     expect(report).toContain('Nenhum item registrado')
   })
 })

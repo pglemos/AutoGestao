@@ -19,7 +19,7 @@ export function AdminHeader({ metrics, isRefetching, onRefresh, onExport }: Prop
     <PageHeading
       icon={TrendingUp}
       title={<>BI Executivo <span className="text-status-success-text">da Rede</span></>}
-      subtitle={`${metrics.storeCount} lojas | ${metrics.totalUsers} usuarios | ${metrics.consultingClients} clientes consultoria | historico ${shortDate(metrics.period.historyStart)} ate ${shortDate(metrics.period.today)}`}
+      subtitle={`${metrics.storeCount} lojas | ${metrics.totalUsers} usuários | ${metrics.consultingClients} clientes de consultoria | histórico ${shortDate(metrics.period.historyStart)} até ${shortDate(metrics.period.today)}`}
       actions={
         <div className="flex flex-wrap items-center gap-mx-sm shrink-0">
           <Button
@@ -51,4 +51,3 @@ export function AdminHeader({ metrics, isRefetching, onRefresh, onExport }: Prop
 }
 
 export default AdminHeader
-

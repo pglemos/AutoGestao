@@ -45,8 +45,8 @@ export function useScopedConsultingClientDetailBySlug(slug?: string) {
       return { error: 'Seu perfil não pode alterar visitas deste cliente.' }
     }
     if (isPerfilInternoMx(role)) return base.upsertVisit(input)
-    if (!isPmrSchedulableVisitNumber(input.visit_number)) {
-      return { error: 'O PMR trabalha com visitas de 1 a 7 e acompanhamento mensal.' }
+    if (!isPmrSchedulableVisitNumber(input.visit_number, base.client.journey_total_visits)) {
+      return { error: 'A etapa selecionada não pertence à jornada contratada deste cliente.' }
     }
 
     const payload = {

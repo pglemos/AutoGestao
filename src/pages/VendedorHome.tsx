@@ -23,6 +23,7 @@ import DeterministicActionsPanel from '@/features/deterministic-actions/Determin
 import { useDeterministicActions } from '@/features/deterministic-actions/useDeterministicActions'
 import { PageCanvas } from '@/design-system/page'
 import { PageHeading } from '@/components/molecules/PageHeading'
+import { Skeleton } from '@/components/atoms/Skeleton'
 
 function saudacao() {
   const h = new Date().getHours()
@@ -42,6 +43,39 @@ function isToday(iso: string) {
     d.getFullYear() === t.getFullYear() &&
     d.getMonth() === t.getMonth() &&
     d.getDate() === t.getDate()
+  )
+}
+
+function VendedorHomeLoadingSkeleton() {
+  return (
+    <PageCanvas
+      as="div"
+      width="dashboard"
+      bottomClearance="navigation"
+      className="flex min-h-full flex-col gap-5"
+      aria-busy="true"
+      aria-live="polite"
+      aria-label="Carregando cockpit do vendedor"
+    >
+      <div className="flex flex-col gap-3 rounded-2xl border border-border-subtle bg-white p-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-64" />
+          <Skeleton className="h-4 w-52" />
+        </div>
+        <div className="flex gap-2">
+          <Skeleton className="h-10 w-32 rounded-xl" />
+          <Skeleton className="h-10 w-36 rounded-xl" />
+          <Skeleton className="h-10 w-10 rounded-xl" />
+        </div>
+      </div>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, index) => <Skeleton key={index} className="h-36 rounded-2xl" />)}
+      </div>
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1.4fr)_minmax(320px,1fr)]">
+        <Skeleton className="min-h-[280px] rounded-2xl" />
+        <Skeleton className="min-h-[280px] rounded-2xl" />
+      </div>
+    </PageCanvas>
   )
 }
 
@@ -100,22 +134,7 @@ export default function VendedorHomePage() {
   ]
 
   if (home.isLoading) {
-    return (
-      <PageCanvas
-        as="div"
-        width="dashboard"
-        bottomClearance="navigation"
-        className="flex min-h-full items-center justify-center"
-        aria-busy="true"
-        aria-live="polite"
-        aria-label="Carregando cockpit"
-      >
-        <div className="text-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-status-success border-t-transparent mx-auto mb-4" />
-          <p className="text-sm text-muted-foreground">Carregando cockpit...</p>
-        </div>
-      </PageCanvas>
-    )
+    return <VendedorHomeLoadingSkeleton />
   }
 
   return (

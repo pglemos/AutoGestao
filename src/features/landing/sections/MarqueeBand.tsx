@@ -1,7 +1,8 @@
 /**
- * Marquee bands usadas como divisores entre sections.
- * `variant="main"` = a marquee gigante após o Hero.
- * `variant="micro"` = a faixa fina após a Problem section.
+ * Static grid bands used as section dividers.
+ * `variant="main"` = feature grid after Hero.
+ * `variant="micro"` = compact grid after Problem section.
+ * Replaces auto-scrolling marquee with user-controlled static content.
  */
 type Props = { variant?: 'main' | 'micro' }
 
@@ -17,48 +18,49 @@ const MAIN_ITEMS = [
   ['ROI', true],
 ] as const
 
-function MainTrackContent() {
+const MICRO_ITEMS = [
+  'Rotina vira rastro',
+  'Rastro vira dado',
+  'Dado vira decisão',
+] as const
+
+function MainGridContent() {
   return (
-    <>
+    <div className="feature-grid" role="list">
       {MAIN_ITEMS.map(([label, italic], i) => (
-        <span key={i}>
-          <span className={italic ? 'it' : undefined}>{label}</span>
+        <div key={i} className="feature-card" role="listitem">
+          <span className={italic ? 'it' : ''}>{label}</span>
           <span className="star">✦</span>
-        </span>
+        </div>
       ))}
-    </>
+    </div>
+  )
+}
+
+function MicroGridContent() {
+  return (
+    <div className="micro-grid" role="list">
+      {MICRO_ITEMS.map((item, i) => (
+        <div key={i} className="micro-card" role="listitem">
+          <span>{item.replace('vira', ' <span className="it">vira</span> ')}</span>
+          <span className="star">✦</span>
+        </div>
+      ))}
+    </div>
   )
 }
 
 export function MarqueeBand({ variant = 'main' }: Props) {
   if (variant === 'micro') {
     return (
-      <div className="micro-mq" aria-hidden="true">
-        <div className="micro-mq-row">
-          <span>
-            Rotina <span className="it">vira</span> rastro <span className="star">✦</span> Rastro{' '}
-            <span className="it">vira</span> dado <span className="star">✦</span> Dado{' '}
-            <span className="it">vira</span> decisão <span className="star">✦</span>
-          </span>
-          <span>
-            Rotina <span className="it">vira</span> rastro <span className="star">✦</span> Rastro{' '}
-            <span className="it">vira</span> dado <span className="star">✦</span> Dado{' '}
-            <span className="it">vira</span> decisão <span className="star">✦</span>
-          </span>
-        </div>
+      <div className="micro-grid-wrapper" aria-label="Rotina para decisão">
+        <MicroGridContent />
       </div>
     )
   }
   return (
-    <div className="marquee" aria-hidden="true">
-      <div className="marquee-track">
-        <span>
-          <MainTrackContent />
-        </span>
-        <span>
-          <MainTrackContent />
-        </span>
-      </div>
+    <div className="feature-grid-wrapper" aria-label="Funcionalidades MX Performance">
+      <MainGridContent />
     </div>
   )
 }

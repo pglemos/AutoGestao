@@ -103,26 +103,19 @@ export function printCalendar(actions, refDate, companyName, unitName) {
 
   const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Calendário — ${formatMonthYear(refDate)}</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; color: #1a1a1a; }
-    h1 { font-size: 20px; margin: 0 0 4px; }
-    .meta { font-size: 12px; color: #666; margin-bottom: 16px; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 20px; color: #18181b; }
+    h1 { font-size: 20px; margin: 0 0 4px; font-weight: 700; }
+    .meta { font-size: 12px; color: #71717a; margin-bottom: 16px; }
     table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-    th { background: #f0f0f0; padding: 6px; font-size: 11px; text-align: center; border: 1px solid #ddd; }
-    td { vertical-align: top; padding: 4px; border: 1px solid #ddd; height: 80px; }
+    th { background: #f4f4f5; padding: 6px; font-size: 11px; text-align: center; border: 1px solid #e4e4e7; font-weight: 600; }
+    td { vertical-align: top; padding: 4px; border: 1px solid #e4e4e7; height: 80px; }
     td.empty { background: #fafafa; }
-    td.today { background: #fffde7; }
-    .day-num { font-weight: bold; font-size: 12px; margin-bottom: 2px; }
-    .event { font-size: 9px; padding: 1px 3px; margin: 1px 0; border-radius: 2px; background: #f5f5f5; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .event.commercial { border-left: 3px solid #8b5cf6; }
-    .event.marketing { border-left: 3px solid #6366F1; }
-    .event.product_stock { border-left: 3px solid #3b82f6; }
-    .event.financial { border-left: 3px solid #10b981; }
-    .event.operations { border-left: 3px solid #f97316; }
-    .event.people_hr { border-left: 3px solid #14b8a6; }
-    .event.general { border-left: 3px solid #6366f1; }
+    td.today { background: #f0fdf4; border-color: #86efac; }
+    .day-num { font-weight: 700; font-size: 12px; margin-bottom: 2px; }
+    .event { font-size: 10px; padding: 2px 4px; margin: 2px 0; border-radius: 4px; background: #f4f4f5; border: 1px solid #e4e4e7; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .legend { margin-top: 16px; font-size: 11px; display: flex; gap: 12px; flex-wrap: wrap; }
     .legend-item { display: flex; align-items: center; gap: 4px; }
-    .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
     @media print { body { margin: 10px; } }
   </style></head><body>
   <h1>Calendário do Plano de Ação — ${formatMonthYear(refDate)}</h1>

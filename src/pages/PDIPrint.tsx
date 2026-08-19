@@ -109,7 +109,7 @@ export default function PDIPrint() {
 
                     <div className="flex-1 flex flex-col justify-center space-y-mx-xl">
                         <div>
-                            <Typography variant="h3" className="text-brand-secondary border-l-4 border-brand-primary pl-4 mb-4">Metas de Curto Prazo (6 Meses)</Typography>
+                            <Typography variant="h3" className="text-brand-secondary border-b border-brand-primary/40 pb-1.5 mb-4">Metas de Curto Prazo (6 Meses)</Typography>
                             <ul className="space-y-mx-xs pl-8 list-none">
                                 {metas6.map((m, i) => (
                                     <li key={i} className="text-sm font-bold uppercase relative before:content-[''] before:absolute before:-left-5 before:top-1.5 before:w-2 before:h-2 before:bg-brand-primary before:rounded-full">
@@ -119,7 +119,7 @@ export default function PDIPrint() {
                             </ul>
                         </div>
                         <div>
-                            <Typography variant="h3" className="text-brand-secondary border-l-4 border-brand-primary pl-4 mb-4">Metas de Médio Prazo (12 Meses)</Typography>
+                            <Typography variant="h3" className="text-brand-secondary border-b border-brand-primary/40 pb-1.5 mb-4">Metas de Médio Prazo (12 Meses)</Typography>
                             <ul className="space-y-mx-xs pl-8 list-none">
                                 {metas12.map((m, i) => (
                                     <li key={i} className="text-sm font-bold uppercase relative before:content-[''] before:absolute before:-left-5 before:top-1.5 before:w-2 before:h-2 before:bg-brand-primary before:rounded-full">
@@ -129,7 +129,7 @@ export default function PDIPrint() {
                             </ul>
                         </div>
                         <div>
-                            <Typography variant="h3" className="text-brand-secondary border-l-4 border-brand-primary pl-4 mb-4">Metas de Longo Prazo (24 Meses)</Typography>
+                            <Typography variant="h3" className="text-brand-secondary border-b border-brand-primary/40 pb-1.5 mb-4">Metas de Longo Prazo (24 Meses)</Typography>
                             <ul className="space-y-mx-xs pl-8 list-none">
                                 {metas24.map((m, i) => (
                                     <li key={i} className="text-sm font-bold uppercase relative before:content-[''] before:absolute before:-left-5 before:top-1.5 before:w-2 before:h-2 before:bg-brand-primary before:rounded-full">
@@ -197,7 +197,7 @@ export default function PDIPrint() {
                     <div className="mt-auto">
                         <Typography variant="tiny" className="text-status-error-text mb-4">Top 5 Maiores Lacunas (Gaps) Identificadas</Typography>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-sm">                            {bundle.top_5_gaps.map((gap, i) => (
-                                <div key={i} className="bg-status-error-surface p-mx-sm border-l-4 border-status-error flex justify-between items-center">
+                                <div key={i} className="bg-status-error-surface p-mx-sm border border-status-error/30 rounded-lg flex justify-between items-center">
                                     <Typography variant="p" className="text-xs font-bold">{gap.competencia}</Typography>
                                     <Typography variant="h3" tone="error" className="text-lg">-{gap.gap}</Typography>
                                 </div>

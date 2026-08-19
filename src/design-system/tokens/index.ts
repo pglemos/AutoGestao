@@ -65,7 +65,7 @@ export const MX_MOTION = {
     standard: 'cubic-bezier(0.2, 0, 0, 1)',
     enter: 'cubic-bezier(0, 0, 0, 1)',
     exit: 'cubic-bezier(0.3, 0, 1, 1)',
-    emphasized: 'cubic-bezier(0.2, 0, 0, 1.2)',
+    emphasized: 'cubic-bezier(0.16, 1, 0.3, 1)',
   },
 } as const
 

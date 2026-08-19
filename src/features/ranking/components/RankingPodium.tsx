@@ -45,7 +45,7 @@ export function RankingPodium({ entries, onSelect }: Props) {
             className={`flex flex-col items-center group cursor-pointer transition-transform duration-500 hover:-translate-y-2 z-[var(--mx-z-sticky)] ${isFirst ? '-mb-4 sm:-mb-0' : ''}`}
           >
             <div className="relative mb-3 flex flex-col items-center">
-              {isFirst && <Crown className="w-mx-lg h-mx-lg text-status-warning-text mb-2 animate-bounce drop-shadow-lg" />}
+              {isFirst && <Crown className="w-mx-lg h-mx-lg text-status-warning-text mb-2 drop-shadow-[0_2px_8px_rgba(245,158,11,0.4)]" />}
               <div className={`rounded-full p-mx-tiny transition-all ${isFirst ? 'bg-gradient-to-br from-brand-primary to-status-warning shadow-mx-glow-brand' : 'bg-white shadow-xl'}`}>
                 <Avatar
                   src={seller.avatar_url || undefined}

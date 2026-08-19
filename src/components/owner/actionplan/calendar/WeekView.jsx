@@ -34,9 +34,9 @@ function WeekEvent({ action, provided, isDragging, onOpenAction }) {
           onOpenAction(action)
         }
       }}
-      className={`mb-1.5 cursor-grab rounded border-l-2 bg-white p-2 text-xs shadow-sm hover:shadow-md ${
+      className={`mb-1.5 cursor-grab rounded-lg border bg-card p-2 text-xs shadow-xs hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/20 ${
         deptStyle.border || "border-border"
-      } ${late ? "border-l-red-500" : ""} ${isDragging ? "opacity-70" : ""}`}
+      } ${late ? "border-status-error/50 bg-status-error-surface/30" : ""} ${isDragging ? "opacity-70" : ""}`}
     >
       <div className="flex items-center justify-between">
         <span className="font-medium text-foreground">{action.code}</span>
@@ -162,7 +162,7 @@ function WeekViewMobile({ refDate, selectedDate, actionsByDate, onSelectDate, on
               <button
                 key={action.id}
                 onClick={() => onOpenAction(action)}
-                className={`w-full rounded border-l-2 bg-white p-3 text-left shadow-sm ${deptStyle.border || "border-border"} ${late ? "border-l-red-500" : ""}`}
+                className={`w-full rounded-xl border bg-card p-3 text-left shadow-xs hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/20 ${deptStyle.border || "border-border"} ${late ? "border-status-error/50 bg-status-error-surface/30" : ""}`}
               >
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-foreground">{action.code}</span>

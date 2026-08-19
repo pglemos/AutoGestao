@@ -67,18 +67,21 @@ export default function MessageBubble({ message, onReferenceClick }: MessageBubb
         } px-4 py-3`}
       >
         {/* Agent name */}
-        {message.agent_name && (
-          <div className="flex items-center gap-2 mb-1.5">
-            <span className="text-xs font-semibold text-brand-300">
-              {message.agent_name}
-            </span>
-            {message.metadata?.phase && (
-              <span className="badge-gray text-[10px]">
-                {String(message.metadata.phase)}
+        {message.agent_name && (() => {
+          const phaseStr = message.metadata?.phase ? String(message.metadata.phase) : null;
+          return (
+            <div className="flex items-center gap-2 mb-1.5">
+              <span className="ui-sm font-semibold text-brand-300">
+                {message.agent_name}
               </span>
-            )}
-          </div>
-        )}
+              {phaseStr && (
+                <span className="badge-gray ui-xs">
+                  {phaseStr}
+                </span>
+              )}
+            </div>
+          );
+        })()}
 
         {/* Message content */}
         <div className="markdown-body text-sm">
@@ -123,7 +126,7 @@ export default function MessageBubble({ message, onReferenceClick }: MessageBubb
         )}
 
         {/* Timestamp */}
-        <div className="mt-1.5 text-[10px] text-gray-600">
+        <div className="mt-1.5 ui-xs text-gray-600">
           {new Date(message.timestamp).toLocaleTimeString("pt-BR", {
             hour: "2-digit",
             minute: "2-digit",
