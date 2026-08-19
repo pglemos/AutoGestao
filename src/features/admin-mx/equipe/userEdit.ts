@@ -17,12 +17,19 @@ export const VIEW_OPTIONS = [
   { value: 'DEPARTAMENTAL', label: 'Departamental', requiresRole: ['MARKETING', 'PRODUTO_ESTOQUE', 'FINANCEIRO_ADMINISTRATIVO', 'RH', 'OPERACOES', 'DIRETOR'] },
 ] as const
 
+/**
+ * Papéis que um vínculo de loja pode ter, no vocabulário de `vinculos_loja.role`
+ * — o mesmo que ranking, dashboard, check-in e RLS leem.
+ *
+ * Antes esta lista trazia os tipos de atribuição do Base44
+ * (RESPONSAVEL_PRINCIPAL, CORRESPONSAVEL, ACESSO_ADICIONAL, …), gravados em
+ * `vinculos_equipe_loja`. Nenhuma outra parte do sistema consulta essa tabela e
+ * ela está vazia, então toda atribuição feita por aqui era invisível.
+ */
 export const ASSIGNMENT_TYPES = [
-  { value: 'RESPONSAVEL_PRINCIPAL', label: 'Responsável principal' },
-  { value: 'CORRESPONSAVEL', label: 'Corresponsável' },
-  { value: 'ACESSO_ADICIONAL', label: 'Acesso adicional' },
-  { value: 'USUARIO_OPERACIONAL', label: 'Usuário operacional' },
-  { value: 'SUBSTITUICAO_TEMPORARIA', label: 'Substituição temporária' },
+  { value: 'vendedor', label: 'Vendedor' },
+  { value: 'gerente', label: 'Gerente' },
+  { value: 'dono', label: 'Dono' },
 ] as const
 
 export const USER_STATUS_OPTIONS = [
@@ -174,15 +181,15 @@ export function validateStoreAssignmentAdd(
   return errors
 }
 
-/** Impede remoção do último responsável principal de uma loja. */
+/** Impede remoção do último gerente de uma loja. */
 export function canRemoveStoreAssignment(
   assignmentToRemove: StoreAssignmentDraft,
   activeAssignments: StoreAssignmentDraft[],
   storeName: string,
 ): string | null {
-  if (assignmentToRemove.assignment_type !== 'RESPONSAVEL_PRINCIPAL') return null
-  const ownersOfStore = activeAssignments.filter(a => a.store_id === assignmentToRemove.store_id && a.assignment_type === 'RESPONSAVEL_PRINCIPAL')
-  if (ownersOfStore.length <= 1) return `A Loja ${storeName} não pode ficar sem responsável gerencial.`
+  if (assignmentToRemove.assignment_type !== 'gerente') return null
+  const managersOfStore = activeAssignments.filter(a => a.store_id === assignmentToRemove.store_id && a.assignment_type === 'gerente')
+  if (managersOfStore.length <= 1) return `A Loja ${storeName} não pode ficar sem responsável gerencial.`
   return null
 }
 

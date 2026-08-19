@@ -55,7 +55,11 @@ export async function fetchTeamUserDetail(userId: string): Promise<TeamUserDetai
       .maybeSingle(),
     supabase.from('perfil_consultor_mx').select('papel_interno, situacao, cidade').eq('user_id', userId).maybeSingle(),
     supabase.from('user_roles').select('id, role_id, is_primary, status, valid_from, valid_until, change_reason').eq('user_id', userId),
-    supabase.from('vinculos_equipe_loja').select('*').eq('user_id', userId).order('created_at', { ascending: true }),
+    supabase
+      .from('vinculos_loja')
+      .select('id, store_id, role, is_active, created_at, ended_at, lojas(name)')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: true }),
     supabase.from('delegacoes_gerenciais').select('*').eq('user_id', userId).order('created_at', { ascending: true }),
     supabase.from('roles').select('id, code'),
   ])
@@ -100,15 +104,18 @@ export async function fetchTeamUserDetail(userId: string): Promise<TeamUserDetai
       ? { papel_interno: profileRes.data.papel_interno, situacao: profileRes.data.situacao, cidade: profileRes.data.cidade }
       : null,
     roleGrants,
-    storeAssignments: (storesRes.data ?? []).map(s => ({
+    // `vinculos_loja` não guarda loja principal nem vigência inicial. O vínculo
+    // ativo mais antigo responde como principal, e a data de criação serve de
+    // início — é o que o dado real permite afirmar.
+    storeAssignments: (storesRes.data ?? []).map((s, index, all) => ({
       id: s.id,
-      store_id: s.loja_id,
-      store_name: s.loja_nome,
-      assignment_type: s.assignment_type.toUpperCase(),
-      is_primary: s.is_primary,
-      valid_from: s.valid_from ?? '',
-      valid_until: s.valid_until ?? '',
-      status: (s.status === 'ativo' ? 'ATIVO' : 'ENCERRADO') as StoreAssignmentDraft['status'],
+      store_id: s.store_id,
+      store_name: (s.lojas as { name?: string } | null)?.name ?? '',
+      assignment_type: s.role,
+      is_primary: s.is_active && all.findIndex(other => other.is_active) === index,
+      valid_from: s.created_at ?? '',
+      valid_until: s.ended_at ?? '',
+      status: (s.is_active ? 'ATIVO' : 'ENCERRADO') as StoreAssignmentDraft['status'],
     })),
     delegations: (delegRes.data ?? []).map(d => ({
       id: d.id,
@@ -166,13 +173,22 @@ export async function saveUserAccess(userId: string, status: string, activatedAt
         .eq('user_id', userId)
         .eq('status', 'ativo'),
       supabase
-        .from('vinculos_equipe_loja')
-        .update({ status: 'encerrado', valid_until: now })
+        .from('vinculos_loja')
+        .update({ is_active: false, ended_at: now })
         .eq('user_id', userId)
-        .eq('status', 'ativo'),
+        .eq('is_active', true),
     ])
     if (rgError) return { error: rgError.message }
     if (saError) return { error: saError.message }
+
+    // Desativar acesso precisa encerrar também o vínculo de vendedor: é ele que
+    // mantém a pessoa no ranking, no check-in e na contagem de equipe.
+    const { error: sellerError } = await supabase
+      .from('vendedores_loja')
+      .update({ is_active: false, ended_at: now })
+      .eq('seller_user_id', userId)
+      .eq('is_active', true)
+    if (sellerError) return { error: sellerError.message }
   }
 
   return { error: null }
@@ -221,36 +237,55 @@ export async function removeRoleGrant(grantId: string): Promise<{ error: string 
   return { error: error?.message ?? null }
 }
 
+/**
+ * Vincula a pessoa à loja em `vinculos_loja`, a tabela que o resto do sistema lê.
+ *
+ * Um vendedor precisa também de linha em `vendedores_loja`: é dela que saem
+ * ranking, check-in e a contagem de equipe da carteira. Sem as duas, a pessoa
+ * aparece vinculada aqui e some de todo o resto.
+ */
 export async function addStoreAssignment(userId: string, assignment: StoreAssignmentDraft): Promise<{ error: string | null }> {
-  const { error } = await supabase.from('vinculos_equipe_loja').insert({
+  const role = assignment.assignment_type.toLowerCase()
+  const { error } = await supabase.from('vinculos_loja').insert({
     user_id: userId,
-    loja_id: assignment.store_id,
-    loja_nome: assignment.store_name,
-    assignment_type: assignment.assignment_type.toLowerCase(),
-    is_primary: assignment.is_primary,
-    valid_from: assignment.valid_from || null,
-    valid_until: assignment.valid_until || null,
-    status: 'ativo',
+    store_id: assignment.store_id,
+    role,
+    is_active: true,
   })
-  return { error: error?.message ?? null }
-}
+  if (error) return { error: error.message }
 
-export async function setStoreAssignmentPrimary(userId: string, assignmentId: string): Promise<{ error: string | null }> {
-  const [{ error: clearError }, { error: setError }] = await Promise.all([
-    supabase.from('vinculos_equipe_loja').update({ is_primary: false }).eq('user_id', userId).eq('is_primary', true),
-    supabase.from('vinculos_equipe_loja').update({ is_primary: true }).eq('id', assignmentId),
-  ])
-  if (clearError) return { error: clearError.message }
-  if (setError) return { error: setError.message }
+  if (role === 'vendedor') {
+    const { error: sellerError } = await supabase.from('vendedores_loja').insert({
+      seller_user_id: userId,
+      store_id: assignment.store_id,
+      is_active: true,
+      started_at: assignment.valid_from || todayIso(),
+    })
+    if (sellerError) return { error: sellerError.message }
+  }
   return { error: null }
 }
 
 export async function removeStoreAssignment(assignmentId: string): Promise<{ error: string | null }> {
-  const { error } = await supabase
-    .from('vinculos_equipe_loja')
-    .update({ status: 'encerrado', valid_until: todayIso() })
+  const ended = todayIso()
+  const { data, error } = await supabase
+    .from('vinculos_loja')
+    .update({ is_active: false, ended_at: ended })
     .eq('id', assignmentId)
-  return { error: error?.message ?? null }
+    .select('user_id, store_id, role')
+    .maybeSingle()
+  if (error) return { error: error.message }
+
+  if (data?.role === 'vendedor') {
+    const { error: sellerError } = await supabase
+      .from('vendedores_loja')
+      .update({ is_active: false, ended_at: ended })
+      .eq('seller_user_id', data.user_id)
+      .eq('store_id', data.store_id)
+      .eq('is_active', true)
+    if (sellerError) return { error: sellerError.message }
+  }
+  return { error: null }
 }
 
 export async function createDelegation(userId: string, draft: ManagerDelegationDraft): Promise<{ error: string | null }> {

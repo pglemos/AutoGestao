@@ -5,10 +5,10 @@
 - Rotas públicas: **9**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
-- Tabelas referenciadas pelo runtime: **175**
+- Tabelas referenciadas pelo runtime: **174**
 - RPCs referenciadas pelo runtime: **89**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **379**
+- Pares tabela/operação encontrados: **376**
 
 ## Rotas
 
@@ -213,7 +213,7 @@
 | `logs_compartilhamento_whatsapp` | 1 |
 | `logs_reprocessamento` | 1 |
 | `logs_rotina_gerente` | 1 |
-| `lojas` | 29 |
+| `lojas` | 28 |
 | `manager_daily_tasks` | 1 |
 | `manager_lead_conferences` | 1 |
 | `marketing_mensal_consultoria` | 1 |
@@ -305,12 +305,11 @@
 | `veiculos_estoque` | 4 |
 | `vendedor_nivel_carreira` | 1 |
 | `vendedor_perfil` | 4 |
-| `vendedores_loja` | 8 |
+| `vendedores_loja` | 9 |
 | `versoes_metodologia_produto` | 1 |
 | `vinculo_modelo_relatorio_encontro` | 1 |
 | `vinculo_plano_acao_encontro` | 1 |
-| `vinculos_equipe_loja` | 2 |
-| `vinculos_loja` | 17 |
+| `vinculos_loja` | 19 |
 | `visitas_consultoria` | 11 |
 | `vw_jornada_alem_do_contratado` | 1 |
 
@@ -487,7 +486,7 @@
 | `logs_rotina_gerente:upsert` | 1 |
 | `lojas:delete` | 1 |
 | `lojas:insert` | 3 |
-| `lojas:select` | 29 |
+| `lojas:select` | 28 |
 | `lojas:update` | 1 |
 | `manager_daily_tasks:select` | 1 |
 | `manager_daily_tasks:update` | 1 |
@@ -672,9 +671,9 @@
 | `vendedor_nivel_carreira:upsert` | 1 |
 | `vendedor_perfil:select` | 4 |
 | `vendedor_perfil:upsert` | 3 |
-| `vendedores_loja:insert` | 2 |
+| `vendedores_loja:insert` | 3 |
 | `vendedores_loja:select` | 8 |
-| `vendedores_loja:update` | 1 |
+| `vendedores_loja:update` | 2 |
 | `versoes_metodologia_produto:insert` | 1 |
 | `versoes_metodologia_produto:select` | 1 |
 | `versoes_metodologia_produto:update` | 1 |
@@ -685,13 +684,10 @@
 | `vinculo_plano_acao_encontro:insert` | 1 |
 | `vinculo_plano_acao_encontro:select` | 1 |
 | `vinculo_plano_acao_encontro:update` | 1 |
-| `vinculos_equipe_loja:insert` | 2 |
-| `vinculos_equipe_loja:select` | 1 |
-| `vinculos_equipe_loja:update` | 1 |
 | `vinculos_loja:delete` | 1 |
-| `vinculos_loja:insert` | 1 |
-| `vinculos_loja:select` | 16 |
-| `vinculos_loja:update` | 1 |
+| `vinculos_loja:insert` | 3 |
+| `vinculos_loja:select` | 17 |
+| `vinculos_loja:update` | 2 |
 | `visitas_consultoria:delete` | 2 |
 | `visitas_consultoria:insert` | 5 |
 | `visitas_consultoria:select` | 11 |

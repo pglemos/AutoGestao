@@ -56,15 +56,13 @@ export async function createTeamMember(draft: MemberCreateDraft): Promise<{ erro
   }
 
   if (draft.store_id) {
-    const { data: store } = await supabase.from('lojas').select('name').eq('id', draft.store_id).maybeSingle()
-    const { error: linkError } = await supabase.from('vinculos_equipe_loja').insert({
+    const { error: linkError } = await supabase.from('vinculos_loja').insert({
       user_id: id,
-      loja_id: draft.store_id,
-      loja_nome: store?.name ?? '',
-      assignment_type: 'responsavel_principal',
-      is_primary: true,
-      valid_from: new Date().toISOString().slice(0, 10),
-      status: 'ativo',
+      store_id: draft.store_id,
+      // Membro interno MX não é vendedor nem dono da loja; entra como gerente,
+      // que é o papel de acesso operacional em `vinculos_loja`.
+      role: 'gerente',
+      is_active: true,
     })
     if (linkError) return { error: linkError.message }
   }

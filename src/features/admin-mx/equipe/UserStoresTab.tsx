@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { Building2, Plus, Star, X } from 'lucide-react'
+import { Building2, Plus, X } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { MxSelect, MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
 import { toast } from '@/lib/toast'
 import { ASSIGNMENT_TYPES, canRemoveStoreAssignment, todayIso, validateStoreAssignmentAdd, type RoleGrantDraft, type StoreAssignmentDraft } from './userEdit'
-import { addStoreAssignment, removeStoreAssignment, setStoreAssignmentPrimary, type AvailableStore } from './userEditMutations'
+import { addStoreAssignment, removeStoreAssignment, type AvailableStore } from './userEditMutations'
 
 const ASSIGNMENT_LABEL = Object.fromEntries(ASSIGNMENT_TYPES.map(a => [a.value, a.label])) as Record<string, string>
 
@@ -84,22 +84,6 @@ export function UserStoresTab(props: {
     }
   }
 
-  const setPrimary = async (assignment: StoreAssignmentDraft) => {
-    if (!assignment.id) return
-    setSaving(true)
-    setError('')
-    try {
-      const result = await setStoreAssignmentPrimary(userId, assignment.id)
-      if (result.error) {
-        setError(result.error)
-        return
-      }
-      onStoreAssignments(storeAssignments.map(a => ({ ...a, is_primary: a.id === assignment.id })))
-      toast.success('Loja principal definida.')
-    } finally {
-      setSaving(false)
-    }
-  }
 
   return (
     <div className="space-y-4">
@@ -141,9 +125,6 @@ export function UserStoresTab(props: {
             {activeAssignments.map(assignment => (
               <div key={assignment.id} className="flex items-center justify-between rounded-lg border border-border bg-surface-default px-3 py-2">
                 <div className="flex items-center gap-2">
-                  <button type="button" title="Definir como principal" disabled={saving} onClick={() => void setPrimary(assignment)}>
-                    <Star size={14} className={assignment.is_primary ? 'fill-status-warning text-status-warning' : 'text-muted-foreground'} />
-                  </button>
                   <Building2 size={14} className="text-status-success-text" />
                   <div>
                     <span className="text-sm font-medium text-foreground">{assignment.store_name}</span>

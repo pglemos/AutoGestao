@@ -109,9 +109,20 @@ describe('vínculo de loja', () => {
     expect(validateStoreAssignmentAdd(assignment(), [assignment()], false)).toEqual([])
   })
 
-  test('bloqueia remoção do último responsável principal', () => {
-    const resp = assignment({ assignment_type: 'RESPONSAVEL_PRINCIPAL' })
-    expect(canRemoveStoreAssignment(resp, [resp], 'Matriz')).toContain('não pode ficar sem responsável')
+  test('bloqueia remoção do último gerente da loja', () => {
+    const gerente = assignment({ assignment_type: 'gerente' })
+    expect(canRemoveStoreAssignment(gerente, [gerente], 'Matriz')).toContain('não pode ficar sem responsável')
+  })
+
+  test('libera remoção quando a loja ainda fica com outro gerente', () => {
+    const a = assignment({ id: 'a', assignment_type: 'gerente' })
+    const b = assignment({ id: 'b', assignment_type: 'gerente' })
+    expect(canRemoveStoreAssignment(a, [a, b], 'Matriz')).toBeNull()
+  })
+
+  test('vendedor não segura a loja: removê-lo nunca é bloqueado', () => {
+    const vendedor = assignment({ assignment_type: 'vendedor' })
+    expect(canRemoveStoreAssignment(vendedor, [vendedor], 'Matriz')).toBeNull()
   })
 
   test('planPrimaryAssignment marca apenas o alvo como principal', () => {
