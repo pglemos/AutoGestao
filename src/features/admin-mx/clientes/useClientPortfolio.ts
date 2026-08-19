@@ -44,7 +44,7 @@ export function useClientPortfolio(): State {
         supabase.from('unidades_cliente_consultoria').select('client_id, is_primary, city').in('client_id', ids),
         supabase.from('visitas_consultoria').select('client_id, status').in('client_id', ids),
         supabase.from('modulos_cliente_consultoria').select('client_id, enabled').in('client_id', ids),
-        supabase.from('atribuicoes_consultoria').select('client_id, active').in('client_id', ids),
+        supabase.from('atribuicoes_consultoria').select('client_id, user_id, assignment_role, active').in('client_id', ids),
         supabase.from('acessos_cliente_consultoria').select('client_id, status, nome, is_dono_master').in('client_id', ids),
         supabase.from('usuarios').select('id, name'),
         supabase.from('programas_visita_consultoria').select('program_key, total_visits'),
@@ -71,11 +71,25 @@ export function useClientPortfolio(): State {
       const assignmentCount = countBy((assignments.data ?? []).filter(row => row.active !== false), row => row.client_id)
       const userCount = countBy((access.data ?? []).filter(row => String(row.status ?? 'ativo') !== 'inativo'), row => row.client_id)
       const ownerNames = new Map((owners.data ?? []).map(row => [row.id, row.name]))
+      // Quem responde pelo cliente é o consultor com atribuição de responsável.
+      // `implementation_owner_id` só está preenchido numa minoria dos clientes e
+      // fica como segunda opção: sem isto a carteira dizia "Não atribuído" para
+      // quase todo mundo, mesmo com atribuição ativa registrada.
+      const responsibleId = new Map<string, string>()
+      for (const row of (assignments.data ?? [])) {
+        if (row.active === false || row.assignment_role !== 'responsavel' || !row.user_id) continue
+        if (!responsibleId.has(row.client_id)) responsibleId.set(row.client_id, row.user_id)
+      }
       const programTotals = new Map((programs.data ?? []).map(row => [row.program_key, row.total_visits ?? 0]))
 
-      setRows((clients ?? []).map(client => ({
+      setRows((clients ?? []).map(client => {
+        const ownerId = responsibleId.get(client.id) ?? client.implementation_owner_id
+        return {
         ...client,
-        implementation_owner_name: client.implementation_owner_id ? ownerNames.get(client.implementation_owner_id) ?? null : null,
+        // O id acompanha o nome para o filtro por responsável continuar casando
+        // com a coluna, e para dois consultores homônimos não colapsarem em um.
+        implementation_owner_id: ownerId,
+        implementation_owner_name: ownerId ? ownerNames.get(ownerId) ?? null : null,
         primary_store_city: primaryUnitCity.get(client.id) ?? null,
         main_contact_name: primaryContact.get(client.id) ?? null,
         units: unitCount.get(client.id) ?? 0,
@@ -85,7 +99,8 @@ export function useClientPortfolio(): State {
         visitsTotal: programTotals.get(client.program_template_key ?? '') ?? visitCount.get(client.id) ?? 0,
         modulesEnabled: moduleCount.get(client.id) ?? 0,
         assignments: assignmentCount.get(client.id) ?? 0,
-      })) as PortfolioClient[])
+        }
+      }) as PortfolioClient[])
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'Falha ao carregar a carteira de clientes.')
       setRows([])
