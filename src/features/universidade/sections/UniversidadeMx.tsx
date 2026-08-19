@@ -6,6 +6,7 @@ import { Card } from '@/components/molecules/Card'
 import { PageHeading } from '@/components/molecules/PageHeading'
 import { ConditionalPageCanvas } from '@/design-system/page'
 import { cn } from '@/lib/utils'
+import { useAuth } from '@/hooks/useAuth'
 import { useVendedorPerfil } from '@/features/crm/hooks/useVendedorPerfil'
 import {
   useUniversidadeMx,
@@ -54,10 +55,17 @@ type Props = {
 }
 
 export function UniversidadeMx({ userId, embedded = false }: Props) {
+  // A rota monta este componente sem props, então sem o fallback o hook recebia
+  // `undefined` e nunca carregava biblioteca nem certificações — o vendedor via
+  // "Nenhuma trilha disponível" mesmo com aulas publicadas para ele.
+  // `profile` e não `supabaseUser`: assim a tela acompanha a simulação de papel.
+  const { profile } = useAuth()
+  const resolvedUserId = userId ?? profile?.id ?? null
   const {
     trilhas,
     aulas,
     certificacoes,
+    biblioteca,
     loading,
     error,
     refresh,
@@ -65,7 +73,7 @@ export function UniversidadeMx({ userId, embedded = false }: Props) {
     toggleFiltro,
     searchQuery,
     setSearchQuery,
-  } = useUniversidadeMx(userId)
+  } = useUniversidadeMx(resolvedUserId)
 
   // Maturity-based trilha recommendation (EV-5.3)
   const { perfil } = useVendedorPerfil()
@@ -182,7 +190,53 @@ export function UniversidadeMx({ userId, embedded = false }: Props) {
         </Card>
       )}
 
+      {biblioteca.length > 0 && (
+        <Card className="p-mx-md">
+          <header className="mb-mx-sm flex items-center gap-mx-xs">
+            <div className="rounded-2xl bg-brand-primary/10 p-mx-xs text-brand-primary">
+              <GraduationCap size={18} aria-hidden="true" />
+            </div>
+            <Typography variant="h3" className="font-bold">
+              Biblioteca ({biblioteca.length})
+            </Typography>
+          </header>
+          <ul className="grid grid-cols-1 gap-mx-sm md:grid-cols-2 xl:grid-cols-3">
+            {biblioteca.map((item) => (
+              <li key={item.id} className="rounded-2xl border border-border bg-white p-mx-sm">
+                <div className="flex items-start justify-between gap-mx-xs">
+                  <Typography variant="caption" className="font-bold">
+                    {item.title}
+                  </Typography>
+                  {item.completed && (
+                    <Award size={16} className="shrink-0 text-status-success-text" aria-label="Concluída" />
+                  )}
+                </div>
+                {item.description && (
+                  <Typography variant="tiny" tone="muted" className="mt-mx-tiny block line-clamp-2">
+                    {item.description}
+                  </Typography>
+                )}
+                <Typography variant="tiny" tone="muted" className="mt-mx-xs block uppercase tracking-widest">
+                  {item.category} · {item.duration_minutes} min
+                </Typography>
+                {item.video_url && (
+                  <a
+                    href={item.video_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-mx-xs inline-block text-mx-tiny font-bold uppercase tracking-widest text-brand-primary underline"
+                  >
+                    Assistir
+                  </a>
+                )}
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
+
       {!trilhas.length ? (
+        biblioteca.length > 0 ? null : (
         <Card className="p-mx-md">
           <div className="rounded-xl border border-dashed border-border p-mx-md text-center">
             <Typography variant="tiny" tone="muted" className="font-bold">
@@ -194,6 +248,7 @@ export function UniversidadeMx({ userId, embedded = false }: Props) {
             </Typography>
           </div>
         </Card>
+        )
       ) : (
         <div className="grid grid-cols-1 gap-mx-md xl:grid-cols-2">
           {trilhas.map((trilha) => (

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { listarTreinamentosVendedor, type VendedorTreinamento } from '../services/universidade-service'
 
 /**
  * Hook do Sprint 2 — S2-T4 (Universidade MX).
@@ -57,6 +58,8 @@ export type UseUniversidadeMxResult = {
   trilhas: UniversidadeTrilha[]
   aulas: Record<string, UniversidadeAula[]>
   certificacoes: UniversidadeCertificacao[]
+  /** Conteúdo publicado em `treinamentos`, com o progresso do usuário. */
+  biblioteca: VendedorTreinamento[]
   loading: boolean
   error: string | null
   refresh: () => Promise<void>
@@ -80,6 +83,7 @@ export function useUniversidadeMx(userId?: string | null): UseUniversidadeMxResu
   const [trilhas, setTrilhas] = useState<UniversidadeTrilha[]>([])
   const [aulas, setAulas] = useState<Record<string, UniversidadeAula[]>>({})
   const [certificacoes, setCertificacoes] = useState<UniversidadeCertificacao[]>([])
+  const [biblioteca, setBiblioteca] = useState<VendedorTreinamento[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [filtros, setFiltros] = useState<UniversidadePublico[]>(ALL_PUBLICOS)
@@ -129,8 +133,15 @@ export function useUniversidadeMx(userId?: string | null): UseUniversidadeMxResu
           .order('emitida_em', { ascending: false })
         if (certRes.error) throw certRes.error
         setCertificacoes((certRes.data ?? []) as UniversidadeCertificacao[])
+
+        // A biblioteca vive em `treinamentos`, não nas tabelas `universidade_*`.
+        // Sem ela a tela prometia "Biblioteca" no subtítulo e mostrava apenas
+        // "Nenhuma trilha disponível", enquanto as 14 aulas do vendedor
+        // estavam publicadas e legíveis o tempo todo.
+        setBiblioteca(await listarTreinamentosVendedor(supabase, userId))
       } else {
         setCertificacoes([])
+        setBiblioteca([])
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Falha ao carregar Universidade MX.'
@@ -171,10 +182,23 @@ export function useUniversidadeMx(userId?: string | null): UseUniversidadeMxResu
       })
   }, [trilhas, filtros, aulas, searchQuery])
 
+  const bibliotecaFiltrada = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase()
+    return biblioteca.filter((item) => {
+      if (!q) return true
+      return (
+        item.title.toLowerCase().includes(q)
+        || (item.description ?? '').toLowerCase().includes(q)
+        || item.category.toLowerCase().includes(q)
+      )
+    })
+  }, [biblioteca, searchQuery])
+
   return {
     trilhas: trilhasFiltradas,
     aulas,
     certificacoes,
+    biblioteca: bibliotecaFiltrada,
     loading,
     error,
     refresh: fetchAll,
