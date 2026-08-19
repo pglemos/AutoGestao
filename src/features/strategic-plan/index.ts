@@ -1,4 +1,5 @@
 export * from './strategicPlan.types'
+export * from './competence'
 export * from './unitPolicy'
 export * from './unitConsolidation'
 export * from './clientUnits'
