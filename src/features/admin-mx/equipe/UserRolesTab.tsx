@@ -19,14 +19,25 @@ const ROLE_LABEL: Record<string, string> = {
   OPERACOES: 'Operações',
 }
 
+/** Papel efetivo em `usuarios.role` — o que o sistema de fato usa. */
+const EFFECTIVE_ROLE_LABEL: Record<string, string> = {
+  administrador_mx: 'Administrador MX',
+  administrador_geral: 'Administrador geral',
+  consultor_mx: 'Consultor MX',
+  dono: 'Dono',
+  gerente: 'Gerente',
+  vendedor: 'Vendedor',
+}
+
 export function UserRolesTab(props: {
   userId: string
+  effectiveRole: string | null
   roleGrants: RoleGrantDraft[]
   defaultView: string
   onRoleGrants: (grants: RoleGrantDraft[]) => void
   onDefaultView: (view: string) => void
 }) {
-  const { userId, roleGrants, defaultView, onRoleGrants, onDefaultView } = props
+  const { userId, effectiveRole, roleGrants, defaultView, onRoleGrants, onDefaultView } = props
   const [showAdd, setShowAdd] = useState(false)
   const [newRole, setNewRole] = useState('')
   const [newReason, setNewReason] = useState('')
@@ -120,8 +131,22 @@ export function UserRolesTab(props: {
   return (
     <div className="space-y-4">
       <div>
+        <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Papel efetivo</h4>
+        <div className="flex items-center justify-between rounded-lg border border-border bg-surface-default px-3 py-2">
+          <span className="text-sm font-medium text-foreground">
+            {effectiveRole ? EFFECTIVE_ROLE_LABEL[effectiveRole] ?? effectiveRole : 'Sem papel definido'}
+          </span>
+          <span className="text-caption text-muted-foreground">define o acesso do usuário</span>
+        </div>
+        <p className="mt-1.5 text-caption text-muted-foreground">
+          É este papel que governa o que o usuário enxerga. Alterá-lo é feito em Configurações da
+          Plataforma, pelo fluxo de usuários internos.
+        </p>
+      </div>
+
+      <div>
         <div className="mb-2 flex items-center justify-between">
-          <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Papéis Atribuídos</h4>
+          <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Papéis complementares</h4>
           <Button variant="outline" size="sm" disabled={availableRoles.length === 0} onClick={() => setShowAdd(v => !v)}>
             <Plus size={12} /> Adicionar Papel
           </Button>
@@ -147,7 +172,7 @@ export function UserRolesTab(props: {
           </div>
         ) : null}
         {activeGrants.length === 0 ? (
-          <p className="py-2 text-sm text-muted-foreground">Nenhum papel atribuído.</p>
+          <p className="py-2 text-sm text-muted-foreground">Nenhum papel complementar concedido.</p>
         ) : (
           <div className="space-y-1.5">
             {activeGrants.map(grant => (

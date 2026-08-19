@@ -125,6 +125,7 @@ export function UserEditModal(props: {
         {!loading && detail && tab === 'papeis' ? (
           <UserRolesTab
             userId={detail.id}
+            effectiveRole={detail.role}
             roleGrants={detail.roleGrants}
             defaultView={detail.default_view ?? ''}
             onRoleGrants={grants => setDetail({ ...detail, roleGrants: grants })}
