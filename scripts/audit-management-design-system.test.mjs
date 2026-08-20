@@ -53,8 +53,8 @@ test('aliases canônicos da Fase 4 não disparam violações', () => {
 
 test('audita as dependências reais das rotas de gestão', () => {
   const report = auditManagementDesignSystem()
-  // 37 desde f4311438 (tela de meta unificada, /metas virou redirect).
-  assert.equal(report.entries, 37)
+  // 34 entradas canônicas; aliases e superfícies removidas ficam fora da auditoria.
+  assert.equal(report.entries, 34)
   assert.ok(report.reachableFiles > 0)
   assert.ok(report.auditedFiles > 0)
   assert.ok(report.baselineFiles > 0)

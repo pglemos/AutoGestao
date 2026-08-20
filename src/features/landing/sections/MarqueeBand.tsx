@@ -42,7 +42,9 @@ function MicroGridContent() {
     <div className="micro-grid" role="list">
       {MICRO_ITEMS.map((item, i) => (
         <div key={i} className="micro-card" role="listitem">
-          <span>{item.replace('vira', ' <span className="it">vira</span> ')}</span>
+          <span>
+            {item.split(' vira ')[0]} <span className="it">vira</span> {item.split(' vira ')[1]}
+          </span>
           <span className="star">✦</span>
         </div>
       ))}

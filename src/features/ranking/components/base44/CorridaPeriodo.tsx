@@ -54,7 +54,7 @@ export function CorridaPeriodo({ vendedores, meta, meuId }: Props) {
           />
 
           {/* Linha de chegada */}
-          <div className="absolute right-0 top-0 h-full w-2 bg-gradient-to-b from-brand-primary to-emerald-600 rounded-r-2xl opacity-70 flex items-center justify-center">
+          <div className="absolute right-0 top-0 h-full w-2 bg-gradient-to-b from-brand-primary to-status-success rounded-r-2xl opacity-70 flex items-center justify-center">
             <Trophy className="w-3 h-3 text-white -ml-0.5 opacity-90" />
           </div>
 
@@ -75,7 +75,7 @@ export function CorridaPeriodo({ vendedores, meta, meuId }: Props) {
             return (
               <div
                 key={v.id}
-                className={`absolute flex flex-col items-center transition-all duration-500 ${isMe ? 'z-30' : 'z-10 hover:z-20'}`}
+                className={`absolute flex flex-col items-center transition-all duration-500 ${isMe ? 'z-[var(--mx-z-topbar)]' : 'z-[var(--mx-z-sticky)] hover:z-[var(--mx-z-sidebar)]'}`}
                 style={{
                   left: `clamp(24px, calc(${clampedPct}% + ${offsetPx}px), calc(100% - 28px))`,
                   top: '-34px',

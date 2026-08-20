@@ -12,10 +12,10 @@ import {
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 
 test('o manifesto cobre as superfícies dos cinco perfis de gestão', () => {
-  // 37 desde f4311438, que unificou a tela de meta: /metas passou a redirecionar
-  // para /meta-loja e saiu do manifesto. A contagem explícita é tripwire contra
-  // rota de gestão adicionada ou removida sem revisão.
-  assert.equal(managementRouteManifest.length, 37)
+  // 34 entradas canônicas; aliases e superfícies removidas ficam fora do manifesto.
+  // A contagem explícita é tripwire contra rota de gestão adicionada ou removida
+  // sem revisão.
+  assert.equal(managementRouteManifest.length, 34)
   assert.equal(new Set(managementRouteManifest.map((route) => route.key)).size, managementRouteManifest.length)
   assert.equal(new Set(managementSourceEntries).size, managementSourceEntries.length)
   for (const role of ['administrador_geral', 'administrador_mx', 'consultor_mx', 'dono', 'gerente']) {

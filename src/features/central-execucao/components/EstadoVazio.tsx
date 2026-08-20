@@ -25,7 +25,7 @@ export function EstadoVazio({
         <p className="text-body-sm text-muted-foreground">
           Nenhuma oportunidade do tipo <strong>{filterLabel}</strong> para hoje.
         </p>
-        <button type="button" onClick={onClearFilter} className="mt-2 text-[12px] font-bold text-status-info-text hover:underline">
+        <button type="button" onClick={onClearFilter} className="mt-2 text-[12px] font-bold text-status-info-text hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-info/40">
           Ver todas
         </button>
       </div>
@@ -47,15 +47,15 @@ export function EstadoVazio({
             <button
               type="button"
               onClick={onOpenPending}
-              className="flex items-center gap-1.5 rounded-xl bg-status-warning px-5 py-2.5 text-body-sm font-bold text-white shadow-xs transition-colors hover:bg-status-warning/90"
+              className="flex items-center gap-1.5 rounded-xl bg-status-warning px-5 py-2.5 text-body-sm font-bold text-white shadow-xs transition-colors hover:bg-status-warning/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-warning/40"
             >
               <AlertTriangle className="h-4 w-4" aria-hidden="true" /> Resolver {pendingCount} pendência{pendingCount > 1 ? 's' : ''}
             </button>
           )}
-          <Link to="/carteira-clientes" className="flex items-center gap-1.5 rounded-xl border border-border px-4 py-2.5 text-body-sm font-bold text-muted-foreground transition-colors hover:bg-surface-alt">
+          <Link to="/carteira-clientes" className="flex items-center gap-1.5 rounded-xl border border-border px-4 py-2.5 text-body-sm font-bold text-muted-foreground transition-colors hover:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40">
             <Users className="h-4 w-4" aria-hidden="true" /> Abrir Carteira
           </Link>
-          <button type="button" onClick={onCreate} className="flex items-center gap-1.5 rounded-xl border border-border px-4 py-2.5 text-body-sm font-bold text-foreground transition-colors hover:bg-surface-alt">
+          <button type="button" onClick={onCreate} className="flex items-center gap-1.5 rounded-xl border border-border px-4 py-2.5 text-body-sm font-bold text-foreground transition-colors hover:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40">
             <Plus className="h-4 w-4" aria-hidden="true" /> Nova atividade
           </button>
         </div>
@@ -73,13 +73,13 @@ export function EstadoVazio({
         Você não possui oportunidades pendentes para executar agora.
       </p>
       <div className="flex flex-wrap items-center justify-center gap-3">
-        <button type="button" onClick={onOpenRoutine} className="flex items-center gap-1.5 rounded-xl border border-status-info px-4 py-2 text-body-sm font-bold text-status-info-text transition-colors hover:bg-status-info-surface">
+        <button type="button" onClick={onOpenRoutine} className="flex items-center gap-1.5 rounded-xl border border-status-info px-4 py-2 text-body-sm font-bold text-status-info-text transition-colors hover:bg-status-info-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-info/40">
           <Sparkles className="h-4 w-4" aria-hidden="true" /> Ver Rotina do Dia
         </button>
-        <Link to="/carteira-clientes" className="flex items-center gap-1.5 rounded-xl border border-border px-4 py-2 text-body-sm font-bold text-muted-foreground transition-colors hover:bg-surface-alt">
+        <Link to="/carteira-clientes" className="flex items-center gap-1.5 rounded-xl border border-border px-4 py-2 text-body-sm font-bold text-muted-foreground transition-colors hover:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40">
           <Users className="h-4 w-4" aria-hidden="true" /> Abrir Carteira
         </Link>
-        <button type="button" onClick={onCreate} className="flex items-center gap-1.5 rounded-xl bg-status-info px-4 py-2 text-body-sm font-bold text-white transition-colors hover:bg-status-info">
+        <button type="button" onClick={onCreate} className="flex items-center gap-1.5 rounded-xl bg-status-info px-4 py-2 text-body-sm font-bold text-white transition-colors hover:bg-status-info focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-info/40">
           <Plus className="h-4 w-4" aria-hidden="true" /> Nova atividade
         </button>
       </div>

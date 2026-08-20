@@ -56,7 +56,7 @@ export function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKe
           <Target className="h-5 w-5 shrink-0 text-muted-foreground" />
           <div>
             <p className="text-body-sm text-muted-foreground">Meta mensal não configurada.</p>
-            <Link to="/perfil" className="text-[12px] font-bold text-status-info-text hover:underline">Definir meta no perfil →</Link>
+            <Link to="/perfil" className="text-[12px] font-bold text-status-info-text hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-info/40">Definir meta no perfil →</Link>
           </div>
         </div>
       ) : metaBatida ? (
@@ -154,13 +154,13 @@ export function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKe
           <div className="flex items-center gap-2">
             <Link
               to="/central-execucao"
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-border bg-white text-caption font-bold text-foreground hover:bg-surface-alt transition-colors"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-border bg-white text-caption font-bold text-foreground hover:bg-surface-alt transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40"
             >
               Rotina do Dia →
             </Link>
             <Link
               to="/carteira-clientes"
-              className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-xl bg-brand-primary text-white text-caption font-bold hover:bg-brand-primary-hover shadow-xs transition-colors"
+              className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-xl bg-brand-primary text-white text-caption font-bold hover:bg-brand-primary-hover shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40"
             >
               Mentor Comercial →
             </Link>
@@ -263,7 +263,7 @@ export function EsforcoNecessarioCard({ channels, faltam }: { channels: ChannelF
               <span className="text-[11px] text-muted-foreground">Recomendação MX:</span>
               <Link
                 to={canalPrincipal === 'Carteira' ? '/carteira-clientes' : '/central-execucao'}
-                className="text-[12px] font-bold text-brand-primary-hover hover:underline inline-flex items-center gap-1"
+                className="text-[12px] font-bold text-brand-primary-hover hover:underline inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40"
               >
                 {canalPrincipal === 'Carteira' ? 'Abrir Mentor Comercial (Carteira) →' : 'Executar na Rotina do Dia →'}
               </Link>
@@ -419,7 +419,7 @@ export function EvolucaoCollapsible({ data, chartAberto, onToggle }: { data: Mon
   const semRegistros = data.every(item => item.oportunidades === 0 && item.atendimentos === 0 && item.vendas === 0)
   return (
     <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
-      <button type="button" onClick={onToggle} className="flex w-full items-center justify-between px-5 py-3.5 transition-colors hover:bg-surface-alt">
+      <button type="button" onClick={onToggle} className="flex w-full items-center justify-between px-5 py-3.5 transition-colors hover:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40">
         <p className="text-caption font-bold uppercase tracking-wider text-muted-foreground">Ver evolução dos últimos meses</p>
         {chartAberto ? <ChevronUp className="h-4 w-4 text-muted-foreground" /> : <ChevronDown className="h-4 w-4 text-muted-foreground" />}
       </button>

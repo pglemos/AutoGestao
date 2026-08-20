@@ -138,13 +138,13 @@
 
 | Recurso | Arquivos consumidores |
 |---|---:|
-| `acessos_cliente_consultoria` | 3 |
+| `acessos_cliente_consultoria` | 4 |
 | `agenda_estrategica_marketing` | 1 |
 | `agendamentos` | 10 |
 | `alerts` | 1 |
 | `artefatos_gerados_consultoria` | 1 |
 | `atendimentos` | 2 |
-| `atribuicoes_consultoria` | 13 |
+| `atribuicoes_consultoria` | 14 |
 | `atribuicoes_trilha_desenvolvimento` | 1 |
 | `aula_presencas` | 1 |
 | `aulas_ao_vivo` | 1 |
@@ -161,7 +161,7 @@
 | `central_execucao_aberturas` | 3 |
 | `ciclos_plano_estrategico` | 1 |
 | `clientes` | 6 |
-| `clientes_consultoria` | 27 |
+| `clientes_consultoria` | 28 |
 | `clientes_oportunidades` | 1 |
 | `comportamental_perfis` | 1 |
 | `comportamental_questoes` | 1 |
@@ -228,7 +228,7 @@
 | `metas_metricas_cliente` | 4 |
 | `modelos_formulario_pmr` | 1 |
 | `modelos_relatorio` | 1 |
-| `modulos_cliente_consultoria` | 7 |
+| `modulos_cliente_consultoria` | 8 |
 | `modulos_produto_consultoria` | 2 |
 | `modulos_sistema` | 1 |
 | `notificacoes` | 4 |
@@ -255,7 +255,7 @@
 | `posicionamento_empresa` | 1 |
 | `pre_cadastros_loja` | 2 |
 | `produtos_digitais` | 2 |
-| `programas_visita_consultoria` | 8 |
+| `programas_visita_consultoria` | 9 |
 | `progresso_etapa_trilha` | 1 |
 | `progresso_treinamentos` | 3 |
 | `prospecting_schedule` | 3 |
@@ -293,7 +293,7 @@
 | `treinamento_tarefas` | 1 |
 | `treinamentos` | 4 |
 | `trilhas_desenvolvimento` | 1 |
-| `unidades_cliente_consultoria` | 9 |
+| `unidades_cliente_consultoria` | 10 |
 | `universidade_aulas` | 2 |
 | `universidade_certificacoes` | 1 |
 | `universidade_trilhas` | 1 |
@@ -310,7 +310,7 @@
 | `vinculo_modelo_relatorio_encontro` | 1 |
 | `vinculo_plano_acao_encontro` | 1 |
 | `vinculos_loja` | 19 |
-| `visitas_consultoria` | 11 |
+| `visitas_consultoria` | 12 |
 | `vw_jornada_alem_do_contratado` | 1 |
 
 ## Operações por tabela
@@ -318,7 +318,7 @@
 | Recurso | Arquivos consumidores |
 |---|---:|
 | `acessos_cliente_consultoria:insert` | 2 |
-| `acessos_cliente_consultoria:select` | 3 |
+| `acessos_cliente_consultoria:select` | 4 |
 | `acessos_cliente_consultoria:update` | 1 |
 | `agenda_estrategica_marketing:select` | 1 |
 | `agendamentos:delete` | 1 |
@@ -334,7 +334,7 @@
 | `atendimentos:select` | 2 |
 | `atribuicoes_consultoria:delete` | 1 |
 | `atribuicoes_consultoria:insert` | 2 |
-| `atribuicoes_consultoria:select` | 12 |
+| `atribuicoes_consultoria:select` | 13 |
 | `atribuicoes_consultoria:update` | 5 |
 | `atribuicoes_consultoria:upsert` | 4 |
 | `atribuicoes_trilha_desenvolvimento:select` | 1 |
@@ -367,7 +367,7 @@
 | `ciclos_plano_estrategico:update` | 1 |
 | `clientes_consultoria:delete` | 1 |
 | `clientes_consultoria:insert` | 4 |
-| `clientes_consultoria:select` | 26 |
+| `clientes_consultoria:select` | 27 |
 | `clientes_consultoria:update` | 7 |
 | `clientes_oportunidades:select` | 1 |
 | `clientes:delete` | 2 |
@@ -513,7 +513,7 @@
 | `modelos_relatorio:update` | 1 |
 | `modelos_relatorio:upsert` | 1 |
 | `modulos_cliente_consultoria:insert` | 2 |
-| `modulos_cliente_consultoria:select` | 7 |
+| `modulos_cliente_consultoria:select` | 8 |
 | `modulos_cliente_consultoria:upsert` | 2 |
 | `modulos_produto_consultoria:insert` | 1 |
 | `modulos_produto_consultoria:select` | 2 |
@@ -580,7 +580,7 @@
 | `produtos_digitais:update` | 1 |
 | `programas_visita_consultoria:delete` | 1 |
 | `programas_visita_consultoria:insert` | 1 |
-| `programas_visita_consultoria:select` | 7 |
+| `programas_visita_consultoria:select` | 8 |
 | `programas_visita_consultoria:update` | 2 |
 | `progresso_etapa_trilha:select` | 1 |
 | `progresso_treinamentos:select` | 3 |
@@ -647,7 +647,7 @@
 | `treinamentos:select` | 3 |
 | `trilhas_desenvolvimento:select` | 1 |
 | `unidades_cliente_consultoria:insert` | 4 |
-| `unidades_cliente_consultoria:select` | 9 |
+| `unidades_cliente_consultoria:select` | 10 |
 | `unidades_cliente_consultoria:update` | 2 |
 | `universidade_aulas:select` | 2 |
 | `universidade_certificacoes:select` | 1 |
@@ -690,7 +690,7 @@
 | `vinculos_loja:update` | 2 |
 | `visitas_consultoria:delete` | 2 |
 | `visitas_consultoria:insert` | 5 |
-| `visitas_consultoria:select` | 11 |
+| `visitas_consultoria:select` | 12 |
 | `visitas_consultoria:update` | 4 |
 | `vw_jornada_alem_do_contratado:select` | 1 |
 
