@@ -53,8 +53,13 @@ describe('CheckinForm draft save contract', () => {
 
 describe('Produção Zero — ação exclusiva no Histórico', () => {
     test('não renderiza card, seletor ou modal de justificativa na tela principal', () => {
-        expect(formSource).not.toContain('Produção Zero')
+        // A tela só orienta o vendedor a usar o Histórico; a ação e o motivo
+        // continuam fora do formulário principal.
+        expect(formSource).toContain('marque Produção Zero no Histórico')
+        expect(formSource).not.toContain('Marcar Produção Zero')
+        expect(formSource).not.toContain('Confirmar Produção Zero')
         expect(formSource).not.toContain('zero_reason')
+        expect(formSource).not.toContain('CHECKIN_ZERO_REASONS')
         expect(formSource).not.toContain('id="checkin-zero-reason"')
         expect(formSource).not.toContain('<select')
     })

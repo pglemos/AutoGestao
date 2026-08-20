@@ -57,7 +57,7 @@ export function NotificationBellButton({ variant = 'light', className }: Notific
         aria-expanded={open}
         aria-label="Abrir notificações"
         className={cn(
-          'relative grid h-10 w-10 place-items-center rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-success/45',
+          'relative grid h-11 w-11 place-items-center rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-success/45 sm:h-10 sm:w-10',
           variant === 'dark'
             ? 'text-white/70 hover:bg-white/10 hover:text-white'
             : 'text-muted-foreground hover:bg-muted hover:text-status-info-text'
@@ -74,7 +74,7 @@ export function NotificationBellButton({ variant = 'light', className }: Notific
       {open && (
         <div
           role="menu"
-          className="absolute right-0 top-[calc(100%+10px)] z-[var(--mx-z-popover)] w-[360px] max-w-[92vw] overflow-hidden rounded-2xl border border-border bg-white text-left shadow-mx-xl"
+          className="fixed left-2 top-[4.25rem] z-[var(--mx-z-popover)] w-[min(360px,calc(100vw-1rem))] max-w-none overflow-hidden rounded-2xl border border-border bg-white text-left shadow-mx-xl sm:absolute sm:left-auto sm:right-0 sm:top-[calc(100%+10px)]"
         >
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
             <p className="text-body-sm font-extrabold text-mx-navy">Notificações</p>

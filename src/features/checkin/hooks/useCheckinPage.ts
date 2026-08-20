@@ -952,6 +952,7 @@ const fechamentoConcluido = metricScope === 'daily'
         changedFields,
         metricScope,
         inputError,
+        setInputError,
         fieldErrors,
         numberDrafts,
  saveNotice,

@@ -43,7 +43,7 @@ export const SIDEBAR_LOGO = '/landing/logo-mx.png'
 
 export const SIDEBAR = {
   /** Coluna fixa no desktop. */
-  aside: 'hidden shrink-0 border-r border-mxsb-line font-sans text-[14px] leading-normal text-mxsb-base antialiased transition-[width] duration-[var(--mx-duration-slow)] xl:block',
+  aside: 'hidden shrink-0 border-r border-mxsb-line font-sans text-[14px] leading-normal text-mxsb-base antialiased xl:block',
   asideWidth: 'w-[var(--mx-sidebar-width-expanded)]',
   asideWidthCollapsed: 'w-[var(--mx-sidebar-width-collapsed)]',
   /**
@@ -62,7 +62,7 @@ export const SIDEBAR = {
   headerCollapsed: 'justify-center px-2',
   brandLogo: 'h-7 w-7 shrink-0 object-contain',
   brandTitle: 'truncate text-body-sm font-black tracking-tight text-foreground',
-  brandModule: 'mt-0.5 truncate text-caption font-bold uppercase tracking-[0.14em] text-status-success-text',
+  brandModule: 'mt-0.5 line-clamp-2 break-words text-caption font-bold leading-tight uppercase tracking-[0.14em] text-status-success-text',
   toggle:
     'flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--mx-sidebar-toggle-radius)] border border-mxsb-line bg-white text-muted-foreground outline-none transition-colors hover:bg-surface-alt hover:text-foreground active:bg-mxsb-hover active:text-foreground focus-visible:ring-2 focus-visible:ring-status-success/30 disabled:pointer-events-none disabled:opacity-50',
 

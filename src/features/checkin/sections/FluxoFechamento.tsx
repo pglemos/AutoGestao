@@ -4,7 +4,7 @@ import type { NumericCheckinField } from '../hooks/useCheckinPage'
 import { chartTokens } from "@/lib/charts/tokens"
 
 /**
- * Wizard de 4 etapas (Showroom → Carteira → Internet → Vendas) com barra de
+ * Wizard de 4 etapas (Showroom → Carteira → Internet → Vendas + D+1) com barra de
  * progresso e confirmação por etapa. Porta do Base44 (components/fechamento/
  * FluxoFechamento.jsx) para o schema real: atendimentos_showroom→visitas_porta,
  * leads_carteira→leads_cart, atendimentos_carteira→visitas_cart,
@@ -18,7 +18,7 @@ const STEPS: Array<{ id: StepId; label: string; pct: number; icon: typeof Store;
   { id: 'showroom', label: 'Showroom', pct: 20, icon: Store, color: 'orange' },
   { id: 'carteira', label: 'Carteira', pct: 20, icon: Users, color: 'green' },
   { id: 'internet', label: 'Internet', pct: 30, icon: Globe, color: 'blue' },
-  { id: 'vendas', label: 'Vendas', pct: 30, icon: ShoppingCart, color: 'purple' },
+  { id: 'vendas', label: 'Vendas + D+1', pct: 30, icon: ShoppingCart, color: 'purple' },
 ]
 
 const COLOR_MAP = {
@@ -350,7 +350,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
               Confirmar Showroom ✓
             </button>
           )}
-          <p className={`text-caption ${co.note}`}>Vendas devem ser registradas em Cadastrar Venda/Agendamentos.</p>
+          <p className={`text-caption ${co.note}`}>Vendas e Agendamentos D+1 devem ser registrados em Novo Registro.</p>
         </div>
       )}
 

@@ -84,6 +84,12 @@ describe('autosave não pode ser desligado por estado de carregamento', () => {
 })
 
 describe('finalização segura', () => {
+  test('não oferece finalização irreversível sem movimento; orienta Produção Zero pelo Histórico', () => {
+    expect(formSource).toContain('const cannotFinalizeWithoutActivity = declaredAllZero && !fechamentoConcluido')
+    expect(formSource).toContain('marque Produção Zero no Histórico')
+    expect(formSource).toContain('|| cannotFinalizeWithoutActivity')
+  })
+
   test('finalizar aguarda o flush do autosave antes de gravar', () => {
     expect(hookSource).toContain('const flushed = await autosave.flush()')
     expect(hookSource).toMatch(/flushed\.status === 'conflict'/)

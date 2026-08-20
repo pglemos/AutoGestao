@@ -511,7 +511,7 @@ const stepItems = [
 { step: 1, label: 'Showroom', percent: 20, done: completedPillars >= 1 },
 { step: 2, label: 'Carteira', percent: 20, done: completedPillars >= 2 },
 { step: 3, label: 'Internet', percent: 30, done: baseReady },
-{ step: 4, label: 'Vendas / Agendamentos', percent: 30, done: detailsComplete },
+{ step: 4, label: 'Vendas + D+1', percent: 30, done: detailsComplete },
 ]
 const activeStepLabel = stepItems.find((item) => item.step === activeStep)?.label ?? 'Internet'
 
@@ -522,10 +522,10 @@ return (
       <div className="w-full">
         <SellerPageHeader
           icon={CheckSquare}
-          title="Fechamento"
+          title="Fechamento Diário"
           actions={
             <>
-              <div className="flex min-w-0 items-center gap-2 rounded-xl border border-border bg-white px-3 py-1.5 shadow-sm">
+              <div className="hidden min-w-0 items-center gap-2 rounded-xl border border-border bg-white px-3 py-1.5 shadow-sm md:flex">
                 <CalendarDays size={18} className="shrink-0 text-status-info-text" aria-hidden="true" />
                 <div className="min-w-0">
                   <p className="text-caption font-bold uppercase tracking-[0.08em] text-muted-foreground">Data operacional principal</p>
@@ -542,7 +542,7 @@ return (
               <button
                 type="button"
                 onClick={handleViewPreviousHistory}
-                className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-white px-4 text-body-sm font-semibold text-muted-foreground shadow-sm transition-colors hover:border-status-info hover:text-status-info-text"
+                className="hidden h-10 items-center gap-2 rounded-xl border border-border bg-white px-4 text-body-sm font-semibold text-muted-foreground shadow-sm transition-colors hover:border-status-info hover:text-status-info-text md:inline-flex"
               >
                 <History size={15} aria-hidden="true" />
                 Histórico de Fechamentos
@@ -569,10 +569,10 @@ previousCard.type === 'previous_done' ? 'text-status-success-text' : 'text-statu
 }`}>
 {previousCard.type === 'previous_done' ? 'FECHAMENTO ANTERIOR CONCLUÍDO' : 'FECHAMENTO ANTERIOR PENDENTE'}
 </p>
-<p className="whitespace-normal break-words text-[12px] font-semibold leading-relaxed text-muted-foreground">
+<p className="max-w-prose whitespace-normal break-words text-[12px] font-semibold leading-relaxed text-muted-foreground">
 {previousCard.type === 'previous_done'
-? `Você enviou o fechamento do dia ${previousCard.date.split('-').reverse().join('/')} com sucesso. As informações foram encaminhadas para sua liderança. Caso precise corrigir algum dado, acesse o Histórico de Fechamentos, clique em Ajustar e envie a regularização para análise.`
-: `O fechamento do dia ${previousCard.date.split('-').reverse().join('/')} não foi enviado dentro do prazo. A tela atual já está liberada para o fechamento de hoje. Para corrigir a pendência, acesse o Histórico de Fechamentos e envie a regularização para análise da liderança.`}
+? `Fechamento de ${previousCard.date.split('-').reverse().join('/')} enviado com sucesso. Para corrigir dados, use o Histórico e envie uma regularização.`
+: `Fechamento de ${previousCard.date.split('-').reverse().join('/')} pendente. O dia de hoje já está liberado. Para corrigir, use o Histórico e envie uma regularização.`}
 </p>
 </div>
 </div>
@@ -597,7 +597,7 @@ previousCard.type === 'previous_done' ? 'bg-brand-primary text-white hover:bg-br
 <CalendarDays size={18} className="shrink-0 text-status-info-text" aria-hidden="true" />
 <div className="min-w-0">
 <p className="text-caption font-bold uppercase tracking-[0.08em] text-muted-foreground">Data operacional principal</p>
-<h2 id="checkin-operational-date" className="truncate text-body font-bold text-mx-navy sm:text-h5">{dateStr}</h2>
+<h2 id="checkin-operational-date" className="text-pretty text-body font-bold leading-snug text-mx-navy sm:text-h5">{dateStr}</h2>
 </div>
 </div>
 <button
@@ -633,11 +633,11 @@ Etapa {activeStep} de 4 <span className="text-muted-foreground">•</span> <span
 </div>
 </section>
 
-<section className="grid grid-cols-4 overflow-hidden rounded-mx-2xl border border-border bg-white shadow-mx-lg">
+<section className="grid grid-cols-4 gap-px overflow-hidden rounded-mx-2xl border border-border bg-border shadow-mx-lg">
 {stepItems.map((item) => {
 const active = item.step === activeStep
 return (
-<div key={item.step} className="flex min-w-0 flex-col items-center gap-1 border-r border-border px-2 py-3 text-center last:border-r-0">
+<div key={item.step} className="flex min-w-0 flex-col items-center gap-1 bg-white px-1.5 py-3 text-center sm:px-3">
 <span className={item.done ? 'grid h-8 w-8 place-items-center rounded-full bg-status-success text-body font-bold text-white' : active ? 'grid h-8 w-8 place-items-center rounded-full bg-status-success text-[14px] font-bold text-white' : 'grid h-8 w-8 place-items-center rounded-full border border-muted-foreground text-[14px] font-bold text-muted-foreground'}>
 {item.done ? '✓' : item.step}
 </span>

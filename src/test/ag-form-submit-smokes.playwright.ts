@@ -21,7 +21,7 @@ test.describe('FASE AG 33.007 — form submit de rota crítica (read-only)', () 
     await loginWithCredentials(page, vendedor, senha())
     await page.goto('/fechamento-diario')
 
-    await expect(page.getByRole('heading', { name: 'Fechamento', exact: true })).toBeVisible({ timeout: 30_000 })
+    await expect(page.getByRole('heading', { name: 'Fechamento Diário', exact: true })).toBeVisible({ timeout: 30_000 })
 
     // Campo primário do form (atendimentos) é editável — form preenchível.
     const atendimentos = page.getByRole('textbox', { name: /Atendimentos realizados/i })

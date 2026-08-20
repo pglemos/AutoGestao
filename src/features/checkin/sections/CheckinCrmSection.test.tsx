@@ -150,12 +150,12 @@ afterEach(() => {
 
 // As 3 validações abaixo (tipo_veiculo obrigatório, motivo_perda obrigatório,
 // oportunidade rica com sinal/financiamento) pertenciam ao formulário inline
-// antigo, que era o alvo direto do botão "+ Novo Cliente". Esse botão agora
+// antigo, que era o alvo direto do botão "+ Novo Registro". Esse botão agora
 // abre o NovoRegistroModal (Base44: seletor de 4 tipos + formulário por
 // tipo — ver NovoRegistroModal.test.tsx), então o form antigo só é alcançável
 // hoje pelo fluxo de edição de um registro já existente.
 describe('CheckinCrmSection', () => {
-  it('abre o NovoRegistroModal ao clicar em + Novo Cliente', () => {
+  it('abre o NovoRegistroModal ao clicar em + Novo Registro', () => {
     render(
       <MemoryRouter>
         <CheckinCrmSection
@@ -171,7 +171,7 @@ describe('CheckinCrmSection', () => {
       </MemoryRouter>,
     )
 
-    fireEvent.click(screen.getByRole('button', { name: /\+ novo cliente/i }))
+    fireEvent.click(screen.getByRole('button', { name: /\+ novo registro/i }))
 
     expect(screen.getByText('Novo Registro')).toBeTruthy()
     expect(screen.getByText('Qual tipo de registro você quer adicionar?')).toBeTruthy()

@@ -22,6 +22,7 @@ import {
   History,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { toast } from '@/lib/toast'
 import type { LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { Badge } from '@/components/atoms/Badge'
@@ -129,6 +130,7 @@ export function CheckinForm({ ctx, totalsAgd, totalsVnd, onOpenHistory }: Checki
     changedFields,
     funnelError,
     inputError,
+    setInputError,
     minutesUntilEditLock,
     hasCrmActivity,
     saveNotice,
@@ -157,6 +159,7 @@ export function CheckinForm({ ctx, totalsAgd, totalsVnd, onOpenHistory }: Checki
     realFaturamento,
     totalAgendamentosD1,
     creditosValidos,
+    declaredAllZero,
     creditosCarteira,
     creditosInternet,
         customReferenceDate,
@@ -175,6 +178,7 @@ export function CheckinForm({ ctx, totalsAgd, totalsVnd, onOpenHistory }: Checki
     const resumoTitle = activeClosingContext.mainLabel === 'Hoje' ? 'RESUMO DE HOJE' : 'RESUMO DO FECHAMENTO ANTERIOR'
     const detalhesD1Concluidos = totalAgendamentosD1 <= 0 || creditosValidos >= totalAgendamentosD1
     const hasIncompleteD1 = shouldConfirmBeforeFinalizar({ totalAgendamentosD1, creditosValidos })
+    const cannotFinalizeWithoutActivity = declaredAllZero && !fechamentoConcluido
 
     const readValue = (field: NumericCheckinField) =>
         Number(declaredForm[field] ?? form[field] ?? 0)
@@ -226,6 +230,12 @@ disabled: fechamentoConcluido,
     const onFormSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         if (fechamentoConcluido || saving) return
+        if (cannotFinalizeWithoutActivity) {
+            const message = 'Registre ao menos um movimento ou marque Produção Zero pelo Histórico antes de finalizar.'
+            setInputError(message)
+            toast.error(message)
+            return
+        }
         setConfirmFinalizeModalOpen(true)
     }
 
@@ -287,7 +297,7 @@ return (
       {/* Estado do rascunho sempre visível. Sticky para acompanhar o scroll de
           uma tela longa — sem isto, o vendedor rola para preencher e perde de
           vista se o que digitou já chegou ao servidor. */}
-      <div className="sticky top-2 z-[var(--mx-z-sticky)] -mx-1 px-1">
+      <div className="md:sticky md:top-2 md:z-[var(--mx-z-sticky)] -mx-1 px-1">
         <CheckinAutosaveStatus
           state={autosaveState}
           finalizado={fechamentoConcluido}
@@ -493,20 +503,20 @@ return (
                   <Award size={14} className="stroke-[2.5]" /> 2. Cadastro dos agendamentos — até +30%
                 </h3>
                 <p>
-                  Os outros 30% são conquistados quando você detalha, no campo “Cadastrar Novo Cliente”, os agendamentos que informou no card “Agendamento para Amanhã”.
+                  Os outros 30% são conquistados quando você detalha, no “Novo Registro”, os Agendamentos D+1 que informou nos canais Carteira e Internet.
                 </p>
                 <p className="font-semibold text-mx-navy">
                   Exemplo:
                 </p>
                 <p>
-                  Se você informou no card “Agendamento para Amanhã”:
+                  Se você informou Agendamentos D+1:
                 </p>
                 <ul className="list-disc pl-4 space-y-0.5">
                   <li>Carteira: 1 agendamento</li>
                   <li>Internet: 1 agendamento</li>
                 </ul>
                 <p>
-                  Total: 2 agendamentos para amanhã. Então você precisa cadastrar 2 clientes no card “Cadastrar Novo Cliente”, sendo:
+                  Total: 2 Agendamentos D+1. Então você precisa cadastrar 2 clientes no “Novo Registro”, sendo:
                 </p>
                 <ul className="list-disc pl-4 space-y-0.5">
                   <li>1 cliente do canal Carteira;</li>
@@ -552,7 +562,7 @@ return (
                   <Clock size={14} /> 4. Atenção à data do agendamento
                 </h3>
                 <p>
-                  Todo agendamento informado no card “Agendamento para Amanhã” deve ser cadastrado com data para o dia seguinte.
+                  Todo Agendamento D+1 informado deve ser cadastrado com data para o dia seguinte ao fechamento.
                 </p>
                 <p>
                   Se a data cadastrada for diferente de amanhã, o sistema considera apenas 50% daquele cadastro para a pontuação extra.
@@ -713,7 +723,7 @@ className="rounded-xl bg-status-success px-6 py-2.5 text-body-sm font-bold text-
               <AlertTriangle size={18} className="mt-0.5 shrink-0 text-status-warning-text" />
               <div className="flex-1">
                 <Typography variant="p" className="text-sm font-bold text-status-warning-text">
-                  Este fechamento está pendente, mas continua disponível para envio sem liberação de gerente. Após concluir, qualquer correção deverá ser solicitada pelo Histórico.
+                  Este fechamento está pendente, mas pode ser enviado agora. Depois de concluir, correções passam pelo Histórico.
                 </Typography>
               </div>
             </div>
@@ -724,10 +734,10 @@ className="rounded-xl bg-status-success px-6 py-2.5 text-body-sm font-bold text-
           {/* Green pill button */}
           <button
             type="submit"
- disabled={saving || submitBlockedByDeadline || editLockedWithoutLiberacao || fechamentoConcluido}
+            disabled={saving || submitBlockedByDeadline || editLockedWithoutLiberacao || fechamentoConcluido || cannotFinalizeWithoutActivity}
           className={cn(
             "inline-flex w-full shrink-0 items-center justify-center gap-2.5 rounded-full px-6 py-3.5 text-center text-[12px] font-extrabold uppercase tracking-[0.06em] text-white shadow-[0_8px_20px_rgba(22,163,74,0.28)] transition-all sm:w-auto sm:px-8 sm:text-body-sm sm:tracking-[0.08em]",
-saving || submitBlockedByDeadline || editLockedWithoutLiberacao || fechamentoConcluido
+saving || submitBlockedByDeadline || editLockedWithoutLiberacao || fechamentoConcluido || cannotFinalizeWithoutActivity
               ? "bg-muted-foreground cursor-not-allowed shadow-none"
               : "bg-status-success hover:bg-status-success active:scale-[0.98]"
           )}
@@ -737,13 +747,24 @@ saving || submitBlockedByDeadline || editLockedWithoutLiberacao || fechamentoCon
             ) : (
               <LockKeyhole size={15} className="shrink-0" />
             )}
- <span>{saving ? 'Salvando...' : fechamentoConcluido ? 'FECHAMENTO CONCLUÍDO' : submitBlockedByDeadline ? 'AGUARDANDO LIBERAÇÃO DO GERENTE' : 'FINALIZAR FECHAMENTO DO DIA'}</span>
+ <span>{saving ? 'Salvando...' : fechamentoConcluido ? 'FECHAMENTO CONCLUÍDO' : cannotFinalizeWithoutActivity ? 'REGISTRE UM MOVIMENTO PARA FINALIZAR' : submitBlockedByDeadline ? 'AGUARDANDO LIBERAÇÃO DO GERENTE' : 'FINALIZAR FECHAMENTO DO DIA'}</span>
           </button>
 
           {/* Warning text */}
           <p className="text-body-sm font-semibold text-muted-foreground leading-snug">
             {fechamentoConcluido ? (
               'Este fechamento já foi enviado. Para ajustes, use o histórico e solicite correção.'
+            ) : cannotFinalizeWithoutActivity ? (
+              <>
+                Nenhum movimento foi registrado. Para um dia sem produção,{' '}
+                {onOpenHistory ? (
+                  <button type="button" onClick={onOpenHistory} className="font-extrabold text-status-warning-text underline underline-offset-2 hover:text-mx-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-warning/40 focus-visible:ring-offset-2">
+                    marque Produção Zero no Histórico
+                  </button>
+                ) : (
+                  <strong className="font-extrabold text-mx-navy">marque Produção Zero no Histórico</strong>
+                )}.
+              </>
             ) : (
               <>
                 Após finalizar, as informações serão enviadas para sua liderança e{' '}

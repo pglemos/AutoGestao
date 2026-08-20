@@ -12,6 +12,30 @@ const notificationPriorityRank: Record<string, number> = {
 
 const NOTIFICATION_SELECT = 'id, title, message, type, priority, read, recipient_id, sender_id, store_id, target_role, link, broadcast_id, created_at'
 
+const QA_NOTIFICATION_MARKER = /\[teste\s+qa\]|dedup-debug/i
+
+/**
+ * Remove fixtures/debug notices before they reach any end-user surface and
+ * collapse exact duplicate broadcasts. QA data must never compete with a
+ * seller's operational alerts in the bell or notification center.
+ */
+export function sanitizeNotifications(notifications: AppNotification[]): AppNotification[] {
+  const seen = new Set<string>()
+  return notifications.filter(notification => {
+    const searchable = `${notification.title} ${notification.message}`
+    if (QA_NOTIFICATION_MARKER.test(searchable)) return false
+
+    const fingerprint = [
+      notification.title.trim().toLocaleLowerCase('pt-BR'),
+      notification.message.trim().toLocaleLowerCase('pt-BR'),
+      notification.link || '',
+    ].join('|')
+    if (seen.has(fingerprint)) return false
+    seen.add(fingerprint)
+    return true
+  })
+}
+
 export function sortNotificationsByPriority<T extends Pick<AppNotification, 'priority' | 'created_at'>>(notifications: T[]): T[] {
   return [...notifications].sort((a, b) => {
     const priorityDelta = (notificationPriorityRank[b.priority] || 0) - (notificationPriorityRank[a.priority] || 0)
@@ -54,7 +78,7 @@ export function useNotifications() {
         throw error
       }
 
-      const notificacoes = sortNotificationsByPriority(parseNotificationArray(data || []))
+      const notificacoes = sanitizeNotifications(sortNotificationsByPriority(parseNotificationArray(data || [])))
       return { notificacoes, unreadCount: notificacoes.filter(n => !n.read).length }
     },
     enabled: !!profile,

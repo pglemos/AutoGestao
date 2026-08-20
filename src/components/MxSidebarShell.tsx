@@ -510,7 +510,7 @@ export default function MxSidebarShell({
     <div className="h-[100dvh] min-w-0 overflow-hidden bg-surface-alt font-display text-foreground">
       <header
         data-mx-mobile-header=""
-        className="fixed left-0 right-0 top-0 z-[var(--mx-z-topbar)] grid h-[calc(var(--mx-mobile-header-height)+env(safe-area-inset-top,0px))] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-[var(--mx-space-2)] border-b border-border-subtle bg-white px-[var(--mx-mobile-header-padding-inline)] pt-[env(safe-area-inset-top,0px)] shadow-[var(--mx-shadow-sm)] xl:hidden"
+        className="fixed left-0 right-0 top-0 z-[var(--mx-z-popover)] grid h-[calc(var(--mx-mobile-header-height)+env(safe-area-inset-top,0px))] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-[var(--mx-space-2)] border-b border-border-subtle bg-white px-[var(--mx-mobile-header-padding-inline)] pt-[env(safe-area-inset-top,0px)] shadow-[var(--mx-shadow-sm)] xl:hidden"
       >
         <button
           type="button"
@@ -524,7 +524,7 @@ export default function MxSidebarShell({
             Menu
           </span>
           <span className="hidden min-w-0 leading-tight min-[500px]:block">
-            <span title={moduleLabel} className="block truncate text-caption font-bold uppercase tracking-[0.12em] text-status-success-text">
+            <span title={moduleLabel} className="block max-w-[26vw] break-words text-caption font-bold leading-tight uppercase tracking-[0.12em] text-status-success-text">
               {moduleLabel}
             </span>
           </span>
@@ -620,7 +620,7 @@ export default function MxSidebarShell({
         role="main"
         tabIndex={-1}
         className={cn(
-          'flex h-[100dvh] min-h-0 min-w-0 flex-col overflow-hidden bg-surface-alt outline-none transition-[padding] duration-[var(--mx-duration-slow)] xl:h-screen',
+          'flex h-[100dvh] min-h-0 min-w-0 flex-col overflow-hidden bg-surface-alt outline-none xl:h-screen',
           'pt-[calc(var(--mx-mobile-header-height)+env(safe-area-inset-top,0px))] xl:pt-0',
           collapsed
             ? 'xl:pl-[var(--mx-sidebar-width-collapsed)]'

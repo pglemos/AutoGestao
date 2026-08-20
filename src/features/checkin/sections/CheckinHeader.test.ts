@@ -105,9 +105,8 @@ describe('CheckinHeader — regularização (P0-02/P0-06)', () => {
     test('mantém os textos e as duas ações prescritas nos cards de contexto', () => {
         expect(headerSource).toContain('FECHAMENTO ANTERIOR CONCLUÍDO')
         expect(headerSource).toContain('FECHAMENTO ANTERIOR PENDENTE')
-        expect(headerSource).toContain('Você enviou o fechamento do dia ${previousCard.date.split')
-        expect(headerSource).toContain('As informações foram encaminhadas para sua liderança. Caso precise corrigir algum dado, acesse o Histórico de Fechamentos, clique em Ajustar e envie a regularização para análise.')
-        expect(headerSource).toContain('não foi enviado dentro do prazo. A tela atual já está liberada para o fechamento de hoje.')
+        expect(headerSource).toContain('Fechamento de ${previousCard.date.split')
+        expect(headerSource).toContain('pendente. O dia de hoje já está liberado. Para corrigir, use o Histórico e envie uma regularização.')
         expect(headerSource).toContain('Ver histórico')
         expect(headerSource).toContain('Ajustar fechamento')
         expect(headerSource).toContain('Regularizar ${previousCard.date.slice')

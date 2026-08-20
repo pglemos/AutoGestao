@@ -1,4 +1,4 @@
-import React, { useMemo, useState, type CSSProperties } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Star, UserPlus, X, Pencil, Trash2, ChevronDown, ChevronUp, AlertCircle, HelpCircle, Users, CalendarClock } from 'lucide-react'
 import { toast } from '@/lib/toast'
@@ -76,18 +76,6 @@ interface CheckinCrmSectionProps {
    * Fechamento (dia passado) continua usando a edição inline normalmente,
    * por isso o default é `true`. */
   allowInlineQuickEdit?: boolean
-}
-
-const srOnlyStyle: CSSProperties = {
-  position: 'absolute',
-  width: '1px',
-  height: '1px',
-  padding: '0',
-  margin: '-1px',
-  overflow: 'hidden',
-  clip: 'rect(0, 0, 0, 0)',
-  whiteSpace: 'nowrap',
-  border: '0',
 }
 
 const formatMoney = (value: number | null) =>
@@ -567,30 +555,6 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 
   return (
     <>
-      {/* Visually Hidden elements to act as index 0 for legacy unit tests */}
-      <div style={srOnlyStyle}>
-        <select
-          aria-label="Canal"
-          value={canal}
-          onChange={event => {
-            setCanal(event.target.value as CrmCanal)
-          }}
-        >
-          <option value="">Canal</option>
-          <option value="carteira">Carteira</option>
-          <option value="internet">Internet</option>
-          <option value="showroom">Showroom</option>
-        </select>
-
-        <label htmlFor="hidden-telefone-test">Telefone</label>
-        <input
-          id="hidden-telefone-test"
-          type="text"
-          value={telefone}
-          onChange={event => handlePhoneChange(event.target.value)}
-        />
-      </div>
-
 <Card id="cadastrar-venda-agendamentos" className="scroll-mt-6 min-w-0 overflow-hidden rounded-2xl border border-border bg-white shadow-mx-lg md:scroll-mt-48">
 <header className="flex min-w-0 flex-col items-stretch justify-between gap-3 border-b border-border px-4 py-4 sm:flex-row sm:items-center sm:px-5">
  <div className="flex min-w-0 items-start gap-2 sm:items-center">
@@ -599,10 +563,10 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
             </span>
  <div className="min-w-0">
  <Typography variant="h2" className="!text-[16px] !leading-tight font-extrabold tracking-tight text-mx-navy sm:!text-h5">
-                CADASTRAR VENDA/AGENDAMENTOS
+                VENDAS E AGENDAMENTOS
               </Typography>
  <Typography variant="p" className="mt-1 text-sm font-medium leading-snug text-muted-foreground">
-                Preencha suas vendas e seus agendamentos para enriquecer suas informações.
+                Registre vendas e agendamentos para enriquecer o fechamento do dia.
               </Typography>
             </div>
           </div>
@@ -613,7 +577,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
               onClick={() => setNovoRegistroModalOpen(true)}
               className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-status-info px-5 text-sm font-bold text-white shadow-[var(--mx-button-shadow)] transition hover:bg-status-info sm:w-auto"
             >
-              <UserPlus size={16} /> + Novo Cliente
+              <UserPlus size={16} /> + Novo Registro
             </button>
           </div>
         </header>
@@ -625,7 +589,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 <Users size={17} />
 </span>
 <p className="text-body-sm font-bold text-muted-foreground">Nenhum cliente cadastrado ainda</p>
-<p className="text-[12px] font-medium text-muted-foreground">Toque em "+ Novo Cliente" para registrar venda ou agendamento.</p>
+<p className="text-[12px] font-medium text-muted-foreground">Toque em "+ Novo Registro" para registrar venda ou agendamento.</p>
 </div>
 ) : (
 <div className="divide-y divide-border">
@@ -683,14 +647,14 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
             <colgroup>
               <col className="w-[14%]" />
               <col className="w-[11%]" />
-              <col className="w-[12%]" />
-              <col className="w-[9%]" />
-              <col className="w-[12%]" />
-              <col className="w-[9%]" />
+              <col className="w-[11%]" />
               <col className="w-[8%]" />
-              <col className="w-[9%]" />
+              <col className="w-[12%]" />
               <col className="w-[9%]" />
               <col className="w-[7%]" />
+              <col className="w-[8%]" />
+              <col className="w-[11%]" />
+              <col className="w-[9%]" />
             </colgroup>
             <thead className="bg-surface-alt text-caption uppercase tracking-normal text-muted-foreground border-b border-border">
               <tr>
@@ -709,11 +673,13 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                   <th
                     scope="col"
                     key={column}
-                    className={`px-4 py-3.5 font-extrabold whitespace-nowrap truncate ${
+                    className={`px-4 py-3.5 font-extrabold whitespace-nowrap ${
                       column === 'Nome do Cliente'
                         ? 'sticky left-0 aggression-z z-[var(--mx-z-sticky)] bg-surface-alt shadow-mx-sticky-start'
                         : column === 'Ações'
-                          ? 'sticky right-0 z-[var(--mx-z-sticky)] bg-surface-alt shadow-mx-sticky-end'
+                          ? 'sticky right-0 z-[var(--mx-z-sticky)] min-w-[8rem] bg-surface-alt shadow-mx-sticky-end'
+                        : column === 'Status'
+                          ? 'min-w-[9rem]'
                           : ''
                     }`}
                     title={column}
@@ -732,7 +698,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                         <Users size={16} />
                       </span>
                       <p className="text-body-sm font-bold text-muted-foreground">Nenhum cliente cadastrado ainda</p>
-                      <p className="text-[12px] font-medium text-muted-foreground">Clique em "+ Novo Cliente" para registrar a primeira venda ou agendamento.</p>
+                      <p className="text-[12px] font-medium text-muted-foreground">Clique em "+ Novo Registro" para registrar a primeira venda ou agendamento.</p>
                     </div>
                   </td>
                 </tr>
@@ -900,7 +866,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
             </tbody>
           </table>
         </div>
-        <div className="flex items-center gap-2 border-t border-border bg-surface-alt px-5 py-3 text-xs font-bold text-status-success">
+        <div className="flex items-center gap-2 border-t border-border bg-surface-alt px-5 py-3 text-xs font-bold text-status-success-text">
           <Star size={14} className="shrink-0 fill-status-warning text-status-warning-text" />
           Clientes cadastrados ajudam a aumentar sua pontuação em Disciplina (30% dos pontos).
         </div>
@@ -941,108 +907,6 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
             {/* Scrollable Form Content */}
             <div className="flex-1 overflow-y-auto px-8 py-6 space-y-4 max-h-[70vh]">
               
-              {/* Visually Hidden elements to satisfy legacy unit tests */}
-              <div style={srOnlyStyle}>
-                {/* Canal select — index [1] for tests (index [0] is the outer hidden) */}
-                <label htmlFor="modal-canal">Canal</label>
-                <select
-                  id="modal-canal"
-                  value={canal}
-                  onChange={event => setCanal(event.target.value as CrmCanal)}
-                >
-                  <option value="">Selecione</option>
-                  <option value="carteira">Carteira</option>
-                  <option value="internet">Internet</option>
-                  <option value="showroom">Showroom</option>
-                </select>
-
-                {/* Tipo de veículo select */}
-                <label htmlFor="modal-tipo-veiculo-hidden">Tipo de veículo</label>
-                <select
-                  id="modal-tipo-veiculo-hidden"
-                  value={tipoVeiculo}
-                  onChange={event => setTipoVeiculo(event.target.value as any)}
-                >
-                  <option value="">Selecione</option>
-                  <option value="carro">Carro</option>
-                  <option value="moto">Moto</option>
-                  <option value="pesado">Pesado</option>
-                  <option value="consórcio">Consórcio</option>
-                  <option value="outro">Outro</option>
-                </select>
-
-                {/* Carro na troca select */}
-                <label htmlFor="modal-carro-troca-hidden">Carro na troca</label>
-                <select
-                  id="modal-carro-troca-hidden"
-                  value={carroAvaliado}
-                  onChange={event => setCarroAvaliado(event.target.value as any)}
-                >
-                  <option value="sim">Sim</option>
-                  <option value="nao">Não</option>
-                </select>
-
-                {/* Data venda/perda input */}
-                <label htmlFor="modal-data-venda-perda-hidden">Data venda/perda</label>
-                <input
-                  id="modal-data-venda-perda-hidden"
-                  type="date"
-                  value={dataFechamento.split('T')[0]}
-                  onChange={event => setDataFechamento(event.target.value)}
-                />
-
-                {/* Venda Realizada select */}
-                <label htmlFor="modal-venda-realizada">Venda Realizada</label>
-                <select
-                  id="modal-venda-realizada"
-                  value={vendaRealizada}
-                  onChange={event => {
-                    const val = event.target.value as any
-                    setVendaRealizada(val)
-                    if (val === 'Em Negociação' || val === 'em_andamento') {
-                      setDataFechamento(`${addDaysDateOnly(selectedDate, 1)}T12:00`)
-                    }
-                  }}
-                >
-                  <option value="Em Negociação">Em Negociação</option>
-                  <option value="Sim">Sim</option>
-                  <option value="Não">Não</option>
-                  <option value="em_andamento">Não</option>
-                  <option value="ganho">Sim</option>
-                  <option value="perdido">Não (Perdido)</option>
-                </select>
-
-                {/* Valor Negociado */}
-                <label htmlFor="modal-valor-hidden">Valor negociado</label>
-                <input
-                  id="modal-valor-hidden"
-                  type="text"
-                  value={valor}
-                  onChange={event => setValor(event.target.value)}
-                />
-
-                {/* Sinal */}
-                <label htmlFor="modal-sinal-hidden">Sinal</label>
-                <input
-                  id="modal-sinal-hidden"
-                  type="text"
-                  value={sinal}
-                  onChange={event => setSinal(event.target.value)}
-                />
-
-                {/* Financiamento */}
-                <label htmlFor="modal-financiamento-hidden">Financiamento</label>
-                <select
-                  id="modal-financiamento-hidden"
-                  value={financiamento}
-                  onChange={event => setFinanciamento(event.target.value as any)}
-                >
-                  <option value="aprovado">Aprovado</option>
-                  <option value="reprovado">Recusado</option>
-                  <option value="nao_aplica">Não se aplica</option>
-                </select>
-              </div>
-
               {/* 2-Column Grid of Fields */}
               <div className="grid grid-cols-2 gap-x-6 gap-y-4">
                 {/* 1. Nome do cliente */}

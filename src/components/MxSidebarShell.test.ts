@@ -118,6 +118,11 @@ describe('sidebar universal MX', () => {
     expect(shellSource).not.toContain('absolute left-1/2 top-[calc(50%+env(safe-area-inset-top)/2)]')
   })
 
+  test('mantém menus do cabeçalho móvel acima do conteúdo da página', () => {
+    expect(shellSource).toContain('data-mx-mobile-header=""')
+    expect(shellSource).toContain('z-[var(--mx-z-popover)]')
+  })
+
   test('não depende do pacote visual legado', () => {
     expect(shellSource).not.toContain('mxds-')
     expect(shellSource).not.toContain('AppShell')
