@@ -22,7 +22,7 @@ describe('entrada de cliente novo', () => {
 
   test('o fechamento diário mantém o cadastro de cliente novo', () => {
     const checkinCrm = readFileSync('src/features/checkin/sections/CheckinCrmSection.tsx', 'utf8')
-    expect(checkinCrm).toContain('+ Novo Cliente')
+    expect(checkinCrm).toContain('+ Novo Registro')
     expect(checkinCrm).toContain('Cadastrar Novo Cliente')
   })
 })
