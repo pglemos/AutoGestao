@@ -7,8 +7,7 @@
  *
  * Uso: node scripts/audit-radius-runtime.mjs
  */
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
-import { execSync } from 'node:child_process';
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 const OUT_DIR = '.superpowers/mx-foundation-zero/radius';
@@ -17,14 +16,33 @@ mkdirSync(OUT_DIR, { recursive: true });
 // 1. Files in src excluding base44-reference, tests, specs, stories.
 // Include SVG radius attributes in discovery: a file containing only `rx`/`ry`
 // is still part of the radius inventory even when it has no CSS/Tailwind radius.
-const codeFiles = execSync(
-  "rg -l \"rounded|border-.*radius|borderRadius|\\b(rx|ry)=\" src --glob '!**/*.test.*' --glob '!**/*.spec.*' --glob '!**/*.stories.*' --glob '!src/base44-reference/**' || true"
-)
-  .toString()
-  .trim()
-  .split('\n')
-  .filter(Boolean)
-  .sort();
+const runtimeExtensions = new Set(['.css', '.ts', '.tsx', '.js', '.jsx', '.mjs']);
+
+function isExcluded(file) {
+  if (file.startsWith('src/base44-reference/')) return true;
+  if (/\.test\.[^.]+$/.test(file)) return true;
+  if (/\.spec\.[^.]+$/.test(file)) return true;
+  if (/\.stories\.[^.]+$/.test(file)) return true;
+  return false;
+}
+
+function collectRuntimeFiles(dir = 'src', files = []) {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name.startsWith('.')) continue;
+    const file = path.posix.normalize(path.relative('.', path.join(dir, entry.name)));
+    if (entry.isDirectory()) {
+      collectRuntimeFiles(file, files);
+      continue;
+    }
+    if (!runtimeExtensions.has(path.extname(file)) || isExcluded(file)) continue;
+    files.push(file);
+  }
+  return files.sort();
+}
+
+const codeFiles = collectRuntimeFiles().filter(file =>
+  /(rounded|border-.*radius|borderRadius|\b(rx|ry)=)/.test(readFileSync(file, 'utf8'))
+);
 
 const tailwindStandard = {};
 const tailwindArbitraryPx = {};

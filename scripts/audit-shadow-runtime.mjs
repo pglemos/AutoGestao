@@ -5,26 +5,38 @@
  * O inventário é deliberadamente separado do lint: ele mede o estado real
  * antes de qualquer migração e mantém a dívida legada visível.
  */
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
-import { execFileSync } from 'node:child_process'
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 
 const OUT_DIR = '.superpowers/mx-foundation-zero/shadow'
 mkdirSync(OUT_DIR, { recursive: true })
 
 const excluded = ['src/base44-reference/**', '**/*.test.*', '**/*.spec.*', '**/*.stories.*']
-const files = execFileSync('rg', ['--files', 'src'], { encoding: 'utf8' })
-  .trim()
-  .split('\n')
-  .filter(Boolean)
-  .filter((file) => !excluded.some((pattern) => {
-    if (pattern === 'src/base44-reference/**') return file.startsWith('src/base44-reference/')
-    if (pattern === '**/*.test.*') return /\.test\.[^.]+$/.test(file)
-    if (pattern === '**/*.spec.*') return /\.spec\.[^.]+$/.test(file)
-    if (pattern === '**/*.stories.*') return /\.stories\.[^.]+$/.test(file)
-    return false
-  }))
-  .sort()
+const runtimeExtensions = new Set(['.css', '.ts', '.tsx', '.js', '.jsx', '.mjs'])
+
+function isExcluded(file) {
+  if (file.startsWith('src/base44-reference/')) return true
+  if (/\.test\.[^.]+$/.test(file)) return true
+  if (/\.spec\.[^.]+$/.test(file)) return true
+  if (/\.stories\.[^.]+$/.test(file)) return true
+  return false
+}
+
+function collectRuntimeFiles(dir = 'src', files = []) {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name.startsWith('.')) continue
+    const file = path.posix.normalize(path.relative('.', path.join(dir, entry.name)))
+    if (entry.isDirectory()) {
+      collectRuntimeFiles(file, files)
+      continue
+    }
+    if (!runtimeExtensions.has(path.extname(file)) || isExcluded(file)) continue
+    files.push(file)
+  }
+  return files.sort()
+}
+
+const files = collectRuntimeFiles()
 
 const standard = {}
 const arbitraryVar = {}
