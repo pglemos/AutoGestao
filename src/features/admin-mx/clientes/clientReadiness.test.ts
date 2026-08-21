@@ -37,7 +37,7 @@ describe('checklist de prontidão do cliente', () => {
     const check = checks.find(item => item.key === 'loja-principal')
     expect(check?.ok).toBe(false)
     expect(check?.evaluationStatus).toBe('INVALID')
-    expect(check?.correctionRoute).toBe('/admin/clientes')
+    expect(check?.correctionRoute).toBe('/clientes')
   })
 
   test('loja ocupada por outro cliente ativo bloqueia', () => {
@@ -71,6 +71,44 @@ describe('checklist de prontidão do cliente', () => {
     expect(checks.map(c => c.key)).toContain('jornada-gerada')
     expect(checks.find(c => c.key === 'dono-master')?.ok).toBe(true)
     expect(checks.find(c => c.key === 'jornada-gerada')?.ok).toBe(true)
+  })
+
+  test('plano estratégico publicado e completo aparece OK', () => {
+    const checks = buildClientReadiness(input({
+      strategic_plan_ready: { cycleStatus: 'publicado', total: 46, ready: 46, pending: 0 },
+    }))
+    const check = checks.find(c => c.key === 'plano-estrategico')
+    expect(check?.ok).toBe(true)
+    expect(check?.evaluationStatus).toBe('VALID')
+    expect(check?.detail).toBe('Publicado — 46 de 46 indicador(es) com meta completa.')
+  })
+
+  test('plano estratégico publicado com pendência não some — mostra WARNING, não trava', () => {
+    // O bug do doc de correção: status "Publicado" com metas publicadas = 0 não
+    // pode aparecer silenciosamente como se estivesse tudo certo.
+    const checks = buildClientReadiness(input({
+      strategic_plan_ready: { cycleStatus: 'publicado', total: 46, ready: 0, pending: 46 },
+    }))
+    const check = checks.find(c => c.key === 'plano-estrategico')
+    expect(check?.ok).toBe(false)
+    expect(check?.evaluationStatus).toBe('WARNING')
+    expect(check?.detail).toBe('Publicado — 0 de 46 indicador(es) com meta completa, 46 pendência(s).')
+    expect(readinessSummary(checks).canActivate).toBe(true) // informativo não bloqueia ativação
+  })
+
+  test('plano estratégico em rascunho não é tratado como pronto', () => {
+    const checks = buildClientReadiness(input({
+      strategic_plan_ready: { cycleStatus: 'rascunho', total: 46, ready: 10, pending: 36 },
+    }))
+    const check = checks.find(c => c.key === 'plano-estrategico')
+    expect(check?.ok).toBe(false)
+    expect(check?.evaluationStatus).toBe('NOT_APPLICABLE')
+    expect(check?.detail).toBe('Rascunho — 10 de 46 indicador(es) prontos para publicar.')
+  })
+
+  test('plano estratégico sem ciclo não aparece no checklist', () => {
+    const checks = buildClientReadiness(input({ strategic_plan_ready: null }))
+    expect(checks.map(c => c.key)).not.toContain('plano-estrategico')
   })
 })
 

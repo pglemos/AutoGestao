@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { Button } from '@/components/atoms/Button'
 import { REPAIRABLE_CHECKS, type RepairKey, runClientRepair } from './clientRepairs'
 import { buildClientReadiness, type ReadinessCheck, readinessSummary } from './clientReadiness'
+import { resolveOwnerMaster } from './personAccess'
+import { fetchCurrentCycle, validateCycleReadiness } from '@/features/strategic-plan/planCycleRepository'
 import { Modal } from '@/components/organisms/Modal'
 import { MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
 import { supabase } from '@/lib/supabase'
@@ -36,7 +38,7 @@ export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch
         supabase.from('unidades_cliente_consultoria').select('name, is_primary').eq('client_id', clientId),
         supabase.from('modulos_cliente_consultoria').select('enabled').eq('client_id', clientId),
         supabase.from('atribuicoes_consultoria').select('active, assignment_role').eq('client_id', clientId),
-        supabase.from('acessos_cliente_consultoria').select('nome, is_primary, email, is_dono_master, status').eq('client_id', clientId),
+        supabase.from('acessos_cliente_consultoria').select('id, nome, is_primary, email, telefone, funcao_declarada, is_dono_master, status, papeis').eq('client_id', clientId),
         supabase.from('clientes_consultoria').select('primary_store_id, status').eq('primary_store_id', (await supabase.from('clientes_consultoria').select('primary_store_id').eq('id', clientId).single()).data?.primary_store_id).neq('id', clientId),
       ])
 
@@ -54,6 +56,11 @@ export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch
       )
       setStoreTaken(busyStores.has(client.primary_store_id))
 
+      const ownerMasterResolution = accessRes.data?.length ? resolveOwnerMaster(accessRes.data) : { status: 'NOT_CONFIGURED' as const, count: 0 }
+
+      const { cycle: planCycle } = await fetchCurrentCycle(clientId, new Date().getFullYear())
+      const planReadiness = planCycle ? (await validateCycleReadiness(planCycle.id)).readiness : null
+
       const builtChecks = buildClientReadiness({
         status: client.status ?? null,
         primary_store_id: client.primary_store_id ?? null,
@@ -68,6 +75,22 @@ export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch
         modules: (modulesRes.data ?? []).map(m => ({ enabled: m.enabled ?? null })),
         assignments: (assignmentsRes.data ?? []).map(a => ({ active: a.active ?? null })),
         storeTakenByOtherClient: busyStores.has(client.primary_store_id),
+        owner_master: ownerMasterResolution.status === 'NOT_CONFIGURED'
+          ? null
+          : {
+              id: ownerMasterResolution.person?.id ?? null,
+              name: ownerMasterResolution.person?.nome ?? null,
+              email: ownerMasterResolution.person?.email ?? null,
+              valid: ownerMasterResolution.status === 'VALID',
+            },
+        strategic_plan_ready: planCycle
+          ? {
+              cycleStatus: planCycle.status,
+              total: planReadiness?.total ?? 0,
+              ready: planReadiness?.ready ?? 0,
+              pending: planReadiness?.pending ?? 0,
+            }
+          : null,
       })
 
       setChecks(builtChecks)

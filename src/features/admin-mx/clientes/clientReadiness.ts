@@ -1,3 +1,5 @@
+import { PLAN_CYCLE_STATUS_LABEL } from '@/features/strategic-plan/planCycle'
+
 export type ReadinessSeverity = 'impeditivo' | 'informativo'
 
 export type CheckEvaluationStatus =
@@ -34,7 +36,18 @@ export type ClientReadinessInput = {
   storeTakenByOtherClient: boolean
   owner_master?: { id?: string | null; name?: string | null; email?: string | null; valid?: boolean | null } | null
   journey_generated?: boolean | null
-  strategic_plan_ready?: boolean | null
+  /**
+   * Prontidão do Plano Estratégico do ano corrente — vem de
+   * `validateCycleReadiness` (RPC `validar_ciclo_plano_estrategico`), a mesma
+   * fonte que decide se o ciclo pode publicar. `total`/`ready`/`pending`
+   * espelham "Indicadores com meta" / "Metas publicadas" / "Metas pendentes".
+   */
+  strategic_plan_ready?: {
+    cycleStatus: 'rascunho' | 'em_validacao' | 'publicado' | 'revisado'
+    total: number
+    ready: number
+    pending: number
+  } | null
 }
 
 /**
@@ -59,7 +72,7 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       severity: 'impeditivo',
       ok: Boolean(input.primary_store_id),
       evaluationStatus: input.primary_store_id ? 'VALID' : 'INVALID',
-      correctionRoute: '/admin/clientes',
+      correctionRoute: '/clientes',
       detail: input.primary_store_id ? 'Cliente vinculado a uma loja do sistema.' : 'Sem loja principal o cliente não pode ficar ativo.',
     },
     {
@@ -68,7 +81,7 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       severity: 'impeditivo',
       ok: !input.storeTakenByOtherClient,
       evaluationStatus: !input.storeTakenByOtherClient ? 'VALID' : 'INVALID',
-      correctionRoute: '/admin/clientes',
+      correctionRoute: '/clientes',
       detail: input.storeTakenByOtherClient ? 'Já existe outro cliente ativo nesta loja.' : 'A loja aceita este cliente.',
     },
     {
@@ -77,7 +90,7 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       severity: 'impeditivo',
       ok: Boolean((input.product_name ?? '').trim() || (input.program_template_key ?? '').trim()),
       evaluationStatus: (input.product_name ?? '').trim() || (input.program_template_key ?? '').trim() ? 'VALID' : 'INVALID',
-      correctionRoute: '/admin/produtos',
+      correctionRoute: '/produtos',
       detail: 'Define a jornada de encontros do cliente.',
     },
     {
@@ -86,7 +99,7 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       severity: 'impeditivo',
       ok: activeAssignments.length > 0,
       evaluationStatus: activeAssignments.length > 0 ? 'VALID' : 'INVALID',
-      correctionRoute: '/admin/equipe',
+      correctionRoute: '/equipe',
       detail: activeAssignments.length ? `${activeAssignments.length} consultor(es) na carteira.` : 'Nenhum consultor atribuído.',
     },
     {
@@ -95,7 +108,7 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       severity: 'impeditivo',
       ok: enabledModules.length > 0,
       evaluationStatus: enabledModules.length > 0 ? 'VALID' : 'INVALID',
-      correctionRoute: '/admin/clientes',
+      correctionRoute: '/clientes',
       detail: enabledModules.length ? `${enabledModules.length} módulo(s) liberado(s).` : 'Sem módulo liberado o cliente entra sem acesso.',
     },
     {
@@ -104,7 +117,7 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       severity: 'informativo',
       ok: namedUnits.length > 0,
       evaluationStatus: namedUnits.length > 0 ? 'VALID' : 'WARNING',
-      correctionRoute: '/admin/clientes',
+      correctionRoute: '/clientes',
       detail: namedUnits.length ? `${namedUnits.length} unidade(s) cadastrada(s).` : 'Nenhuma unidade cadastrada.',
     },
     {
@@ -113,7 +126,7 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       severity: 'informativo',
       ok: Boolean(primaryContact),
       evaluationStatus: primaryContact ? 'VALID' : 'WARNING',
-      correctionRoute: '/admin/clientes',
+      correctionRoute: '/clientes',
       detail: primaryContact ? `${primaryContact.name}` : 'Nenhum contato principal definido.',
     },
     {
@@ -122,7 +135,7 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       severity: 'informativo',
       ok: Boolean((input.cnpj ?? '').trim()),
       evaluationStatus: (input.cnpj ?? '').trim() ? 'VALID' : 'WARNING',
-      correctionRoute: '/admin/clientes',
+      correctionRoute: '/clientes',
       detail: 'Necessário para emissão e conciliação.',
     },
     {
@@ -131,7 +144,7 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       severity: 'informativo',
       ok: Boolean(input.contract_start_date),
       evaluationStatus: input.contract_start_date ? 'VALID' : 'WARNING',
-      correctionRoute: '/admin/clientes',
+      correctionRoute: '/clientes',
       detail: 'Base para a contagem da jornada.',
     },
     {
@@ -140,7 +153,7 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       severity: 'informativo',
       ok: Boolean(input.implementation_owner_id),
       evaluationStatus: input.implementation_owner_id ? 'VALID' : 'WARNING',
-      correctionRoute: '/admin/equipe',
+      correctionRoute: '/equipe',
       detail: 'Quem responde pelo onboarding.',
     },
   ]
@@ -153,7 +166,7 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       severity: 'informativo',
       ok: isOwnerValid,
       evaluationStatus: isOwnerValid ? 'VALID' : 'WARNING',
-      correctionRoute: '/admin/equipe',
+      correctionRoute: '/equipe',
       detail: isOwnerValid ? `Dono Master: ${input.owner_master.email}` : 'Vínculo ou e-mail de Dono Master inconsistente.',
     })
   }
@@ -165,8 +178,27 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       severity: 'informativo',
       ok: Boolean(input.journey_generated),
       evaluationStatus: input.journey_generated ? 'VALID' : 'WARNING',
-      correctionRoute: '/admin/consultoria-mx',
+      correctionRoute: '/consultoria-mx',
       detail: input.journey_generated ? 'Jornada de encontros materializada.' : 'Encontros da jornada ainda não foram gerados.',
+    })
+  }
+
+  if (input.strategic_plan_ready !== undefined && input.strategic_plan_ready !== null) {
+    const plan = input.strategic_plan_ready
+    const published = plan.cycleStatus === 'publicado'
+    const ok = published && plan.pending === 0
+    checks.push({
+      key: 'plano-estrategico',
+      label: 'Plano Estratégico',
+      severity: 'informativo',
+      ok,
+      evaluationStatus: ok ? 'VALID' : published ? 'WARNING' : 'NOT_APPLICABLE',
+      correctionRoute: '/plano-estrategico',
+      detail: plan.total === 0
+        ? 'Plano ainda sem indicadores.'
+        : published
+          ? `Publicado — ${plan.ready} de ${plan.total} indicador(es) com meta completa${plan.pending > 0 ? `, ${plan.pending} pendência(s)` : ''}.`
+          : `${PLAN_CYCLE_STATUS_LABEL[plan.cycleStatus]} — ${plan.ready} de ${plan.total} indicador(es) prontos para publicar.`,
     })
   }
 
