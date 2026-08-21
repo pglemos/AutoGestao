@@ -4253,7 +4253,7 @@ export type Database = {
             foreignKeyName: "conteudo_referencia_encontro_learning_content_id_fkey"
             columns: ["learning_content_id"]
             isOneToOne: false
-            referencedRelation: "universidade_aulas"
+            referencedRelation: "treinamentos"
             referencedColumns: ["id"]
           },
           {
@@ -15607,6 +15607,7 @@ export type Database = {
           closing_time: string | null
           cnpj: string | null
           created_at: string
+          created_by: string | null
           id: string
           internal_code: string | null
           is_primary: boolean
@@ -15629,6 +15630,7 @@ export type Database = {
           closing_time?: string | null
           cnpj?: string | null
           created_at?: string
+          created_by?: string | null
           id?: string
           internal_code?: string | null
           is_primary?: boolean
@@ -15651,6 +15653,7 @@ export type Database = {
           closing_time?: string | null
           cnpj?: string | null
           created_at?: string
+          created_by?: string | null
           id?: string
           internal_code?: string | null
           is_primary?: boolean
@@ -15679,6 +15682,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "vw_jornada_alem_do_contratado"
             referencedColumns: ["client_id"]
+          },
+          {
+            foreignKeyName: "unidades_cliente_consultoria_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
           },
         ]
       }

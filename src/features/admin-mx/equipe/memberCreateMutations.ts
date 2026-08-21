@@ -9,8 +9,9 @@ function newUserId(): string {
 /**
  * Cria um membro da equipe MX: grava usuarios (nome, e-mail, papel, acesso) e,
  * quando o papel é consultor_mx, o perfil do consultor (perfil_consultor_mx).
- * A loja principal opcional vira um vínculo ativo principal em
- * vinculos_equipe_loja.
+ * A loja principal opcional vira um vínculo ativo em `vinculos_loja` — a
+ * mesma tabela que ranking, dashboard, check-in e RLS leem (ver comentário
+ * em userEdit.ts sobre por que não é `vinculos_equipe_loja`, tabela morta).
  */
 export async function createTeamMember(draft: MemberCreateDraft): Promise<{ error: string | null; id?: string }> {
   const errors = validateMemberCreate(draft)
