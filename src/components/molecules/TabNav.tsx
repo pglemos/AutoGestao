@@ -89,6 +89,10 @@ export function TabNav<T extends string = string>({
       {tabs.map(({ key, label, controls, disabled }) => {
         const tabId = `${String(key)}-tab`
         const panelId = controls ?? `${String(key)}-panel`
+        // Consumers that mount only the active panel do not have valid targets
+        // for inactive tabs. Explicit controls keep the all-panels contract;
+        // generated ids are linked only while their panel is mounted.
+        const shouldControlPanel = controls !== undefined || activeTab === key
 
         return (
           <button
@@ -100,7 +104,7 @@ export function TabNav<T extends string = string>({
             aria-disabled={disabled || undefined}
             tabIndex={disabled ? -1 : activeTab === key ? 0 : -1}
             aria-selected={activeTab === key}
-            aria-controls={panelId}
+            aria-controls={shouldControlPanel ? panelId : undefined}
             onClick={() => !disabled && onTabChange(key)}
             onKeyDown={handleKeyDown}
             className={cn(

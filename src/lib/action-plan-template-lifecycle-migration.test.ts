@@ -2,6 +2,7 @@ import { describe, expect, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
 
 const sql = readFileSync('supabase/migrations/20260820233000_action_plan_template_lifecycle_atomic.sql', 'utf8')
+const partialPayloadSql = readFileSync('supabase/migrations/20260821223000_harden_action_plan_template_partial_payload.sql', 'utf8')
 
 describe('migration ciclo de vida transacional dos templates', () => {
   test('garante um rascunho por template e reconcilia duplicados sem delete', () => {
@@ -23,5 +24,11 @@ describe('migration ciclo de vida transacional dos templates', () => {
     expect(sql).toContain("status IN ('rascunho', 'publicada')")
     expect(sql).toContain('SET active = false')
     expect(sql).toContain('REVOKE ALL ON FUNCTION')
+  })
+
+  test('preserva itens quando o payload de edição é parcial', () => {
+    expect(partialPayloadSql).toContain("IF NOT (p_payload ? 'items') THEN")
+    expect(partialPayloadSql).toContain('save_action_plan_template_draft_legacy')
+    expect(partialPayloadSql).toContain('jsonb_agg')
   })
 })

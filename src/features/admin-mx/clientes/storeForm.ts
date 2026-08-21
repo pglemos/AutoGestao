@@ -5,6 +5,8 @@ export type StoreStatus = 'ativa' | 'inativa'
 
 export type StoreDraft = {
   id: string | null
+  /** Loja operacional canônica em `public.lojas`. */
+  store_id: string | null
   name: string
   store_type: StoreType
   cnpj: string
@@ -29,6 +31,7 @@ export const BRAZILIAN_UFS = [
 export function emptyStoreDraft(type: StoreType = 'filial'): StoreDraft {
   return {
     id: null,
+    store_id: null,
     name: '',
     store_type: type,
     cnpj: '',

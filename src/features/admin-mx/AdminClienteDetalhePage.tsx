@@ -545,7 +545,7 @@ export function AdminClienteDetalhePage() {
                             {unit.status === 'inativa' ? <span className="rounded-full bg-status-warning-surface px-2 py-0.5 text-caption font-medium text-status-warning-text">Inativa</span> : null}
                           </div>
                           <div className="flex items-center gap-2">
-                            <Button variant="outline" size="sm" onClick={() => setStoreModal({ open: true, initial: { ...emptyStoreDraft(unit.store_type === 'matriz' ? 'matriz' : 'filial'), id: unit.id, name: unit.name, cnpj: unit.cnpj ?? '', internal_code: unit.internal_code ?? '', address_street: unit.address_street ?? '', address_city: unit.city ?? '', address_state: unit.state ?? '', address_zip: unit.address_zip ?? '', timezone: unit.timezone ?? 'America/Sao_Paulo', status: unit.status === 'inativa' ? 'inativa' : 'ativa', opening_date: unit.opening_date ?? '', notes: unit.notes ?? '', is_primary: unit.is_primary } })}>
+                            <Button variant="outline" size="sm" onClick={() => setStoreModal({ open: true, initial: { ...emptyStoreDraft(unit.store_type === 'matriz' ? 'matriz' : 'filial'), id: unit.id, store_id: unit.store_id, name: unit.name, cnpj: unit.cnpj ?? '', internal_code: unit.internal_code ?? '', address_street: unit.address_street ?? '', address_city: unit.city ?? '', address_state: unit.state ?? '', address_zip: unit.address_zip ?? '', timezone: unit.timezone ?? 'America/Sao_Paulo', status: unit.status === 'inativa' ? 'inativa' : 'ativa', opening_date: unit.opening_date ?? '', notes: unit.notes ?? '', is_primary: unit.is_primary } })}>
                               <Pencil size={14} />Editar
                             </Button>
                             <Button variant="outline" size="sm" onClick={() => setHoursUnitId(hoursUnitId === unit.id ? null : unit.id)}>
@@ -576,7 +576,7 @@ export function AdminClienteDetalhePage() {
                   loading={false}
                   resolution={ownerMasterResolution}
                   onDefine={() => {
-                    setPersonPrefill({ papeis: ['DONO'], is_dono_master: true, visao_padrao: 'DONO', lojas_autorizadas: units.map(unit => unit.id) })
+                    setPersonPrefill({ papeis: ['DONO'], is_dono_master: true, visao_padrao: 'DONO', lojas_autorizadas: units.map(unit => unit.store_id ?? unit.id) })
                     setPersonModal(true)
                   }}
                   onEdit={() => { /* edição abre o modal de pessoa quando implementado */ }}
@@ -782,7 +782,7 @@ export function AdminClienteDetalhePage() {
             <PersonCreateModal
               open={personModal}
               submitting={savingPerson}
-              stores={units.map(unit => ({ id: unit.id, name: unit.name }))}
+              stores={units.map(unit => ({ id: unit.store_id ?? unit.id, name: unit.name }))}
               initial={personPrefill ?? undefined}
               onSubmit={draft => void submitPerson(draft)}
               onClose={() => { setPersonModal(false); setPersonPrefill(null) }}

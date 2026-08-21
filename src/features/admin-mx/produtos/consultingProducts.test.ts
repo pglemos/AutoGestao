@@ -5,12 +5,16 @@ import {
   emptyProductDraft,
   encounterTimeStatus,
   nextVersionKey,
+  patchProductModule,
   productRequiresNewVersion,
+  restoreProductCapabilityDefaults,
   summarizeTimes,
   validateProductPublication,
   validateProductDraft,
   type EncounterTime,
+  type ProductModule,
 } from './consultingProducts'
+import { buildDefaultCapabilities } from './capabilityCatalog'
 
 function time(overrides: Partial<EncounterTime> = {}): EncounterTime {
   return { visit_number: 1, horas_online: null, horas_presencial: null, origem: 'manual', observacao: null, ...overrides }
@@ -89,5 +93,57 @@ describe('tempos por encontro', () => {
       time({ visit_number: 3 }),
     ])
     expect(resumo).toEqual({ totalOnline: 3.5, totalPresencial: 4, encontros: 3, pendencias: 1 })
+  })
+})
+
+describe('origem da matriz de capacidades', () => {
+  const reference = buildDefaultCapabilities()[0]
+  const module = (): ProductModule => ({
+    module_key: reference.moduleKey,
+    label: reference.label,
+    module_code: reference.moduleCode,
+    module_label: reference.moduleLabel,
+    menu_code: reference.code,
+    menu_label: reference.label,
+    incluido: true,
+    obrigatorio: reference.mandatory,
+    etapa: null,
+    visibilidade: 'dono',
+    release_stage: reference.releaseStage,
+    visibility: reference.visibility,
+    technical_status: reference.technicalStatus,
+    display_order: reference.displayOrder,
+    status: 'ATIVO',
+    configuration_origin: 'PADRAO_PRODUTO',
+  })
+
+  test('marca alteração personalizada e restaura o padrão', () => {
+    const customized = patchProductModule(module(), { incluido: false })
+    expect(customized.configuration_origin).toBe('PERSONALIZADO_PRODUTO')
+
+    const restored = restoreProductCapabilityDefaults([customized])[0]
+    expect(restored).toMatchObject({
+      incluido: true,
+      obrigatorio: reference.mandatory,
+      release_stage: reference.releaseStage,
+      visibility: reference.visibility,
+      technical_status: reference.technicalStatus,
+      configuration_origin: 'PADRAO_PRODUTO',
+    })
+  })
+
+  test('mantém itens sem referência oficial como personalizados', () => {
+    const legacy: ProductModule = {
+      ...module(),
+      module_key: 'legado__menu_customizado',
+      module_code: 'LEGADO',
+      module_label: 'Módulos legados',
+      menu_code: 'MENU_CUSTOMIZADO',
+      menu_label: 'Menu customizado',
+      configuration_origin: 'PADRAO_PRODUTO',
+    }
+
+    expect(patchProductModule(legacy, { incluido: true }).configuration_origin).toBe('PERSONALIZADO_PRODUTO')
+    expect(restoreProductCapabilityDefaults([legacy])[0].configuration_origin).toBe('PERSONALIZADO_PRODUTO')
   })
 })

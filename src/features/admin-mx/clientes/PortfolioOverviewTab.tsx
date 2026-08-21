@@ -550,7 +550,7 @@ export function PortfolioOverviewTab({
             /* Cards Operacionais View */
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
               {filtered.map(client => {
-                const stat = stats[client.id]
+                const stat = clientTeamStat(clientStoreIds(client, lojas), stats)
                 const storeSlug = client.slug || client.id
                 const clientActive = isActive(client)
                 const progressPct =

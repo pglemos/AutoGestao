@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { buildStoreHierarchyPlan } from './createClientProgram'
+import { buildStoreHierarchyPlan, resolveUnitStoreId } from './createClientProgram'
 
 describe('hierarquia operacional do cadastro de cliente', () => {
   test('separa matriz e filiais na ordem do wizard', () => {
@@ -29,5 +29,15 @@ describe('hierarquia operacional do cadastro de cliente', () => {
       primaryUnitName: '',
       filialUnitNames: [],
     })
+  })
+
+  test('resolve matriz e filiais para os ids operacionais', () => {
+    const hierarchy = {
+      primaryStoreId: 'store-matrix',
+      storeIdsByName: { 'filial norte': 'store-north' },
+    }
+    expect(resolveUnitStoreId({ name: 'Matriz renomeada', is_primary: true }, hierarchy)).toBe('store-matrix')
+    expect(resolveUnitStoreId({ name: 'Filial Norte', is_primary: false }, hierarchy)).toBe('store-north')
+    expect(resolveUnitStoreId({ name: 'Sem vínculo', is_primary: false }, hierarchy)).toBeNull()
   })
 })

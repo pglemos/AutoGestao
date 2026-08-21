@@ -19,7 +19,9 @@ export default function InternalActionPlanPage() {
     return (
       <>
         {domain.tabs}
-        <AdminPlanosAcaoGlobalPage />
+        <div id="biblioteca-panel" role="tabpanel" aria-labelledby="biblioteca-tab">
+          <AdminPlanosAcaoGlobalPage />
+        </div>
       </>
     )
   }
@@ -27,14 +29,16 @@ export default function InternalActionPlanPage() {
   return (
     <>
       {domain.tabs}
-      <InternalMxPlanningShell
-        icon={ClipboardList}
-        title="Planos de Ação"
-        description="Administre ações, responsáveis, prazos, evidências, validações e impacto da loja selecionada."
-        store={store}
-      >
-        <ActionPlanWorkspace />
-      </InternalMxPlanningShell>
+      <div id="cliente-panel" role="tabpanel" aria-labelledby="cliente-tab">
+        <InternalMxPlanningShell
+          icon={ClipboardList}
+          title="Planos de Ação"
+          description="Administre ações, responsáveis, prazos, evidências, validações e impacto da loja selecionada."
+          store={store}
+        >
+          <ActionPlanWorkspace />
+        </InternalMxPlanningShell>
+      </div>
     </>
   )
 }

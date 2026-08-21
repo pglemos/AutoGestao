@@ -66,7 +66,37 @@ export async function saveClientStore(
     updated_at: new Date().toISOString(),
   }
 
+  const { data: client, error: clientError } = await supabase
+    .from('clientes_consultoria')
+    .select('id, primary_store_id, legal_name, cnpj')
+    .eq('id', clientId)
+    .single()
+  if (clientError || !client) return { error: clientError?.message ?? 'Cliente não encontrado.' }
+
   if (draft.id) {
+    const { data: currentUnit, error: currentUnitError } = await supabase
+      .from('unidades_cliente_consultoria')
+      .select('store_id, name')
+      .eq('id', draft.id)
+      .maybeSingle()
+    if (currentUnitError) return { error: currentUnitError.message }
+
+    let realStoreId = draft.store_id ?? currentUnit?.store_id ?? null
+    if (!realStoreId && draft.store_type === 'matriz') {
+      realStoreId = client.primary_store_id
+    }
+    if (!realStoreId && draft.store_type === 'filial' && client.primary_store_id) {
+      const { data: existingFilial, error: filialLookupError } = await supabase
+        .from('lojas')
+        .select('id')
+        .eq('parent_loja_id', client.primary_store_id)
+        .eq('name', currentUnit?.name ?? draft.name.trim())
+        .maybeSingle()
+      if (filialLookupError) return { error: filialLookupError.message }
+      realStoreId = existingFilial?.id ?? null
+    }
+    if (!realStoreId) return { error: 'A unidade não está vinculada a uma loja operacional. Cadastre a filial na hierarquia antes de editar.' }
+
     const { error } = await supabase
       .from('unidades_cliente_consultoria')
       .update({
@@ -74,17 +104,11 @@ export async function saveClientStore(
         name: draft.name.trim(),
         store_type: draft.store_type,
         is_primary: draft.store_type === 'matriz',
+        store_id: realStoreId,
       })
       .eq('id', draft.id)
     return { error: error?.message ?? null }
   }
-
-  const { data: client, error: clientError } = await supabase
-    .from('clientes_consultoria')
-    .select('id, primary_store_id, legal_name, cnpj')
-    .eq('id', clientId)
-    .single()
-  if (clientError || !client) return { error: clientError?.message ?? 'Cliente não encontrado.' }
 
   let realStoreId = client.primary_store_id
   let createdRealStoreId: string | null = null
@@ -153,6 +177,7 @@ export async function saveClientStore(
       client_id: clientId,
       name: draft.name.trim(),
       is_primary: draft.store_type === 'matriz',
+      store_id: realStoreId,
       created_by: createdBy,
       ...base,
     })

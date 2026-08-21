@@ -242,7 +242,8 @@ export function AdminPlanosAcaoGlobalPage() {
 
         <TabNav tabs={PLAN_TABS} activeTab={tab} onTabChange={setTab} />
 
-        {tab === 'sugestoes' ? (
+        <div id={`${tab}-panel`} role="tabpanel" aria-labelledby={`${tab}-tab`}>
+          {tab === 'sugestoes' ? (
           <SuggestionsTab refreshKey={suggestionsRefreshKey} onChanged={() => { setSuggestionsRefreshKey(current => current + 1); void refetch() }} />
         ) : tab === 'aplicacoes' ? (
           <ApplicationsTab onOpenPlan={openPlanById} refreshKey={applicationsRefreshKey} />
@@ -344,7 +345,7 @@ export function AdminPlanosAcaoGlobalPage() {
               </div>
             </MxSectionCard>
           )
-        ) : loading ? <MxLoadingState label="Carregando planos de ação" /> : error ? <MxErrorState description={error} retry={() => void refetch()} /> : (
+          ) : loading ? <MxLoadingState label="Carregando planos de ação" /> : error ? <MxErrorState description={error} retry={() => void refetch()} /> : (
           <>
             <MxMetricGrid>
               <MxMetricCard title="Planos" value={metrics.total} detail="Últimos 500 registros" icon={ClipboardList} />
@@ -432,7 +433,8 @@ export function AdminPlanosAcaoGlobalPage() {
             </MxSectionCard>
             )}
           </>
-        )}
+          )}
+        </div>
 
         <TemplateWizard
           open={templates.formOpen}

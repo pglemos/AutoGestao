@@ -13,7 +13,7 @@ import {
   MxStatusBanner,
   MxTableSurface,
 } from '@/components/module/MxModuleVisualPrimitives'
-import { ChevronDown, ChevronUp, Eye, Lock, Package } from 'lucide-react'
+import { ChevronDown, ChevronUp, Eye, Lock, Package, RefreshCw } from 'lucide-react'
 import { toast } from '@/lib/toast'
 import { ProductStrategicPlanTab } from './ProductStrategicPlanTab'
 import { PREVIEW_PROFILES, RELEASE_STAGE_LABELS, TECHNICAL_STATUS_LABELS, VISIBILITY_LABELS, moduleInclusionState } from './capabilityCatalog'
@@ -21,6 +21,8 @@ import {
   encounterTimeStatus,
   fetchEncounterTimes,
   fetchProductModules,
+  patchProductModule,
+  restoreProductCapabilityDefaults,
   saveEncounterTimes,
   saveProductModules,
   summarizeTimes,
@@ -85,7 +87,7 @@ export function ProductDetailDrawer(props: { product: ConsultingProduct | null; 
   if (!product) return null
 
   const patchModule = (key: string, values: Partial<ProductModule>) =>
-    setModules(current => current.map(item => (item.module_key === key ? { ...item, ...values } : item)))
+    setModules(current => current.map(item => (item.module_key === key ? patchProductModule(item, values) : item)))
 
   const patchTime = (visit: number, values: Partial<EncounterTime>) =>
     setTimes(current => current.map(item => (item.visit_number === visit ? { ...item, ...values } : item)))
@@ -156,8 +158,9 @@ export function ProductDetailDrawer(props: { product: ConsultingProduct | null; 
             <div className="space-y-3">
               <MxStatusBanner tone="info">A liberação marcada aqui é herdada pelos clientes que contratam este produto.</MxStatusBanner>
               <div className="flex flex-wrap gap-2">
-                <Button variant="outline" size="sm" onClick={() => setModules(current => current.map(item => item.technical_status === 'TEMPORARIAMENTE_INDISPONIVEL' ? item : ({ ...item, incluido: true })))}>Marcar todos</Button>
-                <Button variant="outline" size="sm" onClick={() => setModules(current => current.map(item => item.obrigatorio ? item : ({ ...item, incluido: false })))}>Limpar não obrigatórios</Button>
+                <Button variant="outline" size="sm" onClick={() => setModules(current => current.map(item => item.technical_status === 'TEMPORARIAMENTE_INDISPONIVEL' ? item : patchProductModule(item, { incluido: true })))}>Marcar todos</Button>
+                <Button variant="outline" size="sm" onClick={() => setModules(current => current.map(item => item.obrigatorio ? item : patchProductModule(item, { incluido: false })))}>Limpar não obrigatórios</Button>
+                <Button variant="outline" size="sm" onClick={() => setModules(current => restoreProductCapabilityDefaults(current))}><RefreshCw size={14} />Restaurar padrão do produto</Button>
                 <Button variant="outline" size="sm" onClick={() => setShowPreview(value => !value)}><Eye size={14} />{showPreview ? 'Fechar prévia' : 'Visualizar como perfil'}</Button>
               </div>
               {showPreview ? (
@@ -173,10 +176,10 @@ export function ProductDetailDrawer(props: { product: ConsultingProduct | null; 
                 </div>
               ) : null}
               <MxTableSurface>
-                <Table className="min-w-[1040px]">
+                <Table className="min-w-[1180px]">
                   <TableHeader>
                     <TableRow>
-                      <TableHead colSpan={7}>Matriz de capacidades</TableHead>
+                      <TableHead colSpan={8}>Matriz de capacidades</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -219,6 +222,7 @@ export function ProductDetailDrawer(props: { product: ConsultingProduct | null; 
                               </TableCell>
                               <TableCell><div className="text-xs text-muted-foreground">{RELEASE_STAGE_LABELS[item.release_stage]} · {VISIBILITY_LABELS[item.visibility]}</div></TableCell>
                               <TableCell><div className="text-xs font-medium text-muted-foreground">{TECHNICAL_STATUS_LABELS[item.technical_status]}</div></TableCell>
+                              <TableCell><div className="text-xs font-medium text-muted-foreground">{item.configuration_origin === 'PERSONALIZADO_PRODUTO' ? 'Personalizado' : 'Padrão do produto'}</div></TableCell>
                             </TableRow>
                           )) : null}
                         </Fragment>

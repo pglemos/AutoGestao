@@ -2,6 +2,7 @@ import { supabase } from '@/lib/supabase'
 import { buildDefaultCapabilities, type CapabilityReleaseStage, type CapabilityTechnicalStatus, type CapabilityVisibility } from './capabilityCatalog'
 
 export type ProductStatus = 'rascunho' | 'em_revisao' | 'publicado' | 'suspenso_novas_contratacoes' | 'arquivado'
+export type CapabilityConfigurationOrigin = 'PADRAO_PRODUTO' | 'PERSONALIZADO_PRODUTO'
 
 export type ConsultingProduct = {
   program_key: string
@@ -41,6 +42,7 @@ export type ProductModule = {
   technical_status: CapabilityTechnicalStatus
   display_order: number
   status: 'ATIVO' | 'INATIVO'
+  configuration_origin: CapabilityConfigurationOrigin
 }
 
 export type EncounterTime = {
@@ -102,6 +104,79 @@ export function canDeleteProduct(product: Pick<ConsultingProduct, 'status' | 'cl
 
 export function productRequiresNewVersion(product: Pick<ConsultingProduct, 'status'>): boolean {
   return product.status === 'publicado' || product.status === 'suspenso_novas_contratacoes'
+}
+
+function matchesCapabilityReference(item: ProductModule, reference: ReturnType<typeof buildDefaultCapabilities>[number]) {
+  return item.incluido === true
+    && item.obrigatorio === reference.mandatory
+    && item.etapa === null
+    && item.visibilidade === 'dono'
+    && item.release_stage === reference.releaseStage
+    && item.visibility === reference.visibility
+    && item.technical_status === reference.technicalStatus
+    && item.status === 'ATIVO'
+}
+
+function referenceForCapability(item: Pick<ProductModule, 'module_code' | 'menu_code' | 'module_key'>) {
+  const references = buildDefaultCapabilities()
+  return references.find(reference => (
+    reference.moduleCode === item.module_code && reference.code === item.menu_code
+  )) ?? references.find(reference => reference.moduleKey === item.module_key)
+}
+
+/** Aplica uma alteração de matriz e registra automaticamente sua origem. */
+export function patchProductModule(item: ProductModule, values: Partial<ProductModule>): ProductModule {
+  const next = { ...item, ...values }
+  const reference = referenceForCapability(next)
+  return {
+    ...next,
+    configuration_origin: reference && matchesCapabilityReference(next, reference)
+      ? 'PADRAO_PRODUTO'
+      : 'PERSONALIZADO_PRODUTO',
+  }
+}
+
+/** Restaura o catálogo oficial MX, inclusive itens obrigatórios e metadados técnicos. */
+export function restoreProductCapabilityDefaults(modules: ProductModule[]): ProductModule[] {
+  const references = buildDefaultCapabilities()
+  const byKey = new Map(references.map(reference => [reference.moduleKey, reference]))
+  const byMenu = new Map(references.map(reference => [`${reference.moduleCode}::${reference.code}`, reference]))
+
+  return modules.map(item => {
+    const reference = byMenu.get(`${item.module_code ?? ''}::${item.menu_code ?? ''}`) ?? byKey.get(item.module_key)
+    if (!reference) {
+      return {
+        ...item,
+        incluido: false,
+        obrigatorio: false,
+        etapa: null,
+        visibilidade: 'dono',
+        release_stage: 'NA_ATIVACAO',
+        visibility: 'ATIVO',
+        technical_status: 'DISPONIVEL',
+        status: 'ATIVO',
+        configuration_origin: 'PERSONALIZADO_PRODUTO',
+      }
+    }
+    return {
+      ...item,
+      label: reference.label,
+      module_code: reference.moduleCode,
+      module_label: reference.moduleLabel,
+      menu_code: reference.code,
+      menu_label: reference.label,
+      incluido: true,
+      obrigatorio: reference.mandatory,
+      etapa: null,
+      visibilidade: 'dono',
+      release_stage: reference.releaseStage,
+      visibility: reference.visibility,
+      technical_status: reference.technicalStatus,
+      display_order: reference.displayOrder,
+      status: 'ATIVO',
+      configuration_origin: 'PADRAO_PRODUTO',
+    }
+  })
 }
 
 export function validateProductPublication(input: {
@@ -252,7 +327,7 @@ export async function deleteDraftProduct(product: ConsultingProduct): Promise<{ 
 
 export async function fetchProductModules(programKey: string): Promise<ProductModule[]> {
   const [{ data: saved }, { data: catalog }] = await Promise.all([
-    supabase.from('modulos_produto_consultoria').select('id, module_key, label, module_code, module_label, menu_code, menu_label, incluido, obrigatorio, etapa, visibilidade, release_stage, visibility, technical_status, display_order, status').eq('program_key', programKey).order('display_order', { ascending: true }),
+    supabase.from('modulos_produto_consultoria').select('id, module_key, label, module_code, module_label, menu_code, menu_label, incluido, obrigatorio, etapa, visibilidade, release_stage, visibility, technical_status, display_order, status, configuration_origin').eq('program_key', programKey).order('display_order', { ascending: true }),
     supabase.from('modulos_sistema').select('codigo, nome, interno_mx').order('nome', { ascending: true }),
   ])
   const savedRows = saved ?? []
@@ -283,6 +358,7 @@ export async function fetchProductModules(programKey: string): Promise<ProductMo
       technical_status: (current?.technical_status ?? reference.technicalStatus) as ProductModule['technical_status'],
       display_order: current?.display_order ?? reference.displayOrder,
       status: (current?.status ?? 'ATIVO') as ProductModule['status'],
+      configuration_origin: (current?.configuration_origin ?? 'PADRAO_PRODUTO') as CapabilityConfigurationOrigin,
     }
   })
 
@@ -305,6 +381,7 @@ export async function fetchProductModules(programKey: string): Promise<ProductMo
       technical_status: item.technical_status as ProductModule['technical_status'],
       display_order: item.display_order,
       status: item.status as ProductModule['status'],
+      configuration_origin: 'PERSONALIZADO_PRODUTO' as CapabilityConfigurationOrigin,
     }))
 
   const catalogFallback = (catalog ?? []).filter(item => !item.interno_mx && !savedRows.some(savedItem => savedItem.module_key === item.codigo))
@@ -324,6 +401,7 @@ export async function fetchProductModules(programKey: string): Promise<ProductMo
       technical_status: 'DISPONIVEL' as ProductModule['technical_status'],
       display_order: 1000,
       status: 'ATIVO' as ProductModule['status'],
+      configuration_origin: 'PERSONALIZADO_PRODUTO' as CapabilityConfigurationOrigin,
     }))
 
   return [...defaults, ...legacy, ...catalogFallback].sort((left, right) => left.display_order - right.display_order)
@@ -357,6 +435,7 @@ export async function saveProductModules(programKey: string, modules: ProductMod
       technical_status: item.technical_status,
       display_order: item.display_order,
       status: item.status,
+      configuration_origin: item.configuration_origin,
       updated_at: new Date().toISOString(),
     })),
     { onConflict: 'program_key,module_key' },

@@ -61,6 +61,13 @@ describe("TabNav", () => {
     expect(screen.getByRole("tab", { name: "Arquivos" }).getAttribute("aria-controls")).toBe("files-panel");
   });
 
+  test("links only the active generated panel when inactive panels are not mounted", () => {
+    render(<TabNav tabs={tabs} activeTab="overview" onTabChange={() => {}} />);
+
+    expect(screen.getByRole("tab", { name: "Visão Geral" }).getAttribute("aria-controls")).toBe("overview-panel");
+    expect(screen.getByRole("tab", { name: "Arquivos" }).getAttribute("aria-controls")).toBeNull();
+  });
+
   test("FASE J: roving tabindex — apenas a aba ativa está na ordem de tabulação", () => {
     render(<TabNav tabs={tabs} activeTab="overview" onTabChange={() => {}} />);
 

@@ -1,11 +1,31 @@
 import { supabase } from '@/lib/supabase'
-import { newClientSlug, onlyDigits, type NewClientDraft } from './newClientDraft'
+import { newClientSlug, onlyDigits, type NewClientDraft, type NewClientUnit } from './newClientDraft'
 
 export type CreateClientProgramResult = { clientId: string | null; slug: string | null; error: string | null }
 
 export type StoreHierarchyPlan = {
   primaryUnitName: string
   filialUnitNames: string[]
+}
+
+export type StoreHierarchyResult = {
+  primaryStoreId: string | null
+  createdStoreIds: string[]
+  storeIdsByName: Record<string, string>
+  error: string | null
+}
+
+function normalizeStoreName(name: string): string {
+  return name.trim().toLocaleLowerCase('pt-BR')
+}
+
+/** Resolve a unidade do wizard para a loja operacional criada/reutilizada. */
+export function resolveUnitStoreId(
+  unit: Pick<NewClientUnit, 'name' | 'is_primary'>,
+  hierarchy: Pick<StoreHierarchyResult, 'primaryStoreId' | 'storeIdsByName'>,
+): string | null {
+  if (unit.is_primary) return hierarchy.primaryStoreId
+  return hierarchy.storeIdsByName[normalizeStoreName(unit.name)] ?? null
 }
 
 /** Mantém a regra de uma matriz e N filiais explícita e testável. */
@@ -39,14 +59,16 @@ async function ensureStoreHierarchy(
   clientId: string,
   draft: NewClientDraft,
   fallbackPrimaryStoreId: string | null = null,
-): Promise<{ primaryStoreId: string | null; createdStoreIds: string[]; error: string | null }> {
+): Promise<StoreHierarchyResult> {
   const plan = buildStoreHierarchyPlan(draft)
   const createdStoreIds: string[] = []
+  const storeIdsByName: Record<string, string> = {}
   let primaryStoreId = draft.primary_store_id || fallbackPrimaryStoreId
 
   if (primaryStoreId) {
     const result = await assertMatrixStore(primaryStoreId)
-    if (result.error) return { primaryStoreId: null, createdStoreIds, error: result.error }
+    if (result.error) return { primaryStoreId: null, createdStoreIds, storeIdsByName, error: result.error }
+    if (result.store) storeIdsByName[normalizeStoreName(result.store.name)] = result.store.id
   } else if (plan.primaryUnitName) {
     const { data: created, error } = await supabase
       .from('lojas')
@@ -60,12 +82,16 @@ async function ensureStoreHierarchy(
       })
       .select('id')
       .single()
-    if (error || !created?.id) return { primaryStoreId: null, createdStoreIds, error: error?.message ?? 'Não foi possível criar a matriz operacional.' }
+    if (error || !created?.id) return { primaryStoreId: null, createdStoreIds, storeIdsByName, error: error?.message ?? 'Não foi possível criar a matriz operacional.' }
     primaryStoreId = created.id
     createdStoreIds.push(created.id)
+    storeIdsByName[normalizeStoreName(plan.primaryUnitName)] = created.id
   }
 
-  if (!primaryStoreId) return { primaryStoreId: null, createdStoreIds, error: 'Cadastre uma loja principal antes de continuar.' }
+  if (!primaryStoreId) return { primaryStoreId: null, createdStoreIds, storeIdsByName, error: 'Cadastre uma loja principal antes de continuar.' }
+  if (plan.primaryUnitName && !storeIdsByName[normalizeStoreName(plan.primaryUnitName)]) {
+    storeIdsByName[normalizeStoreName(plan.primaryUnitName)] = primaryStoreId
+  }
 
   if (draft.structure_type === 'REDE') {
     for (const filialName of plan.filialUnitNames) {
@@ -75,8 +101,11 @@ async function ensureStoreHierarchy(
         .eq('parent_loja_id', primaryStoreId)
         .eq('name', filialName)
         .maybeSingle()
-      if (existingError) return { primaryStoreId: null, createdStoreIds, error: existingError.message }
-      if (existing?.id) continue
+      if (existingError) return { primaryStoreId: null, createdStoreIds, storeIdsByName, error: existingError.message }
+      if (existing?.id) {
+        storeIdsByName[normalizeStoreName(filialName)] = existing.id
+        continue
+      }
 
       const { data: filial, error } = await supabase
         .from('lojas')
@@ -91,9 +120,10 @@ async function ensureStoreHierarchy(
         .single()
       if (error || !filial?.id) {
         await supabase.from('lojas').update({ active: false }).in('id', createdStoreIds)
-        return { primaryStoreId: null, createdStoreIds, error: error?.message ?? `Não foi possível criar a filial "${filialName}".` }
+        return { primaryStoreId: null, createdStoreIds, storeIdsByName, error: error?.message ?? `Não foi possível criar a filial "${filialName}".` }
       }
       createdStoreIds.push(filial.id)
+      storeIdsByName[normalizeStoreName(filialName)] = filial.id
     }
   }
 
@@ -103,10 +133,10 @@ async function ensureStoreHierarchy(
     .eq('id', clientId)
   if (clientLinkError) {
     await supabase.from('lojas').update({ active: false }).in('id', createdStoreIds)
-    return { primaryStoreId: null, createdStoreIds, error: clientLinkError.message }
+    return { primaryStoreId: null, createdStoreIds, storeIdsByName, error: clientLinkError.message }
   }
 
-  return { primaryStoreId, createdStoreIds, error: null }
+  return { primaryStoreId, createdStoreIds, storeIdsByName, error: null }
 }
 
 /**
@@ -160,9 +190,13 @@ export async function continueClientProgram(
   const units = draft.units.filter(unit => unit.name.trim())
   if (units.length) {
     for (const unit of units) {
+      const storeId = resolveUnitStoreId(unit, hierarchy)
+      if (!storeId) {
+        return { clientId: null, slug: null, error: `Loja "${unit.name}" não foi vinculada à hierarquia operacional.` }
+      }
       const { data: existing } = await supabase
         .from('unidades_cliente_consultoria')
-        .select('id')
+        .select('id, store_id')
         .eq('client_id', clientId)
         .eq('name', unit.name.trim())
         .maybeSingle()
@@ -174,6 +208,7 @@ export async function continueClientProgram(
             state: unit.state.trim() || null,
             is_primary: unit.is_primary,
             store_type: unit.is_primary ? 'matriz' : 'filial',
+            store_id: storeId,
             updated_at: new Date().toISOString(),
           })
           .eq('id', existing.id)
@@ -186,6 +221,7 @@ export async function continueClientProgram(
           state: unit.state.trim() || null,
           is_primary: unit.is_primary,
           store_type: unit.is_primary ? 'matriz' : 'filial',
+          store_id: storeId,
         })
         if (error) return { clientId: null, slug: null, error: `Loja "${unit.name}" não criou: ${error.message}` }
       }
@@ -340,14 +376,22 @@ export async function createClientProgram(draft: NewClientDraft, createdBy: stri
 
   const units = draft.units.filter(unit => unit.name.trim())
   if (units.length) {
+    const linkedUnits = units.map(unit => ({
+      ...unit,
+      store_id: resolveUnitStoreId(unit, hierarchy),
+    }))
+    const unlinkedUnit = linkedUnits.find(unit => !unit.store_id)
+    if (unlinkedUnit) return rollback(`Cliente criado, mas a loja "${unlinkedUnit.name}" não foi vinculada à hierarquia operacional.`)
+
     const { error } = await supabase.from('unidades_cliente_consultoria').insert(
-      units.map(unit => ({
+      linkedUnits.map(unit => ({
         client_id: client.id,
         name: unit.name.trim(),
         city: unit.city.trim() || null,
         state: unit.state.trim() || null,
         is_primary: unit.is_primary,
         store_type: unit.is_primary ? 'matriz' : 'filial',
+        store_id: unit.store_id,
       })),
     )
     if (error) return rollback(`Cliente criado, mas as lojas falharam: ${error.message}`)

@@ -16,6 +16,53 @@ ALTER TABLE public.programas_visita_consultoria
   ADD CONSTRAINT programas_visita_status_check
   CHECK (status IN ('rascunho', 'em_revisao', 'publicado', 'suspenso_novas_contratacoes', 'arquivado'));
 
+-- Compatibilidade com o catálogo MX já existente. O Base44 usa o grupo
+-- `CONSULTORIA_EVOLUTIVA_PRINCIPAL` para a família PMR Online/Híbrido, mas o
+-- catálogo histórico também contém PMR 7/9, PMR Plus e PPA. Não podemos
+-- atribuir o grupo principal a todos os registros: isso faria o índice abaixo
+-- falhar antes de a aplicação conseguir abrir `/produtos`.
+UPDATE public.programas_visita_consultoria
+SET evolution_group = CASE
+  WHEN program_key IN ('pmr_online', 'pmr_hibrido') THEN 'CONSULTORIA_EVOLUTIVA_PRINCIPAL'
+  WHEN program_key = 'pmr_plus' THEN 'CONSULTORIA_EVOLUTIVA_PMR_PLUS'
+  WHEN program_key = 'ppa' THEN 'CONSULTORIA_EVOLUTIVA_PPA'
+  ELSE 'CONSULTORIA_LEGADO_' || upper(regexp_replace(program_key, '[^a-zA-Z0-9]+', '_', 'g'))
+END,
+updated_at = now()
+WHERE evolution_group = 'CONSULTORIA_EVOLUTIVA_PRINCIPAL';
+
+-- O catálogo atual tem clientes no PMR Híbrido e nenhum cliente não arquivado
+-- no PMR Online. Suspender o Online preserva contratos existentes e fecha a
+-- regra Base44 de não manter as duas variantes PMR ativas simultaneamente.
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM public.programas_visita_consultoria online
+    JOIN public.programas_visita_consultoria hibrido
+      ON hibrido.program_key = 'pmr_hibrido'
+    WHERE online.program_key = 'pmr_online'
+      AND online.status = 'publicado'
+      AND online.active IS TRUE
+      AND hibrido.status = 'publicado'
+      AND hibrido.active IS TRUE
+  ) THEN
+    IF EXISTS (
+      SELECT 1
+      FROM public.clientes_consultoria
+      WHERE program_template_key = 'pmr_online'
+        AND lower(coalesce(status, '')) <> 'arquivado'
+    ) THEN
+      RAISE EXCEPTION 'CONS-20: PMR Online e PMR Híbrido estão ativos e o PMR Online possui contratos; decisão manual necessária antes da migration.'
+        USING ERRCODE = '23514';
+    END IF;
+
+    UPDATE public.programas_visita_consultoria
+    SET status = 'suspenso_novas_contratacoes', active = false, updated_at = now()
+    WHERE program_key = 'pmr_online';
+  END IF;
+END $$;
+
 ALTER TABLE public.modulos_produto_consultoria
   ADD COLUMN IF NOT EXISTS module_code text,
   ADD COLUMN IF NOT EXISTS module_label text,

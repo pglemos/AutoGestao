@@ -9982,6 +9982,7 @@ export type Database = {
       modulos_produto_consultoria: {
         Row: {
           created_at: string
+          configuration_origin: string
           display_order: number
           etapa: string | null
           id: string
@@ -10003,6 +10004,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          configuration_origin?: string
           display_order?: number
           etapa?: string | null
           id?: string
@@ -10024,6 +10026,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          configuration_origin?: string
           display_order?: number
           etapa?: string | null
           id?: string
@@ -15747,6 +15750,7 @@ export type Database = {
           opening_date: string | null
           opening_time: string | null
           state: string | null
+          store_id: string | null
           status: string
           store_type: string | null
           timezone: string
@@ -15770,6 +15774,7 @@ export type Database = {
           opening_date?: string | null
           opening_time?: string | null
           state?: string | null
+          store_id?: string | null
           status?: string
           store_type?: string | null
           timezone?: string
@@ -15793,6 +15798,7 @@ export type Database = {
           opening_date?: string | null
           opening_time?: string | null
           state?: string | null
+          store_id?: string | null
           status?: string
           store_type?: string | null
           timezone?: string
@@ -15819,6 +15825,13 @@ export type Database = {
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "unidades_cliente_consultoria_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "lojas"
             referencedColumns: ["id"]
           },
         ]
