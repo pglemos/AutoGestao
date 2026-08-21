@@ -117,6 +117,11 @@ O doc pede explicitamente (seção Planos de Ação, item ~"Módulo Dono"): bot�
 
 Nota: achei mais um dado de smoke-test em produção durante o teste ("teste" como título de uma ação real, departamento Comercial) — mesmo padrão do Achado 8/10, não mexi.
 
+**Viabilidade checada (sem construir):** `NewActionChoiceModal.tsx` e `ApplyTemplateModal.tsx` (os componentes que o admin-mx já usa) são presentacionais e genéricos — recebem `stores`/`template` por prop, não têm lógica admin-only hardcoded. Reuso é plausível. O que falta pra implementar de verdade, e que é decisão de produto e não coisa que dá pra inventar:
+1. Que templates um Dono deve ver — todos os publicados da MX, ou só os vinculados aos indicadores ativos do Plano Estratégico do cliente dele (é o que o doc pede explicitamente, item 6 de Planos de Ação: "Filtro pelos indicadores do cliente")?
+2. Se a RLS de `planos_acao_templates`/`planos_acao_template_versoes` já libera leitura pro papel `dono` (não verifiquei) ou se precisa de policy nova.
+3. Onde a materialização da ação (via `templateApplicationIdempotency.ts`) se encaixa no fluxo do Dono — reusar a mesma função ou criar uma variante com o escopo de permissão certo.
+
 ## Achado 12 — comparação campo a campo do `PersonCreateModal.tsx` (pendência do Achado 4 fechada)
 
 Comparado com os 4 blocos do doc ("Dados Pessoais" / "Perfis de Acesso" / "Dono Master" / "Escopo e Visão Padrão"):
