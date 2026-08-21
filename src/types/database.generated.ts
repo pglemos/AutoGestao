@@ -12002,12 +12002,18 @@ export type Database = {
           created_at: string
           departamento: string | null
           evidencia_requerida: boolean
+          file_asset_name: string | null
+          file_asset_path: string | null
           id: string
           indicador: string | null
           ordem: number
+          peso_bp: number | null
           prazo_dias: number | null
           prioridade: Database["public"]["Enums"]["action_priority"]
           problema: string
+          support_material_type: string
+          treinamento_id: string | null
+          treinamento_titulo: string | null
           updated_at: string
           version_id: string
         }
@@ -12017,12 +12023,18 @@ export type Database = {
           created_at?: string
           departamento?: string | null
           evidencia_requerida?: boolean
+          file_asset_name?: string | null
+          file_asset_path?: string | null
           id?: string
           indicador?: string | null
           ordem?: number
+          peso_bp?: number | null
           prazo_dias?: number | null
           prioridade?: Database["public"]["Enums"]["action_priority"]
           problema: string
+          support_material_type?: string
+          treinamento_id?: string | null
+          treinamento_titulo?: string | null
           updated_at?: string
           version_id: string
         }
@@ -12032,16 +12044,29 @@ export type Database = {
           created_at?: string
           departamento?: string | null
           evidencia_requerida?: boolean
+          file_asset_name?: string | null
+          file_asset_path?: string | null
           id?: string
           indicador?: string | null
           ordem?: number
+          peso_bp?: number | null
           prazo_dias?: number | null
           prioridade?: Database["public"]["Enums"]["action_priority"]
           problema?: string
+          support_material_type?: string
+          treinamento_id?: string | null
+          treinamento_titulo?: string | null
           updated_at?: string
           version_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "planos_acao_template_itens_treinamento_id_fkey"
+            columns: ["treinamento_id"]
+            isOneToOne: false
+            referencedRelation: "treinamentos"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "planos_acao_template_itens_version_id_fkey"
             columns: ["version_id"]
@@ -12055,38 +12080,59 @@ export type Database = {
         Row: {
           created_at: string
           created_by: string | null
+          effectiveness_indicator_code: string | null
           id: string
           notas: string | null
+          objective: string | null
+          owner_suggestion_problem: string | null
+          owner_suggestion_recommendation: string | null
+          owner_suggestion_title: string | null
+          problem: string | null
           published_at: string | null
           published_by: string | null
           status: string
           template_id: string
           updated_at: string
           versao: number
+          when_to_apply: string | null
         }
         Insert: {
           created_at?: string
           created_by?: string | null
+          effectiveness_indicator_code?: string | null
           id?: string
           notas?: string | null
+          objective?: string | null
+          owner_suggestion_problem?: string | null
+          owner_suggestion_recommendation?: string | null
+          owner_suggestion_title?: string | null
+          problem?: string | null
           published_at?: string | null
           published_by?: string | null
           status?: string
           template_id: string
           updated_at?: string
           versao: number
+          when_to_apply?: string | null
         }
         Update: {
           created_at?: string
           created_by?: string | null
+          effectiveness_indicator_code?: string | null
           id?: string
           notas?: string | null
+          objective?: string | null
+          owner_suggestion_problem?: string | null
+          owner_suggestion_recommendation?: string | null
+          owner_suggestion_title?: string | null
+          problem?: string | null
           published_at?: string | null
           published_by?: string | null
           status?: string
           template_id?: string
           updated_at?: string
           versao?: number
+          when_to_apply?: string | null
         }
         Relationships: [
           {
@@ -12095,6 +12141,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "usuarios"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "planos_acao_template_versoes_effectiveness_indicator_code_fkey"
+            columns: ["effectiveness_indicator_code"]
+            isOneToOne: false
+            referencedRelation: "catalogo_indicadores_planejamento"
+            referencedColumns: ["code"]
           },
           {
             foreignKeyName: "planos_acao_template_versoes_published_by_fkey"
@@ -12120,8 +12173,12 @@ export type Database = {
           departamento: string
           descricao: string | null
           id: string
+          improvement_direction: string | null
           indicador: string | null
+          manual_application_enabled: boolean
           nome: string
+          owner_suggestion_enabled: boolean
+          primary_indicator_code: string | null
           program_key: string | null
           template_key: string
           updated_at: string
@@ -12133,8 +12190,12 @@ export type Database = {
           departamento: string
           descricao?: string | null
           id?: string
+          improvement_direction?: string | null
           indicador?: string | null
+          manual_application_enabled?: boolean
           nome: string
+          owner_suggestion_enabled?: boolean
+          primary_indicator_code?: string | null
           program_key?: string | null
           template_key: string
           updated_at?: string
@@ -12146,8 +12207,12 @@ export type Database = {
           departamento?: string
           descricao?: string | null
           id?: string
+          improvement_direction?: string | null
           indicador?: string | null
+          manual_application_enabled?: boolean
           nome?: string
+          owner_suggestion_enabled?: boolean
+          primary_indicator_code?: string | null
           program_key?: string | null
           template_key?: string
           updated_at?: string
@@ -12159,6 +12224,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "usuarios"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "planos_acao_templates_primary_indicator_code_fkey"
+            columns: ["primary_indicator_code"]
+            isOneToOne: false
+            referencedRelation: "catalogo_indicadores_planejamento"
+            referencedColumns: ["code"]
           },
         ]
       }

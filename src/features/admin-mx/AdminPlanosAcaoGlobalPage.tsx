@@ -37,8 +37,12 @@ import { SuggestionsTab } from './planos-acao/SuggestionsTab'
 import { ApplicationsTab } from './planos-acao/ApplicationsTab'
 import { TemplateFilters } from './planos-acao/TemplateFilters'
 import { emptyTemplateFilters, templateMatchesFilters, type TemplateFilterState } from './planos-acao/templateFilterLogic'
-import { TemplateFormModal } from './planos-acao/TemplateFormModal'
+import { TemplateWizard } from './planos-acao/TemplateWizard'
 import { TemplateActionsMenu, type TemplateLifecycleAction } from './planos-acao/TemplateActionsMenu'
+import { DepartmentCards } from './planos-acao/DepartmentCards'
+import { TemplateDetailDrawer } from './planos-acao/TemplateDetailDrawer'
+import { HistoryTab } from './planos-acao/HistoryTab'
+import { fetchIndicatorCatalog, type ActionPlanTemplate, type IndicatorCatalogEntry } from './planos-acao/actionPlanTemplates'
 import { useActionPlanTemplatesController } from './planos-acao/useActionPlanTemplates'
 import { useAdminActionPlans } from './hooks/useAdminMxLists'
 import {
@@ -51,13 +55,14 @@ import {
 } from './planos-acao/clientActionPlanWizardData'
 import { fetchActionPlanSuggestions, type ActionPlanSuggestion } from './planos-acao/actionPlanSuggestions'
 
-type PlanTab = 'planos' | 'templates' | 'sugestoes' | 'aplicacoes'
+type PlanTab = 'planos' | 'templates' | 'sugestoes' | 'aplicacoes' | 'historico'
 
 const PLAN_TABS = [
   { key: 'planos' as const, label: 'Planos da rede' },
   { key: 'templates' as const, label: 'Biblioteca de templates' },
   { key: 'sugestoes' as const, label: 'Sugestões ao Dono' },
   { key: 'aplicacoes' as const, label: 'Aplicações nos clientes' },
+  { key: 'historico' as const, label: 'Histórico' },
 ]
 
 const CONCLUDED = new Set(['concluido', 'concluída', 'concluida', 'finalizado'])
@@ -87,6 +92,8 @@ export function AdminPlanosAcaoGlobalPage() {
   const [suggestOpen, setSuggestOpen] = useState(false)
   const [promoteTarget, setPromoteTarget] = useState<BoardPlan | null>(null)
   const [templateFilters, setTemplateFilters] = useState<TemplateFilterState>(emptyTemplateFilters())
+  const [detailTemplate, setDetailTemplate] = useState<ActionPlanTemplate | null>(null)
+  const [indicatorCatalog, setIndicatorCatalog] = useState<IndicatorCatalogEntry[]>([])
   const [wizardClients, setWizardClients] = useState<WizardClient[]>([])
   const [wizardIndicators, setWizardIndicators] = useState<WizardIndicator[]>([])
   const [wizardResponsibles, setWizardResponsibles] = useState<WizardResponsible[]>([])
@@ -109,6 +116,10 @@ export function AdminPlanosAcaoGlobalPage() {
       setWizardIndicators(i.rows)
       setWizardResponsibles(r.rows)
     })
+  }, [])
+
+  useEffect(() => {
+    void fetchIndicatorCatalog().then(result => setIndicatorCatalog(result.rows))
   }, [])
 
   const { lojas } = useStores()
@@ -199,7 +210,8 @@ export function AdminPlanosAcaoGlobalPage() {
             </>
           ) : tab === 'aplicacoes' ? (
             <Button onClick={handleNewAction}><Plus size={16} />Nova ação</Button>
-          ) : <Button variant="outline" onClick={() => void loadSuggestions()}><RefreshCw size={16} />Atualizar</Button>}
+          ) : tab === 'historico' ? null
+          : <Button variant="outline" onClick={() => void loadSuggestions()}><RefreshCw size={16} />Atualizar</Button>}
         />
 
         <TabNav tabs={PLAN_TABS} activeTab={tab} onTabChange={setTab} />
@@ -208,6 +220,8 @@ export function AdminPlanosAcaoGlobalPage() {
           <SuggestionsTab />
         ) : tab === 'aplicacoes' ? (
           <ApplicationsTab onOpenPlan={openPlanById} />
+        ) : tab === 'historico' ? (
+          <HistoryTab />
         ) : tab === 'templates' ? (
           templates.loading ? <MxLoadingState label="Carregando templates" /> : templates.error ? <MxErrorState description={templates.error} retry={() => void templates.refetch()} /> : (
             <MxSectionCard>
@@ -217,6 +231,14 @@ export function AdminPlanosAcaoGlobalPage() {
                 actions={<Button variant="outline" size="sm" onClick={templates.openNew}><Plus size={16} />Novo template</Button>}
               />
               <div className="p-5">
+                <div className="mb-4">
+                  <DepartmentCards
+                    templates={templates.rows}
+                    indicators={indicatorCatalog}
+                    selectedDept={templateFilters.departamento}
+                    onSelect={departamento => setTemplateFilters(current => ({ ...current, departamento }))}
+                  />
+                </div>
                 <div className="mb-4">
                   <TemplateFilters
                     templates={templates.rows}
@@ -258,6 +280,7 @@ export function AdminPlanosAcaoGlobalPage() {
                               <TableCell>{archived ? 'Arquivado' : template.active ? 'Ativo' : 'Inativo'}</TableCell>
                               <TableCell className="text-right">
                                 <div className="flex justify-end gap-2">
+                                  <Button variant="outline" size="sm" onClick={() => setDetailTemplate(template)}>Abrir</Button>
                                   <Button variant="outline" size="sm" onClick={() => void templates.openEdit(template)}>Editar</Button>
                                   {openDraft ? <Button variant="outline" size="sm" onClick={() => void templates.publish(template)}>Publicar</Button> : null}
                                   {published && template.active ? <Button size="sm" onClick={() => templates.setApplying(template)}>Aplicar</Button> : null}
@@ -359,14 +382,27 @@ export function AdminPlanosAcaoGlobalPage() {
           </>
         )}
 
-        <TemplateFormModal
+        <TemplateWizard
           open={templates.formOpen}
           editing={templates.editing}
           draft={templates.draft}
           submitting={templates.submitting}
           onDraft={templates.setDraft}
           onSubmit={() => void templates.submit()}
+          onPublish={() => void templates.submitAndPublish()}
           onClose={() => templates.setFormOpen(false)}
+        />
+        <TemplateDetailDrawer
+          template={detailTemplate}
+          submitting={templates.submitting}
+          onClose={() => setDetailTemplate(null)}
+          onEdit={template => { setDetailTemplate(null); void templates.openEdit(template) }}
+          onPublish={template => { setDetailTemplate(null); void templates.publish(template) }}
+          onCreateVersion={template => { setDetailTemplate(null); void templates.createVersion(template) }}
+          onToggleActive={template => { setDetailTemplate(null); void templates.toggleActive(template) }}
+          onArchive={template => { setDetailTemplate(null); void templates.archive(template) }}
+          onApply={template => { setDetailTemplate(null); templates.setApplying(template) }}
+          onSuggest={template => { setDetailTemplate(null); setSuggestTemplate(template); setSuggestOpen(true) }}
         />
         <ActionPlanDetailDrawer plan={openPlan} onClose={() => setOpenPlan(null)} onChanged={() => void refetch()} />
         <ApplyTemplateModal

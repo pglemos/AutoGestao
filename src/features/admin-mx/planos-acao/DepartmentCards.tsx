@@ -1,0 +1,62 @@
+import { DollarSign, LayoutGrid, Megaphone, Package, Settings, TrendingUp, Users, type LucideIcon } from 'lucide-react'
+import type { ActionPlanTemplate, IndicatorCatalogEntry } from './actionPlanTemplates'
+
+const CATEGORY_ICON: Record<string, LucideIcon> = {
+  financeiro: DollarSign,
+  vendas: TrendingUp,
+  marketing: Megaphone,
+  produto: Package,
+  pessoas: Users,
+  operacional: Settings,
+}
+
+function categoryLabel(category: string): string {
+  return category.charAt(0).toUpperCase() + category.slice(1)
+}
+
+/** Cards por categoria de indicador (mesma taxonomia do catálogo do Planejamento Estratégico) — filtra a biblioteca de templates ao clicar. */
+export function DepartmentCards(props: {
+  templates: ActionPlanTemplate[]
+  indicators: IndicatorCatalogEntry[]
+  selectedDept: string
+  onSelect: (category: string) => void
+}) {
+  const categories = [...new Set(props.indicators.map(indicator => indicator.category))].sort()
+  const cards = [{ code: '', label: 'Todos' }, ...categories.map(category => ({ code: category, label: categoryLabel(category) }))]
+
+  const countsFor = (category: string) => {
+    const published = props.templates.filter(template => (!category || template.departamento === category) && template.versions.some(version => version.status === 'publicada')).length
+    const drafts = props.templates.filter(template => (!category || template.departamento === category) && template.versions.some(version => version.status === 'rascunho')).length
+    const activeIndicators = props.indicators.filter(indicator => !category || indicator.category === category).length
+    return { published, drafts, activeIndicators }
+  }
+
+  return (
+    <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-7">
+      {cards.map(card => {
+        const Icon = CATEGORY_ICON[card.code] ?? LayoutGrid
+        const counts = countsFor(card.code)
+        const selected = props.selectedDept === card.code
+        return (
+          <button
+            key={card.code || 'todos'}
+            type="button"
+            onClick={() => props.onSelect(card.code)}
+            className={`rounded-xl border-2 p-3 text-left transition-all ${selected ? 'border-primary bg-primary/5 shadow-sm' : 'border-border bg-surface-default hover:border-border-strong'}`}
+          >
+            <div className="mb-2 flex items-center gap-2">
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-surface-alt text-text-secondary">
+                <Icon size={14} />
+              </div>
+              <span className="truncate text-xs font-semibold text-text-primary">{card.label}</span>
+            </div>
+            <div className="text-lg font-bold text-text-primary">{counts.published}</div>
+            <div className="text-[10px] text-text-secondary">Templates publicados</div>
+            <div className="mt-0.5 text-[10px] text-text-disabled">{counts.activeIndicators} indicador(es) ativo(s)</div>
+            {counts.drafts > 0 ? <div className="mt-0.5 text-[10px] text-status-warning">{counts.drafts} em rascunho</div> : null}
+          </button>
+        )
+      })}
+    </div>
+  )
+}

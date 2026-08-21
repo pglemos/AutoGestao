@@ -6,6 +6,7 @@ import {
   createNewTemplateVersion,
   emptyTemplateDraft,
   fetchActionPlanTemplates,
+  fetchDraftVersionId,
   fetchTemplateItems,
   publishTemplateVersion,
   saveTemplateDraft,
@@ -62,6 +63,17 @@ export function useActionPlanTemplatesController() {
       descricao: template.descricao ?? '',
       program_key: template.program_key ?? '',
       active: template.active,
+      primary_indicator_code: template.primary_indicator_code ?? '',
+      improvement_direction: template.improvement_direction ?? 'aumentar',
+      manual_application_enabled: template.manual_application_enabled,
+      owner_suggestion_enabled: template.owner_suggestion_enabled,
+      problem: source?.problem ?? '',
+      objective: source?.objective ?? '',
+      when_to_apply: source?.when_to_apply ?? '',
+      effectiveness_indicator_code: source?.effectiveness_indicator_code ?? '',
+      owner_suggestion_title: source?.owner_suggestion_title ?? '',
+      owner_suggestion_problem: source?.owner_suggestion_problem ?? '',
+      owner_suggestion_recommendation: source?.owner_suggestion_recommendation ?? '',
       items: items.length ? items : emptyTemplateDraft().items,
     })
     setEditing(true)
@@ -78,6 +90,34 @@ export function useActionPlanTemplatesController() {
         return
       }
       toast.success('Rascunho do template salvo.')
+      setFormOpen(false)
+      await refetch()
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  /** Salva o rascunho atual e publica na sequência — usado pelo passo final do wizard. */
+  const submitAndPublish = async () => {
+    if (submitting || !supabaseUser) return
+    setSubmitting(true)
+    try {
+      const saveResult = await saveTemplateDraft(draft, supabaseUser.id)
+      if (saveResult.error || !saveResult.templateId) {
+        toast.error(saveResult.error ?? 'Falha ao salvar o template.')
+        return
+      }
+      const versionId = await fetchDraftVersionId(saveResult.templateId)
+      if (!versionId) {
+        toast.error('Não foi possível localizar o rascunho salvo para publicar.')
+        return
+      }
+      const publishResult = await publishTemplateVersion(saveResult.templateId, versionId, supabaseUser.id)
+      if (publishResult.error) {
+        toast.error(publishResult.error)
+        return
+      }
+      toast.success('Template publicado.')
       setFormOpen(false)
       await refetch()
     } finally {
@@ -233,6 +273,7 @@ export function useActionPlanTemplatesController() {
     openNew,
     openEdit,
     submit,
+    submitAndPublish,
     publish,
     createVersion,
     toggleActive,
