@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { Check, Copy, Download, History, RefreshCw, Save, Upload } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
@@ -35,6 +35,7 @@ import {
   fetchPlanningHistory,
   fetchStorePlanningValues,
   restorePlanningHistory,
+  saveIndicatorActuals,
   saveIndicatorTargets,
   type PlanningHistoryRow,
 } from '../indicadores/indicatorData'
@@ -145,29 +146,38 @@ export function MetasRealizadosTab(props: {
     return months.size
   }, [isConsolidated, consolidatedIntegrity])
 
-  const saveIndicator = async (code: string) => {
-    setSavingKey(code)
-    const values = props.indicators
-      .find(indicator => indicator.code === code)
-      ? Array.from({ length: 12 }, (_, index) => grid[code]?.[index + 1]?.meta ?? null)
+  const saveIndicator = async (code: string, field: 'meta' | 'realizado') => {
+    setSavingKey(`${field}:${code}`)
+    const values = props.indicators.find(indicator => indicator.code === code)
+      ? Array.from({ length: 12 }, (_, index) => grid[code]?.[index + 1]?.[field] ?? null)
       : []
-    const result = await saveIndicatorTargets({ lojaId: storeId, indicatorCode: code, year, values })
+    const result = field === 'meta'
+      ? await saveIndicatorTargets({ lojaId: storeId, indicatorCode: code, year, values })
+      : await saveIndicatorActuals({ lojaId: storeId, indicatorCode: code, year, values })
     if (result.error) toast.error(result.error)
-    else toast.success('Metas salvas.')
+    else toast.success(field === 'meta' ? 'Metas salvas.' : 'Realizado salvo.')
     setSavingKey(null)
     await refetch()
   }
 
-  const updateCell = (code: string, month: number, raw: string) => {
+  const updateCell = (code: string, month: number, field: 'meta' | 'realizado', raw: string) => {
     const value = raw === '' ? null : Number(raw)
     if (raw !== '' && Number.isNaN(value)) return
     setRows(current => {
       const next = [...current]
       const index = next.findIndex(row => row.indicator_code === code && row.month === month)
       if (index >= 0) {
-        next[index] = { ...next[index], meta: value }
+        next[index] = { ...next[index], [field]: value }
       } else {
-        next.push({ loja_id: storeId, indicator_code: code, year, month, meta: value, realizado: null, ano_anterior: null })
+        next.push({
+          loja_id: storeId,
+          indicator_code: code,
+          year,
+          month,
+          meta: field === 'meta' ? value : null,
+          realizado: field === 'realizado' ? value : null,
+          ano_anterior: null,
+        })
       }
       return next
     })
@@ -275,49 +285,78 @@ export function MetasRealizadosTab(props: {
                   <TableBody>
                     {props.indicators.map(indicator => {
                       const config = getFormatConfig(indicator.calculado ? 'number' : 'number')
+                      const metaKey = `meta:${indicator.code}`
+                      const actualKey = `realizado:${indicator.code}`
                       return (
-                        <TableRow key={indicator.code}>
-                          <TableCell>
-                            <div className="font-semibold text-foreground">{indicator.name}</div>
-                            <div className="text-xs text-muted-foreground">{indicator.code}{indicator.calculado ? ' · calculado' : ''}</div>
-                          </TableCell>
-                          {MONTH_LABELS.map((_label, index) => {
-                            const month = index + 1
-                            const value = isConsolidated
-                              ? consolidatedGrid[indicator.code]?.[month] ?? null
-                              : grid[indicator.code]?.[month]?.meta ?? null
-                            const integrity = isConsolidated ? consolidatedIntegrity[month]?.[indicator.code] : undefined
-                            return (
-                              <TableCell key={month} className="text-right">
-                                {isConsolidated || indicator.calculado ? (
-                                  <span
-                                    className="text-xs text-muted-foreground"
-                                    title={integrity?.explanation || undefined}
-                                  >
-                                    {formatDisplay(value, config)}
-                                    {integrity?.status === CONSOLIDATION_STATUS.PARCIAL ? ' *' : ''}
-                                  </span>
-                                ) : (
+                        <Fragment key={indicator.code}>
+                          <TableRow key={metaKey}>
+                            <TableCell>
+                              <div className="font-semibold text-foreground">{indicator.name}</div>
+                              <div className="text-xs text-muted-foreground">{indicator.code}{indicator.calculado ? ' · calculado' : ''} · Meta</div>
+                            </TableCell>
+                            {MONTH_LABELS.map((_label, index) => {
+                              const month = index + 1
+                              const value = isConsolidated
+                                ? consolidatedGrid[indicator.code]?.[month] ?? null
+                                : grid[indicator.code]?.[month]?.meta ?? null
+                              const integrity = isConsolidated ? consolidatedIntegrity[month]?.[indicator.code] : undefined
+                              return (
+                                <TableCell key={month} className="text-right">
+                                  {isConsolidated || indicator.calculado ? (
+                                    <span
+                                      className="text-xs text-muted-foreground"
+                                      title={integrity?.explanation || undefined}
+                                    >
+                                      {formatDisplay(value, config)}
+                                      {integrity?.status === CONSOLIDATION_STATUS.PARCIAL ? ' *' : ''}
+                                    </span>
+                                  ) : (
+                                    <Input
+                                      className="w-20 text-right"
+                                      value={value === null ? '' : String(value)}
+                                      onChange={event => updateCell(indicator.code, month, 'meta', event.target.value)}
+                                    />
+                                  )}
+                                </TableCell>
+                              )
+                            })}
+                            <TableCell className="text-right">
+                              <div className="flex justify-end gap-1">
+                                <Button variant="outline" size="sm" onClick={() => setHistoryFor(indicator.code)} disabled={savingKey === metaKey}><History size={14} /></Button>
+                                {!indicator.calculado && !isConsolidated ? (
+                                  <Button variant="outline" size="sm" onClick={() => void saveIndicator(indicator.code, 'meta')} disabled={savingKey === metaKey}>
+                                    {savingKey === metaKey ? <RefreshCw size={14} className="animate-spin" /> : <Save size={14} />}
+                                  </Button>
+                                ) : null}
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                          <TableRow key={actualKey} className="bg-background-muted/40">
+                            <TableCell>
+                              <div className="text-xs font-medium text-muted-foreground">Realizado</div>
+                            </TableCell>
+                            {MONTH_LABELS.map((_label, index) => {
+                              const month = index + 1
+                              const value = grid[indicator.code]?.[month]?.realizado ?? null
+                              return (
+                                <TableCell key={month} className="text-right">
                                   <Input
                                     className="w-20 text-right"
                                     value={value === null ? '' : String(value)}
-                                    onChange={event => updateCell(indicator.code, month, event.target.value)}
+                                    onChange={event => updateCell(indicator.code, month, 'realizado', event.target.value)}
                                   />
-                                )}
-                              </TableCell>
-                            )
-                          })}
-                          <TableCell className="text-right">
-                            <div className="flex justify-end gap-1">
-                              <Button variant="outline" size="sm" onClick={() => setHistoryFor(indicator.code)} disabled={savingKey === indicator.code}><History size={14} /></Button>
-                              {!indicator.calculado && !isConsolidated ? (
-                                <Button variant="outline" size="sm" onClick={() => void saveIndicator(indicator.code)} disabled={savingKey === indicator.code}>
-                                  {savingKey === indicator.code ? <RefreshCw size={14} className="animate-spin" /> : <Save size={14} />}
+                                </TableCell>
+                              )
+                            })}
+                            <TableCell className="text-right">
+                              <div className="flex justify-end gap-1">
+                                <Button variant="outline" size="sm" onClick={() => void saveIndicator(indicator.code, 'realizado')} disabled={savingKey === actualKey}>
+                                  {savingKey === actualKey ? <RefreshCw size={14} className="animate-spin" /> : <Save size={14} />}
                                 </Button>
-                              ) : null}
-                            </div>
-                          </TableCell>
-                        </TableRow>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        </Fragment>
                       )
                     })}
                   </TableBody>
@@ -578,7 +617,10 @@ function PlanningHistoryDrawer(props: {
           rows.map(row => (
             <div key={row.id} className="rounded-lg border border-border p-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold text-foreground">
+                <span className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                  <span className="rounded bg-background-muted px-1.5 py-0.5 text-caption font-medium uppercase text-muted-foreground">
+                    {row.field === 'realizado' ? 'Realizado' : 'Meta'}
+                  </span>
                   {new Date(row.created_at).toLocaleString('pt-BR')}
                 </span>
                 <Button variant="outline" size="sm" onClick={() => void restore(row.id)} disabled={restoring}><Check size={14} />Restaurar</Button>

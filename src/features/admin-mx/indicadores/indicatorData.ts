@@ -198,6 +198,7 @@ export type PlanningHistoryRow = {
   loja_id: string
   indicator_code: string
   year: number
+  field: 'meta' | 'realizado'
   previous_values: unknown
   new_values: unknown
   note: string | null
@@ -218,7 +219,7 @@ export async function fetchStorePlanningValues(lojaId: string, year: number): Pr
 export async function fetchPlanningHistory(lojaId: string, indicatorCode: string, year: number): Promise<{ rows: PlanningHistoryRow[]; error: string | null }> {
   const { data, error } = await supabase
     .from('historico_valores_indicadores_planejamento')
-    .select('id, loja_id, indicator_code, year, previous_values, new_values, note, changed_by, created_at')
+    .select('id, loja_id, indicator_code, year, field, previous_values, new_values, note, changed_by, created_at')
     .eq('loja_id', lojaId)
     .eq('indicator_code', indicatorCode)
     .eq('year', year)
@@ -240,6 +241,26 @@ export async function saveIndicatorTargets(params: {
     p_indicator_code: params.indicatorCode,
     p_year: params.year,
     p_values: params.values,
+    p_note: params.note ?? null,
+  })
+  return { error: error?.message ?? null, data }
+}
+
+/** Salva o realizado de um indicador de uma loja via RPC oficial (gera histórico). */
+export async function saveIndicatorActuals(params: {
+  lojaId: string
+  indicatorCode: string
+  year: number
+  values: Array<number | null>
+  source?: 'manual' | 'importacao' | 'dre' | 'funil' | 'score' | 'sistema'
+  note?: string | null
+}): Promise<{ error: string | null; data: unknown }> {
+  const { data, error } = await supabase.rpc('salvar_realizado_indicador_planejamento', {
+    p_store_id: params.lojaId,
+    p_indicator_code: params.indicatorCode,
+    p_year: params.year,
+    p_values: params.values,
+    p_source: params.source ?? 'manual',
     p_note: params.note ?? null,
   })
   return { error: error?.message ?? null, data }
