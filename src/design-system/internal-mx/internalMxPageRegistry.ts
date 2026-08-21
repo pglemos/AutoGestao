@@ -31,6 +31,12 @@ export const INTERNAL_MX_PAGE_REGISTRY: readonly InternalMxPageMeta[] = [
   { key: 'plano-acao', title: 'Plano de Ação', description: 'Execução, evidências, validação, histórico e impacto das ações por loja.', group: 'Rede e Gestão', managerLayout: true, template: 'workspace', match: exact('/plano-acao') },
   { key: 'consultoria-clientes', title: 'Clientes da Consultoria', description: 'Carteira consultiva, evolução, cadência e entregas por cliente.', group: 'Rede e Gestão', managerLayout: true, template: 'list', match: exact('/consultoria/clientes') },
   { key: 'consultoria-cliente-detalhe', title: 'Detalhes da Consultoria', description: 'Visitas, estratégia, plano de ação, indicadores e arquivos do cliente.', group: 'Rede e Gestão', managerLayout: true, template: 'detail', match: child('/consultoria/clientes') },
+  // /lojas e /consultoria/clientes redirecionam (Navigate replace) pra /clientes desde a
+  // unificação do módulo Clientes MX — as entradas acima nunca mais casam com o pathname
+  // final. Sem estas duas linhas, getInternalMxPageMeta cai no fallback managerLayout:false
+  // e o shell canônico inteiro (header, template) some pra quem navega em Lojas/Consultoria.
+  { key: 'clientes', title: 'Clientes MX', description: 'Carteira consolidada, prontidão e governança dos clientes da rede.', group: 'Rede e Gestão', managerLayout: true, template: 'list', match: exact('/clientes') },
+  { key: 'cliente-detalhe', title: 'Detalhes do Cliente', description: 'Ficha 360, pendências, planos e acompanhamento do cliente.', group: 'Rede e Gestão', managerLayout: true, template: 'detail', match: child('/clientes') },
   { key: 'consultoria', title: 'Consultoria', description: 'Operação consultiva da MX, programas, indicadores e entregas.', group: 'Rede e Gestão', managerLayout: true, template: 'list', match: prefix('/consultoria') },
   { key: 'agenda', title: 'Agenda Central MX', description: 'Compromissos, visitas, reuniões e sincronizações da consultoria.', group: 'Rede e Gestão', managerLayout: true, template: 'workspace', match: exact('/agenda') },
   { key: 'simulacao', title: 'Simulação de Perfis', description: 'Validação segura da experiência de Vendedor, Gerente e Dono.', group: 'Simulação', managerLayout: true, template: 'dashboard', match: prefix('/simulacao') },
