@@ -121,6 +121,8 @@ export function suggestTitle(direction: WizardDirection, indicatorName: string):
 export function validateWizardStep(step: WizardStep, form: ClientActionPlanWizardForm): string[] {
   const errors: string[] = []
   if (step === 1) {
+    if (!form.clientId) errors.push('Selecione um cliente.')
+    if (form.clientId && !form.storeId) errors.push('Selecione a unidade operacional do cliente.')
     if (!form.department.trim()) errors.push('Selecione um departamento.')
     if (!form.indicatorId) errors.push('Selecione um indicador.')
     if (!form.title.trim()) errors.push('Informe o título do plano.')

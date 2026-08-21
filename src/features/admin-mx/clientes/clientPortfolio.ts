@@ -36,6 +36,24 @@ export type PortfolioBucket =
   | 'renovacoes_proximas'
   | 'cadastros_pendentes'
 
+/** Situações exibidas na carteira principal. Cada cliente entra em no máximo uma. */
+export type PortfolioStatus = 'ativos' | 'em_implantacao' | 'prontos_para_ativar' | 'em_configuracao'
+export type PortfolioStatusFilter = PortfolioStatus | 'suspenso' | 'todos'
+
+export const PORTFOLIO_STATUS_LABEL: Record<PortfolioStatus, string> = {
+  ativos: 'Ativos',
+  em_implantacao: 'Em Implantação',
+  prontos_para_ativar: 'Prontos p/ Ativar',
+  em_configuracao: 'Em Configuração',
+}
+
+export const PORTFOLIO_STATUS_DETAIL: Record<PortfolioStatus, string> = {
+  ativos: 'Clientes ativos',
+  em_implantacao: 'Jornada em andamento',
+  prontos_para_ativar: 'Sem pendência impeditiva',
+  em_configuracao: 'Cadastro ou configuração pendente',
+}
+
 export const PORTFOLIO_BUCKET_LABEL: Record<PortfolioBucket, string> = {
   ativos: 'Ativos',
   em_implantacao: 'Em implantação',
@@ -47,8 +65,47 @@ export const PORTFOLIO_BUCKET_LABEL: Record<PortfolioBucket, string> = {
 
 const ATIVO = ['ativo', 'ativa', 'active']
 
+function normalizeStatus(value: string | null | undefined): string {
+  return String(value ?? '')
+    .trim()
+    .toLocaleLowerCase('pt-BR')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[\s-]+/g, '_')
+}
+
 export function isActive(client: Pick<PortfolioClient, 'status'>) {
-  return ATIVO.includes(String(client.status ?? '').toLowerCase())
+  return ATIVO.includes(normalizeStatus(client.status))
+}
+
+/**
+ * Situação canônica da carteira principal. Suspensos/encerrados ficam fora dos
+ * quatro KPIs, mas continuam disponíveis no filtro e com seu status explícito
+ * na tabela. Isso evita contar o mesmo cliente duas vezes e não mascara uma
+ * suspensão como configuração.
+ */
+export function canonicalPortfolioStatus(client: PortfolioClient): PortfolioStatus | null {
+  const status = normalizeStatus(client.status)
+  if (['suspenso', 'suspended', 'encerrado', 'closed', 'arquivado'].includes(status)) return null
+  if (
+    ['ativo_em_implantacao', 'em_implantacao', 'ativacao_programada'].includes(status) ||
+    (isActive(client) && client.visitsTotal > 0 && client.visitsDone < client.visitsTotal)
+  ) return 'em_implantacao'
+  if (isActive(client)) return 'ativos'
+  if (activationBlockers(client).length === 0 && ['pronto_para_ativar', 'pronto', 'ready_to_activate', 'em_validacao'].includes(status)) return 'prontos_para_ativar'
+  if (activationBlockers(client).length === 0 && ['inativo', 'inactive', 'coleta_dados', 'rascunho'].includes(status)) return 'prontos_para_ativar'
+  return 'em_configuracao'
+}
+
+export function portfolioStatusLabel(client: PortfolioClient): string {
+  const raw = normalizeStatus(client.status)
+  if (raw === 'suspenso' || raw === 'suspended') return 'Suspenso'
+  if (raw === 'encerrado' || raw === 'closed') return 'Encerrado'
+  if (raw === 'arquivado') return 'Arquivado'
+  if (raw === 'ativo_em_implantacao' || raw === 'em_implantacao') return 'Ativo em Implantação'
+  if (raw === 'ativacao_programada') return 'Ativação Programada'
+  const canonical = canonicalPortfolioStatus(client)
+  return canonical ? PORTFOLIO_STATUS_LABEL[canonical] : 'Indefinido'
 }
 
 /** Falta o mínimo que o banco exige para ativar (loja, produto, consultor). */
@@ -164,6 +221,7 @@ export function journeyLabel(client: PortfolioClient): string {
 
 export type PortfolioFilters = {
   search: string
+  status: PortfolioStatusFilter
   bucket: PortfolioBucket | 'todos'
   phase: string
   product: string
@@ -172,6 +230,7 @@ export type PortfolioFilters = {
 
 export const EMPTY_PORTFOLIO_FILTERS: PortfolioFilters = {
   search: '',
+  status: 'todos',
   bucket: 'todos',
   phase: 'todas',
   product: 'todos',
@@ -182,6 +241,11 @@ export function filterPortfolio(rows: PortfolioClient[], filters: PortfolioFilte
   const term = filters.search.trim().toLowerCase()
   const digits = term.replace(/\D/g, '')
   return rows.filter(client => {
+    if (filters.status && filters.status !== 'todos') {
+      if (filters.status === 'suspenso') {
+        if (!['suspenso', 'suspended'].includes(normalizeStatus(client.status))) return false
+      } else if (canonicalPortfolioStatus(client) !== filters.status) return false
+    }
     if (filters.bucket !== 'todos' && !clientBuckets(client, today).includes(filters.bucket)) return false
     if (filters.phase !== 'todas' && (client.business_phase ?? '') !== filters.phase) return false
     if (filters.product !== 'todos' && (client.product_name ?? '') !== filters.product) return false
@@ -206,6 +270,20 @@ export function portfolioCounters(rows: PortfolioClient[], today = new Date()): 
   }
   for (const client of rows) {
     for (const bucket of clientBuckets(client, today)) counters[bucket] += 1
+  }
+  return counters
+}
+
+export function portfolioStatusCounters(rows: PortfolioClient[]): Record<PortfolioStatus, number> {
+  const counters: Record<PortfolioStatus, number> = {
+    ativos: 0,
+    em_implantacao: 0,
+    prontos_para_ativar: 0,
+    em_configuracao: 0,
+  }
+  for (const client of rows) {
+    const status = canonicalPortfolioStatus(client)
+    if (status) counters[status] += 1
   }
   return counters
 }

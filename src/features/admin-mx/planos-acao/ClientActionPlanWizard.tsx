@@ -58,7 +58,7 @@ export function ClientActionPlanWizard(props: {
     setErrors([])
     setTitleCustomized(false)
     setForm({ ...emptyWizardForm(), clientId: props.clientId ?? '', clientName: props.clientName ?? '' })
-    void Promise.all([fetchWizardClients(), fetchWizardIndicators(), fetchWizardResponsibles()]).then(([c, i, r]) => {
+    void Promise.all([fetchWizardClients(), fetchWizardIndicators(props.clientId), fetchWizardResponsibles()]).then(([c, i, r]) => {
       setClients(c.rows)
       setIndicators(i.rows)
       setResponsibles(r.rows)
@@ -114,6 +114,7 @@ export function ClientActionPlanWizard(props: {
     patch('clientName', client?.name ?? '')
     setStores([])
     if (clientId) void loadStores(clientId)
+    void fetchWizardIndicators(clientId).then(result => setIndicators(result.rows))
   }
 
   const onIndicatorChange = (metricKey: string) => {
@@ -282,14 +283,14 @@ export function ClientActionPlanWizard(props: {
         {step === 1 ? (
           <div className="grid gap-4 sm:grid-cols-2">
             <MxField label="Cliente">
-              <MxSelect aria-label="Cliente" value={form.clientId} onChange={event => onClientChange(event.target.value)}>
+              <MxSelect aria-label="Cliente" value={form.clientId} onChange={event => onClientChange(event.target.value)} disabled={Boolean(props.clientId)}>
                 <option value="">Selecione o cliente</option>
                 {clients.map(client => <option key={client.id} value={client.id}>{client.name}</option>)}
               </MxSelect>
             </MxField>
             <MxField label="Unidade">
               <MxSelect aria-label="Unidade" value={form.storeId} onChange={event => patch('storeId', event.target.value)} disabled={!form.clientId}>
-                <option value="">{form.clientId ? 'Todas as unidades' : 'Selecione um cliente'}</option>
+                <option value="">{form.clientId ? 'Selecione a unidade' : 'Selecione um cliente'}</option>
                 {stores.map(store => <option key={`${store.source}-${store.id}`} value={store.id}>{store.name}</option>)}
               </MxSelect>
             </MxField>

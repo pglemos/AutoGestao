@@ -41,7 +41,7 @@ function formatValue(value: number | null | undefined): string {
   return value == null ? '—' : value.toLocaleString('pt-BR', { maximumFractionDigits: 2 })
 }
 
-export function ClientPlanningContextPanel(props: { clientId: string; primaryStoreId?: string | null }) {
+export function ClientPlanningContextPanel(props: { clientId: string; clientSlug?: string | null; primaryStoreId?: string | null }) {
   const year = new Date().getFullYear()
   const month = new Date().getMonth() + 1
   const [state, setState] = useState<PlanningState>({ units: [], packageResolution: null, cycle: null, readiness: null, values: [], error: null })
@@ -119,7 +119,13 @@ export function ClientPlanningContextPanel(props: { clientId: string; primarySto
   const expectedCells = (resolution?.items.length ?? 0) * activeUnits.length
   const metasPreenchidas = state.values.filter(row => row.month === month && row.meta != null).length
   const realizadosPreenchidos = state.values.filter(row => row.month === month && row.realizado != null).length
-  const strategicHref = matrixId ? `/plano-estrategico?storeId=${encodeURIComponent(matrixId)}` : '/plano-estrategico'
+  const strategicHref = matrixId
+    ? props.clientSlug
+      ? `/clientes/${encodeURIComponent(props.clientSlug)}/plano-estrategico?clientId=${encodeURIComponent(props.clientId)}&storeId=${encodeURIComponent(matrixId)}`
+      : `/plano-estrategico?clientId=${encodeURIComponent(props.clientId)}&storeId=${encodeURIComponent(matrixId)}`
+    : props.clientSlug
+      ? `/clientes/${encodeURIComponent(props.clientSlug)}/plano-estrategico?clientId=${encodeURIComponent(props.clientId)}`
+      : `/plano-estrategico?clientId=${encodeURIComponent(props.clientId)}`
 
   if (loading) return <MxLoadingState label="Carregando Plano Estratégico do cliente" />
 
@@ -134,7 +140,7 @@ export function ClientPlanningContextPanel(props: { clientId: string; primarySto
               <RefreshCw size={14} />Atualizar
             </Button>
             <Button asChild size="sm">
-              <Link to={strategicHref}><ArrowUpRight size={14} />Abrir workspace</Link>
+              <Link to={strategicHref}><ArrowUpRight size={14} />Abrir plano completo</Link>
             </Button>
           </div>
         )}

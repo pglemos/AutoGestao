@@ -1,7 +1,9 @@
 import { describe, expect, test } from 'bun:test'
 import {
   allowedIndicatorTransitions,
+  formatIndicatorValueType,
   indicatorCalculationMode,
+  indicatorMatchesFilter,
   isUsableIndicator,
   reorderIndicators,
   validateDecimals,
@@ -28,6 +30,37 @@ describe('ciclo de vida do indicador', () => {
     expect(isUsableIndicator({ status: 'publicado', active: false })).toBe(false)
     expect(isUsableIndicator({ status: 'rascunho', active: true })).toBe(false)
     expect(isUsableIndicator({ status: 'desabilitado', active: true })).toBe(false)
+  })
+})
+
+describe('filtros rápidos do catálogo', () => {
+  const manual = {
+    target_calculation_mode: 'MANUAL',
+    formula_expression: null,
+    created_origin: 'mx_padrao',
+    status: 'publicado',
+    active: true,
+    visivel_dono: true,
+  } as never
+
+  test('separa digitáveis e calculáveis sem depender do texto visual', () => {
+    expect(indicatorMatchesFilter(manual, 'digitaveis')).toBe(true)
+    expect(indicatorMatchesFilter(manual, 'calculaveis')).toBe(false)
+    expect(indicatorMatchesFilter({ ...manual, target_calculation_mode: 'CALCULATED_ADJUSTABLE', formula_expression: 'PAR("MARGEM")' }, 'calculaveis')).toBe(true)
+    expect(indicatorMatchesFilter({ ...manual, target_calculation_mode: 'CALCULATED_ADJUSTABLE', formula_expression: 'PAR("MARGEM")' }, 'com_parametro')).toBe(true)
+  })
+
+  test('mantém filtros de origem, status e visibilidade independentes', () => {
+    expect(indicatorMatchesFilter(manual, 'padrao_mx')).toBe(true)
+    expect(indicatorMatchesFilter({ ...manual, created_origin: 'criado_mx' }, 'criados_mx')).toBe(true)
+    expect(indicatorMatchesFilter({ ...manual, status: 'arquivado' }, 'arquivados')).toBe(true)
+    expect(indicatorMatchesFilter({ ...manual, visivel_dono: false }, 'ocultos_dono')).toBe(true)
+  })
+
+  test('apresenta unidades do catálogo em linguagem de operação', () => {
+    expect(formatIndicatorValueType('number')).toBe('Número')
+    expect(formatIndicatorValueType('percent')).toBe('Percentual')
+    expect(formatIndicatorValueType('currency')).toBe('Moeda')
   })
 })
 

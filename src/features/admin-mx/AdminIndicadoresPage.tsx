@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { ArrowDown, ArrowUp, Calculator, Eye, EyeOff, FileClock, Gauge, History, Plus, RefreshCw, RotateCcw, Save } from 'lucide-react'
+import { ArrowDown, ArrowUp, Calculator, ChevronDown, Eye, EyeOff, FileClock, Gauge, History, Plus, RefreshCw, RotateCcw, Save } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
@@ -44,15 +44,17 @@ import {
   INDICATOR_STATUSES,
   INDICATOR_STATUS_LABEL,
   changeIndicatorStatus,
+  formatIndicatorValueType,
   fetchCatalogIndicators,
   fetchIndicatorParameters,
-  isUsableIndicator,
+  indicatorMatchesFilter,
   persistIndicatorOrder,
   reorderIndicators,
   restoreDefaultOrder,
   toggleOwnerVisibility,
   validateThresholds,
   type CatalogIndicator,
+  type CatalogFilterKey,
   type IndicatorParameter,
   type IndicatorStatus,
 } from './indicadores/indicatorCatalog'
@@ -95,6 +97,22 @@ const CALCULATION_FILTER_MODE: Record<Exclude<AdminIndicadoresPageCalculationFil
   calculado_ajustavel: 'CALCULATED_ADJUSTABLE',
 }
 type AdminIndicadoresPageCalculationFilter = 'todos' | 'manual' | 'calculado_bloqueado' | 'calculado_ajustavel'
+type CatalogQuickFilter = 'todos' | CatalogFilterKey
+
+const QUICK_FILTERS: Array<{ key: CatalogQuickFilter; label: string }> = [
+  { key: 'todos', label: 'Todos' },
+  { key: 'digitaveis', label: 'Digitáveis' },
+  { key: 'calculaveis', label: 'Calculáveis' },
+  { key: 'com_parametro', label: 'Com parâmetro' },
+  { key: 'sem_parametro', label: 'Sem parâmetro' },
+  { key: 'padrao_mx', label: 'Padrão MX' },
+  { key: 'criados_mx', label: 'Criados pela MX' },
+  { key: 'publicados', label: 'Publicados' },
+  { key: 'rascunhos', label: 'Em rascunho' },
+  { key: 'ocultos_dono', label: 'Ocultos no Dono' },
+  { key: 'desabilitados', label: 'Desabilitados' },
+  { key: 'arquivados', label: 'Arquivados' },
+]
 
 export function AdminIndicadoresPage() {
   const location = useLocation()
@@ -111,6 +129,8 @@ export function AdminIndicadoresPage() {
   const [valueTypeFilter, setValueTypeFilter] = useState('todos')
   const [originFilter, setOriginFilter] = useState<'todos' | 'mx_padrao' | 'criado_mx'>('todos')
   const [parameterFilter, setParameterFilter] = useState<'todos' | 'com_parametro' | 'sem_parametro'>('todos')
+  const [quickFilter, setQuickFilter] = useState<CatalogQuickFilter>('todos')
+  const [collapsedAreas, setCollapsedAreas] = useState<Record<string, boolean>>({})
   const [wizardOpen, setWizardOpen] = useState(false)
   const [wizardInitial, setWizardInitial] = useState<Partial<IndicatorWizardDraft> | undefined>(undefined)
   const [editing, setEditing] = useState(false)
@@ -151,6 +171,16 @@ export function AdminIndicadoresPage() {
   }, [])
 
   useEffect(() => { void refetch() }, [refetch])
+
+  useEffect(() => {
+    let active = true
+    void fetchIndicatorParameters().then(result => {
+      if (!active) return
+      setParameterError(result.error)
+      if (!result.error) setParameters(result.rows)
+    })
+    return () => { active = false }
+  }, [])
 
   const loadPlans = useCallback(async () => {
     setPlanLoading(true)
@@ -205,6 +235,7 @@ export function AdminIndicadoresPage() {
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase()
     return rows.filter(item => {
+      if (quickFilter !== 'todos' && !indicatorMatchesFilter(item, quickFilter)) return false
       if (area !== 'todas' && item.area !== area) return false
       if (status !== 'todos' && item.status !== status) return false
       if (calculationFilter !== 'todos' && indicatorCalculationMode(item) !== CALCULATION_FILTER_MODE[calculationFilter]) return false
@@ -214,7 +245,7 @@ export function AdminIndicadoresPage() {
       if (!term) return true
       return [item.label, item.metric_key, item.area].some(value => (value ?? '').toLowerCase().includes(term))
     })
-  }, [area, calculationFilter, originFilter, parameterFilter, rows, search, status, valueTypeFilter])
+  }, [area, calculationFilter, originFilter, parameterFilter, quickFilter, rows, search, status, valueTypeFilter])
 
   const ordered = useMemo(() => {
     if (!orderMode) return filtered
@@ -224,10 +255,32 @@ export function AdminIndicadoresPage() {
 
   const metrics = useMemo(() => ({
     total: rows.length,
-    publicados: rows.filter(item => isUsableIndicator(item)).length,
-    areas: areas.length,
-    noDono: rows.filter(item => item.visivel_dono).length,
-  }), [rows, areas])
+    digitaveis: rows.filter(item => indicatorMatchesFilter(item, 'digitaveis')).length,
+    calculaveis: rows.filter(item => indicatorMatchesFilter(item, 'calculaveis')).length,
+    parameterized: rows.filter(item => indicatorMatchesFilter(item, 'com_parametro')).length,
+    parameterCount: parameterError ? '—' : parameters.length,
+    archived: rows.filter(item => indicatorMatchesFilter(item, 'arquivados')).length,
+  }), [parameterError, parameters.length, rows])
+
+  const grouped = useMemo(() => {
+    const groups = new Map<string, CatalogIndicator[]>()
+    for (const item of (orderMode ? ordered : filtered)) {
+      const key = item.area || 'Sem área'
+      groups.set(key, [...(groups.get(key) ?? []), item])
+    }
+    return [...groups.entries()].map(([areaName, items]) => ({ areaName, items }))
+  }, [filtered, orderMode, ordered])
+
+  const clearCatalogFilters = () => {
+    setSearch('')
+    setArea('todas')
+    setStatus('todos')
+    setCalculationFilter('todos')
+    setValueTypeFilter('todos')
+    setOriginFilter('todos')
+    setParameterFilter('todos')
+    setQuickFilter('todos')
+  }
 
   const openNew = () => {
     setWizardInitial(undefined)
@@ -447,6 +500,81 @@ export function AdminIndicadoresPage() {
     casas_decimais: item.casas_decimais,
   })), [rows])
 
+  const renderCatalogTable = (items: CatalogIndicator[], areaName: string) => (
+    <MxTableSurface aria-label={`Indicadores da área ${areaName}`}>
+      <Table className="min-w-[1480px]">
+        <TableHeader>
+          <TableRow>
+            <TableHead>Ordem oficial</TableHead>
+            <TableHead>Indicador</TableHead>
+            <TableHead>Unidade</TableHead>
+            <TableHead>Leitura</TableHead>
+            <TableHead>Meta</TableHead>
+            <TableHead>Total anual</TableHead>
+            <TableHead>Dono</TableHead>
+            <TableHead>Origem</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead className="text-right">Ações</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {items.map(item => {
+            const orderIndex = orderKeys.indexOf(item.metric_key)
+            const orderLabel = item.status === 'arquivado' ? '999' : String(item.sort_order).padStart(2, '0')
+            return (
+              <TableRow key={item.metric_key}>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <span className="min-w-8 tabular-nums font-semibold text-foreground">{orderLabel}</span>
+                    {orderMode ? (
+                      <div className="flex gap-1">
+                        <Button variant="outline" size="icon" aria-label={`Subir ${item.label}`} disabled={orderIndex <= 0} onClick={() => move(item.metric_key, 'up')}><ArrowUp size={14} /></Button>
+                        <Button variant="outline" size="icon" aria-label={`Descer ${item.label}`} disabled={orderIndex < 0 || orderIndex === orderKeys.length - 1} onClick={() => move(item.metric_key, 'down')}><ArrowDown size={14} /></Button>
+                      </div>
+                    ) : null}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="font-semibold text-foreground">{item.label}</div>
+                  <div className="text-xs text-muted-foreground">{item.metric_key}</div>
+                </TableCell>
+                <TableCell>{formatIndicatorValueType(item.value_type)}</TableCell>
+                <TableCell>{DIRECTION_LABEL[item.direction] ?? item.direction}</TableCell>
+                <TableCell>
+                  <div>{INDICATOR_CALCULATION_MODE_LABEL[indicatorCalculationMode(item)]}</div>
+                  <div className="text-xs text-muted-foreground">{item.targets} meta(s) cadastrada(s)</div>
+                </TableCell>
+                <TableCell className="tabular-nums">{item.annual_target == null ? '—' : new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(item.annual_target)}</TableCell>
+                <TableCell>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    aria-label={item.visivel_dono ? 'Visível no Dono' : 'Oculto no Dono'}
+                    aria-pressed={item.visivel_dono}
+                    onClick={() => void updateOwnerVisibility(item.metric_key, !item.visivel_dono)}
+                    disabled={submitting}
+                    title={item.visivel_dono ? 'Ocultar no Módulo Dono' : 'Mostrar no Módulo Dono'}
+                  >
+                    {item.visivel_dono ? <Eye size={14} /> : <EyeOff size={14} />}{item.visivel_dono ? 'Visível' : 'Oculto'}
+                  </Button>
+                </TableCell>
+                <TableCell>{item.created_origin === 'criado_mx' ? 'Criado pela MX' : 'Padrão MX'}</TableCell>
+                <TableCell>{INDICATOR_STATUS_LABEL[item.status]}</TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end gap-2">
+                    <Button variant="outline" size="sm" onClick={() => setDetail(item)}>Abrir</Button>
+                    <Button variant="outline" size="sm" onClick={() => openEdit(item)}>Editar</Button>
+                    <Button variant="ghost" size="sm" onClick={() => openIndicatorHistory(item)} title={`Abrir histórico de ${item.label}`}><History size={14} />Histórico</Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            )
+          })}
+        </TableBody>
+      </Table>
+    </MxTableSurface>
+  )
+
   return (
     <MxModulePage id="admin-mx-indicadores" width={width} bottomClearance={bottomClearance}>
       <div className="w-full space-y-5">
@@ -478,17 +606,25 @@ export function AdminIndicadoresPage() {
         {loading ? <MxLoadingState label="Carregando indicadores" /> : error ? <MxErrorState description={error} retry={() => void refetch()} /> : tab === 'catalogo' ? (
           <>
             <MxMetricGrid>
-              <MxMetricCard title="Indicadores" value={metrics.total} detail="No catálogo" icon={Gauge} />
-              <MxMetricCard title="Publicados" value={metrics.publicados} detail="Disponíveis para uso" icon={Gauge} tone="success" />
-              <MxMetricCard title="Áreas" value={metrics.areas} detail="Agrupamentos" icon={Gauge} tone="info" />
-              <MxMetricCard title="No Módulo Dono" value={metrics.noDono} detail="Visíveis para o cliente" icon={Gauge} tone="violet" />
+              <MxMetricCard title="Indicadores" value={metrics.total} detail="No catálogo" icon={Gauge} actionLabel="Ver todos" onAction={clearCatalogFilters} />
+              <MxMetricCard title="Digitáveis" value={metrics.digitaveis} detail="Entrada manual" icon={Gauge} tone="info" actionLabel="Filtrar digitáveis" onAction={() => setQuickFilter('digitaveis')} />
+              <MxMetricCard title="Calculáveis" value={metrics.calculaveis} detail="Por fórmula" icon={Calculator} tone="violet" actionLabel="Filtrar calculáveis" onAction={() => setQuickFilter('calculaveis')} />
+              <MxMetricCard title="Com parâmetro" value={metrics.parameterized} detail="Fórmulas parametrizadas" icon={Calculator} tone="success" actionLabel="Filtrar parâmetros" onAction={() => setQuickFilter('com_parametro')} />
+              <MxMetricCard title="Parâmetros globais" value={metrics.parameterCount} detail="Conjunto ativo" icon={Gauge} tone="warning" actionLabel="Abrir parâmetros" onAction={() => setTab('parametros')} />
+              <MxMetricCard title="Arquivados" value={metrics.archived} detail="Fora da operação" icon={FileClock} tone="warning" actionLabel="Filtrar arquivados" onAction={() => setQuickFilter('arquivados')} />
             </MxMetricGrid>
+            {parameterError ? <MxStatusBanner tone="warning">Parâmetros globais indisponíveis: {parameterError}. Abra a aba “Parâmetros e fórmulas” para tentar novamente.</MxStatusBanner> : null}
 
             {orderMode ? <MxStatusBanner tone="info">Modo de ordenação: use as setas para reordenar e salve a ordem oficial. Os filtros ficam desativados.</MxStatusBanner> : null}
 
             {!orderMode ? (
               <MxToolbar>
-                <MxInput className="min-w-[220px] flex-1" value={search} onChange={event => setSearch(event.target.value)} placeholder="Buscar indicador" aria-label="Buscar indicador" />
+                <MxInput className="min-w-[240px] flex-1" value={search} onChange={event => setSearch(event.target.value)} placeholder="Buscar por nome ou código..." aria-label="Buscar por nome ou código" />
+                <div className="flex w-full flex-wrap gap-2" role="group" aria-label="Filtros rápidos do catálogo">
+                  {QUICK_FILTERS.map(filter => (
+                    <Button key={filter.key} variant={quickFilter === filter.key ? 'primary' : 'outline'} size="sm" aria-pressed={quickFilter === filter.key} onClick={() => setQuickFilter(filter.key)}>{filter.label}</Button>
+                  ))}
+                </div>
                 <MxSelect value={area} onChange={event => setArea(event.target.value)} aria-label="Filtrar por área">
                   <option value="todas">Todas as áreas</option>
                   {areas.map(item => <option key={item} value={item}>{item}</option>)}
@@ -517,67 +653,30 @@ export function AdminIndicadoresPage() {
                   <option value="com_parametro">Com parâmetro</option>
                   <option value="sem_parametro">Sem parâmetro</option>
                 </MxSelect>
+                {(search || area !== 'todas' || status !== 'todos' || calculationFilter !== 'todos' || valueTypeFilter !== 'todos' || originFilter !== 'todos' || parameterFilter !== 'todos' || quickFilter !== 'todos') ? <Button variant="ghost" size="sm" onClick={clearCatalogFilters}>Limpar filtros</Button> : null}
               </MxToolbar>
             ) : null}
 
             <MxSectionCard>
-              <MxSectionHeader title="Catálogo de indicadores" description={`${ordered.length} indicador(es) visível(is).`} />
-              <div className="p-5">
-                {ordered.length ? (
-                  <MxTableSurface>
-                    <Table className="min-w-[1240px]">
-                      <TableHeader>
-                        <TableRow>
-                          {orderMode ? <TableHead>Ordem</TableHead> : null}
-                          <TableHead>Indicador</TableHead>
-                          <TableHead>Área</TableHead>
-                          <TableHead>Tipo</TableHead>
-                          <TableHead>Leitura</TableHead>
-                          <TableHead>Metas</TableHead>
-                          <TableHead>Dono</TableHead>
-                          <TableHead>Origem</TableHead>
-                          <TableHead>Status</TableHead>
-                          <TableHead className="text-right">Ação</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {ordered.map((item, index) => (
-                          <TableRow key={item.metric_key}>
-                            {orderMode ? (
-                              <TableCell>
-                                <div className="flex gap-1">
-                                  <Button variant="outline" size="sm" aria-label={`Subir ${item.label}`} disabled={index === 0} onClick={() => move(item.metric_key, 'up')}><ArrowUp size={14} /></Button>
-                                  <Button variant="outline" size="sm" aria-label={`Descer ${item.label}`} disabled={index === ordered.length - 1} onClick={() => move(item.metric_key, 'down')}><ArrowDown size={14} /></Button>
-                                </div>
-                              </TableCell>
-                            ) : null}
-                            <TableCell>
-                              <div className="font-semibold text-foreground">{item.label}</div>
-                              <div className="text-xs text-muted-foreground">{item.metric_key}</div>
-                            </TableCell>
-                            <TableCell>{item.area}</TableCell>
-                            <TableCell>{item.value_type}</TableCell>
-                            <TableCell>{DIRECTION_LABEL[item.direction] ?? item.direction}</TableCell>
-                            <TableCell>{item.targets}</TableCell>
-                            <TableCell>{item.visivel_dono ? 'Sim' : '—'}</TableCell>
-                            <TableCell>{item.created_origin === 'criado_mx' ? 'Criado no MX' : 'Padrão MX'}</TableCell>
-                            <TableCell>{INDICATOR_STATUS_LABEL[item.status]}</TableCell>
-                            <TableCell className="text-right">
-                              <div className="flex justify-end gap-2">
-                                <Button variant="outline" size="sm" onClick={() => setDetail(item)}>Abrir</Button>
-                                <Button variant="outline" size="sm" onClick={() => openEdit(item)}>Editar</Button>
-                                <Button variant="outline" size="sm" onClick={() => void updateOwnerVisibility(item.metric_key, !item.visivel_dono)} disabled={submitting} title={item.visivel_dono ? 'Ocultar no Módulo Dono' : 'Mostrar no Módulo Dono'}>
-                                  {item.visivel_dono ? <EyeOff size={14} /> : <Eye size={14} />}{item.visivel_dono ? 'Ocultar' : 'Mostrar'}
-                                </Button>
-                                <Button variant="ghost" size="sm" onClick={() => openIndicatorHistory(item)} title={`Abrir histórico de ${item.label}`}><History size={14} />Histórico</Button>
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </MxTableSurface>
-                ) : <MxEmptyState variant="filter" title="Nenhum indicador encontrado" description="Ajuste a busca ou os filtros." />}
+              <MxSectionHeader title="Catálogo de indicadores" description={`${(orderMode ? ordered : filtered).length} indicador(es) visível(is) em ${grouped.length} área(s).`} />
+              <div className="space-y-4 p-5">
+                {(orderMode ? ordered : filtered).length ? grouped.map(group => {
+                  const collapsed = collapsedAreas[group.areaName] === true
+                  return (
+                    <section key={group.areaName} className="overflow-hidden rounded-xl border border-border-subtle bg-surface-alt">
+                      <div className="flex flex-wrap items-center justify-between gap-3 p-4">
+                        <div>
+                          <h3 className="text-base font-semibold text-foreground">{group.areaName}</h3>
+                          <p className="mt-1 text-sm text-muted-foreground">{group.items.length} indicador(es)</p>
+                        </div>
+                        <Button variant="ghost" size="sm" aria-expanded={!collapsed} onClick={() => setCollapsedAreas(current => ({ ...current, [group.areaName]: !collapsed }))}>
+                          <ChevronDown size={16} className={collapsed ? '' : 'rotate-180'} />{collapsed ? 'Expandir' : 'Recolher'}
+                        </Button>
+                      </div>
+                      {!collapsed ? <div className="border-t border-border-subtle bg-white p-3">{renderCatalogTable(group.items, group.areaName)}</div> : null}
+                    </section>
+                  )
+                }) : <MxEmptyState variant="filter" title="Nenhum indicador encontrado" description="Ajuste a busca ou os filtros." />}
               </div>
             </MxSectionCard>
           </>

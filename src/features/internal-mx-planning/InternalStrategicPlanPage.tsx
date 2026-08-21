@@ -34,7 +34,7 @@ export default function InternalStrategicPlanPage() {
       <InternalMxPlanningShell
         icon={Target}
         title="Plano Estratégico"
-        description="Acompanhe os 45 indicadores, metas, comparativos e ações da loja selecionada."
+        description="Acompanhe os indicadores, metas, comparativos e ações da loja selecionada."
         store={store}
       >
         <StrategicPlanWorkspace year={year} />

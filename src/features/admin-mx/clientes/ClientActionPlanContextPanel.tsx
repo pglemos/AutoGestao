@@ -31,6 +31,7 @@ import { ActionPlanDetailDrawer } from '@/features/admin-mx/planos-acao/ActionPl
 
 type Props = {
   clientId: string
+  clientSlug?: string | null
   primaryStoreId?: string | null
   refreshKey?: number
   onCreatePlan: () => void
@@ -71,7 +72,7 @@ function toBoardPlan(row: ClientActionPlanRow): BoardPlan {
   }
 }
 
-export function ClientActionPlanContextPanel({ clientId, primaryStoreId, refreshKey = 0, onCreatePlan }: Props) {
+export function ClientActionPlanContextPanel({ clientId, clientSlug, primaryStoreId, refreshKey = 0, onCreatePlan }: Props) {
   const [rows, setRows] = useState<ClientActionPlanRow[]>([])
   const [responsibles, setResponsibles] = useState<Responsible[]>([])
   const [loading, setLoading] = useState(true)
@@ -153,7 +154,10 @@ export function ClientActionPlanContextPanel({ clientId, primaryStoreId, refresh
                 <RefreshCw size={14} />Atualizar
               </Button>
               <Button variant="outline" size="sm" asChild>
-                <Link to={`/plano-acao?clientId=${encodeURIComponent(clientId)}`}><ExternalLink size={14} />Workspace global</Link>
+                <Link to={clientSlug
+                  ? `/clientes/${encodeURIComponent(clientSlug)}/plano-acao?clientId=${encodeURIComponent(clientId)}${primaryStoreId ? `&storeId=${encodeURIComponent(primaryStoreId)}` : ''}`
+                  : `/plano-acao?clientId=${encodeURIComponent(clientId)}${primaryStoreId ? `&storeId=${encodeURIComponent(primaryStoreId)}` : ''}`
+                }><ExternalLink size={14} />Abrir plano completo</Link>
               </Button>
               <Button size="sm" onClick={onCreatePlan}><Plus size={14} />Novo plano</Button>
             </div>

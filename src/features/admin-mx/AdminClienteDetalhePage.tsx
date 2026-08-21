@@ -72,22 +72,53 @@ import { useAdminConsultingProducts, useAdminTeam } from './hooks/useAdminMxList
 import { resolveVisitVolumeRule } from './clientes/visitVolumeRule'
 import { ClientActionPlanWizard } from './planos-acao/ClientActionPlanWizard'
 
-type ClientTab = 'visao' | 'lojas' | 'pessoas' | 'jornada' | 'implantacao' | 'estrategico' | 'plano-acao' | 'modulos' | 'configuracoes' | 'dados' | 'historico'
+type ClientTab = 'visao' | 'lojas' | 'pessoas' | 'jornada' | 'implantacao' | 'planejamento' | 'operacao' | 'dados'
+type PlanningTab = 'estrategico' | 'plano-acao'
+type OperationTab = 'modulos' | 'configuracoes'
+type DataTab = 'dados' | 'historico'
 
-// Ordem da especificação do módulo: as oito abas da Visão 360.
+// Oito áreas principais. As abas legadas continuam disponíveis como subáreas,
+// para preservar links existentes sem deixar a Visão 360 fragmentada.
 const TABS = [
   { key: 'visao' as const, label: 'Visão geral' },
   { key: 'lojas' as const, label: 'Empresa e lojas' },
   { key: 'pessoas' as const, label: 'Pessoas e acessos' },
   { key: 'jornada' as const, label: 'Programa e jornada' },
   { key: 'implantacao' as const, label: 'Implantação e aderência' },
+  { key: 'planejamento' as const, label: 'Planejamento e ações' },
+  { key: 'operacao' as const, label: 'Módulos e configurações' },
+  { key: 'dados' as const, label: 'Dados e histórico' },
+]
+
+const PLANNING_TABS = [
   { key: 'estrategico' as const, label: 'Plano Estratégico' },
   { key: 'plano-acao' as const, label: 'Plano de Ação' },
+]
+
+const OPERATION_TABS = [
   { key: 'modulos' as const, label: 'Módulos e acessos' },
   { key: 'configuracoes' as const, label: 'Configurações' },
+]
+
+const DATA_TABS = [
   { key: 'dados' as const, label: 'Dados e integridade' },
   { key: 'historico' as const, label: 'Histórico e auditoria' },
 ]
+
+function resolveInitialDetailTab(requestedTab: string | null): {
+  tab: ClientTab
+  planningTab: PlanningTab
+  operationTab: OperationTab
+  dataTab: DataTab
+} {
+  if (requestedTab === 'estrategico') return { tab: 'planejamento', planningTab: 'estrategico', operationTab: 'modulos', dataTab: 'dados' }
+  if (requestedTab === 'plano-acao') return { tab: 'planejamento', planningTab: 'plano-acao', operationTab: 'modulos', dataTab: 'dados' }
+  if (requestedTab === 'modulos') return { tab: 'operacao', planningTab: 'estrategico', operationTab: 'modulos', dataTab: 'dados' }
+  if (requestedTab === 'configuracoes') return { tab: 'operacao', planningTab: 'estrategico', operationTab: 'configuracoes', dataTab: 'dados' }
+  if (requestedTab === 'historico') return { tab: 'dados', planningTab: 'estrategico', operationTab: 'modulos', dataTab: 'historico' }
+  const tab = TABS.some(entry => entry.key === requestedTab) ? requestedTab as ClientTab : 'visao'
+  return { tab, planningTab: 'estrategico', operationTab: 'modulos', dataTab: 'dados' }
+}
 
 function formatDate(value: string | null | undefined) {
   if (!value) return '—'
@@ -114,9 +145,21 @@ export function AdminClienteDetalhePage() {
   const team = useAdminTeam()
   const [searchParams] = useSearchParams()
   const requestedTab = searchParams.get('tab')
-  const [tab, setTabState] = useState<ClientTab>(requestedTab && TABS.some(entry => entry.key === requestedTab) ? requestedTab as ClientTab : 'visao')
+  const initialTabState = resolveInitialDetailTab(requestedTab)
+  const [tab, setTabState] = useState<ClientTab>(initialTabState.tab)
+  const [planningTab, setPlanningTab] = useState<PlanningTab>(initialTabState.planningTab)
+  const [operationTab, setOperationTab] = useState<OperationTab>(initialTabState.operationTab)
+  const [dataTab, setDataTab] = useState<DataTab>(initialTabState.dataTab)
 
   const setTab = (next: ClientTab) => setTabState(next)
+
+  useEffect(() => {
+    const next = resolveInitialDetailTab(requestedTab)
+    setTabState(next.tab)
+    setPlanningTab(next.planningTab)
+    setOperationTab(next.operationTab)
+    setDataTab(next.dataTab)
+  }, [requestedTab])
   const [storeTaken, setStoreTaken] = useState(false)
   const [activationOpen, setActivationOpen] = useState(false)
   const [activating, setActivating] = useState(false)
@@ -458,7 +501,7 @@ export function AdminClienteDetalhePage() {
                 ? <Button onClick={() => setActivationOpen(true)}><CheckCircle2 size={16} />Validar e ativar</Button>
                 : null}
               {client ? <Button variant="outline" onClick={() => void createStrategicPlan()} disabled={creatingStrategicPlan}><Target size={16} />{creatingStrategicPlan ? 'Criando plano...' : 'Criar Plano Estratégico'}</Button> : null}
-              {client ? <Button asChild variant="outline"><Link to={`/plano-acao${client.primary_store_id ? `?storeId=${encodeURIComponent(client.primary_store_id)}` : ''}`}><ClipboardList size={16} />Abrir Plano de Ação</Link></Button> : null}
+              {client ? <Button asChild variant="outline"><Link to={`/clientes/${encodeURIComponent(client.slug || client.id)}/plano-acao?clientId=${encodeURIComponent(client.id)}${client.primary_store_id ? `&storeId=${encodeURIComponent(client.primary_store_id)}` : ''}`}><ClipboardList size={16} />Abrir Plano de Ação</Link></Button> : null}
               {client ? <Button asChild variant="outline"><Link to={`/consultoria?clientId=${encodeURIComponent(client.id)}`}><Sparkles size={16} />Abrir Consultoria</Link></Button> : null}
             </>
           )}
@@ -488,6 +531,38 @@ export function AdminClienteDetalhePage() {
             {tab === 'visao' ? (
               <MxSectionCard>
                 <MxSectionHeader title="Informações gerais" description="Cadastro, contrato e situação do cliente." />
+                <div className="grid gap-3 border-b border-border p-5 lg:grid-cols-3">
+                  <div className="rounded-xl border border-border bg-surface-alt p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <div className="flex items-center gap-2 text-sm font-semibold text-foreground"><Target size={16} className="text-status-info-text" />Plano Estratégico</div>
+                        <p className="mt-2 text-xs text-muted-foreground">Indicadores, metas e ciclo do produto contratado.</p>
+                      </div>
+                      <span className="text-xs font-semibold text-foreground">{strategicPlanReadiness ? `${strategicPlanReadiness.ready}/${strategicPlanReadiness.total}` : '—'}</span>
+                    </div>
+                    <Button variant="outline" size="sm" className="mt-4" onClick={() => { setPlanningTab('estrategico'); setTab('planejamento') }}>Abrir no cliente</Button>
+                  </div>
+                  <div className="rounded-xl border border-border bg-surface-alt p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <div className="flex items-center gap-2 text-sm font-semibold text-foreground"><ClipboardList size={16} className="text-status-warning-text" />Plano de Ação</div>
+                        <p className="mt-2 text-xs text-muted-foreground">Problemas, responsáveis, prazos e evidências da execução.</p>
+                      </div>
+                      <span className="text-xs font-semibold text-foreground">No cliente</span>
+                    </div>
+                    <Button variant="outline" size="sm" className="mt-4" onClick={() => { setPlanningTab('plano-acao'); setTab('planejamento') }}>Abrir no cliente</Button>
+                  </div>
+                  <div className="rounded-xl border border-border bg-surface-alt p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <div className="flex items-center gap-2 text-sm font-semibold text-foreground"><Sparkles size={16} className="text-status-success-text" />Consultoria</div>
+                        <p className="mt-2 text-xs text-muted-foreground">Jornada, encontros e entregas do programa contratado.</p>
+                      </div>
+                      <span className="text-xs font-semibold text-foreground">{visits.length} encontro(s)</span>
+                    </div>
+                    <Button asChild variant="outline" size="sm" className="mt-4"><Link to={`/consultoria?clientId=${encodeURIComponent(client.id)}`}>Abrir consultoria</Link></Button>
+                  </div>
+                </div>
                 <div className="grid gap-3 p-5 sm:grid-cols-2 lg:grid-cols-3">
                   {[
                     ['Razão social', client.legal_name || '—'],
@@ -500,6 +575,7 @@ export function AdminClienteDetalhePage() {
                     ['Fim do contrato', formatDate((client as { contract_end_date?: string | null }).contract_end_date)],
                     ['Onboarding', onboardingCompleted ? 'Concluído' : `Etapa ${onboardingStep}/7`],
                     ['Ciclo da jornada', totalVisits > 0 ? `${journey.completedVisits}/${totalVisits}` : '—'],
+                    ['Visitas presenciais', visitRule.label],
                   ].map(([label, value]) => (
                     <div key={label} className="rounded-lg border border-border p-3">
                       <dt className="text-xs text-muted-foreground">{label}</dt>
@@ -694,57 +770,68 @@ export function AdminClienteDetalhePage() {
               />
             ) : null}
 
-            {tab === 'estrategico' ? (
-              <ClientPlanningContextPanel
-                clientId={client.id}
-                primaryStoreId={client.primary_store_id}
-              />
-            ) : null}
-
-            {tab === 'plano-acao' ? (
-              <ClientActionPlanContextPanel
-                clientId={client.id}
-                primaryStoreId={client.primary_store_id}
-                refreshKey={actionPlanRefreshKey}
-                onCreatePlan={() => setActionPlanWizardOpen(true)}
-              />
+            {tab === 'planejamento' ? (
+              <div className="space-y-4">
+                <TabNav tabs={PLANNING_TABS} activeTab={planningTab} onTabChange={setPlanningTab} />
+                {planningTab === 'estrategico' ? (
+                  <ClientPlanningContextPanel
+                    clientId={client.id}
+                    clientSlug={client.slug}
+                    primaryStoreId={client.primary_store_id}
+                  />
+                ) : (
+                  <ClientActionPlanContextPanel
+                    clientId={client.id}
+                    clientSlug={client.slug}
+                    primaryStoreId={client.primary_store_id}
+                    refreshKey={actionPlanRefreshKey}
+                    onCreatePlan={() => setActionPlanWizardOpen(true)}
+                  />
+                )}
+              </div>
             ) : null}
 
             {tab === 'dados' ? (
-              <ClientDadosTab sources={health.sources} loading={health.loading} error={health.error} onRetry={() => void health.refetch()} />
+              <div className="space-y-4">
+                <TabNav tabs={DATA_TABS} activeTab={dataTab} onTabChange={setDataTab} />
+                {dataTab === 'dados' ? (
+                  <ClientDadosTab sources={health.sources} loading={health.loading} error={health.error} onRetry={() => void health.refetch()} />
+                ) : (
+                  <ClientHistoricoTab events={health.timeline} loading={health.loading} error={health.error} onRetry={() => void health.refetch()} />
+                )}
+              </div>
             ) : null}
 
-            {tab === 'historico' ? (
-              <ClientHistoricoTab events={health.timeline} loading={health.loading} error={health.error} onRetry={() => void health.refetch()} />
-            ) : null}
-
-            {tab === 'modulos' ? (
-              <MxSectionCard>
-                <MxSectionHeader title="Módulos do cliente" description={`${(client.modules ?? []).filter(item => item.enabled !== false).length} módulo(s) liberado(s).`} />
-                <div className="p-5">
-                  {client.modules?.length ? (
-                    <MxTableSurface>
-                      <Table className="min-w-[520px]">
-                        <TableHeader><TableRow><TableHead>Módulo</TableHead><TableHead>Chave</TableHead><TableHead>Liberado</TableHead><TableHead>Premium</TableHead></TableRow></TableHeader>
-                        <TableBody>
-                          {client.modules.map(item => (
-                            <TableRow key={item.id}>
-                              <TableCell className="font-semibold text-foreground">{item.label || item.module_key}</TableCell>
-                              <TableCell className="text-xs text-muted-foreground">{item.module_key}</TableCell>
-                              <TableCell>{item.enabled === false ? 'Não' : 'Sim'}</TableCell>
-                              <TableCell>{item.premium ? 'Sim' : '—'}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </MxTableSurface>
-                  ) : <MxEmptyState title="Nenhum módulo configurado" description="O cliente entra sem acesso até liberar ao menos um módulo." />}
-                </div>
-              </MxSectionCard>
-            ) : null}
-
-            {tab === 'configuracoes' ? (
-              <ClientConfigTab clientId={client.id} units={units.map(unit => ({ id: unit.id, name: unit.name, store_type: unit.store_type }))} updatedBy={supabaseUser?.id ?? ''} />
+            {tab === 'operacao' ? (
+              <div className="space-y-4">
+                <TabNav tabs={OPERATION_TABS} activeTab={operationTab} onTabChange={setOperationTab} />
+                {operationTab === 'modulos' ? (
+                  <MxSectionCard>
+                    <MxSectionHeader title="Módulos do cliente" description={`${(client.modules ?? []).filter(item => item.enabled !== false).length} módulo(s) liberado(s).`} />
+                    <div className="p-5">
+                      {client.modules?.length ? (
+                        <MxTableSurface>
+                          <Table className="min-w-[520px]">
+                            <TableHeader><TableRow><TableHead>Módulo</TableHead><TableHead>Chave</TableHead><TableHead>Liberado</TableHead><TableHead>Premium</TableHead></TableRow></TableHeader>
+                            <TableBody>
+                              {client.modules.map(item => (
+                                <TableRow key={item.id}>
+                                  <TableCell className="font-semibold text-foreground">{item.label || item.module_key}</TableCell>
+                                  <TableCell className="text-xs text-muted-foreground">{item.module_key}</TableCell>
+                                  <TableCell>{item.enabled === false ? 'Não' : 'Sim'}</TableCell>
+                                  <TableCell>{item.premium ? 'Sim' : '—'}</TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </MxTableSurface>
+                      ) : <MxEmptyState title="Nenhum módulo configurado" description="O cliente entra sem acesso até liberar ao menos um módulo." />}
+                    </div>
+                  </MxSectionCard>
+                ) : (
+                  <ClientConfigTab clientId={client.id} units={units.map(unit => ({ id: unit.id, name: unit.name, store_type: unit.store_type }))} updatedBy={supabaseUser?.id ?? ''} />
+                )}
+              </div>
             ) : null}
 
             <ClientActivationModal

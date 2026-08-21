@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 import {
   activationBlockers,
+  canonicalPortfolioStatus,
   clientBuckets,
   clientStoreIds,
   clientTeamStat,
@@ -9,6 +10,8 @@ import {
   journeyLabel,
   nextAction,
   portfolioCounters,
+  portfolioStatusCounters,
+  portfolioStatusLabel,
   structureLabel,
   EMPTY_PORTFOLIO_FILTERS,
   type PortfolioClient,
@@ -129,6 +132,25 @@ describe('cards da carteira', () => {
     expect(counters.ativos).toBe(2)
     expect(counters.com_bloqueios).toBe(1)
     expect(counters.renovacoes_proximas).toBe(1)
+  })
+})
+
+describe('situação canônica da carteira principal', () => {
+  test('não conta um cliente ativo em implantação também como ativo', () => {
+    expect(canonicalPortfolioStatus(client({ visitsDone: 2 }))).toBe('em_implantacao')
+    expect(portfolioStatusCounters([client({ visitsDone: 2 })])).toEqual({
+      ativos: 0,
+      em_implantacao: 1,
+      prontos_para_ativar: 0,
+      em_configuracao: 0,
+    })
+  })
+
+  test('separa pronto, configuração e suspensão', () => {
+    expect(canonicalPortfolioStatus(client({ status: 'inativo' }))).toBe('prontos_para_ativar')
+    expect(canonicalPortfolioStatus(client({ status: 'em_configuracao' }))).toBe('em_configuracao')
+    expect(canonicalPortfolioStatus(client({ status: 'suspenso' }))).toBeNull()
+    expect(portfolioStatusLabel(client({ status: 'suspenso' }))).toBe('Suspenso')
   })
 })
 

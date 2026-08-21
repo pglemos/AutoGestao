@@ -2,14 +2,19 @@ import { useMemo, useState } from 'react'
 import {
   Building2,
   CalendarDays,
+  MoreHorizontal,
   Plus,
   RefreshCw,
-  Sparkles,
 } from 'lucide-react'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
-import { TabNav } from '@/components/molecules/TabNav'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import {
   MxErrorState,
   MxLoadingState,
@@ -98,12 +103,11 @@ export function AdminClientesPage() {
 
   const counters = useMemo(() => portfolioCounters(rows), [rows])
 
-  const tabsConfig = useMemo(() => [
-    { key: 'carteira', label: `Carteira 360 (${rows.length})` },
-    { key: 'onboarding', label: `Em Implantação (${counters.em_implantacao + counters.prontos_para_ativar})` },
-    { key: 'inscricoes', label: 'Inscrições & Links' },
-    { key: 'governanca', label: `Governança & Bloqueios (${counters.com_bloqueios})` },
-  ], [rows.length, counters])
+  const operationalTabs = useMemo(() => [
+    { key: 'onboarding' as const, label: `Onboarding (${counters.em_implantacao + counters.prontos_para_ativar})` },
+    { key: 'inscricoes' as const, label: 'Inscrições & links' },
+    { key: 'governanca' as const, label: `Governança (${counters.com_bloqueios})` },
+  ], [counters])
 
   const handleCopyLink = (name: string) => {
     const link = getPreRegistrationLink(name)
@@ -274,42 +278,43 @@ export function AdminClientesPage() {
       <div className="w-full space-y-5">
         <MxModuleHeader
           icon={Building2}
-          eyebrow="Administração MX & Rede"
-          title="Clientes & Lojas MX"
-          description="Central unificada de gestão da carteira, onboarding, rede de lojas, metas e acessos."
+          eyebrow="Administração MX"
+          title="Clientes MX"
+          description={`${rows.length} ${rows.length === 1 ? 'cliente' : 'clientes'} na carteira.`}
           actions={
             <div className="flex flex-wrap items-center gap-2">
-              <Button asChild variant="outline" size="sm">
-                <Link to="/agenda">
-                  <CalendarDays size={14} className="mr-1.5" />
-                  Agenda MX
-                </Link>
+              <Button variant="outline" size="sm" onClick={() => void refetchAll()} aria-label="Atualizar carteira de clientes">
+                <RefreshCw size={14} className="mr-1.5" />Atualizar
               </Button>
-              <Button variant="outline" size="sm" onClick={() => void refetchAll()}>
-                <RefreshCw size={14} className="mr-1.5" />
-                Atualizar
-              </Button>
-              <Button variant="outline" size="sm" onClick={() => setIsCreateModalOpen(true)}>
-                <Plus size={14} className="mr-1.5" />
-                Cadastro Rápido
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" aria-label="Abrir operações da carteira">
+                    <MoreHorizontal size={15} className="mr-1.5" />Mais operações
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuItem onSelect={() => setIsCreateModalOpen(true)}><Plus size={14} />Cadastro rápido</DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => navigate('/agenda')}><CalendarDays size={14} />Agenda MX</DropdownMenuItem>
+                  {operationalTabs.map(item => (
+                    <DropdownMenuItem key={item.key} onSelect={() => setActiveTab(item.key)}>{item.label}</DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
               <Button asChild size="sm">
                 <Link to="/clientes/novo">
                   <Plus size={14} className="mr-1.5" />
-                  Novo Cliente
+                  Novo cliente
                 </Link>
               </Button>
             </div>
           }
         />
 
-        {/* Tab Navigation */}
-        <TabNav
-          tabs={tabsConfig}
-          activeTab={activeTab}
-          onTabChange={tab => setActiveTab(tab as AdminClientesTab)}
-          scrollable
-        />
+        {activeTab !== 'carteira' ? (
+          <Button variant="ghost" size="sm" onClick={() => setActiveTab('carteira')}>
+            ← Voltar para a carteira
+          </Button>
+        ) : null}
 
         {portfolioLoading ? (
           <MxLoadingState label="Carregando carteira e rede de lojas" />

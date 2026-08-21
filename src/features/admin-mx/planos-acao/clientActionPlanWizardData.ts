@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase'
-import { fetchClientUnits } from '@/features/strategic-plan/clientPlanningRepository'
+import { fetchClientProductPackage, fetchClientUnits } from '@/features/strategic-plan/clientPlanningRepository'
 
 /**
  * Acesso a dados do wizard de plano por cliente. Os dados de apoio vêm das
@@ -61,15 +61,38 @@ export async function fetchWizardStores(clientId: string): Promise<{ rows: Wizar
   }
 }
 
-/** Indicadores ativos do catálogo, filtrados por área no componente. */
-export async function fetchWizardIndicators(): Promise<{ rows: WizardIndicator[]; error: string | null }> {
-  const { data, error } = await supabase
+/**
+ * Indicadores ativos do catálogo, filtrados por área no componente. Quando o
+ * wizard está dentro da ficha de um cliente, o roster do produto contratado é
+ * a fonte de verdade; o catálogo geral fica reservado ao wizard global.
+ */
+export async function fetchWizardIndicators(clientId?: string): Promise<{ rows: WizardIndicator[]; error: string | null }> {
+  const packageResult = clientId ? await fetchClientProductPackage(clientId) : null
+  if (packageResult && !packageResult.ok) return { rows: [], error: packageResult.message }
+
+  const rosterItems = packageResult?.ok ? packageResult.resolution.items : []
+  const rosterCodes = rosterItems.map(item => item.metric_key)
+  if (clientId && !rosterCodes.length) return { rows: [], error: null }
+
+  let query = supabase
     .from('catalogo_metricas_consultoria')
     .select('metric_key, label, area, direction')
     .eq('active', true)
     .order('label', { ascending: true })
+  if (rosterCodes.length) query = query.in('metric_key', rosterCodes)
+  const { data, error } = await query
   if (error) return { rows: [], error: error.message }
-  return { rows: (data ?? []).map(item => ({ metric_key: item.metric_key, label: item.label, area: item.area, direction: item.direction })), error: null }
+
+  const catalogRows = (data ?? []).map(item => ({
+    metric_key: item.metric_key,
+    label: rosterItems.find(rosterItem => rosterItem.metric_key === item.metric_key)?.label_snapshot || item.label,
+    area: rosterItems.find(rosterItem => rosterItem.metric_key === item.metric_key)?.area_snapshot || item.area,
+    direction: item.direction,
+  }))
+  if (!rosterCodes.length) return { rows: catalogRows, error: null }
+  const order = new Map(rosterCodes.map((code, index) => [code, index]))
+  catalogRows.sort((a, b) => (order.get(a.metric_key) ?? 9999) - (order.get(b.metric_key) ?? 9999))
+  return { rows: catalogRows, error: null }
 }
 
 /** Responsáveis: usuários internos MX ativos. */
