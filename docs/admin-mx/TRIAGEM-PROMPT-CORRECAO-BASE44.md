@@ -51,9 +51,11 @@ Cruzado com o código: `resolveOwnerMaster()` em `personAccess.ts` já É esse s
 
 Não implementado (nem pedido explicitamente pelo doc como bloqueante pro MX): o formulário "Adicionar Usuário" em blocos separados (Dados Pessoais / Perfis de Acesso / Dono Master / Escopo) com toggle de transferência de Master — o `PersonCreateModal.tsx` atual já cobre papéis múltiplos + toggle Dono Master + lojas autorizadas, mas não foi comparado campo a campo com os 4 blocos do doc. Baixa prioridade — GAP-PARIDADE-BASE44.md já audita `/equipe`+`/clientes` pessoas como ~95% saudável ao vivo.
 
-## Achado 5 — módulo adicional descoberto no doc: Planos de Ação (linha 44.185+)
+## Achado 5 — Planos de Ação Padrão vs Plano do Cliente: spot-check positivo
 
-A partir da linha ~44.185 o documento muda de assunto de novo: "PLANOS DE AÇÃO PADRÃO, PLANOS DO CLIENTE E PROMOÇÃO PARA A BIBLIOTECA" — regras pra diferenciar Plano Padrão (modelo reutilizável) de Plano do Cliente (instância real), e promover um plano de cliente a padrão. **Não lido a fundo.** GAP-PARIDADE-BASE44.md já registra `/planos-acao` auditado ao vivo em 2026-08-21 (commit `26535302`, hardening de atomicidade), então parte disso pode já estar coberta — precisa ler e cruzar antes de assumir gap.
+A partir da linha ~44.185 o documento pede: dois modelos de dados separados (template vs execução do cliente), um componente/lógica única de criação usada em ambos os fluxos, escolha inicial "Usar Plano Padrão" ou "Criar Plano Personalizado", e a função "Transformar em Plano Padrão" com saneamento de dados do cliente antes de virar template reutilizável.
+
+Cruzado com `src/features/admin-mx/planos-acao/`: `NewActionChoiceModal.tsx` (a escolha inicial), `ClientActionPlanWizard.tsx` + `TemplateFormModal.tsx` compartilhando `actionPlanWizardLogic.ts` (lógica única, ainda que não seja literalmente o mesmo componente visual pedido pelo doc), `ApplyTemplateModal.tsx`, `PromoteToTemplateModal.tsx` e `templateApplicationIdempotency.ts` — os nomes e a separação batem com o pedido. GAP-PARIDADE-BASE44.md já marca esse módulo auditado ao vivo (commit `26535302`, hardening de atomicidade). **Não abri as telas nem li os arquivos linha a linha** — é spot-check por nome/estrutura, não confirmação funcional. Risco baixo de gap grande aqui; se quiser certeza total, precisa clicar em produção como fez a auditoria de 2026-08-21.
 
 ## Entregue nesta sessão
 
