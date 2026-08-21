@@ -43,19 +43,32 @@ Achei (e corrigi nesta sessão, PR #190):
 
 Tela `/clientes`, aba Carteira 360, mostrava "Total de Lojas 52", "Ativos 52", "Em Implantação 52" com o mesmo número. Lido `clientPortfolio.ts`: `ativos` e `em_implantacao` não são buckets mutuamente exclusivos (`clientBuckets` empurra o cliente pra os dois quando aplicável), e "Total de Lojas" nem é um bucket — é contagem bruta de lojas. A coincidência é explicável pelos dados reais de hoje: os 52 clientes ativos são todos loja única (52 lojas = 52 clientes) e todos com jornada de encontros incompleta (`visitsDone < visitsTotal`). Fechado — sem ação.
 
-## Pessoas e Acessos — Dono Master (linhas 41.838–48.704)
+## Achado 4 — Pessoas e Acessos / Dono Master: dois prompts, ambos já resolvidos no MX
 
-Lido só o topo (diagnóstico ETAPA A/B de outro bug do Plano Estratégico, que se repete colado no meio deste bloco — o documento mistura módulos). Os itens específicos de "Pessoas e Acessos" (formulário Adicionar Usuário, blocos de perfil/master, múltiplos papéis, autocadastro) **ainda não foram lidos** nem cruzados com `PersonCreateModal.tsx` / `TeamMemberFormModal.tsx` / `personAccess.ts`. GAP-PARIDADE-BASE44.md já audita `/equipe` como ~95% saudável (auditoria ao vivo de 2026-08-21), então a prioridade real pode já estar coberta — precisa confirmar item a item.
+Linhas 41.838–44.184 (dois prompts sobrepostos: "Dono Master, papéis e ativação" de 31 itens + "Reconciliação entre designação, usuário, papel e cliente" de 22 itens). Pedido central de ambos: um **serviço único** (`evaluateOwnerMasterReadiness`/`resolveClientOwnerMaster`) consumido por card, lista, checklist, edição e ativação — pra impedir o bug relatado (card mostra "Ativo", checklist diz "usuário não encontrado", porque cada tela lia uma entidade/fonte diferente).
+
+Cruzado com o código: `resolveOwnerMaster()` em `personAccess.ts` já É esse serviço único — resolve por `is_dono_master` + `status === 'ativo'` + papel `DONO`, com os 4 estados que o doc pede em espírito (`NOT_CONFIGURED`/`VALID`/`DUPLICATE_MASTER`/`INACTIVE`). Antes desta sessão só o `DonoMasterCard` (Ficha 360) usava; **Achado 2** já corrigiu os outros dois consumidores (Ficha 360 checklist + Pendências), então agora card, checklist de prontidão e modal de ativação (`ClientActivationModal` é puramente apresentacional, recebe `checks` de fora) leem exatamente a mesma resolução — sem fonte divergente. **Fechado, sem gap adicional identificado.**
+
+Não implementado (nem pedido explicitamente pelo doc como bloqueante pro MX): o formulário "Adicionar Usuário" em blocos separados (Dados Pessoais / Perfis de Acesso / Dono Master / Escopo) com toggle de transferência de Master — o `PersonCreateModal.tsx` atual já cobre papéis múltiplos + toggle Dono Master + lojas autorizadas, mas não foi comparado campo a campo com os 4 blocos do doc. Baixa prioridade — GAP-PARIDADE-BASE44.md já audita `/equipe`+`/clientes` pessoas como ~95% saudável ao vivo.
+
+## Achado 5 — módulo adicional descoberto no doc: Planos de Ação (linha 44.185+)
+
+A partir da linha ~44.185 o documento muda de assunto de novo: "PLANOS DE AÇÃO PADRÃO, PLANOS DO CLIENTE E PROMOÇÃO PARA A BIBLIOTECA" — regras pra diferenciar Plano Padrão (modelo reutilizável) de Plano do Cliente (instância real), e promover um plano de cliente a padrão. **Não lido a fundo.** GAP-PARIDADE-BASE44.md já registra `/planos-acao` auditado ao vivo em 2026-08-21 (commit `26535302`, hardening de atomicidade), então parte disso pode já estar coberta — precisa ler e cruzar antes de assumir gap.
 
 ## Entregue nesta sessão
 
-- PR [#190](https://github.com/pglemos/MXGESTAOPREDITIVA/pull/190) `fix/admin-mx-readiness-correction-route`: rotas de correção mortas + Dono Master ausente do checklist. Testes verdes, typecheck limpo.
+- PR [#190](https://github.com/pglemos/MXGESTAOPREDITIVA/pull/190) `fix/admin-mx-readiness-correction-route`:
+  1. `correctionRoute` morto corrigido (4 rotas).
+  2. Check "Dono Master válido" ligado nos dois consumidores do checklist.
+  3. **`strategic_plan_ready` implementado de verdade** — usa `validateCycleReadiness` (a mesma RPC autoritativa que decide se o ciclo pode publicar), não um recálculo paralelo. 4 testes novos, inclusive o cenário exato do bug do doc (publicado com pendência não desaparece, vira WARNING).
+  4. `ownerStrategicPlanViewModel.ts` órfão removido (zero consumidores, dead code de tentativa anterior).
+  - Typecheck limpo, 264+172 testes verdes, eslint limpo em todos os arquivos tocados.
 
 ## Próximos passos (ordem sugerida)
 
-1. Decidir destino do `ownerStrategicPlanViewModel.ts` órfão (Achado 1) — apagar ou documentar por que existe.
-2. Implementar `strategic_plan_ready` de verdade no checklist (Achado 2) — é o item mais alinhado ao que o doc pede e ainda falta.
-3. Ler e triar o restante de "Pessoas e Acessos" (linhas ~42.100–48.700) contra `personAccess.ts`, `PersonCreateModal.tsx`, `EnrollmentLinkModal.tsx`.
-4. Se algum cliente real tiver Matriz + 2+ filiais, testar o cenário multiunidade completo da Visão do Dono ao vivo (Achado 1 ficou sem esse teste).
+1. Ler e triar "Planos de Ação Padrão vs Plano do Cliente" (Achado 5, linha ~44.185 em diante) contra `AdminPlanosAcaoGlobalPage.tsx` e o restante do doc (ainda tem conteúdo depois disso — não mapeado).
+2. Comparar `PersonCreateModal.tsx` campo a campo com os 4 blocos do formulário do doc (baixa prioridade).
+3. Se algum cliente real tiver Matriz + 2+ filiais, testar o cenário multiunidade completo da Visão do Dono ao vivo (Achado 1 ficou sem esse teste).
+4. Merge do PR #190 quando confortável.
 
 Consolidar este arquivo em `GAP-PARIDADE-BASE44.md` quando a triagem terminar, ou linkar os dois — evitar dois documentos de verdade divergentes sobre o mesmo assunto.
