@@ -107,6 +107,15 @@ Esse achado não estava no documento de correção — veio de investigar dado r
 
 **Sanity check adicional:** nenhum outro cliente tem Dono Master duplicado nem contato principal duplicado (mesma família de bug, checado direto no banco — zero ocorrências). GoCars continua com a linha física duplicada (2 unidades chamadas "GoCars", uma agora `is_primary=false`) — não apaguei a linha em si por não ter mapeado tudo que referencia `unidade_id` (horários, planos de ação por escopo); só corrigi o flag que causava o bug visível de dois "Principal". Se quiser a limpeza completa da duplicata física, é um reparo à parte.
 
+## Achado 12 — comparação campo a campo do `PersonCreateModal.tsx` (pendência do Achado 4 fechada)
+
+Comparado com os 4 blocos do doc ("Dados Pessoais" / "Perfis de Acesso" / "Dono Master" / "Escopo e Visão Padrão"):
+
+- **Bloco 1:** tem Nome, E-mail, Telefone, Função declarada. Faltam (baixa prioridade, não bloqueante): Data de nascimento, Status do vínculo explícito, "Enviar convite agora" como toggle visível (o convite é implícito no fluxo hoje).
+- **Blocos 2, 3, 4:** batem de perto com o doc — multi-select de perfis com descrição, toggle de Dono Master com texto de apoio, visão padrão + lojas autorizadas.
+
+**Achado real durante a comparação, não o campo em si:** nem `createClientPerson` (cadastro direto) nem `approveInscricao` (aprovação de autocadastro) impediam criar um **segundo Dono Master** — mesma classe de bug do Achado 9 (duplicidade de `is_primary` em lojas), agora em `is_dono_master`. Pior no fluxo de autocadastro: a aprovação deriva `is_dono_master` só de "papel aprovado inclui DONO", sem nenhum toggle explícito de Master, e o comentário do código alegava uma validação que não existia (`resolveOwnerMaster` não era importado no componente de aprovação). Corrigido (commit `e679778e`): ambos os pontos demovem o Master vigente antes de gravar o novo. Nenhum cliente real tinha esse estado hoje (checado no banco antes do fix), mas o caminho estava aberto.
+
 ## Achado 11 — `ciclos_plano_estrategico` está vazia: 0 linhas em toda a produção
 
 Tentando montar o teste multiunidade da Visão do Dono (pendência dos Achados 1/2), fui ver se GoCars/VB (os únicos clientes reais multiunidade) tinham um ciclo de Plano Estratégico pra testar. Descoberta maior: **nenhum cliente, em toda a base, tem uma linha em `ciclos_plano_estrategico`** — o sistema de governança (rascunho → validação → publicado) que sustenta o `strategic_plan_ready` que implementei (Achado 2) nunca foi usado por ninguém, nem uma vez.
@@ -133,8 +142,11 @@ Todo o bloco de correções (linhas 38.776–48.704) foi lido e triado nesta ses
 
 ## Próximos passos (ordem sugerida)
 
-1. Comparar `PersonCreateModal.tsx` campo a campo com os 4 blocos do formulário do doc (baixa prioridade, Achado 4 já fechado por spot-check).
-2. Se algum cliente real tiver Matriz + 2+ filiais, testar o cenário multiunidade completo da Visão do Dono ao vivo (Achado 1 ficou sem esse teste).
-3. **Decisão do dono, não técnica:** se quiser executar o reset de dados de teste (Achado 8), definir critério explícito de quais dos 52 clientes são teste vs. reais antes de qualquer DELETE.
+1. **Ação de negócio, não técnica:** clicar "Iniciar Ciclo" num cliente real (dentro de `/plano-estrategico` como Dono ou via `canManageCycle`) pra validar ponta a ponta o sistema de governança do Plano Estratégico (Achado 11) — ninguém fez isso ainda em produção. Só depois disso o `strategic_plan_ready` do checklist (Achado 2) vai ter dado real pra mostrar.
+2. Se algum cliente ganhar Matriz + 2+ filiais em `lojas` (hoje nenhum tem, ver Achado 11), testar o cenário multiunidade completo da Visão do Dono ao vivo (Achado 1 ficou sem esse teste por falta de dado).
+3. Considerar um índice único parcial em `unidades_cliente_consultoria` e `acessos_cliente_consultoria` pra reforçar no banco as regras "uma loja principal"/"um Dono Master" que os Achados 9 e 12 já protegem na aplicação — defesa em profundidade, não urgente.
+4. **Decisão do dono, não técnica:** se quiser executar o reset de dados de teste (Achado 8), definir critério explícito de quais dos 52 clientes são teste vs. reais antes de qualquer DELETE.
+
+**Itens da lista anterior já resolvidos nesta sessão:** comparação do `PersonCreateModal.tsx` (Achado 12, achou e corrigiu bug real de Dono Master duplicado).
 
 Consolidar este arquivo em `GAP-PARIDADE-BASE44.md` quando fizer sentido, ou linkar os dois — evitar dois documentos de verdade divergentes sobre o mesmo assunto.
