@@ -1,4 +1,4 @@
-import type { ActionPlanTemplate } from './actionPlanTemplates'
+import { RESPONSIBLE_ROLE_OPTIONS, type ActionPlanTemplate } from './actionPlanTemplates'
 import { deriveTemplateStatus } from './templateFilterLogic'
 
 export const TEMPLATE_STATUS_LABEL: Record<ReturnType<typeof deriveTemplateStatus>, string> = {
@@ -13,6 +13,11 @@ const PRIORITY_LABEL: Record<string, string> = {
   alta: 'Alta',
   media: 'Média',
   baixa: 'Baixa',
+}
+
+function responsibleRoleLabel(value: string | null | undefined): string {
+  if (!value) return '—'
+  return RESPONSIBLE_ROLE_OPTIONS.find(option => option.value === value)?.label ?? value
 }
 
 export type TemplateTableSummary = {
@@ -34,10 +39,10 @@ export function summarizeTemplate(template: ActionPlanTemplate): TemplateTableSu
   const items = version?.itens ?? []
   const priorities = [...new Set(items.map(item => item.prioridade).filter(Boolean))]
     .map(priority => PRIORITY_LABEL[priority] ?? priority)
-  const responsibleRole = template.default_responsible_role
+  const responsibleRole = responsibleRoleLabel(template.default_responsible_role
     ?? version?.default_responsible_role
     ?? items.find(item => item.recommended_responsible_role)?.recommended_responsible_role
-    ?? '—'
+    ?? null)
   const status = deriveTemplateStatus(template)
 
   return {

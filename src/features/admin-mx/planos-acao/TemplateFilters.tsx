@@ -3,7 +3,7 @@ import { Search, X } from 'lucide-react'
 import { MxInput, MxSelect } from '@/components/module/MxModuleVisualPrimitives'
 import { Button } from '@/components/atoms/Button'
 import { RESPONSIBLE_ROLE_OPTIONS, type ActionPlanTemplate } from './actionPlanTemplates'
-import { departmentCategory, departmentLabel, departmentMatchesFilter, indicatorAreaMatchesDepartment } from './departmentTaxonomy'
+import { ACTION_PLAN_DEPARTMENT_CARDS, departmentMatchesFilter, indicatorAreaMatchesDepartment } from './departmentTaxonomy'
 import { emptyTemplateFilters, templateFiltersActive, type TemplateFilterState } from './templateFilterLogic'
 import type { WizardIndicator } from './clientActionPlanWizardData'
 
@@ -25,13 +25,7 @@ export function TemplateFilters(props: {
   onFilterChange: (field: keyof TemplateFilterState, value: string | boolean) => void
   onClear: () => void
 }) {
-  const departments = useMemo(
-    () => [...new Set(props.templates.map(template => template.departamento).filter(Boolean))]
-      .map(value => ({ value: departmentCategory(value) ?? value, label: departmentLabel(value) }))
-      .filter((option, index, all) => all.findIndex(candidate => candidate.value === option.value) === index)
-      .sort((left, right) => left.label.localeCompare(right.label, 'pt-BR')),
-    [props.templates],
-  )
+  const departments = ACTION_PLAN_DEPARTMENT_CARDS
   const indicators = useMemo(() => {
     const selectedDepartment = props.filters.departamento
     const fromCatalog = props.indicators
@@ -68,7 +62,7 @@ export function TemplateFilters(props: {
 
         <MxSelect aria-label="Filtrar por departamento" value={props.filters.departamento} onChange={onSelectChange('departamento')}>
           <option value="">Todos os departamentos</option>
-          {departments.map(department => <option key={department.value} value={department.value}>{department.label}</option>)}
+          {departments.map(department => <option key={department.code} value={department.code}>{department.label}</option>)}
         </MxSelect>
 
         <MxSelect aria-label="Filtrar por indicador" value={props.filters.indicador} onChange={event => {

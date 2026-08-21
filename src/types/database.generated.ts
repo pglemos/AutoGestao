@@ -19341,9 +19341,22 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      duplicate_consulting_product: {
+        Args: {
+          p_source_key: string
+          p_target_key: string
+          p_target_name: string
+          p_version: number
+        }
+        Returns: string
+      }
       normalize_mx_role: { Args: { p_role: string }; Returns: string }
       open_action_plan_template_revision: {
         Args: { p_notes?: string; p_template_id: string }
+        Returns: string
+      }
+      save_action_plan_template_draft: {
+        Args: { p_payload: Json }
         Returns: string
       }
       operar_ciclo_plano_estrategico: {

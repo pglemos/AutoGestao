@@ -43,8 +43,10 @@ export async function fetchWizardClients(): Promise<{ rows: WizardClient[]; erro
 }
 
 /**
- * Lojas e unidades de um cliente: a loja primária (primary_store_id) e as
- * unidades cadastradas em unidades_cliente_consultoria.
+ * Unidades operacionais de um cliente: a matriz e suas filiais reais em
+ * `lojas.parent_loja_id`. O wizard grava planos no mesmo escopo `store` usado
+ * pelo board global, então não pode misturar IDs de uma tabela de cadastro
+ * auxiliar com IDs das lojas operacionais.
  */
 export async function fetchWizardStores(clientId: string): Promise<{ rows: WizardStore[]; error: string | null }> {
   const result = await fetchClientUnits(clientId)

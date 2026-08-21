@@ -46,7 +46,7 @@ describe('resumo da tabela de templates', () => {
     expect(summarizeTemplate(template())).toMatchObject({
       actions: 2,
       priority: 'Alta, Crítica',
-      responsibleRole: 'GERENTE_COMERCIAL',
+      responsibleRole: 'Gerente Comercial',
       version: 2,
       status: 'publicada',
       statusLabel: 'Publicado',

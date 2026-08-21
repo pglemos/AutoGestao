@@ -293,6 +293,7 @@ export async function fetchTemplateItems(versionId: string): Promise<ActionPlanT
 export async function saveTemplateDraft(draft: TemplateDraft, userId: string): Promise<{ error: string | null; templateId: string | null }> {
   const errors = validateTemplateDraft(draft)
   if (errors.length) return { error: errors[0], templateId: null }
+  if (!userId.trim()) return { error: 'Usuário autenticado não identificado.', templateId: null }
 
   const templatePayload = {
     template_key: draft.template_key.trim(),
@@ -310,21 +311,6 @@ export async function saveTemplateDraft(draft: TemplateDraft, userId: string): P
     updated_at: new Date().toISOString(),
   }
 
-  const { data: template, error: templateError } = draft.id
-    ? await supabase.from('planos_acao_templates').update(templatePayload).eq('id', draft.id).select('id').single()
-    : await supabase.from('planos_acao_templates').insert({ ...templatePayload, created_by: userId }).select('id').single()
-
-  if (templateError || !template) return { error: templateError?.message ?? 'Falha ao salvar o template.', templateId: null }
-
-  const { data: existing } = await supabase
-    .from('planos_acao_template_versoes')
-    .select('id, versao, status')
-    .eq('template_id', template.id)
-    .order('versao', { ascending: false })
-
-  const draftVersion = (existing ?? []).find(version => version.status === 'rascunho')
-  let versionId = draftVersion?.id ?? null
-
   const versionPayload = {
     improvement_direction: draft.improvement_direction || null,
     default_responsible_role: draft.default_responsible_role.trim() || null,
@@ -337,27 +323,14 @@ export async function saveTemplateDraft(draft: TemplateDraft, userId: string): P
     effectiveness_indicator_code: draft.effectiveness_indicator_code.trim() || null,
     updated_at: new Date().toISOString(),
   }
-
-  if (!versionId) {
-    const nextNumber = ((existing ?? [])[0]?.versao ?? 0) + 1
-    const { data: created, error: versionError } = await supabase
-      .from('planos_acao_template_versoes')
-      .insert({ template_id: template.id, versao: nextNumber, status: 'rascunho', created_by: userId, ...versionPayload })
-      .select('id')
-      .single()
-    if (versionError || !created) return { error: versionError?.message ?? 'Falha ao criar a versão.', templateId: template.id }
-    versionId = created.id
-  } else {
-    await supabase.from('planos_acao_template_itens').delete().eq('version_id', versionId)
-    const { error: versionUpdateError } = await supabase.from('planos_acao_template_versoes').update(versionPayload).eq('id', versionId)
-    if (versionUpdateError) return { error: versionUpdateError.message, templateId: template.id }
-  }
-
   const items = draft.items.filter(item => item.problema.trim() && item.acao.trim())
   const weights = calculateItemWeights(items.length)
-  const { error: itemsError } = await supabase.from('planos_acao_template_itens').insert(
-    items.map((item, index) => ({
-      version_id: versionId,
+  const { data: templateId, error } = await supabase.rpc('save_action_plan_template_draft', {
+    p_payload: {
+      template_id: draft.id ?? null,
+      template: templatePayload,
+      version: versionPayload,
+      items: items.map((item, index) => ({
       ordem: index + 1,
       problema: item.problema.trim(),
       acao: item.acao.trim(),
@@ -374,11 +347,13 @@ export async function saveTemplateDraft(draft: TemplateDraft, userId: string): P
       treinamento_titulo: item.support_material_type === 'aula' ? item.treinamento_titulo : null,
       recommended_responsible_role: item.recommended_responsible_role?.trim() || null,
       peso_bp: weights[index]?.weight_bp ?? null,
-    })),
-  )
-  if (itemsError) return { error: itemsError.message, templateId: template.id }
+      })),
+    },
+  })
+  if (error) return { error: error.message, templateId: draft.id ?? null }
+  if (typeof templateId !== 'string') return { error: 'O salvamento retornou uma identificação inválida.', templateId: null }
 
-  return { error: null, templateId: template.id }
+  return { error: null, templateId }
 }
 
 /** Id do rascunho aberto de um template, se houver — usado para publicar logo após salvar. */

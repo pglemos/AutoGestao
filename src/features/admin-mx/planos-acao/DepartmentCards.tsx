@@ -1,6 +1,6 @@
 import { DollarSign, LayoutGrid, Megaphone, Package, Settings, TrendingUp, Users, type LucideIcon } from 'lucide-react'
 import type { ActionPlanTemplate, IndicatorCatalogEntry } from './actionPlanTemplates'
-import { ACTION_PLAN_DEPARTMENT_CARDS, departmentCategory } from './departmentTaxonomy'
+import { ACTION_PLAN_DEPARTMENT_CARDS, departmentCategory, indicatorAreaMatchesDepartment } from './departmentTaxonomy'
 
 const CATEGORY_ICON: Record<string, LucideIcon> = {
   financeiro: DollarSign,
@@ -23,7 +23,7 @@ export function DepartmentCards(props: {
   const countsFor = (category: string) => {
     const published = props.templates.filter(template => (!category || departmentCategory(template.departamento) === category) && template.versions.some(version => version.status === 'publicada')).length
     const drafts = props.templates.filter(template => (!category || departmentCategory(template.departamento) === category) && template.versions.some(version => version.status === 'rascunho')).length
-    const activeIndicators = props.indicators.filter(indicator => !category || indicator.category === category).length
+    const activeIndicators = props.indicators.filter(indicator => !category || indicatorAreaMatchesDepartment(indicator.category, category)).length
     return { published, drafts, activeIndicators }
   }
 

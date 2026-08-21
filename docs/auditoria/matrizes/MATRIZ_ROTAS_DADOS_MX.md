@@ -6,9 +6,9 @@
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
 - Tabelas referenciadas pelo runtime: **175**
-- RPCs referenciadas pelo runtime: **100**
+- RPCs referenciadas pelo runtime: **101**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **376**
+- Pares tabela/operação encontrados: **374**
 
 ## Rotas
 
@@ -249,7 +249,7 @@
 | `pdis` | 4 |
 | `perfil_consultor_mx` | 4 |
 | `planejamentos_estrategicos` | 1 |
-| `planos_acao` | 10 |
+| `planos_acao` | 13 |
 | `planos_acao_template_itens` | 4 |
 | `planos_acao_template_versoes` | 6 |
 | `planos_acao_templates` | 3 |
@@ -299,7 +299,7 @@
 | `universidade_certificacoes` | 1 |
 | `universidade_trilhas` | 1 |
 | `user_roles` | 1 |
-| `usuarios` | 24 |
+| `usuarios` | 25 |
 | `valores_indicadores_planejamento_vigentes` | 3 |
 | `valores_parametros_consultoria` | 3 |
 | `vehicle_model_catalog` | 1 |
@@ -488,7 +488,7 @@
 | `lojas:delete` | 1 |
 | `lojas:insert` | 3 |
 | `lojas:select` | 27 |
-| `lojas:update` | 1 |
+| `lojas:update` | 3 |
 | `manager_daily_tasks:select` | 1 |
 | `manager_daily_tasks:update` | 1 |
 | `manager_lead_conferences:select` | 1 |
@@ -516,7 +516,6 @@
 | `modulos_cliente_consultoria:insert` | 2 |
 | `modulos_cliente_consultoria:select` | 8 |
 | `modulos_cliente_consultoria:upsert` | 2 |
-| `modulos_produto_consultoria:insert` | 1 |
 | `modulos_produto_consultoria:select` | 2 |
 | `modulos_produto_consultoria:upsert` | 1 |
 | `modulos_sistema:select` | 1 |
@@ -572,7 +571,7 @@
 | `planos_acao_templates:update` | 1 |
 | `planos_acao:delete` | 1 |
 | `planos_acao:insert` | 3 |
-| `planos_acao:select` | 10 |
+| `planos_acao:select` | 13 |
 | `planos_acao:update` | 1 |
 | `posicionamento_empresa:select` | 1 |
 | `pre_cadastros_loja:select` | 2 |
@@ -632,7 +631,6 @@
 | `story_ideas:select` | 2 |
 | `sugestoes_conteudo:insert` | 1 |
 | `sugestoes_conteudo:select` | 1 |
-| `tempos_encontro_produto:insert` | 1 |
 | `tempos_encontro_produto:select` | 1 |
 | `tempos_encontro_produto:upsert` | 1 |
 | `tokens_oauth_consultoria:select` | 1 |
@@ -658,7 +656,7 @@
 | `user_roles:update` | 1 |
 | `usuarios:delete` | 2 |
 | `usuarios:insert` | 1 |
-| `usuarios:select` | 21 |
+| `usuarios:select` | 22 |
 | `usuarios:update` | 6 |
 | `usuarios:upsert` | 1 |
 | `valores_indicadores_planejamento_vigentes:select` | 3 |
@@ -739,6 +737,7 @@
 | `criar_plano_acao_planejamento_unico` | 1 |
 | `criar_plano_acao_v2` | 2 |
 | `dismiss_alert` | 1 |
+| `duplicate_consulting_product` | 1 |
 | `enviar_cobranca_diaria` | 1 |
 | `exportar_contatos_cadastros_mx` | 2 |
 | `foo` | 1 |

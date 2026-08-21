@@ -40,7 +40,7 @@ export function TemplateDetailDrawer(props: {
         <Dialog.Overlay className="fixed inset-0 z-[var(--mx-z-overlay)] bg-surface-overlay/30" />
         <Dialog.Content
           className="fixed inset-y-0 right-0 z-[var(--mx-z-modal)] flex h-full w-full max-w-xl flex-col overflow-y-auto bg-surface-default shadow-xl focus:outline-none"
-          data-mx-scroll-region
+          data-mx-scroll-region="vertical"
           onEscapeKeyDown={event => { if (props.submitting) event.preventDefault() }}
         >
         <div className="sticky top-0 z-[var(--mx-z-sticky)] border-b border-border bg-surface-default px-5 py-4">

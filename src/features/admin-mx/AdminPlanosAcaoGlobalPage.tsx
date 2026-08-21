@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { ClipboardList, Plus, RefreshCw } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
+import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/organisms/Table'
 import {
@@ -40,6 +41,8 @@ import { TemplateDetailDrawer } from './planos-acao/TemplateDetailDrawer'
 import { HistoryTab } from './planos-acao/HistoryTab'
 import { fetchIndicatorCatalog, type ActionPlanTemplate, type IndicatorCatalogEntry } from './planos-acao/actionPlanTemplates'
 import { useActionPlanTemplatesController } from './planos-acao/useActionPlanTemplates'
+import { summarizeTemplate, TEMPLATE_STATUS_LABEL } from './planos-acao/templateTableMetrics'
+import { departmentLabel } from './planos-acao/departmentTaxonomy'
 import { useAdminActionPlans } from './hooks/useAdminMxLists'
 import { toast } from '@/lib/toast'
 import {
@@ -67,6 +70,13 @@ const PLAN_PRIORITY_OPTIONS = [
   { value: 'media', label: 'Média' },
   { value: 'baixa', label: 'Baixa' },
 ]
+
+const TEMPLATE_STATUS_VARIANT = {
+  publicada: 'success',
+  rascunho: 'warning',
+  inativo: 'outline',
+  arquivado: 'danger',
+} as const
 
 function formatDate(value: string | null) {
   if (!value) return '—'
@@ -96,6 +106,11 @@ export function AdminPlanosAcaoGlobalPage() {
   const [wizardClients, setWizardClients] = useState<WizardClient[]>([])
   const [wizardIndicators, setWizardIndicators] = useState<WizardIndicator[]>([])
   const [wizardResponsibles, setWizardResponsibles] = useState<WizardResponsible[]>([])
+
+  const indicatorLabels = useMemo(() => new Map([
+    ...indicatorCatalog.map(indicator => [indicator.code, indicator.label] as const),
+    ...wizardIndicators.map(indicator => [indicator.metric_key, indicator.label] as const),
+  ]), [indicatorCatalog, wizardIndicators])
 
   useEffect(() => {
     void Promise.all([fetchWizardClients(), fetchWizardIndicators(), fetchWizardResponsibles()]).then(([c, i, r]) => {
@@ -210,10 +225,12 @@ export function AdminPlanosAcaoGlobalPage() {
           <Button onClick={handleNewAction}><Plus size={16} />Nova ação</Button>
           </div>
           ) : tab === 'templates' ? (
-            <>
+            <div className="flex flex-wrap items-center justify-end gap-2">
+              <Button variant="outline" onClick={() => setSelectorOpen(true)}><Plus size={16} />Aplicar a cliente</Button>
+              <Button variant="outline" onClick={() => setTab('historico')}>Abrir histórico</Button>
               <Button variant="outline" onClick={() => void templates.refetch()}><RefreshCw size={16} />Atualizar</Button>
-              <Button onClick={templates.openNew}><Plus size={16} />Novo template</Button>
-            </>
+              <Button onClick={templates.openNew}><Plus size={16} />Criar plano padrão</Button>
+            </div>
           ) : tab === 'aplicacoes' ? (
             <div className="flex items-center gap-2">
               <Button variant="outline" onClick={() => setApplicationsRefreshKey(current => current + 1)}><RefreshCw size={16} />Atualizar</Button>
@@ -235,9 +252,9 @@ export function AdminPlanosAcaoGlobalPage() {
           templates.loading ? <MxLoadingState label="Carregando templates" /> : templates.error ? <MxErrorState description={templates.error} retry={() => void templates.refetch()} /> : (
             <MxSectionCard>
               <MxSectionHeader
-                title="Templates de plano de ação"
+                title="Planos padrão de ação"
                 description={`${filteredTemplates.length} template(s) na biblioteca.`}
-                actions={<Button variant="outline" size="sm" onClick={templates.openNew}><Plus size={16} />Novo template</Button>}
+                actions={<Button variant="outline" size="sm" onClick={templates.openNew}><Plus size={16} />Criar plano padrão</Button>}
               />
               <div className="p-5">
                 <div className="mb-4">
@@ -261,40 +278,48 @@ export function AdminPlanosAcaoGlobalPage() {
                 </div>
                 {filteredTemplates.length ? (
                   <MxTableSurface>
-                    <Table className="min-w-[1000px]">
+                    <Table className="min-w-[1240px]">
                       <TableHeader>
                         <TableRow>
-                          <TableHead>Template</TableHead>
+                          <TableHead>Plano padrão</TableHead>
                           <TableHead>Departamento</TableHead>
                           <TableHead>Indicador</TableHead>
-                          <TableHead>Versão publicada</TableHead>
-                          <TableHead>Rascunho</TableHead>
+                          <TableHead>Ações</TableHead>
+                          <TableHead>Prioridade</TableHead>
+                          <TableHead>Resp.</TableHead>
+                          <TableHead>Sug.</TableHead>
+                          <TableHead>Apl.</TableHead>
                           <TableHead>Status</TableHead>
+                          <TableHead>Versão</TableHead>
                           <TableHead className="text-right">Ações</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {filteredTemplates.map(template => {
+                          const summary = summarizeTemplate(template)
                           const published = template.versions.find(version => version.status === 'publicada')
                           const openDraft = template.versions.find(version => version.status === 'rascunho')
-                          const archived = template.versions.length > 0 && template.versions.every(version => version.status === 'arquivada')
                           return (
                             <TableRow key={template.id}>
                               <TableCell>
                                 <div className="font-semibold text-foreground">{template.nome}</div>
                                 <div className="text-xs text-muted-foreground">{template.template_key}</div>
                               </TableCell>
-                              <TableCell>{template.departamento}</TableCell>
-                              <TableCell>{template.indicador || '—'}</TableCell>
-                              <TableCell>{published ? `v${published.versao}` : '—'}</TableCell>
-                              <TableCell>{openDraft ? `v${openDraft.versao}` : '—'}</TableCell>
-                              <TableCell>{archived ? 'Arquivado' : template.active ? 'Ativo' : 'Inativo'}</TableCell>
+                              <TableCell>{departmentLabel(template.departamento)}</TableCell>
+                              <TableCell>{indicatorLabels.get(template.indicador ?? '') ?? (template.indicador || '—')}</TableCell>
+                              <TableCell>{summary.actions}</TableCell>
+                              <TableCell>{summary.priority}</TableCell>
+                              <TableCell>{summary.responsibleRole}</TableCell>
+                              <TableCell>{summary.suggestion}</TableCell>
+                              <TableCell>{summary.applications}</TableCell>
+                              <TableCell><Badge variant={TEMPLATE_STATUS_VARIANT[summary.status]}>{TEMPLATE_STATUS_LABEL[summary.status]}</Badge></TableCell>
+                              <TableCell>{summary.version ? `v${summary.version}` : '—'}</TableCell>
                               <TableCell className="text-right">
                                 <div className="flex justify-end gap-2">
                                   <Button variant="outline" size="sm" onClick={() => setDetailTemplate(template)}>Abrir</Button>
                                   <Button variant="outline" size="sm" onClick={() => void templates.openEdit(template)}>Editar</Button>
                                   {openDraft ? <Button variant="outline" size="sm" onClick={() => void templates.publish(template)}>Publicar</Button> : null}
-                                  {published && template.active && template.manual_application_enabled ? <Button size="sm" onClick={() => templates.setApplying(template)}>Aplicar</Button> : null}
+                                  {published && template.active && template.manual_application_enabled ? <Button size="sm" onClick={() => templates.setApplying(template)}>Aplicar a cliente</Button> : null}
                                   {published && template.active ? <Button variant="outline" size="sm" onClick={() => { setSuggestTemplate(template); setSuggestOpen(true) }}>Sugerir ao Dono</Button> : null}
                                   <TemplateActionsMenu
                                     template={template}

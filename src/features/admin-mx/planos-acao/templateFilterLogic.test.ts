@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import type { ActionPlanTemplate } from './actionPlanTemplates'
+import { emptyTemplateItem, type ActionPlanTemplate, type ActionPlanTemplateVersion } from './actionPlanTemplates'
 import {
   deriveTemplateStatus,
   emptyTemplateFilters,
@@ -27,6 +27,16 @@ function template(overrides: Partial<ActionPlanTemplate> = {}): ActionPlanTempla
   }
 }
 
+function version(overrides: Partial<ActionPlanTemplateVersion> = {}): ActionPlanTemplateVersion {
+  return {
+    id: 'v1', template_id: 't1', versao: 1, status: 'publicada',
+    improvement_direction: null, default_responsible_role: null, notas: null, published_at: null,
+    problem: null, objective: null, when_to_apply: null,
+    owner_suggestion_title: null, owner_suggestion_problem: null, owner_suggestion_recommendation: null,
+    effectiveness_indicator_code: null, itens: [], ...overrides,
+  }
+}
+
 describe('templateFilters — estado', () => {
   test('filtros vazios não estão ativos', () => {
     expect(templateFiltersActive(emptyTemplateFilters())).toBe(false)
@@ -42,14 +52,14 @@ describe('templateFilters — status derivado', () => {
   test('template inativo é inativo mesmo com versão publicada', () => {
     const t = template({
       active: false,
-      versions: [{ id: 'v1', template_id: 't1', versao: 1, status: 'publicada', improvement_direction: null, default_responsible_role: null, notas: null, published_at: null }],
+      versions: [version()],
     })
     expect(deriveTemplateStatus(t)).toBe('inativo')
   })
 
   test('template ativo com versão publicada é publicada', () => {
     const t = template({
-      versions: [{ id: 'v1', template_id: 't1', versao: 1, status: 'publicada', improvement_direction: null, default_responsible_role: null, notas: null, published_at: null }],
+      versions: [version()],
     })
     expect(deriveTemplateStatus(t)).toBe('publicada')
   })
@@ -76,7 +86,7 @@ describe('templateFilters — match', () => {
 
   test('status publicada exige versão publicada', () => {
     const published = template({
-      versions: [{ id: 'v1', template_id: 't1', versao: 1, status: 'publicada', improvement_direction: null, default_responsible_role: null, notas: null, published_at: null }],
+      versions: [version()],
     })
     expect(templateMatchesFilters(published, { ...emptyTemplateFilters(), status: 'publicada' })).toBe(true)
     expect(templateMatchesFilters(template(), { ...emptyTemplateFilters(), status: 'publicada' })).toBe(false)
@@ -84,7 +94,7 @@ describe('templateFilters — match', () => {
 
   test('status rascunho exclui publicadas', () => {
     const published = template({
-      versions: [{ id: 'v1', template_id: 't1', versao: 1, status: 'publicada', improvement_direction: null, default_responsible_role: null, notas: null, published_at: null }],
+      versions: [version()],
     })
     expect(templateMatchesFilters(template(), { ...emptyTemplateFilters(), status: 'rascunho' })).toBe(true)
     expect(templateMatchesFilters(published, { ...emptyTemplateFilters(), status: 'rascunho' })).toBe(false)
@@ -92,10 +102,9 @@ describe('templateFilters — match', () => {
 
   test('prioridade filtra pelos itens da versão', () => {
     const t = template({
-      versions: [{
-        id: 'v1', template_id: 't1', versao: 1, status: 'publicada', improvement_direction: null, default_responsible_role: null, notas: null, published_at: null,
-        itens: [{ id: 'i1', ordem: 1, problema: 'p', acao: 'a', como: '', departamento: '', indicador: '', prioridade: 'critica', prazo_dias: 30, evidencia_requerida: false, recommended_responsible_role: null }],
-      }],
+      versions: [version({
+        itens: [{ ...emptyTemplateItem(1), id: 'i1', problema: 'p', acao: 'a', prioridade: 'critica' }],
+      })],
     })
     expect(templateMatchesFilters(t, { ...emptyTemplateFilters(), prioridade: 'critica' })).toBe(true)
     expect(templateMatchesFilters(t, { ...emptyTemplateFilters(), prioridade: 'baixa' })).toBe(false)
@@ -103,7 +112,7 @@ describe('templateFilters — match', () => {
 
   test('comVersaoPublicada exige versão publicada', () => {
     const published = template({
-      versions: [{ id: 'v1', template_id: 't1', versao: 1, status: 'publicada', improvement_direction: null, default_responsible_role: null, notas: null, published_at: null }],
+      versions: [version()],
     })
     expect(templateMatchesFilters(published, { ...emptyTemplateFilters(), comVersaoPublicada: true })).toBe(true)
     expect(templateMatchesFilters(template(), { ...emptyTemplateFilters(), comVersaoPublicada: true })).toBe(false)
@@ -118,10 +127,9 @@ describe('templateFilters — match', () => {
   test('filtra responsável recomendado do template ou item', () => {
     const byTemplate = template({ default_responsible_role: 'GERENTE_COMERCIAL' })
     const byItem = template({
-      versions: [{
-        id: 'v1', template_id: 't1', versao: 1, status: 'publicada', improvement_direction: null, default_responsible_role: null, notas: null, published_at: null,
-        itens: [{ id: 'i1', ordem: 1, problema: 'p', acao: 'a', como: '', departamento: '', indicador: '', prioridade: 'media', prazo_dias: 30, evidencia_requerida: false, recommended_responsible_role: 'MARKETING' }],
-      }],
+      versions: [version({
+        itens: [{ ...emptyTemplateItem(1), id: 'i1', problema: 'p', acao: 'a', recommended_responsible_role: 'MARKETING' }],
+      })],
     })
     expect(templateMatchesFilters(byTemplate, { ...emptyTemplateFilters(), responsible_role: 'GERENTE_COMERCIAL' })).toBe(true)
     expect(templateMatchesFilters(byItem, { ...emptyTemplateFilters(), responsible_role: 'MARKETING' })).toBe(true)

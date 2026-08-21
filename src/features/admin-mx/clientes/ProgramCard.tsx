@@ -1,6 +1,7 @@
 import { AlertCircle, CheckCircle2, FileText } from 'lucide-react'
 import { MxProgress } from '@/components/module/MxModuleVisualPrimitives'
 import { buildProgramSummary, type ProgramSummary } from './programSummary'
+import type { VisitVolumeRule } from './visitVolumeRule'
 
 function formatDate(value: string | null) {
   if (!value) return '—'
@@ -8,7 +9,7 @@ function formatDate(value: string | null) {
   return Number.isNaN(date.getTime()) ? '—' : date.toLocaleDateString('pt-BR')
 }
 
-export function ProgramCard(props: { summary: ProgramSummary; onEditProgram: () => void }) {
+export function ProgramCard(props: { summary: ProgramSummary; visitRule?: VisitVolumeRule | null; onEditProgram: () => void }) {
   const summary = props.summary
   const statusLabel = summary.configured
     ? summary.progress > 0
@@ -35,10 +36,10 @@ export function ProgramCard(props: { summary: ProgramSummary; onEditProgram: () 
     ['Produto', summary.product_name ?? summary.program_template_key ?? '—'],
     ['Modalidade', summary.modality ?? '—'],
     ['Início', formatDate(summary.contract_start_date)],
-    ['Fim', formatDate(summary.contract_end_date)],
-    ['Encontros', `${summary.completed_visits} concluídos de ${summary.visits}`],
-    ['Onboarding', `${summary.onboarding_visits} encontro(s)`],
-    ['Consultor responsável', summary.responsible_consultant ?? '—'],
+        ['Fim', formatDate(summary.contract_end_date)],
+        ['Encontros', `${summary.completed_visits} concluídos de ${summary.visits}`],
+        ['Onboarding', `${summary.onboarding_visits} encontro(s)`],
+        ['Consultor responsável', summary.responsible_consultant ?? '—'],
   ]
 
   return (
@@ -50,6 +51,14 @@ export function ProgramCard(props: { summary: ProgramSummary; onEditProgram: () 
         </div>
         <span className="rounded-full bg-surface-alt px-2 py-0.5 text-xs font-medium text-foreground">{statusLabel}</span>
       </div>
+
+      {props.visitRule ? (
+        <div className="mt-4 rounded-lg border border-border bg-surface-alt p-3">
+          <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Regra de visitas presenciais</div>
+          <div className="mt-1 text-sm font-semibold text-foreground">{props.visitRule.label}</div>
+          <p className="mt-1 text-xs text-muted-foreground">{props.visitRule.detail}</p>
+        </div>
+      ) : null}
 
       <div className="grid gap-3 text-xs sm:grid-cols-2 lg:grid-cols-4">
         {info.map(([label, value]) => (

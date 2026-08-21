@@ -65,6 +65,7 @@ export function ApplyTemplateWizard(props: {
   const [scopeMode, setScopeMode] = useState<ScopeMode>('cliente')
   const [unitId, setUnitId] = useState('')
   const [units, setUnits] = useState<ClientUnit[]>([])
+  const [unitsLoading, setUnitsLoading] = useState(false)
   const [unitsError, setUnitsError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [requestIds] = useState(() => new Map<string, string>())
@@ -122,18 +123,39 @@ export function ApplyTemplateWizard(props: {
     setScopeMode('cliente')
     setUnitId('')
     setUnits([])
+    setUnitsLoading(false)
     setUnitsError(null)
   }, [props.initialClientId, props.indicators, props.open, props.template])
 
   useEffect(() => {
-    if (!props.open || !clientId) return
+    if (!props.open || !clientId) {
+      setUnits([])
+      setUnitId('')
+      setUnitsLoading(false)
+      setUnitsError(null)
+      return
+    }
     let cancelled = false
-    void resolveClientApplicationTargets(clientId).then(result => {
-      if (cancelled) return
-      setUnits(result.units)
-      setUnitsError(result.error)
-      setUnitId(result.units.find(unit => unit.active)?.id ?? '')
-    })
+    setUnits([])
+    setUnitId('')
+    setUnitsError(null)
+    setUnitsLoading(true)
+    void resolveClientApplicationTargets(clientId)
+      .then(result => {
+        if (cancelled) return
+        setUnits(result.units)
+        setUnitsError(result.error)
+        setUnitId(result.units.find(unit => unit.active)?.id ?? '')
+      })
+      .catch(error => {
+        if (cancelled) return
+        setUnits([])
+        setUnitId('')
+        setUnitsError(error instanceof Error ? error.message : 'Não foi possível carregar as unidades do cliente.')
+      })
+      .finally(() => {
+        if (!cancelled) setUnitsLoading(false)
+      })
     return () => { cancelled = true }
   }, [clientId, props.open])
 
@@ -145,6 +167,8 @@ export function ApplyTemplateWizard(props: {
     if (target === 3 && !department) return 'Selecione um departamento.'
     if (target === 4 && !indicatorKey && !props.template?.indicador) return 'Selecione um indicador.'
     if (target === 5 && !selectedTemplate) return 'Selecione um plano padrão publicado.'
+    if (target === 6 && unitsLoading) return 'Aguarde o carregamento das unidades do cliente.'
+    if (target === 6 && unitsError) return 'Não foi possível carregar as unidades do cliente. Tente novamente.'
     if (target === 6 && !targetUnits.length) return 'Selecione ao menos uma unidade ativa.'
     return null
   }
@@ -220,7 +244,7 @@ export function ApplyTemplateWizard(props: {
         <div className="flex w-full items-center justify-between gap-3">
           <Button variant="outline" onClick={back} disabled={step === 1 || saving}><ChevronLeft size={16} />Voltar</Button>
           <div className="flex items-center gap-2">
-            {step < 7 ? <Button onClick={next} disabled={saving}>Continuar <ChevronRight size={16} /></Button> : <Button onClick={() => void apply()} disabled={saving}><FileCheck size={16} />{saving ? 'Criando...' : 'Revisar e criar plano'}</Button>}
+            {step < 7 ? <Button onClick={next} disabled={saving || (step === 6 && unitsLoading)}>Continuar <ChevronRight size={16} /></Button> : <Button onClick={() => void apply()} disabled={saving}><FileCheck size={16} />{saving ? 'Criando...' : 'Revisar e criar plano'}</Button>}
           </div>
         </div>
       )}

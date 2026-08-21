@@ -69,9 +69,82 @@ export async function saveClientStore(
   if (draft.id) {
     const { error } = await supabase
       .from('unidades_cliente_consultoria')
-      .update({ ...base, name: draft.name.trim() })
+      .update({
+        ...base,
+        name: draft.name.trim(),
+        store_type: draft.store_type,
+        is_primary: draft.store_type === 'matriz',
+      })
       .eq('id', draft.id)
     return { error: error?.message ?? null }
+  }
+
+  const { data: client, error: clientError } = await supabase
+    .from('clientes_consultoria')
+    .select('id, primary_store_id, legal_name, cnpj')
+    .eq('id', clientId)
+    .single()
+  if (clientError || !client) return { error: clientError?.message ?? 'Cliente não encontrado.' }
+
+  let realStoreId = client.primary_store_id
+  let createdRealStoreId: string | null = null
+
+  if (draft.store_type === 'matriz') {
+    if (client.primary_store_id) return { error: 'Este cliente já possui uma matriz vinculada.' }
+    const { data: matrix, error: matrixError } = await supabase
+      .from('lojas')
+      .insert({
+        name: draft.name.trim(),
+        legal_name: client.legal_name || draft.name.trim(),
+        cnpj: draft.cnpj.trim() ? onlyDigits(draft.cnpj) : client.cnpj || null,
+        address: draft.address_street.trim() || null,
+        active: draft.status === 'ativa',
+        parent_loja_id: null,
+        structure_type: 'matriz',
+      })
+      .select('id')
+      .single()
+    if (matrixError || !matrix?.id) return { error: matrixError?.message ?? 'Não foi possível criar a matriz operacional.' }
+    realStoreId = matrix.id
+    createdRealStoreId = matrix.id
+  } else {
+    if (!client.primary_store_id) return { error: 'Cadastre a matriz antes de adicionar uma filial.' }
+    const { data: matrix, error: matrixError } = await supabase
+      .from('lojas')
+      .select('id, parent_loja_id')
+      .eq('id', client.primary_store_id)
+      .maybeSingle()
+    if (matrixError) return { error: matrixError.message }
+    if (!matrix) return { error: 'A matriz operacional do cliente não foi encontrada.' }
+    if (matrix.parent_loja_id) return { error: 'A raiz do cliente precisa ser uma matriz, não uma filial.' }
+
+    const { data: existingFilial, error: filialLookupError } = await supabase
+      .from('lojas')
+      .select('id')
+      .eq('parent_loja_id', client.primary_store_id)
+      .eq('name', draft.name.trim())
+      .maybeSingle()
+    if (filialLookupError) return { error: filialLookupError.message }
+    if (existingFilial?.id) {
+      realStoreId = existingFilial.id
+    } else {
+      const { data: filial, error: filialError } = await supabase
+        .from('lojas')
+        .insert({
+          name: draft.name.trim(),
+          legal_name: draft.name.trim(),
+          cnpj: draft.cnpj.trim() ? onlyDigits(draft.cnpj) : null,
+          address: draft.address_street.trim() || null,
+          active: draft.status === 'ativa',
+          parent_loja_id: client.primary_store_id,
+          structure_type: 'filial',
+        })
+        .select('id')
+        .single()
+      if (filialError || !filial?.id) return { error: filialError?.message ?? 'Não foi possível criar a filial operacional.' }
+      realStoreId = filial.id
+      createdRealStoreId = filial.id
+    }
   }
 
   const { data: created, error } = await supabase
@@ -85,32 +158,19 @@ export async function saveClientStore(
     })
     .select('id')
     .single()
-  if (error) return { error: error.message }
+  if (error) {
+    if (createdRealStoreId) await supabase.from('lojas').update({ active: false }).eq('id', createdRealStoreId)
+    return { error: error.message }
+  }
 
-  // Garante vínculo com a tabela lojas se o cliente não tiver loja principal
-  const { data: client } = await supabase
-    .from('clientes_consultoria')
-    .select('id, primary_store_id, legal_name, cnpj')
-    .eq('id', clientId)
-    .single()
-
-  if (client && (!client.primary_store_id || draft.store_type === 'matriz')) {
-    const { data: storeRow } = await supabase
-      .from('lojas')
-      .insert({
-        name: draft.name.trim(),
-        legal_name: client.legal_name || draft.name.trim(),
-        cnpj: draft.cnpj.trim() ? onlyDigits(draft.cnpj) : client.cnpj || null,
-        active: true,
-      })
-      .select('id')
-      .single()
-
-    if (storeRow?.id && !client.primary_store_id) {
-      await supabase
-        .from('clientes_consultoria')
-        .update({ primary_store_id: storeRow.id, status: 'ativo' })
-        .eq('id', clientId)
+  if (draft.store_type === 'matriz' && realStoreId) {
+    const { error: linkError } = await supabase
+      .from('clientes_consultoria')
+      .update({ primary_store_id: realStoreId, status: 'ativo', updated_at: new Date().toISOString() })
+      .eq('id', clientId)
+    if (linkError) {
+      if (createdRealStoreId) await supabase.from('lojas').update({ active: false }).eq('id', createdRealStoreId)
+      return { error: linkError.message }
     }
   }
 
