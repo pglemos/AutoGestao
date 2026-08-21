@@ -183,6 +183,11 @@ export function AdminClienteDetalhePage() {
   useEffect(() => { void loadPersons() }, [loadPersons])
   useEffect(() => { void loadLinks() }, [loadLinks])
 
+  const ownerMasterResolution = useMemo<OwnerMasterResolution>(() => {
+    if (!persons.length) return { status: 'NOT_CONFIGURED', count: 0 }
+    return resolveOwnerMaster(persons)
+  }, [persons])
+
   const checks = useMemo(() => {
     if (!client) return []
     return buildClientReadiness({
@@ -199,8 +204,16 @@ export function AdminClienteDetalhePage() {
       modules: client.modules ?? [],
       assignments: client.assignments ?? [],
       storeTakenByOtherClient: storeTaken,
+      owner_master: ownerMasterResolution.status === 'NOT_CONFIGURED'
+        ? null
+        : {
+            id: ownerMasterResolution.person?.id ?? null,
+            name: ownerMasterResolution.person?.nome ?? null,
+            email: ownerMasterResolution.person?.email ?? null,
+            valid: ownerMasterResolution.status === 'VALID',
+          },
     })
-  }, [client, storeTaken])
+  }, [client, storeTaken, ownerMasterResolution])
 
   const summary = useMemo(() => readinessSummary(checks), [checks])
   const health = useClientHealth(client?.id, client?.primary_store_id ?? null)
@@ -251,11 +264,6 @@ export function AdminClienteDetalhePage() {
       auxiliary_consultant_ids: auxiliaries,
     }
   }, [client])
-
-  const ownerMasterResolution = useMemo<OwnerMasterResolution>(() => {
-    if (!persons.length) return { status: 'NOT_CONFIGURED', count: 0 }
-    return resolveOwnerMaster(persons)
-  }, [persons])
 
   const onboardingStep = (client as { onboarding_step?: number | null })?.onboarding_step ?? 1
   const onboardingCompleted = (client as { onboarding_completed?: boolean | null })?.onboarding_completed ?? false
