@@ -107,6 +107,15 @@ Esse achado não estava no documento de correção — veio de investigar dado r
 
 **Sanity check adicional:** nenhum outro cliente tem Dono Master duplicado nem contato principal duplicado (mesma família de bug, checado direto no banco — zero ocorrências). GoCars continua com a linha física duplicada (2 unidades chamadas "GoCars", uma agora `is_primary=false`) — não apaguei a linha em si por não ter mapeado tudo que referencia `unidade_id` (horários, planos de ação por escopo); só corrigi o flag que causava o bug visível de dois "Principal". Se quiser a limpeza completa da duplicata física, é um reparo à parte.
 
+## Achado 10 — smoke test rápido em Vendedor e Gerente: saudável
+
+Fora do escopo do doc (que é só admin-mx), fiz uma passada rápida nos dois perfis operacionais que ainda não tinham sido tocados nesta sessão:
+
+- **Vendedor:** Início, Rotina do Dia (modal de 9 pendências abre e renderiza corretamente, com WhatsApp/Ligar/Abrir cliente/Reagendar/Resolver), Fechamento Diário (D-1 correto, rascunho salvo, progresso por canal). Zero erro de console nas três telas.
+- **Gerente:** Início (Painel de Previsibilidade Comercial, Equipe em Foco, tour de onboarding funcional). Zero erro de console.
+
+Nenhum bug novo encontrado nessa amostra. Nota: a fila de pendências do vendedor tem dado de smoke-test real poluindo produção (`[smoke test PR#101 edit ficha]`, "Cliente Avulso Teste QA", "Carlos QA Teste") — mais uma evidência a favor do Achado 8 (existe teste misturado com produção), reforça por que a limpeza não pode ser feita sem critério humano.
+
 ## Doc totalmente lido
 
 Todo o bloco de correções (linhas 38.776–48.704) foi lido e triado nesta sessão: Plano Estratégico Multiunidade (Achado 1), Clientes MX — Resumo do Plano (Achado 2), Pessoas e Acessos — Dono Master, 2 prompts (Achado 4), Planos de Ação — duplicação e Kanban (Achado 5 e 7), e o módulo de reset destrutivo (Achado 8, **não executado**). As linhas 0–38.775 (prompt original que gerou o protótipo Base44 em si, não uma correção) seguem não lidas — baixa prioridade, MX não é um port 1:1 do Base44.
