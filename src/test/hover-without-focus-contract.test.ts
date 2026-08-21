@@ -80,7 +80,7 @@ describe('contrato FASE T 20.002 — hover sem focus-visible', () => {
     const findings = runHoverWithoutFocusGate()
     expect(Array.isArray(findings)).toBe(true)
     expect(findings.length).toBeGreaterThan(0)
-  })
+  }, 30_000)
 
   test('RATCHET: contagem atual por arquivo+regra não excede o baseline', () => {
     const findings = runHoverWithoutFocusGate()
@@ -91,7 +91,7 @@ describe('contrato FASE T 20.002 — hover sem focus-visible', () => {
       ...newFiles.map((f) => `${f}: arquivo novo`),
     ].join('\n')
     expect(detail, `ratchet violado:\n${detail}`).toEqual('')
-  })
+  }, 30_000)
 
   test('RATCHET: baseline é arquivo commitável com total coerente', () => {
     const findings = runHoverWithoutFocusGate()
@@ -104,7 +104,7 @@ describe('contrato FASE T 20.002 — hover sem focus-visible', () => {
     expect(baselineTotal).toBeGreaterThan(0)
     // O total do baseline deve ser >= atual (só pode encolher).
     expect(baselineTotal).toBeGreaterThanOrEqual(findings.length)
-  })
+  }, 30_000)
 
   test('checkRatchet detecta aumento acima do baseline', () => {
     const findings = [

@@ -345,8 +345,8 @@ export function TemplateWizard(props: {
 function PreviewAsOwner(props: { draft: TemplateDraft; weights: Array<{ weight_percentage_display: string }>; onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-[var(--mx-z-popover,70)] flex items-center justify-center p-4">
-      <div className="fixed inset-0 bg-black/40" onClick={props.onClose} />
-      <div className="relative flex max-h-[85vh] w-full max-w-lg flex-col overflow-y-auto rounded-xl bg-surface-default shadow-xl">
+      <button type="button" aria-label="Fechar prévia do template" className="fixed inset-0 bg-surface-overlay/40" onClick={props.onClose} />
+      <div data-mx-scroll-region="vertical" className="relative flex max-h-[var(--mx-overlay-max-height)] w-full max-w-lg flex-col overflow-y-auto rounded-xl bg-surface-default shadow-xl">
         <div className="sticky top-0 flex items-center justify-between rounded-t-xl bg-primary px-5 py-3 text-primary-foreground">
           <h3 className="text-sm font-semibold">Prévia — como o Dono vai ver</h3>
           <Button variant="ghost" size="icon" aria-label="Fechar prévia" onClick={props.onClose}><X size={16} /></Button>
@@ -364,7 +364,7 @@ function PreviewAsOwner(props: { draft: TemplateDraft; weights: Array<{ weight_p
                   <span className="font-medium">{item.acao}</span>
                   {item.como ? <p className="mt-0.5 text-xs text-text-secondary">{item.como}</p> : null}
                   {item.support_material_type === 'arquivo' && item.file_asset_name ? <p className="mt-0.5 text-xs text-primary">📎 {item.file_asset_name}</p> : null}
-                  {item.support_material_type === 'aula' && item.treinamento_titulo ? <p className="mt-0.5 flex items-center gap-1 text-xs text-primary"><GraduationCap size={11} />{item.treinamento_titulo}</p> : null}
+                          {item.support_material_type === 'aula' && item.treinamento_titulo ? <p className="mt-0.5 flex items-center gap-1 text-xs text-primary"><GraduationCap size={12} />{item.treinamento_titulo}</p> : null}
                 </div>
                 <span className="shrink-0 text-xs text-text-disabled">{props.weights[index]?.weight_percentage_display}</span>
               </div>

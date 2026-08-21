@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Archive, Clock, Edit3, FileCheck, GraduationCap, ListChecks, Paperclip, Power, PowerOff, RefreshCw, Send, Target, X, Zap } from 'lucide-react'
+import { Archive, Clock, FileCheck, GraduationCap, ListChecks, Paperclip, Pencil, Power, PowerOff, RefreshCw, Send, Target, X, Zap } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { fetchTemplateItems, type ActionPlanTemplate, type ActionPlanTemplateItem } from './actionPlanTemplates'
 
@@ -34,16 +34,16 @@ export function TemplateDetailDrawer(props: {
   const allArchived = template.versions.length > 0 && template.versions.every(entry => entry.status === 'arquivada')
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end">
-      <div className="fixed inset-0 bg-black/30" onClick={props.onClose} />
-      <div className="relative flex h-full w-full max-w-xl flex-col overflow-y-auto bg-surface-default shadow-xl">
-        <div className="sticky top-0 z-10 border-b border-border bg-surface-default px-5 py-4">
+    <div className="fixed inset-0 z-[var(--mx-z-overlay)] flex justify-end">
+      <button type="button" aria-label="Fechar detalhes do template" className="fixed inset-0 bg-surface-overlay/30" onClick={props.onClose} />
+      <div data-mx-scroll-region="vertical" className="relative flex h-full w-full max-w-xl flex-col overflow-y-auto bg-surface-default shadow-xl">
+        <div className="sticky top-0 z-[var(--mx-z-sticky)] border-b border-border bg-surface-default px-5 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Zap size={18} className="text-primary" />
+              <Zap size={20} className="text-primary" />
               <h3 className="font-semibold text-text-primary">{template.nome}</h3>
             </div>
-            <Button variant="ghost" size="icon" aria-label="Fechar" onClick={props.onClose}><X size={18} /></Button>
+            <Button variant="ghost" size="icon" aria-label="Fechar" onClick={props.onClose}><X size={16} /></Button>
           </div>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <span className="rounded-full bg-surface-alt px-2 py-0.5 text-xs font-medium text-text-secondary">{template.departamento}</span>
@@ -90,10 +90,10 @@ export function TemplateDetailDrawer(props: {
                   </div>
                   {item.como ? <p className="ml-7 text-xs text-text-secondary">{item.como}</p> : null}
                   {item.support_material_type === 'arquivo' && item.file_asset_name ? (
-                    <p className="ml-7 mt-1 flex items-center gap-1 text-xs text-primary"><Paperclip size={11} />{item.file_asset_name}</p>
+                    <p className="ml-7 mt-1 flex items-center gap-1 text-xs text-primary"><Paperclip size={12} />{item.file_asset_name}</p>
                   ) : null}
                   {item.support_material_type === 'aula' && item.treinamento_titulo ? (
-                    <p className="ml-7 mt-1 flex items-center gap-1 text-xs text-primary"><GraduationCap size={11} />{item.treinamento_titulo}</p>
+                    <p className="ml-7 mt-1 flex items-center gap-1 text-xs text-primary"><GraduationCap size={12} />{item.treinamento_titulo}</p>
                   ) : null}
                 </div>
               ))}
@@ -128,7 +128,7 @@ export function TemplateDetailDrawer(props: {
         <div className="sticky bottom-0 flex flex-wrap gap-2 border-t border-border bg-surface-default px-5 py-3">
           {hasDraft ? (
             <>
-              <Button variant="outline" size="sm" disabled={props.submitting} onClick={() => props.onEdit(template)}><Edit3 size={14} />Editar rascunho</Button>
+              <Button variant="outline" size="sm" disabled={props.submitting} onClick={() => props.onEdit(template)}><Pencil size={14} />Editar rascunho</Button>
               <Button size="sm" disabled={props.submitting} onClick={() => props.onPublish(template)}><FileCheck size={14} />Publicar</Button>
             </>
           ) : null}

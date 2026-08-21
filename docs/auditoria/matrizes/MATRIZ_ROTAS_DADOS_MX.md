@@ -5,10 +5,10 @@
 - Rotas públicas: **9**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
-- Tabelas referenciadas pelo runtime: **174**
+- Tabelas referenciadas pelo runtime: **175**
 - RPCs referenciadas pelo runtime: **98**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **374**
+- Pares tabela/operação encontrados: **375**
 
 ## Rotas
 
@@ -157,6 +157,7 @@
 | `carreira_niveis` | 1 |
 | `carteira_empresa` | 1 |
 | `carteira_missoes` | 1 |
+| `catalogo_indicadores_planejamento` | 1 |
 | `catalogo_metricas_consultoria` | 7 |
 | `central_execucao_aberturas` | 3 |
 | `ciclos_plano_estrategico` | 1 |
@@ -213,7 +214,7 @@
 | `logs_compartilhamento_whatsapp` | 1 |
 | `logs_reprocessamento` | 1 |
 | `logs_rotina_gerente` | 1 |
-| `lojas` | 28 |
+| `lojas` | 27 |
 | `manager_daily_tasks` | 1 |
 | `manager_lead_conferences` | 1 |
 | `marketing_mensal_consultoria` | 1 |
@@ -248,9 +249,9 @@
 | `pdis` | 4 |
 | `perfil_consultor_mx` | 4 |
 | `planejamentos_estrategicos` | 1 |
-| `planos_acao` | 10 |
+| `planos_acao` | 11 |
 | `planos_acao_template_itens` | 4 |
-| `planos_acao_template_versoes` | 5 |
+| `planos_acao_template_versoes` | 6 |
 | `planos_acao_templates` | 3 |
 | `posicionamento_empresa` | 1 |
 | `pre_cadastros_loja` | 2 |
@@ -291,14 +292,14 @@
 | `treinamento_quiz_questoes` | 1 |
 | `treinamento_tarefa_respostas` | 1 |
 | `treinamento_tarefas` | 1 |
-| `treinamentos` | 5 |
+| `treinamentos` | 6 |
 | `trilhas_desenvolvimento` | 1 |
-| `unidades_cliente_consultoria` | 10 |
+| `unidades_cliente_consultoria` | 9 |
 | `universidade_aulas` | 1 |
 | `universidade_certificacoes` | 1 |
 | `universidade_trilhas` | 1 |
 | `user_roles` | 1 |
-| `usuarios` | 22 |
+| `usuarios` | 23 |
 | `valores_indicadores_planejamento_vigentes` | 3 |
 | `valores_parametros_consultoria` | 3 |
 | `vehicle_model_catalog` | 1 |
@@ -319,7 +320,7 @@
 |---|---:|
 | `acessos_cliente_consultoria:insert` | 2 |
 | `acessos_cliente_consultoria:select` | 4 |
-| `acessos_cliente_consultoria:update` | 1 |
+| `acessos_cliente_consultoria:update` | 2 |
 | `agenda_estrategica_marketing:select` | 1 |
 | `agendamentos:delete` | 1 |
 | `agendamentos:insert` | 1 |
@@ -357,6 +358,7 @@
 | `carreira_niveis:upsert` | 1 |
 | `carteira_empresa:select` | 1 |
 | `carteira_missoes:select` | 1 |
+| `catalogo_indicadores_planejamento:select` | 1 |
 | `catalogo_metricas_consultoria:select` | 7 |
 | `catalogo_metricas_consultoria:update` | 1 |
 | `catalogo_metricas_consultoria:upsert` | 1 |
@@ -484,8 +486,8 @@
 | `logs_rotina_gerente:upsert` | 1 |
 | `lojas:delete` | 1 |
 | `lojas:insert` | 3 |
-| `lojas:select` | 28 |
-| `lojas:update` | 1 |
+| `lojas:select` | 27 |
+| `lojas:update` | 3 |
 | `manager_daily_tasks:select` | 1 |
 | `manager_daily_tasks:update` | 1 |
 | `manager_lead_conferences:select` | 1 |
@@ -562,14 +564,14 @@
 | `planos_acao_template_itens:insert` | 3 |
 | `planos_acao_template_itens:select` | 2 |
 | `planos_acao_template_versoes:insert` | 3 |
-| `planos_acao_template_versoes:select` | 5 |
+| `planos_acao_template_versoes:select` | 6 |
 | `planos_acao_template_versoes:update` | 1 |
 | `planos_acao_templates:insert` | 3 |
 | `planos_acao_templates:select` | 3 |
 | `planos_acao_templates:update` | 1 |
 | `planos_acao:delete` | 1 |
 | `planos_acao:insert` | 3 |
-| `planos_acao:select` | 10 |
+| `planos_acao:select` | 11 |
 | `planos_acao:update` | 1 |
 | `posicionamento_empresa:select` | 1 |
 | `pre_cadastros_loja:select` | 2 |
@@ -642,10 +644,10 @@
 | `treinamento_tarefa_respostas:upsert` | 1 |
 | `treinamento_tarefas:select` | 1 |
 | `treinamentos:insert` | 1 |
-| `treinamentos:select` | 4 |
+| `treinamentos:select` | 5 |
 | `trilhas_desenvolvimento:select` | 1 |
 | `unidades_cliente_consultoria:insert` | 4 |
-| `unidades_cliente_consultoria:select` | 10 |
+| `unidades_cliente_consultoria:select` | 9 |
 | `unidades_cliente_consultoria:update` | 2 |
 | `universidade_aulas:select` | 1 |
 | `universidade_certificacoes:select` | 1 |
@@ -655,7 +657,7 @@
 | `user_roles:update` | 1 |
 | `usuarios:delete` | 2 |
 | `usuarios:insert` | 1 |
-| `usuarios:select` | 19 |
+| `usuarios:select` | 20 |
 | `usuarios:update` | 6 |
 | `usuarios:upsert` | 1 |
 | `valores_indicadores_planejamento_vigentes:select` | 3 |

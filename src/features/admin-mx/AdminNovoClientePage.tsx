@@ -22,6 +22,7 @@ import {
 } from '@/components/module/MxModuleVisualPrimitives'
 import { useAdminConsultingProducts, useAdminTeam, useStoresWithoutActiveClient } from './hooks/useAdminMxLists'
 import { continueClientProgram, createClientProgram } from './novo-cliente/createClientProgram'
+import { resolveVisitVolumeRule } from './clientes/visitVolumeRule'
 import {
   NEW_CLIENT_STEPS,
   emptyNewClientDraft,
@@ -32,7 +33,11 @@ import {
   type NewClientContact,
 } from './novo-cliente/newClientDraft'
 
-const MODALITIES = ['presencial', 'online', 'hibrido']
+const MODALITIES = [
+  { value: 'presencial', label: 'Presencial' },
+  { value: 'online', label: 'Online' },
+  { value: 'hibrido', label: 'Híbrido' },
+]
 
 const BUSINESS_PHASES = [
   { value: 'ESTRUTURACAO', label: 'Estruturação' },
@@ -117,6 +122,14 @@ export function AdminNovoClientePage() {
 
   const errors = useMemo(() => validateNewClientStep(step, draft), [step, draft])
   const pending = useMemo(() => pendingNewClientSteps(draft), [draft])
+  const selectedProduct = useMemo(
+    () => products.rows.find(product => product.program_key === draft.program_template_key) ?? null,
+    [draft.program_template_key, products.rows],
+  )
+  const visitRule = useMemo(
+    () => resolveVisitVolumeRule(selectedProduct, draft.modality),
+    [draft.modality, selectedProduct],
+  )
   const patch = (values: Partial<NewClientDraft>) => setDraft(current => ({ ...current, ...values }))
 
   const goNext = () => {
@@ -147,7 +160,7 @@ export function AdminNovoClientePage() {
           return
         }
         toast.success('Onboarding atualizado. Continuidade preservada.')
-        navigate(`/consultoria/clientes/${draft.name.trim() ? (result.slug ?? '') : ''}` || '/clientes')
+        navigate(result.slug ? `/clientes/${result.slug}` : '/clientes')
         return
       }
       const result = await createClientProgram(draft, supabaseUser.id)
@@ -156,7 +169,7 @@ export function AdminNovoClientePage() {
         return
       }
       toast.success('Cliente criado com estrutura, módulos e consultores.')
-      navigate(result.slug ? `/consultoria/clientes/${result.slug}` : '/clientes')
+      navigate(result.slug ? `/clientes/${result.slug}` : '/clientes')
     } finally {
       submittingRef.current = false
       setSubmitting(false)
@@ -259,7 +272,11 @@ export function AdminNovoClientePage() {
                       value={draft.program_template_key}
                       onChange={event => {
                         const product = products.rows.find(item => item.program_key === event.target.value)
-                        patch({ program_template_key: event.target.value, product_name: product?.name ?? '' })
+                        patch({
+                          program_template_key: event.target.value,
+                          product_name: product?.name ?? '',
+                          modality: draft.modality || product?.modalidade || '',
+                        })
                       }}
                     >
                       <option value="">Selecione o produto</option>
@@ -269,9 +286,18 @@ export function AdminNovoClientePage() {
                   <MxField label="Modalidade">
                     <MxSelect aria-label="Modalidade" value={draft.modality} onChange={event => patch({ modality: event.target.value })}>
                       <option value="">Selecione a modalidade</option>
-                      {MODALITIES.map(item => <option key={item} value={item}>{item}</option>)}
+                      {MODALITIES.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}
                     </MxSelect>
                   </MxField>
+                  {draft.program_template_key ? (
+                    <div className="rounded-lg border border-border bg-surface-alt p-4 sm:col-span-2">
+                      <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Regra de visitas presenciais</div>
+                      <div className="mt-1 text-sm font-semibold text-foreground">{visitRule.label}</div>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {visitRule.detail}{visitRule.totalVisits != null ? ` Jornada: ${visitRule.totalVisits} encontro(s).` : ''}
+                      </p>
+                    </div>
+                  ) : null}
                   <div className="grid gap-3 sm:grid-cols-2">
                     <MxField label="Início do contrato"><MxInput type="date" value={draft.contract_start_date} onChange={event => patch({ contract_start_date: event.target.value })} /></MxField>
                     <MxField label="Fim do contrato"><MxInput type="date" value={draft.contract_end_date} onChange={event => patch({ contract_end_date: event.target.value })} /></MxField>
@@ -350,6 +376,7 @@ export function AdminNovoClientePage() {
                   ['Fase empresarial', BUSINESS_PHASES.find(phase => phase.value === draft.business_phase)?.label || '—'],
                   ['Produto', draft.product_name || '—'],
                   ['Modalidade', draft.modality || '—'],
+                  ['Visitas presenciais', draft.program_template_key ? visitRule.label : '—'],
                   ['Contrato', draft.contract_start_date ? `${draft.contract_start_date} → ${draft.contract_end_date || 'sem fim'}` : '—'],
                   ['Responsável MX', team.rows.find(member => member.id === draft.implementation_owner_id)?.name || '—'],
                   ['Consultores', String(draft.consultant_ids.length)],

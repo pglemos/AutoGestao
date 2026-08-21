@@ -76,7 +76,13 @@ export function useAdminTeam(): QueryState<AdminTeamMember> {
 export type AdminConsultingProduct = {
   program_key: string
   name: string | null
+  descricao: string | null
+  modalidade: string | null
   total_visits: number | null
+  min_presenciais: number | null
+  max_presenciais: number | null
+  usa_plano_estrategico: boolean | null
+  indicator_package_version_id: string | null
   active: boolean | null
   status: string | null
   clients: number
@@ -86,7 +92,7 @@ export function useAdminConsultingProducts(): QueryState<AdminConsultingProduct>
   return useSupabaseList<AdminConsultingProduct>('produtos de consultoria', async () => {
     const { data: programs, error } = await supabase
       .from('programas_visita_consultoria')
-      .select('program_key, name, total_visits, active, status')
+      .select('program_key, name, descricao, modalidade, total_visits, min_presenciais, max_presenciais, usa_plano_estrategico, indicator_package_version_id, active, status')
       .order('name', { ascending: true })
     if (error) throw new Error(error.message)
     const { data: clients } = await supabase
@@ -113,7 +119,7 @@ export type AvailableStore = { id: string; name: string }
 export function useStoresWithoutActiveClient(): QueryState<AvailableStore> {
   return useSupabaseList<AvailableStore>('lojas disponíveis', async () => {
     const [{ data: stores, error }, { data: taken }] = await Promise.all([
-      supabase.from('lojas').select('id, name').order('name', { ascending: true }),
+      supabase.from('lojas').select('id, name').is('parent_loja_id', null).order('name', { ascending: true }),
       supabase.from('clientes_consultoria').select('primary_store_id, status'),
     ])
     if (error) throw new Error(error.message)

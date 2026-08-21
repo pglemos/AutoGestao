@@ -43,11 +43,13 @@ import { runClientRepair, type RepairKey } from './clientes/clientRepairs'
 import { buildClientReadiness, readinessSummary, type ClientReadinessInput } from './clientes/clientReadiness'
 import { fetchCurrentCycle, validateCycleReadiness } from '@/features/strategic-plan/planCycleRepository'
 import { ClientConfigTab } from './clientes/ClientConfigTab'
+import { ClientActionPlanContextPanel } from './clientes/ClientActionPlanContextPanel'
 import { DonoMasterCard } from './clientes/DonoMasterCard'
 import { EnrollmentLinkModal } from './clientes/EnrollmentLinkModal'
 import { PersonCreateModal } from './clientes/PersonCreateModal'
 import { ProgramCard } from './clientes/ProgramCard'
 import { ProgramEditModal } from './clientes/ProgramEditModal'
+import { ClientPlanningContextPanel } from './clientes/ClientPlanningContextPanel'
 import { StoreFormModal } from './clientes/StoreFormModal'
 import { StoreOperatingHoursEditor } from './clientes/StoreOperatingHoursEditor'
 import {
@@ -63,8 +65,10 @@ import { saveClientProgram, type ProgramDraft } from './clientes/programMutation
 import { emptyStoreDraft, type StoreDraft } from './clientes/storeForm'
 import { fetchUnitOperatingHours, saveClientStore, type UnitRow } from './clientes/storeMutations'
 import { useAdminConsultingProducts, useAdminTeam } from './hooks/useAdminMxLists'
+import { resolveVisitVolumeRule } from './clientes/visitVolumeRule'
+import { ClientActionPlanWizard } from './planos-acao/ClientActionPlanWizard'
 
-type ClientTab = 'visao' | 'lojas' | 'pessoas' | 'jornada' | 'implantacao' | 'modulos' | 'configuracoes' | 'dados' | 'historico'
+type ClientTab = 'visao' | 'lojas' | 'pessoas' | 'jornada' | 'implantacao' | 'estrategico' | 'plano-acao' | 'modulos' | 'configuracoes' | 'dados' | 'historico'
 
 // Ordem da especificação do módulo: as oito abas da Visão 360.
 const TABS = [
@@ -73,7 +77,9 @@ const TABS = [
   { key: 'pessoas' as const, label: 'Pessoas e acessos' },
   { key: 'jornada' as const, label: 'Programa e jornada' },
   { key: 'implantacao' as const, label: 'Implantação e aderência' },
-  { key: 'modulos' as const, label: 'Estratégia e operação' },
+  { key: 'estrategico' as const, label: 'Plano Estratégico' },
+  { key: 'plano-acao' as const, label: 'Plano de Ação' },
+  { key: 'modulos' as const, label: 'Módulos e acessos' },
   { key: 'configuracoes' as const, label: 'Configurações' },
   { key: 'dados' as const, label: 'Dados e integridade' },
   { key: 'historico' as const, label: 'Histórico e auditoria' },
@@ -114,6 +120,8 @@ export function AdminClienteDetalhePage() {
   // Programa contratado
   const [programModalOpen, setProgramModalOpen] = useState(false)
   const [savingProgram, setSavingProgram] = useState(false)
+  const [actionPlanWizardOpen, setActionPlanWizardOpen] = useState(false)
+  const [actionPlanRefreshKey, setActionPlanRefreshKey] = useState(0)
 
   // Lojas: CRUD + horários
   const [units, setUnits] = useState<UnitRow[]>([])
@@ -267,6 +275,15 @@ export function AdminClienteDetalhePage() {
       consultant_name: visit.consultant?.name ?? null,
     })),
   }), [client, visits, responsibleConsultant])
+
+  const selectedProduct = useMemo(
+    () => products.rows.find(product => product.program_key === client?.program_template_key) ?? null,
+    [client?.program_template_key, products.rows],
+  )
+  const visitRule = useMemo(
+    () => resolveVisitVolumeRule(selectedProduct, client?.modality),
+    [client?.modality, selectedProduct],
+  )
 
   const programInitialDraft = useMemo<ProgramDraft>(() => {
     const assignments = client?.assignments ?? []
@@ -601,7 +618,7 @@ export function AdminClienteDetalhePage() {
 
             {tab === 'jornada' ? (
               <div className="space-y-5">
-                <ProgramCard summary={programSummary} onEditProgram={() => setProgramModalOpen(true)} />
+                <ProgramCard summary={programSummary} visitRule={visitRule} onEditProgram={() => setProgramModalOpen(true)} />
                 <MxSectionCard>
                   <MxSectionHeader title="Jornada de encontros" description={`${visits.length} encontro(s) registrados.`} />
                   <div className="space-y-4 p-5">
@@ -609,8 +626,8 @@ export function AdminClienteDetalhePage() {
                     {health.presence ? (
                       <MxStatusBanner tone={health.presence.disponiveis === 0 ? 'warning' : 'info'}>
                         {health.presence.contratadas === null
-                          ? `Encontros presenciais: ${health.presence.usadas} marcado(s) · produto sem faixa definida.`
-                          : `Encontros presenciais: ${health.presence.usadas} de ${health.presence.contratadas} · ${health.presence.disponiveis} disponível(is)${health.presence.minimas ? ` · mínimo contratado ${health.presence.minimas}` : ''}.`}
+                          ? `Encontros presenciais: ${health.presence.usadas} marcado(s) · ${visitRule.detail}`
+                          : `Encontros presenciais: ${health.presence.usadas} de ${health.presence.contratadas} · ${health.presence.disponiveis} disponível(is)${health.presence.minimas != null ? ` · mínimo contratado ${health.presence.minimas}` : ''}.`}
                       </MxStatusBanner>
                     ) : null}
                     {visits.length ? (
@@ -646,6 +663,22 @@ export function AdminClienteDetalhePage() {
                   visitsTotal: totalVisits,
                 })}
                 blockers={checks.filter(check => !check.ok).map(check => `${check.label} — ${check.detail}`)}
+              />
+            ) : null}
+
+            {tab === 'estrategico' ? (
+              <ClientPlanningContextPanel
+                clientId={client.id}
+                primaryStoreId={client.primary_store_id}
+              />
+            ) : null}
+
+            {tab === 'plano-acao' ? (
+              <ClientActionPlanContextPanel
+                clientId={client.id}
+                primaryStoreId={client.primary_store_id}
+                refreshKey={actionPlanRefreshKey}
+                onCreatePlan={() => setActionPlanWizardOpen(true)}
               />
             ) : null}
 
@@ -732,6 +765,14 @@ export function AdminClienteDetalhePage() {
               submitting={savingLink}
               onSubmit={draft => submitLink(draft)}
               onClose={() => setLinkModal(false)}
+            />
+
+            <ClientActionPlanWizard
+              open={actionPlanWizardOpen}
+              clientId={client.id}
+              clientName={client.name}
+              onSaved={() => setActionPlanRefreshKey(current => current + 1)}
+              onClose={() => setActionPlanWizardOpen(false)}
             />
           </>
         )}

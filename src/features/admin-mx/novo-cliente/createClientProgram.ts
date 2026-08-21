@@ -3,6 +3,112 @@ import { newClientSlug, onlyDigits, type NewClientDraft } from './newClientDraft
 
 export type CreateClientProgramResult = { clientId: string | null; slug: string | null; error: string | null }
 
+export type StoreHierarchyPlan = {
+  primaryUnitName: string
+  filialUnitNames: string[]
+}
+
+/** Mantém a regra de uma matriz e N filiais explícita e testável. */
+export function buildStoreHierarchyPlan(draft: Pick<NewClientDraft, 'units'>): StoreHierarchyPlan {
+  const units = draft.units.filter(unit => unit.name.trim())
+  const primary = units.find(unit => unit.is_primary) ?? units[0]
+  return {
+    primaryUnitName: primary?.name.trim() ?? '',
+    filialUnitNames: units
+      .filter(unit => unit !== primary)
+      .map(unit => unit.name.trim())
+      .filter(Boolean),
+  }
+}
+
+type StoreLookup = { id: string; parent_loja_id: string | null; name: string }
+
+async function assertMatrixStore(storeId: string): Promise<{ store: StoreLookup | null; error: string | null }> {
+  const { data, error } = await supabase
+    .from('lojas')
+    .select('id, parent_loja_id, name')
+    .eq('id', storeId)
+    .maybeSingle()
+  if (error) return { store: null, error: error.message }
+  if (!data) return { store: null, error: 'A loja principal selecionada não existe.' }
+  if (data.parent_loja_id) return { store: null, error: 'Selecione uma matriz como loja principal. Filial não pode ser a raiz do cliente.' }
+  return { store: data as StoreLookup, error: null }
+}
+
+async function ensureStoreHierarchy(
+  clientId: string,
+  draft: NewClientDraft,
+  fallbackPrimaryStoreId: string | null = null,
+): Promise<{ primaryStoreId: string | null; createdStoreIds: string[]; error: string | null }> {
+  const plan = buildStoreHierarchyPlan(draft)
+  const createdStoreIds: string[] = []
+  let primaryStoreId = draft.primary_store_id || fallbackPrimaryStoreId
+
+  if (primaryStoreId) {
+    const result = await assertMatrixStore(primaryStoreId)
+    if (result.error) return { primaryStoreId: null, createdStoreIds, error: result.error }
+  } else if (plan.primaryUnitName) {
+    const { data: created, error } = await supabase
+      .from('lojas')
+      .insert({
+        name: plan.primaryUnitName,
+        legal_name: draft.legal_name.trim() || plan.primaryUnitName,
+        cnpj: draft.cnpj.trim() ? onlyDigits(draft.cnpj) : null,
+        active: true,
+        parent_loja_id: null,
+        structure_type: 'matriz',
+      })
+      .select('id')
+      .single()
+    if (error || !created?.id) return { primaryStoreId: null, createdStoreIds, error: error?.message ?? 'Não foi possível criar a matriz operacional.' }
+    primaryStoreId = created.id
+    createdStoreIds.push(created.id)
+  }
+
+  if (!primaryStoreId) return { primaryStoreId: null, createdStoreIds, error: 'Cadastre uma loja principal antes de continuar.' }
+
+  if (draft.structure_type === 'REDE') {
+    for (const filialName of plan.filialUnitNames) {
+      const { data: existing, error: existingError } = await supabase
+        .from('lojas')
+        .select('id')
+        .eq('parent_loja_id', primaryStoreId)
+        .eq('name', filialName)
+        .maybeSingle()
+      if (existingError) return { primaryStoreId: null, createdStoreIds, error: existingError.message }
+      if (existing?.id) continue
+
+      const { data: filial, error } = await supabase
+        .from('lojas')
+        .insert({
+          name: filialName,
+          legal_name: filialName,
+          active: true,
+          parent_loja_id: primaryStoreId,
+          structure_type: 'filial',
+        })
+        .select('id')
+        .single()
+      if (error || !filial?.id) {
+        await supabase.from('lojas').update({ active: false }).in('id', createdStoreIds)
+        return { primaryStoreId: null, createdStoreIds, error: error?.message ?? `Não foi possível criar a filial "${filialName}".` }
+      }
+      createdStoreIds.push(filial.id)
+    }
+  }
+
+  const { error: clientLinkError } = await supabase
+    .from('clientes_consultoria')
+    .update({ primary_store_id: primaryStoreId, status: 'ativo', updated_at: new Date().toISOString() })
+    .eq('id', clientId)
+  if (clientLinkError) {
+    await supabase.from('lojas').update({ active: false }).in('id', createdStoreIds)
+    return { primaryStoreId: null, createdStoreIds, error: clientLinkError.message }
+  }
+
+  return { primaryStoreId, createdStoreIds, error: null }
+}
+
 /**
  * Continua o onboarding de um cliente existente: atualiza os campos do draft e
  * aplica apenas o que falta nas coleções (lojas, contatos, módulos, consultores)
@@ -15,6 +121,18 @@ export async function continueClientProgram(
   step: number,
   updatedBy: string,
 ): Promise<CreateClientProgramResult> {
+  const { data: currentClient, error: currentClientError } = await supabase
+    .from('clientes_consultoria')
+    .select('primary_store_id')
+    .eq('id', clientId)
+    .maybeSingle()
+  if (currentClientError || !currentClient) {
+    return { clientId: null, slug: null, error: currentClientError?.message ?? 'Cliente não encontrado.' }
+  }
+
+  const hierarchy = await ensureStoreHierarchy(clientId, draft, currentClient.primary_store_id)
+  if (hierarchy.error) return { clientId: null, slug: null, error: hierarchy.error }
+
   const { error: clientError } = await supabase
     .from('clientes_consultoria')
     .update({
@@ -30,7 +148,8 @@ export async function continueClientProgram(
       implementation_owner_id: draft.implementation_owner_id || null,
       contract_start_date: draft.contract_start_date || null,
       contract_end_date: draft.contract_end_date || null,
-      primary_store_id: draft.primary_store_id || null,
+      primary_store_id: hierarchy.primaryStoreId,
+      status: hierarchy.primaryStoreId ? 'ativo' : 'inativo',
       onboarding_step: Math.min(Math.max(step, 1), 7),
       onboarding_completed: step >= 7,
       updated_at: new Date().toISOString(),
@@ -50,7 +169,13 @@ export async function continueClientProgram(
       if (existing) {
         const { error } = await supabase
           .from('unidades_cliente_consultoria')
-          .update({ city: unit.city.trim() || null, state: unit.state.trim() || null, is_primary: unit.is_primary, updated_at: new Date().toISOString() })
+          .update({
+            city: unit.city.trim() || null,
+            state: unit.state.trim() || null,
+            is_primary: unit.is_primary,
+            store_type: unit.is_primary ? 'matriz' : 'filial',
+            updated_at: new Date().toISOString(),
+          })
           .eq('id', existing.id)
         if (error) return { clientId: null, slug: null, error: `Loja "${unit.name}" não atualizou: ${error.message}` }
       } else {
@@ -60,6 +185,7 @@ export async function continueClientProgram(
           city: unit.city.trim() || null,
           state: unit.state.trim() || null,
           is_primary: unit.is_primary,
+          store_type: unit.is_primary ? 'matriz' : 'filial',
         })
         if (error) return { clientId: null, slug: null, error: `Loja "${unit.name}" não criou: ${error.message}` }
       }
@@ -156,6 +282,11 @@ export async function continueClientProgram(
  * para não deixar cadastro pela metade na carteira.
  */
 export async function createClientProgram(draft: NewClientDraft, createdBy: string): Promise<CreateClientProgramResult> {
+  if (draft.primary_store_id) {
+    const primaryValidation = await assertMatrixStore(draft.primary_store_id)
+    if (primaryValidation.error) return { clientId: null, slug: null, error: primaryValidation.error }
+  }
+
   const slug = newClientSlug(draft.name)
   const { data: client, error: insertError } = await supabase
     .from('clientes_consultoria')
@@ -198,8 +329,14 @@ export async function createClientProgram(draft: NewClientDraft, createdBy: stri
 
   const rollback = async (message: string): Promise<CreateClientProgramResult> => {
     await supabase.from('clientes_consultoria').update({ status: 'arquivado' }).eq('id', client.id)
+    if (hierarchy.createdStoreIds.length) {
+      await supabase.from('lojas').update({ active: false }).in('id', hierarchy.createdStoreIds)
+    }
     return { clientId: null, slug: null, error: message }
   }
+
+  const hierarchy = await ensureStoreHierarchy(client.id, draft)
+  if (hierarchy.error) return rollback(`Cliente criado, mas a hierarquia de lojas falhou: ${hierarchy.error}`)
 
   const units = draft.units.filter(unit => unit.name.trim())
   if (units.length) {
@@ -210,31 +347,10 @@ export async function createClientProgram(draft: NewClientDraft, createdBy: stri
         city: unit.city.trim() || null,
         state: unit.state.trim() || null,
         is_primary: unit.is_primary,
+        store_type: unit.is_primary ? 'matriz' : 'filial',
       })),
     )
     if (error) return rollback(`Cliente criado, mas as lojas falharam: ${error.message}`)
-  }
-
-  if (!draft.primary_store_id) {
-    const primaryUnit = units.find(unit => unit.is_primary) ?? units[0]
-    const storeName = primaryUnit?.name.trim() || draft.name.trim()
-    const { data: createdStore } = await supabase
-      .from('lojas')
-      .insert({
-        name: storeName,
-        legal_name: draft.legal_name.trim() || storeName,
-        cnpj: draft.cnpj.trim() ? onlyDigits(draft.cnpj) : null,
-        active: true,
-      })
-      .select('id')
-      .single()
-
-    if (createdStore?.id) {
-      await supabase
-        .from('clientes_consultoria')
-        .update({ primary_store_id: createdStore.id, status: 'ativo' })
-        .eq('id', client.id)
-    }
   }
 
   const contacts = draft.contacts.filter(contact => contact.name.trim())

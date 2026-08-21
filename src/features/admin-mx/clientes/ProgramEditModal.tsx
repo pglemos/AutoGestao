@@ -4,14 +4,27 @@ import { Button } from '@/components/atoms/Button'
 import { Modal } from '@/components/organisms/Modal'
 import { MxField, MxInput, MxSelect, MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
 import { emptyProgramDraft, validateProgramDraft, type ProgramDraft } from './programMutations'
+import { resolveVisitVolumeRule } from './visitVolumeRule'
 
-const MODALITIES = ['presencial', 'online', 'hibrido']
+const MODALITIES = [
+  { value: 'presencial', label: 'Presencial' },
+  { value: 'online', label: 'Online' },
+  { value: 'hibrido', label: 'Híbrido' },
+]
 
 export function ProgramEditModal(props: {
   open: boolean
   initial: ProgramDraft | null
   submitting: boolean
-  products: Array<{ program_key: string; name: string | null; status?: string | null }>
+  products: Array<{
+    program_key: string
+    name: string | null
+    status?: string | null
+    modalidade?: string | null
+    total_visits?: number | null
+    min_presenciais?: number | null
+    max_presenciais?: number | null
+  }>
   team: Array<{ id: string; name: string | null; email: string | null; role: string | null }>
   onSubmit: (draft: ProgramDraft) => void
   onClose: () => void
@@ -24,6 +37,14 @@ export function ProgramEditModal(props: {
   }, [props.open, props.initial])
 
   const errors = useMemo(() => validateProgramDraft(draft), [draft])
+  const selectedProduct = useMemo(
+    () => props.products.find(product => product.program_key === draft.program_template_key) ?? null,
+    [draft.program_template_key, props.products],
+  )
+  const visitRule = useMemo(
+    () => resolveVisitVolumeRule(selectedProduct, draft.modality),
+    [draft.modality, selectedProduct],
+  )
 
   const patch = (values: Partial<ProgramDraft>) => setDraft(current => ({ ...current, ...values }))
 
@@ -69,6 +90,7 @@ export function ProgramEditModal(props: {
                 patch({
                   program_template_key: event.target.value,
                   product_name: product?.name ?? event.target.value,
+                  modality: draft.modality || product?.modalidade || '',
                 })
               }}
             >
@@ -91,12 +113,22 @@ export function ProgramEditModal(props: {
             >
               <option value="">Selecione a modalidade</option>
               {MODALITIES.map(item => (
-                <option key={item} value={item}>
-                  {item.charAt(0).toUpperCase() + item.slice(1)}
+                <option key={item.value} value={item.value}>
+                  {item.label}
                 </option>
               ))}
             </MxSelect>
           </MxField>
+
+          {draft.program_template_key ? (
+            <div className="rounded-lg border border-border bg-surface-alt p-3 sm:col-span-2">
+              <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Regra de visitas presenciais</div>
+              <div className="mt-1 text-sm font-semibold text-foreground">{visitRule.label}</div>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {visitRule.detail}{visitRule.totalVisits != null ? ` Jornada: ${visitRule.totalVisits} encontro(s).` : ''}
+              </p>
+            </div>
+          ) : null}
 
           <MxField label="Responsável MX pela implantação">
             <MxSelect
