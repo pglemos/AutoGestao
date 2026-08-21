@@ -21,6 +21,7 @@ import {
   fetchApplications,
   type ApplicationPlan,
 } from './actionPlanApplications'
+import { ActionPlanDiagnosticsPanel } from './ActionPlanDiagnosticsPanel'
 
 function formatDate(value: string | null) {
   if (!value) return '—'
@@ -71,6 +72,8 @@ export function ApplicationsTab(props: { onOpenPlan: (planId: string) => void })
         <MxMetricCard title="Atrasados" value={metrics.atrasadas} detail="Prazo vencido em aberto" icon={ClipboardList} tone="danger" />
         <MxMetricCard title="Concluídos" value={metrics.concluidas} detail="Ciclo encerrado" icon={TrendingUp} tone="success" />
       </MxMetricGrid>
+
+      <ActionPlanDiagnosticsPanel />
 
       <MxSectionCard>
         <MxSectionHeader title="Aplicações nos clientes" description={`${filtered.length} plano(s) aplicado(s) a partir de templates.`} />

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/atoms/Button'
+import { Checkbox } from '@/components/atoms/Checkbox'
 import { Input } from '@/components/atoms/Input'
 import { Modal } from '@/components/organisms/Modal'
 import { TabNav } from '@/components/molecules/TabNav'
@@ -17,11 +18,18 @@ import {
   STATUS_LABEL,
   allowedPlanTransitions,
   changePlanStatus,
+  countPendingChecklistItems,
+  correctPlanCompletionDate,
   fetchPlanEvidence,
   fetchPlanHistory,
   reschedulePlan,
   resolveBoardColumn,
   validateCompletion,
+  validateChecklistCompletion,
+  validateCompletionDateCorrection,
+  validateStatusTransition,
+  toggleChecklistItem,
+  type BoardChecklistItem,
   type BoardPlan,
   type PlanEvidence,
   type PlanHistoryEntry,
@@ -45,7 +53,7 @@ function formatDateTime(value: string | null) {
 
 export function ActionPlanDetailDrawer(props: { plan: BoardPlan | null; onClose: () => void; onChanged: () => void }) {
   const { plan } = props
-  const { supabaseUser } = useAuth()
+  const { supabaseUser, baseRole } = useAuth()
   const [tab, setTab] = useState<DetailTab>('resumo')
   const [history, setHistory] = useState<PlanHistoryEntry[]>([])
   const [evidence, setEvidence] = useState<PlanEvidence[]>([])
@@ -54,24 +62,53 @@ export function ActionPlanDetailDrawer(props: { plan: BoardPlan | null; onClose:
   const [completionDate, setCompletionDate] = useState(new Date().toISOString().slice(0, 10))
   const [newDueDate, setNewDueDate] = useState('')
   const [rescheduleReason, setRescheduleReason] = useState('')
+  const [statusReason, setStatusReason] = useState('')
+  const [completionCorrectionReason, setCompletionCorrectionReason] = useState('')
+  const [executionChecklist, setExecutionChecklist] = useState<BoardChecklistItem[]>([])
+  const [executionProgress, setExecutionProgress] = useState(0)
+  const [completionOverride, setCompletionOverride] = useState(false)
+  const [completionOverrideReason, setCompletionOverrideReason] = useState('')
+  const [activeStatus, setActiveStatus] = useState<PlanStatus>('pendente')
 
   useEffect(() => {
     if (!plan) return
+    let active = true
     setTab('resumo')
-    setCompletionDate(new Date().toISOString().slice(0, 10))
-    setNewDueDate(plan.prazo ?? '')
     setRescheduleReason('')
+    setStatusReason('')
+    setCompletionCorrectionReason('')
+    setCompletionOverride(false)
+    setCompletionOverrideReason('')
     setLoading(true)
-    void Promise.all([fetchPlanHistory(plan.id), fetchPlanEvidence(plan.id)]).then(([nextHistory, nextEvidence]) => {
-      setHistory(nextHistory)
-      setEvidence(nextEvidence)
-      setLoading(false)
-    })
-  }, [plan])
+    void Promise.all([fetchPlanHistory(plan.id), fetchPlanEvidence(plan.id)])
+      .then(([nextHistory, nextEvidence]) => {
+        if (!active) return
+        setHistory(nextHistory)
+        setEvidence(nextEvidence)
+      })
+      .catch(() => {
+        if (active) toast.error('Não foi possível carregar o histórico completo do plano.')
+      })
+      .finally(() => {
+        if (active) setLoading(false)
+      })
+    return () => { active = false }
+  }, [plan?.id])
+
+  useEffect(() => {
+    if (!plan) return
+    setCompletionDate(plan.concluido_at?.slice(0, 10) || new Date().toISOString().slice(0, 10))
+    setNewDueDate(plan.prazo ?? '')
+    setExecutionChecklist(Array.isArray(plan.checklist) ? plan.checklist : [])
+    setExecutionProgress(plan.progresso ?? 0)
+    setActiveStatus(plan.status ?? 'pendente')
+  }, [plan?.id, plan?.checklist, plan?.progresso, plan?.status, plan?.prazo, plan?.concluido_at])
 
   if (!plan) return null
 
-  const column = resolveBoardColumn(plan)
+  const column = resolveBoardColumn({ ...plan, status: activeStatus })
+  const pendingChecklistCount = countPendingChecklistItems(executionChecklist)
+  const canOverrideCompletion = baseRole === 'administrador_geral' || baseRole === 'administrador_mx'
 
   const transition = async (next: PlanStatus) => {
     if (busy) return
@@ -81,15 +118,62 @@ export function ActionPlanDetailDrawer(props: { plan: BoardPlan | null; onClose:
         toast.error(invalid)
         return
       }
+      const checklistError = validateChecklistCompletion({
+        checklist: executionChecklist,
+        overrideRequested: completionOverride,
+        overrideReason: completionOverrideReason,
+        canOverride: canOverrideCompletion,
+      })
+      if (checklistError) {
+        setTab('execucao')
+        toast.error(checklistError)
+        return
+      }
+    }
+    const transitionError = validateStatusTransition(activeStatus, next, statusReason)
+    if (transitionError) {
+      setTab('execucao')
+      toast.error(transitionError)
+      return
     }
     setBusy(true)
     try {
-      const result = await changePlanStatus(plan.id, next, next === 'concluido' ? { concluido_at: `${completionDate}T12:00:00.000Z` } : {})
+      const result = await changePlanStatus(plan.id, next, next === 'concluido'
+        ? {
+            from: activeStatus,
+            concluido_at: `${completionDate}T12:00:00.000Z`,
+            completionOverride,
+            completionOverrideReason,
+            note: statusReason,
+          }
+        : { from: activeStatus, note: statusReason, checklist: executionChecklist })
       if (result.error) {
         toast.error(result.error)
         return
       }
       toast.success(`Plano movido para ${STATUS_LABEL[next].toLowerCase()}.`)
+      props.onChanged()
+      props.onClose()
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const submitCompletionDateCorrection = async () => {
+    if (busy) return
+    const invalid = validateCompletionDateCorrection(completionDate, completionCorrectionReason)
+    if (invalid) {
+      toast.error(invalid)
+      return
+    }
+    setBusy(true)
+    try {
+      const result = await correctPlanCompletionDate(plan.id, completionDate, completionCorrectionReason)
+      if (result.error) {
+        toast.error(result.error)
+        return
+      }
+      toast.success('Data efetiva corrigida e registrada no histórico.')
       props.onChanged()
       props.onClose()
     } finally {
@@ -114,6 +198,31 @@ export function ActionPlanDetailDrawer(props: { plan: BoardPlan | null; onClose:
     }
   }
 
+  const toggleChecklist = async (index: number, completed: boolean) => {
+    if (busy) return
+    setBusy(true)
+    try {
+      const result = await toggleChecklistItem({
+        planId: plan.id,
+        checklist: executionChecklist,
+        itemIndex: index,
+        completed,
+        currentStatus: activeStatus,
+      })
+      if (result.error) {
+        toast.error(result.error)
+        return
+      }
+      setExecutionChecklist(result.checklist)
+      setExecutionProgress(result.progresso)
+      if (result.status) setActiveStatus(result.status)
+      toast.success(completed ? 'Item concluído.' : 'Item reaberto.')
+      props.onChanged()
+    } finally {
+      setBusy(false)
+    }
+  }
+
   return (
     <Modal
       open
@@ -124,9 +233,9 @@ export function ActionPlanDetailDrawer(props: { plan: BoardPlan | null; onClose:
       footer={(
         <>
           <Button variant="outline" onClick={props.onClose} disabled={busy}>Fechar</Button>
-          {allowedPlanTransitions(plan.status).map(next => (
+          {allowedPlanTransitions(activeStatus).map(next => (
             <Button key={next} variant={next === 'concluido' ? 'primary' : 'outline'} onClick={() => void transition(next)} disabled={busy}>
-              {next === 'em_andamento' ? 'Iniciar' : next === 'concluido' ? 'Concluir' : next === 'bloqueada' ? 'Bloquear' : 'Cancelar'}
+              {next === 'em_andamento' ? (activeStatus === 'concluido' ? 'Reabrir' : 'Iniciar') : next === 'concluido' ? 'Concluir' : next === 'bloqueada' ? 'Bloquear' : 'Cancelar'}
             </Button>
           ))}
         </>
@@ -161,11 +270,93 @@ export function ActionPlanDetailDrawer(props: { plan: BoardPlan | null; onClose:
         {!loading && tab === 'execucao' ? (
           <div className="space-y-5">
             <section className="space-y-3 rounded-lg border border-border p-4">
-              <h3 className="text-sm font-semibold text-foreground">Concluir plano</h3>
-              <MxField label="Data efetiva de conclusão">
+              <div>
+                <h3 className="text-sm font-semibold text-foreground">Checklist de execução</h3>
+                <p className="text-xs text-muted-foreground">{executionProgress}% concluído</p>
+              </div>
+              {executionChecklist.length ? (
+                <ul className="space-y-2">
+                  {executionChecklist.map((item, index) => {
+                    const completed = ['concluido', 'concluida', 'realizado'].includes(item.status.toLowerCase())
+                    const id = `action-plan-checklist-${plan.id}-${index}`
+                    return (
+                      <li key={`${item.titulo}-${index}`} className="flex items-start gap-3 rounded-lg border border-border p-3">
+                        <Checkbox id={id} checked={completed} disabled={busy || activeStatus === 'concluido'} onCheckedChange={checked => void toggleChecklist(index, checked === true)} />
+                        <label htmlFor={id} className="min-w-0 flex-1 cursor-pointer">
+                          <span className="block text-sm font-medium text-foreground">{item.titulo}</span>
+                          {item.como ? <span className="block text-xs text-muted-foreground">{item.como}</span> : null}
+                        </label>
+                        <span className="text-xs text-muted-foreground">{item.peso_pct}</span>
+                      </li>
+                    )
+                  })}
+                </ul>
+              ) : (
+                <p className="rounded-lg border border-dashed border-border p-4 text-sm text-muted-foreground">
+                  Este plano não possui etapas ponderadas cadastradas.
+                </p>
+              )}
+            </section>
+            {activeStatus === 'concluido' || activeStatus === 'bloqueada' || allowedPlanTransitions(activeStatus).some(status => status === 'bloqueada' || status === 'cancelada') ? (
+              <section className="space-y-3 rounded-lg border border-border p-4">
+                <h3 className="text-sm font-semibold text-foreground">Justificativa da mudança de status</h3>
+                <MxField label="Justificativa (obrigatória para bloquear, cancelar, desbloquear ou reabrir)">
+                  <MxTextarea rows={3} value={statusReason} onChange={event => setStatusReason(event.target.value)} placeholder="Explique o motivo para bloquear, cancelar, desbloquear ou reabrir o plano..." />
+                </MxField>
+                <p className="text-xs text-muted-foreground">
+                  {activeStatus === 'concluido' ? 'A conclusão anterior permanece registrada no histórico.' : 'O motivo será registrado no histórico do plano.'}
+                </p>
+              </section>
+            ) : null}
+            <section className="space-y-3 rounded-lg border border-border p-4">
+              <h3 className="text-sm font-semibold text-foreground">{activeStatus === 'concluido' ? 'Corrigir conclusão' : 'Concluir plano'}</h3>
+              <MxField label={activeStatus === 'concluido' ? 'Nova data efetiva de conclusão' : 'Data efetiva de conclusão'}>
                 <Input type="date" value={completionDate} onChange={event => setCompletionDate(event.target.value)} />
               </MxField>
-              <p className="text-xs text-muted-foreground">A data entra no histórico e trava o progresso em 100%.</p>
+              {activeStatus === 'concluido' ? (
+                <>
+                  <MxField label="Justificativa da correção">
+                    <MxTextarea rows={2} value={completionCorrectionReason} onChange={event => setCompletionCorrectionReason(event.target.value)} placeholder="Explique por que a data efetiva precisa ser corrigida..." />
+                  </MxField>
+                  <Button variant="outline" onClick={() => void submitCompletionDateCorrection()} disabled={busy}>Salvar correção</Button>
+                </>
+              ) : pendingChecklistCount > 0 ? (
+                <div className="space-y-3">
+                  <MxStatusBanner tone="warning">
+                    Este plano possui {pendingChecklistCount} item(ns) pendente(s). Conclua ou cancele os itens antes de finalizar.
+                  </MxStatusBanner>
+                  {canOverrideCompletion ? (
+                    <>
+                      <label htmlFor={`completion-override-${plan.id}`} className="flex items-start gap-2 text-sm text-foreground">
+                        <Checkbox
+                          id={`completion-override-${plan.id}`}
+                          checked={completionOverride}
+                          onCheckedChange={checked => setCompletionOverride(checked === true)}
+                          disabled={busy}
+                        />
+                        Concluir administrativamente mesmo com itens pendentes
+                      </label>
+                      {completionOverride ? (
+                        <MxField label="Justificativa do override administrativo">
+                          <MxTextarea
+                            rows={3}
+                            value={completionOverrideReason}
+                            onChange={event => setCompletionOverrideReason(event.target.value)}
+                            placeholder="Registre a decisão administrativa e o motivo para manter itens pendentes..."
+                          />
+                        </MxField>
+                      ) : null}
+                    </>
+                  ) : null}
+                </div>
+              ) : null}
+              <p className="text-xs text-muted-foreground">
+                {activeStatus === 'concluido'
+                  ? 'A data anterior e o motivo permanecem auditáveis no histórico.'
+                  : pendingChecklistCount > 0
+                    ? 'Overrides ficam registrados com autor, data, justificativa e quantidade de pendências.'
+                    : 'A data entra no histórico e trava o progresso em 100%.'}
+              </p>
             </section>
             <section className="space-y-3 rounded-lg border border-border p-4">
               <h3 className="text-sm font-semibold text-foreground">Alterar prazo previsto</h3>

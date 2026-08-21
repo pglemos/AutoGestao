@@ -45,11 +45,11 @@ export function AgendaAdmin() {
     navigateToDate,
     createVisit, updateVisit, updateVisitStatus, deleteVisit,
     createScheduleEvent, updateScheduleEvent, deleteScheduleEvent,
-    getNextVisitNumber, canViewAllAgendas,
+    getNextVisitNumber, getVisitLabel, programTotalVisits, canViewAllAgendas,
   } = page
 
   const forms = useAgendaAdminForms({
-    visits, consultants, canViewAllAgendas,
+    visits, clients, programTotalVisits, consultants, canViewAllAgendas,
     createVisit, updateVisit, updateVisitStatus, deleteVisit,
     createScheduleEvent, updateScheduleEvent, deleteScheduleEvent,
     getNextVisitNumber,
@@ -542,6 +542,7 @@ export function AgendaAdmin() {
         targetAudienceSelectOptions={targetAudienceSelectOptions}
         productSelectOptions={productSelectOptions}
         getNextVisitNumber={getNextVisitNumber}
+        getVisitLabel={getVisitLabel}
       />
 
       <EventoModal

@@ -49,6 +49,9 @@ export type PackageItem = {
   inclusion_reason: InclusionReason
   is_required: boolean
   dependency_of: string | null
+  unit_entry_mode_snapshot: string | null
+  unit_rollup_method_snapshot: string | null
+  weight_indicator_code_snapshot: string | null
 }
 
 /** Indicador do catálogo já com a informação de entrada derivada do `formula_key`. */
@@ -61,6 +64,9 @@ export type PackageIndicator = {
   direction: string
   calculavel: boolean
   inclusion_reason: InclusionReason
+  unit_entry_mode: string | null
+  unit_rollup_method: string | null
+  weight_indicator_code: string | null
 }
 
 export const PACKAGE_STATUS_LABEL: Record<PackageStatus, string> = {
@@ -84,7 +90,18 @@ export function isCalculatedIndicator(formulaKey: string | null): boolean {
 
 /** Converte uma linha do catálogo em indicador de pacote com o modo derivado. */
 export function toPackageIndicator(
-  row: { metric_key: string; label: string; area: string; sort_order: number; value_type: string; direction: string; formula_key: string | null },
+  row: {
+    metric_key: string
+    label: string
+    area: string
+    sort_order: number
+    value_type: string
+    direction: string
+    formula_key: string | null
+    unit_entry_mode?: string | null
+    unit_rollup_method?: string | null
+    weight_indicator_code?: string | null
+  },
   inclusionReason: InclusionReason = 'selecao_direta',
 ): PackageIndicator {
   return {
@@ -96,6 +113,9 @@ export function toPackageIndicator(
     direction: row.direction,
     calculavel: isCalculatedIndicator(row.formula_key),
     inclusion_reason: inclusionReason,
+    unit_entry_mode: row.unit_entry_mode ?? null,
+    unit_rollup_method: row.unit_rollup_method ?? null,
+    weight_indicator_code: row.weight_indicator_code ?? null,
   }
 }
 
@@ -135,6 +155,9 @@ export function buildPackageItems(indicators: PackageIndicator[], versionId: str
     inclusion_reason: ind.inclusion_reason,
     is_required: true,
     dependency_of: null,
+    unit_entry_mode_snapshot: ind.unit_entry_mode,
+    unit_rollup_method_snapshot: ind.unit_rollup_method,
+    weight_indicator_code_snapshot: ind.weight_indicator_code,
   }))
 }
 
@@ -215,7 +238,7 @@ export async function fetchLinkablePackageVersions(): Promise<{ rows: StrategicP
 export async function fetchPublishedIndicators(): Promise<{ rows: PackageIndicator[]; error: string | null }> {
   const { data, error } = await supabase
     .from('catalogo_metricas_consultoria')
-    .select('metric_key, label, area, sort_order, value_type, direction, formula_key, status')
+    .select('metric_key, label, area, sort_order, value_type, direction, formula_key, status, unit_entry_mode, unit_rollup_method, weight_indicator_code')
     .eq('status', 'publicado')
     .order('sort_order', { ascending: true })
   if (error) return { rows: [], error: error.message }
@@ -226,7 +249,7 @@ export async function fetchPublishedIndicators(): Promise<{ rows: PackageIndicat
 export async function fetchPackageVersionItems(versionId: string): Promise<{ rows: PackageIndicator[]; error: string | null }> {
   const { data, error } = await supabase
     .from('pacotes_indicadores_itens')
-    .select('metric_key, label_snapshot, area_snapshot, ordem_snapshot, input_mode_snapshot, formato_snapshot, direction_snapshot, inclusion_reason')
+    .select('metric_key, label_snapshot, area_snapshot, ordem_snapshot, input_mode_snapshot, formato_snapshot, direction_snapshot, inclusion_reason, unit_entry_mode_snapshot, unit_rollup_method_snapshot, weight_indicator_code_snapshot')
     .eq('version_id', versionId)
     .order('ordem_snapshot', { ascending: true, nullsFirst: true })
   if (error) return { rows: [], error: error.message }
@@ -240,6 +263,9 @@ export async function fetchPackageVersionItems(versionId: string): Promise<{ row
       direction: item.direction_snapshot ?? '—',
       calculavel: item.input_mode_snapshot === 'calculado',
       inclusion_reason: (item.inclusion_reason ?? 'selecao_direta') as InclusionReason,
+      unit_entry_mode: item.unit_entry_mode_snapshot,
+      unit_rollup_method: item.unit_rollup_method_snapshot,
+      weight_indicator_code: item.weight_indicator_code_snapshot,
     })),
     error: null,
   }
@@ -282,7 +308,7 @@ export async function createStrategicPackage(
 
   const { data: indicators } = await supabase
     .from('catalogo_metricas_consultoria')
-    .select('metric_key, label, area, sort_order, value_type, direction, formula_key')
+    .select('metric_key, label, area, sort_order, value_type, direction, formula_key, unit_entry_mode, unit_rollup_method, weight_indicator_code')
     .in('metric_key', draft.metricKeys)
 
   const { data: version, error: versionError } = await supabase

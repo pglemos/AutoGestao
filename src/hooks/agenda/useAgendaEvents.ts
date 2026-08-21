@@ -18,6 +18,8 @@ export type UseAgendaEventsReturn = {
   clients: AgendaClient[]
   consultants: AgendaConsultant[]
   products: AgendaProduct[]
+  /** `program_key` → total de visitas contratadas. Governa o intervalo válido de `visit_number`. */
+  programTotalVisits: Record<string, number>
   loading: boolean
   error: string | null
   canViewAllAgendas: boolean
@@ -37,6 +39,7 @@ export function useAgendaEvents(): UseAgendaEventsReturn {
   const [clients, setClients] = useState<AgendaClient[]>([])
   const [consultants, setConsultants] = useState<AgendaConsultant[]>([])
   const [products, setProducts] = useState<AgendaProduct[]>([])
+  const [programTotalVisits, setProgramTotalVisits] = useState<Record<string, number>>({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -73,12 +76,12 @@ export function useAgendaEvents(): UseAgendaEventsReturn {
       eventsQuery = eventsQuery.or(`responsible_user_id.eq.${supabaseUser.id},and(responsible_user_id.is.null,created_by.eq.${supabaseUser.id})`)
     }
 
-    const [visitsRes, eventsRes, clientsRes, storesRes, usersRes, productsRes] = await Promise.all([
+    const [visitsRes, eventsRes, clientsRes, storesRes, usersRes, productsRes, programsRes] = await Promise.all([
       visitsQuery,
       eventsQuery,
       supabase
         .from('clientes_consultoria')
-        .select('id, name, slug, status, current_visit_step, primary_store_id')
+        .select('id, name, slug, status, current_visit_step, primary_store_id, program_template_key')
         .order('name', { ascending: true }),
       supabase
         .from('lojas')
@@ -95,7 +98,24 @@ export function useAgendaEvents(): UseAgendaEventsReturn {
         .from('produtos_digitais')
         .select('*')
         .order('created_at', { ascending: false }),
+      supabase
+        .from('programas_visita_consultoria')
+        .select('program_key, total_visits'),
     ])
+
+    // Governa o intervalo válido de `visit_number` por programa contratado —
+    // sem isto, todo cliente ficava travado no limite do PMR de 7 visitas,
+    // mesmo os 51 dos 52 clientes ativos que contrataram PMR de 9 ou 12.
+    if (programsRes.error) {
+      setError((current) => current || programsRes.error.message)
+      setProgramTotalVisits({})
+    } else {
+      const totals: Record<string, number> = {}
+      for (const row of programsRes.data ?? []) {
+        if (row.program_key && typeof row.total_visits === 'number') totals[row.program_key] = row.total_visits
+      }
+      setProgramTotalVisits(totals)
+    }
 
     let mappedVisits: AgendaVisit[] = []
     let mappedEvents: AgendaScheduleEvent[] = []
@@ -179,6 +199,7 @@ export function useAgendaEvents(): UseAgendaEventsReturn {
             status: 'ativo',
             current_visit_step: 0,
             primary_store_id: store.id,
+            program_template_key: null,
           })
         }
       }
@@ -213,6 +234,7 @@ export function useAgendaEvents(): UseAgendaEventsReturn {
     clients,
     consultants,
     products,
+    programTotalVisits,
     loading,
     error,
     canViewAllAgendas,

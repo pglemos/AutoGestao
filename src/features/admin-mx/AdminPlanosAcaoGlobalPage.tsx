@@ -26,7 +26,7 @@ import { useStores } from '@/hooks/useStores'
 import { useAuth } from '@/hooks/useAuth'
 import { ActionPlanKanban } from './planos-acao/ActionPlanKanban'
 import { ActionPlanDetailDrawer } from './planos-acao/ActionPlanDetailDrawer'
-import { boardMetrics, type BoardPlan, type PlanStatus } from './planos-acao/actionPlanBoard'
+import { boardMetrics, normalizeBoardChecklist, type BoardPlan, type PlanStatus } from './planos-acao/actionPlanBoard'
 import { ApplyTemplateModal } from './planos-acao/ApplyTemplateModal'
 import { ClientActionPlanWizard } from './planos-acao/ClientActionPlanWizard'
 import { NewActionChoiceModal } from './planos-acao/NewActionChoiceModal'
@@ -38,6 +38,7 @@ import { ApplicationsTab } from './planos-acao/ApplicationsTab'
 import { TemplateFilters } from './planos-acao/TemplateFilters'
 import { emptyTemplateFilters, templateMatchesFilters, type TemplateFilterState } from './planos-acao/templateFilterLogic'
 import { TemplateFormModal } from './planos-acao/TemplateFormModal'
+import { TemplateActionsMenu, type TemplateLifecycleAction } from './planos-acao/TemplateActionsMenu'
 import { useActionPlanTemplatesController } from './planos-acao/useActionPlanTemplates'
 import { useAdminActionPlans } from './hooks/useAdminMxLists'
 import {
@@ -136,9 +137,10 @@ export function AdminPlanosAcaoGlobalPage() {
     progresso: plan.progresso,
     departamento: plan.departamento,
     indicador: plan.indicador,
-    responsavel_id: null,
-    concluido_at: null,
+    responsavel_id: plan.responsavel_id,
+    concluido_at: plan.concluido_at,
     scope_id: plan.scope_id,
+    checklist: normalizeBoardChecklist(plan.checklist),
   })), [filtered])
 
   const filteredTemplates = useMemo(
@@ -162,6 +164,20 @@ export function AdminPlanosAcaoGlobalPage() {
   }
 
   const handleNewAction = () => setChoiceOpen(true)
+
+  const handleTemplateLifecycleAction = (
+    template: (typeof templates.rows)[number],
+    action: TemplateLifecycleAction,
+  ) => {
+    if (action === 'nova-versao') return void templates.createVersion(template)
+    if (action === 'desativar' || action === 'reativar') return void templates.toggleActive(template)
+    if (action === 'arquivar') {
+      const confirmed = window.confirm(
+        `Arquivar "${template.nome}"? O template sairá da operação, mas aplicações já criadas e o histórico serão preservados.`,
+      )
+      if (confirmed) void templates.archive(template)
+    }
+  }
 
   return (
     <MxModulePage id="admin-mx-planos-acao" width={width} bottomClearance={bottomClearance}>
@@ -228,6 +244,7 @@ export function AdminPlanosAcaoGlobalPage() {
                         {filteredTemplates.map(template => {
                           const published = template.versions.find(version => version.status === 'publicada')
                           const openDraft = template.versions.find(version => version.status === 'rascunho')
+                          const archived = template.versions.length > 0 && template.versions.every(version => version.status === 'arquivada')
                           return (
                             <TableRow key={template.id}>
                               <TableCell>
@@ -238,13 +255,18 @@ export function AdminPlanosAcaoGlobalPage() {
                               <TableCell>{template.indicador || '—'}</TableCell>
                               <TableCell>{published ? `v${published.versao}` : '—'}</TableCell>
                               <TableCell>{openDraft ? `v${openDraft.versao}` : '—'}</TableCell>
-                              <TableCell>{template.active ? 'Ativo' : 'Inativo'}</TableCell>
+                              <TableCell>{archived ? 'Arquivado' : template.active ? 'Ativo' : 'Inativo'}</TableCell>
                               <TableCell className="text-right">
                                 <div className="flex justify-end gap-2">
                                   <Button variant="outline" size="sm" onClick={() => void templates.openEdit(template)}>Editar</Button>
                                   {openDraft ? <Button variant="outline" size="sm" onClick={() => void templates.publish(template)}>Publicar</Button> : null}
-                                  {published ? <Button size="sm" onClick={() => templates.setApplying(template)}>Aplicar</Button> : null}
-                                  {published ? <Button variant="outline" size="sm" onClick={() => { setSuggestTemplate(template); setSuggestOpen(true) }}>Sugerir ao Dono</Button> : null}
+                                  {published && template.active ? <Button size="sm" onClick={() => templates.setApplying(template)}>Aplicar</Button> : null}
+                                  {published && template.active ? <Button variant="outline" size="sm" onClick={() => { setSuggestTemplate(template); setSuggestOpen(true) }}>Sugerir ao Dono</Button> : null}
+                                  <TemplateActionsMenu
+                                    template={template}
+                                    disabled={templates.submitting}
+                                    onAction={action => handleTemplateLifecycleAction(template, action)}
+                                  />
                                 </div>
                               </TableCell>
                             </TableRow>
@@ -375,7 +397,6 @@ export function AdminPlanosAcaoGlobalPage() {
           templates={templates.rows}
           indicators={wizardIndicators}
           responsibles={wizardResponsibles}
-          stores={lojas.map(store => ({ id: store.id, name: store.name }))}
           onClose={() => setSelectorOpen(false)}
           onCreated={() => { setSelectorOpen(false); void Promise.all([refetch(), templates.refetch()]) }}
         />

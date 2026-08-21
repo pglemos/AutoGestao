@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { FileCheck, Target, Zap } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { Modal } from '@/components/organisms/Modal'
@@ -6,7 +6,12 @@ import { MxField, MxSelect, MxStatusBanner } from '@/components/module/MxModuleV
 import { useAuth } from '@/hooks/useAuth'
 import { toast } from '@/lib/toast'
 import type { ActionPlanTemplate } from './actionPlanTemplates'
-import { applyTemplateToStore } from './actionPlanTemplates'
+import {
+  applyTemplateToStoresIdempotent,
+  buildTemplateApplicationStorageKey,
+  createTemplateApplicationRequestId,
+  resolveClientApplicationTargets,
+} from './templateApplicationIdempotency'
 import type { WizardClient, WizardIndicator, WizardResponsible } from './clientActionPlanWizardData'
 
 /**
@@ -20,7 +25,6 @@ export function StrategicIndicatorActionSelector(props: {
   templates: ActionPlanTemplate[]
   indicators: WizardIndicator[]
   responsibles: WizardResponsible[]
-  stores: Array<{ id: string; name: string }>
   onClose: () => void
   onCreated: () => void
 }) {
@@ -28,10 +32,10 @@ export function StrategicIndicatorActionSelector(props: {
   const [indicatorKey, setIndicatorKey] = useState('')
   const [templateId, setTemplateId] = useState('')
   const [responsibleId, setResponsibleId] = useState('')
-  const [storeId, setStoreId] = useState('')
   const [deadlineDays, setDeadlineDays] = useState(30)
   const [saving, setSaving] = useState(false)
   const [selectedClientId, setSelectedClientId] = useState('')
+  const requestIds = useRef(new Map<string, string>())
 
   const activeClient = props.client ?? (props.clients ?? []).find(client => client.id === selectedClientId) ?? null
 
@@ -40,7 +44,6 @@ export function StrategicIndicatorActionSelector(props: {
       setIndicatorKey('')
       setTemplateId('')
       setResponsibleId('')
-      setStoreId('')
       setDeadlineDays(30)
       setSelectedClientId(props.client?.id ?? '')
     }
@@ -48,6 +51,7 @@ export function StrategicIndicatorActionSelector(props: {
 
   const compatibleTemplates = useMemo(
     () => props.templates.filter(template => {
+      if (!template.active || !template.versions.some(version => version.status === 'publicada')) return false
       if (!indicatorKey) return true
       if (!template.indicador) return true
       return template.indicador === props.indicators.find(indicator => indicator.metric_key === indicatorKey)?.label
@@ -70,23 +74,61 @@ export function StrategicIndicatorActionSelector(props: {
       toast.error('Este template não tem versão publicada.')
       return
     }
-    if (!storeId) {
-      toast.error('Selecione a loja de destino.')
-      return
-    }
     setSaving(true)
     try {
-      const result = await applyTemplateToStore({
+      const targets = await resolveClientApplicationTargets(activeClient.id)
+      if (targets.error) {
+        toast.error(targets.error)
+        return
+      }
+      if (!targets.storeIds.length) {
+        toast.error('Este cliente não tem matriz nem filial ativa para receber o plano.')
+        return
+      }
+
+      const storageKey = buildTemplateApplicationStorageKey(version.id, `client:${activeClient.id}`)
+      let persistedRequestId = requestIds.current.get(storageKey) ?? null
+      try {
+        persistedRequestId ||= window.sessionStorage.getItem(storageKey)
+      } catch {
+        // O Map mantém a mesma chave durante retries mesmo sem sessionStorage.
+      }
+      const requestId = persistedRequestId || createTemplateApplicationRequestId()
+      requestIds.current.set(storageKey, requestId)
+      if (!persistedRequestId) {
+        try {
+          window.sessionStorage.setItem(storageKey, requestId)
+        } catch {
+          // Storage indisponível não impede a aplicação idempotente nesta sessão React.
+        }
+      }
+
+      const selectedIndicator = props.indicators.find(indicator => indicator.metric_key === indicatorKey)
+      const result = await applyTemplateToStoresIdempotent({
         versionId: version.id,
-        storeId,
+        storeIds: targets.storeIds,
         userId: supabaseUser.id,
+        requestId,
         appliedAt: new Date(),
+        responsibleId: responsibleId || null,
+        deadlineDays,
+        indicator: selectedIndicator?.label || null,
       })
       if (result.error) {
         toast.error(result.error)
         return
       }
-      toast.success(`${result.created} ação(ões) criada(s) no cliente.`)
+      requestIds.current.delete(storageKey)
+      try {
+        window.sessionStorage.removeItem(storageKey)
+      } catch {
+        // A aplicação já foi confirmada no banco.
+      }
+      toast.success(
+        result.replayed
+          ? 'Aplicação já confirmada. Nenhuma ação foi duplicada.'
+          : `${result.created} ação(ões) criada(s) em ${targets.storeIds.length} unidade(s) do cliente.`,
+      )
       props.onCreated()
       props.onClose()
     } finally {
@@ -104,7 +146,7 @@ export function StrategicIndicatorActionSelector(props: {
       footer={(
         <>
           <Button variant="outline" onClick={props.onClose} disabled={saving}>Cancelar</Button>
-          <Button onClick={() => void apply()} disabled={saving || !activeClient || !templateId || !storeId}>
+          <Button onClick={() => void apply()} disabled={saving || !activeClient || !templateId}>
             <FileCheck size={16} />{saving ? 'Criando...' : 'Criar plano de ação'}
           </Button>
         </>
@@ -159,12 +201,9 @@ export function StrategicIndicatorActionSelector(props: {
               className="flex h-[var(--mx-input-height)] w-full rounded-[var(--mx-input-radius)] border border-border bg-surface-default px-3 py-2 text-sm outline-none focus-visible:border-primary focus-visible:ring-focus-ring/25"
             />
           </MxField>
-          <MxField label="Loja de destino" className="sm:col-span-2">
-            <MxSelect aria-label="Loja de destino" value={storeId} onChange={event => setStoreId(event.target.value)}>
-              <option value="">Selecione a loja...</option>
-              {props.stores.map(store => <option key={store.id} value={store.id}>{store.name}</option>)}
-            </MxSelect>
-          </MxField>
+          <MxStatusBanner tone="neutral" className="sm:col-span-2">
+            O plano será aplicado à matriz e a todas as filiais ativas do cliente selecionado.
+          </MxStatusBanner>
         </div>
 
         {selectedTemplate ? (

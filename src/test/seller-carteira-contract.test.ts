@@ -95,3 +95,36 @@ describe('FASE AA — campanhas/modais/drawers de carteira (27.012)', () => {
     }
   })
 })
+
+describe('QA Impeccable — fila operacional, acessibilidade e recuperação', () => {
+  test('mobile prioriza a fila e mantém controles com alvo mínimo', () => {
+    const page = read('src/features/carteira-clientes/pages/CarteiraClientesBase44Page.tsx')
+    const carteira = read('src/components/carteira/CarteiraAtivaTab.jsx')
+    expect(page).not.toContain('SellerPageHeader')
+    expect(carteira).toContain('overflow-x-auto')
+    expect(carteira).toContain('min-h-11')
+  })
+
+  test('hierarquia e controles possuem nomes acessíveis', () => {
+    const carteira = read('src/components/carteira/CarteiraAtivaTab.jsx')
+    expect(carteira).toContain('<h1 className="text-2xl font-black text-mx-navy">Mentor Comercial</h1>')
+    expect(carteira).toContain('htmlFor="carteira-busca"')
+    expect(carteira).toContain('<SheetContent side="right"')
+    expect(read('src/components/ui/sheet.jsx')).toContain('aria-label="Fechar painel"')
+    expect(carteira).not.toContain('title={motivos.join')
+  })
+
+  test('falha no retorno WhatsApp preserva o modal e informa recuperação', () => {
+    const page = read('src/base44-reference/pages/CarteiraClientes.jsx')
+    expect(page).toContain('setRetornoWaSaving(true)')
+    expect(page).toContain('Seus dados foram preservados')
+    expect(page).toContain('setRetornoWaSaving(false)')
+  })
+
+  test('criação de campanha é um fluxo secundário recolhido', () => {
+    const plano = read('src/components/carteira/PlanoAtaqueTab.jsx')
+    expect(plano).toContain('<details className="group')
+    expect(plano).toContain('Criar ou gerenciar campanhas')
+    expect(plano).toContain('Fluxo secundário')
+  })
+})

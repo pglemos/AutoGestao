@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { z } from 'zod'
 import { toast } from '@/lib/toast'
 import { supabase } from '@/lib/supabase'
@@ -94,6 +94,14 @@ const normalizePartners = (partners?: StorePartner[]) => {
 
 export function useStores() {
   const { role, vinculos_loja, storeId } = useAuth()
+  // O provider pode reconstruir `vinculos_loja` sem alterar seu conteúdo.
+  // Depender da identidade do array recriava `fetchStores` e mantinha a tela
+  // num ciclo contínuo de refetch/loading. A chave primitiva só muda quando o
+  // escopo efetivo de lojas muda.
+  const linkedStoreIdsKey = useMemo(
+    () => [...new Set(vinculos_loja.map((membership) => membership.store_id))].sort().join(','),
+    [vinculos_loja],
+  )
   const [lojas, setStores] = useState<Store[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -105,7 +113,7 @@ export function useStores() {
       let query = supabase.from('lojas').select(STORES_SELECT).order('name')
 
       if (role === 'dono' || role === 'gerente') {
-        const storeIds = vinculos_loja.map((m) => m.store_id)
+        const storeIds = linkedStoreIdsKey ? linkedStoreIdsKey.split(',') : []
         if (!storeIds.length) {
           setStores([])
           return
@@ -149,7 +157,7 @@ export function useStores() {
     } finally {
       setLoading(false)
     }
-  }, [role, vinculos_loja, storeId])
+  }, [role, linkedStoreIdsKey, storeId])
 
   const createStore = async (
     name: string,

@@ -181,8 +181,9 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
       {/* Origem e Atendimento */}
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Origem (canal)</label>
+          <label htmlFor="cliente-canal-comercial" className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Origem (canal)</label>
           <select
+            id="cliente-canal-comercial"
             value={form.canal_comercial || "Internet"}
             onChange={e => setForm(p => ({ ...p, canal_comercial: e.target.value }))}
             className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm"
@@ -192,8 +193,9 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
         </div>
         {campo("origem_detalhada", "Origem Detalhada", false, "text", "Ex: Indicação, Tráfego Pago...")}
         <div>
-          <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Temperatura</label>
+          <label htmlFor="cliente-temperatura" className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Temperatura</label>
           <select
+            id="cliente-temperatura"
             value={form.temperatura || "Morno"}
             onChange={e => setForm(p => ({ ...p, temperatura: e.target.value }))}
             className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm"
@@ -202,8 +204,9 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
           </select>
         </div>
         <div>
-          <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Urgência da Compra</label>
+          <label htmlFor="cliente-urgencia" className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Urgência da Compra</label>
           <select
+            id="cliente-urgencia"
             value={form.urgencia_compra || form.urgencia || "Não informado"}
             onChange={e => setForm(p => ({ ...p, urgencia_compra: e.target.value, urgencia: e.target.value }))}
             className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm"
@@ -218,8 +221,9 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
         {campo("veiculo_interesse", "Veículo de interesse", true, "text", "Ex: HB20 1.0 COMFORT")}
         {campo("valor_negociado", "Orçamento / Valor Negociado", false, "text", "R$ 68.900,00")}
         <div>
-          <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Financiamento</label>
+          <label htmlFor="cliente-financiamento" className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Financiamento</label>
           <select
+            id="cliente-financiamento"
             value={form.financiamento || "Não se aplica"}
             onChange={e => setForm(p => ({ ...p, financiamento: e.target.value, interesse_financiamento: e.target.value !== "Não se aplica" }))}
             className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm"
@@ -233,8 +237,9 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
         {campo("veiculo_troca", "Veículo na troca", false, "text", "Ex: GOL 1.0 2018")}
         {campo("valor_troca", "Valor da troca", false, "text", "R$ 35.000,00")}
         <div>
-          <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Modalidade Preferida</label>
+          <label htmlFor="cliente-modalidade" className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Modalidade Preferida</label>
           <select
+            id="cliente-modalidade"
             value={form.preferencia_modalidade || form.modalidade || "Não informado"}
             onChange={e => setForm(p => ({ ...p, preferencia_modalidade: e.target.value, modalidade: e.target.value }))}
             className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm"
@@ -250,8 +255,9 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
         {campo("veiculo_comprado", "Veículo Comprado / Vendido", false, "text", "Ex: HB20 1.0 COMFORT 2024")}
         {campo("data_venda", "Data da Venda", false, "date")}
         <div>
-          <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Valor da Venda</label>
+          <label htmlFor="cliente-valor-venda" className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Valor da Venda</label>
           <Input
+            id="cliente-valor-venda"
             type="text"
             value={form.valor_venda || ""}
             onChange={e => setForm(p => ({ ...p, valor_venda: formatCurrencyInput(e.target.value) }))}
@@ -263,24 +269,24 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
 
       {/* Situação e Agenda */}
       <div>
-        <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Situação atual</label>
-        <select value={form.situacao_atual || ""} onChange={e => setForm(p => ({ ...p, situacao_atual: e.target.value }))} className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm">
+        <label htmlFor="cliente-situacao-atual" className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Situação atual</label>
+        <select id="cliente-situacao-atual" value={form.situacao_atual || ""} onChange={e => setForm(p => ({ ...p, situacao_atual: e.target.value }))} className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm">
           {SITUACOES_ATUAIS.map(s => <option key={s} value={s}>{s}</option>)}
         </select>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
         <div className="col-span-2">
-          <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Próximo passo</label>
-          <Input value={form.proximo_passo || ""} onChange={e => setForm(p => ({ ...p, proximo_passo: e.target.value }))} />
+          <label htmlFor="cliente-proximo-passo" className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Próximo passo</label>
+          <Input id="cliente-proximo-passo" value={form.proximo_passo || ""} onChange={e => setForm(p => ({ ...p, proximo_passo: e.target.value }))} />
         </div>
         <div className="col-span-2">
-          <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Data do próximo passo</label>
-          <Input type="datetime-local" value={form.proxima_acao_data ? form.proxima_acao_data.slice(0, 16) : ""} onChange={e => setForm(p => ({ ...p, proxima_acao_data: e.target.value }))} />
+          <label htmlFor="cliente-data-proximo-passo" className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Data do próximo passo</label>
+          <Input id="cliente-data-proximo-passo" type="datetime-local" value={form.proxima_acao_data ? form.proxima_acao_data.slice(0, 16) : ""} onChange={e => setForm(p => ({ ...p, proxima_acao_data: e.target.value }))} />
         </div>
         <div className="col-span-2">
-          <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Data e Hora da Visita / Agendamento</label>
-          <Input type="datetime-local" value={form.visita_agendada_em ? form.visita_agendada_em.slice(0, 16) : ""} onChange={e => setForm(p => ({ ...p, visita_agendada_em: e.target.value }))} />
+          <label htmlFor="cliente-data-visita" className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Data e Hora da Visita / Agendamento</label>
+          <Input id="cliente-data-visita" type="datetime-local" value={form.visita_agendada_em ? form.visita_agendada_em.slice(0, 16) : ""} onChange={e => setForm(p => ({ ...p, visita_agendada_em: e.target.value }))} />
         </div>
       </div>
 
@@ -307,13 +313,13 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
       </div>
 
       <div>
-        <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Objeções / Motivo de perda</label>
-        <Input value={form.motivo_perda || ""} onChange={e => setForm(p => ({ ...p, motivo_perda: e.target.value }))} placeholder="Ex: preço, parcela, avaliação..." />
+        <label htmlFor="cliente-motivo-perda" className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Objeções / Motivo de perda</label>
+        <Input id="cliente-motivo-perda" value={form.motivo_perda || ""} onChange={e => setForm(p => ({ ...p, motivo_perda: e.target.value }))} placeholder="Ex: preço, parcela, avaliação..." />
       </div>
 
       <div>
-        <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Observações</label>
-        <Textarea value={form.observacoes || ""} onChange={e => setForm(p => ({ ...p, observacoes: e.target.value }))} rows={2} className="resize-none" />
+        <label htmlFor="cliente-observacoes" className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Observações</label>
+        <Textarea id="cliente-observacoes" value={form.observacoes || ""} onChange={e => setForm(p => ({ ...p, observacoes: e.target.value }))} rows={2} className="resize-none" />
       </div>
 
       <div className="flex gap-2 pt-1">
@@ -465,7 +471,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
 
   return (
     <Dialog open={open} onOpenChange={v => !v && onClose()}>
-      <DialogContent className="w-full sm:max-w-xl max-h-[90vh] overflow-y-auto p-0 flex flex-col">
+      <DialogContent className="sm:max-w-xl max-h-[90vh] overflow-y-auto p-0 flex flex-col">
         {loading ? (
           <div className="flex items-center justify-center h-48">
             <div className="w-6 h-6 border-4 border-border border-t-status-info rounded-full animate-spin" />

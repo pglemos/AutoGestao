@@ -134,7 +134,7 @@ export function createStrategicPlanLiveSource({
     await legacyRepository.load({ storeId, year })
     const [valuesResult, historyResult] = await Promise.all([
       client
-        .from('valores_indicadores_planejamento')
+        .from('valores_indicadores_planejamento_vigentes')
         .select('indicator_code,month,meta,realizado,ano_anterior')
         .eq('loja_id', storeId)
         .eq('year', year),

@@ -7,7 +7,8 @@
 //   - Botão de ação primária conforme o status do ciclo
 //   - Lista de pendências antes da publicação (quando `!canPublish`)
 //
-// Quem tem `canManageCycle` (= canEditTargets) vê os botões de transição.
+// Só a área interna MX administra o ciclo; o Dono pode editar metas do rascunho,
+// mas não validar/publicar a versão oficial.
 // O Dono vê o status mas não vê os botões.
 
 import React, { useState } from 'react'
@@ -129,7 +130,7 @@ function PendingIssues({ state }: { state: PlanCycleState }) {
 // ─── Botão de ação primária ───────────────────────────────────────────────────
 
 function CycleActionButton({ state }: { state: PlanCycleState }) {
-  const { cycle, readiness, transitioning, canManageCycle, initCycle, submitForValidation, publishCycle } = state
+  const { cycle, readiness, readinessLoading, transitioning, canManageCycle, initCycle, submitForValidation, publishCycle } = state
 
   if (!canManageCycle) return null
 
@@ -170,12 +171,12 @@ function CycleActionButton({ state }: { state: PlanCycleState }) {
         size="sm"
         variant={canPublish ? 'primary' : 'outline'}
         onClick={() => void publishCycle()}
-        disabled={transitioning || !canPublish}
-        aria-busy={transitioning}
-        title={canPublish ? 'Publicar plano' : 'Há pendências — verifique a lista abaixo'}
+        disabled={transitioning || readinessLoading || !canPublish}
+        aria-busy={transitioning || readinessLoading}
+        title={readinessLoading ? 'Validando prontidão do plano' : canPublish ? 'Publicar plano' : 'Há pendências — verifique a lista abaixo'}
       >
-        {transitioning && <Loader2 className="h-4 w-4 animate-spin" aria-hidden />}
-        {canPublish ? 'Publicar Plano' : 'Publicar (com pendências)'}
+        {(transitioning || readinessLoading) && <Loader2 className="h-4 w-4 animate-spin" aria-hidden />}
+        {readinessLoading ? 'Validando plano...' : canPublish ? 'Publicar Plano' : 'Publicar (com pendências)'}
       </Button>
     )
   }

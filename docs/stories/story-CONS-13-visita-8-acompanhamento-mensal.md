@@ -1,6 +1,6 @@
 # Story CONS-13 - Visita 8 de Acompanhamento Mensal PMR
 
-**Status:** Implemented - aguardando validacao final  
+**Status:** Ready for Review
 **Epic:** EPIC-MX-CONS-DEV-20260515  
 **Onda:** 1 - Consultoria PMR pronta para uso  
 **Owner:** @pm  
@@ -30,6 +30,8 @@ para continuar acompanhando o lojista/dono depois das visitas principais sem usa
 - [x] Agenda/detalhe do cliente exibe visita 8 quando criada/agendada.
 - [x] Relatorio de visita aceita `visit_number = 8` sem erro visual ou textual.
 - [x] Testes de schema/regressao cobrem o novo limite de visita.
+- [x] Agenda respeita `total_visits` do programa contratado (7, 9 ou 12) antes de oferecer acompanhamento mensal.
+- [x] Rótulos e validação deixam de fixar `/7` para clientes PMR 9, Plus ou Híbrido.
 
 ## Regras de Negocio
 
@@ -76,6 +78,7 @@ para continuar acompanhando o lojista/dono depois das visitas principais sem usa
 - [x] `npm run typecheck`
 - [x] `npm test`
 - [x] Schema/RLS validado quando houver migration.
+- [x] Formulário autenticado validado em Chrome desktop e mobile sem mutação de dados.
 
 ## File List
 
@@ -84,6 +87,14 @@ para continuar acompanhando o lojista/dono depois das visitas principais sem usa
 - `src/lib/consultoria/pmr-visit-rules.test.ts`
 - `src/hooks/useConsultingClientBySlug.ts`
 - `src/hooks/useAgendaAdmin.ts`
+- `src/hooks/agenda/types.ts`
+- `src/hooks/agenda/useAgendaCRUD.ts`
+- `src/hooks/agenda/useAgendaEvents.ts`
+- `src/features/agenda-admin/AgendaAdmin.container.tsx`
+- `src/features/agenda-admin/hooks/useAgendaAdminForms.ts`
+- `src/features/agenda-admin/hooks/useAgendaAdminPage.ts`
+- `src/features/agenda-admin/modals/VisitaModal.tsx`
+- `src/test/agenda.playwright.ts`
 - `src/hooks/useConsultingClients.ts`
 - `src/pages/AgendaAdmin.tsx`
 - `src/pages/ConsultoriaClienteDetalhe.tsx`

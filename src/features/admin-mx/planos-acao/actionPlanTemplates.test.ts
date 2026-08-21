@@ -2,6 +2,7 @@ import { describe, expect, test } from 'bun:test'
 import {
   emptyTemplateDraft,
   emptyTemplateItem,
+  nextTemplateVersionNumber,
   resolveItemDueDate,
   validateTemplateDraft,
 } from './actionPlanTemplates'
@@ -54,6 +55,16 @@ describe('templates de plano de ação — validação', () => {
       items: [{ ...emptyTemplateItem(1), problema: 'P', acao: 'A', prazo_dias: -5 }],
     }
     expect(validateTemplateDraft(draft)).toContain('Item 1: prazo em dias não pode ser negativo.')
+  })
+})
+
+describe('ciclo de vida das versões do template', () => {
+  test('primeira versão começa em 1', () => {
+    expect(nextTemplateVersionNumber([])).toBe(1)
+  })
+
+  test('usa o maior número existente mesmo com retorno fora de ordem', () => {
+    expect(nextTemplateVersionNumber([{ versao: 2 }, { versao: 7 }, { versao: 3 }])).toBe(8)
   })
 })
 

@@ -249,13 +249,16 @@ export type AdminActionPlan = {
   scope_type: string | null
   scope_id: string | null
   indicador: string | null
+  responsavel_id: string | null
+  concluido_at: string | null
+  checklist: unknown
 }
 
 export function useAdminActionPlans(): QueryState<AdminActionPlan> {
   return useSupabaseList<AdminActionPlan>('planos de ação', async () => {
     const { data, error } = await supabase
       .from('planos_acao')
-      .select('id, codigo, problema, acao, status, prioridade, prazo, progresso, departamento, scope_type, scope_id, indicador')
+      .select('id, codigo, problema, acao, status, prioridade, prazo, progresso, departamento, scope_type, scope_id, indicador, responsavel_id, concluido_at, checklist')
       .order('prazo', { ascending: true, nullsFirst: false })
       .limit(500)
     if (error) throw new Error(error.message)

@@ -92,6 +92,11 @@ export function resolveItemDueDate(appliedAt: Date, prazoDias: number | null): s
   return due.toISOString().slice(0, 10)
 }
 
+/** Próximo número monotônico, sem depender da ordem retornada pelo banco. */
+export function nextTemplateVersionNumber(versions: Array<Pick<ActionPlanTemplateVersion, 'versao'>>): number {
+  return versions.reduce((highest, version) => Math.max(highest, version.versao), 0) + 1
+}
+
 export async function fetchActionPlanTemplates(): Promise<{ rows: ActionPlanTemplate[]; error: string | null }> {
   const { data: templates, error } = await supabase
     .from('planos_acao_templates')
@@ -219,10 +224,53 @@ export async function publishTemplateVersion(templateId: string, versionId: stri
     .eq('status', 'publicada')
   if (archiveError) return { error: archiveError.message }
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('planos_acao_template_versoes')
     .update({ status: 'publicada', published_at: new Date().toISOString(), published_by: userId, updated_at: new Date().toISOString() })
     .eq('id', versionId)
+  return { error: error?.message ?? null }
+}
+
+/** Abre uma revisão copiando a versão publicada; reutiliza rascunho existente. */
+export async function createNewTemplateVersion(input: {
+  templateId: string
+  userId: string
+  notes?: string | null
+}): Promise<{ versionId: string | null; created: boolean; error: string | null }> {
+  const { data: versions, error: versionsError } = await supabase
+    .from('planos_acao_template_versoes')
+    .select('id, status')
+    .eq('template_id', input.templateId)
+    .order('versao', { ascending: false })
+  if (versionsError) return { versionId: null, created: false, error: versionsError.message }
+
+  const existingDraft = (versions ?? []).find(version => version.status === 'rascunho')
+  if (existingDraft) return { versionId: existingDraft.id, created: false, error: null }
+  const { data, error } = await supabase.rpc('open_action_plan_template_revision', {
+    p_template_id: input.templateId,
+    p_notes: input.notes?.trim() || null,
+  })
+  if (error) return { versionId: null, created: false, error: error.message }
+  if (typeof data !== 'string' || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(data)) {
+    return { versionId: null, created: false, error: 'A revisão foi criada com uma resposta inválida.' }
+  }
+  return { versionId: data, created: true, error: null }
+}
+
+/** Desativa ou reativa um template sem apagar versões nem aplicações. */
+export async function setTemplateActive(templateId: string, active: boolean): Promise<{ error: string | null }> {
+  const { data, error } = await supabase
+    .from('planos_acao_templates')
+    .update({ active, updated_at: new Date().toISOString() })
+    .eq('id', templateId)
+    .select('id')
+  if (error) return { error: error.message }
+  return { error: data?.length ? null : 'Não foi possível atualizar o template.' }
+}
+
+/** Arquiva versões abertas/publicadas e preserva aplicações já materializadas. */
+export async function archiveTemplate(templateId: string): Promise<{ error: string | null }> {
+  const { error } = await supabase.rpc('archive_action_plan_template', { p_template_id: templateId })
   return { error: error?.message ?? null }
 }
 

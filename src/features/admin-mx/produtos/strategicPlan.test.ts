@@ -23,6 +23,9 @@ function indicator(overrides: Partial<PackageIndicator> = {}): PackageIndicator 
     direction: 'increase',
     calculavel: true,
     inclusion_reason: 'selecao_direta',
+    unit_entry_mode: 'PER_UNIT_REQUIRED',
+    unit_rollup_method: 'SUM',
+    weight_indicator_code: null,
     ...overrides,
   }
 }
@@ -67,6 +70,8 @@ describe('plano estratégico — itens da versão', () => {
       metric_key: 'sales_total',
       label_snapshot: 'Vendas total',
       input_mode_snapshot: 'calculado',
+      unit_entry_mode_snapshot: 'PER_UNIT_REQUIRED',
+      unit_rollup_method_snapshot: 'SUM',
       is_required: true,
     })
   })

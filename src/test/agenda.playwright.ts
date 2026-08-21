@@ -82,7 +82,7 @@ test.describe('Agenda MX Page', () => {
     await expect(page.getByText('Agendar visita')).toBeVisible({ timeout: 10000 });
   });
 
-  test('schedule modal opens with form fields', async ({ page }) => {
+  test('schedule modal opens with form fields', async ({ page }, testInfo) => {
     await loginAsAdmin(page);
     await page.goto('/agenda');
 
@@ -102,6 +102,11 @@ test.describe('Agenda MX Page', () => {
 
     const objectiveTextarea = page.locator('#agenda-objective');
     await expect(objectiveTextarea).toBeVisible();
+
+    await page.screenshot({
+      path: testInfo.outputPath('agenda-visit-modal.png'),
+      fullPage: true,
+    });
   });
 
   test('schedule modal closes on cancel button', async ({ page }) => {

@@ -70,6 +70,7 @@ export type AgendaClient = {
   status: string
   current_visit_step: number
   primary_store_id?: string | null
+  program_template_key: string | null
 }
 
 export type AgendaConsultant = {

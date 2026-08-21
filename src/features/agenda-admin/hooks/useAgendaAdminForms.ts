@@ -1,13 +1,16 @@
 import { useState } from 'react'
 import { format, parseISO } from 'date-fns'
 import { toast } from '@/lib/toast'
-import { buildSaoPauloDateTime, type AgendaScheduleEvent, type AgendaVisit, type AgendaConsultant } from '@/hooks/agenda'
-import { isPmrSchedulableVisitNumber } from '@/lib/consultoria/pmr-visit-rules'
+import { buildSaoPauloDateTime, type AgendaClient, type AgendaScheduleEvent, type AgendaVisit, type AgendaConsultant } from '@/hooks/agenda'
+import { isPmrSchedulableVisitNumber, pmrVisitRangeMessage, resolveProgramTotalVisits } from '@/lib/consultoria/pmr-visit-rules'
 import type { ScheduleForm } from '../modals/VisitaModal'
 import type { EventForm } from '../modals/EventoModal'
 
 type Deps = {
   visits: AgendaVisit[]
+  clients: AgendaClient[]
+  /** `program_key` → total de visitas contratadas, do repositório de eventos. */
+  programTotalVisits: Record<string, number>
   consultants: AgendaConsultant[]
   canViewAllAgendas: boolean
   createVisit: (...args: any[]) => Promise<{ error?: string | null }>
@@ -54,7 +57,7 @@ const initialBlockEvent: EventForm = {
  */
 export function useAgendaAdminForms(deps: Deps) {
   const {
-    visits, consultants, canViewAllAgendas,
+    visits, clients, programTotalVisits, consultants, canViewAllAgendas,
     createVisit, updateVisit, updateVisitStatus, deleteVisit,
     createScheduleEvent, updateScheduleEvent, deleteScheduleEvent,
     getNextVisitNumber,
@@ -159,8 +162,10 @@ export function useAgendaAdminForms(deps: Deps) {
     const visitNumber = editingVisitId
       ? Number(scheduleForm.visit_number) || 0
       : getNextVisitNumber(scheduleForm.client_id)
-    if (!isPmrSchedulableVisitNumber(visitNumber)) {
-      toast.error('O PMR trabalha com visitas de 1 a 7 e acompanhamento mensal.')
+    const client = clients.find((c) => c.id === scheduleForm.client_id)
+    const totalVisits = resolveProgramTotalVisits(client?.program_template_key, programTotalVisits)
+    if (!isPmrSchedulableVisitNumber(visitNumber, totalVisits)) {
+      toast.error(pmrVisitRangeMessage(totalVisits))
       return
     }
     const scheduledAt = buildSaoPauloDateTime(scheduleForm.scheduled_at, scheduleForm.scheduled_time)

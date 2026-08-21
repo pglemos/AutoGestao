@@ -72,6 +72,8 @@ export function useAgendaAdmin() {
 
   const crud = useAgendaCRUD({
     visits: events.visits,
+    clients: events.clients,
+    programTotalVisits: events.programTotalVisits,
     refetch: events.refetch,
     canViewAllAgendas: events.canViewAllAgendas,
   })
@@ -84,6 +86,7 @@ export function useAgendaAdmin() {
     clients: events.clients,
     consultants: events.consultants,
     products: events.products,
+    programTotalVisits: events.programTotalVisits,
     canViewAllAgendas: events.canViewAllAgendas,
     metrics: view.metrics,
     loading: events.loading,
@@ -111,5 +114,6 @@ export function useAgendaAdmin() {
     updateScheduleEvent: crud.updateScheduleEvent,
     deleteScheduleEvent: crud.deleteScheduleEvent,
     getNextVisitNumber: crud.getNextVisitNumber,
+    getVisitLabel: crud.getVisitLabel,
   }
 }

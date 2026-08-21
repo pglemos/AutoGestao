@@ -15,6 +15,7 @@ export type ProductPackageBlockReason =
   | 'PACOTE_NAO_ENCONTRADO'
   | 'PACOTE_NAO_PUBLICADO'
   | 'PACOTE_SEM_ITENS'
+  | 'ERRO_ACESSO_DADOS'
 
 export const PRODUCT_PACKAGE_BLOCK_LABEL: Record<ProductPackageBlockReason, string> = {
   CLIENTE_SEM_PRODUTO: 'Cliente sem produto de consultoria contratado.',
@@ -24,6 +25,7 @@ export const PRODUCT_PACKAGE_BLOCK_LABEL: Record<ProductPackageBlockReason, stri
   PACOTE_NAO_ENCONTRADO: 'Pacote de indicadores não encontrado.',
   PACOTE_NAO_PUBLICADO: 'A versão do pacote de indicadores não está publicada.',
   PACOTE_SEM_ITENS: 'A versão publicada do pacote não tem indicadores.',
+  ERRO_ACESSO_DADOS: 'Não foi possível consultar o produto e o pacote de indicadores.',
 }
 
 export type ProductRow = {
@@ -52,6 +54,9 @@ export type PackageItemRow = {
   ordem_snapshot: number | null
   is_required: boolean | null
   inclusion_reason: string | null
+  unit_entry_mode_snapshot: string | null
+  unit_rollup_method_snapshot: string | null
+  weight_indicator_code_snapshot: string | null
 }
 
 export type ResolvedProductPackage = {
@@ -69,8 +74,13 @@ export type ProductPackageResolution =
   | { ok: true; resolution: ResolvedProductPackage }
   | { ok: false; reason: ProductPackageBlockReason; message: string; product: ProductRow | null }
 
-function blocked(reason: ProductPackageBlockReason, product: ProductRow | null = null): ProductPackageResolution {
-  return { ok: false, reason, message: PRODUCT_PACKAGE_BLOCK_LABEL[reason], product }
+function blocked(reason: ProductPackageBlockReason, product: ProductRow | null = null, message?: string): ProductPackageResolution {
+  return { ok: false, reason, message: message ?? PRODUCT_PACKAGE_BLOCK_LABEL[reason], product }
+}
+
+export function productPackageDataError(message: string, product: ProductRow | null = null): ProductPackageResolution {
+  console.error('[strategic-plan] product package data access failed', message)
+  return blocked('ERRO_ACESSO_DADOS', product)
 }
 
 /**

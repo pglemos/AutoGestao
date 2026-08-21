@@ -95,6 +95,7 @@ quality_gate_tools:
 
 - `src/pages/CarteiraClientes.tsx`
 - `src/features/carteira-clientes/pages/CarteiraClientesBase44Page.tsx`
+- `src/test/seller-carteira-contract.test.ts`
 - `src/features/carteira-clientes/lib/installCarteiraBase44Adapter.js`
 - `src/features/carteira-clientes/lib/carteira-mappers.ts`
 - `src/components/carteira/*`
@@ -152,6 +153,7 @@ Claude Code (Sonnet 5), continuando trabalho iniciado em sessão anterior via Co
 - Reexecução CodeRabbit após os ajustes desta continuação: `coderabbit review --uncommitted --base main` terminou com `No findings`; a revisão específica desta atualização documental também foi executada antes do commit final.
 - CI remoto do SHA final passou nos workflows Quality Gates (`30884163091`), Typecheck/unit (`30884163101`), ESLint (`30884163086`), Atomic Design (`30884163063`) e Gitleaks (`30884163095`). Os cinco workflows Dependabot dinâmicos acionados também concluíram sem falha.
 - Supabase remoto permaneceu read-only nesta continuação. Vercel publicou o SHA exato `1b99c0ab82618038fa0826557e7b8762e6247b2b` no deployment `dpl_52J3PrgJceo2Lw43S8mRrF5LZCUL`, em `READY`, com `/api/health` HTTP 200.
+- **Remediação visual/UX Codex em 2026-08-20:** a crítica autenticada do vendedor foi aplicada na fila operacional. O cabeçalho duplicado foi removido para manter um único `h1` por aba; no mobile, os resumos viraram faixa horizontal e a primeira oportunidade/CTA aparecem na primeira dobra; busca, drawer, score, tabs e ações receberam nomes/tamanhos acessíveis; a ficha do cliente deixou de exceder a largura do viewport; o drawer de filtros mantém as ações visíveis; labels dos formulários passaram a apontar para seus controles; a falha de persistência do retorno WhatsApp preserva o modal e mostra recuperação; campanhas ficaram recolhidas como fluxo secundário; labels de compatibilidade foram corrigidos; transições de layout do shell foram removidas. Validação browser autenticada em `390×844` e `1440×900`: `overflow=0`, `h1=Mentor Comercial`, busca nomeada e CTA mobile em `top=689`. Detector Impeccable: limpo. Contratos focados: `16 pass`; `npm run lint`, `npm test` (`4139 pass / 0 fail`), build Vite e Graphify concluídos. `agent-browser` autenticado passou em desktop/mobile com `summary.status=passed`, sem erros JS e auditoria a11y com `0` violações; evidências em `visual-evidence/agent-browser/carteira-clientes-impeccable-final-*`.
 
 ### File List
 
@@ -165,6 +167,13 @@ Claude Code (Sonnet 5), continuando trabalho iniciado em sessão anterior via Co
 - `src/components/carteira/FichaClienteSheet.jsx`
 - `src/components/carteira/NovoClienteModal.jsx`
 - `src/components/carteira/WhatsAppRoteiro.jsx`
+- `src/components/carteira/CarteiraAtivaTab.jsx`
+- `src/components/carteira/PlanoAtaqueTab.jsx`
+- `src/components/carteira/RetornoWhatsAppModal.jsx`
+- `src/components/carteira/VeiculosChegaram.jsx`
+- `src/components/NotificationBellButton.tsx`
+- `src/components/MxSidebarShell.tsx`
+- `src/design-system/sidebar/tokens.ts`
 - `src/features/carteira-clientes/components/carteira-source-parity.test.ts`
 - `src/features/carteira-clientes/components/carteira-rendered-parity.test.tsx`
 - `src/features/carteira-clientes/components/carteira-resilience.test.tsx`

@@ -89,7 +89,7 @@ export function useStrategicPlanController(options: {
     storeId,
     year,
     userId: actor.id,
-    canManageCycle: capabilities.canEditTargets,
+    canManageCycle: capabilities.canManageStrategicCycle,
     series,
   })
 

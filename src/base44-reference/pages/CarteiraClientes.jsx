@@ -10,6 +10,7 @@ import ProximaOportunidadeModal, { MODO_ATAQUE_ACEITO_KEY } from "@/components/c
 import RetornoWhatsAppModal from "@/components/carteira/RetornoWhatsAppModal";
 import ModoAtaque from "@/components/carteira/ModoAtaque";
 import { calcularPrioridade, resultadoParaSituacao } from "@/components/carteira/carteiraUtils";
+import { toast } from "@/lib/toast";
 
 // Retorna a próxima oportunidade da fila excluindo o cliente atual
 function proximaOportunidadeDaFila(clientes, clienteAtualId) {
@@ -47,6 +48,7 @@ export default function CarteiraClientes() {
   const [retornoWaOpen, setRetornoWaOpen] = useState(false);
   const [retornoWaCliente, setRetornoWaCliente] = useState(null);
   const [retornoWaResultado, setRetornoWaResultado] = useState("");
+  const [retornoWaSaving, setRetornoWaSaving] = useState(false);
   const visibilityTimerRef = useRef(null);
 
   // Controle de auto-expansão do WhatsAppRoteiro após retorno do WhatsApp via Script IA
@@ -122,7 +124,7 @@ export default function CarteiraClientes() {
 
     setRetornoWaResultado(resultadoLabel);
     if (!retornoWaCliente) return;
-    sessionStorage.removeItem(WA_KEY);
+    setRetornoWaSaving(true);
 
     const RESULTADO_MAP = {
       "Executado": "Atendeu", "Não atendeu": "Não atendeu", "Não respondeu": "Não respondeu",
@@ -181,15 +183,19 @@ export default function CarteiraClientes() {
     let persistido;
     try {
       persistido = await base44.entities.CarteiraCliente.update(retornoWaCliente.id, update);
-    } catch {
-      setRetornoWaOpen(false);
-      setRetornoWaCliente(null);
+    } catch (cause) {
+      toast.error("Não foi possível registrar o resultado.", {
+        description: cause instanceof Error ? cause.message : "Seus dados foram preservados. Confira a conexão e tente novamente.",
+      });
+      setRetornoWaSaving(false);
       return;
     }
 
     const atualizado = persistido || { ...retornoWaCliente, ...update };
     const novosClientes = clientes.map(c => c.id === atualizado.id ? atualizado : c);
     setClientes(novosClientes);
+    sessionStorage.removeItem(WA_KEY);
+    setRetornoWaSaving(false);
     setRetornoWaOpen(false);
     setRetornoWaCliente(null);
 
@@ -329,16 +335,17 @@ export default function CarteiraClientes() {
   }
 
   return (
-    <div className="w-full min-w-0 space-y-6 bg-surface-alt">
+    <div className="w-full min-w-0 space-y-3 bg-surface-alt sm:space-y-6">
 
         {aba !== "execucao" && (
-          <div className="flex gap-1 bg-white border border-slate-100 rounded-2xl p-1 w-fit shadow-sm">
+          <div className="flex w-fit gap-1 rounded-2xl border border-border-subtle bg-white p-1 shadow-sm">
             {[
               { id: "carteira", label: "Carteira Ativa" },
               { id: "plano", label: "Plano de Ataque" },
             ].map(t => (
               <button key={t.id} onClick={() => setAba(t.id)}
-                className={`px-5 py-2 rounded-xl text-sm font-bold transition-all ${aba === t.id ? "bg-[#005BFF] text-white shadow-sm" : "text-slate-500 hover:text-[#031B3D]"}`}>
+                aria-pressed={aba === t.id}
+                className={`min-h-11 rounded-xl px-4 py-2 text-sm font-bold transition-colors sm:px-5 ${aba === t.id ? "bg-status-info text-white shadow-sm" : "text-muted-foreground hover:bg-surface-alt hover:text-mx-navy"}`}>
                 {t.label}
               </button>
             ))}
@@ -405,8 +412,9 @@ export default function CarteiraClientes() {
           open={retornoWaOpen}
           cliente={retornoWaCliente}
           resultado={retornoWaResultado}
+          saving={retornoWaSaving}
           onResultado={handleRetornoWaConfirmar}
-          onIgnorar={() => { setRetornoWaOpen(false); sessionStorage.removeItem(WA_KEY); }}
+          onIgnorar={() => { if (!retornoWaSaving) { setRetornoWaOpen(false); sessionStorage.removeItem(WA_KEY); } }}
         />
 
         {/* Próxima oportunidade (fluxo contínuo) */}

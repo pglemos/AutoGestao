@@ -28,7 +28,7 @@ const COR_MAP = {
 
 const MODALIDADES = ["Visita na loja", "Atendimento externo", "Videochamada"];
 
-export default function RetornoWhatsAppModal({ open, cliente, resultado, onResultado, onIgnorar }) {
+export default function RetornoWhatsAppModal({ open, cliente, resultado, saving = false, onResultado, onIgnorar }) {
   const [selecionado, setSelecionado] = useState("");
   const [emAgendamento, setEmAgendamento] = useState(false);
   const [dataHora, setDataHora] = useState("");
@@ -51,12 +51,12 @@ export default function RetornoWhatsAppModal({ open, cliente, resultado, onResul
       setSelecionado(label);
       setEmAgendamento(true);
     } else {
-      onResultado(label);
+      if (!saving) onResultado(label);
     }
   }
 
   function handleConfirmarAgendamento() {
-    if (!dataHora) return;
+    if (!dataHora || saving) return;
     onResultado({
       resultado: selecionado,
       dataVisita: dataHora,
@@ -66,7 +66,7 @@ export default function RetornoWhatsAppModal({ open, cliente, resultado, onResul
   }
 
   return (
-    <Dialog open={open} onOpenChange={v => { if (!v) onIgnorar(); }}>
+    <Dialog open={open} onOpenChange={v => { if (!v && !saving) onIgnorar(); }}>
       <DialogContent className="max-w-sm rounded-2xl">
         <DialogHeader>
           <div className="flex items-center gap-2 mb-1">
@@ -94,7 +94,8 @@ export default function RetornoWhatsAppModal({ open, cliente, resultado, onResul
                   <button
                     key={r.label}
                     onClick={() => handleCardClick(r.label)}
-                    className={`flex flex-col items-center gap-1 px-2 py-3 rounded-2xl border-2 transition-all ${
+                    disabled={saving}
+                    className={`flex min-h-11 flex-col items-center gap-1 px-2 py-3 rounded-2xl border-2 transition-colors disabled:cursor-wait disabled:opacity-60 ${
                       isSel ? cores.sel : cores.base
                     }`}
                   >
@@ -108,7 +109,8 @@ export default function RetornoWhatsAppModal({ open, cliente, resultado, onResul
             <Button
               variant="ghost"
               onClick={onIgnorar}
-              className="w-full rounded-xl text-muted-foreground text-xs mt-1"
+              disabled={saving}
+              className="min-h-11 w-full rounded-xl text-muted-foreground text-xs mt-1"
             >
               Ignorar
             </Button>
@@ -116,25 +118,29 @@ export default function RetornoWhatsAppModal({ open, cliente, resultado, onResul
         ) : (
           <div className="space-y-3.5 mt-1">
             <div>
-              <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">
+              <label htmlFor="retorno-data-agendamento" className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">
                 Data e Hora do Agendamento *
               </label>
               <input
+                id="retorno-data-agendamento"
                 type="datetime-local"
                 value={dataHora}
                 onChange={e => setDataHora(e.target.value)}
-                className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-status-info font-medium"
+                disabled={saving}
+                className="w-full min-h-11 rounded-xl border border-input bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-status-info/40 font-medium"
               />
             </div>
 
             <div>
-              <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">
+              <label htmlFor="retorno-modalidade" className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">
                 Modalidade *
               </label>
               <select
+                id="retorno-modalidade"
                 value={modalidade}
                 onChange={e => setModalidade(e.target.value)}
-                className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm"
+                disabled={saving}
+                className="w-full min-h-11 rounded-xl border border-input bg-white px-3 text-sm"
               >
                 {MODALIDADES.map(m => (
                   <option key={m} value={m}>{m}</option>
@@ -143,15 +149,17 @@ export default function RetornoWhatsAppModal({ open, cliente, resultado, onResul
             </div>
 
             <div>
-              <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">
+              <label htmlFor="retorno-veiculo" className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">
                 Veículo de Interesse
               </label>
               <input
+                id="retorno-veiculo"
                 type="text"
                 value={veiculo}
                 onChange={e => setVeiculo(e.target.value.toUpperCase())}
                 placeholder="Ex: HB20 1.0 COMFORT"
-                className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm font-medium"
+                disabled={saving}
+                className="w-full min-h-11 rounded-xl border border-input bg-white px-3 text-sm font-medium"
               />
             </div>
 
@@ -159,16 +167,17 @@ export default function RetornoWhatsAppModal({ open, cliente, resultado, onResul
               <Button
                 variant="outline"
                 onClick={() => setEmAgendamento(false)}
-                className="flex-1 rounded-xl text-xs"
+                disabled={saving}
+                className="min-h-11 flex-1 rounded-xl text-xs"
               >
                 <ArrowLeft className="w-3.5 h-3.5 mr-1" /> Voltar
               </Button>
               <Button
                 onClick={handleConfirmarAgendamento}
-                disabled={!dataHora}
-                className="flex-1 rounded-xl bg-status-info hover:bg-status-info text-white text-xs font-bold"
+                disabled={!dataHora || saving}
+                className="min-h-11 flex-1 rounded-xl bg-status-info hover:bg-status-info text-white text-xs font-bold"
               >
-                Confirmar
+                {saving ? "Salvando..." : "Confirmar"}
               </Button>
             </div>
           </div>

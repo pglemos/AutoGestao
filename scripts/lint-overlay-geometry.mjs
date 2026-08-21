@@ -51,7 +51,6 @@ const PRIMITIVE_FILES = new Set([
  */
 const LEGACY_OVERLAY_ALLOWLIST = [
   'components/carteira/AlterarProximoPasso.jsx',
-  'components/carteira/CarteiraAtivaTab.jsx',
   'components/carteira/FichaClienteSheet.jsx',
   'components/carteira/NovoClienteModal.jsx',
   'components/carteira/VeiculosChegaram.jsx',
@@ -114,7 +113,6 @@ const LEGACY_OVERLAY_ALLOWLIST = [
  */
 const LEGACY_OVERLAY_BASELINE = {
   'components/carteira/AlterarProximoPasso.jsx': { 'undeclared-overlay-scroll': 1, 'raw-overlay-max-size': 1 },
-  'components/carteira/CarteiraAtivaTab.jsx': { 'custom-fixed-overlay': 1 },
   'components/carteira/FichaClienteSheet.jsx': { 'undeclared-overlay-scroll': 1, 'raw-overlay-max-size': 1 },
   'components/carteira/NovoClienteModal.jsx': { 'undeclared-overlay-scroll': 1, 'raw-overlay-max-size': 1 },
   'components/carteira/VeiculosChegaram.jsx': { 'custom-fixed-overlay': 1 },

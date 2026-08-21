@@ -207,7 +207,7 @@ export type PlanningHistoryRow = {
 
 export async function fetchStorePlanningValues(lojaId: string, year: number): Promise<{ rows: StorePlanningRow[]; error: string | null }> {
   const { data, error } = await supabase
-    .from('valores_indicadores_planejamento')
+    .from('valores_indicadores_planejamento_vigentes')
     .select('id, loja_id, indicator_code, year, month, meta, realizado, ano_anterior')
     .eq('loja_id', lojaId)
     .eq('year', year)

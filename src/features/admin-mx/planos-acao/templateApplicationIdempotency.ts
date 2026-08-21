@@ -74,7 +74,13 @@ export function buildTemplateApplicationRows(input: {
   requestId: string
   userId: string
   appliedAt: Date
+  responsibleId?: string | null
+  deadlineDays?: number | null
+  indicator?: string | null
 }) {
+  const deadline = input.deadlineDays && input.deadlineDays > 0
+    ? resolveItemDueDate(input.appliedAt, input.deadlineDays)
+    : null
   const rows = []
   for (const storeId of input.storeIds) {
     for (const item of input.items) {
@@ -82,17 +88,18 @@ export function buildTemplateApplicationRows(input: {
         scope_type: 'store' as const,
         scope_id: storeId,
         departamento: item.departamento || 'Geral',
-        indicador: item.indicador || 'Não definido',
+        indicador: input.indicator || item.indicador || 'Não definido',
         problema: item.problema,
         acao: item.acao,
         como: item.como || null,
-        prazo: resolveItemDueDate(input.appliedAt, item.prazo_dias),
+        prazo: deadline || resolveItemDueDate(input.appliedAt, item.prazo_dias),
         prioridade: item.prioridade,
         origem: 'consultor' as const,
         origem_ref_id: input.versionId,
         origem_ref_table: 'planos_acao_template_versoes',
         evidence_required: item.evidencia_requerida,
         created_by: input.userId,
+        responsavel_id: input.responsibleId || null,
         transition_metadata: {
           template_application_request_id: input.requestId,
           template_item_id: item.id,
@@ -123,6 +130,21 @@ export async function resolveApplicationTargets(
   return { units: actives, storeIds: actives.map(unit => unit.id), clientId: client.clientId }
 }
 
+/** Resolve diretamente o cliente escolhido no wizard, sem aceitar loja de outro cliente. */
+export async function resolveClientApplicationTargets(
+  clientId: string,
+): Promise<{ units: ClientUnit[]; storeIds: string[]; clientId: string; error: string | null }> {
+  const result = await fetchClientUnits(clientId)
+  if (result.error) return { units: [], storeIds: [], clientId, error: result.error }
+
+  const units = activeUnits(result.units)
+  if (!units.length) {
+    return { units: [], storeIds: [], clientId, error: 'O cliente não possui matriz ou filial ativa vinculada.' }
+  }
+
+  return { units, storeIds: units.map(unit => unit.id), clientId, error: null }
+}
+
 /**
  * Materializa uma versão publicada de Plano Padrão com idempotência por
  * requestId. O banco possui índice UNIQUE parcial por request/item; um retry
@@ -135,6 +157,9 @@ export async function applyTemplateToStoresIdempotent(input: {
   userId: string
   requestId: string
   appliedAt?: Date
+  responsibleId?: string | null
+  deadlineDays?: number | null
+  indicator?: string | null
 }): Promise<{ error: string | null; created: number; replayed: boolean }> {
   if (input.storeIds.length === 0) {
     return { error: 'Nenhuma unidade de destino para aplicar.', created: 0, replayed: false }
@@ -154,6 +179,9 @@ export async function applyTemplateToStoresIdempotent(input: {
     requestId: input.requestId,
     userId: input.userId,
     appliedAt: input.appliedAt ?? new Date(),
+    responsibleId: input.responsibleId,
+    deadlineDays: input.deadlineDays,
+    indicator: input.indicator,
   })
 
   const { error } = await supabase.from('planos_acao').insert(rows)

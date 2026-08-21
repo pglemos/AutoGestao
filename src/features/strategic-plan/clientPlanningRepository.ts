@@ -6,7 +6,7 @@
 
 import { supabase } from '@/lib/supabase'
 import { buildClientUnits, type ClientUnit } from './clientUnits'
-import { decideProductPackage, type ProductPackageResolution } from './clientProductPackage'
+import { decideProductPackage, productPackageDataError, type ProductPackageResolution } from './clientProductPackage'
 import type { PlanningValueRow } from './clientPlanningConsolidation'
 
 /** Unidades ativas e encerradas de um cliente, matriz primeiro. */
@@ -74,32 +74,39 @@ export async function fetchClientProductPackage(clientId: string): Promise<Produ
     .eq('id', clientId)
     .maybeSingle()
 
-  if (clientError || !client?.program_template_key) {
+  if (clientError) return productPackageDataError(clientError.message)
+  if (!client?.program_template_key) {
     return decideProductPackage({ programKey: null, product: null, packageVersion: null, items: [] })
   }
 
   const programKey = client.program_template_key
 
-  const { data: product } = await supabase
+  const { data: product, error: productError } = await supabase
     .from('programas_visita_consultoria')
     .select('program_key, name, status, usa_plano_estrategico, indicator_package_version_id')
     .eq('program_key', programKey)
     .maybeSingle()
 
+  if (productError) return productPackageDataError(productError.message)
+
   if (!product?.indicator_package_version_id) {
     return decideProductPackage({ programKey, product: product ?? null, packageVersion: null, items: [] })
   }
 
-  const { data: packageVersion } = await supabase
+  const { data: packageVersion, error: packageVersionError } = await supabase
     .from('pacotes_indicadores_versoes')
     .select('id, nome, status, versao, total_indicadores')
     .eq('id', product.indicator_package_version_id)
     .maybeSingle()
 
-  const { data: items } = await supabase
+  if (packageVersionError) return productPackageDataError(packageVersionError.message, product)
+
+  const { data: items, error: itemsError } = await supabase
     .from('pacotes_indicadores_itens')
-    .select('id, version_id, metric_key, label_snapshot, area_snapshot, input_mode_snapshot, ordem_snapshot, is_required, inclusion_reason')
+    .select('id, version_id, metric_key, label_snapshot, area_snapshot, input_mode_snapshot, ordem_snapshot, is_required, inclusion_reason, unit_entry_mode_snapshot, unit_rollup_method_snapshot, weight_indicator_code_snapshot')
     .eq('version_id', product.indicator_package_version_id)
+
+  if (itemsError) return productPackageDataError(itemsError.message, product)
 
   return decideProductPackage({
     programKey,
@@ -117,7 +124,7 @@ export async function fetchUnitsPlanningValues(
   if (unitIds.length === 0) return { rows: [], error: null }
 
   const { data, error } = await supabase
-    .from('valores_indicadores_planejamento')
+    .from('valores_indicadores_planejamento_vigentes')
     .select('loja_id, indicator_code, year, month, meta, realizado, ano_anterior')
     .in('loja_id', unitIds)
     .eq('year', year)

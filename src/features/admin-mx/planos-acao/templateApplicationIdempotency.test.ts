@@ -60,4 +60,18 @@ describe('buildTemplateApplicationRows', () => {
   test('sem unidades, nada é materializado', () => {
     expect(buildTemplateApplicationRows({ ...base, storeIds: [] })).toEqual([])
   })
+
+  test('responsável, indicador e prazo escolhidos no wizard valem em todas as unidades', () => {
+    const rows = buildTemplateApplicationRows({
+      ...base,
+      storeIds: ['matriz', 'filialA'],
+      responsibleId: 'consultor-1',
+      indicator: 'Conversão de vendas',
+      deadlineDays: 45,
+    })
+
+    expect(rows.every(row => row.responsavel_id === 'consultor-1')).toBe(true)
+    expect(rows.every(row => row.indicador === 'Conversão de vendas')).toBe(true)
+    expect(new Set(rows.map(row => row.prazo))).toEqual(new Set(['2026-04-15']))
+  })
 })

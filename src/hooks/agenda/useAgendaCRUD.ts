@@ -1,9 +1,16 @@
 import { useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 import { isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
-import { isPmrSchedulableVisitNumber, PMR_FOLLOW_UP_VISIT } from '@/lib/consultoria/pmr-visit-rules'
+import {
+  getPmrVisitDisplayLabel,
+  isPmrSchedulableVisitNumber,
+  nextPmrVisitNumber,
+  pmrVisitRangeMessage,
+  resolveProgramTotalVisits,
+} from '@/lib/consultoria/pmr-visit-rules'
 import { getCentralSyncError, syncScheduleEventToGoogle, syncVisitToGoogle } from './googleSync'
 import type {
+  AgendaClient,
   AgendaVisit,
   CreateVisitInput,
   ScheduleEventInput,
@@ -12,6 +19,9 @@ import type {
 
 export type UseAgendaCRUDInput = {
   visits: AgendaVisit[]
+  clients: AgendaClient[]
+  /** `program_key` → total de visitas contratadas, do repositório de eventos. */
+  programTotalVisits: Record<string, number>
   refetch: () => Promise<void>
   canViewAllAgendas: boolean
 }
@@ -25,10 +35,8 @@ export type UseAgendaCRUDReturn = {
   updateScheduleEvent: (eventId: string, input: ScheduleEventInput) => Promise<{ error: string | null }>
   deleteScheduleEvent: (eventId: string) => Promise<{ error: string | null }>
   getNextVisitNumber: (clientId: string) => number
-}
-
-function validPmrVisitNumber(visitNumber: number) {
-  return isPmrSchedulableVisitNumber(visitNumber)
+  /** Rótulo de exibição ("Visita 8/12", "Acompanhamento Mensal") já resolvido pelo programa do cliente. */
+  getVisitLabel: (clientId: string, visitNumber: number) => string
 }
 
 /**
@@ -37,17 +45,25 @@ function validPmrVisitNumber(visitNumber: number) {
  */
 export function useAgendaCRUD({
   visits,
+  clients,
+  programTotalVisits,
   refetch,
   canViewAllAgendas,
 }: UseAgendaCRUDInput): UseAgendaCRUDReturn {
   const { supabaseUser, role } = useAuth()
 
+  const totalVisitsForClient = useCallback((clientId: string) => {
+    const client = clients.find((c) => c.id === clientId)
+    return resolveProgramTotalVisits(client?.program_template_key, programTotalVisits)
+  }, [clients, programTotalVisits])
+
   const createVisit = useCallback(async (input: CreateVisitInput) => {
     if (!supabaseUser || !isPerfilInternoMx(role)) {
       return { error: 'Apenas perfis MX podem agendar visitas.' }
     }
-    if (!validPmrVisitNumber(input.visit_number)) {
-      return { error: 'O PMR trabalha com visitas de 1 a 7 e acompanhamento mensal.' }
+    const totalVisits = totalVisitsForClient(input.client_id)
+    if (!isPmrSchedulableVisitNumber(input.visit_number, totalVisits)) {
+      return { error: pmrVisitRangeMessage(totalVisits) }
     }
 
     const consultantId = canViewAllAgendas ? input.consultant_id : supabaseUser.id
@@ -120,7 +136,7 @@ export function useAgendaCRUD({
     }
     await refetch()
     return { error: null }
-  }, [supabaseUser, role, refetch, canViewAllAgendas])
+  }, [supabaseUser, role, refetch, canViewAllAgendas, totalVisitsForClient])
 
   const updateVisitStatus = useCallback(async (visitId: string, status: string) => {
     if (!supabaseUser || !isPerfilInternoMx(role)) {
@@ -144,8 +160,9 @@ export function useAgendaCRUD({
     if (!supabaseUser || !isPerfilInternoMx(role)) {
       return { error: 'Apenas perfis MX podem editar visitas.' }
     }
-    if (!validPmrVisitNumber(input.visit_number)) {
-      return { error: 'O PMR trabalha com visitas de 1 a 7 e acompanhamento mensal.' }
+    const totalVisits = totalVisitsForClient(input.client_id)
+    if (!isPmrSchedulableVisitNumber(input.visit_number, totalVisits)) {
+      return { error: pmrVisitRangeMessage(totalVisits) }
     }
 
     const consultantId = canViewAllAgendas ? input.consultant_id : supabaseUser.id
@@ -175,7 +192,7 @@ export function useAgendaCRUD({
     const syncError = getCentralSyncError(syncResult)
     await refetch()
     return { error: syncError }
-  }, [supabaseUser, role, refetch, canViewAllAgendas])
+  }, [supabaseUser, role, refetch, canViewAllAgendas, totalVisitsForClient])
 
   const deleteVisit = useCallback(async (visitId: string) => {
     if (!supabaseUser || !isPerfilInternoMx(role)) {
@@ -281,8 +298,12 @@ export function useAgendaCRUD({
   const getNextVisitNumber = useCallback((clientId: string) => {
     const clientVisits = visits.filter((v) => v.client_id === clientId)
     const maxNum = clientVisits.reduce((max, v) => Math.max(max, v.visit_number), 0)
-    return Math.min(maxNum + 1, PMR_FOLLOW_UP_VISIT)
-  }, [visits])
+    return nextPmrVisitNumber(maxNum, totalVisitsForClient(clientId))
+  }, [visits, totalVisitsForClient])
+
+  const getVisitLabel = useCallback((clientId: string, visitNumber: number) => (
+    getPmrVisitDisplayLabel(visitNumber, totalVisitsForClient(clientId))
+  ), [totalVisitsForClient])
 
   return {
     createVisit,
@@ -293,5 +314,6 @@ export function useAgendaCRUD({
     updateScheduleEvent,
     deleteScheduleEvent,
     getNextVisitNumber,
+    getVisitLabel,
   }
 }

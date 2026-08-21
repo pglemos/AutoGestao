@@ -18,6 +18,7 @@ export type PlanningActor = {
 export type PlanningCapabilities = {
   scope: 'global' | 'store' | 'self'
   canEditTargets: boolean
+  canManageStrategicCycle: boolean
   canCreateActions: boolean
   canDeleteActions: boolean
   canReviewActions: boolean

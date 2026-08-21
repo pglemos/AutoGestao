@@ -2,11 +2,14 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { toast } from '@/lib/toast'
 import {
+  archiveTemplate,
+  createNewTemplateVersion,
   emptyTemplateDraft,
   fetchActionPlanTemplates,
   fetchTemplateItems,
   publishTemplateVersion,
   saveTemplateDraft,
+  setTemplateActive,
   type ActionPlanTemplate,
   type TemplateDraft,
 } from './actionPlanTemplates'
@@ -96,6 +99,45 @@ export function useActionPlanTemplatesController() {
     }
     toast.success(`Versão ${version.versao} publicada.`)
     await refetch()
+  }
+
+  const createVersion = async (template: ActionPlanTemplate) => {
+    if (!supabaseUser || submitting) return
+    setSubmitting(true)
+    try {
+      const result = await createNewTemplateVersion({ templateId: template.id, userId: supabaseUser.id })
+      if (result.error) return toast.error(result.error)
+      toast.success(result.created ? 'Nova versão criada como rascunho.' : 'O template já possui um rascunho aberto.')
+      await refetch()
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const toggleActive = async (template: ActionPlanTemplate) => {
+    if (submitting) return
+    setSubmitting(true)
+    try {
+      const result = await setTemplateActive(template.id, !template.active)
+      if (result.error) return toast.error(result.error)
+      toast.success(template.active ? 'Template desativado.' : 'Template reativado.')
+      await refetch()
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const archive = async (template: ActionPlanTemplate) => {
+    if (submitting) return
+    setSubmitting(true)
+    try {
+      const result = await archiveTemplate(template.id)
+      if (result.error) return toast.error(result.error)
+      toast.success('Template arquivado. As aplicações existentes foram preservadas.')
+      await refetch()
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const getApplicationRequestId = (versionId: string, storeId: string) => {
@@ -192,6 +234,9 @@ export function useActionPlanTemplatesController() {
     openEdit,
     submit,
     publish,
+    createVersion,
+    toggleActive,
+    archive,
     applying,
     setApplying,
     applyStoreId,

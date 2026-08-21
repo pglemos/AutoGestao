@@ -8,6 +8,7 @@ describe('resolvePlanningCapabilities', () => {
     expect(resolvePlanningCapabilities(role)).toEqual({
       scope: 'global',
       canEditTargets: true,
+      canManageStrategicCycle: true,
       canCreateActions: true,
       canDeleteActions: true,
       canReviewActions: true,

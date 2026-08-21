@@ -37,7 +37,8 @@ export function templateFiltersActive(filters: TemplateFilterState): boolean {
 }
 
 /** Status derivado de um template: versão publicada / rascunho / inativo. */
-export function deriveTemplateStatus(template: ActionPlanTemplate): 'publicada' | 'rascunho' | 'inativo' {
+export function deriveTemplateStatus(template: ActionPlanTemplate): 'publicada' | 'rascunho' | 'inativo' | 'arquivado' {
+  if (template.versions.length > 0 && template.versions.every(version => version.status === 'arquivada')) return 'arquivado'
   if (!template.active) return 'inativo'
   if (template.versions.some(version => version.status === 'publicada')) return 'publicada'
   return 'rascunho'
@@ -64,7 +65,13 @@ export function templateMatchesFilters(template: ActionPlanTemplate, filters: Te
   }
   if (filters.status) {
     const actual = deriveTemplateStatus(template)
-    const wanted = filters.status === 'publicada' ? 'publicada' : filters.status === 'rascunho' ? 'rascunho' : 'inativo'
+    const wanted = filters.status === 'publicada'
+      ? 'publicada'
+      : filters.status === 'rascunho'
+        ? 'rascunho'
+        : filters.status === 'arquivado'
+          ? 'arquivado'
+          : 'inativo'
     if (actual !== wanted) return false
   }
   if (filters.comVersaoPublicada) {

@@ -6,9 +6,9 @@
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
 - Tabelas referenciadas pelo runtime: **174**
-- RPCs referenciadas pelo runtime: **89**
+- RPCs referenciadas pelo runtime: **97**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **376**
+- Pares tabela/operação encontrados: **374**
 
 ## Rotas
 
@@ -248,14 +248,14 @@
 | `pdis` | 4 |
 | `perfil_consultor_mx` | 4 |
 | `planejamentos_estrategicos` | 1 |
-| `planos_acao` | 11 |
-| `planos_acao_template_itens` | 3 |
-| `planos_acao_template_versoes` | 4 |
+| `planos_acao` | 10 |
+| `planos_acao_template_itens` | 4 |
+| `planos_acao_template_versoes` | 5 |
 | `planos_acao_templates` | 3 |
 | `posicionamento_empresa` | 1 |
 | `pre_cadastros_loja` | 2 |
 | `produtos_digitais` | 2 |
-| `programas_visita_consultoria` | 9 |
+| `programas_visita_consultoria` | 10 |
 | `progresso_etapa_trilha` | 1 |
 | `progresso_treinamentos` | 3 |
 | `prospecting_schedule` | 3 |
@@ -299,7 +299,7 @@
 | `universidade_trilhas` | 1 |
 | `user_roles` | 1 |
 | `usuarios` | 22 |
-| `valores_indicadores_planejamento` | 3 |
+| `valores_indicadores_planejamento_vigentes` | 3 |
 | `valores_parametros_consultoria` | 3 |
 | `vehicle_model_catalog` | 1 |
 | `veiculos_estoque` | 4 |
@@ -362,9 +362,7 @@
 | `catalogo_metricas_consultoria:upsert` | 1 |
 | `central_execucao_aberturas:select` | 1 |
 | `central_execucao_aberturas:upsert` | 2 |
-| `ciclos_plano_estrategico:insert` | 1 |
 | `ciclos_plano_estrategico:select` | 1 |
-| `ciclos_plano_estrategico:update` | 1 |
 | `clientes_consultoria:delete` | 1 |
 | `clientes_consultoria:insert` | 4 |
 | `clientes_consultoria:select` | 27 |
@@ -562,17 +560,17 @@
 | `planejamentos_estrategicos:select` | 1 |
 | `planos_acao_template_itens:delete` | 1 |
 | `planos_acao_template_itens:insert` | 3 |
-| `planos_acao_template_itens:select` | 1 |
+| `planos_acao_template_itens:select` | 2 |
 | `planos_acao_template_versoes:insert` | 3 |
-| `planos_acao_template_versoes:select` | 4 |
+| `planos_acao_template_versoes:select` | 5 |
 | `planos_acao_template_versoes:update` | 1 |
 | `planos_acao_templates:insert` | 3 |
 | `planos_acao_templates:select` | 3 |
 | `planos_acao_templates:update` | 1 |
 | `planos_acao:delete` | 1 |
-| `planos_acao:insert` | 4 |
+| `planos_acao:insert` | 3 |
 | `planos_acao:select` | 10 |
-| `planos_acao:update` | 2 |
+| `planos_acao:update` | 1 |
 | `posicionamento_empresa:select` | 1 |
 | `pre_cadastros_loja:select` | 2 |
 | `produtos_digitais:insert` | 1 |
@@ -580,7 +578,7 @@
 | `produtos_digitais:update` | 1 |
 | `programas_visita_consultoria:delete` | 1 |
 | `programas_visita_consultoria:insert` | 1 |
-| `programas_visita_consultoria:select` | 8 |
+| `programas_visita_consultoria:select` | 9 |
 | `programas_visita_consultoria:update` | 2 |
 | `progresso_etapa_trilha:select` | 1 |
 | `progresso_treinamentos:select` | 3 |
@@ -660,7 +658,7 @@
 | `usuarios:select` | 19 |
 | `usuarios:update` | 6 |
 | `usuarios:upsert` | 1 |
-| `valores_indicadores_planejamento:select` | 3 |
+| `valores_indicadores_planejamento_vigentes:select` | 3 |
 | `valores_parametros_consultoria:select` | 3 |
 | `valores_parametros_consultoria:upsert` | 2 |
 | `vehicle_model_catalog:select` | 1 |
@@ -706,10 +704,11 @@
 | `admin_store_live_overview` | 1 |
 | `admin_update_store` | 1 |
 | `aplicar_regularizacao_fechamento` | 1 |
+| `archive_action_plan_template` | 1 |
 | `atribuir_trilha_maturidade_vendedor` | 1 |
 | `atualizar_etapa_oportunidade_crm` | 1 |
 | `atualizar_plano_acao` | 2 |
-| `atualizar_plano_acao_patch` | 1 |
+| `atualizar_plano_acao_patch` | 2 |
 | `atualizar_status_agendamento_crm` | 1 |
 | `begin_password_change` | 2 |
 | `cancelar_regularizacao_fechamento` | 1 |
@@ -730,6 +729,7 @@
 | `consultar_liberacao_por_token` | 1 |
 | `consultor_ia_sugerir_acao` | 1 |
 | `contar_vendedores_ativos_loja` | 2 |
+| `convert_action_plan_suggestion` | 1 |
 | `create_pdi_session_bundle` | 1 |
 | `criar_agendamento_crm` | 1 |
 | `criar_oportunidade_crm` | 1 |
@@ -758,8 +758,12 @@
 | `liberar_fechamento_por_token` | 1 |
 | `listar_acoes_cadencia_vendedor` | 1 |
 | `listar_responsaveis_tratativa_loja` | 1 |
+| `open_action_plan_template_revision` | 1 |
+| `operar_ciclo_plano_estrategico` | 1 |
 | `pode_gerir_metas_planejamento` | 1 |
 | `process_import_data` | 1 |
+| `reconcile_action_plan_applications` | 1 |
+| `reconcile_action_plan_template_drafts` | 1 |
 | `record_d1_contact_action` | 1 |
 | `refresh_manager_daily_tasks` | 1 |
 | `registrar_status_acao_cadencia` | 1 |
@@ -776,9 +780,11 @@
 | `submeter_prova_aula` | 1 |
 | `submeter_quiz_treinamento` | 1 |
 | `submit_checkin` | 2 |
+| `toggle_action_plan_checklist_item` | 1 |
 | `update_d1_confirmation` | 1 |
 | `update_my_profile` | 1 |
 | `upsert_funnel_metrics_snapshot` | 1 |
+| `validar_ciclo_plano_estrategico` | 1 |
 | `vendedor_atualizar_pdi_acao` | 1 |
 | `vendedor_atualizar_pdi_acao_status` | 1 |
 | `vendedor_atualizar_pdi_metas` | 1 |

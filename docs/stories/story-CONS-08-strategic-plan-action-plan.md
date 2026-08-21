@@ -24,16 +24,32 @@ para acompanhar execucao do PMR em tempo real.
 - [x] A tela do Dono usa `public.planos_acao` e não fixtures/localStorage como fonte de negócio.
 - [x] Criação, edição, conclusão e progresso usam RPCs com autorização por escopo e auditoria.
 - [x] Central MX/Loja reutiliza o mesmo contrato persistido, preservando leitura por escopo.
-- [ ] Validar o fluxo autenticado em produção para Dono, Gerente, Vendedor, Admin MX, Administrador MX e Consultor MX.
+- [x] Templates podem abrir nova versão a partir da publicada, desativar, reativar e arquivar sem apagar histórico ou aplicações.
+- [x] Biblioteca MX expõe os controles de ciclo de vida por estado, impede aplicação/sugestão de templates inativos e separa templates arquivados nos filtros.
+- [x] Validar o fluxo autenticado em produção para Dono, Gerente, Vendedor, Admin MX, Administrador MX e Consultor MX.
 
 ## Evidências de validação
 
 - [x] `npm run lint` — 0 erros (7 warnings preexistentes fora do escopo).
 - [x] `npm run typecheck` — aprovado.
-- [x] `npm test` — 1402 aprovados, 0 falhas.
+- [x] `npm test` — 4194 aprovados, 0 falhas (697 arquivos).
 - [x] `npm run build` — aprovado.
 - [x] Contrato do Plano de Ação — 4 testes aprovados.
+- [x] Ciclo de templates, board, checklist, reconciliação e conversão — 67 testes focados aprovados; Playwright autenticado do drawer e diagnóstico desktop/mobile sem executar mutações.
+- [x] Detecção e reconciliação de aplicações parciais/duplicadas — 9 testes focados aprovados; detecção por aplicação lógica multiunidade e reconciliação explícita, auditável, sem exclusão de histórico.
+- [x] Conversão de sugestão em plano — RPC transacional, idempotente e protegida por papel interno; elimina plano órfão entre criação e vínculo.
+- [x] Board Admin MX — transições de status e reagendamento usam a RPC autorizada/auditada; coluna Kanban continua derivada de status e prazo.
+- [x] Execução do plano — bloqueio, cancelamento, desbloqueio e reabertura exigem justificativa e usam campos/eventos próprios; correção da data efetiva preserva motivo e histórico.
+- [x] Diagnóstico administrativo — execução explícita, somente leitura, mostra aplicações parciais, rascunhos duplicados e múltiplos request IDs como possíveis duplicidades sem inferir cancelamentos.
+- [x] Reconciliação administrativa — RPCs atômicas com lock, autorização interna, dry-run padrão, seleção explícita, motivo e confirmação; nenhuma exclusão física.
+- [x] Conclusão do plano — checklist pendente bloqueia na UI e na RPC; override exige Administrador Geral/MX, justificativa e metadata server-side auditável.
+- [x] Ciclo do plano estratégico — criação e transições passam por uma RPC autorizada com lock e controle de concorrência; revisão fecha a versão publicada e abre a próxima de forma atômica.
+- [x] Metas do plano estratégico — valores e histórico são versionados por `ciclo_id`; revisão copia o snapshot e planos publicados ficam imutáveis.
+- [x] Prontidão do plano estratégico — pacote, roster, políticas, unidades e doze competências são validados no banco; trigger impede publicação incompleta mesmo fora da UI.
 - [x] Supabase remoto — migrations `20260725190000`, `20260725200000`, `20260725210000`, `20260725220000` e `20260725230000` aplicadas.
+- [x] Supabase remoto — migrations transacionais `20260820203000`, `20260820210000`, `20260820220000`, `20260820230000`, `20260820231000`, `20260820232000`, `20260820233000` e `20260820234000` aplicadas e reconciliadas no histórico remoto.
+- [x] Smoke autenticado local dos seis módulos Admin MX — `/clientes`, `/equipe`, `/produtos`, `/plano-estrategico`, `/plano-acao` e `/consultoria` em `1440×900` e `390×844`, sem overflow, overlay ou erro de página.
+- [x] Smoke autenticado local com Supabase real — Consultor MX selecionou ACERTT e carregou ciclo, 45 indicadores, metas e histórico em desktop `1440×900` e mobile `390×844`, sem overflow e sem erro de runtime.
 - [ ] CodeRabbit — revisão externa indisponível por rate limit do plano; revisão dirigida local realizada.
 - [ ] Smoke autenticado multi-role em produção — pendente de credenciais/sessões reais dos seis perfis.
 
@@ -72,6 +88,55 @@ para acompanhar execucao do PMR em tempo real.
 - `src/features/dashboard-loja/sections/CentralMxCriarPlanoModal.tsx`
 - `src/features/dashboard-loja/sections/CentralMxPersistedPanels.tsx`
 - `src/features/dashboard-loja/sections/CentralMxPlanoSegmentadoPanel.tsx`
+- `src/features/admin-mx/planos-acao/actionPlanTemplates.ts`
+- `src/features/admin-mx/planos-acao/actionPlanTemplates.test.ts`
+- `src/features/admin-mx/planos-acao/TemplateActionsMenu.tsx`
+- `src/features/admin-mx/planos-acao/TemplateActionsMenu.test.ts`
+- `src/features/admin-mx/planos-acao/TemplateFilters.tsx`
+- `src/features/admin-mx/planos-acao/templateFilterLogic.ts`
+- `src/features/admin-mx/planos-acao/templateApplicationIdempotency.ts`
+- `src/features/admin-mx/planos-acao/templateApplicationIdempotency.test.ts`
+- `src/features/admin-mx/planos-acao/actionPlanReconciliation.ts`
+- `src/features/admin-mx/planos-acao/actionPlanReconciliation.test.ts`
+- `src/features/admin-mx/planos-acao/ActionPlanDiagnosticsPanel.tsx`
+- `src/features/admin-mx/planos-acao/ApplicationsTab.tsx`
+- `src/features/admin-mx/planos-acao/actionPlanSuggestions.ts`
+- `src/features/admin-mx/planos-acao/actionPlanBoard.ts`
+- `src/features/admin-mx/planos-acao/actionPlanBoard.test.ts`
+- `src/lib/action-plan-suggestion-conversion-migration.test.ts`
+- `supabase/migrations/20260820203000_convert_action_plan_suggestion_atomic.sql`
+- `src/lib/action-plan-reconciliation-migration.test.ts`
+- `supabase/migrations/20260820210000_action_plan_reconciliation_atomic.sql`
+- `src/lib/action-plan-completion-guard-migration.test.ts`
+- `supabase/migrations/20260820220000_action_plan_completion_guard.sql`
+- `supabase/migrations/20260820230000_strategic_plan_cycle_atomic.sql`
+- `src/lib/strategic-plan-cycle-atomic-migration.test.ts`
+- `supabase/migrations/20260820231000_strategic_plan_values_by_cycle.sql`
+- `src/lib/strategic-plan-values-cycle-migration.test.ts`
+- `supabase/migrations/20260820232000_strategic_plan_publish_readiness.sql`
+- `src/lib/strategic-plan-publish-readiness-migration.test.ts`
+- `supabase/migrations/20260820233000_action_plan_template_lifecycle_atomic.sql`
+- `src/lib/action-plan-template-lifecycle-migration.test.ts`
+- `supabase/migrations/20260820234000_action_plan_checklist_toggle_atomic.sql`
+- `src/lib/action-plan-checklist-toggle-migration.test.ts`
+- `src/features/strategic-plan/planCycle.ts`
+- `src/features/strategic-plan/planCycleRepository.ts`
+- `src/features/strategic-plan/planCycleRepository.test.ts`
+- `src/features/strategic-plan/usePlanCycle.ts`
+- `src/features/strategic-plan/clientPlanningRepository.ts`
+- `src/features/strategic-plan/strategicPlanRepositoryAdapter.ts`
+- `src/features/strategic-plan/clientProductPackage.ts`
+- `src/features/admin-mx/produtos/strategicPlan.ts`
+- `src/features/admin-mx/produtos/strategicPlan.test.ts`
+- `src/features/admin-mx/indicadores/indicatorData.ts`
+- `src/features/planning-workspace/planningCapabilities.ts`
+- `src/features/planning-workspace/planningCapabilities.test.ts`
+- `src/features/admin-mx/planos-acao/StrategicIndicatorActionSelector.tsx`
+- `src/features/admin-mx/planos-acao/useActionPlanTemplates.ts`
+- `src/features/admin-mx/planos-acao/ActionPlanDetailDrawer.tsx`
+- `src/features/admin-mx/AdminPlanosAcaoGlobalPage.tsx`
+- `src/features/admin-mx/hooks/useAdminMxLists.ts`
+- `src/test/action-plan-template-lifecycle.playwright.ts`
 - `src/lib/action-plan-table-parity.test.ts`
 - `src/types/database.generated.ts`
 

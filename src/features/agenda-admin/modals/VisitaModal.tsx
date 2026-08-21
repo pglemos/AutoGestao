@@ -6,7 +6,6 @@ import { Typography } from '@/components/atoms/Typography'
 import { Modal } from '@/components/organisms/Modal'
 import { Select } from '@/components/atoms/Select'
 import { DatePicker } from '@/components/atoms/DatePicker'
-import { getPmrVisitDisplayLabel, PMR_FOLLOW_UP_VISIT } from '@/lib/consultoria/pmr-visit-rules'
 import type { AgendaClient, AgendaConsultant } from '@/hooks/agenda'
 
 export type ScheduleForm = {
@@ -39,6 +38,7 @@ interface VisitaModalProps {
   targetAudienceSelectOptions: string[]
   productSelectOptions: string[]
   getNextVisitNumber: (clientId: string) => number
+  getVisitLabel: (clientId: string, visitNumber: number) => string
 }
 
 export function getSelectableAgendaClients(clients: AgendaClient[]) {
@@ -51,7 +51,7 @@ export function VisitaModal({
   submitting, onSubmit,
   clients, consultants,
   visitReasonSelectOptions, targetAudienceSelectOptions, productSelectOptions,
-  getNextVisitNumber,
+  getNextVisitNumber, getVisitLabel,
 }: VisitaModalProps) {
   const handleSelectClient = (clientId: string) => {
     setScheduleForm((prev) => ({ ...prev, client_id: clientId }))
@@ -59,8 +59,9 @@ export function VisitaModal({
 
   const selectedClientVisitNum = useMemo(() => {
     if (!scheduleForm.client_id) return null
+    if (editingVisitId) return Number(scheduleForm.visit_number) || null
     return getNextVisitNumber(scheduleForm.client_id)
-  }, [scheduleForm.client_id, getNextVisitNumber])
+  }, [editingVisitId, scheduleForm.client_id, scheduleForm.visit_number, getNextVisitNumber])
 
   return (
     <Modal
@@ -88,12 +89,12 @@ export function VisitaModal({
           >
             <option value="">Selecionar cliente...</option>
             {getSelectableAgendaClients(clients).map((c) => (
-              <option key={c.id} value={c.id}>{c.name} (Etapa {c.current_visit_step || 0}/7)</option>
+              <option key={c.id} value={c.id}>{c.name} (Etapa atual: {c.current_visit_step || 0})</option>
             ))}
           </Select>
           {selectedClientVisitNum && (
             <Typography variant="tiny" tone="muted">
-              Será {getPmrVisitDisplayLabel(selectedClientVisitNum).toLowerCase()} deste cliente
+              Será {getVisitLabel(scheduleForm.client_id, selectedClientVisitNum).toLowerCase()} deste cliente
             </Typography>
           )}
         </div>
@@ -106,7 +107,6 @@ export function VisitaModal({
                 id="agenda-visit-number"
                 type="number"
                 min="1"
-                max={PMR_FOLLOW_UP_VISIT}
                 value={scheduleForm.visit_number}
                 onChange={(e) => setScheduleForm((prev) => ({ ...prev, visit_number: e.target.value }))}
               />

@@ -13,7 +13,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { fetchClientOfStore, fetchClientProductPackage } from './clientPlanningRepository'
 import { diffRosterAgainstPackage } from './clientProductPackage'
-import { ensureCycle, fetchCurrentCycle, transitionCycle, type PlanCycle } from './planCycleRepository'
+import {
+  ensureCycle,
+  fetchCurrentCycle,
+  transitionCycle,
+  validateCycleReadiness,
+  type PlanCycle,
+} from './planCycleRepository'
 import {
   validatePlanReadiness,
   readinessSummary,
@@ -33,6 +39,7 @@ export type PlanCycleState = {
    */
   packageAlignment: { missing: string[]; extra: string[]; aligned: boolean; disjoint: boolean } | null
   loading: boolean
+  readinessLoading: boolean
   transitioning: boolean
   error: string | null
   /**
@@ -102,6 +109,8 @@ export function usePlanCycle(input: {
   /** Roster do produto contratado. `null` enquanto não resolvido ou se bloqueado. */
   const [packageIndicatorCodes, setPackageIndicatorCodes] = useState<string[] | null>(null)
   const [cycle, setCycle] = useState<PlanCycle | null>(null)
+  const [serverReadiness, setServerReadiness] = useState<PlanReadiness | null>(null)
+  const [readinessLoading, setReadinessLoading] = useState(false)
   const [loading, setLoading] = useState(false)
   const [transitioning, setTransitioning] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -111,9 +120,13 @@ export function usePlanCycle(input: {
 
   // ─── Carrega cliente + ciclo ───────────────────────────────────────────────
   useEffect(() => {
+    setClientId(null)
+    setCycle(null)
+    setPackageVersionId(null)
+    setPackageIndicatorCodes(null)
+    setServerReadiness(null)
+    setReadinessLoading(false)
     if (!storeId) {
-      setClientId(null)
-      setCycle(null)
       return
     }
 
@@ -140,6 +153,7 @@ export function usePlanCycle(input: {
       // roster contratado, que é contra quem a prontidão precisa ser medida.
       const pkg = await fetchClientProductPackage(cid)
       if (!active) return
+      if (!pkg.ok && pkg.reason === 'ERRO_ACESSO_DADOS') setError(pkg.message)
       setPackageVersionId(pkg.ok ? pkg.resolution.packageVersion.id : null)
       setPackageIndicatorCodes(pkg.ok ? pkg.resolution.indicatorCodes : null)
 
@@ -158,7 +172,7 @@ export function usePlanCycle(input: {
   }, [storeId, year, reloadToken])
 
   // ─── Prontidão — recalculada sempre que series mudam ──────────────────────
-  const readiness = useMemo<PlanReadiness | null>(() => {
+  const localReadiness = useMemo<PlanReadiness | null>(() => {
     if (!storeId || series.length === 0) return null
     const indicatorCodes = series.map(s => s.code)
     const policies = buildPolicies(indicatorCodes)
@@ -170,6 +184,27 @@ export function usePlanCycle(input: {
       metaByUnit,
     })
   }, [storeId, series])
+
+  useEffect(() => {
+    if (!cycle || !canManageCycle) {
+      setServerReadiness(null)
+      setReadinessLoading(false)
+      return
+    }
+    let active = true
+    setServerReadiness(null)
+    setReadinessLoading(true)
+    void (async () => {
+      const result = await validateCycleReadiness(cycle.id)
+      if (!active) return
+      if (result.error) setError(result.error)
+      else setServerReadiness(result.readiness)
+      setReadinessLoading(false)
+    })()
+    return () => { active = false }
+  }, [cycle?.id, cycle?.status, canManageCycle, reloadToken])
+
+  const readiness = cycle && canManageCycle ? serverReadiness : localReadiness
 
   const summary = readiness ? readinessSummary(readiness) : null
 
@@ -212,6 +247,10 @@ export function usePlanCycle(input: {
 
   const publishCycle = useCallback(async () => {
     if (!cycle || !canManageCycle) return
+    if (readinessLoading) {
+      setError('A validação do plano ainda está em andamento. Aguarde e tente novamente.')
+      return
+    }
     if (!readiness?.canPublish) {
       setError('Há pendências que impedem a publicação. Verifique a lista de pendências.')
       return
@@ -222,7 +261,7 @@ export function usePlanCycle(input: {
     if (result.error) setError(result.error)
     else setCycle(result.cycle)
     setTransitioning(false)
-  }, [cycle, canManageCycle, readiness, userId])
+  }, [cycle, canManageCycle, readiness, readinessLoading, userId])
 
   return {
     cycle,
@@ -230,6 +269,7 @@ export function usePlanCycle(input: {
     summary,
     packageAlignment,
     loading,
+    readinessLoading,
     transitioning,
     error,
     clientId,

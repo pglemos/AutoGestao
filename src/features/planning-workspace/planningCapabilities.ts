@@ -3,6 +3,7 @@ import type { PlanningCapabilities, PlanningRole } from './planningWorkspace.typ
 const INTERNAL: PlanningCapabilities = Object.freeze({
   scope: 'global',
   canEditTargets: true,
+  canManageStrategicCycle: true,
   canCreateActions: true,
   canDeleteActions: true,
   canReviewActions: true,
@@ -14,6 +15,7 @@ const INTERNAL: PlanningCapabilities = Object.freeze({
 const OWNER: PlanningCapabilities = Object.freeze({
   scope: 'store',
   canEditTargets: true,
+  canManageStrategicCycle: false,
   canCreateActions: true,
   canDeleteActions: false,
   canReviewActions: true,
@@ -25,6 +27,7 @@ const OWNER: PlanningCapabilities = Object.freeze({
 const MANAGER: PlanningCapabilities = Object.freeze({
   scope: 'store',
   canEditTargets: false,
+  canManageStrategicCycle: false,
   canCreateActions: true,
   canDeleteActions: false,
   canReviewActions: false,
@@ -36,6 +39,7 @@ const MANAGER: PlanningCapabilities = Object.freeze({
 const SELLER: PlanningCapabilities = Object.freeze({
   scope: 'self',
   canEditTargets: false,
+  canManageStrategicCycle: false,
   canCreateActions: false,
   canDeleteActions: false,
   canReviewActions: false,

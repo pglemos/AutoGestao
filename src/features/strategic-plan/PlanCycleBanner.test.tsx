@@ -11,6 +11,7 @@ function mockState(overrides: Partial<PlanCycleState> = {}): PlanCycleState {
     summary: null,
     packageAlignment: null,
     loading: false,
+    readinessLoading: false,
     transitioning: false,
     error: null,
     clientId: 'client-1',

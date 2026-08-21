@@ -57,6 +57,7 @@ export function TemplateFilters(props: {
           <option value="publicada">Publicado</option>
           <option value="rascunho">Rascunho</option>
           <option value="inativo">Inativo</option>
+          <option value="arquivada">Arquivado</option>
         </MxSelect>
 
         <MxSelect aria-label="Filtrar por prioridade dos itens" value={props.filters.prioridade} onChange={onSelectChange('prioridade')}>

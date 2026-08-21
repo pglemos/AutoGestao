@@ -52,6 +52,8 @@ export function useAgendaAdminPage(viewMode?: 'day' | 'week' | 'month' | 'list')
 
   const crud = useAgendaCRUD({
     visits: events.visits,
+    clients: events.clients,
+    programTotalVisits: events.programTotalVisits,
     refetch: events.refetch,
     canViewAllAgendas: events.canViewAllAgendas,
   })
@@ -62,6 +64,7 @@ export function useAgendaAdminPage(viewMode?: 'day' | 'week' | 'month' | 'list')
     visits: filters.filteredVisits,
     scheduleEvents: filters.filteredScheduleEvents,
     clients: events.clients,
+    programTotalVisits: events.programTotalVisits,
     consultants: events.consultants,
     products: events.products,
     canViewAllAgendas: events.canViewAllAgendas,
@@ -92,6 +95,7 @@ export function useAgendaAdminPage(viewMode?: 'day' | 'week' | 'month' | 'list')
     updateScheduleEvent: crud.updateScheduleEvent,
     deleteScheduleEvent: crud.deleteScheduleEvent,
     getNextVisitNumber: crud.getNextVisitNumber,
+    getVisitLabel: crud.getVisitLabel,
   }
 }
 

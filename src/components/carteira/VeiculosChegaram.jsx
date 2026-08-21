@@ -199,7 +199,7 @@ function CardVeiculo({ veiculo, compatíveis, onClick }) {
         <div className="flex items-center gap-1.5">
           <Users className="w-3.5 h-3.5 text-muted-foreground" />
           <span className={`text-xs font-bold ${compatíveis > 0 ? "text-mx-navy" : "text-muted-foreground"}`}>
-            {compatíveis} cliente{compatíveis !== 1 ? "s" : ""} compatível{compatíveis !== 1 ? "s" : ""}
+            {compatíveis} {compatíveis === 1 ? "cliente compatível" : "clientes compatíveis"}
           </span>
         </div>
       </div>
@@ -260,7 +260,7 @@ function AtaqueVeiculo({ veiculo, clientes, catalog, onVoltar, onExecutar, onFic
         </div>
       ) : (
         <div className="space-y-3">
-          <p className="text-xs font-black text-muted-foreground uppercase tracking-wider">{lista.length} cliente{lista.length !== 1 ? "s" : ""} compatível{lista.length !== 1 ? "s" : ""}</p>
+          <p className="text-xs font-black text-muted-foreground uppercase tracking-wider">{lista.length} {lista.length === 1 ? "cliente compatível" : "clientes compatíveis"}</p>
           {lista.map(c => {
             const situacao = c.situacao_atual || c.momento || "—";
             const iniciais = (c.nome || "?").split(" ").slice(0, 2).map(p => p[0]).join("").toUpperCase();
@@ -390,12 +390,12 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-start justify-between gap-4">
-        <div>
+      <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:gap-4">
+        <div className="min-w-0">
           <h2 className="text-lg font-black text-mx-navy">Veículos que chegaram</h2>
           <p className="text-sm text-muted-foreground mt-0.5">Encontre clientes da carteira interessados nos veículos recém-entrados.</p>
         </div>
-        <Button onClick={() => setModalOpen(true)} variant="outline" className="rounded-xl text-sm gap-1.5 border-status-info text-status-info-text hover:bg-status-info-surface whitespace-nowrap">
+        <Button onClick={() => setModalOpen(true)} variant="outline" className="min-h-11 w-full rounded-xl text-sm gap-1.5 border-status-info text-status-info-text hover:bg-status-info-surface whitespace-nowrap sm:w-auto">
           <Plus className="w-4 h-4" /> Registrar veículo
         </Button>
       </div>
@@ -412,7 +412,7 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
                 key={f.id}
                 type="button"
                 onClick={() => setFaixaPrecoAtiva(f.id)}
-                className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all ${
+                className={`min-h-11 px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-colors ${
                   ativo
                     ? "bg-status-info text-white shadow-sm"
                     : "bg-surface-alt text-muted-foreground border border-border-subtle hover:bg-muted"

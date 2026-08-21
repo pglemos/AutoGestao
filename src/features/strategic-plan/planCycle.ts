@@ -46,6 +46,9 @@ export type PlanIssueType =
   | 'PLANO_INCOMPLETO'
   | 'POLITICA_AUSENTE'
   | 'MES_SEM_META'
+  | 'CLIENTE_SEM_MATRIZ'
+  | 'UNIDADES_AUSENTES'
+  | 'PACOTE_INVALIDO'
 
 export type PlanIssueSeverity = 'critico' | 'pendencia'
 

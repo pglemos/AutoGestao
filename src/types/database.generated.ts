@@ -2551,9 +2551,12 @@ export type Database = {
           source_scope: string
           status: string
           target_calculation_mode: string
+          unit_entry_mode: string | null
+          unit_rollup_method: string | null
           updated_at: string
           value_type: string
           visivel_dono: boolean
+          weight_indicator_code: string | null
         }
         Insert: {
           active?: boolean
@@ -2573,9 +2576,12 @@ export type Database = {
           source_scope?: string
           status?: string
           target_calculation_mode?: string
+          unit_entry_mode?: string | null
+          unit_rollup_method?: string | null
           updated_at?: string
           value_type?: string
           visivel_dono?: boolean
+          weight_indicator_code?: string | null
         }
         Update: {
           active?: boolean
@@ -2595,9 +2601,12 @@ export type Database = {
           source_scope?: string
           status?: string
           target_calculation_mode?: string
+          unit_entry_mode?: string | null
+          unit_rollup_method?: string | null
           updated_at?: string
           value_type?: string
           visivel_dono?: boolean
+          weight_indicator_code?: string | null
         }
         Relationships: []
       }
@@ -7304,6 +7313,7 @@ export type Database = {
       historico_valores_indicadores_planejamento: {
         Row: {
           changed_by: string | null
+          ciclo_id: string | null
           created_at: string
           id: string
           indicator_code: string
@@ -7315,6 +7325,7 @@ export type Database = {
         }
         Insert: {
           changed_by?: string | null
+          ciclo_id?: string | null
           created_at?: string
           id?: string
           indicator_code: string
@@ -7326,6 +7337,7 @@ export type Database = {
         }
         Update: {
           changed_by?: string | null
+          ciclo_id?: string | null
           created_at?: string
           id?: string
           indicator_code?: string
@@ -7336,6 +7348,13 @@ export type Database = {
           year?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "historico_valores_indicadores_planejamento_ciclo_id_fkey"
+            columns: ["ciclo_id"]
+            isOneToOne: false
+            referencedRelation: "ciclos_plano_estrategico"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "historico_valores_indicadores_planejamento_changed_by_fkey"
             columns: ["changed_by"]
@@ -10718,7 +10737,10 @@ export type Database = {
           metric_key: string
           ordem_snapshot: number | null
           updated_at: string
+          unit_entry_mode_snapshot: string | null
+          unit_rollup_method_snapshot: string | null
           version_id: string
+          weight_indicator_code_snapshot: string | null
         }
         Insert: {
           area_snapshot?: string | null
@@ -10734,7 +10756,10 @@ export type Database = {
           metric_key: string
           ordem_snapshot?: number | null
           updated_at?: string
+          unit_entry_mode_snapshot?: string | null
+          unit_rollup_method_snapshot?: string | null
           version_id: string
+          weight_indicator_code_snapshot?: string | null
         }
         Update: {
           area_snapshot?: string | null
@@ -10750,7 +10775,10 @@ export type Database = {
           metric_key?: string
           ordem_snapshot?: number | null
           updated_at?: string
+          unit_entry_mode_snapshot?: string | null
+          unit_rollup_method_snapshot?: string | null
           version_id?: string
+          weight_indicator_code_snapshot?: string | null
         }
         Relationships: [
           {
@@ -15991,6 +16019,7 @@ export type Database = {
       valores_indicadores_planejamento: {
         Row: {
           ano_anterior: number | null
+          ciclo_id: string | null
           created_at: string
           created_by: string | null
           id: string
@@ -16006,6 +16035,7 @@ export type Database = {
         }
         Insert: {
           ano_anterior?: number | null
+          ciclo_id?: string | null
           created_at?: string
           created_by?: string | null
           id?: string
@@ -16021,6 +16051,7 @@ export type Database = {
         }
         Update: {
           ano_anterior?: number | null
+          ciclo_id?: string | null
           created_at?: string
           created_by?: string | null
           id?: string
@@ -16035,6 +16066,13 @@ export type Database = {
           year?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "valores_indicadores_planejamento_ciclo_id_fkey"
+            columns: ["ciclo_id"]
+            isOneToOne: false
+            referencedRelation: "ciclos_plano_estrategico"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "valores_indicadores_planejamento_created_by_fkey"
             columns: ["created_by"]
@@ -17077,6 +17115,40 @@ export type Database = {
       }
     }
     Views: {
+      valores_indicadores_planejamento_vigentes: {
+        Row: {
+          ano_anterior: number | null
+          ciclo_id: string | null
+          created_at: string | null
+          created_by: string | null
+          id: string | null
+          indicator_code: string | null
+          loja_id: string | null
+          meta: number | null
+          month: number | null
+          realizado: number | null
+          source: string | null
+          source_ref: Json | null
+          updated_at: string | null
+          year: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "valores_indicadores_planejamento_ciclo_id_fkey"
+            columns: ["ciclo_id"]
+            isOneToOne: false
+            referencedRelation: "ciclos_plano_estrategico"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "valores_indicadores_planejamento_loja_id_fkey"
+            columns: ["loja_id"]
+            isOneToOne: false
+            referencedRelation: "lojas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clientes_oportunidades: {
         Row: {
           canal: Database["public"]["Enums"]["crm_canal"] | null
@@ -17347,9 +17419,47 @@ export type Database = {
         Args: { p_payload: Json; p_store_id: string }
         Returns: Json
       }
+      archive_action_plan_template: {
+        Args: { p_template_id: string }
+        Returns: undefined
+      }
       aplicar_regularizacao_fechamento: {
         Args: { p_request_id: string }
         Returns: Json
+      }
+      convert_action_plan_suggestion: {
+        Args: {
+          p_departamento: string
+          p_indicador: string
+          p_prazo?: string
+          p_suggestion_id: string
+        }
+        Returns: string
+      }
+      reconcile_action_plan_applications: {
+        Args: {
+          p_canonical_request_id: string
+          p_dry_run?: boolean
+          p_duplicate_request_ids: string[]
+          p_reason: string
+          p_store_ids: string[]
+          p_version_id: string
+        }
+        Returns: Json
+      }
+      reconcile_action_plan_template_drafts: {
+        Args: {
+          p_canonical_version_id: string
+          p_dry_run?: boolean
+          p_duplicate_version_ids: string[]
+          p_reason: string
+          p_template_id: string
+        }
+        Returns: Json
+      }
+      open_action_plan_template_revision: {
+        Args: { p_notes?: string; p_template_id: string }
+        Returns: string
       }
       append_audit_log: {
         Args: { p_action: string; p_details?: Json; p_entity: string }
@@ -19362,6 +19472,21 @@ export type Database = {
         Args: { p_history_id: string; p_note?: string }
         Returns: Json
       }
+      validar_ciclo_plano_estrategico: {
+        Args: { p_cycle_id: string }
+        Returns: Json
+      }
+      operar_ciclo_plano_estrategico: {
+        Args: {
+          p_client_id?: string
+          p_cycle_id?: string
+          p_expected_status?: string
+          p_operation: string
+          p_package_version_id?: string
+          p_year?: number
+        }
+        Returns: Database["public"]["Tables"]["ciclos_plano_estrategico"]["Row"]
+      }
       revisar_antecipacao_consultoria: {
         Args: { p_note?: string; p_request_id: string; p_status: string }
         Returns: {
@@ -19574,6 +19699,14 @@ export type Database = {
       tem_papel_loja: {
         Args: { p_loja_id: string; p_papeis: string[]; uid?: string }
         Returns: boolean
+      }
+      toggle_action_plan_checklist_item: {
+        Args: {
+          p_completed: boolean
+          p_item_index: number
+          p_plan_id: string
+        }
+        Returns: Database["public"]["Tables"]["planos_acao"]["Row"]
       }
       unaccent: { Args: { "": string }; Returns: string }
       update_d1_confirmation: {

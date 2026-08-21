@@ -114,37 +114,17 @@ export async function promoteSuggestionToPlan(input: {
   userId: string
 }): Promise<{ error: string | null; planId: string | null }> {
   const { suggestion } = input
-  if (isSuggestionPromoted(suggestion)) return { error: 'Esta sugestão já virou plano de ação.', planId: null }
+  if (isSuggestionPromoted(suggestion)) return { error: null, planId: suggestion.source_plano_id }
   if (!suggestion.scope_id || !suggestion.scope_type) return { error: 'A sugestão não tem escopo definido.', planId: null }
   if (!suggestion.recommendation?.trim()) return { error: 'A sugestão não tem recomendação para virar ação.', planId: null }
 
-  const { data: plan, error } = await supabase
-    .from('planos_acao')
-    .insert({
-      scope_type: suggestion.scope_type as 'store' | 'department' | 'individual' | 'process',
-      scope_id: suggestion.scope_id,
-      departamento: input.departamento.trim() || 'Geral',
-      indicador: input.indicador.trim() || 'Não definido',
-      problema: suggestion.problem?.trim() || 'Problema identificado pelo motor de regras.',
-      acao: suggestion.recommendation.trim(),
-      como: suggestion.rationale?.trim() || null,
-      prazo: input.prazo || null,
-      prioridade: suggestionPriorityToPlanPriority(suggestion.priority),
-      origem: 'consultor' as const,
-      origem_ref_id: suggestion.id,
-      origem_ref_table: 'consultor_solucoes',
-      created_by: input.userId,
-    })
-    .select('id')
-    .single()
+  const { data: planId, error } = await supabase.rpc('convert_action_plan_suggestion', {
+    p_suggestion_id: suggestion.id,
+    p_departamento: input.departamento.trim() || 'Geral',
+    p_indicador: input.indicador.trim() || 'Não definido',
+    p_prazo: input.prazo || null,
+  })
 
-  if (error || !plan) return { error: error?.message ?? 'Falha ao criar o plano de ação.', planId: null }
-
-  const { error: linkError } = await supabase
-    .from('consultor_solucoes')
-    .update({ source_plano_id: plan.id, converted_plano_id: plan.id, status: 'convertida' })
-    .eq('id', suggestion.id)
-  if (linkError) return { error: `Plano criado, mas o vínculo com a sugestão falhou: ${linkError.message}`, planId: plan.id }
-
-  return { error: null, planId: plan.id }
+  if (error || !planId) return { error: error?.message ?? 'Falha ao criar o plano de ação.', planId: null }
+  return { error: null, planId }
 }
