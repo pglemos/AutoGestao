@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase'
+import { departmentCategory } from './departmentTaxonomy'
 
 export type TemplateItemPriority = 'baixa' | 'media' | 'alta' | 'critica'
 export type ImprovementDirection = 'aumentar' | 'reduzir' | 'manter' | 'faixa' | 'corrigir_processo'
@@ -137,6 +138,45 @@ export function emptyTemplateItem(ordem: number): ActionPlanTemplateItem {
 }
 
 /**
+ * Rehydrates a persisted template into the editor's canonical catalog values.
+ * Older seeds store department labels/codes such as `PESSOAS_RH`, while the
+ * indicator catalog and wizard use the MX category codes (`rh`, `produto`, ...).
+ * The primary indicator also predates its dedicated column in some rows, so
+ * the persisted indicator code is a safe backwards-compatible fallback.
+ */
+export function buildTemplateDraftFromTemplate(
+  template: ActionPlanTemplate,
+  source: ActionPlanTemplateVersion | null,
+  items: ActionPlanTemplateItem[],
+): TemplateDraft {
+  const empty = emptyTemplateDraft()
+  return {
+    ...empty,
+    id: template.id,
+    template_key: template.template_key,
+    nome: template.nome,
+    departamento: departmentCategory(template.departamento) ?? template.departamento,
+    indicador: template.indicador ?? '',
+    descricao: template.descricao ?? '',
+    program_key: template.program_key ?? '',
+    active: template.active,
+    primary_indicator_code: template.primary_indicator_code ?? template.indicador ?? '',
+    improvement_direction: source?.improvement_direction ?? template.improvement_direction ?? empty.improvement_direction,
+    default_responsible_role: source?.default_responsible_role ?? template.default_responsible_role ?? '',
+    manual_application_enabled: template.manual_application_enabled,
+    owner_suggestion_enabled: template.owner_suggestion_enabled,
+    problem: source?.problem ?? '',
+    objective: source?.objective ?? '',
+    when_to_apply: source?.when_to_apply ?? '',
+    effectiveness_indicator_code: source?.effectiveness_indicator_code ?? '',
+    owner_suggestion_title: source?.owner_suggestion_title ?? '',
+    owner_suggestion_problem: source?.owner_suggestion_problem ?? '',
+    owner_suggestion_recommendation: source?.owner_suggestion_recommendation ?? '',
+    items: items.length ? items : empty.items,
+  }
+}
+
+/**
  * Divide 100% entre `count` itens em basis points (soma exata 10000). O resto
  * da divisão inteira vai pro último item, pra nunca sobrar/faltar por causa de
  * arredondamento — mesma regra do `calculateWeights` do base44.
@@ -152,6 +192,20 @@ export function calculateItemWeights(count: number): Array<{ weight_bp: number; 
 }
 
 export type IndicatorCatalogEntry = { code: string; label: string; category: string; unit: string }
+
+/** Keeps a legacy Base44 indicator selectable while the MX catalog evolves. */
+export function withPersistedIndicatorOption(
+  indicators: IndicatorCatalogEntry[],
+  department: string,
+  primaryCode: string,
+  persistedLabel: string,
+): IndicatorCatalogEntry[] {
+  const departmentIndicators = indicators.filter(indicator => indicator.category === department)
+  if (!primaryCode || departmentIndicators.some(indicator => indicator.code === primaryCode)) return departmentIndicators
+
+  const persisted = indicators.find(indicator => indicator.code === primaryCode)
+  return [persisted ?? { code: primaryCode, label: persistedLabel || primaryCode, category: department, unit: 'legado' }, ...departmentIndicators]
+}
 
 /** Catálogo real de indicadores do MX (mesmo usado no Planejamento Estratégico) — reaproveitado como fonte de indicador/departamento do wizard. */
 export async function fetchIndicatorCatalog(): Promise<{ rows: IndicatorCatalogEntry[]; error: string | null }> {

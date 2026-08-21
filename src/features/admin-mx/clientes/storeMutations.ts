@@ -6,6 +6,7 @@ import type { OperatingHoursMap, StoredOperatingHourRow } from './storeOperating
 export type UnitRow = {
   id: string
   client_id: string
+  store_id: string | null
   name: string
   city: string | null
   state: string | null

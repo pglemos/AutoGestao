@@ -1,13 +1,51 @@
 import { describe, expect, test } from 'bun:test'
 import {
+  buildTemplateDraftFromTemplate,
   emptyTemplateDraft,
   emptyTemplateItem,
   nextTemplateVersionNumber,
   resolveItemDueDate,
   validateTemplateDraft,
+  withPersistedIndicatorOption,
 } from './actionPlanTemplates'
 
+const persistedTemplate = {
+  id: 'template-1',
+  template_key: 'adequacao_quadro_colab',
+  nome: 'Adequação do Quadro de Colaboradores',
+  departamento: 'PESSOAS_RH',
+  indicador: 'EMPLOYEE_COUNT',
+  descricao: null,
+  program_key: null,
+  active: true,
+  primary_indicator_code: null,
+  improvement_direction: null,
+  default_responsible_role: null,
+  manual_application_enabled: true,
+  owner_suggestion_enabled: false,
+  versions: [],
+} as const
+
 describe('templates de plano de ação — validação', () => {
+  test('rehidrata valores legados no contrato do editor', () => {
+    const draft = buildTemplateDraftFromTemplate(persistedTemplate, null, [])
+
+    expect(draft.departamento).toBe('rh')
+    expect(draft.primary_indicator_code).toBe('EMPLOYEE_COUNT')
+    expect(draft.items).toHaveLength(1)
+  })
+
+  test('mantém indicador legado selecionável no editor', () => {
+    const options = withPersistedIndicatorOption(
+      [{ code: 'employees_total', label: 'Funcionários Ativos', category: 'rh', unit: 'number' }],
+      'rh',
+      'EMPLOYEE_COUNT',
+      'EMPLOYEE_COUNT',
+    )
+
+    expect(options[0]).toMatchObject({ code: 'EMPLOYEE_COUNT', label: 'EMPLOYEE_COUNT', category: 'rh' })
+  })
+
   test('cobra chave, nome, departamento e ao menos um item', () => {
     const errors = validateTemplateDraft(emptyTemplateDraft())
     expect(errors).toContain('Informe a chave do template.')

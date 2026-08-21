@@ -18,6 +18,7 @@ import {
   type SupportMaterialType,
   type TemplateDraft,
   type TemplateItemPriority,
+  withPersistedIndicatorOption,
 } from './actionPlanTemplates'
 import { uploadLibraryFile } from '../consultoria-mx/consultoriaMxData'
 
@@ -82,8 +83,8 @@ export function TemplateWizard(props: {
 
   const departments = useMemo(() => [...new Set(indicators.map(indicator => indicator.category))].sort(), [indicators])
   const deptIndicators = useMemo(
-    () => indicators.filter(indicator => indicator.category === props.draft.departamento),
-    [indicators, props.draft.departamento],
+    () => withPersistedIndicatorOption(indicators, props.draft.departamento, props.draft.primary_indicator_code, props.draft.indicador),
+    [indicators, props.draft.departamento, props.draft.indicador, props.draft.primary_indicator_code],
   )
   const weights = useMemo(() => calculateItemWeights(props.draft.items.length), [props.draft.items.length])
   const errors = validateTemplateDraft(props.draft)

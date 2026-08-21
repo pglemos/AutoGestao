@@ -3,6 +3,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { toast } from '@/lib/toast'
 import {
   archiveTemplate,
+  buildTemplateDraftFromTemplate,
   createNewTemplateVersion,
   emptyTemplateDraft,
   fetchActionPlanTemplates,
@@ -54,29 +55,7 @@ export function useActionPlanTemplatesController() {
     // Edita sempre em cima do rascunho aberto; sem rascunho, parte da última versão.
     const source = template.versions.find(version => version.status === 'rascunho') ?? template.versions[0] ?? null
     const items = source ? await fetchTemplateItems(source.id) : []
-    setDraft({
-      id: template.id,
-      template_key: template.template_key,
-      nome: template.nome,
-      departamento: template.departamento,
-      indicador: template.indicador ?? '',
-      descricao: template.descricao ?? '',
-      program_key: template.program_key ?? '',
-      active: template.active,
-      primary_indicator_code: template.primary_indicator_code ?? '',
-      improvement_direction: template.improvement_direction ?? 'aumentar',
-      default_responsible_role: template.default_responsible_role ?? source?.default_responsible_role ?? '',
-      manual_application_enabled: template.manual_application_enabled,
-      owner_suggestion_enabled: template.owner_suggestion_enabled,
-      problem: source?.problem ?? '',
-      objective: source?.objective ?? '',
-      when_to_apply: source?.when_to_apply ?? '',
-      effectiveness_indicator_code: source?.effectiveness_indicator_code ?? '',
-      owner_suggestion_title: source?.owner_suggestion_title ?? '',
-      owner_suggestion_problem: source?.owner_suggestion_problem ?? '',
-      owner_suggestion_recommendation: source?.owner_suggestion_recommendation ?? '',
-      items: items.length ? items : emptyTemplateDraft().items,
-    })
+    setDraft(buildTemplateDraftFromTemplate(template, source, items))
     setEditing(true)
     setFormOpen(true)
   }
