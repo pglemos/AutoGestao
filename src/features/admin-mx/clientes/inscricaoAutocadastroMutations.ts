@@ -28,12 +28,28 @@ export type ApproveInscricaoInput = {
 /**
  * Aprova a inscrição: cria a pessoa em acessos_cliente_consultoria com os
  * dados confirmados e os papéis/visão aprovados, e marca a inscrição como
- * aprovada. A regra de Dono Master é validada no componente/rota de
- * aprovação (resolveOwnerMaster) antes de chamar esta mutation.
+ * aprovada.
+ *
+ * `is_dono_master` é derivado de o papel aprovado incluir DONO — a UI de
+ * aprovação não tem um toggle próprio de Master (só de papéis). Isso por si só
+ * não distingue "tem perfil Dono" de "é O Dono Master" (a regra central do doc
+ * de correção), então antes de gravar demovemos qualquer Master vigente do
+ * mesmo jeito que `createClientPerson` faz — sem isso, aprovar um segundo
+ * usuário com papel Dono cria dois is_dono_master=true silenciosamente.
  */
 export async function approveInscricao(input: ApproveInscricaoInput): Promise<{ error: string | null }> {
   const invalid = validateAprovacaoDraft(input.draft)
   if (invalid) return { error: invalid }
+
+  const willBeMaster = input.draft.papeis_aprovados.includes('DONO')
+  if (willBeMaster) {
+    const { error: demoteError } = await supabase
+      .from('acessos_cliente_consultoria')
+      .update({ is_dono_master: false, updated_at: new Date().toISOString() })
+      .eq('client_id', input.inscricao.client_id)
+      .eq('is_dono_master', true)
+    if (demoteError) return { error: demoteError.message }
+  }
 
   const { data: created, error: insertError } = await supabase
     .from('acessos_cliente_consultoria')
@@ -45,7 +61,7 @@ export async function approveInscricao(input: ApproveInscricaoInput): Promise<{ 
       funcao_declarada: input.draft.equipe_aprovada || input.inscricao.funcao_declarada || null,
       papeis: input.draft.papeis_aprovados,
       lojas_autorizadas: input.draft.loja_aprovada_id ? [input.draft.loja_aprovada_id] : [],
-      is_dono_master: input.draft.papeis_aprovados.includes('DONO'),
+      is_dono_master: willBeMaster,
       visao_padrao: input.draft.visao_padrao || null,
       status: 'ativo',
       created_by: input.reviewedBy,

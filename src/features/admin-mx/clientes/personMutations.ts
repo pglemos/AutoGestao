@@ -41,6 +41,21 @@ export async function createClientPerson(
 ): Promise<{ error: string | null }> {
   const errors = validatePersonAccessDraft(draft)
   if (errors.length) return { error: errors[0] }
+
+  // Um cliente só pode ter um Dono Master vigente (regra central do doc de
+  // correção, item 10/17 de Pessoas e Acessos). Sem isso, marcar "Dono Master"
+  // num segundo cadastro cria dois is_dono_master=true — mesma classe de bug
+  // encontrada em unidades_cliente_consultoria (duas lojas "Principal").
+  // Demover é a transferência implícita que o doc pede ao marcar outro usuário.
+  if (draft.is_dono_master) {
+    const { error: demoteError } = await supabase
+      .from('acessos_cliente_consultoria')
+      .update({ is_dono_master: false, updated_at: new Date().toISOString() })
+      .eq('client_id', clientId)
+      .eq('is_dono_master', true)
+    if (demoteError) return { error: demoteError.message }
+  }
+
   const { error } = await supabase.from('acessos_cliente_consultoria').insert({
     client_id: clientId,
     nome: draft.nome.trim(),
