@@ -23,3 +23,9 @@ ALTER TABLE public.catalogo_metricas_consultoria
 
 COMMENT ON COLUMN public.catalogo_metricas_consultoria.created_origin IS
   'Origem do registro: catálogo padrão MX ou indicador criado pela equipe MX.';
+
+-- DOWN
+-- ALTER TABLE public.catalogo_metricas_consultoria
+--   DROP CONSTRAINT IF EXISTS catalogo_metricas_created_origin_check;
+-- ALTER TABLE public.catalogo_metricas_consultoria
+--   DROP COLUMN IF EXISTS created_origin;

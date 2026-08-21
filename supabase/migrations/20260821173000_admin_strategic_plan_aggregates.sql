@@ -36,3 +36,7 @@ REVOKE ALL ON FUNCTION public.get_admin_indicator_target_aggregates(integer) FRO
 GRANT EXECUTE ON FUNCTION public.get_admin_indicator_target_aggregates(integer) TO authenticated;
 REVOKE ALL ON FUNCTION public.get_strategic_plan_indicator_counts(uuid[]) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION public.get_strategic_plan_indicator_counts(uuid[]) TO authenticated;
+
+-- DOWN
+-- DROP FUNCTION IF EXISTS public.get_admin_indicator_target_aggregates(integer);
+-- DROP FUNCTION IF EXISTS public.get_strategic_plan_indicator_counts(uuid[]);

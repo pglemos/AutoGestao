@@ -6,9 +6,9 @@
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
 - Tabelas referenciadas pelo runtime: **175**
-- RPCs referenciadas pelo runtime: **101**
+- RPCs referenciadas pelo runtime: **102**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **374**
+- Pares tabela/operação encontrados: **373**
 
 ## Rotas
 
@@ -560,13 +560,12 @@
 | `perfil_consultor_mx:upsert` | 1 |
 | `planejamentos_estrategicos:insert` | 1 |
 | `planejamentos_estrategicos:select` | 1 |
-| `planos_acao_template_itens:delete` | 1 |
-| `planos_acao_template_itens:insert` | 3 |
+| `planos_acao_template_itens:insert` | 2 |
 | `planos_acao_template_itens:select` | 2 |
-| `planos_acao_template_versoes:insert` | 3 |
+| `planos_acao_template_versoes:insert` | 2 |
 | `planos_acao_template_versoes:select` | 6 |
 | `planos_acao_template_versoes:update` | 1 |
-| `planos_acao_templates:insert` | 3 |
+| `planos_acao_templates:insert` | 2 |
 | `planos_acao_templates:select` | 3 |
 | `planos_acao_templates:update` | 1 |
 | `planos_acao:delete` | 1 |
@@ -778,6 +777,7 @@
 | `saldo_presencial_cliente` | 1 |
 | `salvar_metas_indicador_planejamento` | 2 |
 | `salvar_realizado_indicador_planejamento` | 1 |
+| `save_action_plan_template_draft` | 1 |
 | `save_manager_lead_conference` | 1 |
 | `send_broadcast_notification` | 1 |
 | `solicitar_liberacao_fechamento` | 1 |

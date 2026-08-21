@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import * as Dialog from '@radix-ui/react-dialog'
 import { Archive, Clock, FileCheck, GraduationCap, ListChecks, Paperclip, Pencil, Power, PowerOff, RefreshCw, Send, Target, X, Zap } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { fetchTemplateItems, RESPONSIBLE_ROLE_OPTIONS, type ActionPlanTemplate, type ActionPlanTemplateItem } from './actionPlanTemplates'
@@ -35,23 +34,17 @@ export function TemplateDetailDrawer(props: {
   const allArchived = template.versions.length > 0 && template.versions.every(entry => entry.status === 'arquivada')
 
   return (
-    <Dialog.Root open onOpenChange={open => { if (!open) props.onClose() }}>
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-[var(--mx-z-overlay)] bg-surface-overlay/30" />
-        <Dialog.Content
-          className="fixed inset-y-0 right-0 z-[var(--mx-z-modal)] flex h-full w-full max-w-xl flex-col overflow-y-auto bg-surface-default shadow-xl focus:outline-none"
-          data-mx-scroll-region="vertical"
-          onEscapeKeyDown={event => { if (props.submitting) event.preventDefault() }}
-        >
+    <div className="fixed inset-0 z-[var(--mx-z-overlay)] flex justify-end">
+      <button type="button" aria-label="Fechar detalhes do template" className="fixed inset-0 bg-surface-overlay/30" onClick={props.onClose} />
+      <div data-mx-scroll-region="vertical" className="relative flex h-full w-full max-w-xl flex-col overflow-y-auto bg-surface-default shadow-xl">
         <div className="sticky top-0 z-[var(--mx-z-sticky)] border-b border-border bg-surface-default px-5 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Zap size={20} className="text-primary" />
-              <Dialog.Title asChild><h3 className="font-semibold text-text-primary">{template.nome}</h3></Dialog.Title>
+              <h3 className="font-semibold text-text-primary">{template.nome}</h3>
             </div>
-            <Button variant="ghost" size="icon" aria-label="Fechar" onClick={props.onClose}><X size={20} /></Button>
+            <Button variant="ghost" size="icon" aria-label="Fechar" onClick={props.onClose}><X size={16} /></Button>
           </div>
-          <Dialog.Description className="sr-only">Detalhes, versões e ações do template {template.nome}.</Dialog.Description>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <span className="rounded-full bg-surface-alt px-2 py-0.5 text-xs font-medium text-text-secondary">{template.departamento}</span>
             {version ? <span className="rounded-full bg-surface-alt px-2 py-0.5 text-xs font-medium text-text-secondary">{VERSION_STATUS_LABEL[version.status]}</span> : null}
@@ -157,8 +150,7 @@ export function TemplateDetailDrawer(props: {
             <Button variant="outline" size="sm" disabled={props.submitting} onClick={() => props.onArchive(template)}><Archive size={14} />Arquivar</Button>
           ) : null}
         </div>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+      </div>
+    </div>
   )
 }
