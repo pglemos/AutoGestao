@@ -142,11 +142,11 @@ para acompanhar execucao do PMR em tempo real.
 
 ## QA Results
 
-- **Gate: CONCERNS — correção local aprovada; publicação e validação de produção permanecem abertas.**
+- **Gate: CONCERNS — correção publicada e validada; permanecem concerns externos já documentados.**
 - Correção validada: `Editar` da Biblioteca MX reidrata departamento legado (`PESSOAS_RH → rh`), mantém indicadores Base44 legados como `EMPLOYEE_COUNT` selecionáveis, recupera os itens persistidos e deixa `Continuar` habilitado.
 - Regressões focadas: `21 pass, 0 fail` em `actionPlanTemplates.test.ts`.
 - Gates locais: `npm run lint`, `npm run typecheck`, `npm test` (`4246 pass, 0 fail, 705 arquivos`), `npm run build`, ESLint direcionado e `git diff --check` passaram; o build confirmou ausência de sourcemaps públicos.
 - Browser oficial local: `summary.status == "passed"` em desktop `1440×900` e mobile `390×844`, sem falhas; a auditoria a11y associada registrou `0` violações. Evidências: `visual-evidence/agent-browser/plano-acao-edit-fix-2026-08-21-2026-08-21T20-29-09/desktop.png` e `mobile.png`.
 - CodeRabbit: revisão externa bloqueada por `Rate limit exceeded` após três revisões consumidas; revisão dirigida local realizada.
 - Graphify: `npx graphify hook-rebuild` tentou processar `4453` arquivos e terminou com `exit 137` por memória; não considerado gate verde.
-- Produção/CI: nenhum commit, push, CI, deploy ou smoke autenticado foi executado com este código; não declarar a versão publicada como validada.
+- Produção/CI: commit `95c74dc4ed29f2a4f2a156c023dff105eaec0303` foi enviado para `main`; Vercel deployment `dpl_FvkR5VxmEg1VoXpWdSdJLy2f7LAU` está `Ready` com aliases oficiais. CI do SHA passou em Quality Gates, Typecheck/unit tests, Gitleaks, ESLint a11y e Atomic Design; smoke autenticado pós-deploy das rotas desta entrega foi concluído sem erros.
