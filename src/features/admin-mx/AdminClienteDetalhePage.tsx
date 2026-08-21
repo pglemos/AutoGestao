@@ -224,14 +224,12 @@ export function AdminClienteDetalhePage() {
       modules: client.modules ?? [],
       assignments: client.assignments ?? [],
       storeTakenByOtherClient: storeTaken,
-      owner_master: ownerMasterResolution.status === 'NOT_CONFIGURED'
-        ? null
-        : {
-            id: ownerMasterResolution.person?.id ?? null,
-            name: ownerMasterResolution.person?.nome ?? null,
-            email: ownerMasterResolution.person?.email ?? null,
-            valid: ownerMasterResolution.status === 'VALID',
-          },
+      owner_master: {
+        status: ownerMasterResolution.status,
+        id: ownerMasterResolution.person?.id ?? null,
+        name: ownerMasterResolution.person?.nome ?? null,
+        email: ownerMasterResolution.person?.email ?? null,
+      },
       strategic_plan_ready: strategicPlanReadiness,
     })
   }, [client, storeTaken, ownerMasterResolution, strategicPlanReadiness])

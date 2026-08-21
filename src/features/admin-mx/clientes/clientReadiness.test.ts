@@ -64,13 +64,36 @@ describe('checklist de prontidão do cliente', () => {
 
   test('avalia checks adicionais de dono master e jornada gerada quando presentes', () => {
     const checks = buildClientReadiness(input({
-      owner_master: { email: 'dono@empresa.com', valid: true },
+      owner_master: { status: 'VALID', name: 'Daniel', email: 'dono@empresa.com' },
       journey_generated: true,
     }))
     expect(checks.map(c => c.key)).toContain('dono-master')
     expect(checks.map(c => c.key)).toContain('jornada-gerada')
     expect(checks.find(c => c.key === 'dono-master')?.ok).toBe(true)
     expect(checks.find(c => c.key === 'jornada-gerada')?.ok).toBe(true)
+  })
+
+  test('dono master ausente ainda aparece no checklist como pendência (não some da lista)', () => {
+    // Bug achado ao vivo em produção: cliente sem nenhuma pessoa cadastrada
+    // não mostrava a linha "Dono Master válido" — o checklist simplesmente
+    // omitia o item em vez de sinalizar a pendência, igual aos demais checks
+    // informativos (Contato principal, CNPJ, etc.) fazem quando faltam.
+    const checks = buildClientReadiness(input({
+      owner_master: { status: 'NOT_CONFIGURED' },
+    }))
+    const check = checks.find(c => c.key === 'dono-master')
+    expect(check).toBeDefined()
+    expect(check?.ok).toBe(false)
+    expect(check?.detail).toBe('Nenhum Dono Master configurado para esta empresa.')
+  })
+
+  test('dois donos master ao mesmo tempo geram aviso específico de duplicidade', () => {
+    const checks = buildClientReadiness(input({
+      owner_master: { status: 'DUPLICATE_MASTER' },
+    }))
+    const check = checks.find(c => c.key === 'dono-master')
+    expect(check?.ok).toBe(false)
+    expect(check?.detail).toContain('dois usuários marcados como Dono Master')
   })
 
   test('plano estratégico publicado e completo aparece OK', () => {

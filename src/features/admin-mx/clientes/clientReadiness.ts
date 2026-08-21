@@ -34,7 +34,18 @@ export type ClientReadinessInput = {
   assignments: Array<{ active: boolean | null }>
   /** Outro cliente já ativo na mesma loja bloqueia a ativação (índice parcial). */
   storeTakenByOtherClient: boolean
-  owner_master?: { id?: string | null; name?: string | null; email?: string | null; valid?: boolean | null } | null
+  /**
+   * Resolução do Dono Master (`resolveOwnerMaster`, o serviço único de
+   * validação do Master). Passe o resultado sempre que as pessoas já
+   * tiverem sido carregadas — inclusive `NOT_CONFIGURED` — para o check
+   * aparecer como pendência de verdade, não desaparecer do checklist.
+   */
+  owner_master?: {
+    status: 'NOT_CONFIGURED' | 'VALID' | 'DUPLICATE_MASTER' | 'INACTIVE'
+    id?: string | null
+    name?: string | null
+    email?: string | null
+  } | null
   journey_generated?: boolean | null
   /**
    * Prontidão do Plano Estratégico do ano corrente — vem de
@@ -159,15 +170,23 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
   ]
 
   if (input.owner_master !== undefined && input.owner_master !== null) {
-    const isOwnerValid = Boolean(input.owner_master.valid !== false && input.owner_master.email)
+    const master = input.owner_master
+    const ok = master.status === 'VALID'
+    const detail = master.status === 'VALID'
+      ? `${master.name ?? master.email} — Dono Master.`
+      : master.status === 'NOT_CONFIGURED'
+        ? 'Nenhum Dono Master configurado para esta empresa.'
+        : master.status === 'DUPLICATE_MASTER'
+          ? 'Foram encontrados dois usuários marcados como Dono Master. Regularize a designação antes de ativar.'
+          : 'Existe usuário marcado como Dono Master, mas o vínculo está inconsistente (inativo ou sem perfil Dono).'
     checks.push({
       key: 'dono-master',
       label: 'Dono Master válido',
       severity: 'informativo',
-      ok: isOwnerValid,
-      evaluationStatus: isOwnerValid ? 'VALID' : 'WARNING',
+      ok,
+      evaluationStatus: ok ? 'VALID' : 'WARNING',
       correctionRoute: '/equipe',
-      detail: isOwnerValid ? `Dono Master: ${input.owner_master.email}` : 'Vínculo ou e-mail de Dono Master inconsistente.',
+      detail,
     })
   }
 

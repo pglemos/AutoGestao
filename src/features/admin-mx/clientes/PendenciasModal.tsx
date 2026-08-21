@@ -75,14 +75,12 @@ export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch
         modules: (modulesRes.data ?? []).map(m => ({ enabled: m.enabled ?? null })),
         assignments: (assignmentsRes.data ?? []).map(a => ({ active: a.active ?? null })),
         storeTakenByOtherClient: busyStores.has(client.primary_store_id),
-        owner_master: ownerMasterResolution.status === 'NOT_CONFIGURED'
-          ? null
-          : {
-              id: ownerMasterResolution.person?.id ?? null,
-              name: ownerMasterResolution.person?.nome ?? null,
-              email: ownerMasterResolution.person?.email ?? null,
-              valid: ownerMasterResolution.status === 'VALID',
-            },
+        owner_master: {
+          status: ownerMasterResolution.status,
+          id: ownerMasterResolution.person?.id ?? null,
+          name: ownerMasterResolution.person?.nome ?? null,
+          email: ownerMasterResolution.person?.email ?? null,
+        },
         strategic_plan_ready: planCycle
           ? {
               cycleStatus: planCycle.status,
