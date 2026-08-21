@@ -47,7 +47,7 @@ describe('role capabilities', () => {
     expect(hasCapability('administrador_mx', 'simulateRole')).toBe(true)
     expect(hasCapability('vendedor', 'simulateRole')).toBe(false)
     expect(hasCapability('gerente', 'viewProducts')).toBe(true)
-    expect(hasCapability('vendedor', 'viewProducts')).toBe(false)
+    expect(hasCapability('vendedor', 'viewProducts')).toBe(true)
     expect(hasCapability('dono', 'viewConfigurations')).toBe(true)
     expect(hasCapability('gerente', 'viewConfigurations')).toBe(true)
     expect(hasCapability('vendedor', 'viewConfigurations')).toBe(false)

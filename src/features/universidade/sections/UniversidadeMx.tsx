@@ -89,7 +89,12 @@ export function UniversidadeMx({ userId, embedded = false }: Props) {
       <PageHeading
         icon={GraduationCap}
         title="Universidade MX"
-        subtitle="Biblioteca · Trilhas · Aulas ao vivo · Certificações"
+        // "Trilhas" e "Certificações" saem do subtítulo: universidade_trilhas e
+        // universidade_certificacoes estão vazias em produção (auditoria
+        // 2026-08-21) e a seção de trilhas já é suprimida no corpo da página
+        // quando a biblioteca tem conteúdo (linha abaixo) — o subtítulo
+        // prometia uma feature que não existe em lugar nenhum do produto.
+        subtitle="Biblioteca · Aulas ao vivo"
         actions={
           <Button type="button" variant="outline" size="sm" onClick={refresh} disabled={loading}>
             {loading ? <Loader2 size={16} className="animate-spin" /> : <RefreshCw size={16} />}

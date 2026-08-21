@@ -157,7 +157,10 @@ describe('route access matrix', () => {
     expect(canAccessPath('/settings', 'dono')).toBe(true)
     expect(canAccessPath('/settings', 'vendedor')).toBe(false)
     expect(canAccessPath('/produtos', 'gerente')).toBe(true)
-    expect(canAccessPath('/produtos', 'vendedor')).toBe(false)
+    // vendedor vê o catálogo de produtos digitais (read-only, RoleSwitch em
+    // App.tsx já montava <ProdutosDigitais /> pro papel) — a allowlist é que
+    // esquecia o papel; ver capabilities.ts PRODUCT_ROLES (2026-08-21).
+    expect(canAccessPath('/produtos', 'vendedor')).toBe(true)
     expect(canAccessPath('/pdi/abc/print', 'gerente')).toBe(true)
     expect(canAccessPath('/pdi/abc/print', 'vendedor')).toBe(false)
   })

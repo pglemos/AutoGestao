@@ -24,7 +24,12 @@ export type Capability =
   | 'viewRanking'
 
 export const CONFIGURATION_ROLES: readonly UserRole[] = ['administrador_geral', 'administrador_mx', 'consultor_mx', 'dono', 'gerente']
-export const PRODUCT_ROLES: readonly UserRole[] = ['administrador_geral', 'administrador_mx', 'consultor_mx', 'dono', 'gerente']
+// Inclui 'vendedor': App.tsx já monta <ProdutosDigitais /> pro vendedor em
+// /produtos (RoleSwitch) e todo produto em produtos_digitais.target_roles já
+// lista 'vendedor' — mas essa allowlist esquecia o papel, então a rota
+// bloqueava antes do RoleSwitch rodar. A tela é read-only pra quem não é
+// admin (canManageDigitalProducts), então liberar aqui não abre edição.
+export const PRODUCT_ROLES: readonly UserRole[] = ['administrador_geral', 'administrador_mx', 'consultor_mx', 'dono', 'gerente', 'vendedor']
 export const PDI_PRINT_ROLES: readonly UserRole[] = ['administrador_geral', 'administrador_mx', 'consultor_mx', 'dono', 'gerente']
 export const RANKING_ROLES: readonly UserRole[] = ['administrador_geral', 'administrador_mx', 'consultor_mx', 'dono', 'gerente', 'vendedor']
 
