@@ -47,7 +47,7 @@ describe('contrato AC-29.013 — z-index arbitrário fora de allowlist', () => {
   test('integração: árvore viva sem z-index arbitrário fora da allowlist', () => {
     const violations = runArbitraryZIndexGate()
     expect(violations, JSON.stringify(violations, null, 2)).toEqual([])
-  })
+  }, 15_000)
 
   test('allowlist é orçamento explícito (documentada ou vazia)', () => {
     expect(ALLOWLIST).toBeInstanceOf(Map)

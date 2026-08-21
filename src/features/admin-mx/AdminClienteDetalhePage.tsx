@@ -71,6 +71,7 @@ import { fetchUnitOperatingHours, saveClientStore, type UnitRow } from './client
 import { useAdminConsultingProducts, useAdminTeam } from './hooks/useAdminMxLists'
 import { resolveVisitVolumeRule } from './clientes/visitVolumeRule'
 import { ClientActionPlanWizard } from './planos-acao/ClientActionPlanWizard'
+import { canonicalPortfolioStatus, PORTFOLIO_STATUS_LABEL } from './clientes/clientPortfolio'
 
 type ClientTab = 'visao' | 'lojas' | 'pessoas' | 'jornada' | 'implantacao' | 'planejamento' | 'operacao' | 'dados'
 type PlanningTab = 'estrategico' | 'plano-acao'
@@ -300,6 +301,19 @@ export function AdminClienteDetalhePage() {
   }), [client?.journey_total_visits, client?.program_template_key, visits])
   const totalVisits = journey.totalVisits
   const progress = journey.progress
+  const portfolioStatus = useMemo(() => {
+    if (!client) return null
+    return canonicalPortfolioStatus({
+      status: client.status,
+      primary_store_id: client.primary_store_id ?? null,
+      product_name: client.product_name ?? null,
+      assignments: client.assignments?.filter(assignment => assignment.active).length ?? 0,
+      modulesEnabled: client.modules?.filter(module => module.enabled !== false).length ?? 0,
+      visitsDone: journey.completedVisits,
+      visitsTotal: totalVisits,
+    })
+  }, [client, journey.completedVisits, totalVisits])
+  const portfolioStatusLabel = portfolioStatus ? PORTFOLIO_STATUS_LABEL[portfolioStatus] : formatClientStatus(client?.status)
   const responsibleConsultant = useMemo(() => {
     const primary = client?.assignments?.find(a => a.active && a.assignment_role === 'responsavel')?.user?.name
     if (primary) return primary
@@ -514,12 +528,14 @@ export function AdminClienteDetalhePage() {
             <MxMetricGrid>
               <MxMetricCard
                 title="Status"
-                value={formatClientStatus(client.status)}
-                detail={summary.canActivate
-                  ? client.status === 'ativo' ? 'Ativo e pronto para operar' : 'Pronto para ativar'
+                value={portfolioStatusLabel}
+                detail={portfolioStatus === 'em_implantacao'
+                  ? `Jornada em andamento · ${journey.completedVisits}/${totalVisits}`
+                  : summary.canActivate
+                  ? portfolioStatus === 'ativos' ? 'Pronto para operar' : 'Pronto para ativar'
                   : `${summary.blockers.length} impeditivo(s)`}
                 icon={BriefcaseBusiness}
-                tone={client.status === 'ativo' ? 'success' : 'warning'}
+                tone={portfolioStatus === 'ativos' ? 'success' : portfolioStatus === 'em_implantacao' ? 'info' : 'warning'}
               />
               <MxMetricCard title="Lojas" value={units.length ?? 0} detail="Unidades cadastradas" icon={Building2} tone="info" />
               <MxMetricCard title="Pessoas" value={persons.length ?? 0} detail="Acessos cadastrados" icon={UserPlus} tone="violet" />

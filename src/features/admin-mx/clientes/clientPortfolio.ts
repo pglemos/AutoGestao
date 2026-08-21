@@ -39,6 +39,10 @@ export type PortfolioBucket =
 /** Situações exibidas na carteira principal. Cada cliente entra em no máximo uma. */
 export type PortfolioStatus = 'ativos' | 'em_implantacao' | 'prontos_para_ativar' | 'em_configuracao'
 export type PortfolioStatusFilter = PortfolioStatus | 'suspenso' | 'todos'
+export type PortfolioStatusSource = Pick<
+  PortfolioClient,
+  'status' | 'primary_store_id' | 'product_name' | 'assignments' | 'modulesEnabled' | 'visitsDone' | 'visitsTotal'
+>
 
 export const PORTFOLIO_STATUS_LABEL: Record<PortfolioStatus, string> = {
   ativos: 'Ativos',
@@ -84,7 +88,7 @@ export function isActive(client: Pick<PortfolioClient, 'status'>) {
  * na tabela. Isso evita contar o mesmo cliente duas vezes e não mascara uma
  * suspensão como configuração.
  */
-export function canonicalPortfolioStatus(client: PortfolioClient): PortfolioStatus | null {
+export function canonicalPortfolioStatus(client: PortfolioStatusSource): PortfolioStatus | null {
   const status = normalizeStatus(client.status)
   if (['suspenso', 'suspended', 'encerrado', 'closed', 'arquivado'].includes(status)) return null
   if (
@@ -109,7 +113,7 @@ export function portfolioStatusLabel(client: PortfolioClient): string {
 }
 
 /** Falta o mínimo que o banco exige para ativar (loja, produto, consultor). */
-export function activationBlockers(client: PortfolioClient): string[] {
+export function activationBlockers(client: Pick<PortfolioClient, 'primary_store_id' | 'product_name' | 'assignments' | 'modulesEnabled'>): string[] {
   const blockers: string[] = []
   if (!client.primary_store_id) blockers.push('sem loja principal')
   if (!client.product_name) blockers.push('sem produto contratado')

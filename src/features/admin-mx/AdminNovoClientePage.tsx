@@ -237,13 +237,24 @@ export function AdminNovoClientePage() {
                   </MxSelect>
                 </MxField>
                 {draft.units.map((unit, index) => (
-                  <div key={index} className="grid gap-3 rounded-lg border border-border p-4 sm:grid-cols-[2fr_2fr_1fr_auto]">
+                  <div key={index} className="rounded-lg border border-border p-4">
+                    <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-semibold text-foreground">Unidade {index + 1}</span>
+                        <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${unit.is_primary ? 'bg-primary/10 text-primary' : 'bg-status-info-bg text-status-info-text'}`}>
+                          {draft.structure_type === 'REDE' ? (unit.is_primary ? 'Matriz' : 'Filial') : 'Loja principal'}
+                        </span>
+                      </div>
+                      <span className="text-xs text-muted-foreground">{unit.is_primary ? 'Recebe o vínculo do cliente' : 'Vinculada à matriz ao salvar'}</span>
+                    </div>
+                    <div className="grid gap-3 sm:grid-cols-[2fr_2fr_1fr_auto]">
                     <MxField label="Loja"><MxInput value={unit.name} onChange={event => patch({ units: draft.units.map((item, position) => position === index ? { ...item, name: event.target.value } : item) })} /></MxField>
                     <MxField label="Cidade"><MxInput value={unit.city} onChange={event => patch({ units: draft.units.map((item, position) => position === index ? { ...item, city: event.target.value } : item) })} /></MxField>
                     <MxField label="UF"><MxInput value={unit.state} maxLength={2} onChange={event => patch({ units: draft.units.map((item, position) => position === index ? { ...item, state: event.target.value.toUpperCase() } : item) })} /></MxField>
                     <div className="flex items-end gap-2">
-                      <Button type="button" variant={unit.is_primary ? 'primary' : 'outline'} size="sm" onClick={() => patch({ units: draft.units.map((item, position) => ({ ...item, is_primary: position === index })) })}>Principal</Button>
+                      <Button type="button" variant={unit.is_primary ? 'primary' : 'outline'} size="sm" onClick={() => patch({ units: draft.units.map((item, position) => ({ ...item, is_primary: position === index })) })}>{unit.is_primary ? 'Matriz definida' : 'Definir matriz'}</Button>
                       {draft.units.length > 1 ? <Button type="button" variant="outline" size="sm" aria-label={`Remover loja ${index + 1}`} onClick={() => patch({ units: draft.units.filter((_, position) => position !== index) })}><Trash2 size={16} /></Button> : null}
+                    </div>
                     </div>
                   </div>
                 ))}
