@@ -115,26 +115,29 @@ Como administrador MX, quero operar consultoria e produtos nas rotas `/consultor
 ### Completion Notes
 
 - Implementação local concluída para o overview operacional de `/consultoria`, catálogo/ciclo de vida/matriz de `/produtos`, bridges produto → plano estratégico e detalhe 360.
-- `/consultoria` foi validada com dados persistidos em navegador real: métricas, filtros, detalhe, navegação para Plano Estratégico/Plano de Ação, desktop 1440×900 e mobile 390×844.
-- Gates locais verdes nesta rodada: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, reversibilidade de migrations e testes direcionados (39 testes / 97 expectativas); o build também confirmou ausência de sourcemaps públicos.
+- `/consultoria` e `/produtos` foram validadas com dados persistidos em navegador real, desktop 1440×900 e mobile 390×844; as duas evidências finais têm `status: passed`, axe com 0 violações e 0 erros de runtime/console.
+- Gates locais verdes no SHA `6b7ad31ab231ad7321b0ab72192306954e6890d6`: `npm run lint`, `npm run typecheck`, `npm test` (4.246 testes, 25.277 expectativas, 705 arquivos), `npm run build`, reversibilidade de migrations e testes direcionados (24 testes / 65 expectativas); o build também confirmou ausência de sourcemaps públicos.
 - `npx graphify hook-rebuild` concluído com runtime TypeScript; seis scripts PowerShell ficaram fora da extração por ausência de `tree-sitter-powershell`, limitação conhecida do parser.
-- O projeto Supabase confirmado é `fbhcmzzgwjdgkctlfvbo`. A leitura remota mostra `pmr_hibrido` ativo, `pmr_online` suspenso e grupos legados separados; as migrations `20260821180000`, `20260821200000` e `20260821210000` já constam aplicadas, enquanto `20260821170000` e `20260821173000` permanecem pendentes para o push desta rodada.
+- O projeto Supabase confirmado é `fbhcmzzgwjdgkctlfvbo`. A leitura remota mostra `pmr_hibrido` publicado/ativo, `pmr_online` suspenso/inativo, `pmr_9_copia` inexistente e `configuration_origin` existente; as migrations `20260821170000`, `20260821173000`, `20260821180000`, `20260821200000` e `20260821210000` constam aplicadas.
+- `npm run gen:db-types` continua bloqueado por privilégio do endpoint: `Your account does not have the necessary privileges to access this endpoint`; por isso a geração autoritativa de tipos permanece um gate externo, sem habilitar cliente tipado à força.
+- A produção em `https://www.mxperformance.com.br` ainda está stale em relação ao checkout: `/produtos` mostra a matriz antiga sem status técnico/origem/restauração e `/consultoria` mostra “Nenhum programa vinculado” com lojas desabilitadas. HTTP 200 e smoke genérico não comprovam a funcionalidade nova; não há prova de deploy desta implementação.
 - O audit de dependências permanece com uma preocupação HIGH preexistente em `xlsx` (`<0.20.2`, ReDoS/Prototype Pollution); não foi executado `npm audit fix --force` porque não há patch upstream seguro no contrato atual.
 
 ### Debug Log References
 
-- `visual-evidence/agent-browser/cons20-consultoria-2026-08-21T19-12-46/summary.json` — `status: passed`, desktop/mobile, axe sem violações e sem erros de runtime.
-- `visual-evidence/agent-browser/cons20-produtos-2026-08-21T19-13-55/summary.json` — falha honesta por catálogo indisponível; screenshot registra o erro de schema, sem erro JS.
-- Consulta direta do cliente Supabase confirmou `code=42703` para a coluna `evolution_group`.
-- Ações manuais do detalhe da consultoria navegaram para `/plano-estrategico?storeId=...` e `/plano-acao?storeId=...`, sem alertas na página.
+- `visual-evidence/agent-browser/cons20-produtos-final-2026-08-21T20-08-56/summary.json` — `status: passed`, `1440x900`/`390x844`, axe 0, sem falhas/erros.
+- `visual-evidence/agent-browser/cons20-consultoria-final-2026-08-21T20-09-09/summary.json` — `status: passed`, `1440x900`/`390x844`, axe 0, sem falhas/erros.
+- As ações manuais do detalhe da consultoria navegaram para `/plano-estrategico?storeId=...` e `/plano-acao?storeId=...`, sem alertas na página.
+- A verificação remota do Supabase confirmou `pmr_hibrido` ativo, `pmr_online` suspenso, ausência de `pmr_9_copia`, presença de `configuration_origin` e aplicação das cinco migrations da story.
+- A validação de produção confirmou HTTP 200, mas também confirmou superfície stale nos dois caminhos; o bloqueio de `npm run gen:db-types` retornou `Your account does not have the necessary privileges to access this endpoint`.
 
 ### CodeRabbit Integration
 
-- Revisão dirigida local deve cobrir segurança de RLS, mutações de ciclo de vida, clonagem idempotente e ausência de CSS Base44.
-- @aiox-qa deve emitir o veredito final dos gates; @aiox-devops é responsável por qualquer publicação remota autorizada.
+- A primeira revisão dirigida do CodeRabbit retornou 0 findings no escopo analisado, mas cobriu apenas `src/features/admin-mx/clientes/storeMutations.ts`; a tentativa de revisão incluindo os arquivos não rastreados foi bloqueada por `Rate limit exceeded` (quota de 24 minutos). Não tratar isso como revisão integral limpa.
+- O veredito permanece condicionado à publicação por @aiox-devops e à repetição do navegador autenticado em produção após o deploy; o agente dev não executou push/deploy.
 
 ### QA Results
 
-- **Decision:** CONCERNS — validação local concluída; publicação, migrations pendentes e navegador de produção seguem como gates externos desta rodada.
-- **PASS:** lint, typecheck, regressão completa, build, testes direcionados, reversibilidade, secret scan, Graphify e `/consultoria` autenticada em desktop/mobile.
-- **OPEN:** aplicar as duas migrations pendentes no projeto confirmado, regenerar/verificar os tipos e repetir CRUD/matriz/detalhe de `/produtos` e o workspace de `/plano-estrategico` em navegador real após o deploy.
+- **Decision:** CONCERNS — implementação e gates locais concluídos, mas a versão publicada ainda não contém esta implementação; geração de tipos e revisão integral do CodeRabbit continuam bloqueadas por autoridade/quota externa.
+- **PASS:** lint, typecheck, regressão completa, build no SHA atual, testes direcionados, reversibilidade, secret scan, Graphify, cinco migrations aplicadas no projeto confirmado e navegador local autenticado de `/consultoria` e `/produtos` em desktop/mobile.
+- **OPEN:** publicar o SHA `6b7ad31ab231ad7321b0ab72192306954e6890d6`, confirmar CI/deployment/alias atual e repetir CRUD/matriz/detalhe de `/produtos`, `/consultoria` e workspace de `/plano-estrategico` em navegador autenticado de produção; liberar `npm run gen:db-types`; repetir CodeRabbit com quota disponível.

@@ -142,11 +142,11 @@ para acompanhar execucao do PMR em tempo real.
 
 ## QA Results
 
-- **Gate: CONCERNS — funcionalidade do Plano de Ação aprovada em produção; gates globais preexistentes permanecem fora do escopo.**
-- Produção: deploy `https://mxperformance-k2zoya5wf-synvolt.vercel.app` em `Ready`, aliases `https://www.mxperformance.com.br`, `https://mxperformance.com.br` e `https://mxperformance.vercel.app`, código publicado no `main` em `19d5dd18e0412dec85dc73459aa7fd8e1183fef2`.
-- Smoke autenticado multi-role final: `1 passed (10.9m)`, contra `https://www.mxperformance.com.br`, cobrindo vendedor, gerente, dono, administrador geral, administrador MX e consultor MX, leitura Supabase real por rota, ausência de mocks/dados fictícios, isolamento de consultoria e limpeza das identidades temporárias.
-- Controle de autorização validado no smoke: gerente e vendedor não exibem `Novo plano` nem `Concluir`; Dono usa `Nova Ação`; Admin Geral, Admin MX e Consultor MX exibem `Novo plano`.
-- Navegador: `/dono/plano-acao` exibiu tabela detalhada persistida com código, ação, objetivo, indicador, departamento, responsável, prioridade, status, progresso, datas, atraso e atualização; console sem erros.
-- Rota legada `/lojas/mx-consultoria/plano-acao` não abriu conteúdo legado nem redirecionou para `/dono/plano-acao`; terminou em autenticação, enquanto as rotas canônicas permanecem em `/dono/*` e `/plano-acao`.
-- Contratos focados: `26 pass, 0 fail`; typecheck e build passaram; ESLint direcionado dos arquivos alterados passou.
-- **CONCERNS não relacionados:** `npm run lint` global ainda reporta 3 erros em controllers preexistentes (`useAdminMorningReportController.ts`, `useNetworkDashboardController.ts`, `useOperationalDiagnosticsController.ts`) e `npm test` global reporta `1440 pass / 9 fail / 1 error` em contratos internos preexistentes.
+- **Gate: CONCERNS — correção local aprovada; publicação e validação de produção permanecem abertas.**
+- Correção validada: `Editar` da Biblioteca MX reidrata departamento legado (`PESSOAS_RH → rh`), mantém indicadores Base44 legados como `EMPLOYEE_COUNT` selecionáveis, recupera os itens persistidos e deixa `Continuar` habilitado.
+- Regressões focadas: `21 pass, 0 fail` em `actionPlanTemplates.test.ts`.
+- Gates locais: `npm run lint`, `npm run typecheck`, `npm test` (`4246 pass, 0 fail, 705 arquivos`), `npm run build`, ESLint direcionado e `git diff --check` passaram; o build confirmou ausência de sourcemaps públicos.
+- Browser oficial local: `summary.status == "passed"` em desktop `1440×900` e mobile `390×844`, sem falhas; a auditoria a11y associada registrou `0` violações. Evidências: `visual-evidence/agent-browser/plano-acao-edit-fix-2026-08-21-2026-08-21T20-29-09/desktop.png` e `mobile.png`.
+- CodeRabbit: revisão externa bloqueada por `Rate limit exceeded` após três revisões consumidas; revisão dirigida local realizada.
+- Graphify: `npx graphify hook-rebuild` tentou processar `4453` arquivos e terminou com `exit 137` por memória; não considerado gate verde.
+- Produção/CI: nenhum commit, push, CI, deploy ou smoke autenticado foi executado com este código; não declarar a versão publicada como validada.
