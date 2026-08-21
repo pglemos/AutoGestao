@@ -52,6 +52,8 @@ export function TemplateFilters(props: {
         <div className="flex min-w-48 flex-1 items-center gap-2 rounded-lg border border-border bg-background px-3">
           <Search size={14} className="shrink-0 text-muted-foreground" />
           <MxInput
+            id="template-filter-search"
+            name="template-search"
             value={props.filters.search}
             onChange={event => props.onFilterChange('search', event.target.value)}
             placeholder="Buscar por nome..."
@@ -60,19 +62,19 @@ export function TemplateFilters(props: {
           />
         </div>
 
-        <MxSelect aria-label="Filtrar por departamento" value={props.filters.departamento} onChange={onSelectChange('departamento')}>
+        <MxSelect id="template-filter-department" name="template-department" aria-label="Filtrar por departamento" value={props.filters.departamento} onChange={onSelectChange('departamento')}>
           <option value="">Todos os departamentos</option>
           {departments.map(department => <option key={department.code} value={department.code}>{department.label}</option>)}
         </MxSelect>
 
-        <MxSelect aria-label="Filtrar por indicador" value={props.filters.indicador} onChange={event => {
+        <MxSelect id="template-filter-indicator" name="template-indicator" aria-label="Filtrar por indicador" value={props.filters.indicador} onChange={event => {
           props.onFilterChange('indicador', event.target.value)
         }}>
           <option value="">Todos os indicadores</option>
           {indicators.map(indicator => <option key={indicator.value} value={indicator.value}>{indicator.label}</option>)}
         </MxSelect>
 
-        <MxSelect aria-label="Filtrar por status" value={props.filters.status} onChange={onSelectChange('status')}>
+        <MxSelect id="template-filter-status" name="template-status" aria-label="Filtrar por status" value={props.filters.status} onChange={onSelectChange('status')}>
           <option value="">Todos os status</option>
           <option value="publicada">Publicado</option>
           <option value="rascunho">Rascunho</option>
@@ -82,18 +84,18 @@ export function TemplateFilters(props: {
           <option value="arquivada">Arquivado</option>
         </MxSelect>
 
-        <MxSelect aria-label="Filtrar por prioridade dos itens" value={props.filters.prioridade} onChange={onSelectChange('prioridade')}>
+        <MxSelect id="template-filter-priority" name="template-priority" aria-label="Filtrar por prioridade dos itens" value={props.filters.prioridade} onChange={onSelectChange('prioridade')}>
           <option value="">Todas as prioridades</option>
           {PRIORITY_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
         </MxSelect>
 
-        <MxSelect aria-label="Filtrar disponibilidade para sugestão" value={props.filters.suggestion_enabled === '' ? '' : String(props.filters.suggestion_enabled)} onChange={event => props.onFilterChange('suggestion_enabled', event.target.value === '' ? '' : event.target.value === 'true')}>
+        <MxSelect id="template-filter-suggestion" name="template-suggestion" aria-label="Filtrar disponibilidade para sugestão" value={props.filters.suggestion_enabled === '' ? '' : String(props.filters.suggestion_enabled)} onChange={event => props.onFilterChange('suggestion_enabled', event.target.value === '' ? '' : event.target.value === 'true')}>
           <option value="">Disponibilidade</option>
           <option value="true">Disponível para sugestão</option>
           <option value="false">Não disponível</option>
         </MxSelect>
 
-        <MxSelect aria-label="Filtrar responsável recomendado" value={props.filters.responsible_role} onChange={onSelectChange('responsible_role')}>
+        <MxSelect id="template-filter-responsible" name="template-responsible" aria-label="Filtrar responsável recomendado" value={props.filters.responsible_role} onChange={onSelectChange('responsible_role')}>
           <option value="">Todos os responsáveis</option>
           {RESPONSIBLE_ROLE_OPTIONS.map(role => <option key={role.value} value={role.value}>{role.label}</option>)}
         </MxSelect>

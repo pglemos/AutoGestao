@@ -354,28 +354,28 @@ export function AdminPlanosAcaoGlobalPage() {
               <MxMetricCard title="Prioridade alta ou crítica" value={metrics.criticos} detail="Exigem acompanhamento" icon={ClipboardList} tone="warning" />
             </MxMetricGrid>
             <MxToolbar>
-              <MxInput value={search} onChange={event => setSearch(event.target.value)} placeholder="Buscar por código, problema ou ação" aria-label="Buscar plano de ação" />
-              <MxSelect value={status} onChange={event => setStatus(event.target.value)} aria-label="Filtrar por status">
+              <MxInput id="action-plan-filter-search" name="action-plan-search" value={search} onChange={event => setSearch(event.target.value)} placeholder="Buscar por código, problema ou ação" aria-label="Buscar plano de ação" />
+              <MxSelect id="action-plan-filter-status" name="action-plan-status" value={status} onChange={event => setStatus(event.target.value)} aria-label="Filtrar por status">
                 <option value="todos">Todos os status</option>
                 {statuses.map(item => <option key={item} value={item}>{STATUS_LABEL[item as PlanStatus] ?? item}</option>)}
               </MxSelect>
-              <MxSelect value={departmentFilter} onChange={event => setDepartmentFilter(event.target.value)} aria-label="Filtrar por departamento">
+              <MxSelect id="action-plan-filter-department" name="action-plan-department" value={departmentFilter} onChange={event => setDepartmentFilter(event.target.value)} aria-label="Filtrar por departamento">
                 <option value="">Todos os departamentos</option>
                 {departments.map(item => <option key={item} value={item}>{item}</option>)}
               </MxSelect>
-              <MxSelect value={indicatorFilter} onChange={event => setIndicatorFilter(event.target.value)} aria-label="Filtrar por indicador">
+              <MxSelect id="action-plan-filter-indicator" name="action-plan-indicator" value={indicatorFilter} onChange={event => setIndicatorFilter(event.target.value)} aria-label="Filtrar por indicador">
                 <option value="">Todos os indicadores</option>
                 {indicators.map(item => <option key={item} value={item}>{item}</option>)}
               </MxSelect>
-              <MxSelect value={priorityFilter} onChange={event => setPriorityFilter(event.target.value)} aria-label="Filtrar por prioridade">
+              <MxSelect id="action-plan-filter-priority" name="action-plan-priority" value={priorityFilter} onChange={event => setPriorityFilter(event.target.value)} aria-label="Filtrar por prioridade">
                 <option value="">Todas as prioridades</option>
                 {PLAN_PRIORITY_OPTIONS.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}
               </MxSelect>
-              <MxSelect value={responsibleFilter} onChange={event => setResponsibleFilter(event.target.value)} aria-label="Filtrar por responsável">
+              <MxSelect id="action-plan-filter-responsible" name="action-plan-responsible" value={responsibleFilter} onChange={event => setResponsibleFilter(event.target.value)} aria-label="Filtrar por responsável">
                 <option value="">Todos os responsáveis</option>
                 {responsibleOptions.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
               </MxSelect>
-              <MxSelect value={view} onChange={event => setView(event.target.value as 'lista' | 'kanban')} aria-label="Modo de visualização">
+              <MxSelect id="action-plan-view-mode" name="action-plan-view-mode" value={view} onChange={event => setView(event.target.value as 'lista' | 'kanban')} aria-label="Modo de visualização">
                 <option value="kanban">Kanban</option>
                 <option value="lista">Lista</option>
               </MxSelect>
