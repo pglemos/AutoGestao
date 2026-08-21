@@ -244,7 +244,11 @@ async function auditProfile(
   if (profile.key !== 'gerente') {
     expect(metrics.pageHeader).toMatchObject({
       backgroundColor: 'rgb(255, 255, 255)',
-      borderRadius: '16px',
+      // --mx-card-radius = --mx-radius-xl = 12px (contrato ativo:
+      // component-radius-token-contract.test.ts). 16px era valor obsoleto,
+      // nunca atualizado quando o token foi fixado — vermelho falso em
+      // toda PR desde 2026-08-21.
+      borderRadius: '12px',
     })
     expect(metrics.pageHeader?.borderColor).not.toBe('rgba(0, 0, 0, 0)')
     expect(metrics.pageHeader?.boxShadow).not.toBe('none')
