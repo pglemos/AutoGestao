@@ -95,6 +95,18 @@ Nota curiosa: o próprio arquivo do doc termina com o texto **idêntico** ao `/g
   4. `ownerStrategicPlanViewModel.ts` órfão removido (zero consumidores, dead code de tentativa anterior).
   - Typecheck limpo, 264+172 testes verdes, eslint limpo em todos os arquivos tocados.
 
+## Achado 9 — fora do doc: duplo clique no wizard de Novo Cliente criava lojas duplicadas
+
+Tentando achar um cliente real com Matriz+filiais pra testar a Visão do Dono multiunidade (pendência do Achado 1), consultei o banco direto (`unidades_cliente_consultoria`) e achei: só 3 clientes reais têm mais de 1 unidade (GoCars, VB VEÍCULOS MULTIMARCAS, AG AUTOMÓVEIS — este último com uma unidade chamada literalmente "TESTE QA REMOVER", dado de teste esquecido em produção, não mexi). Dos 3, **GoCars e VB tinham duas unidades com o mesmo nome, ambas `is_primary=true`, criadas ~200-370ms uma da outra** — sem índice único no banco pra impedir isso.
+
+Causa raiz: `AdminNovoClientePage.tsx` guardava duplo-submit lendo `submitting` do `useState` — que só reflete no `disabled` do botão no próximo render. Dois cliques a poucos milissegundos de distância (a janela medida em produção) passam pelo `if (submitting) return` os dois, porque ambos leem o mesmo closure `false`. Corrigido com `useRef` (trava síncrona, commit `5fe19f35`). Efeito visível: Ficha 360 → Empresa e lojas mostrava duas lojas com badge "Principal" ao mesmo tempo. Dados dos 2 clientes reparados (UPDATE `is_primary=false` na duplicata mais recente — nada excluído).
+
+**Não fiz:** índice único parcial `(client_id) WHERE is_primary` no banco (defesa em profundidade — o fix de UI resolve o caminho conhecido, mas não impede logicamente duas abas/retry). Precisa de migration nova; dado o histórico de migrations de drift nunca aplicadas neste projeto (ver `reference_supabase_mx_performance.md`), preferi não arriscar numa sessão já longa. Recomendo pra próxima sessão, com cuidado extra no `supabase db push`.
+
+Esse achado não estava no documento de correção — veio de investigar dado real tentando montar o teste multiunidade, não de ler o doc.
+
+**Sanity check adicional:** nenhum outro cliente tem Dono Master duplicado nem contato principal duplicado (mesma família de bug, checado direto no banco — zero ocorrências). GoCars continua com a linha física duplicada (2 unidades chamadas "GoCars", uma agora `is_primary=false`) — não apaguei a linha em si por não ter mapeado tudo que referencia `unidade_id` (horários, planos de ação por escopo); só corrigi o flag que causava o bug visível de dois "Principal". Se quiser a limpeza completa da duplicata física, é um reparo à parte.
+
 ## Doc totalmente lido
 
 Todo o bloco de correções (linhas 38.776–48.704) foi lido e triado nesta sessão: Plano Estratégico Multiunidade (Achado 1), Clientes MX — Resumo do Plano (Achado 2), Pessoas e Acessos — Dono Master, 2 prompts (Achado 4), Planos de Ação — duplicação e Kanban (Achado 5 e 7), e o módulo de reset destrutivo (Achado 8, **não executado**). As linhas 0–38.775 (prompt original que gerou o protótipo Base44 em si, não uma correção) seguem não lidas — baixa prioridade, MX não é um port 1:1 do Base44.
