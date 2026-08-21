@@ -231,6 +231,7 @@ export function AdminClienteDetalhePage() {
         email: ownerMasterResolution.person?.email ?? null,
       },
       strategic_plan_ready: strategicPlanReadiness,
+      journey_generated: (client.visits?.length ?? 0) > 0,
     })
   }, [client, storeTaken, ownerMasterResolution, strategicPlanReadiness])
 
