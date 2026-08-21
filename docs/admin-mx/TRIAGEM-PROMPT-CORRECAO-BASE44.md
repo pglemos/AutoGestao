@@ -107,6 +107,16 @@ Esse achado não estava no documento de correção — veio de investigar dado r
 
 **Sanity check adicional:** nenhum outro cliente tem Dono Master duplicado nem contato principal duplicado (mesma família de bug, checado direto no banco — zero ocorrências). GoCars continua com a linha física duplicada (2 unidades chamadas "GoCars", uma agora `is_primary=false`) — não apaguei a linha em si por não ter mapeado tudo que referencia `unidade_id` (horários, planos de ação por escopo); só corrigi o flag que causava o bug visível de dois "Principal". Se quiser a limpeza completa da duplicata física, é um reparo à parte.
 
+## Achado 13 — Módulo Dono não oferece "Usar Plano Padrão" ao criar ação (gap real, é feature nova)
+
+Testando ao vivo como dono (MX Consultoria) o botão "Nova Ação" em `/plano-acao`: abre um modal com dois modos, "Ação Rápida" (título/departamento/responsável/prazo/prioridade) e "Completo" (adiciona objetivo estratégico, indicador, origem, impacto, orçamento). O campo "Origem" tem opções (Plano Estratégico, Alerta executivo, Consultoria, Diagnóstico, Departamento, Manual) mas **nenhuma delas é "aplicar um Plano Padrão da biblioteca"** — é só rotulagem de onde a ideia veio, não um seletor de template.
+
+O doc pede explicitamente (seção Planos de Ação, item ~"Módulo Dono"): botão de criação com "Usar Plano Padrão" / "Criar Ação Livre", Dono podendo selecionar template publicado e adaptar responsável/prazo/unidade, sem poder alterar a biblioteca global. Isso **não existe hoje pro Dono** — só admin-mx tem `NewActionChoiceModal.tsx`/`ApplyTemplateModal.tsx` com a biblioteca de templates.
+
+**Não construí isso agora.** É feature nova de verdade (UI de navegação de biblioteca + query de templates publicados escopados + adaptar wizard existente), não um fix pontual como os outros achados desta sessão — decidir se e como construir merece alinhamento, não uma implementação às pressas no fim de uma sessão já longa. Sem contadores quebrados nem crash: testei o Kanban/contadores de `/plano-acao` e bateram certo (2 ações = soma das colunas).
+
+Nota: achei mais um dado de smoke-test em produção durante o teste ("teste" como título de uma ação real, departamento Comercial) — mesmo padrão do Achado 8/10, não mexi.
+
 ## Achado 12 — comparação campo a campo do `PersonCreateModal.tsx` (pendência do Achado 4 fechada)
 
 Comparado com os 4 blocos do doc ("Dados Pessoais" / "Perfis de Acesso" / "Dono Master" / "Escopo e Visão Padrão"):
@@ -145,7 +155,8 @@ Todo o bloco de correções (linhas 38.776–48.704) foi lido e triado nesta ses
 1. **Ação de negócio, não técnica:** clicar "Iniciar Ciclo" num cliente real (dentro de `/plano-estrategico` como Dono ou via `canManageCycle`) pra validar ponta a ponta o sistema de governança do Plano Estratégico (Achado 11) — ninguém fez isso ainda em produção. Só depois disso o `strategic_plan_ready` do checklist (Achado 2) vai ter dado real pra mostrar.
 2. Se algum cliente ganhar Matriz + 2+ filiais em `lojas` (hoje nenhum tem, ver Achado 11), testar o cenário multiunidade completo da Visão do Dono ao vivo (Achado 1 ficou sem esse teste por falta de dado).
 3. ~~Índice único parcial reforçando "uma loja principal"/"um Dono Master" no banco~~ — feito (migration `20260821150000`, aplicada e confirmada em produção).
-4. **Decisão do dono, não técnica:** se quiser executar o reset de dados de teste (Achado 8), definir critério explícito de quais dos 52 clientes são teste vs. reais antes de qualquer DELETE.
+4. **Decisão de produto, não técnica:** construir "Usar Plano Padrão" no módulo Dono de Planos de Ação (Achado 13) — feature nova, precisa de alinhamento antes de implementar.
+5. **Decisão do dono, não técnica:** se quiser executar o reset de dados de teste (Achado 8), definir critério explícito de quais dos 52 clientes são teste vs. reais antes de qualquer DELETE.
 
 **Itens da lista anterior já resolvidos nesta sessão:** comparação do `PersonCreateModal.tsx` (Achado 12, achou e corrigiu bug real de Dono Master duplicado).
 
