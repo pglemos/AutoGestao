@@ -144,7 +144,7 @@ Todo o bloco de correções (linhas 38.776–48.704) foi lido e triado nesta ses
 
 1. **Ação de negócio, não técnica:** clicar "Iniciar Ciclo" num cliente real (dentro de `/plano-estrategico` como Dono ou via `canManageCycle`) pra validar ponta a ponta o sistema de governança do Plano Estratégico (Achado 11) — ninguém fez isso ainda em produção. Só depois disso o `strategic_plan_ready` do checklist (Achado 2) vai ter dado real pra mostrar.
 2. Se algum cliente ganhar Matriz + 2+ filiais em `lojas` (hoje nenhum tem, ver Achado 11), testar o cenário multiunidade completo da Visão do Dono ao vivo (Achado 1 ficou sem esse teste por falta de dado).
-3. Considerar um índice único parcial em `unidades_cliente_consultoria` e `acessos_cliente_consultoria` pra reforçar no banco as regras "uma loja principal"/"um Dono Master" que os Achados 9 e 12 já protegem na aplicação — defesa em profundidade, não urgente.
+3. ~~Índice único parcial reforçando "uma loja principal"/"um Dono Master" no banco~~ — feito (migration `20260821150000`, aplicada e confirmada em produção).
 4. **Decisão do dono, não técnica:** se quiser executar o reset de dados de teste (Achado 8), definir critério explícito de quais dos 52 clientes são teste vs. reais antes de qualquer DELETE.
 
 **Itens da lista anterior já resolvidos nesta sessão:** comparação do `PersonCreateModal.tsx` (Achado 12, achou e corrigiu bug real de Dono Master duplicado).
