@@ -3,6 +3,7 @@ import { Button } from '@/components/atoms/Button'
 import { REPAIRABLE_CHECKS, type RepairKey, runClientRepair } from './clientRepairs'
 import { buildClientReadiness, type ReadinessCheck, readinessSummary } from './clientReadiness'
 import { resolveOwnerMaster } from './personAccess'
+import { fetchCurrentCycle, validateCycleReadiness } from '@/features/strategic-plan/planCycleRepository'
 import { Modal } from '@/components/organisms/Modal'
 import { MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
 import { supabase } from '@/lib/supabase'
@@ -57,6 +58,9 @@ export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch
 
       const ownerMasterResolution = accessRes.data?.length ? resolveOwnerMaster(accessRes.data) : { status: 'NOT_CONFIGURED' as const, count: 0 }
 
+      const { cycle: planCycle } = await fetchCurrentCycle(clientId, new Date().getFullYear())
+      const planReadiness = planCycle ? (await validateCycleReadiness(planCycle.id)).readiness : null
+
       const builtChecks = buildClientReadiness({
         status: client.status ?? null,
         primary_store_id: client.primary_store_id ?? null,
@@ -79,6 +83,14 @@ export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch
               email: ownerMasterResolution.person?.email ?? null,
               valid: ownerMasterResolution.status === 'VALID',
             },
+        strategic_plan_ready: planCycle
+          ? {
+              cycleStatus: planCycle.status,
+              total: planReadiness?.total ?? 0,
+              ready: planReadiness?.ready ?? 0,
+              pending: planReadiness?.pending ?? 0,
+            }
+          : null,
       })
 
       setChecks(builtChecks)

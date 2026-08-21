@@ -40,7 +40,8 @@ import { ClientDadosTab, ClientHistoricoTab, ClientImplantacaoTab } from './clie
 import { buildProgressBars } from './clientes/clientProgress'
 import { useClientHealth } from './clientes/useClientHealth'
 import { runClientRepair, type RepairKey } from './clientes/clientRepairs'
-import { buildClientReadiness, readinessSummary } from './clientes/clientReadiness'
+import { buildClientReadiness, readinessSummary, type ClientReadinessInput } from './clientes/clientReadiness'
+import { fetchCurrentCycle, validateCycleReadiness } from '@/features/strategic-plan/planCycleRepository'
 import { ClientConfigTab } from './clientes/ClientConfigTab'
 import { DonoMasterCard } from './clientes/DonoMasterCard'
 import { EnrollmentLinkModal } from './clientes/EnrollmentLinkModal'
@@ -127,6 +128,7 @@ export function AdminClienteDetalhePage() {
   const [savingPerson, setSavingPerson] = useState(false)
   const [linkModal, setLinkModal] = useState(false)
   const [links, setLinks] = useState<EnrollmentLinkRow[]>([])
+  const [strategicPlanReadiness, setStrategicPlanReadiness] = useState<ClientReadinessInput['strategic_plan_ready']>(null)
   const [savingLink, setSavingLink] = useState(false)
 
   const checkStore = useCallback(async () => {
@@ -179,9 +181,27 @@ export function AdminClienteDetalhePage() {
     setLinks(rows)
   }, [client?.id])
 
+  const loadStrategicPlan = useCallback(async () => {
+    if (!client?.id) return
+    const year = new Date().getFullYear()
+    const { cycle, error: cycleError } = await fetchCurrentCycle(client.id, year)
+    if (cycleError || !cycle) {
+      setStrategicPlanReadiness(null)
+      return
+    }
+    const { readiness } = await validateCycleReadiness(cycle.id)
+    setStrategicPlanReadiness({
+      cycleStatus: cycle.status,
+      total: readiness?.total ?? 0,
+      ready: readiness?.ready ?? 0,
+      pending: readiness?.pending ?? 0,
+    })
+  }, [client?.id])
+
   useEffect(() => { void loadUnits() }, [loadUnits])
   useEffect(() => { void loadPersons() }, [loadPersons])
   useEffect(() => { void loadLinks() }, [loadLinks])
+  useEffect(() => { void loadStrategicPlan() }, [loadStrategicPlan])
 
   const ownerMasterResolution = useMemo<OwnerMasterResolution>(() => {
     if (!persons.length) return { status: 'NOT_CONFIGURED', count: 0 }
@@ -212,8 +232,9 @@ export function AdminClienteDetalhePage() {
             email: ownerMasterResolution.person?.email ?? null,
             valid: ownerMasterResolution.status === 'VALID',
           },
+      strategic_plan_ready: strategicPlanReadiness,
     })
-  }, [client, storeTaken, ownerMasterResolution])
+  }, [client, storeTaken, ownerMasterResolution, strategicPlanReadiness])
 
   const summary = useMemo(() => readinessSummary(checks), [checks])
   const health = useClientHealth(client?.id, client?.primary_store_id ?? null)

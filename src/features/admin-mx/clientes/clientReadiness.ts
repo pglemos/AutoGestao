@@ -1,3 +1,5 @@
+import { PLAN_CYCLE_STATUS_LABEL } from '@/features/strategic-plan/planCycle'
+
 export type ReadinessSeverity = 'impeditivo' | 'informativo'
 
 export type CheckEvaluationStatus =
@@ -34,7 +36,18 @@ export type ClientReadinessInput = {
   storeTakenByOtherClient: boolean
   owner_master?: { id?: string | null; name?: string | null; email?: string | null; valid?: boolean | null } | null
   journey_generated?: boolean | null
-  strategic_plan_ready?: boolean | null
+  /**
+   * Prontidão do Plano Estratégico do ano corrente — vem de
+   * `validateCycleReadiness` (RPC `validar_ciclo_plano_estrategico`), a mesma
+   * fonte que decide se o ciclo pode publicar. `total`/`ready`/`pending`
+   * espelham "Indicadores com meta" / "Metas publicadas" / "Metas pendentes".
+   */
+  strategic_plan_ready?: {
+    cycleStatus: 'rascunho' | 'em_validacao' | 'publicado' | 'revisado'
+    total: number
+    ready: number
+    pending: number
+  } | null
 }
 
 /**
@@ -167,6 +180,25 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       evaluationStatus: input.journey_generated ? 'VALID' : 'WARNING',
       correctionRoute: '/consultoria-mx',
       detail: input.journey_generated ? 'Jornada de encontros materializada.' : 'Encontros da jornada ainda não foram gerados.',
+    })
+  }
+
+  if (input.strategic_plan_ready !== undefined && input.strategic_plan_ready !== null) {
+    const plan = input.strategic_plan_ready
+    const published = plan.cycleStatus === 'publicado'
+    const ok = published && plan.pending === 0
+    checks.push({
+      key: 'plano-estrategico',
+      label: 'Plano Estratégico',
+      severity: 'informativo',
+      ok,
+      evaluationStatus: ok ? 'VALID' : published ? 'WARNING' : 'NOT_APPLICABLE',
+      correctionRoute: '/plano-estrategico',
+      detail: plan.total === 0
+        ? 'Plano ainda sem indicadores.'
+        : published
+          ? `Publicado — ${plan.ready} de ${plan.total} indicador(es) com meta completa${plan.pending > 0 ? `, ${plan.pending} pendência(s)` : ''}.`
+          : `${PLAN_CYCLE_STATUS_LABEL[plan.cycleStatus]} — ${plan.ready} de ${plan.total} indicador(es) prontos para publicar.`,
     })
   }
 
