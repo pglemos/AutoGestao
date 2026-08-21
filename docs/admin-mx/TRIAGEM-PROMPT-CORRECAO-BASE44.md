@@ -57,6 +57,14 @@ A partir da linha ~44.185 o documento pede: dois modelos de dados separados (tem
 
 Cruzado com `src/features/admin-mx/planos-acao/`: `NewActionChoiceModal.tsx` (a escolha inicial), `ClientActionPlanWizard.tsx` + `TemplateFormModal.tsx` compartilhando `actionPlanWizardLogic.ts` (lógica única, ainda que não seja literalmente o mesmo componente visual pedido pelo doc), `ApplyTemplateModal.tsx`, `PromoteToTemplateModal.tsx` e `templateApplicationIdempotency.ts` — os nomes e a separação batem com o pedido. GAP-PARIDADE-BASE44.md já marca esse módulo auditado ao vivo (commit `26535302`, hardening de atomicidade). **Não abri as telas nem li os arquivos linha a linha** — é spot-check por nome/estrutura, não confirmação funcional. Risco baixo de gap grande aqui; se quiser certeza total, precisa clicar em produção como fez a auditoria de 2026-08-21.
 
+## Achado 6 — smoke test pós-deploy pegou bug que typecheck/testes não pegaram
+
+Depois do merge do PR #190, testei ao vivo em produção (cliente AG AUTOMOVEIS, admin `synvollt@gmail.com`): o novo check "Dono Master válido" **não aparecia** no checklist de prontidão. Causa: eu mesmo tinha passado `owner_master: null` quando `resolveOwnerMaster` retornava `NOT_CONFIGURED` (cliente sem nenhuma pessoa cadastrada) — e `buildClientReadiness` só empurra o check quando o valor não é `null`. Resultado: em vez de mostrar "Nenhum Dono Master configurado" como pendência (o comportamento correto, igual aos outros checks informativos), o item simplesmente sumia da lista — o oposto do que a Achado 2 pretendia corrigir. Nenhum teste unitário pegou porque os testes só cobriam o caso `owner_master` presente; typecheck não pega isso porque é erro de lógica, não de tipo.
+
+Corrigido no mesmo dia (commit `f2fabcbd`, direto em main): `owner_master` agora carrega o status inteiro do `resolveOwnerMaster` (`NOT_CONFIGURED`/`VALID`/`DUPLICATE_MASTER`/`INACTIVE`) em vez de um boolean achatado, e os dois consumidores sempre passam o objeto — nunca `null`. Textos por status alinhados ao item 23 do doc ("Nenhum Dono Master configurado para esta empresa."). 2 testes novos cobrindo exatamente esse caso.
+
+**Lição para a próxima sessão:** depois de qualquer mudança no checklist de prontidão, testar ao vivo em pelo menos um cliente **sem** Dono Master configurado, não só um com. É fácil escrever o caminho feliz certo e esquecer o caminho vazio.
+
 ## Entregue nesta sessão
 
 - PR [#190](https://github.com/pglemos/MXGESTAOPREDITIVA/pull/190) `fix/admin-mx-readiness-correction-route` — **merged em main** (squash, commit `5a6c096e`):
