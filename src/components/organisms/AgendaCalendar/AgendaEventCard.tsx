@@ -1,3 +1,4 @@
+import { forwardRef } from 'react'
 import { format, parseISO } from 'date-fns'
 import { Clock } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -15,7 +16,14 @@ interface AgendaEventCardProps {
   onOpen?: (event: React.MouseEvent<HTMLDivElement>) => void
 }
 
-export function AgendaEventCard({
+// forwardRef é obrigatório aqui: AgendaEventPopover usa <Popover.Trigger asChild>
+// em volta deste card pra abrir o popover de detalhe (visto na visão Semana). O
+// Radix Slot injeta um ref no filho pra medir a posição real do card; sem
+// forwardRef o ref cai no vazio e o floating-ui nunca mede o anchor — o
+// popover fica preso no placeholder inicial (translateY(-200%), fora da tela)
+// pra sempre. Achado auditando /agenda ao vivo (2026-08-21): clicar em
+// qualquer evento na visão Semana (padrão do módulo) não abria nada.
+export const AgendaEventCard = forwardRef<HTMLDivElement, AgendaEventCardProps>(function AgendaEventCard({
   item,
   getVisitDotColor,
   compact = false,
@@ -24,12 +32,13 @@ export function AgendaEventCard({
   onPointerDownBody,
   onPointerDownHandle,
   onOpen,
-}: AgendaEventCardProps) {
+}, ref) {
   const start = parseISO(item.startsAt)
   const dotColor = item.kind === 'event' ? 'bg-status-info' : getVisitDotColor(item.status)
 
   return (
     <div
+      ref={ref}
       role="button"
       tabIndex={0}
       onPointerDown={onPointerDownBody}
@@ -83,7 +92,7 @@ export function AgendaEventCard({
       )}
     </div>
   )
-}
+})
 
 export function AgendaEventCompactChip({
   item,
