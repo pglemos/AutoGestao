@@ -107,6 +107,17 @@ Esse achado não estava no documento de correção — veio de investigar dado r
 
 **Sanity check adicional:** nenhum outro cliente tem Dono Master duplicado nem contato principal duplicado (mesma família de bug, checado direto no banco — zero ocorrências). GoCars continua com a linha física duplicada (2 unidades chamadas "GoCars", uma agora `is_primary=false`) — não apaguei a linha em si por não ter mapeado tudo que referencia `unidade_id` (horários, planos de ação por escopo); só corrigi o flag que causava o bug visível de dois "Principal". Se quiser a limpeza completa da duplicata física, é um reparo à parte.
 
+## Achado 11 — `ciclos_plano_estrategico` está vazia: 0 linhas em toda a produção
+
+Tentando montar o teste multiunidade da Visão do Dono (pendência dos Achados 1/2), fui ver se GoCars/VB (os únicos clientes reais multiunidade) tinham um ciclo de Plano Estratégico pra testar. Descoberta maior: **nenhum cliente, em toda a base, tem uma linha em `ciclos_plano_estrategico`** — o sistema de governança (rascunho → validação → publicado) que sustenta o `strategic_plan_ready` que implementei (Achado 2) nunca foi usado por ninguém, nem uma vez.
+
+Investiguei se é bug de UI (botão inalcançável) ou só feature nova sem uso ainda:
+- `PlanCycleBanner` está corretamente importado e renderizado em `StrategicPlanWorkspace.tsx`, com botão "Iniciar Ciclo" quando `canManageCycle` e `!cycle`.
+- Ele só fica oculto quando `clientId` é null (`fetchClientOfStore` não achou `clientes_consultoria` com aquele `primary_store_id`) — explica por que não apareceu no teste que fiz como dono da MX Consultoria: a MX Consultoria é a própria empresa, provavelmente não é uma linha de `clientes_consultoria` (isso é normal, não bug).
+- Pra clientes reais (GoCars etc.), a resolução via `lojas.id → clientes_consultoria.primary_store_id` está correta no código — não achei bug estrutural que impeça o banner de aparecer pra eles.
+
+**Conclusão:** é uma feature nova (commits dos últimos 1-2 dias: `ae36ef70`, `07268508`, `26535302`) que a própria equipe MX ainda não começou a usar operacionalmente — clicar "Iniciar Ciclo" pela primeira vez num cliente real é uma ação de negócio de verdade (inicia o fluxo formal de governança do plano daquele cliente), não uma verificação técnica. **Não fiz isso eu mesmo** — não tenho login de dono real de GoCars/VB, e mesmo se tivesse, iniciar um ciclo pra um cliente pagante não é algo que eu deva fazer só pra testar. Fica como recomendação: alguém da equipe MX (ou você) clicar "Iniciar Ciclo" num cliente real de teste controlado pra validar o fluxo ponta a ponta — banner, transições, publicação, e só então o `strategic_plan_ready` do checklist vai ter dado real pra mostrar pela primeira vez.
+
 ## Achado 10 — smoke test rápido em Vendedor e Gerente: saudável
 
 Fora do escopo do doc (que é só admin-mx), fiz uma passada rápida nos dois perfis operacionais que ainda não tinham sido tocados nesta sessão:
