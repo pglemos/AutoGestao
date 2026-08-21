@@ -2,6 +2,8 @@
 
 Levantamento honesto do que existe no export `mx-admin-flow` e do que o MX tem hoje, por rota. Base: inventário de telas, ações e entidades extraído do próprio código do Base44.
 
+⚠️ **Aviso sobre este documento (2026-08-21):** as % de cobertura abaixo e os itens marcados "feito" foram levantados por presença de arquivo/tela (paridade estrutural), não por teste de ponta a ponta. Uma auditoria ao vivo em 2026-08-21 achou 5 gaps reais e severos escondidos atrás de itens já marcados "feito" — três deles em rotas com cobertura estimada em 85–95%. Ver **[Auditoria ao vivo (2026-08-21)](#auditoria-ao-vivo-2026-08-21--o-que-a--de-cobertura-escondia)** antes de confiar em qualquer "feito" deste arquivo. Método: grep por tabela/coluna sem escritor ou sem leitor + clicar de verdade em produção, não só ler o código.
+
 ## Tamanho do gap
 
 | Rota | Base44 (arquivos / linhas) | MX hoje | Cobertura estimada |
@@ -73,6 +75,30 @@ Sem elas, parte do gap não fecha: qualificação de consultor por produto e por
 6. ~~`/indicadores` — ordem, drawer, parâmetros~~ — feito.
 7. ~~`/indicadores` — wizard completo, fórmulas e importação de metas~~ — feito (branch route/admin-indicadores).
 8. ~~`/consultoria-mx` — metodologia por produto e editor de encontro~~ — feito (branch route/admin-consultoria-mx).
+
+## Auditoria ao vivo (2026-08-21) — o que a % de cobertura escondia
+
+Depois do hardening de concorrência em `/planos-acao`, auditamos as 6 rotas de novo — desta vez sem confiar em "o arquivo existe": para cada tabela nova, grep pra achar quem escreve e quem lê; pra cada tela, clicar de verdade em produção com uma conta real. O padrão que se repetiu 4 vezes: uma feature com tela, tipo e teste unitário, mas com um elo faltando no meio — uma coluna que nada grava, uma tabela que nada lê, ou uma coluna que nunca existiu.
+
+| Rota | Cobertura estimada (arquivo) | Gap real achado | Severidade |
+|---|---|---|---|
+| `/planos-acao` | ~90% | Concorrência/idempotência em RPCs críticas (retry/clique duplo corrompia estado) | Alta — dado incorreto silencioso |
+| `/indicadores` | ~85% | `realizado` nunca foi gravável em lugar nenhum do sistema — só dava pra definir meta | Crítica — metade da feature "Metas e Realizados" nunca funcionou |
+| `/consultoria-mx` | ~85% | "Vincular Aula da Universidade MX" sempre vazio — consultava tabela morta (`universidade_aulas`, 0 linhas) em vez de `treinamentos` (14 ativas) | Alta — feature 100% não funcional |
+| `/clientes` | ~95% | 60 de 63 clientes sem loja cadastrada na Ficha 360 (trigger de backfill nunca rodou pros existentes) + botão "Adicionar loja" quebrado pra **todo mundo** (coluna `created_by` nunca existiu) | Crítica — feature de cadastro travada desde que foi escrita |
+| `/equipe` | ~95% | Nenhum — auditado ao vivo (UserEditModal 4 abas, ConsultantProfileModal, capacidade h/mês), tudo funcional | — |
+| `/produtos` | ~100% | Nenhum — auditado ao vivo (Resumo, Módulos, Tempos e Capacidade, Plano Estratégico), tudo funcional | — |
+
+**Os 4 fixes, em produção:**
+
+1. [`26535302`](https://github.com/pglemos/MXGESTAOPREDITIVA/commit/26535302) — `fix(admin-mx,strategic-plan): harden action plan and strategic plan cycle atomicity`. 8 migrations movendo mutações multi-tabela pra RPCs `SECURITY DEFINER` atômicas (conversão sugestão→plano, reconciliação, guard de conclusão, ciclo do plano, template lifecycle, checklist toggle).
+2. [`20777320`](https://github.com/pglemos/MXGESTAOPREDITIVA/commit/20777320) — `feat(indicadores): registrar realizado do plano estratégico`. RPC nova `salvar_realizado_indicador_planejamento` (espelha a de meta, sem o bloqueio de "publicado é imutável" — realizado precisa entrar contra meta já fechada); corrige `restaurar_metas_indicador_planejamento` pra restaurar pelo campo certo (senão restauraria realizado na meta).
+3. [`78529a94`](https://github.com/pglemos/MXGESTAOPREDITIVA/commit/78529a94) — `fix(consultoria-mx): vincular aula da Universidade MX à tabela certa`. Troca a fonte de `universidade_aulas` pra `treinamentos` + migra a FK de `conteudo_referencia_encontro.learning_content_id`. Mesmo defeito já corrigido uma vez do lado do vendedor (`a9ba19ee`), nunca replicado aqui.
+4. [`39be7fe0`](https://github.com/pglemos/MXGESTAOPREDITIVA/commit/39be7fe0) — `fix(clientes): destravar cadastro de lojas e fechar o backfill que faltou`. Adiciona `created_by` em `unidades_cliente_consultoria` (existia no código desde que foi escrito, nunca no banco) + backfill único pros 49 clientes que tinham `primary_store_id` mas nenhuma unidade.
+
+Todos: typecheck limpo, testes verdes, build ok, CI completo, verificado clicando em produção antes de fechar (dado de teste sempre limpo depois).
+
+**Lição pra próxima auditoria:** "tem tela + tem tipo + tem teste unitário" não prova que a feature funciona — os testes unitários testavam a lógica pura (formatação, validação, cálculo), nunca o caminho de I/O real contra o schema do banco. Rodar `grep` por tabela sem `.insert(`/`.update(`/`.upsert(` e clicar em cada botão real em produção pega o que typecheck e suíte verde não pegam.
 
 ## Fatia — `/produtos` aba Plano Estratégico (2026-08-15)
 
