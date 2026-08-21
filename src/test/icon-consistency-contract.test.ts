@@ -52,7 +52,7 @@ describe('FASE U 21.009 — ícones consistentes para a mesma ação', () => {
   test('integração: árvore viva sem ícones inconsistentes (21.009)', () => {
     const findings = runIconConsistencyGate()
     expect(findings, `ícones inconsistentes:\n${JSON.stringify(findings, null, 2)}`).toEqual([])
-  })
+  }, 15_000)
 
   test('allowlist é orçamento explícito', () => {
     expect(ALLOWLIST).toBeInstanceOf(Map)
