@@ -57,7 +57,7 @@ A partir da linha ~44.185 o documento muda de assunto de novo: "PLANOS DE AÇÃO
 
 ## Entregue nesta sessão
 
-- PR [#190](https://github.com/pglemos/MXGESTAOPREDITIVA/pull/190) `fix/admin-mx-readiness-correction-route`:
+- PR [#190](https://github.com/pglemos/MXGESTAOPREDITIVA/pull/190) `fix/admin-mx-readiness-correction-route` — **merged em main** (squash, commit `5a6c096e`):
   1. `correctionRoute` morto corrigido (4 rotas).
   2. Check "Dono Master válido" ligado nos dois consumidores do checklist.
   3. **`strategic_plan_ready` implementado de verdade** — usa `validateCycleReadiness` (a mesma RPC autoritativa que decide se o ciclo pode publicar), não um recálculo paralelo. 4 testes novos, inclusive o cenário exato do bug do doc (publicado com pendência não desaparece, vira WARNING).
