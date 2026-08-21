@@ -67,6 +67,12 @@ Corrigido no mesmo dia (commit `f2fabcbd`, direto em main): `owner_master` agora
 
 **Confirmado em produção** (commit `f2fabcbd`, deploy `dpl_9g3HiWAoMaENHBwyHENVZ5YC85Rr` READY): cliente AG AUTOMOVEIS agora mostra `Dono Master válido — Nenhum Dono Master configurado para esta empresa. — Pendente` como 11º item do checklist, sem erro no console. Nota: o check "Plano Estratégico" continua propositalmente ausente para esse cliente (nunca teve ciclo de plano criado — `fetchCurrentCycle` retorna null) — comportamento consistente porque nem todo cliente já começou o Plano Estratégico, diferente do Dono Master que é esperado sempre. Se algum dia isso incomodar, é o mesmo padrão de fix.
 
+## Achado 7 — Planos de Ação: duplicação de 7 registros já resolvida, Kanban consistente ao vivo
+
+Continuação da leitura do doc (linha ~44.850+): módulo inteiro sobre um bug específico — aplicar um Plano Padrão gerava 7 `ClientActionPlan` em vez de 1 com 5 itens — mais spec de Kanban (drag-and-drop, colunas, transições, drawer de detalhe). `templateApplicationIdempotency.ts` já implementa exatamente o padrão pedido (`createTemplateApplicationRequestId` + `application_request_id` único, detecção de replay por `transition_metadata`) — bate com os itens 5/6 do doc (operação única + idempotência). `actionPlanReconciliation.ts` e o RPC `action_plan_reconciliation` do commit `26535302` cobrem a reconciliação (item 8).
+
+Testado ao vivo (Planos de Ação → Planos da rede): card "Planos: 2" bate exatamente com a soma das colunas do Kanban (Não iniciada 0 + Em andamento 1 + Atrasada 1 + Concluída 0 = 2) — sem o bug "7 totais e só 6 distribuídas" que o doc descreve (item 9). Amostra pequena (rede real só tem 2 planos hoje), mas nenhuma inconsistência visível.
+
 ## Entregue nesta sessão
 
 - PR [#190](https://github.com/pglemos/MXGESTAOPREDITIVA/pull/190) `fix/admin-mx-readiness-correction-route` — **merged em main** (squash, commit `5a6c096e`):
