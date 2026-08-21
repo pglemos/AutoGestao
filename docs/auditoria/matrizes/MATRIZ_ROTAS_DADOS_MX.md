@@ -291,10 +291,10 @@
 | `treinamento_quiz_questoes` | 1 |
 | `treinamento_tarefa_respostas` | 1 |
 | `treinamento_tarefas` | 1 |
-| `treinamentos` | 4 |
+| `treinamentos` | 5 |
 | `trilhas_desenvolvimento` | 1 |
 | `unidades_cliente_consultoria` | 10 |
-| `universidade_aulas` | 2 |
+| `universidade_aulas` | 1 |
 | `universidade_certificacoes` | 1 |
 | `universidade_trilhas` | 1 |
 | `user_roles` | 1 |
@@ -642,12 +642,12 @@
 | `treinamento_tarefa_respostas:upsert` | 1 |
 | `treinamento_tarefas:select` | 1 |
 | `treinamentos:insert` | 1 |
-| `treinamentos:select` | 3 |
+| `treinamentos:select` | 4 |
 | `trilhas_desenvolvimento:select` | 1 |
 | `unidades_cliente_consultoria:insert` | 4 |
 | `unidades_cliente_consultoria:select` | 10 |
 | `unidades_cliente_consultoria:update` | 2 |
-| `universidade_aulas:select` | 2 |
+| `universidade_aulas:select` | 1 |
 | `universidade_certificacoes:select` | 1 |
 | `universidade_trilhas:select` | 1 |
 | `user_roles:insert` | 1 |

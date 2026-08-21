@@ -872,14 +872,22 @@ export async function duplicateReportTemplate(template: ReportTemplate): Promise
 
 // ------- Aulas (Universidade MX) -------
 
+// `universidade_aulas` está vazia em produção (0 linhas) — a jornada real da
+// Universidade MX vive em `treinamentos` (mesma tabela que a tela do vendedor
+// usa; ver listarTreinamentosVendedor). Antes desta correção, "Vincular Aula
+// da Universidade MX" sempre mostrava "Nenhuma aula publicada encontrada.",
+// mesmo com aulas ativas publicadas no sistema.
 export async function fetchUniversityLessons(): Promise<{ rows: Array<{ id: string; titulo: string; tipo: string; trilha_id: string | null }>; error: string | null }> {
   const { data, error } = await supabase
-    .from('universidade_aulas')
-    .select('id, titulo, tipo, trilha_id')
-    .eq('ativo', true)
-    .order('titulo', { ascending: true })
+    .from('treinamentos')
+    .select('id, title, type')
+    .eq('active', true)
+    .order('title', { ascending: true })
   if (error) return { rows: [], error: error.message }
-  return { rows: (data ?? []).map(row => ({ id: row.id, titulo: row.titulo, tipo: row.tipo, trilha_id: row.trilha_id })), error: null }
+  return {
+    rows: (data ?? []).map(row => ({ id: row.id, titulo: row.title, tipo: row.type, trilha_id: null })),
+    error: null,
+  }
 }
 
 // ------- Auditoria -------
