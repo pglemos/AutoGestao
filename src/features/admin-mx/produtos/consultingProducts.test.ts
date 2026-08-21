@@ -9,6 +9,7 @@ import {
   productRequiresNewVersion,
   restoreProductCapabilityDefaults,
   summarizeTimes,
+  toggleProductModuleGroup,
   validateProductPublication,
   validateProductDraft,
   type EncounterTime,
@@ -145,5 +146,36 @@ describe('origem da matriz de capacidades', () => {
 
     expect(patchProductModule(legacy, { incluido: true }).configuration_origin).toBe('PERSONALIZADO_PRODUTO')
     expect(restoreProductCapabilityDefaults([legacy])[0].configuration_origin).toBe('PERSONALIZADO_PRODUTO')
+  })
+
+  test('alterna o grupo sem desligar obrigatórios ou indisponíveis', () => {
+    const references = buildDefaultCapabilities().filter(item => item.moduleCode === 'DONO').slice(0, 3)
+    const modules = references.map((reference, index): ProductModule => ({
+      module_key: reference.moduleKey,
+      label: reference.label,
+      module_code: reference.moduleCode,
+      module_label: reference.moduleLabel,
+      menu_code: reference.code,
+      menu_label: reference.label,
+      incluido: index === 0,
+      obrigatorio: index === 0,
+      etapa: null,
+      visibilidade: 'dono',
+      release_stage: reference.releaseStage,
+      visibility: reference.visibility,
+      technical_status: index === 2 ? 'TEMPORARIAMENTE_INDISPONIVEL' : reference.technicalStatus,
+      display_order: reference.displayOrder,
+      status: 'ATIVO',
+      configuration_origin: 'PADRAO_PRODUTO',
+    }))
+
+    const enabled = toggleProductModuleGroup(modules, 'DONO')
+    expect(enabled.map(item => item.incluido)).toEqual([true, true, false])
+
+    const disabled = toggleProductModuleGroup(enabled, 'DONO')
+    expect(disabled.map(item => item.incluido)).toEqual([true, false, false])
+
+    const lockedOnly = modules.filter(item => item.obrigatorio || item.technical_status === 'TEMPORARIAMENTE_INDISPONIVEL')
+    expect(toggleProductModuleGroup(lockedOnly, 'DONO')).toEqual(lockedOnly)
   })
 })

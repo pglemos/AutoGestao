@@ -13,7 +13,7 @@ import {
   MxStatusBanner,
   MxTableSurface,
 } from '@/components/module/MxModuleVisualPrimitives'
-import { ChevronDown, ChevronUp, Eye, Lock, Package, RefreshCw } from 'lucide-react'
+import { Check, ChevronDown, ChevronUp, Eye, Lock, MinusCircle, Package, Plus, RefreshCw } from 'lucide-react'
 import { toast } from '@/lib/toast'
 import { ProductStrategicPlanTab } from './ProductStrategicPlanTab'
 import { PREVIEW_PROFILES, RELEASE_STAGE_LABELS, TECHNICAL_STATUS_LABELS, VISIBILITY_LABELS, moduleInclusionState } from './capabilityCatalog'
@@ -26,6 +26,7 @@ import {
   saveEncounterTimes,
   saveProductModules,
   summarizeTimes,
+  toggleProductModuleGroup,
   type ConsultingProduct,
   type EncounterTime,
   type ProductModule,
@@ -46,6 +47,8 @@ export function ProductDetailDrawer(props: { product: ConsultingProduct | null; 
   const [modules, setModules] = useState<ProductModule[]>([])
   const [times, setTimes] = useState<EncounterTime[]>([])
   const [loading, setLoading] = useState(false)
+  const [loadError, setLoadError] = useState<string | null>(null)
+  const [reloadNonce, setReloadNonce] = useState(0)
   const [saving, setSaving] = useState(false)
   const [expandedModules, setExpandedModules] = useState<Record<string, boolean>>({})
   const [showPreview, setShowPreview] = useState(false)
@@ -57,15 +60,20 @@ export function ProductDetailDrawer(props: { product: ConsultingProduct | null; 
     setShowPreview(false)
     setPreviewProfile('DONO')
     setLoading(true)
+    setLoadError(null)
+    let active = true
     void Promise.all([
       fetchProductModules(product.program_key),
       fetchEncounterTimes(product.program_key, product.total_visits ?? 0),
-    ]).then(([nextModules, nextTimes]) => {
-      setModules(nextModules)
-      setTimes(nextTimes)
+    ]).then(([moduleResult, timeResult]) => {
+      if (!active) return
+      setModules(moduleResult.rows)
+      setTimes(timeResult.rows)
+      setLoadError(moduleResult.error ?? timeResult.error)
       setLoading(false)
     })
-  }, [product])
+    return () => { active = false }
+  }, [product, reloadNonce])
 
   const resumoTempos = useMemo(() => summarizeTimes(times), [times])
   const modulosIncluidos = modules.filter(item => item.incluido).length
@@ -104,6 +112,7 @@ export function ProductDetailDrawer(props: { product: ConsultingProduct | null; 
         return
       }
       toast.success(tab === 'modulos' ? 'Módulos do produto salvos.' : 'Tempos do produto salvos.')
+      props.onChanged?.()
     } finally {
       setSaving(false)
     }
@@ -127,6 +136,12 @@ export function ProductDetailDrawer(props: { product: ConsultingProduct | null; 
         <TabNav tabs={TABS} activeTab={tab} onTabChange={setTab} />
 
         {loading ? <MxLoadingState label="Carregando produto" /> : null}
+        {!loading && loadError ? (
+          <MxStatusBanner tone="danger" className="flex flex-wrap items-center justify-between gap-3">
+            <span>Não foi possível carregar todos os dados deste produto: {loadError}</span>
+            <Button variant="outline" size="sm" onClick={() => setReloadNonce(value => value + 1)}>Tentar novamente</Button>
+          </MxStatusBanner>
+        ) : null}
 
         {!loading && tab === 'resumo' ? (
           <div className="space-y-4">
@@ -190,12 +205,24 @@ export function ProductDetailDrawer(props: { product: ConsultingProduct | null; 
                       return (
                         <Fragment key={group.code}>
                           <TableRow key={group.code} className="bg-surface-alt">
-                            <TableCell colSpan={7}>
-                              <button type="button" className="flex w-full items-center gap-3 text-left" onClick={() => setExpandedModules(current => ({ ...current, [group.code]: !expanded }))}>
-                                {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                                <span className="font-semibold text-foreground">{group.label}</span>
-                                <span className="text-xs text-muted-foreground">{included}/{group.items.length} incluídos · {state === 'partial' ? 'parcial' : state === 'full' ? 'liberado' : 'bloqueado'}</span>
-                              </button>
+                            <TableCell colSpan={8}>
+                              <div className="flex items-center gap-3">
+                                <button
+                                  type="button"
+                                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border bg-card text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring disabled:cursor-not-allowed disabled:opacity-50"
+                                  aria-label={state === 'full' ? `Desativar menus disponíveis de ${group.label}` : `Incluir menus disponíveis de ${group.label}`}
+                                  aria-pressed={state === 'full'}
+                                  title={state === 'full' ? 'Desativar menus disponíveis' : 'Incluir menus disponíveis'}
+                                  onClick={() => setModules(current => toggleProductModuleGroup(current, group.code))}
+                                >
+                                  {state === 'full' ? <Check size={16} aria-hidden="true" /> : state === 'partial' ? <MinusCircle size={16} aria-hidden="true" /> : <Plus size={16} aria-hidden="true" />}
+                                </button>
+                                <button type="button" className="flex min-w-0 flex-1 items-center gap-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring" onClick={() => setExpandedModules(current => ({ ...current, [group.code]: !expanded }))}>
+                                  {expanded ? <ChevronUp size={16} aria-hidden="true" /> : <ChevronDown size={16} aria-hidden="true" />}
+                                  <span className="font-semibold text-foreground">{group.label}</span>
+                                  <span className="text-xs text-muted-foreground">{included}/{group.items.length} incluídos · {state === 'partial' ? 'parcial' : state === 'full' ? 'liberado' : 'bloqueado'}</span>
+                                </button>
+                              </div>
                             </TableCell>
                           </TableRow>
                           {expanded ? group.items.map(item => (

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Package, Plus, RefreshCw } from 'lucide-react'
+import { Package, Plus, RefreshCw, ShieldCheck } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
@@ -16,6 +16,7 @@ import {
   MxSectionCard,
   MxSectionHeader,
   MxSelect,
+  MxStatusBanner,
   MxTableSurface,
   MxToolbar,
 } from '@/components/module/MxModuleVisualPrimitives'
@@ -193,6 +194,18 @@ export function AdminProdutosConsultoriaPage() {
               <MxMetricCard title="Presenciais" value={metrics.presenciais} detail="Limite máximo das jornadas" icon={Package} tone="info" />
               <MxMetricCard title="Contratos ativos" value={metrics.contratos} detail="Clientes vinculados" icon={Package} tone="success" />
             </MxMetricGrid>
+            <MxStatusBanner tone="info" className="space-y-2">
+              <div className="flex items-center gap-2">
+                <ShieldCheck size={16} aria-hidden="true" />
+                <span>Regras de exclusividade evolutiva</span>
+              </div>
+              <ul className="ml-6 list-disc space-y-1 font-normal">
+                <li>Grupo CONSULTORIA_EVOLUTIVA_PRINCIPAL: apenas um programa ativo por empresa (PMR → PMR Plus → PPA).</li>
+                <li>PMR Online e PMR Híbrido são variantes do PMR e não podem ficar simultaneamente ativos.</li>
+                <li>Produto publicado com clientes vinculados não pode ser excluído.</li>
+                <li>Para editar um produto publicado, uma nova versão em rascunho deve ser criada.</li>
+              </ul>
+            </MxStatusBanner>
             <MxToolbar>
               <MxInput value={search} onChange={event => setSearch(event.target.value)} placeholder="Buscar produto" aria-label="Buscar produto" />
               <MxSelect value={status} onChange={event => setStatus(event.target.value)} aria-label="Filtrar por status">

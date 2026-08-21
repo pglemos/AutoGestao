@@ -136,6 +136,22 @@ export function patchProductModule(item: ProductModule, values: Partial<ProductM
   }
 }
 
+/** Alterna um grupo inteiro, preservando menus obrigatórios e indisponíveis. */
+export function toggleProductModuleGroup(modules: ProductModule[], moduleCode: string): ProductModule[] {
+  const belongsToGroup = (item: ProductModule) => (item.module_code ?? 'LEGADO') === moduleCode
+  const group = modules.filter(belongsToGroup)
+  if (group.length === 0) return modules
+
+  const toggleable = group.filter(item => !item.obrigatorio && item.technical_status !== 'TEMPORARIAMENTE_INDISPONIVEL')
+  if (toggleable.length === 0) return modules
+
+  const targetIncluded = !toggleable.every(item => item.incluido)
+  return modules.map(item => {
+    if (!belongsToGroup(item) || item.obrigatorio || item.technical_status === 'TEMPORARIAMENTE_INDISPONIVEL') return item
+    return patchProductModule(item, { incluido: targetIncluded })
+  })
+}
+
 /** Restaura o catálogo oficial MX, inclusive itens obrigatórios e metadados técnicos. */
 export function restoreProductCapabilityDefaults(modules: ProductModule[]): ProductModule[] {
   const references = buildDefaultCapabilities()
@@ -325,11 +341,14 @@ export async function deleteDraftProduct(product: ConsultingProduct): Promise<{ 
   return { error: error?.message ?? null }
 }
 
-export async function fetchProductModules(programKey: string): Promise<ProductModule[]> {
-  const [{ data: saved }, { data: catalog }] = await Promise.all([
+export async function fetchProductModules(programKey: string): Promise<{ rows: ProductModule[]; error: string | null }> {
+  const [{ data: saved, error: savedError }, { data: catalog, error: catalogError }] = await Promise.all([
     supabase.from('modulos_produto_consultoria').select('id, module_key, label, module_code, module_label, menu_code, menu_label, incluido, obrigatorio, etapa, visibilidade, release_stage, visibility, technical_status, display_order, status, configuration_origin').eq('program_key', programKey).order('display_order', { ascending: true }),
     supabase.from('modulos_sistema').select('codigo, nome, interno_mx').order('nome', { ascending: true }),
   ])
+  const queryError = savedError ?? catalogError
+  if (queryError) return { rows: [], error: queryError.message }
+
   const savedRows = saved ?? []
   const savedByMenu = new Map(
     savedRows
@@ -404,7 +423,10 @@ export async function fetchProductModules(programKey: string): Promise<ProductMo
       configuration_origin: 'PERSONALIZADO_PRODUTO' as CapabilityConfigurationOrigin,
     }))
 
-  return [...defaults, ...legacy, ...catalogFallback].sort((left, right) => left.display_order - right.display_order)
+  return {
+    rows: [...defaults, ...legacy, ...catalogFallback].sort((left, right) => left.display_order - right.display_order),
+    error: null,
+  }
 }
 
 export function validateProductModules(modules: ProductModule[]): string | null {
@@ -443,23 +465,28 @@ export async function saveProductModules(programKey: string, modules: ProductMod
   return { error: error?.message ?? null }
 }
 
-export async function fetchEncounterTimes(programKey: string, totalVisits: number): Promise<EncounterTime[]> {
-  const { data } = await supabase
+export async function fetchEncounterTimes(programKey: string, totalVisits: number): Promise<{ rows: EncounterTime[]; error: string | null }> {
+  const { data, error } = await supabase
     .from('tempos_encontro_produto')
     .select('visit_number, horas_online, horas_presencial, origem, observacao')
     .eq('program_key', programKey)
+  if (error) return { rows: [], error: error.message }
+
   const byVisit = new Map((data ?? []).map(item => [item.visit_number, item]))
-  return Array.from({ length: Math.max(totalVisits, 0) }, (_, index) => {
-    const visit = index + 1
-    const current = byVisit.get(visit)
-    return {
-      visit_number: visit,
-      horas_online: current?.horas_online ?? null,
-      horas_presencial: current?.horas_presencial ?? null,
-      origem: (current?.origem ?? 'manual') as EncounterTime['origem'],
-      observacao: current?.observacao ?? null,
-    }
-  })
+  return {
+    rows: Array.from({ length: Math.max(totalVisits, 0) }, (_, index) => {
+      const visit = index + 1
+      const current = byVisit.get(visit)
+      return {
+        visit_number: visit,
+        horas_online: current?.horas_online ?? null,
+        horas_presencial: current?.horas_presencial ?? null,
+        origem: (current?.origem ?? 'manual') as EncounterTime['origem'],
+        observacao: current?.observacao ?? null,
+      }
+    }),
+    error: null,
+  }
 }
 
 export async function saveEncounterTimes(programKey: string, times: EncounterTime[]): Promise<{ error: string | null }> {
