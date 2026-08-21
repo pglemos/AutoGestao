@@ -39,9 +39,9 @@ Achei (e corrigi nesta sessão, PR #190):
 - `journey_generated`: consultar se a jornada de encontros do cliente foi materializada (tabela de visitas/encontros da consultoria).
 - `strategic_plan_ready`: é literalmente o que o doc pede na seção "Clientes MX — Resumo do Plano Estratégico" — contar indicadores com meta na versão publicada vs pendentes. Fonte provável: `src/features/strategic-plan/planCycleRepository.ts` + `clientPlanningRepository.ts` (já existem, usados pelo motor do Achado 1). Precisa uma função `getClientStrategicPlanPublicationSummary` nova ou adaptar as existentes.
 
-## Achado 3 — não confirmado: KPIs da lista de Clientes MX todos iguais a 52
+## Achado 3 — KPIs 52/52/52 em Clientes MX: investigado, não é bug
 
-Tela `/clientes`, aba Carteira 360: "Total de Lojas 52", "Ativos 52", "Em Implantação 52" — os três badges com o mesmo número. Pode ser legítimo (não são status mutuamente exclusivos) ou pode ser bug de card sem filtro aplicado. **Não investigado a fundo** — próxima sessão: ler `useClientPortfolio.ts` / `clientPortfolio.ts` e conferir se cada card usa o filtro certo.
+Tela `/clientes`, aba Carteira 360, mostrava "Total de Lojas 52", "Ativos 52", "Em Implantação 52" com o mesmo número. Lido `clientPortfolio.ts`: `ativos` e `em_implantacao` não são buckets mutuamente exclusivos (`clientBuckets` empurra o cliente pra os dois quando aplicável), e "Total de Lojas" nem é um bucket — é contagem bruta de lojas. A coincidência é explicável pelos dados reais de hoje: os 52 clientes ativos são todos loja única (52 lojas = 52 clientes) e todos com jornada de encontros incompleta (`visitsDone < visitsTotal`). Fechado — sem ação.
 
 ## Pessoas e Acessos — Dono Master (linhas 41.838–48.704)
 
@@ -55,8 +55,7 @@ Lido só o topo (diagnóstico ETAPA A/B de outro bug do Plano Estratégico, que 
 
 1. Decidir destino do `ownerStrategicPlanViewModel.ts` órfão (Achado 1) — apagar ou documentar por que existe.
 2. Implementar `strategic_plan_ready` de verdade no checklist (Achado 2) — é o item mais alinhado ao que o doc pede e ainda falta.
-3. Investigar os KPIs 52/52/52 em `/clientes` (Achado 3).
-4. Ler e triar o restante de "Pessoas e Acessos" (linhas ~42.100–48.700) contra `personAccess.ts`, `PersonCreateModal.tsx`, `EnrollmentLinkModal.tsx`.
-5. Se algum cliente real tiver Matriz + 2+ filiais, testar o cenário multiunidade completo da Visão do Dono ao vivo (Achado 1 ficou sem esse teste).
+3. Ler e triar o restante de "Pessoas e Acessos" (linhas ~42.100–48.700) contra `personAccess.ts`, `PersonCreateModal.tsx`, `EnrollmentLinkModal.tsx`.
+4. Se algum cliente real tiver Matriz + 2+ filiais, testar o cenário multiunidade completo da Visão do Dono ao vivo (Achado 1 ficou sem esse teste).
 
 Consolidar este arquivo em `GAP-PARIDADE-BASE44.md` quando a triagem terminar, ou linkar os dois — evitar dois documentos de verdade divergentes sobre o mesmo assunto.
