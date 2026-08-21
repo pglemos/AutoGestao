@@ -65,6 +65,8 @@ Corrigido no mesmo dia (commit `f2fabcbd`, direto em main): `owner_master` agora
 
 **Lição para a próxima sessão:** depois de qualquer mudança no checklist de prontidão, testar ao vivo em pelo menos um cliente **sem** Dono Master configurado, não só um com. É fácil escrever o caminho feliz certo e esquecer o caminho vazio.
 
+**Confirmado em produção** (commit `f2fabcbd`, deploy `dpl_9g3HiWAoMaENHBwyHENVZ5YC85Rr` READY): cliente AG AUTOMOVEIS agora mostra `Dono Master válido — Nenhum Dono Master configurado para esta empresa. — Pendente` como 11º item do checklist, sem erro no console. Nota: o check "Plano Estratégico" continua propositalmente ausente para esse cliente (nunca teve ciclo de plano criado — `fetchCurrentCycle` retorna null) — comportamento consistente porque nem todo cliente já começou o Plano Estratégico, diferente do Dono Master que é esperado sempre. Se algum dia isso incomodar, é o mesmo padrão de fix.
+
 ## Entregue nesta sessão
 
 - PR [#190](https://github.com/pglemos/MXGESTAOPREDITIVA/pull/190) `fix/admin-mx-readiness-correction-route` — **merged em main** (squash, commit `5a6c096e`):
