@@ -1,7 +1,7 @@
 # Story CONS-20 — Paridade Base44 de Consultoria e Produtos no Admin MX
 
-**Status:** READY FOR DEVELOPMENT  
-**Agent:** @aiox-master + @dev  
+**Status:** READY FOR DEVELOPMENT
+**Agent:** @aiox-master + @dev
 **Priority:** HIGH
 
 ## Contexto

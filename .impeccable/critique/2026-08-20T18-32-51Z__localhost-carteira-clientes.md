@@ -2,7 +2,7 @@
 target: "http://localhost:3457/carteira-clientes"
 total_score: 27
 max_score: 40
-na_heuristics: 
+na_heuristics:
 p0_count: 0
 p1_count: 4
 timestamp: 2026-08-20T18-32-51Z

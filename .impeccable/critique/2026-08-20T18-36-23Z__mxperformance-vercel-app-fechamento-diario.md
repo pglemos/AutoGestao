@@ -2,7 +2,7 @@
 target: "https://mxperformance.vercel.app/fechamento-diario"
 total_score: 25
 max_score: 40
-na_heuristics: 
+na_heuristics:
 p0_count: 1
 p1_count: 2
 timestamp: 2026-08-20T18-36-23Z
