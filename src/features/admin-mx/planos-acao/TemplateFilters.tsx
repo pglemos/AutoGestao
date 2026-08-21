@@ -2,7 +2,8 @@ import { useMemo } from 'react'
 import { Search, X } from 'lucide-react'
 import { MxInput, MxSelect } from '@/components/module/MxModuleVisualPrimitives'
 import { Button } from '@/components/atoms/Button'
-import type { ActionPlanTemplate } from './actionPlanTemplates'
+import { RESPONSIBLE_ROLE_OPTIONS, type ActionPlanTemplate } from './actionPlanTemplates'
+import { departmentCategory, departmentLabel, departmentMatchesFilter, indicatorAreaMatchesDepartment } from './departmentTaxonomy'
 import { emptyTemplateFilters, templateFiltersActive, type TemplateFilterState } from './templateFilterLogic'
 import type { WizardIndicator } from './clientActionPlanWizardData'
 
@@ -25,12 +26,30 @@ export function TemplateFilters(props: {
   onClear: () => void
 }) {
   const departments = useMemo(
-    () => [...new Set(props.templates.map(template => template.departamento).filter(Boolean))].sort(),
+    () => [...new Set(props.templates.map(template => template.departamento).filter(Boolean))]
+      .map(value => ({ value: departmentCategory(value) ?? value, label: departmentLabel(value) }))
+      .filter((option, index, all) => all.findIndex(candidate => candidate.value === option.value) === index)
+      .sort((left, right) => left.label.localeCompare(right.label, 'pt-BR')),
     [props.templates],
   )
+  const indicators = useMemo(() => {
+    const selectedDepartment = props.filters.departamento
+    const fromCatalog = props.indicators
+      .filter(indicator => indicatorAreaMatchesDepartment(indicator.area, selectedDepartment))
+      .map(indicator => ({ value: indicator.metric_key, label: indicator.label }))
+      .filter(indicator => indicator.value && indicator.label)
+    const fromTemplates = props.templates
+      .filter(template => departmentMatchesFilter(template.departamento, selectedDepartment))
+      .map(template => ({ value: template.indicador ?? '', label: template.indicador ?? '' }))
+      .filter(indicator => indicator.value)
+    return [...new Map([...fromCatalog, ...fromTemplates].map(indicator => [indicator.value.toLowerCase(), indicator])).values()]
+      .sort((left, right) => left.label.localeCompare(right.label, 'pt-BR'))
+  }, [props.filters.departamento, props.indicators, props.templates])
   const hasFilters = templateFiltersActive(props.filters)
   const onSelectChange = (field: keyof TemplateFilterState) => (event: React.ChangeEvent<HTMLSelectElement>) => {
-    props.onFilterChange(field, event.target.value)
+    const value = event.target.value
+    props.onFilterChange(field, value)
+    if (field === 'departamento') props.onFilterChange('indicador', '')
   }
 
   return (
@@ -49,7 +68,14 @@ export function TemplateFilters(props: {
 
         <MxSelect aria-label="Filtrar por departamento" value={props.filters.departamento} onChange={onSelectChange('departamento')}>
           <option value="">Todos os departamentos</option>
-          {departments.map(department => <option key={department} value={department}>{department}</option>)}
+          {departments.map(department => <option key={department.value} value={department.value}>{department.label}</option>)}
+        </MxSelect>
+
+        <MxSelect aria-label="Filtrar por indicador" value={props.filters.indicador} onChange={event => {
+          props.onFilterChange('indicador', event.target.value)
+        }}>
+          <option value="">Todos os indicadores</option>
+          {indicators.map(indicator => <option key={indicator.value} value={indicator.value}>{indicator.label}</option>)}
         </MxSelect>
 
         <MxSelect aria-label="Filtrar por status" value={props.filters.status} onChange={onSelectChange('status')}>
@@ -63,6 +89,17 @@ export function TemplateFilters(props: {
         <MxSelect aria-label="Filtrar por prioridade dos itens" value={props.filters.prioridade} onChange={onSelectChange('prioridade')}>
           <option value="">Todas as prioridades</option>
           {PRIORITY_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
+        </MxSelect>
+
+        <MxSelect aria-label="Filtrar disponibilidade para sugestão" value={props.filters.suggestion_enabled === '' ? '' : String(props.filters.suggestion_enabled)} onChange={event => props.onFilterChange('suggestion_enabled', event.target.value === '' ? '' : event.target.value === 'true')}>
+          <option value="">Disponibilidade</option>
+          <option value="true">Disponível para sugestão</option>
+          <option value="false">Não disponível</option>
+        </MxSelect>
+
+        <MxSelect aria-label="Filtrar responsável recomendado" value={props.filters.responsible_role} onChange={onSelectChange('responsible_role')}>
+          <option value="">Todos os responsáveis</option>
+          {RESPONSIBLE_ROLE_OPTIONS.map(role => <option key={role.value} value={role.value}>{role.label}</option>)}
         </MxSelect>
 
         {hasFilters ? (

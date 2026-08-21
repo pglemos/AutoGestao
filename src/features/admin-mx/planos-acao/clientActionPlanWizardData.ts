@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase'
+import { fetchClientUnits } from '@/features/strategic-plan/clientPlanningRepository'
 
 /**
  * Acesso a dados do wizard de plano por cliente. Os dados de apoio vêm das
@@ -46,19 +47,16 @@ export async function fetchWizardClients(): Promise<{ rows: WizardClient[]; erro
  * unidades cadastradas em unidades_cliente_consultoria.
  */
 export async function fetchWizardStores(clientId: string): Promise<{ rows: WizardStore[]; error: string | null }> {
-  const [{ data: client }, { data: units }] = await Promise.all([
-    supabase.from('clientes_consultoria').select('id, primary_store_id').eq('id', clientId).maybeSingle(),
-    supabase.from('unidades_cliente_consultoria').select('id, name').eq('client_id', clientId).order('is_primary', { ascending: false }),
-  ])
-  const stores: WizardStore[] = []
-  if (client?.primary_store_id) {
-    const { data: loja } = await supabase.from('lojas').select('id, name').eq('id', client.primary_store_id).maybeSingle()
-    if (loja) stores.push({ id: loja.id, name: loja.name, source: 'loja' })
+  const result = await fetchClientUnits(clientId)
+  if (result.error) return { rows: [], error: result.error }
+  return {
+    rows: result.units.map(unit => ({
+      id: unit.id,
+      name: unit.name,
+      source: unit.store_type === 'MATRIZ' ? 'loja' : 'unidade',
+    })),
+    error: null,
   }
-  for (const unit of units ?? []) {
-    stores.push({ id: unit.id, name: unit.name, source: 'unidade' })
-  }
-  return { rows: stores, error: null }
 }
 
 /** Indicadores ativos do catálogo, filtrados por área no componente. */

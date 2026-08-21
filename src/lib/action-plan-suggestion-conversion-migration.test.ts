@@ -23,6 +23,11 @@ describe('conversão atômica de sugestão em plano de ação', () => {
     expect(sql).toContain('COMMIT;')
   })
 
+  test('só converte sugestões validadas ou exibidas ao Dono', () => {
+    expect(sql).toContain("IF v_suggestion.status NOT IN ('validada', 'exibida_dono') THEN")
+    expect(sql).toContain("SUGGESTION_NOT_CONVERTIBLE")
+  })
+
   test('restringe a função à área interna e não permite spoof do autor', () => {
     expect(sql).toContain('NOT public.eh_area_interna_mx()')
     expect(sql).toContain('created_by,')

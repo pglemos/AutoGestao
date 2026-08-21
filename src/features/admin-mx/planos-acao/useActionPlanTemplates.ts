@@ -65,6 +65,7 @@ export function useActionPlanTemplatesController() {
       active: template.active,
       primary_indicator_code: template.primary_indicator_code ?? '',
       improvement_direction: template.improvement_direction ?? 'aumentar',
+      default_responsible_role: template.default_responsible_role ?? source?.default_responsible_role ?? '',
       manual_application_enabled: template.manual_application_enabled,
       owner_suggestion_enabled: template.owner_suggestion_enabled,
       problem: source?.problem ?? '',

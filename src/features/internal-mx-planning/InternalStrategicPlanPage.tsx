@@ -1,4 +1,5 @@
 import { Target } from 'lucide-react'
+import { useLocation } from 'react-router-dom'
 import AdminIndicadoresPage from '@/features/admin-mx/AdminIndicadoresPage'
 import { useInternalMxDomainTabs } from '@/design-system/internal-mx/InternalMxDomainTabs'
 import { StrategicPlanWorkspace } from '@/features/strategic-plan/StrategicPlanWorkspace'
@@ -13,7 +14,10 @@ const STRATEGIC_TABS = [
 
 export default function InternalStrategicPlanPage() {
   const store = useInternalPlanningStore()
+  const location = useLocation()
   const domain = useInternalMxDomainTabs<StrategicMode>({ tabs: STRATEGIC_TABS, fallback: 'cliente' })
+  const requestedYear = Number(new URLSearchParams(location.search).get('year'))
+  const year = Number.isInteger(requestedYear) && requestedYear >= 2020 && requestedYear <= 2100 ? requestedYear : undefined
 
   if (domain.active === 'catalogo') {
     return (
@@ -33,7 +37,7 @@ export default function InternalStrategicPlanPage() {
         description="Acompanhe os 45 indicadores, metas, comparativos e ações da loja selecionada."
         store={store}
       >
-        <StrategicPlanWorkspace />
+        <StrategicPlanWorkspace year={year} />
       </InternalMxPlanningShell>
     </>
   )

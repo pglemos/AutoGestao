@@ -1,0 +1,53 @@
+import type { ActionPlanTemplate } from './actionPlanTemplates'
+import { deriveTemplateStatus } from './templateFilterLogic'
+
+export const TEMPLATE_STATUS_LABEL: Record<ReturnType<typeof deriveTemplateStatus>, string> = {
+  publicada: 'Publicado',
+  rascunho: 'Rascunho',
+  inativo: 'Inativo',
+  arquivado: 'Arquivado',
+}
+
+const PRIORITY_LABEL: Record<string, string> = {
+  critica: 'Crítica',
+  alta: 'Alta',
+  media: 'Média',
+  baixa: 'Baixa',
+}
+
+export type TemplateTableSummary = {
+  actions: number
+  priority: string
+  responsibleRole: string
+  version: number | null
+  status: ReturnType<typeof deriveTemplateStatus>
+  statusLabel: string
+  applications: number
+  suggestion: string
+}
+
+export function summarizeTemplate(template: ActionPlanTemplate): TemplateTableSummary {
+  const version = template.versions.find(item => item.status === 'publicada')
+    ?? template.versions.find(item => item.status === 'rascunho')
+    ?? template.versions[0]
+    ?? null
+  const items = version?.itens ?? []
+  const priorities = [...new Set(items.map(item => item.prioridade).filter(Boolean))]
+    .map(priority => PRIORITY_LABEL[priority] ?? priority)
+  const responsibleRole = template.default_responsible_role
+    ?? version?.default_responsible_role
+    ?? items.find(item => item.recommended_responsible_role)?.recommended_responsible_role
+    ?? '—'
+  const status = deriveTemplateStatus(template)
+
+  return {
+    actions: items.length,
+    priority: priorities.length ? priorities.join(', ') : '—',
+    responsibleRole,
+    version: version?.versao ?? null,
+    status,
+    statusLabel: TEMPLATE_STATUS_LABEL[status],
+    applications: template.application_count ?? 0,
+    suggestion: template.owner_suggestion_enabled ? 'Ativo' : '—',
+  }
+}

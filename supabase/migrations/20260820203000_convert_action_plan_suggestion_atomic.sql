@@ -40,6 +40,9 @@ BEGIN
   IF v_suggestion.status = 'descartada' THEN
     RAISE EXCEPTION 'SUGGESTION_DISMISSED' USING ERRCODE = 'P0001';
   END IF;
+  IF v_suggestion.status NOT IN ('validada', 'exibida_dono') THEN
+    RAISE EXCEPTION 'SUGGESTION_NOT_CONVERTIBLE' USING ERRCODE = 'P0001';
+  END IF;
   IF v_suggestion.scope_id IS NULL OR v_suggestion.scope_type IS NULL THEN
     RAISE EXCEPTION 'SUGGESTION_SCOPE_REQUIRED' USING ERRCODE = '23502';
   END IF;

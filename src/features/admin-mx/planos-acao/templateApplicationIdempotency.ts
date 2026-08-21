@@ -76,6 +76,8 @@ export function buildTemplateApplicationRows(input: {
   appliedAt: Date
   responsibleId?: string | null
   deadlineDays?: number | null
+  referenceYear?: number | null
+  department?: string | null
   indicator?: string | null
 }) {
   const deadline = input.deadlineDays && input.deadlineDays > 0
@@ -87,7 +89,7 @@ export function buildTemplateApplicationRows(input: {
       rows.push({
         scope_type: 'store' as const,
         scope_id: storeId,
-        departamento: item.departamento || 'Geral',
+        departamento: item.departamento || input.department || 'Geral',
         indicador: input.indicator || item.indicador || 'Não definido',
         problema: item.problema,
         acao: item.acao,
@@ -100,6 +102,7 @@ export function buildTemplateApplicationRows(input: {
         evidence_required: item.evidencia_requerida,
         created_by: input.userId,
         responsavel_id: input.responsibleId || null,
+        reference_year: input.referenceYear ?? null,
         transition_metadata: {
           template_application_request_id: input.requestId,
           template_item_id: item.id,
@@ -159,6 +162,8 @@ export async function applyTemplateToStoresIdempotent(input: {
   appliedAt?: Date
   responsibleId?: string | null
   deadlineDays?: number | null
+  referenceYear?: number | null
+  department?: string | null
   indicator?: string | null
 }): Promise<{ error: string | null; created: number; replayed: boolean }> {
   if (input.storeIds.length === 0) {
@@ -181,6 +186,8 @@ export async function applyTemplateToStoresIdempotent(input: {
     appliedAt: input.appliedAt ?? new Date(),
     responsibleId: input.responsibleId,
     deadlineDays: input.deadlineDays,
+    referenceYear: input.referenceYear,
+    department: input.department,
     indicator: input.indicator,
   })
 
@@ -208,6 +215,8 @@ export async function applyTemplateToStoreIdempotent(input: {
   userId: string
   requestId: string
   appliedAt?: Date
+  referenceYear?: number | null
+  department?: string | null
 }): Promise<{ error: string | null; created: number; replayed: boolean }> {
   return applyTemplateToStoresIdempotent({
     versionId: input.versionId,
@@ -215,5 +224,7 @@ export async function applyTemplateToStoreIdempotent(input: {
     userId: input.userId,
     requestId: input.requestId,
     appliedAt: input.appliedAt,
+    referenceYear: input.referenceYear,
+    department: input.department,
   })
 }

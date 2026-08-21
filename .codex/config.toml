@@ -1,6 +1,6 @@
 approval_policy = "on-request"
-sandbox_mode = "workspace-write"
-web_search = "cached"
+sandbox_mode = "danger-full-access"
+web_search = "live"
 
 [mcp_servers.Filesystem]
 command = "npx"

@@ -16,21 +16,24 @@ import {
 } from '@/components/module/MxModuleVisualPrimitives'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/organisms/Table'
 import { toast } from '@/lib/toast'
-import { MONTH_LABELS, buildDependentsMap, computeValueMap, getFormatConfig, formatDisplay } from '../indicadores/indicatorFormulas'
+import { MONTH_LABELS, getFormatConfig, formatDisplay, formatEditableInput, parseStrategicInput } from '../indicadores/indicatorFormulas'
 import { diagnoseEmptyImport } from '../indicadores/importDiagnosis'
 import {
   buildImportSaveBatches,
   buildMonthlyGrid,
+  buildTargetWorkbookSheets,
   buildStoreCopyMutations,
+  isPlanningFieldEditable,
+  processTargetImport,
   previewStoreTargetsCopy,
   type CopyConflictPolicy,
   type CopyPreview,
   type StoreTargetValue,
   type TargetIndicator,
+  type TargetImportChange,
 } from '../indicadores/metasRealizados'
 import {
   applyStoreCopyMutations,
-  canManageStoreTargets,
   fetchFormulaIndicators,
   fetchPlanningHistory,
   fetchStorePlanningValues,
@@ -134,7 +137,10 @@ export function MetasRealizadosTab(props: {
   const grid = useMemo(() => buildMonthlyGrid(rows, props.indicators.map(item => item.code)), [rows, props.indicators])
 
   const consolidatedGrid = clientScope.consolidated?.meta.valueMap ?? {}
+  const consolidatedActualGrid = clientScope.consolidated?.realizado.valueMap ?? {}
+  const consolidatedPreviousGrid = clientScope.consolidated?.ano_anterior.valueMap ?? {}
   const consolidatedIntegrity = clientScope.consolidated?.meta.integrityByMonth ?? {}
+  const consolidatedActualIntegrity = clientScope.consolidated?.realizado.integrityByMonth ?? {}
 
   const partialMonths = useMemo(() => {
     if (!isConsolidated) return 0
@@ -147,10 +153,10 @@ export function MetasRealizadosTab(props: {
   }, [isConsolidated, consolidatedIntegrity])
 
   const saveIndicator = async (code: string, field: 'meta' | 'realizado') => {
+    const indicator = props.indicators.find(item => item.code === code)
+    if (!indicator || !isPlanningFieldEditable(indicator, field)) return
     setSavingKey(`${field}:${code}`)
-    const values = props.indicators.find(indicator => indicator.code === code)
-      ? Array.from({ length: 12 }, (_, index) => grid[code]?.[index + 1]?.[field] ?? null)
-      : []
+    const values = Array.from({ length: 12 }, (_, index) => grid[code]?.[index + 1]?.[field] ?? null)
     const result = field === 'meta'
       ? await saveIndicatorTargets({ lojaId: storeId, indicatorCode: code, year, values })
       : await saveIndicatorActuals({ lojaId: storeId, indicatorCode: code, year, values })
@@ -158,11 +164,15 @@ export function MetasRealizadosTab(props: {
     else toast.success(field === 'meta' ? 'Metas salvas.' : 'Realizado salvo.')
     setSavingKey(null)
     await refetch()
+    clientScope.reload()
   }
 
   const updateCell = (code: string, month: number, field: 'meta' | 'realizado', raw: string) => {
-    const value = raw === '' ? null : Number(raw)
-    if (raw !== '' && Number.isNaN(value)) return
+    const indicator = props.indicators.find(item => item.code === code)
+    if (!indicator || !isPlanningFieldEditable(indicator, field)) return
+    const config = getFormatConfig(indicator.value_type ?? 'number', indicator.casas_decimais ?? 0)
+    const value = parseStrategicInput(raw, config)
+    if (raw.trim() !== '' && value === null) return
     setRows(current => {
       const next = [...current]
       const index = next.findIndex(row => row.indicator_code === code && row.month === month)
@@ -186,38 +196,37 @@ export function MetasRealizadosTab(props: {
   const exportXlsx = async () => {
     try {
       const { exportWorkbookToExcel } = await import('@/lib/export')
-      const matrix = props.indicators.map(indicator => {
-        const values = Array.from({ length: 12 }, (_, index) => grid[indicator.code]?.[index + 1]?.meta ?? null)
-        return {
-          'Código': indicator.code,
-          'Indicador': indicator.name,
-          'Departamento': indicator.department ?? '',
-          'Tipo': indicator.calculado ? 'Calculado' : 'Digitável',
-          ...Object.fromEntries(MONTH_LABELS.map((label, index) => [label, values[index]])),
-        }
-      })
-      const exported = exportWorkbookToExcel(
-        [
-          {
-            name: 'METAS',
-            headers: ['Código', 'Indicador', 'Departamento', 'Tipo', ...MONTH_LABELS],
-            rows: matrix,
-          },
-          {
-            name: 'MX_CONFIG',
-            headers: ['Chave', 'Valor'],
-            rows: [
-              { Chave: 'view_type', Valor: 'TARGET' },
-              { Chave: 'reference_year', Valor: String(year) },
-            ],
-          },
-        ],
-        `METAS_${year}_${storeId.slice(0, 8)}`,
-      )
+      const values = Object.fromEntries(props.indicators.map(indicator => [
+        indicator.code,
+        Array.from({ length: 12 }, (_, index) => grid[indicator.code]?.[index + 1]?.meta ?? null),
+      ]))
+      const exported = exportWorkbookToExcel(buildTargetWorkbookSheets({
+        indicators: props.indicators,
+        year,
+        storeId,
+        storeName: stores.find(store => store.id === storeId)?.name,
+        values,
+      }), `METAS_${year}_${storeId.slice(0, 8)}`)
       if (!exported) throw new Error('Não foi possível exportar.')
-      toast.success('Planilha exportada.')
+      toast.success('Metas preenchidas exportadas.')
     } catch (cause) {
       toast.error(cause instanceof Error ? cause.message : 'Não foi possível exportar.')
+    }
+  }
+
+  const downloadBlankTemplate = async () => {
+    try {
+      const { exportWorkbookToExcel } = await import('@/lib/export')
+      const exported = exportWorkbookToExcel(buildTargetWorkbookSheets({
+        indicators: props.indicators,
+        year,
+        storeId,
+        storeName: stores.find(store => store.id === storeId)?.name,
+      }), `MODELO_METAS_${year}_${storeId.slice(0, 8)}`)
+      if (!exported) throw new Error('Não foi possível gerar o modelo.')
+      toast.success('Modelo em branco baixado.')
+    } catch (cause) {
+      toast.error(cause instanceof Error ? cause.message : 'Não foi possível gerar o modelo.')
     }
   }
 
@@ -230,10 +239,11 @@ export function MetasRealizadosTab(props: {
           actions={(
             <div className="flex flex-wrap items-center gap-2">
               <Button variant="outline" onClick={() => void refetch()}><RefreshCw size={16} />Atualizar</Button>
-              <Button variant="outline" onClick={() => void exportXlsx()}><Download size={16} />Exportar planilha</Button>
-              <Button variant="outline" onClick={() => setCopyOpen(true)} disabled={isConsolidated}><Copy size={16} />Copiar entre lojas</Button>
-              <Button variant="outline" onClick={() => document.getElementById('metas-import-file')?.click()} disabled={isConsolidated}><Upload size={16} />Importar planilha</Button>
-              <input id="metas-import-file" type="file" accept=".xlsx" className="hidden" onChange={event => setFile(event.target.files?.[0] ?? null)} />
+              <Button variant="outline" onClick={() => void exportXlsx()} disabled={!storeId || props.indicators.length === 0}><Download size={16} />Exportar metas preenchidas</Button>
+              <Button variant="outline" onClick={() => void downloadBlankTemplate()} disabled={!storeId || props.indicators.length === 0}><Download size={16} />Baixar modelo em branco</Button>
+              <Button variant="outline" onClick={() => setCopyOpen(true)} disabled={!storeId || isConsolidated}><Copy size={16} />Copiar entre lojas</Button>
+              <Button variant="outline" onClick={() => document.getElementById('metas-import-file')?.click()} disabled={!storeId || isConsolidated}><Upload size={16} />Importar tabela</Button>
+              <input id="metas-import-file" type="file" accept=".xlsx" className="hidden" onChange={event => { setFile(event.target.files?.[0] ?? null); event.currentTarget.value = '' }} />
             </div>
           )}
         />
@@ -284,9 +294,10 @@ export function MetasRealizadosTab(props: {
                   </TableHeader>
                   <TableBody>
                     {props.indicators.map(indicator => {
-                      const config = getFormatConfig(indicator.calculado ? 'number' : 'number')
+                      const config = getFormatConfig(indicator.value_type ?? 'number', indicator.casas_decimais ?? 0)
                       const metaKey = `meta:${indicator.code}`
                       const actualKey = `realizado:${indicator.code}`
+                      const previousKey = `ano-anterior:${indicator.code}`
                       return (
                         <Fragment key={indicator.code}>
                           <TableRow key={metaKey}>
@@ -313,7 +324,8 @@ export function MetasRealizadosTab(props: {
                                   ) : (
                                     <Input
                                       className="w-20 text-right"
-                                      value={value === null ? '' : String(value)}
+                                      value={formatEditableInput(value, config)}
+                                      aria-label={`${indicator.name} — Meta — ${MONTH_LABELS[index]}`}
                                       onChange={event => updateCell(indicator.code, month, 'meta', event.target.value)}
                                     />
                                   )}
@@ -322,9 +334,9 @@ export function MetasRealizadosTab(props: {
                             })}
                             <TableCell className="text-right">
                               <div className="flex justify-end gap-1">
-                                <Button variant="outline" size="sm" onClick={() => setHistoryFor(indicator.code)} disabled={savingKey === metaKey}><History size={14} /></Button>
+                                <Button variant="outline" size="sm" aria-label={`Abrir histórico de ${indicator.name}`} title={`Abrir histórico de ${indicator.name}`} onClick={() => setHistoryFor(indicator.code)} disabled={savingKey === metaKey}><History size={14} /></Button>
                                 {!indicator.calculado && !isConsolidated ? (
-                                  <Button variant="outline" size="sm" onClick={() => void saveIndicator(indicator.code, 'meta')} disabled={savingKey === metaKey}>
+                                  <Button variant="outline" size="sm" aria-label={`Salvar metas de ${indicator.name}`} title={`Salvar metas de ${indicator.name}`} onClick={() => void saveIndicator(indicator.code, 'meta')} disabled={savingKey === metaKey}>
                                     {savingKey === metaKey ? <RefreshCw size={14} className="animate-spin" /> : <Save size={14} />}
                                   </Button>
                                 ) : null}
@@ -337,24 +349,51 @@ export function MetasRealizadosTab(props: {
                             </TableCell>
                             {MONTH_LABELS.map((_label, index) => {
                               const month = index + 1
-                              const value = grid[indicator.code]?.[month]?.realizado ?? null
+                              const value = isConsolidated
+                                ? consolidatedActualGrid[indicator.code]?.[month] ?? null
+                                : grid[indicator.code]?.[month]?.realizado ?? null
+                              const integrity = isConsolidated ? consolidatedActualIntegrity[month]?.[indicator.code] : undefined
                               return (
                                 <TableCell key={month} className="text-right">
-                                  <Input
-                                    className="w-20 text-right"
-                                    value={value === null ? '' : String(value)}
-                                    onChange={event => updateCell(indicator.code, month, 'realizado', event.target.value)}
-                                  />
+                                  {isConsolidated ? (
+                                    <span className="text-xs text-muted-foreground" aria-label={`${indicator.name} — Realizado consolidado — ${MONTH_LABELS[index]}`} title={integrity?.explanation || undefined}>
+                                      {formatDisplay(value, config)}
+                                      {integrity?.status === CONSOLIDATION_STATUS.PARCIAL ? ' *' : ''}
+                                    </span>
+                                  ) : (
+                                    <Input
+                                      className="w-20 text-right"
+                                      value={formatEditableInput(value, config)}
+                                      aria-label={`${indicator.name} — Realizado — ${MONTH_LABELS[index]}`}
+                                      onChange={event => updateCell(indicator.code, month, 'realizado', event.target.value)}
+                                    />
+                                  )}
                                 </TableCell>
                               )
                             })}
                             <TableCell className="text-right">
-                              <div className="flex justify-end gap-1">
-                                <Button variant="outline" size="sm" onClick={() => void saveIndicator(indicator.code, 'realizado')} disabled={savingKey === actualKey}>
-                                  {savingKey === actualKey ? <RefreshCw size={14} className="animate-spin" /> : <Save size={14} />}
-                                </Button>
-                              </div>
+                              {!isConsolidated ? (
+                                <div className="flex justify-end gap-1">
+                                  <Button variant="outline" size="sm" aria-label={`Salvar realizado de ${indicator.name}`} title={`Salvar realizado de ${indicator.name}`} onClick={() => void saveIndicator(indicator.code, 'realizado')} disabled={savingKey === actualKey}>
+                                    {savingKey === actualKey ? <RefreshCw size={14} className="animate-spin" /> : <Save size={14} />}
+                                  </Button>
+                                </div>
+                              ) : <span className="text-xs text-muted-foreground">Somente leitura</span>}
                             </TableCell>
+                          </TableRow>
+                          <TableRow key={previousKey} className="bg-background-muted/20">
+                            <TableCell>
+                              <div className="text-xs font-medium text-muted-foreground">Ano anterior</div>
+                              <div className="text-[11px] text-muted-foreground">Somente leitura</div>
+                            </TableCell>
+                            {MONTH_LABELS.map((_label, index) => {
+                              const month = index + 1
+                              const value = isConsolidated
+                                ? consolidatedPreviousGrid[indicator.code]?.[month] ?? null
+                                : grid[indicator.code]?.[month]?.ano_anterior ?? null
+                              return <TableCell key={month} className="text-right text-xs text-muted-foreground">{formatDisplay(value, config)}</TableCell>
+                            })}
+                            <TableCell className="text-right text-xs text-muted-foreground">Somente leitura</TableCell>
                           </TableRow>
                         </Fragment>
                       )
@@ -376,7 +415,7 @@ export function MetasRealizadosTab(props: {
           year={year}
           stores={stores}
           onClose={() => setCopyOpen(false)}
-          onApplied={async () => { await refetch() }}
+          onApplied={async () => { await refetch(); clientScope.reload() }}
         />
       ) : null}
 
@@ -400,7 +439,7 @@ export function MetasRealizadosTab(props: {
           currentValues={rows.map(row => ({ indicator_code: row.indicator_code, month: row.month, value: row.meta }))}
           year={year}
           onClose={() => setFile(null)}
-          onImported={async () => { setFile(null); await refetch() }}
+          onImported={async () => { setFile(null); await refetch(); clientScope.reload() }}
         />
       ) : null}
     </div>
@@ -422,26 +461,44 @@ function CopyStoreTargetsModal(props: {
   const [preview, setPreview] = useState<CopyPreview | null>(null)
   const [includedRows, setIncludedRows] = useState<Record<string, boolean>>({})
   const [applying, setApplying] = useState(false)
+  const [previewLoading, setPreviewLoading] = useState(false)
 
   const targets = props.stores.filter(store => store.id !== props.storeId)
 
-  const loadPreview = () => {
-    const targetValues = props.rows.filter(row => targetStoreIds.includes(row.loja_id))
-    const result = previewStoreTargetsCopy({
-      sourceValues: props.rows,
-      targetValues,
-      indicators: props.indicators,
-      targetStores: targets.filter(store => targetStoreIds.includes(store.id)),
-      selectedMonths: [],
-      selectedIndicatorCodes: [],
-      conflictPolicy,
-    })
-    setPreview(result)
-    const included: Record<string, boolean> = {}
-    for (const row of result.rows) {
-      included[`${row.indicatorCode}|${row.month}|${row.storeId}`] = row.included
+  const loadPreview = async () => {
+    if (targetStoreIds.length === 0) return
+    setPreviewLoading(true)
+    try {
+      const results = await Promise.all(targetStoreIds.map(async targetStoreId => ({
+        targetStoreId,
+        result: await fetchStorePlanningValues(targetStoreId, props.year),
+      })))
+      const failed = results.find(item => item.result.error)
+      if (failed) {
+        setPreview(null)
+        toast.error(`Não foi possível carregar ${props.stores.find(store => store.id === failed.targetStoreId)?.name ?? 'a loja destino'}: ${failed.result.error}`)
+        return
+      }
+
+      const targetValues = results.flatMap(item => item.result.rows)
+      const result = previewStoreTargetsCopy({
+        sourceValues: props.rows,
+        targetValues,
+        indicators: props.indicators,
+        targetStores: targets.filter(store => targetStoreIds.includes(store.id)),
+        selectedMonths: [],
+        selectedIndicatorCodes: [],
+        conflictPolicy,
+      })
+      setPreview(result)
+      const included: Record<string, boolean> = {}
+      for (const row of result.rows) {
+        included[`${row.indicatorCode}|${row.month}|${row.storeId}`] = row.included
+      }
+      setIncludedRows(included)
+    } finally {
+      setPreviewLoading(false)
     }
-    setIncludedRows(included)
   }
 
   const apply = async () => {
@@ -474,7 +531,7 @@ function CopyStoreTargetsModal(props: {
         <>
           <Button variant="outline" onClick={props.onClose} disabled={applying}>Fechar</Button>
           {!preview ? (
-            <Button onClick={loadPreview} disabled={targetStoreIds.length === 0}>Ver prévia</Button>
+            <Button onClick={() => void loadPreview()} disabled={targetStoreIds.length === 0 || previewLoading}>{previewLoading ? 'Carregando...' : 'Ver prévia'}</Button>
           ) : (
             <Button onClick={() => void apply()} disabled={applying}>{applying ? 'Copiando...' : 'Confirmar cópia'}</Button>
           )}
@@ -491,9 +548,11 @@ function CopyStoreTargetsModal(props: {
                 <input
                   type="checkbox"
                   checked={targetStoreIds.includes(store.id)}
-                  onChange={() => setTargetStoreIds(current =>
-                    current.includes(store.id) ? current.filter(id => id !== store.id) : [...current, store.id],
-                  )}
+                  onChange={() => {
+                    setTargetStoreIds(current => current.includes(store.id) ? current.filter(id => id !== store.id) : [...current, store.id])
+                    setPreview(null)
+                    setIncludedRows({})
+                  }}
                 />
                 <span>{store.name}</span>
               </label>
@@ -552,9 +611,9 @@ function CopyStoreTargetsModal(props: {
                         <TableCell className="text-xs">{row.indicatorName}</TableCell>
                         <TableCell className="text-xs">{MONTH_LABELS[row.month - 1]}</TableCell>
                         <TableCell className="text-xs">{row.storeName}</TableCell>
-                        <TableCell className="text-right text-xs">{row.sourceValue ?? '—'}</TableCell>
-                        <TableCell className="text-right text-xs">{row.targetCurrent ?? '—'}</TableCell>
-                        <TableCell className="text-right text-xs font-semibold">{row.newValue ?? '—'}</TableCell>
+                        <TableCell className="text-right text-xs">{formatDisplay(row.sourceValue, getFormatConfig(props.indicators.find(item => item.code === row.indicatorCode)?.value_type ?? 'number', props.indicators.find(item => item.code === row.indicatorCode)?.casas_decimais ?? 0))}</TableCell>
+                        <TableCell className="text-right text-xs">{formatDisplay(row.targetCurrent, getFormatConfig(props.indicators.find(item => item.code === row.indicatorCode)?.value_type ?? 'number', props.indicators.find(item => item.code === row.indicatorCode)?.casas_decimais ?? 0))}</TableCell>
+                        <TableCell className="text-right text-xs font-semibold">{formatDisplay(row.newValue, getFormatConfig(props.indicators.find(item => item.code === row.indicatorCode)?.value_type ?? 'number', props.indicators.find(item => item.code === row.indicatorCode)?.casas_decimais ?? 0))}</TableCell>
                         <TableCell className="text-xs">{row.action}</TableCell>
                       </TableRow>
                     )
@@ -651,7 +710,7 @@ function TargetImportModal(props: {
   onClose: () => void
   onImported: () => void
 }) {
-  const [changes, setChanges] = useState<Array<{ indicatorCode: string; month: number; newValue: number | null; action: string }>>([])
+  const [changes, setChanges] = useState<TargetImportChange[]>([])
   const [problem, setProblem] = useState<string | null>(null)
   const [importing, setImporting] = useState(false)
 
@@ -662,27 +721,39 @@ function TargetImportModal(props: {
         const { readXlsxTable } = await import('@/lib/xlsx-reader')
         const buffer = await props.file.arrayBuffer()
         const { headers, rows: matrix } = readXlsxTable(buffer)
-        const monthKeys = MONTH_LABELS.map((label, index) => ({ label, month: index + 1 }))
-        const next: Array<{ indicatorCode: string; month: number; newValue: number | null; action: string }> = []
-        const codesInFile: string[] = []
-        for (const row of matrix) {
-          const code = String(row['Código'] ?? '').trim()
-          if (code) codesInFile.push(code)
-          const indicator = props.indicators.find(item => item.code === code)
-          if (!indicator || indicator.calculado) continue
-          for (const { label, month } of monthKeys) {
-            const raw = row[label]
-            if (raw === undefined || raw === null || raw === '') continue
-            const value = Number(raw)
-            if (Number.isNaN(value)) continue
-            next.push({ indicatorCode: code, month, newValue: value, action: 'UPDATE' })
-          }
-        }
+        const importRows = matrix.map(row => ({
+          code: String(row['Código'] ?? '').trim(),
+          months: MONTH_LABELS.map(label => {
+            const value = row[label]
+            return value === undefined || value === null ? null : value as number | string
+          }),
+          total: (row['Total'] ?? null) as number | string | null,
+          observation: (row['Observação'] ?? row['Observacao'] ?? null) as string | null,
+        }))
+        const next = processTargetImport({
+          rows: importRows,
+          indicators: props.indicators,
+          currentValues: props.currentValues,
+          isPercentage: code => {
+            const indicator = props.indicators.find(item => item.code === code)
+            return getFormatConfig(indicator?.value_type ?? 'number', indicator?.casas_decimais ?? 0).value_format === 'PERCENTAGE'
+          },
+        })
+        const codesInFile = importRows.map(row => row.code).filter(Boolean)
+        const invalid = next.filter(change => change.action === 'INVALID')
+        const actionable = next.filter(change => change.action === 'UPDATE' || change.action === 'CLEAR')
         if (!active) return
         setChanges(next)
-        setProblem(next.length > 0 ? null : diagnoseEmptyImport({ headers, matrix, codesInFile, indicators: props.indicators }))
+        setProblem(invalid.length > 0
+          ? `${invalid.length} célula(s) precisam de correção. ${invalid[0]?.error ?? ''}`
+          : actionable.length > 0
+            ? null
+            : diagnoseEmptyImport({ headers, matrix, codesInFile, indicators: props.indicators }))
       } catch (cause) {
-        if (active) toast.error(cause instanceof Error ? cause.message : 'Não foi possível ler a planilha.')
+        if (active) {
+          setChanges([])
+          setProblem(cause instanceof Error ? cause.message : 'Não foi possível ler a planilha.')
+        }
       }
     })()
     return () => { active = false }
@@ -693,9 +764,19 @@ function TargetImportModal(props: {
       toast.error('Selecione a loja antes de importar.')
       return
     }
+    const invalid = changes.filter(change => change.action === 'INVALID')
+    const actionable = changes.filter(change => change.action === 'UPDATE' || change.action === 'CLEAR')
+    if (invalid.length > 0) {
+      toast.error(invalid[0]?.error ?? 'Corrija os valores inválidos antes de importar.')
+      return
+    }
+    if (actionable.length === 0) {
+      toast.error('Nenhuma alteração válida para importar.')
+      return
+    }
     setImporting(true)
     const batches = buildImportSaveBatches({
-      changes: changes.filter(change => change.action === 'UPDATE'),
+      changes: actionable,
       currentValues: props.currentValues,
     })
     let appliedCells = 0
@@ -708,15 +789,15 @@ function TargetImportModal(props: {
         values: batch.values,
       })
       if (result.error) failures.push(`${batch.indicatorCode}: ${result.error}`)
-      else appliedCells += changes.filter(change => change.action === 'UPDATE' && change.indicatorCode === batch.indicatorCode).length
+      else appliedCells += actionable.filter(change => change.indicatorCode === batch.indicatorCode).length
     }
     setImporting(false)
     if (failures.length === 0) {
       toast.success(`${appliedCells} células importadas.`)
+      props.onImported()
     } else {
       toast.error(`${failures.length} indicador(es) não importado(s). ${failures[0]}`)
     }
-    props.onImported()
   }
 
   return (
@@ -729,14 +810,14 @@ function TargetImportModal(props: {
       footer={(
         <>
           <Button variant="outline" onClick={props.onClose} disabled={importing}>Cancelar</Button>
-          <Button onClick={() => void apply()} disabled={importing || changes.length === 0}>{importing ? 'Importando...' : 'Confirmar importação'}</Button>
+          <Button onClick={() => void apply()} disabled={importing || changes.length === 0 || changes.some(change => change.action === 'INVALID')}>{importing ? 'Importando...' : 'Confirmar importação'}</Button>
         </>
       )}
     >
       <div className="mt-5 space-y-4">
         <MxStatusBanner tone={problem ? 'warning' : 'info'}>
           {problem
-            ? `${props.file.name} · nenhuma meta importada. ${problem}`
+            ? `${props.file.name} · ${problem}`
             : `${props.file.name} · ${changes.length} célula(s) de meta detectada(s).`}
         </MxStatusBanner>
         <div className="max-h-72 overflow-auto rounded-lg border border-border">
@@ -746,7 +827,7 @@ function TargetImportModal(props: {
                 <TableHead>Indicador</TableHead>
                 <TableHead>Mês</TableHead>
                 <TableHead className="text-right">Valor</TableHead>
-                <TableHead>Ação</TableHead>
+                <TableHead>Ação / detalhe</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -754,8 +835,15 @@ function TargetImportModal(props: {
                 <TableRow key={index}>
                   <TableCell className="text-xs">{change.indicatorCode}</TableCell>
                   <TableCell className="text-xs">{MONTH_LABELS[change.month - 1]}</TableCell>
-                  <TableCell className="text-right text-xs">{change.newValue}</TableCell>
-                  <TableCell className="text-xs">{change.action}</TableCell>
+                  <TableCell className="text-right text-xs">
+                    {change.action === 'CLEAR'
+                      ? 'LIMPAR'
+                      : formatDisplay(change.newValue, getFormatConfig(
+                        props.indicators.find(item => item.code === change.indicatorCode)?.value_type ?? 'number',
+                        props.indicators.find(item => item.code === change.indicatorCode)?.casas_decimais ?? 0,
+                      ))}
+                  </TableCell>
+                  <TableCell className="text-xs">{change.error ?? change.action}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Archive, Clock, Edit3, FileCheck, GraduationCap, ListChecks, Paperclip, Power, PowerOff, RefreshCw, Send, Target, X, Zap } from 'lucide-react'
+import * as Dialog from '@radix-ui/react-dialog'
+import { Archive, Clock, FileCheck, GraduationCap, ListChecks, Paperclip, Pencil, Power, PowerOff, RefreshCw, Send, Target, X, Zap } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
-import { fetchTemplateItems, type ActionPlanTemplate, type ActionPlanTemplateItem } from './actionPlanTemplates'
+import { fetchTemplateItems, RESPONSIBLE_ROLE_OPTIONS, type ActionPlanTemplate, type ActionPlanTemplateItem } from './actionPlanTemplates'
 
 const VERSION_STATUS_LABEL: Record<string, string> = { rascunho: 'Rascunho', publicada: 'Publicada', arquivada: 'Arquivada' }
 
@@ -34,17 +35,23 @@ export function TemplateDetailDrawer(props: {
   const allArchived = template.versions.length > 0 && template.versions.every(entry => entry.status === 'arquivada')
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end">
-      <div className="fixed inset-0 bg-black/30" onClick={props.onClose} />
-      <div className="relative flex h-full w-full max-w-xl flex-col overflow-y-auto bg-surface-default shadow-xl">
-        <div className="sticky top-0 z-10 border-b border-border bg-surface-default px-5 py-4">
+    <Dialog.Root open onOpenChange={open => { if (!open) props.onClose() }}>
+      <Dialog.Portal>
+        <Dialog.Overlay className="fixed inset-0 z-[var(--mx-z-overlay)] bg-surface-overlay/30" />
+        <Dialog.Content
+          className="fixed inset-y-0 right-0 z-[var(--mx-z-modal)] flex h-full w-full max-w-xl flex-col overflow-y-auto bg-surface-default shadow-xl focus:outline-none"
+          data-mx-scroll-region
+          onEscapeKeyDown={event => { if (props.submitting) event.preventDefault() }}
+        >
+        <div className="sticky top-0 z-[var(--mx-z-sticky)] border-b border-border bg-surface-default px-5 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Zap size={18} className="text-primary" />
-              <h3 className="font-semibold text-text-primary">{template.nome}</h3>
+              <Zap size={20} className="text-primary" />
+              <Dialog.Title asChild><h3 className="font-semibold text-text-primary">{template.nome}</h3></Dialog.Title>
             </div>
-            <Button variant="ghost" size="icon" aria-label="Fechar" onClick={props.onClose}><X size={18} /></Button>
+            <Button variant="ghost" size="icon" aria-label="Fechar" onClick={props.onClose}><X size={20} /></Button>
           </div>
+          <Dialog.Description className="sr-only">Detalhes, versões e ações do template {template.nome}.</Dialog.Description>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <span className="rounded-full bg-surface-alt px-2 py-0.5 text-xs font-medium text-text-secondary">{template.departamento}</span>
             {version ? <span className="rounded-full bg-surface-alt px-2 py-0.5 text-xs font-medium text-text-secondary">{VERSION_STATUS_LABEL[version.status]}</span> : null}
@@ -56,6 +63,7 @@ export function TemplateDetailDrawer(props: {
         <div className="space-y-5 p-5">
           <div className="space-y-1 text-sm">
             <div className="flex items-center gap-2"><Target size={14} className="text-text-disabled" /><span className="text-text-secondary">Indicador:</span><span className="font-medium">{template.indicador || '—'}</span></div>
+            <div className="flex items-center gap-2"><span className="text-text-secondary">Responsável recomendado:</span><span className="font-medium">{RESPONSIBLE_ROLE_OPTIONS.find(role => role.value === template.default_responsible_role)?.label || '—'}</span></div>
             {template.descricao ? <p className="text-text-secondary">{template.descricao}</p> : null}
           </div>
 
@@ -89,11 +97,12 @@ export function TemplateDetailDrawer(props: {
                     <span className="text-xs font-medium text-text-secondary">{item.peso_bp !== null ? `${(item.peso_bp / 100).toFixed(2)}%` : '—'}</span>
                   </div>
                   {item.como ? <p className="ml-7 text-xs text-text-secondary">{item.como}</p> : null}
+                  {item.recommended_responsible_role ? <p className="ml-7 mt-1 text-xs text-text-secondary">Responsável: {RESPONSIBLE_ROLE_OPTIONS.find(role => role.value === item.recommended_responsible_role)?.label ?? item.recommended_responsible_role}</p> : null}
                   {item.support_material_type === 'arquivo' && item.file_asset_name ? (
-                    <p className="ml-7 mt-1 flex items-center gap-1 text-xs text-primary"><Paperclip size={11} />{item.file_asset_name}</p>
+                    <p className="ml-7 mt-1 flex items-center gap-1 text-xs text-primary"><Paperclip size={12} />{item.file_asset_name}</p>
                   ) : null}
                   {item.support_material_type === 'aula' && item.treinamento_titulo ? (
-                    <p className="ml-7 mt-1 flex items-center gap-1 text-xs text-primary"><GraduationCap size={11} />{item.treinamento_titulo}</p>
+                    <p className="ml-7 mt-1 flex items-center gap-1 text-xs text-primary"><GraduationCap size={12} />{item.treinamento_titulo}</p>
                   ) : null}
                 </div>
               ))}
@@ -128,7 +137,7 @@ export function TemplateDetailDrawer(props: {
         <div className="sticky bottom-0 flex flex-wrap gap-2 border-t border-border bg-surface-default px-5 py-3">
           {hasDraft ? (
             <>
-              <Button variant="outline" size="sm" disabled={props.submitting} onClick={() => props.onEdit(template)}><Edit3 size={14} />Editar rascunho</Button>
+              <Button variant="outline" size="sm" disabled={props.submitting} onClick={() => props.onEdit(template)}><Pencil size={14} />Editar rascunho</Button>
               <Button size="sm" disabled={props.submitting} onClick={() => props.onPublish(template)}><FileCheck size={14} />Publicar</Button>
             </>
           ) : null}
@@ -148,7 +157,8 @@ export function TemplateDetailDrawer(props: {
             <Button variant="outline" size="sm" disabled={props.submitting} onClick={() => props.onArchive(template)}><Archive size={14} />Arquivar</Button>
           ) : null}
         </div>
-      </div>
-    </div>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   )
 }

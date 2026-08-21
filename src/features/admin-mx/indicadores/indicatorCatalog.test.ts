@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 import {
   allowedIndicatorTransitions,
+  indicatorCalculationMode,
   isUsableIndicator,
   reorderIndicators,
   validateDecimals,
@@ -9,6 +10,11 @@ import {
 } from './indicatorCatalog'
 
 describe('ciclo de vida do indicador', () => {
+  test('modo manual explícito prevalece sobre fórmula legada', () => {
+    expect(indicatorCalculationMode({ target_calculation_mode: 'MANUAL', formula_expression: 'IND("A")' })).toBe('MANUAL')
+    expect(indicatorCalculationMode({ target_calculation_mode: null, formula_expression: 'IND("A")' })).toBe('CALCULATED_ADJUSTABLE')
+  })
+
   test('cada status oferece as transições do drawer', () => {
     expect(allowedIndicatorTransitions('rascunho')).toEqual(['em_revisao', 'publicado', 'arquivado'])
     expect(allowedIndicatorTransitions('em_revisao')).toEqual(['publicado', 'rascunho', 'arquivado'])

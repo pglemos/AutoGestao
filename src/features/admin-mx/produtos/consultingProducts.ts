@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase'
+import { buildDefaultCapabilities, type CapabilityReleaseStage, type CapabilityTechnicalStatus, type CapabilityVisibility } from './capabilityCatalog'
 
-export type ProductStatus = 'rascunho' | 'publicado' | 'arquivado'
+export type ProductStatus = 'rascunho' | 'em_revisao' | 'publicado' | 'suspenso_novas_contratacoes' | 'arquivado'
 
 export type ConsultingProduct = {
   program_key: string
@@ -14,6 +15,10 @@ export type ConsultingProduct = {
   max_presenciais: number | null
   usa_plano_estrategico: boolean
   indicator_package_version_id: string | null
+  evolution_group: string
+  modality_variant: string | null
+  change_summary: string | null
+  effective_from: string | null
   active: boolean | null
   published_at: string | null
   clients: number
@@ -23,10 +28,19 @@ export type ProductModule = {
   id?: string
   module_key: string
   label: string
+  module_code: string | null
+  module_label: string | null
+  menu_code: string | null
+  menu_label: string | null
   incluido: boolean
   obrigatorio: boolean
   etapa: string | null
   visibilidade: 'dono' | 'gerente' | 'interno'
+  release_stage: CapabilityReleaseStage
+  visibility: CapabilityVisibility
+  technical_status: CapabilityTechnicalStatus
+  display_order: number
+  status: 'ATIVO' | 'INATIVO'
 }
 
 export type EncounterTime = {
@@ -46,10 +60,16 @@ export type ProductDraft = {
   min_presenciais: number | null
   max_presenciais: number | null
   usa_plano_estrategico: boolean
+  evolution_group: string
+  modality_variant: string
 }
 
 export function emptyProductDraft(): ProductDraft {
-  return { program_key: '', name: '', descricao: '', modalidade: '', total_visits: 7, min_presenciais: null, max_presenciais: null, usa_plano_estrategico: false }
+  return {
+    program_key: '', name: '', descricao: '', modalidade: '', total_visits: 7,
+    min_presenciais: null, max_presenciais: null, usa_plano_estrategico: false,
+    evolution_group: 'CONSULTORIA_EVOLUTIVA_PRINCIPAL', modality_variant: '',
+  }
 }
 
 /** Erro bloqueante do produto, ou null. */
@@ -69,13 +89,49 @@ export function validateProductDraft(draft: ProductDraft): string | null {
 
 /** Transições de ciclo de vida permitidas — espelha as ações da tela. */
 export function allowedProductTransitions(status: ProductStatus): ProductStatus[] {
-  if (status === 'rascunho') return ['publicado', 'arquivado']
-  if (status === 'publicado') return ['arquivado']
+  if (status === 'rascunho') return ['em_revisao', 'arquivado']
+  if (status === 'em_revisao') return ['rascunho', 'publicado', 'arquivado']
+  if (status === 'publicado') return ['suspenso_novas_contratacoes', 'arquivado']
+  if (status === 'suspenso_novas_contratacoes') return ['publicado', 'arquivado']
   return ['rascunho']
 }
 
 export function canDeleteProduct(product: Pick<ConsultingProduct, 'status' | 'clients'>) {
   return product.status === 'rascunho' && product.clients === 0
+}
+
+export function productRequiresNewVersion(product: Pick<ConsultingProduct, 'status'>): boolean {
+  return product.status === 'publicado' || product.status === 'suspenso_novas_contratacoes'
+}
+
+export function validateProductPublication(input: {
+  target: Pick<ConsultingProduct, 'program_key' | 'evolution_group' | 'modalidade'>
+  targetStatus: ProductStatus
+  currentStatus?: ProductStatus
+  candidates: Array<Pick<ConsultingProduct, 'program_key' | 'evolution_group' | 'modalidade' | 'status' | 'active'>>
+}): string | null {
+  if (input.targetStatus !== 'publicado' || input.currentStatus === 'publicado') return null
+  const activeInGroup = input.candidates.find(candidate => (
+    candidate.program_key !== input.target.program_key
+    && candidate.evolution_group === input.target.evolution_group
+    && candidate.status === 'publicado'
+    && candidate.active !== false
+  ))
+  if (activeInGroup) return `O grupo ${input.target.evolution_group} já possui um produto publicado (${activeInGroup.program_key}). Arquive ou suspenda a versão anterior antes de publicar.`
+
+  const modality = String(input.target.modalidade ?? '').toLowerCase()
+  const isPmrVariant = input.target.program_key === 'pmr_online' || input.target.program_key === 'pmr_hibrido' || modality === 'online' || modality === 'hibrido'
+  if (isPmrVariant) {
+    const incompatible = input.candidates.find(candidate => (
+      candidate.program_key !== input.target.program_key
+      && candidate.status === 'publicado'
+      && candidate.active !== false
+      && ((candidate.program_key === 'pmr_online' && input.target.program_key === 'pmr_hibrido')
+        || (candidate.program_key === 'pmr_hibrido' && input.target.program_key === 'pmr_online'))
+    ))
+    if (incompatible) return 'PMR Online e PMR Híbrido não podem ficar ativos simultaneamente.'
+  }
+  return null
 }
 
 /** Chave da próxima versão do produto: `pmr_7` → `pmr_7_v2`. */
@@ -88,7 +144,7 @@ export async function fetchConsultingProducts(): Promise<{ rows: ConsultingProdu
   const [{ data: products, error }, { data: clients }] = await Promise.all([
     supabase
       .from('programas_visita_consultoria')
-      .select('program_key, name, descricao, modalidade, status, versao, total_visits, min_presenciais, max_presenciais, usa_plano_estrategico, indicator_package_version_id, active, published_at')
+      .select('program_key, name, descricao, modalidade, status, versao, total_visits, min_presenciais, max_presenciais, usa_plano_estrategico, indicator_package_version_id, evolution_group, modality_variant, change_summary, effective_from, active, published_at')
       .order('name', { ascending: true }),
     supabase.from('clientes_consultoria').select('program_template_key, status'),
   ])
@@ -106,9 +162,17 @@ export async function fetchConsultingProducts(): Promise<{ rows: ConsultingProdu
   }
 }
 
-export async function saveProduct(draft: ProductDraft, editing: boolean): Promise<{ error: string | null }> {
+export async function saveProduct(
+  draft: ProductDraft,
+  editing: boolean,
+  source?: Pick<ConsultingProduct, 'status'>,
+): Promise<{ error: string | null }> {
   const invalid = validateProductDraft(draft)
   if (invalid) return { error: invalid }
+  if (editing && !source) return { error: 'Não foi possível identificar o produto original para edição.' }
+  if (editing && source && productRequiresNewVersion(source)) {
+    return { error: 'Produto publicado é imutável. Crie uma nova versão em rascunho para editar.' }
+  }
   const payload = {
     program_key: draft.program_key.trim(),
     name: draft.name.trim(),
@@ -118,6 +182,8 @@ export async function saveProduct(draft: ProductDraft, editing: boolean): Promis
     min_presenciais: draft.min_presenciais,
     max_presenciais: draft.max_presenciais,
     usa_plano_estrategico: draft.usa_plano_estrategico,
+    evolution_group: draft.evolution_group.trim() || 'CONSULTORIA_EVOLUTIVA_PRINCIPAL',
+    modality_variant: draft.modality_variant.trim() || null,
     updated_at: new Date().toISOString(),
   }
   const { error } = editing
@@ -130,13 +196,36 @@ export async function saveProduct(draft: ProductDraft, editing: boolean): Promis
 }
 
 export async function changeProductStatus(programKey: string, status: ProductStatus, userId: string): Promise<{ error: string | null }> {
+  const { data: current, error: currentError } = await supabase
+    .from('programas_visita_consultoria')
+    .select('program_key, modalidade, evolution_group, status, active, published_at, published_by')
+    .eq('program_key', programKey)
+    .maybeSingle()
+  if (currentError) return { error: currentError.message }
+  if (!current) return { error: 'Produto não encontrado.' }
+
+  if (status === 'publicado') {
+    const { data: candidates, error: candidatesError } = await supabase
+      .from('programas_visita_consultoria')
+      .select('program_key, modalidade, evolution_group, status, active')
+      .neq('program_key', programKey)
+    if (candidatesError) return { error: candidatesError.message }
+    const constraintError = validateProductPublication({
+      target: current,
+      targetStatus: status,
+      currentStatus: current.status as ProductStatus,
+      candidates: (candidates ?? []) as Array<Pick<ConsultingProduct, 'program_key' | 'evolution_group' | 'modalidade' | 'status' | 'active'>>,
+    })
+    if (constraintError) return { error: constraintError }
+  }
+
   const { error } = await supabase
     .from('programas_visita_consultoria')
     .update({
       status,
       active: status !== 'arquivado',
-      published_at: status === 'publicado' ? new Date().toISOString() : null,
-      published_by: status === 'publicado' ? userId : null,
+      published_at: status === 'publicado' ? new Date().toISOString() : current.published_at,
+      published_by: status === 'publicado' ? userId : current.published_by,
       updated_at: new Date().toISOString(),
     })
     .eq('program_key', programKey)
@@ -146,28 +235,13 @@ export async function changeProductStatus(programKey: string, status: ProductSta
 /** Duplica produto, módulos e tempos numa chave nova, sempre como rascunho. */
 export async function duplicateProduct(source: ConsultingProduct, targetKey: string, targetName: string, versao: number): Promise<{ error: string | null }> {
   if (!/^[a-z0-9_]+$/.test(targetKey)) return { error: 'A chave aceita apenas minúsculas, números e underline.' }
-  const { error } = await supabase.from('programas_visita_consultoria').insert({
-    program_key: targetKey,
-    name: targetName,
-    descricao: source.descricao,
-    modalidade: source.modalidade,
-    total_visits: source.total_visits,
-    min_presenciais: source.min_presenciais,
-    max_presenciais: source.max_presenciais,
-    usa_plano_estrategico: source.usa_plano_estrategico,
-    status: 'rascunho',
-    versao,
-    active: true,
+  const { error } = await supabase.rpc('duplicate_consulting_product', {
+    p_source_key: source.program_key,
+    p_target_key: targetKey,
+    p_target_name: targetName,
+    p_version: versao,
   })
-  if (error) return { error: error.code === '23505' ? 'Já existe um produto com essa chave.' : error.message }
-
-  const [{ data: modules }, { data: times }] = await Promise.all([
-    supabase.from('modulos_produto_consultoria').select('module_key, label, incluido, obrigatorio, etapa, visibilidade').eq('program_key', source.program_key),
-    supabase.from('tempos_encontro_produto').select('visit_number, horas_online, horas_presencial, origem, observacao').eq('program_key', source.program_key),
-  ])
-  if (modules?.length) await supabase.from('modulos_produto_consultoria').insert(modules.map(m => ({ ...m, program_key: targetKey })))
-  if (times?.length) await supabase.from('tempos_encontro_produto').insert(times.map(t => ({ ...t, program_key: targetKey })))
-  return { error: null }
+  return { error: error ? (error.code === '23505' ? 'Já existe um produto com essa chave.' : error.message) : null }
 }
 
 export async function deleteDraftProduct(product: ConsultingProduct): Promise<{ error: string | null }> {
@@ -178,37 +252,111 @@ export async function deleteDraftProduct(product: ConsultingProduct): Promise<{ 
 
 export async function fetchProductModules(programKey: string): Promise<ProductModule[]> {
   const [{ data: saved }, { data: catalog }] = await Promise.all([
-    supabase.from('modulos_produto_consultoria').select('id, module_key, label, incluido, obrigatorio, etapa, visibilidade').eq('program_key', programKey),
+    supabase.from('modulos_produto_consultoria').select('id, module_key, label, module_code, module_label, menu_code, menu_label, incluido, obrigatorio, etapa, visibilidade, release_stage, visibility, technical_status, display_order, status').eq('program_key', programKey).order('display_order', { ascending: true }),
     supabase.from('modulos_sistema').select('codigo, nome, interno_mx').order('nome', { ascending: true }),
   ])
-  const byKey = new Map((saved ?? []).map(item => [item.module_key, item]))
-  return (catalog ?? [])
-    .filter(item => !item.interno_mx)
-    .map(item => {
-      const current = byKey.get(item.codigo)
-      return {
-        id: current?.id,
-        module_key: item.codigo,
-        label: current?.label ?? item.nome,
-        incluido: current?.incluido ?? false,
-        obrigatorio: current?.obrigatorio ?? false,
-        etapa: current?.etapa ?? null,
-        visibilidade: (current?.visibilidade ?? 'dono') as ProductModule['visibilidade'],
-      }
-    })
+  const savedRows = saved ?? []
+  const savedByMenu = new Map(
+    savedRows
+      .filter(item => item.menu_code)
+      .map(item => [`${String(item.module_code ?? 'LEGADO').toLowerCase()}::${String(item.menu_code).toLowerCase()}`, item]),
+  )
+  const savedByKey = new Map(savedRows.map(item => [item.module_key, item]))
+  const consumed = new Set<string>()
+  const defaults = buildDefaultCapabilities().map(reference => {
+    const current = savedByMenu.get(`${reference.moduleCode.toLowerCase()}::${reference.code.toLowerCase()}`) ?? savedByKey.get(reference.moduleKey)
+    if (current?.id) consumed.add(current.id)
+    return {
+      id: current?.id,
+      module_key: current?.module_key ?? reference.moduleKey,
+      label: current?.label ?? reference.label,
+      module_code: current?.module_code ?? reference.moduleCode,
+      module_label: current?.module_label ?? reference.moduleLabel,
+      menu_code: current?.menu_code ?? reference.code,
+      menu_label: current?.menu_label ?? reference.label,
+      incluido: current?.incluido ?? true,
+      obrigatorio: current?.obrigatorio ?? reference.mandatory,
+      etapa: current?.etapa ?? null,
+      visibilidade: (current?.visibilidade ?? 'dono') as ProductModule['visibilidade'],
+      release_stage: (current?.release_stage ?? reference.releaseStage) as ProductModule['release_stage'],
+      visibility: (current?.visibility ?? reference.visibility) as ProductModule['visibility'],
+      technical_status: (current?.technical_status ?? reference.technicalStatus) as ProductModule['technical_status'],
+      display_order: current?.display_order ?? reference.displayOrder,
+      status: (current?.status ?? 'ATIVO') as ProductModule['status'],
+    }
+  })
+
+  const legacy = savedRows
+    .filter(item => !item.id || !consumed.has(item.id))
+    .map(item => ({
+      id: item.id,
+      module_key: item.module_key,
+      label: item.label,
+      module_code: item.module_code ?? 'LEGADO',
+      module_label: item.module_label ?? 'Módulos legados',
+      menu_code: item.menu_code ?? item.module_key,
+      menu_label: item.menu_label ?? item.label,
+      incluido: item.incluido,
+      obrigatorio: item.obrigatorio,
+      etapa: item.etapa,
+      visibilidade: item.visibilidade as ProductModule['visibilidade'],
+      release_stage: item.release_stage as ProductModule['release_stage'],
+      visibility: item.visibility as ProductModule['visibility'],
+      technical_status: item.technical_status as ProductModule['technical_status'],
+      display_order: item.display_order,
+      status: item.status as ProductModule['status'],
+    }))
+
+  const catalogFallback = (catalog ?? []).filter(item => !item.interno_mx && !savedRows.some(savedItem => savedItem.module_key === item.codigo))
+    .map(item => ({
+      module_key: item.codigo,
+      label: item.nome,
+      module_code: 'LEGADO',
+      module_label: 'Módulos legados',
+      menu_code: item.codigo,
+      menu_label: item.nome,
+      incluido: false,
+      obrigatorio: false,
+      etapa: null,
+      visibilidade: 'dono' as ProductModule['visibilidade'],
+      release_stage: 'NA_ATIVACAO' as ProductModule['release_stage'],
+      visibility: 'ATIVO' as ProductModule['visibility'],
+      technical_status: 'DISPONIVEL' as ProductModule['technical_status'],
+      display_order: 1000,
+      status: 'ATIVO' as ProductModule['status'],
+    }))
+
+  return [...defaults, ...legacy, ...catalogFallback].sort((left, right) => left.display_order - right.display_order)
+}
+
+export function validateProductModules(modules: ProductModule[]): string | null {
+  if (!modules.some(item => item.incluido)) return 'Pelo menos um módulo deve ser liberado.'
+  const missingMandatory = modules.find(item => item.obrigatorio && !item.incluido)
+  if (missingMandatory) return 'O módulo obrigatório ' + (missingMandatory.menu_label ?? missingMandatory.label) + ' precisa permanecer incluído.'
+  return null
 }
 
 export async function saveProductModules(programKey: string, modules: ProductModule[]): Promise<{ error: string | null }> {
-  if (!modules.some(item => item.incluido)) return { error: 'Pelo menos um módulo deve ser liberado.' }
+  const invalid = validateProductModules(modules)
+  if (invalid) return { error: invalid }
   const { error } = await supabase.from('modulos_produto_consultoria').upsert(
     modules.map(item => ({
       program_key: programKey,
       module_key: item.module_key,
       label: item.label,
+      module_code: item.module_code,
+      module_label: item.module_label,
+      menu_code: item.menu_code,
+      menu_label: item.menu_label,
       incluido: item.incluido,
-      obrigatorio: item.obrigatorio,
+      obrigatorio: item.incluido && item.obrigatorio,
       etapa: item.etapa,
       visibilidade: item.visibilidade,
+      release_stage: item.release_stage,
+      visibility: item.visibility,
+      technical_status: item.technical_status,
+      display_order: item.display_order,
+      status: item.status,
       updated_at: new Date().toISOString(),
     })),
     { onConflict: 'program_key,module_key' },

@@ -58,6 +58,12 @@ export function ConsultingProductFormModal(props: {
           <MxField label="Máximo de presenciais">
             <Input type="number" min={0} value={props.draft.max_presenciais === null ? '' : String(props.draft.max_presenciais)} onChange={event => props.onDraft({ ...props.draft, max_presenciais: numberOrNull(event.target.value) })} />
           </MxField>
+          <MxField label="Grupo de evolução" hint="Produtos do mesmo grupo seguem a regra de exclusividade do catálogo.">
+            <Input value={props.draft.evolution_group} onChange={event => props.onDraft({ ...props.draft, evolution_group: event.target.value.toUpperCase().replace(/[^A-Z0-9_]/g, '_') })} placeholder="CONSULTORIA_EVOLUTIVA_PRINCIPAL" />
+          </MxField>
+          <MxField label="Variante de modalidade">
+            <Input value={props.draft.modality_variant} onChange={event => props.onDraft({ ...props.draft, modality_variant: event.target.value })} placeholder="ONLINE, HIBRIDO ou FLEXIVEL" />
+          </MxField>
           <MxField label="Descrição" className="sm:col-span-2">
             <MxTextarea rows={2} value={props.draft.descricao} onChange={event => props.onDraft({ ...props.draft, descricao: event.target.value })} />
           </MxField>

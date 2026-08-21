@@ -1,8 +1,22 @@
 import { supabase } from '@/lib/supabase'
 
 export type TemplateItemPriority = 'baixa' | 'media' | 'alta' | 'critica'
-export type ImprovementDirection = 'aumentar' | 'reduzir'
+export type ImprovementDirection = 'aumentar' | 'reduzir' | 'manter' | 'faixa' | 'corrigir_processo'
 export type SupportMaterialType = 'nenhum' | 'arquivo' | 'aula'
+
+export const RESPONSIBLE_ROLE_OPTIONS = [
+  { value: 'DONO', label: 'Dono' },
+  { value: 'DIRETOR', label: 'Diretor' },
+  { value: 'GERENTE_GERAL', label: 'Gerente Geral' },
+  { value: 'GERENTE_COMERCIAL', label: 'Gerente Comercial' },
+  { value: 'MARKETING', label: 'Marketing' },
+  { value: 'PRODUTO_ESTOQUE', label: 'Produto e Estoque' },
+  { value: 'PESSOAS_RH', label: 'Pessoas - RH' },
+  { value: 'FINANCEIRO', label: 'Financeiro' },
+  { value: 'OPERACOES', label: 'Operações' },
+  { value: 'VENDEDOR', label: 'Vendedor' },
+  { value: 'CONSULTOR_MX', label: 'Consultor MX' },
+] as const
 
 export type ActionPlanTemplateItem = {
   id?: string
@@ -20,6 +34,7 @@ export type ActionPlanTemplateItem = {
   file_asset_name: string | null
   treinamento_id: string | null
   treinamento_titulo: string | null
+  recommended_responsible_role: string | null
   /** Peso em basis points (soma 10000 entre os itens da versão). Calculado, não editável. */
   peso_bp: number | null
 }
@@ -29,6 +44,8 @@ export type ActionPlanTemplateVersion = {
   template_id: string
   versao: number
   status: 'rascunho' | 'publicada' | 'arquivada'
+  improvement_direction: ImprovementDirection | null
+  default_responsible_role: string | null
   notas: string | null
   published_at: string | null
   problem: string | null
@@ -53,8 +70,11 @@ export type ActionPlanTemplate = {
   active: boolean
   primary_indicator_code: string | null
   improvement_direction: ImprovementDirection | null
+  default_responsible_role: string | null
   manual_application_enabled: boolean
   owner_suggestion_enabled: boolean
+  /** Total de planos criados a partir de qualquer versão deste template. */
+  application_count?: number
   versions: ActionPlanTemplateVersion[]
 }
 
@@ -69,6 +89,7 @@ export type TemplateDraft = {
   active: boolean
   primary_indicator_code: string
   improvement_direction: ImprovementDirection
+  default_responsible_role: string
   manual_application_enabled: boolean
   owner_suggestion_enabled: boolean
   problem: string
@@ -92,6 +113,7 @@ export function emptyTemplateDraft(): TemplateDraft {
     active: true,
     primary_indicator_code: '',
     improvement_direction: 'aumentar',
+    default_responsible_role: '',
     manual_application_enabled: true,
     owner_suggestion_enabled: false,
     problem: '',
@@ -110,7 +132,7 @@ export function emptyTemplateItem(ordem: number): ActionPlanTemplateItem {
     ordem, problema: '', acao: '', como: '', departamento: '', indicador: '',
     prioridade: 'media', prazo_dias: 30, evidencia_requerida: false,
     support_material_type: 'nenhum', file_asset_path: null, file_asset_name: null,
-    treinamento_id: null, treinamento_titulo: null, peso_bp: null,
+    treinamento_id: null, treinamento_titulo: null, recommended_responsible_role: null, peso_bp: null,
   }
 }
 
@@ -186,8 +208,8 @@ export function nextTemplateVersionNumber(versions: Array<Pick<ActionPlanTemplat
   return versions.reduce((highest, version) => Math.max(highest, version.versao), 0) + 1
 }
 
-const TEMPLATE_ITEM_COLUMNS = 'id, ordem, problema, acao, como, departamento, indicador, prioridade, prazo_dias, evidencia_requerida, support_material_type, file_asset_path, file_asset_name, treinamento_id, treinamento_titulo, peso_bp'
-const TEMPLATE_VERSION_COLUMNS = 'id, template_id, versao, status, notas, published_at, problem, objective, when_to_apply, owner_suggestion_title, owner_suggestion_problem, owner_suggestion_recommendation, effectiveness_indicator_code'
+const TEMPLATE_ITEM_COLUMNS = 'id, ordem, problema, acao, como, departamento, indicador, prioridade, prazo_dias, evidencia_requerida, support_material_type, file_asset_path, file_asset_name, treinamento_id, treinamento_titulo, recommended_responsible_role, peso_bp'
+const TEMPLATE_VERSION_COLUMNS = 'id, template_id, versao, status, improvement_direction, default_responsible_role, notas, published_at, problem, objective, when_to_apply, owner_suggestion_title, owner_suggestion_problem, owner_suggestion_recommendation, effectiveness_indicator_code'
 
 function normalizeItem(item: Partial<ActionPlanTemplateItem> & { id: string; ordem: number; problema: string; acao: string }): ActionPlanTemplateItem {
   return {
@@ -200,6 +222,7 @@ function normalizeItem(item: Partial<ActionPlanTemplateItem> & { id: string; ord
     file_asset_name: item.file_asset_name ?? null,
     treinamento_id: item.treinamento_id ?? null,
     treinamento_titulo: item.treinamento_titulo ?? null,
+    recommended_responsible_role: item.recommended_responsible_role ?? null,
     peso_bp: item.peso_bp ?? null,
   } as ActionPlanTemplateItem
 }
@@ -207,7 +230,7 @@ function normalizeItem(item: Partial<ActionPlanTemplateItem> & { id: string; ord
 export async function fetchActionPlanTemplates(): Promise<{ rows: ActionPlanTemplate[]; error: string | null }> {
   const { data: templates, error } = await supabase
     .from('planos_acao_templates')
-    .select('id, template_key, nome, departamento, indicador, descricao, program_key, active, primary_indicator_code, improvement_direction, manual_application_enabled, owner_suggestion_enabled')
+    .select('id, template_key, nome, departamento, indicador, descricao, program_key, active, primary_indicator_code, improvement_direction, default_responsible_role, manual_application_enabled, owner_suggestion_enabled')
     .order('nome', { ascending: true })
   if (error) return { rows: [], error: error.message }
 
@@ -226,8 +249,29 @@ export async function fetchActionPlanTemplates(): Promise<{ rows: ActionPlanTemp
     byTemplate.set(rest.template_id, [...(byTemplate.get(rest.template_id) ?? []), { ...rest, itens: (itens ?? []).map(item => normalizeItem(item as never)) }])
   }
 
+  const versionIds = (versions ?? []).map(version => version.id)
+  const { data: applications } = versionIds.length
+    ? await supabase
+        .from('planos_acao')
+        .select('origem_ref_id')
+        .eq('origem_ref_table', 'planos_acao_template_versoes')
+        .in('origem_ref_id', versionIds)
+    : { data: [] as Array<{ origem_ref_id: string | null }> }
+  const applicationCounts = new Map<string, number>()
+  for (const application of applications ?? []) {
+    if (!application.origem_ref_id) continue
+    applicationCounts.set(application.origem_ref_id, (applicationCounts.get(application.origem_ref_id) ?? 0) + 1)
+  }
+
   return {
-    rows: (templates ?? []).map(template => ({ ...template, versions: byTemplate.get(template.id) ?? [] })) as ActionPlanTemplate[],
+    rows: (templates ?? []).map(template => {
+      const templateVersions = byTemplate.get(template.id) ?? []
+      return {
+        ...template,
+        application_count: templateVersions.reduce((total, version) => total + (applicationCounts.get(version.id) ?? 0), 0),
+        versions: templateVersions,
+      }
+    }) as ActionPlanTemplate[],
     error: null,
   }
 }
@@ -260,6 +304,7 @@ export async function saveTemplateDraft(draft: TemplateDraft, userId: string): P
     active: draft.active,
     primary_indicator_code: draft.primary_indicator_code.trim() || null,
     improvement_direction: draft.improvement_direction || null,
+    default_responsible_role: draft.default_responsible_role.trim() || null,
     manual_application_enabled: draft.manual_application_enabled,
     owner_suggestion_enabled: draft.owner_suggestion_enabled,
     updated_at: new Date().toISOString(),
@@ -281,6 +326,8 @@ export async function saveTemplateDraft(draft: TemplateDraft, userId: string): P
   let versionId = draftVersion?.id ?? null
 
   const versionPayload = {
+    improvement_direction: draft.improvement_direction || null,
+    default_responsible_role: draft.default_responsible_role.trim() || null,
     problem: draft.problem.trim() || null,
     objective: draft.objective.trim() || null,
     when_to_apply: draft.when_to_apply.trim() || null,
@@ -325,6 +372,7 @@ export async function saveTemplateDraft(draft: TemplateDraft, userId: string): P
       file_asset_name: item.support_material_type === 'arquivo' ? item.file_asset_name : null,
       treinamento_id: item.support_material_type === 'aula' ? item.treinamento_id : null,
       treinamento_titulo: item.support_material_type === 'aula' ? item.treinamento_titulo : null,
+      recommended_responsible_role: item.recommended_responsible_role?.trim() || null,
       peso_bp: weights[index]?.weight_bp ?? null,
     })),
   )
@@ -406,4 +454,3 @@ export async function archiveTemplate(templateId: string): Promise<{ error: stri
   const { error } = await supabase.rpc('archive_action_plan_template', { p_template_id: templateId })
   return { error: error?.message ?? null }
 }
-

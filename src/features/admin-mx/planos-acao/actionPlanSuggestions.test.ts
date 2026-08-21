@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 import {
+  canConvertSuggestion,
   isSuggestionPromoted,
   nextSuggestionActions,
   suggestionPriorityToPlanPriority,
@@ -35,22 +36,31 @@ describe('sugestões do motor determinístico', () => {
   })
 
   test('sugestão com plano vinculado conta como promovida', () => {
-    expect(isSuggestionPromoted({ source_plano_id: null })).toBe(false)
-    expect(isSuggestionPromoted({ source_plano_id: 'plan-1' })).toBe(true)
+    expect(isSuggestionPromoted({ source_plano_id: null, converted_plano_id: null })).toBe(false)
+    expect(isSuggestionPromoted({ source_plano_id: 'plan-1', converted_plano_id: null })).toBe(true)
+    expect(isSuggestionPromoted({ source_plano_id: null, converted_plano_id: 'plan-2' })).toBe(true)
   })
 })
 
 describe('ciclo de vida da sugestão ao dono', () => {
+  test('só sugestões validadas ou exibidas ao Dono podem virar plano', () => {
+    expect(canConvertSuggestion('validada')).toBe(true)
+    expect(canConvertSuggestion('exibida_dono')).toBe(true)
+    expect(canConvertSuggestion('pendente_validacao')).toBe(false)
+    expect(canConvertSuggestion('convertida')).toBe(false)
+    expect(canConvertSuggestion('descartada')).toBe(false)
+  })
+
   test('pendente pode validar ou descartar', () => {
     expect(nextSuggestionActions('pendente_validacao')).toEqual(['validar', 'descartar'])
   })
 
   test('validada pode publicar ou descartar', () => {
-    expect(nextSuggestionActions('validada')).toEqual(['publicar', 'descartar'])
+    expect(nextSuggestionActions('validada')).toEqual(['publicar', 'converter', 'descartar'])
   })
 
-  test('exibida ao dono não tem mais ações', () => {
-    expect(nextSuggestionActions('exibida_dono')).toEqual([])
+  test('exibida ao dono pode ser convertida', () => {
+    expect(nextSuggestionActions('exibida_dono')).toEqual(['converter'])
     expect(nextSuggestionActions('convertida')).toEqual([])
     expect(nextSuggestionActions('descartada')).toEqual([])
   })

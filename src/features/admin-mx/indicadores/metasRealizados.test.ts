@@ -1,8 +1,10 @@
 import { describe, expect, test } from 'bun:test'
 import {
   buildMonthlyGrid,
+  buildTargetWorkbookSheets,
   buildStoreCopyMutations,
   isCompanyLevelIndicator,
+  isPlanningFieldEditable,
   previewStoreTargetsCopy,
   processTargetImport,
   validateQuickEntryCells,
@@ -19,6 +21,14 @@ describe('isCompanyLevelIndicator', () => {
   test('empresariais não são copiados', () => {
     expect(isCompanyLevelIndicator({ code: 'INSTAGRAM_FOLLOWERS', name: 'x' })).toBe(true)
     expect(isCompanyLevelIndicator({ code: 'SALES_WALKIN', name: 'x' })).toBe(false)
+  })
+})
+
+describe('edição de metas e realizados', () => {
+  test('indicador calculado bloqueia somente a Meta', () => {
+    const indicator = { code: 'SALES_TOTAL', name: 'Vendas Total', calculado: true }
+    expect(isPlanningFieldEditable(indicator, 'meta')).toBe(false)
+    expect(isPlanningFieldEditable(indicator, 'realizado')).toBe(true)
   })
 })
 
@@ -165,15 +175,38 @@ describe('processTargetImport', () => {
 describe('cadastro rápido', () => {
   test('grid mensal preenche meta e realizado', () => {
     const grid = buildMonthlyGrid(
-      [{ loja_id: 'l', indicator_code: 'A', year: 2026, month: 1, meta: 5, realizado: 3, ano_anterior: null }],
+      [{ loja_id: 'l', indicator_code: 'A', year: 2026, month: 1, meta: 5, realizado: 3, ano_anterior: 4 }],
       ['A'],
     )
-    expect(grid.A[1]).toEqual({ meta: 5, realizado: 3 })
-    expect(grid.A[12]).toEqual({ meta: null, realizado: null })
+    expect(grid.A[1]).toEqual({ meta: 5, realizado: 3, ano_anterior: 4 })
+    expect(grid.A[12]).toEqual({ meta: null, realizado: null, ano_anterior: null })
   })
 
   test('validação de células recusa mês fora do intervalo', () => {
     expect(validateQuickEntryCells([{ indicator_code: 'A', month: 13, value: 1 }])).toHaveLength(1)
     expect(validateQuickEntryCells([{ indicator_code: 'A', month: 1, value: 1 }])).toEqual([])
+  })
+})
+
+describe('modelo XLSX de metas', () => {
+  test('inclui grade, instruções e configuração no modelo em branco', () => {
+    const sheets = buildTargetWorkbookSheets({
+      indicators: [
+        { code: 'SALES_WALKIN', name: 'Vendas Fluxo', department: 'COMERCIAL' },
+        { code: 'CONVERSION_RATE', name: 'Conversão', department: 'COMERCIAL', value_type: 'percent', casas_decimais: 2 },
+        { code: 'SALES_TOTAL', name: 'Vendas Total', department: 'COMERCIAL', calculado: true },
+      ],
+      year: 2026,
+      storeId: 'store-1',
+      storeName: 'Matriz',
+      values: { CONVERSION_RATE: [0.25] },
+    })
+
+    expect(sheets.map(sheet => sheet.name)).toEqual(['METAS', 'INSTRUCOES', 'MX_CONFIG'])
+    expect(sheets[0]?.rows[0]).toMatchObject({ Código: 'SALES_WALKIN', Jan: null, Tipo: 'Digitável' })
+    expect(sheets[0]?.rows[1]).toMatchObject({ Código: 'CONVERSION_RATE', Jan: 25 })
+    expect(sheets[0]?.rows[2]).toMatchObject({ Código: 'SALES_TOTAL', Jan: 'CALCULADO', Tipo: 'Calculado' })
+    expect(sheets[1]?.rows.length).toBeGreaterThan(0)
+    expect(sheets[2]?.rows).toContainEqual({ Chave: 'view_type', Valor: 'TARGET' })
   })
 })

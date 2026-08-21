@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Check, ChevronLeft, ChevronRight, Plus, RotateCcw, X } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
@@ -11,6 +11,7 @@ import {
   WIZARD_SOURCE_SCOPES,
   WIZARD_STEPS,
   WIZARD_VALUE_TYPES,
+  buildWizardDraft,
   isWizardCodeEditable,
   slugifyCode,
   type IndicatorWizardDraft,
@@ -23,31 +24,23 @@ export function CreateIndicatorWizard(props: {
   open: boolean
   areas: string[]
   initial?: Partial<IndicatorWizardDraft>
+  editing: boolean
   submitting: boolean
-  onSave: (draft: IndicatorWizardDraft, publish: boolean) => void
+  onSave: (draft: IndicatorWizardDraft, publish: boolean) => Promise<boolean> | boolean
   onClose: () => void
 }) {
   const [step, setStep] = useState(0)
-  const [savedCode, setSavedCode] = useState(false)
+  const [savedCode, setSavedCode] = useState(Boolean(props.initial?.code))
   const [publish, setPublish] = useState(false)
-  const [draft, setDraft] = useState<IndicatorWizardDraft>(() => ({
-    name: props.initial?.name ?? '',
-    code: props.initial?.code ?? '',
-    area: props.initial?.area ?? '',
-    description: props.initial?.description ?? '',
-    value_type: props.initial?.value_type ?? 'number',
-    direction: props.initial?.direction ?? 'increase',
-    casas_decimais: props.initial?.casas_decimais ?? 0,
-    frequencia: props.initial?.frequencia ?? 'mensal',
-    ano_inicial: props.initial?.ano_inicial ?? new Date().getFullYear(),
-    ano_final: props.initial?.ano_final ?? null,
-    source_scope: props.initial?.source_scope ?? 'manual',
-    formula_expression: props.initial?.formula_expression ?? '',
-    target_calculation_mode: props.initial?.target_calculation_mode ?? 'MANUAL',
-    visivel_dono: props.initial?.visivel_dono ?? true,
-    posicao: props.initial?.posicao ?? 'last',
-    posicao_ref: props.initial?.posicao_ref ?? '',
-  }))
+  const [draft, setDraft] = useState<IndicatorWizardDraft>(() => buildWizardDraft(props.initial))
+
+  useEffect(() => {
+    if (!props.open) return
+    setStep(0)
+    setPublish(false)
+    setSavedCode(props.editing || Boolean(props.initial?.code))
+    setDraft(buildWizardDraft(props.initial))
+  }, [props.open, props.initial, props.editing])
 
   const areas = props.areas.length > 0 ? props.areas : AREAS
   const patch = (values: Partial<IndicatorWizardDraft>) => setDraft(current => ({ ...current, ...values }))
@@ -67,16 +60,17 @@ export function CreateIndicatorWizard(props: {
     }
   }
 
-  const submit = (willPublish: boolean) => {
+  const submit = async (willPublish: boolean) => {
     setPublish(willPublish)
-    props.onSave(draft, willPublish)
+    const saved = await props.onSave(draft, willPublish)
+    if (saved) setSavedCode(true)
   }
 
   return (
     <Modal
       open={props.open}
       onClose={props.onClose}
-      title="Criar indicador"
+      title={props.editing ? 'Editar indicador' : 'Criar indicador'}
       size="xl"
       closeOnEscape={!props.submitting}
       footer={(
@@ -93,10 +87,10 @@ export function CreateIndicatorWizard(props: {
             </Button>
           ) : (
             <>
-              <Button variant="outline" onClick={() => submit(false)} disabled={props.submitting}>
+              <Button variant="outline" onClick={() => void submit(false)} disabled={props.submitting}>
                 {props.submitting && !publish ? 'Salvando...' : 'Salvar rascunho'}
               </Button>
-              <Button onClick={() => submit(true)} disabled={props.submitting || !draft.name.trim() || !draft.code.trim()}>
+              <Button onClick={() => void submit(true)} disabled={props.submitting || !draft.name.trim() || !draft.code.trim()}>
                 {props.submitting && publish ? 'Publicando...' : 'Publicar indicador'}
               </Button>
             </>
@@ -129,7 +123,11 @@ export function CreateIndicatorWizard(props: {
           ))}
         </ol>
 
-        <MxStatusBanner tone="info">Crie o indicador com o ciclo de vida do catálogo. A chave é gerada do nome e congela após a primeira gravação.</MxStatusBanner>
+        <MxStatusBanner tone="info">
+          {props.editing
+            ? 'Edite os dados do indicador no ciclo de vida do catálogo. A chave interna já está congelada.'
+            : 'Crie o indicador com o ciclo de vida do catálogo. A chave é gerada do nome e congela após a primeira gravação.'}
+        </MxStatusBanner>
 
         {step === 0 ? (
           <div className="grid gap-4 sm:grid-cols-2">

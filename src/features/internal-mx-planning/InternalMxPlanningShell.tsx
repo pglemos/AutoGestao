@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { Building2, RefreshCw, type LucideIcon } from 'lucide-react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
 import { Select } from '@/components/atoms/Select'
@@ -14,7 +14,9 @@ import { toInternalPlanningActor } from './internalPlanningAdapter'
 export function useInternalPlanningStore() {
   const { activeStoreId, setActiveStoreId } = useAuth()
   const { lojas, loading, error, refetch } = useStores()
-  const queryStoreId = useMemo(() => new URLSearchParams(window.location.search).get('storeId') || '', [])
+  const location = useLocation()
+  const navigate = useNavigate()
+  const queryStoreId = useMemo(() => new URLSearchParams(location.search).get('storeId') || '', [location.search])
   const [selectedStoreId, setSelectedStoreId] = useState('')
   const stores = useMemo(() => lojas.filter((store) => store.active), [lojas])
 
@@ -26,20 +28,20 @@ export function useInternalPlanningStore() {
     setSelectedStoreId((current) => current === preferred ? current : preferred)
 
     if (queryStoreId && !queryIsValid) {
-      const url = new URL(window.location.href)
-      url.searchParams.delete('storeId')
-      window.history.replaceState({}, '', url)
+      const params = new URLSearchParams(location.search)
+      params.delete('storeId')
+      navigate({ pathname: location.pathname, search: params.toString() ? `?${params.toString()}` : '', hash: location.hash }, { replace: true })
     }
-  }, [activeStoreId, loading, queryStoreId, stores])
+  }, [activeStoreId, loading, location.hash, location.pathname, location.search, navigate, queryStoreId, stores])
 
   const selectStore = (storeId: string) => {
     const validStoreId = stores.some((store) => store.id === storeId) ? storeId : ''
     setSelectedStoreId(validStoreId)
     setActiveStoreId(validStoreId || null)
-    const url = new URL(window.location.href)
-    if (validStoreId) url.searchParams.set('storeId', validStoreId)
-    else url.searchParams.delete('storeId')
-    window.history.replaceState({}, '', url)
+    const params = new URLSearchParams(location.search)
+    if (validStoreId) params.set('storeId', validStoreId)
+    else params.delete('storeId')
+    navigate({ pathname: location.pathname, search: params.toString() ? `?${params.toString()}` : '', hash: location.hash }, { replace: true })
   }
 
   return {

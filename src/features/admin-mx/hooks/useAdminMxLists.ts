@@ -172,6 +172,7 @@ export type IndicatorInput = {
   formula_expression?: string | null
   target_calculation_mode?: string
   visivel_dono?: boolean
+  created_origin?: 'mx_padrao' | 'criado_mx'
 }
 
 // O catálogo é NOT NULL em area/value_type/direction/source_scope e tem CHECK
@@ -231,6 +232,7 @@ export async function saveIndicator(input: IndicatorInput): Promise<{ error: str
       formula_expression: input.formula_expression ?? null,
       target_calculation_mode: input.target_calculation_mode ?? 'MANUAL',
       visivel_dono: input.visivel_dono ?? true,
+      ...(input.created_origin ? { created_origin: input.created_origin } : {}),
       updated_at: new Date().toISOString(),
     }, { onConflict: 'metric_key' })
   return { error: error?.message ?? null }

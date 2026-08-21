@@ -2,9 +2,23 @@ import { supabase } from '@/lib/supabase'
 
 export const INDICATOR_STATUSES = ['rascunho', 'em_revisao', 'publicado', 'desabilitado', 'arquivado'] as const
 export const INDICATOR_FREQUENCIES = ['diaria', 'semanal', 'mensal', 'trimestral', 'anual'] as const
+export const INDICATOR_CALCULATION_MODES = ['MANUAL', 'CALCULATED_LOCKED', 'CALCULATED_ADJUSTABLE'] as const
+
+export const INDICATOR_CALCULATION_MODE_LABEL: Record<(typeof INDICATOR_CALCULATION_MODES)[number], string> = {
+  MANUAL: 'Manual',
+  CALCULATED_LOCKED: 'Calculado bloqueado',
+  CALCULATED_ADJUSTABLE: 'Calculado ajustável',
+}
+
+export const INDICATOR_VALUE_TYPE_LABEL: Record<string, string> = {
+  number: 'Número',
+  percent: 'Percentual',
+  currency: 'Moeda',
+}
 
 export type IndicatorStatus = (typeof INDICATOR_STATUSES)[number]
 export type IndicatorFrequency = (typeof INDICATOR_FREQUENCIES)[number]
+export type IndicatorCalculationMode = (typeof INDICATOR_CALCULATION_MODES)[number]
 
 export const INDICATOR_STATUS_LABEL: Record<IndicatorStatus, string> = {
   rascunho: 'Rascunho',
@@ -38,9 +52,11 @@ export type CatalogIndicator = {
   ano_final: number | null
   formula_expression: string | null
   target_calculation_mode: string | null
+  created_origin: 'mx_padrao' | 'criado_mx'
   sort_order: number
   active: boolean
   targets: number
+  annual_target: number | null
 }
 
 export type IndicatorParameter = {
@@ -66,6 +82,62 @@ export function allowedIndicatorTransitions(status: IndicatorStatus): IndicatorS
 /** Só indicador publicado entra em plano estratégico e no Módulo Dono. */
 export function isUsableIndicator(indicator: Pick<CatalogIndicator, 'status' | 'active'>) {
   return indicator.status === 'publicado' && indicator.active !== false
+}
+
+export function indicatorCalculationMode(indicator: Pick<CatalogIndicator, 'target_calculation_mode' | 'formula_expression'>): IndicatorCalculationMode {
+  if (indicator.target_calculation_mode === 'MANUAL') return 'MANUAL'
+  if (indicator.target_calculation_mode === 'CALCULATED_LOCKED') return 'CALCULATED_LOCKED'
+  if (indicator.target_calculation_mode === 'CALCULATED_ADJUSTABLE') return 'CALCULATED_ADJUSTABLE'
+  if (indicator.formula_expression) return 'CALCULATED_ADJUSTABLE'
+  return 'MANUAL'
+}
+
+export function indicatorIsCalculated(indicator: Pick<CatalogIndicator, 'target_calculation_mode' | 'formula_expression'>) {
+  return indicatorCalculationMode(indicator) !== 'MANUAL'
+}
+
+export function indicatorHasParameter(indicator: Pick<CatalogIndicator, 'formula_expression'>) {
+  return /\bPAR\s*\(/i.test(indicator.formula_expression ?? '')
+}
+
+export type CatalogFilterKey =
+  | 'manual'
+  | 'calculado_bloqueado'
+  | 'calculado_ajustavel'
+  | 'digitaveis'
+  | 'calculaveis'
+  | 'com_parametro'
+  | 'sem_parametro'
+  | 'padrao_mx'
+  | 'criados_mx'
+  | 'publicados'
+  | 'rascunhos'
+  | 'ocultos_dono'
+  | 'desabilitados'
+  | 'arquivados'
+
+export function indicatorMatchesFilter(indicator: CatalogIndicator, filter: CatalogFilterKey): boolean {
+  const mode = indicatorCalculationMode(indicator)
+  switch (filter) {
+    case 'manual': return mode === 'MANUAL'
+    case 'calculado_bloqueado': return mode === 'CALCULATED_LOCKED'
+    case 'calculado_ajustavel': return mode === 'CALCULATED_ADJUSTABLE'
+    case 'digitaveis': return mode === 'MANUAL'
+    case 'calculaveis': return mode !== 'MANUAL'
+    case 'com_parametro': return indicatorHasParameter(indicator)
+    case 'sem_parametro': return !indicatorHasParameter(indicator)
+    case 'padrao_mx': return indicator.created_origin === 'mx_padrao'
+    case 'criados_mx': return indicator.created_origin === 'criado_mx'
+    case 'publicados': return indicator.status === 'publicado' && indicator.active !== false
+    case 'rascunhos': return indicator.status === 'rascunho'
+    case 'ocultos_dono': return !indicator.visivel_dono
+    case 'desabilitados': return indicator.status === 'desabilitado' || indicator.active === false
+    case 'arquivados': return indicator.status === 'arquivado'
+  }
+}
+
+export function formatIndicatorValueType(valueType: string) {
+  return INDICATOR_VALUE_TYPE_LABEL[valueType] ?? valueType
 }
 
 export function validateIndicatorVigencia(anoInicial: number | null, anoFinal: number | null): string | null {
@@ -122,21 +194,30 @@ export function validateThresholds(parameter: Pick<IndicatorParameter, 'red_thre
 }
 
 export async function fetchCatalogIndicators(): Promise<{ rows: CatalogIndicator[]; error: string | null }> {
-  const [{ data, error }, { data: targets }] = await Promise.all([
+  const currentYear = new Date().getFullYear()
+  const [{ data, error }, { data: targets, error: targetsError }] = await Promise.all([
     supabase
       .from('catalogo_metricas_consultoria')
-      .select('metric_key, label, area, descricao, value_type, direction, source_scope, status, frequencia, casas_decimais, visivel_dono, ano_inicial, ano_final, formula_expression, target_calculation_mode, sort_order, active')
+      .select('metric_key, label, area, descricao, value_type, direction, source_scope, status, frequencia, casas_decimais, visivel_dono, ano_inicial, ano_final, formula_expression, target_calculation_mode, created_origin, sort_order, active')
       .order('sort_order', { ascending: true }),
-    supabase.from('metas_metricas_cliente').select('metric_key'),
+    supabase.rpc('get_admin_indicator_target_aggregates', { p_year: currentYear }),
   ])
-  if (error) return { rows: [], error: error.message }
+  if (error || targetsError) return { rows: [], error: (error ?? targetsError)?.message ?? 'Não foi possível carregar os indicadores.' }
   const counters = new Map<string, number>()
+  const annualTotals = new Map<string, number>()
   for (const target of targets ?? []) {
     if (!target.metric_key) continue
-    counters.set(target.metric_key, (counters.get(target.metric_key) ?? 0) + 1)
+    counters.set(target.metric_key, Number(target.target_count) || 0)
+    const value = Number(target.annual_target)
+    if (Number.isFinite(value)) annualTotals.set(target.metric_key, (annualTotals.get(target.metric_key) ?? 0) + value)
   }
   return {
-    rows: (data ?? []).map(item => ({ ...item, targets: counters.get(item.metric_key) ?? 0 })) as CatalogIndicator[],
+    rows: (data ?? []).map(item => ({
+      ...item,
+      created_origin: item.created_origin === 'criado_mx' ? 'criado_mx' : 'mx_padrao',
+      targets: counters.get(item.metric_key) ?? 0,
+      annual_target: annualTotals.get(item.metric_key) ?? null,
+    })) as CatalogIndicator[],
     error: null,
   }
 }
@@ -168,18 +249,19 @@ export async function persistIndicatorOrder(order: Array<{ metric_key: string; s
   return { error: null }
 }
 
-export async function fetchIndicatorParameters(): Promise<{ rows: IndicatorParameter[]; setName: string | null }> {
-  const { data: set } = await supabase
+export async function fetchIndicatorParameters(): Promise<{ rows: IndicatorParameter[]; setName: string | null; error: string | null }> {
+  const { data: set, error: setError } = await supabase
     .from('conjuntos_parametros_consultoria')
     .select('id, name')
     .eq('active', true)
     .order('updated_at', { ascending: false })
     .limit(1)
     .maybeSingle()
-  if (!set) return { rows: [], setName: null }
-  const { data } = await supabase
+  if (setError) return { rows: [], setName: null, error: setError.message }
+  if (!set) return { rows: [], setName: null, error: null }
+  const { data, error } = await supabase
     .from('valores_parametros_consultoria')
     .select('metric_key, market_average, best_practice, target_default, red_threshold, yellow_threshold, green_threshold, notes')
     .eq('parameter_set_id', set.id)
-  return { rows: (data ?? []) as IndicatorParameter[], setName: set.name }
+  return { rows: (data ?? []) as IndicatorParameter[], setName: set.name, error: error?.message ?? null }
 }

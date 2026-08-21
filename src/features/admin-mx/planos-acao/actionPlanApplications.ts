@@ -108,17 +108,22 @@ export async function fetchApplications(input: { limit?: number } = {}): Promise
   if (error) return { rows: [], error: error.message }
 
   const storeIds = [...new Set((plans ?? []).map(plan => plan.scope_id).filter((id): id is string => Boolean(id)))]
-  const [{ data: stores }, { data: clients }] = await Promise.all([
+  const [{ data: stores, error: storesError }] = await Promise.all([
     storeIds.length
-      ? supabase.from('lojas').select('id, name').in('id', storeIds)
-      : Promise.resolve({ data: [] as Array<{ id: string; name: string }> }),
-    storeIds.length
-      ? supabase.from('clientes_consultoria').select('id, name, primary_store_id').in('primary_store_id', storeIds)
-      : Promise.resolve({ data: [] as Array<{ id: string; name: string; primary_store_id: string | null }> }),
+      ? supabase.from('lojas').select('id, name, parent_loja_id').in('id', storeIds)
+      : Promise.resolve({ data: [] as Array<{ id: string; name: string; parent_loja_id: string | null }>, error: null }),
   ])
+  if (storesError) return { rows: [], error: storesError.message }
+
+  const matrizIds = [...new Set((stores ?? []).map(store => store.parent_loja_id ?? store.id))]
+  const { data: clients, error: clientsError } = matrizIds.length
+    ? await supabase.from('clientes_consultoria').select('id, name, primary_store_id').in('primary_store_id', matrizIds)
+    : { data: [] as Array<{ id: string; name: string; primary_store_id: string | null }>, error: null }
+  if (clientsError) return { rows: [], error: clientsError.message }
 
   const storeNames = new Map((stores ?? []).map(store => [store.id, store.name]))
-  const clientByStore = new Map((clients ?? []).map(client => [client.primary_store_id, client]))
+  const clientByMatriz = new Map((clients ?? []).map(client => [client.primary_store_id, client]))
+  const clientByStore = new Map((stores ?? []).map(store => [store.id, clientByMatriz.get(store.parent_loja_id ?? store.id) ?? null]))
 
   const rows: ApplicationPlan[] = (plans ?? []).map(plan => {
     const storeId = plan.scope_type === 'store' ? plan.scope_id : null

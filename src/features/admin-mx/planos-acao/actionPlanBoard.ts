@@ -41,6 +41,35 @@ export type BoardPlan = {
   checklist: BoardChecklistItem[]
 }
 
+export async function fetchBoardPlanById(id: string): Promise<{ plan: BoardPlan | null; error: string | null }> {
+  const { data, error } = await supabase
+    .from('planos_acao')
+    .select('id, codigo, problema, acao, status, prioridade, prazo, progresso, departamento, indicador, responsavel_id, concluido_at, scope_id, checklist')
+    .eq('id', id)
+    .maybeSingle()
+  if (error) return { plan: null, error: error.message }
+  if (!data) return { plan: null, error: 'Plano de ação não encontrado.' }
+  return {
+    plan: {
+      id: data.id,
+      codigo: data.codigo,
+      problema: data.problema,
+      acao: data.acao,
+      status: data.status as PlanStatus | null,
+      prioridade: data.prioridade,
+      prazo: data.prazo,
+      progresso: data.progresso,
+      departamento: data.departamento,
+      indicador: data.indicador,
+      responsavel_id: data.responsavel_id,
+      concluido_at: data.concluido_at,
+      scope_id: data.scope_id,
+      checklist: normalizeBoardChecklist(data.checklist),
+    },
+    error: null,
+  }
+}
+
 export type BoardChecklistItem = {
   titulo: string
   como: string | null

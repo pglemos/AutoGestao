@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ClipboardList, Plus, RefreshCw } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
@@ -20,18 +20,14 @@ import {
   MxTableSurface,
   MxToolbar,
 } from '@/components/module/MxModuleVisualPrimitives'
-import { toast } from '@/lib/toast'
 import { TabNav } from '@/components/molecules/TabNav'
-import { useStores } from '@/hooks/useStores'
-import { useAuth } from '@/hooks/useAuth'
 import { ActionPlanKanban } from './planos-acao/ActionPlanKanban'
 import { ActionPlanDetailDrawer } from './planos-acao/ActionPlanDetailDrawer'
-import { boardMetrics, normalizeBoardChecklist, type BoardPlan, type PlanStatus } from './planos-acao/actionPlanBoard'
-import { ApplyTemplateModal } from './planos-acao/ApplyTemplateModal'
+import { boardMetrics, fetchBoardPlanById, normalizeBoardChecklist, STATUS_LABEL, type BoardPlan, type PlanStatus } from './planos-acao/actionPlanBoard'
+import { ApplyTemplateWizard } from './planos-acao/ApplyTemplateWizard'
 import { ClientActionPlanWizard } from './planos-acao/ClientActionPlanWizard'
 import { NewActionChoiceModal } from './planos-acao/NewActionChoiceModal'
 import { PromoteToTemplateModal } from './planos-acao/PromoteToTemplateModal'
-import { StrategicIndicatorActionSelector } from './planos-acao/StrategicIndicatorActionSelector'
 import { SuggestToClientModal } from './planos-acao/SuggestToClientModal'
 import { SuggestionsTab } from './planos-acao/SuggestionsTab'
 import { ApplicationsTab } from './planos-acao/ApplicationsTab'
@@ -45,6 +41,7 @@ import { HistoryTab } from './planos-acao/HistoryTab'
 import { fetchIndicatorCatalog, type ActionPlanTemplate, type IndicatorCatalogEntry } from './planos-acao/actionPlanTemplates'
 import { useActionPlanTemplatesController } from './planos-acao/useActionPlanTemplates'
 import { useAdminActionPlans } from './hooks/useAdminMxLists'
+import { toast } from '@/lib/toast'
 import {
   fetchWizardClients,
   fetchWizardIndicators,
@@ -53,7 +50,6 @@ import {
   type WizardIndicator,
   type WizardResponsible,
 } from './planos-acao/clientActionPlanWizardData'
-import { fetchActionPlanSuggestions, type ActionPlanSuggestion } from './planos-acao/actionPlanSuggestions'
 
 type PlanTab = 'planos' | 'templates' | 'sugestoes' | 'aplicacoes' | 'historico'
 
@@ -65,7 +61,12 @@ const PLAN_TABS = [
   { key: 'historico' as const, label: 'Histórico' },
 ]
 
-const CONCLUDED = new Set(['concluido', 'concluída', 'concluida', 'finalizado'])
+const PLAN_PRIORITY_OPTIONS = [
+  { value: 'critica', label: 'Crítica' },
+  { value: 'alta', label: 'Alta' },
+  { value: 'media', label: 'Média' },
+  { value: 'baixa', label: 'Baixa' },
+]
 
 function formatDate(value: string | null) {
   if (!value) return '—'
@@ -79,10 +80,8 @@ export function AdminPlanosAcaoGlobalPage() {
   const [status, setStatus] = useState('todos')
   const [tab, setTab] = useState<PlanTab>('planos')
   const templates = useActionPlanTemplatesController()
-  const { supabaseUser } = useAuth()
-  const [suggestions, setSuggestions] = useState<ActionPlanSuggestion[]>([])
-  const [suggestionsError, setSuggestionsError] = useState<string | null>(null)
-  const [suggestionsLoading, setSuggestionsLoading] = useState(false)
+  const [suggestionsRefreshKey, setSuggestionsRefreshKey] = useState(0)
+  const [applicationsRefreshKey, setApplicationsRefreshKey] = useState(0)
   const [view, setView] = useState<'lista' | 'kanban'>('kanban')
   const [openPlan, setOpenPlan] = useState<BoardPlan | null>(null)
   const [choiceOpen, setChoiceOpen] = useState(false)
@@ -98,18 +97,6 @@ export function AdminPlanosAcaoGlobalPage() {
   const [wizardIndicators, setWizardIndicators] = useState<WizardIndicator[]>([])
   const [wizardResponsibles, setWizardResponsibles] = useState<WizardResponsible[]>([])
 
-  const loadSuggestions = useCallback(async () => {
-    setSuggestionsLoading(true)
-    const result = await fetchActionPlanSuggestions()
-    setSuggestions(result.rows)
-    setSuggestionsError(result.error)
-    setSuggestionsLoading(false)
-  }, [])
-
-  useEffect(() => {
-    if (tab === 'sugestoes' && !suggestions.length && !suggestionsError) void loadSuggestions()
-  }, [tab, suggestions.length, suggestionsError, loadSuggestions])
-
   useEffect(() => {
     void Promise.all([fetchWizardClients(), fetchWizardIndicators(), fetchWizardResponsibles()]).then(([c, i, r]) => {
       setWizardClients(c.rows)
@@ -122,20 +109,30 @@ export function AdminPlanosAcaoGlobalPage() {
     void fetchIndicatorCatalog().then(result => setIndicatorCatalog(result.rows))
   }, [])
 
-  const { lojas } = useStores()
   const location = useLocation()
   const { width, bottomClearance } = resolveRouteLayout(location.pathname)
 
   const statuses = useMemo(() => [...new Set(rows.map(plan => plan.status).filter((value): value is string => Boolean(value)))].sort(), [rows])
+  const departments = useMemo(() => [...new Set(rows.map(plan => plan.departamento).filter((value): value is string => Boolean(value)))].sort(), [rows])
+  const indicators = useMemo(() => [...new Set(rows.map(plan => plan.indicador).filter((value): value is string => Boolean(value)))].sort(), [rows])
+  const responsibleOptions = useMemo(() => wizardResponsibles.filter(responsible => rows.some(plan => plan.responsavel_id === responsible.id)), [rows, wizardResponsibles])
+  const [departmentFilter, setDepartmentFilter] = useState('')
+  const [indicatorFilter, setIndicatorFilter] = useState('')
+  const [priorityFilter, setPriorityFilter] = useState('')
+  const [responsibleFilter, setResponsibleFilter] = useState('')
 
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase()
     return rows.filter(plan => {
       if (status !== 'todos' && plan.status !== status) return false
+      if (departmentFilter && plan.departamento !== departmentFilter) return false
+      if (indicatorFilter && plan.indicador !== indicatorFilter) return false
+      if (priorityFilter && (plan.prioridade ?? '').toLowerCase() !== priorityFilter) return false
+      if (responsibleFilter && plan.responsavel_id !== responsibleFilter) return false
       if (!term) return true
       return [plan.codigo, plan.problema, plan.acao, plan.departamento, plan.indicador].some(value => (value ?? '').toLowerCase().includes(term))
     })
-  }, [rows, search, status])
+  }, [departmentFilter, indicatorFilter, priorityFilter, responsibleFilter, rows, search, status])
 
   const boardPlans = useMemo<BoardPlan[]>(() => filtered.map(plan => ({
     id: plan.id,
@@ -165,13 +162,22 @@ export function AdminPlanosAcaoGlobalPage() {
       total: rows.length,
       concluidos: board.concluidas,
       atrasados: board.atrasadas,
-      criticos: rows.filter(plan => (plan.prioridade ?? '').toLowerCase() === 'alta').length,
+      criticos: rows.filter(plan => ['alta', 'critica'].includes((plan.prioridade ?? '').toLowerCase())).length,
     }
   }, [rows, boardPlans])
 
-  const openPlanById = (planId: string) => {
-    const plan = boardPlans.find(item => item.id === planId) ?? null
-    setOpenPlan(plan)
+  const openPlanById = async (planId: string) => {
+    const inBoard = boardPlans.find(item => item.id === planId)
+    if (inBoard) {
+      setOpenPlan(inBoard)
+      return
+    }
+    const result = await fetchBoardPlanById(planId)
+    if (result.error || !result.plan) {
+      toast.error(result.error ?? 'Não foi possível abrir o plano de ação.')
+      return
+    }
+    setOpenPlan(result.plan)
   }
 
   const handleNewAction = () => setChoiceOpen(true)
@@ -201,25 +207,28 @@ export function AdminPlanosAcaoGlobalPage() {
           actions={tab === 'planos' ? (
             <div className="flex items-center gap-2">
               <Button variant="outline" onClick={() => void refetch()}><RefreshCw size={16} />Atualizar</Button>
-              <Button onClick={handleNewAction}><Plus size={16} />Nova ação</Button>
-            </div>
+          <Button onClick={handleNewAction}><Plus size={16} />Nova ação</Button>
+          </div>
           ) : tab === 'templates' ? (
             <>
               <Button variant="outline" onClick={() => void templates.refetch()}><RefreshCw size={16} />Atualizar</Button>
               <Button onClick={templates.openNew}><Plus size={16} />Novo template</Button>
             </>
           ) : tab === 'aplicacoes' ? (
-            <Button onClick={handleNewAction}><Plus size={16} />Nova ação</Button>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" onClick={() => setApplicationsRefreshKey(current => current + 1)}><RefreshCw size={16} />Atualizar</Button>
+              <Button onClick={handleNewAction}><Plus size={16} />Nova ação</Button>
+            </div>
           ) : tab === 'historico' ? null
-          : <Button variant="outline" onClick={() => void loadSuggestions()}><RefreshCw size={16} />Atualizar</Button>}
+          : <Button variant="outline" onClick={() => setSuggestionsRefreshKey(current => current + 1)}><RefreshCw size={16} />Atualizar</Button>}
         />
 
         <TabNav tabs={PLAN_TABS} activeTab={tab} onTabChange={setTab} />
 
         {tab === 'sugestoes' ? (
-          <SuggestionsTab />
+          <SuggestionsTab refreshKey={suggestionsRefreshKey} onChanged={() => { setSuggestionsRefreshKey(current => current + 1); void refetch() }} />
         ) : tab === 'aplicacoes' ? (
-          <ApplicationsTab onOpenPlan={openPlanById} />
+          <ApplicationsTab onOpenPlan={openPlanById} refreshKey={applicationsRefreshKey} />
         ) : tab === 'historico' ? (
           <HistoryTab />
         ) : tab === 'templates' ? (
@@ -236,7 +245,7 @@ export function AdminPlanosAcaoGlobalPage() {
                     templates={templates.rows}
                     indicators={indicatorCatalog}
                     selectedDept={templateFilters.departamento}
-                    onSelect={departamento => setTemplateFilters(current => ({ ...current, departamento }))}
+                    onSelect={departamento => setTemplateFilters(current => ({ ...current, departamento, indicador: '' }))}
                   />
                 </div>
                 <div className="mb-4">
@@ -244,7 +253,9 @@ export function AdminPlanosAcaoGlobalPage() {
                     templates={templates.rows}
                     indicators={wizardIndicators}
                     filters={templateFilters}
-                    onFilterChange={(field: keyof TemplateFilterState, value: string | boolean) => setTemplateFilters(current => ({ ...current, [field]: value }))}
+                    onFilterChange={(field: keyof TemplateFilterState, value: string | boolean) => setTemplateFilters(current => field === 'departamento'
+                      ? { ...current, departamento: String(value), indicador: '' }
+                      : { ...current, [field]: value })}
                     onClear={() => setTemplateFilters(emptyTemplateFilters())}
                   />
                 </div>
@@ -283,7 +294,7 @@ export function AdminPlanosAcaoGlobalPage() {
                                   <Button variant="outline" size="sm" onClick={() => setDetailTemplate(template)}>Abrir</Button>
                                   <Button variant="outline" size="sm" onClick={() => void templates.openEdit(template)}>Editar</Button>
                                   {openDraft ? <Button variant="outline" size="sm" onClick={() => void templates.publish(template)}>Publicar</Button> : null}
-                                  {published && template.active ? <Button size="sm" onClick={() => templates.setApplying(template)}>Aplicar</Button> : null}
+                                  {published && template.active && template.manual_application_enabled ? <Button size="sm" onClick={() => templates.setApplying(template)}>Aplicar</Button> : null}
                                   {published && template.active ? <Button variant="outline" size="sm" onClick={() => { setSuggestTemplate(template); setSuggestOpen(true) }}>Sugerir ao Dono</Button> : null}
                                   <TemplateActionsMenu
                                     template={template}
@@ -314,13 +325,29 @@ export function AdminPlanosAcaoGlobalPage() {
               <MxMetricCard title="Planos" value={metrics.total} detail="Últimos 500 registros" icon={ClipboardList} />
               <MxMetricCard title="Concluídos" value={metrics.concluidos} detail="Ciclo encerrado" icon={ClipboardList} tone="success" />
               <MxMetricCard title="Atrasados" value={metrics.atrasados} detail="Prazo vencido em aberto" icon={ClipboardList} tone="danger" />
-              <MxMetricCard title="Prioridade alta" value={metrics.criticos} detail="Exigem acompanhamento" icon={ClipboardList} tone="warning" />
+              <MxMetricCard title="Prioridade alta ou crítica" value={metrics.criticos} detail="Exigem acompanhamento" icon={ClipboardList} tone="warning" />
             </MxMetricGrid>
             <MxToolbar>
               <MxInput value={search} onChange={event => setSearch(event.target.value)} placeholder="Buscar por código, problema ou ação" aria-label="Buscar plano de ação" />
               <MxSelect value={status} onChange={event => setStatus(event.target.value)} aria-label="Filtrar por status">
                 <option value="todos">Todos os status</option>
-                {statuses.map(item => <option key={item} value={item}>{item}</option>)}
+                {statuses.map(item => <option key={item} value={item}>{STATUS_LABEL[item as PlanStatus] ?? item}</option>)}
+              </MxSelect>
+              <MxSelect value={departmentFilter} onChange={event => setDepartmentFilter(event.target.value)} aria-label="Filtrar por departamento">
+                <option value="">Todos os departamentos</option>
+                {departments.map(item => <option key={item} value={item}>{item}</option>)}
+              </MxSelect>
+              <MxSelect value={indicatorFilter} onChange={event => setIndicatorFilter(event.target.value)} aria-label="Filtrar por indicador">
+                <option value="">Todos os indicadores</option>
+                {indicators.map(item => <option key={item} value={item}>{item}</option>)}
+              </MxSelect>
+              <MxSelect value={priorityFilter} onChange={event => setPriorityFilter(event.target.value)} aria-label="Filtrar por prioridade">
+                <option value="">Todas as prioridades</option>
+                {PLAN_PRIORITY_OPTIONS.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}
+              </MxSelect>
+              <MxSelect value={responsibleFilter} onChange={event => setResponsibleFilter(event.target.value)} aria-label="Filtrar por responsável">
+                <option value="">Todos os responsáveis</option>
+                {responsibleOptions.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
               </MxSelect>
               <MxSelect value={view} onChange={event => setView(event.target.value as 'lista' | 'kanban')} aria-label="Modo de visualização">
                 <option value="kanban">Kanban</option>
@@ -363,10 +390,10 @@ export function AdminPlanosAcaoGlobalPage() {
                             <TableCell>{formatDate(plan.prazo)}</TableCell>
                             <TableCell>{plan.prioridade || '—'}</TableCell>
                             <TableCell className="w-40"><MxProgress value={plan.progresso ?? 0} label={`${plan.progresso ?? 0}%`} /></TableCell>
-                            <TableCell>{plan.status || '—'}</TableCell>
+                            <TableCell>{STATUS_LABEL[plan.status as PlanStatus] ?? plan.status ?? '—'}</TableCell>
                             <TableCell className="text-right">
                               <div className="flex justify-end gap-2">
-                                <Button variant="outline" size="sm" onClick={() => setOpenPlan(boardPlans.find(item => item.id === plan.id) ?? null)}>Abrir</Button>
+                                <Button variant="outline" size="sm" onClick={() => void openPlanById(plan.id)}>Abrir</Button>
                                 <Button variant="outline" size="sm" onClick={() => setPromoteTarget(boardPlans.find(item => item.id === plan.id) ?? null)}>Virar template</Button>
                               </div>
                             </TableCell>
@@ -405,15 +432,15 @@ export function AdminPlanosAcaoGlobalPage() {
           onSuggest={template => { setDetailTemplate(null); setSuggestTemplate(template); setSuggestOpen(true) }}
         />
         <ActionPlanDetailDrawer plan={openPlan} onClose={() => setOpenPlan(null)} onChanged={() => void refetch()} />
-        <ApplyTemplateModal
-          open={Boolean(templates.applying)}
+        <ApplyTemplateWizard
+          open={Boolean(templates.applying) || selectorOpen}
           template={templates.applying}
-          stores={lojas.map(store => ({ id: store.id, name: store.name }))}
-          storeId={templates.applyStoreId}
-          submitting={templates.submitting}
-          onStore={templates.setApplyStoreId}
-          onSubmit={() => void templates.apply()}
-          onClose={() => templates.setApplying(null)}
+          templates={templates.rows}
+          clients={wizardClients}
+          indicators={wizardIndicators}
+          responsibles={wizardResponsibles}
+          onClose={() => { templates.setApplying(null); setSelectorOpen(false) }}
+          onCreated={() => { templates.setApplying(null); setSelectorOpen(false); setApplicationsRefreshKey(current => current + 1); void Promise.all([refetch(), templates.refetch()]) }}
         />
         <NewActionChoiceModal
           open={choiceOpen}
@@ -426,23 +453,13 @@ export function AdminPlanosAcaoGlobalPage() {
           onClose={() => setWizardOpen(false)}
           onSaved={() => void refetch()}
         />
-        <StrategicIndicatorActionSelector
-          open={selectorOpen}
-          client={null}
-          clients={wizardClients}
-          templates={templates.rows}
-          indicators={wizardIndicators}
-          responsibles={wizardResponsibles}
-          onClose={() => setSelectorOpen(false)}
-          onCreated={() => { setSelectorOpen(false); void Promise.all([refetch(), templates.refetch()]) }}
-        />
         <SuggestToClientModal
           open={suggestOpen}
           template={suggestTemplate}
           clients={wizardClients}
           indicators={wizardIndicators}
           onClose={() => setSuggestOpen(false)}
-          onSuggested={() => { setSuggestOpen(false); void loadSuggestions() }}
+          onSuggested={() => { setSuggestOpen(false); setSuggestionsRefreshKey(current => current + 1) }}
         />
         <PromoteToTemplateModal
           open={Boolean(promoteTarget)}

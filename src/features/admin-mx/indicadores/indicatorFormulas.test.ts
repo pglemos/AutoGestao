@@ -8,6 +8,7 @@ import {
   extractIndicatorDeps,
   extractParameterDeps,
   formatDisplay,
+  formatEditableInput,
   getFormatConfig,
   parseStrategicInput,
 } from './indicatorFormulas'
@@ -78,6 +79,12 @@ describe('formatação', () => {
   test('percentual armazenado como fração exibe como pontos', () => {
     const config = getFormatConfig('percent', 2)
     expect(formatDisplay(0.25, config)).toBe('25,00%')
+  })
+
+  test('valor percentual editável respeita as casas decimais', () => {
+    const config = getFormatConfig('percent', 2)
+    expect(formatEditableInput(0.123456, config)).toBe('12.35')
+    expect(formatEditableInput(null, config)).toBe('')
   })
 
   test('moeda exibe com R$ e casas decimais', () => {

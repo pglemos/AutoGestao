@@ -1,17 +1,14 @@
 import { DollarSign, LayoutGrid, Megaphone, Package, Settings, TrendingUp, Users, type LucideIcon } from 'lucide-react'
 import type { ActionPlanTemplate, IndicatorCatalogEntry } from './actionPlanTemplates'
+import { ACTION_PLAN_DEPARTMENT_CARDS, departmentCategory } from './departmentTaxonomy'
 
 const CATEGORY_ICON: Record<string, LucideIcon> = {
   financeiro: DollarSign,
-  vendas: TrendingUp,
+  comercial: TrendingUp,
   marketing: Megaphone,
   produto: Package,
-  pessoas: Users,
+  rh: Users,
   operacional: Settings,
-}
-
-function categoryLabel(category: string): string {
-  return category.charAt(0).toUpperCase() + category.slice(1)
 }
 
 /** Cards por categoria de indicador (mesma taxonomia do catálogo do Planejamento Estratégico) — filtra a biblioteca de templates ao clicar. */
@@ -21,12 +18,11 @@ export function DepartmentCards(props: {
   selectedDept: string
   onSelect: (category: string) => void
 }) {
-  const categories = [...new Set(props.indicators.map(indicator => indicator.category))].sort()
-  const cards = [{ code: '', label: 'Todos' }, ...categories.map(category => ({ code: category, label: categoryLabel(category) }))]
+  const cards = [{ code: '', label: 'Todos' }, ...ACTION_PLAN_DEPARTMENT_CARDS]
 
   const countsFor = (category: string) => {
-    const published = props.templates.filter(template => (!category || template.departamento === category) && template.versions.some(version => version.status === 'publicada')).length
-    const drafts = props.templates.filter(template => (!category || template.departamento === category) && template.versions.some(version => version.status === 'rascunho')).length
+    const published = props.templates.filter(template => (!category || departmentCategory(template.departamento) === category) && template.versions.some(version => version.status === 'publicada')).length
+    const drafts = props.templates.filter(template => (!category || departmentCategory(template.departamento) === category) && template.versions.some(version => version.status === 'rascunho')).length
     const activeIndicators = props.indicators.filter(indicator => !category || indicator.category === category).length
     return { published, drafts, activeIndicators }
   }

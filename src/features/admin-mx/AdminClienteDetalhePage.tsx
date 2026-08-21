@@ -4,12 +4,15 @@ import {
   BriefcaseBusiness,
   Building2,
   CheckCircle2,
+  ClipboardList,
   Clock,
   Crown,
   Link2,
   Pencil,
   Plus,
   RefreshCw,
+  Sparkles,
+  Target,
   UserPlus,
 } from 'lucide-react'
 import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom'
@@ -42,6 +45,7 @@ import { useClientHealth } from './clientes/useClientHealth'
 import { runClientRepair, type RepairKey } from './clientes/clientRepairs'
 import { buildClientReadiness, readinessSummary, type ClientReadinessInput } from './clientes/clientReadiness'
 import { fetchCurrentCycle, validateCycleReadiness } from '@/features/strategic-plan/planCycleRepository'
+import { createStrategicPlanFromProduct } from '@/features/strategic-plan/productPackageOps'
 import { ClientConfigTab } from './clientes/ClientConfigTab'
 import { DonoMasterCard } from './clientes/DonoMasterCard'
 import { EnrollmentLinkModal } from './clientes/EnrollmentLinkModal'
@@ -129,6 +133,7 @@ export function AdminClienteDetalhePage() {
   const [linkModal, setLinkModal] = useState(false)
   const [links, setLinks] = useState<EnrollmentLinkRow[]>([])
   const [strategicPlanReadiness, setStrategicPlanReadiness] = useState<ClientReadinessInput['strategic_plan_ready']>(null)
+  const [creatingStrategicPlan, setCreatingStrategicPlan] = useState(false)
   const [savingLink, setSavingLink] = useState(false)
 
   const checkStore = useCallback(async () => {
@@ -397,6 +402,26 @@ export function AdminClienteDetalhePage() {
     }
   }
 
+  const createStrategicPlan = async () => {
+    if (!client?.id || creatingStrategicPlan) return
+    setCreatingStrategicPlan(true)
+    try {
+      const result = await createStrategicPlanFromProduct({
+        clientId: client.id,
+        referenceYear: new Date().getFullYear(),
+        userId: supabaseUser?.id,
+      })
+      if (result.error) {
+        toast.error(result.error)
+        return
+      }
+      toast.success(result.created ? 'Plano Estratégico criado a partir do produto.' : 'Plano Estratégico já existente; ciclo atual carregado.')
+      await loadStrategicPlan()
+    } finally {
+      setCreatingStrategicPlan(false)
+    }
+  }
+
   return (
     <MxModulePage id="admin-mx-cliente-detalhe" width={width} bottomClearance={bottomClearance}>
       <div className="w-full space-y-5">
@@ -415,6 +440,9 @@ export function AdminClienteDetalhePage() {
               {client && client.status !== 'ativo'
                 ? <Button onClick={() => setActivationOpen(true)}><CheckCircle2 size={16} />Validar e ativar</Button>
                 : null}
+              {client ? <Button variant="outline" onClick={() => void createStrategicPlan()} disabled={creatingStrategicPlan}><Target size={16} />{creatingStrategicPlan ? 'Criando plano...' : 'Criar Plano Estratégico'}</Button> : null}
+              {client ? <Button asChild variant="outline"><Link to={`/plano-acao${client.primary_store_id ? `?storeId=${encodeURIComponent(client.primary_store_id)}` : ''}`}><ClipboardList size={16} />Abrir Plano de Ação</Link></Button> : null}
+              {client ? <Button asChild variant="outline"><Link to={`/consultoria?clientId=${encodeURIComponent(client.id)}`}><Sparkles size={16} />Abrir Consultoria</Link></Button> : null}
             </>
           )}
         />

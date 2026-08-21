@@ -17,6 +17,11 @@ function template(overrides: Partial<ActionPlanTemplate> = {}): ActionPlanTempla
     descricao: null,
     program_key: null,
     active: true,
+    primary_indicator_code: null,
+    improvement_direction: null,
+    default_responsible_role: null,
+    manual_application_enabled: true,
+    owner_suggestion_enabled: false,
     versions: [],
     ...overrides,
   }
@@ -37,14 +42,14 @@ describe('templateFilters — status derivado', () => {
   test('template inativo é inativo mesmo com versão publicada', () => {
     const t = template({
       active: false,
-      versions: [{ id: 'v1', template_id: 't1', versao: 1, status: 'publicada', notas: null, published_at: null }],
+      versions: [{ id: 'v1', template_id: 't1', versao: 1, status: 'publicada', improvement_direction: null, default_responsible_role: null, notas: null, published_at: null }],
     })
     expect(deriveTemplateStatus(t)).toBe('inativo')
   })
 
   test('template ativo com versão publicada é publicada', () => {
     const t = template({
-      versions: [{ id: 'v1', template_id: 't1', versao: 1, status: 'publicada', notas: null, published_at: null }],
+      versions: [{ id: 'v1', template_id: 't1', versao: 1, status: 'publicada', improvement_direction: null, default_responsible_role: null, notas: null, published_at: null }],
     })
     expect(deriveTemplateStatus(t)).toBe('publicada')
   })
@@ -71,7 +76,7 @@ describe('templateFilters — match', () => {
 
   test('status publicada exige versão publicada', () => {
     const published = template({
-      versions: [{ id: 'v1', template_id: 't1', versao: 1, status: 'publicada', notas: null, published_at: null }],
+      versions: [{ id: 'v1', template_id: 't1', versao: 1, status: 'publicada', improvement_direction: null, default_responsible_role: null, notas: null, published_at: null }],
     })
     expect(templateMatchesFilters(published, { ...emptyTemplateFilters(), status: 'publicada' })).toBe(true)
     expect(templateMatchesFilters(template(), { ...emptyTemplateFilters(), status: 'publicada' })).toBe(false)
@@ -79,7 +84,7 @@ describe('templateFilters — match', () => {
 
   test('status rascunho exclui publicadas', () => {
     const published = template({
-      versions: [{ id: 'v1', template_id: 't1', versao: 1, status: 'publicada', notas: null, published_at: null }],
+      versions: [{ id: 'v1', template_id: 't1', versao: 1, status: 'publicada', improvement_direction: null, default_responsible_role: null, notas: null, published_at: null }],
     })
     expect(templateMatchesFilters(template(), { ...emptyTemplateFilters(), status: 'rascunho' })).toBe(true)
     expect(templateMatchesFilters(published, { ...emptyTemplateFilters(), status: 'rascunho' })).toBe(false)
@@ -88,8 +93,8 @@ describe('templateFilters — match', () => {
   test('prioridade filtra pelos itens da versão', () => {
     const t = template({
       versions: [{
-        id: 'v1', template_id: 't1', versao: 1, status: 'publicada', notas: null, published_at: null,
-        itens: [{ id: 'i1', ordem: 1, problema: 'p', acao: 'a', como: '', departamento: '', indicador: '', prioridade: 'critica', prazo_dias: 30, evidencia_requerida: false }],
+        id: 'v1', template_id: 't1', versao: 1, status: 'publicada', improvement_direction: null, default_responsible_role: null, notas: null, published_at: null,
+        itens: [{ id: 'i1', ordem: 1, problema: 'p', acao: 'a', como: '', departamento: '', indicador: '', prioridade: 'critica', prazo_dias: 30, evidencia_requerida: false, recommended_responsible_role: null }],
       }],
     })
     expect(templateMatchesFilters(t, { ...emptyTemplateFilters(), prioridade: 'critica' })).toBe(true)
@@ -98,9 +103,28 @@ describe('templateFilters — match', () => {
 
   test('comVersaoPublicada exige versão publicada', () => {
     const published = template({
-      versions: [{ id: 'v1', template_id: 't1', versao: 1, status: 'publicada', notas: null, published_at: null }],
+      versions: [{ id: 'v1', template_id: 't1', versao: 1, status: 'publicada', improvement_direction: null, default_responsible_role: null, notas: null, published_at: null }],
     })
     expect(templateMatchesFilters(published, { ...emptyTemplateFilters(), comVersaoPublicada: true })).toBe(true)
     expect(templateMatchesFilters(template(), { ...emptyTemplateFilters(), comVersaoPublicada: true })).toBe(false)
+  })
+
+  test('filtra disponibilidade para sugestão', () => {
+    const enabled = template({ owner_suggestion_enabled: true })
+    expect(templateMatchesFilters(enabled, { ...emptyTemplateFilters(), suggestion_enabled: true })).toBe(true)
+    expect(templateMatchesFilters(enabled, { ...emptyTemplateFilters(), suggestion_enabled: false })).toBe(false)
+  })
+
+  test('filtra responsável recomendado do template ou item', () => {
+    const byTemplate = template({ default_responsible_role: 'GERENTE_COMERCIAL' })
+    const byItem = template({
+      versions: [{
+        id: 'v1', template_id: 't1', versao: 1, status: 'publicada', improvement_direction: null, default_responsible_role: null, notas: null, published_at: null,
+        itens: [{ id: 'i1', ordem: 1, problema: 'p', acao: 'a', como: '', departamento: '', indicador: '', prioridade: 'media', prazo_dias: 30, evidencia_requerida: false, recommended_responsible_role: 'MARKETING' }],
+      }],
+    })
+    expect(templateMatchesFilters(byTemplate, { ...emptyTemplateFilters(), responsible_role: 'GERENTE_COMERCIAL' })).toBe(true)
+    expect(templateMatchesFilters(byItem, { ...emptyTemplateFilters(), responsible_role: 'MARKETING' })).toBe(true)
+    expect(templateMatchesFilters(byItem, { ...emptyTemplateFilters(), responsible_role: 'FINANCEIRO' })).toBe(false)
   })
 })

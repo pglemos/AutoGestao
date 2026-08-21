@@ -8,6 +8,7 @@ import { toast } from '@/lib/toast'
 import { supabase } from '@/lib/supabase'
 import type { ActionPlanTemplate } from './actionPlanTemplates'
 import type { WizardClient, WizardIndicator } from './clientActionPlanWizardData'
+import { resolveClientApplicationTargets } from './templateApplicationIdempotency'
 
 /**
  * Sugere um template ao Dono de um cliente (Base44 `SuggestToClientModal`).
@@ -53,9 +54,17 @@ export function SuggestToClientModal(props: {
     const indicator = deptIndicators.find(item => item.metric_key === indicatorKey)
     setSaving(true)
     try {
+      const targets = await resolveClientApplicationTargets(clientId)
+      if (targets.error || !targets.units.length) {
+        toast.error(targets.error ?? 'O cliente não possui uma unidade ativa para receber a sugestão.')
+        return
+      }
+      const primaryUnit = targets.units.find(unit => unit.store_type === 'MATRIZ') ?? targets.units[0]
       const { error } = await supabase.from('consultor_solucoes').insert({
         scope_type: 'store',
-        scope_id: client?.id ?? null,
+        // O enum MX ainda materializa a sugestão por unidade; usa a matriz como
+        // âncora e guarda todas as unidades no metadata para o fluxo posterior.
+        scope_id: primaryUnit.id,
         rule_code: 'SUGESTAO_DONO_TEMPLATE',
         problem: reason.trim() || 'Indicador com oportunidade de melhoria identificada.',
         recommendation: `Aplicar o plano padrão "${props.template?.nome}" no cliente.`,
@@ -68,6 +77,8 @@ export function SuggestToClientModal(props: {
           template_name: props.template?.nome,
           indicator_key: indicatorKey || null,
           client_name: client?.name ?? null,
+          client_id: clientId,
+          unit_ids: targets.units.map(unit => unit.id),
         },
         status: 'pendente_validacao',
         created_at: new Date().toISOString(),

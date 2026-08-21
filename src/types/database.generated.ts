@@ -2540,6 +2540,7 @@ export type Database = {
           area: string
           casas_decimais: number
           created_at: string
+          created_origin: string
           descricao: string | null
           direction: string
           formula_expression: string | null
@@ -2565,6 +2566,7 @@ export type Database = {
           area: string
           casas_decimais?: number
           created_at?: string
+          created_origin?: string
           descricao?: string | null
           direction?: string
           formula_expression?: string | null
@@ -2590,6 +2592,7 @@ export type Database = {
           area?: string
           casas_decimais?: number
           created_at?: string
+          created_origin?: string
           descricao?: string | null
           direction?: string
           formula_expression?: string | null
@@ -9979,38 +9982,65 @@ export type Database = {
       modulos_produto_consultoria: {
         Row: {
           created_at: string
+          display_order: number
           etapa: string | null
           id: string
           incluido: boolean
           label: string
+          menu_code: string | null
+          menu_label: string | null
+          module_code: string | null
+          module_label: string | null
           module_key: string
           obrigatorio: boolean
           program_key: string
+          release_stage: string
+          status: string
+          technical_status: string
           updated_at: string
+          visibility: string
           visibilidade: string
         }
         Insert: {
           created_at?: string
+          display_order?: number
           etapa?: string | null
           id?: string
           incluido?: boolean
           label: string
+          menu_code?: string | null
+          menu_label?: string | null
+          module_code?: string | null
+          module_label?: string | null
           module_key: string
           obrigatorio?: boolean
           program_key: string
+          release_stage?: string
+          status?: string
+          technical_status?: string
           updated_at?: string
+          visibility?: string
           visibilidade?: string
         }
         Update: {
           created_at?: string
+          display_order?: number
           etapa?: string | null
           id?: string
           incluido?: boolean
           label?: string
+          menu_code?: string | null
+          menu_label?: string | null
+          module_code?: string | null
+          module_label?: string | null
           module_key?: string
           obrigatorio?: boolean
           program_key?: string
+          release_stage?: string
+          status?: string
+          technical_status?: string
           updated_at?: string
+          visibility?: string
           visibilidade?: string
         }
         Relationships: [
@@ -12011,6 +12041,7 @@ export type Database = {
           prazo_dias: number | null
           prioridade: Database["public"]["Enums"]["action_priority"]
           problema: string
+          recommended_responsible_role: string | null
           support_material_type: string
           treinamento_id: string | null
           treinamento_titulo: string | null
@@ -12032,6 +12063,7 @@ export type Database = {
           prazo_dias?: number | null
           prioridade?: Database["public"]["Enums"]["action_priority"]
           problema: string
+          recommended_responsible_role?: string | null
           support_material_type?: string
           treinamento_id?: string | null
           treinamento_titulo?: string | null
@@ -12053,6 +12085,7 @@ export type Database = {
           prazo_dias?: number | null
           prioridade?: Database["public"]["Enums"]["action_priority"]
           problema?: string
+          recommended_responsible_role?: string | null
           support_material_type?: string
           treinamento_id?: string | null
           treinamento_titulo?: string | null
@@ -12080,8 +12113,10 @@ export type Database = {
         Row: {
           created_at: string
           created_by: string | null
+          default_responsible_role: string | null
           effectiveness_indicator_code: string | null
           id: string
+          improvement_direction: string | null
           notas: string | null
           objective: string | null
           owner_suggestion_problem: string | null
@@ -12099,8 +12134,10 @@ export type Database = {
         Insert: {
           created_at?: string
           created_by?: string | null
+          default_responsible_role?: string | null
           effectiveness_indicator_code?: string | null
           id?: string
+          improvement_direction?: string | null
           notas?: string | null
           objective?: string | null
           owner_suggestion_problem?: string | null
@@ -12118,8 +12155,10 @@ export type Database = {
         Update: {
           created_at?: string
           created_by?: string | null
+          default_responsible_role?: string | null
           effectiveness_indicator_code?: string | null
           id?: string
+          improvement_direction?: string | null
           notas?: string | null
           objective?: string | null
           owner_suggestion_problem?: string | null
@@ -12170,6 +12209,7 @@ export type Database = {
           active: boolean
           created_at: string
           created_by: string | null
+          default_responsible_role: string | null
           departamento: string
           descricao: string | null
           id: string
@@ -12187,6 +12227,7 @@ export type Database = {
           active?: boolean
           created_at?: string
           created_by?: string | null
+          default_responsible_role?: string | null
           departamento: string
           descricao?: string | null
           id?: string
@@ -12204,6 +12245,7 @@ export type Database = {
           active?: boolean
           created_at?: string
           created_by?: string | null
+          default_responsible_role?: string | null
           departamento?: string
           descricao?: string | null
           id?: string
@@ -12478,10 +12520,14 @@ export type Database = {
           active: boolean
           created_at: string
           descricao: string | null
+          change_summary: string | null
+          effective_from: string | null
+          evolution_group: string
           indicator_package_version_id: string | null
           max_presenciais: number | null
           min_presenciais: number | null
           modalidade: string | null
+          modality_variant: string | null
           name: string
           program_key: string
           published_at: string | null
@@ -12496,10 +12542,14 @@ export type Database = {
           active?: boolean
           created_at?: string
           descricao?: string | null
+          change_summary?: string | null
+          effective_from?: string | null
+          evolution_group?: string
           indicator_package_version_id?: string | null
           max_presenciais?: number | null
           min_presenciais?: number | null
           modalidade?: string | null
+          modality_variant?: string | null
           name: string
           program_key: string
           published_at?: string | null
@@ -12514,10 +12564,14 @@ export type Database = {
           active?: boolean
           created_at?: string
           descricao?: string | null
+          change_summary?: string | null
+          effective_from?: string | null
+          evolution_group?: string
           indicator_package_version_id?: string | null
           max_presenciais?: number | null
           min_presenciais?: number | null
           modalidade?: string | null
+          modality_variant?: string | null
           name?: string
           program_key?: string
           published_at?: string | null

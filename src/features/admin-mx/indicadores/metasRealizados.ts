@@ -4,7 +4,7 @@
 // QuickEntryView): prévia e execução de cópia de metas entre lojas, plano de
 // mudanças de importação, e grade de cadastro rápido.
 
-import { MONTHS, type AnnualAggregation } from './indicatorFormulas'
+import { MONTHS, MONTH_LABELS, type AnnualAggregation } from './indicatorFormulas'
 
 export type StoreTargetValue = {
   loja_id: string
@@ -21,6 +21,83 @@ export type TargetIndicator = {
   name: string
   department?: string
   calculado?: boolean
+  value_type?: string | null
+  casas_decimais?: number | null
+}
+
+/**
+ * A fórmula bloqueia apenas a edição da Meta. O Realizado continua sendo um
+ * lançamento operacional, inclusive quando a meta do indicador é calculada.
+ */
+export function isPlanningFieldEditable(
+  indicator: Pick<TargetIndicator, 'calculado'>,
+  field: 'meta' | 'realizado',
+): boolean {
+  return field === 'realizado' || !indicator.calculado
+}
+
+export type TargetWorkbookSheet = {
+  name: string
+  headers: string[]
+  rows: Array<Record<string, unknown>>
+}
+
+export const TARGET_TEMPLATE_INSTRUCTION_LINES = [
+  'Não altere os códigos dos indicadores.',
+  'Não altere os nomes dos indicadores.',
+  'Não exclua linhas da tabela.',
+  'Preencha somente as células liberadas (indicadores digitáveis).',
+  'Deixe vazio quando não houver atualização para aquele mês.',
+  'Digite zero (0) somente quando o resultado for realmente zero.',
+  'Use "LIMPAR" para remover uma meta existente.',
+  'Indicadores calculados serão recalculados pelo sistema e não devem ser alterados.',
+  'A importação altera somente Metas; não altera Realizado nem Ano anterior.',
+] as const
+
+/** Gera as abas do XLSX de metas, tanto preenchido quanto em branco. */
+export function buildTargetWorkbookSheets(params: {
+  indicators: TargetIndicator[]
+  year: number
+  storeId: string
+  storeName?: string
+  values?: Record<string, Array<number | null>>
+}): TargetWorkbookSheet[] {
+  const headers = ['Código', 'Indicador', 'Departamento', 'Tipo', ...MONTH_LABELS]
+  const rows = params.indicators.map(indicator => ({
+    Código: indicator.code,
+      Indicador: indicator.name,
+      Departamento: indicator.department ?? '',
+      Tipo: indicator.calculado ? 'Calculado' : 'Digitável',
+      ...Object.fromEntries(MONTH_LABELS.map((label, index) => [
+        label,
+        indicator.calculado
+          ? 'CALCULADO'
+          : (() => {
+            const value = params.values?.[indicator.code]?.[index] ?? null
+            return indicator.value_type === 'percent' && value != null ? value * 100 : value
+          })(),
+      ])),
+  }))
+
+  return [
+    { name: 'METAS', headers, rows },
+    {
+      name: 'INSTRUCOES',
+      headers: ['Instrução'],
+      rows: TARGET_TEMPLATE_INSTRUCTION_LINES.map(instruction => ({ Instrução: instruction })),
+    },
+    {
+      name: 'MX_CONFIG',
+      headers: ['Chave', 'Valor'],
+      rows: [
+        { Chave: 'template_version', Valor: '1.0.0' },
+        { Chave: 'view_type', Valor: 'TARGET' },
+        { Chave: 'reference_year', Valor: String(params.year) },
+        { Chave: 'store_id', Valor: params.storeId },
+        { Chave: 'store_name', Valor: params.storeName ?? '' },
+      ],
+    },
+  ]
 }
 
 export type CopyConflictPolicy = 'FILL_EMPTY_ONLY' | 'REPLACE_SELECTED' | 'CELL_BY_CELL'
@@ -359,17 +436,21 @@ export function validateQuickEntryCells(cells: QuickEntryCell[]): string[] {
 export function buildMonthlyGrid(
   values: StoreTargetValue[],
   indicatorCodes: string[],
-): Record<string, Record<number, { meta: number | null; realizado: number | null }>> {
-  const grid: Record<string, Record<number, { meta: number | null; realizado: number | null }>> = {}
+): Record<string, Record<number, { meta: number | null; realizado: number | null; ano_anterior: number | null }>> {
+  const grid: Record<string, Record<number, { meta: number | null; realizado: number | null; ano_anterior: number | null }>> = {}
   for (const code of indicatorCodes) {
     grid[code] = {}
     for (const month of MONTHS) {
-      grid[code][month] = { meta: null, realizado: null }
+      grid[code][month] = { meta: null, realizado: null, ano_anterior: null }
     }
   }
   for (const value of values) {
     if (!grid[value.indicator_code]) continue
-    grid[value.indicator_code][value.month] = { meta: value.meta, realizado: value.realizado }
+    grid[value.indicator_code][value.month] = {
+      meta: value.meta,
+      realizado: value.realizado,
+      ano_anterior: value.ano_anterior,
+    }
   }
   return grid
 }

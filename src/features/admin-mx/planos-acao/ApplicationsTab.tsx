@@ -33,12 +33,20 @@ function formatDate(value: string | null) {
  * Aplicações de templates nos clientes (Base44 `ApplicationsTab`):
  * acompanhamento por cliente com progresso ponderado e eficácia.
  */
-export function ApplicationsTab(props: { onOpenPlan: (planId: string) => void }) {
+const PRIORITY_OPTIONS = [
+  { value: 'critica', label: 'Crítica' },
+  { value: 'alta', label: 'Alta' },
+  { value: 'media', label: 'Média' },
+  { value: 'baixa', label: 'Baixa' },
+]
+
+export function ApplicationsTab(props: { onOpenPlan: (planId: string) => void; refreshKey?: number }) {
   const [rows, setRows] = useState<ApplicationPlan[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
+  const [priorityFilter, setPriorityFilter] = useState('')
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -48,18 +56,22 @@ export function ApplicationsTab(props: { onOpenPlan: (planId: string) => void })
     setLoading(false)
   }, [])
 
-  useEffect(() => { void load() }, [load])
+  useEffect(() => { void load() }, [load, props.refreshKey])
 
-  const statuses = useMemo(() => [...new Set(rows.map(plan => plan.status).filter(Boolean))].sort(), [rows])
+  const statuses = useMemo(() => [...new Set([
+    'pendente', 'em_andamento', 'atrasado', 'concluido', 'validando_eficacia', 'bloqueada', 'aguardando_decisao', 'cancelada',
+    ...rows.map(plan => plan.status).filter(Boolean),
+  ])].sort(), [rows])
 
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase()
     return rows.filter(plan => {
       if (statusFilter && plan.status !== statusFilter) return false
+      if (priorityFilter && plan.prioridade !== priorityFilter) return false
       if (!term) return true
       return [plan.clientName, plan.acao, plan.indicador].some(value => (value ?? '').toLowerCase().includes(term))
     })
-  }, [rows, search, statusFilter])
+  }, [priorityFilter, rows, search, statusFilter])
 
   const metrics = useMemo(() => applicationMetrics(rows), [rows])
 
@@ -71,6 +83,7 @@ export function ApplicationsTab(props: { onOpenPlan: (planId: string) => void })
         <MxMetricCard title="Em andamento" value={metrics.emAndamento} detail="Execução em curso" icon={Clock} />
         <MxMetricCard title="Atrasados" value={metrics.atrasadas} detail="Prazo vencido em aberto" icon={ClipboardList} tone="danger" />
         <MxMetricCard title="Concluídos" value={metrics.concluidas} detail="Ciclo encerrado" icon={TrendingUp} tone="success" />
+        <MxMetricCard title="Validando eficácia" value={metrics.validando} detail="Aguardando medição de impacto" icon={TrendingUp} tone="info" />
       </MxMetricGrid>
 
       <ActionPlanDiagnosticsPanel />
@@ -83,6 +96,10 @@ export function ApplicationsTab(props: { onOpenPlan: (planId: string) => void })
             <MxSelect aria-label="Filtrar por status" value={statusFilter} onChange={event => setStatusFilter(event.target.value)}>
               <option value="">Todos os status</option>
               {statuses.map(status => <option key={status} value={status}>{applicationStatusLabel(status)}</option>)}
+            </MxSelect>
+            <MxSelect aria-label="Filtrar por prioridade" value={priorityFilter} onChange={event => setPriorityFilter(event.target.value)}>
+              <option value="">Todas as prioridades</option>
+              {PRIORITY_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
             </MxSelect>
           </div>
 

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ArrowDown, ArrowUp, Check, Copy, Eye, FileCheck, GraduationCap, Loader2, Plus, Save, Trash2, Upload, X } from 'lucide-react'
+import { ArrowDown, ArrowUp, Check, Copy, Eye, FileCheck, GraduationCap, Loader2, Plus, Save, Trash2, Upload } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { Modal } from '@/components/organisms/Modal'
@@ -9,6 +9,7 @@ import {
   emptyTemplateItem,
   fetchIndicatorCatalog,
   fetchPublishedTrainings,
+  RESPONSIBLE_ROLE_OPTIONS,
   validateTemplateDraft,
   type ActionPlanTemplateItem,
   type ImprovementDirection,
@@ -37,11 +38,21 @@ const PRIORITIES: Array<{ value: TemplateItemPriority; label: string }> = [
 const DIRECTIONS: Array<{ value: ImprovementDirection; label: string }> = [
   { value: 'aumentar', label: 'Aumentar' },
   { value: 'reduzir', label: 'Reduzir' },
+  { value: 'manter', label: 'Manter' },
+  { value: 'faixa', label: 'Atingir faixa ideal' },
+  { value: 'corrigir_processo', label: 'Corrigir processo' },
 ]
 
 function suggestTitle(direction: ImprovementDirection, indicatorLabel: string): string {
   if (!indicatorLabel) return ''
-  return `${direction === 'aumentar' ? 'Aumentar' : 'Reduzir'} ${indicatorLabel}`
+  const labels: Record<ImprovementDirection, string> = {
+    aumentar: 'Aumentar',
+    reduzir: 'Reduzir',
+    manter: 'Manter',
+    faixa: 'Atingir faixa ideal',
+    corrigir_processo: 'Corrigir processo',
+  }
+  return `${labels[direction]} ${indicatorLabel}`
 }
 
 export function TemplateWizard(props: {
@@ -233,6 +244,12 @@ export function TemplateWizard(props: {
                         {PRIORITIES.map(priority => <option key={priority.value} value={priority.value}>{priority.label}</option>)}
                       </MxSelect>
                     </MxField>
+                    <MxField label="Responsável recomendado">
+                      <MxSelect aria-label={`Responsável recomendado do item ${index + 1}`} value={item.recommended_responsible_role ?? ''} onChange={event => patchItem(index, { recommended_responsible_role: event.target.value || null })}>
+                        <option value="">Usar responsável do template</option>
+                        {RESPONSIBLE_ROLE_OPTIONS.map(role => <option key={role.value} value={role.value}>{role.label}</option>)}
+                      </MxSelect>
+                    </MxField>
                     <MxField label="Prazo (dias)">
                       <Input type="number" min={0} value={item.prazo_dias === null ? '' : String(item.prazo_dias)} onChange={event => patchItem(index, { prazo_dias: event.target.value === '' ? null : Number(event.target.value) })} />
                     </MxField>
@@ -295,6 +312,12 @@ export function TemplateWizard(props: {
               <MxField label="Problema"><MxTextarea rows={2} value={props.draft.problem} onChange={event => patch({ problem: event.target.value })} /></MxField>
               <MxField label="Objetivo"><MxTextarea rows={2} value={props.draft.objective} onChange={event => patch({ objective: event.target.value })} /></MxField>
               <MxField label="Quando aplicar"><MxTextarea rows={2} value={props.draft.when_to_apply} onChange={event => patch({ when_to_apply: event.target.value })} /></MxField>
+              <MxField label="Responsável recomendado para o template">
+                <MxSelect aria-label="Responsável recomendado para o template" value={props.draft.default_responsible_role} onChange={event => patch({ default_responsible_role: event.target.value })}>
+                  <option value="">Não definido</option>
+                  {RESPONSIBLE_ROLE_OPTIONS.map(role => <option key={role.value} value={role.value}>{role.label}</option>)}
+                </MxSelect>
+              </MxField>
               <label className="flex items-center gap-2 text-sm">
                 <input type="checkbox" checked={props.draft.manual_application_enabled} onChange={event => patch({ manual_application_enabled: event.target.checked })} />
                 Disponível para aplicação nos clientes
@@ -320,6 +343,7 @@ export function TemplateWizard(props: {
                 <div className="flex justify-between"><span className="text-text-secondary">Departamento</span><span className="font-medium">{props.draft.departamento || '—'}</span></div>
                 <div className="flex justify-between"><span className="text-text-secondary">Indicador</span><span className="font-medium">{props.draft.indicador || '—'}</span></div>
                 <div className="flex justify-between"><span className="text-text-secondary">Título</span><span className="font-medium">{props.draft.nome || '—'}</span></div>
+                <div className="flex justify-between"><span className="text-text-secondary">Responsável recomendado</span><span className="font-medium">{RESPONSIBLE_ROLE_OPTIONS.find(role => role.value === props.draft.default_responsible_role)?.label || '—'}</span></div>
               </div>
               <div className="space-y-2 rounded-lg bg-surface-alt p-3">
                 <h5 className="mb-1 text-xs font-semibold uppercase text-text-secondary">Ações ({props.draft.items.length})</h5>
@@ -344,13 +368,14 @@ export function TemplateWizard(props: {
 
 function PreviewAsOwner(props: { draft: TemplateDraft; weights: Array<{ weight_percentage_display: string }>; onClose: () => void }) {
   return (
-    <div className="fixed inset-0 z-[var(--mx-z-popover,70)] flex items-center justify-center p-4">
-      <div className="fixed inset-0 bg-black/40" onClick={props.onClose} />
-      <div className="relative flex max-h-[85vh] w-full max-w-lg flex-col overflow-y-auto rounded-xl bg-surface-default shadow-xl">
-        <div className="sticky top-0 flex items-center justify-between rounded-t-xl bg-primary px-5 py-3 text-primary-foreground">
-          <h3 className="text-sm font-semibold">Prévia — como o Dono vai ver</h3>
-          <Button variant="ghost" size="icon" aria-label="Fechar prévia" onClick={props.onClose}><X size={16} /></Button>
-        </div>
+    <Modal
+      open
+      onClose={props.onClose}
+      title="Prévia — como o Dono vai ver"
+      description="Visualização somente leitura do template antes da publicação."
+      size="md"
+      footer={<Button variant="outline" onClick={props.onClose}>Fechar</Button>}
+    >
         <div className="space-y-4 p-5">
           <div>
             <h4 className="text-lg font-bold text-text-primary">{props.draft.nome || 'Sem título'}</h4>
@@ -364,14 +389,13 @@ function PreviewAsOwner(props: { draft: TemplateDraft; weights: Array<{ weight_p
                   <span className="font-medium">{item.acao}</span>
                   {item.como ? <p className="mt-0.5 text-xs text-text-secondary">{item.como}</p> : null}
                   {item.support_material_type === 'arquivo' && item.file_asset_name ? <p className="mt-0.5 text-xs text-primary">📎 {item.file_asset_name}</p> : null}
-                  {item.support_material_type === 'aula' && item.treinamento_titulo ? <p className="mt-0.5 flex items-center gap-1 text-xs text-primary"><GraduationCap size={11} />{item.treinamento_titulo}</p> : null}
+                  {item.support_material_type === 'aula' && item.treinamento_titulo ? <p className="mt-0.5 flex items-center gap-1 text-xs text-primary"><GraduationCap size={12} />{item.treinamento_titulo}</p> : null}
                 </div>
                 <span className="shrink-0 text-xs text-text-disabled">{props.weights[index]?.weight_percentage_display}</span>
               </div>
             ))}
           </div>
         </div>
-      </div>
-    </div>
+    </Modal>
   )
 }

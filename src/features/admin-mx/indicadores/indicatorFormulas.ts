@@ -185,6 +185,13 @@ export function getFormatConfig(valueType: string | null | undefined, casasDecim
   }
 }
 
+/** Valor editável sem símbolo; percentuais são armazenados como fração. */
+export function formatEditableInput(value: number | null | undefined, config: FormatConfig): string {
+  if (value == null || Number.isNaN(value)) return ''
+  if (config.value_format === 'PERCENTAGE') return String(Number((value * 100).toFixed(config.display_decimal_places)))
+  return String(value)
+}
+
 function formatNumberBR(value: number, minDecimals: number, maxDecimals: number): string {
   return value.toLocaleString('pt-BR', { minimumFractionDigits: minDecimals, maximumFractionDigits: maxDecimals })
 }

@@ -13,22 +13,25 @@ describe('páginas de planejamento do módulo interno MX', () => {
   test('usa a fundação compartilhada sem importar páginas ou provider do Dono', () => {
     for (const page of Object.values(pages)) {
       const source = read(page)
-      expect(source).toContain('InternalMxPlanningShell')
       expect(source).not.toContain('@/pages/owner/')
       expect(source).not.toContain('OwnerProvider')
     }
+    expect(read(pages.strategic)).toContain('InternalMxPlanningShell')
+    expect(read(pages.action)).toContain('InternalMxPlanningShell')
     expect(read('src/features/internal-mx-planning/InternalMxPlanningShell.tsx')).toContain('PlanningWorkspaceProvider')
   })
 
   test('monta as três superfícies funcionais canônicas', () => {
     expect(read(pages.strategic)).toContain('StrategicPlanWorkspace')
     expect(read(pages.action)).toContain('ActionPlanWorkspace')
-    expect(read(pages.consulting)).toContain('ConsultingJourneyWorkspace')
+    expect(read(pages.consulting)).toContain('AdminConsultingOverviewPage')
   })
 
-  test('não cria PageCanvas aninhado ao renderizar a consultoria', () => {
+  test('monta o overview administrativo no modo operação sem duplicar shell de planejamento', () => {
     const consultingPage = read(pages.consulting)
-    expect(consultingPage).toContain('<ConsultingJourneyWorkspace />')
+    expect(consultingPage).toContain('<AdminConsultingOverviewPage />')
+    expect(consultingPage).not.toContain('ConsultingJourneyWorkspace')
+    expect(consultingPage).not.toContain('InternalMxPlanningShell')
     expect(consultingPage).not.toContain('className="-mx-4 lg:-mx-6"')
   })
 
@@ -45,7 +48,9 @@ describe('páginas de planejamento do módulo interno MX', () => {
     const shell = read('src/features/internal-mx-planning/InternalMxPlanningShell.tsx')
     const realtime = read('src/features/planning-workspace/usePlanningRealtime.ts')
     expect(shell).toContain('useStores')
-    expect(shell).toContain("url.searchParams.set('storeId'")
+    expect(shell).toContain("params.set('storeId'")
+    expect(shell).toContain("navigate({ pathname: location.pathname")
+    expect(shell).toContain('{ replace: true }')
     expect(realtime).toContain('strategic:')
     expect(realtime).toContain('action:')
     expect(realtime).toContain('consulting:')

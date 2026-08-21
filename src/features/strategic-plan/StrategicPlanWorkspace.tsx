@@ -21,8 +21,8 @@ import { ConditionalPageCanvas } from '@/design-system/page'
 import { PlanCycleBanner } from './PlanCycleBanner'
 import { useStrategicPlanController, type StrategicPlanController } from './useStrategicPlanController'
 
-export function StrategicPlanWorkspace({ onUpdated }: { onUpdated?: (at: Date) => void }) {
-  const controller = useStrategicPlanController({ onUpdated })
+export function StrategicPlanWorkspace({ onUpdated, year }: { onUpdated?: (at: Date) => void; year?: number }) {
+  const controller = useStrategicPlanController({ onUpdated, year })
   return <StrategicPlanView controller={controller} />
 }
 

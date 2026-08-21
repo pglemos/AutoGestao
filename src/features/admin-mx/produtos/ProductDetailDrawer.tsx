@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { Modal } from '@/components/organisms/Modal'
@@ -13,9 +13,10 @@ import {
   MxStatusBanner,
   MxTableSurface,
 } from '@/components/module/MxModuleVisualPrimitives'
-import { Package } from 'lucide-react'
+import { ChevronDown, ChevronUp, Eye, Lock, Package } from 'lucide-react'
 import { toast } from '@/lib/toast'
 import { ProductStrategicPlanTab } from './ProductStrategicPlanTab'
+import { PREVIEW_PROFILES, RELEASE_STAGE_LABELS, TECHNICAL_STATUS_LABELS, VISIBILITY_LABELS, moduleInclusionState } from './capabilityCatalog'
 import {
   encounterTimeStatus,
   fetchEncounterTimes,
@@ -44,10 +45,15 @@ export function ProductDetailDrawer(props: { product: ConsultingProduct | null; 
   const [times, setTimes] = useState<EncounterTime[]>([])
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [expandedModules, setExpandedModules] = useState<Record<string, boolean>>({})
+  const [showPreview, setShowPreview] = useState(false)
+  const [previewProfile, setPreviewProfile] = useState('DONO')
 
   useEffect(() => {
     if (!product) return
     setTab('resumo')
+    setShowPreview(false)
+    setPreviewProfile('DONO')
     setLoading(true)
     void Promise.all([
       fetchProductModules(product.program_key),
@@ -61,6 +67,20 @@ export function ProductDetailDrawer(props: { product: ConsultingProduct | null; 
 
   const resumoTempos = useMemo(() => summarizeTimes(times), [times])
   const modulosIncluidos = modules.filter(item => item.incluido).length
+  const moduleGroups = useMemo(() => {
+    const grouped = new Map<string, ProductModule[]>()
+    for (const item of modules) {
+      const key = item.module_code ?? 'LEGADO'
+      grouped.set(key, [...(grouped.get(key) ?? []), item])
+    }
+    return [...grouped.entries()].map(([code, items]) => ({
+      code,
+      label: items[0]?.module_label ?? 'Módulos legados',
+      items: [...items].sort((left, right) => left.display_order - right.display_order),
+    }))
+  }, [modules])
+  const preview = PREVIEW_PROFILES.find(item => item.code === previewProfile) ?? PREVIEW_PROFILES[0]
+  const previewModuleCodes: readonly string[] = preview.modules
 
   if (!product) return null
 
@@ -135,46 +155,75 @@ export function ProductDetailDrawer(props: { product: ConsultingProduct | null; 
           modules.length ? (
             <div className="space-y-3">
               <MxStatusBanner tone="info">A liberação marcada aqui é herdada pelos clientes que contratam este produto.</MxStatusBanner>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" onClick={() => setModules(current => current.map(item => ({ ...item, incluido: true })))}>Marcar todos</Button>
-                <Button variant="outline" size="sm" onClick={() => setModules(current => current.map(item => ({ ...item, incluido: false, obrigatorio: false })))}>Limpar</Button>
+              <div className="flex flex-wrap gap-2">
+                <Button variant="outline" size="sm" onClick={() => setModules(current => current.map(item => item.technical_status === 'TEMPORARIAMENTE_INDISPONIVEL' ? item : ({ ...item, incluido: true })))}>Marcar todos</Button>
+                <Button variant="outline" size="sm" onClick={() => setModules(current => current.map(item => item.obrigatorio ? item : ({ ...item, incluido: false })))}>Limpar não obrigatórios</Button>
+                <Button variant="outline" size="sm" onClick={() => setShowPreview(value => !value)}><Eye size={14} />{showPreview ? 'Fechar prévia' : 'Visualizar como perfil'}</Button>
               </div>
+              {showPreview ? (
+                <div className="rounded-xl border border-border bg-surface-alt p-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs font-semibold text-muted-foreground">Perfil:</span>
+                    {PREVIEW_PROFILES.map(profile => <Button key={profile.code} variant={profile.code === previewProfile ? 'primary' : 'outline'} size="sm" onClick={() => setPreviewProfile(profile.code)}>{profile.label}</Button>)}
+                  </div>
+                  <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                    {modules.filter(item => item.incluido && previewModuleCodes.includes(item.module_code ?? '')).map(item => <div key={item.module_key} className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm"><span className="min-w-0 flex-1 truncate text-foreground">{item.menu_label ?? item.label}</span><span className="text-xs text-muted-foreground">{VISIBILITY_LABELS[item.visibility]}</span></div>)}
+                    {!modules.some(item => item.incluido && previewModuleCodes.includes(item.module_code ?? '')) ? <p className="text-sm text-muted-foreground">Nenhum menu liberado para este perfil.</p> : null}
+                  </div>
+                </div>
+              ) : null}
               <MxTableSurface>
-                <Table className="min-w-[720px]">
+                <Table className="min-w-[1040px]">
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Menu</TableHead>
-                      <TableHead>Incluído</TableHead>
-                      <TableHead>Obrigatório</TableHead>
-                      <TableHead>Etapa</TableHead>
-                      <TableHead>Visibilidade</TableHead>
+                      <TableHead colSpan={7}>Matriz de capacidades</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {modules.map(item => (
-                      <TableRow key={item.module_key}>
-                        <TableCell>
-                          <div className="font-semibold text-foreground">{item.label}</div>
-                          <div className="text-xs text-muted-foreground">{item.module_key}</div>
-                        </TableCell>
-                        <TableCell>
-                          <input type="checkbox" aria-label={`Incluir ${item.label}`} checked={item.incluido} onChange={event => patchModule(item.module_key, { incluido: event.target.checked, obrigatorio: event.target.checked ? item.obrigatorio : false })} />
-                        </TableCell>
-                        <TableCell>
-                          <input type="checkbox" aria-label={`Tornar ${item.label} obrigatório`} disabled={!item.incluido} checked={item.obrigatorio} onChange={event => patchModule(item.module_key, { obrigatorio: event.target.checked })} />
-                        </TableCell>
-                        <TableCell>
-                          <Input aria-label={`Etapa de ${item.label}`} value={item.etapa ?? ''} onChange={event => patchModule(item.module_key, { etapa: event.target.value || null })} />
-                        </TableCell>
-                        <TableCell>
-                          <MxSelect aria-label={`Visibilidade de ${item.label}`} value={item.visibilidade} onChange={event => patchModule(item.module_key, { visibilidade: event.target.value as ProductModule['visibilidade'] })}>
-                            <option value="dono">Dono</option>
-                            <option value="gerente">Gerente</option>
-                            <option value="interno">Interno MX</option>
-                          </MxSelect>
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                    {moduleGroups.map(group => {
+                      const included = group.items.filter(item => item.incluido).length
+                      const state = moduleInclusionState(included, group.items.length)
+                      const expanded = expandedModules[group.code] ?? true
+                      return (
+                        <Fragment key={group.code}>
+                          <TableRow key={group.code} className="bg-surface-alt">
+                            <TableCell colSpan={7}>
+                              <button type="button" className="flex w-full items-center gap-3 text-left" onClick={() => setExpandedModules(current => ({ ...current, [group.code]: !expanded }))}>
+                                {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                                <span className="font-semibold text-foreground">{group.label}</span>
+                                <span className="text-xs text-muted-foreground">{included}/{group.items.length} incluídos · {state === 'partial' ? 'parcial' : state === 'full' ? 'liberado' : 'bloqueado'}</span>
+                              </button>
+                            </TableCell>
+                          </TableRow>
+                          {expanded ? group.items.map(item => (
+                            <TableRow key={item.module_key}>
+                              <TableCell>
+                                <div className="font-semibold text-foreground">{item.menu_label ?? item.label}</div>
+                                <div className="text-xs text-muted-foreground">{item.menu_code ?? item.module_key}</div>
+                              </TableCell>
+                              <TableCell>
+                                <input type="checkbox" aria-label={`Incluir ${item.menu_label ?? item.label}`} disabled={(item.obrigatorio && item.incluido) || item.technical_status === 'TEMPORARIAMENTE_INDISPONIVEL'} checked={item.incluido} onChange={event => patchModule(item.module_key, { incluido: event.target.checked })} />
+                              </TableCell>
+                              <TableCell>
+                                <label className="flex items-center gap-1 text-xs text-muted-foreground"><input type="checkbox" aria-label={`Tornar ${item.menu_label ?? item.label} obrigatório`} disabled={!item.incluido} checked={item.obrigatorio} onChange={event => patchModule(item.module_key, { obrigatorio: event.target.checked })} />{item.obrigatorio ? <Lock size={12} aria-hidden="true" /> : null}</label>
+                              </TableCell>
+                              <TableCell>
+                                <Input aria-label={`Etapa de ${item.menu_label ?? item.label}`} value={item.etapa ?? ''} onChange={event => patchModule(item.module_key, { etapa: event.target.value || null })} />
+                              </TableCell>
+                              <TableCell>
+                                <MxSelect aria-label={`Visibilidade de ${item.menu_label ?? item.label}`} value={item.visibilidade} onChange={event => patchModule(item.module_key, { visibilidade: event.target.value as ProductModule['visibilidade'] })}>
+                                  <option value="dono">Dono</option>
+                                  <option value="gerente">Gerente</option>
+                                  <option value="interno">Interno MX</option>
+                                </MxSelect>
+                              </TableCell>
+                              <TableCell><div className="text-xs text-muted-foreground">{RELEASE_STAGE_LABELS[item.release_stage]} · {VISIBILITY_LABELS[item.visibility]}</div></TableCell>
+                              <TableCell><div className="text-xs font-medium text-muted-foreground">{TECHNICAL_STATUS_LABELS[item.technical_status]}</div></TableCell>
+                            </TableRow>
+                          )) : null}
+                        </Fragment>
+                      )
+                    })}
                   </TableBody>
                 </Table>
               </MxTableSurface>

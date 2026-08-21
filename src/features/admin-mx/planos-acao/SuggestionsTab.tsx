@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { CheckCircle2, Eye, Send, XCircle } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { ArrowRight, CheckCircle2, Eye, Send, XCircle } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { Modal } from '@/components/organisms/Modal'
 import {
@@ -7,6 +7,8 @@ import {
   MxErrorState,
   MxInput,
   MxLoadingState,
+  MxMetricCard,
+  MxMetricGrid,
   MxSectionCard,
   MxSectionHeader,
   MxSelect,
@@ -20,14 +22,17 @@ import { toast } from '@/lib/toast'
 import {
   dismissSuggestion,
   fetchActionPlanSuggestions,
+  canConvertSuggestion,
   isSuggestionPromoted,
   nextSuggestionActions,
   publishSuggestionToOwner,
+  promoteSuggestionToPlan,
   SUGGESTION_STATUS_LABEL,
   validateSuggestion,
   type ActionPlanSuggestion,
 } from './actionPlanSuggestions'
 import { suggestionPriorityToPlanPriority } from './actionPlanSuggestions'
+import { PromoteSuggestionModal } from './PromoteSuggestionModal'
 
 function formatDate(value: string) {
   const date = new Date(value)
@@ -38,7 +43,7 @@ function formatDate(value: string) {
  * Sugestões ao Dono (Base44 `SuggestionsTab`): valida, publica, descarta e
  * visualiza como Dono cada sugestão gerada pelo motor ou manualmente.
  */
-export function SuggestionsTab() {
+export function SuggestionsTab({ refreshKey = 0, onChanged }: { refreshKey?: number; onChanged?: () => void }) {
   const { supabaseUser } = useAuth()
   const [rows, setRows] = useState<ActionPlanSuggestion[]>([])
   const [loading, setLoading] = useState(true)
@@ -49,16 +54,23 @@ export function SuggestionsTab() {
   const [dismissing, setDismissing] = useState<ActionPlanSuggestion | null>(null)
   const [dismissReason, setDismissReason] = useState('')
   const [preview, setPreview] = useState<ActionPlanSuggestion | null>(null)
+  const [promoting, setPromoting] = useState<ActionPlanSuggestion | null>(null)
+  const [promoteDepartment, setPromoteDepartment] = useState('Geral')
+  const [promoteIndicator, setPromoteIndicator] = useState('Não definido')
+  const [promoteDueDate, setPromoteDueDate] = useState('')
+  const loadRequestRef = useRef(0)
 
   const load = useCallback(async () => {
+    const requestId = ++loadRequestRef.current
     setLoading(true)
     const result = await fetchActionPlanSuggestions()
+    if (requestId !== loadRequestRef.current) return
     setRows(result.rows)
     setError(result.error)
     setLoading(false)
   }, [])
 
-  useEffect(() => { void load() }, [load])
+  useEffect(() => { void load() }, [load, refreshKey])
 
   const statuses = useMemo(() => [...new Set(rows.map(item => item.status))], [rows])
 
@@ -114,13 +126,56 @@ export function SuggestionsTab() {
     }
   }
 
-  const pendingCount = rows.filter(item => !isSuggestionPromoted(item)).length
+  const pendingCount = rows.filter(item => !isSuggestionPromoted(item) && !['descartada', 'expirada'].includes(item.status)).length
+  const metrics = useMemo(() => ({
+    total: rows.length,
+    pending: rows.filter(item => item.status === 'pendente_validacao').length,
+    published: rows.filter(item => item.status === 'exibida_dono').length,
+    converted: rows.filter(item => isSuggestionPromoted(item) || item.status === 'convertida').length,
+  }), [rows])
+
+  const openPromotion = (suggestion: ActionPlanSuggestion) => {
+    setPromoting(suggestion)
+    setPromoteDepartment('Geral')
+    setPromoteIndicator('Não definido')
+    setPromoteDueDate('')
+  }
+
+  const submitPromotion = async () => {
+    if (!promoting || busyId || !supabaseUser) return
+    setBusyId(promoting.id)
+    try {
+      const result = await promoteSuggestionToPlan({
+        suggestion: promoting,
+        departamento: promoteDepartment,
+        indicador: promoteIndicator,
+        prazo: promoteDueDate || null,
+        userId: supabaseUser.id,
+      })
+      if (result.error) {
+        toast.error(result.error)
+        return
+      }
+      toast.success(result.planId ? 'Sugestão convertida em plano de ação.' : 'Sugestão convertida.')
+      setPromoting(null)
+      onChanged?.()
+      await load()
+    } finally {
+      setBusyId(null)
+    }
+  }
 
   return (
     <>
       <MxSectionCard>
         <MxSectionHeader title="Sugestões ao Dono" description={`${pendingCount} sugestão(ões) ainda não convertida(s) em plano.`} />
         <div className="space-y-4 p-5">
+          <MxMetricGrid>
+            <MxMetricCard title="Sugestões" value={metrics.total} detail="Recebidas pelo motor" icon={Eye} />
+            <MxMetricCard title="Pendentes" value={metrics.pending} detail="Aguardando validação" icon={CheckCircle2} tone="warning" />
+            <MxMetricCard title="Exibidas ao Dono" value={metrics.published} detail="Disponíveis para conversão" icon={Send} tone="info" />
+            <MxMetricCard title="Convertidas" value={metrics.converted} detail="Já viraram plano" icon={ArrowRight} tone="success" />
+          </MxMetricGrid>
           <div className="flex flex-wrap gap-2">
             <MxInput value={search} onChange={event => setSearch(event.target.value)} placeholder="Buscar por problema ou regra..." aria-label="Buscar sugestão" />
             <MxSelect aria-label="Filtrar por status" value={statusFilter} onChange={event => setStatusFilter(event.target.value)}>
@@ -172,6 +227,11 @@ export function SuggestionsTab() {
                             {actions.includes('publicar') ? (
                               <Button size="sm" disabled={busyId === item.id} onClick={() => void runAction(item.id, 'publicar')}>
                                 <Send size={14} />Publicar ao Dono
+                              </Button>
+                            ) : null}
+                            {actions.includes('converter') && canConvertSuggestion(item.status) ? (
+                              <Button size="sm" variant="outline" disabled={busyId === item.id} onClick={() => openPromotion(item)}>
+                                <ArrowRight size={14} />Converter em plano
                               </Button>
                             ) : null}
                             {actions.includes('descartar') ? (
@@ -244,6 +304,20 @@ export function SuggestionsTab() {
           ) : null}
         </div>
       </Modal>
+
+      <PromoteSuggestionModal
+        open={Boolean(promoting)}
+        suggestion={promoting}
+        departamento={promoteDepartment}
+        indicador={promoteIndicator}
+        prazo={promoteDueDate}
+        submitting={Boolean(busyId)}
+        onDepartamento={setPromoteDepartment}
+        onIndicador={setPromoteIndicator}
+        onPrazo={setPromoteDueDate}
+        onSubmit={() => void submitPromotion()}
+        onClose={() => { if (!busyId) setPromoting(null) }}
+      />
     </>
   )
 }

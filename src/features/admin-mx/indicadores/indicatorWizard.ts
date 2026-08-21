@@ -58,6 +58,11 @@ export function emptyWizardDraft(): IndicatorWizardDraft {
   }
 }
 
+/** Constrói um draft novo ou hidrata o wizard com os dados do indicador editado. */
+export function buildWizardDraft(initial?: Partial<IndicatorWizardDraft>): IndicatorWizardDraft {
+  return { ...emptyWizardDraft(), ...initial }
+}
+
 /** Slug da chave a partir do nome (Base44 slugifyCode). */
 export function slugifyCode(name: string): string {
   return name

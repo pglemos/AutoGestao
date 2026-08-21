@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 import {
   WIZARD_STEPS,
+  buildWizardDraft,
   emptyWizardDraft,
   isWizardCodeEditable,
   slugifyCode,
@@ -13,6 +14,15 @@ describe('slugifyCode', () => {
     expect(slugifyCode('Vendas Internet Premium')).toBe('vendas_internet_premium')
     expect(slugifyCode('Ticket Médio')).toBe('ticket_medio')
     expect(slugifyCode('  Ticket   Médio  ')).toBe('ticket_medio')
+  })
+})
+
+describe('hidratação do wizard', () => {
+  test('preserva os dados editados e completa defaults ausentes', () => {
+    const draft = buildWizardDraft({ name: 'Indicador editado', code: 'indicador_editado', area: 'Comercial' })
+    expect(draft).toMatchObject({ name: 'Indicador editado', code: 'indicador_editado', area: 'Comercial' })
+    expect(draft.frequencia).toBe('mensal')
+    expect(draft.ano_final).toBeNull()
   })
 })
 

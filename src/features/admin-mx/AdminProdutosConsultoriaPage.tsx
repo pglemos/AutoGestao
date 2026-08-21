@@ -32,14 +32,27 @@ import {
   emptyProductDraft,
   fetchConsultingProducts,
   nextVersionKey,
+  productRequiresNewVersion,
   saveProduct,
   type ConsultingProduct,
   type ProductDraft,
   type ProductStatus,
 } from './produtos/consultingProducts'
 
-const STATUS_LABEL: Record<ProductStatus, string> = { rascunho: 'Rascunho', publicado: 'Publicado', arquivado: 'Arquivado' }
-const TRANSITION_LABEL: Record<ProductStatus, string> = { publicado: 'Publicar', arquivado: 'Arquivar', rascunho: 'Voltar a rascunho' }
+const STATUS_LABEL: Record<ProductStatus, string> = {
+  rascunho: 'Rascunho',
+  em_revisao: 'Em revisão',
+  publicado: 'Publicado',
+  suspenso_novas_contratacoes: 'Suspenso para novas contratações',
+  arquivado: 'Arquivado',
+}
+const TRANSITION_LABEL: Record<ProductStatus, string> = {
+  rascunho: 'Voltar a rascunho',
+  em_revisao: 'Enviar para revisão',
+  publicado: 'Publicar',
+  suspenso_novas_contratacoes: 'Suspender novas contratações',
+  arquivado: 'Arquivar',
+}
 
 export function AdminProdutosConsultoriaPage() {
   const { supabaseUser } = useAuth()
@@ -53,6 +66,7 @@ export function AdminProdutosConsultoriaPage() {
   const [draft, setDraft] = useState<ProductDraft>(emptyProductDraft)
   const [formOpen, setFormOpen] = useState(false)
   const [editing, setEditing] = useState(false)
+  const [editingProduct, setEditingProduct] = useState<ConsultingProduct | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [detail, setDetail] = useState<ConsultingProduct | null>(null)
 
@@ -77,18 +91,23 @@ export function AdminProdutosConsultoriaPage() {
 
   const metrics = useMemo(() => ({
     produtos: rows.length,
-    publicados: rows.filter(product => product.status === 'publicado').length,
     contratos: rows.reduce((sum, product) => sum + product.clients, 0),
     encontros: rows.reduce((sum, product) => sum + (product.total_visits ?? 0), 0),
+    presenciais: rows.reduce((sum, product) => sum + (product.max_presenciais ?? product.min_presenciais ?? 0), 0),
   }), [rows])
 
   const openNew = () => {
     setDraft(emptyProductDraft())
     setEditing(false)
+    setEditingProduct(null)
     setFormOpen(true)
   }
 
   const openEdit = (product: ConsultingProduct) => {
+    if (productRequiresNewVersion(product)) {
+      void duplicate(product, true)
+      return
+    }
     setDraft({
       program_key: product.program_key,
       name: product.name ?? '',
@@ -98,8 +117,11 @@ export function AdminProdutosConsultoriaPage() {
       min_presenciais: product.min_presenciais,
       max_presenciais: product.max_presenciais,
       usa_plano_estrategico: product.usa_plano_estrategico,
+      evolution_group: product.evolution_group,
+      modality_variant: product.modality_variant ?? '',
     })
     setEditing(true)
+    setEditingProduct(product)
     setFormOpen(true)
   }
 
@@ -107,7 +129,7 @@ export function AdminProdutosConsultoriaPage() {
     if (submitting) return
     setSubmitting(true)
     try {
-      const result = await saveProduct(draft, editing)
+      const result = await saveProduct(draft, editing, editingProduct ?? undefined)
       if (result.error) {
         toast.error(result.error)
         return
@@ -167,16 +189,18 @@ export function AdminProdutosConsultoriaPage() {
           <>
             <MxMetricGrid>
               <MxMetricCard title="Produtos" value={metrics.produtos} detail="No catálogo" icon={Package} />
-              <MxMetricCard title="Publicados" value={metrics.publicados} detail="Disponíveis para venda" icon={Package} tone="success" />
-              <MxMetricCard title="Contratos ativos" value={metrics.contratos} detail="Clientes vinculados" icon={Package} tone="info" />
               <MxMetricCard title="Encontros previstos" value={metrics.encontros} detail="Somatório das jornadas" icon={Package} tone="violet" />
+              <MxMetricCard title="Presenciais" value={metrics.presenciais} detail="Limite máximo das jornadas" icon={Package} tone="info" />
+              <MxMetricCard title="Contratos ativos" value={metrics.contratos} detail="Clientes vinculados" icon={Package} tone="success" />
             </MxMetricGrid>
             <MxToolbar>
               <MxInput value={search} onChange={event => setSearch(event.target.value)} placeholder="Buscar produto" aria-label="Buscar produto" />
               <MxSelect value={status} onChange={event => setStatus(event.target.value)} aria-label="Filtrar por status">
                 <option value="todos">Todos os status</option>
                 <option value="rascunho">Rascunho</option>
+                <option value="em_revisao">Em revisão</option>
                 <option value="publicado">Publicado</option>
+                <option value="suspenso_novas_contratacoes">Suspenso</option>
                 <option value="arquivado">Arquivado</option>
               </MxSelect>
             </MxToolbar>
@@ -212,7 +236,7 @@ export function AdminProdutosConsultoriaPage() {
                             <TableCell className="text-right">
                               <div className="flex flex-wrap justify-end gap-2">
                                 <Button variant="outline" size="sm" onClick={() => setDetail(product)}>Abrir</Button>
-                                <Button variant="outline" size="sm" onClick={() => openEdit(product)}>Editar</Button>
+                                <Button variant="outline" size="sm" onClick={() => openEdit(product)}>{productRequiresNewVersion(product) ? 'Editar / nova versão' : 'Editar'}</Button>
                                 {allowedProductTransitions(product.status).map(next => (
                                   <Button key={next} variant="outline" size="sm" onClick={() => void transition(product, next)}>{TRANSITION_LABEL[next]}</Button>
                                 ))}
