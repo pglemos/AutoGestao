@@ -33,13 +33,14 @@ export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch
   const loadChecks = async () => {
     setLoading(true)
     try {
-      const [clientRes, unitsRes, modulesRes, assignmentsRes, accessRes, clientsRes] = await Promise.all([
+      const [clientRes, unitsRes, modulesRes, assignmentsRes, accessRes, clientsRes, visitsRes] = await Promise.all([
         supabase.from('clientes_consultoria').select('*').eq('id', clientId).single(),
         supabase.from('unidades_cliente_consultoria').select('name, is_primary').eq('client_id', clientId),
         supabase.from('modulos_cliente_consultoria').select('enabled').eq('client_id', clientId),
         supabase.from('atribuicoes_consultoria').select('active, assignment_role').eq('client_id', clientId),
         supabase.from('acessos_cliente_consultoria').select('id, nome, is_primary, email, telefone, funcao_declarada, is_dono_master, status, papeis').eq('client_id', clientId),
         supabase.from('clientes_consultoria').select('primary_store_id, status').eq('primary_store_id', (await supabase.from('clientes_consultoria').select('primary_store_id').eq('id', clientId).single()).data?.primary_store_id).neq('id', clientId),
+        supabase.from('visitas_consultoria').select('id', { count: 'exact', head: true }).eq('client_id', clientId),
       ])
 
       const client = clientRes.data

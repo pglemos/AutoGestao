@@ -310,7 +310,7 @@
 | `vinculo_modelo_relatorio_encontro` | 1 |
 | `vinculo_plano_acao_encontro` | 1 |
 | `vinculos_loja` | 19 |
-| `visitas_consultoria` | 12 |
+| `visitas_consultoria` | 13 |
 | `vw_jornada_alem_do_contratado` | 1 |
 
 ## Operações por tabela
@@ -319,7 +319,7 @@
 |---|---:|
 | `acessos_cliente_consultoria:insert` | 2 |
 | `acessos_cliente_consultoria:select` | 4 |
-| `acessos_cliente_consultoria:update` | 1 |
+| `acessos_cliente_consultoria:update` | 2 |
 | `agenda_estrategica_marketing:select` | 1 |
 | `agendamentos:delete` | 1 |
 | `agendamentos:insert` | 1 |
@@ -688,7 +688,7 @@
 | `vinculos_loja:update` | 2 |
 | `visitas_consultoria:delete` | 2 |
 | `visitas_consultoria:insert` | 5 |
-| `visitas_consultoria:select` | 12 |
+| `visitas_consultoria:select` | 13 |
 | `visitas_consultoria:update` | 4 |
 | `vw_jornada_alem_do_contratado:select` | 1 |
 

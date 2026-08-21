@@ -116,7 +116,14 @@
 ) {
   width: 100%;
   border: 1px solid var(--mx-border);
-  border-radius: 1rem;
+  /* radius vem do componente (PageHeader/PageHeading/MxModuleHeader), via
+     rounded-[var(--mx-card-radius)] = 12px. Duplicava aqui com 1rem (16px)
+     e empatava em especificidade com a classe Tailwind — quem ganhava
+     dependia da ordem dos chunks CSS no bundle, não-determinístico entre
+     builds. Páginas com este wrapper (.mx-canonical-template) e páginas
+     sem ele (MxModulePage puro) divergiam de radius por isso — quebra de
+     paridade real entre módulos, pega pelo teste
+     module-design-system-authenticated-visual.playwright.ts. */
   background: var(--mx-surface);
   padding: 1.25rem;
   box-shadow: 0 1px 2px rgb(15 23 42 / 0.05);
