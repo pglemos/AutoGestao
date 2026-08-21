@@ -37,7 +37,7 @@ describe('checklist de prontidão do cliente', () => {
     const check = checks.find(item => item.key === 'loja-principal')
     expect(check?.ok).toBe(false)
     expect(check?.evaluationStatus).toBe('INVALID')
-    expect(check?.correctionRoute).toBe('/admin/clientes')
+    expect(check?.correctionRoute).toBe('/clientes')
   })
 
   test('loja ocupada por outro cliente ativo bloqueia', () => {
