@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import type { ComponentType, ReactNode } from 'react'
 import {
   Building2,
   CalendarDays,
@@ -42,6 +43,12 @@ import { PortfolioOverviewTab } from './clientes/PortfolioOverviewTab'
 import { OnboardingPortfolioTab } from './clientes/OnboardingPortfolioTab'
 import { InscricoesTab } from './clientes/InscricoesTab'
 import { GovernancaBloqueiosTab } from './clientes/GovernancaBloqueiosTab'
+
+// The shared JSX wrapper is JavaScript and its inferred ref-only type drops
+// the children prop when consumed from TypeScript. Keep the cast local to this
+// menu, matching the existing client actions menu contract.
+const Base44DropdownContent = DropdownMenuContent as unknown as ComponentType<{ children: ReactNode; align?: 'end'; className?: string }>
+const Base44DropdownItem = DropdownMenuItem as unknown as ComponentType<{ children: ReactNode; key?: string; onSelect: () => void; className?: string }>
 
 export type AdminClientesTab = 'carteira' | 'onboarding' | 'inscricoes' | 'governanca'
 
@@ -289,16 +296,16 @@ export function AdminClientesPage() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="sm" aria-label="Abrir operações da carteira">
-                    <MoreHorizontal size={15} className="mr-1.5" />Mais operações
+                    <MoreHorizontal size={14} className="mr-1.5" />Mais operações
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuItem onSelect={() => setIsCreateModalOpen(true)}><Plus size={14} />Cadastro rápido</DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => navigate('/agenda')}><CalendarDays size={14} />Agenda MX</DropdownMenuItem>
+                <Base44DropdownContent align="end" className="w-56">
+                  <Base44DropdownItem onSelect={() => setIsCreateModalOpen(true)}><Plus size={14} />Cadastro rápido</Base44DropdownItem>
+                  <Base44DropdownItem onSelect={() => navigate('/agenda')}><CalendarDays size={14} />Agenda MX</Base44DropdownItem>
                   {operationalTabs.map(item => (
-                    <DropdownMenuItem key={item.key} onSelect={() => setActiveTab(item.key)}>{item.label}</DropdownMenuItem>
+                    <Base44DropdownItem key={item.key} onSelect={() => setActiveTab(item.key)}>{item.label}</Base44DropdownItem>
                   ))}
-                </DropdownMenuContent>
+                </Base44DropdownContent>
               </DropdownMenu>
               <Button asChild size="sm">
                 <Link to="/clientes/novo">

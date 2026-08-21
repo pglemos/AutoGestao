@@ -180,7 +180,7 @@ export function PortfolioOverviewTab({ rows, onAction, onRefetch }: PortfolioOve
               aria-label="Filtrar por status"
               value={filters.status}
               onChange={event => patch({ status: event.target.value as PortfolioFilters['status'] })}
-              className="h-11 min-w-[170px]"
+              className="h-11 min-w-44"
             >
               {STATUS_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
             </MxSelect>
@@ -191,7 +191,7 @@ export function PortfolioOverviewTab({ rows, onAction, onRefetch }: PortfolioOve
               onClick={() => setAdvancedOpen(open => !open)}
               aria-expanded={advancedOpen}
             >
-              <Filter size={15} />Filtros{advancedFilterCount ? ` (${advancedFilterCount})` : ''}
+              <Filter size={14} />Filtros{advancedFilterCount ? ` (${advancedFilterCount})` : ''}
             </Button>
             {hasActiveFilters ? (
               <Button variant="ghost" size="sm" className="h-11 text-muted-foreground" onClick={clearAllFilters}>
@@ -299,7 +299,7 @@ export function PortfolioOverviewTab({ rows, onAction, onRefetch }: PortfolioOve
                           </div>
                         </TableCell>
                         <TableCell>
-                          <span className="text-sm text-foreground">{PHASE_LABEL[client.business_phase ?? ''] ?? client.business_phase || 'Não definida'}</span>
+                          <span className="text-sm text-foreground">{PHASE_LABEL[client.business_phase ?? ''] ?? (client.business_phase || 'Não definida')}</span>
                         </TableCell>
                         <TableCell>
                           <span className={client.onboarding_completed ? 'text-sm font-semibold text-status-success-text' : 'text-sm text-foreground'}>
