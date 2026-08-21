@@ -7,6 +7,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { toast } from '@/lib/toast'
 import type { ClientUnit } from '@/features/strategic-plan/clientUnits'
 import type { ActionPlanTemplate } from './actionPlanTemplates'
+import { ACTION_PLAN_DEPARTMENT_CARDS, departmentCategory, departmentLabel, departmentMatchesFilter, indicatorAreaMatchesDepartment } from './departmentTaxonomy'
 import {
   applyTemplateToStoresIdempotent,
   buildTemplateApplicationStorageKey,
@@ -76,13 +77,14 @@ export function ApplyTemplateWizard(props: {
   )
 
   const departments = useMemo(() => {
-    const values = new Set(props.indicators.map(indicator => indicator.area).filter(Boolean))
-    if (props.template?.departamento) values.add(props.template.departamento)
-    return [...values].sort((a, b) => a.localeCompare(b, 'pt-BR'))
+    const values = ACTION_PLAN_DEPARTMENT_CARDS.map(card => card.code)
+    const templateCategory = departmentCategory(props.template?.departamento)
+    if (templateCategory && !values.includes(templateCategory)) values.push(templateCategory)
+    return values
   }, [props.indicators, props.template?.departamento])
 
   const departmentIndicators = useMemo(
-    () => props.indicators.filter(indicator => indicator.area === department),
+    () => props.indicators.filter(indicator => indicatorAreaMatchesDepartment(indicator.area, department)),
     [department, props.indicators],
   )
 
@@ -91,10 +93,12 @@ export function ApplyTemplateWizard(props: {
     return source.filter(template => {
       if (!template.active || !template.manual_application_enabled) return false
       if (!template.versions.some(version => version.status === 'publicada')) return false
-      if (department && template.departamento !== department) return false
+      if (department && !departmentMatchesFilter(template.departamento, department)) return false
       if (indicatorKey) {
         const selectedIndicator = props.indicators.find(indicator => indicator.metric_key === indicatorKey)
-        if (template.indicador && template.indicador !== selectedIndicator?.label) return false
+        const indicatorValues = [selectedIndicator?.metric_key, selectedIndicator?.label].filter(Boolean).map(value => value?.toLowerCase())
+        const templateValues = [template.indicador, template.primary_indicator_code].filter(Boolean).map(value => value?.toLowerCase())
+        if (templateValues.length && !templateValues.some(value => indicatorValues.includes(value))) return false
       }
       return true
     })
@@ -115,8 +119,8 @@ export function ApplyTemplateWizard(props: {
     setStep(1)
     setClientId(props.initialClientId ?? '')
     setReferenceYear(CURRENT_YEAR)
-    setDepartment(nextTemplate?.departamento ?? '')
-    setIndicatorKey(matchingIndicator?.metric_key ?? '')
+    setDepartment(departmentCategory(nextTemplate?.departamento) ?? nextTemplate?.departamento ?? '')
+    setIndicatorKey(matchingIndicator?.metric_key ?? (nextTemplate?.primary_indicator_code ?? ''))
     setTemplateId(nextTemplate?.id ?? '')
     setResponsibleId('')
     setDeadlineDays(30)
@@ -211,7 +215,7 @@ export function ApplyTemplateWizard(props: {
         referenceYear,
         responsibleId: responsibleId || null,
         deadlineDays,
-        department,
+        department: selectedTemplate.departamento,
         indicator: selectedIndicator?.label || selectedTemplate.indicador || null,
       })
       if (result.error) {
@@ -290,7 +294,7 @@ export function ApplyTemplateWizard(props: {
           <MxField label="Departamento">
             <MxSelect aria-label="Departamento da aplicação" value={department} onChange={event => { setDepartment(event.target.value); setIndicatorKey(''); setTemplateId('') }}>
               <option value="">Selecione...</option>
-              {departments.map(value => <option key={value} value={value}>{value}</option>)}
+              {departments.map(value => <option key={value} value={value}>{departmentLabel(value)}</option>)}
             </MxSelect>
           </MxField>
         ) : null}
@@ -313,7 +317,7 @@ export function ApplyTemplateWizard(props: {
               </MxSelect>
             </MxField>
             {!availableTemplates.length ? <MxStatusBanner tone="neutral">Nenhum plano padrão publicado e disponível para o departamento e indicador escolhidos.</MxStatusBanner> : null}
-            {selectedTemplate && publishedVersion ? <div className="rounded-lg border border-border bg-surface-alt p-4 text-sm"><div className="flex items-center gap-2 font-semibold text-foreground"><Target size={16} />{selectedTemplate.nome}</div><div className="mt-1 text-xs text-muted-foreground">{selectedTemplate.departamento} · versão publicada v{publishedVersion.versao}</div></div> : null}
+            {selectedTemplate && publishedVersion ? <div className="rounded-lg border border-border bg-surface-alt p-4 text-sm"><div className="flex items-center gap-2 font-semibold text-foreground"><Target size={16} />{selectedTemplate.nome}</div><div className="mt-1 text-xs text-muted-foreground">{departmentLabel(selectedTemplate.departamento)} · versão publicada v{publishedVersion.versao}</div></div> : null}
           </div>
         ) : null}
 
@@ -347,7 +351,7 @@ export function ApplyTemplateWizard(props: {
             <dl className="grid gap-3 rounded-lg border border-border bg-surface-alt p-4 text-sm sm:grid-cols-2">
               <div><dt className="text-xs text-muted-foreground">Cliente</dt><dd className="font-semibold text-foreground">{activeClient?.name ?? '—'}</dd></div>
               <div><dt className="text-xs text-muted-foreground">Ano</dt><dd className="font-semibold text-foreground">{referenceYear}</dd></div>
-              <div><dt className="text-xs text-muted-foreground">Departamento</dt><dd className="font-semibold text-foreground">{department || '—'}</dd></div>
+              <div><dt className="text-xs text-muted-foreground">Departamento</dt><dd className="font-semibold text-foreground">{departmentLabel(department) || '—'}</dd></div>
               <div><dt className="text-xs text-muted-foreground">Indicador</dt><dd className="font-semibold text-foreground">{selectedIndicator?.label || selectedTemplate?.indicador || '—'}</dd></div>
               <div><dt className="text-xs text-muted-foreground">Plano padrão</dt><dd className="font-semibold text-foreground">{selectedTemplate?.nome ?? '—'} · v{publishedVersion?.versao ?? '—'}</dd></div>
               <div><dt className="text-xs text-muted-foreground">Escopo materializado</dt><dd className="font-semibold text-foreground">{targetUnits.length} unidade(s)</dd></div>

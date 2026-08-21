@@ -1,6 +1,6 @@
 # Story CONS-20 — Paridade Base44 de Consultoria e Produtos no Admin MX
 
-**Status:** READY FOR DEVELOPMENT
+**Status:** BLOCKED — migration remota CONS-20 pendente
 **Agent:** @aiox-master + @dev
 **Priority:** HIGH
 
@@ -75,23 +75,51 @@ Como administrador MX, quero operar consultoria e produtos nas rotas `/consultor
 - `docs/base44-import/_source/src/lib/productPackageOps.js`
 - `docs/base44-import/_source/src/lib/capabilityCatalog.js`
 - `src/features/internal-mx-planning/InternalConsultingPage.tsx`
+- `src/test/internal-mx-planning-pages.test.ts`
+- `src/features/admin-mx/consultoria/AdminConsultingOverviewPage.tsx`
+- `src/features/admin-mx/consultoria/consultingOverview.ts`
+- `src/features/admin-mx/consultoria/consultingOverview.test.ts`
 - `src/features/admin-mx/AdminProdutosConsultoriaPage.tsx`
+- `src/features/admin-mx/AdminClienteDetalhePage.tsx`
+- `src/features/admin-mx/produtos/ConsultingProductFormModal.tsx`
+- `src/features/admin-mx/produtos/ProductDetailDrawer.tsx`
+- `src/features/admin-mx/produtos/ProductStrategicPlanTab.tsx`
+- `src/features/admin-mx/produtos/capabilityCatalog.ts`
 - `src/features/admin-mx/produtos/consultingProducts.ts`
+- `src/features/admin-mx/produtos/consultingProducts.test.ts`
+- `src/features/admin-mx/produtos/strategicPlan.ts`
+- `src/features/admin-mx/produtos/strategicPlan.test.ts`
+- `src/features/strategic-plan/productPackageOps.ts`
 - `src/features/strategic-plan/clientProductPackage.ts`
 - `src/features/strategic-plan/planCycle.ts`
 - `src/types/database.generated.ts`
+- `supabase/migrations/20260821200000_consulting_product_base44_capabilities.sql`
 
 ## Dev Agent Record
 
 ### Completion Notes
 
-- Story criada a partir dos contratos existentes; implementação e evidências serão registradas durante o desenvolvimento.
+- Implementação local concluída para o overview operacional de `/consultoria`, catálogo/ciclo de vida/matriz de `/produtos`, bridges produto → plano estratégico e detalhe 360.
+- `/consultoria` foi validada com dados persistidos em navegador real: métricas, filtros, detalhe, navegação para Plano Estratégico/Plano de Ação, desktop 1440×900 e mobile 390×844.
+- Gates locais verdes: `npm run lint`, `npm run typecheck`, `npm test` (4.224 testes / 25.180 expectativas), `npm run build` e testes direcionados (18 testes / 70 expectativas).
+- `npx graphify hook-rebuild` concluído: 61.620 nós, 139.748 arestas e 7.627 comunidades; seis scripts PowerShell ficaram fora da extração por ausência de `tree-sitter-powershell`.
+- A prova de `/produtos` está bloqueada pelo schema remoto não aplicado: Supabase retorna `42703 — column programas_visita_consultoria.evolution_group does not exist`. A migration está no repositório, mas não foi aplicada por governança/escopo.
 
 ### Debug Log References
 
-- Nenhum ainda.
+- `visual-evidence/agent-browser/cons20-consultoria-2026-08-21T19-12-46/summary.json` — `status: passed`, desktop/mobile, axe sem violações e sem erros de runtime.
+- `visual-evidence/agent-browser/cons20-produtos-2026-08-21T19-13-55/summary.json` — falha honesta por catálogo indisponível; screenshot registra o erro de schema, sem erro JS.
+- Consulta direta do cliente Supabase confirmou `code=42703` para a coluna `evolution_group`.
+- Ações manuais do detalhe da consultoria navegaram para `/plano-estrategico?storeId=...` e `/plano-acao?storeId=...`, sem alertas na página.
 
 ### CodeRabbit Integration
 
 - Revisão dirigida local deve cobrir segurança de RLS, mutações de ciclo de vida, clonagem idempotente e ausência de CSS Base44.
 - @aiox-qa deve emitir o veredito final dos gates; @aiox-devops é responsável por qualquer publicação remota autorizada.
+
+### QA Results
+
+- **Decision:** CONCERNS / BLOCKED.
+- **PASS:** lint, typecheck, regressão completa, build, testes direcionados, Graphify e `/consultoria` autenticada em desktop/mobile.
+- **BLOCKER:** `/produtos` não carrega no ambiente conectado ao Supabase porque a migration `20260821200000_consulting_product_base44_capabilities.sql` ainda não está aplicada; a leitura falha com `42703`.
+- **Release status:** não aprovar publicação, commit adicional ou encerramento da story como Ready for Review até aplicar a migration pelo fluxo autorizado e repetir CRUD/matriz/detalhe de produtos no navegador real.
