@@ -76,7 +76,9 @@ export function TemplateFilters(props: {
           <option value="">Todos os status</option>
           <option value="publicada">Publicado</option>
           <option value="rascunho">Rascunho</option>
+          <option value="em_revisao">Em Revisão</option>
           <option value="inativo">Inativo</option>
+          <option value="desabilitado">Desabilitado</option>
           <option value="arquivada">Arquivado</option>
         </MxSelect>
 

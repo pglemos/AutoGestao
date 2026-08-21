@@ -100,6 +100,15 @@ describe('templateFilters — match', () => {
     expect(templateMatchesFilters(published, { ...emptyTemplateFilters(), status: 'rascunho' })).toBe(false)
   })
 
+  test('aliases editoriais do Base44 mapeiam para o ciclo MX', () => {
+    const draft = template()
+    const inactive = template({ active: false, versions: [version()] })
+    const archived = template({ versions: [version({ status: 'arquivada' })] })
+    expect(templateMatchesFilters(draft, { ...emptyTemplateFilters(), status: 'em_revisao' })).toBe(true)
+    expect(templateMatchesFilters(inactive, { ...emptyTemplateFilters(), status: 'desabilitado' })).toBe(true)
+    expect(templateMatchesFilters(archived, { ...emptyTemplateFilters(), status: 'arquivada' })).toBe(true)
+  })
+
   test('prioridade filtra pelos itens da versão', () => {
     const t = template({
       versions: [version({

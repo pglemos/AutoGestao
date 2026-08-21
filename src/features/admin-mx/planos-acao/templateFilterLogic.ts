@@ -80,11 +80,13 @@ export function templateMatchesFilters(template: ActionPlanTemplate, filters: Te
   }
   if (filters.status) {
     const actual = deriveTemplateStatus(template)
+    // Base44 exposes editorial aliases that map to the MX lifecycle without
+    // changing the persisted MX statuses or copying its data model.
     const wanted = filters.status === 'publicada'
       ? 'publicada'
-      : filters.status === 'rascunho'
+      : filters.status === 'rascunho' || filters.status === 'em_revisao'
         ? 'rascunho'
-        : filters.status === 'arquivado'
+        : filters.status === 'arquivado' || filters.status === 'arquivada'
           ? 'arquivado'
           : 'inativo'
     if (actual !== wanted) return false
