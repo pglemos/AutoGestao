@@ -38,6 +38,17 @@ describe('route access matrix', () => {
     }
   })
 
+  it('authorizes client-scoped planning aliases only for internal MX profiles', () => {
+    for (const route of ['/clientes/acme/plano-estrategico?clientId=c1', '/clientes/acme/plano-acao?clientId=c1']) {
+      for (const role of ['administrador_geral', 'administrador_mx', 'consultor_mx'] as const) {
+        expect(canAccessPath(route, role)).toBe(true)
+      }
+      for (const role of ['dono', 'gerente', 'vendedor'] as const) {
+        expect(canAccessPath(route, role)).toBe(false)
+      }
+    }
+  })
+
   it('keeps simulation routes restricted to internal MX profiles', () => {
     for (const role of ['administrador_mx', 'consultor_mx', 'administrador_geral'] as const) {
       expect(canAccessPath('/simulacao/vendedor', role)).toBe(true)

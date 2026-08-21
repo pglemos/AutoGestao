@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-18T18:08:15.367Z",
-  "baselineSha": "b629ddad11d6528be022f9e1e51cebf09e9ebecf",
-  "routeCount": 117,
+  "generatedAt": "2026-08-21T22:30:44.783Z",
+  "baselineSha": "60a14ac7f5cc919afa608ac70940def0dfb7c90e",
+  "routeCount": 119,
   "routes": [
     {
       "path": "/",
@@ -218,6 +218,48 @@
       ],
       "files": [
         "src/features/admin-mx/AdminClienteDetalhePage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "wide",
+        "bottomClearance": "navigation",
+        "adopted": true
+      }
+    },
+    {
+      "path": "/clientes/:clientSlug/plano-acao",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:InternalActionPlanPage"
+      ],
+      "files": [
+        "src/features/internal-mx-planning/InternalActionPlanPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "wide",
+        "bottomClearance": "navigation",
+        "adopted": true
+      }
+    },
+    {
+      "path": "/clientes/:clientSlug/plano-estrategico",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:InternalStrategicPlanPage"
+      ],
+      "files": [
+        "src/features/internal-mx-planning/InternalStrategicPlanPage.tsx"
       ],
       "canvas": 0,
       "template": 0,
@@ -887,7 +929,7 @@
       ],
       "canvas": 5,
       "template": 0,
-      "structural": 1,
+      "structural": 0,
       "metadata": {
         "width": "dashboard",
         "source": "default"

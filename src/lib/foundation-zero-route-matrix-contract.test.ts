@@ -20,8 +20,11 @@ describe('Foundation Zero route × role matrix', () => {
   test('is generated from the live route audit and contains no governance gap', () => {
     execFileSync('bun', ['scripts/generate_foundation_zero_route_matrix.ts'], { stdio: 'pipe' })
     const matrix = JSON.parse(readFileSync(artifactPath, 'utf8')) as RouteMatrix
-    expect(matrix.summary.routesTotal).toBe(119)
-    expect(matrix.summary.routesProtected).toBe(110)
+    // The live audit keeps both the root Route and its protected shell
+    // container as records. The route-path denominator remains 119 unique
+    // paths; the ledger row denominator is therefore 121.
+    expect(matrix.summary.routesTotal).toBe(121)
+    expect(matrix.summary.routesProtected).toBe(112)
     expect(matrix.summary.routesPublic).toBe(9)
     expect(matrix.summary.routeRoleTotal).toBeGreaterThan(0)
     expect(matrix.summary.ungoverned).toBe(0)
@@ -30,7 +33,7 @@ describe('Foundation Zero route × role matrix', () => {
 
   test('does not silently lose route rows or role status columns', () => {
     const matrix = JSON.parse(readFileSync(artifactPath, 'utf8')) as RouteMatrix
-    expect(matrix.rows).toHaveLength(119)
+    expect(matrix.rows).toHaveLength(121)
     for (const row of matrix.rows) {
       expect(Object.keys(row.roleStatus)).toEqual([
         'administrador_geral',

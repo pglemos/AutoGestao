@@ -1,8 +1,8 @@
 # Inventário de Rotas — Layout
 
-- Gerado em: 2026-08-18T18:08:15.367Z
-- Baseline SHA: `b629ddad11d6528be022f9e1e51cebf09e9ebecf`
-- Total de rotas: 117
+- Gerado em: 2026-08-21T22:30:44.783Z
+- Baseline SHA: `60a14ac7f5cc919afa608ac70940def0dfb7c90e`
+- Total de rotas: 119
 
 | Path | Rota p/ perfil | Arquivo(s) | Canvas | Template | Estrutural | Width | Clearance | Adotada |
 |---|---|---|---|---|---|---|---|---|
@@ -18,6 +18,8 @@
 | /classificacao | *:Ranking | `src/features/ranking/Ranking.container.tsx` | 0 | 0 | 0 | dashboard | — | não |
 | /clientes | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:InternalClientsPage | `src/features/internal-mx-planning/InternalClientsPage.tsx` | 0 | 0 | 0 | dashboard | — | não |
 | /clientes/:clientSlug | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:AdminClienteDetalhePage | `src/features/admin-mx/AdminClienteDetalhePage.tsx` | 0 | 0 | 0 | wide | navigation | sim |
+| /clientes/:clientSlug/plano-acao | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:InternalActionPlanPage | `src/features/internal-mx-planning/InternalActionPlanPage.tsx` | 0 | 0 | 0 | wide | navigation | sim |
+| /clientes/:clientSlug/plano-estrategico | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:InternalStrategicPlanPage | `src/features/internal-mx-planning/InternalStrategicPlanPage.tsx` | 0 | 0 | 0 | wide | navigation | sim |
 | /clientes/novo | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:AdminNovoClientePage | `src/features/admin-mx/AdminNovoClientePage.tsx` | 0 | 0 | 0 | wide | navigation | sim |
 | /configuracoes | vendedor:VendedorConfiguracoes, gerente:Configuracoes, dono:Configuracoes, admin:Configuracoes | `src/pages/VendedorConfiguracoes.tsx`<br>`src/pages/Configuracoes.tsx` | 0 | 4 | 0 | dashboard | — | não |
 | /configuracoes/consultoria-pmr | *:ConsultoriaParametros | `src/pages/ConsultoriaParametros.tsx` | 0 | 0 | 0 | focused | none | sim |
@@ -52,7 +54,7 @@
 | /funil-comercial | vendedor:FunilVendedor, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:ForbiddenRoute | `src/pages/FunilVendedor.tsx` | 5 | 0 | 1 | dashboard | navigation | sim |
 | /funil-vendas | vendedor:ForbiddenRoute, gerente:FunilVendasGerente, dono:FunilVendasGerente, admin:ForbiddenRoute | `src/features/gerente/FunilVendasGerente.tsx` | 3 | 0 | 0 | dashboard | navigation | sim |
 | /gerente/* | *:ManagerLegacyPathRedirect | — | 0 | 0 | 0 | dashboard | — | não |
-| /home | vendedor:VendedorHome, gerente:DashboardLoja, dono:DashboardLoja, admin:RoleRedirect | `src/pages/VendedorHome.tsx`<br>`src/features/dashboard-loja/DashboardLoja.container.tsx` | 5 | 0 | 1 | dashboard | — | não |
+| /home | vendedor:VendedorHome, gerente:DashboardLoja, dono:DashboardLoja, admin:RoleRedirect | `src/pages/VendedorHome.tsx`<br>`src/features/dashboard-loja/DashboardLoja.container.tsx` | 5 | 0 | 0 | dashboard | — | não |
 | /indicadores | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:AdminIndicadoresPage | `src/features/admin-mx/AdminIndicadoresPage.tsx` | 0 | 0 | 0 | dashboard | — | não |
 | /lancamento-diario | *:RedirectWithSearch | — | 0 | 0 | 0 | focused | actions | não |
 | /liberacao-fechamento | *:LiberacaoFechamento | `src/pages/LiberacaoFechamento.tsx` | 0 | 0 | 2 | wide | — | não |

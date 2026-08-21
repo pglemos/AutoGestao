@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-21T22:08:29.414Z",
+  "generatedAt": "2026-08-21T23:10:20.909Z",
   "source": "scripts/audit_route_data_inventory.mjs + src/lib/auth/routeAccess.ts",
   "roles": [
     "administrador_geral",
@@ -10,12 +10,12 @@
     "vendedor"
   ],
   "summary": {
-    "routesTotal": 119,
-    "routesProtected": 110,
+    "routesTotal": 121,
+    "routesProtected": 112,
     "routesPublic": 9,
-    "routeRoleTotal": 258,
-    "standardCanvasTotal": 74,
-    "standardCanvasRenderings": 242,
+    "routeRoleTotal": 264,
+    "standardCanvasTotal": 76,
+    "standardCanvasRenderings": 248,
     "redirectTotal": 31,
     "fullscreenTotal": 4,
     "printTotal": 1,
@@ -2119,6 +2119,50 @@
       "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminNovoClientePage />} /> </Suspense>"
     },
     {
+      "path": "/clientes/:clientSlug/plano-estrategico",
+      "kind": "route",
+      "surface": "STANDARD_CANVAS",
+      "rulePattern": "/clientes/:clientSlug/plano-estrategico",
+      "redirect": null,
+      "renderRoles": [
+        "administrador_geral",
+        "administrador_mx",
+        "consultor_mx"
+      ],
+      "roleStatus": {
+        "administrador_geral": "RENDER_STANDARD_CANVAS",
+        "administrador_mx": "RENDER_STANDARD_CANVAS",
+        "consultor_mx": "RENDER_STANDARD_CANVAS",
+        "dono": "FORBIDDEN",
+        "gerente": "FORBIDDEN",
+        "vendedor": "FORBIDDEN"
+      },
+      "applicable": true,
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen"
+    },
+    {
+      "path": "/clientes/:clientSlug/plano-acao",
+      "kind": "route",
+      "surface": "STANDARD_CANVAS",
+      "rulePattern": "/clientes/:clientSlug/plano-acao",
+      "redirect": null,
+      "renderRoles": [
+        "administrador_geral",
+        "administrador_mx",
+        "consultor_mx"
+      ],
+      "roleStatus": {
+        "administrador_geral": "RENDER_STANDARD_CANVAS",
+        "administrador_mx": "RENDER_STANDARD_CANVAS",
+        "consultor_mx": "RENDER_STANDARD_CANVAS",
+        "dono": "FORBIDDEN",
+        "gerente": "FORBIDDEN",
+        "vendedor": "FORBIDDEN"
+      },
+      "applicable": true,
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalActionPlanPage />} /> </Suspense>"
+    },
+    {
       "path": "/clientes/:clientSlug",
       "kind": "route",
       "surface": "STANDARD_CANVAS",
@@ -3893,6 +3937,48 @@
       "surface": "STANDARD_CANVAS",
       "kind": "route",
       "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminNovoClientePage />} /> </Suspense>"
+    },
+    {
+      "path": "/clientes/:clientSlug/plano-estrategico",
+      "role": "administrador_geral",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen"
+    },
+    {
+      "path": "/clientes/:clientSlug/plano-estrategico",
+      "role": "administrador_mx",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen"
+    },
+    {
+      "path": "/clientes/:clientSlug/plano-estrategico",
+      "role": "consultor_mx",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen"
+    },
+    {
+      "path": "/clientes/:clientSlug/plano-acao",
+      "role": "administrador_geral",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalActionPlanPage />} /> </Suspense>"
+    },
+    {
+      "path": "/clientes/:clientSlug/plano-acao",
+      "role": "administrador_mx",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalActionPlanPage />} /> </Suspense>"
+    },
+    {
+      "path": "/clientes/:clientSlug/plano-acao",
+      "role": "consultor_mx",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalActionPlanPage />} /> </Suspense>"
     },
     {
       "path": "/clientes/:clientSlug",
