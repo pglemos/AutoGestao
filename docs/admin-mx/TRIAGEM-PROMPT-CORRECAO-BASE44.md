@@ -73,6 +73,19 @@ Continuação da leitura do doc (linha ~44.850+): módulo inteiro sobre um bug e
 
 Testado ao vivo (Planos de Ação → Planos da rede): card "Planos: 2" bate exatamente com a soma das colunas do Kanban (Não iniciada 0 + Em andamento 1 + Atrasada 1 + Concluída 0 = 2) — sem o bug "7 totais e só 6 distribuídas" que o doc descreve (item 9). Amostra pequena (rede real só tem 2 planos hoje), mas nenhuma inconsistência visível.
 
+## ⚠️ Achado 8 — módulo final do doc pede um RESET DESTRUTIVO do banco. NÃO EXECUTADO.
+
+O fim do documento (última seção antes do EOF) é um "PROMPT DE MANUTENÇÃO CONTROLADA — RESET DOS DADOS DE TESTE v1.0": pede apagar **todos** os clientes, usuários de cliente, jornadas, Planos Estratégicos e Planos de Ação classificados como "teste/demo/seed/mock", deixando "banco operacional vazio, nenhum cliente cadastrado" — preservando só dados mestres (produtos, 45 indicadores, Equipe MX, conta admin).
+
+**Não executei nada disso e não vou executar sem confirmação explícita e ao vivo do dono do produto.** Motivos:
+1. É destrutivo e, na prática, irreversível (mesmo com checkpoint/backup, restaurar produção é uma operação de alto risco).
+2. A rede tem hoje 52 clientes reais em `/clientes` (AG AUTOMOVEIS, ACERTT, MX CONSULTORIA — a própria empresa dona do sistema — entre outros), todos com aparência de dados de produção genuínos: CNPJ, lojas, vendedores, vendas registradas. Não há como eu, sem contexto de negócio, distinguir com segurança "cliente de teste" de "cliente real" só olhando o banco — errar essa classificação apaga um cliente pagante de verdade.
+3. O próprio texto do documento reconhece essa ambiguidade ("não declarar concluído quando existir cliente de teste") sem dar um critério técnico objetivo de classificação.
+
+Nota curiosa: o próprio arquivo do doc termina com o texto **idêntico** ao `/goal` desta sessão (mesmos logins, mesmos tokens) — ou seja, o usuário colou o prompt da sessão dentro do próprio arquivo de correção em algum momento. Não é uma instrução de terceiro escondida no documento; é a mesma diretiva que já rege esta sessão, sem conteúdo novo além do módulo de reset acima.
+
+**Se o dono realmente quiser esse reset**, é um trabalho à parte que precisa: (a) lista explícita de quais dos 52 clientes são teste vs. reais, confirmada por humano; (b) checkpoint/backup real do Supabase antes de qualquer DELETE; (c) execução em ambiente de homologação primeiro. Não é algo pra rodar "de madrugada sem perguntar".
+
 ## Entregue nesta sessão
 
 - PR [#190](https://github.com/pglemos/MXGESTAOPREDITIVA/pull/190) `fix/admin-mx-readiness-correction-route` — **merged em main** (squash, commit `5a6c096e`):
@@ -82,11 +95,14 @@ Testado ao vivo (Planos de Ação → Planos da rede): card "Planos: 2" bate exa
   4. `ownerStrategicPlanViewModel.ts` órfão removido (zero consumidores, dead code de tentativa anterior).
   - Typecheck limpo, 264+172 testes verdes, eslint limpo em todos os arquivos tocados.
 
+## Doc totalmente lido
+
+Todo o bloco de correções (linhas 38.776–48.704) foi lido e triado nesta sessão: Plano Estratégico Multiunidade (Achado 1), Clientes MX — Resumo do Plano (Achado 2), Pessoas e Acessos — Dono Master, 2 prompts (Achado 4), Planos de Ação — duplicação e Kanban (Achado 5 e 7), e o módulo de reset destrutivo (Achado 8, **não executado**). As linhas 0–38.775 (prompt original que gerou o protótipo Base44 em si, não uma correção) seguem não lidas — baixa prioridade, MX não é um port 1:1 do Base44.
+
 ## Próximos passos (ordem sugerida)
 
-1. Ler e triar "Planos de Ação Padrão vs Plano do Cliente" (Achado 5, linha ~44.185 em diante) contra `AdminPlanosAcaoGlobalPage.tsx` e o restante do doc (ainda tem conteúdo depois disso — não mapeado).
-2. Comparar `PersonCreateModal.tsx` campo a campo com os 4 blocos do formulário do doc (baixa prioridade).
-3. Se algum cliente real tiver Matriz + 2+ filiais, testar o cenário multiunidade completo da Visão do Dono ao vivo (Achado 1 ficou sem esse teste).
-4. Merge do PR #190 quando confortável.
+1. Comparar `PersonCreateModal.tsx` campo a campo com os 4 blocos do formulário do doc (baixa prioridade, Achado 4 já fechado por spot-check).
+2. Se algum cliente real tiver Matriz + 2+ filiais, testar o cenário multiunidade completo da Visão do Dono ao vivo (Achado 1 ficou sem esse teste).
+3. **Decisão do dono, não técnica:** se quiser executar o reset de dados de teste (Achado 8), definir critério explícito de quais dos 52 clientes são teste vs. reais antes de qualquer DELETE.
 
-Consolidar este arquivo em `GAP-PARIDADE-BASE44.md` quando a triagem terminar, ou linkar os dois — evitar dois documentos de verdade divergentes sobre o mesmo assunto.
+Consolidar este arquivo em `GAP-PARIDADE-BASE44.md` quando fizer sentido, ou linkar os dois — evitar dois documentos de verdade divergentes sobre o mesmo assunto.
