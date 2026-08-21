@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowLeft, ArrowRight, Check, Plus, Trash2, UserPlus } from 'lucide-react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
@@ -54,6 +54,12 @@ export function AdminNovoClientePage() {
   const [draft, setDraft] = useState<NewClientDraft>(emptyNewClientDraft)
   const [step, setStep] = useState(1)
   const [submitting, setSubmitting] = useState(false)
+  // Guard síncrono: o state `submitting` só reflete no `disabled` do botão depois
+  // do próximo render, então dois cliques a poucos milissegundos de distância
+  // (medido em produção: ~200-370ms) leem o mesmo closure `submitting === false`
+  // e os dois passam pelo `if (submitting) return`. Um ref é lido/escrito na
+  // hora — a segunda chamada sempre vê o lock já tomado pela primeira.
+  const submittingRef = useRef(false)
   const [loadingExisting, setLoadingExisting] = useState(false)
   const continueId = searchParams.get('continue')
   const isContinuation = Boolean(continueId)
@@ -122,7 +128,7 @@ export function AdminNovoClientePage() {
   }
 
   const submit = async () => {
-    if (submitting) return
+    if (submittingRef.current) return
     if (pending.length) {
       toast.error(`Pendências nos passos ${pending.join(', ')}.`)
       return
@@ -131,6 +137,7 @@ export function AdminNovoClientePage() {
       toast.error('Sessão expirada. Entre novamente.')
       return
     }
+    submittingRef.current = true
     setSubmitting(true)
     try {
       if (continueId) {
@@ -151,6 +158,7 @@ export function AdminNovoClientePage() {
       toast.success('Cliente criado com estrutura, módulos e consultores.')
       navigate(result.slug ? `/consultoria/clientes/${result.slug}` : '/clientes')
     } finally {
+      submittingRef.current = false
       setSubmitting(false)
     }
   }
