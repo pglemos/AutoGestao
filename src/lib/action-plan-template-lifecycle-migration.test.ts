@@ -28,7 +28,9 @@ describe('migration ciclo de vida transacional dos templates', () => {
 
   test('preserva itens quando o payload de edição é parcial', () => {
     expect(partialPayloadSql).toContain("IF NOT (p_payload ? 'items') THEN")
-    expect(partialPayloadSql).toContain('save_action_plan_template_draft_legacy')
+    expect(partialPayloadSql).toContain('CREATE OR REPLACE FUNCTION public.save_action_plan_template_draft')
+    expect(partialPayloadSql).toContain("v_payload := p_payload || jsonb_build_object('items', v_items)")
     expect(partialPayloadSql).toContain('jsonb_agg')
+    expect(partialPayloadSql).not.toContain('ALTER FUNCTION public.save_action_plan_template_draft(jsonb)')
   })
 })
