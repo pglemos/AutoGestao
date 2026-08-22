@@ -1,3 +1,5 @@
+import { collectClientStoreIds } from './mergeClientPeople'
+
 export type PortfolioClient = {
   id: string
   name: string
@@ -20,6 +22,7 @@ export type PortfolioClient = {
   scheduled_activation_at: string | null
   primary_store_city: string | null
   main_contact_name: string | null
+  hasDonoMaster: boolean
   units: number
   users: number
   visitsDone: number
@@ -160,21 +163,91 @@ export function activationBlockers(client: Pick<PortfolioClient, 'primary_store_
 }
 
 /**
- * Lojas que respondem por um cliente: a principal e as filiais penduradas nela.
+ * Lojas que respondem por um cliente: a principal, as apontadas pelas unidades
+ * cadastradas e as filiais penduradas em qualquer uma delas.
  *
- * A carteira vive em `clientes_consultoria` e a operação vive em `lojas`; a
- * única ponte entre as duas é `primary_store_id` mais a hierarquia
- * `parent_loja_id`. `unidades_cliente_consultoria` não serve aqui — não guarda
- * referência para `lojas`, então não dá para contar equipe por ela.
+ * A carteira vive em `clientes_consultoria` e a operação vive em `lojas`. As
+ * pontes entre as duas são `primary_store_id`, `unidades_cliente_consultoria.store_id`
+ * e a hierarquia `parent_loja_id`. Unidade sem `store_id` fica de fora: não há
+ * loja para consultar, e inventar uma contaria equipe de outro cliente.
  */
 export function clientStoreIds(
   client: Pick<PortfolioClient, 'primary_store_id'>,
   lojas: ReadonlyArray<{ id: string; parent_loja_id?: string | null }>,
+  unidades: ReadonlyArray<{ store_id?: string | null }> = [],
 ): string[] {
-  const primary = client.primary_store_id
-  if (!primary) return []
-  const branches = lojas.filter((loja) => loja.parent_loja_id === primary).map((loja) => loja.id)
-  return [primary, ...branches]
+  return collectClientStoreIds({ primaryStoreId: client.primary_store_id, unidades, lojas })
+}
+
+/**
+ * Cliente cuja loja principal é filial de outro cliente da carteira.
+ *
+ * Importações criaram um `clientes_consultoria` por loja (AG matriz, AG 3 Piso,
+ * AG Tito). Na operação, 3 Piso e Tito são filiais (`parent_loja_id` da matriz).
+ * Cada uma tem gerente e vendedores próprios, mas o contrato e a jornada são
+ * da matriz — listá-las como clientes infla a carteira e duplica a equipe.
+ */
+export function isBranchClient(
+  client: Pick<PortfolioClient, 'id' | 'primary_store_id'>,
+  clients: ReadonlyArray<Pick<PortfolioClient, 'id' | 'primary_store_id'>>,
+  lojas: ReadonlyArray<{ id: string; parent_loja_id?: string | null }>,
+): boolean {
+  const storeId = client.primary_store_id
+  if (!storeId) return false
+  const parentById = new Map(lojas.map(loja => [loja.id, loja.parent_loja_id ?? null]))
+  const primaryOfOthers = new Set(
+    clients.filter(other => other.id !== client.id && other.primary_store_id).map(other => other.primary_store_id as string),
+  )
+  let current: string | null = parentById.get(storeId) ?? null
+  const seen = new Set<string>()
+  while (current && !seen.has(current)) {
+    if (primaryOfOthers.has(current)) return true
+    seen.add(current)
+    current = parentById.get(current) ?? null
+  }
+  return false
+}
+
+export function excludeBranchClients<T extends Pick<PortfolioClient, 'id' | 'primary_store_id'>>(
+  clients: ReadonlyArray<T>,
+  lojas: ReadonlyArray<{ id: string; parent_loja_id?: string | null }>,
+): T[] {
+  return clients.filter(client => !isBranchClient(client, clients, lojas))
+}
+
+/** Matriz da qual este cliente-filial é loja. Sem pai na carteira, devolve null. */
+export function parentClientOf<T extends Pick<PortfolioClient, 'id' | 'primary_store_id'>>(
+  client: T,
+  clients: ReadonlyArray<T>,
+  lojas: ReadonlyArray<{ id: string; parent_loja_id?: string | null }>,
+): T | null {
+  const storeId = client.primary_store_id
+  if (!storeId) return null
+  const parentById = new Map(lojas.map(loja => [loja.id, loja.parent_loja_id ?? null]))
+  const byPrimary = new Map(
+    clients.filter(other => other.id !== client.id && other.primary_store_id).map(other => [other.primary_store_id as string, other]),
+  )
+  let current: string | null = parentById.get(storeId) ?? null
+  const seen = new Set<string>()
+  while (current && !seen.has(current)) {
+    const parent = byPrimary.get(current)
+    if (parent) return parent
+    seen.add(current)
+    current = parentById.get(current) ?? null
+  }
+  return null
+}
+
+/**
+ * Filiais importadas como cliente, sem jornada própria. Essas linhas podem ser
+ * arquivadas: a equipe e o contrato ficam na matriz. Quem já tem visita
+ * registrada não entra — a jornada não pode sumir com o arquivo.
+ */
+export function branchClientsToArchive<T extends Pick<PortfolioClient, 'id' | 'primary_store_id' | 'visitsTotal'>>(
+  clients: ReadonlyArray<T>,
+  lojas: ReadonlyArray<{ id: string; parent_loja_id?: string | null }>,
+): T[] {
+  return clients.filter(client => isBranchClient(client, clients, lojas) && (client.visitsTotal ?? 0) === 0)
 }
 
 export type StoreTeamStat = { sellers: number; checkedIn?: number; disciplinePct: number }
@@ -224,11 +297,12 @@ export function clientBuckets(client: PortfolioClient, today = new Date()): Port
   const buckets: PortfolioBucket[] = []
   const active = isActive(client)
   const blockers = activationBlockers(client)
+  const missingMaster = client.hasDonoMaster === false
 
   if (active) buckets.push('ativos')
   if (active && client.visitsTotal > 0 && client.visitsDone < client.visitsTotal) buckets.push('em_implantacao')
-  if (!active && !blockers.length) buckets.push('prontos_para_ativar')
-  if (!active && blockers.length) buckets.push('com_bloqueios')
+  if (!active && !blockers.length && !missingMaster) buckets.push('prontos_para_ativar')
+  if (blockers.length || missingMaster) buckets.push('com_bloqueios')
   if (isRenewalNear(client, today)) buckets.push('renovacoes_proximas')
   if (client.onboarding_completed === false || (client.onboarding_step ?? 0) > 0 && client.onboarding_completed !== true) {
     buckets.push('cadastros_pendentes')
@@ -240,6 +314,7 @@ export function clientBuckets(client: PortfolioClient, today = new Date()): Port
 export function nextAction(client: PortfolioClient): string {
   const blockers = activationBlockers(client)
   if (!isActive(client) && blockers.length) return `Resolver: ${blockers[0]}`
+  if (!client.hasDonoMaster) return 'Definir Dono Master'
   if (!isActive(client)) return 'Validar e ativar cliente'
   if (client.onboarding_completed === false) return 'Continuar onboarding'
   if (!client.users) return 'Cadastrar pessoas e acessos'

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { emptyPersonAccessDraft, resolveOwnerMaster, validatePersonAccessDraft } from './personAccess'
+import { emptyPersonAccessDraft, personToAccessDraft, resolveOwnerMaster, validatePersonAccessDraft } from './personAccess'
 
 describe('pessoas e acessos — lógica pura', () => {
   test('valida nome, e-mail e ao menos um perfil', () => {
@@ -46,5 +46,34 @@ describe('pessoas e acessos — lógica pura', () => {
       is_dono_master: true, status: 'inativo', papeis: ['DONO'],
     }])
     expect(inactive.status).toBe('INACTIVE')
+
+    const invited = resolveOwnerMaster([{
+      id: 'p1', nome: 'Ana', email: 'a@b.com', telefone: null, funcao_declarada: null,
+      is_dono_master: true, status: 'em_preparacao', papeis: ['DONO'],
+    }])
+    expect(invited.status).toBe('VALID')
+
+    const donoSemMaster = resolveOwnerMaster([{
+      id: 'p1', nome: 'Ana', email: 'a@b.com', telefone: null, funcao_declarada: null,
+      is_dono_master: false, status: 'ativo', papeis: ['DONO'],
+    }])
+    expect(donoSemMaster.status).toBe('OWNER_WITHOUT_MASTER')
+  })
+
+  test('personToAccessDraft reabre o cadastro existente sem criar outro', () => {
+    const draft = personToAccessDraft({
+      nome: 'Ana',
+      email: 'ana@alfa.com',
+      telefone: '1199',
+      funcao_declarada: 'SOCIO',
+      papeis: ['DONO', 'DIRETOR'],
+      lojas_autorizadas: ['loja-1'],
+      is_dono_master: true,
+      visao_padrao: 'DONO',
+    })
+    expect(draft.nome).toBe('Ana')
+    expect(draft.papeis).toEqual(['DONO', 'DIRETOR'])
+    expect(draft.is_dono_master).toBe(true)
+    expect(draft.visao_padrao).toBe('DONO')
   })
 })

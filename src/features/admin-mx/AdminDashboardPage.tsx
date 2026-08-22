@@ -30,7 +30,7 @@ import {
   MxSectionCard,
 } from '@/components/module/MxModuleVisualPrimitives'
 import { useClientPortfolio } from './clientes/useClientPortfolio'
-import { portfolioCounters, journeyLabel, structureLabel, type PortfolioClient } from './clientes/clientPortfolio'
+import { portfolioCounters, portfolioStatusCounters, journeyLabel, structureLabel, type PortfolioClient } from './clientes/clientPortfolio'
 import { fetchInscricoesPendentes } from './clientes/inscricaoAutocadastroMutations'
 import type { InscricaoRow } from './clientes/inscricaoAutocadastro'
 
@@ -49,7 +49,8 @@ export function AdminDashboardPage() {
     })
   }, [])
 
-  const counters = useMemo(() => portfolioCounters(clients), [clients])
+  const bucketCounters = useMemo(() => portfolioCounters(clients), [clients])
+  const statusCounters = useMemo(() => portfolioStatusCounters(clients), [clients])
 
   const recentClients = useMemo(() => {
     return clients.slice(0, 6)
@@ -81,7 +82,7 @@ export function AdminDashboardPage() {
       })
     }
 
-    const withoutOwner = clients.filter(c => !c.main_contact_name && c.status !== 'rascunho')
+    const withoutOwner = clients.filter(c => !c.hasDonoMaster && c.status !== 'rascunho')
     if (withoutOwner.length > 0) {
       alerts.push({
         id: 'no-owner',
@@ -143,7 +144,7 @@ export function AdminDashboardPage() {
           <MxMetricGrid>
             <MxMetricCard
               title="Clientes Ativos"
-              value={counters.ativos}
+              value={statusCounters.ativos}
               detail="Contratos ativos em execução"
               icon={CheckCircle2}
               tone="success"
@@ -152,7 +153,7 @@ export function AdminDashboardPage() {
             />
             <MxMetricCard
               title="Em Implantação"
-              value={counters.em_implantacao}
+              value={statusCounters.em_implantacao}
               detail="Jornada de onboarding em andamento"
               icon={Rocket}
               tone="info"
@@ -161,7 +162,7 @@ export function AdminDashboardPage() {
             />
             <MxMetricCard
               title="Prontos para Ativar"
-              value={counters.prontos_para_ativar}
+              value={statusCounters.prontos_para_ativar}
               detail="Checklist de ativação cumprido"
               icon={ClipboardList}
               tone="brand"
@@ -170,7 +171,7 @@ export function AdminDashboardPage() {
             />
             <MxMetricCard
               title="Com Bloqueios"
-              value={counters.com_bloqueios}
+              value={bucketCounters.com_bloqueios}
               detail="Falta Dono Master, loja ou produto"
               icon={AlertTriangle}
               tone="danger"

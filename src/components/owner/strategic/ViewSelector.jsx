@@ -1,5 +1,22 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { VIEW_OPTIONS } from "./strategicUtils";
+import { MONTHS_FULL, VIEW_OPTIONS } from "./strategicUtils";
+
+export function CompetenceSelector({ year, value, onChange }) {
+  return (
+    <Select value={String(value)} onValueChange={(next) => onChange(Number(next))}>
+      <SelectTrigger aria-label="Competência" className="h-9 w-[168px] bg-card">
+        <SelectValue placeholder="Competência" />
+      </SelectTrigger>
+      <SelectContent>
+        {MONTHS_FULL.map((label, index) => (
+          <SelectItem key={label} value={String(index)}>
+            {label}/{year}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+}
 
 export default function ViewSelector({ value, onChange }) {
   return (

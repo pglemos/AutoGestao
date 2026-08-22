@@ -20,6 +20,7 @@ describe('workspace estratégico compartilhado', () => {
   test('workspace preserva composição funcional final', () => {
     const source = read('src/features/strategic-plan/StrategicPlanWorkspace.tsx')
     expect(source).toContain('StrategicPlanTabs')
+    expect(source).toContain('CompetenceSelector')
     expect(source).toContain('StrategicIndicatorSummaryCards')
     expect(source).toContain('StrategicIndicatorComparisonTable')
     expect(source).toContain('StrategicIndicatorChart')

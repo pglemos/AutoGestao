@@ -22,6 +22,14 @@ export const PERFORMANCE_STATUS_LABEL: Record<PerformanceStatus, string> = {
 }
 
 /** Atingimento em pontos percentuais: 100 significa meta cumprida. */
+export function calculateIndicatorAttainment(
+  realizado: number | null | undefined,
+  meta: number | null | undefined,
+): number | null {
+  return calcAttainment(meta, realizado)
+}
+
+/** Atingimento em pontos percentuais: 100 significa meta cumprida. */
 export function calcAttainment(meta: number | null | undefined, realizado: number | null | undefined): number | null {
   if (meta == null || realizado == null || meta === 0) return null
   return (realizado / meta) * 100

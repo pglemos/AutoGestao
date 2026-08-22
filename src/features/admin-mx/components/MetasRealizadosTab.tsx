@@ -46,13 +46,21 @@ import {
 import {
   CONSOLIDATED_SCOPE,
   CONSOLIDATION_STATUS,
+  formatPartialUnitsLabel,
+  resolveStoreScopedValue,
   useClientScope,
   type ConsolidationIndicator,
+  type IndicatorIntegrity,
 } from '@/features/strategic-plan'
 
 type StoreOption = { id: string; name: string }
 
 const DEFAULT_YEAR = new Date().getFullYear()
+
+function partialMark(integrity?: IndicatorIntegrity): string {
+  if (integrity?.status !== CONSOLIDATION_STATUS.PARCIAL) return ''
+  return ` ${formatPartialUnitsLabel(integrity.unitsWithData, integrity.totalUnits) ?? '*'}`
+}
 
 export function MetasRealizadosTab(props: {
   indicators: TargetIndicator[]
@@ -73,6 +81,7 @@ export function MetasRealizadosTab(props: {
   const [historyFor, setHistoryFor] = useState<string | null>(null)
   const [file, setFile] = useState<File | null>(null)
   const [scope, setScope] = useState<string>('')
+  const [scopeNotice, setScopeNotice] = useState<string | null>(null)
   const [formulas, setFormulas] = useState<Record<string, string | null>>({})
 
   const refetch = useCallback(async () => {
@@ -151,8 +160,13 @@ export function MetasRealizadosTab(props: {
   const isConsolidated = scope === CONSOLIDATED_SCOPE && clientScope.supportsConsolidated
 
   // Trocar de loja invalida um escopo consolidado que talvez não exista no cliente novo.
+  // A troca é visível: sem aviso o usuário pensaria que ainda está no consolidado.
   useEffect(() => {
-    if (scope === CONSOLIDATED_SCOPE && !clientScope.loading && !clientScope.supportsConsolidated) setScope('')
+    if (scope === CONSOLIDATED_SCOPE && !clientScope.loading && !clientScope.supportsConsolidated) {
+      setScope('')
+      setScopeNotice('Consolidado indisponível: este cliente tem uma única unidade. Exibindo a unidade selecionada.')
+    }
+    if (scope === CONSOLIDATED_SCOPE && clientScope.supportsConsolidated) setScopeNotice(null)
   }, [scope, clientScope.loading, clientScope.supportsConsolidated])
 
   const grid = useMemo(() => buildOfficialMonthlyGrid(
@@ -303,6 +317,8 @@ export function MetasRealizadosTab(props: {
             ) : null}
           </div>
 
+          {scopeNotice ? <MxStatusBanner tone="warning">{scopeNotice}</MxStatusBanner> : null}
+
           {isConsolidated ? (
             <MxStatusBanner tone={partialMonths > 0 ? 'warning' : 'neutral'}>
               {partialMonths > 0
@@ -340,7 +356,7 @@ export function MetasRealizadosTab(props: {
                               const month = index + 1
                               const value = isConsolidated
                                 ? consolidatedGrid[indicator.code]?.[month] ?? null
-                                : readOfficialMonthValue(grid, props.indicators, indicator.code, month, 'meta')
+                                : resolveStoreScopedValue(readOfficialMonthValue(grid, props.indicators, indicator.code, month, 'meta'))
                               const integrity = isConsolidated ? consolidatedIntegrity[month]?.[indicator.code] : undefined
                               return (
                                 <TableCell key={month} className="text-right">
@@ -350,7 +366,7 @@ export function MetasRealizadosTab(props: {
                                       title={integrity?.explanation || undefined}
                                     >
                                       {formatDisplay(value, config)}
-                                      {integrity?.status === CONSOLIDATION_STATUS.PARCIAL ? ' *' : ''}
+                                      {partialMark(integrity)}
                                     </span>
                                   ) : (
                                     <Input
@@ -382,14 +398,14 @@ export function MetasRealizadosTab(props: {
                               const month = index + 1
                               const value = isConsolidated
                                 ? consolidatedActualGrid[indicator.code]?.[month] ?? null
-                                : grid[indicator.code]?.[month]?.realizado ?? null
+                                : resolveStoreScopedValue(grid[indicator.code]?.[month]?.realizado)
                               const integrity = isConsolidated ? consolidatedActualIntegrity[month]?.[indicator.code] : undefined
                               return (
                                 <TableCell key={month} className="text-right">
                                   {isConsolidated ? (
                                     <span className="text-xs text-muted-foreground" aria-label={`${indicator.name} — Realizado consolidado — ${MONTH_LABELS[index]}`} title={integrity?.explanation || undefined}>
                                       {formatDisplay(value, config)}
-                                      {integrity?.status === CONSOLIDATION_STATUS.PARCIAL ? ' *' : ''}
+                                      {partialMark(integrity)}
                                     </span>
                                   ) : (
                                     <Input

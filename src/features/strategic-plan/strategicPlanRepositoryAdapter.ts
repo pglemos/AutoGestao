@@ -1,9 +1,21 @@
 import { supabase } from '@/lib/supabase'
 import { strategicPlanRepository } from '@/components/owner/strategic/strategicPlanLiveRepository'
 import { MONTHS, consolidateValues, getConsolidatedLabel, SELECTED_MONTH_INDEX } from '@/components/owner/strategic/strategicUtils'
+import {
+  BASE44_STANDARD_INDICATORS,
+  catalogAliasKeys,
+  matchCanonicalIndicator,
+} from '@/features/admin-mx/indicadores/canonicalBase44Catalog'
+import { buildOfficialMonthlyGrid, readOfficialMonthValue } from '@/features/admin-mx/indicadores/metasRealizados'
+import { planSalesOtherRepairs, repairOwnerStrategicPlanData } from './repairOwnerStrategicPlanData'
+import {
+  ownerStrategicPlanQueryKey,
+  type OwnerStrategicPlanQueryScope,
+} from './ownerStrategicPlanQueryKey'
 import type {
   StrategicActionPayload,
   StrategicHistoryEntry,
+  StrategicPlanLoadInput,
   StrategicPlanRepository,
   StrategicSeries,
 } from './strategicPlan.types'
@@ -91,6 +103,39 @@ function numberOrNull(value: unknown): number | null {
   return Number.isFinite(parsed) ? parsed : null
 }
 
+const OFFICIAL_AREA: Record<string, string> = {
+  Comercial: 'Vendas',
+  Marketing: 'Marketing',
+  'Produto e Estoque': 'Estoque',
+  Financeiro: 'Financeiro',
+  Operações: 'Operacional',
+  'Pessoas - RH': 'Operacional',
+}
+
+function seriesLookupKeys(series: StrategicSeries): string[] {
+  const keys = [series.metricCode, series.id, series.code].filter(Boolean).map(String)
+  const canon = matchCanonicalIndicator(String(series.metricCode || series.code || series.id || ''))
+  if (canon) keys.push(...catalogAliasKeys(canon.code))
+  return [...new Set(keys)]
+}
+
+function rowsForSeries(
+  series: StrategicSeries,
+  byIndicator: Map<string, PersistedValueRow[]>,
+): PersistedValueRow[] {
+  const seen = new Set<string>()
+  const rows: PersistedValueRow[] = []
+  for (const key of seriesLookupKeys(series)) {
+    for (const row of byIndicator.get(key) ?? []) {
+      const id = `${row.month}|${row.indicator_code}`
+      if (seen.has(id)) continue
+      seen.add(id)
+      rows.push(row)
+    }
+  }
+  return rows
+}
+
 function overlaySeries(base: StrategicSeries, rows: PersistedValueRow[]): StrategicSeries {
   const targetValues = [...base.targetValues]
   const currentValues = [...base.currentValues]
@@ -103,6 +148,79 @@ function overlaySeries(base: StrategicSeries, rows: PersistedValueRow[]): Strate
     if (row.ano_anterior !== null && row.ano_anterior !== undefined) previousYearValues[index] = numberOrNull(row.ano_anterior)
   }
   return { ...base, targetValues, currentValues, previousYearValues }
+}
+
+function officialSeriesTemplate(code: string): StrategicSeries | null {
+  const canon = matchCanonicalIndicator(code) ?? BASE44_STANDARD_INDICATORS.find(item => item.code === code)
+  if (!canon) return null
+  const empty = Array.from({ length: 12 }, () => null)
+  return {
+    id: canon.code,
+    code: canon.code,
+    metricCode: canon.code,
+    name: canon.name,
+    area: OFFICIAL_AREA[canon.area] || canon.area,
+    direction: canon.target_calculation_mode === 'CALCULATED_LOCKED' ? 'increase' : 'increase',
+    formula_expression: canon.formula_expression,
+    displayFormat: 'integer',
+    aggregationMode: 'sum',
+    decimalPlaces: 0,
+    unitLabel: 'unidades',
+    targetValues: [...empty],
+    currentValues: [...empty],
+    previousYearValues: [...empty],
+  }
+}
+
+function mergeOfficialPlanningSeries(
+  base: StrategicSeries[],
+  byIndicator: Map<string, PersistedValueRow[]>,
+): StrategicSeries[] {
+  const merged = base.map(item => overlaySeries(item, rowsForSeries(item, byIndicator)))
+  const hasOfficial = [...byIndicator.keys()].some(key => matchCanonicalIndicator(key))
+  if (!hasOfficial) return hydrateOfficialComputed(merged)
+
+  const present = new Set(merged.flatMap(item => seriesLookupKeys(item).map(key => key.toLowerCase())))
+  for (const canon of BASE44_STANDARD_INDICATORS) {
+    if (present.has(canon.code.toLowerCase())) continue
+    const template = officialSeriesTemplate(canon.code)
+    if (!template) continue
+    merged.push(overlaySeries(template, rowsForSeries(template, byIndicator)))
+    present.add(canon.code.toLowerCase())
+  }
+  return hydrateOfficialComputed(merged)
+}
+
+function hydrateOfficialComputed(seriesList: StrategicSeries[]): StrategicSeries[] {
+  if (seriesList.length === 0) return seriesList
+  const indicators = seriesList.map(item => ({
+    code: String(item.metricCode || item.code),
+    formula_expression: typeof item.formula_expression === 'string'
+      ? item.formula_expression
+      : matchCanonicalIndicator(String(item.metricCode || item.code))?.formula_expression ?? null,
+  }))
+  const values = seriesList.flatMap(item => {
+    const code = String(item.metricCode || item.code)
+    return item.targetValues.map((meta, index) => ({
+      loja_id: 'owner',
+      indicator_code: code,
+      year: 0,
+      month: index + 1,
+      meta,
+      realizado: item.currentValues[index] ?? null,
+      ano_anterior: item.previousYearValues[index] ?? null,
+    }))
+  })
+  const grid = buildOfficialMonthlyGrid(values, indicators, 'owner')
+  return seriesList.map(item => {
+    const code = String(item.metricCode || item.code)
+    return {
+      ...item,
+      targetValues: item.targetValues.map((_, index) => readOfficialMonthValue(grid, indicators, code, index + 1, 'meta')),
+      currentValues: item.currentValues.map((_, index) => readOfficialMonthValue(grid, indicators, code, index + 1, 'realizado')),
+      previousYearValues: item.previousYearValues.map((_, index) => readOfficialMonthValue(grid, indicators, code, index + 1, 'ano_anterior')),
+    }
+  })
 }
 
 function csvCell(value: unknown): string {
@@ -119,15 +237,38 @@ export function createStrategicPlanLiveSource({
   let cache: {
     storeId: string | null
     year: number
+    input: StrategicPlanLoadInput
+    queryKey: readonly unknown[]
     series: StrategicSeries[]
     histories: HistoryRow[]
     actions: Array<Record<string, unknown>>
-  } = { storeId: null, year: new Date().getFullYear(), series: [], histories: [], actions: [] }
+  } = {
+    storeId: null,
+    year: new Date().getFullYear(),
+    input: { storeId: null, year: new Date().getFullYear() },
+    queryKey: [],
+    series: [],
+    histories: [],
+    actions: [],
+  }
   let preferences = legacyRepository.getPreferences?.() ?? {}
 
-  const reload = async (storeId: string | null, year: number) => {
+  const scopeOf = (input: StrategicPlanLoadInput): OwnerStrategicPlanQueryScope => ({
+    clientAccountId: input.clientId ?? null,
+    strategicPlanVersionId: input.versionId ?? null,
+    referenceYear: input.year,
+    referenceMonth: input.month ?? null,
+    selectedValueView: input.view ?? null,
+    scopeType: input.scopeType ?? (input.storeId ? 'STORE' : 'CONSOLIDATED'),
+    storeId: input.storeId,
+  })
+
+  const reload = async (input: StrategicPlanLoadInput) => {
+    const storeId = input.storeId
+    const year = input.year
+    const queryKey = ownerStrategicPlanQueryKey(scopeOf(input))
     if (!storeId) {
-      cache = { storeId: null, year, series: [], histories: [], actions: [] }
+      cache = { storeId: null, year, input, queryKey, series: [], histories: [], actions: [] }
       return
     }
 
@@ -157,11 +298,35 @@ export function createStrategicPlanLiveSource({
       byIndicator.set(row.indicator_code, list)
     }
 
+    const planningRows = persisted.map(row => ({
+      loja_id: storeId,
+      indicator_code: row.indicator_code,
+      year,
+      month: row.month,
+      meta: numberOrNull(row.meta),
+      realizado: numberOrNull(row.realizado),
+      ano_anterior: numberOrNull(row.ano_anterior),
+    }))
+    const planned = planSalesOtherRepairs(planningRows, [storeId], year)
+    if (planned.write.length) {
+      await repairOwnerStrategicPlanData({
+        storeId,
+        clientAccountId: input.clientId,
+        strategicPlanVersionId: input.versionId,
+        referenceYear: year,
+        persist: true,
+        values: planningRows,
+        unitIds: [storeId],
+      })
+    }
+
     const base = (legacyRepository.getOverviewData(year) ?? []) as StrategicSeries[]
     cache = {
       storeId,
       year,
-      series: base.map(item => overlaySeries(item, byIndicator.get(String(item.metricCode || '')) ?? byIndicator.get(item.id) ?? byIndicator.get(item.code) ?? [])),
+      input,
+      queryKey,
+      series: mergeOfficialPlanningSeries(base, byIndicator),
       histories: historyResult.data ?? [],
       actions: legacyRepository.getActionItems() ?? [],
     }
@@ -180,7 +345,7 @@ export function createStrategicPlanLiveSource({
   }
 
   return {
-    async load({ storeId, year }) { await reload(storeId, year) },
+    async load(input) { await reload(input) },
     getOverviewData() { return cache.series },
     getIndicatorById(id) { return findSeries(id) },
     getIndicatorSeries(id) { return findSeries(id) },
@@ -209,7 +374,7 @@ export function createStrategicPlanLiveSource({
           : null,
       })
       if (result.error) throw result.error
-      await reload(cache.storeId, cache.year)
+      await reload(cache.input)
     },
     getPreferences() { return preferences },
     setPreferences(input) {
@@ -226,7 +391,7 @@ export function createStrategicPlanLiveSource({
         p_note: note || null,
       })
       if (result.error) throw result.error
-      await reload(cache.storeId, year)
+      await reload({ ...cache.input, year })
     },
     async createActionItem(payload: StrategicActionPayload) {
       if (!cache.storeId) throw new Error('Nenhuma unidade selecionada para criar a ação.')
@@ -252,7 +417,7 @@ export function createStrategicPlanLiveSource({
         p_note: payload.note || null,
       })
       if (result.error) throw result.error
-      await reload(cache.storeId, cache.year)
+      await reload(cache.input)
       return cache.actions.find(action => aliases.includes(String(action.indicator || '')) || aliases.includes(String(action.indicatorCode || '')))
         ?? (result.data as Record<string, unknown> | null)
     },

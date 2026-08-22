@@ -1,11 +1,33 @@
 // Utilitários do Plano Estratégico: formatação, cálculos, estilos e constantes.
 import { formatBRL, formatNumber, formatPercent } from "@/features/owner/lib/ownerFormatters";
 import { chartTokens } from "@/lib/charts/tokens";
+import { resolveLastClosedCompetence } from "@/features/strategic-plan/competence";
 
 export const MONTHS = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 export const MONTHS_FULL = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-export const SELECTED_MONTH_INDEX = 6; // Julho
+export const SELECTED_MONTH_INDEX = 6; // fallback da gravação (Julho/2026)
 export const REFERENCE_YEAR = 2026;
+
+/** Competência padrão: último mês encerrado (M-1) no fuso de São Paulo. */
+export function resolveDefaultSelectedMonthIndex(year, now = new Date()) {
+  const competence = resolveLastClosedCompetence(year, now);
+  if (competence.targetActualMonth != null) return competence.targetActualMonth - 1;
+  if (competence.isPlanPastYear) return 11;
+  return SELECTED_MONTH_INDEX;
+}
+
+export function isActualMonthClosed(monthIndex, year, now = new Date()) {
+  const competence = resolveLastClosedCompetence(year, now);
+  if (competence.actualHasNoClosedMonth) return false;
+  if (competence.targetActualMonth == null) return competence.isPlanPastYear;
+  return monthIndex + 1 <= competence.targetActualMonth;
+}
+
+export function seriesValuesForView(series, view) {
+  if (view === "realizado") return series.currentValues;
+  if (view === "ano_anterior") return series.previousYearValues;
+  return series.targetValues;
+}
 
 export const VIEW_OPTIONS = [
   { value: "meta", label: "Meta" },
@@ -80,6 +102,10 @@ export function calculatePercentageOfTarget(current, target) {
   if (current === null || current === undefined || current === "—") return null;
   if (!target || target === 0) return null;
   return (current / target) * 100;
+}
+
+export function calculateIndicatorAttainment(current, target) {
+  return calculatePercentageOfTarget(current, target);
 }
 
 export function calculateVariation(current, previous) {

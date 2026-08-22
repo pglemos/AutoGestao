@@ -21,6 +21,7 @@ export const CONSOLIDATED_SCOPE = 'CONSOLIDADO' as const
 export type PlanningScope = typeof CONSOLIDATED_SCOPE | string
 
 export type ClientScopeState = {
+  clientId: string | null
   units: ClientUnit[]
   /** Valores mensais de todas as unidades ativas; usado pela prontidão do ciclo. */
   values: PlanningValueRow[]
@@ -41,6 +42,7 @@ export function useClientScope(
   year: number,
   indicators: ConsolidationIndicator[],
 ): ClientScopeState {
+  const [clientId, setClientId] = useState<string | null>(null)
   const [units, setUnits] = useState<ClientUnit[]>([])
   const [rows, setRows] = useState<PlanningValueRow[]>([])
   const [loading, setLoading] = useState(false)
@@ -51,6 +53,7 @@ export function useClientScope(
 
   useEffect(() => {
     if (!storeId) {
+      setClientId(null)
       setUnits([])
       setRows([])
       setError(null)
@@ -66,6 +69,7 @@ export function useClientScope(
       if (client.error || !client.clientId) {
         // Loja sem cliente vinculado continua funcionando como sempre: uma loja,
         // sem consolidado. Não é erro de tela.
+        setClientId(null)
         setUnits([])
         setRows([])
         setError(client.error)
@@ -73,6 +77,7 @@ export function useClientScope(
         return
       }
 
+      setClientId(client.clientId)
       const unitsResult = await fetchClientUnits(client.clientId)
       if (!active) return
       if (unitsResult.error) {
@@ -110,5 +115,5 @@ export function useClientScope(
     })
   }, [supportsConsolidated, rows, units, indicators])
 
-  return { units, values: rows, supportsConsolidated, consolidated, loading, error, reload }
+  return { clientId, units, values: rows, supportsConsolidated, consolidated, loading, error, reload }
 }

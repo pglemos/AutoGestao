@@ -3,7 +3,9 @@ import { Button } from '@/components/atoms/Button'
 import { REPAIRABLE_CHECKS, type RepairKey, runClientRepair } from './clientRepairs'
 import { buildClientReadiness, type ReadinessCheck, readinessSummary } from './clientReadiness'
 import { resolveOwnerMaster } from './personAccess'
-import { fetchCurrentCycle, validateCycleReadiness } from '@/features/strategic-plan/planCycleRepository'
+import { buildPublicationCardFromRows } from '@/features/strategic-plan/planCycle'
+import { fetchClientProductPackage, fetchClientUnits, fetchUnitsPlanningValues } from '@/features/strategic-plan/clientPlanningRepository'
+import { fetchCurrentCycle } from '@/features/strategic-plan/planCycleRepository'
 import { Modal } from '@/components/organisms/Modal'
 import { MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
 import { supabase } from '@/lib/supabase'
@@ -16,9 +18,10 @@ interface PendenciasModalProps {
   clientName: string
   onClose: () => void
   onRefetch: () => void
+  onCorrect?: (check: ReadinessCheck) => void
 }
 
-export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch }: PendenciasModalProps) {
+export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch, onCorrect }: PendenciasModalProps) {
   const { supabaseUser } = useAuth()
   const [checks, setChecks] = useState<ReadinessCheck[]>([])
   const [loading, setLoading] = useState(false)
@@ -58,8 +61,21 @@ export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch
 
       const ownerMasterResolution = accessRes.data?.length ? resolveOwnerMaster(accessRes.data) : { status: 'NOT_CONFIGURED' as const, count: 0 }
 
-      const { cycle: planCycle } = await fetchCurrentCycle(clientId, new Date().getFullYear())
-      const planReadiness = planCycle ? (await validateCycleReadiness(planCycle.id)).readiness : null
+      const year = new Date().getFullYear()
+      const { cycle: planCycle } = await fetchCurrentCycle(clientId, year)
+      const [planUnits, planPackage] = planCycle
+        ? await Promise.all([fetchClientUnits(clientId), fetchClientProductPackage(clientId)])
+        : [{ units: [] }, { ok: false as const, reason: 'CLIENTE_SEM_PRODUTO' as const, message: '', product: null }]
+      const planRows = planCycle
+        ? (await fetchUnitsPlanningValues(planUnits.units.filter(unit => unit.active).map(unit => unit.id), year)).rows
+        : []
+      const publicationCard = planCycle
+        ? buildPublicationCardFromRows({
+            cycleStatus: planCycle.status,
+            rosterCodes: planPackage.ok ? planPackage.resolution.indicatorCodes : [],
+            rows: planRows,
+          })
+        : null
 
       const builtChecks = buildClientReadiness({
         status: client.status ?? null,
@@ -80,13 +96,15 @@ export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch
           id: ownerMasterResolution.person?.id ?? null,
           name: ownerMasterResolution.person?.nome ?? null,
           email: ownerMasterResolution.person?.email ?? null,
+          personStatus: ownerMasterResolution.person?.status ?? null,
         },
-        strategic_plan_ready: planCycle
+        strategic_plan_ready: planCycle && publicationCard
           ? {
               cycleStatus: planCycle.status,
-              total: planReadiness?.total ?? 0,
-              ready: planReadiness?.ready ?? 0,
-              pending: planReadiness?.pending ?? 0,
+              total: publicationCard.indicadoresComMeta + publicationCard.metasPendentes,
+              ready: publicationCard.metasPublicadas,
+              pending: publicationCard.metasPendentes,
+              indicadoresComMeta: publicationCard.indicadoresComMeta,
             }
           : null,
       })
@@ -164,6 +182,10 @@ export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch
                           onClick={() => handleRepair(check.key as RepairKey)}
                         >
                           {repairing === check.key ? 'Reparando...' : 'Reparar'}
+                        </Button>
+                      ) : !check.ok && onCorrect && check.correctionRoute ? (
+                        <Button variant="outline" size="sm" onClick={() => onCorrect(check)}>
+                          Corrigir
                         </Button>
                       ) : null}
                       <span className="text-xs font-semibold text-status-error-text">Pendente</span>

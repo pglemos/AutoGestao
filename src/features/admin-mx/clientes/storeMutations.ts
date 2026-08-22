@@ -1,7 +1,9 @@
 import { supabase } from '@/lib/supabase'
+import { isOrphanTestUnit } from './mergeClientPeople'
 import { onlyDigits } from '../novo-cliente/newClientDraft'
 import { validateStoreDraft, type StoreDraft } from './storeForm'
-import type { OperatingHoursMap, StoredOperatingHourRow } from './storeOperatingHours'
+import { DEFAULT_MX_HOURS, type OperatingHoursMap, type StoredOperatingHourRow } from './storeOperatingHours'
+import type { DisplayClientUnit } from './mergeClientPeople'
 
 export type UnitRow = {
   id: string
@@ -23,6 +25,86 @@ export type UnitRow = {
   status: string | null
   opening_date: string | null
   notes: string | null
+  /** True quando a loja existe na operação e ainda não tem linha em unidades. */
+  synthetic?: boolean
+}
+
+/**
+ * Apaga unidades de teste sem loja (ex.: "TESTE QA REMOVER"). Horários da
+ * unidade saem primeiro para não deixar órfão em `horarios_funcionamento_unidade`.
+ */
+export async function deleteOrphanTestUnits(unitIds: readonly string[]): Promise<{ deleted: number; error: string | null }> {
+  const ids = [...new Set(unitIds.filter(Boolean))]
+  if (!ids.length) return { deleted: 0, error: null }
+  const { data: rows, error: loadError } = await supabase
+    .from('unidades_cliente_consultoria')
+    .select('id, name, store_id')
+    .in('id', ids)
+  if (loadError) return { deleted: 0, error: loadError.message }
+  const junk = (rows ?? []).filter(isOrphanTestUnit).map(row => row.id)
+  if (!junk.length) return { deleted: 0, error: null }
+  const { error: hoursError } = await supabase
+    .from('horarios_funcionamento_unidade')
+    .delete()
+    .in('unidade_id', junk)
+  if (hoursError) return { deleted: 0, error: hoursError.message }
+  const { data, error } = await supabase
+    .from('unidades_cliente_consultoria')
+    .delete()
+    .in('id', junk)
+    .select('id')
+  if (error) return { deleted: 0, error: error.message }
+  return { deleted: data?.length ?? 0, error: null }
+}
+
+/**
+ * Grava no cadastro as filiais que já existem em `lojas` e ainda não têm
+ * linha em `unidades_cliente_consultoria`. Sem isso, 3 Piso e Tito da AG
+ * apareciam só como "Filial operacional", sem editar nem horário.
+ */
+export async function ensureOperationalUnitRows(input: {
+  clientId: string
+  createdBy?: string | null
+  units: ReadonlyArray<DisplayClientUnit>
+}): Promise<{ created: number; error: string | null }> {
+  const missing = input.units.filter(unit => unit.synthetic && unit.store_id)
+  if (!missing.length) return { created: 0, error: null }
+
+  const now = new Date().toISOString()
+  const { data, error } = await supabase
+    .from('unidades_cliente_consultoria')
+    .insert(missing.map(unit => ({
+      client_id: input.clientId,
+      store_id: unit.store_id,
+      name: unit.name,
+      city: unit.city,
+      state: unit.state,
+      is_primary: unit.is_primary,
+      store_type: unit.store_type,
+      cnpj: unit.cnpj,
+      status: unit.status === 'inativa' ? 'inativa' : 'ativa',
+      timezone: 'America/Sao_Paulo',
+      created_by: input.createdBy ?? null,
+      updated_at: now,
+    })))
+    .select('id')
+  if (error) return { created: 0, error: error.message }
+
+  const createdIds = (data ?? []).map(row => row.id)
+  if (createdIds.length) {
+    const hours = createdIds.flatMap(unitId => DEFAULT_MX_HOURS.map(entry => ({
+      unidade_id: unitId,
+      day_of_week: entry.day_of_week,
+      is_open: entry.is_open,
+      opening_time: entry.is_open ? entry.opening_time : null,
+      closing_time: entry.is_open ? entry.closing_time : null,
+      status: 'ativo',
+      origin: 'Visão 360 — filial operacional',
+    })))
+    const { error: hoursError } = await supabase.from('horarios_funcionamento_unidade').insert(hours)
+    if (hoursError) return { created: createdIds.length, error: hoursError.message }
+  }
+  return { created: createdIds.length, error: null }
 }
 
 /** Carrega as unidades do cliente com os campos novos. */

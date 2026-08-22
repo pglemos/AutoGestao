@@ -5,7 +5,10 @@ import {
   clientBuckets,
   clientStoreIds,
   clientTeamStat,
+  excludeBranchClients,
   filterPortfolio,
+  parentClientOf,
+  branchClientsToArchive,
   isRenewalNear,
   journeyLabel,
   nextAction,
@@ -26,7 +29,7 @@ function client(overrides: Partial<PortfolioClient> = {}): PortfolioClient {
     status: 'ativo', business_phase: 'CRESCIMENTO', product_name: 'PMR 7', program_template_key: 'pmr_7',
     structure_type: 'LOJA_UNICA', primary_store_id: 's1', implementation_owner_id: 'u1',
     implementation_owner_name: 'Ana', contract_end_date: null, onboarding_step: 7, onboarding_completed: true,
-    primary_store_city: 'São Paulo', main_contact_name: 'Carlos Dono',
+    primary_store_city: 'São Paulo', main_contact_name: 'Carlos Dono', hasDonoMaster: true,
     units: 1, users: 4, visitsDone: 7, visitsTotal: 7, modulesEnabled: 3, assignments: 1,
     ...overrides,
   }
@@ -83,6 +86,40 @@ describe('equipe do cliente somada nas lojas dele', () => {
   })
 })
 
+describe('filiais não entram na carteira como clientes', () => {
+  const lojas = [
+    { id: 'matriz', parent_loja_id: null },
+    { id: 'piso3', parent_loja_id: 'matriz' },
+    { id: 'tito', parent_loja_id: 'matriz' },
+    { id: 'orfa', parent_loja_id: 'sumida' },
+  ]
+
+  test('esconde 3 Piso e Tito quando a matriz já é cliente', () => {
+    const rows = [
+      client({ id: 'ag', name: 'AG AUTOMÓVEIS', primary_store_id: 'matriz', units: 3 }),
+      client({ id: 'ag-3', name: 'AG AUTOMÓVEIS - 3 PISO', primary_store_id: 'piso3', units: 1 }),
+      client({ id: 'ag-tito', name: 'AG AUTOMÓVEIS - TITO', primary_store_id: 'tito', units: 1 }),
+    ]
+    expect(excludeBranchClients(rows, lojas).map(row => row.id)).toEqual(['ag'])
+  })
+
+  test('mantém filial órfã se a matriz não está na carteira', () => {
+    const rows = [client({ id: 'orfa', primary_store_id: 'orfa' })]
+    expect(excludeBranchClients(rows, lojas)).toHaveLength(1)
+  })
+
+  test('aponta a matriz como pai e só arquiva filial sem jornada', () => {
+    const rows = [
+      client({ id: 'ag', name: 'AG AUTOMÓVEIS', primary_store_id: 'matriz', slug: 'ag-automoveis', visitsTotal: 11 }),
+      client({ id: 'ag-3', name: 'AG 3 PISO', primary_store_id: 'piso3', slug: 'ag-3', visitsTotal: 0 }),
+      client({ id: 'ag-tito', name: 'AG TITO', primary_store_id: 'tito', slug: 'ag-tito', visitsTotal: 0 }),
+      client({ id: 'com-visita', name: 'Filial com jornada', primary_store_id: 'piso3', visitsTotal: 3 }),
+    ]
+    expect(parentClientOf(rows[1], rows, lojas)?.id).toBe('ag')
+    expect(branchClientsToArchive(rows, lojas).map(row => row.id)).toEqual(['ag-3', 'ag-tito'])
+  })
+})
+
 describe('impedimentos de ativação', () => {
   test('cliente completo não tem bloqueio', () => {
     expect(activationBlockers(client())).toEqual([])
@@ -122,6 +159,10 @@ describe('cards da carteira', () => {
 
   test('onboarding aberto entra em cadastros pendentes', () => {
     expect(clientBuckets(client({ onboarding_completed: false }), HOJE)).toContain('cadastros_pendentes')
+  })
+
+  test('ativo sem Dono Master entra em bloqueios', () => {
+    expect(clientBuckets(client({ hasDonoMaster: false }), HOJE)).toContain('com_bloqueios')
   })
 
   test('contadores somam por card', () => {

@@ -1,6 +1,6 @@
 // Leitura executiva do indicador — texto determinístico baseado nos dados.
 import { ShoppingCart, Megaphone, Package, Wallet, Settings, BookOpen } from "lucide-react";
-import { formatCellValue, calculatePercentageOfTarget, consolidateValues, SELECTED_MONTH_INDEX, MONTHS_FULL, AREA_STYLES } from "./strategicUtils";
+import { formatCellValue, calculatePercentageOfTarget, consolidateValues, SELECTED_MONTH_INDEX, REFERENCE_YEAR, MONTHS_FULL, AREA_STYLES, isActualMonthClosed } from "./strategicUtils";
 
 const AREA_ICONS = {
   Vendas: ShoppingCart,
@@ -10,12 +10,12 @@ const AREA_ICONS = {
   Operacional: Settings,
 };
 
-export default function StrategicIndicatorReading({ series }) {
+export default function StrategicIndicatorReading({ series, monthIndex = SELECTED_MONTH_INDEX, year = REFERENCE_YEAR }) {
   if (!series) return null;
   const { targetValues, currentValues, previousYearValues, displayFormat, decimalPlaces, direction, aggregationMode, unitLabel, area } = series;
   const areaStyle = AREA_STYLES[area] || {};
   const AreaIcon = AREA_ICONS[area] || BookOpen;
-  const idx = SELECTED_MONTH_INDEX;
+  const idx = monthIndex;
   const meta = targetValues[idx];
   const resultado = currentValues[idx];
   const pct = calculatePercentageOfTarget(resultado, meta);
@@ -27,7 +27,9 @@ export default function StrategicIndicatorReading({ series }) {
 
   let mainText = "";
   let distanceText = "";
-  if (resultado === null) {
+  if (!isActualMonthClosed(idx, year)) {
+    mainText = `A competência de ${MONTHS_FULL[idx]} ainda não encerrada. A meta pode aparecer; o resultado atual e o % da meta ficam indisponíveis até o fechamento.`;
+  } else if (resultado === null) {
     mainText = "Ainda não há resultado registrado para este indicador no período.";
   } else if (meta === 0) {
     mainText = "Este indicador ainda não possui uma meta definida para o período.";

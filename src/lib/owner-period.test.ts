@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'bun:test'
-import { computePeriodRange, resolveOwnerPeriodRange } from './owner-period'
+import { computePeriodRange, ownerClosedMonthLabel, resolveOwnerPeriodRange } from './owner-period'
 
 describe('Dono — intervalos do seletor de período', () => {
   const now = new Date(2026, 6, 22, 12, 0, 0)
 
-  test('mês começa no primeiro dia local e termina na data de referência', () => {
-    expect(resolveOwnerPeriodRange('month', now)).toEqual({ start: '2026-07-01', end: '2026-07-22' })
+  test('mês usa a competência fechada (M-1), não o calendário aberto', () => {
+    expect(resolveOwnerPeriodRange('month', now)).toEqual({ start: '2026-06-01', end: '2026-06-30' })
   })
 
   test('trimestre e ano usam o início correto sem deslocamento UTC', () => {
@@ -20,10 +20,10 @@ describe('Dono — intervalos do seletor de período', () => {
     })
   })
 
-  test('intervalo personalizado inválido recua para mês seguro', () => {
+  test('intervalo personalizado inválido recua para competência fechada', () => {
     expect(resolveOwnerPeriodRange('custom', now, '2026-07-10', '2026-07-05')).toEqual({
-      start: '2026-07-01',
-      end: '2026-07-22',
+      start: '2026-06-01',
+      end: '2026-06-30',
     })
   })
 
@@ -36,5 +36,9 @@ describe('Dono — intervalos do seletor de período', () => {
   test('normaliza o dia antes de recuar o mês no trimestre', () => {
     const range = computePeriodRange('quarter', new Date(2026, 4, 31, 12, 0, 0))
     expect(range.start).toEqual(new Date(2026, 3, 1, 0, 0, 0))
+  })
+
+  test('rótulo do mês é a competência fechada', () => {
+    expect(ownerClosedMonthLabel(now)).toBe('Junho/2026')
   })
 })

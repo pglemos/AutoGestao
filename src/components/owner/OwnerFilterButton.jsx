@@ -1,17 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { useOwnerOptional } from "@/components/owner/OwnerContext";
+import { ALL_OWNER_UNITS } from "@/components/owner/ownerPlanningAdapter";
 import { formatDateTime } from "@/features/owner/lib/ownerFormatters";
+import { ownerClosedMonthLabel } from "@/lib/owner-period";
 import { cn } from "@/lib/utils";
 import { Check, ChevronDown, RefreshCw, SlidersHorizontal } from "lucide-react";
 
-const PERIODS = [
-  { value: "month", label: "Mês atual" },
-  { value: "quarter", label: "Trimestre atual" },
-  { value: "year", label: "Ano atual" },
-  { value: "custom", label: "Período personalizado" },
-];
-
-const ALL_UNITS = "all";
+function periodOptions() {
+  return [
+    { value: "month", label: ownerClosedMonthLabel() },
+    { value: "quarter", label: "Trimestre atual" },
+    { value: "year", label: "Ano atual" },
+    { value: "custom", label: "Período personalizado" },
+  ];
+}
 
 function Option({ active, children, onClick }) {
   return (
@@ -70,11 +72,12 @@ export default function OwnerFilterButton({ lastUpdated }) {
     reload,
   } = owner;
 
+  const periods = periodOptions();
   const unitLabel =
-    unitId === ALL_UNITS
+    unitId === ALL_OWNER_UNITS
       ? "Todas as lojas"
       : currentUnits.find((unit) => unit.id === unitId)?.name || "Selecionar loja";
-  const periodLabel = PERIODS.find((entry) => entry.value === period)?.label || "Mês atual";
+  const periodLabel = periods.find((entry) => entry.value === period)?.label || ownerClosedMonthLabel();
 
   return (
     <div className="relative" ref={containerRef}>
@@ -102,11 +105,24 @@ export default function OwnerFilterButton({ lastUpdated }) {
             Loja
           </p>
           <div className="max-h-52 overflow-y-auto">
-            <Option active={unitId === ALL_UNITS} onClick={() => setUnitId(ALL_UNITS)}>
+            <Option
+              active={unitId === ALL_OWNER_UNITS}
+              onClick={() => {
+                setUnitId(ALL_OWNER_UNITS);
+                setOpen(false);
+              }}
+            >
               Todas as lojas
             </Option>
             {currentUnits.map((unit) => (
-              <Option key={unit.id} active={unitId === unit.id} onClick={() => setUnitId(unit.id)}>
+              <Option
+                key={unit.id}
+                active={unitId === unit.id}
+                onClick={() => {
+                  setUnitId(unit.id);
+                  setOpen(false);
+                }}
+              >
                 {unit.name}
               </Option>
             ))}
@@ -117,11 +133,14 @@ export default function OwnerFilterButton({ lastUpdated }) {
           <p className="px-2.5 pb-1 text-caption font-semibold uppercase tracking-[0.08em] text-muted-foreground">
             Período
           </p>
-          {PERIODS.map((entry) => (
+          {periods.map((entry) => (
             <Option
               key={entry.value}
               active={period === entry.value}
-              onClick={() => setPeriod(entry.value)}
+              onClick={() => {
+                setPeriod(entry.value);
+                if (entry.value !== "custom") setOpen(false);
+              }}
             >
               {entry.label}
             </Option>

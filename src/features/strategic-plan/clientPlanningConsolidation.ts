@@ -154,9 +154,11 @@ export function consolidateClientPlanning({
 
     // Unidade sem nenhum registro ainda é unidade: precisa constar do
     // denominador para que o consolidado saia PARCIAL em vez de COMPLETO.
-    for (const code of Object.keys(unitMonthlyMap)) {
+    const expectedUnitIds = active.map(unit => unit.id)
+    for (const indicator of indicators) {
+      if (!unitMonthlyMap[indicator.code]) unitMonthlyMap[indicator.code] = {}
       for (const unit of active) {
-        if (!unitMonthlyMap[code][unit.id]) unitMonthlyMap[code][unit.id] = {}
+        if (!unitMonthlyMap[indicator.code][unit.id]) unitMonthlyMap[indicator.code][unit.id] = {}
       }
     }
 
@@ -167,6 +169,7 @@ export function consolidateClientPlanning({
       policies,
       params,
       blankPolicy,
+      expectedUnitIds,
     })
 
     const valueMap: Record<string, Record<number, number | null>> = {}

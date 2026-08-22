@@ -39,8 +39,18 @@ export type StrategicHistoryEntry = {
   note?: string | null
 }
 
+export type StrategicPlanLoadInput = {
+  storeId: string | null
+  year: number
+  clientId?: string | null
+  versionId?: string | null
+  month?: number | null
+  view?: string | null
+  scopeType?: string | null
+}
+
 export type StrategicPlanRepository = {
-  load(input: { storeId: string | null; year: number }): Promise<void>
+  load(input: StrategicPlanLoadInput): Promise<void>
   getOverviewData(year?: number): StrategicSeries[]
   getIndicatorById(id: string): StrategicSeries | null
   getIndicatorSeries(id: string, year?: number): StrategicSeries | null

@@ -2,13 +2,13 @@
 import React, { useRef, useEffect } from "react";
 import { MONTHS, SELECTED_MONTH_INDEX, formatCellValue, calculatePercentageOfTarget, calculateVariation, consolidateValues, getConsolidatedLabel, getStatusFromPercentage, STATUS_STYLES, AREA_STYLES, formatVariation } from "./strategicUtils";
 
-export default function StrategicIndicatorComparisonTable({ series, height = 360 }) {
+export default function StrategicIndicatorComparisonTable({ series, height = 360, monthIndex = SELECTED_MONTH_INDEX }) {
   const scrollRef = useRef(null);
 
   useEffect(() => {
     if (!scrollRef.current) return;
     const container = scrollRef.current;
-    const targetCell = container.querySelector(`[data-month-idx="${SELECTED_MONTH_INDEX}"]`);
+    const targetCell = container.querySelector(`[data-month-idx="${monthIndex}"]`);
     if (targetCell) {
       const cellLeft = targetCell.offsetLeft;
       const cellWidth = targetCell.offsetWidth;
@@ -16,11 +16,11 @@ export default function StrategicIndicatorComparisonTable({ series, height = 360
       const scrollLeft = cellLeft - containerWidth / 2 + cellWidth / 2;
       container.scrollTo({ left: Math.max(0, scrollLeft), behavior: "auto" });
     }
-  }, [series]);
+  }, [series, monthIndex]);
 
   if (!series) return null;
   const { targetValues, currentValues, previousYearValues, displayFormat, decimalPlaces, direction, aggregationMode, area } = series;
-  const idx = SELECTED_MONTH_INDEX;
+  const idx = monthIndex;
   const consLabel = getConsolidatedLabel(aggregationMode, idx);
   const areaStyle = AREA_STYLES[area] || {};
 

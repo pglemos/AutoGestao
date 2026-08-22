@@ -18,6 +18,7 @@ import {
 } from '@/features/strategic-plan/clientPlanningRepository'
 import type { ClientUnit } from '@/features/strategic-plan/clientUnits'
 import type { ProductPackageResolution } from '@/features/strategic-plan/clientProductPackage'
+import { buildPublicationCardFromRows } from '@/features/strategic-plan/planCycle'
 import { fetchCurrentCycle, validateCycleReadiness, type PlanCycle } from '@/features/strategic-plan/planCycleRepository'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/organisms/Table'
 
@@ -116,6 +117,14 @@ export function ClientPlanningContextPanel(props: { clientId: string; clientSlug
       realizado: consolidated?.realizado.valueMap[item.metric_key]?.[month] ?? null,
     }))
   }, [consolidated, month, resolution])
+  const publicationCard = useMemo(() => {
+    if (!state.cycle) return null
+    return buildPublicationCardFromRows({
+      cycleStatus: state.cycle.status,
+      rosterCodes: resolution?.indicatorCodes ?? [],
+      rows: state.values,
+    })
+  }, [resolution?.indicatorCodes, state.cycle, state.values])
   const expectedCells = (resolution?.items.length ?? 0) * activeUnits.length
   const metasPreenchidas = state.values.filter(row => row.month === month && row.meta != null).length
   const realizadosPreenchidos = state.values.filter(row => row.month === month && row.realizado != null).length
@@ -161,7 +170,7 @@ export function ClientPlanningContextPanel(props: { clientId: string; clientSlug
           <div className="rounded-lg border border-border bg-surface-alt p-3"><div className="text-xs text-muted-foreground">Ciclo {year}</div><div className="mt-1 font-semibold text-foreground">{state.cycle ? CYCLE_STATUS_LABEL[state.cycle.status] ?? state.cycle.status : 'Sem ciclo'}</div></div>
           <div className="rounded-lg border border-border bg-surface-alt p-3"><div className="text-xs text-muted-foreground">Indicadores do pacote</div><div className="mt-1 font-semibold text-foreground">{resolution?.items.length ?? 0}</div><div className="text-xs text-muted-foreground">{resolution ? `${resolution.manualCount} manuais · ${resolution.calculatedCount} calculados` : 'Produto sem roster'}</div></div>
           <div className="rounded-lg border border-border bg-surface-alt p-3"><div className="text-xs text-muted-foreground">Unidades consolidadas</div><div className="mt-1 font-semibold text-foreground">{activeUnits.length}</div><div className="text-xs text-muted-foreground">matriz + filiais ativas</div></div>
-          <div className="rounded-lg border border-border bg-surface-alt p-3"><div className="text-xs text-muted-foreground">Prontidão</div><div className="mt-1 font-semibold text-foreground">{state.readiness ? `${state.readiness.ready}/${state.readiness.total}` : '—'}</div><div className="text-xs text-muted-foreground">{state.readiness ? `${state.readiness.pending} pendência(s)` : 'Validação ainda não iniciada'}</div></div>
+          <div className="rounded-lg border border-border bg-surface-alt p-3"><div className="text-xs text-muted-foreground">Indicadores com meta</div><div className="mt-1 font-semibold text-foreground">{publicationCard ? publicationCard.indicadoresComMeta : '—'}</div><div className="text-xs text-muted-foreground">{publicationCard ? `Metas publicadas: ${publicationCard.metasPublicadas} · Pendentes: ${publicationCard.metasPendentes}` : 'Validação ainda não iniciada'}</div></div>
         </div>
 
         {state.readiness && !state.readiness.canPublish ? (

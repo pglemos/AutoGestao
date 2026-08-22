@@ -10,6 +10,7 @@ import {
   consolidateValues,
   formatCellValue,
   getConsolidatedLabel,
+  resolveDefaultSelectedMonthIndex,
 } from "./strategicUtils";
 
 const CHECKIN_SELECT = "reference_date,submission_status,metric_scope,leads_prev_day,agd_cart_prev_day,agd_net_prev_day,vnd_porta_prev_day,vnd_cart_prev_day,vnd_net_prev_day,visit_prev_day";
@@ -56,15 +57,12 @@ export function sumSeries(...series) {
   ));
 }
 
-function currentMonthIndex(year) {
-  const now = new Date();
-  if (year < now.getFullYear()) return 11;
-  if (year > now.getFullYear()) return -1;
-  return now.getMonth();
+function currentMonthIndex(year, now = new Date()) {
+  return resolveDefaultSelectedMonthIndex(year, now);
 }
 
-function maskFuture(values, year) {
-  const selected = currentMonthIndex(year);
+function maskFuture(values, year, now = new Date()) {
+  const selected = currentMonthIndex(year, now);
   return values.map((value, index) => (index > selected ? null : value));
 }
 
@@ -220,7 +218,9 @@ class StrategicPlanLiveRepository {
   getTargetHistory() { return []; }
 
   async updateTargets(indicatorId, _year, values) {
-    if (indicatorId !== "SP-001") {
+    const metric = this.getIndicatorById(indicatorId)?.metricCode || indicatorId;
+    const isSalesTotal = ["SP-001", "SALES_TOTAL", "sales_total"].includes(indicatorId) || ["SALES_TOTAL", "sales_total"].includes(metric);
+    if (!isSalesTotal) {
       throw new Error("Este indicador ainda não possui meta persistida para a unidade selecionada.");
     }
     const normalized = values.map((value) => Number(value));

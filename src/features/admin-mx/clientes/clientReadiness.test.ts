@@ -62,6 +62,16 @@ describe('checklist de prontidão do cliente', () => {
     expect(summary.warnings.map(item => item.key).sort()).toEqual(['cnpj', 'contrato'])
   })
 
+  test('unidade TESTE QA sem loja não conta na estrutura', () => {
+    const checks = buildClientReadiness(input({
+      units: [
+        { name: 'AG AUTOMÓVEIS', is_primary: true, store_id: 'loja-1' },
+        { name: 'TESTE QA REMOVER', is_primary: false, store_id: null },
+      ],
+    }))
+    expect(checks.find(item => item.key === 'unidade')?.detail).toBe('1 unidade(s) cadastrada(s).')
+  })
+
   test('avalia checks adicionais de dono master e jornada gerada quando presentes', () => {
     const checks = buildClientReadiness(input({
       owner_master: { status: 'VALID', name: 'Daniel', email: 'dono@empresa.com' },
@@ -84,7 +94,10 @@ describe('checklist de prontidão do cliente', () => {
     const check = checks.find(c => c.key === 'dono-master')
     expect(check).toBeDefined()
     expect(check?.ok).toBe(false)
+    expect(check?.severity).toBe('impeditivo')
+    expect(check?.correctionRoute).toBe('pessoas')
     expect(check?.detail).toBe('Nenhum Dono Master configurado para esta empresa.')
+    expect(readinessSummary(checks).canActivate).toBe(false)
   })
 
   test('dois donos master ao mesmo tempo geram aviso específico de duplicidade', () => {
@@ -103,7 +116,7 @@ describe('checklist de prontidão do cliente', () => {
     const check = checks.find(c => c.key === 'plano-estrategico')
     expect(check?.ok).toBe(true)
     expect(check?.evaluationStatus).toBe('VALID')
-    expect(check?.detail).toBe('Publicado — 46 de 46 indicador(es) com meta completa.')
+    expect(check?.detail).toBe('Publicado — Indicadores com meta: 46. Metas publicadas: 46. Metas pendentes: 0.')
   })
 
   test('plano estratégico publicado com pendência não some — mostra WARNING, não trava', () => {
@@ -115,18 +128,18 @@ describe('checklist de prontidão do cliente', () => {
     const check = checks.find(c => c.key === 'plano-estrategico')
     expect(check?.ok).toBe(false)
     expect(check?.evaluationStatus).toBe('WARNING')
-    expect(check?.detail).toBe('Publicado — 0 de 46 indicador(es) com meta completa, 46 pendência(s).')
+    expect(check?.detail).toBe('Publicado — Indicadores com meta: 0. Metas publicadas: 0. Metas pendentes: 46.')
     expect(readinessSummary(checks).canActivate).toBe(true) // informativo não bloqueia ativação
   })
 
   test('plano estratégico em rascunho não é tratado como pronto', () => {
     const checks = buildClientReadiness(input({
-      strategic_plan_ready: { cycleStatus: 'rascunho', total: 46, ready: 10, pending: 36 },
+      strategic_plan_ready: { cycleStatus: 'rascunho', total: 46, ready: 0, pending: 36, indicadoresComMeta: 10 },
     }))
     const check = checks.find(c => c.key === 'plano-estrategico')
     expect(check?.ok).toBe(false)
     expect(check?.evaluationStatus).toBe('NOT_APPLICABLE')
-    expect(check?.detail).toBe('Rascunho — 10 de 46 indicador(es) prontos para publicar.')
+    expect(check?.detail).toBe('Rascunho — Indicadores com meta: 10. Metas publicadas: 0. Metas pendentes: 36.')
   })
 
   test('plano estratégico sem ciclo não aparece no checklist', () => {

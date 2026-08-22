@@ -1,4 +1,5 @@
 import { PLAN_CYCLE_STATUS_LABEL } from '@/features/strategic-plan/planCycle'
+import { isOrphanTestUnit } from './mergeClientPeople'
 
 export type ReadinessSeverity = 'impeditivo' | 'informativo'
 
@@ -28,7 +29,7 @@ export type ClientReadinessInput = {
   cnpj: string | null
   contract_start_date: string | null
   implementation_owner_id: string | null
-  units: Array<{ name: string | null; is_primary: boolean | null }>
+  units: Array<{ name: string | null; is_primary: boolean | null; store_id?: string | null }>
   contacts: Array<{ name: string | null; is_primary: boolean | null; email: string | null }>
   modules: Array<{ enabled: boolean | null }>
   assignments: Array<{ active: boolean | null }>
@@ -41,10 +42,11 @@ export type ClientReadinessInput = {
    * aparecer como pendência de verdade, não desaparecer do checklist.
    */
   owner_master?: {
-    status: 'NOT_CONFIGURED' | 'VALID' | 'DUPLICATE_MASTER' | 'INACTIVE'
+    status: 'NOT_CONFIGURED' | 'VALID' | 'DUPLICATE_MASTER' | 'INACTIVE' | 'OWNER_WITHOUT_MASTER'
     id?: string | null
     name?: string | null
     email?: string | null
+    personStatus?: string | null
   } | null
   journey_generated?: boolean | null
   /**
@@ -58,6 +60,7 @@ export type ClientReadinessInput = {
     total: number
     ready: number
     pending: number
+    indicadoresComMeta?: number
   } | null
 }
 
@@ -71,7 +74,7 @@ export type ClientReadinessInput = {
  * a ativação, mas aparece para a equipe decidir.
  */
 export function buildClientReadiness(input: ClientReadinessInput): ReadinessCheck[] {
-  const namedUnits = input.units.filter(unit => (unit.name ?? '').trim())
+  const namedUnits = input.units.filter(unit => (unit.name ?? '').trim() && !isOrphanTestUnit(unit))
   const primaryContact = input.contacts.find(contact => contact.is_primary && (contact.name ?? '').trim())
   const enabledModules = input.modules.filter(module => module.enabled !== false)
   const activeAssignments = input.assignments.filter(assignment => assignment.active !== false)
@@ -171,21 +174,26 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
 
   if (input.owner_master !== undefined && input.owner_master !== null) {
     const master = input.owner_master
+    const invited = master.status === 'VALID' && master.personStatus === 'em_preparacao'
     const ok = master.status === 'VALID'
     const detail = master.status === 'VALID'
-      ? `${master.name ?? master.email} — Dono Master.`
+      ? invited
+        ? `${master.name ?? master.email} — Dono Master. Convite pendente de aceite.`
+        : `${master.name ?? master.email} — Dono Master.`
       : master.status === 'NOT_CONFIGURED'
         ? 'Nenhum Dono Master configurado para esta empresa.'
-        : master.status === 'DUPLICATE_MASTER'
-          ? 'Foram encontrados dois usuários marcados como Dono Master. Regularize a designação antes de ativar.'
-          : 'Existe usuário marcado como Dono Master, mas o vínculo está inconsistente (inativo ou sem perfil Dono).'
+        : master.status === 'OWNER_WITHOUT_MASTER'
+          ? 'Existem usuários com acesso de Dono, mas nenhum foi definido como Dono Master.'
+          : master.status === 'DUPLICATE_MASTER'
+            ? 'Foram encontrados dois usuários marcados como Dono Master. Regularize a designação antes de ativar.'
+            : 'Existe usuário marcado como Dono Master, mas o vínculo está inconsistente (inativo ou sem perfil Dono).'
     checks.push({
       key: 'dono-master',
       label: 'Dono Master válido',
-      severity: 'informativo',
+      severity: 'impeditivo',
       ok,
-      evaluationStatus: ok ? 'VALID' : 'WARNING',
-      correctionRoute: '/equipe',
+      evaluationStatus: ok ? (invited ? 'WARNING' : 'VALID') : 'INVALID',
+      correctionRoute: 'pessoas',
       detail,
     })
   }
@@ -205,6 +213,7 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
   if (input.strategic_plan_ready !== undefined && input.strategic_plan_ready !== null) {
     const plan = input.strategic_plan_ready
     const published = plan.cycleStatus === 'publicado'
+    const indicadoresComMeta = plan.indicadoresComMeta ?? (published ? plan.ready : plan.total - plan.pending)
     const ok = published && plan.pending === 0
     checks.push({
       key: 'plano-estrategico',
@@ -215,9 +224,7 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       correctionRoute: '/plano-estrategico',
       detail: plan.total === 0
         ? 'Plano ainda sem indicadores.'
-        : published
-          ? `Publicado — ${plan.ready} de ${plan.total} indicador(es) com meta completa${plan.pending > 0 ? `, ${plan.pending} pendência(s)` : ''}.`
-          : `${PLAN_CYCLE_STATUS_LABEL[plan.cycleStatus]} — ${plan.ready} de ${plan.total} indicador(es) prontos para publicar.`,
+        : `${PLAN_CYCLE_STATUS_LABEL[plan.cycleStatus]} — Indicadores com meta: ${indicadoresComMeta}. Metas publicadas: ${plan.ready}. Metas pendentes: ${plan.pending}.`,
     })
   }
 

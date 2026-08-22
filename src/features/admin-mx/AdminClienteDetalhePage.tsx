@@ -15,7 +15,7 @@ import {
   Target,
   UserPlus,
 } from 'lucide-react'
-import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
 import { TabNav } from '@/components/molecules/TabNav'
@@ -44,7 +44,9 @@ import { buildProgressBars } from './clientes/clientProgress'
 import { useClientHealth } from './clientes/useClientHealth'
 import { runClientRepair, type RepairKey } from './clientes/clientRepairs'
 import { buildClientReadiness, readinessSummary, type ClientReadinessInput } from './clientes/clientReadiness'
-import { fetchCurrentCycle, validateCycleReadiness } from '@/features/strategic-plan/planCycleRepository'
+import { buildPublicationCardFromRows } from '@/features/strategic-plan/planCycle'
+import { fetchClientProductPackage, fetchClientUnits, fetchUnitsPlanningValues } from '@/features/strategic-plan/clientPlanningRepository'
+import { fetchCurrentCycle } from '@/features/strategic-plan/planCycleRepository'
 import { createStrategicPlanFromProduct } from '@/features/strategic-plan/productPackageOps'
 import { ClientConfigTab } from './clientes/ClientConfigTab'
 import { ClientActionPlanContextPanel } from './clientes/ClientActionPlanContextPanel'
@@ -60,19 +62,23 @@ import { StoreOperatingHoursEditor } from './clientes/StoreOperatingHoursEditor'
 import {
   createClientPerson,
   fetchClientPersons,
+  setClientDonoMaster,
+  updateClientPerson,
   type PersonAccessRow,
 } from './clientes/personMutations'
-import { emptyPersonAccessDraft, resolveOwnerMaster, type PersonAccessDraft, type OwnerMasterResolution } from './clientes/personAccess'
+import { personToAccessDraft, resolveOwnerMaster, type PersonAccessDraft, type OwnerMasterResolution } from './clientes/personAccess'
+import { DonoMasterPickerModal } from './clientes/DonoMasterPickerModal'
 import { createEnrollmentLink, listEnrollmentLinks, type EnrollmentLinkRow } from './clientes/enrollmentMutations'
 import { buildProgramSummary } from './clientes/programSummary'
 import { buildClientJourney } from './clientes/clientJourney'
 import { saveClientProgram, type ProgramDraft } from './clientes/programMutations'
 import { emptyStoreDraft, type StoreDraft } from './clientes/storeForm'
-import { fetchUnitOperatingHours, saveClientStore, type UnitRow } from './clientes/storeMutations'
+import { deleteOrphanTestUnits, ensureOperationalUnitRows, fetchUnitOperatingHours, saveClientStore, type UnitRow } from './clientes/storeMutations'
 import { useAdminConsultingProducts, useAdminTeam } from './hooks/useAdminMxLists'
 import { resolveVisitVolumeRule } from './clientes/visitVolumeRule'
 import { ClientActionPlanWizard } from './planos-acao/ClientActionPlanWizard'
-import { canonicalPortfolioStatus, PORTFOLIO_STATUS_LABEL } from './clientes/clientPortfolio'
+import { groupPeopleByStore, isOrphanTestUnit, mergeOperationalUnits } from './clientes/mergeClientPeople'
+import { canonicalPortfolioStatus, parentClientOf, PORTFOLIO_STATUS_LABEL } from './clientes/clientPortfolio'
 
 type ClientTab = 'visao' | 'lojas' | 'pessoas' | 'jornada' | 'implantacao' | 'planejamento' | 'operacao' | 'dados'
 type PlanningTab = 'estrategico' | 'plano-acao'
@@ -157,6 +163,7 @@ function formatClientStatus(value: string | null | undefined) {
 export function AdminClienteDetalhePage() {
   const { clientSlug } = useParams<{ clientSlug: string }>()
   const location = useLocation()
+  const navigate = useNavigate()
   const { width, bottomClearance } = resolveRouteLayout(location.pathname)
   const { client, loading, error, refetch } = useConsultingClientDetailBySlug(clientSlug)
   const { supabaseUser } = useAuth()
@@ -198,8 +205,11 @@ export function AdminClienteDetalhePage() {
 
   // Pessoas e acessos
   const [persons, setPersons] = useState<PersonAccessRow[]>([])
+  const [personStores, setPersonStores] = useState<Array<{ id: string; name: string; parent_loja_id?: string | null }>>([])
   const [personModal, setPersonModal] = useState(false)
   const [personPrefill, setPersonPrefill] = useState<Partial<PersonAccessDraft> | null>(null)
+  const [editingPersonId, setEditingPersonId] = useState<string | null>(null)
+  const [masterPickerOpen, setMasterPickerOpen] = useState(false)
   const [savingPerson, setSavingPerson] = useState(false)
   const [linkModal, setLinkModal] = useState(false)
   const [links, setLinks] = useState<EnrollmentLinkRow[]>([])
@@ -222,30 +232,112 @@ export function AdminClienteDetalhePage() {
 
   useEffect(() => { void checkStore() }, [checkStore])
 
+  useEffect(() => {
+    if (!client?.id || !client.primary_store_id) return
+    let cancelled = false
+    void (async () => {
+      const [peers, lojas] = await Promise.all([
+        supabase.from('clientes_consultoria').select('id, slug, primary_store_id').neq('status', 'arquivado'),
+        supabase.from('lojas').select('id, parent_loja_id'),
+      ])
+      if (cancelled || peers.error || lojas.error) return
+      const parent = parentClientOf(
+        { id: client.id, primary_store_id: client.primary_store_id },
+        peers.data ?? [],
+        lojas.data ?? [],
+      )
+      if (parent?.slug && parent.slug !== client.slug) {
+        navigate(`/clientes/${parent.slug}`, { replace: true })
+      }
+    })()
+    return () => { cancelled = true }
+  }, [client?.id, client?.primary_store_id, client?.slug, navigate])
+
   const loadUnits = useCallback(async () => {
     if (!client?.id) return
-    const { data, error: unitsError } = await supabase
-      .from('unidades_cliente_consultoria')
-      .select('*')
-      .eq('client_id', client.id)
-      .order('is_primary', { ascending: false })
-      .order('name', { ascending: true })
-    if (unitsError) {
-      toast.error(unitsError.message)
+    const [unitsResult, lojasResult] = await Promise.all([
+      supabase
+        .from('unidades_cliente_consultoria')
+        .select('*')
+        .eq('client_id', client.id)
+        .order('is_primary', { ascending: false })
+        .order('name', { ascending: true }),
+      supabase.from('lojas').select('id, name, parent_loja_id, active'),
+    ])
+    if (unitsResult.error) {
+      toast.error(unitsResult.error.message)
       return
     }
-    setUnits((data ?? []) as UnitRow[])
-  }, [client?.id])
+    if (lojasResult.error) {
+      toast.error(lojasResult.error.message)
+      return
+    }
+    const fetched = (unitsResult.data ?? []) as UnitRow[]
+    const junkIds = fetched.filter(isOrphanTestUnit).map(unit => unit.id)
+    if (junkIds.length) {
+      const removed = await deleteOrphanTestUnits(junkIds)
+      if (removed.error) toast.error(removed.error)
+      else if (removed.deleted) void refetch()
+    }
+    let cadastro = fetched.filter(unit => !isOrphanTestUnit(unit))
+    const merged = mergeOperationalUnits({
+      clientId: client.id,
+      primaryStoreId: client.primary_store_id,
+      units: cadastro,
+      lojas: lojasResult.data ?? [],
+    })
+    const persisted = await ensureOperationalUnitRows({
+      clientId: client.id,
+      createdBy: supabaseUser?.id ?? null,
+      units: merged,
+    })
+    if (persisted.error) toast.error(persisted.error)
+    if (persisted.created) {
+      const { data: refreshed } = await supabase
+        .from('unidades_cliente_consultoria')
+        .select('*')
+        .eq('client_id', client.id)
+      cadastro = ((refreshed ?? []) as UnitRow[]).filter(unit => !isOrphanTestUnit(unit))
+      void refetch()
+    }
+    const visible = persisted.created
+      ? mergeOperationalUnits({
+        clientId: client.id,
+        primaryStoreId: client.primary_store_id,
+        units: cadastro,
+        lojas: lojasResult.data ?? [],
+      })
+      : merged
+    setUnits(visible.map(unit => ({
+      internal_code: null,
+      address_street: null,
+      address_zip: null,
+      timezone: null,
+      working_days: null,
+      opening_time: null,
+      closing_time: null,
+      opening_date: null,
+      notes: null,
+      ...cadastro.find(row => row.id === unit.id),
+      ...unit,
+    })))
+  }, [client?.id, client?.primary_store_id, refetch, supabaseUser?.id])
 
   const loadPersons = useCallback(async () => {
     if (!client?.id) return
-    const { rows, error: personsError } = await fetchClientPersons(client.id)
+    const { rows, stores, error: personsError } = await fetchClientPersons(client.id)
     if (personsError) {
       toast.error(personsError)
       return
     }
     setPersons(rows)
+    setPersonStores(stores)
   }, [client?.id])
+
+  const personGroups = useMemo(
+    () => groupPeopleByStore(persons, personStores, client?.primary_store_id),
+    [persons, personStores, client?.primary_store_id],
+  )
 
   const loadLinks = useCallback(async () => {
     if (!client?.id) return
@@ -265,12 +357,24 @@ export function AdminClienteDetalhePage() {
       setStrategicPlanReadiness(null)
       return
     }
-    const { readiness } = await validateCycleReadiness(cycle.id)
+    const [unitsResult, packageResult] = await Promise.all([
+      fetchClientUnits(client.id),
+      fetchClientProductPackage(client.id),
+    ])
+    const unitIds = unitsResult.units.filter(unit => unit.active).map(unit => unit.id)
+    const { rows } = await fetchUnitsPlanningValues(unitIds, year)
+    const rosterCodes = packageResult.ok ? packageResult.resolution.indicatorCodes : []
+    const card = buildPublicationCardFromRows({
+      cycleStatus: cycle.status,
+      rosterCodes,
+      rows,
+    })
     setStrategicPlanReadiness({
       cycleStatus: cycle.status,
-      total: readiness?.total ?? 0,
-      ready: readiness?.ready ?? 0,
-      pending: readiness?.pending ?? 0,
+      total: rosterCodes.length || card.indicadoresComMeta,
+      ready: card.metasPublicadas,
+      pending: card.metasPendentes,
+      indicadoresComMeta: card.indicadoresComMeta,
     })
   }, [client?.id])
 
@@ -334,10 +438,53 @@ export function AdminClienteDetalhePage() {
         id: ownerMasterResolution.person?.id ?? null,
         name: ownerMasterResolution.person?.nome ?? null,
         email: ownerMasterResolution.person?.email ?? null,
+        personStatus: ownerMasterResolution.person?.status ?? null,
       },
       strategic_plan_ready: strategicPlanReadiness,
     })
   }, [client, storeTaken, ownerMasterResolution, strategicPlanReadiness])
+
+  const correctDonoMaster = async () => {
+    if (!client?.id) return
+    setActivationOpen(false)
+    setTab('pessoas')
+    const donos = persons.filter(person => person.papeis.includes('DONO'))
+    if (ownerMasterResolution.status === 'OWNER_WITHOUT_MASTER' && donos.length === 1) {
+      const result = await setClientDonoMaster(client.id, donos[0])
+      if (result.error) toast.error(result.error)
+      else {
+        toast.success(`${donos[0].nome} definido como Dono Master.`)
+        await loadPersons()
+      }
+      return
+    }
+    if (ownerMasterResolution.status === 'OWNER_WITHOUT_MASTER' && donos.length > 1) {
+      setMasterPickerOpen(true)
+      return
+    }
+    if (ownerMasterResolution.status === 'DUPLICATE_MASTER') {
+      setMasterPickerOpen(true)
+      return
+    }
+    const contact = client.contacts?.find(item => item.is_primary)
+    setEditingPersonId(null)
+    setPersonPrefill({
+      nome: contact?.name ?? '',
+      email: contact?.email ?? '',
+      telefone: (contact as { phone?: string | null } | undefined)?.phone ?? '',
+      papeis: ['DONO'],
+      is_dono_master: true,
+      visao_padrao: 'DONO',
+      lojas_autorizadas: units.map(unit => unit.store_id ?? unit.id),
+    })
+    setPersonModal(true)
+  }
+
+  const openPersonEdit = (person: PersonAccessRow) => {
+    setEditingPersonId(person.id)
+    setPersonPrefill(personToAccessDraft(person))
+    setPersonModal(true)
+  }
 
   const summary = useMemo(() => readinessSummary(checks), [checks])
   const health = useClientHealth(client?.id, client?.primary_store_id ?? null)
@@ -477,14 +624,17 @@ export function AdminClienteDetalhePage() {
     if (!client?.id || !supabaseUser) return
     setSavingPerson(true)
     try {
-      const { error: personError } = await createClientPerson(client.id, draft, supabaseUser.id)
+      const { error: personError } = editingPersonId
+        ? await updateClientPerson(client.id, editingPersonId, draft)
+        : await createClientPerson(client.id, draft, supabaseUser.id)
       if (personError) {
         toast.error(personError)
         return
       }
-      toast.success('Usuário cadastrado.')
+      toast.success(editingPersonId ? 'Usuário atualizado.' : 'Usuário cadastrado.')
       setPersonModal(false)
       setPersonPrefill(null)
+      setEditingPersonId(null)
       await loadPersons()
     } finally {
       setSavingPerson(false)
@@ -585,8 +735,8 @@ export function AdminClienteDetalhePage() {
                 icon={BriefcaseBusiness}
                 tone={portfolioStatus === 'ativos' ? 'success' : portfolioStatus === 'em_implantacao' ? 'info' : 'warning'}
               />
-              <MxMetricCard title="Lojas" value={units.length ?? 0} detail="Unidades cadastradas" icon={Building2} tone="info" />
-              <MxMetricCard title="Pessoas" value={persons.length ?? 0} detail="Acessos cadastrados" icon={UserPlus} tone="violet" />
+              <MxMetricCard title="Lojas" value={units.length ?? 0} detail="Matriz e filiais operacionais" icon={Building2} tone="info" />
+              <MxMetricCard title="Pessoas" value={persons.length} detail="Acessos e vínculos de loja" icon={UserPlus} tone="violet" />
               <MxMetricCard title="Prontidão" value={`${summary.completed}/${summary.total}`} detail="Itens do checklist concluídos" icon={BriefcaseBusiness} />
             </MxMetricGrid>
 
@@ -602,8 +752,15 @@ export function AdminClienteDetalhePage() {
                         <div className="flex items-center gap-2 text-sm font-semibold text-foreground"><Target size={16} className="text-status-info-text" />Plano Estratégico</div>
                         <p className="mt-2 text-xs text-muted-foreground">Indicadores, metas e ciclo do produto contratado.</p>
                       </div>
-                      <span className="text-xs font-semibold text-foreground">{strategicPlanReadiness ? `${strategicPlanReadiness.ready}/${strategicPlanReadiness.total}` : '—'}</span>
+                      <span className="text-xs font-semibold text-foreground">{strategicPlanReadiness ? strategicPlanReadiness.cycleStatus === 'publicado' ? 'Publicado' : 'Rascunho' : '—'}</span>
                     </div>
+                    {strategicPlanReadiness ? (
+                      <p className="mt-2 text-xs text-muted-foreground">
+                        Indicadores com meta: {strategicPlanReadiness.indicadoresComMeta ?? strategicPlanReadiness.ready}
+                        {' · '}Metas publicadas: {strategicPlanReadiness.ready}
+                        {' · '}Metas pendentes: {strategicPlanReadiness.pending}
+                      </p>
+                    ) : null}
                     <Button variant="outline" size="sm" className="mt-4" onClick={() => { setPlanningTab('estrategico'); setTab('planejamento') }}>Abrir no cliente</Button>
                   </div>
                   <div className="rounded-xl border border-border bg-surface-alt p-4">
@@ -669,7 +826,7 @@ export function AdminClienteDetalhePage() {
               <MxSectionCard>
                 <MxSectionHeader
                   title="Empresa e lojas"
-                  description={`${units.length} unidade(s) cadastrada(s).`}
+                  description={`${units.length} loja(s) operacional(is) — matriz e filiais.`}
                   actions={<Button size="sm" onClick={() => setStoreModal({ open: true, initial: null })}><Plus size={16} />Adicionar loja</Button>}
                 />
                 <div className="space-y-3 p-5">
@@ -686,12 +843,18 @@ export function AdminClienteDetalhePage() {
                             {unit.status === 'inativa' ? <span className="rounded-full bg-status-warning-surface px-2 py-0.5 text-caption font-medium text-status-warning-text">Inativa</span> : null}
                           </div>
                           <div className="flex items-center gap-2">
+                            {unit.synthetic ? (
+                              <span className="text-xs text-muted-foreground">Filial operacional</span>
+                            ) : (
+                              <>
                             <Button variant="outline" size="sm" onClick={() => setStoreModal({ open: true, initial: { ...emptyStoreDraft(unit.store_type === 'matriz' ? 'matriz' : 'filial'), id: unit.id, store_id: unit.store_id, name: unit.name, cnpj: unit.cnpj ?? '', internal_code: unit.internal_code ?? '', address_street: unit.address_street ?? '', address_city: unit.city ?? '', address_state: unit.state ?? '', address_zip: unit.address_zip ?? '', timezone: unit.timezone ?? 'America/Sao_Paulo', status: unit.status === 'inativa' ? 'inativa' : 'ativa', opening_date: unit.opening_date ?? '', notes: unit.notes ?? '', is_primary: unit.is_primary } })}>
                               <Pencil size={14} />Editar
                             </Button>
                             <Button variant="outline" size="sm" onClick={() => setHoursUnitId(hoursUnitId === unit.id ? null : unit.id)}>
                               <Clock size={14} />Horário
                             </Button>
+                              </>
+                            )}
                           </div>
                         </div>
                         <div className="mt-2 grid gap-2 text-xs text-muted-foreground sm:grid-cols-3">
@@ -716,17 +879,19 @@ export function AdminClienteDetalhePage() {
                 <DonoMasterCard
                   loading={false}
                   resolution={ownerMasterResolution}
-                  onDefine={() => {
-                    setPersonPrefill({ papeis: ['DONO'], is_dono_master: true, visao_padrao: 'DONO', lojas_autorizadas: units.map(unit => unit.store_id ?? unit.id) })
-                    setPersonModal(true)
+                  onDefine={() => { void correctDonoMaster() }}
+                  onEdit={() => {
+                    const master = ownerMasterResolution.person
+                    const row = master ? persons.find(person => person.id === master.id) : null
+                    if (row) openPersonEdit(row)
+                    else toast.info('Cadastre ou escolha o Dono Master para editar.')
                   }}
-                  onEdit={() => { /* edição abre o modal de pessoa quando implementado */ }}
                 />
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="rounded-xl border border-border p-4">
                     <div className="mb-2 flex items-center gap-2"><UserPlus size={16} className="text-primary" /><h4 className="text-sm font-medium text-foreground">Cadastro Direto</h4></div>
                     <p className="mb-3 text-xs text-muted-foreground">Cadastre usuários manualmente com papel, loja e visão padrão.</p>
-                    <Button size="sm" onClick={() => { setPersonPrefill(null); setPersonModal(true) }}><UserPlus size={14} />Cadastrar usuário</Button>
+                    <Button size="sm" onClick={() => { setEditingPersonId(null); setPersonPrefill(null); setPersonModal(true) }}><UserPlus size={14} />Cadastrar usuário</Button>
                   </div>
                   <div className="rounded-xl border border-border p-4">
                     <div className="mb-2 flex items-center gap-2"><Link2 size={16} className="text-status-info-text" /><h4 className="text-sm font-medium text-foreground">Autocadastro por Link</h4></div>
@@ -735,12 +900,24 @@ export function AdminClienteDetalhePage() {
                   </div>
                 </div>
                 <MxSectionCard>
-                  <MxSectionHeader title={`Usuários (${persons.length})`} description="Acessos e papéis da equipe do cliente." />
+                  <MxSectionHeader title={`Usuários (${persons.length})`} description="Equipe por loja: cada filial tem gerente e vendedores próprios." />
                   <div className="p-5">
                     {persons.length ? (
-                      <div className="space-y-2">
-                        {persons.map(person => (
-                          <div key={person.id} className="flex items-center justify-between rounded-lg border border-border p-3">
+                      <div className="space-y-6">
+                        {personGroups.map(group => (
+                          <div key={group.storeId} className="space-y-2">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <h3 className="text-sm font-semibold text-foreground">{group.storeName}</h3>
+                              {group.kind === 'matriz' ? <span className="rounded-full bg-primary/10 px-2 py-0.5 text-caption font-medium text-primary">Matriz</span> : null}
+                              {group.kind === 'filial' ? <span className="rounded-full bg-status-info-bg px-2 py-0.5 text-caption font-medium text-status-info-text">Filial</span> : null}
+                              <span className="text-xs text-muted-foreground">
+                                {group.gerenteNome ? `Gerente: ${group.gerenteNome}` : 'Sem gerente'}
+                                {' · '}
+                                {group.people.length} pessoa(s)
+                              </span>
+                            </div>
+                            {group.people.map(person => (
+                          <div key={`${group.storeId}:${person.id}`} className="flex items-center justify-between rounded-lg border border-border p-3">
                             <div className="flex items-center gap-3">
                               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-surface-alt text-xs font-bold text-foreground">{person.nome.charAt(0) || '?'}</div>
                               <div>
@@ -751,9 +928,19 @@ export function AdminClienteDetalhePage() {
                                 <div className="text-xs text-muted-foreground">{person.funcao_declarada || '—'} · {person.email}</div>
                               </div>
                             </div>
-                            <span className="rounded-full bg-surface-alt px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                              {person.is_dono_master ? 'Dono Master' : person.papeis.join(', ') || '—'} · {person.status === 'em_preparacao' ? 'Em preparação' : person.status === 'ativo' ? 'Ativo' : 'Inativo'}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              {person.source === 'vinculo' ? (
+                                <span className="rounded-full bg-surface-alt px-2 py-0.5 text-xs font-medium text-muted-foreground">Vínculo de loja</span>
+                              ) : null}
+                              <span className="rounded-full bg-surface-alt px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                                {person.is_dono_master ? 'Dono Master' : person.papeis.join(', ') || '—'} · {person.status === 'em_preparacao' ? 'Em preparação' : person.status === 'ativo' ? 'Ativo' : 'Inativo'}
+                              </span>
+                              <Button variant="outline" size="sm" onClick={() => openPersonEdit(person)}>
+                                <Pencil size={14} />Editar
+                              </Button>
+                            </div>
+                          </div>
+                            ))}
                           </div>
                         ))}
                       </div>
@@ -906,6 +1093,9 @@ export function AdminClienteDetalhePage() {
               submitting={activating}
               onSubmit={() => void activate()}
               onRepair={key => void repair(key)}
+              onCorrect={check => {
+                if (check.key === 'dono-master') void correctDonoMaster()
+              }}
               repairing={repairing}
               onClose={() => setActivationOpen(false)}
             />
@@ -936,8 +1126,38 @@ export function AdminClienteDetalhePage() {
               submitting={savingPerson}
               stores={units.map(unit => ({ id: unit.store_id ?? unit.id, name: unit.name }))}
               initial={personPrefill ?? undefined}
+              editing={Boolean(editingPersonId)}
               onSubmit={draft => void submitPerson(draft)}
-              onClose={() => { setPersonModal(false); setPersonPrefill(null) }}
+              onClose={() => { setPersonModal(false); setPersonPrefill(null); setEditingPersonId(null) }}
+            />
+
+            <DonoMasterPickerModal
+              open={masterPickerOpen}
+              donos={persons.filter(person => person.papeis.includes('DONO')).map(person => ({
+                id: person.id,
+                nome: person.nome,
+                email: person.email,
+              }))}
+              submitting={savingPerson}
+              onPick={async personId => {
+                if (!client?.id) return
+                const picked = persons.find(person => person.id === personId)
+                if (!picked) {
+                  toast.error('Pessoa não encontrada na lista atual.')
+                  return
+                }
+                setSavingPerson(true)
+                const result = await setClientDonoMaster(client.id, picked)
+                setSavingPerson(false)
+                if (result.error) {
+                  toast.error(result.error)
+                  return
+                }
+                toast.success(`${picked.nome} definido como Dono Master.`)
+                setMasterPickerOpen(false)
+                await loadPersons()
+              }}
+              onClose={() => setMasterPickerOpen(false)}
             />
 
             <EnrollmentLinkModal

@@ -172,6 +172,62 @@ export function validatePlanReadiness(input: {
   }
 }
 
+/**
+ * Card de exibição do plano (Clientes MX / Visão Geral).
+ * Distinct indicadores com alguma meta — não células mês × unidade.
+ * Publicado conta as metas da versão exibida; rascunho não mistura com a publicada.
+ */
+export type PublicationCardSummary = {
+  indicadoresComMeta: number
+  metasPublicadas: number
+  metasPendentes: number
+  statusLabel: string
+  cycleStatus: PlanCycleStatus
+}
+
+export function indicatorsWithConfiguredMeta(
+  rows: Array<{ indicator_code: string; meta?: number | null }>,
+): string[] {
+  const codes = new Set<string>()
+  for (const row of rows) {
+    if (row.meta != null && Number.isFinite(Number(row.meta))) codes.add(row.indicator_code)
+  }
+  return [...codes]
+}
+
+export function summarizePublicationCard(input: {
+  cycleStatus: PlanCycleStatus
+  rosterCodes: string[]
+  indicatorsWithMeta: string[]
+}): PublicationCardSummary {
+  const roster = [...new Set(input.rosterCodes.filter(Boolean))]
+  const withMeta = new Set(input.indicatorsWithMeta)
+  const indicadoresComMeta = roster.length
+    ? roster.filter(code => withMeta.has(code)).length
+    : withMeta.size
+  const rosterSize = roster.length || indicadoresComMeta
+  const published = input.cycleStatus === 'publicado'
+  return {
+    indicadoresComMeta,
+    metasPublicadas: published ? indicadoresComMeta : 0,
+    metasPendentes: Math.max(0, rosterSize - indicadoresComMeta),
+    statusLabel: PLAN_CYCLE_STATUS_LABEL[input.cycleStatus],
+    cycleStatus: input.cycleStatus,
+  }
+}
+
+export function buildPublicationCardFromRows(input: {
+  cycleStatus: PlanCycleStatus
+  rosterCodes: string[]
+  rows: Array<{ indicator_code: string; meta?: number | null }>
+}): PublicationCardSummary {
+  return summarizePublicationCard({
+    cycleStatus: input.cycleStatus,
+    rosterCodes: input.rosterCodes,
+    indicatorsWithMeta: indicatorsWithConfiguredMeta(input.rows),
+  })
+}
+
 /** Resumo curto para banner de tela. */
 export function readinessSummary(readiness: PlanReadiness): string {
   if (readiness.total === 0) return 'Plano sem indicadores.'

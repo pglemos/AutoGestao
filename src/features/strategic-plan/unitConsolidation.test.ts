@@ -3,8 +3,10 @@ import {
   CONSOLIDATION_STATUS,
   computeConsolidatedMonth,
   computeConsolidatedYear,
+  formatPartialUnitsLabel,
   groupValuesByUnit,
   isEditableInScope,
+  resolveStoreScopedValue,
 } from './unitConsolidation'
 import type { UnitPolicy } from './unitPolicy'
 
@@ -45,7 +47,20 @@ describe('computeConsolidatedMonth — SUM', () => {
     })
     expect(consolidated.SALES_WALKIN).toBe(10)
     expect(integrity.SALES_WALKIN.status).toBe(CONSOLIDATION_STATUS.PARCIAL)
-    expect(integrity.SALES_WALKIN.explanation).toContain('1 de 2')
+    expect(integrity.SALES_WALKIN.explanation).toBe('Parcial — 1 de 2 unidades')
+  })
+
+  test('unidade ausente do mapa entra no denominador quando expectedUnitIds é passado', () => {
+    const { integrity } = computeConsolidatedMonth({
+      unitValueMap: { SALES_WALKIN: { lojaA: 10, lojaB: 25 } },
+      companyValueMap: {},
+      indicators,
+      policies,
+      month: 3,
+      expectedUnitIds: ['lojaA', 'lojaB', 'matriz'],
+    })
+    expect(integrity.SALES_WALKIN.status).toBe(CONSOLIDATION_STATUS.PARCIAL)
+    expect(integrity.SALES_WALKIN.explanation).toBe('Parcial — 2 de 3 unidades')
   })
 
   test('zero é valor, não ausência', () => {
@@ -123,6 +138,24 @@ describe('computeConsolidatedMonth — RECALCULATE_FROM_BASES', () => {
     // Nunca a soma (0.4) nem a média simples (0.2).
     expect(consolidated.VISIT_TO_SALE_CONVERSION).not.toBeCloseTo(0.4, 5)
     expect(consolidated.VISIT_TO_SALE_CONVERSION).not.toBeCloseTo(0.2, 5)
+  })
+
+  test('derivado herda PARCIAL das bases e mostra N de M', () => {
+    const { consolidated, integrity } = computeConsolidatedMonth({
+      unitValueMap: {
+        VISITS_VOLUME: { lojaA: 100, lojaB: 300, matriz: null },
+        SALES_TOTAL: { lojaA: 10, lojaB: 90, matriz: null },
+      },
+      companyValueMap: {},
+      indicators,
+      policies,
+      month: 1,
+      expectedUnitIds: ['lojaA', 'lojaB', 'matriz'],
+    })
+    expect(consolidated.VISIT_TO_SALE_CONVERSION).toBeCloseTo(0.25, 10)
+    expect(integrity.SALES_TOTAL.status).toBe(CONSOLIDATION_STATUS.PARCIAL)
+    expect(integrity.VISIT_TO_SALE_CONVERSION.status).toBe(CONSOLIDATION_STATUS.PARCIAL)
+    expect(integrity.VISIT_TO_SALE_CONVERSION.explanation).toBe('Parcial — 2 de 3 unidades')
   })
 
   test('derivado é calculado depois das bases, independente da ordem da lista', () => {
@@ -353,5 +386,19 @@ describe('computeConsolidatedYear', () => {
     expect(integrityByMonth[2].SALES_WALKIN.status).toBe(CONSOLIDATION_STATUS.PARCIAL)
     expect(consolidatedByMonth[12].SALES_WALKIN).toBeNull()
     expect(Object.keys(consolidatedByMonth)).toHaveLength(12)
+  })
+})
+
+describe('rótulos de escopo e parcial', () => {
+  test('formatPartialUnitsLabel só rotula quando falta unidade', () => {
+    expect(formatPartialUnitsLabel(2, 3)).toBe('Parcial — 2 de 3 unidades')
+    expect(formatPartialUnitsLabel(3, 3)).toBeNull()
+    expect(formatPartialUnitsLabel(0, 3)).toBeNull()
+  })
+
+  test('resolveStoreScopedValue nunca cai no consolidado', () => {
+    expect(resolveStoreScopedValue(null)).toBeNull()
+    expect(resolveStoreScopedValue(undefined)).toBeNull()
+    expect(resolveStoreScopedValue(12)).toBe(12)
   })
 })

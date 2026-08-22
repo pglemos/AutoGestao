@@ -47,7 +47,7 @@ function ChartTooltip({ active, payload, label, displayFormat, decimalPlaces, se
   );
 }
 
-export default function StrategicIndicatorChart({ series, height = 360 }) {
+export default function StrategicIndicatorChart({ series, height = 360, monthIndex = SELECTED_MONTH_INDEX }) {
   const [hidden, setHidden] = useState({ meta: false, atual: false, anterior: false });
   const [chartReady, setChartReady] = useState(false);
   useEffect(() => {
@@ -58,7 +58,7 @@ export default function StrategicIndicatorChart({ series, height = 360 }) {
   const { targetValues, currentValues, previousYearValues, displayFormat, decimalPlaces, name, area } = series;
   const areaHex = AREA_HEX[area] || chartTokens.success();
 
-  const idx = SELECTED_MONTH_INDEX;
+  const idx = monthIndex;
   const pct = calculatePercentageOfTarget(currentValues[idx], targetValues[idx]);
   const status = pct !== null ? getStatusFromPercentage(pct, series.direction) : "neutral";
   const statusStyle = STATUS_STYLES[status];

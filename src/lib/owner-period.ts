@@ -1,3 +1,10 @@
+import { resolveLastClosedCompetence } from '@/features/strategic-plan/competence'
+
+const MONTHS_PT = [
+  'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+  'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
+]
+
 export type OwnerPeriod = 'month' | 'quarter' | 'year' | 'custom'
 
 export type OwnerPeriodRange = {
@@ -51,10 +58,18 @@ export function resolveOwnerPeriodRange(
     }
   }
 
+  const closed = resolveLastClosedCompetence(year, now)
+  const lastDay = new Date(closed.lastClosedYear, closed.lastClosedMonth, 0).getDate()
   return {
-    start: toOwnerDateOnly(new Date(year, month, 1, 12)),
-    end: today,
+    start: `${closed.lastClosedYear}-${pad(closed.lastClosedMonth)}-01`,
+    end: `${closed.lastClosedYear}-${pad(closed.lastClosedMonth)}-${pad(lastDay)}`,
   }
+}
+
+/** Rótulo do período "mês" = competência fechada (M-1), não o calendário aberto. */
+export function ownerClosedMonthLabel(now = new Date()): string {
+  const closed = resolveLastClosedCompetence(now.getFullYear(), now)
+  return `${MONTHS_PT[closed.lastClosedMonth - 1]}/${closed.lastClosedYear}`
 }
 
 // Compatibility API for the legacy Dono data hook. The canonical period
@@ -96,7 +111,7 @@ export function computePeriodRange(
 }
 
 export const PERIOD_LABELS: Record<OwnerPeriod, string> = {
-  month: 'Mês atual',
+  month: 'Competência',
   quarter: 'Trimestre atual',
   year: 'Ano atual',
   custom: 'Período personalizado',

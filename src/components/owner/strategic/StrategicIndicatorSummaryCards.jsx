@@ -1,6 +1,6 @@
 // Faixa horizontal de resumo do indicador: identidade + 4 métricas.
 import { Target, TrendingUp, Percent, ArrowLeftRight, ShoppingCart, Megaphone, Package, Wallet, Settings } from "lucide-react";
-import { formatCellValue, calculatePercentageOfTarget, calculateVariation, getStatusFromPercentage, STATUS_STYLES, AREA_STYLES, SELECTED_MONTH_INDEX, formatVariation } from "./strategicUtils";
+import { formatCellValue, calculatePercentageOfTarget, calculateVariation, getStatusFromPercentage, STATUS_STYLES, AREA_STYLES, SELECTED_MONTH_INDEX, REFERENCE_YEAR, formatVariation, isActualMonthClosed } from "./strategicUtils";
 import { DIRECTION_LABELS } from "./strategicIndicatorCatalog";
 
 const AREA_ICONS = {
@@ -33,18 +33,21 @@ function MetricBlock({ icon: Icon, label, value, complement, status }) {
   );
 }
 
-export default function StrategicIndicatorSummaryCards({ series }) {
+export default function StrategicIndicatorSummaryCards({ series, monthIndex = SELECTED_MONTH_INDEX, year = REFERENCE_YEAR }) {
   if (!series) return null;
   const { targetValues, currentValues, previousYearValues, displayFormat, decimalPlaces, direction, area, name, code } = series;
-  const idx = SELECTED_MONTH_INDEX;
+  const idx = monthIndex;
   const areaStyle = AREA_STYLES[area] || {};
   const AreaIcon = AREA_ICONS[area] || Target;
 
+  const monthClosed = isActualMonthClosed(idx, year);
   const meta = targetValues[idx];
-  const resultado = currentValues[idx];
+  const resultado = monthClosed ? currentValues[idx] : null;
   const anoAnterior = previousYearValues[idx];
+  const resultadoLabel = !monthClosed ? "Competência ainda não encerrada" : resultado !== null ? formatCellValue(resultado, displayFormat, decimalPlaces) : "—";
 
   const pct = calculatePercentageOfTarget(resultado, meta);
+  const atingimentoLabel = !monthClosed ? "Indisponível" : pct !== null ? formatCellValue(pct, "percentage", 1) : "—";
   const status = pct !== null ? getStatusFromPercentage(pct, direction) : "neutral";
   const statusStyle = STATUS_STYLES[status];
 
@@ -84,8 +87,8 @@ export default function StrategicIndicatorSummaryCards({ series }) {
         {/* Lado direito: 4 métricas */}
         <div className="flex flex-1 flex-col divide-y divide-border sm:grid sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4">
           <MetricBlock icon={Target} label="Meta do mês" value={formatCellValue(meta, displayFormat, decimalPlaces)} complement={displayFormat === "currency" ? "" : `em ${series.unitLabel}`} />
-          <MetricBlock icon={TrendingUp} label="Resultado do mês" value={resultado !== null ? formatCellValue(resultado, displayFormat, decimalPlaces) : "—"} complement={resultado !== null ? `em ${series.unitLabel}` : "Sem resultado"} />
-          <MetricBlock icon={Percent} label="Atingimento" value={pct !== null ? formatCellValue(pct, "percentage", 1) : "—"} status={pct !== null ? status : "neutral"} complement={distanceText || (pct !== null ? "da meta" : "Sem meta")} />
+          <MetricBlock icon={TrendingUp} label="Resultado do mês" value={resultadoLabel} complement={resultado !== null ? `em ${series.unitLabel}` : (!monthClosed ? "Mês ainda aberto" : "Sem resultado")} />
+          <MetricBlock icon={Percent} label="Atingimento" value={atingimentoLabel} status={pct !== null ? status : "neutral"} complement={distanceText || (pct !== null ? "da meta" : (!monthClosed ? "Aguarde o encerramento" : "Sem meta"))} />
           <MetricBlock icon={ArrowLeftRight} label="Variação vs. ano anterior" value={formatVariation(variacao)} status={variacao !== null ? variacaoStatus : "neutral"} complement={variacao !== null ? "vs. ano anterior" : "Sem dados"} />
         </div>
       </div>

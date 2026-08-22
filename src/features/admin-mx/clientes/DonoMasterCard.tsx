@@ -13,14 +13,18 @@ export function DonoMasterCard(props: {
     return <MxLoadingState label="Carregando Dono Master" />
   }
 
-  if (props.resolution.status === 'NOT_CONFIGURED') {
+  if (props.resolution.status === 'NOT_CONFIGURED' || props.resolution.status === 'OWNER_WITHOUT_MASTER') {
     return (
       <div className="flex items-center justify-between rounded-xl bg-surface-alt p-4">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary"><Crown size={16} /></div>
           <div>
             <div className="text-sm font-bold text-foreground">DONO MASTER</div>
-            <div className="text-xs text-muted-foreground">Nenhum Dono Master configurado</div>
+            <div className="text-xs text-muted-foreground">
+              {props.resolution.status === 'OWNER_WITHOUT_MASTER'
+                ? 'Existem usuários com acesso de Dono, mas nenhum foi definido como Dono Master.'
+                : 'Nenhum Dono Master configurado'}
+            </div>
           </div>
         </div>
         <Button size="sm" onClick={props.onDefine}><UserPlus size={14} />Definir Dono Master</Button>

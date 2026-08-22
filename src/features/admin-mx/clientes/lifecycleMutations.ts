@@ -95,6 +95,26 @@ export async function scheduleActivation(input: ScheduleActivationInput): Promis
   return { error: null }
 }
 
+/**
+ * Arquiva clientes que são só filiais de outro cliente da carteira.
+ * Reversível: status volta de `arquivado` se a equipe reabrir o cadastro.
+ */
+export async function archiveBranchClients(clientIds: readonly string[]): Promise<{ archived: number; error: string | null }> {
+  const ids = [...new Set(clientIds.filter(Boolean))]
+  if (!ids.length) return { archived: 0, error: null }
+  const { data, error } = await supabase
+    .from('clientes_consultoria')
+    .update({
+      status: 'arquivado',
+      updated_at: new Date().toISOString(),
+    })
+    .in('id', ids)
+    .neq('status', 'arquivado')
+    .select('id')
+  if (error) return { archived: 0, error: error.message }
+  return { archived: data?.length ?? 0, error: null }
+}
+
 /** Ativa imediatamente, registrando activated_at e limpando agendamento. */
 export async function activateClientNow(clientId: string, activatedBy: string): Promise<{ error: string | null }> {
   const { error } = await supabase

@@ -17,6 +17,7 @@ import StrategicExportMenu from '@/components/owner/strategic/StrategicExportMen
 import TargetHistoryPanel from '@/components/owner/strategic/TargetHistoryPanel'
 import FiltersDrawer from '@/components/owner/strategic/FiltersDrawer'
 import DisplayModeSelector from '@/components/owner/strategic/DisplayModeSelector'
+import { CompetenceSelector } from '@/components/owner/strategic/ViewSelector'
 import { usePlanningWorkspace } from '@/features/planning-workspace'
 import { ConditionalPageCanvas } from '@/design-system/page'
 import { PlanCycleBanner } from './PlanCycleBanner'
@@ -84,6 +85,14 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
             ? (id) => navigate(`/plano-estrategico?cycleId=${encodeURIComponent(id)}`)
             : undefined}
         />
+        {controller.scopeNotice ? (
+          <AlertMessage tone="warning">{controller.scopeNotice}</AlertMessage>
+        ) : null}
+        {controller.partialUnitsLabel ? (
+          <AlertMessage tone="warning">
+            {controller.partialUnitsLabel}. O consolidado usa só as unidades com base — não é tratado como completo.
+          </AlertMessage>
+        ) : null}
         <StrategicPlanTabs tab={controller.tab} onTabChange={controller.setTab} />
 
         {controller.tab === 'resumo' && controller.indicator ? (
@@ -96,6 +105,11 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
                   areaFilter={controller.areaFilter}
                   onAreaFilterChange={controller.setAreaFilter}
                   compact
+                />
+                <CompetenceSelector
+                  year={controller.year}
+                  value={controller.selectedMonthIndex}
+                  onChange={controller.setSelectedMonthIndex}
                 />
                 <DisplayModeSelector
                   value={controller.displayMode}
@@ -129,19 +143,19 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
               </div>
             </div>
 
-            <StrategicIndicatorSummaryCards series={controller.indicator} />
+            <StrategicIndicatorSummaryCards series={controller.indicator} monthIndex={controller.selectedMonthIndex} year={controller.year} />
 
             <div className={`grid grid-cols-1 gap-4 ${controller.effectiveDisplayMode === 'both' ? 'xl:grid-cols-[58%_42%]' : ''}`}>
               {controller.effectiveDisplayMode !== 'chart' ? (
-                <StrategicIndicatorComparisonTable series={controller.indicator} height={360} />
+                <StrategicIndicatorComparisonTable series={controller.indicator} height={360} monthIndex={controller.selectedMonthIndex} />
               ) : null}
               {controller.effectiveDisplayMode !== 'table' ? (
-                <StrategicIndicatorChart series={controller.indicator} height={360} />
+                <StrategicIndicatorChart series={controller.indicator} height={360} monthIndex={controller.selectedMonthIndex} />
               ) : null}
             </div>
 
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-              <StrategicIndicatorReading series={controller.indicator} />
+              <StrategicIndicatorReading series={controller.indicator} monthIndex={controller.selectedMonthIndex} year={controller.year} />
               <StrategicIndicatorGuidance
                 series={controller.indicator}
                 onCreateAction={() => controller.setActionOpen(true)}
@@ -165,6 +179,7 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
             onRowClick={controller.handleRowClick}
             year={controller.year}
             refreshKey={controller.refreshKey}
+            monthIndex={controller.selectedMonthIndex}
           />
           </section>
         ) : null}

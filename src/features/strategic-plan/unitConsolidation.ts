@@ -59,6 +59,20 @@ function unitsWithDataOf(unitVals: NumericMap): string[] {
   return Object.keys(unitVals).filter(storeId => isNumber(unitVals[storeId]))
 }
 
+/** Rótulo do consolidado incompleto. Null quando não é parcial. */
+export function formatPartialUnitsLabel(unitsWithData: number, totalUnits: number): string | null {
+  if (totalUnits <= 0 || unitsWithData <= 0 || unitsWithData >= totalUnits) return null
+  return `Parcial — ${unitsWithData} de ${totalUnits} unidades`
+}
+
+/**
+ * Escopo STORE: o valor da unidade selecionada. Nunca cai no consolidado.
+ * Unidade sem lançamento fica vazia — Meta permanece, Resultado e % não.
+ */
+export function resolveStoreScopedValue(storeValue: number | null | undefined): number | null {
+  return storeValue ?? null
+}
+
 /**
  * Consolida os indicadores de um mês.
  *
@@ -73,6 +87,7 @@ export function computeConsolidatedMonth({
   params = {},
   month,
   blankPolicy = null,
+  expectedUnitIds,
 }: {
   unitValueMap: UnitValueMap
   companyValueMap: CompanyValueMap
@@ -81,6 +96,8 @@ export function computeConsolidatedMonth({
   params?: Record<string, number | null | undefined>
   month?: number
   blankPolicy?: BlankPolicy | null
+  /** Unidades ativas do cliente — entram no denominador mesmo sem registro. */
+  expectedUnitIds?: string[]
 }): {
   consolidated: Record<string, number | null>
   integrity: Record<string, IndicatorIntegrity>
@@ -101,13 +118,15 @@ export function computeConsolidatedMonth({
     const policy = policies[indicator.code] ?? resolveUnitPolicy(indicator.code)
     const method = policy.unit_rollup_method
     const unitVals = unitValueMap[indicator.code] ?? {}
-    const storeIds = Object.keys(unitVals)
+    const storeIds = [...new Set([...(expectedUnitIds ?? []), ...Object.keys(unitVals)])]
     const withData = unitsWithDataOf(unitVals)
     const companyValue = companyValueMap[indicator.code]
 
     let value: number | null = null
     let status: ConsolidationStatus = CONSOLIDATION_STATUS.SEM_BASE
     let explanation = ''
+    let inheritedUnitsWithData: number | null = null
+    let inheritedTotalUnits: number | null = null
 
     switch (method) {
       case 'SUM': {
@@ -115,7 +134,8 @@ export function computeConsolidatedMonth({
         if (valid.length > 0) {
           value = valid.reduce((total, current) => total + current, 0)
           status = valid.length === storeIds.length ? CONSOLIDATION_STATUS.COMPLETO : CONSOLIDATION_STATUS.PARCIAL
-          explanation = `Soma de ${valid.length} de ${storeIds.length} unidades`
+          explanation = formatPartialUnitsLabel(valid.length, storeIds.length)
+            ?? `Soma de ${valid.length} de ${storeIds.length} unidades`
         } else if (blankPolicy?.[indicator.code] === 'ZERO_IF_EMPTY') {
           value = 0
           status = CONSOLIDATION_STATUS.COMPLETO
@@ -141,7 +161,8 @@ export function computeConsolidatedMonth({
         if (denominator !== 0) {
           value = numerator / denominator
           status = withData.length === storeIds.length ? CONSOLIDATION_STATUS.COMPLETO : CONSOLIDATION_STATUS.PARCIAL
-          explanation = `Média ponderada por ${weightCode} (${withData.length}/${storeIds.length} unidades)`
+          explanation = formatPartialUnitsLabel(withData.length, storeIds.length)
+            ?? `Média ponderada por ${weightCode} (${withData.length}/${storeIds.length} unidades)`
         } else {
           explanation = `Sem peso (${weightCode ?? 'não declarado'}) para a média ponderada`
         }
@@ -153,7 +174,8 @@ export function computeConsolidatedMonth({
         if (valid.length > 0) {
           value = valid.reduce((total, current) => total + current, 0) / valid.length
           status = valid.length === storeIds.length ? CONSOLIDATION_STATUS.COMPLETO : CONSOLIDATION_STATUS.PARCIAL
-          explanation = `Média de ${valid.length} valores válidos`
+          explanation = formatPartialUnitsLabel(valid.length, storeIds.length)
+            ?? `Média de ${valid.length} valores válidos`
         } else {
           explanation = 'Nenhuma unidade possui dados'
         }
@@ -207,6 +229,17 @@ export function computeConsolidatedMonth({
         } else {
           explanation = 'Indicador derivado sem fórmula definida'
         }
+        if (status === CONSOLIDATION_STATUS.COMPLETO && indicator.formula_expression) {
+          const partialDeps = extractIndicatorDeps(indicator.formula_expression)
+            .map(code => integrity[code])
+            .filter((item): item is IndicatorIntegrity => item?.status === CONSOLIDATION_STATUS.PARCIAL)
+          if (partialDeps.length) {
+            status = CONSOLIDATION_STATUS.PARCIAL
+            inheritedUnitsWithData = Math.min(...partialDeps.map(item => item.unitsWithData))
+            inheritedTotalUnits = Math.max(...partialDeps.map(item => item.totalUnits))
+            explanation = formatPartialUnitsLabel(inheritedUnitsWithData, inheritedTotalUnits) ?? explanation
+          }
+        }
         break
       }
 
@@ -223,8 +256,8 @@ export function computeConsolidatedMonth({
     consolidated[indicator.code] = value
     integrity[indicator.code] = {
       status,
-      unitsWithData: withData.length,
-      totalUnits: storeIds.length,
+      unitsWithData: inheritedUnitsWithData ?? withData.length,
+      totalUnits: inheritedTotalUnits ?? storeIds.length,
       explanation,
       month,
     }
@@ -242,6 +275,7 @@ export function computeConsolidatedYear({
   params = {},
   paramMapByMonth = null,
   blankPolicy = null,
+  expectedUnitIds,
 }: {
   unitMonthlyMap: UnitMonthlyMap
   companyMonthlyMap: CompanyMonthlyMap
@@ -250,6 +284,7 @@ export function computeConsolidatedYear({
   params?: Record<string, number | null | undefined>
   paramMapByMonth?: Record<number, Record<string, number | null | undefined>> | null
   blankPolicy?: BlankPolicy | null
+  expectedUnitIds?: string[]
 }): {
   consolidatedByMonth: Record<number, Record<string, number | null>>
   integrityByMonth: Record<number, Record<string, IndicatorIntegrity>>
@@ -279,6 +314,7 @@ export function computeConsolidatedYear({
       params: paramMapByMonth ? (paramMapByMonth[month] ?? params) : params,
       month,
       blankPolicy,
+      expectedUnitIds,
     })
 
     consolidatedByMonth[month] = result.consolidated
@@ -358,9 +394,9 @@ export function getIndicatorScopeBadge(
 ): { label: string; tone: 'info' | 'neutral' } | null {
   switch (policies[indicatorCode]?.unit_entry_mode) {
     case 'COMPANY_ONLY':
-      return { label: 'Indicador consolidado da empresa', tone: 'info' }
+      return { label: 'Empresa', tone: 'info' }
     case 'SHARED_COMPANY_VALUE':
-      return { label: 'Valor compartilhado entre as unidades', tone: 'info' }
+      return { label: 'Compartilhado', tone: 'info' }
     case 'PER_UNIT_OPTIONAL':
       return { label: 'Cadastro opcional por unidade', tone: 'neutral' }
     default:

@@ -35,6 +35,34 @@ export type PersonAccessDraft = {
   visao_padrao: PersonDefaultView | ''
 }
 
+export function personToAccessDraft(person: {
+  nome: string
+  email: string
+  telefone: string | null
+  funcao_declarada: string | null
+  papeis: unknown
+  lojas_autorizadas?: unknown
+  is_dono_master: boolean
+  visao_padrao?: string | null
+}): PersonAccessDraft {
+  const papeis = (Array.isArray(person.papeis) ? person.papeis : []).filter(
+    (role): role is PersonProfile => PERSON_PROFILES.some(item => item.value === role),
+  )
+  const visao = person.visao_padrao && PERSON_DEFAULT_VIEWS.includes(person.visao_padrao as PersonDefaultView)
+    ? person.visao_padrao as PersonDefaultView
+    : ''
+  return {
+    nome: person.nome,
+    email: person.email,
+    telefone: person.telefone ?? '',
+    funcao_declarada: person.funcao_declarada ?? '',
+    papeis,
+    lojas_autorizadas: Array.isArray(person.lojas_autorizadas) ? person.lojas_autorizadas as string[] : [],
+    is_dono_master: person.is_dono_master,
+    visao_padrao: visao,
+  }
+}
+
 export function emptyPersonAccessDraft(): PersonAccessDraft {
   return {
     nome: '',
@@ -61,7 +89,7 @@ export function validatePersonAccessDraft(draft: PersonAccessDraft): string[] {
 }
 
 export type OwnerMasterResolution = {
-  status: 'NOT_CONFIGURED' | 'VALID' | 'DUPLICATE_MASTER' | 'INACTIVE'
+  status: 'NOT_CONFIGURED' | 'VALID' | 'DUPLICATE_MASTER' | 'INACTIVE' | 'OWNER_WITHOUT_MASTER'
   person?: {
     id: string
     nome: string
@@ -91,12 +119,19 @@ export function resolveOwnerMaster(
   }>,
 ): OwnerMasterResolution {
   const masters = persons.filter(person => person.is_dono_master)
-  if (masters.length === 0) return { status: 'NOT_CONFIGURED', count: 0 }
+  if (masters.length === 0) {
+    const donos = persons.filter(person => {
+      const papeis = Array.isArray(person.papeis) ? (person.papeis as string[]) : []
+      return papeis.includes('DONO')
+    })
+    if (donos.length > 0) return { status: 'OWNER_WITHOUT_MASTER', count: donos.length }
+    return { status: 'NOT_CONFIGURED', count: 0 }
+  }
   if (masters.length > 1) return { status: 'DUPLICATE_MASTER', count: masters.length }
 
   const person = masters[0]
   const papeis = Array.isArray(person.papeis) ? (person.papeis as string[]) : []
-  const ativo = person.status === 'ativo'
+  const ativo = person.status === 'ativo' || person.status === 'em_preparacao'
   const temDono = papeis.includes('DONO')
 
   if (!ativo || !temDono) {

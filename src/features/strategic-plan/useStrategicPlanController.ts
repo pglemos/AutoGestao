@@ -1,16 +1,18 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useOwnerOptional } from '@/components/owner/OwnerContext'
+import { ALL_OWNER_UNITS, resolveOwnerPlanningScopeType } from '@/components/owner/ownerPlanningAdapter'
 import { usePlanningRealtime, usePlanningWorkspace } from '@/features/planning-workspace'
 import {
   REFERENCE_YEAR,
-  SELECTED_MONTH_INDEX,
   calculatePercentageOfTarget,
   getStatusFromPercentage,
+  resolveDefaultSelectedMonthIndex,
 } from '@/components/owner/strategic/strategicUtils'
 import { strategicPlanDataSource } from './strategicPlanRepositoryAdapter'
 import { readStrategicRouteState, resolveInitialStrategicDisplayMode, writeStrategicRouteState } from './strategicPlanPreferences'
 import { usePlanCycle, type PlanCycleState } from './usePlanCycle'
 import { useClientScope } from './useClientScope'
-import type { ConsolidationIndicator } from './unitConsolidation'
+import { CONSOLIDATION_STATUS, formatPartialUnitsLabel, type ConsolidationIndicator } from './unitConsolidation'
 import type {
   StrategicDisplayMode,
   StrategicPlanRepository,
@@ -50,6 +52,10 @@ export type StrategicPlanController = {
   handleRowClick: (id: string) => void
   handleSaved: () => Promise<void>
   planCycle: PlanCycleState
+  selectedMonthIndex: number
+  setSelectedMonthIndex: (index: number) => void
+  partialUnitsLabel: string | null
+  scopeNotice: string | null
 }
 
 export function useStrategicPlanController(options: {
@@ -59,6 +65,8 @@ export function useStrategicPlanController(options: {
   useRealtime?: typeof usePlanningRealtime
 } = {}): StrategicPlanController {
   const { storeId, actor, capabilities } = usePlanningWorkspace()
+  const owner = useOwnerOptional() as { unitId?: string } | null
+  const ownerUnitId = owner?.unitId
   const repository = options.repository ?? strategicPlanDataSource
   const year = options.year ?? REFERENCE_YEAR
   const onUpdated = options.onUpdated
@@ -78,7 +86,7 @@ export function useStrategicPlanController(options: {
   const [error, setError] = useState<string | null>(null)
   const [series, setSeries] = useState<StrategicSeries[]>([])
   const [tab, setTabState] = useState<StrategicTab>(routeState.tab)
-  const [selectedIndicatorId, setSelectedIndicatorIdState] = useState(routeState.indicatorId || 'SP-001')
+  const [selectedIndicatorId, setSelectedIndicatorIdState] = useState(routeState.indicatorId || '')
   const [areaFilter, setAreaFilter] = useState('all')
   const [displayMode, setDisplayModeState] = useState<StrategicDisplayMode>(initialMode)
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768)
@@ -86,6 +94,7 @@ export function useStrategicPlanController(options: {
   const [actionOpen, setActionOpen] = useState(false)
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
+  const [selectedMonthIndex, setSelectedMonthIndex] = useState(() => resolveDefaultSelectedMonthIndex(year))
 
   const consolidationIndicators = useMemo<ConsolidationIndicator[]>(
     () => series.map(item => ({
@@ -97,6 +106,13 @@ export function useStrategicPlanController(options: {
   )
   const clientScope = useClientScope(storeId, year, consolidationIndicators)
   const reloadClientScope = clientScope.reload
+  const wantsConsolidated = ownerUnitId === ALL_OWNER_UNITS
+  const scopeType = resolveOwnerPlanningScopeType(ownerUnitId, clientScope.supportsConsolidated)
+  const scopeNotice = wantsConsolidated && !clientScope.loading && !clientScope.supportsConsolidated
+    ? 'Consolidado indisponível: este cliente tem uma única unidade. Exibindo a loja selecionada.'
+    : !wantsConsolidated && ownerUnitId && clientScope.supportsConsolidated
+      ? 'Exibindo a loja selecionada. O consolidado não entra neste recorte.'
+      : null
 
   const planCycle = usePlanCycle({
     storeId,
@@ -120,12 +136,22 @@ export function useStrategicPlanController(options: {
     setLoading(true)
     setError(null)
     try {
-      await repository.load({ storeId, year })
+      await repository.load({
+        storeId,
+        year,
+        clientId: clientScope.clientId,
+        versionId: planCycle.cycle?.id ?? null,
+        month: selectedMonthIndex + 1,
+        view: displayMode,
+        scopeType,
+      })
       if (requestId !== requestSequence.current) return
       const snapshot = repository.getOverviewData(year)
       setSeries(snapshot)
       setSelectedIndicatorIdState(current => (
-        snapshot.some(item => item.id === current) ? current : snapshot[0]?.id || 'SP-001'
+        snapshot.some(item => item.id === current || item.code === current || item.metricCode === current)
+          ? current
+          : snapshot[0]?.id || ''
       ))
       onUpdated?.(new Date())
     } catch (cause) {
@@ -135,9 +161,12 @@ export function useStrategicPlanController(options: {
     } finally {
       if (requestId === requestSequence.current) setLoading(false)
     }
-  }, [onUpdated, repository, storeId, year])
+  }, [clientScope.clientId, displayMode, onUpdated, planCycle.cycle?.id, repository, scopeType, selectedMonthIndex, storeId, year])
 
   useEffect(() => { void reload() }, [reload])
+  useEffect(() => {
+    setSelectedMonthIndex(resolveDefaultSelectedMonthIndex(year))
+  }, [year])
 
   const { status: realtimeStatus } = useRealtime({
     scope: 'strategic',
@@ -183,12 +212,12 @@ export function useStrategicPlanController(options: {
   )
   const isActionPrimary = useMemo(() => {
     if (!indicator) return false
-    const result = indicator.currentValues[SELECTED_MONTH_INDEX]
-    const target = indicator.targetValues[SELECTED_MONTH_INDEX]
+    const result = indicator.currentValues[selectedMonthIndex]
+    const target = indicator.targetValues[selectedMonthIndex]
     const percentage = calculatePercentageOfTarget(result, target)
     const status = percentage === null ? 'neutral' : getStatusFromPercentage(percentage, indicator.direction)
     return status === 'attention' || status === 'critical'
-  }, [indicator])
+  }, [indicator, selectedMonthIndex])
 
   const handleCardClick = useCallback((id: string) => {
     setSelectedIndicatorIdState(id)
@@ -204,6 +233,18 @@ export function useStrategicPlanController(options: {
     reloadClientScope()
     await reload()
   }, [reload, reloadClientScope])
+
+  const partialUnitsLabel = useMemo(() => {
+    if (scopeType !== 'CONSOLIDATED' || !clientScope.supportsConsolidated || !clientScope.consolidated) return null
+    const month = selectedMonthIndex + 1
+    const byCode = clientScope.consolidated.realizado.integrityByMonth[month] ?? {}
+    for (const item of Object.values(byCode)) {
+      if (item.status === CONSOLIDATION_STATUS.PARCIAL) {
+        return formatPartialUnitsLabel(item.unitsWithData, item.totalUnits)
+      }
+    }
+    return null
+  }, [clientScope.consolidated, clientScope.supportsConsolidated, scopeType, selectedMonthIndex])
 
   return {
     repository,
@@ -237,5 +278,9 @@ export function useStrategicPlanController(options: {
     handleRowClick,
     handleSaved,
     planCycle,
+    selectedMonthIndex,
+    setSelectedMonthIndex,
+    partialUnitsLabel,
+    scopeNotice,
   }
 }

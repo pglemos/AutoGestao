@@ -20,6 +20,7 @@ export function PersonCreateModal(props: {
   submitting: boolean
   stores: PersonStoreOption[]
   initial?: Partial<PersonAccessDraft>
+  editing?: boolean
   onSubmit: (draft: PersonAccessDraft) => void
   onClose: () => void
 }) {
@@ -79,7 +80,7 @@ export function PersonCreateModal(props: {
     <Modal
       open={props.open}
       onClose={props.onClose}
-      title="Adicionar Usuário"
+      title={props.editing ? 'Editar usuário' : 'Adicionar Usuário'}
       description="Dados pessoais, perfis de acesso, Dono Master e lojas autorizadas."
       size="lg"
       closeOnEscape={!props.submitting}
@@ -98,7 +99,7 @@ export function PersonCreateModal(props: {
             }}
             disabled={props.submitting || errors.length > 0}
           >
-            <UserPlus size={16} />{props.submitting ? 'Salvando...' : 'Salvar usuário'}
+            <UserPlus size={16} />{props.submitting ? 'Salvando...' : props.editing ? 'Salvar alterações' : 'Salvar usuário'}
           </Button>
         </>
       )}

@@ -7,6 +7,8 @@ import { readinessSummary, type ReadinessCheck } from './clientReadiness'
 export function ClientActivationModal(props: {
   /** Reparo automático do check; ausente = botão não aparece. */
   onRepair?: (key: RepairKey) => void
+  /** Correção manual (Dono Master, Pessoas). */
+  onCorrect?: (check: ReadinessCheck) => void
   repairing?: string | null
   open: boolean
   clientName: string
@@ -56,6 +58,10 @@ export function ClientActivationModal(props: {
                       onClick={() => props.onRepair?.(check.key as RepairKey)}
                     >
                       {props.repairing === check.key ? 'Reparando...' : 'Reparar'}
+                    </Button>
+                  ) : !check.ok && props.onCorrect && check.correctionRoute ? (
+                    <Button variant="outline" size="sm" onClick={() => props.onCorrect?.(check)}>
+                      Corrigir
                     </Button>
                   ) : null}
                   <span className={check.ok ? 'text-xs font-semibold text-status-success-text' : 'text-xs font-semibold text-status-error-text'}>

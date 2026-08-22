@@ -1,8 +1,10 @@
 import { describe, expect, test } from 'bun:test'
 import {
   allowedTransitions,
+  buildPublicationCardFromRows,
   canTransition,
   readinessSummary,
+  summarizePublicationCard,
   validatePlanReadiness,
   type PlanCycleStatus,
 } from './planCycle'
@@ -175,5 +177,37 @@ describe('readinessSummary', () => {
       indicatorCodes: codes, activeUnitIds: ['matriz'], policies: policies(codes), metaByUnit,
     })
     expect(readinessSummary(readiness)).toContain('2 meta(s)')
+  })
+})
+
+describe('card de metas publicadas', () => {
+  test('publicado conta distinct indicadores com meta, não células', () => {
+    const card = buildPublicationCardFromRows({
+      cycleStatus: 'publicado',
+      rosterCodes: ['a', 'b', 'c'],
+      rows: [
+        { indicator_code: 'a', meta: 10 },
+        { indicator_code: 'a', meta: 20 },
+        { indicator_code: 'b', meta: 5 },
+        { indicator_code: 'c', meta: 1 },
+      ],
+    })
+    expect(card).toMatchObject({
+      indicadoresComMeta: 3,
+      metasPublicadas: 3,
+      metasPendentes: 0,
+      statusLabel: 'Publicado',
+    })
+  })
+
+  test('rascunho não conta como meta publicada', () => {
+    const card = summarizePublicationCard({
+      cycleStatus: 'rascunho',
+      rosterCodes: Array.from({ length: 46 }, (_, index) => `i${index}`),
+      indicatorsWithMeta: Array.from({ length: 46 }, (_, index) => `i${index}`),
+    })
+    expect(card.indicadoresComMeta).toBe(46)
+    expect(card.metasPublicadas).toBe(0)
+    expect(card.metasPendentes).toBe(0)
   })
 })

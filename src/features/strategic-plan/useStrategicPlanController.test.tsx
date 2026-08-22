@@ -21,8 +21,10 @@ describe('useStrategicPlanController', () => {
     const repository = fakeRepository(45)
     const { result } = renderStrategicController({ storeId: 'store-1', repository })
     await waitFor(() => expect(result.current.loading).toBe(false))
-    expect(repository.loadCalls).toEqual([{ storeId: 'store-1', year: 2026 }])
+    expect(repository.loadCalls[0]).toMatchObject({ storeId: 'store-1', year: 2026 })
     expect(result.current.series).toHaveLength(45)
+    expect(result.current.selectedMonthIndex).toBeGreaterThanOrEqual(0)
+    expect(result.current.selectedMonthIndex).toBeLessThan(12)
   })
 })
 

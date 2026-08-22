@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react";
 import { useAuth } from "@/features/owner/lib/ownerAuth";
 import { useStores } from "@/hooks/useStores";
+import { nextOwnerUnitId, ALL_OWNER_UNITS } from "@/components/owner/ownerPlanningAdapter";
 import { resolveOwnerPeriodRange } from "@/lib/owner-period";
 
 const OwnerContext = createContext(null);
@@ -20,11 +21,8 @@ export const OwnerProvider = ({ children }) => {
   const { lojas, loading: storesLoading, error: storesError } = useStores();
 
   const [period, setPeriod] = useState("month"); // month | quarter | year | custom
-  const [customStart, setCustomStart] = useState(() => {
-    const now = new Date();
-    return new Date(now.getFullYear(), now.getMonth(), 1).toISOString().slice(0, 10);
-  });
-  const [customEnd, setCustomEnd] = useState(() => new Date().toISOString().slice(0, 10));
+  const [customStart, setCustomStart] = useState(() => resolveOwnerPeriodRange("month").start);
+  const [customEnd, setCustomEnd] = useState(() => resolveOwnerPeriodRange("month").end);
   const [unitId, setUnitId] = useState("");
   const [consultantModal, setConsultantModal] = useState({ open: false, context: null });
 
@@ -34,14 +32,7 @@ export const OwnerProvider = ({ children }) => {
   );
 
   useEffect(() => {
-    if (units.length === 0) {
-      setUnitId("");
-      return;
-    }
-    // "all" (todas as lojas) é uma seleção válida e deve ser preservada.
-    setUnitId((current) => current === "all" || units.some((unit) => unit.id === current)
-      ? current
-      : (activeStoreId && units.some((unit) => unit.id === activeStoreId) ? activeStoreId : units[0].id));
+    setUnitId((current) => nextOwnerUnitId(current, units, activeStoreId));
   }, [activeStoreId, units]);
 
   const company = useMemo(
@@ -80,8 +71,8 @@ export const OwnerProvider = ({ children }) => {
     unitId,
     setUnitId: (nextUnitId) => {
       setUnitId(nextUnitId);
-      // Em "todas as lojas" nao existe loja ativa unica no escopo raiz.
-      setRootActiveStoreId?.(nextUnitId && nextUnitId !== "all" ? nextUnitId : null);
+      // Consolidado não zera a loja de identidade (simulação/RBAC). Só troca quando é uma loja real.
+      if (nextUnitId && nextUnitId !== ALL_OWNER_UNITS) setRootActiveStoreId?.(nextUnitId);
     },
     period,
     setPeriod,

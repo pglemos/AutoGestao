@@ -338,6 +338,12 @@ export function PortfolioOverviewTab({ rows, onAction, onRefetch }: PortfolioOve
         clientName={pendenciasClient?.name ?? ''}
         onClose={() => setPendenciasClient(null)}
         onRefetch={onRefetch}
+        onCorrect={check => {
+          if (check.key !== 'dono-master' || !pendenciasClient) return
+          const slug = pendenciasClient.slug || pendenciasClient.id
+          setPendenciasClient(null)
+          navigate(`/clientes/${slug}?tab=pessoas`)
+        }}
       />
     </div>
   )
