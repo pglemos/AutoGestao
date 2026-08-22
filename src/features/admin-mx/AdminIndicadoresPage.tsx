@@ -236,7 +236,10 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
     })()
   }, [tab, parameterSetId])
 
-  const areas = useMemo(() => [...new Set(rows.map(item => item.area).filter(Boolean))].sort(), [rows])
+  const areas = useMemo(
+    () => sortCatalogAreas([...new Set(rows.filter(item => item.status !== 'arquivado').map(item => item.area).filter(Boolean))]),
+    [rows],
+  )
 
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase()
