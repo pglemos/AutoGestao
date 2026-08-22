@@ -206,6 +206,33 @@ describe('cadastro rápido', () => {
     expect(grid.sales_total[1].meta).toBe(55)
   })
 
+  test('recalcula a partir da grade hidratada mesmo com loja_id vazio e código oficial de carteira', () => {
+    const grid = buildOfficialMonthlyGrid([
+      { loja_id: '', indicator_code: 'sales_door_flow', year: 2026, month: 1, meta: 15, realizado: null, ano_anterior: null },
+      { loja_id: '', indicator_code: 'sales_referral', year: 2026, month: 1, meta: 5, realizado: null, ano_anterior: null },
+      { loja_id: '', indicator_code: 'sales_company_wallet', year: 2026, month: 1, meta: 5, realizado: null, ano_anterior: null },
+      { loja_id: '', indicator_code: 'sales_seller_wallet', year: 2026, month: 1, meta: 10, realizado: null, ano_anterior: null },
+      { loja_id: '', indicator_code: 'sales_internet', year: 2026, month: 1, meta: 20, realizado: null, ano_anterior: null },
+      { loja_id: '', indicator_code: 'sales_other', year: 2026, month: 1, meta: 0, realizado: null, ano_anterior: null },
+    ], [
+      { code: 'sales_walkin' },
+      { code: 'sales_referral' },
+      { code: 'sales_company_portfolio' },
+      { code: 'sales_seller_portfolio' },
+      { code: 'sales_internet' },
+      { code: 'sales_other' },
+      { code: 'sales_total' },
+      { code: 'net_profit' },
+      { code: 'contribution_margin' },
+      { code: 'additional_revenue' },
+      { code: 'total_expense' },
+    ], '467a19d1-af51-4b4f-9b05-d67187a2a759')
+
+    expect(grid.sales_walkin[1].meta).toBe(15)
+    expect(grid.sales_company_portfolio[1].meta).toBe(5)
+    expect(grid.sales_total[1].meta).toBe(55)
+  })
+
   test('validação de células recusa mês fora do intervalo', () => {
     expect(validateQuickEntryCells([{ indicator_code: 'A', month: 13, value: 1 }])).toHaveLength(1)
     expect(validateQuickEntryCells([{ indicator_code: 'A', month: 1, value: 1 }])).toEqual([])

@@ -470,22 +470,51 @@ export function buildMonthlyGrid(
   return grid
 }
 
+function toFiniteNumber(value: unknown): number | null {
+  if (value == null || value === '') return null
+  const num = typeof value === 'number' ? value : Number(value)
+  return Number.isFinite(num) ? num : null
+}
+
+function flattenMonthlyGrid(
+  grid: ReturnType<typeof buildMonthlyGrid>,
+  unitId: string,
+  year: number,
+): StoreTargetValue[] {
+  const rows: StoreTargetValue[] = []
+  for (const [code, months] of Object.entries(grid)) {
+    for (const month of MONTHS) {
+      const cell = months[month]
+      rows.push({
+        loja_id: unitId,
+        indicator_code: code,
+        year,
+        month,
+        meta: toFiniteNumber(cell.meta),
+        realizado: toFiniteNumber(cell.realizado),
+        ano_anterior: toFiniteNumber(cell.ano_anterior),
+      })
+    }
+  }
+  return rows
+}
+
 export function buildOfficialMonthlyGrid(
   values: StoreTargetValue[],
   indicators: Array<{ code: string; formula_expression?: string | null }>,
   unitId: string,
 ) {
-  const computed = unitId
-    ? applyOfficialComputedMetas({
-      values,
-      indicators: indicators.map(item => ({
-        metric_key: item.code,
-        formula_expression: item.formula_expression ?? matchCanonicalIndicator(item.code)?.formula_expression ?? null,
-      })),
-      unitIds: [unitId],
-    })
-    : values
-  return buildMonthlyGrid(computed, indicators.map(item => item.code))
+  const codes = indicators.map(item => item.code)
+  const hydrated = buildMonthlyGrid(values, codes)
+  if (!unitId) return hydrated
+  return buildMonthlyGrid(applyOfficialComputedMetas({
+    values: flattenMonthlyGrid(hydrated, unitId, values[0]?.year ?? 0),
+    indicators: indicators.map(item => ({
+      metric_key: item.code,
+      formula_expression: item.formula_expression ?? matchCanonicalIndicator(item.code)?.formula_expression ?? null,
+    })),
+    unitIds: [unitId],
+  }), codes)
 }
 
 /** Soma anual respeitando a política de agregação do indicador. */

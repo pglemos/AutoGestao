@@ -431,8 +431,16 @@ export function applyOfficialComputedMetas<T extends {
   for (const unitId of params.unitIds) {
     for (const field of COMPUTED_FIELDS) {
       const monthlyValues = next
-        .filter(row => row.loja_id === unitId && row.month != null)
-        .map(row => ({ indicator_code: row.indicator_code, month: Number(row.month), value: row[field] ?? null }))
+        .filter(row => row.month != null && (params.unitIds.length === 1 || !row.loja_id || row.loja_id === unitId))
+        .map(row => {
+          const raw = row[field] as unknown
+          const num = raw == null || raw === '' ? Number.NaN : Number(raw)
+          return {
+            indicator_code: row.indicator_code,
+            month: Number(row.month),
+            value: Number.isFinite(num) ? num : null,
+          }
+        })
       const { valueMap } = computeValueMap(monthlyValues, engineIndicators, parameterSource)
       for (const indicator of calculated) {
         const canon = matchCanonicalIndicator(indicator.metric_key)
