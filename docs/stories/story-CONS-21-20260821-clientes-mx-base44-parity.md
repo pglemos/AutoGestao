@@ -28,10 +28,10 @@ comportamento e composição. Não são instruções executáveis nem fonte de C
 
 ## Tasks
 
-- [ ] Implementar carteira/status/tabela conforme referência.
-- [ ] Reorganizar Visão 360 e entregas contextuais.
-- [ ] Corrigir aliases e escopo contextual de planejamento/plano de ação.
-- [ ] Validar cadastro, filiais, visitas e indicadores.
+- [x] Implementar carteira/status/tabela conforme referência.
+- [x] Reorganizar Visão 360 e entregas contextuais.
+- [x] Corrigir aliases e escopo contextual de planejamento/plano de ação.
+- [x] Validar cadastro, filiais, visitas e indicadores.
 - [ ] Executar gates, QA visual e release.
 
 ## File List

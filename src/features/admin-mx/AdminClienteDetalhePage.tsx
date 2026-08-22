@@ -128,11 +128,28 @@ function formatDate(value: string | null | undefined) {
 }
 
 function formatClientStatus(value: string | null | undefined) {
-  const normalized = String(value ?? '').trim().toLowerCase()
-  if (normalized === 'ativo' || normalized === 'active') return 'Ativo'
-  if (normalized === 'inativo' || normalized === 'inactive') return 'Inativo'
-  if (normalized === 'em_implantacao') return 'Em implantação'
-  if (normalized === 'bloqueado') return 'Bloqueado'
+  const normalized = String(value ?? '')
+    .trim()
+    .toLocaleLowerCase('pt-BR')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[\s-]+/g, '_')
+  const labels: Record<string, string> = {
+    ativo: 'Ativo',
+    active: 'Ativo',
+    inativo: 'Inativo',
+    inactive: 'Inativo',
+    em_implantacao: 'Em implantação',
+    ativo_em_implantacao: 'Ativo em Implantação',
+    ativacao_programada: 'Ativação Programada',
+    bloqueado: 'Bloqueado',
+    suspenso: 'Suspenso',
+    suspended: 'Suspenso',
+    encerrado: 'Encerrado',
+    closed: 'Encerrado',
+    arquivado: 'Arquivado',
+  }
+  if (Object.prototype.hasOwnProperty.call(labels, normalized)) return labels[normalized]
   return value?.trim() || 'Indefinido'
 }
 
