@@ -9,7 +9,13 @@ import {
 } from '@/features/strategic-plan/planCycleRepository'
 import type { PlanCycleStatus, PlanReadiness } from '@/features/strategic-plan/planCycle'
 import type { CatalogIndicator } from './indicatorCatalog'
-import { overlayCanonicalCatalog } from './canonicalBase44Catalog'
+import { applyCanonicalFormulas } from './indicatorCatalog'
+import {
+  isOfficialBase44Key,
+  liveOfficialCatalogRows,
+  matchCanonicalIndicator,
+  overlayCanonicalCatalog,
+} from './canonicalBase44Catalog'
 import type { EditorField, EditorPlanningRow } from './strategicPlanEditor'
 
 const CYCLE_COLUMNS = 'id, client_id, year, status, version_number, package_version_id, revised_from_id, published_at, published_by, created_at, updated_at'
@@ -163,6 +169,73 @@ async function fetchCycleRoster(cycle: PlanCycle): Promise<{ rows: Row[]; error:
   }
 }
 
+async function reconcileOfficialRoster(
+  cycle: PlanCycle,
+  roster: Row[],
+  officialCatalog: CatalogIndicator[],
+): Promise<{ rows: Row[]; error: string | null }> {
+  const extraKeys = [...new Set(roster.map(row => asString(row.metric_key)).filter(key => key && !isOfficialBase44Key(key)))]
+  if (extraKeys.length || officialCatalog.length < 45) {
+    const synced = await applyCanonicalFormulas()
+    if (synced.error) return { rows: roster.filter(row => isOfficialBase44Key(asString(row.metric_key))), error: synced.error }
+  }
+
+  if (extraKeys.length) {
+    const { error } = await supabase
+      .from('ciclos_plano_estrategico_indicadores')
+      .delete()
+      .eq('ciclo_id', cycle.id)
+      .in('metric_key', extraKeys)
+    if (error) return { rows: roster.filter(row => isOfficialBase44Key(asString(row.metric_key))), error: error.message }
+  }
+
+  if (cycle.package_version_id) {
+    const { data: packageItems } = await supabase
+      .from('pacotes_indicadores_itens')
+      .select('id, metric_key')
+      .eq('version_id', cycle.package_version_id)
+    const extraItemIds = (packageItems ?? [])
+      .filter(item => !isOfficialBase44Key(asString(item.metric_key)))
+      .map(item => item.id)
+    if (extraItemIds.length) {
+      await supabase.from('pacotes_indicadores_itens').delete().in('id', extraItemIds)
+    }
+  }
+
+  const remaining = roster.filter(row => isOfficialBase44Key(asString(row.metric_key)))
+  if (!['rascunho', 'em_validacao'].includes(cycle.status)) return { rows: remaining, error: null }
+
+  const present = new Set(
+    remaining
+      .map(row => matchCanonicalIndicator(asString(row.metric_key))?.code)
+      .filter((code): code is string => Boolean(code)),
+  )
+  const missing = officialCatalog.filter(item => {
+    const code = matchCanonicalIndicator(item.metric_key)?.code
+    return Boolean(code && !present.has(code))
+  })
+  if (missing.length === 0) return { rows: remaining, error: null }
+
+  const { error } = await supabase.from('ciclos_plano_estrategico_indicadores').insert(
+    missing.map(item => ({
+      ciclo_id: cycle.id,
+      metric_key: item.metric_key,
+      label_snapshot: item.label,
+      area_snapshot: item.area,
+      value_type_snapshot: item.value_type,
+      calculation_mode_snapshot: item.target_calculation_mode,
+      enabled: true,
+      visible_to_owner: item.visivel_dono,
+      display_order: item.sort_order,
+      origin: 'pacote',
+    })),
+  )
+  if (error) return { rows: remaining, error: error.message }
+
+  const next = await fetchCycleRoster(cycle)
+  return { rows: next.rows.filter(row => isOfficialBase44Key(asString(row.metric_key))), error: next.error }
+}
+
 export async function fetchStrategicPlanEditorData(cycleId: string): Promise<{ data: StrategicPlanEditorData | null; error: string | null }> {
   const { data: cycleData, error: cycleError } = await supabase
     .from('ciclos_plano_estrategico')
@@ -189,13 +262,36 @@ export async function fetchStrategicPlanEditorData(cycleId: string): Promise<{ d
     status: (clientResult.data as Row).status == null ? null : asString((clientResult.data as Row).status),
     primaryStoreId: (clientResult.data as Row).primary_store_id == null ? null : asString((clientResult.data as Row).primary_store_id),
   }
-  const catalogByKey = new Map(catalogResult.rows.map(row => [row.metric_key, row]))
-  const indicators = rosterResult.rows
+  const officialCatalog = liveOfficialCatalogRows(catalogResult.rows)
+  const reconciled = await reconcileOfficialRoster(cycle, rosterResult.rows, officialCatalog)
+  if (reconciled.error) return { data: null, error: reconciled.error }
+  const catalogByKey = new Map(officialCatalog.map(row => [row.metric_key, row]))
+  const catalogByCode = new Map(officialCatalog.map(row => [matchCanonicalIndicator(row.metric_key)?.code ?? row.metric_key, row]))
+  const seen = new Set<string>()
+  const indicators = reconciled.rows
     .map(row => {
-      const catalog = catalogByKey.get(asString(row.metric_key))
-      return catalog ? toEditorIndicator(row, catalog) : null
+      const key = asString(row.metric_key)
+      const catalog = catalogByKey.get(key) ?? catalogByCode.get(matchCanonicalIndicator(key)?.code ?? '')
+      const code = matchCanonicalIndicator(key)?.code
+      if (!catalog || !code || seen.has(code)) return null
+      seen.add(code)
+      return toEditorIndicator(row, catalog)
     })
     .filter((row): row is StrategicPlanEditorIndicator => Boolean(row))
+  for (const catalog of officialCatalog) {
+    const code = matchCanonicalIndicator(catalog.metric_key)?.code
+    if (!code || seen.has(code)) continue
+    seen.add(code)
+    indicators.push(toEditorIndicator({
+      id: `catalog:${catalog.metric_key}`,
+      metric_key: catalog.metric_key,
+      enabled: true,
+      visible_to_owner: catalog.visivel_dono,
+      display_order: catalog.sort_order,
+      origin: 'pacote',
+    }, catalog))
+  }
+  indicators.sort((left, right) => left.display_order - right.display_order || left.label.localeCompare(right.label, 'pt-BR'))
 
   const unitsResult = await fetchClientUnits(client.id)
   if (unitsResult.error) return { data: null, error: unitsResult.error }
@@ -204,7 +300,7 @@ export async function fetchStrategicPlanEditorData(cycleId: string): Promise<{ d
   if (values.error) return { data: null, error: values.error }
 
   return {
-    data: { cycle, client, units: unitsResult.units, indicators, catalog: catalogResult.rows, values: values.rows },
+    data: { cycle, client, units: unitsResult.units, indicators, catalog: officialCatalog, values: values.rows },
     error: null,
   }
 }
@@ -294,6 +390,7 @@ export async function fetchCycleHistory(params: {
 }
 
 export async function addCycleIndicator(cycleId: string, metricKey: string): Promise<{ error: string | null }> {
+  if (!isOfficialBase44Key(metricKey)) return { error: 'Só indicadores oficiais do Base44 entram no plano.' }
   const { error } = await supabase.rpc('adicionar_indicador_ciclo_plano', {
     p_cycle_id: cycleId,
     p_metric_key: metricKey,

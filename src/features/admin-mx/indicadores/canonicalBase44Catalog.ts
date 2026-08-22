@@ -170,6 +170,28 @@ export function matchCanonicalIndicator(metricKey: string) {
   return INDEX.get(normalizeCatalogKey(metricKey)) ?? null
 }
 
+export function isOfficialBase44Key(metricKey: string) {
+  return matchCanonicalIndicator(metricKey) != null
+}
+
+export function officialPersistenceKeys() {
+  return [...INDEX.keys()].sort()
+}
+
+export function filterOfficialRows<T extends { metric_key: string }>(rows: T[]) {
+  const seen = new Set<string>()
+  return rows.filter(row => {
+    const canon = matchCanonicalIndicator(row.metric_key)
+    if (!canon || seen.has(canon.code)) return false
+    seen.add(canon.code)
+    return true
+  })
+}
+
+export function liveOfficialCatalogRows<T extends OverlayCatalogRow>(rows: T[]) {
+  return filterOfficialRows(rows.filter(row => row.status !== 'arquivado' && row.active !== false))
+}
+
 export function rewriteCanonicalFormula(expression: string, resolveKey: (code: string) => string) {
   return expression.replace(/\b(IND|PAR)\("([^"]+)"\)/g, (_match, fn: string, code: string) => `${fn}("${resolveKey(code)}")`)
 }

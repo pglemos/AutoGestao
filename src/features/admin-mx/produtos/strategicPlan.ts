@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase'
+import { filterOfficialRows, isOfficialBase44Key } from '@/features/admin-mx/indicadores/canonicalBase44Catalog'
 
 // ─── Plano Estratégico do produto: pacote de indicadores versionado ──────────
 // Paridade com o Base44 (ProductStrategicPlanTab + productPackageOps): o produto
@@ -143,7 +144,7 @@ export function validatePackageDraft(draft: { nome: string; metricKeys: string[]
 
 /** Constrói os itens de uma versão a partir dos indicadores escolhidos. */
 export function buildPackageItems(indicators: PackageIndicator[], versionId: string): PackageItem[] {
-  return indicators.map(ind => ({
+  return filterOfficialRows(indicators).map(ind => ({
     version_id: versionId,
     metric_key: ind.metric_key,
     label_snapshot: ind.label,
@@ -242,7 +243,7 @@ export async function fetchPublishedIndicators(): Promise<{ rows: PackageIndicat
     .eq('status', 'publicado')
     .order('sort_order', { ascending: true })
   if (error) return { rows: [], error: error.message }
-  return { rows: (data ?? []).map(row => toPackageIndicator(row)), error: null }
+  return { rows: filterOfficialRows((data ?? []).map(row => toPackageIndicator(row))), error: null }
 }
 
 /** Itens (indicadores congelados) de uma versão de pacote. */
@@ -254,7 +255,7 @@ export async function fetchPackageVersionItems(versionId: string): Promise<{ row
     .order('ordem_snapshot', { ascending: true, nullsFirst: true })
   if (error) return { rows: [], error: error.message }
   return {
-    rows: (data ?? []).map(item => ({
+    rows: filterOfficialRows((data ?? []).map(item => ({
       metric_key: item.metric_key,
       label: item.label_snapshot ?? item.metric_key,
       area: item.area_snapshot ?? '—',
@@ -266,7 +267,7 @@ export async function fetchPackageVersionItems(versionId: string): Promise<{ row
       unit_entry_mode: item.unit_entry_mode_snapshot,
       unit_rollup_method: item.unit_rollup_method_snapshot,
       weight_indicator_code: item.weight_indicator_code_snapshot,
-    })),
+    }))),
     error: null,
   }
 }
@@ -276,7 +277,8 @@ export async function createStrategicPackage(
   draft: { nome: string; descricao: string; metricKeys: string[] },
   createdBy: string,
 ): Promise<{ packageId: string; versionId: string; error: string | null }> {
-  const invalid = validatePackageDraft({ nome: draft.nome, metricKeys: draft.metricKeys })
+  const metricKeys = draft.metricKeys.filter(isOfficialBase44Key)
+  const invalid = validatePackageDraft({ nome: draft.nome, metricKeys })
   if (invalid) return { packageId: '', versionId: '', error: invalid }
 
   const pacoteKey = draft.nome
@@ -309,7 +311,7 @@ export async function createStrategicPackage(
   const { data: indicators } = await supabase
     .from('catalogo_metricas_consultoria')
     .select('metric_key, label, area, sort_order, value_type, direction, formula_key, unit_entry_mode, unit_rollup_method, weight_indicator_code')
-    .in('metric_key', draft.metricKeys)
+    .in('metric_key', metricKeys)
 
   const { data: version, error: versionError } = await supabase
     .from('pacotes_indicadores_versoes')

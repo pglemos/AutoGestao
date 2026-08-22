@@ -69,6 +69,7 @@ import {
   type StrategicPlanEditorIndicator,
   type StrategicPlanHistoryRow,
 } from './strategicPlanEditorRepository'
+import { matchCanonicalIndicator } from './canonicalBase44Catalog'
 import { PLAN_CYCLE_STATUS_LABEL, type PlanReadiness } from '@/features/strategic-plan/planCycle'
 import { consolidateClientPlanning, resolvePolicies, type PlanningValueRow } from '@/features/strategic-plan/clientPlanningConsolidation'
 import type { ConsolidationIndicator } from '@/features/strategic-plan/unitConsolidation'
@@ -525,7 +526,8 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
     const existing = new Set(allIndicators.map(indicator => indicator.metric_key))
     const term = addSearch.trim().toLocaleLowerCase('pt-BR')
     return data?.catalog.filter(indicator => {
-      if (existing.has(indicator.metric_key) || indicator.active === false) return false
+      if (existing.has(indicator.metric_key) || indicator.active === false || indicator.status === 'arquivado') return false
+      if (!matchCanonicalIndicator(indicator.metric_key)) return false
       if (!term) return true
       return [indicator.metric_key, indicator.label, indicator.area].some(value => String(value ?? '').toLocaleLowerCase('pt-BR').includes(term))
     }).slice(0, 100) ?? []

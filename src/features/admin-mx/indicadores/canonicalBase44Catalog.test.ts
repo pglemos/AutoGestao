@@ -1,6 +1,8 @@
 import { describe, expect, test } from 'bun:test'
 import {
   BASE44_STANDARD_INDICATORS,
+  filterOfficialRows,
+  isOfficialBase44Key,
   matchCanonicalIndicator,
   officialCatalogCode,
   overlayCanonicalCatalog,
@@ -17,6 +19,21 @@ describe('catálogo canônico Base44', () => {
   test('reconhece chaves MX e códigos oficiais', () => {
     expect(matchCanonicalIndicator('sales_door_flow')?.code).toBe('SALES_WALKIN')
     expect(officialCatalogCode('sales_total')).toBe('SALES_TOTAL')
+    expect(isOfficialBase44Key('sales_door_flow')).toBe(true)
+    expect(isOfficialBase44Key('sales_goal')).toBe(false)
+    expect(isOfficialBase44Key('internet_sales_share')).toBe(false)
+    expect(isOfficialBase44Key('crm_followup_rate')).toBe(false)
+  })
+
+  test('remove extras MX e deduplica aliases oficiais', () => {
+    const rows = filterOfficialRows([
+      { metric_key: 'sales_door_flow' },
+      { metric_key: 'sales_walkin' },
+      { metric_key: 'sales_goal' },
+      { metric_key: 'goal_achievement_rate' },
+      { metric_key: 'contribution_margin' },
+    ])
+    expect(rows.map(row => row.metric_key)).toEqual(['sales_door_flow', 'contribution_margin'])
   })
 
   test('regrava fórmulas para as chaves reais do catálogo', () => {
