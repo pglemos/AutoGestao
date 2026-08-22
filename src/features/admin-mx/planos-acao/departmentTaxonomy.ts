@@ -29,7 +29,7 @@ function normalizeDepartment(value: string | null | undefined): string {
 /** Converte os códigos históricos e os códigos canônicos no agrupamento MX. */
 export function departmentCategory(value: string | null | undefined): ActionPlanDepartmentCategory | null {
   const normalized = normalizeDepartment(value)
-  if (normalized === 'COMERCIAL' || normalized === 'VENDAS') return 'comercial'
+  if (normalized === 'COMERCIAL' || normalized === 'COMMERCIAL' || normalized === 'VENDAS') return 'comercial'
   if (normalized === 'MARKETING') return 'marketing'
   if (['PRODUTO', 'PRODUTOESTOQUE', 'ESTOQUE'].includes(normalized)) return 'produto'
   if (['RH', 'PESSOAS', 'PESSOASRH', 'EQUIPE', 'DESENVOLVIMENTO'].includes(normalized)) return 'rh'

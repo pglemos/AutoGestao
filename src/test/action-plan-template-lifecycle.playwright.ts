@@ -24,9 +24,9 @@ test.describe('biblioteca de templates do plano de ação', () => {
     await loginWithCredentials(page, ADMIN_EMAIL, getE2ERolePassword())
     await page.goto('/plano-acao')
 
-    await expect(page.getByRole('tab', { name: 'Gestão global' })).toHaveAttribute('aria-selected', 'true')
     await page.getByRole('tab', { name: 'Planos da rede' }).click()
     await expect(page.getByRole('tab', { name: 'Planos da rede' })).toHaveAttribute('aria-selected', 'true')
+    await page.getByLabel('Modo de visualização').selectOption('kanban')
 
     const planCards = page.locator('section[aria-label] ul li button')
     await expect(planCards.first()).toBeVisible()
@@ -57,8 +57,8 @@ test.describe('biblioteca de templates do plano de ação', () => {
   test('expõe ações de ciclo de vida sem executar mutações', async ({ page }, testInfo) => {
     await loginWithCredentials(page, ADMIN_EMAIL, getE2ERolePassword())
     await page.goto('/plano-acao?mode=biblioteca')
-    await expect(page.getByRole('tab', { name: 'Gestão global' })).toHaveAttribute('aria-selected', 'true')
-    await page.getByRole('tab', { name: 'Biblioteca de templates' }).click()
+    await expect(page.getByRole('tab', { name: 'Planos Padrão' })).toHaveAttribute('aria-selected', 'true')
+    await page.getByRole('tab', { name: 'Planos Padrão' }).click()
 
     await expect(page.getByText('Planos padrão de ação')).toBeVisible({ timeout: 15000 })
     const lifecycleMenu = page.getByRole('button', { name: /Mais ações para/ }).first()
@@ -78,14 +78,13 @@ test.describe('biblioteca de templates do plano de ação', () => {
     await loginWithCredentials(page, ADMIN_EMAIL, getE2ERolePassword())
     await page.goto('/plano-acao?mode=biblioteca')
 
-    await expect(page.getByRole('tab', { name: 'Gestão global' })).toHaveAttribute('aria-selected', 'true')
     await page.getByRole('tab', { name: 'Planos da rede' }).click()
     await page.getByRole('button', { name: 'Nova ação' }).first().click()
-    await page.getByRole('button', { name: /Usar template/ }).click()
+    await page.getByRole('button', { name: /Usar Plano Padrão/ }).click()
 
-    await expect(page.getByRole('dialog', { name: /Criar plano de ação/ })).toBeVisible()
-    await expect(page.getByRole('combobox', { name: 'Cliente' })).toBeVisible()
-    await expect(page.getByText('O plano será aplicado à matriz e a todas as filiais ativas do cliente selecionado.')).toBeVisible()
+    await expect(page.getByRole('dialog', { name: /Aplicar plano padrão/ })).toBeVisible()
+    await expect(page.getByRole('combobox', { name: 'Cliente da aplicação' })).toBeVisible()
+    await expect(page.getByText(/decisão do cliente/)).toBeVisible()
     await expect(page.getByRole('combobox', { name: 'Loja de destino' })).toHaveCount(0)
 
     await page.screenshot({

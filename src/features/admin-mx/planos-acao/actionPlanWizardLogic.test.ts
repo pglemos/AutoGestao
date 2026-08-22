@@ -1,11 +1,13 @@
 import { describe, expect, test } from 'bun:test'
 import {
   buildChecklistItems,
+  buildCreatedPlanPatch,
   buildPlanPayload,
   buildTemplateItemsFromChecklist,
   calculateWeights,
   emptyWizardForm,
   resolveWizardDueDate,
+  resolveActionPlanTargetStoreIds,
   sanitizeTextForTemplate,
   suggestTitle,
   validateWizardStep,
@@ -81,6 +83,11 @@ describe('clientActionPlanWizard — validação por passo', () => {
     expect(errors).toContain('Informe o prazo final.')
     expect(validateWizardStep(3, filledForm())).toEqual([])
   })
+
+  test('materializa no padrão todas as unidades ativas sem duplicar ids', () => {
+    expect(resolveActionPlanTargetStoreIds({ ...emptyWizardForm(), scopeMode: 'all_units', storeId: 'matrix' }, ['matrix', 'branch', 'branch'])).toEqual(['matrix', 'branch'])
+    expect(resolveActionPlanTargetStoreIds({ ...emptyWizardForm(), scopeMode: 'single_unit', storeId: 'branch' }, ['matrix', 'branch'])).toEqual(['branch'])
+  })
 })
 
 describe('clientActionPlanWizard — datas', () => {
@@ -113,6 +120,13 @@ describe('clientActionPlanWizard — payload e checklist', () => {
     expect(total).toBe(10000)
     expect(items[0].status).toBe('pendente')
     expect(items[1].peso_pct).toBe('50.00%')
+  })
+
+  test('patch pós-RPC carrega checklist, participantes e início', () => {
+    const patch = buildCreatedPlanPatch({ ...filledForm(), participants: 'Time comercial', startDate: '2026-08-20' })
+    expect((patch.checklist as unknown[]).length).toBe(2)
+    expect(patch.participants).toBe('Time comercial')
+    expect(patch.iniciado_at).toBe('2026-08-20')
   })
 })
 

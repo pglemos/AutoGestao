@@ -7,6 +7,8 @@ import {
   buildChecklistProgressPatch,
   countPendingChecklistItems,
   groupPlansByColumn,
+  planDaysLate,
+  deriveKanbanColumn,
   resolveBoardColumn,
   validateCompletion,
   validateChecklistCompletion,
@@ -28,6 +30,7 @@ function plan(overrides: Partial<BoardPlan> = {}): BoardPlan {
 
 describe('coluna do kanban', () => {
   test('prazo vencido em plano aberto vira Atrasada', () => {
+    expect(deriveKanbanColumn(plan({ status: 'em_andamento', prazo: '2026-08-01' }), HOJE)).toBe('atrasado')
     expect(resolveBoardColumn(plan({ status: 'em_andamento', prazo: '2026-08-01' }), HOJE)).toBe('atrasado')
     expect(resolveBoardColumn(plan({ status: 'pendente', prazo: '2026-08-14' }), HOJE)).toBe('atrasado')
   })
@@ -42,6 +45,15 @@ describe('coluna do kanban', () => {
 
   test('plano do próprio dia ainda não está atrasado', () => {
     expect(resolveBoardColumn(plan({ status: 'pendente', prazo: '2026-08-15' }), HOJE)).toBe('pendente')
+  })
+})
+
+describe('atraso da tabela', () => {
+  test('conta dias só em plano aberto com prazo vencido', () => {
+    expect(planDaysLate('em_andamento', '2026-08-01', HOJE)).toBe(14)
+    expect(planDaysLate('concluido', '2026-08-01', HOJE)).toBe(0)
+    expect(planDaysLate('pendente', '2026-08-20', HOJE)).toBe(0)
+    expect(planDaysLate('pendente', null, HOJE)).toBe(0)
   })
 })
 

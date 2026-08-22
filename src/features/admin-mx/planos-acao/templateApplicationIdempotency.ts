@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase'
 import { activeUnits, fetchClientOfStore, fetchClientUnits, type ClientUnit } from '@/features/strategic-plan'
 import { fetchTemplateItems, resolveItemDueDate, type ActionPlanTemplateItem } from './actionPlanTemplates'
+import { calculateWeights } from './actionPlanWizardLogic'
 
 const APPLICATION_STORAGE_PREFIX = 'mx:action-template-apply'
 
@@ -8,12 +9,6 @@ type PersistedTemplateItem = ActionPlanTemplateItem & { id: string }
 
 function isPersistedTemplateItem(item: ActionPlanTemplateItem): item is PersistedTemplateItem {
   return typeof item.id === 'string' && item.id.length > 0
-}
-
-function metadataItemId(metadata: unknown): string | null {
-  if (!metadata || typeof metadata !== 'object' || Array.isArray(metadata)) return null
-  const value = (metadata as Record<string, unknown>).template_item_id
-  return typeof value === 'string' ? value : null
 }
 
 export function buildTemplateApplicationStorageKey(versionId: string, storeId: string): string {
@@ -45,27 +40,17 @@ async function resolveConfirmedReplay(input: {
   // Um replay só é replay se TODAS as unidades da requisição tiverem TODOS os
   // itens materializados. Confirmar por unidade isolada esconderia uma aplicação
   // que parou no meio.
-  const materialized = new Set(
-    (data ?? [])
-      .map(row => {
-        const itemId = metadataItemId(row.transition_metadata)
-        return itemId ? `${row.scope_id}|${itemId}` : null
-      })
-      .filter((value): value is string => Boolean(value)),
-  )
-  return input.storeIds.every(storeId => input.items.every(item => materialized.has(`${storeId}|${item.id}`)))
+  const materializedStores = new Set((data ?? []).map(row => row.scope_id).filter((id): id is string => Boolean(id)))
+  return input.storeIds.every(storeId => materializedStores.has(storeId))
 }
 
 /**
  * Monta as linhas de `planos_acao` de uma aplicação.
  *
- * Um plano padrão é aplicado ao cliente, não a uma loja avulsa: cada unidade
- * ativa recebe a sua materialização dos mesmos itens, todas compartilhando o
- * mesmo `template_application_request_id`. É uma aplicação lógica com N
- * materializações — o trabalho é executado na loja, mas a decisão é do cliente.
- *
- * O escopo continua `store` porque `score_scope_type` não tem valor de cliente;
- * o vínculo com o cliente se lê pela hierarquia matriz/filial das unidades.
+ * Espelha o Base44 `applyTemplateToClient`: EXATAMENTE UM plano por destino,
+ * com os itens do modelo no `checklist`. O enum `score_scope_type` não tem
+ * cliente, então cada unidade ativa recebe a mesma ficha — uma aplicação
+ * lógica, N materializações de loja, mesmo `template_application_request_id`.
  */
 export function buildTemplateApplicationRows(input: {
   items: PersistedTemplateItem[]
@@ -74,6 +59,7 @@ export function buildTemplateApplicationRows(input: {
   requestId: string
   userId: string
   appliedAt: Date
+  title?: string | null
   responsibleId?: string | null
   deadlineDays?: number | null
   referenceYear?: number | null
@@ -83,34 +69,43 @@ export function buildTemplateApplicationRows(input: {
   const deadline = input.deadlineDays && input.deadlineDays > 0
     ? resolveItemDueDate(input.appliedAt, input.deadlineDays)
     : null
-  const rows = []
-  for (const storeId of input.storeIds) {
-    for (const item of input.items) {
-      rows.push({
-        scope_type: 'store' as const,
-        scope_id: storeId,
-        departamento: item.departamento || input.department || 'Geral',
-        indicador: input.indicator || item.indicador || 'Não definido',
-        problema: item.problema,
-        acao: item.acao,
-        como: item.como || null,
-        prazo: deadline || resolveItemDueDate(input.appliedAt, item.prazo_dias),
-        prioridade: item.prioridade,
-        origem: 'consultor' as const,
-        origem_ref_id: input.versionId,
-        origem_ref_table: 'planos_acao_template_versoes',
-        evidence_required: item.evidencia_requerida,
-        created_by: input.userId,
-        responsavel_id: input.responsibleId || null,
-        reference_year: input.referenceYear ?? null,
-        transition_metadata: {
-          template_application_request_id: input.requestId,
-          template_item_id: item.id,
-        },
-      })
+  const first = input.items[0]
+  const weights = calculateWeights(input.items.length)
+  const checklist = input.items.map((item, index) => {
+    const pesoBp = item.peso_bp && item.peso_bp > 0 ? item.peso_bp : weights[index]?.weight_basis_points ?? 0
+    return {
+      titulo: item.acao,
+      como: item.como || null,
+      peso_bp: pesoBp,
+      peso_pct: `${(pesoBp / 100).toFixed(2)}%`,
+      status: 'pendente',
+      template_item_id: item.id,
+      evidencia_requerida: item.evidencia_requerida,
     }
-  }
-  return rows
+  })
+  return input.storeIds.map(storeId => ({
+    scope_type: 'store' as const,
+    scope_id: storeId,
+    departamento: input.department || first?.departamento || 'Geral',
+    indicador: input.indicator || first?.indicador || 'Não definido',
+    problema: first?.problema || 'Problema identificado na orientação MX.',
+    acao: input.title?.trim() || first?.acao || 'Plano padrão',
+    como: first?.como || null,
+    prazo: deadline || resolveItemDueDate(input.appliedAt, first?.prazo_dias ?? null),
+    prioridade: first?.prioridade ?? 'media',
+    origem: 'consultor' as const,
+    origem_ref_id: input.versionId,
+    origem_ref_table: 'planos_acao_template_versoes',
+    evidence_required: input.items.some(item => item.evidencia_requerida),
+    created_by: input.userId,
+    responsavel_id: input.responsibleId || null,
+    reference_year: input.referenceYear ?? null,
+    checklist,
+    transition_metadata: {
+      template_application_request_id: input.requestId,
+      template_item_ids: input.items.map(item => item.id),
+    },
+  }))
 }
 
 /**
@@ -150,9 +145,9 @@ export async function resolveClientApplicationTargets(
 
 /**
  * Materializa uma versão publicada de Plano Padrão com idempotência por
- * requestId. O banco possui índice UNIQUE parcial por request/item; um retry
- * após timeout recebe 23505 e só é tratado como replay se todos os itens da
- * requisição anterior puderem ser comprovados no banco.
+ * requestId. O banco possui índice UNIQUE por unidade+request; um retry após
+ * timeout recebe 23505 e só é tratado como replay se todas as unidades da
+ * requisição tiverem o plano comprovado no banco.
  */
 export async function applyTemplateToStoresIdempotent(input: {
   versionId: string
@@ -160,6 +155,7 @@ export async function applyTemplateToStoresIdempotent(input: {
   userId: string
   requestId: string
   appliedAt?: Date
+  title?: string | null
   responsibleId?: string | null
   deadlineDays?: number | null
   referenceYear?: number | null
@@ -184,6 +180,7 @@ export async function applyTemplateToStoresIdempotent(input: {
     requestId: input.requestId,
     userId: input.userId,
     appliedAt: input.appliedAt ?? new Date(),
+    title: input.title,
     responsibleId: input.responsibleId,
     deadlineDays: input.deadlineDays,
     referenceYear: input.referenceYear,

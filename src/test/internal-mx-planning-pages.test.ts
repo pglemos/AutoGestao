@@ -27,11 +27,29 @@ describe('páginas de planejamento do módulo interno MX', () => {
     expect(read(pages.consulting)).toContain('AdminConsultingOverviewPage')
   })
 
-  test('abre o plano de ação administrativo na gestão global por padrão', () => {
+  test('abre o plano de ação administrativo no contexto do cliente', () => {
     const actionPage = read(pages.action)
     expect(actionPage).toContain("label: 'Gestão global'")
-    expect(actionPage).toContain("fallback: 'biblioteca'")
-    expect(actionPage).toContain('`?mode=cliente`')
+    expect(actionPage).toContain("fallback: isClientRoute ? 'cliente' : 'biblioteca'")
+    expect(actionPage).toContain("location.pathname.startsWith('/clientes/')")
+  })
+
+  test('abre Plano Estratégico no catálogo e preserva execução por cliente', () => {
+    const strategicPage = read(pages.strategic)
+    const indicatorsPage = read('src/features/admin-mx/AdminIndicadoresPage.tsx')
+
+    expect(strategicPage).not.toContain("label: 'Gestão global'")
+    expect(strategicPage).toContain('fetchCurrentCycle')
+    expect(strategicPage).toContain('<AdminIndicadoresPage initialTab="planos" />')
+    expect(strategicPage).toContain('<AdminIndicadoresPage initialTab="catalogo" />')
+    expect(strategicPage).toContain('<AdminStrategicPlanEditor cycleId={cycleId} readOnly={preview} />')
+    expect(read('src/features/admin-mx/indicadores/AdminStrategicPlanEditor.tsx')).toContain("label: 'Cadastro rápido'")
+    expect(indicatorsPage).toContain('Criar Demo')
+    expect(indicatorsPage).toContain('Aplicar fórmulas MX')
+    expect(indicatorsPage).toContain('Arquivar')
+    expect(indicatorsPage).toContain('new URLSearchParams({ cycleId: row.cycleId })')
+    expect(indicatorsPage).not.toContain('new URLSearchParams({ storeId: row.primaryStoreId')
+    expect(indicatorsPage).not.toContain('if (client?.primaryStoreId) openStrategicPlan')
   })
 
   test('monta o overview administrativo no modo operação sem duplicar shell de planejamento', () => {

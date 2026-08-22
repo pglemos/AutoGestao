@@ -212,6 +212,7 @@ export function ApplyTemplateWizard(props: {
         storeIds: targetUnits.map(unit => unit.id),
         userId: supabaseUser.id,
         requestId,
+        title: selectedTemplate.nome,
         referenceYear,
         responsibleId: responsibleId || null,
         deadlineDays,
@@ -228,7 +229,7 @@ export function ApplyTemplateWizard(props: {
       toast.success(
         result.replayed
           ? 'Aplicação já confirmada. Nenhum plano foi duplicado.'
-          : `${result.created} ação(ões) materializada(s) em ${targetUnits.length} unidade(s) do cliente.`,
+          : `${result.created} plano(s) criado(s) em ${targetUnits.length} unidade(s) do cliente.`,
       )
       props.onCreated()
       props.onClose()
@@ -341,7 +342,7 @@ export function ApplyTemplateWizard(props: {
               <MxField label="Responsável real"><MxSelect aria-label="Responsável pela aplicação" value={responsibleId} onChange={event => setResponsibleId(event.target.value)}><option value="">Não definido agora</option>{props.responsibles.map(responsible => <option key={responsible.id} value={responsible.id}>{responsible.name} ({responsible.role})</option>)}</MxSelect></MxField>
               <MxField label="Prazo padrão (dias)"><input type="number" min={1} value={deadlineDays} onChange={event => setDeadlineDays(Math.max(1, Number(event.target.value) || 1))} className="flex h-[var(--mx-input-height)] w-full rounded-[var(--mx-input-radius)] border border-border bg-surface-default px-3 py-2 text-sm outline-none focus-visible:border-primary focus-visible:ring-focus-ring/25" /></MxField>
             </div>
-            <div className="rounded-lg border border-border bg-surface-alt p-4 text-sm"><div className="font-semibold text-foreground">Unidades que receberão os itens</div><ul className="mt-2 space-y-1 text-xs text-muted-foreground">{targetUnits.map(unit => <li key={unit.id}>✓ {unitLabel(unit)}</li>)}</ul></div>
+            <div className="rounded-lg border border-border bg-surface-alt p-4 text-sm"><div className="font-semibold text-foreground">Unidades que receberão o plano</div><ul className="mt-2 space-y-1 text-xs text-muted-foreground">{targetUnits.map(unit => <li key={unit.id}>✓ {unitLabel(unit)}</li>)}</ul></div>
           </div>
         ) : null}
 
@@ -358,7 +359,7 @@ export function ApplyTemplateWizard(props: {
               <div><dt className="text-xs text-muted-foreground">Responsável</dt><dd className="font-semibold text-foreground">{props.responsibles.find(item => item.id === responsibleId)?.name ?? 'Não definido agora'}</dd></div>
               <div><dt className="text-xs text-muted-foreground">Prazo</dt><dd className="font-semibold text-foreground">{deadlineDays} dias</dd></div>
             </dl>
-            <div className="rounded-lg border border-border p-4 text-xs text-muted-foreground">A aplicação será idempotente: se a mesma confirmação for reenviada, o MX reconhece a aplicação já materializada e não duplica itens.</div>
+            <div className="rounded-lg border border-border p-4 text-xs text-muted-foreground">A aplicação será idempotente: se a mesma confirmação for reenviada, o MX reconhece o plano já materializado e não duplica.</div>
           </div>
         ) : null}
       </div>

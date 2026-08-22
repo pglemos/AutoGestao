@@ -21,6 +21,7 @@ import {
   withPersistedIndicatorOption,
 } from './actionPlanTemplates'
 import { uploadLibraryFile } from '../consultoria-mx/consultoriaMxData'
+import { departmentLabel } from './departmentTaxonomy'
 
 const STEPS = [
   { id: 1, label: 'Indicador' },
@@ -61,7 +62,7 @@ export function TemplateWizard(props: {
   editing: boolean
   draft: TemplateDraft
   submitting: boolean
-  onDraft: (draft: TemplateDraft) => void
+  onDraft: (draft: TemplateDraft | ((current: TemplateDraft) => TemplateDraft)) => void
   onSubmit: () => void
   onPublish?: () => void
   onClose: () => void
@@ -76,7 +77,7 @@ export function TemplateWizard(props: {
   useEffect(() => {
     if (!props.open) return
     setStep(1)
-    setTitleCustomized(Boolean(props.draft.nome))
+    setTitleCustomized(props.editing || Boolean(props.draft.nome))
     void fetchIndicatorCatalog().then(result => setIndicators(result.rows))
     void fetchPublishedTrainings().then(result => setTrainings(result.rows))
   }, [props.open])
@@ -91,7 +92,7 @@ export function TemplateWizard(props: {
 
   if (!props.open) return null
 
-  const patch = (values: Partial<TemplateDraft>) => props.onDraft({ ...props.draft, ...values })
+  const patch = (values: Partial<TemplateDraft>) => props.onDraft(current => ({ ...current, ...values }))
   const patchItem = (index: number, values: Partial<ActionPlanTemplateItem>) =>
     patch({ items: props.draft.items.map((item, position) => (position === index ? { ...item, ...values } : item)) })
 
@@ -196,13 +197,13 @@ export function TemplateWizard(props: {
               <MxField label="Departamento">
                 <MxSelect aria-label="Departamento" value={props.draft.departamento} onChange={event => { patch({ departamento: event.target.value, primary_indicator_code: '', indicador: '' }) }}>
                   <option value="">Selecionar...</option>
-                  {departments.map(dept => <option key={dept} value={dept}>{dept}</option>)}
+                  {departments.map(dept => <option key={dept} value={dept}>{departmentLabel(dept)}</option>)}
                 </MxSelect>
               </MxField>
               <MxField label="Indicador principal">
                 <MxSelect aria-label="Indicador principal" value={props.draft.primary_indicator_code} onChange={event => onIndicatorChange(event.target.value)} disabled={!props.draft.departamento}>
                   <option value="">{props.draft.departamento ? 'Selecione um indicador' : 'Selecione primeiro um departamento'}</option>
-                  {deptIndicators.map(indicator => <option key={indicator.code} value={indicator.code}>{indicator.label} ({indicator.unit})</option>)}
+                  {deptIndicators.map(indicator => <option key={indicator.code} value={indicator.code}>{indicator.label}</option>)}
                 </MxSelect>
               </MxField>
               <MxField label="Título do template" hint={titleCustomized ? undefined : 'Sugerido a partir do indicador — edite se quiser.'}>
@@ -319,12 +320,12 @@ export function TemplateWizard(props: {
                   {RESPONSIBLE_ROLE_OPTIONS.map(role => <option key={role.value} value={role.value}>{role.label}</option>)}
                 </MxSelect>
               </MxField>
-              <label className="flex items-center gap-2 text-sm">
-                <input type="checkbox" checked={props.draft.manual_application_enabled} onChange={event => patch({ manual_application_enabled: event.target.checked })} />
+              <label className="flex cursor-pointer items-center gap-2 text-sm">
+                <input type="checkbox" checked={props.draft.manual_application_enabled} disabled={props.submitting} onChange={event => patch({ manual_application_enabled: event.target.checked })} />
                 Disponível para aplicação nos clientes
               </label>
-              <label className="flex items-center gap-2 text-sm">
-                <input type="checkbox" checked={props.draft.owner_suggestion_enabled} onChange={event => patch({ owner_suggestion_enabled: event.target.checked })} />
+              <label className="flex cursor-pointer items-center gap-2 text-sm">
+                <input type="checkbox" checked={props.draft.owner_suggestion_enabled} disabled={props.submitting} onChange={event => patch({ owner_suggestion_enabled: event.target.checked })} />
                 Disponível para sugestão ao Dono
               </label>
               {props.draft.owner_suggestion_enabled ? (
@@ -341,7 +342,7 @@ export function TemplateWizard(props: {
             <div className="space-y-3 text-sm">
               <div className="space-y-1 rounded-lg bg-surface-alt p-3">
                 <h5 className="mb-1 text-xs font-semibold uppercase text-text-secondary">Identificação</h5>
-                <div className="flex justify-between"><span className="text-text-secondary">Departamento</span><span className="font-medium">{props.draft.departamento || '—'}</span></div>
+                <div className="flex justify-between"><span className="text-text-secondary">Departamento</span><span className="font-medium">{departmentLabel(props.draft.departamento)}</span></div>
                 <div className="flex justify-between"><span className="text-text-secondary">Indicador</span><span className="font-medium">{props.draft.indicador || '—'}</span></div>
                 <div className="flex justify-between"><span className="text-text-secondary">Título</span><span className="font-medium">{props.draft.nome || '—'}</span></div>
                 <div className="flex justify-between"><span className="text-text-secondary">Responsável recomendado</span><span className="font-medium">{RESPONSIBLE_ROLE_OPTIONS.find(role => role.value === props.draft.default_responsible_role)?.label || '—'}</span></div>

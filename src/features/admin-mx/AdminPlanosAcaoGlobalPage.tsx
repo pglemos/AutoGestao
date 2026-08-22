@@ -24,7 +24,8 @@ import {
 import { TabNav } from '@/components/molecules/TabNav'
 import { ActionPlanKanban } from './planos-acao/ActionPlanKanban'
 import { ActionPlanDetailDrawer } from './planos-acao/ActionPlanDetailDrawer'
-import { boardMetrics, fetchBoardPlanById, normalizeBoardChecklist, STATUS_LABEL, type BoardPlan, type PlanStatus } from './planos-acao/actionPlanBoard'
+import { boardMetrics, fetchBoardPlanById, normalizeBoardChecklist, planDaysLate, STATUS_LABEL, type BoardPlan, type PlanStatus } from './planos-acao/actionPlanBoard'
+import { Modal } from '@/components/organisms/Modal'
 import { ApplyTemplateWizard } from './planos-acao/ApplyTemplateWizard'
 import { ClientActionPlanWizard } from './planos-acao/ClientActionPlanWizard'
 import { NewActionChoiceModal } from './planos-acao/NewActionChoiceModal'
@@ -42,7 +43,7 @@ import { HistoryTab } from './planos-acao/HistoryTab'
 import { fetchIndicatorCatalog, type ActionPlanTemplate, type IndicatorCatalogEntry } from './planos-acao/actionPlanTemplates'
 import { useActionPlanTemplatesController } from './planos-acao/useActionPlanTemplates'
 import { summarizeTemplate, TEMPLATE_STATUS_LABEL } from './planos-acao/templateTableMetrics'
-import { departmentLabel } from './planos-acao/departmentTaxonomy'
+import { departmentCategory, departmentLabel, departmentMatchesFilter } from './planos-acao/departmentTaxonomy'
 import { useAdminActionPlans } from './hooks/useAdminMxLists'
 import { toast } from '@/lib/toast'
 import {
@@ -57,11 +58,11 @@ import {
 type PlanTab = 'planos' | 'templates' | 'sugestoes' | 'aplicacoes' | 'historico'
 
 const PLAN_TABS = [
-  { key: 'templates' as const, label: 'Biblioteca de templates' },
-  { key: 'planos' as const, label: 'Planos da rede' },
+  { key: 'templates' as const, label: 'Planos Padrão' },
   { key: 'sugestoes' as const, label: 'Sugestões ao Dono' },
   { key: 'aplicacoes' as const, label: 'Aplicações nos clientes' },
   { key: 'historico' as const, label: 'Histórico' },
+  { key: 'planos' as const, label: 'Planos da rede' },
 ]
 
 const PLAN_PRIORITY_OPTIONS = [
@@ -70,6 +71,8 @@ const PLAN_PRIORITY_OPTIONS = [
   { value: 'media', label: 'Média' },
   { value: 'baixa', label: 'Baixa' },
 ]
+
+const PRIORITY_LABEL: Record<string, string> = Object.fromEntries(PLAN_PRIORITY_OPTIONS.map(item => [item.value, item.label]))
 
 const TEMPLATE_STATUS_VARIANT = {
   publicada: 'success',
@@ -95,7 +98,7 @@ export function AdminPlanosAcaoGlobalPage() {
   const templates = useActionPlanTemplatesController()
   const [suggestionsRefreshKey, setSuggestionsRefreshKey] = useState(0)
   const [applicationsRefreshKey, setApplicationsRefreshKey] = useState(0)
-  const [view, setView] = useState<'lista' | 'kanban'>('kanban')
+  const [view, setView] = useState<'lista' | 'kanban'>('lista')
   const [openPlan, setOpenPlan] = useState<BoardPlan | null>(null)
   const [choiceOpen, setChoiceOpen] = useState(false)
   const [wizardOpen, setWizardOpen] = useState(false)
@@ -103,6 +106,7 @@ export function AdminPlanosAcaoGlobalPage() {
   const [suggestTemplate, setSuggestTemplate] = useState<Awaited<ReturnType<typeof useActionPlanTemplatesController>>['rows'][number] | null>(null)
   const [suggestOpen, setSuggestOpen] = useState(false)
   const [promoteTarget, setPromoteTarget] = useState<BoardPlan | null>(null)
+  const [archiveTarget, setArchiveTarget] = useState<ActionPlanTemplate | null>(null)
   const [templateFilters, setTemplateFilters] = useState<TemplateFilterState>(emptyTemplateFilters())
   const [detailTemplate, setDetailTemplate] = useState<ActionPlanTemplate | null>(null)
   const [indicatorCatalog, setIndicatorCatalog] = useState<IndicatorCatalogEntry[]>([])
@@ -130,8 +134,18 @@ export function AdminPlanosAcaoGlobalPage() {
   const location = useLocation()
   const { width, bottomClearance } = resolveRouteLayout(location.pathname)
 
-  const statuses = useMemo(() => [...new Set(rows.map(plan => plan.status).filter((value): value is string => Boolean(value)))].sort(), [rows])
-  const departments = useMemo(() => [...new Set(rows.map(plan => plan.departamento).filter((value): value is string => Boolean(value)))].sort(), [rows])
+  const statuses = useMemo(() => (Object.keys(STATUS_LABEL) as PlanStatus[]), [])
+  const departments = useMemo(() => {
+    const seen = new Set<string>()
+    const options: Array<{ value: string; label: string }> = []
+    for (const raw of rows.map(plan => plan.departamento).filter((value): value is string => Boolean(value))) {
+      const value = departmentCategory(raw) ?? raw
+      if (seen.has(value)) continue
+      seen.add(value)
+      options.push({ value, label: departmentLabel(raw) })
+    }
+    return options.sort((left, right) => left.label.localeCompare(right.label, 'pt-BR'))
+  }, [rows])
   const indicators = useMemo(() => [...new Set(rows.map(plan => plan.indicador).filter((value): value is string => Boolean(value)))].sort(), [rows])
   const responsibleOptions = useMemo(() => wizardResponsibles.filter(responsible => rows.some(plan => plan.responsavel_id === responsible.id)), [rows, wizardResponsibles])
   const [departmentFilter, setDepartmentFilter] = useState('')
@@ -143,7 +157,7 @@ export function AdminPlanosAcaoGlobalPage() {
     const term = search.trim().toLowerCase()
     return rows.filter(plan => {
       if (status !== 'todos' && plan.status !== status) return false
-      if (departmentFilter && plan.departamento !== departmentFilter) return false
+      if (departmentFilter && !departmentMatchesFilter(plan.departamento, departmentFilter)) return false
       if (indicatorFilter && plan.indicador !== indicatorFilter) return false
       if (priorityFilter && (plan.prioridade ?? '').toLowerCase() !== priorityFilter) return false
       if (responsibleFilter && plan.responsavel_id !== responsibleFilter) return false
@@ -206,12 +220,7 @@ export function AdminPlanosAcaoGlobalPage() {
   ) => {
     if (action === 'nova-versao') return void templates.createVersion(template)
     if (action === 'desativar' || action === 'reativar') return void templates.toggleActive(template)
-    if (action === 'arquivar') {
-      const confirmed = window.confirm(
-        `Arquivar "${template.nome}"? O template sairá da operação, mas aplicações já criadas e o histórico serão preservados.`,
-      )
-      if (confirmed) void templates.archive(template)
-    }
+    if (action === 'arquivar') setArchiveTarget(template)
   }
 
   return (
@@ -219,28 +228,24 @@ export function AdminPlanosAcaoGlobalPage() {
       <div className="w-full space-y-5">
         <MxModuleHeader
           icon={ClipboardList}
-          eyebrow="Administração MX"
-          title="Planos de ação"
-          description="Visão global dos planos de ação da rede: status, prazos e prioridade."
-          actions={tab === 'planos' ? (
+          title="Planos de Ação e Playbooks"
+          description="Crie modelos de ação da metodologia MX para aplicação nos clientes e sugestão aos Donos."
+          actions={tab === 'templates' ? (
             <div className="flex flex-wrap items-center justify-end gap-2">
-              <Button variant="outline" onClick={() => setSelectorOpen(true)}><Plus size={16} />Aplicar a cliente</Button>
-              <Button variant="outline" onClick={() => setTab('historico')}>Abrir histórico</Button>
-              <Button variant="outline" onClick={() => void refetch()}><RefreshCw size={16} />Atualizar</Button>
-              <Button variant="outline" onClick={handleNewAction}><Plus size={16} />Nova ação</Button>
-              <Button onClick={templates.openNew}><Plus size={16} />Criar plano padrão</Button>
+              <Button variant="outline" onClick={() => setSelectorOpen(true)}>Aplicar a Cliente</Button>
+              <Button variant="outline" onClick={() => setTab('historico')}>Abrir Histórico</Button>
+              <Button onClick={templates.openNew}><Plus size={16} />Criar Plano Padrão</Button>
             </div>
-          ) : tab === 'templates' ? (
+          ) : tab === 'planos' ? (
             <div className="flex flex-wrap items-center justify-end gap-2">
-              <Button variant="outline" onClick={() => setSelectorOpen(true)}><Plus size={16} />Aplicar a cliente</Button>
-              <Button variant="outline" onClick={() => setTab('historico')}>Abrir histórico</Button>
-              <Button variant="outline" onClick={() => void templates.refetch()}><RefreshCw size={16} />Atualizar</Button>
-              <Button onClick={templates.openNew}><Plus size={16} />Criar plano padrão</Button>
+              <Button variant="outline" onClick={() => setSelectorOpen(true)}>Aplicar a Cliente</Button>
+              <Button variant="outline" onClick={() => setTab('historico')}>Abrir Histórico</Button>
+              <Button variant="outline" onClick={() => void refetch()}><RefreshCw size={16} />Atualizar</Button>
+              <Button onClick={handleNewAction}><Plus size={16} />Nova ação</Button>
             </div>
           ) : tab === 'aplicacoes' ? (
             <div className="flex items-center gap-2">
               <Button variant="outline" onClick={() => setApplicationsRefreshKey(current => current + 1)}><RefreshCw size={16} />Atualizar</Button>
-              <Button onClick={handleNewAction}><Plus size={16} />Nova ação</Button>
             </div>
           ) : tab === 'historico' ? null
           : <Button variant="outline" onClick={() => setSuggestionsRefreshKey(current => current + 1)}><RefreshCw size={16} />Atualizar</Button>}
@@ -261,7 +266,7 @@ export function AdminPlanosAcaoGlobalPage() {
               <MxSectionHeader
                 title="Planos padrão de ação"
                 description={`${filteredTemplates.length} template(s) na biblioteca.`}
-                actions={<Button variant="outline" size="sm" onClick={templates.openNew}><Plus size={16} />Criar plano padrão</Button>}
+                actions={<Button variant="outline" size="sm" onClick={templates.openNew}><Plus size={16} />Criar Plano Padrão</Button>}
               />
               <div className="p-5">
                 <div className="mb-4">
@@ -345,7 +350,7 @@ export function AdminPlanosAcaoGlobalPage() {
                   <MxEmptyState
                     title="Nenhum template encontrado"
                     description="Crie um template ou ajuste os filtros para padronizar planos entre clientes."
-                    action={<Button onClick={templates.openNew}><Plus size={16} />Novo template</Button>}
+                    action={<Button onClick={templates.openNew}><Plus size={16} />Criar Plano Padrão</Button>}
                   />
                 )}
               </div>
@@ -363,11 +368,11 @@ export function AdminPlanosAcaoGlobalPage() {
               <MxInput id="action-plan-filter-search" name="action-plan-search" value={search} onChange={event => setSearch(event.target.value)} placeholder="Buscar por código, problema ou ação" aria-label="Buscar plano de ação" />
               <MxSelect id="action-plan-filter-status" name="action-plan-status" value={status} onChange={event => setStatus(event.target.value)} aria-label="Filtrar por status">
                 <option value="todos">Todos os status</option>
-                {statuses.map(item => <option key={item} value={item}>{STATUS_LABEL[item as PlanStatus] ?? item}</option>)}
+                {statuses.map(item => <option key={item} value={item}>{STATUS_LABEL[item]}</option>)}
               </MxSelect>
               <MxSelect id="action-plan-filter-department" name="action-plan-department" value={departmentFilter} onChange={event => setDepartmentFilter(event.target.value)} aria-label="Filtrar por departamento">
                 <option value="">Todos os departamentos</option>
-                {departments.map(item => <option key={item} value={item}>{item}</option>)}
+                {departments.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}
               </MxSelect>
               <MxSelect id="action-plan-filter-indicator" name="action-plan-indicator" value={indicatorFilter} onChange={event => setIndicatorFilter(event.target.value)} aria-label="Filtrar por indicador">
                 <option value="">Todos os indicadores</option>
@@ -382,8 +387,8 @@ export function AdminPlanosAcaoGlobalPage() {
                 {responsibleOptions.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
               </MxSelect>
               <MxSelect id="action-plan-view-mode" name="action-plan-view-mode" value={view} onChange={event => setView(event.target.value as 'lista' | 'kanban')} aria-label="Modo de visualização">
+                <option value="lista">Tabela</option>
                 <option value="kanban">Kanban</option>
-                <option value="lista">Lista</option>
               </MxSelect>
             </MxToolbar>
             {view === 'kanban' ? (
@@ -397,32 +402,48 @@ export function AdminPlanosAcaoGlobalPage() {
               <div className="p-5">
                 {filtered.length ? (
                   <MxTableSurface>
-                    <Table className="min-w-[900px]">
+                    <Table className="min-w-[1480px]">
                       <TableHeader>
                         <TableRow>
-                          <TableHead>Plano</TableHead>
-                          <TableHead>Departamento</TableHead>
+                          <TableHead>Código</TableHead>
+                          <TableHead>Ação</TableHead>
+                          <TableHead>Objetivo</TableHead>
                           <TableHead>Indicador</TableHead>
-                          <TableHead>Prazo</TableHead>
-                          <TableHead>Prioridade</TableHead>
-                          <TableHead>Progresso</TableHead>
+                          <TableHead>Depto</TableHead>
+                          <TableHead>Resp.</TableHead>
+                          <TableHead>Prio</TableHead>
                           <TableHead>Status</TableHead>
-                          <TableHead className="text-right">Ação</TableHead>
+                          <TableHead>Progresso</TableHead>
+                          <TableHead>Início</TableHead>
+                          <TableHead>Prazo</TableHead>
+                          <TableHead>Atraso</TableHead>
+                          <TableHead>Atualização</TableHead>
+                          <TableHead className="text-right">Ações</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {filtered.map(plan => (
+                        {filtered.map(plan => {
+                          const lateDays = planDaysLate(plan.status, plan.prazo)
+                          const responsibleName = wizardResponsibles.find(item => item.id === plan.responsavel_id)?.name
+                          return (
                           <TableRow key={plan.id}>
-                            <TableCell>
-                              <div className="font-semibold text-foreground">{plan.codigo || 'Sem código'}</div>
-                              <div className="text-xs text-muted-foreground">{plan.acao || plan.problema || 'Sem descrição'}</div>
+                            <TableCell className="whitespace-nowrap text-xs font-bold text-muted-foreground">{plan.codigo || '—'}</TableCell>
+                            <TableCell className="max-w-[240px]">
+                              <button type="button" className="block w-full truncate text-left font-semibold text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring" onClick={() => void openPlanById(plan.id)}>
+                                {plan.acao || plan.problema || 'Sem descrição'}
+                              </button>
                             </TableCell>
-                            <TableCell>{plan.departamento || '—'}</TableCell>
-                            <TableCell>{plan.indicador || '—'}</TableCell>
-                            <TableCell>{formatDate(plan.prazo)}</TableCell>
-                            <TableCell>{plan.prioridade || '—'}</TableCell>
-                            <TableCell className="w-40"><MxProgress value={plan.progresso ?? 0} label={`${plan.progresso ?? 0}%`} /></TableCell>
+                            <TableCell className="max-w-[180px] truncate text-xs text-muted-foreground">{plan.objetivo || '—'}</TableCell>
+                            <TableCell className="max-w-[160px] truncate">{plan.indicador || '—'}</TableCell>
+                            <TableCell>{departmentLabel(plan.departamento)}</TableCell>
+                            <TableCell className="max-w-[140px] truncate">{responsibleName || '—'}</TableCell>
+                            <TableCell>{PRIORITY_LABEL[(plan.prioridade ?? '').toLowerCase()] ?? plan.prioridade ?? '—'}</TableCell>
                             <TableCell>{STATUS_LABEL[plan.status as PlanStatus] ?? plan.status ?? '—'}</TableCell>
+                            <TableCell className="w-36"><MxProgress value={plan.progresso ?? 0} label={`${plan.progresso ?? 0}%`} /></TableCell>
+                            <TableCell className="whitespace-nowrap">{formatDate(plan.iniciado_at)}</TableCell>
+                            <TableCell className="whitespace-nowrap">{formatDate(plan.prazo)}</TableCell>
+                            <TableCell className="whitespace-nowrap">{lateDays > 0 ? `${lateDays}d` : '—'}</TableCell>
+                            <TableCell className="whitespace-nowrap">{formatDate(plan.updated_at)}</TableCell>
                             <TableCell className="text-right">
                               <div className="flex justify-end gap-2">
                                 <Button variant="outline" size="sm" onClick={() => void openPlanById(plan.id)}>Abrir</Button>
@@ -430,7 +451,8 @@ export function AdminPlanosAcaoGlobalPage() {
                               </div>
                             </TableCell>
                           </TableRow>
-                        ))}
+                          )
+                        })}
                       </TableBody>
                     </Table>
                   </MxTableSurface>
@@ -501,6 +523,32 @@ export function AdminPlanosAcaoGlobalPage() {
           onClose={() => setPromoteTarget(null)}
           onPromoted={() => void templates.refetch()}
         />
+        <Modal
+          open={Boolean(archiveTarget)}
+          onClose={() => setArchiveTarget(null)}
+          title="Arquivar plano padrão"
+          size="md"
+          footer={(
+            <>
+              <Button variant="outline" onClick={() => setArchiveTarget(null)} disabled={templates.submitting}>Cancelar</Button>
+              <Button
+                disabled={templates.submitting}
+                onClick={() => {
+                  if (!archiveTarget) return
+                  const target = archiveTarget
+                  setArchiveTarget(null)
+                  void templates.archive(target)
+                }}
+              >
+                Arquivar
+              </Button>
+            </>
+          )}
+        >
+          <p className="mt-4 text-sm text-muted-foreground">
+            Arquivar “{archiveTarget?.nome}”? O template sai da operação. Aplicações já criadas e o histórico ficam preservados.
+          </p>
+        </Modal>
       </div>
     </MxModulePage>
   )

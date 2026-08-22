@@ -13,7 +13,7 @@ export function NewActionChoiceModal(props: {
   onCreateCustom: () => void
 }) {
   return (
-    <Modal open={props.open} onClose={props.onClose} title="Nova ação" size="md">
+    <Modal open={props.open} onClose={props.onClose} title="Nova Ação" size="md">
       <div className="mt-5 space-y-3">
         <button
           type="button"
@@ -22,7 +22,7 @@ export function NewActionChoiceModal(props: {
         >
           <div className="flex items-center gap-2">
             <FileCheck size={16} className="text-primary" />
-            <span className="font-medium text-foreground">Usar template</span>
+            <span className="font-medium text-foreground">Usar Plano Padrão</span>
             <span className="ml-auto rounded-full bg-primary px-2 py-0.5 text-caption font-medium text-white">Recomendado</span>
           </div>
           <p className="text-xs text-muted-foreground">Selecione uma orientação da metodologia MX e adapte responsáveis, prazos e metas para este cliente.</p>
@@ -34,7 +34,7 @@ export function NewActionChoiceModal(props: {
         >
           <div className="flex items-center gap-2">
             <Plus size={16} className="text-muted-foreground" />
-            <span className="font-medium text-foreground">Criar plano personalizado</span>
+            <span className="font-medium text-foreground">Criar Plano Personalizado</span>
           </div>
           <p className="text-xs text-muted-foreground">Crie um plano específico para uma necessidade deste cliente.</p>
         </button>

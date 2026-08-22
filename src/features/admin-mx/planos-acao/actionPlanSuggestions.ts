@@ -64,6 +64,34 @@ export function nextSuggestionActions(status: SuggestionStatus): Array<'validar'
   return []
 }
 
+export async function createSuggestion(input: {
+  problem: string
+  recommendation: string
+  rationale?: string
+  priority?: 'critica' | 'alta' | 'media' | 'baixa'
+}): Promise<{ error: string | null; id: string | null }> {
+  const problem = input.problem.trim()
+  const recommendation = input.recommendation.trim()
+  if (!problem) return { error: 'Informe o problema da sugestão.', id: null }
+  if (!recommendation) return { error: 'Informe a recomendação ao Dono.', id: null }
+  const { data, error } = await supabase
+    .from('consultor_solucoes')
+    .insert({
+      problem,
+      recommendation,
+      rationale: input.rationale?.trim() || null,
+      priority: input.priority ?? 'media',
+      rule_code: 'MANUAL',
+      rule_version: 'manual-1',
+      scope_type: 'process',
+      status: 'pendente_validacao',
+      metadata: { source: 'manual' },
+    })
+    .select('id')
+    .maybeSingle()
+  return { error: error?.message ?? null, id: data?.id ?? null }
+}
+
 export async function fetchActionPlanSuggestions(): Promise<{ rows: ActionPlanSuggestion[]; error: string | null }> {
   const { data, error } = await supabase
     .from('consultor_solucoes')

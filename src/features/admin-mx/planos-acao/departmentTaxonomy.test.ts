@@ -9,6 +9,7 @@ import {
 describe('taxonomia de departamentos do plano de ação', () => {
   test('agrupa os códigos históricos nos cards MX', () => {
     expect(departmentCategory('COMERCIAL')).toBe('comercial')
+    expect(departmentCategory('commercial')).toBe('comercial')
     expect(departmentCategory('PRODUTO_ESTOQUE')).toBe('produto')
     expect(departmentCategory('PESSOAS_RH')).toBe('rh')
     expect(departmentCategory('OPERACOES')).toBe('operacional')

@@ -118,6 +118,11 @@ export type PlanEvidence = {
  * vira "Atrasada" mesmo quando o status gravado ainda é pendente/andamento —
  * é assim que a equipe enxerga o board.
  */
+/** Alias Base44 (`deriveKanbanColumn`): prazo vencido em plano aberto cai em Atrasada. */
+export function deriveKanbanColumn(plan: Pick<BoardPlan, 'status' | 'prazo'>, today = new Date()): PlanStatus {
+  return resolveBoardColumn(plan, today)
+}
+
 export function resolveBoardColumn(plan: Pick<BoardPlan, 'status' | 'prazo'>, today = new Date()): PlanStatus {
   const status = (plan.status ?? 'pendente') as PlanStatus
   if (status === 'concluido' || status === 'cancelada' || status === 'validando_eficacia') return status
@@ -125,10 +130,20 @@ export function resolveBoardColumn(plan: Pick<BoardPlan, 'status' | 'prazo'>, to
   return status
 }
 
+export function planDaysLate(status: string | null, prazo: string | null, today = new Date()): number {
+  if (!prazo) return 0
+  if (status === 'concluido' || status === 'cancelada' || status === 'validando_eficacia') return 0
+  const due = prazo.slice(0, 10)
+  const ref = today.toISOString().slice(0, 10)
+  if (due >= ref) return 0
+  const ms = Date.parse(`${ref}T00:00:00`) - Date.parse(`${due}T00:00:00`)
+  return Number.isFinite(ms) ? Math.round(ms / 86_400_000) : 0
+}
+
 export function groupPlansByColumn(plans: BoardPlan[], today = new Date()): Record<PlanStatus, BoardPlan[]> {
   const groups = Object.fromEntries(BOARD_COLUMNS.map(column => [column, [] as BoardPlan[]])) as Record<PlanStatus, BoardPlan[]>
   for (const plan of plans) {
-    const column = resolveBoardColumn(plan, today)
+    const column = deriveKanbanColumn(plan, today)
     if (groups[column]) groups[column].push(plan)
   }
   return groups

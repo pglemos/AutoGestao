@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowRight, CheckCircle2, Eye, Send, XCircle } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Eye, Plus, Send, XCircle } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { Modal } from '@/components/organisms/Modal'
 import {
@@ -20,6 +20,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { useAuth } from '@/hooks/useAuth'
 import { toast } from '@/lib/toast'
 import {
+  createSuggestion,
   dismissSuggestion,
   fetchActionPlanSuggestions,
   canConvertSuggestion,
@@ -58,6 +59,10 @@ export function SuggestionsTab({ refreshKey = 0, onChanged }: { refreshKey?: num
   const [promoteDepartment, setPromoteDepartment] = useState('Geral')
   const [promoteIndicator, setPromoteIndicator] = useState('Não definido')
   const [promoteDueDate, setPromoteDueDate] = useState('')
+  const [creating, setCreating] = useState(false)
+  const [createProblem, setCreateProblem] = useState('')
+  const [createRecommendation, setCreateRecommendation] = useState('')
+  const [createPriority, setCreatePriority] = useState<'critica' | 'alta' | 'media' | 'baixa'>('media')
   const loadRequestRef = useRef(0)
 
   const load = useCallback(async () => {
@@ -72,7 +77,7 @@ export function SuggestionsTab({ refreshKey = 0, onChanged }: { refreshKey?: num
 
   useEffect(() => { void load() }, [load, refreshKey])
 
-  const statuses = useMemo(() => [...new Set(rows.map(item => item.status))], [rows])
+  const statuses = useMemo(() => Object.keys(SUGGESTION_STATUS_LABEL) as Array<keyof typeof SUGGESTION_STATUS_LABEL>, [])
 
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase()
@@ -134,6 +139,27 @@ export function SuggestionsTab({ refreshKey = 0, onChanged }: { refreshKey?: num
     converted: rows.filter(item => isSuggestionPromoted(item) || item.status === 'convertida').length,
   }), [rows])
 
+  const submitCreate = async () => {
+    if (busyId) return
+    setBusyId('create')
+    try {
+      const result = await createSuggestion({
+        problem: createProblem,
+        recommendation: createRecommendation,
+        priority: createPriority,
+      })
+      if (result.error) {
+        toast.error(result.error)
+        return
+      }
+      toast.success('Sugestão criada. Valide antes de publicar ao Dono.')
+      setCreating(false)
+      await load()
+    } finally {
+      setBusyId(null)
+    }
+  }
+
   const openPromotion = (suggestion: ActionPlanSuggestion) => {
     setPromoting(suggestion)
     setPromoteDepartment('Geral')
@@ -168,7 +194,11 @@ export function SuggestionsTab({ refreshKey = 0, onChanged }: { refreshKey?: num
   return (
     <>
       <MxSectionCard>
-        <MxSectionHeader title="Sugestões ao Dono" description={`${pendingCount} sugestão(ões) ainda não convertida(s) em plano.`} />
+        <MxSectionHeader
+          title="Sugestões ao Dono"
+          description={`${pendingCount} sugestão(ões) ainda não convertida(s) em plano.`}
+          actions={<Button size="sm" onClick={() => { setCreating(true); setCreateProblem(''); setCreateRecommendation(''); setCreatePriority('media') }}><Plus size={14} />Criar sugestão</Button>}
+        />
         <div className="space-y-4 p-5">
           <MxMetricGrid>
             <MxMetricCard title="Sugestões" value={metrics.total} detail="Recebidas pelo motor" icon={Eye} />
@@ -180,7 +210,7 @@ export function SuggestionsTab({ refreshKey = 0, onChanged }: { refreshKey?: num
             <MxInput value={search} onChange={event => setSearch(event.target.value)} placeholder="Buscar por problema ou regra..." aria-label="Buscar sugestão" />
             <MxSelect aria-label="Filtrar por status" value={statusFilter} onChange={event => setStatusFilter(event.target.value)}>
               <option value="">Todos os status</option>
-              {statuses.map(status => <option key={status} value={status}>{SUGGESTION_STATUS_LABEL[status as keyof typeof SUGGESTION_STATUS_LABEL] ?? status}</option>)}
+              {statuses.map(status => <option key={status} value={status}>{SUGGESTION_STATUS_LABEL[status]}</option>)}
             </MxSelect>
           </div>
 
@@ -248,7 +278,7 @@ export function SuggestionsTab({ refreshKey = 0, onChanged }: { refreshKey?: num
               </Table>
             </MxTableSurface>
           ) : (
-            <MxEmptyState title="Nenhuma sugestão encontrada" description="Sugestões enviadas ao Dono aparecerão aqui." />
+            <MxEmptyState title="Nenhuma sugestão encontrada" description="Crie uma sugestão manual ou aguarde o motor enviar uma ao Dono." action={<Button onClick={() => setCreating(true)}><Plus size={16} />Criar sugestão</Button>} />
           )}
         </div>
       </MxSectionCard>
@@ -302,6 +332,33 @@ export function SuggestionsTab({ refreshKey = 0, onChanged }: { refreshKey?: num
               </div>
             </>
           ) : null}
+        </div>
+      </Modal>
+
+      <Modal
+        open={creating}
+        onClose={() => { if (!busyId) setCreating(false) }}
+        title="Criar sugestão ao Dono"
+        size="md"
+        closeOnEscape={!busyId}
+        footer={(
+          <>
+            <Button variant="outline" onClick={() => setCreating(false)} disabled={Boolean(busyId)}>Cancelar</Button>
+            <Button onClick={() => void submitCreate()} disabled={Boolean(busyId) || !createProblem.trim() || !createRecommendation.trim()}>
+              {busyId === 'create' ? 'Salvando...' : 'Salvar sugestão'}
+            </Button>
+          </>
+        )}
+      >
+        <div className="mt-5 space-y-3">
+          <MxTextarea rows={2} value={createProblem} onChange={event => setCreateProblem(event.target.value)} placeholder="Problema que o Dono vai ver" aria-label="Problema da sugestão" />
+          <MxTextarea rows={3} value={createRecommendation} onChange={event => setCreateRecommendation(event.target.value)} placeholder="Recomendação de ação" aria-label="Recomendação da sugestão" />
+          <MxSelect aria-label="Prioridade da sugestão" value={createPriority} onChange={event => setCreatePriority(event.target.value as typeof createPriority)}>
+            <option value="critica">Crítica</option>
+            <option value="alta">Alta</option>
+            <option value="media">Média</option>
+            <option value="baixa">Baixa</option>
+          </MxSelect>
         </div>
       </Modal>
 

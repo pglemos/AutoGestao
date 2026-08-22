@@ -9,6 +9,7 @@ import type { TemplateItemPriority } from './actionPlanTemplates'
 export type WizardDirection = 'AUMENTAR' | 'DIMINUIR' | 'MANTER' | 'FAIXA' | 'CORRIGIR_PROCESSO'
 
 export type WizardStep = 1 | 2 | 3 | 4
+export type ActionPlanScopeMode = 'all_units' | 'single_unit'
 
 export type WizardAction = {
   titulo: string
@@ -18,6 +19,7 @@ export type WizardAction = {
 export type ClientActionPlanWizardForm = {
   clientId: string
   clientName: string
+  scopeMode: ActionPlanScopeMode
   storeId: string
   department: string
   indicatorId: string
@@ -42,6 +44,7 @@ export function emptyWizardForm(): ClientActionPlanWizardForm {
   return {
     clientId: '',
     clientName: '',
+    scopeMode: 'all_units',
     storeId: '',
     department: '',
     indicatorId: '',
@@ -122,7 +125,7 @@ export function validateWizardStep(step: WizardStep, form: ClientActionPlanWizar
   const errors: string[] = []
   if (step === 1) {
     if (!form.clientId) errors.push('Selecione um cliente.')
-    if (form.clientId && !form.storeId) errors.push('Selecione a unidade operacional do cliente.')
+    if (form.clientId && form.scopeMode === 'single_unit' && !form.storeId) errors.push('Selecione a unidade operacional do cliente.')
     if (!form.department.trim()) errors.push('Selecione um departamento.')
     if (!form.indicatorId) errors.push('Selecione um indicador.')
     if (!form.title.trim()) errors.push('Informe o título do plano.')
@@ -136,6 +139,19 @@ export function validateWizardStep(step: WizardStep, form: ClientActionPlanWizar
     if (!form.dueDate) errors.push('Informe o prazo final.')
   }
   return errors
+}
+
+/**
+ * O Base44 aplica o plano ao cliente. Como o schema MX materializa o contrato
+ * em `planos_acao(scope_type=store)`, o modo padrão replica a mesma ação em
+ * todas as unidades ativas; o modo unitário preserva a exceção operacional.
+ */
+export function resolveActionPlanTargetStoreIds(
+  form: Pick<ClientActionPlanWizardForm, 'scopeMode' | 'storeId'>,
+  availableStoreIds: string[],
+): string[] {
+  if (form.scopeMode === 'single_unit') return form.storeId ? [form.storeId] : []
+  return [...new Set(availableStoreIds.filter(Boolean))]
 }
 
 /** Data de vencimento padrão: 30 dias após o início, se não informada. */
@@ -176,6 +192,55 @@ export function buildPlanPayload(input: {
     checklist: buildChecklistItems(form.actions),
     created_by: userId,
   }
+}
+
+/** Campos que a RPC de criação não recebe e precisam ir no patch autenticado. */
+export function buildCreatedPlanPatch(form: ClientActionPlanWizardForm): Record<string, unknown> {
+  return {
+    checklist: buildChecklistItems(form.actions),
+    participants: form.participants.trim() || null,
+    efficacy_indicator: form.efficacyIndicatorName.trim() || null,
+    reference_year: new Date().getFullYear(),
+    iniciado_at: form.startDate || null,
+  }
+}
+
+/**
+ * Cria um plano por unidade via RPC autorizada, depois grava checklist e
+ * campos extras. Insert direto em `planos_acao` cai no RLS/hardening.
+ */
+export async function createClientActionPlans(input: {
+  form: ClientActionPlanWizardForm
+  storeIds: string[]
+  userId: string
+}): Promise<{ error: string | null; created: number; ids: string[] }> {
+  const ids: string[] = []
+  for (const storeId of input.storeIds) {
+    const payload = buildPlanPayload({ form: input.form, storeId, userId: input.userId })
+    const { data, error } = await supabase.rpc('criar_plano_acao_v2', {
+      p_scope_type: 'store',
+      p_scope_id: storeId,
+      p_objetivo: String(payload.objetivo ?? ''),
+      p_departamento: String(payload.departamento),
+      p_indicador: String(payload.indicador),
+      p_problema: String(payload.problema),
+      p_acao: String(payload.acao),
+      p_como: payload.como as string | null,
+      p_responsavel_id: payload.responsavel_id as string | null,
+      p_prazo: payload.prazo as string,
+      p_prioridade: payload.prioridade as ClientActionPlanWizardForm['priority'],
+      p_origem: payload.origem as ClientActionPlanWizardForm['origin'],
+    })
+    if (error || !data) return { error: error?.message ?? 'Falha ao criar o plano de ação.', created: ids.length, ids }
+    const plan = data as { id: string }
+    const { error: patchError } = await supabase.rpc('atualizar_plano_acao_patch', {
+      p_plano_id: plan.id,
+      p_patch: buildCreatedPlanPatch(input.form),
+    })
+    if (patchError) return { error: patchError.message, created: ids.length, ids }
+    ids.push(plan.id)
+  }
+  return { error: null, created: ids.length, ids }
 }
 
 /**

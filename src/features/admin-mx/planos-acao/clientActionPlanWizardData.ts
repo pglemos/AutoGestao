@@ -52,7 +52,7 @@ export async function fetchWizardStores(clientId: string): Promise<{ rows: Wizar
   const result = await fetchClientUnits(clientId)
   if (result.error) return { rows: [], error: result.error }
   return {
-    rows: result.units.map(unit => ({
+    rows: result.units.filter(unit => unit.active).map(unit => ({
       id: unit.id,
       name: unit.name,
       source: unit.store_type === 'MATRIZ' ? 'loja' : 'unidade',

@@ -90,10 +90,14 @@ describe('Plano de Ação canônico e tabela Base44', () => {
   test('opens the global route on the Base44-equivalent template library', () => {
     const page = read('src/features/admin-mx/AdminPlanosAcaoGlobalPage.tsx')
     expect(page).toContain("useState<PlanTab>('templates')")
-    expect(page).toContain("label: 'Biblioteca de templates'")
+    expect(page).toContain("label: 'Planos Padrão'")
     expect(page).toContain("label: 'Planos da rede'")
-    for (const action of ['Aplicar a cliente', 'Abrir histórico', 'Criar plano padrão']) {
+    expect(page).toContain("useState<'lista' | 'kanban'>('lista')")
+    for (const action of ['Aplicar a Cliente', 'Abrir Histórico', 'Criar Plano Padrão', 'Nova ação']) {
       expect(page).toContain(action)
+    }
+    for (const label of ['Código', 'Ação', 'Objetivo', 'Indicador', 'Depto', 'Resp.', 'Prio', 'Status', 'Progresso', 'Início', 'Prazo', 'Atraso', 'Atualização']) {
+      expect(page).toContain(`<TableHead>${label}</TableHead>`)
     }
   })
 
@@ -101,5 +105,14 @@ describe('Plano de Ação canônico e tabela Base44', () => {
     const page = read('src/pages/owner/PlanoDeAcao.jsx')
     expect(page).toContain('normalizeActionPlanMode(saved)')
     expect(page).toContain('import { normalizeActionPlanMode }')
+  })
+
+  test('aplica template como um plano por unidade, não um plano por item', () => {
+    const migration = read('supabase/migrations/20260822020000_action_plan_apply_one_plan_per_store.sql')
+    expect(migration).toContain('planos_acao_template_application_scope_uidx')
+    expect(migration).toContain("NOT (transition_metadata ? 'template_item_id')")
+    const apply = read('src/features/admin-mx/planos-acao/templateApplicationIdempotency.ts')
+    expect(apply).toContain('template_item_ids')
+    expect(apply).toContain('checklist')
   })
 })

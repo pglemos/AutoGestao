@@ -1,4 +1,5 @@
 import { ClipboardList } from 'lucide-react'
+import { useLocation } from 'react-router-dom'
 import AdminPlanosAcaoGlobalPage from '@/features/admin-mx/AdminPlanosAcaoGlobalPage'
 import { useInternalMxDomainTabs } from '@/design-system/internal-mx/InternalMxDomainTabs'
 import { ActionPlanWorkspace } from '@/features/action-plan/ActionPlanWorkspace'
@@ -13,10 +14,22 @@ const ACTION_PLAN_TABS = [
 
 export default function InternalActionPlanPage() {
   const store = useInternalPlanningStore()
+  const location = useLocation()
+  const isClientRoute = location.pathname.startsWith('/clientes/')
   // O caminho administrativo canônico abre a superfície equivalente ao
-  // Base44 `/planos-acao`. A execução focada continua disponível de forma
-  // explícita em `?mode=cliente`.
-  const domain = useInternalMxDomainTabs<ActionPlanMode>({ tabs: ACTION_PLAN_TABS, fallback: 'biblioteca' })
+  // Base44 `/planos-acao`. A rota contextual do cliente abre diretamente a
+  // execução para manter o planejamento no contexto da ficha.
+  const domain = useInternalMxDomainTabs<ActionPlanMode>({
+    tabs: ACTION_PLAN_TABS,
+    fallback: isClientRoute ? 'cliente' : 'biblioteca',
+  })
+
+  // `/plano-acao` é a home Base44. A execução fica na ficha do cliente —
+  // a aba extra nesta URL não trocava a view (URL ia para ?mode=cliente e o
+  // board da rede permanecia).
+  if (!isClientRoute) {
+    return <AdminPlanosAcaoGlobalPage />
+  }
 
   if (domain.active === 'biblioteca') {
     return (

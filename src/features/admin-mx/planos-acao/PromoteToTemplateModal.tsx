@@ -65,7 +65,7 @@ export function PromoteToTemplateModal(props: {
         {result ? (
           <MxStatusBanner tone="success">
             <div className="font-medium text-foreground">{props.planTitle || 'Plano'} virou um template em rascunho.</div>
-            <div className="mt-1 text-sm">Disponível para revisão na aba Biblioteca de templates.</div>
+            <div className="mt-1 text-sm">Disponível para revisão na aba Planos Padrão.</div>
           </MxStatusBanner>
         ) : (
           <>

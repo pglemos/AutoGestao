@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 import {
   canConvertSuggestion,
+  createSuggestion,
   isSuggestionPromoted,
   nextSuggestionActions,
   suggestionPriorityToPlanPriority,
@@ -68,5 +69,18 @@ describe('ciclo de vida da sugestão ao dono', () => {
   test('rótulos de status existem', () => {
     expect(SUGGESTION_STATUS_LABEL.pendente_validacao).toBe('Pendente de validação')
     expect(SUGGESTION_STATUS_LABEL.convertida).toBe('Convertida em Plano')
+  })
+})
+
+describe('criação manual de sugestão', () => {
+  test('exige problema e recomendação antes de gravar', async () => {
+    expect(await createSuggestion({ problem: '   ', recommendation: 'Fazer X' })).toEqual({
+      error: 'Informe o problema da sugestão.',
+      id: null,
+    })
+    expect(await createSuggestion({ problem: 'Queda de conversão', recommendation: '' })).toEqual({
+      error: 'Informe a recomendação ao Dono.',
+      id: null,
+    })
   })
 })

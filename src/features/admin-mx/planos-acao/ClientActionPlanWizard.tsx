@@ -8,12 +8,12 @@ import { useAuth } from '@/hooks/useAuth'
 import { toast } from '@/lib/toast'
 import { supabase } from '@/lib/supabase'
 import {
-  buildChecklistItems,
-  buildPlanPayload,
   calculateWeights,
+  createClientActionPlans,
   DIRECTION_OPTIONS,
   DIRECTION_LABELS,
   emptyWizardForm,
+  resolveActionPlanTargetStoreIds,
   suggestTitle,
   validateWizardStep,
   WIZARD_PRIORITIES,
@@ -43,11 +43,12 @@ export function ClientActionPlanWizard(props: {
   const { supabaseUser } = useAuth()
   const [step, setStep] = useState<WizardStep>(1)
   const [form, setForm] = useState<ClientActionPlanWizardForm>(emptyWizardForm)
-  const [saving, setSaving] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [errors, setErrors] = useState<string[]>([])
   const [clients, setClients] = useState<WizardClient[]>([])
   const [stores, setStores] = useState<WizardStore[]>([])
+  const [storesLoading, setStoresLoading] = useState(false)
+  const [storesError, setStoresError] = useState<string | null>(null)
   const [indicators, setIndicators] = useState<WizardIndicator[]>([])
   const [responsibles, setResponsibles] = useState<WizardResponsible[]>([])
   const [titleCustomized, setTitleCustomized] = useState(false)
@@ -57,6 +58,9 @@ export function ClientActionPlanWizard(props: {
     setStep(1)
     setErrors([])
     setTitleCustomized(false)
+    setStores([])
+    setStoresLoading(Boolean(props.clientId))
+    setStoresError(null)
     setForm({ ...emptyWizardForm(), clientId: props.clientId ?? '', clientName: props.clientName ?? '' })
     void Promise.all([fetchWizardClients(), fetchWizardIndicators(props.clientId), fetchWizardResponsibles()]).then(([c, i, r]) => {
       setClients(c.rows)
@@ -67,9 +71,16 @@ export function ClientActionPlanWizard(props: {
   }, [props.open, props.clientId, props.clientName])
 
   const loadStores = useCallback(async (clientId: string) => {
-    const result = await fetchWizardStores(clientId)
-    setStores(result.rows)
-    setForm(current => ({ ...current, storeId: result.rows[0]?.id ?? '' }))
+    setStoresLoading(true)
+    setStoresError(null)
+    try {
+      const result = await fetchWizardStores(clientId)
+      setStores(result.rows)
+      setStoresError(result.error)
+      setForm(current => ({ ...current, storeId: result.rows[0]?.id ?? '' }))
+    } finally {
+      setStoresLoading(false)
+    }
   }, [])
 
   const patch = (field: keyof ClientActionPlanWizardForm, value: unknown) => {
@@ -113,6 +124,7 @@ export function ClientActionPlanWizard(props: {
     patch('clientId', clientId)
     patch('clientName', client?.name ?? '')
     setStores([])
+    setStoresError(null)
     if (clientId) void loadStores(clientId)
     void fetchWizardIndicators(clientId).then(result => setIndicators(result.rows))
   }
@@ -165,12 +177,16 @@ export function ClientActionPlanWizard(props: {
       setErrors([...new Set(finalErrors)])
       return
     }
+    const targetStoreIds = resolveActionPlanTargetStoreIds(form, stores.map(store => store.id))
+    if (!targetStoreIds.length) {
+      setErrors([form.scopeMode === 'single_unit' ? 'Selecione a unidade operacional do cliente.' : 'Este cliente ainda não tem unidades operacionais ativas.'])
+      return
+    }
     setSubmitting(true)
     try {
-      const payload = buildPlanPayload({ form, storeId: form.storeId || null, userId: supabaseUser.id })
-      const { data: plan, error } = await supabase.from('planos_acao').insert(payload).select('id, acao').single()
-      if (error || !plan) {
-        toast.error(error?.message ?? 'Falha ao criar o plano de ação.')
+      const created = await createClientActionPlans({ form, storeIds: targetStoreIds, userId: supabaseUser.id })
+      if (created.error || !created.ids.length) {
+        toast.error(created.error ?? 'Falha ao criar o plano de ação.')
         return
       }
 
@@ -218,7 +234,9 @@ export function ClientActionPlanWizard(props: {
         }
       }
 
-      toast.success(`Plano "${plan.acao}" criado.`)
+      toast.success(targetStoreIds.length === 1
+        ? `Plano "${form.title}" criado.`
+        : `Plano "${form.title}" criado para ${targetStoreIds.length} unidades.`)
       props.onSaved()
       props.onClose()
     } finally {
@@ -249,7 +267,7 @@ export function ClientActionPlanWizard(props: {
                 Continuar <ChevronRight size={16} />
               </Button>
             ) : (
-              <Button onClick={() => void create()} disabled={submitting || saving}>
+              <Button onClick={() => void create()} disabled={submitting}>
                 {submitting ? 'Criando...' : 'Criar plano de ação'}
               </Button>
             )}
@@ -288,12 +306,31 @@ export function ClientActionPlanWizard(props: {
                 {clients.map(client => <option key={client.id} value={client.id}>{client.name}</option>)}
               </MxSelect>
             </MxField>
-            <MxField label="Unidade">
-              <MxSelect aria-label="Unidade" value={form.storeId} onChange={event => patch('storeId', event.target.value)} disabled={!form.clientId}>
-                <option value="">{form.clientId ? 'Selecione a unidade' : 'Selecione um cliente'}</option>
-                {stores.map(store => <option key={`${store.source}-${store.id}`} value={store.id}>{store.name}</option>)}
+            <MxField label="Escopo do plano">
+              <MxSelect aria-label="Escopo do plano" value={form.scopeMode} onChange={event => patch('scopeMode', event.target.value)} disabled={!form.clientId}>
+                <option value="all_units">Todas as unidades ativas</option>
+                <option value="single_unit">Uma unidade específica</option>
               </MxSelect>
+              <p className="mt-1 text-xs text-muted-foreground">Padrão Base44: a ação é materializada na matriz e nas filiais ativas.</p>
             </MxField>
+            {form.scopeMode === 'single_unit' ? (
+              <MxField label="Unidade operacional">
+                <MxSelect aria-label="Unidade operacional" value={form.storeId} onChange={event => patch('storeId', event.target.value)} disabled={!form.clientId || storesLoading}>
+                  <option value="">{storesLoading ? 'Carregando unidades...' : form.clientId ? 'Selecione a unidade' : 'Selecione um cliente'}</option>
+                  {stores.map(store => <option key={`${store.source}-${store.id}`} value={store.id}>{store.name}</option>)}
+                </MxSelect>
+              </MxField>
+            ) : (
+              <div className="rounded-lg border border-border bg-surface-alt p-3 text-sm">
+                <div className="font-semibold text-foreground">{storesLoading ? 'Carregando unidades ativas…' : `${stores.length} unidade(s) ativa(s)`}</div>
+                <div className="mt-1 text-xs text-muted-foreground">
+                  {storesLoading
+                    ? 'Consultando a matriz e as filiais operacionais do cliente.'
+                    : stores.map(store => store.name).join(' · ') || (form.clientId ? 'Este cliente ainda não tem unidades operacionais ativas.' : 'Selecione um cliente para carregar a matriz e as filiais.')}
+                </div>
+                {storesError ? <div className="mt-2 text-xs text-status-error-text">Não foi possível carregar as unidades: {storesError}</div> : null}
+              </div>
+            )}
             <MxField label="Departamento">
               <MxSelect
                 aria-label="Departamento"
@@ -421,6 +458,7 @@ export function ClientActionPlanWizard(props: {
           <div className="space-y-4">
             <div className="space-y-1.5 rounded-lg border border-border bg-muted/30 p-4 text-sm">
               <div className="flex justify-between"><span className="text-muted-foreground">Cliente:</span><span className="font-semibold text-foreground">{form.clientName || '—'}</span></div>
+              <div className="flex justify-between"><span className="text-muted-foreground">Escopo:</span><span className="font-semibold text-foreground">{form.scopeMode === 'all_units' ? `${stores.length} unidade(s) ativa(s)` : stores.find(store => store.id === form.storeId)?.name || '—'}</span></div>
               <div className="flex justify-between"><span className="text-muted-foreground">Departamento:</span><span className="font-semibold text-foreground">{form.department || '—'}</span></div>
               <div className="flex justify-between"><span className="text-muted-foreground">Indicador:</span><span className="font-semibold text-foreground">{form.indicatorName || '—'}</span></div>
               <div className="flex justify-between"><span className="text-muted-foreground">Direção:</span><span className="font-semibold text-foreground">{DIRECTION_LABELS[form.direction]}</span></div>
