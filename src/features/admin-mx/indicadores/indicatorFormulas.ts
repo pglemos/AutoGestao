@@ -4,6 +4,13 @@
 // avalia expressões com IND("CODIGO") e PAR("CODIGO"), calcula totais anuais,
 // extrai dependências e formata valores conforme o tipo do indicador.
 
+import {
+  catalogAliasKeys,
+  matchCanonicalIndicator,
+  matchOfficialParameter,
+  officialParameterDefaults,
+} from './canonicalBase44Catalog'
+
 export type IndicatorValueFormat = 'INTEGER' | 'DECIMAL' | 'CURRENCY_BRL' | 'PERCENTAGE' | 'SCORE_0_5' | 'RATIO' | 'INVENTORY_TURNOVER'
 
 export type AnnualAggregation = 'SUM_MONTHS' | 'AVERAGE_MONTHS' | 'LAST_VALID_MONTH' | 'RECALCULATE_FROM_ANNUAL_BASES' | 'RECALCULATE_FROM_LAST_PERIOD_BASES'
@@ -60,6 +67,34 @@ export function extractParameterDeps(formula: string | null | undefined): string
  * Avalia uma expressão com IND() e PAR(). Devolve null quando falta base
  * (indicador/parâmetro ausente, divisão por zero ou erro de sintaxe).
  */
+function lookupLoose(
+  map: Record<string, number | null | undefined>,
+  code: string,
+  kind: 'indicator' | 'parameter',
+): number | null | undefined {
+  if (map[code] != null && !Number.isNaN(map[code])) return map[code]
+  if (kind === 'indicator') {
+    const canon = matchCanonicalIndicator(code)
+    if (canon) {
+      for (const key of catalogAliasKeys(canon.code)) {
+        if (map[key] != null && !Number.isNaN(map[key])) return map[key]
+      }
+      for (const [key, value] of Object.entries(map)) {
+        if (value == null || Number.isNaN(value)) continue
+        if (matchCanonicalIndicator(key)?.code === canon.code) return value
+      }
+    }
+    return map[code]
+  }
+  const param = matchOfficialParameter(code)
+  if (param) {
+    if (map[param.code] != null && !Number.isNaN(map[param.code])) return map[param.code]
+    const lower = param.code.toLowerCase()
+    if (map[lower] != null && !Number.isNaN(map[lower])) return map[lower]
+  }
+  return map[code]
+}
+
 export function evaluateFormula(
   formula: string | null | undefined,
   indicatorValues: Record<string, number | null | undefined>,
@@ -69,12 +104,12 @@ export function evaluateFormula(
   try {
     let expr = formula
     expr = expr.replace(/IND\("([^"]+)"\)/g, (_match, code: string) => {
-      const value = indicatorValues[code]
+      const value = lookupLoose(indicatorValues, code, 'indicator')
       if (value == null || Number.isNaN(value)) return 'null'
       return String(value)
     })
     expr = expr.replace(/PAR\("([^"]+)"\)/g, (_match, code: string) => {
-      const value = parameterValues[code]
+      const value = lookupLoose(parameterValues, code, 'parameter')
       if (value == null || Number.isNaN(value)) return 'null'
       return String(value)
     })
@@ -273,6 +308,26 @@ export function buildDependentsMap(
   return transitive
 }
 
+export type ParameterSource =
+  | Record<string, number | null | undefined>
+  | ((month: number) => Record<string, number | null | undefined>)
+
+function paramsForMonth(params: ParameterSource, month: number) {
+  return typeof params === 'function' ? params(month) : params
+}
+
+function writeMonthValue(
+  valueMap: Record<string, Record<number, number | null>>,
+  code: string,
+  month: number,
+  value: number | null,
+) {
+  for (const key of catalogAliasKeys(code)) {
+    if (!valueMap[key]) valueMap[key] = {}
+    valueMap[key][month] = value
+  }
+}
+
 /**
  * Calcula o mapa de valores mensais: manuais alimentam as fórmulas dos
  * calculados (3 passagens resolvem cadeias de dependência).
@@ -280,7 +335,7 @@ export function buildDependentsMap(
 export function computeValueMap(
   monthlyValues: Array<{ indicator_code: string; month: number; value: number | null }>,
   indicators: Array<Pick<FormulaEngineIndicator, 'code' | 'formula_expression'>>,
-  params: Record<string, number | null | undefined>,
+  params: ParameterSource,
 ): {
   valueMap: Record<string, Record<number, number | null>>
   calcStatus: Record<string, Record<number, 'CALCULATED' | 'WITHOUT_BASE' | 'MISSING_PARAMETER'>>
@@ -289,8 +344,7 @@ export function computeValueMap(
   const calcStatus: Record<string, Record<number, 'CALCULATED' | 'WITHOUT_BASE' | 'MISSING_PARAMETER'>> = {}
 
   for (const mv of monthlyValues) {
-    if (!valueMap[mv.indicator_code]) valueMap[mv.indicator_code] = {}
-    valueMap[mv.indicator_code][mv.month] = mv.value
+    writeMonthValue(valueMap, mv.indicator_code, mv.month, mv.value)
   }
 
   const calculated = indicators
@@ -305,28 +359,92 @@ export function computeValueMap(
       for (const month of MONTHS) {
         if (pass > 0 && calcStatus[indicator.code][month] === 'CALCULATED') continue
 
+        const monthParams = paramsForMonth(params, month)
         const flatValues: Record<string, number | null> = {}
         for (const [code, monthMap] of Object.entries(valueMap)) {
           flatValues[code] = monthMap[month] ?? null
         }
-        const result = evaluateFormula(indicator.formula_expression, flatValues, params)
+        const result = evaluateFormula(indicator.formula_expression, flatValues, monthParams)
 
         if (result != null && !Number.isNaN(result)) {
-          valueMap[indicator.code][month] = result
+          writeMonthValue(valueMap, indicator.code, month, result)
           calcStatus[indicator.code][month] = 'CALCULATED'
         } else {
           const hasMissingParam = extractParameterDeps(indicator.formula_expression).some(code => {
-            const value = params[code]
+            const value = lookupLoose(monthParams, code, 'parameter')
             return value == null || Number.isNaN(value)
           })
           calcStatus[indicator.code][month] = hasMissingParam ? 'MISSING_PARAMETER' : 'WITHOUT_BASE'
-          valueMap[indicator.code][month] = null
+          writeMonthValue(valueMap, indicator.code, month, null)
         }
       }
     }
   }
 
   return { valueMap, calcStatus }
+}
+
+const COMPUTED_FIELDS = ['meta', 'realizado', 'ano_anterior'] as const
+
+export function applyOfficialComputedMetas<T extends {
+  loja_id: string
+  indicator_code: string
+  month: number | null
+  meta: number | null
+  realizado?: number | null
+  ano_anterior?: number | null
+}>(params: {
+  values: T[]
+  indicators: Array<{ metric_key: string; formula_expression?: string | null }>
+  unitIds: string[]
+  parameterSource?: ParameterSource
+}): T[] {
+  const calculated = params.indicators.filter(item => item.formula_expression)
+  if (calculated.length === 0) return params.values
+
+  const next = params.values.map(row => ({ ...row }))
+  const index = new Map<string, number>()
+  next.forEach((row, position) => {
+    if (row.month == null) return
+    index.set(`${row.loja_id}:${row.indicator_code}:${row.month}`, position)
+  })
+
+  const parameterSource = params.parameterSource ?? (month => officialParameterDefaults(month))
+  const engineIndicators = params.indicators.map(item => ({
+    code: item.metric_key,
+    formula_expression: item.formula_expression,
+  }))
+
+  for (const unitId of params.unitIds) {
+    for (const field of COMPUTED_FIELDS) {
+      const monthlyValues = next
+        .filter(row => row.loja_id === unitId && row.month != null)
+        .map(row => ({ indicator_code: row.indicator_code, month: Number(row.month), value: row[field] ?? null }))
+      const { valueMap } = computeValueMap(monthlyValues, engineIndicators, parameterSource)
+      for (const indicator of calculated) {
+        for (const month of MONTHS) {
+          const computed = valueMap[indicator.metric_key]?.[month] ?? null
+          const key = `${unitId}:${indicator.metric_key}:${month}`
+          const existing = index.get(key)
+          if (existing != null) {
+            next[existing] = { ...next[existing], [field]: computed }
+            continue
+          }
+          index.set(key, next.length)
+          next.push({
+            loja_id: unitId,
+            indicator_code: indicator.metric_key,
+            month,
+            meta: field === 'meta' ? computed : null,
+            realizado: field === 'realizado' ? computed : null,
+            ano_anterior: field === 'ano_anterior' ? computed : null,
+          } as T)
+        }
+      }
+    }
+  }
+
+  return next
 }
 
 export function calcStatusLabel(

@@ -14,8 +14,10 @@ import {
   isOfficialBase44Key,
   liveOfficialCatalogRows,
   matchCanonicalIndicator,
+  officialDemoManualValue,
   overlayCanonicalCatalog,
 } from './canonicalBase44Catalog'
+import { MONTHS, applyOfficialComputedMetas } from './indicatorFormulas'
 import type { EditorField, EditorPlanningRow } from './strategicPlanEditor'
 
 const CYCLE_COLUMNS = 'id, client_id, year, status, version_number, package_version_id, revised_from_id, published_at, published_by, created_at, updated_at'
@@ -299,10 +301,105 @@ export async function fetchStrategicPlanEditorData(cycleId: string): Promise<{ d
   const values = await fetchCyclePlanningValues(cycle.id, cycle.year, unitIds)
   if (values.error) return { data: null, error: values.error }
 
+  const recalculated = await recalculateAndPersistCycle({
+    year: cycle.year,
+    status: cycle.status,
+    unitIds,
+    indicators,
+    values: values.rows,
+  })
+
   return {
-    data: { cycle, client, units: unitsResult.units, indicators, catalog: officialCatalog, values: values.rows },
+    data: { cycle, client, units: unitsResult.units, indicators, catalog: officialCatalog, values: recalculated.values },
     error: null,
   }
+}
+
+export async function recalculateAndPersistCycle(params: {
+  year: number
+  status: string
+  unitIds: string[]
+  indicators: Array<{ metric_key: string; formula_expression?: string | null }>
+  values: EditorPlanningRow[]
+}): Promise<{ values: EditorPlanningRow[]; error: string | null }> {
+  const values = applyOfficialComputedMetas({
+    values: params.values,
+    indicators: params.indicators,
+    unitIds: params.unitIds,
+  })
+
+  if (!['rascunho', 'em_validacao'].includes(params.status)) {
+    return { values, error: null }
+  }
+
+  const storedByKey = new Map<string, number | null>()
+  for (const row of params.values) {
+    if (row.month == null) continue
+    storedByKey.set(`${row.loja_id}:${row.indicator_code}:${row.month}`, row.meta)
+  }
+
+  const calculated = params.indicators.filter(item => item.formula_expression)
+  const saves = params.unitIds.flatMap(unitId => calculated.map(indicator => {
+    const series = MONTHS.map(month => {
+      const row = values.find(item => item.loja_id === unitId && item.indicator_code === indicator.metric_key && item.month === month)
+      return row?.meta ?? null
+    })
+    const previous = MONTHS.map(month => storedByKey.get(`${unitId}:${indicator.metric_key}:${month}`) ?? null)
+    if (series.every(value => value == null) && previous.every(value => value == null)) return null
+    if (series.every((value, index) => value === previous[index])) return null
+    return saveIndicatorField({
+      lojaId: unitId,
+      indicatorCode: indicator.metric_key,
+      year: params.year,
+      field: 'meta',
+      values: series,
+      note: 'Recálculo oficial Base44',
+    })
+  }))
+
+  const results = await Promise.all(saves.filter((item): item is ReturnType<typeof saveIndicatorField> => item != null))
+  const firstError = results.find(result => result.error)?.error ?? null
+  return { values, error: firstError }
+}
+
+export async function fillOfficialDemoForCycle(cycleId: string): Promise<{ error: string | null }> {
+  const loaded = await fetchStrategicPlanEditorData(cycleId)
+  if (loaded.error || !loaded.data) return { error: loaded.error ?? 'Ciclo não encontrado.' }
+
+  const { cycle, client, units, indicators, values } = loaded.data
+  const unitIds = units.filter(unit => unit.active).map(unit => unit.id)
+  const primaryId = unitIds.find(id => id === client.primaryStoreId) ?? unitIds[0]
+  if (!primaryId) return { error: 'Ciclo sem unidade ativa.' }
+
+  for (const indicator of indicators) {
+    if (indicator.formula_expression) continue
+    const existing = values.filter(row => row.loja_id === primaryId && row.indicator_code === indicator.metric_key)
+    const firstFilled = existing.find(row => row.meta != null)?.meta ?? officialDemoManualValue(indicator.metric_key)
+    if (firstFilled == null) continue
+    const series = MONTHS.map(month => existing.find(row => row.month === month)?.meta ?? firstFilled)
+    const previous = MONTHS.map(month => existing.find(row => row.month === month)?.meta ?? null)
+    if (series.every((value, index) => value === previous[index])) continue
+    const result = await saveIndicatorField({
+      lojaId: primaryId,
+      indicatorCode: indicator.metric_key,
+      year: cycle.year,
+      field: 'meta',
+      values: series,
+      note: 'Demo oficial Base44',
+    })
+    if (result.error) return { error: result.error }
+  }
+
+  const refreshed = await fetchCyclePlanningValues(cycle.id, cycle.year, unitIds)
+  if (refreshed.error) return { error: refreshed.error }
+  const recalculated = await recalculateAndPersistCycle({
+    year: cycle.year,
+    status: cycle.status,
+    unitIds,
+    indicators,
+    values: refreshed.rows,
+  })
+  return { error: recalculated.error }
 }
 
 export async function fetchCyclePlanningValues(

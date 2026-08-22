@@ -18,6 +18,7 @@ export type StoreTargetValue = {
 
 export type TargetIndicator = {
   code: string
+  displayCode?: string
   name: string
   department?: string
   calculado?: boolean

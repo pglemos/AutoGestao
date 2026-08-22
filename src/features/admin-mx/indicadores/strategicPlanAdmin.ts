@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase'
 import { ensureCycle } from '@/features/strategic-plan/planCycleRepository'
 import { fetchClientProductPackage } from '@/features/strategic-plan/clientPlanningRepository'
+import { fillOfficialDemoForCycle } from './strategicPlanEditorRepository'
 
 export type StrategicPlanAdminRow = {
   cycleId: string
@@ -218,7 +219,12 @@ export async function seedStrategicPlanDemo(year = new Date().getFullYear()) {
   if (clients.error) return { error: clients.error, cycle: null, created: false, packageName: null, packageWarning: null }
   const demo = clients.rows.find(row => /demonstra|demo/i.test(row.name)) ?? clients.rows[0]
   if (!demo) return { error: 'Nenhum cliente disponível para o demo.', cycle: null, created: false, packageName: null, packageWarning: null }
-  return ensureAdminStrategicPlan({ clientId: demo.id, year })
+  const created = await ensureAdminStrategicPlan({ clientId: demo.id, year })
+  if (created.cycle) {
+    const filled = await fillOfficialDemoForCycle(created.cycle.id)
+    if (filled.error) return { ...created, error: filled.error }
+  }
+  return created
 }
 
 export async function ensureAdminStrategicPlan(input: { clientId: string; year: number }) {

@@ -326,7 +326,7 @@ export function MetasRealizadosTab(props: {
                           <TableRow key={metaKey}>
                             <TableCell>
                               <div className="font-semibold text-foreground">{indicator.name}</div>
-                              <div className="text-xs text-muted-foreground">{indicator.code}{indicator.calculado ? ' · calculado' : ''} · Meta</div>
+                              <div className="text-xs text-muted-foreground">{indicator.displayCode ?? indicator.code}{indicator.calculado ? ' · calculado' : ''} · Meta</div>
                             </TableCell>
                             {MONTH_LABELS.map((_label, index) => {
                               const month = index + 1

@@ -48,6 +48,7 @@ import {
   copyEditorMonth,
   editorAnnualTotal,
   filterEditorIndicators,
+  groupEditorIndicatorsByArea,
   hydrateEditorGrid,
   patchEditorGrid,
   readEditorSeries,
@@ -69,7 +70,7 @@ import {
   type StrategicPlanEditorIndicator,
   type StrategicPlanHistoryRow,
 } from './strategicPlanEditorRepository'
-import { matchCanonicalIndicator } from './canonicalBase44Catalog'
+import { matchCanonicalIndicator, officialCatalogCode } from './canonicalBase44Catalog'
 import { PLAN_CYCLE_STATUS_LABEL, type PlanReadiness } from '@/features/strategic-plan/planCycle'
 import { consolidateClientPlanning, resolvePolicies, type PlanningValueRow } from '@/features/strategic-plan/clientPlanningConsolidation'
 import type { ConsolidationIndicator } from '@/features/strategic-plan/unitConsolidation'
@@ -580,7 +581,13 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
           <span><ShieldCheck size={16} className="mr-2 inline" />Prontidão: {readiness.ready}/{readiness.total} indicadores completos ({readinessPercent}%). {readiness.canPublish ? 'O ciclo pode ser publicado.' : `${readiness.pending} pendência(s) bloqueiam a publicação.`}</span>
           {readiness.pending > readinessIssues.length ? <span className="text-xs">Mostrando {readinessIssues.length} de {readiness.pending}</span> : null}
         </div>
-        {readinessIssues.length ? <ul className="mt-2 list-disc space-y-1 pl-5 text-xs font-normal">{readinessIssues.map((issue, index) => <li key={`${issue.type}-${issue.indicatorCode ?? ''}-${issue.unitId ?? ''}-${issue.month ?? ''}-${index}`}>{issue.message}</li>)}</ul> : null}
+        {readinessIssues.length ? <ul className="mt-2 list-disc space-y-1 pl-5 text-xs font-normal">{readinessIssues.map((issue, index) => {
+          const official = issue.indicatorCode ? officialCatalogCode(issue.indicatorCode) : ''
+          const message = issue.indicatorCode && official && issue.message.includes(issue.indicatorCode)
+            ? issue.message.replaceAll(issue.indicatorCode, official)
+            : issue.message
+          return <li key={`${issue.type}-${issue.indicatorCode ?? ''}-${issue.unitId ?? ''}-${issue.month ?? ''}-${index}`}>{message}</li>
+        })}</ul> : null}
       </MxStatusBanner> : null}
 
       <TabNav tabs={EDITOR_TABS} activeTab={tab} onTabChange={setTab} scrollable />
@@ -613,14 +620,18 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
                 <Table className="min-w-[1420px]">
                   <TableHeader><TableRow><TableHead>Indicador</TableHead>{MONTH_LABELS.map(label => <TableHead key={label} className="text-right">{label}</TableHead>)}<TableHead className="text-right">Total anual</TableHead></TableRow></TableHeader>
                   <TableBody>
-                    {gridIndicators.map(indicator => {
+                    {groupEditorIndicatorsByArea(gridIndicators).flatMap(group => [
+                      <TableRow key={`area-${group.area}`}>
+                        <TableCell colSpan={14} className="bg-surface-alt text-xs font-semibold uppercase tracking-wide text-muted-foreground">{group.area}</TableCell>
+                      </TableRow>,
+                      ...group.items.map(indicator => {
                       const config = getFormatConfig(indicator.value_type, indicator.casas_decimais)
                       const editable = canEdit(indicator, field)
                       const values = readEditorSeries(grid, unitId, indicator.metric_key, field)
                       return <TableRow key={indicator.metric_key}>
                           <TableCell className="sticky left-0 z-[var(--mx-z-sticky)] min-w-[240px] bg-background">
                           <div className="font-semibold text-foreground">{indicator.label}</div>
-                          <div className="text-xs text-muted-foreground">{indicator.metric_key} · {calculatedIndicator(indicator) ? 'Calculado' : 'Digitável'}</div>
+                          <div className="text-xs text-muted-foreground">{officialCatalogCode(indicator.metric_key)} · {calculatedIndicator(indicator) ? 'Calculado' : 'Digitável'}</div>
                         </TableCell>
                         {MONTHS.map(month => {
                           const value = grid[unitId]?.[indicator.metric_key]?.[month]?.[field] ?? null
@@ -636,7 +647,8 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
                         })}
                         <TableCell className="text-right font-semibold tabular-nums">{formatDisplay(editorAnnualTotal(values), config)}</TableCell>
                       </TableRow>
-                    })}
+                      }),
+                    ])}
                   </TableBody>
                 </Table>
               </MxTableSurface>
@@ -649,6 +661,7 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
         <MetasRealizadosTab
           indicators={gridIndicators.map(indicator => ({
             code: indicator.metric_key,
+            displayCode: officialCatalogCode(indicator.metric_key),
             name: indicator.label,
             department: indicator.area,
             calculado: calculatedIndicator(indicator),
@@ -673,7 +686,7 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
               <label className="flex items-center gap-2 text-sm text-muted-foreground"><input type="checkbox" checked={includeHidden} onChange={event => setIncludeHidden(event.target.checked)} />Mostrar ocultos</label>
             </MxToolbar>
             {data.cycle.status === 'publicado' ? <MxStatusBanner tone="info">O roster publicado é imutável. Abra uma revisão para adicionar indicadores ou alterar a visibilidade no Dono.</MxStatusBanner> : null}
-            {filteredIndicators.length ? <MxTableSurface aria-label="Roster de indicadores do ciclo"><Table className="min-w-[1180px]"><TableHeader><TableRow><TableHead>Indicador</TableHead><TableHead>Área</TableHead><TableHead>Entrada</TableHead><TableHead>Consolidação</TableHead><TableHead>Origem</TableHead><TableHead>Dono</TableHead><TableHead className="text-right">Ação</TableHead></TableRow></TableHeader><TableBody>{filteredIndicators.map(indicator => <TableRow key={indicator.metric_key}><TableCell><div className="font-semibold">{indicator.label}</div><div className="text-xs text-muted-foreground">{indicator.metric_key} · ordem {indicator.display_order}</div></TableCell><TableCell>{indicator.area}</TableCell><TableCell>{calculatedIndicator(indicator) ? 'Calculado' : 'Digitável'}</TableCell><TableCell>{indicator.unit_rollup_method ? UNIT_ROLLUP_METHODS[indicator.unit_rollup_method as keyof typeof UNIT_ROLLUP_METHODS]?.short ?? indicator.unit_rollup_method : 'Sem política'}</TableCell><TableCell>{indicator.origin === 'adicionado_mx' ? <Badge variant="info">Adicionado MX</Badge> : <Badge variant="outline">Pacote</Badge>}</TableCell><TableCell><Badge variant={indicator.visible_to_owner ? 'success' : 'secondary'}>{indicator.visible_to_owner ? <><Eye size={14} />Visível</> : <><EyeOff size={14} />Oculto</>}</Badge></TableCell><TableCell className="text-right"><Button variant="outline" size="sm" onClick={() => void toggleVisibility(indicator)} disabled={effectiveReadOnly || data.cycle.status === 'publicado' || busyIndicator === indicator.metric_key} title={data.cycle.status === 'publicado' ? 'Abra uma revisão para alterar a visibilidade.' : undefined}>{indicator.visible_to_owner ? 'Ocultar no Dono' : 'Mostrar no Dono'}</Button></TableCell></TableRow>)}</TableBody></Table></MxTableSurface> : <MxEmptyState title="Nenhum indicador encontrado" description="Ajuste a busca ou os filtros, ou adicione um indicador ativo do catálogo." variant="filter" />}
+            {filteredIndicators.length ? <MxTableSurface aria-label="Roster de indicadores do ciclo"><Table className="min-w-[1180px]"><TableHeader><TableRow><TableHead>Indicador</TableHead><TableHead>Área</TableHead><TableHead>Entrada</TableHead><TableHead>Consolidação</TableHead><TableHead>Origem</TableHead><TableHead>Dono</TableHead><TableHead className="text-right">Ação</TableHead></TableRow></TableHeader><TableBody>{filteredIndicators.map(indicator => <TableRow key={indicator.metric_key}><TableCell><div className="font-semibold">{indicator.label}</div><div className="text-xs text-muted-foreground">{officialCatalogCode(indicator.metric_key)} · ordem {indicator.display_order}</div></TableCell><TableCell>{indicator.area}</TableCell><TableCell>{calculatedIndicator(indicator) ? 'Calculado' : 'Digitável'}</TableCell><TableCell>{indicator.unit_rollup_method ? UNIT_ROLLUP_METHODS[indicator.unit_rollup_method as keyof typeof UNIT_ROLLUP_METHODS]?.short ?? indicator.unit_rollup_method : 'Sem política'}</TableCell><TableCell>{indicator.origin === 'adicionado_mx' ? <Badge variant="info">Adicionado MX</Badge> : <Badge variant="outline">Pacote</Badge>}</TableCell><TableCell><Badge variant={indicator.visible_to_owner ? 'success' : 'secondary'}>{indicator.visible_to_owner ? <><Eye size={14} />Visível</> : <><EyeOff size={14} />Oculto</>}</Badge></TableCell><TableCell className="text-right"><Button variant="outline" size="sm" onClick={() => void toggleVisibility(indicator)} disabled={effectiveReadOnly || data.cycle.status === 'publicado' || busyIndicator === indicator.metric_key} title={data.cycle.status === 'publicado' ? 'Abra uma revisão para alterar a visibilidade.' : undefined}>{indicator.visible_to_owner ? 'Ocultar no Dono' : 'Mostrar no Dono'}</Button></TableCell></TableRow>)}</TableBody></Table></MxTableSurface> : <MxEmptyState title="Nenhum indicador encontrado" description="Ajuste a busca ou os filtros, ou adicione um indicador ativo do catálogo." variant="filter" />}
           </div>
         </MxSectionCard>
       </section> : null}
@@ -684,7 +697,7 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
       </section> : null}
 
       {tab === 'consolidado' ? <section id="consolidado-panel" role="tabpanel" aria-label="Consolidado" className="space-y-5">
-        {activeUnits.length < 2 ? <MxStatusBanner tone="info">Este cliente possui uma única unidade ativa. O consolidado só é exibido quando há matriz e filial ativas.</MxStatusBanner> : consolidated ? <MxSectionCard><MxSectionHeader title="Consolidado do cliente" description="Percentuais e médias são recalculados sobre as bases consolidadas; não são somados entre unidades." actions={<MxSelect aria-label="Série do consolidado" value={field} onChange={event => setField(event.target.value as EditorField)}>{FIELD_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</MxSelect>} /><div className="p-5"><MxTableSurface aria-label="Consolidado mensal do cliente"><Table className="min-w-[1280px]"><TableHeader><TableRow><TableHead>Indicador</TableHead>{MONTH_LABELS.map(label => <TableHead key={label} className="text-right">{label}</TableHead>)}<TableHead>Política</TableHead></TableRow></TableHeader><TableBody>{gridIndicators.map(indicator => { const series = consolidated[field]; const config = getFormatConfig(indicator.value_type, indicator.casas_decimais); const policy = indicator.unit_rollup_method ? UNIT_ROLLUP_METHODS[indicator.unit_rollup_method as keyof typeof UNIT_ROLLUP_METHODS]?.short ?? indicator.unit_rollup_method : 'Sem política'; return <TableRow key={indicator.metric_key}><TableCell><div className="font-semibold">{indicator.label}</div><div className="text-xs text-muted-foreground">{indicator.metric_key}</div></TableCell>{MONTHS.map(month => { const value = series.valueMap[indicator.metric_key]?.[month] ?? null; const integrity = series.integrityByMonth[month]?.[indicator.metric_key]; return <TableCell key={month} className="text-right"><div className="tabular-nums">{formatDisplay(value, config)}</div>{integrity ? <Badge variant={consolidationTone(integrity.status)} className="mt-1">{integrity.status}</Badge> : null}</TableCell>})}<TableCell>{policy}{indicator.unit_entry_mode ? <div className="text-xs text-muted-foreground">{UNIT_ENTRY_MODES[indicator.unit_entry_mode as keyof typeof UNIT_ENTRY_MODES]?.short ?? indicator.unit_entry_mode}</div> : null}</TableCell></TableRow>})}</TableBody></Table></MxTableSurface></div></MxSectionCard> : <MxEmptyState title="Consolidado indisponível" description="Não foi possível calcular o consolidado deste ciclo." />}
+        {activeUnits.length < 2 ? <MxStatusBanner tone="info">Este cliente possui uma única unidade ativa. O consolidado só é exibido quando há matriz e filial ativas.</MxStatusBanner> : consolidated ? <MxSectionCard><MxSectionHeader title="Consolidado do cliente" description="Percentuais e médias são recalculados sobre as bases consolidadas; não são somados entre unidades." actions={<MxSelect aria-label="Série do consolidado" value={field} onChange={event => setField(event.target.value as EditorField)}>{FIELD_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</MxSelect>} /><div className="p-5"><MxTableSurface aria-label="Consolidado mensal do cliente"><Table className="min-w-[1280px]"><TableHeader><TableRow><TableHead>Indicador</TableHead>{MONTH_LABELS.map(label => <TableHead key={label} className="text-right">{label}</TableHead>)}<TableHead>Política</TableHead></TableRow></TableHeader><TableBody>{gridIndicators.map(indicator => { const series = consolidated[field]; const config = getFormatConfig(indicator.value_type, indicator.casas_decimais); const policy = indicator.unit_rollup_method ? UNIT_ROLLUP_METHODS[indicator.unit_rollup_method as keyof typeof UNIT_ROLLUP_METHODS]?.short ?? indicator.unit_rollup_method : 'Sem política'; return <TableRow key={indicator.metric_key}><TableCell><div className="font-semibold">{indicator.label}</div><div className="text-xs text-muted-foreground">{officialCatalogCode(indicator.metric_key)}</div></TableCell>{MONTHS.map(month => { const value = series.valueMap[indicator.metric_key]?.[month] ?? null; const integrity = series.integrityByMonth[month]?.[indicator.metric_key]; return <TableCell key={month} className="text-right"><div className="tabular-nums">{formatDisplay(value, config)}</div>{integrity ? <Badge variant={consolidationTone(integrity.status)} className="mt-1">{integrity.status}</Badge> : null}</TableCell>})}<TableCell>{policy}{indicator.unit_entry_mode ? <div className="text-xs text-muted-foreground">{UNIT_ENTRY_MODES[indicator.unit_entry_mode as keyof typeof UNIT_ENTRY_MODES]?.short ?? indicator.unit_entry_mode}</div> : null}</TableCell></TableRow>})}</TableBody></Table></MxTableSurface></div></MxSectionCard> : <MxEmptyState title="Consolidado indisponível" description="Não foi possível calcular o consolidado deste ciclo." />}
       </section> : null}
 
       {tab === 'historico' ? <section id="historico-panel" role="tabpanel" aria-label="Histórico" className="space-y-5">
@@ -761,7 +774,7 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
       </section> : null}
 
       <Modal open={addIndicatorOpen} onClose={() => setAddIndicatorOpen(false)} title="Adicionar indicador ao ciclo" description="A inclusão altera somente este roster. O catálogo global e outros clientes permanecem intactos." size="lg" footer={<Button variant="outline" onClick={() => setAddIndicatorOpen(false)}>Fechar</Button>}>
-        <div className="space-y-4"><MxInput value={addSearch} onChange={event => setAddSearch(event.target.value)} placeholder="Buscar no catálogo ativo" aria-label="Buscar indicador para adicionar" />{availableIndicators.length ? <MxTableSurface aria-label="Indicadores disponíveis para adicionar"><Table><TableHeader><TableRow><TableHead>Indicador</TableHead><TableHead>Área</TableHead><TableHead className="text-right">Ação</TableHead></TableRow></TableHeader><TableBody>{availableIndicators.map(indicator => <TableRow key={indicator.metric_key}><TableCell><div className="font-semibold">{indicator.label}</div><div className="text-xs text-muted-foreground">{indicator.metric_key}</div></TableCell><TableCell>{indicator.area}</TableCell><TableCell className="text-right"><Button size="sm" onClick={() => void addIndicator(indicator.metric_key)} disabled={busyIndicator === indicator.metric_key}><Plus size={14} />Adicionar</Button></TableCell></TableRow>)}</TableBody></Table></MxTableSurface> : <MxEmptyState title="Nenhum indicador disponível" description="Todos os indicadores ativos já fazem parte deste ciclo ou não correspondem à busca." variant="filter" />}</div>
+        <div className="space-y-4"><MxInput value={addSearch} onChange={event => setAddSearch(event.target.value)} placeholder="Buscar no catálogo ativo" aria-label="Buscar indicador para adicionar" />{availableIndicators.length ? <MxTableSurface aria-label="Indicadores disponíveis para adicionar"><Table><TableHeader><TableRow><TableHead>Indicador</TableHead><TableHead>Área</TableHead><TableHead className="text-right">Ação</TableHead></TableRow></TableHeader><TableBody>{availableIndicators.map(indicator => <TableRow key={indicator.metric_key}><TableCell><div className="font-semibold">{indicator.label}</div><div className="text-xs text-muted-foreground">{officialCatalogCode(indicator.metric_key)}</div></TableCell><TableCell>{indicator.area}</TableCell><TableCell className="text-right"><Button size="sm" onClick={() => void addIndicator(indicator.metric_key)} disabled={busyIndicator === indicator.metric_key}><Plus size={14} />Adicionar</Button></TableCell></TableRow>)}</TableBody></Table></MxTableSurface> : <MxEmptyState title="Nenhum indicador disponível" description="Todos os indicadores ativos já fazem parte deste ciclo ou não correspondem à busca." variant="filter" />}</div>
       </Modal>
     </MxModulePage>
   )

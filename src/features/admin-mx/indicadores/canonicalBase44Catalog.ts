@@ -132,19 +132,19 @@ const OFFICIAL_DIRECTION: Record<string, 'increase' | 'decrease'> = {
 }
 
 export const BASE44_STANDARD_PARAMETERS = [
-  { code: 'LEADS_PER_INTERNET_SALE', name: 'Leads necessários por venda de Internet' },
-  { code: 'TRADE_SALES_RATE', name: 'Percentual de vendas com troca' },
-  { code: 'EVALUATIONS_PER_TRADE_SALE', name: 'Avaliações necessárias por venda com troca' },
-  { code: 'FINANCED_SALES_RATE', name: 'Percentual de vendas financiadas' },
-  { code: 'APPROVAL_BUFFER_MULTIPLIER', name: 'Margem adicional de fichas aprovadas' },
-  { code: 'APPROVED_TO_PAID_CONVERSION', name: 'Conversão de fichas aprovadas em fichas pagas' },
-  { code: 'LEAD_TO_APPOINTMENT_RATE', name: 'Conversão planejada de leads em agendamentos' },
-  { code: 'APPOINTMENT_TO_VISIT_RATE', name: 'Conversão planejada de agendamentos em visitas' },
-  { code: 'ACTIVE_STOCK_RATE', name: 'Percentual planejado de estoque ativo' },
-  { code: 'STOCK_TO_SALES_RATIO', name: 'Relação planejada entre estoque total e vendas' },
-  { code: 'OVER_90_STOCK_RATE', name: 'Percentual máximo de estoque acima de 90 dias' },
-  { code: 'STOCK_MARGIN_RATE', name: 'Margem média planejada sobre o Ticket do Estoque' },
-  { code: 'POST_SALE_RATE', name: 'Percentual planejado de pós-venda' },
+  { code: 'LEADS_PER_INTERNET_SALE', name: 'Leads necessários por venda de Internet', default_value: 40 },
+  { code: 'TRADE_SALES_RATE', name: 'Percentual de vendas com troca', default_value: 0.50 },
+  { code: 'EVALUATIONS_PER_TRADE_SALE', name: 'Avaliações necessárias por venda com troca', default_value: 3 },
+  { code: 'FINANCED_SALES_RATE', name: 'Percentual de vendas financiadas', default_value: 0.60 },
+  { code: 'APPROVAL_BUFFER_MULTIPLIER', name: 'Margem adicional de fichas aprovadas', default_value: 1.10 },
+  { code: 'APPROVED_TO_PAID_CONVERSION', name: 'Conversão de fichas aprovadas em fichas pagas', default_value: 0.909091 },
+  { code: 'LEAD_TO_APPOINTMENT_RATE', name: 'Conversão planejada de leads em agendamentos', default_value: 0.20 },
+  { code: 'APPOINTMENT_TO_VISIT_RATE', name: 'Conversão planejada de agendamentos em visitas', default_value: 0.33 },
+  { code: 'ACTIVE_STOCK_RATE', name: 'Percentual planejado de estoque ativo', default_value: 0.65 },
+  { code: 'STOCK_TO_SALES_RATIO', name: 'Relação planejada entre estoque total e vendas', default_value: 1.65, monthly_defaults: [1.70, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65] },
+  { code: 'OVER_90_STOCK_RATE', name: 'Percentual máximo de estoque acima de 90 dias', default_value: 0.15 },
+  { code: 'STOCK_MARGIN_RATE', name: 'Margem média planejada sobre o Ticket do Estoque', default_value: 0.20 },
+  { code: 'POST_SALE_RATE', name: 'Percentual planejado de pós-venda', default_value: 0.20 },
 ] as const
 
 export function officialValueType(code: string) {
@@ -153,6 +153,78 @@ export function officialValueType(code: string) {
 
 export function officialDirection(code: string) {
   return OFFICIAL_DIRECTION[code] ?? 'increase'
+}
+
+const OFFICIAL_UNIT_LABEL: Record<string, string> = {
+  SALES_TOTAL: 'veículos', SALES_WALKIN: 'veículos', SALES_REFERRAL: 'veículos',
+  SALES_COMPANY_PORTFOLIO: 'veículos', SALES_SELLER_PORTFOLIO: 'veículos',
+  SALES_INTERNET: 'veículos', SALES_OTHER: 'veículos',
+  SELLER_COUNT: 'vendedores', LEADS_RECEIVED: 'leads',
+  INSTAGRAM_FOLLOWERS: 'seguidores', EMPLOYEE_COUNT: 'colaboradores',
+  SALES_PER_SELLER: 'veículos', LEADS_PER_SELLER: 'leads',
+  VEHICLES_APPRAISED: 'veículos', SALES_WITH_TRADE: 'veículos',
+  APPROVED_CREDIT_APPLICATIONS: 'fichas', PAID_CREDIT_APPLICATIONS: 'fichas',
+  APPOINTMENTS_VOLUME: 'agendamentos', VISITS_VOLUME: 'visitas',
+  ACTIVE_INVENTORY: 'veículos', INVENTORY_TOTAL: 'veículos',
+  INVENTORY_OVER_90_VOLUME: 'veículos', AFTER_SALES_VOLUME: 'ocorrências',
+  TRADE_SALES_PERCENTAGE: '%', FINANCED_SALES_PERCENTAGE: '%',
+  LEAD_TO_APPOINTMENT_CONVERSION: '%', APPOINTMENT_TO_VISIT_CONVERSION: '%',
+  VISIT_TO_SALE_CONVERSION: '%', INVENTORY_OVER_90_PERCENTAGE: '%',
+  AFTER_SALES_PERCENTAGE: '%',
+  INTERNET_INVESTMENT: 'R$', INTERNET_COST_PER_SALE: 'R$',
+  INVENTORY_AVERAGE_TICKET: 'R$', INVENTORY_AVERAGE_MARGIN: 'R$',
+  CONTRIBUTION_MARGIN: 'R$', ADDITIONAL_REVENUE: 'R$',
+  TOTAL_EXPENSE: 'R$', NET_PROFIT: 'R$', AVERAGE_SALES_MARGIN: 'R$',
+  AVERAGE_PREPARATION_COST: 'R$', AVERAGE_AFTER_SALES_COST: 'R$',
+  GOOGLE_BUSINESS_RATING: 'nota 0-5', CONTENT_QUALITY: 'nota 0-5',
+  APPOINTMENTS_PER_INTERNET_SALE: 'agend./venda',
+  INVENTORY_TURNOVER: 'giros',
+}
+
+export function officialUnitLabel(code: string) {
+  return OFFICIAL_UNIT_LABEL[code] ?? (officialValueType(code) === 'percent' ? '%' : officialValueType(code) === 'currency' ? 'R$' : 'número')
+}
+
+/** Unidade gravada no IndicatorDefinition do Base44 (`unit`, não `unit_label`). */
+const OFFICIAL_DEFINITION_UNIT: Record<string, string> = {
+  SALES_TOTAL: 'Número inteiro', SALES_WALKIN: 'Número inteiro', SALES_REFERRAL: 'Número inteiro',
+  SALES_COMPANY_PORTFOLIO: 'Número inteiro', SALES_SELLER_PORTFOLIO: 'Número inteiro',
+  SALES_INTERNET: 'Número inteiro', SALES_OTHER: 'Número inteiro', SELLER_COUNT: 'Número inteiro',
+  SALES_PER_SELLER: 'Número decimal', LEADS_PER_SELLER: 'Número decimal',
+  VEHICLES_APPRAISED: 'Número decimal', SALES_WITH_TRADE: 'Número decimal',
+  TRADE_SALES_PERCENTAGE: 'Percentual', APPROVED_CREDIT_APPLICATIONS: 'Número decimal',
+  PAID_CREDIT_APPLICATIONS: 'Número decimal', FINANCED_SALES_PERCENTAGE: 'Percentual',
+  APPOINTMENTS_VOLUME: 'Número decimal', VISITS_VOLUME: 'Número decimal',
+  APPOINTMENTS_PER_INTERNET_SALE: 'Número decimal',
+  LEAD_TO_APPOINTMENT_CONVERSION: 'Percentual', APPOINTMENT_TO_VISIT_CONVERSION: 'Percentual',
+  VISIT_TO_SALE_CONVERSION: 'Percentual',
+  LEADS_RECEIVED: 'Número inteiro', INTERNET_INVESTMENT: 'Moeda', INTERNET_COST_PER_SALE: 'Moeda',
+  INSTAGRAM_FOLLOWERS: 'Número inteiro', GOOGLE_BUSINESS_RATING: 'Número decimal', CONTENT_QUALITY: 'Nota',
+  INVENTORY_TURNOVER: 'Razão', ACTIVE_INVENTORY: 'Número decimal', INVENTORY_TOTAL: 'Número decimal',
+  INVENTORY_OVER_90_VOLUME: 'Número decimal', INVENTORY_OVER_90_PERCENTAGE: 'Percentual',
+  INVENTORY_AVERAGE_TICKET: 'Moeda', INVENTORY_AVERAGE_MARGIN: 'Moeda',
+  CONTRIBUTION_MARGIN: 'Moeda', ADDITIONAL_REVENUE: 'Moeda', TOTAL_EXPENSE: 'Moeda',
+  NET_PROFIT: 'Moeda', AVERAGE_SALES_MARGIN: 'Moeda',
+  AVERAGE_PREPARATION_COST: 'Moeda', AVERAGE_AFTER_SALES_COST: 'Moeda',
+  AFTER_SALES_VOLUME: 'Número decimal', AFTER_SALES_PERCENTAGE: 'Percentual',
+  EMPLOYEE_COUNT: 'Número inteiro',
+}
+
+const OFFICIAL_DEFINITION_DIRECTION: Record<string, 'AUMENTAR' | 'DIMINUIR'> = {
+  APPOINTMENTS_PER_INTERNET_SALE: 'DIMINUIR',
+  INTERNET_INVESTMENT: 'DIMINUIR', INTERNET_COST_PER_SALE: 'DIMINUIR',
+  INVENTORY_OVER_90_VOLUME: 'DIMINUIR', INVENTORY_OVER_90_PERCENTAGE: 'DIMINUIR',
+  TOTAL_EXPENSE: 'DIMINUIR', AVERAGE_PREPARATION_COST: 'DIMINUIR',
+  AVERAGE_AFTER_SALES_COST: 'DIMINUIR', AFTER_SALES_VOLUME: 'DIMINUIR',
+  AFTER_SALES_PERCENTAGE: 'DIMINUIR', EMPLOYEE_COUNT: 'DIMINUIR',
+}
+
+export function officialDefinitionUnit(code: string) {
+  return OFFICIAL_DEFINITION_UNIT[code] ?? 'Número inteiro'
+}
+
+export function officialDefinitionDirection(code: string) {
+  return OFFICIAL_DEFINITION_DIRECTION[code] ?? 'AUMENTAR'
 }
 
 const INDEX = new Map<string, CanonicalIndicator>()
@@ -215,6 +287,54 @@ export const BASE44_GLOBAL_ORDER: Record<string, number> = {
 
 export function officialCatalogCode(metricKey: string) {
   return matchCanonicalIndicator(metricKey)?.code ?? metricKey
+}
+
+export const OFFICIAL_DEMO_MANUAL_VALUES: Record<string, number> = {
+  SALES_WALKIN: 15,
+  SALES_REFERRAL: 5,
+  SALES_COMPANY_PORTFOLIO: 5,
+  SALES_SELLER_PORTFOLIO: 10,
+  SALES_INTERNET: 20,
+  SALES_OTHER: 0,
+  SELLER_COUNT: 7,
+  CONTRIBUTION_MARGIN: 440000,
+  ADDITIONAL_REVENUE: 50000,
+  TOTAL_EXPENSE: 300000,
+  INVENTORY_AVERAGE_TICKET: 45000,
+  INTERNET_COST_PER_SALE: 350,
+  INSTAGRAM_FOLLOWERS: 5000,
+  GOOGLE_BUSINESS_RATING: 4.9,
+  CONTENT_QUALITY: 5,
+  AVERAGE_PREPARATION_COST: 800,
+  AVERAGE_AFTER_SALES_COST: 600,
+  EMPLOYEE_COUNT: 12,
+}
+
+export function officialDemoManualValue(metricKey: string) {
+  const code = matchCanonicalIndicator(metricKey)?.code
+  return code == null ? null : OFFICIAL_DEMO_MANUAL_VALUES[code] ?? null
+}
+
+export function matchOfficialParameter(code: string) {
+  const normalized = normalizeCatalogKey(code)
+  return BASE44_STANDARD_PARAMETERS.find(item => normalizeCatalogKey(item.code) === normalized) ?? null
+}
+
+export function officialParameterDefaults(month = 1): Record<string, number> {
+  const map: Record<string, number> = {}
+  for (const item of BASE44_STANDARD_PARAMETERS) {
+    const monthly = 'monthly_defaults' in item ? item.monthly_defaults[month - 1] : undefined
+    const value = monthly ?? item.default_value
+    map[item.code] = value
+    map[item.code.toLowerCase()] = value
+  }
+  return map
+}
+
+export function catalogAliasKeys(metricKey: string) {
+  const canon = matchCanonicalIndicator(metricKey)
+  if (!canon) return [metricKey]
+  return [...new Set([metricKey, canon.code, canon.code.toLowerCase(), ...canon.aliases])]
 }
 
 export function officialCatalogOrder(metricKey: string, fallback = 999) {

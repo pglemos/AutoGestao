@@ -1,6 +1,8 @@
 import { describe, expect, test } from 'bun:test'
+import { BASE44_STANDARD_INDICATORS, officialParameterDefaults } from './canonicalBase44Catalog'
 import {
   MONTHS,
+  applyOfficialComputedMetas,
   buildDependentsMap,
   calculateAnnualValue,
   computeValueMap,
@@ -47,6 +49,19 @@ describe('evaluateFormula', () => {
   test('expressão inválida devolve null sem lançar', () => {
     expect(evaluateFormula('IND("A") +', { A: 1 }, {})).toBeNull()
     expect(evaluateFormula(null, {}, {})).toBeNull()
+  })
+
+  test('resolve aliases oficiais e chaves persistidas do MX', () => {
+    expect(evaluateFormula(
+      'IND("SALES_WALKIN") + IND("SALES_REFERRAL")',
+      { sales_door_flow: 15, sales_referral: 5 },
+      {},
+    )).toBe(20)
+    expect(evaluateFormula(
+      'IND("SALES_TOTAL") * PAR("TRADE_SALES_RATE")',
+      { sales_total: 55 },
+      { trade_sales_rate: 0.5 },
+    )).toBe(27.5)
   })
 })
 
@@ -125,6 +140,53 @@ describe('computeValueMap', () => {
     const { valueMap, calcStatus } = computeValueMap(monthlyValues, indicators, { P: 2 })
     expect(valueMap.TOTAL[2]).toBeNull()
     expect(calcStatus.TOTAL[2]).toBe('WITHOUT_BASE')
+  })
+
+  test('demo Base44: canais MX somam 55 e disparam a cadeia oficial', () => {
+    const demoValues = [
+      { indicator_code: 'sales_door_flow', month: 1, value: 15 },
+      { indicator_code: 'sales_referral', month: 1, value: 5 },
+      { indicator_code: 'sales_company_wallet', month: 1, value: 5 },
+      { indicator_code: 'sales_seller_wallet', month: 1, value: 10 },
+      { indicator_code: 'sales_internet', month: 1, value: 20 },
+      { indicator_code: 'sales_other', month: 1, value: 0 },
+      { indicator_code: 'seller_count', month: 1, value: 7 },
+      { indicator_code: 'contribution_margin', month: 1, value: 440000 },
+      { indicator_code: 'additional_revenue', month: 1, value: 50000 },
+      { indicator_code: 'total_expense', month: 1, value: 300000 },
+      { indicator_code: 'inventory_average_ticket', month: 1, value: 45000 },
+      { indicator_code: 'internet_cost_per_sale', month: 1, value: 350 },
+    ]
+    const demoIndicators = BASE44_STANDARD_INDICATORS.map(item => ({
+      code: item.code,
+      formula_expression: item.formula_expression,
+    }))
+    const { valueMap, calcStatus } = computeValueMap(demoValues, demoIndicators, month => officialParameterDefaults(month))
+    expect(valueMap.SALES_TOTAL[1]).toBe(55)
+    expect(valueMap.sales_total[1]).toBe(55)
+    expect(calcStatus.SALES_TOTAL[1]).toBe('CALCULATED')
+    expect(valueMap.LEADS_RECEIVED[1]).toBe(800)
+    expect(valueMap.SALES_WITH_TRADE[1]).toBe(27.5)
+    expect(valueMap.INVENTORY_TOTAL[1]).toBe(93.5)
+    expect(valueMap.NET_PROFIT[1]).toBe(190000)
+    expect(valueMap.INTERNET_INVESTMENT[1]).toBe(7000)
+
+    const applied = applyOfficialComputedMetas({
+      values: demoValues.map(item => ({
+        loja_id: 'loja-mx',
+        indicator_code: item.indicator_code,
+        month: item.month,
+        meta: item.value,
+        realizado: null,
+        ano_anterior: null,
+      })),
+      indicators: BASE44_STANDARD_INDICATORS.map(item => ({
+        metric_key: item.code.toLowerCase(),
+        formula_expression: item.formula_expression,
+      })),
+      unitIds: ['loja-mx'],
+    })
+    expect(applied.find(row => row.indicator_code === 'sales_total' && row.month === 1)?.meta).toBe(55)
   })
 })
 

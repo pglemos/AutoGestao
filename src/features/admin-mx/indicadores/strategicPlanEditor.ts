@@ -177,6 +177,17 @@ function applyPatches(grid: EditorGrid, patches: EditorCellPatch[]) {
   return { grid: next, patches }
 }
 
+export function groupEditorIndicatorsByArea<T extends { area?: string | null }>(indicators: T[]) {
+  const groups: Array<{ area: string; items: T[] }> = []
+  for (const item of indicators) {
+    const area = item.area || 'Sem área'
+    const last = groups[groups.length - 1]
+    if (last && last.area === area) last.items.push(item)
+    else groups.push({ area, items: [item] })
+  }
+  return groups
+}
+
 export function sortEditorIndicators<T extends EditorIndicatorLike>(indicators: T[], order: 'ordem' | 'nome' = 'ordem'): T[] {
   return [...indicators].sort((a, b) => {
     if (order === 'nome') return a.label.localeCompare(b.label, 'pt-BR')
@@ -196,7 +207,7 @@ export function filterEditorIndicators<T extends EditorIndicatorLike>(
     if (!filters.includeHidden && indicator.visible_to_owner === false) return false
     if (filters.area && filters.area !== 'todas' && indicator.area !== filters.area) return false
     if (!search) return true
-    return [indicator.metric_key, indicator.label, indicator.area]
+    return [indicator.metric_key, indicator.label, indicator.area, indicator.metric_key.replace(/_/g, '')]
       .some(value => String(value ?? '').toLocaleLowerCase('pt-BR').includes(search))
   })
 }

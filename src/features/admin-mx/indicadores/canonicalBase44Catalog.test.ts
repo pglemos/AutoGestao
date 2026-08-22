@@ -1,10 +1,17 @@
 import { describe, expect, test } from 'bun:test'
 import {
   BASE44_STANDARD_INDICATORS,
+  BASE44_STANDARD_PARAMETERS,
   filterOfficialRows,
   isOfficialBase44Key,
   matchCanonicalIndicator,
+  matchOfficialParameter,
   officialCatalogCode,
+  officialDefinitionDirection,
+  officialDefinitionUnit,
+  officialDemoManualValue,
+  officialParameterDefaults,
+  officialUnitLabel,
   overlayCanonicalCatalog,
   rewriteCanonicalFormula,
   sortCatalogAreas,
@@ -14,6 +21,14 @@ describe('catálogo canônico Base44', () => {
   test('tem 45 indicadores oficiais com 27 calculáveis', () => {
     expect(BASE44_STANDARD_INDICATORS).toHaveLength(45)
     expect(BASE44_STANDARD_INDICATORS.filter(item => item.target_calculation_mode !== 'MANUAL')).toHaveLength(27)
+    expect(officialUnitLabel('SALES_WALKIN')).toBe('veículos')
+    expect(officialUnitLabel('TRADE_SALES_PERCENTAGE')).toBe('%')
+    expect(officialUnitLabel('INTERNET_INVESTMENT')).toBe('R$')
+    expect(officialDefinitionUnit('SALES_WALKIN')).toBe('Número inteiro')
+    expect(officialDefinitionUnit('TRADE_SALES_PERCENTAGE')).toBe('Percentual')
+    expect(officialDefinitionUnit('INTERNET_INVESTMENT')).toBe('Moeda')
+    expect(officialDefinitionDirection('SALES_TOTAL')).toBe('AUMENTAR')
+    expect(officialDefinitionDirection('APPOINTMENTS_PER_INTERNET_SALE')).toBe('DIMINUIR')
   })
 
   test('reconhece chaves MX e códigos oficiais', () => {
@@ -119,6 +134,29 @@ describe('catálogo canônico Base44', () => {
     expect(officialCatalogCode('appointments')).toBe('APPOINTMENTS_VOLUME')
     expect(officialCatalogCode('google_rating')).toBe('GOOGLE_BUSINESS_RATING')
     expect(archived.map(row => row.metric_key)).toEqual(['internet_sales_share'])
+  })
+
+  test('demo oficial reproduz o seed do Base44', () => {
+    expect(officialDemoManualValue('sales_door_flow')).toBe(15)
+    expect(officialDemoManualValue('SALES_REFERRAL')).toBe(5)
+    expect(officialDemoManualValue('SALES_INTERNET')).toBe(20)
+    expect(
+      officialDemoManualValue('sales_door_flow')!
+      + officialDemoManualValue('sales_referral')!
+      + officialDemoManualValue('sales_company_wallet')!
+      + officialDemoManualValue('sales_seller_wallet')!
+      + officialDemoManualValue('sales_internet')!
+      + officialDemoManualValue('sales_other')!,
+    ).toBe(55)
+  })
+
+  test('parâmetros oficiais usam os defaults do Base44', () => {
+    expect(BASE44_STANDARD_PARAMETERS).toHaveLength(13)
+    expect(matchOfficialParameter('trade_sales_rate')?.code).toBe('TRADE_SALES_RATE')
+    expect(officialParameterDefaults(1).LEADS_PER_INTERNET_SALE).toBe(40)
+    expect(officialParameterDefaults(1).STOCK_TO_SALES_RATIO).toBe(1.7)
+    expect(officialParameterDefaults(2).STOCK_TO_SALES_RATIO).toBe(1.65)
+    expect(officialParameterDefaults(1).trade_sales_rate).toBe(0.5)
   })
 
   test('ordena departamentos na sequência oficial', () => {
