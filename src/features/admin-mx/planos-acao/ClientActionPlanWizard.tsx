@@ -33,7 +33,6 @@ import {
   type WizardStore,
 } from './clientActionPlanWizardData'
 import { ACTION_PLAN_DEPARTMENT_CARDS, departmentLabel, indicatorAreaMatchesDepartment } from './departmentTaxonomy'
-import { IndicatorPicker } from './IndicatorPicker'
 
 export function ClientActionPlanWizard(props: {
   open: boolean
@@ -350,19 +349,10 @@ export function ClientActionPlanWizard(props: {
               </MxSelect>
             </MxField>
             <MxField label="Indicador principal">
-              <IndicatorPicker
-                aria-label="Indicador principal"
-                value={form.indicatorId}
-                options={deptIndicators.map(indicator => ({
-                  code: indicator.metric_key,
-                  label: indicator.label,
-                  unit: indicator.unit,
-                  direction: indicator.direction,
-                }))}
-                disabled={!form.department}
-                placeholder={form.department ? 'Selecione um indicador' : 'Selecione um departamento'}
-                onChange={onIndicatorChange}
-              />
+              <MxSelect aria-label="Indicador principal" value={form.indicatorId} onChange={event => onIndicatorChange(event.target.value)} disabled={!form.department}>
+                <option value="">{form.department ? 'Selecione um indicador' : 'Selecione um departamento'}</option>
+                {deptIndicators.map(indicator => <option key={indicator.metric_key} value={indicator.metric_key}>{indicator.label}</option>)}
+              </MxSelect>
             </MxField>
             <MxField label="Título do plano">
               <Input value={form.title} onChange={event => onTitleChange(event.target.value)} placeholder="Título do plano de ação" />
@@ -454,20 +444,10 @@ export function ClientActionPlanWizard(props: {
               </MxSelect>
             </MxField>
             <MxField label="Indicador de eficácia">
-              <IndicatorPicker
-                aria-label="Indicador de eficácia"
-                value={deptIndicators.find(indicator => indicator.label === form.efficacyIndicatorName)?.metric_key ?? ''}
-                options={deptIndicators.map(indicator => ({
-                  code: indicator.metric_key,
-                  label: indicator.label,
-                  unit: indicator.unit,
-                  direction: indicator.direction,
-                }))}
-                placeholder="Mesmo indicador"
-                allowClear
-                clearLabel="Mesmo indicador"
-                onChange={code => patch('efficacyIndicatorName', deptIndicators.find(indicator => indicator.metric_key === code)?.label ?? '')}
-              />
+              <MxSelect aria-label="Indicador de eficácia" value={form.efficacyIndicatorName} onChange={event => patch('efficacyIndicatorName', event.target.value)}>
+                <option value="">Mesmo indicador</option>
+                {deptIndicators.map(indicator => <option key={indicator.metric_key} value={indicator.label}>{indicator.label}</option>)}
+              </MxSelect>
             </MxField>
             <MxField label="Resultado esperado" className="sm:col-span-2">
               <Input value={form.expectedImpact} onChange={event => patch('expectedImpact', event.target.value)} placeholder="O que se espera ao concluir este plano" />

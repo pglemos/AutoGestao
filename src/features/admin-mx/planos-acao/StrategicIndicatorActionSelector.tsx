@@ -13,7 +13,6 @@ import {
   resolveClientApplicationTargets,
 } from './templateApplicationIdempotency'
 import type { WizardClient, WizardIndicator, WizardResponsible } from './clientActionPlanWizardData'
-import { IndicatorPicker } from './IndicatorPicker'
 
 /**
  * Seletor de indicador estratégico + template compatível + responsável para
@@ -166,18 +165,10 @@ export function StrategicIndicatorActionSelector(props: {
         ) : null}
 
         <MxField label="Indicador ativo">
-          <IndicatorPicker
-            aria-label="Indicador ativo"
-            value={indicatorKey}
-            options={props.indicators.map(indicator => ({
-              code: indicator.metric_key,
-              label: indicator.label,
-              unit: indicator.unit,
-              direction: indicator.direction,
-            }))}
-            placeholder="Selecionar indicador..."
-            onChange={code => { setIndicatorKey(code); setTemplateId('') }}
-          />
+          <MxSelect aria-label="Indicador ativo" value={indicatorKey} onChange={event => { setIndicatorKey(event.target.value); setTemplateId('') }}>
+            <option value="">Selecionar indicador...</option>
+            {props.indicators.map(indicator => <option key={indicator.metric_key} value={indicator.metric_key}>{indicator.label}</option>)}
+          </MxSelect>
         </MxField>
 
         <MxField label="Templates compatíveis">

@@ -15,7 +15,6 @@ import {
   resolveClientApplicationTargets,
 } from './templateApplicationIdempotency'
 import type { WizardClient, WizardIndicator, WizardResponsible } from './clientActionPlanWizardData'
-import { IndicatorPicker } from './IndicatorPicker'
 
 type ApplyStep = 1 | 2 | 3 | 4 | 5 | 6 | 7
 type ScopeMode = 'cliente' | 'unidade'
@@ -303,19 +302,10 @@ export function ApplyTemplateWizard(props: {
 
         {step === 4 ? (
           <MxField label="Indicador">
-            <IndicatorPicker
-              aria-label="Indicador da aplicação"
-              value={indicatorKey}
-              options={departmentIndicators.map(indicator => ({
-                code: indicator.metric_key,
-                label: indicator.label,
-                unit: indicator.unit,
-                direction: indicator.direction,
-              }))}
-              disabled={!department}
-              placeholder={department ? 'Selecione um indicador...' : 'Selecione primeiro o departamento'}
-              onChange={code => { setIndicatorKey(code); setTemplateId('') }}
-            />
+            <MxSelect aria-label="Indicador da aplicação" value={indicatorKey} onChange={event => { setIndicatorKey(event.target.value); setTemplateId('') }} disabled={!department}>
+              <option value="">{department ? 'Selecione um indicador...' : 'Selecione primeiro o departamento'}</option>
+              {departmentIndicators.map(indicator => <option key={indicator.metric_key} value={indicator.metric_key}>{indicator.label}</option>)}
+            </MxSelect>
           </MxField>
         ) : null}
 
