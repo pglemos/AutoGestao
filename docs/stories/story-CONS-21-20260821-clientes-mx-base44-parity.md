@@ -63,3 +63,20 @@ Browser autenticado em produção (`https://www.mxperformance.com.br`): `/client
 CI GitHub do SHA de implementação `bfa206763bb308b48f21f2621f149dcc7ccea2e9`: Quality Gates, Typecheck/unit, Gitleaks, Atomic Design e ESLint a11y concluíram `success`. O deployment Vercel de produção `dpl_EqDgctMvVQo9PD3pnyypjmHTwHc9` estava `READY`; `/api/health` e `/api/health.release` retornaram HTTP 200 e o release `bfa206763bb308b48f21f2621f149dcc7ccea2e9`. O commit documental final e seu deployment/CI devem ser registrados no fechamento abaixo.
 
 Graphify: runtime TypeScript `0.17.1` comprovado; o hook foi tentado após as alterações e concluiu a extração de `4453/4453` arquivos, mas a montagem terminou com `exit 130` durante a concorrência do checkout. Os seis arquivos PowerShell sem parser tree-sitter foram registrados como limitação; o grafo anterior permaneceu intacto e este hook não é declarado como gate verde. Artefatos de enriquecimento com caminhos absolutos permanecem fora do commit.
+
+Release final: o commit `c25317237c8cfd0c142d2c963e7a0eac95a3117a` está publicado em
+`main` e `origin/main`. Os checks `Quality Gates` (`32543882741`), `Typecheck and
+unit tests` (`32543882754`), `Module Design System Parity` (`32543882727`),
+`MX Atomic Design Enforcement` (`32543882778`), `ESLint a11y (jsx-a11y)`
+(`32543882709`), `Management Design System Audit V3` (`32543882683`),
+`Gitleaks (Secret Scanning)` (`32543882775`) e `Supabase Preview` concluíram
+`success` para esse SHA.
+
+O deployment Vercel de produção `dpl_B9ZJzhBFDwgLi8C7khhiupSBCuZb` está
+`READY`, com aliases `www.mxperformance.com.br`, `mxperformance.com.br` e
+`mxperformance.vercel.app`. No alias oficial, `/api/health` retornou HTTP 200
+com `status=healthy`, e `/api/health.release` retornou exatamente o SHA
+`c25317237c8cfd0c142d2c963e7a0eac95a3117a`. A evidência final do navegador é
+`visual-evidence/agent-browser/clientes-c2531723-2026-08-22T01-38-14/summary.json`:
+`passed`, desktop `1440×900`, mobile `390×844`, sem erros e com `0` violações
+axe.
