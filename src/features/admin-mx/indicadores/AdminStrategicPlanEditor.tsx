@@ -79,8 +79,8 @@ import { toast } from '@/lib/toast'
 type EditorTab = 'matriz' | 'rapido' | 'indicadores' | 'unidades' | 'consolidado' | 'historico'
 
 const EDITOR_TABS: TabNavItem<EditorTab>[] = [
-  { key: 'matriz', label: 'Matriz do plano', controls: 'matriz-panel' },
   { key: 'rapido', label: 'Cadastro rápido', controls: 'rapido-panel' },
+  { key: 'matriz', label: 'Revisão completa', controls: 'matriz-panel' },
   { key: 'indicadores', label: 'Indicadores', controls: 'indicadores-panel' },
   { key: 'unidades', label: 'Unidades', controls: 'unidades-panel' },
   { key: 'consolidado', label: 'Consolidado', controls: 'consolidado-panel' },
@@ -165,7 +165,7 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
   const [readinessLoading, setReadinessLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [historyError, setHistoryError] = useState<string | null>(null)
-  const [tab, setTab] = useState<EditorTab>('matriz')
+  const [tab, setTab] = useState<EditorTab>('rapido')
   const [field, setField] = useState<EditorField>('meta')
   const [unitId, setUnitId] = useState('')
   const [sourceMonth, setSourceMonth] = useState(1)

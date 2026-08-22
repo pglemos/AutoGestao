@@ -45,7 +45,7 @@ describe('páginas de planejamento do módulo interno MX', () => {
     expect(strategicPage).toContain('<AdminStrategicPlanEditor cycleId={cycleId} readOnly={preview} />')
     expect(read('src/features/admin-mx/indicadores/AdminStrategicPlanEditor.tsx')).toContain("label: 'Cadastro rápido'")
     expect(indicatorsPage).toContain('Criar Demo')
-    expect(indicatorsPage).toContain('Aplicar fórmulas MX')
+    expect(indicatorsPage).toContain('Criar Indicador')
     expect(indicatorsPage).toContain('Arquivar')
     expect(indicatorsPage).toContain('new URLSearchParams({ cycleId: row.cycleId })')
     expect(indicatorsPage).not.toContain('new URLSearchParams({ storeId: row.primaryStoreId')

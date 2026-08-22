@@ -59,6 +59,7 @@ import {
   type IndicatorParameter,
   type IndicatorStatus,
 } from './indicadores/indicatorCatalog'
+import { officialCatalogCode, sortCatalogAreas } from './indicadores/canonicalBase44Catalog'
 import { saveIndicator } from './hooks/useAdminMxLists'
 import {
   dependentsOfParameter,
@@ -273,7 +274,7 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
       const key = item.area || 'Sem área'
       groups.set(key, [...(groups.get(key) ?? []), item])
     }
-    return [...groups.entries()].map(([areaName, items]) => ({ areaName, items }))
+    return sortCatalogAreas([...groups.keys()]).map(areaName => ({ areaName, items: groups.get(areaName) ?? [] }))
   }, [filtered, orderMode, ordered])
 
   const clearCatalogFilters = () => {
@@ -404,22 +405,6 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
     }
   }
 
-  const applyFormulas = async () => {
-    if (submitting) return
-    setSubmitting(true)
-    try {
-      const result = await applyCanonicalFormulas()
-      if (result.error) {
-        toast.error(result.error)
-        return
-      }
-      toast.success(result.updated ? `${result.updated} indicador(es) calculável(is) aplicado(s).` : 'Nenhum indicador do catálogo canônico encontrado para atualizar.')
-      await refetch()
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
   const archiveIndicator = async (indicator: CatalogIndicator) => {
     if (submitting || indicator.status === 'arquivado') return
     if (!window.confirm(`Arquivar "${indicator.label}"?`)) return
@@ -503,12 +488,17 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
     if (submitting) return
     setSubmitting(true)
     try {
+      const formulas = await applyCanonicalFormulas()
+      if (formulas.error) {
+        toast.error(formulas.error)
+        return
+      }
       const result = await persistIndicatorOrder(restoreDefaultOrder(rows))
       if (result.error) {
         toast.error(result.error)
         return
       }
-      toast.success('Ordem padrão MX restaurada.')
+      toast.success('Catálogo alinhado ao padrão Base44.')
       await refetch()
     } finally {
       setSubmitting(false)
@@ -603,7 +593,7 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
                 </TableCell>
                 <TableCell>
                   <div className="font-semibold text-foreground">{item.label}</div>
-                  <div className="text-xs text-muted-foreground">{item.metric_key}</div>
+                  <div className="text-xs text-muted-foreground">{officialCatalogCode(item.metric_key)}</div>
                 </TableCell>
                 <TableCell>{formatIndicatorValueType(item.value_type)}</TableCell>
                 <TableCell>{DIRECTION_LABEL[item.direction] ?? item.direction}</TableCell>
@@ -649,15 +639,15 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
         <MxModuleHeader
           icon={Gauge}
           eyebrow="Administração MX"
-          title="Indicadores e parâmetros"
+          title="Indicadores e Parâmetros"
           description="Catálogo oficial da consultoria: ciclo de vida, ordem, visibilidade no Módulo Dono e faixas de referência."
           actions={(
             <>
               <Button variant="outline" onClick={() => void (tab === 'planos' ? loadPlans() : tab === 'historico' ? loadHistory() : refetch())}><RefreshCw size={16} />Atualizar</Button>
               {tab === 'catalogo' ? (
                 orderMode
-                  ? <><Button variant="outline" onClick={() => { setOrderMode(false); setOrderKeys(rows.map(item => item.metric_key)) }}>Cancelar ordem</Button><Button onClick={() => void saveOrder()} disabled={submitting}><Save size={16} />Salvar ordem</Button></>
-                  : <><Button variant="outline" onClick={() => setOrderMode(true)}>Editar ordem</Button><Button variant="outline" onClick={() => void applyFormulas()} disabled={submitting}>Aplicar fórmulas MX</Button><Button variant="outline" onClick={() => void createDemoPlan()} disabled={submitting}>Criar Demo</Button><Button variant="outline" onClick={() => void restoreDefault()} disabled={submitting}><RotateCcw size={16} />Restaurar padrão MX</Button><Button variant="outline" onClick={() => setTab('parametros')}>Parâmetros</Button><Button onClick={openNew}><Plus size={16} />Novo indicador</Button></>
+                  ? <><Button variant="outline" onClick={() => { setOrderMode(false); setOrderKeys(rows.map(item => item.metric_key)) }}>Cancelar ordem</Button><Button variant="outline" onClick={() => void restoreDefault()} disabled={submitting}><RotateCcw size={16} />Restaurar padrão</Button><Button onClick={() => void saveOrder()} disabled={submitting}><Save size={16} />Salvar ordem</Button></>
+                  : <><Button variant="outline" onClick={() => setOrderMode(true)}>Editar Ordem</Button><Button variant="outline" onClick={() => void createDemoPlan()} disabled={submitting}>Criar Demo</Button><Button variant="outline" onClick={() => setTab('parametros')}>Parâmetros</Button><Button onClick={openNew}><Plus size={16} />Criar Indicador</Button></>
               ) : tab === 'parametros' ? (
                 <><Button variant="outline" onClick={() => setTesterOpen(true)}><Calculator size={16} />Testar cálculo</Button><Button onClick={() => setParameterPickerOpen(true)} disabled={!parameterSetId}><Plus size={16} />Criar parâmetro</Button></>
               ) : tab === 'planos' ? (

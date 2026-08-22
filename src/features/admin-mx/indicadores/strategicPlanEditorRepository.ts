@@ -9,6 +9,7 @@ import {
 } from '@/features/strategic-plan/planCycleRepository'
 import type { PlanCycleStatus, PlanReadiness } from '@/features/strategic-plan/planCycle'
 import type { CatalogIndicator } from './indicatorCatalog'
+import { overlayCanonicalCatalog } from './canonicalBase44Catalog'
 import type { EditorField, EditorPlanningRow } from './strategicPlanEditor'
 
 const CYCLE_COLUMNS = 'id, client_id, year, status, version_number, package_version_id, revised_from_id, published_at, published_by, created_at, updated_at'
@@ -119,7 +120,7 @@ async function fetchCatalog(): Promise<{ rows: CatalogIndicator[]; error: string
     .order('sort_order', { ascending: true })
 
   if (error) return { rows: [], error: error.message }
-  return { rows: ((data ?? []) as Row[]).map(mapCatalogRow), error: null }
+  return { rows: overlayCanonicalCatalog(((data ?? []) as Row[]).map(mapCatalogRow)), error: null }
 }
 
 async function fetchCycleRoster(cycle: PlanCycle): Promise<{ rows: Row[]; error: string | null }> {

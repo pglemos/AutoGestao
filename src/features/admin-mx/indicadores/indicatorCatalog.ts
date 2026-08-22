@@ -1,4 +1,12 @@
 import { supabase } from '@/lib/supabase'
+import {
+  officialCatalogOrder,
+  overlayCanonicalCatalog,
+  matchCanonicalIndicator,
+  rewriteCanonicalFormula,
+  buildCatalogKeyMap,
+  normalizeCatalogKey,
+} from './canonicalBase44Catalog'
 
 export const INDICATOR_STATUSES = ['rascunho', 'em_revisao', 'publicado', 'desabilitado', 'arquivado'] as const
 export const INDICATOR_FREQUENCIES = ['diaria', 'semanal', 'mensal', 'trimestral', 'anual'] as const
@@ -174,10 +182,14 @@ export function reorderIndicators(keys: string[], metricKey: string, direction: 
  * frente, arquivados ao final).
  */
 export function restoreDefaultOrder(rows: CatalogIndicator[]): Array<{ metric_key: string; sort_order: number }> {
-  const active = rows.filter(item => item.status !== 'arquivado')
-  const archived = rows.filter(item => item.status === 'arquivado')
-  const ordered = [...active, ...archived]
-  return ordered.map((item, index) => ({ metric_key: item.metric_key, sort_order: (index + 1) * 10 }))
+  const rank = (item: CatalogIndicator) => {
+    const official = officialCatalogOrder(item.metric_key)
+    if (item.status === 'arquivado') return 10_000 + official
+    return official
+  }
+  return [...rows]
+    .sort((left, right) => rank(left) - rank(right) || left.label.localeCompare(right.label, 'pt-BR'))
+    .map((item, index) => ({ metric_key: item.metric_key, sort_order: officialCatalogOrder(item.metric_key, (index + 1) * 10) }))
 }
 
 /** Faixas precisam ser monotônicas na direção do indicador. */
@@ -212,12 +224,12 @@ export async function fetchCatalogIndicators(): Promise<{ rows: CatalogIndicator
     if (Number.isFinite(value)) annualTotals.set(target.metric_key, (annualTotals.get(target.metric_key) ?? 0) + value)
   }
   return {
-    rows: (data ?? []).map(item => ({
+    rows: overlayCanonicalCatalog((data ?? []).map(item => ({
       ...item,
       created_origin: item.created_origin === 'criado_mx' ? 'criado_mx' : 'mx_padrao',
       targets: counters.get(item.metric_key) ?? 0,
       annual_target: annualTotals.get(item.metric_key) ?? null,
-    })) as CatalogIndicator[],
+    })) as CatalogIndicator[]),
     error: null,
   }
 }
@@ -267,19 +279,26 @@ export async function fetchIndicatorParameters(): Promise<{ rows: IndicatorParam
 }
 
 export async function applyCanonicalFormulas(): Promise<{ updated: number; error: string | null }> {
-  const { CANONICAL_CALCULATED_INDICATORS } = await import('./canonicalIndicatorFormulas')
-  const { data, error } = await supabase.from('catalogo_metricas_consultoria').select('metric_key')
+  const { BASE44_STANDARD_INDICATORS } = await import('./canonicalBase44Catalog')
+  const { data, error } = await supabase.from('catalogo_metricas_consultoria').select('metric_key, label, area')
   if (error) return { updated: 0, error: error.message }
-  const byLower = new Map((data ?? []).map(row => [String(row.metric_key).toLowerCase(), String(row.metric_key)]))
+  const keys = (data ?? []).map(row => String(row.metric_key))
+  const keyMap = buildCatalogKeyMap(keys)
   let updated = 0
-  for (const item of CANONICAL_CALCULATED_INDICATORS) {
-    const metricKey = byLower.get(item.metric_key.toLowerCase())
+  for (const item of BASE44_STANDARD_INDICATORS) {
+    const metricKey = keyMap.get(normalizeCatalogKey(item.code)) ?? keys.find(key => matchCanonicalIndicator(key)?.code === item.code)
     if (!metricKey) continue
+    const formula = item.formula_expression
+      ? rewriteCanonicalFormula(item.formula_expression, code => keyMap.get(normalizeCatalogKey(code)) ?? code.toLowerCase())
+      : null
     const { error: updateError } = await supabase
       .from('catalogo_metricas_consultoria')
       .update({
-        formula_expression: item.formula_expression,
+        label: item.name,
+        area: item.area,
+        formula_expression: formula,
         target_calculation_mode: item.target_calculation_mode,
+        sort_order: officialCatalogOrder(item.code),
         updated_at: new Date().toISOString(),
       })
       .eq('metric_key', metricKey)
