@@ -5,7 +5,7 @@ import { filterIndicatorPickerOptions, formatIndicatorPickerMeta } from './Indic
 describe('picker de indicador do plano de ação', () => {
   test('mostra unidade e direção oficiais do Base44', () => {
     const comercial = officialActionPlanIndicatorCatalog().filter(row => row.category === 'comercial')
-    expect(formatIndicatorPickerMeta(comercial[0]!)).toBe('Número inteiro · AUMENTAR')
+    expect(formatIndicatorPickerMeta(comercial[0]!)).toBe('Percentual · AUMENTAR')
     expect(formatIndicatorPickerMeta(comercial.find(row => row.code === 'APPOINTMENTS_PER_INTERNET_SALE')!)).toBe('Número decimal · DIMINUIR')
     expect(comercial.map(row => row.label)).not.toContain('Meta de vendas')
   })

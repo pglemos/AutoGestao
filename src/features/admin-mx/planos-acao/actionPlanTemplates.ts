@@ -235,9 +235,9 @@ const DEFINITION_DIRECTION_LABELS: Record<string, string> = {
   CORRIGIR_PROCESSO: 'Corrigir processo',
 }
 
-export function formatTemplateWizardPrimaryOption(indicator: Pick<IndicatorCatalogEntry, 'label' | 'unit' | 'direction'>) {
-  const direction = DEFINITION_DIRECTION_LABELS[indicator.direction] || indicator.direction
-  return `${indicator.label} — ${indicator.unit || ''} (${direction})`
+export function formatTemplateWizardPrimaryOption(indicator: Pick<IndicatorCatalogEntry, 'label' | 'unit'>) {
+  // IndicadorDefinition publicado no Base44 grava default_direction=AUMENTAR nos 45 oficiais.
+  return `${indicator.label} — ${indicator.unit || ''} (${DEFINITION_DIRECTION_LABELS.AUMENTAR})`
 }
 
 /** Base44 TemplateWizard.jsx eficácia: `{i.name} — {i.unit}` */
@@ -247,7 +247,8 @@ export function formatTemplateWizardEffectivenessOption(indicator: Pick<Indicato
 
 /** 45 indicadores oficiais do Base44, com departamento no código do wizard MX. */
 export function officialActionPlanIndicatorCatalog(): IndicatorCatalogEntry[] {
-  return BASE44_STANDARD_INDICATORS.map(item => ({
+  // TemplateWizard.jsx não ordena: o filter do Base44 devolve o inverso do display_order.
+  return [...BASE44_STANDARD_INDICATORS].reverse().map(item => ({
     code: item.code,
     label: item.name,
     category: departmentCategory(item.department) ?? item.department.toLowerCase(),
