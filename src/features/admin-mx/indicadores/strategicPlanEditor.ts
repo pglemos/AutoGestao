@@ -1,5 +1,5 @@
 import { catalogAliasKeys, matchCanonicalIndicator } from './canonicalBase44Catalog'
-import { MONTHS } from './indicatorFormulas'
+import { MONTHS, applyOfficialComputedMetas } from './indicatorFormulas'
 
 function resolveEditorGridCode(indicatorCode: string, allowed: Set<string>): string | null {
   if (allowed.has(indicatorCode)) return indicatorCode
@@ -82,13 +82,42 @@ export function hydrateEditorGrid(
     if (!row.month) continue
     const code = resolveEditorGridCode(row.indicator_code, allowed)
     if (!code || !grid[row.loja_id]?.[code]) continue
+    const current = grid[row.loja_id][code][row.month]
     grid[row.loja_id][code][row.month] = {
-      meta: row.meta ?? null,
-      realizado: row.realizado ?? null,
-      ano_anterior: row.ano_anterior ?? null,
+      meta: row.meta ?? current.meta,
+      realizado: row.realizado ?? current.realizado,
+      ano_anterior: row.ano_anterior ?? current.ano_anterior,
     }
   }
   return grid
+}
+
+export function recalculateEditorGrid(
+  grid: EditorGrid,
+  unitIds: string[],
+  indicators: Array<{ metric_key: string; formula_expression?: string | null }>,
+): EditorGrid {
+  const values: EditorPlanningRow[] = []
+  for (const unitId of unitIds) {
+    for (const indicator of indicators) {
+      for (const month of MONTHS) {
+        const cell = grid[unitId]?.[indicator.metric_key]?.[month]
+        values.push({
+          loja_id: unitId,
+          indicator_code: indicator.metric_key,
+          month,
+          meta: cell?.meta ?? null,
+          realizado: cell?.realizado ?? null,
+          ano_anterior: cell?.ano_anterior ?? null,
+        })
+      }
+    }
+  }
+  return hydrateEditorGrid(
+    applyOfficialComputedMetas({ values, indicators, unitIds }),
+    unitIds,
+    indicators.map(indicator => indicator.metric_key),
+  )
 }
 
 export function readEditorSeries(

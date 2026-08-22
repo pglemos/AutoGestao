@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { BASE44_STANDARD_INDICATORS } from './canonicalBase44Catalog'
 import {
   applyEditorMonthToUnits,
   clearEditorMonth,
@@ -9,6 +10,7 @@ import {
   hydrateEditorGrid,
   patchEditorGrid,
   readEditorSeries,
+  recalculateEditorGrid,
   sortEditorIndicators,
 } from './strategicPlanEditor'
 
@@ -31,6 +33,35 @@ describe('strategicPlanEditor', () => {
 
     expect(readEditorSeries(grid, 'matriz', 'sales_walkin', 'meta')[0]).toBe(15)
     expect(readEditorSeries(grid, 'matriz', 'sales_total', 'meta')[0]).toBe(55)
+  })
+
+  it('does not let a null official row wipe a persisted alias', () => {
+    const grid = hydrateEditorGrid([
+      { loja_id: 'matriz', indicator_code: 'sales_door_flow', month: 1, meta: 15, realizado: null, ano_anterior: null },
+      { loja_id: 'matriz', indicator_code: 'sales_walkin', month: 1, meta: null, realizado: null, ano_anterior: null },
+    ], ['matriz'], ['sales_walkin'])
+
+    expect(readEditorSeries(grid, 'matriz', 'sales_walkin', 'meta')[0]).toBe(15)
+  })
+
+  it('recalculates official totals onto the roster keys after hydrating aliases', () => {
+    const indicators = BASE44_STANDARD_INDICATORS.map(item => ({
+      metric_key: item.code.toLowerCase(),
+      formula_expression: item.formula_expression,
+    }))
+    const codes = indicators.map(item => item.metric_key)
+    const grid = recalculateEditorGrid(hydrateEditorGrid([
+      { loja_id: 'matriz', indicator_code: 'sales_door_flow', month: 1, meta: 15, realizado: null, ano_anterior: null },
+      { loja_id: 'matriz', indicator_code: 'sales_referral', month: 1, meta: 5, realizado: null, ano_anterior: null },
+      { loja_id: 'matriz', indicator_code: 'sales_company_wallet', month: 1, meta: 5, realizado: null, ano_anterior: null },
+      { loja_id: 'matriz', indicator_code: 'sales_seller_wallet', month: 1, meta: 10, realizado: null, ano_anterior: null },
+      { loja_id: 'matriz', indicator_code: 'sales_internet', month: 1, meta: 20, realizado: null, ano_anterior: null },
+      { loja_id: 'matriz', indicator_code: 'sales_other', month: 1, meta: 0, realizado: null, ano_anterior: null },
+      { loja_id: 'matriz', indicator_code: 'sales_walkin', month: 1, meta: null, realizado: null, ano_anterior: null },
+    ], ['matriz'], codes), ['matriz'], indicators)
+
+    expect(readEditorSeries(grid, 'matriz', 'sales_total', 'meta')[0]).toBe(55)
+    expect(readEditorSeries(grid, 'matriz', 'sales_walkin', 'meta')[0]).toBe(15)
   })
 
   it('copies one month only for editable indicators', () => {

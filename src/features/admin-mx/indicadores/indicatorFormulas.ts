@@ -344,6 +344,14 @@ export function computeValueMap(
   const calcStatus: Record<string, Record<number, 'CALCULATED' | 'WITHOUT_BASE' | 'MISSING_PARAMETER'>> = {}
 
   for (const mv of monthlyValues) {
+    if (mv.value == null) {
+      const existing = lookupLoose(
+        Object.fromEntries(Object.entries(valueMap).map(([code, months]) => [code, months[mv.month] ?? null])),
+        mv.indicator_code,
+        'indicator',
+      )
+      if (existing != null && !Number.isNaN(existing)) continue
+    }
     writeMonthValue(valueMap, mv.indicator_code, mv.month, mv.value)
   }
 

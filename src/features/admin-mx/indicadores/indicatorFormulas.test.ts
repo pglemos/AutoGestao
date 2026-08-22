@@ -188,6 +188,27 @@ describe('computeValueMap', () => {
     })
     expect(applied.find(row => row.indicator_code === 'sales_total' && row.month === 1)?.meta).toBe(55)
   })
+
+  test('null oficial não apaga alias já hidratado', () => {
+    const demoIndicators = BASE44_STANDARD_INDICATORS.map(item => ({
+      code: item.code,
+      formula_expression: item.formula_expression,
+    }))
+    const { valueMap } = computeValueMap([
+      { indicator_code: 'sales_door_flow', month: 1, value: 15 },
+      { indicator_code: 'sales_referral', month: 1, value: 5 },
+      { indicator_code: 'sales_company_wallet', month: 1, value: 5 },
+      { indicator_code: 'sales_seller_wallet', month: 1, value: 10 },
+      { indicator_code: 'sales_internet', month: 1, value: 20 },
+      { indicator_code: 'sales_other', month: 1, value: 0 },
+      { indicator_code: 'sales_walkin', month: 1, value: null },
+      { indicator_code: 'SALES_WALKIN', month: 1, value: null },
+    ], demoIndicators, month => officialParameterDefaults(month))
+
+    expect(valueMap.SALES_WALKIN[1]).toBe(15)
+    expect(valueMap.sales_walkin[1]).toBe(15)
+    expect(valueMap.SALES_TOTAL[1]).toBe(55)
+  })
 })
 
 describe('buildDependentsMap', () => {

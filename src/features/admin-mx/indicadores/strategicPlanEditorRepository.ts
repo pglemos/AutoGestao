@@ -207,6 +207,19 @@ async function reconcileOfficialRoster(
   const remaining = roster.filter(row => isOfficialBase44Key(asString(row.metric_key)))
   if (!['rascunho', 'em_validacao'].includes(cycle.status)) return { rows: remaining, error: null }
 
+  const snapshotFixes = remaining.flatMap(row => {
+    const catalog = officialCatalog.find(item => (
+      matchCanonicalIndicator(item.metric_key)?.code === matchCanonicalIndicator(asString(row.metric_key))?.code
+    ))
+    if (!catalog || !catalog.target_calculation_mode) return []
+    if (asString(row.calculation_mode_snapshot) === catalog.target_calculation_mode) return []
+    return [supabase
+      .from('ciclos_plano_estrategico_indicadores')
+      .update({ calculation_mode_snapshot: catalog.target_calculation_mode })
+      .eq('id', asString(row.id))]
+  })
+  if (snapshotFixes.length) await Promise.all(snapshotFixes)
+
   const present = new Set(
     remaining
       .map(row => matchCanonicalIndicator(asString(row.metric_key))?.code)
@@ -216,7 +229,11 @@ async function reconcileOfficialRoster(
     const code = matchCanonicalIndicator(item.metric_key)?.code
     return Boolean(code && !present.has(code))
   })
-  if (missing.length === 0) return { rows: remaining, error: null }
+  if (missing.length === 0) {
+    if (!snapshotFixes.length) return { rows: remaining, error: null }
+    const next = await fetchCycleRoster(cycle)
+    return { rows: next.rows.filter(row => isOfficialBase44Key(asString(row.metric_key))), error: next.error }
+  }
 
   const { error } = await supabase.from('ciclos_plano_estrategico_indicadores').insert(
     missing.map(item => ({

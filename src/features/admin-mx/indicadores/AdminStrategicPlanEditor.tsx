@@ -50,6 +50,7 @@ import {
   filterEditorIndicators,
   groupEditorIndicatorsByArea,
   hydrateEditorGrid,
+  recalculateEditorGrid,
   patchEditorGrid,
   readEditorSeries,
   sortEditorIndicators,
@@ -98,6 +99,7 @@ const FIELD_OPTIONS: Array<{ value: EditorField; label: string }> = [
 function calculatedIndicator(indicator: StrategicPlanEditorIndicator) {
   return String(indicator.target_calculation_mode ?? '').toUpperCase().startsWith('CALCULATED')
     || String(indicator.target_calculation_mode ?? '').toLowerCase().startsWith('calculado')
+    || Boolean(indicator.formula_expression)
 }
 
 function companyScopedIndicator(indicator: StrategicPlanEditorIndicator) {
@@ -217,7 +219,11 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
     const unitIds = next.units.map(unit => unit.id)
     const indicatorCodes = next.indicators.map(indicator => indicator.metric_key)
     setData(next)
-    setGrid(hydrateEditorGrid(next.values, unitIds, indicatorCodes))
+    setGrid(recalculateEditorGrid(
+      hydrateEditorGrid(next.values, unitIds, indicatorCodes),
+      unitIds,
+      next.indicators,
+    ))
     setUnitId(current => next.units.some(unit => unit.id === current && unit.active)
       ? current
       : unitIds.find(id => next.units.find(unit => unit.id === id)?.active) ?? unitIds[0] ?? '')
