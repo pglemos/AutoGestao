@@ -4,8 +4,8 @@
 // QuickEntryView): prévia e execução de cópia de metas entre lojas, plano de
 // mudanças de importação, e grade de cadastro rápido.
 
-import { catalogAliasKeys, matchCanonicalIndicator } from './canonicalBase44Catalog'
-import { MONTHS, MONTH_LABELS, applyOfficialComputedMetas, type AnnualAggregation } from './indicatorFormulas'
+import { catalogAliasKeys, matchCanonicalIndicator, officialParameterDefaults } from './canonicalBase44Catalog'
+import { MONTHS, MONTH_LABELS, applyOfficialComputedMetas, evaluateFormula, type AnnualAggregation } from './indicatorFormulas'
 
 export type StoreTargetValue = {
   loja_id: string
@@ -515,6 +515,30 @@ export function buildOfficialMonthlyGrid(
     })),
     unitIds: [unitId],
   }), codes)
+}
+
+export function readOfficialMonthValue(
+  grid: ReturnType<typeof buildMonthlyGrid>,
+  indicators: Array<{ code: string; formula_expression?: string | null }>,
+  code: string,
+  month: number,
+  field: 'meta' | 'realizado' | 'ano_anterior' = 'meta',
+): number | null {
+  const stored = grid[code]?.[month]?.[field] ?? null
+  const formula = matchCanonicalIndicator(code)?.formula_expression
+    ?? indicators.find(item => item.code === code)?.formula_expression
+    ?? null
+  if (!formula) return stored
+  const flat: Record<string, number | null> = {}
+  for (const indicator of indicators) {
+    const value = grid[indicator.code]?.[month]?.[field] ?? null
+    flat[indicator.code] = value
+    const canon = matchCanonicalIndicator(indicator.code)
+    if (!canon) continue
+    flat[canon.code] = value
+    for (const key of catalogAliasKeys(canon.code)) flat[key] = value
+  }
+  return evaluateFormula(formula, flat, officialParameterDefaults(month)) ?? stored
 }
 
 /** Soma anual respeitando a política de agregação do indicador. */

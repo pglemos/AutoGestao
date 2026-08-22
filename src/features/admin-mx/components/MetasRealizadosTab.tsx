@@ -21,6 +21,7 @@ import { diagnoseEmptyImport } from '../indicadores/importDiagnosis'
 import {
   buildImportSaveBatches,
   buildOfficialMonthlyGrid,
+  readOfficialMonthValue,
   buildTargetWorkbookSheets,
   buildStoreCopyMutations,
   isPlanningFieldEditable,
@@ -339,7 +340,7 @@ export function MetasRealizadosTab(props: {
                               const month = index + 1
                               const value = isConsolidated
                                 ? consolidatedGrid[indicator.code]?.[month] ?? null
-                                : grid[indicator.code]?.[month]?.meta ?? null
+                                : readOfficialMonthValue(grid, props.indicators, indicator.code, month, 'meta')
                               const integrity = isConsolidated ? consolidatedIntegrity[month]?.[indicator.code] : undefined
                               return (
                                 <TableCell key={month} className="text-right">

@@ -2,6 +2,7 @@ import { describe, expect, test } from 'bun:test'
 import {
   buildMonthlyGrid,
   buildOfficialMonthlyGrid,
+  readOfficialMonthValue,
   buildTargetWorkbookSheets,
   buildStoreCopyMutations,
   isCompanyLevelIndicator,
@@ -231,6 +232,27 @@ describe('cadastro rápido', () => {
     expect(grid.sales_walkin[1].meta).toBe(15)
     expect(grid.sales_company_portfolio[1].meta).toBe(5)
     expect(grid.sales_total[1].meta).toBe(55)
+  })
+
+  test('lê SALES_TOTAL a partir dos canais já visíveis na grade', () => {
+    const indicators = [
+      { code: 'sales_walkin' },
+      { code: 'sales_referral' },
+      { code: 'sales_company_portfolio' },
+      { code: 'sales_seller_portfolio' },
+      { code: 'sales_internet' },
+      { code: 'sales_other' },
+      { code: 'sales_total' },
+    ]
+    const grid = buildMonthlyGrid([
+      { loja_id: 'u', indicator_code: 'sales_walkin', year: 2026, month: 1, meta: 15, realizado: null, ano_anterior: null },
+      { loja_id: 'u', indicator_code: 'sales_referral', year: 2026, month: 1, meta: 5, realizado: null, ano_anterior: null },
+      { loja_id: 'u', indicator_code: 'sales_company_portfolio', year: 2026, month: 1, meta: 5, realizado: null, ano_anterior: null },
+      { loja_id: 'u', indicator_code: 'sales_seller_portfolio', year: 2026, month: 1, meta: 10, realizado: null, ano_anterior: null },
+      { loja_id: 'u', indicator_code: 'sales_internet', year: 2026, month: 1, meta: 20, realizado: null, ano_anterior: null },
+      { loja_id: 'u', indicator_code: 'sales_other', year: 2026, month: 1, meta: 0, realizado: null, ano_anterior: null },
+    ], indicators.map(item => item.code))
+    expect(readOfficialMonthValue(grid, indicators, 'sales_total', 1)).toBe(55)
   })
 
   test('validação de células recusa mês fora do intervalo', () => {
