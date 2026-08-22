@@ -23,6 +23,7 @@ function plan(overrides: Partial<ApplicationPlan> = {}): ApplicationPlan {
     eficacia_score: null,
     eficacia_nota: null,
     responsavel_id: null,
+    responsavelName: null,
     checklist: null,
     createdAt: '2026-08-15T12:00:00Z',
     storeId: 'store-1',

@@ -24,7 +24,8 @@ test.describe('biblioteca de templates do plano de ação', () => {
     await loginWithCredentials(page, ADMIN_EMAIL, getE2ERolePassword())
     await page.goto('/plano-acao')
 
-    await page.getByRole('tab', { name: 'Biblioteca MX' }).click()
+    await expect(page.getByRole('tab', { name: 'Gestão global' })).toHaveAttribute('aria-selected', 'true')
+    await page.getByRole('tab', { name: 'Planos da rede' }).click()
     await expect(page.getByRole('tab', { name: 'Planos da rede' })).toHaveAttribute('aria-selected', 'true')
 
     const planCards = page.locator('section[aria-label] ul li button')
@@ -56,10 +57,10 @@ test.describe('biblioteca de templates do plano de ação', () => {
   test('expõe ações de ciclo de vida sem executar mutações', async ({ page }, testInfo) => {
     await loginWithCredentials(page, ADMIN_EMAIL, getE2ERolePassword())
     await page.goto('/plano-acao?mode=biblioteca')
-    await expect(page.getByRole('tab', { name: 'Biblioteca MX' })).toHaveAttribute('aria-selected', 'true')
+    await expect(page.getByRole('tab', { name: 'Gestão global' })).toHaveAttribute('aria-selected', 'true')
     await page.getByRole('tab', { name: 'Biblioteca de templates' }).click()
 
-    await expect(page.getByText('Templates de plano de ação')).toBeVisible({ timeout: 15000 })
+    await expect(page.getByText('Planos padrão de ação')).toBeVisible({ timeout: 15000 })
     const lifecycleMenu = page.getByRole('button', { name: /Mais ações para/ }).first()
     await expect(lifecycleMenu).toBeVisible()
     await lifecycleMenu.click()
@@ -77,7 +78,8 @@ test.describe('biblioteca de templates do plano de ação', () => {
     await loginWithCredentials(page, ADMIN_EMAIL, getE2ERolePassword())
     await page.goto('/plano-acao?mode=biblioteca')
 
-    await expect(page.getByRole('tab', { name: 'Biblioteca MX' })).toHaveAttribute('aria-selected', 'true')
+    await expect(page.getByRole('tab', { name: 'Gestão global' })).toHaveAttribute('aria-selected', 'true')
+    await page.getByRole('tab', { name: 'Planos da rede' }).click()
     await page.getByRole('button', { name: 'Nova ação' }).first().click()
     await page.getByRole('button', { name: /Usar template/ }).click()
 

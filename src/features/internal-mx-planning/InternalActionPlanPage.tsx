@@ -7,13 +7,16 @@ import { InternalMxPlanningShell, useInternalPlanningStore } from './InternalMxP
 type ActionPlanMode = 'cliente' | 'biblioteca'
 
 const ACTION_PLAN_TABS = [
+  { key: 'biblioteca' as const, label: 'Gestão global' },
   { key: 'cliente' as const, label: 'Execução do cliente' },
-  { key: 'biblioteca' as const, label: 'Biblioteca MX' },
 ]
 
 export default function InternalActionPlanPage() {
   const store = useInternalPlanningStore()
-  const domain = useInternalMxDomainTabs<ActionPlanMode>({ tabs: ACTION_PLAN_TABS, fallback: 'cliente' })
+  // O caminho administrativo canônico abre a superfície equivalente ao
+  // Base44 `/planos-acao`. A execução focada continua disponível de forma
+  // explícita em `?mode=cliente`.
+  const domain = useInternalMxDomainTabs<ActionPlanMode>({ tabs: ACTION_PLAN_TABS, fallback: 'biblioteca' })
 
   if (domain.active === 'biblioteca') {
     return (

@@ -47,6 +47,7 @@ export function ApplicationsTab(props: { onOpenPlan: (planId: string) => void; r
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [priorityFilter, setPriorityFilter] = useState('')
+  const [responsibleFilter, setResponsibleFilter] = useState('')
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -62,16 +63,21 @@ export function ApplicationsTab(props: { onOpenPlan: (planId: string) => void; r
     'pendente', 'em_andamento', 'atrasado', 'concluido', 'validando_eficacia', 'bloqueada', 'aguardando_decisao', 'cancelada',
     ...rows.map(plan => plan.status).filter(Boolean),
   ])].sort(), [rows])
+  const responsibleOptions = useMemo(
+    () => [...new Set(rows.map(plan => plan.responsavelName).filter((name): name is string => Boolean(name)))].sort((a, b) => a.localeCompare(b, 'pt-BR')),
+    [rows],
+  )
 
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase()
     return rows.filter(plan => {
       if (statusFilter && plan.status !== statusFilter) return false
       if (priorityFilter && plan.prioridade !== priorityFilter) return false
+      if (responsibleFilter && plan.responsavelName !== responsibleFilter) return false
       if (!term) return true
-      return [plan.clientName, plan.acao, plan.indicador].some(value => (value ?? '').toLowerCase().includes(term))
+      return [plan.clientName, plan.acao, plan.indicador, plan.responsavelName].some(value => (value ?? '').toLowerCase().includes(term))
     })
-  }, [priorityFilter, rows, search, statusFilter])
+  }, [priorityFilter, responsibleFilter, rows, search, statusFilter])
 
   const metrics = useMemo(() => applicationMetrics(rows), [rows])
 
@@ -101,6 +107,10 @@ export function ApplicationsTab(props: { onOpenPlan: (planId: string) => void; r
               <option value="">Todas as prioridades</option>
               {PRIORITY_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
             </MxSelect>
+            <MxSelect aria-label="Filtrar por responsável" value={responsibleFilter} onChange={event => setResponsibleFilter(event.target.value)}>
+              <option value="">Todos os responsáveis</option>
+              {responsibleOptions.map(name => <option key={name} value={name}>{name}</option>)}
+            </MxSelect>
           </div>
 
           {loading ? <MxLoadingState label="Carregando aplicações" /> : error ? <MxErrorState description={error} retry={() => void load()} /> : filtered.length ? (
@@ -112,6 +122,7 @@ export function ApplicationsTab(props: { onOpenPlan: (planId: string) => void; r
                     <TableHead>Plano aplicado</TableHead>
                     <TableHead>Departamento</TableHead>
                     <TableHead>Indicador</TableHead>
+                    <TableHead>Responsável</TableHead>
                     <TableHead>Prazo</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Progresso</TableHead>
@@ -131,6 +142,7 @@ export function ApplicationsTab(props: { onOpenPlan: (planId: string) => void; r
                         <TableCell className="max-w-[260px]">{plan.acao || plan.problema || '—'}</TableCell>
                         <TableCell>{plan.departamento || '—'}</TableCell>
                         <TableCell className="max-w-[200px]">{plan.indicador || '—'}</TableCell>
+                        <TableCell>{plan.responsavelName || '—'}</TableCell>
                         <TableCell>{formatDate(plan.prazo)}</TableCell>
                         <TableCell>{applicationStatusLabel(plan.status)}</TableCell>
                         <TableCell className="w-44">

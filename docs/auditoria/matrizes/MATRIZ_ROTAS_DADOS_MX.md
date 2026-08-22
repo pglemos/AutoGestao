@@ -301,7 +301,7 @@
 | `universidade_certificacoes` | 1 |
 | `universidade_trilhas` | 1 |
 | `user_roles` | 1 |
-| `usuarios` | 25 |
+| `usuarios` | 26 |
 | `valores_indicadores_planejamento_vigentes` | 3 |
 | `valores_parametros_consultoria` | 3 |
 | `vehicle_model_catalog` | 1 |
@@ -657,7 +657,7 @@
 | `user_roles:update` | 1 |
 | `usuarios:delete` | 2 |
 | `usuarios:insert` | 1 |
-| `usuarios:select` | 22 |
+| `usuarios:select` | 23 |
 | `usuarios:update` | 6 |
 | `usuarios:upsert` | 1 |
 | `valores_indicadores_planejamento_vigentes:select` | 3 |

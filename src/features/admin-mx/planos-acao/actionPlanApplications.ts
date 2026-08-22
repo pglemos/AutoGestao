@@ -29,6 +29,7 @@ export type ApplicationPlan = {
   eficacia_score: number | null
   eficacia_nota: string | null
   responsavel_id: string | null
+  responsavelName: string | null
   checklist: ChecklistItem[] | null
   createdAt: string
   storeId: string | null
@@ -115,6 +116,12 @@ export async function fetchApplications(input: { limit?: number } = {}): Promise
   ])
   if (storesError) return { rows: [], error: storesError.message }
 
+  const responsibleIds = [...new Set((plans ?? []).map(plan => plan.responsavel_id).filter((id): id is string => Boolean(id)))]
+  const { data: responsibles, error: responsiblesError } = responsibleIds.length
+    ? await supabase.from('usuarios').select('id, name').in('id', responsibleIds)
+    : { data: [] as Array<{ id: string; name: string }>, error: null }
+  if (responsiblesError) return { rows: [], error: responsiblesError.message }
+
   const matrizIds = [...new Set((stores ?? []).map(store => store.parent_loja_id ?? store.id))]
   const { data: clients, error: clientsError } = matrizIds.length
     ? await supabase.from('clientes_consultoria').select('id, name, primary_store_id').in('primary_store_id', matrizIds)
@@ -124,6 +131,7 @@ export async function fetchApplications(input: { limit?: number } = {}): Promise
   const storeNames = new Map((stores ?? []).map(store => [store.id, store.name]))
   const clientByMatriz = new Map((clients ?? []).map(client => [client.primary_store_id, client]))
   const clientByStore = new Map((stores ?? []).map(store => [store.id, clientByMatriz.get(store.parent_loja_id ?? store.id) ?? null]))
+  const responsibleNames = new Map((responsibles ?? []).map(responsible => [responsible.id, responsible.name]))
 
   const rows: ApplicationPlan[] = (plans ?? []).map(plan => {
     const storeId = plan.scope_type === 'store' ? plan.scope_id : null
@@ -143,6 +151,7 @@ export async function fetchApplications(input: { limit?: number } = {}): Promise
       eficacia_score: plan.eficacia_score,
       eficacia_nota: plan.eficacia_nota,
       responsavel_id: plan.responsavel_id,
+      responsavelName: plan.responsavel_id ? responsibleNames.get(plan.responsavel_id) ?? null : null,
       checklist: plan.checklist as ChecklistItem[] | null,
       createdAt: plan.created_at,
       storeId,

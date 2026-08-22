@@ -57,8 +57,8 @@ import {
 type PlanTab = 'planos' | 'templates' | 'sugestoes' | 'aplicacoes' | 'historico'
 
 const PLAN_TABS = [
-  { key: 'planos' as const, label: 'Planos da rede' },
   { key: 'templates' as const, label: 'Biblioteca de templates' },
+  { key: 'planos' as const, label: 'Planos da rede' },
   { key: 'sugestoes' as const, label: 'Sugestões ao Dono' },
   { key: 'aplicacoes' as const, label: 'Aplicações nos clientes' },
   { key: 'historico' as const, label: 'Histórico' },
@@ -88,7 +88,10 @@ export function AdminPlanosAcaoGlobalPage() {
   const { rows, loading, error, refetch } = useAdminActionPlans()
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState('todos')
-  const [tab, setTab] = useState<PlanTab>('planos')
+  // A entrada global replica a descoberta do Base44: a biblioteca/tabela de
+  // planos padrão é a primeira superfície. O board da rede segue disponível
+  // na aba adjacente, sem esconder a execução persistida.
+  const [tab, setTab] = useState<PlanTab>('templates')
   const templates = useActionPlanTemplatesController()
   const [suggestionsRefreshKey, setSuggestionsRefreshKey] = useState(0)
   const [applicationsRefreshKey, setApplicationsRefreshKey] = useState(0)
@@ -220,10 +223,13 @@ export function AdminPlanosAcaoGlobalPage() {
           title="Planos de ação"
           description="Visão global dos planos de ação da rede: status, prazos e prioridade."
           actions={tab === 'planos' ? (
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center justify-end gap-2">
+              <Button variant="outline" onClick={() => setSelectorOpen(true)}><Plus size={16} />Aplicar a cliente</Button>
+              <Button variant="outline" onClick={() => setTab('historico')}>Abrir histórico</Button>
               <Button variant="outline" onClick={() => void refetch()}><RefreshCw size={16} />Atualizar</Button>
-          <Button onClick={handleNewAction}><Plus size={16} />Nova ação</Button>
-          </div>
+              <Button variant="outline" onClick={handleNewAction}><Plus size={16} />Nova ação</Button>
+              <Button onClick={templates.openNew}><Plus size={16} />Criar plano padrão</Button>
+            </div>
           ) : tab === 'templates' ? (
             <div className="flex flex-wrap items-center justify-end gap-2">
               <Button variant="outline" onClick={() => setSelectorOpen(true)}><Plus size={16} />Aplicar a cliente</Button>

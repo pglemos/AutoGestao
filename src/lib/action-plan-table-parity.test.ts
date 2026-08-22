@@ -78,6 +78,25 @@ describe('Plano de Ação canônico e tabela Base44', () => {
     }
   })
 
+  test('exposes the responsible person in the global applications table', () => {
+    const applications = read('src/features/admin-mx/planos-acao/ApplicationsTab.tsx')
+    const repository = read('src/features/admin-mx/planos-acao/actionPlanApplications.ts')
+    expect(applications).toContain('<TableHead>Responsável</TableHead>')
+    expect(applications).toContain('Filtrar por responsável')
+    expect(repository).toContain("from('usuarios').select('id, name')")
+    expect(repository).toContain('responsavelName')
+  })
+
+  test('opens the global route on the Base44-equivalent template library', () => {
+    const page = read('src/features/admin-mx/AdminPlanosAcaoGlobalPage.tsx')
+    expect(page).toContain("useState<PlanTab>('templates')")
+    expect(page).toContain("label: 'Biblioteca de templates'")
+    expect(page).toContain("label: 'Planos da rede'")
+    for (const action of ['Aplicar a cliente', 'Abrir histórico', 'Criar plano padrão']) {
+      expect(page).toContain(action)
+    }
+  })
+
   test('opens the action plan in the approved Base44 table view by default', () => {
     const page = read('src/pages/owner/PlanoDeAcao.jsx')
     expect(page).toContain('normalizeActionPlanMode(saved)')
