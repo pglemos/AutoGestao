@@ -20,7 +20,7 @@ import { MONTH_LABELS, getFormatConfig, formatDisplay, formatEditableInput, pars
 import { diagnoseEmptyImport } from '../indicadores/importDiagnosis'
 import {
   buildImportSaveBatches,
-  buildMonthlyGrid,
+  buildOfficialMonthlyGrid,
   buildTargetWorkbookSheets,
   buildStoreCopyMutations,
   isPlanningFieldEditable,
@@ -154,7 +154,14 @@ export function MetasRealizadosTab(props: {
     if (scope === CONSOLIDATED_SCOPE && !clientScope.loading && !clientScope.supportsConsolidated) setScope('')
   }, [scope, clientScope.loading, clientScope.supportsConsolidated])
 
-  const grid = useMemo(() => buildMonthlyGrid(rows, props.indicators.map(item => item.code)), [rows, props.indicators])
+  const grid = useMemo(() => buildOfficialMonthlyGrid(
+    rows,
+    props.indicators.map(indicator => ({
+      code: indicator.code,
+      formula_expression: formulas[indicator.code] ?? null,
+    })),
+    storeId,
+  ), [formulas, props.indicators, rows, storeId])
 
   const consolidatedGrid = clientScope.consolidated?.meta.valueMap ?? {}
   const consolidatedActualGrid = clientScope.consolidated?.realizado.valueMap ?? {}

@@ -4,7 +4,8 @@
 // QuickEntryView): prévia e execução de cópia de metas entre lojas, plano de
 // mudanças de importação, e grade de cadastro rápido.
 
-import { MONTHS, MONTH_LABELS, type AnnualAggregation } from './indicatorFormulas'
+import { catalogAliasKeys, matchCanonicalIndicator } from './canonicalBase44Catalog'
+import { MONTHS, MONTH_LABELS, applyOfficialComputedMetas, type AnnualAggregation } from './indicatorFormulas'
 
 export type StoreTargetValue = {
   loja_id: string
@@ -433,12 +434,23 @@ export function validateQuickEntryCells(cells: QuickEntryCell[]): string[] {
   return errors
 }
 
+function resolveMonthlyGridCode(indicatorCode: string, allowed: Set<string>): string | null {
+  if (allowed.has(indicatorCode)) return indicatorCode
+  const canon = matchCanonicalIndicator(indicatorCode)
+  if (!canon) return null
+  for (const key of catalogAliasKeys(canon.code)) {
+    if (allowed.has(key)) return key
+  }
+  return null
+}
+
 /** Agrupa valores mensais por indicador (para a grade do cadastro rápido). */
 export function buildMonthlyGrid(
   values: StoreTargetValue[],
   indicatorCodes: string[],
 ): Record<string, Record<number, { meta: number | null; realizado: number | null; ano_anterior: number | null }>> {
   const grid: Record<string, Record<number, { meta: number | null; realizado: number | null; ano_anterior: number | null }>> = {}
+  const allowed = new Set(indicatorCodes)
   for (const code of indicatorCodes) {
     grid[code] = {}
     for (const month of MONTHS) {
@@ -446,14 +458,34 @@ export function buildMonthlyGrid(
     }
   }
   for (const value of values) {
-    if (!grid[value.indicator_code]) continue
-    grid[value.indicator_code][value.month] = {
-      meta: value.meta,
-      realizado: value.realizado,
-      ano_anterior: value.ano_anterior,
+    const code = resolveMonthlyGridCode(value.indicator_code, allowed)
+    if (!code || !grid[code]) continue
+    const current = grid[code][value.month]
+    grid[code][value.month] = {
+      meta: value.meta ?? current.meta,
+      realizado: value.realizado ?? current.realizado,
+      ano_anterior: value.ano_anterior ?? current.ano_anterior,
     }
   }
   return grid
+}
+
+export function buildOfficialMonthlyGrid(
+  values: StoreTargetValue[],
+  indicators: Array<{ code: string; formula_expression?: string | null }>,
+  unitId: string,
+) {
+  const computed = unitId
+    ? applyOfficialComputedMetas({
+      values,
+      indicators: indicators.map(item => ({
+        metric_key: item.code,
+        formula_expression: item.formula_expression ?? matchCanonicalIndicator(item.code)?.formula_expression ?? null,
+      })),
+      unitIds: [unitId],
+    })
+    : values
+  return buildMonthlyGrid(computed, indicators.map(item => item.code))
 }
 
 /** Soma anual respeitando a política de agregação do indicador. */

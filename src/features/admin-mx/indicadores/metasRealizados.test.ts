@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 import {
   buildMonthlyGrid,
+  buildOfficialMonthlyGrid,
   buildTargetWorkbookSheets,
   buildStoreCopyMutations,
   isCompanyLevelIndicator,
@@ -180,6 +181,29 @@ describe('cadastro rápido', () => {
     )
     expect(grid.A[1]).toEqual({ meta: 5, realizado: 3, ano_anterior: 4 })
     expect(grid.A[12]).toEqual({ meta: null, realizado: null, ano_anterior: null })
+  })
+
+  test('recalcula oficiais no cadastro rápido mesmo com alias e null', () => {
+    const grid = buildOfficialMonthlyGrid([
+      { loja_id: 'matriz', indicator_code: 'sales_door_flow', year: 2026, month: 1, meta: 15, realizado: null, ano_anterior: null },
+      { loja_id: 'matriz', indicator_code: 'sales_referral', year: 2026, month: 1, meta: 5, realizado: null, ano_anterior: null },
+      { loja_id: 'matriz', indicator_code: 'sales_company_wallet', year: 2026, month: 1, meta: 5, realizado: null, ano_anterior: null },
+      { loja_id: 'matriz', indicator_code: 'sales_seller_wallet', year: 2026, month: 1, meta: 10, realizado: null, ano_anterior: null },
+      { loja_id: 'matriz', indicator_code: 'sales_internet', year: 2026, month: 1, meta: 20, realizado: null, ano_anterior: null },
+      { loja_id: 'matriz', indicator_code: 'sales_other', year: 2026, month: 1, meta: 0, realizado: null, ano_anterior: null },
+      { loja_id: 'matriz', indicator_code: 'sales_walkin', year: 2026, month: 1, meta: null, realizado: null, ano_anterior: null },
+    ], [
+      { code: 'sales_walkin' },
+      { code: 'sales_referral' },
+      { code: 'sales_company_wallet' },
+      { code: 'sales_seller_wallet' },
+      { code: 'sales_internet' },
+      { code: 'sales_other' },
+      { code: 'sales_total' },
+    ], 'matriz')
+
+    expect(grid.sales_walkin[1].meta).toBe(15)
+    expect(grid.sales_total[1].meta).toBe(55)
   })
 
   test('validação de células recusa mês fora do intervalo', () => {
