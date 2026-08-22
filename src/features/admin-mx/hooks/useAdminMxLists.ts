@@ -109,17 +109,24 @@ export function useAdminConsultingProducts(): QueryState<AdminConsultingProduct>
   })
 }
 
-export type AvailableStore = { id: string; name: string }
+export type AvailableStore = {
+  id: string
+  name: string
+  parent_loja_id: string | null
+  structure_type: string | null
+  active: boolean | null
+}
 
 /**
  * Lojas que ainda podem receber um cliente: o índice parcial
  * `clientes_consultoria_one_active_per_store_uidx` só admite um cliente ativo
  * por loja, então oferecer as ocupadas garantiria um 409 na gravação.
  */
-export function useStoresWithoutActiveClient(): QueryState<AvailableStore> {
-  return useSupabaseList<AvailableStore>('lojas disponíveis', async () => {
+export function useStoresWithoutActiveClient(includeStoreIds: string[] = []): QueryState<AvailableStore> {
+  const includeKey = includeStoreIds.filter(Boolean).sort().join(',')
+  return useSupabaseList<AvailableStore>(`lojas disponíveis:${includeKey}`, async () => {
     const [{ data: stores, error }, { data: taken }] = await Promise.all([
-      supabase.from('lojas').select('id, name').is('parent_loja_id', null).order('name', { ascending: true }),
+      supabase.from('lojas').select('id, name, parent_loja_id, structure_type, active').order('name', { ascending: true }),
       supabase.from('clientes_consultoria').select('primary_store_id, status'),
     ])
     if (error) throw new Error(error.message)
@@ -129,7 +136,20 @@ export function useStoresWithoutActiveClient(): QueryState<AvailableStore> {
         .map(client => client.primary_store_id)
         .filter((id): id is string => Boolean(id)),
     )
-    return (stores ?? []).filter(store => !busy.has(store.id)) as AvailableStore[]
+    const rows = (stores ?? []) as AvailableStore[]
+    const eligibleMatrices = new Set(
+      rows
+        .filter(store => store.parent_loja_id === null && (!busy.has(store.id) || includeStoreIds.includes(store.id)))
+        .map(store => store.id),
+    )
+    // O onboarding precisa enxergar a matriz e as filiais que já existem nela.
+    // Filiais de uma matriz ocupada continuam fora para não oferecer vínculo
+    // cruzado entre clientes.
+    return rows.filter(store => {
+      if (store.active === false) return false
+      if (store.parent_loja_id === null) return eligibleMatrices.has(store.id)
+      return eligibleMatrices.has(store.parent_loja_id)
+    })
   })
 }
 
@@ -249,6 +269,7 @@ export type AdminActionPlan = {
   codigo: string | null
   problema: string | null
   acao: string | null
+  objetivo: string | null
   status: string | null
   prioridade: string | null
   prazo: string | null
@@ -259,6 +280,8 @@ export type AdminActionPlan = {
   indicador: string | null
   responsavel_id: string | null
   concluido_at: string | null
+  iniciado_at: string | null
+  updated_at: string | null
   checklist: unknown
 }
 
@@ -266,7 +289,7 @@ export function useAdminActionPlans(): QueryState<AdminActionPlan> {
   return useSupabaseList<AdminActionPlan>('planos de ação', async () => {
     const { data, error } = await supabase
       .from('planos_acao')
-      .select('id, codigo, problema, acao, status, prioridade, prazo, progresso, departamento, scope_type, scope_id, indicador, responsavel_id, concluido_at, checklist')
+      .select('id, codigo, problema, acao, objetivo, status, prioridade, prazo, progresso, departamento, scope_type, scope_id, indicador, responsavel_id, concluido_at, iniciado_at, updated_at, checklist')
       .order('prazo', { ascending: true, nullsFirst: false })
       .limit(500)
     if (error) throw new Error(error.message)
