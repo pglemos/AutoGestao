@@ -470,7 +470,7 @@ export function AdminPlanosAcaoGlobalPage() {
           draft={templates.draft}
           submitting={templates.submitting}
           onDraft={templates.setDraft}
-          onSubmit={() => void templates.submit()}
+          onSubmit={() => templates.submit()}
           onPublish={() => void templates.submitAndPublish()}
           onClose={() => templates.setFormOpen(false)}
         />

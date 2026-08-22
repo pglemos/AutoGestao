@@ -4,7 +4,9 @@ import {
   emptyTemplateDraft,
   emptyTemplateItem,
   nextTemplateVersionNumber,
+  prepareTemplateDraftForSave,
   resolveItemDueDate,
+  suggestTemplateKey,
   validateTemplateDraft,
   withPersistedIndicatorOption,
 } from './actionPlanTemplates'
@@ -117,5 +119,19 @@ describe('aplicação de template', () => {
 
   test('prazo zero vence no mesmo dia', () => {
     expect(resolveItemDueDate(new Date('2026-08-15T12:00:00Z'), 0)).toBe('2026-08-15')
+  })
+
+  test('gera chave canônica e copia a ação para o problema oculto', () => {
+    expect(suggestTemplateKey({ departamento: 'comercial', primary_indicator_code: 'SALES_TOTAL', nome: 'Aumentar vendas' })).toBe('comercial_sales_total_aumentar_vendas')
+    const prepared = prepareTemplateDraftForSave({
+      ...emptyTemplateDraft(),
+      departamento: 'comercial',
+      primary_indicator_code: 'SALES_TOTAL',
+      nome: 'Aumentar vendas',
+      items: [{ ...emptyTemplateItem(1), acao: 'Treinar fechamento' }],
+    })
+    expect(prepared.template_key).toBe('comercial_sales_total_aumentar_vendas')
+    expect(prepared.items[0]?.problema).toBe('Treinar fechamento')
+    expect(validateTemplateDraft(prepared)).toEqual([])
   })
 })

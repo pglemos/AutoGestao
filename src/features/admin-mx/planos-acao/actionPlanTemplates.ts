@@ -137,6 +137,38 @@ export function emptyTemplateItem(ordem: number): ActionPlanTemplateItem {
   }
 }
 
+function slugPart(value: string): string {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_|_$/g, '')
+}
+
+/** Gera a chave do Base44 (`generateTemplateCode`) a partir de depto + indicador + título. */
+export function suggestTemplateKey(draft: Pick<TemplateDraft, 'departamento' | 'primary_indicator_code' | 'nome'>): string {
+  const base = [draft.departamento, draft.primary_indicator_code, draft.nome]
+    .map(slugPart)
+    .filter(Boolean)
+    .join('_')
+    .slice(0, 60)
+  return base || 'plano_padrao'
+}
+
+/** Completa chave e problema ocultos para o save continuar 1:1 com o wizard Base44. */
+export function prepareTemplateDraftForSave(draft: TemplateDraft): TemplateDraft {
+  return {
+    ...draft,
+    template_key: draft.template_key.trim() || suggestTemplateKey(draft),
+    items: draft.items.map(item => ({
+      ...item,
+      problema: item.problema.trim() || item.acao.trim(),
+      acao: item.acao.trim() || item.problema.trim(),
+    })),
+  }
+}
+
 /**
  * Rehydrates a persisted template into the editor's canonical catalog values.
  * Older seeds store department labels/codes such as `PESSOAS_RH`, while the
@@ -345,43 +377,44 @@ export async function fetchTemplateItems(versionId: string): Promise<ActionPlanT
  * os itens do rascunho são substituídos.
  */
 export async function saveTemplateDraft(draft: TemplateDraft, userId: string): Promise<{ error: string | null; templateId: string | null }> {
-  const errors = validateTemplateDraft(draft)
+  const prepared = prepareTemplateDraftForSave(draft)
+  const errors = validateTemplateDraft(prepared)
   if (errors.length) return { error: errors[0], templateId: null }
   if (!userId.trim()) return { error: 'Usuário autenticado não identificado.', templateId: null }
 
   const templatePayload = {
-    template_key: draft.template_key.trim(),
-    nome: draft.nome.trim(),
-    departamento: draft.departamento.trim(),
-    indicador: draft.indicador.trim() || null,
-    descricao: draft.descricao.trim() || null,
-    program_key: draft.program_key.trim() || null,
-    active: draft.active,
-    primary_indicator_code: draft.primary_indicator_code.trim() || null,
-    improvement_direction: draft.improvement_direction || null,
-    default_responsible_role: draft.default_responsible_role.trim() || null,
-    manual_application_enabled: draft.manual_application_enabled,
-    owner_suggestion_enabled: draft.owner_suggestion_enabled,
+    template_key: prepared.template_key.trim(),
+    nome: prepared.nome.trim(),
+    departamento: prepared.departamento.trim(),
+    indicador: prepared.indicador.trim() || null,
+    descricao: prepared.descricao.trim() || null,
+    program_key: prepared.program_key.trim() || null,
+    active: prepared.active,
+    primary_indicator_code: prepared.primary_indicator_code.trim() || null,
+    improvement_direction: prepared.improvement_direction || null,
+    default_responsible_role: prepared.default_responsible_role.trim() || null,
+    manual_application_enabled: prepared.manual_application_enabled,
+    owner_suggestion_enabled: prepared.owner_suggestion_enabled,
     updated_at: new Date().toISOString(),
   }
 
   const versionPayload = {
-    improvement_direction: draft.improvement_direction || null,
-    default_responsible_role: draft.default_responsible_role.trim() || null,
-    problem: draft.problem.trim() || null,
-    objective: draft.objective.trim() || null,
-    when_to_apply: draft.when_to_apply.trim() || null,
-    owner_suggestion_title: draft.owner_suggestion_title.trim() || null,
-    owner_suggestion_problem: draft.owner_suggestion_problem.trim() || null,
-    owner_suggestion_recommendation: draft.owner_suggestion_recommendation.trim() || null,
-    effectiveness_indicator_code: draft.effectiveness_indicator_code.trim() || null,
+    improvement_direction: prepared.improvement_direction || null,
+    default_responsible_role: prepared.default_responsible_role.trim() || null,
+    problem: prepared.problem.trim() || null,
+    objective: prepared.objective.trim() || null,
+    when_to_apply: prepared.when_to_apply.trim() || null,
+    owner_suggestion_title: prepared.owner_suggestion_title.trim() || null,
+    owner_suggestion_problem: prepared.owner_suggestion_problem.trim() || null,
+    owner_suggestion_recommendation: prepared.owner_suggestion_recommendation.trim() || null,
+    effectiveness_indicator_code: prepared.effectiveness_indicator_code.trim() || null,
     updated_at: new Date().toISOString(),
   }
-  const items = draft.items.filter(item => item.problema.trim() && item.acao.trim())
+  const items = prepared.items.filter(item => item.problema.trim() && item.acao.trim())
   const weights = calculateItemWeights(items.length)
   const { data: templateId, error } = await supabase.rpc('save_action_plan_template_draft', {
     p_payload: {
-      template_id: draft.id ?? null,
+      template_id: prepared.id ?? null,
       template: templatePayload,
       version: versionPayload,
       items: items.map((item, index) => ({

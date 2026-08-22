@@ -87,6 +87,29 @@ describe('Plano de Ação canônico e tabela Base44', () => {
     expect(repository).toContain('responsavelName')
   })
 
+  test('create-standard-plan wizard matches Base44 TemplateWizard copy', () => {
+    const wizard = read('src/features/admin-mx/planos-acao/TemplateWizard.tsx')
+    for (const copy of [
+      'Criar Plano Padrão',
+      'Editar Plano Padrão',
+      'Título do Plano *',
+      'Indicador Principal *',
+      'Prazo Recomendado em Dias *',
+      'Prioridade Padrão *',
+      'Revisão e Publicação',
+      'Publicar Plano Padrão',
+      'Usar título sugerido',
+      'Adicionar Ação',
+      'Nome da Ação *',
+      'Nenhum material',
+      'Vincular aula da Universidade MX',
+    ]) {
+      expect(wizard).toContain(copy)
+    }
+    expect(wizard).not.toContain('Novo template de plano de ação')
+    expect(wizard).not.toContain('Título do template')
+  })
+
   test('opens the global route on the Base44-equivalent template library', () => {
     const page = read('src/features/admin-mx/AdminPlanosAcaoGlobalPage.tsx')
     expect(page).toContain("useState<PlanTab>('templates')")

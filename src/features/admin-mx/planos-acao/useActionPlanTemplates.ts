@@ -9,6 +9,7 @@ import {
   fetchActionPlanTemplates,
   fetchDraftVersionId,
   fetchTemplateItems,
+  prepareTemplateDraftForSave,
   publishTemplateVersion,
   saveTemplateDraft,
   setTemplateActive,
@@ -60,18 +61,24 @@ export function useActionPlanTemplatesController() {
     setFormOpen(true)
   }
 
-  const submit = async () => {
-    if (submitting || !supabaseUser) return
+  const submit = async (): Promise<boolean> => {
+    if (submitting || !supabaseUser) return false
     setSubmitting(true)
     try {
-      const result = await saveTemplateDraft(draft, supabaseUser.id)
+      const prepared = prepareTemplateDraftForSave(draft)
+      const result = await saveTemplateDraft(prepared, supabaseUser.id)
       if (result.error) {
         toast.error(result.error)
-        return
+        return false
       }
-      toast.success('Rascunho do template salvo.')
-      setFormOpen(false)
+      setDraft(current => ({
+        ...current,
+        id: result.templateId ?? current.id,
+        template_key: prepared.template_key,
+      }))
+      toast.success('Rascunho do plano padrão salvo.')
       await refetch()
+      return true
     } finally {
       setSubmitting(false)
     }
@@ -97,7 +104,7 @@ export function useActionPlanTemplatesController() {
         toast.error(publishResult.error)
         return
       }
-      toast.success('Template publicado.')
+      toast.success('Plano padrão publicado.')
       setFormOpen(false)
       await refetch()
     } finally {
