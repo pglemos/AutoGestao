@@ -1,4 +1,15 @@
+import { catalogAliasKeys, matchCanonicalIndicator } from './canonicalBase44Catalog'
 import { MONTHS } from './indicatorFormulas'
+
+function resolveEditorGridCode(indicatorCode: string, allowed: Set<string>): string | null {
+  if (allowed.has(indicatorCode)) return indicatorCode
+  const canon = matchCanonicalIndicator(indicatorCode)
+  if (!canon) return null
+  for (const key of catalogAliasKeys(canon.code)) {
+    if (allowed.has(key)) return key
+  }
+  return null
+}
 
 export type Month = typeof MONTHS[number]
 
@@ -66,9 +77,12 @@ export function hydrateEditorGrid(
   indicatorCodes: string[],
 ): EditorGrid {
   const grid = createEditorGrid(unitIds, indicatorCodes)
+  const allowed = new Set(indicatorCodes)
   for (const row of rows) {
-    if (!row.month || !grid[row.loja_id]?.[row.indicator_code]) continue
-    grid[row.loja_id][row.indicator_code][row.month] = {
+    if (!row.month) continue
+    const code = resolveEditorGridCode(row.indicator_code, allowed)
+    if (!code || !grid[row.loja_id]?.[code]) continue
+    grid[row.loja_id][code][row.month] = {
       meta: row.meta ?? null,
       realizado: row.realizado ?? null,
       ano_anterior: row.ano_anterior ?? null,

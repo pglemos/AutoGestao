@@ -23,6 +23,16 @@ describe('strategicPlanEditor', () => {
     expect(readEditorSeries(grid, 'filial', 'sales_total', 'meta').every(value => value === null)).toBe(true)
   })
 
+  it('hydrates persisted alias keys onto the official roster code', () => {
+    const grid = hydrateEditorGrid([
+      { loja_id: 'matriz', indicator_code: 'sales_door_flow', month: 1, meta: 15, realizado: null, ano_anterior: null },
+      { loja_id: 'matriz', indicator_code: 'SALES_TOTAL', month: 1, meta: 55, realizado: null, ano_anterior: null },
+    ], ['matriz'], ['sales_walkin', 'sales_total'])
+
+    expect(readEditorSeries(grid, 'matriz', 'sales_walkin', 'meta')[0]).toBe(15)
+    expect(readEditorSeries(grid, 'matriz', 'sales_total', 'meta')[0]).toBe(55)
+  })
+
   it('copies one month only for editable indicators', () => {
     let grid = createEditorGrid(['matriz'], ['manual', 'calculado'])
     grid = patchEditorGrid(grid, { unitId: 'matriz', indicatorCode: 'manual', month: 2, field: 'meta', value: 42 })

@@ -399,7 +399,9 @@ export function applyOfficialComputedMetas<T extends {
   unitIds: string[]
   parameterSource?: ParameterSource
 }): T[] {
-  const calculated = params.indicators.filter(item => item.formula_expression)
+  const calculated = params.indicators.filter(item => (
+    item.formula_expression || matchCanonicalIndicator(item.metric_key)?.formula_expression
+  ))
   if (calculated.length === 0) return params.values
 
   const next = params.values.map(row => ({ ...row }))
@@ -410,10 +412,13 @@ export function applyOfficialComputedMetas<T extends {
   })
 
   const parameterSource = params.parameterSource ?? (month => officialParameterDefaults(month))
-  const engineIndicators = params.indicators.map(item => ({
-    code: item.metric_key,
-    formula_expression: item.formula_expression,
-  }))
+  const engineIndicators = params.indicators.map(item => {
+    const canon = matchCanonicalIndicator(item.metric_key)
+    return {
+      code: item.metric_key,
+      formula_expression: canon?.formula_expression ?? item.formula_expression,
+    }
+  })
 
   for (const unitId of params.unitIds) {
     for (const field of COMPUTED_FIELDS) {
@@ -422,23 +427,28 @@ export function applyOfficialComputedMetas<T extends {
         .map(row => ({ indicator_code: row.indicator_code, month: Number(row.month), value: row[field] ?? null }))
       const { valueMap } = computeValueMap(monthlyValues, engineIndicators, parameterSource)
       for (const indicator of calculated) {
+        const canon = matchCanonicalIndicator(indicator.metric_key)
         for (const month of MONTHS) {
-          const computed = valueMap[indicator.metric_key]?.[month] ?? null
-          const key = `${unitId}:${indicator.metric_key}:${month}`
-          const existing = index.get(key)
-          if (existing != null) {
-            next[existing] = { ...next[existing], [field]: computed }
-            continue
+          const computed = valueMap[indicator.metric_key]?.[month]
+            ?? (canon ? valueMap[canon.code]?.[month] : null)
+            ?? null
+          for (const code of catalogAliasKeys(indicator.metric_key)) {
+            const key = `${unitId}:${code}:${month}`
+            const existing = index.get(key)
+            if (existing != null) {
+              next[existing] = { ...next[existing], [field]: computed }
+              continue
+            }
+            index.set(key, next.length)
+            next.push({
+              loja_id: unitId,
+              indicator_code: code,
+              month,
+              meta: field === 'meta' ? computed : null,
+              realizado: field === 'realizado' ? computed : null,
+              ano_anterior: field === 'ano_anterior' ? computed : null,
+            } as T)
           }
-          index.set(key, next.length)
-          next.push({
-            loja_id: unitId,
-            indicator_code: indicator.metric_key,
-            month,
-            meta: field === 'meta' ? computed : null,
-            realizado: field === 'realizado' ? computed : null,
-            ano_anterior: field === 'ano_anterior' ? computed : null,
-          } as T)
         }
       }
     }

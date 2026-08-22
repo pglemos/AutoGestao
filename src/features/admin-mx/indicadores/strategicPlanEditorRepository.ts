@@ -335,16 +335,27 @@ export async function recalculateAndPersistCycle(params: {
   const storedByKey = new Map<string, number | null>()
   for (const row of params.values) {
     if (row.month == null) continue
+    const canon = matchCanonicalIndicator(row.indicator_code)?.code ?? row.indicator_code
+    storedByKey.set(`${row.loja_id}:${canon}:${row.month}`, row.meta)
     storedByKey.set(`${row.loja_id}:${row.indicator_code}:${row.month}`, row.meta)
   }
 
-  const calculated = params.indicators.filter(item => item.formula_expression)
+  const calculated = params.indicators.filter(item => item.formula_expression || matchCanonicalIndicator(item.metric_key)?.formula_expression)
   const saves = params.unitIds.flatMap(unitId => calculated.map(indicator => {
+    const canon = matchCanonicalIndicator(indicator.metric_key)?.code ?? indicator.metric_key
     const series = MONTHS.map(month => {
-      const row = values.find(item => item.loja_id === unitId && item.indicator_code === indicator.metric_key && item.month === month)
+      const row = values.find(item => (
+        item.loja_id === unitId
+        && item.month === month
+        && (item.indicator_code === indicator.metric_key || matchCanonicalIndicator(item.indicator_code)?.code === canon)
+      ))
       return row?.meta ?? null
     })
-    const previous = MONTHS.map(month => storedByKey.get(`${unitId}:${indicator.metric_key}:${month}`) ?? null)
+    const previous = MONTHS.map(month => (
+      storedByKey.get(`${unitId}:${indicator.metric_key}:${month}`)
+      ?? storedByKey.get(`${unitId}:${canon}:${month}`)
+      ?? null
+    ))
     if (series.every(value => value == null) && previous.every(value => value == null)) return null
     if (series.every((value, index) => value === previous[index])) return null
     return saveIndicatorField({
