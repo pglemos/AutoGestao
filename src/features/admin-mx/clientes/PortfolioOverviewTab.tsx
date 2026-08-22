@@ -65,7 +65,15 @@ const METRICS: Array<{
 const STATUS_OPTIONS: Array<{ value: PortfolioFilters['status']; label: string }> = [
   { value: 'todos', label: 'Todos os status' },
   ...METRICS.map(item => ({ value: item.status, label: PORTFOLIO_STATUS_LABEL[item.status] })),
+  { value: 'rascunho', label: 'Rascunho' },
+  { value: 'coleta_de_dados', label: 'Coleta de Dados' },
+  { value: 'em_validacao', label: 'Em Validação' },
+  { value: 'pronto_para_ativar', label: 'Pronto para Ativar' },
+  { value: 'ativacao_programada', label: 'Ativação Programada' },
+  { value: 'ativo_em_implantacao', label: 'Ativo em Implantação' },
+  { value: 'ativo', label: 'Ativo' },
   { value: 'suspenso', label: 'Suspenso' },
+  { value: 'encerrado', label: 'Encerrado' },
 ]
 
 export interface PortfolioOverviewTabProps {

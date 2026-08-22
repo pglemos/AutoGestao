@@ -48,6 +48,7 @@ import { fetchCurrentCycle, validateCycleReadiness } from '@/features/strategic-
 import { createStrategicPlanFromProduct } from '@/features/strategic-plan/productPackageOps'
 import { ClientConfigTab } from './clientes/ClientConfigTab'
 import { ClientActionPlanContextPanel } from './clientes/ClientActionPlanContextPanel'
+import { fetchClientActionPlanSummary, type ClientActionPlanSummary } from './clientes/clientActionPlanContext'
 import { DonoMasterCard } from './clientes/DonoMasterCard'
 import { EnrollmentLinkModal } from './clientes/EnrollmentLinkModal'
 import { PersonCreateModal } from './clientes/PersonCreateModal'
@@ -187,6 +188,7 @@ export function AdminClienteDetalhePage() {
   const [savingProgram, setSavingProgram] = useState(false)
   const [actionPlanWizardOpen, setActionPlanWizardOpen] = useState(false)
   const [actionPlanRefreshKey, setActionPlanRefreshKey] = useState(0)
+  const [actionPlanSummary, setActionPlanSummary] = useState<ClientActionPlanSummary | null>(null)
 
   // Lojas: CRUD + horários
   const [units, setUnits] = useState<UnitRow[]>([])
@@ -276,6 +278,35 @@ export function AdminClienteDetalhePage() {
   useEffect(() => { void loadPersons() }, [loadPersons])
   useEffect(() => { void loadLinks() }, [loadLinks])
   useEffect(() => { void loadStrategicPlan() }, [loadStrategicPlan])
+
+  const loadActionPlanSummary = useCallback(async () => {
+    if (!client?.id) {
+      setActionPlanSummary(null)
+      return
+    }
+    const result = await fetchClientActionPlanSummary(client.id, client.primary_store_id)
+    setActionPlanSummary(result.summary)
+  }, [client?.id, client?.primary_store_id])
+
+  useEffect(() => { void loadActionPlanSummary() }, [loadActionPlanSummary, actionPlanRefreshKey])
+
+  // O produto contratado é a fonte do roster. Ao abrir uma ficha legada sem
+  // ciclo, a tela provisiona o ciclo idempotentemente e passa a exibir o
+  // mesmo pacote no contexto do cliente.
+  useEffect(() => {
+    if (!client?.id || !client.program_template_key) return
+    let active = true
+    void createStrategicPlanFromProduct({
+      clientId: client.id,
+      referenceYear: new Date().getFullYear(),
+      userId: supabaseUser?.id,
+    }).then(result => {
+      if (!active) return
+      if (result.resolution.ok && result.error) toast.error(result.error)
+      if (result.resolution.ok) void loadStrategicPlan()
+    })
+    return () => { active = false }
+  }, [client?.id, client?.program_template_key, loadStrategicPlan, supabaseUser?.id])
 
   const ownerMasterResolution = useMemo<OwnerMasterResolution>(() => {
     if (!persons.length) return { status: 'NOT_CONFIGURED', count: 0 }
@@ -531,8 +562,8 @@ export function AdminClienteDetalhePage() {
               {client && client.status !== 'ativo'
                 ? <Button onClick={() => setActivationOpen(true)}><CheckCircle2 size={16} />Validar e ativar</Button>
                 : null}
-              {client ? <Button variant="outline" onClick={() => void createStrategicPlan()} disabled={creatingStrategicPlan}><Target size={16} />{creatingStrategicPlan ? 'Criando plano...' : 'Criar Plano Estratégico'}</Button> : null}
-              {client ? <Button asChild variant="outline"><Link to={`/clientes/${encodeURIComponent(client.slug || client.id)}/plano-acao?clientId=${encodeURIComponent(client.id)}${client.primary_store_id ? `&storeId=${encodeURIComponent(client.primary_store_id)}` : ''}`}><ClipboardList size={16} />Abrir Plano de Ação</Link></Button> : null}
+              {client ? <Button variant="outline" onClick={() => void createStrategicPlan()} disabled={creatingStrategicPlan}><Target size={16} />{creatingStrategicPlan ? 'Sincronizando...' : 'Sincronizar indicadores'}</Button> : null}
+              {client ? <Button variant="outline" onClick={() => { setPlanningTab('plano-acao'); setTab('planejamento') }}><ClipboardList size={16} />Abrir Plano de Ação</Button> : null}
               {client ? <Button asChild variant="outline"><Link to={`/consultoria?clientId=${encodeURIComponent(client.id)}`}><Sparkles size={16} />Abrir Consultoria</Link></Button> : null}
             </>
           )}
@@ -581,8 +612,9 @@ export function AdminClienteDetalhePage() {
                         <div className="flex items-center gap-2 text-sm font-semibold text-foreground"><ClipboardList size={16} className="text-status-warning-text" />Plano de Ação</div>
                         <p className="mt-2 text-xs text-muted-foreground">Problemas, responsáveis, prazos e evidências da execução.</p>
                       </div>
-                      <span className="text-xs font-semibold text-foreground">No cliente</span>
+                      <span className="text-xs font-semibold text-foreground">{actionPlanSummary ? `${actionPlanSummary.total} plano(s)` : 'Carregando…'}</span>
                     </div>
+                    <p className="mt-2 text-xs text-muted-foreground">{actionPlanSummary ? `${actionPlanSummary.open} em aberto · ${actionPlanSummary.averageProgress}% de progresso médio · ${actionPlanSummary.completed} concluído(s)` : 'Consultando a matriz e as filiais do cliente.'}</p>
                     <Button variant="outline" size="sm" className="mt-4" onClick={() => { setPlanningTab('plano-acao'); setTab('planejamento') }}>Abrir no cliente</Button>
                   </div>
                   <div className="rounded-xl border border-border bg-surface-alt p-4">

@@ -26,14 +26,16 @@ para acompanhar execucao do PMR em tempo real.
 - [x] Central MX/Loja reutiliza o mesmo contrato persistido, preservando leitura por escopo.
 - [x] Templates podem abrir nova versão a partir da publicada, desativar, reativar e arquivar sem apagar histórico ou aplicações.
 - [x] Biblioteca MX expõe os controles de ciclo de vida por estado, impede aplicação/sugestão de templates inativos e separa templates arquivados nos filtros.
-- [x] Validar o fluxo autenticado em produção para Dono, Gerente, Vendedor, Admin MX, Administrador MX e Consultor MX.
+- [x] `/plano-acao` do Admin MX abre a gestão global equivalente a `/planos-acao` do Base44, com biblioteca/tabela como entrada, ações de aplicar, histórico e criação, board da rede, sugestões e aplicações.
+- [x] Aplicações globais exibem e filtram o responsável real resolvido de `public.usuarios`, sem inventar nomes.
+- [ ] Validar o fluxo autenticado em produção para Dono, Gerente, Vendedor, Admin MX, Administrador MX e Consultor MX.
 
 ## Evidências de validação
 
-- [x] `npm run lint` — 0 erros (7 warnings preexistentes fora do escopo).
+- [x] `npm run lint` — 0 erros; os 12 diagnósticos tipográficos e 1 override reportados são não bloqueantes e permanecem fora dos page roots desta entrega.
 - [x] `npm run typecheck` — aprovado.
-- [x] `npm test` — 4194 aprovados, 0 falhas (697 arquivos).
-- [x] `npm run build` — aprovado.
+- [x] `npm test` — 4278 aprovados, 0 falhas (707 arquivos; 25453 expectativas).
+- [x] `npm run build` — aprovado; 5267 módulos transformados e nenhum sourcemap público.
 - [x] Contrato do Plano de Ação — 4 testes aprovados.
 - [x] Ciclo de templates, board, checklist, reconciliação e conversão — 67 testes focados aprovados; Playwright autenticado do drawer e diagnóstico desktop/mobile sem executar mutações.
 - [x] Detecção e reconciliação de aplicações parciais/duplicadas — 9 testes focados aprovados; detecção por aplicação lógica multiunidade e reconciliação explícita, auditável, sem exclusão de histórico.
@@ -50,6 +52,11 @@ para acompanhar execucao do PMR em tempo real.
 - [x] Supabase remoto — migrations transacionais `20260820203000`, `20260820210000`, `20260820220000`, `20260820230000`, `20260820231000`, `20260820232000`, `20260820233000` e `20260820234000` aplicadas e reconciliadas no histórico remoto.
 - [x] Smoke autenticado local dos seis módulos Admin MX — `/clientes`, `/equipe`, `/produtos`, `/plano-estrategico`, `/plano-acao` e `/consultoria` em `1440×900` e `390×844`, sem overflow, overlay ou erro de página.
 - [x] Smoke autenticado local com Supabase real — Consultor MX selecionou ACERTT e carregou ciclo, 45 indicadores, metas e histórico em desktop `1440×900` e mobile `390×844`, sem overflow e sem erro de runtime.
+- [x] Gate final após a correção de foco e do campo imutável de ano — testes focados `14 pass, 0 fail`; `npm run lint`, `npm run typecheck`, `npm test` (`4278 pass, 0 fail`), `npm run build`, `npm run audit:routes-data` e `git diff --check` passaram; a matriz foi regenerada pelo gerador canônico.
+- [x] Revalidação autenticada da nova entrada global em browser real — `/plano-acao` carregou a gestão global em `1440×900` e `390×844`; os cinco painéis, filtros, board/lista, detalhes, sugestões, diagnóstico, histórico e `?mode=cliente` responderam sem mutação; `body.scrollWidth == viewportWidth`, com rolagem horizontal restrita às tabelas, e console com `0` erros/avisos. Evidências: `output/playwright/plano-acao-authenticated-desktop.png` e `output/playwright/plano-acao-authenticated-mobile.png`.
+- [x] Revalidação autenticada final de `/plano-estrategico` — ACERTT carregou ciclo real, 45 indicadores, metas, histórico, roster de 50 indicadores, unidades/consolidado e preview Dono em desktop `1440×900` e mobile `390×844`; após reload da correção, a superfície manteve título/indicadores e registrou `0` novos erros/avisos de console. Evidências: `output/playwright/plano-estrategico-authenticated-final-20260822/desktop.png` e `output/playwright/plano-estrategico-authenticated-final-20260822/mobile.png`.
+- [x] Revalidação autenticada final de Clientes MX — `/clientes`, `/clientes/novo`, `/clientes/acertt` e `/clientes/acertt/plano-acao?clientId=d744dc4f-e1cb-4fbc-84ae-950aa262af03&storeId=2bff56ad-fbd1-46b2-959a-bcf66b1638cb` passaram em `1440×900` e `390×844`, com `summary.status == "passed"`, sem erros de runtime e `0` violações a11y. Evidências: `visual-evidence/agent-browser/clientes-mx-final-2026-08-22T02-50-58/summary.json`, `visual-evidence/agent-browser/novo-cliente-final-2026-08-22T02-51-22/summary.json`, `visual-evidence/agent-browser/cliente-detalhe-final-2026-08-22T02-51-22/summary.json` e `visual-evidence/agent-browser/cliente-plano-acao-final-2026-08-22T02-51-22/summary.json`.
+- [x] Smoke autenticado em produção de `/clientes` — `https://www.mxperformance.com.br/clientes` passou em `1440×900` e `390×844`, com `summary.status == "passed"`, sem falhas e `0` violações a11y. Evidência: `visual-evidence/agent-browser/clientes-production-final-2026-08-22T01-22-14/summary.json`.
 - [ ] CodeRabbit — revisão externa indisponível por rate limit do plano; revisão dirigida local realizada.
 - [ ] Smoke autenticado multi-role em produção — pendente de credenciais/sessões reais dos seis perfis.
 
@@ -100,6 +107,8 @@ para acompanhar execucao do PMR em tempo real.
 - `src/features/admin-mx/planos-acao/actionPlanReconciliation.test.ts`
 - `src/features/admin-mx/planos-acao/ActionPlanDiagnosticsPanel.tsx`
 - `src/features/admin-mx/planos-acao/ApplicationsTab.tsx`
+- `src/features/admin-mx/planos-acao/actionPlanApplications.ts`
+- `src/features/admin-mx/planos-acao/actionPlanApplications.test.ts`
 - `src/features/admin-mx/planos-acao/actionPlanSuggestions.ts`
 - `src/features/admin-mx/planos-acao/actionPlanBoard.ts`
 - `src/features/admin-mx/planos-acao/actionPlanBoard.test.ts`
@@ -135,18 +144,54 @@ para acompanhar execucao do PMR em tempo real.
 - `src/features/admin-mx/planos-acao/useActionPlanTemplates.ts`
 - `src/features/admin-mx/planos-acao/ActionPlanDetailDrawer.tsx`
 - `src/features/admin-mx/AdminPlanosAcaoGlobalPage.tsx`
+- `src/features/admin-mx/AdminClienteDetalhePage.tsx`
+- `src/features/admin-mx/AdminIndicadoresPage.tsx`
+- `src/features/admin-mx/AdminNovoClientePage.tsx`
+- `src/features/admin-mx/clientes/PortfolioOverviewTab.tsx`
+- `src/features/admin-mx/clientes/clientActionPlanContext.ts`
+- `src/features/admin-mx/clientes/clientPortfolio.ts`
+- `src/features/admin-mx/clientes/clientPortfolio.test.ts`
+- `src/features/admin-mx/clientes/programMutations.ts`
+- `src/features/admin-mx/components/ClientOverridesSection.tsx`
+- `src/features/admin-mx/components/MetasRealizadosTab.tsx`
+- `src/features/admin-mx/indicadores/StrategicPlanAdminPanels.tsx`
+- `src/features/admin-mx/indicadores/AdminStrategicPlanEditor.tsx`
+- `src/features/admin-mx/indicadores/strategicPlanEditor.ts`
+- `src/features/admin-mx/indicadores/strategicPlanEditor.test.ts`
+- `src/features/admin-mx/indicadores/strategicPlanEditorRepository.ts`
+- `src/features/admin-mx/novo-cliente/createClientProgram.ts`
+- `src/features/admin-mx/novo-cliente/createClientProgram.test.ts`
+- `src/features/admin-mx/novo-cliente/newClientDraft.ts`
+- `src/features/admin-mx/novo-cliente/newClientDraft.test.ts`
+- `src/features/admin-mx/planos-acao/ApplyTemplateWizard.tsx`
+- `src/features/admin-mx/planos-acao/ClientActionPlanWizard.tsx`
+- `src/features/admin-mx/planos-acao/NewActionChoiceModal.tsx`
+- `src/features/admin-mx/planos-acao/actionPlanWizardLogic.ts`
+- `src/features/admin-mx/planos-acao/actionPlanWizardLogic.test.ts`
+- `src/features/admin-mx/planos-acao/clientActionPlanWizardData.ts`
 - `src/features/admin-mx/hooks/useAdminMxLists.ts`
+- `src/features/internal-mx-planning/InternalActionPlanPage.tsx`
+- `src/features/internal-mx-planning/InternalStrategicPlanPage.tsx`
+- `src/features/strategic-plan/clientPlanningConsolidation.ts`
+- `src/features/strategic-plan/clientPlanningConsolidation.test.ts`
+- `src/features/strategic-plan/useClientScope.ts`
+- `src/features/strategic-plan/useStrategicPlanController.ts`
 - `src/test/action-plan-template-lifecycle.playwright.ts`
+- `src/test/internal-mx-planning-pages.test.ts`
 - `src/lib/action-plan-table-parity.test.ts`
+- `scripts/lint-icon-semantics.mjs`
+- `docs/auditoria/matrizes/MATRIZ_ROTAS_DADOS_MX.md`
 - `src/types/database.generated.ts`
 
 ## QA Results
 
-- **Gate: CONCERNS — correção publicada e validada; permanecem concerns externos já documentados.**
+- **Gate: CONCERNS — implementação, gates locais e browser autenticado locais verdes; CodeRabbit e release externo permanecem pendentes.**
 - Correção validada: `Editar` da Biblioteca MX reidrata departamento legado (`PESSOAS_RH → rh`), mantém indicadores Base44 legados como `EMPLOYEE_COUNT` selecionáveis, recupera os itens persistidos e deixa `Continuar` habilitado.
 - Regressões focadas: `21 pass, 0 fail` em `actionPlanTemplates.test.ts`.
-- Gates locais: `npm run lint`, `npm run typecheck`, `npm test` (`4246 pass, 0 fail, 705 arquivos`), `npm run build`, ESLint direcionado e `git diff --check` passaram; o build confirmou ausência de sourcemaps públicos.
+- Gates locais finais: `npm run lint`, `npm run typecheck`, `npm test` (`4278 pass, 0 fail, 707 arquivos`), `npm run build`, `npm run audit:routes-data` e `git diff --check` passaram; o build confirmou ausência de sourcemaps públicos.
 - Browser oficial local: `summary.status == "passed"` em desktop `1440×900` e mobile `390×844`, sem falhas; a auditoria a11y associada registrou `0` violações. Evidências: `visual-evidence/agent-browser/plano-acao-edit-fix-2026-08-21-2026-08-21T20-29-09/desktop.png` e `mobile.png`.
+- Browser real autenticado da nova entrada global: desktop `1440×900` e mobile `390×844` aprovados; biblioteca com 6 templates/91 indicadores, Planos da rede com board e lista, modal com Resumo/Execução/Evidências/Histórico, sugestões, aplicações, diagnóstico de integridade, histórico pesquisável e modo `?mode=cliente` com calendário/formulários; `0` erros e `0` avisos no console. Evidências: `output/playwright/plano-acao-authenticated-desktop.png` e `output/playwright/plano-acao-authenticated-mobile.png`.
+- Browser real autenticado do plano estratégico: ACERTT, ciclo real, 45 indicadores, metas, histórico, roster de 50 indicadores, unidades/consolidado e preview Dono confirmados em `1440×900` e `390×844`; após a correção do campo de ano, `0` novos erros/avisos no console. Evidências: `output/playwright/plano-estrategico-authenticated-final-20260822/desktop.png` e `output/playwright/plano-estrategico-authenticated-final-20260822/mobile.png`.
 - CodeRabbit: revisão externa bloqueada por `Rate limit exceeded` após três revisões consumidas; revisão dirigida local realizada.
-- Graphify: `npx graphify hook-rebuild` tentou processar `4453` arquivos e terminou com `exit 137` por memória; não considerado gate verde.
-- Produção/CI: commit `95c74dc4ed29f2a4f2a156c023dff105eaec0303` foi enviado para `main`; Vercel deployment `dpl_FvkR5VxmEg1VoXpWdSdJLy2f7LAU` está `Ready` com aliases oficiais. CI do SHA passou em Quality Gates, Typecheck/unit tests, Gitleaks, ESLint a11y e Atomic Design; smoke autenticado pós-deploy das rotas desta entrega foi concluído sem erros.
+- Graphify: `npx graphify hook-rebuild` concluiu em 22/08 com runtime `typescript`, atualizou `.graphify/graph.json` e `GRAPH_REPORT.md`, e não deixou `.graphify/needs_update`.
+- Produção/CI: não foram executados nesta retomada; não houve commit, push, CI ou deploy novos. O smoke autenticado multi-role em produção continua pendente e não é declarado como concluído.

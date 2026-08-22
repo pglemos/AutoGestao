@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase'
+import { createStrategicPlanFromProduct } from '@/features/strategic-plan/productPackageOps'
 import { newClientSlug, onlyDigits, type NewClientDraft, type NewClientUnit } from './newClientDraft'
 
 export type CreateClientProgramResult = { clientId: string | null; slug: string | null; error: string | null }
@@ -21,10 +22,11 @@ function normalizeStoreName(name: string): string {
 
 /** Resolve a unidade do wizard para a loja operacional criada/reutilizada. */
 export function resolveUnitStoreId(
-  unit: Pick<NewClientUnit, 'name' | 'is_primary'>,
+  unit: Pick<NewClientUnit, 'name' | 'is_primary' | 'store_id'>,
   hierarchy: Pick<StoreHierarchyResult, 'primaryStoreId' | 'storeIdsByName'>,
 ): string | null {
   if (unit.is_primary) return hierarchy.primaryStoreId
+  if (unit.store_id) return unit.store_id
   return hierarchy.storeIdsByName[normalizeStoreName(unit.name)] ?? null
 }
 
@@ -41,16 +43,34 @@ export function buildStoreHierarchyPlan(draft: Pick<NewClientDraft, 'units'>): S
   }
 }
 
-type StoreLookup = { id: string; parent_loja_id: string | null; name: string }
+type StoreLookup = { id: string; parent_loja_id: string | null; name: string; active: boolean | null }
+
+/** Guarda compartilhada pelo onboarding para impedir filial fora da matriz. */
+export function validateLinkedStore(input: {
+  storeId: string
+  parentLojaId: string | null
+  primaryStoreId: string
+  isPrimary: boolean
+}): string | null {
+  if (input.isPrimary && input.parentLojaId) {
+    return 'Selecione uma matriz como loja principal. Filial não pode ser a raiz do cliente.'
+  }
+  if (!input.isPrimary && input.parentLojaId !== input.primaryStoreId) {
+    return 'A filial selecionada pertence a outra matriz. Escolha uma filial da matriz deste cliente.'
+  }
+  if (!input.storeId) return 'A loja operacional selecionada não existe.'
+  return null
+}
 
 async function assertMatrixStore(storeId: string): Promise<{ store: StoreLookup | null; error: string | null }> {
   const { data, error } = await supabase
     .from('lojas')
-    .select('id, parent_loja_id, name')
+    .select('id, parent_loja_id, name, active')
     .eq('id', storeId)
     .maybeSingle()
   if (error) return { store: null, error: error.message }
   if (!data) return { store: null, error: 'A loja principal selecionada não existe.' }
+  if (data.active === false) return { store: null, error: 'A loja principal selecionada está inativa.' }
   if (data.parent_loja_id) return { store: null, error: 'Selecione uma matriz como loja principal. Filial não pode ser a raiz do cliente.' }
   return { store: data as StoreLookup, error: null }
 }
@@ -63,7 +83,8 @@ async function ensureStoreHierarchy(
   const plan = buildStoreHierarchyPlan(draft)
   const createdStoreIds: string[] = []
   const storeIdsByName: Record<string, string> = {}
-  let primaryStoreId = draft.primary_store_id || fallbackPrimaryStoreId
+  const primaryUnit = draft.units.find(unit => unit.is_primary && unit.name.trim()) ?? draft.units.find(unit => unit.name.trim())
+  let primaryStoreId = draft.primary_store_id || primaryUnit?.store_id || fallbackPrimaryStoreId
 
   if (primaryStoreId) {
     const result = await assertMatrixStore(primaryStoreId)
@@ -94,10 +115,36 @@ async function ensureStoreHierarchy(
   }
 
   if (draft.structure_type === 'REDE') {
-    for (const filialName of plan.filialUnitNames) {
+    const filialUnits = draft.units.filter(unit => !unit.is_primary && unit.name.trim())
+    for (const filialUnit of filialUnits) {
+      const filialName = filialUnit.name.trim()
+
+      // Quando o onboarding escolheu uma filial existente, o vínculo por ID é
+      // a fonte de verdade. Nunca tente inferir outra loja pelo nome.
+      if (filialUnit.store_id) {
+        const { data: linkedStore, error: linkedStoreError } = await supabase
+          .from('lojas')
+          .select('id, parent_loja_id, name, active')
+          .eq('id', filialUnit.store_id)
+          .maybeSingle()
+        if (linkedStoreError) return { primaryStoreId: null, createdStoreIds, storeIdsByName, error: linkedStoreError.message }
+        if (!linkedStore) return { primaryStoreId: null, createdStoreIds, storeIdsByName, error: `A filial "${filialName}" não existe mais.` }
+        if (linkedStore.active === false) return { primaryStoreId: null, createdStoreIds, storeIdsByName, error: `A filial "${filialName}" está inativa.` }
+        const linkError = validateLinkedStore({
+          storeId: linkedStore.id,
+          parentLojaId: linkedStore.parent_loja_id,
+          primaryStoreId,
+          isPrimary: false,
+        })
+        if (linkError) return { primaryStoreId: null, createdStoreIds, storeIdsByName, error: linkError }
+        storeIdsByName[normalizeStoreName(filialName)] = linkedStore.id
+        storeIdsByName[normalizeStoreName(linkedStore.name)] = linkedStore.id
+        continue
+      }
+
       const { data: existing, error: existingError } = await supabase
         .from('lojas')
-        .select('id')
+        .select('id, name')
         .eq('parent_loja_id', primaryStoreId)
         .eq('name', filialName)
         .maybeSingle()
@@ -309,7 +356,29 @@ export async function continueClientProgram(
     }
   }
 
+  const strategicPlanError = await provisionStrategicPlan(draft, clientId, updatedBy)
+  if (strategicPlanError) return { clientId, slug: draft.name.trim() ? newClientSlug(draft.name) : null, error: strategicPlanError }
+
   return { clientId, slug: draft.name.trim() ? newClientSlug(draft.name) : null, error: null }
+}
+
+/**
+ * Produto estratégico válido cria o ciclo e congela o roster idempotentemente.
+ * Produtos sem Plano Estratégico continuam válidos; pacote quebrado, porém,
+ * não é silenciosamente aceito no onboarding novo.
+ */
+async function provisionStrategicPlan(draft: NewClientDraft, clientId: string, userId: string): Promise<string | null> {
+  if (!draft.program_template_key) return null
+  const result = await createStrategicPlanFromProduct({
+    clientId,
+    referenceYear: new Date().getFullYear(),
+    userId,
+  })
+  if (result.resolution.ok) {
+    return result.error ? `Cliente salvo, mas o Plano Estratégico não foi criado: ${result.error}` : null
+  }
+  if (result.resolution.reason === 'CLIENTE_SEM_PRODUTO' || result.resolution.reason === 'PRODUTO_NAO_USA_PLANO') return null
+  return `Cliente salvo, mas o pacote de indicadores não pôde ser vinculado: ${result.resolution.message}`
 }
 
 /**
@@ -441,6 +510,9 @@ export async function createClientProgram(draft: NewClientDraft, createdBy: stri
     )
     if (error) return rollback(`Cliente criado, mas os consultores falharam: ${error.message}`)
   }
+
+  const strategicPlanError = await provisionStrategicPlan(draft, client.id, createdBy)
+  if (strategicPlanError) return rollback(strategicPlanError)
 
   return { clientId: client.id, slug: client.slug ?? slug, error: null }
 }

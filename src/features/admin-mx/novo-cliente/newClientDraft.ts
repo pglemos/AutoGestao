@@ -1,4 +1,11 @@
-export type NewClientUnit = { name: string; city: string; state: string; is_primary: boolean }
+export type NewClientUnit = {
+  name: string
+  city: string
+  state: string
+  is_primary: boolean
+  /** Loja operacional canônica. Nulo significa "criar ao concluir". */
+  store_id?: string | null
+}
 export type NewClientContact = { name: string; role: string; email: string; phone: string; is_primary: boolean }
 
 export type NewClientDraft = {
@@ -48,7 +55,7 @@ export function emptyNewClientDraft(): NewClientDraft {
     notes: '',
     structure_type: 'LOJA_UNICA',
     primary_store_id: '',
-    units: [{ name: '', city: '', state: '', is_primary: true }],
+    units: [{ name: '', city: '', state: '', is_primary: true, store_id: null }],
     business_phase: '',
     product_name: '',
     program_template_key: '',
@@ -100,6 +107,10 @@ export function validateNewClientStep(step: number, draft: NewClientDraft): stri
     if (!named.length) errors.push('Cadastre ao menos uma loja.')
     if (named.length && !draft.units.some(unit => unit.is_primary && unit.name.trim())) errors.push('Defina a loja principal.')
     if (draft.structure_type === 'LOJA_UNICA' && named.length > 1) errors.push('Estrutura "Loja única" aceita apenas uma loja.')
+    const linkedStoreIds = named
+      .map(unit => unit.store_id)
+      .filter((storeId): storeId is string => Boolean(storeId))
+    if (new Set(linkedStoreIds).size !== linkedStoreIds.length) errors.push('Cada unidade deve apontar para uma loja operacional diferente.')
   }
   if (step === 3) {
     if (!draft.product_name.trim()) errors.push('Selecione o produto contratado.')

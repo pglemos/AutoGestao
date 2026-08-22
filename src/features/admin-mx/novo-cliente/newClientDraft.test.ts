@@ -47,6 +47,16 @@ describe('wizard de novo cliente — validação por passo', () => {
     expect(validateNewClientStep(2, draft)).toContain('Defina a loja principal.')
   })
 
+  test('passo 2 não permite vincular a mesma loja operacional duas vezes', () => {
+    const draft = emptyNewClientDraft()
+    draft.structure_type = 'REDE'
+    draft.units = [
+      { name: 'Matriz', city: '', state: '', is_primary: true, store_id: 'store-1' },
+      { name: 'Filial', city: '', state: '', is_primary: false, store_id: 'store-1' },
+    ]
+    expect(validateNewClientStep(2, draft)).toContain('Cada unidade deve apontar para uma loja operacional diferente.')
+  })
+
   test('passo 3 exige produto e recusa contrato invertido', () => {
     const draft = emptyNewClientDraft()
     expect(validateNewClientStep(3, draft)).toContain('Selecione o produto contratado.')

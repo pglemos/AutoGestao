@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { buildStoreHierarchyPlan, resolveUnitStoreId } from './createClientProgram'
+import { buildStoreHierarchyPlan, resolveUnitStoreId, validateLinkedStore } from './createClientProgram'
 
 describe('hierarquia operacional do cadastro de cliente', () => {
   test('separa matriz e filiais na ordem do wizard', () => {
@@ -39,5 +39,19 @@ describe('hierarquia operacional do cadastro de cliente', () => {
     expect(resolveUnitStoreId({ name: 'Matriz renomeada', is_primary: true }, hierarchy)).toBe('store-matrix')
     expect(resolveUnitStoreId({ name: 'Filial Norte', is_primary: false }, hierarchy)).toBe('store-north')
     expect(resolveUnitStoreId({ name: 'Sem vínculo', is_primary: false }, hierarchy)).toBeNull()
+  })
+
+  test('prioriza o store_id da filial mesmo quando o nome mudou', () => {
+    const hierarchy = { primaryStoreId: 'store-matrix', storeIdsByName: {} }
+    expect(resolveUnitStoreId({ name: 'Nome antigo', is_primary: false, store_id: 'store-branch' }, hierarchy)).toBe('store-branch')
+  })
+
+  test('recusa filial pertencente a outra matriz', () => {
+    expect(validateLinkedStore({
+      storeId: 'store-branch',
+      parentLojaId: 'other-matrix',
+      primaryStoreId: 'store-matrix',
+      isPrimary: false,
+    })).toBe('A filial selecionada pertence a outra matriz. Escolha uma filial da matriz deste cliente.')
   })
 })

@@ -1,3 +1,6 @@
+import { supabase } from '@/lib/supabase'
+import { fetchClientUnits } from '@/features/strategic-plan/clientPlanningRepository'
+
 export type ClientActionPlanRow = {
   id: string
   codigo: string | null
@@ -51,4 +54,26 @@ export function summarizeClientActionPlans(rows: Array<Pick<ClientActionPlanRow,
   const open = rows.length - completed - blocked - cancelled
   const averageProgress = rows.length ? Math.round(rows.reduce((sum, row) => sum + Math.max(0, Math.min(100, row.progresso ?? 0)), 0) / rows.length) : 0
   return { total: rows.length, open, completed, blocked, cancelled, averageProgress }
+}
+
+/** Resumo leve para a Visão geral, sem deixar a ficha com texto fixo. */
+export async function fetchClientActionPlanSummary(
+  clientId: string,
+  primaryStoreId?: string | null,
+): Promise<{ summary: ClientActionPlanSummary; error: string | null }> {
+  const unitsResult = await fetchClientUnits(clientId)
+  const scopeIds = [...new Set(unitsResult.units.map(unit => unit.id).concat(primaryStoreId ? [primaryStoreId] : []))]
+  if (!scopeIds.length) return { summary: summarizeClientActionPlans([]), error: unitsResult.error }
+
+  const { data, error } = await supabase
+    .from('planos_acao')
+    .select('status, progresso')
+    .eq('scope_type', 'store')
+    .in('scope_id', scopeIds)
+    .limit(300)
+  if (error) return { summary: summarizeClientActionPlans([]), error: error.message }
+  return {
+    summary: summarizeClientActionPlans((data ?? []) as Array<Pick<ClientActionPlanRow, 'status' | 'progresso'>>),
+    error: unitsResult.error,
+  }
 }

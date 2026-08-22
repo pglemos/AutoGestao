@@ -38,7 +38,18 @@ export type PortfolioBucket =
 
 /** Situações exibidas na carteira principal. Cada cliente entra em no máximo uma. */
 export type PortfolioStatus = 'ativos' | 'em_implantacao' | 'prontos_para_ativar' | 'em_configuracao'
-export type PortfolioStatusFilter = PortfolioStatus | 'suspenso' | 'todos'
+export type PortfolioStatusFilter =
+  | PortfolioStatus
+  | 'todos'
+  | 'rascunho'
+  | 'coleta_de_dados'
+  | 'em_validacao'
+  | 'pronto_para_ativar'
+  | 'ativacao_programada'
+  | 'ativo_em_implantacao'
+  | 'ativo'
+  | 'suspenso'
+  | 'encerrado'
 export type PortfolioStatusSource = Pick<
   PortfolioClient,
   'status' | 'primary_store_id' | 'product_name' | 'assignments' | 'modulesEnabled' | 'visitsDone' | 'visitsTotal'
@@ -110,6 +121,32 @@ export function portfolioStatusLabel(client: PortfolioClient): string {
   if (raw === 'ativacao_programada') return 'Ativação Programada'
   const canonical = canonicalPortfolioStatus(client)
   return canonical ? PORTFOLIO_STATUS_LABEL[canonical] : 'Indefinido'
+}
+
+/**
+ * Filtro de estado da tabela. Os quatro cards usam estados canônicos da
+ * carteira; a tabela também precisa expor os estados de lifecycle do Base44,
+ * mesmo quando dois deles caem no mesmo card operacional.
+ */
+export function matchesPortfolioStatusFilter(client: PortfolioClient, filter: PortfolioStatusFilter): boolean {
+  if (filter === 'todos') return true
+  if (filter === 'ativos' || filter === 'em_implantacao' || filter === 'prontos_para_ativar' || filter === 'em_configuracao') {
+    return canonicalPortfolioStatus(client) === filter
+  }
+
+  const raw = normalizeStatus(client.status)
+  switch (filter) {
+    case 'rascunho': return raw === 'rascunho'
+    case 'coleta_de_dados': return ['coleta_de_dados', 'coleta_dados'].includes(raw)
+    case 'em_validacao': return raw === 'em_validacao'
+    case 'pronto_para_ativar': return ['pronto_para_ativar', 'pronto', 'ready_to_activate'].includes(raw)
+    case 'ativacao_programada': return raw === 'ativacao_programada' || Boolean(client.scheduled_activation_at)
+    case 'ativo_em_implantacao': return ['ativo_em_implantacao', 'em_implantacao'].includes(raw)
+    case 'ativo': return isActive(client) && !['ativo_em_implantacao', 'em_implantacao'].includes(raw)
+    case 'suspenso': return ['suspenso', 'suspended'].includes(raw)
+    case 'encerrado': return ['encerrado', 'closed'].includes(raw)
+    default: return false
+  }
 }
 
 /** Falta o mínimo que o banco exige para ativar (loja, produto, consultor). */
@@ -245,11 +282,7 @@ export function filterPortfolio(rows: PortfolioClient[], filters: PortfolioFilte
   const term = filters.search.trim().toLowerCase()
   const digits = term.replace(/\D/g, '')
   return rows.filter(client => {
-    if (filters.status && filters.status !== 'todos') {
-      if (filters.status === 'suspenso') {
-        if (!['suspenso', 'suspended'].includes(normalizeStatus(client.status))) return false
-      } else if (canonicalPortfolioStatus(client) !== filters.status) return false
-    }
+    if (!matchesPortfolioStatusFilter(client, filters.status)) return false
     if (filters.bucket !== 'todos' && !clientBuckets(client, today).includes(filters.bucket)) return false
     if (filters.phase !== 'todas' && (client.business_phase ?? '') !== filters.phase) return false
     if (filters.product !== 'todos' && (client.product_name ?? '') !== filters.product) return false

@@ -266,7 +266,7 @@ export function TemplateWizard(props: {
               <MxField label="Título do Plano *">
                 <Input value={props.draft.nome} onChange={event => { setTitleCustomized(true); patch({ nome: event.target.value }) }} placeholder="Título do Plano de Ação" />
                 {titleCustomized && props.draft.indicador ? (
-                  <button type="button" className="mt-1 text-xs text-primary hover:underline" onClick={() => { setTitleCustomized(false); patch({ nome: suggestTitle(props.draft.improvement_direction, props.draft.indicador) }) }}>
+                  <button type="button" className="mt-1 text-xs text-primary hover:underline focus-visible:underline" onClick={() => { setTitleCustomized(false); patch({ nome: suggestTitle(props.draft.improvement_direction, props.draft.indicador) }) }}>
                     Usar título sugerido
                   </button>
                 ) : null}
@@ -450,7 +450,7 @@ function ActionCard(props: {
               props.item.file_asset_name ? (
                 <span className="flex items-center gap-1 text-xs text-text-secondary"><Check size={12} className="text-primary" />{props.item.file_asset_name}</span>
               ) : (
-                <label className="flex cursor-pointer items-center gap-1 text-xs text-primary hover:underline">
+                <label className="flex cursor-pointer items-center gap-1 text-xs text-primary hover:underline focus-visible:underline">
                   {props.uploading ? <Loader2 size={12} className="animate-spin" /> : <Upload size={12} />}
                   Enviar arquivo
                   <input type="file" className="hidden" onChange={event => props.onFileUpload(event.target.files?.[0])} />

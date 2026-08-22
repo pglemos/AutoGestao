@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase'
+import { createStrategicPlanFromProduct } from '@/features/strategic-plan/productPackageOps'
 
 export type ProgramDraft = {
   product_name: string
@@ -113,6 +114,19 @@ export async function saveClientProgram(
         { onConflict: 'client_id,user_id' },
       )
     if (auxError) return { error: `Erro ao vincular consultor auxiliar: ${auxError.message}` }
+  }
+
+  if (draft.program_template_key) {
+    const strategicPlan = await createStrategicPlanFromProduct({
+      clientId,
+      referenceYear: new Date().getFullYear(),
+    })
+    if (strategicPlan.resolution.ok && strategicPlan.error) {
+      return { error: `Programa salvo, mas o Plano Estratégico não foi sincronizado: ${strategicPlan.error}` }
+    }
+    if (!strategicPlan.resolution.ok && !['CLIENTE_SEM_PRODUTO', 'PRODUTO_NAO_USA_PLANO'].includes(strategicPlan.resolution.reason)) {
+      return { error: `Programa salvo, mas o pacote de indicadores não pôde ser vinculado: ${strategicPlan.resolution.message}` }
+    }
   }
 
   return { error: null }

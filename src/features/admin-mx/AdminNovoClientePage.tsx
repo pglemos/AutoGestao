@@ -47,16 +47,26 @@ const BUSINESS_PHASES = [
   { value: 'RECUPERACAO', label: 'Recuperação' },
 ]
 
+type ProductPackagePreview = {
+  loading: boolean
+  ok: boolean
+  status: string | null
+  indicatorCount: number
+  manualCount: number
+  calculatedCount: number
+  message: string | null
+}
+
 export function AdminNovoClientePage() {
   const { supabaseUser } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const [searchParams] = useSearchParams()
   const { width, bottomClearance } = resolveRouteLayout(location.pathname)
+  const [draft, setDraft] = useState<NewClientDraft>(emptyNewClientDraft)
   const products = useAdminConsultingProducts()
   const team = useAdminTeam()
-  const availableStores = useStoresWithoutActiveClient()
-  const [draft, setDraft] = useState<NewClientDraft>(emptyNewClientDraft)
+  const availableStores = useStoresWithoutActiveClient(draft.primary_store_id ? [draft.primary_store_id] : [])
   const [step, setStep] = useState(1)
   const [submitting, setSubmitting] = useState(false)
   // Guard síncrono: o state `submitting` só reflete no `disabled` do botão depois
@@ -66,6 +76,7 @@ export function AdminNovoClientePage() {
   // hora — a segunda chamada sempre vê o lock já tomado pela primeira.
   const submittingRef = useRef(false)
   const [loadingExisting, setLoadingExisting] = useState(false)
+  const [packagePreview, setPackagePreview] = useState<ProductPackagePreview | null>(null)
   const continueId = searchParams.get('continue')
   const isContinuation = Boolean(continueId)
 
@@ -106,11 +117,17 @@ export function AdminNovoClientePage() {
       loaded.contract_start_date = client.contract_start_date ?? ''
       loaded.contract_end_date = client.contract_end_date ?? ''
       loaded.implementation_owner_id = client.implementation_owner_id ?? ''
-      loaded.units = (units ?? []).map((unit): NewClientUnit => ({ name: unit.name ?? '', city: unit.city ?? '', state: unit.state ?? '', is_primary: unit.is_primary ?? false }))
+      loaded.units = (units ?? []).map((unit): NewClientUnit => ({
+        name: unit.name ?? '',
+        city: unit.city ?? '',
+        state: unit.state ?? '',
+        is_primary: unit.is_primary ?? false,
+        store_id: unit.store_id ?? (unit.is_primary ? loaded.primary_store_id || null : null),
+      }))
       loaded.contacts = (contacts ?? []).map((contact): NewClientContact => ({ name: contact.name ?? '', role: contact.role ?? '', email: contact.email ?? '', phone: contact.phone ?? '', is_primary: contact.is_primary ?? false }))
       loaded.enabled_modules = (modules ?? []).filter(item => item.enabled !== false).map(item => item.module_key)
       loaded.consultant_ids = (assignments ?? []).map(item => item.user_id).filter(Boolean)
-      if (!loaded.units.length) loaded.units = [{ name: '', city: '', state: '', is_primary: true }]
+      if (!loaded.units.length) loaded.units = [{ name: '', city: '', state: '', is_primary: true, store_id: loaded.primary_store_id || null }]
       if (!loaded.contacts.length) loaded.contacts = [{ name: '', role: '', email: '', phone: '', is_primary: true }]
       setDraft(loaded)
       const currentStep = client.onboarding_step ?? 1
@@ -130,7 +147,83 @@ export function AdminNovoClientePage() {
     () => resolveVisitVolumeRule(selectedProduct, draft.modality),
     [draft.modality, selectedProduct],
   )
+  const matrixOptions = useMemo(
+    () => availableStores.rows.filter(store => store.parent_loja_id === null),
+    [availableStores.rows],
+  )
+  const branchOptions = useMemo(
+    () => availableStores.rows.filter(store => store.parent_loja_id === draft.primary_store_id),
+    [availableStores.rows, draft.primary_store_id],
+  )
+
+  useEffect(() => {
+    const packageVersionId = selectedProduct?.indicator_package_version_id
+    const requiresStrategicPlan = selectedProduct?.usa_plano_estrategico === true
+    if (!selectedProduct || !requiresStrategicPlan) {
+      setPackagePreview(null)
+      return
+    }
+    if (!packageVersionId) {
+      setPackagePreview({ loading: false, ok: false, status: null, indicatorCount: 0, manualCount: 0, calculatedCount: 0, message: 'Este produto usa Plano Estratégico, mas não tem pacote de indicadores vinculado.' })
+      return
+    }
+    let active = true
+    setPackagePreview({ loading: true, ok: false, status: null, indicatorCount: 0, manualCount: 0, calculatedCount: 0, message: null })
+    void (async () => {
+      const { data: version, error: versionError } = await supabase
+        .from('pacotes_indicadores_versoes')
+        .select('id, status')
+        .eq('id', packageVersionId)
+        .maybeSingle()
+      if (!active) return
+      if (versionError || !version) {
+        setPackagePreview({ loading: false, ok: false, status: null, indicatorCount: 0, manualCount: 0, calculatedCount: 0, message: versionError?.message ?? 'Pacote de indicadores não encontrado.' })
+        return
+      }
+      const { data: items, error: itemsError } = await supabase
+        .from('pacotes_indicadores_itens')
+        .select('input_mode_snapshot')
+        .eq('version_id', packageVersionId)
+      if (!active) return
+      if (itemsError) {
+        setPackagePreview({ loading: false, ok: false, status: version.status, indicatorCount: 0, manualCount: 0, calculatedCount: 0, message: itemsError.message })
+        return
+      }
+      const rows = items ?? []
+      const manualCount = rows.filter(item => String(item.input_mode_snapshot ?? '').trim().toLowerCase() === 'manual').length
+      const calculatedCount = rows.filter(item => ['calculated', 'calculado'].includes(String(item.input_mode_snapshot ?? '').trim().toLowerCase())).length
+      const published = version.status === 'publicada'
+      setPackagePreview({
+        loading: false,
+        ok: published && rows.length > 0,
+        status: version.status,
+        indicatorCount: rows.length,
+        manualCount,
+        calculatedCount,
+        message: published && rows.length > 0 ? null : published ? 'O pacote publicado não possui indicadores.' : 'A versão do pacote ainda não está publicada.',
+      })
+    })()
+    return () => { active = false }
+  }, [selectedProduct])
+
   const patch = (values: Partial<NewClientDraft>) => setDraft(current => ({ ...current, ...values }))
+
+  const selectMatrix = (storeId: string) => {
+    const store = matrixOptions.find(item => item.id === storeId)
+    patch({
+      primary_store_id: storeId,
+      units: draft.units.map(unit => unit.is_primary
+        ? { ...unit, store_id: storeId || null, name: store?.name ?? unit.name, city: unit.city || '', state: unit.state || '' }
+        : unit),
+    })
+  }
+
+  const selectBranch = (index: number, storeId: string) => {
+    const store = branchOptions.find(item => item.id === storeId)
+    patch({ units: draft.units.map((unit, position) => position === index
+      ? { ...unit, store_id: storeId || null, name: store?.name ?? unit.name }
+      : unit) })
+  }
 
   const goNext = () => {
     if (errors.length) {
@@ -148,6 +241,16 @@ export function AdminNovoClientePage() {
     }
     if (!supabaseUser) {
       toast.error('Sessão expirada. Entre novamente.')
+      return
+    }
+    if (selectedProduct?.usa_plano_estrategico === true && packagePreview?.loading) {
+      setStep(3)
+      toast.error('Aguarde o carregamento do pacote de indicadores.')
+      return
+    }
+    if (selectedProduct?.usa_plano_estrategico === true && !packagePreview?.ok) {
+      setStep(3)
+      toast.error(packagePreview?.message ?? 'O produto precisa de um pacote publicado de indicadores.')
       return
     }
     submittingRef.current = true
@@ -230,6 +333,7 @@ export function AdminNovoClientePage() {
 
             {step === 2 ? (
               <>
+                {availableStores.error ? <MxStatusBanner tone="warning">Não foi possível carregar as lojas operacionais: {availableStores.error}</MxStatusBanner> : null}
                 <MxField label="Tipo de estrutura">
                   <MxSelect aria-label="Tipo de estrutura" value={draft.structure_type} onChange={event => patch({ structure_type: event.target.value as NewClientDraft['structure_type'] })}>
                     <option value="LOJA_UNICA">Loja única</option>
@@ -248,7 +352,7 @@ export function AdminNovoClientePage() {
                       <span className="text-xs text-muted-foreground">{unit.is_primary ? 'Recebe o vínculo do cliente' : 'Vinculada à matriz ao salvar'}</span>
                     </div>
                     <div className="grid gap-3 sm:grid-cols-[2fr_2fr_1fr_auto]">
-                    <MxField label="Loja"><MxInput value={unit.name} onChange={event => patch({ units: draft.units.map((item, position) => position === index ? { ...item, name: event.target.value } : item) })} /></MxField>
+                    <MxField label="Loja"><MxInput value={unit.name} readOnly={Boolean(unit.store_id)} onChange={event => patch({ units: draft.units.map((item, position) => position === index ? { ...item, name: event.target.value, store_id: null } : item) })} /></MxField>
                     <MxField label="Cidade"><MxInput value={unit.city} onChange={event => patch({ units: draft.units.map((item, position) => position === index ? { ...item, city: event.target.value } : item) })} /></MxField>
                     <MxField label="UF"><MxInput value={unit.state} maxLength={2} onChange={event => patch({ units: draft.units.map((item, position) => position === index ? { ...item, state: event.target.value.toUpperCase() } : item) })} /></MxField>
                     <div className="flex items-end gap-2">
@@ -256,13 +360,23 @@ export function AdminNovoClientePage() {
                       {draft.units.length > 1 ? <Button type="button" variant="outline" size="sm" aria-label={`Remover loja ${index + 1}`} onClick={() => patch({ units: draft.units.filter((_, position) => position !== index) })}><Trash2 size={16} /></Button> : null}
                     </div>
                     </div>
+                    {!unit.is_primary && draft.structure_type === 'REDE' ? (
+                      <div className="mt-3 max-w-xl">
+                        <MxField label="Filial operacional" hint={draft.primary_store_id ? 'Vincule uma filial existente ou deixe vazio para criar uma nova filial nesta matriz.' : 'Selecione a matriz para listar as filiais existentes.'}>
+                          <MxSelect aria-label={`Filial operacional da unidade ${index + 1}`} value={unit.store_id ?? ''} onChange={event => selectBranch(index, event.target.value)} disabled={!draft.primary_store_id}>
+                            <option value="">Criar nova filial ao concluir</option>
+                            {branchOptions.map(store => <option key={store.id} value={store.id}>{store.name}</option>)}
+                          </MxSelect>
+                        </MxField>
+                      </div>
+                    ) : null}
                   </div>
                 ))}
-                <Button type="button" variant="outline" onClick={() => patch({ units: [...draft.units, { name: '', city: '', state: '', is_primary: false }] })}><Plus size={16} />Adicionar loja</Button>
-                <MxField label="Loja principal no sistema" hint="Só aparecem lojas sem cliente ativo. Sem vínculo, o cliente é criado inativo.">
-                  <MxSelect aria-label="Loja principal no sistema" value={draft.primary_store_id} onChange={event => patch({ primary_store_id: event.target.value })}>
-                    <option value="">Sem loja vinculada (cliente inativo)</option>
-                    {availableStores.rows.map(store => <option key={store.id} value={store.id}>{store.name}</option>)}
+                <Button type="button" variant="outline" onClick={() => patch({ units: [...draft.units, { name: '', city: '', state: '', is_primary: false, store_id: null }] })}><Plus size={16} />Adicionar loja</Button>
+                <MxField label="Matriz operacional do sistema" hint="Vincule a matriz existente por ID. Se deixar vazio, uma nova matriz será criada no final do cadastro.">
+                  <MxSelect aria-label="Matriz operacional do sistema" value={draft.primary_store_id} onChange={event => selectMatrix(event.target.value)}>
+                    <option value="">Criar nova matriz ao concluir</option>
+                    {matrixOptions.map(store => <option key={store.id} value={store.id}>{store.name}</option>)}
                   </MxSelect>
                 </MxField>
                 <MxField label="Fase empresarial" hint="Momento do negócio — orienta a priorização da jornada.">
@@ -301,12 +415,25 @@ export function AdminNovoClientePage() {
                     </MxSelect>
                   </MxField>
                   {draft.program_template_key ? (
-                    <div className="rounded-lg border border-border bg-surface-alt p-4 sm:col-span-2">
-                      <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Regra de visitas presenciais</div>
-                      <div className="mt-1 text-sm font-semibold text-foreground">{visitRule.label}</div>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        {visitRule.detail}{visitRule.totalVisits != null ? ` Jornada: ${visitRule.totalVisits} encontro(s).` : ''}
-                      </p>
+                    <div className="grid gap-3 sm:col-span-2 sm:grid-cols-2">
+                      <div className="rounded-lg border border-border bg-surface-alt p-4">
+                        <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Regra de volume presencial</div>
+                        <div className="mt-1 text-sm font-semibold text-foreground">{visitRule.label}</div>
+                        <p className="mt-1 text-xs text-muted-foreground">
+                          {visitRule.detail}{visitRule.totalVisits != null ? ` Jornada: ${visitRule.totalVisits} encontro(s).` : ''}
+                        </p>
+                      </div>
+                      <div className="rounded-lg border border-border bg-surface-alt p-4">
+                        <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Indicadores vinculados ao produto</div>
+                        {packagePreview?.loading ? <div className="mt-1 text-sm text-muted-foreground">Carregando pacote…</div> : packagePreview?.ok ? (
+                          <>
+                            <div className="mt-1 text-sm font-semibold text-foreground">{packagePreview.indicatorCount} indicador(es)</div>
+                            <p className="mt-1 text-xs text-muted-foreground">{packagePreview.manualCount} manuais · {packagePreview.calculatedCount} calculados · ciclo criado automaticamente ao concluir.</p>
+                          </>
+                        ) : selectedProduct?.usa_plano_estrategico ? (
+                          <p className="mt-1 text-xs text-status-warning-text">{packagePreview?.message ?? 'Validando pacote de indicadores…'}</p>
+                        ) : <p className="mt-1 text-xs text-muted-foreground">Este produto não usa Plano Estratégico.</p>}
+                      </div>
                     </div>
                   ) : null}
                   <div className="grid gap-3 sm:grid-cols-2">
@@ -383,11 +510,13 @@ export function AdminNovoClientePage() {
                   ['CNPJ', draft.cnpj || '—'],
                   ['Estrutura', draft.structure_type === 'LOJA_UNICA' ? 'Loja única' : 'Rede'],
                   ['Lojas', String(draft.units.filter(unit => unit.name.trim()).length)],
-                  ['Loja principal', availableStores.rows.find(store => store.id === draft.primary_store_id)?.name || 'Sem vínculo — cliente nasce inativo'],
+                  ['Matriz operacional', matrixOptions.find(store => store.id === draft.primary_store_id)?.name || 'Nova matriz será criada'],
+                  ['Filiais vinculadas', String(draft.units.filter(unit => !unit.is_primary && unit.store_id).length)],
                   ['Fase empresarial', BUSINESS_PHASES.find(phase => phase.value === draft.business_phase)?.label || '—'],
                   ['Produto', draft.product_name || '—'],
                   ['Modalidade', draft.modality || '—'],
                   ['Visitas presenciais', draft.program_template_key ? visitRule.label : '—'],
+                  ['Indicadores do pacote', packagePreview?.ok ? `${packagePreview.indicatorCount} (${packagePreview.manualCount} manuais · ${packagePreview.calculatedCount} calculados)` : selectedProduct?.usa_plano_estrategico ? 'Pacote pendente' : 'Não se aplica'],
                   ['Contrato', draft.contract_start_date ? `${draft.contract_start_date} → ${draft.contract_end_date || 'sem fim'}` : '—'],
                   ['Responsável MX', team.rows.find(member => member.id === draft.implementation_owner_id)?.name || '—'],
                   ['Consultores', String(draft.consultant_ids.length)],

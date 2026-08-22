@@ -15,6 +15,7 @@ import {
   structureLabel,
   EMPTY_PORTFOLIO_FILTERS,
   type PortfolioClient,
+  type PortfolioStatusFilter,
 } from './clientPortfolio'
 
 const HOJE = new Date('2026-08-16T12:00:00Z')
@@ -197,5 +198,36 @@ describe('rótulos e filtros', () => {
     const rows = [client(), client({ id: 'c2', status: 'inativo', primary_store_id: null, business_phase: 'ESTRUTURACAO' })]
     expect(filterPortfolio(rows, { ...EMPTY_PORTFOLIO_FILTERS, bucket: 'com_bloqueios' }, HOJE)).toHaveLength(1)
     expect(filterPortfolio(rows, { ...EMPTY_PORTFOLIO_FILTERS, phase: 'ESTRUTURACAO' }, HOJE)).toHaveLength(1)
+  })
+
+  test('expõe e filtra os estados de lifecycle do Base44', () => {
+    const rows = [
+      client({ id: 'draft', status: 'rascunho' }),
+      client({ id: 'collect', status: 'coleta_de_dados' }),
+      client({ id: 'validation', status: 'em_validacao' }),
+      client({ id: 'ready', status: 'pronto_para_ativar' }),
+      client({ id: 'scheduled', status: 'ativacao_programada', scheduled_activation_at: '2026-09-01' }),
+      client({ id: 'implanting', status: 'ativo_em_implantacao' }),
+      client({ id: 'active', status: 'ativo' }),
+      client({ id: 'suspended', status: 'suspenso' }),
+      client({ id: 'closed', status: 'encerrado' }),
+    ]
+
+    const filters: Array<[PortfolioStatusFilter, string]> = [
+      ['rascunho', 'draft'],
+      ['coleta_de_dados', 'collect'],
+      ['em_validacao', 'validation'],
+      ['pronto_para_ativar', 'ready'],
+      ['ativacao_programada', 'scheduled'],
+      ['ativo_em_implantacao', 'implanting'],
+      ['ativo', 'active'],
+      ['suspenso', 'suspended'],
+      ['encerrado', 'closed'],
+    ]
+
+    for (const [status, expectedId] of filters) {
+      const result = filterPortfolio(rows, { ...EMPTY_PORTFOLIO_FILTERS, status }, HOJE)
+      expect(result.map(item => item.id)).toEqual([expectedId])
+    }
   })
 })

@@ -179,13 +179,19 @@ export function runIconSemanticsGate() {
 }
 
 export function countIconSizeDebt() {
-  const files = walk(resolve(ROOT, 'src'))
   let count = 0
-  for (const file of files) {
-    const relative = file.replace(resolve(ROOT) + '/', '')
-    const source = readFileSync(file, 'utf8')
-    for (const v of inspectIconSemantics(source, relative)) {
-      if (v.prop === 'size' && v.budgeted) count += 1
+  // A contagem só precisa visitar os arquivos explicitamente orçados. Fazer
+  // outra varredura/parse da árvore inteira torna o contrato lento e sujeito
+  // ao timeout padrão do Bun, sem aumentar a cobertura desta métrica.
+  for (const relative of SIZE_DEBT) {
+    const file = resolve(ROOT, relative)
+    try {
+      const source = readFileSync(file, 'utf8')
+      count += inspectIconSemantics(source, relative).filter(
+        (v) => v.prop === 'size' && v.budgeted,
+      ).length
+    } catch (error) {
+      if (error?.code !== 'ENOENT') throw error
     }
   }
   return count
