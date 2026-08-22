@@ -242,7 +242,7 @@ export function AdminClienteDetalhePage() {
       ])
       if (cancelled || peers.error || lojas.error) return
       const parent = parentClientOf(
-        { id: client.id, primary_store_id: client.primary_store_id },
+        { id: client.id, slug: client.slug, primary_store_id: client.primary_store_id },
         peers.data ?? [],
         lojas.data ?? [],
       )
