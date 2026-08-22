@@ -3,9 +3,10 @@ import { Search, X } from 'lucide-react'
 import { MxInput, MxSelect } from '@/components/module/MxModuleVisualPrimitives'
 import { Button } from '@/components/atoms/Button'
 import { RESPONSIBLE_ROLE_OPTIONS, type ActionPlanTemplate } from './actionPlanTemplates'
-import { ACTION_PLAN_DEPARTMENT_CARDS, departmentMatchesFilter, indicatorAreaMatchesDepartment } from './departmentTaxonomy'
+import { ACTION_PLAN_DEPARTMENT_CARDS, indicatorAreaMatchesDepartment } from './departmentTaxonomy'
 import { emptyTemplateFilters, templateFiltersActive, type TemplateFilterState } from './templateFilterLogic'
 import type { WizardIndicator } from './clientActionPlanWizardData'
+import { IndicatorPicker } from './IndicatorPicker'
 
 const PRIORITY_OPTIONS = [
   { value: 'critica', label: 'Crítica' },
@@ -28,17 +29,16 @@ export function TemplateFilters(props: {
   const departments = ACTION_PLAN_DEPARTMENT_CARDS
   const indicators = useMemo(() => {
     const selectedDepartment = props.filters.departamento
-    const fromCatalog = props.indicators
-      .filter(indicator => indicatorAreaMatchesDepartment(indicator.area, selectedDepartment))
-      .map(indicator => ({ value: indicator.metric_key, label: indicator.label }))
-      .filter(indicator => indicator.value && indicator.label)
-    const fromTemplates = props.templates
-      .filter(template => departmentMatchesFilter(template.departamento, selectedDepartment))
-      .map(template => ({ value: template.indicador ?? '', label: template.indicador ?? '' }))
-      .filter(indicator => indicator.value)
-    return [...new Map([...fromCatalog, ...fromTemplates].map(indicator => [indicator.value.toLowerCase(), indicator])).values()]
-      .sort((left, right) => left.label.localeCompare(right.label, 'pt-BR'))
-  }, [props.filters.departamento, props.indicators, props.templates])
+    return props.indicators
+      .filter(indicator => selectedDepartment && indicatorAreaMatchesDepartment(indicator.area, selectedDepartment))
+      .map(indicator => ({
+        code: indicator.metric_key,
+        label: indicator.label,
+        unit: indicator.unit,
+        direction: indicator.direction,
+      }))
+      .filter(indicator => indicator.code && indicator.label)
+  }, [props.filters.departamento, props.indicators])
   const hasFilters = templateFiltersActive(props.filters)
   const onSelectChange = (field: keyof TemplateFilterState) => (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value
@@ -67,12 +67,18 @@ export function TemplateFilters(props: {
           {departments.map(department => <option key={department.code} value={department.code}>{department.label}</option>)}
         </MxSelect>
 
-        <MxSelect id="template-filter-indicator" name="template-indicator" aria-label="Filtrar por indicador" value={props.filters.indicador} onChange={event => {
-          props.onFilterChange('indicador', event.target.value)
-        }}>
-          <option value="">Todos os indicadores</option>
-          {indicators.map(indicator => <option key={indicator.value} value={indicator.value}>{indicator.label}</option>)}
-        </MxSelect>
+        <IndicatorPicker
+          id="template-filter-indicator"
+          name="template-indicator"
+          aria-label="Filtrar por indicador"
+          value={props.filters.indicador}
+          options={indicators}
+          disabled={!props.filters.departamento}
+          placeholder="Selecione primeiro um departamento"
+          allowClear
+          clearLabel="Todos os indicadores"
+          onChange={code => props.onFilterChange('indicador', code)}
+        />
 
         <MxSelect id="template-filter-status" name="template-status" aria-label="Filtrar por status" value={props.filters.status} onChange={onSelectChange('status')}>
           <option value="">Todos os status</option>

@@ -8,6 +8,8 @@ import { toast } from '@/lib/toast'
 import { supabase } from '@/lib/supabase'
 import type { ActionPlanTemplate } from './actionPlanTemplates'
 import type { WizardClient, WizardIndicator } from './clientActionPlanWizardData'
+import { indicatorAreaMatchesDepartment } from './departmentTaxonomy'
+import { IndicatorPicker } from './IndicatorPicker'
 import { resolveClientApplicationTargets } from './templateApplicationIdempotency'
 
 /**
@@ -39,7 +41,7 @@ export function SuggestToClientModal(props: {
 
   const deptIndicators = useMemo(() => {
     const template = props.template
-    return template ? props.indicators.filter(indicator => indicator.area === template.departamento) : []
+    return template ? props.indicators.filter(indicator => indicatorAreaMatchesDepartment(indicator.area, template.departamento)) : []
   }, [props.template, props.indicators])
 
   if (!props.open || !props.template) return null
@@ -123,10 +125,20 @@ export function SuggestToClientModal(props: {
           </MxSelect>
         </MxField>
         <MxField label="Indicador">
-          <MxSelect aria-label="Indicador" value={indicatorKey} onChange={event => setIndicatorKey(event.target.value)}>
-            <option value="">Indicador principal do plano</option>
-            {deptIndicators.map(indicator => <option key={indicator.metric_key} value={indicator.metric_key}>{indicator.label}</option>)}
-          </MxSelect>
+          <IndicatorPicker
+            aria-label="Indicador"
+            value={indicatorKey}
+            options={deptIndicators.map(indicator => ({
+              code: indicator.metric_key,
+              label: indicator.label,
+              unit: indicator.unit,
+              direction: indicator.direction,
+            }))}
+            placeholder="Indicador principal do plano"
+            allowClear
+            clearLabel="Indicador principal do plano"
+            onChange={setIndicatorKey}
+          />
         </MxField>
         <MxField label="Motivo da sugestão">
           <MxTextarea rows={2} value={reason} onChange={event => setReason(event.target.value)} placeholder="Ex: indicador abaixo da meta" />

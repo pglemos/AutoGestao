@@ -108,6 +108,16 @@ describe('Plano de Ação canônico e tabela Base44', () => {
     }
     expect(wizard).not.toContain('Novo template de plano de ação')
     expect(wizard).not.toContain('Título do template')
+    expect(wizard).toContain('IndicatorPicker')
+    expect(wizard).not.toContain('{indicator.label} — {indicator.unit')
+    const picker = read('src/features/admin-mx/planos-acao/IndicatorPicker.tsx')
+    expect(picker).toContain('Buscar indicador...')
+    expect(picker).toContain('formatIndicatorPickerMeta')
+    expect(picker).toContain("join(' · ')")
+    const catalog = read('src/features/admin-mx/planos-acao/actionPlanTemplates.ts')
+    expect(catalog).toContain('officialActionPlanIndicatorCatalog')
+    expect(catalog).toContain('officialDefinitionUnit')
+    expect(catalog).not.toContain('catalogo_indicadores_planejamento')
   })
 
   test('opens the global route on the Base44-equivalent template library', () => {

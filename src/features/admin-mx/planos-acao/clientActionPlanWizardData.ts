@@ -1,10 +1,11 @@
 import { supabase } from '@/lib/supabase'
 import { fetchClientProductPackage, fetchClientUnits } from '@/features/strategic-plan/clientPlanningRepository'
+import { BASE44_STANDARD_INDICATORS, matchCanonicalIndicator, officialDefinitionDirection, officialDefinitionUnit } from '../indicadores/canonicalBase44Catalog'
 
 /**
  * Acesso a dados do wizard de plano por cliente. Os dados de apoio vêm das
  * tabelas MX existentes: clientes_consultoria, unidades_cliente_consultoria,
- * lojas, catalogo_metricas_consultoria e usuarios.
+ * lojas, catálogo oficial Base44 e usuarios.
  */
 
 export type WizardClient = {
@@ -24,6 +25,7 @@ export type WizardIndicator = {
   label: string
   area: string
   direction: string
+  unit: string
 }
 
 export type WizardResponsible = {
@@ -61,38 +63,45 @@ export async function fetchWizardStores(clientId: string): Promise<{ rows: Wizar
   }
 }
 
+export function officialWizardIndicators(): WizardIndicator[] {
+  return BASE44_STANDARD_INDICATORS.map(item => ({
+    metric_key: item.code,
+    label: item.name,
+    area: item.area,
+    direction: officialDefinitionDirection(item.code),
+    unit: officialDefinitionUnit(item.code),
+  }))
+}
+
 /**
- * Indicadores ativos do catálogo, filtrados por área no componente. Quando o
- * wizard está dentro da ficha de um cliente, o roster do produto contratado é
- * a fonte de verdade; o catálogo geral fica reservado ao wizard global.
+ * Indicadores oficiais Base44 do plano de ação. No wizard de um cliente,
+ * o roster só escolhe quais oficiais aparecem — nomes e áreas vêm do catálogo canônico.
  */
 export async function fetchWizardIndicators(clientId?: string): Promise<{ rows: WizardIndicator[]; error: string | null }> {
-  const packageResult = clientId ? await fetchClientProductPackage(clientId) : null
-  if (packageResult && !packageResult.ok) return { rows: [], error: packageResult.message }
+  const official = officialWizardIndicators()
+  if (!clientId) return { rows: official, error: null }
 
-  const rosterItems = packageResult?.ok ? packageResult.resolution.items : []
-  const rosterCodes = rosterItems.map(item => item.metric_key)
-  if (clientId && !rosterCodes.length) return { rows: [], error: null }
+  const packageResult = await fetchClientProductPackage(clientId)
+  if (!packageResult.ok) return { rows: [], error: packageResult.message }
 
-  let query = supabase
-    .from('catalogo_metricas_consultoria')
-    .select('metric_key, label, area, direction')
-    .eq('active', true)
-    .order('label', { ascending: true })
-  if (rosterCodes.length) query = query.in('metric_key', rosterCodes)
-  const { data, error } = await query
-  if (error) return { rows: [], error: error.message }
+  const rosterItems = packageResult.resolution.items
+  if (!rosterItems.length) return { rows: [], error: null }
 
-  const catalogRows = (data ?? []).map(item => ({
-    metric_key: item.metric_key,
-    label: rosterItems.find(rosterItem => rosterItem.metric_key === item.metric_key)?.label_snapshot || item.label,
-    area: rosterItems.find(rosterItem => rosterItem.metric_key === item.metric_key)?.area_snapshot || item.area,
-    direction: item.direction,
-  }))
-  if (!rosterCodes.length) return { rows: catalogRows, error: null }
-  const order = new Map(rosterCodes.map((code, index) => [code, index]))
-  catalogRows.sort((a, b) => (order.get(a.metric_key) ?? 9999) - (order.get(b.metric_key) ?? 9999))
-  return { rows: catalogRows, error: null }
+  const seen = new Set<string>()
+  const rows: WizardIndicator[] = []
+  for (const item of rosterItems) {
+    const canon = matchCanonicalIndicator(item.metric_key)
+    if (!canon || seen.has(canon.code)) continue
+    seen.add(canon.code)
+    rows.push({
+      metric_key: canon.code,
+      label: canon.name,
+      area: canon.area,
+      direction: officialDefinitionDirection(canon.code),
+      unit: officialDefinitionUnit(canon.code),
+    })
+  }
+  return { rows, error: null }
 }
 
 /** Responsáveis: usuários internos MX ativos. */

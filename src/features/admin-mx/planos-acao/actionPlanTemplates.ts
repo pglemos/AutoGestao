@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase'
+import { BASE44_STANDARD_INDICATORS, matchCanonicalIndicator, officialDefinitionDirection, officialDefinitionUnit } from '../indicadores/canonicalBase44Catalog'
 import { departmentCategory } from './departmentTaxonomy'
 
 export type TemplateItemPriority = 'baixa' | 'media' | 'alta' | 'critica'
@@ -223,7 +224,18 @@ export function calculateItemWeights(count: number): Array<{ weight_bp: number; 
   })
 }
 
-export type IndicatorCatalogEntry = { code: string; label: string; category: string; unit: string }
+export type IndicatorCatalogEntry = { code: string; label: string; category: string; unit: string; direction: string }
+
+/** 45 indicadores oficiais do Base44, com departamento no código do wizard MX. */
+export function officialActionPlanIndicatorCatalog(): IndicatorCatalogEntry[] {
+  return BASE44_STANDARD_INDICATORS.map(item => ({
+    code: item.code,
+    label: item.name,
+    category: departmentCategory(item.department) ?? item.department.toLowerCase(),
+    unit: officialDefinitionUnit(item.code),
+    direction: officialDefinitionDirection(item.code),
+  }))
+}
 
 /** Keeps a legacy Base44 indicator selectable while the MX catalog evolves. */
 export function withPersistedIndicatorOption(
@@ -232,22 +244,35 @@ export function withPersistedIndicatorOption(
   primaryCode: string,
   persistedLabel: string,
 ): IndicatorCatalogEntry[] {
-  const departmentIndicators = indicators.filter(indicator => indicator.category === department)
-  if (!primaryCode || departmentIndicators.some(indicator => indicator.code === primaryCode)) return departmentIndicators
+  const departmentKey = departmentCategory(department)
+  const departmentIndicators = indicators.filter(indicator => departmentCategory(indicator.category) === departmentKey)
+  if (!primaryCode) return departmentIndicators
+
+  const persistedCanon = matchCanonicalIndicator(primaryCode)
+  if (departmentIndicators.some(indicator =>
+    indicator.code === primaryCode ||
+    (persistedCanon != null && matchCanonicalIndicator(indicator.code)?.code === persistedCanon.code)
+  )) {
+    return departmentIndicators
+  }
+
+  if (persistedCanon && departmentCategory(persistedCanon.department) === departmentKey) {
+    return [{
+      code: persistedCanon.code,
+      label: persistedCanon.name,
+      category: departmentKey ?? department,
+      unit: officialDefinitionUnit(persistedCanon.code),
+      direction: officialDefinitionDirection(persistedCanon.code),
+    }, ...departmentIndicators]
+  }
 
   const persisted = indicators.find(indicator => indicator.code === primaryCode)
-  return [persisted ?? { code: primaryCode, label: persistedLabel || primaryCode, category: department, unit: 'legado' }, ...departmentIndicators]
+  return [persisted ?? { code: primaryCode, label: persistedLabel || primaryCode, category: department, unit: 'legado', direction: 'AUMENTAR' }, ...departmentIndicators]
 }
 
-/** Catálogo real de indicadores do MX (mesmo usado no Planejamento Estratégico) — reaproveitado como fonte de indicador/departamento do wizard. */
+/** Catálogo oficial Base44 do wizard Criar Plano Padrão — não usa o catálogo legado do planejamento. */
 export async function fetchIndicatorCatalog(): Promise<{ rows: IndicatorCatalogEntry[]; error: string | null }> {
-  const { data, error } = await supabase
-    .from('catalogo_indicadores_planejamento')
-    .select('code, label, category, unit')
-    .eq('active', true)
-    .order('sort_order', { ascending: true })
-  if (error) return { rows: [], error: error.message }
-  return { rows: (data ?? []) as IndicatorCatalogEntry[], error: null }
+  return { rows: officialActionPlanIndicatorCatalog(), error: null }
 }
 
 export type PublishedTraining = { id: string; title: string; type: string; duration_minutes: number | null; target_audience: string | null }

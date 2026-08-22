@@ -8,6 +8,7 @@ import {
   resolveItemDueDate,
   suggestTemplateKey,
   validateTemplateDraft,
+  officialActionPlanIndicatorCatalog,
   withPersistedIndicatorOption,
 } from './actionPlanTemplates'
 
@@ -37,15 +38,57 @@ describe('templates de plano de ação — validação', () => {
     expect(draft.items).toHaveLength(1)
   })
 
+  test('usa os 45 indicadores oficiais do Base44 no wizard', () => {
+    const rows = officialActionPlanIndicatorCatalog()
+    const comercial = rows.filter(row => row.category === 'comercial')
+
+    expect(rows).toHaveLength(45)
+    expect(comercial).toHaveLength(22)
+    expect(comercial.map(row => row.label)).toEqual([
+      'Vendas Total',
+      'Vendas - Fluxo de Porta',
+      'Vendas - Indicação',
+      'Vendas - Carteira Empresa',
+      'Vendas - Carteira Vendedor',
+      'Vendas - Internet',
+      'Vendas - Outros',
+      'Volume de Vendedores',
+      'Média de Vendas por Vendedor',
+      'Média de Leads por Vendedor',
+      'Volume de Carros Avaliados',
+      'Volume de Vendas com Troca',
+      '% Venda com Troca',
+      'Volume de Fichas Aprovadas',
+      'Volume de Fichas Pagas',
+      '% Vendas Financiadas',
+      'Volume de Agendamentos',
+      'Volume de Visitas',
+      'Volume de Agendamentos por Venda',
+      'Conversão de Leads em Agendamentos',
+      'Conversão de Agendamentos em Visitas',
+      'Conversão de Visitas em Vendas',
+    ])
+    expect(rows.some(row => /meta de vendas|volume de vendas —|vendas total —/i.test(row.label))).toBe(false)
+    expect(comercial[0]).toMatchObject({ label: 'Vendas Total', unit: 'Número inteiro', direction: 'AUMENTAR' })
+    expect(comercial.find(row => row.code === 'APPOINTMENTS_PER_INTERNET_SALE')).toMatchObject({
+      label: 'Volume de Agendamentos por Venda',
+      unit: 'Número decimal',
+      direction: 'DIMINUIR',
+    })
+    expect(rows.every(row => row.unit !== 'number' && row.unit !== 'percent' && row.unit !== 'veículos')).toBe(true)
+    expect(withPersistedIndicatorOption(rows, 'comercial', 'SALES_WALKIN', 'Vendas - Fluxo de Porta').map(row => row.code)).toEqual(comercial.map(row => row.code))
+  })
+
   test('mantém indicador legado selecionável no editor', () => {
     const options = withPersistedIndicatorOption(
-      [{ code: 'employees_total', label: 'Funcionários Ativos', category: 'rh', unit: 'number' }],
+      officialActionPlanIndicatorCatalog(),
       'rh',
-      'EMPLOYEE_COUNT',
-      'EMPLOYEE_COUNT',
+      'quadro_legado',
+      'Funcionários Ativos',
     )
 
-    expect(options[0]).toMatchObject({ code: 'EMPLOYEE_COUNT', label: 'EMPLOYEE_COUNT', category: 'rh' })
+    expect(options[0]).toMatchObject({ code: 'quadro_legado', label: 'Funcionários Ativos', category: 'rh' })
+    expect(options.some(option => option.code === 'EMPLOYEE_COUNT' && option.label === 'Quadro de Colaboradores')).toBe(true)
   })
 
   test('cobra chave, nome, departamento e ao menos um item', () => {

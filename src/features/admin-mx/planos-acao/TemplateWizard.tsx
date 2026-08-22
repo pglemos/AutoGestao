@@ -21,6 +21,7 @@ import {
 } from './actionPlanTemplates'
 import { uploadLibraryFile } from '../consultoria-mx/consultoriaMxData'
 import { ACTION_PLAN_DEPARTMENT_CARDS, departmentLabel } from './departmentTaxonomy'
+import { IndicatorPicker } from './IndicatorPicker'
 
 const STEPS = [
   { id: 1, label: 'Indicador' },
@@ -108,12 +109,14 @@ export function TemplateWizard(props: {
     patch({ items: props.draft.items.map((item, position) => (position === index ? { ...item, ...values } : item)) })
 
   const onIndicatorChange = (code: string) => {
-    const indicator = indicators.find(entry => entry.code === code)
-    const nextTitle = titleCustomized ? props.draft.nome : suggestTitle(props.draft.improvement_direction, indicator?.label ?? '')
+    const indicator = indicators.find(entry => entry.code === code) ?? deptIndicators.find(entry => entry.code === code)
+    const nextDirection: ImprovementDirection = indicator?.direction === 'DIMINUIR' ? 'reduzir' : indicator?.direction === 'AUMENTAR' ? 'aumentar' : props.draft.improvement_direction
+    const nextTitle = titleCustomized ? props.draft.nome : suggestTitle(nextDirection, indicator?.label ?? '')
     patch({
       primary_indicator_code: code,
       indicador: indicator?.label ?? '',
       nome: nextTitle,
+      improvement_direction: nextDirection,
       effectiveness_indicator_code: props.draft.effectiveness_indicator_code || code,
     })
   }
@@ -253,14 +256,14 @@ export function TemplateWizard(props: {
                 {stepErrors.departamento ? <p className="mt-1 text-xs text-status-danger-text">{stepErrors.departamento}</p> : null}
               </MxField>
               <MxField label="Indicador Principal *">
-                <MxSelect aria-label="Indicador principal" value={props.draft.primary_indicator_code} onChange={event => onIndicatorChange(event.target.value)} disabled={!props.draft.departamento}>
-                  <option value="">{props.draft.departamento ? 'Selecione um indicador' : 'Selecione primeiro um departamento'}</option>
-                  {deptIndicators.map(indicator => (
-                    <option key={indicator.code} value={indicator.code}>
-                      {indicator.label} — {indicator.unit || '—'}
-                    </option>
-                  ))}
-                </MxSelect>
+                <IndicatorPicker
+                  aria-label="Indicador principal"
+                  value={props.draft.primary_indicator_code}
+                  options={deptIndicators}
+                  disabled={!props.draft.departamento}
+                  placeholder={props.draft.departamento ? 'Selecione um indicador' : 'Selecione primeiro um departamento'}
+                  onChange={onIndicatorChange}
+                />
                 {stepErrors.indicador ? <p className="mt-1 text-xs text-status-danger-text">{stepErrors.indicador}</p> : null}
               </MxField>
               <MxField label="Título do Plano *">
@@ -339,10 +342,14 @@ export function TemplateWizard(props: {
                 {stepErrors.prioridade ? <p className="mt-1 text-xs text-status-danger-text">{stepErrors.prioridade}</p> : null}
               </MxField>
               <MxField label="Indicador de Eficácia *">
-                <MxSelect aria-label="Indicador de eficácia" value={props.draft.effectiveness_indicator_code} onChange={event => patch({ effectiveness_indicator_code: event.target.value })}>
-                  <option value="">Selecionar...</option>
-                  {deptIndicators.map(indicator => <option key={indicator.code} value={indicator.code}>{indicator.label} — {indicator.unit || '—'}</option>)}
-                </MxSelect>
+                <IndicatorPicker
+                  aria-label="Indicador de eficácia"
+                  value={props.draft.effectiveness_indicator_code}
+                  options={deptIndicators}
+                  disabled={!props.draft.departamento}
+                  placeholder="Selecionar..."
+                  onChange={code => patch({ effectiveness_indicator_code: code })}
+                />
                 {stepErrors.eficacia ? <p className="mt-1 text-xs text-status-danger-text">{stepErrors.eficacia}</p> : null}
               </MxField>
             </div>

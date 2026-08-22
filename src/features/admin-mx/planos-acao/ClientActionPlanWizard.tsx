@@ -32,6 +32,8 @@ import {
   type WizardResponsible,
   type WizardStore,
 } from './clientActionPlanWizardData'
+import { ACTION_PLAN_DEPARTMENT_CARDS, departmentLabel, indicatorAreaMatchesDepartment } from './departmentTaxonomy'
+import { IndicatorPicker } from './IndicatorPicker'
 
 export function ClientActionPlanWizard(props: {
   open: boolean
@@ -114,7 +116,7 @@ export function ClientActionPlanWizard(props: {
   })
 
   const deptIndicators = useMemo(
-    () => form.department ? indicators.filter(indicator => indicator.area === form.department) : [],
+    () => form.department ? indicators.filter(indicator => indicatorAreaMatchesDepartment(indicator.area, form.department)) : [],
     [form.department, indicators],
   )
   const weights = useMemo(() => calculateWeights(form.actions.length), [form.actions.length])
@@ -131,7 +133,7 @@ export function ClientActionPlanWizard(props: {
 
   const onIndicatorChange = (metricKey: string) => {
     const indicator = deptIndicators.find(item => item.metric_key === metricKey)
-    const direction = (indicator?.direction === 'increase' ? 'AUMENTAR' : indicator?.direction === 'decrease' ? 'DIMINUIR' : 'AUMENTAR') as ClientActionPlanWizardForm['direction']
+    const direction = (indicator?.direction === 'DIMINUIR' || indicator?.direction === 'decrease' ? 'DIMINUIR' : 'AUMENTAR') as ClientActionPlanWizardForm['direction']
     const nextTitle = titleCustomized ? form.title : suggestTitle(direction, indicator?.label ?? '')
     setForm(current => ({
       ...current,
@@ -342,16 +344,25 @@ export function ClientActionPlanWizard(props: {
                 }}
               >
                 <option value="">Selecionar...</option>
-                {[...new Set(indicators.map(indicator => indicator.area).filter(Boolean))].map(area => (
-                  <option key={area} value={area}>{area}</option>
+                {ACTION_PLAN_DEPARTMENT_CARDS.map(dept => (
+                  <option key={dept.code} value={dept.code}>{dept.label}</option>
                 ))}
               </MxSelect>
             </MxField>
             <MxField label="Indicador principal">
-              <MxSelect aria-label="Indicador principal" value={form.indicatorId} onChange={event => onIndicatorChange(event.target.value)} disabled={!form.department}>
-                <option value="">{form.department ? 'Selecione um indicador' : 'Selecione um departamento'}</option>
-                {deptIndicators.map(indicator => <option key={indicator.metric_key} value={indicator.metric_key}>{indicator.label}</option>)}
-              </MxSelect>
+              <IndicatorPicker
+                aria-label="Indicador principal"
+                value={form.indicatorId}
+                options={deptIndicators.map(indicator => ({
+                  code: indicator.metric_key,
+                  label: indicator.label,
+                  unit: indicator.unit,
+                  direction: indicator.direction,
+                }))}
+                disabled={!form.department}
+                placeholder={form.department ? 'Selecione um indicador' : 'Selecione um departamento'}
+                onChange={onIndicatorChange}
+              />
             </MxField>
             <MxField label="Título do plano">
               <Input value={form.title} onChange={event => onTitleChange(event.target.value)} placeholder="Título do plano de ação" />
@@ -443,10 +454,20 @@ export function ClientActionPlanWizard(props: {
               </MxSelect>
             </MxField>
             <MxField label="Indicador de eficácia">
-              <MxSelect aria-label="Indicador de eficácia" value={form.efficacyIndicatorName} onChange={event => patch('efficacyIndicatorName', event.target.value)}>
-                <option value="">Mesmo indicador</option>
-                {deptIndicators.map(indicator => <option key={indicator.metric_key} value={indicator.label}>{indicator.label}</option>)}
-              </MxSelect>
+              <IndicatorPicker
+                aria-label="Indicador de eficácia"
+                value={deptIndicators.find(indicator => indicator.label === form.efficacyIndicatorName)?.metric_key ?? ''}
+                options={deptIndicators.map(indicator => ({
+                  code: indicator.metric_key,
+                  label: indicator.label,
+                  unit: indicator.unit,
+                  direction: indicator.direction,
+                }))}
+                placeholder="Mesmo indicador"
+                allowClear
+                clearLabel="Mesmo indicador"
+                onChange={code => patch('efficacyIndicatorName', deptIndicators.find(indicator => indicator.metric_key === code)?.label ?? '')}
+              />
             </MxField>
             <MxField label="Resultado esperado" className="sm:col-span-2">
               <Input value={form.expectedImpact} onChange={event => patch('expectedImpact', event.target.value)} placeholder="O que se espera ao concluir este plano" />
@@ -459,7 +480,7 @@ export function ClientActionPlanWizard(props: {
             <div className="space-y-1.5 rounded-lg border border-border bg-muted/30 p-4 text-sm">
               <div className="flex justify-between"><span className="text-muted-foreground">Cliente:</span><span className="font-semibold text-foreground">{form.clientName || '—'}</span></div>
               <div className="flex justify-between"><span className="text-muted-foreground">Escopo:</span><span className="font-semibold text-foreground">{form.scopeMode === 'all_units' ? `${stores.length} unidade(s) ativa(s)` : stores.find(store => store.id === form.storeId)?.name || '—'}</span></div>
-              <div className="flex justify-between"><span className="text-muted-foreground">Departamento:</span><span className="font-semibold text-foreground">{form.department || '—'}</span></div>
+              <div className="flex justify-between"><span className="text-muted-foreground">Departamento:</span><span className="font-semibold text-foreground">{departmentLabel(form.department) || '—'}</span></div>
               <div className="flex justify-between"><span className="text-muted-foreground">Indicador:</span><span className="font-semibold text-foreground">{form.indicatorName || '—'}</span></div>
               <div className="flex justify-between"><span className="text-muted-foreground">Direção:</span><span className="font-semibold text-foreground">{DIRECTION_LABELS[form.direction]}</span></div>
               <div className="flex justify-between"><span className="text-muted-foreground">Responsável:</span><span className="font-semibold text-foreground">{form.responsibleName || '—'}</span></div>
