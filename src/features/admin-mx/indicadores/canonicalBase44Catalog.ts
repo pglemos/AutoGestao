@@ -72,13 +72,98 @@ export const BASE44_STANDARD_INDICATORS: CanonicalIndicator[] = [
 ]
 
 export function normalizeCatalogKey(value: string) {
-  return value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '_')
+  return value
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/%/g, 'pct_')
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_|_$/g, '')
+}
+
+const EXTRA_ALIASES: Record<string, string[]> = {
+  SALES_COMPANY_PORTFOLIO: ['sales_company_wallet', 'carteira_empresa'],
+  SALES_SELLER_PORTFOLIO: ['sales_seller_wallet', 'carteira_vendedor'],
+  SALES_PER_SELLER: ['avg_sales_per_seller', 'media_de_vendas_por_vendedor', 'media_vendas_por_vendedor'],
+  LEADS_PER_SELLER: ['avg_leads_per_seller', 'media_de_leads_por_vendedor'],
+  SALES_WITH_TRADE: ['trade_in_volume', 'volume_de_carros_de_troca', 'volume_de_vendas_com_troca'],
+  TRADE_SALES_PERCENTAGE: ['trade_in_to_sales_rate', 'participacao_da_troca_nas_vendas'],
+  APPOINTMENTS_VOLUME: ['appointments', 'agendamentos', 'volume_de_agendamentos'],
+  VISITS_VOLUME: ['visits', 'comparecimentos', 'visitas', 'volume_de_visitas'],
+  APPOINTMENTS_PER_INTERNET_SALE: ['appointments_per_sale', 'agendamentos_por_venda'],
+  LEAD_TO_APPOINTMENT_CONVERSION: ['lead_to_appointment_rate', 'conversao_lead_para_agendamento'],
+  APPOINTMENT_TO_VISIT_CONVERSION: ['appointment_to_visit_rate', 'conversao_agendamento_para_visita'],
+  VISIT_TO_SALE_CONVERSION: ['visit_to_sale_rate', 'conversao_visita_para_venda'],
+  GOOGLE_BUSINESS_RATING: ['google_rating', 'avaliacao_google_meu_negocio'],
+  INVENTORY_TURNOVER: ['stock_turnover', 'giro_de_estoque'],
+  ACTIVE_INVENTORY: ['active_stock', 'estoque_ativo'],
+  INVENTORY_TOTAL: ['stock_total', 'estoque_total'],
+  INVENTORY_OVER_90_PERCENTAGE: ['stock_over_90_rate', 'estoque_acima_de_90_dias'],
+  INVENTORY_AVERAGE_TICKET: ['avg_stock_price', 'preco_medio_do_estoque', 'ticket_medio_do_estoque'],
+  AVERAGE_SALES_MARGIN: ['avg_margin', 'margem_media', 'margem_media_de_venda'],
+  AVERAGE_PREPARATION_COST: ['preparation_cost', 'custo_de_preparacao', 'custo_medio_preparacao'],
+  AVERAGE_AFTER_SALES_COST: ['post_sale_cost', 'custo_pos_venda', 'custo_medio_pos_venda'],
+  CONTRIBUTION_MARGIN: ['margem_de_contribuicao'],
+  ADDITIONAL_REVENUE: ['receita_adicional'],
+  TOTAL_EXPENSE: ['despesa_total'],
+  EMPLOYEE_COUNT: ['employee_count', 'quadro_de_colaboradores'],
+}
+
+const OFFICIAL_VALUE_TYPE: Record<string, 'number' | 'percent' | 'currency'> = {
+  INTERNET_INVESTMENT: 'currency', INTERNET_COST_PER_SALE: 'currency',
+  INVENTORY_AVERAGE_TICKET: 'currency', INVENTORY_AVERAGE_MARGIN: 'currency',
+  CONTRIBUTION_MARGIN: 'currency', ADDITIONAL_REVENUE: 'currency',
+  TOTAL_EXPENSE: 'currency', NET_PROFIT: 'currency',
+  AVERAGE_SALES_MARGIN: 'currency', AVERAGE_PREPARATION_COST: 'currency',
+  AVERAGE_AFTER_SALES_COST: 'currency',
+  TRADE_SALES_PERCENTAGE: 'percent', FINANCED_SALES_PERCENTAGE: 'percent',
+  LEAD_TO_APPOINTMENT_CONVERSION: 'percent', APPOINTMENT_TO_VISIT_CONVERSION: 'percent',
+  VISIT_TO_SALE_CONVERSION: 'percent', INVENTORY_OVER_90_PERCENTAGE: 'percent',
+  AFTER_SALES_PERCENTAGE: 'percent',
+}
+
+const OFFICIAL_DIRECTION: Record<string, 'increase' | 'decrease'> = {
+  INTERNET_INVESTMENT: 'decrease', INTERNET_COST_PER_SALE: 'decrease',
+  INVENTORY_OVER_90_VOLUME: 'decrease', INVENTORY_OVER_90_PERCENTAGE: 'decrease',
+  TOTAL_EXPENSE: 'decrease', AVERAGE_PREPARATION_COST: 'decrease',
+  AVERAGE_AFTER_SALES_COST: 'decrease', AFTER_SALES_VOLUME: 'decrease',
+  AFTER_SALES_PERCENTAGE: 'decrease', EMPLOYEE_COUNT: 'decrease',
+}
+
+export const BASE44_STANDARD_PARAMETERS = [
+  { code: 'LEADS_PER_INTERNET_SALE', name: 'Leads necessários por venda de Internet' },
+  { code: 'TRADE_SALES_RATE', name: 'Percentual de vendas com troca' },
+  { code: 'EVALUATIONS_PER_TRADE_SALE', name: 'Avaliações necessárias por venda com troca' },
+  { code: 'FINANCED_SALES_RATE', name: 'Percentual de vendas financiadas' },
+  { code: 'APPROVAL_BUFFER_MULTIPLIER', name: 'Margem adicional de fichas aprovadas' },
+  { code: 'APPROVED_TO_PAID_CONVERSION', name: 'Conversão de fichas aprovadas em fichas pagas' },
+  { code: 'LEAD_TO_APPOINTMENT_RATE', name: 'Conversão planejada de leads em agendamentos' },
+  { code: 'APPOINTMENT_TO_VISIT_RATE', name: 'Conversão planejada de agendamentos em visitas' },
+  { code: 'ACTIVE_STOCK_RATE', name: 'Percentual planejado de estoque ativo' },
+  { code: 'STOCK_TO_SALES_RATIO', name: 'Relação planejada entre estoque total e vendas' },
+  { code: 'OVER_90_STOCK_RATE', name: 'Percentual máximo de estoque acima de 90 dias' },
+  { code: 'STOCK_MARGIN_RATE', name: 'Margem média planejada sobre o Ticket do Estoque' },
+  { code: 'POST_SALE_RATE', name: 'Percentual planejado de pós-venda' },
+] as const
+
+export function officialValueType(code: string) {
+  return OFFICIAL_VALUE_TYPE[code] ?? 'number'
+}
+
+export function officialDirection(code: string) {
+  return OFFICIAL_DIRECTION[code] ?? 'increase'
 }
 
 const INDEX = new Map<string, CanonicalIndicator>()
 for (const item of BASE44_STANDARD_INDICATORS) {
   INDEX.set(normalizeCatalogKey(item.code), item)
   for (const alias of item.aliases) INDEX.set(normalizeCatalogKey(alias), item)
+}
+for (const [code, aliases] of Object.entries(EXTRA_ALIASES)) {
+  const item = INDEX.get(normalizeCatalogKey(code))
+  if (!item) continue
+  for (const alias of aliases) INDEX.set(normalizeCatalogKey(alias), item)
 }
 
 export function matchCanonicalIndicator(metricKey: string) {
@@ -127,15 +212,56 @@ export function buildCatalogKeyMap(keys: string[]) {
   return map
 }
 
-export function overlayCanonicalIndicator<T extends {
+type OverlayCatalogRow = {
   metric_key: string
   label: string
   area: string
   formula_expression: string | null
   target_calculation_mode: string | null
   sort_order: number
-}>(row: T, keyMap?: Map<string, string>): T {
-  const canon = matchCanonicalIndicator(row.metric_key)
+  status?: string
+  active?: boolean
+  value_type?: string
+  direction?: string
+}
+
+export function findCatalogRow<T extends OverlayCatalogRow>(rows: T[], canon: CanonicalIndicator, used: Set<string>) {
+  const unused = rows.filter(row => !used.has(row.metric_key))
+  const byKey = unused.find(row => matchCanonicalIndicator(row.metric_key)?.code === canon.code)
+  if (byKey) return byKey
+  const nameKey = normalizeCatalogKey(canon.name)
+  return unused.find(row => normalizeCatalogKey(row.label) === nameKey) ?? null
+}
+
+export function synthesizeCanonicalIndicator(canon: CanonicalIndicator, keyMap?: Map<string, string>) {
+  const valueType = officialValueType(canon.code)
+  const resolve = (code: string) => keyMap?.get(normalizeCatalogKey(code)) ?? code.toLowerCase()
+  return {
+    metric_key: canon.code.toLowerCase(),
+    label: canon.name,
+    area: canon.area,
+    descricao: null,
+    value_type: valueType,
+    direction: officialDirection(canon.code),
+    source_scope: canon.formula_expression ? 'computed' : 'manual',
+    status: 'publicado' as const,
+    frequencia: 'mensal' as const,
+    casas_decimais: valueType === 'number' ? 0 : 2,
+    visivel_dono: true,
+    ano_inicial: null,
+    ano_final: null,
+    formula_expression: canon.formula_expression ? rewriteCanonicalFormula(canon.formula_expression, resolve) : null,
+    target_calculation_mode: canon.target_calculation_mode,
+    created_origin: 'mx_padrao' as const,
+    sort_order: officialCatalogOrder(canon.code),
+    active: true,
+    targets: 0,
+    annual_target: null,
+  }
+}
+
+export function overlayCanonicalIndicator<T extends OverlayCatalogRow>(row: T, keyMap?: Map<string, string>): T {
+  const canon = matchCanonicalIndicator(row.metric_key) ?? matchCanonicalIndicator(row.label)
   if (!canon) return row
   const resolve = (code: string) => keyMap?.get(normalizeCatalogKey(code))
     ?? keyMap?.get(normalizeCatalogKey(code.replace(/_/g, '')))
@@ -147,19 +273,33 @@ export function overlayCanonicalIndicator<T extends {
     formula_expression: canon.formula_expression ? rewriteCanonicalFormula(canon.formula_expression, resolve) : null,
     target_calculation_mode: canon.target_calculation_mode,
     sort_order: officialCatalogOrder(canon.code, row.sort_order),
+    ...(row.value_type !== undefined ? { value_type: officialValueType(canon.code) } : {}),
+    ...(row.direction !== undefined ? { direction: officialDirection(canon.code) } : {}),
+    ...(row.status !== undefined ? { status: 'publicado', active: true } : {}),
   }
 }
 
-export function overlayCanonicalCatalog<T extends {
-  metric_key: string
-  label: string
-  area: string
-  formula_expression: string | null
-  target_calculation_mode: string | null
-  sort_order: number
-}>(rows: T[]) {
-  const keyMap = buildCatalogKeyMap(rows.map(row => row.metric_key))
-  return rows.map(row => overlayCanonicalIndicator(row, keyMap))
+export function overlayCanonicalCatalog<T extends OverlayCatalogRow>(rows: T[]) {
+  const used = new Set<string>()
+  const resolved = new Map<string, string>()
+  for (const canon of BASE44_STANDARD_INDICATORS) {
+    const match = findCatalogRow(rows, canon, used)
+    const key = match?.metric_key ?? canon.code.toLowerCase()
+    if (match) used.add(match.metric_key)
+    resolved.set(canon.code, key)
+  }
+  const keyMap = buildCatalogKeyMap([...used, ...resolved.values()])
+  for (const [code, key] of resolved) keyMap.set(normalizeCatalogKey(code), key)
+
+  const official = BASE44_STANDARD_INDICATORS.map(canon => {
+    const key = resolved.get(canon.code) ?? canon.code.toLowerCase()
+    const match = rows.find(row => row.metric_key === key)
+    return match ? overlayCanonicalIndicator(match, keyMap) : synthesizeCanonicalIndicator(canon, keyMap) as unknown as T
+  })
+  const extras = rows
+    .filter(row => !used.has(row.metric_key))
+    .map(row => ({ ...row, status: 'arquivado', active: false }))
+  return [...official, ...extras]
 }
 
 export function sortCatalogAreas(areas: string[]) {

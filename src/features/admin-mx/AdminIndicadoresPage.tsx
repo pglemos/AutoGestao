@@ -59,7 +59,7 @@ import {
   type IndicatorParameter,
   type IndicatorStatus,
 } from './indicadores/indicatorCatalog'
-import { officialCatalogCode, sortCatalogAreas } from './indicadores/canonicalBase44Catalog'
+import { BASE44_STANDARD_PARAMETERS, officialCatalogCode, sortCatalogAreas } from './indicadores/canonicalBase44Catalog'
 import { saveIndicator } from './hooks/useAdminMxLists'
 import {
   dependentsOfParameter,
@@ -241,6 +241,7 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase()
     return rows.filter(item => {
+      if (quickFilter !== 'arquivados' && status !== 'arquivado' && item.status === 'arquivado') return false
       if (quickFilter !== 'todos' && !indicatorMatchesFilter(item, quickFilter)) return false
       if (area !== 'todas' && item.area !== area) return false
       if (status !== 'todos' && item.status !== status) return false
@@ -259,14 +260,17 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
     return orderKeys.map(key => byKey.get(key)).filter((item): item is CatalogIndicator => Boolean(item))
   }, [orderMode, orderKeys, rows, filtered])
 
-  const metrics = useMemo(() => ({
-    total: rows.length,
-    digitaveis: rows.filter(item => indicatorMatchesFilter(item, 'digitaveis')).length,
-    calculaveis: rows.filter(item => indicatorMatchesFilter(item, 'calculaveis')).length,
-    parameterized: rows.filter(item => indicatorMatchesFilter(item, 'com_parametro')).length,
-    parameterCount: parameterError ? '—' : parameters.length,
-    archived: rows.filter(item => indicatorMatchesFilter(item, 'arquivados')).length,
-  }), [parameterError, parameters.length, rows])
+  const metrics = useMemo(() => {
+    const live = rows.filter(item => item.status !== 'arquivado')
+    return {
+      total: live.length,
+      digitaveis: live.filter(item => indicatorMatchesFilter(item, 'digitaveis')).length,
+      calculaveis: live.filter(item => indicatorMatchesFilter(item, 'calculaveis')).length,
+      parameterized: live.filter(item => indicatorMatchesFilter(item, 'com_parametro')).length,
+      parameterCount: parameterError ? '—' : BASE44_STANDARD_PARAMETERS.length,
+      archived: rows.filter(item => indicatorMatchesFilter(item, 'arquivados')).length,
+    }
+  }, [parameterError, rows])
 
   const grouped = useMemo(() => {
     const groups = new Map<string, CatalogIndicator[]>()
@@ -508,8 +512,9 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
   const parameterByKey = useMemo(() => new Map(parameters.map(item => [item.metric_key, item])), [parameters])
   const filteredParameterRows = useMemo(() => {
     const term = parameterSearch.trim().toLocaleLowerCase('pt-BR')
-    if (!term) return rows
-    return rows.filter(item => [item.label, item.metric_key, item.area].some(value => (value ?? '').toLocaleLowerCase('pt-BR').includes(term)))
+    const live = rows.filter(item => item.status !== 'arquivado')
+    if (!term) return live
+    return live.filter(item => [item.label, item.metric_key, item.area].some(value => (value ?? '').toLocaleLowerCase('pt-BR').includes(term)))
   }, [parameterSearch, rows])
   const configuredParameterKeys = useMemo(() => new Set(parameters.map(parameter => parameter.metric_key)), [parameters])
 

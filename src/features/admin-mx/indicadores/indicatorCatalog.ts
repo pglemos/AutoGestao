@@ -279,31 +279,55 @@ export async function fetchIndicatorParameters(): Promise<{ rows: IndicatorParam
 }
 
 export async function applyCanonicalFormulas(): Promise<{ updated: number; error: string | null }> {
-  const { BASE44_STANDARD_INDICATORS } = await import('./canonicalBase44Catalog')
-  const { data, error } = await supabase.from('catalogo_metricas_consultoria').select('metric_key, label, area')
+  const {
+    BASE44_STANDARD_INDICATORS,
+    officialDirection,
+    officialValueType,
+  } = await import('./canonicalBase44Catalog')
+  const { data, error } = await supabase.from('catalogo_metricas_consultoria').select('metric_key, label, area, status')
   if (error) return { updated: 0, error: error.message }
   const keys = (data ?? []).map(row => String(row.metric_key))
   const keyMap = buildCatalogKeyMap(keys)
   let updated = 0
   for (const item of BASE44_STANDARD_INDICATORS) {
-    const metricKey = keyMap.get(normalizeCatalogKey(item.code)) ?? keys.find(key => matchCanonicalIndicator(key)?.code === item.code)
-    if (!metricKey) continue
+    const metricKey = keyMap.get(normalizeCatalogKey(item.code))
+      ?? keys.find(key => matchCanonicalIndicator(key)?.code === item.code)
+      ?? item.code.toLowerCase()
     const formula = item.formula_expression
       ? rewriteCanonicalFormula(item.formula_expression, code => keyMap.get(normalizeCatalogKey(code)) ?? code.toLowerCase())
       : null
-    const { error: updateError } = await supabase
+    const payload = {
+      metric_key: metricKey,
+      label: item.name,
+      area: item.area,
+      value_type: officialValueType(item.code),
+      direction: officialDirection(item.code),
+      source_scope: formula ? 'computed' : 'manual',
+      formula_expression: formula,
+      target_calculation_mode: item.target_calculation_mode,
+      sort_order: officialCatalogOrder(item.code),
+      status: 'publicado',
+      active: true,
+      visivel_dono: true,
+      created_origin: 'mx_padrao',
+      frequencia: 'mensal',
+      updated_at: new Date().toISOString(),
+    }
+    const { error: upsertError } = await supabase
       .from('catalogo_metricas_consultoria')
-      .update({
-        label: item.name,
-        area: item.area,
-        formula_expression: formula,
-        target_calculation_mode: item.target_calculation_mode,
-        sort_order: officialCatalogOrder(item.code),
-        updated_at: new Date().toISOString(),
-      })
-      .eq('metric_key', metricKey)
-    if (updateError) return { updated, error: updateError.message }
+      .upsert(payload, { onConflict: 'metric_key' })
+    if (upsertError) return { updated, error: upsertError.message }
+    keyMap.set(normalizeCatalogKey(item.code), metricKey)
     updated += 1
+  }
+  for (const row of data ?? []) {
+    const key = String(row.metric_key)
+    if (matchCanonicalIndicator(key) || matchCanonicalIndicator(String(row.label ?? ''))) continue
+    const { error: archiveError } = await supabase
+      .from('catalogo_metricas_consultoria')
+      .update({ status: 'arquivado', active: false, updated_at: new Date().toISOString() })
+      .eq('metric_key', key)
+    if (archiveError) return { updated, error: archiveError.message }
   }
   return { updated, error: null }
 }
