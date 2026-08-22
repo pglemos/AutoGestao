@@ -190,9 +190,10 @@ function CycleActionButton({ state }: { state: PlanCycleState }) {
 export interface PlanCycleBannerProps {
   state: PlanCycleState
   year: number
+  onOpenEditor?: (cycleId: string) => void
 }
 
-export function PlanCycleBanner({ state, year }: PlanCycleBannerProps) {
+export function PlanCycleBanner({ state, year, onOpenEditor }: PlanCycleBannerProps) {
   const { cycle, summary, loading, transitioning, error, clientId } = state
 
   // Sem cliente vinculado: banner não aparece.
@@ -253,7 +254,12 @@ export function PlanCycleBanner({ state, year }: PlanCycleBannerProps) {
         </div>
 
         {/* Direita: botão de ação */}
-        <div className="shrink-0">
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
+          {cycle && onOpenEditor ? (
+            <Button size="sm" variant="outline" onClick={() => onOpenEditor(cycle.id)}>
+              Abrir editor
+            </Button>
+          ) : null}
           {transitioning
             ? <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" aria-label="Processando…" />
             : <CycleActionButton state={state} />

@@ -112,8 +112,9 @@ export function AdminConsultingOverviewPage() {
   }
 
   const openStrategicPlan = (row: ConsultingOverviewRow) => {
-    const query = row.primaryStoreId ? `?storeId=${encodeURIComponent(row.primaryStoreId)}` : ''
-    navigate(`/plano-estrategico${query}`)
+    const params = new URLSearchParams({ clientId: row.clientId })
+    if (row.primaryStoreId) params.set('storeId', row.primaryStoreId)
+    navigate(`/plano-estrategico?${params.toString()}`)
   }
 
   const openActionPlan = (row: ConsultingOverviewRow) => {

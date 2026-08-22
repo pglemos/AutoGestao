@@ -213,6 +213,14 @@ export async function fetchStrategicPlanAdminRows(): Promise<{ rows: StrategicPl
   }
 }
 
+export async function seedStrategicPlanDemo(year = new Date().getFullYear()) {
+  const clients = await fetchStrategicPlanClients()
+  if (clients.error) return { error: clients.error, cycle: null, created: false, packageName: null, packageWarning: null }
+  const demo = clients.rows.find(row => /demonstra|demo/i.test(row.name)) ?? clients.rows[0]
+  if (!demo) return { error: 'Nenhum cliente disponível para o demo.', cycle: null, created: false, packageName: null, packageWarning: null }
+  return ensureAdminStrategicPlan({ clientId: demo.id, year })
+}
+
 export async function ensureAdminStrategicPlan(input: { clientId: string; year: number }) {
   const packageResult = await fetchClientProductPackage(input.clientId)
   const result = await ensureCycle({

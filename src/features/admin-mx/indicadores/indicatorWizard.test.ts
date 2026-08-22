@@ -24,6 +24,12 @@ describe('hidratação do wizard', () => {
     expect(draft.frequencia).toBe('mensal')
     expect(draft.ano_final).toBeNull()
   })
+
+  test('não grava undefined no nome ou no código', () => {
+    const draft = buildWizardDraft({ name: undefined, code: undefined })
+    expect(draft.name).toBe('')
+    expect(draft.code).toBe('')
+  })
 })
 
 describe('validação por passo', () => {

@@ -190,6 +190,21 @@ describe('consolidateClientPlanning', () => {
     expect(result.meta.valueMap.VISITS_VOLUME[5]).toBe(42)
     expect(result.meta.integrityByMonth[5].VISITS_VOLUME.status).toBe(CONSOLIDATION_STATUS.COMPLETO)
   })
+
+  test('indicador empresarial usa a matriz como escopo COMPANY sem somar filiais', () => {
+    const companyIndicators = [{ code: 'instagram_followers' }]
+    const result = consolidateClientPlanning({
+      rows: [
+        row('matriz', 'instagram_followers', 1, { meta: 900 }),
+        row('filialA', 'instagram_followers', 1, { meta: 1200 }),
+      ],
+      units,
+      indicators: companyIndicators,
+      policies: resolvePolicies(companyIndicators),
+    })
+    expect(result.meta.valueMap.instagram_followers[1]).toBe(900)
+    expect(result.meta.integrityByMonth[1].instagram_followers.status).toBe(CONSOLIDATION_STATUS.COMPLETO)
+  })
 })
 
 describe('fórmulas de consolidação para o catálogo MX', () => {

@@ -22,6 +22,8 @@ export type PlanningScope = typeof CONSOLIDATED_SCOPE | string
 
 export type ClientScopeState = {
   units: ClientUnit[]
+  /** Valores mensais de todas as unidades ativas; usado pela prontidão do ciclo. */
+  values: PlanningValueRow[]
   /** Só há consolidado a oferecer quando o cliente tem mais de uma unidade ativa. */
   supportsConsolidated: boolean
   consolidated: ConsolidatedClientPlanning | null
@@ -35,7 +37,7 @@ export type ClientScopeState = {
  * uma, o consolidado do ano.
  */
 export function useClientScope(
-  storeId: string,
+  storeId: string | null,
   year: number,
   indicators: ConsolidationIndicator[],
 ): ClientScopeState {
@@ -108,5 +110,5 @@ export function useClientScope(
     })
   }, [supportsConsolidated, rows, units, indicators])
 
-  return { units, supportsConsolidated, consolidated, loading, error, reload }
+  return { units, values: rows, supportsConsolidated, consolidated, loading, error, reload }
 }

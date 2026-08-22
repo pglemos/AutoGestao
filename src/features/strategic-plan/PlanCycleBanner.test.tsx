@@ -111,6 +111,31 @@ describe('PlanCycleBanner', () => {
     expect(screen.getByText('Plano sem indicadores.')).toBeTruthy()
   })
 
+  it('oferece abrir o editor administrativo quando o ciclo existe', () => {
+    render(
+      <PlanCycleBanner
+        state={mockState({
+          cycle: {
+            id: 'cycle-1',
+            client_id: 'client-1',
+            year: 2026,
+            status: 'rascunho',
+            version_number: 1,
+            package_version_id: null,
+            revised_from_id: null,
+            published_at: null,
+            published_by: null,
+            created_at: '2026-01-01T00:00:00Z',
+          },
+          summary: 'Plano em rascunho.',
+        })}
+        year={2026}
+        onOpenEditor={() => undefined}
+      />
+    )
+    expect(screen.getByRole('button', { name: /abrir editor/i })).toBeTruthy()
+  })
+
   it('mostra status "Rascunho" e botão "Enviar para Validação"', () => {
     render(
       <PlanCycleBanner

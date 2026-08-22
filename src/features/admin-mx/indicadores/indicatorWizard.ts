@@ -60,7 +60,18 @@ export function emptyWizardDraft(): IndicatorWizardDraft {
 
 /** Constrói um draft novo ou hidrata o wizard com os dados do indicador editado. */
 export function buildWizardDraft(initial?: Partial<IndicatorWizardDraft>): IndicatorWizardDraft {
-  return { ...emptyWizardDraft(), ...initial }
+  const base = emptyWizardDraft()
+  if (!initial) return base
+  return {
+    ...base,
+    ...initial,
+    name: initial.name ?? base.name,
+    code: initial.code ?? base.code,
+    area: initial.area ?? base.area,
+    description: initial.description ?? base.description,
+    formula_expression: initial.formula_expression ?? base.formula_expression,
+    posicao_ref: initial.posicao_ref ?? base.posicao_ref,
+  }
 }
 
 /** Slug da chave a partir do nome (Base44 slugifyCode). */

@@ -9,6 +9,8 @@ import {
 import { strategicPlanDataSource } from './strategicPlanRepositoryAdapter'
 import { readStrategicRouteState, resolveInitialStrategicDisplayMode, writeStrategicRouteState } from './strategicPlanPreferences'
 import { usePlanCycle, type PlanCycleState } from './usePlanCycle'
+import { useClientScope } from './useClientScope'
+import type { ConsolidationIndicator } from './unitConsolidation'
 import type {
   StrategicDisplayMode,
   StrategicPlanRepository,
@@ -85,12 +87,25 @@ export function useStrategicPlanController(options: {
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
 
+  const consolidationIndicators = useMemo<ConsolidationIndicator[]>(
+    () => series.map(item => ({
+      code: String(item.metricCode || item.code),
+      formula_expression: typeof item.formula_expression === 'string' ? item.formula_expression : null,
+      global_display_order: typeof item.display_order === 'number' ? item.display_order : null,
+    })),
+    [series],
+  )
+  const clientScope = useClientScope(storeId, year, consolidationIndicators)
+  const reloadClientScope = clientScope.reload
+
   const planCycle = usePlanCycle({
     storeId,
     year,
     userId: actor.id,
     canManageCycle: capabilities.canManageStrategicCycle,
     series,
+    activeUnitIds: clientScope.units.filter(unit => unit.active).map(unit => unit.id),
+    planningRows: clientScope.values,
   })
 
   const reload = useCallback(async () => {
@@ -186,8 +201,9 @@ export function useStrategicPlanController(options: {
   }, [])
   const handleSaved = useCallback(async () => {
     setRefreshKey(key => key + 1)
+    reloadClientScope()
     await reload()
-  }, [reload])
+  }, [reload, reloadClientScope])
 
   return {
     repository,

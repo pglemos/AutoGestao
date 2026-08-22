@@ -51,6 +51,7 @@ import {
   persistIndicatorOrder,
   reorderIndicators,
   restoreDefaultOrder,
+  applyCanonicalFormulas,
   toggleOwnerVisibility,
   validateThresholds,
   type CatalogIndicator,
@@ -69,6 +70,7 @@ import {
 } from './indicadores/indicatorData'
 import {
   ensureAdminStrategicPlan,
+  seedStrategicPlanDemo,
   fetchIndicatorHistory,
   fetchStrategicPlanAdminRows,
   fetchStrategicPlanClients,
@@ -83,10 +85,9 @@ import type { IndicatorWizardDraft } from './indicadores/indicatorWizard'
 type CatalogTab = 'catalogo' | 'parametros' | 'metas' | 'planos' | 'historico'
 
 const TABS = [
-  { key: 'catalogo' as const, label: 'Catálogo de indicadores' },
-  { key: 'parametros' as const, label: 'Parâmetros e fórmulas' },
-  { key: 'metas' as const, label: 'Metas e realizados' },
-  { key: 'planos' as const, label: 'Planos por cliente' },
+  { key: 'catalogo' as const, label: 'Catálogo' },
+  { key: 'parametros' as const, label: 'Parâmetros' },
+  { key: 'planos' as const, label: 'Planos por Cliente' },
   { key: 'historico' as const, label: 'Histórico' },
 ]
 
@@ -114,14 +115,14 @@ const QUICK_FILTERS: Array<{ key: CatalogQuickFilter; label: string }> = [
   { key: 'arquivados', label: 'Arquivados' },
 ]
 
-export function AdminIndicadoresPage() {
+export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?: CatalogTab } = {}) {
   const location = useLocation()
   const navigate = useNavigate()
   const { width, bottomClearance } = resolveRouteLayout(location.pathname)
   const [rows, setRows] = useState<CatalogIndicator[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [tab, setTab] = useState<CatalogTab>('catalogo')
+  const [tab, setTab] = useState<CatalogTab>(initialTab)
   const [search, setSearch] = useState('')
   const [area, setArea] = useState('todas')
   const [status, setStatus] = useState('todos')
@@ -171,6 +172,10 @@ export function AdminIndicadoresPage() {
   }, [])
 
   useEffect(() => { void refetch() }, [refetch])
+
+  useEffect(() => {
+    setTab(initialTab)
+  }, [initialTab])
 
   useEffect(() => {
     let active = true
@@ -367,12 +372,74 @@ export function AdminIndicadoresPage() {
     if (planClients.length === 0) void loadPlanClients()
   }
 
-  const openStrategicPlan = (row: StrategicPlanAdminRow) => {
-    if (!row.primaryStoreId) {
-      toast.error('Este cliente ainda não possui uma loja matriz selecionada para abrir o plano.')
-      return
+  const createDemoPlan = async () => {
+    if (submitting) return
+    setSubmitting(true)
+    try {
+      const result = await seedStrategicPlanDemo()
+      if (result.error || !result.cycle) {
+        toast.error(result.error ?? 'Não foi possível criar o demo.')
+        return
+      }
+      toast.success(result.created ? 'Demo criado. Abrindo o editor.' : 'Demo já existia. Abrindo o ciclo.')
+      await loadPlans()
+      openStrategicPlan({
+        cycleId: result.cycle.id,
+        clientId: result.cycle.client_id,
+        clientName: 'Cliente Demonstração',
+        clientStatus: null,
+        primaryStoreId: null,
+        year: result.cycle.year,
+        versionNumber: result.cycle.version_number,
+        status: result.cycle.status,
+        indicatorCount: 0,
+        unitCount: 0,
+        responsibleName: 'Não atribuído',
+        packageName: result.packageName,
+        publishedAt: result.cycle.published_at,
+        updatedAt: result.cycle.created_at,
+      })
+    } finally {
+      setSubmitting(false)
     }
-    const params = new URLSearchParams({ storeId: row.primaryStoreId, year: String(row.year) })
+  }
+
+  const applyFormulas = async () => {
+    if (submitting) return
+    setSubmitting(true)
+    try {
+      const result = await applyCanonicalFormulas()
+      if (result.error) {
+        toast.error(result.error)
+        return
+      }
+      toast.success(result.updated ? `${result.updated} indicador(es) calculável(is) aplicado(s).` : 'Nenhum indicador do catálogo canônico encontrado para atualizar.')
+      await refetch()
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const archiveIndicator = async (indicator: CatalogIndicator) => {
+    if (submitting || indicator.status === 'arquivado') return
+    if (!window.confirm(`Arquivar "${indicator.label}"?`)) return
+    setSubmitting(true)
+    try {
+      const result = await changeIndicatorStatus(indicator.metric_key, 'arquivado')
+      if (result.error) {
+        toast.error(result.error)
+        return
+      }
+      toast.success('Indicador arquivado.')
+      await refetch()
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const openStrategicPlan = (row: StrategicPlanAdminRow, options: { preview?: boolean } = {}) => {
+    const params = new URLSearchParams({ cycleId: row.cycleId })
+    if (options.preview) params.set('preview', '1')
     navigate(`/plano-estrategico?${params.toString()}`)
   }
 
@@ -390,12 +457,12 @@ export function AdminIndicadoresPage() {
       setCreatePlanOpen(false)
       await loadPlans()
       const client = planClients.find(item => item.id === input.clientId)
-      if (client?.primaryStoreId) openStrategicPlan({
+      openStrategicPlan({
         cycleId: result.cycle.id,
         clientId: input.clientId,
-        clientName: client.name,
-        clientStatus: client.status,
-        primaryStoreId: client.primaryStoreId,
+        clientName: client?.name ?? 'Cliente',
+        clientStatus: client?.status ?? null,
+        primaryStoreId: client?.primaryStoreId ?? null,
         year: input.year,
         versionNumber: result.cycle.version_number,
         status: result.cycle.status,
@@ -564,6 +631,7 @@ export function AdminIndicadoresPage() {
                   <div className="flex justify-end gap-2">
                     <Button variant="outline" size="sm" onClick={() => setDetail(item)}>Abrir</Button>
                     <Button variant="outline" size="sm" onClick={() => openEdit(item)}>Editar</Button>
+                    {item.status !== 'arquivado' ? <Button variant="outline" size="sm" onClick={() => void archiveIndicator(item)}>Arquivar</Button> : null}
                     <Button variant="ghost" size="sm" onClick={() => openIndicatorHistory(item)} title={`Abrir histórico de ${item.label}`}><History size={14} />Histórico</Button>
                   </div>
                 </TableCell>
@@ -589,11 +657,11 @@ export function AdminIndicadoresPage() {
               {tab === 'catalogo' ? (
                 orderMode
                   ? <><Button variant="outline" onClick={() => { setOrderMode(false); setOrderKeys(rows.map(item => item.metric_key)) }}>Cancelar ordem</Button><Button onClick={() => void saveOrder()} disabled={submitting}><Save size={16} />Salvar ordem</Button></>
-                  : <><Button variant="outline" onClick={() => setOrderMode(true)}>Editar ordem</Button><Button variant="outline" onClick={() => void restoreDefault()} disabled={submitting}><RotateCcw size={16} />Restaurar padrão MX</Button><Button onClick={openNew}><Plus size={16} />Novo indicador</Button></>
+                  : <><Button variant="outline" onClick={() => setOrderMode(true)}>Editar ordem</Button><Button variant="outline" onClick={() => void applyFormulas()} disabled={submitting}>Aplicar fórmulas MX</Button><Button variant="outline" onClick={() => void createDemoPlan()} disabled={submitting}>Criar Demo</Button><Button variant="outline" onClick={() => void restoreDefault()} disabled={submitting}><RotateCcw size={16} />Restaurar padrão MX</Button><Button variant="outline" onClick={() => setTab('parametros')}>Parâmetros</Button><Button onClick={openNew}><Plus size={16} />Novo indicador</Button></>
               ) : tab === 'parametros' ? (
                 <><Button variant="outline" onClick={() => setTesterOpen(true)}><Calculator size={16} />Testar cálculo</Button><Button onClick={() => setParameterPickerOpen(true)} disabled={!parameterSetId}><Plus size={16} />Criar parâmetro</Button></>
               ) : tab === 'planos' ? (
-                <Button onClick={openCreatePlan}><Plus size={16} />Criar Plano Estratégico</Button>
+                <><Button variant="outline" onClick={() => void createDemoPlan()} disabled={submitting}>Criar Demo</Button><Button onClick={openCreatePlan}><Plus size={16} />Criar Plano Estratégico</Button></>
               ) : tab === 'historico' ? (
                 <Button variant="outline" onClick={() => void loadHistory()}><FileClock size={16} />Atualizar histórico</Button>
               ) : null}
@@ -817,7 +885,7 @@ export function AdminIndicadoresPage() {
           onCreate={input => void createStrategicPlan(input)}
           onClose={() => setCreatePlanOpen(false)}
         />
-        <StrategicPlanPreviewModal row={previewPlan} onClose={() => setPreviewPlan(null)} onOpen={row => { setPreviewPlan(null); openStrategicPlan(row) }} />
+        <StrategicPlanPreviewModal row={previewPlan} onClose={() => setPreviewPlan(null)} onOpen={(row, options) => { setPreviewPlan(null); openStrategicPlan(row, options) }} />
         <IndicatorDetailDrawer
           indicator={detail}
           busy={submitting}

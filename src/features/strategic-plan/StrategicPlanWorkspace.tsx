@@ -1,5 +1,6 @@
 import { AlertMessage } from '@/components/molecules/AlertMessage'
 import { Pencil, Plus, SlidersHorizontal } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/atoms/Button'
 import StrategicHeader from '@/components/owner/strategic/StrategicHeader'
 import StrategicPlanTabs from '@/components/owner/strategic/StrategicPlanTabs'
@@ -27,6 +28,7 @@ export function StrategicPlanWorkspace({ onUpdated, year }: { onUpdated?: (at: D
 }
 
 export function StrategicPlanView({ controller }: { controller: StrategicPlanController }) {
+  const navigate = useNavigate()
   const { shell, capabilities, storeId } = usePlanningWorkspace()
   const pageClass = shell === 'owner'
     ? 'flex min-h-0 flex-1 flex-col space-y-6 pb-20 lg:pb-0'
@@ -75,7 +77,13 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
     <ConditionalPageCanvas enabled={shell === 'owner'} as="div" width="dashboard" bottomClearance="navigation" id="page-plano-estrategico" aria-label="Plano Estratégico" className={pageClass}>
       <div className="space-y-4">
         {shell === 'owner' ? <StrategicHeader /> : null}
-        <PlanCycleBanner state={controller.planCycle} year={controller.year} />
+        <PlanCycleBanner
+          state={controller.planCycle}
+          year={controller.year}
+          onOpenEditor={shell === 'internal' && controller.planCycle.cycle
+            ? (id) => navigate(`/plano-estrategico?cycleId=${encodeURIComponent(id)}`)
+            : undefined}
+        />
         <StrategicPlanTabs tab={controller.tab} onTabChange={controller.setTab} />
 
         {controller.tab === 'resumo' && controller.indicator ? (

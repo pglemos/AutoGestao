@@ -133,14 +133,14 @@ export function CreateIndicatorWizard(props: {
           <div className="grid gap-4 sm:grid-cols-2">
             <MxField label="Nome" hint="Obrigatório.">
               <Input
-                value={draft.name}
+                value={draft.name ?? ''}
                 onChange={event => patch({ name: event.target.value, code: savedCode ? draft.code : slugifyCode(event.target.value) })}
                 placeholder="Vendas Internet Premium"
               />
             </MxField>
             <MxField label="Código interno" hint="Gerado automaticamente. Congela após a primeira gravação.">
               <div className="flex gap-2">
-                <Input value={draft.code} readOnly={!isWizardCodeEditable(savedCode)} onChange={event => patch({ code: event.target.value })} />
+                <Input value={draft.code ?? ''} readOnly={!isWizardCodeEditable(savedCode)} onChange={event => patch({ code: event.target.value })} />
                 {!savedCode ? (
                   <Button variant="outline" size="sm" aria-label="Regenerar código" onClick={() => patch({ code: slugifyCode(draft.name) })}>
                     <RotateCcw size={14} />

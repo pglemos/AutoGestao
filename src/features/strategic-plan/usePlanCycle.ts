@@ -4,11 +4,8 @@
 // matriz é resolvida primeiro. Se a loja não tiver cliente vinculado, o hook
 // fica ocioso (não é erro — a tela continua funcionando como sempre).
 //
-// Prontidão v1: usa o storeId como única unidade de cobertura, e as policies
-// do catálogo de defaults (UNIT_POLICY_DEFAULTS). Cobertura suficiente para o
-// estado atual de produção (uma loja por cliente, catálogo de 95 indicadores).
-// Quando useClientScope expuser o consolidado completo, os inputs podem ser
-// trocados sem mudar o banner.
+// A prontidão local usa todas as unidades ativas expostas por useClientScope.
+// A RPC continua sendo a autoridade final para validar e publicar.
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { fetchClientOfStore, fetchClientProductPackage } from './clientPlanningRepository'
@@ -27,6 +24,7 @@ import {
 } from './planCycle'
 import { resolveUnitPolicy, type UnitPolicy } from './unitPolicy'
 import type { StrategicSeries } from './strategicPlan.types'
+import type { PlanningValueRow } from './clientPlanningConsolidation'
 
 export type PlanCycleState = {
   cycle: PlanCycle | null
@@ -63,6 +61,7 @@ export type PlanCycleState = {
 function buildMetaByUnit(
   series: StrategicSeries[],
   unitId: string,
+  policies: Record<string, UnitPolicy>,
 ): Record<string, Record<string, Record<number, number | null>>> {
   const result: Record<string, Record<string, Record<number, number | null>>> = {}
   for (const s of series) {
@@ -71,7 +70,37 @@ function buildMetaByUnit(
       const val = s.targetValues[m - 1]
       byMonth[m] = val ?? null
     }
-    result[s.code] = { [unitId]: byMonth }
+    const isCompanyScoped = policies[s.code]?.unit_entry_mode === 'COMPANY_ONLY'
+      || policies[s.code]?.unit_entry_mode === 'SHARED_COMPANY_VALUE'
+    result[s.code] = { [isCompanyScoped ? '__empresa__' : unitId]: byMonth }
+  }
+  return result
+}
+
+function buildMetaByUnitFromRows(
+  rows: PlanningValueRow[],
+  indicatorCodes: string[],
+  unitIds: string[],
+  policies: Record<string, UnitPolicy>,
+): Record<string, Record<string, Record<number, number | null>>> {
+  const result: Record<string, Record<string, Record<number, number | null>>> = {}
+  for (const code of indicatorCodes) {
+    result[code] = {}
+    const isCompanyScoped = policies[code]?.unit_entry_mode === 'COMPANY_ONLY'
+      || policies[code]?.unit_entry_mode === 'SHARED_COMPANY_VALUE'
+    const scopes = isCompanyScoped ? ['__empresa__'] : unitIds
+    for (const scopeId of scopes) {
+      result[code][scopeId] = Object.fromEntries(Array.from({ length: 12 }, (_, index) => [index + 1, null]))
+    }
+  }
+  for (const row of rows) {
+    if (!row.month || !result[row.indicator_code]?.[row.loja_id]) continue
+    const isCompanyScoped = policies[row.indicator_code]?.unit_entry_mode === 'COMPANY_ONLY'
+      || policies[row.indicator_code]?.unit_entry_mode === 'SHARED_COMPANY_VALUE'
+    const scopeId = isCompanyScoped ? '__empresa__' : row.loja_id
+    if (isCompanyScoped && row.loja_id !== unitIds[0]) continue
+    if (!result[row.indicator_code]?.[scopeId]) continue
+    result[row.indicator_code][scopeId][row.month] = row.meta ?? null
   }
   return result
 }
@@ -101,8 +130,10 @@ export function usePlanCycle(input: {
   userId: string | null
   canManageCycle: boolean
   series: StrategicSeries[]
+  activeUnitIds?: string[]
+  planningRows?: PlanningValueRow[]
 }): PlanCycleState {
-  const { storeId, year, userId, canManageCycle, series } = input
+  const { storeId, year, userId, canManageCycle, series, activeUnitIds = [], planningRows = [] } = input
 
   const [clientId, setClientId] = useState<string | null>(null)
   const [packageVersionId, setPackageVersionId] = useState<string | null>(null)
@@ -173,17 +204,23 @@ export function usePlanCycle(input: {
 
   // ─── Prontidão — recalculada sempre que series mudam ──────────────────────
   const localReadiness = useMemo<PlanReadiness | null>(() => {
-    if (!storeId || series.length === 0) return null
-    const indicatorCodes = series.map(s => s.code)
+    if (!storeId) return null
+    const indicatorCodes = packageIndicatorCodes?.length
+      ? packageIndicatorCodes
+      : series.map(s => String(s.metricCode || s.code))
+    if (indicatorCodes.length === 0) return null
     const policies = buildPolicies(indicatorCodes)
-    const metaByUnit = buildMetaByUnit(series, storeId)
+    const unitIds = activeUnitIds.length > 0 ? activeUnitIds : [storeId]
+    const metaByUnit = planningRows.length > 0
+      ? buildMetaByUnitFromRows(planningRows, indicatorCodes, unitIds, policies)
+      : buildMetaByUnit(series, storeId, policies)
     return validatePlanReadiness({
       indicatorCodes,
-      activeUnitIds: [storeId],
+      activeUnitIds: unitIds,
       policies,
       metaByUnit,
     })
-  }, [storeId, series])
+  }, [activeUnitIds, packageIndicatorCodes, planningRows, series, storeId])
 
   useEffect(() => {
     if (!cycle || !canManageCycle) {

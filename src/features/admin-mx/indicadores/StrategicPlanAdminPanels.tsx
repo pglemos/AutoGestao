@@ -226,10 +226,10 @@ export function IndicatorHistoryPanel(props: {
   )
 }
 
-export function StrategicPlanPreviewModal(props: { row: StrategicPlanAdminRow | null; onClose: () => void; onOpen: (row: StrategicPlanAdminRow) => void }) {
+export function StrategicPlanPreviewModal(props: { row: StrategicPlanAdminRow | null; onClose: () => void; onOpen: (row: StrategicPlanAdminRow, options?: { preview?: boolean }) => void }) {
   const row = props.row
   return (
-    <Modal open={Boolean(row)} onClose={props.onClose} title={row ? `Preview Dono · ${row.clientName}` : 'Preview Dono'} size="xl" footer={row ? <><Button variant="outline" onClick={props.onClose}>Fechar</Button><Button onClick={() => props.onOpen(row)}>Abrir plano completo</Button></> : null}>
+    <Modal open={Boolean(row)} onClose={props.onClose} title={row ? `Preview Dono · ${row.clientName}` : 'Preview Dono'} size="xl" footer={row ? <><Button variant="outline" onClick={props.onClose}>Fechar</Button><Button variant="outline" onClick={() => props.onOpen(row, { preview: true })}>Abrir preview completo</Button><Button onClick={() => props.onOpen(row)}>Abrir editor</Button></> : null}>
       {row ? <div className="space-y-5">
         <MxStatusBanner tone="info">Pré-visualização somente leitura com os mesmos dados persistidos do ciclo selecionado. Ações de meta e publicação ficam bloqueadas neste modo.</MxStatusBanner>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">

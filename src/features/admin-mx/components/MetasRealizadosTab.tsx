@@ -56,10 +56,14 @@ const DEFAULT_YEAR = new Date().getFullYear()
 export function MetasRealizadosTab(props: {
   indicators: TargetIndicator[]
   onNavigateToParams?: () => void
+  initialStoreId?: string
+  initialYear?: number
+  stores?: StoreOption[]
+  onSaved?: () => void
 }) {
-  const [stores, setStores] = useState<StoreOption[]>([])
-  const [storeId, setStoreId] = useState('')
-  const [year, setYear] = useState(DEFAULT_YEAR)
+  const [stores, setStores] = useState<StoreOption[]>(props.stores ?? [])
+  const [storeId, setStoreId] = useState(props.initialStoreId ?? '')
+  const [year, setYear] = useState(props.initialYear ?? DEFAULT_YEAR)
   const [rows, setRows] = useState<StoreTargetValue[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -84,23 +88,39 @@ export function MetasRealizadosTab(props: {
   }, [storeId, year])
 
   useEffect(() => {
+    const boundStores = props.stores
+    if (boundStores?.length) {
+      setStores(boundStores)
+      setStoreId(current => current || props.initialStoreId || boundStores[0].id)
+      return
+    }
     let active = true
     void (async () => {
-      const { data, error: storeError } = await (await import('@/lib/supabase')).supabase
+      const supabase = (await import('@/lib/supabase')).supabase
+      const { data, error: storeError } = await supabase
         .from('lojas')
         .select('id, name')
         .order('name', { ascending: true })
       if (!active) return
-      if (storeError) {
-        setError(storeError.message)
-        setLoading(false)
-        return
+      let nextStores = (data ?? []) as StoreOption[]
+      if (storeError || nextStores.length === 0) {
+        const units = await supabase.from('unidades_cliente_consultoria').select('id, name, store_id').order('name', { ascending: true })
+        if (!active) return
+        if (units.error && storeError) {
+          setError(storeError.message)
+          setLoading(false)
+          return
+        }
+        nextStores = ((units.data ?? []) as Array<{ id: string; name: string | null; store_id: string | null }>).map(unit => ({
+          id: unit.store_id || unit.id,
+          name: unit.name || unit.id,
+        }))
       }
-      setStores((data ?? []) as StoreOption[])
-      if (data?.length) setStoreId(current => current || String(data[0].id))
+      setStores(nextStores)
+      if (nextStores.length) setStoreId(current => current || props.initialStoreId || nextStores[0].id)
     })()
     return () => { active = false }
-  }, [])
+  }, [props.initialStoreId, props.stores])
 
   useEffect(() => { void refetch() }, [refetch])
 
@@ -161,7 +181,10 @@ export function MetasRealizadosTab(props: {
       ? await saveIndicatorTargets({ lojaId: storeId, indicatorCode: code, year, values })
       : await saveIndicatorActuals({ lojaId: storeId, indicatorCode: code, year, values })
     if (result.error) toast.error(result.error)
-    else toast.success(field === 'meta' ? 'Metas salvas.' : 'Realizado salvo.')
+    else {
+      toast.success(field === 'meta' ? 'Metas salvas.' : 'Realizado salvo.')
+      props.onSaved?.()
+    }
     setSavingKey(null)
     await refetch()
     clientScope.reload()
@@ -384,7 +407,7 @@ export function MetasRealizadosTab(props: {
                           <TableRow key={previousKey} className="bg-background-muted/20">
                             <TableCell>
                               <div className="text-xs font-medium text-muted-foreground">Ano anterior</div>
-                              <div className="text-[11px] text-muted-foreground">Somente leitura</div>
+                              <div className="text-caption text-muted-foreground">Somente leitura</div>
                             </TableCell>
                             {MONTH_LABELS.map((_label, index) => {
                               const month = index + 1
@@ -415,7 +438,7 @@ export function MetasRealizadosTab(props: {
           year={year}
           stores={stores}
           onClose={() => setCopyOpen(false)}
-          onApplied={async () => { await refetch(); clientScope.reload() }}
+          onApplied={async () => { await refetch(); clientScope.reload(); props.onSaved?.() }}
         />
       ) : null}
 
@@ -426,7 +449,7 @@ export function MetasRealizadosTab(props: {
           indicatorCode={historyFor}
           year={year}
           onClose={() => setHistoryFor(null)}
-          onRestored={async () => { await refetch() }}
+          onRestored={async () => { await refetch(); props.onSaved?.() }}
         />
       ) : null}
 
@@ -439,7 +462,7 @@ export function MetasRealizadosTab(props: {
           currentValues={rows.map(row => ({ indicator_code: row.indicator_code, month: row.month, value: row.meta }))}
           year={year}
           onClose={() => setFile(null)}
-          onImported={async () => { setFile(null); await refetch(); clientScope.reload() }}
+          onImported={async () => { setFile(null); await refetch(); clientScope.reload(); props.onSaved?.() }}
         />
       ) : null}
     </div>

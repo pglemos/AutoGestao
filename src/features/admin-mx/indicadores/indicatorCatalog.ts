@@ -265,3 +265,26 @@ export async function fetchIndicatorParameters(): Promise<{ rows: IndicatorParam
     .eq('parameter_set_id', set.id)
   return { rows: (data ?? []) as IndicatorParameter[], setName: set.name, error: error?.message ?? null }
 }
+
+export async function applyCanonicalFormulas(): Promise<{ updated: number; error: string | null }> {
+  const { CANONICAL_CALCULATED_INDICATORS } = await import('./canonicalIndicatorFormulas')
+  const { data, error } = await supabase.from('catalogo_metricas_consultoria').select('metric_key')
+  if (error) return { updated: 0, error: error.message }
+  const byLower = new Map((data ?? []).map(row => [String(row.metric_key).toLowerCase(), String(row.metric_key)]))
+  let updated = 0
+  for (const item of CANONICAL_CALCULATED_INDICATORS) {
+    const metricKey = byLower.get(item.metric_key.toLowerCase())
+    if (!metricKey) continue
+    const { error: updateError } = await supabase
+      .from('catalogo_metricas_consultoria')
+      .update({
+        formula_expression: item.formula_expression,
+        target_calculation_mode: item.target_calculation_mode,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('metric_key', metricKey)
+    if (updateError) return { updated, error: updateError.message }
+    updated += 1
+  }
+  return { updated, error: null }
+}

@@ -156,7 +156,7 @@ export function ClientOverridesSection(props: {
             </MxSelect>
           </MxField>
           <MxField label="Ano de referência">
-            <MxSelect aria-label="Ano de referência" value={String(CURRENT_YEAR)}>
+            <MxSelect aria-label="Ano de referência" defaultValue={String(CURRENT_YEAR)} disabled>
               <option value={String(CURRENT_YEAR)}>{CURRENT_YEAR}</option>
             </MxSelect>
           </MxField>

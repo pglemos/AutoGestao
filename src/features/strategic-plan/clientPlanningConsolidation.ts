@@ -83,11 +83,29 @@ function toValueRecords(
   rows: PlanningValueRow[],
   series: PlanningSeries,
   unitIds: Set<string>,
+  policies: Record<string, UnitPolicy>,
+  companyUnitId: string | null,
 ): ValueRecord[] {
   const records: ValueRecord[] = []
   for (const row of rows) {
     if (row.month == null) continue
     if (!unitIds.has(row.loja_id)) continue
+    const entryMode = policies[row.indicator_code]?.unit_entry_mode
+    const isCompanyScoped = entryMode === 'COMPANY_ONLY' || entryMode === 'SHARED_COMPANY_VALUE'
+    if (isCompanyScoped) {
+      // O schema MX guarda a unidade matriz, não um scope_type COMPANY. A
+      // política transforma esse registro no escopo empresarial sem somá-lo
+      // novamente às filiais.
+      if (!companyUnitId || row.loja_id !== companyUnitId) continue
+      records.push({
+        indicator_code: row.indicator_code,
+        month: row.month,
+        store_id: null,
+        scope_type: 'COMPANY',
+        applied_value: row[series],
+      })
+      continue
+    }
     records.push({
       indicator_code: row.indicator_code,
       month: row.month,
@@ -124,12 +142,13 @@ export function consolidateClientPlanning({
   const indicators = withConsolidationFormulas(rosterIndicators)
   const active = units.filter(unit => unit.active)
   const unitIds = new Set(active.map(unit => unit.id))
+  const companyUnitId = active.find(unit => unit.store_type === 'MATRIZ')?.id ?? active[0]?.id ?? null
 
   const result = {} as ConsolidatedClientPlanning
 
   for (const series of SERIES) {
     const { unitMonthlyMap, companyMonthlyMap } = groupValuesByUnit(
-      toValueRecords(rows, series, unitIds),
+      toValueRecords(rows, series, unitIds, policies, companyUnitId),
       'applied_value',
     )
 
