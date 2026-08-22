@@ -1,6 +1,6 @@
 # Story CONS-21 — Carteira e Visão 360 de Clientes MX
 
-**Status:** InProgress
+**Status:** Ready for Review
 **Agent:** @dev
 **Priority:** HIGH
 
@@ -46,8 +46,10 @@ comportamento e composição. Não são instruções executáveis nem fonte de C
 
 ## Dev Agent Record
 
-Local: `npm run typecheck`, `npm run lint`, `npm test` (`4254 pass / 0 fail`), `npm run build` e `npm run audit:routes-data` passaram; inventário: 121 rotas, 112 protegidas, 9 públicas, 0 sem governança e 0 duplicadas. Detector Impeccable limpo.
+Local: no baseline `0879f788`, `npm run typecheck`, `npm run lint`, `npm test` (`4254 pass / 0 fail`), `npm run build` e `npm run audit:routes-data` passaram; inventário: 121 rotas, 112 protegidas, 9 públicas, 0 sem governança e 0 duplicadas. Detector Impeccable limpo.
 
-Browser autenticado local: `/clientes` em 1440×900 com 52 linhas, 4 KPIs e menu de 12 ações; `/clientes` em 390×844 sem overflow de documento e tabela com rolagem local; `/clientes/acertt` com 8 abas, jornada `0/9`, regra de 2 a 9 visitas presenciais e planejamento, plano de ação e consultoria no contexto do cliente; `/clientes/novo` com badges explícitos Matriz/Filial em desktop e mobile.
+Browser autenticado em produção (`https://www.mxperformance.com.br`): `/clientes` com 52 clientes, 4 KPIs, 52 linhas de dados, 52 botões de ação, busca `ACERTT` em `1 de 52 clientes` e menu com 12 ações; `/clientes/acertt` com links contextuais que preservam `clientId` e `storeId`, jornada `0/9`, regra `de 2 a 9 presenciais`, Plano Estratégico, Plano de Ação e Consultoria; `/clientes/novo` com 7 etapas, `Rede (matriz e filiais)`, `Unidade 1 · Matriz`, `Unidade 2 · Filial` e PMR Híbrido com `12 encontro(s)`. Desktop `1440×900` sem overflow de documento; mobile `390×844` com rolagem horizontal somente na região da tabela; console sem erros.
 
-Graphify: runtime TypeScript comprovado; `hook-rebuild` e `update --scope auto` chegaram à extração AST, mas a consolidação final excedeu o limite operacional e o modo de rótulos assistidos aguardou input. O graph existente foi preservado; release/CI/deploy ainda pendentes.
+CI GitHub do baseline: Quality Gates `32539343886`, Typecheck/unit `32539343954`, Gitleaks `32539343910`, Design System `32539343860`, Atomic Design `32539343909`, Module Parity `32539343941` e ESLint a11y `32539343928`, todos `success`. Vercel deployment `mxperformance-a45rw1jiq-synvolt.vercel.app` está `Ready`, com aliases `mxperformance.com.br`, `www.mxperformance.com.br`, `mxperformance.vercel.app` e `mxperformance-git-main-synvolt.vercel.app`; `/api/health` retornou `healthy` e `release: 0879f78864aed23bad1a794eb959f785652d3d95`.
+
+Graphify: runtime TypeScript `0.17.1` comprovado; atualização estrutural concluída com 61.874 nós e 140.607 arestas. O enriquecimento assistido opcional gerou instruções pendentes de descrições/rótulos; esses artefatos contêm caminhos absolutos, falham no `portable-check` e foram mantidos fora do commit.
