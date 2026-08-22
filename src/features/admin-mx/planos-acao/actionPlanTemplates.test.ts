@@ -9,6 +9,8 @@ import {
   suggestTemplateKey,
   validateTemplateDraft,
   officialActionPlanIndicatorCatalog,
+  formatTemplateWizardEffectivenessOption,
+  formatTemplateWizardPrimaryOption,
   withPersistedIndicatorOption,
 } from './actionPlanTemplates'
 
@@ -77,6 +79,31 @@ describe('templates de plano de ação — validação', () => {
     })
     expect(rows.every(row => row.unit !== 'number' && row.unit !== 'percent' && row.unit !== 'veículos')).toBe(true)
     expect(withPersistedIndicatorOption(rows, 'comercial', 'SALES_WALKIN', 'Vendas - Fluxo de Porta').map(row => row.code)).toEqual(comercial.map(row => row.code))
+    expect(comercial.map(row => formatTemplateWizardPrimaryOption(row))).toEqual([
+      'Vendas Total — Número inteiro (Aumentar)',
+      'Vendas - Fluxo de Porta — Número inteiro (Aumentar)',
+      'Vendas - Indicação — Número inteiro (Aumentar)',
+      'Vendas - Carteira Empresa — Número inteiro (Aumentar)',
+      'Vendas - Carteira Vendedor — Número inteiro (Aumentar)',
+      'Vendas - Internet — Número inteiro (Aumentar)',
+      'Vendas - Outros — Número inteiro (Aumentar)',
+      'Volume de Vendedores — Número inteiro (Aumentar)',
+      'Média de Vendas por Vendedor — Número decimal (Aumentar)',
+      'Média de Leads por Vendedor — Número decimal (Aumentar)',
+      'Volume de Carros Avaliados — Número decimal (Aumentar)',
+      'Volume de Vendas com Troca — Número decimal (Aumentar)',
+      '% Venda com Troca — Percentual (Aumentar)',
+      'Volume de Fichas Aprovadas — Número decimal (Aumentar)',
+      'Volume de Fichas Pagas — Número decimal (Aumentar)',
+      '% Vendas Financiadas — Percentual (Aumentar)',
+      'Volume de Agendamentos — Número decimal (Aumentar)',
+      'Volume de Visitas — Número decimal (Aumentar)',
+      'Volume de Agendamentos por Venda — Número decimal (Reduzir)',
+      'Conversão de Leads em Agendamentos — Percentual (Aumentar)',
+      'Conversão de Agendamentos em Visitas — Percentual (Aumentar)',
+      'Conversão de Visitas em Vendas — Percentual (Aumentar)',
+    ])
+    expect(formatTemplateWizardEffectivenessOption(comercial[0])).toBe('Vendas Total — Número inteiro')
   })
 
   test('mantém indicador legado selecionável no editor', () => {

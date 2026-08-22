@@ -9,6 +9,8 @@ import {
   emptyTemplateItem,
   fetchIndicatorCatalog,
   fetchPublishedTrainings,
+  formatTemplateWizardEffectivenessOption,
+  formatTemplateWizardPrimaryOption,
   validateTemplateDraft,
   type ActionPlanTemplateItem,
   type ImprovementDirection,
@@ -258,7 +260,7 @@ export function TemplateWizard(props: {
                 <MxSelect aria-label="Indicador principal" value={props.draft.primary_indicator_code} onChange={event => onIndicatorChange(event.target.value)} disabled={!props.draft.departamento}>
                   <option value="">{props.draft.departamento ? 'Selecione um indicador' : 'Selecione primeiro um departamento'}</option>
                   {deptIndicators.map(indicator => (
-                    <option key={indicator.code} value={indicator.code}>{indicator.label}</option>
+                    <option key={indicator.code} value={indicator.code}>{formatTemplateWizardPrimaryOption(indicator)}</option>
                   ))}
                 </MxSelect>
                 {stepErrors.indicador ? <p className="mt-1 text-xs text-status-danger-text">{stepErrors.indicador}</p> : null}
@@ -341,7 +343,7 @@ export function TemplateWizard(props: {
               <MxField label="Indicador de Eficácia *">
                 <MxSelect aria-label="Indicador de eficácia" value={props.draft.effectiveness_indicator_code} onChange={event => patch({ effectiveness_indicator_code: event.target.value })}>
                   <option value="">Selecionar...</option>
-                  {deptIndicators.map(indicator => <option key={indicator.code} value={indicator.code}>{indicator.label}</option>)}
+                  {deptIndicators.map(indicator => <option key={indicator.code} value={indicator.code}>{formatTemplateWizardEffectivenessOption(indicator)}</option>)}
                 </MxSelect>
                 {stepErrors.eficacia ? <p className="mt-1 text-xs text-status-danger-text">{stepErrors.eficacia}</p> : null}
               </MxField>

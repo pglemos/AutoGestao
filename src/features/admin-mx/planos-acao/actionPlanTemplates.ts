@@ -226,6 +226,25 @@ export function calculateItemWeights(count: number): Array<{ weight_bp: number; 
 
 export type IndicatorCatalogEntry = { code: string; label: string; category: string; unit: string; direction: string }
 
+/** Base44 TemplateWizard.jsx: `{i.name} — {i.unit} ({DIRECTION_LABELS[i.default_direction]})` */
+const DEFINITION_DIRECTION_LABELS: Record<string, string> = {
+  AUMENTAR: 'Aumentar',
+  DIMINUIR: 'Reduzir',
+  MANTER: 'Manter',
+  FAIXA: 'Atingir faixa ideal',
+  CORRIGIR_PROCESSO: 'Corrigir processo',
+}
+
+export function formatTemplateWizardPrimaryOption(indicator: Pick<IndicatorCatalogEntry, 'label' | 'unit' | 'direction'>) {
+  const direction = DEFINITION_DIRECTION_LABELS[indicator.direction] || indicator.direction
+  return `${indicator.label} — ${indicator.unit || ''} (${direction})`
+}
+
+/** Base44 TemplateWizard.jsx eficácia: `{i.name} — {i.unit}` */
+export function formatTemplateWizardEffectivenessOption(indicator: Pick<IndicatorCatalogEntry, 'label' | 'unit'>) {
+  return `${indicator.label} — ${indicator.unit || ''}`
+}
+
 /** 45 indicadores oficiais do Base44, com departamento no código do wizard MX. */
 export function officialActionPlanIndicatorCatalog(): IndicatorCatalogEntry[] {
   return BASE44_STANDARD_INDICATORS.map(item => ({
