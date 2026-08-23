@@ -90,6 +90,9 @@ export interface PortfolioOverviewTabProps {
 
 function onboardingLabel(client: PortfolioClient): string {
   if (client.onboarding_completed === true) return 'Concluído'
+  // Preferência pela jornada real — onboarding_step=1 preso em massa não reflete o progresso.
+  if (client.visitsTotal > 0 && client.visitsDone >= client.visitsTotal) return 'Concluído'
+  if (client.visitsTotal > 0) return `${client.visitsDone} de ${client.visitsTotal}`
   if (client.onboarding_step && client.onboarding_step > 0) return `Etapa ${client.onboarding_step}/7`
   return 'Não iniciado'
 }
@@ -350,7 +353,7 @@ export function PortfolioOverviewTab({ rows, onAction, onRefetch }: PortfolioOve
           if (check.key !== 'dono-master' || !pendenciasClient) return
           const slug = pendenciasClient.slug || pendenciasClient.id
           setPendenciasClient(null)
-          navigate(`/clientes/${slug}?tab=pessoas`)
+          navigate(`/clientes/${slug}?tab=pessoas&corrigirMaster=1&returnTo=activation`)
         }}
       />
     </div>

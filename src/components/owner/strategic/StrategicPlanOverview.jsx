@@ -70,13 +70,17 @@ export default function StrategicPlanOverview({ repository, onCardClick, onRowCl
 
   return (
     <div className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h3 className="text-sm font-semibold text-foreground">Visão Geral</h3>
+        <ViewSelector value={view} onChange={setView} />
+      </div>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {executiveCards.map(({ config, series }) => (
           <ExecutiveCard key={config.id} card={config} series={series} view={view} monthIndex={monthIndex} year={year} onClick={() => onCardClick(series.id)} />
         ))}
       </div>
       <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 shadow-sm">
-        <div className="flex flex-wrap items-center justify-between gap-2"><h3 className="text-sm font-semibold">Indicadores Estratégicos</h3><div className="flex items-center gap-2"><Button variant="ghost" size="sm" onClick={() => setExpanded(Object.fromEntries(AREA_LIST.map(area => [area, true])))}>Expandir todas</Button><Button variant="ghost" size="sm" onClick={() => setExpanded({})}>Recolher todas</Button><ViewSelector value={view} onChange={setView} /></div></div>
+        <div className="flex flex-wrap items-center justify-between gap-2"><h3 className="text-sm font-semibold">Indicadores Estratégicos</h3><div className="flex items-center gap-2"><Button variant="ghost" size="sm" onClick={() => setExpanded(Object.fromEntries(AREA_LIST.map(area => [area, true])))}>Expandir todas</Button><Button variant="ghost" size="sm" onClick={() => setExpanded({})}>Recolher todas</Button></div></div>
         <StrategicPlanOverviewFilters search={search} onSearchChange={setSearch} area={areaFilter} onAreaChange={setAreaFilter} result={resultFilter} onResultChange={setResultFilter} onClear={clearFilters} total={allSeries.length} filtered={filtered.length} />
       </div>
       <div className="rounded-xl border border-border bg-card shadow-sm">

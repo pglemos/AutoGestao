@@ -6,6 +6,7 @@ import {
   formatPartialUnitsLabel,
   groupValuesByUnit,
   isEditableInScope,
+  resolveActualIndicatorValue,
   resolveStoreScopedValue,
 } from './unitConsolidation'
 import type { UnitPolicy } from './unitPolicy'
@@ -314,6 +315,40 @@ describe('computeConsolidatedMonth — média, último valor e valor de empresa'
     })
     expect(consolidated.DESCONHECIDO).toBeNull()
     expect(integrity.DESCONHECIDO.status).toBe(CONSOLIDATION_STATUS.INCONSISTENTE)
+  })
+})
+
+describe('resolveActualIndicatorValue', () => {
+  test('calculável usa effective/calculated sem exigir manual', () => {
+    expect(resolveActualIndicatorValue({
+      indicator_code: 'MARGEM',
+      month: 1,
+      calculated_value: 12.5,
+    })).toBe(12.5)
+    expect(resolveActualIndicatorValue({
+      indicator_code: 'MARGEM',
+      month: 1,
+      effective_value: 11,
+      calculated_value: 12.5,
+    })).toBe(11)
+  })
+
+  test('manual_override vence calculated', () => {
+    expect(resolveActualIndicatorValue({
+      indicator_code: 'VENDAS',
+      month: 2,
+      manual_override_value: 99,
+      effective_value: 50,
+      calculated_value: 40,
+    })).toBe(99)
+  })
+
+  test('meta path não mistura realizado no fallback de applied_value', () => {
+    const { companyMonthlyMap } = groupValuesByUnit(
+      [{ indicator_code: 'X', month: 1, effective_value: 77, calculated_value: 88 }],
+      'applied_value',
+    )
+    expect(companyMonthlyMap.X[1]).toBeNull()
   })
 })
 

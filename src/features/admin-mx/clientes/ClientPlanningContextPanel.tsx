@@ -14,12 +14,14 @@ import { consolidateClientPlanning, resolvePolicies, type PlanningValueRow } fro
 import {
   fetchClientProductPackage,
   fetchClientUnits,
+  fetchCyclePlanningValues,
   fetchUnitsPlanningValues,
 } from '@/features/strategic-plan/clientPlanningRepository'
 import type { ClientUnit } from '@/features/strategic-plan/clientUnits'
 import type { ProductPackageResolution } from '@/features/strategic-plan/clientProductPackage'
-import { buildPublicationCardFromRows } from '@/features/strategic-plan/planCycle'
+import { type PublicationCardSummary } from '@/features/strategic-plan/planCycle'
 import { fetchCurrentCycle, validateCycleReadiness, type PlanCycle } from '@/features/strategic-plan/planCycleRepository'
+import { getClientStrategicPlanPublicationSummary } from '@/features/strategic-plan/publicationSummary'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/organisms/Table'
 
 type PlanningState = {
@@ -28,6 +30,8 @@ type PlanningState = {
   cycle: PlanCycle | null
   readiness: { total: number; ready: number; pending: number; canPublish: boolean } | null
   values: PlanningValueRow[]
+  publicationCard: PublicationCardSummary | null
+  revisionInProgress: boolean
   error: string | null
 }
 
@@ -45,16 +49,23 @@ function formatValue(value: number | null | undefined): string {
 export function ClientPlanningContextPanel(props: { clientId: string; clientSlug?: string | null; primaryStoreId?: string | null }) {
   const year = new Date().getFullYear()
   const month = new Date().getMonth() + 1
-  const [state, setState] = useState<PlanningState>({ units: [], packageResolution: null, cycle: null, readiness: null, values: [], error: null })
+  const [state, setState] = useState<PlanningState>({
+    units: [], packageResolution: null, cycle: null, readiness: null, values: [],
+    publicationCard: null, revisionInProgress: false, error: null,
+  })
   const [loading, setLoading] = useState(true)
 
   const load = useCallback(async () => {
     setLoading(true)
     setState(current => ({ ...current, error: null }))
-    const [unitsResult, packageResult, cycleResult] = await Promise.all([
+    const [unitsResult, packageResult, cycleResult, publicationResult] = await Promise.all([
       fetchClientUnits(props.clientId),
       fetchClientProductPackage(props.clientId),
       fetchCurrentCycle(props.clientId, year),
+      getClientStrategicPlanPublicationSummary({
+        clientAccountId: props.clientId,
+        referenceYear: year,
+      }),
     ])
 
     if (unitsResult.error) {
@@ -65,7 +76,9 @@ export function ClientPlanningContextPanel(props: { clientId: string; clientSlug
 
     const units = unitsResult.units
     const activeUnitIds = units.filter(unit => unit.active).map(unit => unit.id)
-    const valuesResult = await fetchUnitsPlanningValues(activeUnitIds, year)
+    const valuesResult = cycleResult.cycle
+      ? await fetchCyclePlanningValues(cycleResult.cycle.id)
+      : await fetchUnitsPlanningValues(activeUnitIds, year)
     let readiness: PlanningState['readiness'] = null
     let readinessError: string | null = null
     if (cycleResult.cycle) {
@@ -82,7 +95,9 @@ export function ClientPlanningContextPanel(props: { clientId: string; clientSlug
       cycle: cycleResult.cycle,
       readiness,
       values: valuesResult.rows,
-      error: cycleResult.error ?? valuesResult.error ?? readinessError,
+      publicationCard: publicationResult.summary?.card ?? null,
+      revisionInProgress: publicationResult.summary?.revisionInProgress ?? false,
+      error: cycleResult.error ?? valuesResult.error ?? readinessError ?? publicationResult.error,
     })
     setLoading(false)
   }, [props.clientId, year])
@@ -117,14 +132,7 @@ export function ClientPlanningContextPanel(props: { clientId: string; clientSlug
       realizado: consolidated?.realizado.valueMap[item.metric_key]?.[month] ?? null,
     }))
   }, [consolidated, month, resolution])
-  const publicationCard = useMemo(() => {
-    if (!state.cycle) return null
-    return buildPublicationCardFromRows({
-      cycleStatus: state.cycle.status,
-      rosterCodes: resolution?.indicatorCodes ?? [],
-      rows: state.values,
-    })
-  }, [resolution?.indicatorCodes, state.cycle, state.values])
+  const publicationCard = state.publicationCard
   const expectedCells = (resolution?.items.length ?? 0) * activeUnits.length
   const metasPreenchidas = state.values.filter(row => row.month === month && row.meta != null).length
   const realizadosPreenchidos = state.values.filter(row => row.month === month && row.realizado != null).length
@@ -157,6 +165,9 @@ export function ClientPlanningContextPanel(props: { clientId: string; clientSlug
 
       <div className="space-y-4 p-5">
         {state.error ? <MxStatusBanner tone="warning">Leitura parcial do planejamento: {state.error}</MxStatusBanner> : null}
+        {state.revisionInProgress ? (
+          <MxStatusBanner tone="info">Há revisão em rascunho. O card acima mostra a versão publicada ao Dono.</MxStatusBanner>
+        ) : null}
         {!activeUnits.length ? (
             <MxStatusBanner tone="warning"><Building2 size={16} className="mr-1 inline" />Cadastre a matriz operacional para iniciar o consolidado.</MxStatusBanner>
         ) : null}
@@ -167,7 +178,7 @@ export function ClientPlanningContextPanel(props: { clientId: string; clientSlug
         ) : null}
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-lg border border-border bg-surface-alt p-3"><div className="text-xs text-muted-foreground">Ciclo {year}</div><div className="mt-1 font-semibold text-foreground">{state.cycle ? CYCLE_STATUS_LABEL[state.cycle.status] ?? state.cycle.status : 'Sem ciclo'}</div></div>
+          <div className="rounded-lg border border-border bg-surface-alt p-3"><div className="text-xs text-muted-foreground">Ciclo {year}</div><div className="mt-1 font-semibold text-foreground">{publicationCard ? publicationCard.statusLabel : state.cycle ? CYCLE_STATUS_LABEL[state.cycle.status] ?? state.cycle.status : 'Sem ciclo'}</div></div>
           <div className="rounded-lg border border-border bg-surface-alt p-3"><div className="text-xs text-muted-foreground">Indicadores do pacote</div><div className="mt-1 font-semibold text-foreground">{resolution?.items.length ?? 0}</div><div className="text-xs text-muted-foreground">{resolution ? `${resolution.manualCount} manuais · ${resolution.calculatedCount} calculados` : 'Produto sem roster'}</div></div>
           <div className="rounded-lg border border-border bg-surface-alt p-3"><div className="text-xs text-muted-foreground">Unidades consolidadas</div><div className="mt-1 font-semibold text-foreground">{activeUnits.length}</div><div className="text-xs text-muted-foreground">matriz + filiais ativas</div></div>
           <div className="rounded-lg border border-border bg-surface-alt p-3"><div className="text-xs text-muted-foreground">Indicadores com meta</div><div className="mt-1 font-semibold text-foreground">{publicationCard ? publicationCard.indicadoresComMeta : '—'}</div><div className="text-xs text-muted-foreground">{publicationCard ? `Metas publicadas: ${publicationCard.metasPublicadas} · Pendentes: ${publicationCard.metasPendentes}` : 'Validação ainda não iniciada'}</div></div>

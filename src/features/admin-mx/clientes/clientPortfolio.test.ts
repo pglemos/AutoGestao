@@ -161,8 +161,9 @@ describe('cards da carteira', () => {
     expect(clientBuckets(client({ onboarding_completed: false }), HOJE)).toContain('cadastros_pendentes')
   })
 
-  test('ativo sem Dono Master entra em bloqueios', () => {
-    expect(clientBuckets(client({ hasDonoMaster: false }), HOJE)).toContain('com_bloqueios')
+  test('ativo sem Dono Master não infla Com Bloqueios (já está ativo)', () => {
+    expect(clientBuckets(client({ hasDonoMaster: false }), HOJE)).not.toContain('com_bloqueios')
+    expect(clientBuckets(client({ status: 'inativo', hasDonoMaster: false }), HOJE)).toContain('com_bloqueios')
   })
 
   test('contadores somam por card', () => {

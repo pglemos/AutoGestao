@@ -2,10 +2,8 @@ import { useEffect, useState } from 'react'
 import { Button } from '@/components/atoms/Button'
 import { REPAIRABLE_CHECKS, type RepairKey, runClientRepair } from './clientRepairs'
 import { buildClientReadiness, type ReadinessCheck, readinessSummary } from './clientReadiness'
-import { resolveOwnerMaster } from './personAccess'
-import { buildPublicationCardFromRows } from '@/features/strategic-plan/planCycle'
-import { fetchClientProductPackage, fetchClientUnits, fetchUnitsPlanningValues } from '@/features/strategic-plan/clientPlanningRepository'
-import { fetchCurrentCycle } from '@/features/strategic-plan/planCycleRepository'
+import { getClientStrategicPlanPublicationSummary } from '@/features/strategic-plan/publicationSummary'
+import { evaluateOwnerMasterReadiness } from './ownerMasterReadiness'
 import { Modal } from '@/components/organisms/Modal'
 import { MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
 import { supabase } from '@/lib/supabase'
@@ -36,13 +34,13 @@ export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch
   const loadChecks = async () => {
     setLoading(true)
     try {
-      const [clientRes, unitsRes, modulesRes, assignmentsRes, accessRes, clientsRes] = await Promise.all([
+      const [clientRes, unitsRes, modulesRes, assignmentsRes, clientsRes, ownerMaster] = await Promise.all([
         supabase.from('clientes_consultoria').select('*').eq('id', clientId).single(),
         supabase.from('unidades_cliente_consultoria').select('name, is_primary').eq('client_id', clientId),
         supabase.from('modulos_cliente_consultoria').select('enabled').eq('client_id', clientId),
         supabase.from('atribuicoes_consultoria').select('active, assignment_role').eq('client_id', clientId),
-        supabase.from('acessos_cliente_consultoria').select('id, nome, is_primary, email, telefone, funcao_declarada, is_dono_master, status, papeis').eq('client_id', clientId),
         supabase.from('clientes_consultoria').select('primary_store_id, status').eq('primary_store_id', (await supabase.from('clientes_consultoria').select('primary_store_id').eq('id', clientId).single()).data?.primary_store_id).neq('id', clientId),
+        evaluateOwnerMasterReadiness(clientId),
       ])
 
       const client = clientRes.data
@@ -59,23 +57,18 @@ export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch
       )
       setStoreTaken(busyStores.has(client.primary_store_id))
 
-      const ownerMasterResolution = accessRes.data?.length ? resolveOwnerMaster(accessRes.data) : { status: 'NOT_CONFIGURED' as const, count: 0 }
+      if (ownerMaster.error) toast.error(ownerMaster.error)
+      const ownerMasterResolution = ownerMaster.readiness
+      const people = ownerMasterResolution.persons
 
       const year = new Date().getFullYear()
-      const { cycle: planCycle } = await fetchCurrentCycle(clientId, year)
-      const [planUnits, planPackage] = planCycle
-        ? await Promise.all([fetchClientUnits(clientId), fetchClientProductPackage(clientId)])
-        : [{ units: [] }, { ok: false as const, reason: 'CLIENTE_SEM_PRODUTO' as const, message: '', product: null }]
-      const planRows = planCycle
-        ? (await fetchUnitsPlanningValues(planUnits.units.filter(unit => unit.active).map(unit => unit.id), year)).rows
-        : []
-      const publicationCard = planCycle
-        ? buildPublicationCardFromRows({
-            cycleStatus: planCycle.status,
-            rosterCodes: planPackage.ok ? planPackage.resolution.indicatorCodes : [],
-            rows: planRows,
-          })
-        : null
+      const { summary: publicationSummary } = await getClientStrategicPlanPublicationSummary({
+        clientAccountId: clientId,
+        referenceYear: year,
+      })
+      const planCycle = publicationSummary?.cycle ?? null
+      const publicationCard = publicationSummary?.card ?? null
+      const rosterLen = publicationSummary?.rosterCodes.length ?? 0
 
       const builtChecks = buildClientReadiness({
         status: client.status ?? null,
@@ -87,7 +80,7 @@ export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch
         contract_start_date: (client as { contract_start_date?: string | null }).contract_start_date ?? null,
         implementation_owner_id: (client as { implementation_owner_id?: string | null }).implementation_owner_id ?? null,
         units: (unitsRes.data ?? []).map(u => ({ name: u.name ?? null, is_primary: u.is_primary ?? null })),
-        contacts: (accessRes.data ?? []).map(a => ({ name: a.nome ?? null, is_primary: a.is_primary ?? null, email: a.email ?? null })),
+        contacts: people.map(a => ({ name: a.nome ?? null, is_primary: false, email: a.email ?? null })),
         modules: (modulesRes.data ?? []).map(m => ({ enabled: m.enabled ?? null })),
         assignments: (assignmentsRes.data ?? []).map(a => ({ active: a.active ?? null })),
         storeTakenByOtherClient: busyStores.has(client.primary_store_id),
@@ -101,7 +94,7 @@ export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch
         strategic_plan_ready: planCycle && publicationCard
           ? {
               cycleStatus: planCycle.status,
-              total: publicationCard.indicadoresComMeta + publicationCard.metasPendentes,
+              total: rosterLen || publicationCard.indicadoresComMeta + publicationCard.metasPendentes,
               ready: publicationCard.metasPublicadas,
               pending: publicationCard.metasPendentes,
               indicadoresComMeta: publicationCard.indicadoresComMeta,

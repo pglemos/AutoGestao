@@ -11,8 +11,8 @@ test('unitId vence a primeira unidade quando a loja existe na lista', () => {
   expect(resolveOwnerPlanningStoreId('store-2', [{ id: 'store-1' }, { id: 'store-2' }])).toBe('store-2')
 })
 
-test('unitId desconhecido recua para a primeira loja', () => {
-  expect(resolveOwnerPlanningStoreId('fantasma', [{ id: 'store-1' }])).toBe('store-1')
+test('unitId desconhecido não cai na primeira loja (sem fallback silencioso)', () => {
+  expect(resolveOwnerPlanningStoreId('fantasma', [{ id: 'store-1' }])).toBe(null)
 })
 
 test('"all" ancora no primeiro id real — nunca manda "all" para o workspace', () => {

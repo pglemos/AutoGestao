@@ -135,6 +135,28 @@ export async function fetchCurrentCycle(
 }
 
 /**
+ * Última versão já publicada ao Dono (status publicado ou revisado com published_at).
+ * O card da Visão Geral usa isto — não misturar contagem do rascunho atual.
+ */
+export async function fetchLatestPublishedCycle(
+  clientId: string,
+  year: number,
+): Promise<{ cycle: PlanCycle | null; error: string | null }> {
+  const { data, error } = await supabase
+    .from('ciclos_plano_estrategico')
+    .select(COLUMNS)
+    .eq('client_id', clientId)
+    .eq('year', year)
+    .not('published_at', 'is', null)
+    .order('published_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (error) return { cycle: null, error: error.message }
+  return parsePlanCycleResponse(data, { nullable: true })
+}
+
+/**
  * Cria o ciclo do ano, ou devolve o que já existe.
  *
  * Idempotente de propósito: dois ciclos do mesmo cliente no mesmo ano é o defeito

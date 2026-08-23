@@ -329,11 +329,35 @@ export type ValueRecord = {
   month: number
   store_id?: string | null
   scope_type?: string | null
+  manual_override_value?: number | null
   applied_value?: number | null
   effective_value?: number | null
   calculated_value?: number | null
+  official_value?: number | null
+  imported_value?: number | null
   target_value?: number | null
   manual_value?: number | null
+}
+
+/**
+ * Resultado Atual — ordem Base44 (não exigir digitação manual).
+ * Calculáveis: effective → calculated.
+ */
+export function resolveActualIndicatorValue(record: ValueRecord | null | undefined): number | null {
+  if (!record) return null
+  const candidates = [
+    record.manual_override_value,
+    record.effective_value,
+    record.calculated_value,
+    record.official_value,
+    record.imported_value,
+    record.manual_value,
+    record.applied_value,
+  ]
+  for (const value of candidates) {
+    if (value != null && Number.isFinite(Number(value))) return Number(value)
+  }
+  return null
 }
 
 /** Separa registros mensais em valores por unidade e valores de empresa. */
@@ -346,12 +370,17 @@ export function groupValuesByUnit(
 
   for (const record of records) {
     const code = record.indicator_code
-    const value = (record[valueField] ??
-      record.effective_value ??
-      record.calculated_value ??
-      record.target_value ??
-      record.manual_value ??
-      null) as number | null
+    const preferred = record[valueField]
+    let value: number | null = null
+    if (preferred != null && Number.isFinite(Number(preferred))) {
+      value = Number(preferred)
+    } else if (valueField === 'applied_value' || valueField === 'target_value') {
+      // Meta: nunca misturar com realizado/calculado
+      const targetFallback = record.target_value ?? record.manual_value ?? null
+      value = targetFallback != null && Number.isFinite(Number(targetFallback)) ? Number(targetFallback) : null
+    } else {
+      value = resolveActualIndicatorValue(record)
+    }
 
     const isCompanyScope =
       record.scope_type === 'COMPANY' || (!record.store_id && record.scope_type !== 'STORE')

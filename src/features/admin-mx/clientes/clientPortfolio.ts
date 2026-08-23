@@ -314,7 +314,9 @@ export function clientBuckets(client: PortfolioClient, today = new Date()): Port
   if (active) buckets.push('ativos')
   if (active && client.visitsTotal > 0 && client.visitsDone < client.visitsTotal) buckets.push('em_implantacao')
   if (!active && !blockers.length && !missingMaster) buckets.push('prontos_para_ativar')
-  if (blockers.length || missingMaster) buckets.push('com_bloqueios')
+  // Com bloqueios = pendência de ativação estrutural. Cliente já ativo sem Master
+  // não entra aqui (senão o card do Panorama vira 43/43); Master segue em nextAction.
+  if (blockers.length || (!active && missingMaster)) buckets.push('com_bloqueios')
   if (isRenewalNear(client, today)) buckets.push('renovacoes_proximas')
   if (client.onboarding_completed === false || (client.onboarding_step ?? 0) > 0 && client.onboarding_completed !== true) {
     buckets.push('cadastros_pendentes')

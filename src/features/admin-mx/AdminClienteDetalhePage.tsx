@@ -44,9 +44,7 @@ import { buildProgressBars } from './clientes/clientProgress'
 import { useClientHealth } from './clientes/useClientHealth'
 import { runClientRepair, type RepairKey } from './clientes/clientRepairs'
 import { buildClientReadiness, readinessSummary, type ClientReadinessInput } from './clientes/clientReadiness'
-import { buildPublicationCardFromRows } from '@/features/strategic-plan/planCycle'
-import { fetchClientProductPackage, fetchClientUnits, fetchUnitsPlanningValues } from '@/features/strategic-plan/clientPlanningRepository'
-import { fetchCurrentCycle } from '@/features/strategic-plan/planCycleRepository'
+import { getClientStrategicPlanPublicationSummary } from '@/features/strategic-plan/publicationSummary'
 import { createStrategicPlanFromProduct } from '@/features/strategic-plan/productPackageOps'
 import { ClientConfigTab } from './clientes/ClientConfigTab'
 import { ClientActionPlanContextPanel } from './clientes/ClientActionPlanContextPanel'
@@ -206,6 +204,7 @@ export function AdminClienteDetalhePage() {
   // Pessoas e acessos
   const [persons, setPersons] = useState<PersonAccessRow[]>([])
   const [personStores, setPersonStores] = useState<Array<{ id: string; name: string; parent_loja_id?: string | null }>>([])
+  const [personsReady, setPersonsReady] = useState(false)
   const [personModal, setPersonModal] = useState(false)
   const [personPrefill, setPersonPrefill] = useState<Partial<PersonAccessDraft> | null>(null)
   const [editingPersonId, setEditingPersonId] = useState<string | null>(null)
@@ -328,10 +327,12 @@ export function AdminClienteDetalhePage() {
     const { rows, stores, error: personsError } = await fetchClientPersons(client.id)
     if (personsError) {
       toast.error(personsError)
+      setPersonsReady(true)
       return
     }
     setPersons(rows)
     setPersonStores(stores)
+    setPersonsReady(true)
   }, [client?.id])
 
   const personGroups = useMemo(
@@ -352,26 +353,18 @@ export function AdminClienteDetalhePage() {
   const loadStrategicPlan = useCallback(async () => {
     if (!client?.id) return
     const year = new Date().getFullYear()
-    const { cycle, error: cycleError } = await fetchCurrentCycle(client.id, year)
-    if (cycleError || !cycle) {
+    const { summary, error } = await getClientStrategicPlanPublicationSummary({
+      clientAccountId: client.id,
+      referenceYear: year,
+    })
+    if (error || !summary) {
       setStrategicPlanReadiness(null)
       return
     }
-    const [unitsResult, packageResult] = await Promise.all([
-      fetchClientUnits(client.id),
-      fetchClientProductPackage(client.id),
-    ])
-    const unitIds = unitsResult.units.filter(unit => unit.active).map(unit => unit.id)
-    const { rows } = await fetchUnitsPlanningValues(unitIds, year)
-    const rosterCodes = packageResult.ok ? packageResult.resolution.indicatorCodes : []
-    const card = buildPublicationCardFromRows({
-      cycleStatus: cycle.status,
-      rosterCodes,
-      rows,
-    })
+    const { card, rosterCodes } = summary
     setStrategicPlanReadiness({
-      cycleStatus: cycle.status,
-      total: rosterCodes.length || card.indicadoresComMeta,
+      cycleStatus: card.cycleStatus,
+      total: rosterCodes.length || card.indicadoresComMeta + card.metasPendentes,
       ready: card.metasPublicadas,
       pending: card.metasPendentes,
       indicadoresComMeta: card.indicadoresComMeta,
@@ -379,7 +372,10 @@ export function AdminClienteDetalhePage() {
   }, [client?.id])
 
   useEffect(() => { void loadUnits() }, [loadUnits])
-  useEffect(() => { void loadPersons() }, [loadPersons])
+  useEffect(() => {
+    setPersonsReady(false)
+    void loadPersons()
+  }, [loadPersons])
   useEffect(() => { void loadLinks() }, [loadLinks])
   useEffect(() => { void loadStrategicPlan() }, [loadStrategicPlan])
 
@@ -446,8 +442,12 @@ export function AdminClienteDetalhePage() {
 
   const correctDonoMaster = async () => {
     if (!client?.id) return
+    const returnToActivation = searchParams.get('returnTo') === 'activation'
     setActivationOpen(false)
     setTab('pessoas')
+    const reopenActivation = () => {
+      if (returnToActivation) setActivationOpen(true)
+    }
     const donos = persons.filter(person => person.papeis.includes('DONO'))
     if (ownerMasterResolution.status === 'OWNER_WITHOUT_MASTER' && donos.length === 1) {
       const result = await setClientDonoMaster(client.id, donos[0])
@@ -455,6 +455,7 @@ export function AdminClienteDetalhePage() {
       else {
         toast.success(`${donos[0].nome} definido como Dono Master.`)
         await loadPersons()
+        reopenActivation()
       }
       return
     }
@@ -464,6 +465,19 @@ export function AdminClienteDetalhePage() {
     }
     if (ownerMasterResolution.status === 'DUPLICATE_MASTER') {
       setMasterPickerOpen(true)
+      return
+    }
+    if (ownerMasterResolution.status === 'INACTIVE' && ownerMasterResolution.person) {
+      const inactive = persons.find(person => person.id === ownerMasterResolution.person?.id)
+      if (inactive) {
+        setEditingPersonId(inactive.id)
+        setPersonPrefill(personToAccessDraft({
+          ...inactive,
+          papeis: inactive.papeis.includes('DONO') ? inactive.papeis : [...inactive.papeis, 'DONO'],
+          is_dono_master: true,
+        }))
+        setPersonModal(true)
+      }
       return
     }
     const contact = client.contacts?.find(item => item.is_primary)
@@ -485,6 +499,17 @@ export function AdminClienteDetalhePage() {
     setPersonPrefill(personToAccessDraft(person))
     setPersonModal(true)
   }
+
+  // Deep-link: /clientes/:slug?tab=pessoas&corrigirMaster=1&returnTo=activation
+  useEffect(() => {
+    if (searchParams.get('corrigirMaster') !== '1') return
+    if (!client?.id || loading || !personsReady) return
+    void correctDonoMaster()
+    const next = new URLSearchParams(searchParams)
+    next.delete('corrigirMaster')
+    navigate({ search: next.toString() ? `?${next}` : '' }, { replace: true })
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- one-shot deep link após personsReady
+  }, [client?.id, loading, personsReady, searchParams.get('corrigirMaster')])
 
   const summary = useMemo(() => readinessSummary(checks), [checks])
   const health = useClientHealth(client?.id, client?.primary_store_id ?? null)

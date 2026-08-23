@@ -186,7 +186,7 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
           ? 'Existem usuários com acesso de Dono, mas nenhum foi definido como Dono Master.'
           : master.status === 'DUPLICATE_MASTER'
             ? 'Foram encontrados dois usuários marcados como Dono Master. Regularize a designação antes de ativar.'
-            : 'Existe usuário marcado como Dono Master, mas o vínculo está inconsistente (inativo ou sem perfil Dono).'
+            : 'Designação Master existe, mas usuário não foi encontrado ou está inconsistente (inativo ou sem perfil Dono).'
     checks.push({
       key: 'dono-master',
       label: 'Dono Master válido',

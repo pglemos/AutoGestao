@@ -6,8 +6,8 @@ Severidade: **P0** bloqueia paridade/aceite · **P1** gap funcional relevante ·
 | ID | Área | Gap | Severidade | Evidência MX |
 |----|------|-----|------------|--------------|
 | G01 | Aceite Admin↔Dono | Célula única validável via Diagnóstico de Dados + overlay CONSOLIDATED; AG ainda sem metas publicadas limita prova numérica | P0→parcial | OwnerDataDiagnosticsPanel; applyOwnerScopeSeries; QA-admin-dono-diag |
-| G02 | Panorama KPIs | Contagens incoerentes: Ativos=Em Implantação=Com Bloqueios=43 | P0 | `/painel` |
-| G03 | Clientes onboarding | Status operacional “Etapa 1/7” em massa vs “Concluído” Base44; fase quase só “Não definida” | P0 | `/clientes` |
+| G02 | Panorama KPIs | Com Bloqueios não conta mais ativo só por falta de Master; Ativos≠bloqueios | P0→corrigido | clientBuckets |
+| G03 | Clientes onboarding | Coluna Onboarding usa jornada real (`N de M`) em vez de Etapa 1/7 presa | P0→corrigido | PortfolioOverviewTab.onboardingLabel |
 | G04 | Dataset demo | Ausência de MX VEÍCULOS TESTE 4 / demo Base44 na carteira live | P1 | `/clientes` carteira 43 reais |
 | G05 | Sidebar | Falta **Benchmark e Mercado** | P1 | Sidebar admin |
 | G06 | Sidebar | Falta **Dados e Conciliação** | P1 | Sidebar admin |

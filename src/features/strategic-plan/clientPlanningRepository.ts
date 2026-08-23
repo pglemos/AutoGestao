@@ -116,7 +116,24 @@ export async function fetchClientProductPackage(clientId: string): Promise<Produ
   })
 }
 
-/** Valores de planejamento de todas as unidades informadas, num ano. */
+/**
+ * Valores do ciclo (versão) — fonte do card Publicado/Rascunho.
+ * Lê a tabela por `ciclo_id`, sem a view `vigentes` (join matriz frágil
+ * some com filiais / primary_store desalinhado).
+ */
+export async function fetchCyclePlanningValues(
+  cycleId: string,
+): Promise<{ rows: PlanningValueRow[]; error: string | null }> {
+  const { data, error } = await supabase
+    .from('valores_indicadores_planejamento')
+    .select('loja_id, indicator_code, year, month, meta, realizado, ano_anterior')
+    .eq('ciclo_id', cycleId)
+
+  if (error) return { rows: [], error: error.message }
+  return { rows: (data ?? []) as PlanningValueRow[], error: null }
+}
+
+/** Valores vigentes por lojas+ano (fallback legado sem ciclo). */
 export async function fetchUnitsPlanningValues(
   unitIds: string[],
   year: number,

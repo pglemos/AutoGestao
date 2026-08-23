@@ -19,8 +19,10 @@ export function resolveOwnerPlanningStoreId(
   units: Array<{ id: string }> | null | undefined,
 ): string | null {
   const list = units ?? []
+  // Consolidado precisa de loja-identidade para a série base; overlay vem depois.
+  // STORE nunca cai na 1ª loja em silêncio (misturava BH/Matriz — prompt Base44).
   if (!unitId || unitId === ALL_OWNER_UNITS) return list[0]?.id ?? null
-  return list.some(unit => unit.id === unitId) ? unitId : list[0]?.id ?? null
+  return list.some(unit => unit.id === unitId) ? unitId : null
 }
 
 export function resolveOwnerPlanningScopeType(
