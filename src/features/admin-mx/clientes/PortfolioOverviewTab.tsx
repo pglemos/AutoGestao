@@ -33,6 +33,7 @@ import {
   canonicalPortfolioStatus,
   filterPortfolio,
   portfolioStatusCounters,
+  portfolioCounters,
   portfolioStatusLabel,
   type PortfolioClient,
   type PortfolioFilters,
@@ -109,7 +110,14 @@ export function PortfolioOverviewTab({ rows, onAction, onRefetch }: PortfolioOve
   const [advancedOpen, setAdvancedOpen] = useState(false)
   const [pendenciasClient, setPendenciasClient] = useState<PortfolioClient | null>(null)
 
-  const counters = useMemo(() => portfolioStatusCounters(rows), [rows])
+  const statusCounters = useMemo(() => portfolioStatusCounters(rows), [rows])
+  const bucketCounters = useMemo(() => portfolioCounters(rows), [rows])
+  // Ativos = status comercial `ativo`. Em Implantação = jornada incompleta
+  // (bucket operacional). Antes a jornada demovia o ativo e o card Ativos ia a 0.
+  const counters = useMemo(() => ({
+    ...statusCounters,
+    em_implantacao: bucketCounters.em_implantacao,
+  }), [bucketCounters.em_implantacao, statusCounters])
   const filtered = useMemo(() => filterPortfolio(rows, filters), [rows, filters])
   const phases = useMemo(
     () => [...new Set(rows.map(row => row.business_phase).filter((value): value is string => Boolean(value)))].sort(),

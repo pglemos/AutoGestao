@@ -3,6 +3,7 @@ import { PageCanvas, resolveRouteLayout } from '@/design-system/page'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { isAdministradorMx, isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { useStores } from '@/hooks/useStores'
+import { useOwnerOptional } from '@/components/owner/OwnerContext'
 import { slugify } from '@/lib/utils'
 import { openInNewTab } from '@/lib/ui/openInNewTab'
 import { StoreEditModal } from '@/features/admin/components/StoreEditModal'
@@ -31,6 +32,7 @@ import { DashboardErrorBoundary } from './components/DashboardErrorBoundary'
  */
 export function DashboardLoja() {
   const { setActiveStoreId } = useAuth()
+  const owner = useOwnerOptional()
   const navigate = useNavigate()
   const location = useLocation()
   // DashboardLoja é compartilhado por rotas de larguras e clearances diferentes
@@ -97,10 +99,16 @@ export function DashboardLoja() {
     navigate({ pathname: location.pathname, search: params.toString() ? `?${params.toString()}` : '' })
   }, [location.pathname, location.search, navigate])
 
+  // Dono: período do filtro do cabeçalho (M-1) alimenta as queries do /home.
+  // Sem isto o pill mostra Julho/2026 e os cards ainda leem o mês calendário.
+  // OwnerContext é JSX sem tipagem — leitura defensiva do shape já usado no filtro.
+  const ownerPeriod = owner as { period?: 'month' | 'quarter' | 'year' | 'custom'; periodRange?: { start: string; end: string } } | null
   const data = useDashboardLojaData({
     selectedStoreId,
     selectedStoreName: selectedStore?.name || 'Unidade MX',
     managerCalendarMode: role === 'gerente' && activeTab === 'performance',
+    period: isOwner ? (ownerPeriod?.period ?? 'month') : undefined,
+    periodRange: isOwner ? ownerPeriod?.periodRange : undefined,
   })
 
   const handleManagerStoreChange = useCallback((storeId: string) => {

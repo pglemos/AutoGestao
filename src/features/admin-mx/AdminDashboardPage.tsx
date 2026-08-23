@@ -30,7 +30,7 @@ import {
   MxSectionCard,
 } from '@/components/module/MxModuleVisualPrimitives'
 import { useClientPortfolio } from './clientes/useClientPortfolio'
-import { portfolioCounters, portfolioStatusCounters, journeyLabel, structureLabel, type PortfolioClient } from './clientes/clientPortfolio'
+import { portfolioCounters, journeyLabel, structureLabel, type PortfolioClient } from './clientes/clientPortfolio'
 import { fetchInscricoesPendentes } from './clientes/inscricaoAutocadastroMutations'
 import type { InscricaoRow } from './clientes/inscricaoAutocadastro'
 
@@ -50,7 +50,6 @@ export function AdminDashboardPage() {
   }, [])
 
   const bucketCounters = useMemo(() => portfolioCounters(clients), [clients])
-  const statusCounters = useMemo(() => portfolioStatusCounters(clients), [clients])
 
   const recentClients = useMemo(() => {
     return clients.slice(0, 6)
@@ -144,7 +143,7 @@ export function AdminDashboardPage() {
           <MxMetricGrid>
             <MxMetricCard
               title="Clientes Ativos"
-              value={statusCounters.ativos}
+              value={bucketCounters.ativos}
               detail="Contratos ativos em execução"
               icon={CheckCircle2}
               tone="success"
@@ -153,7 +152,7 @@ export function AdminDashboardPage() {
             />
             <MxMetricCard
               title="Em Implantação"
-              value={statusCounters.em_implantacao}
+              value={bucketCounters.em_implantacao}
               detail="Jornada de onboarding em andamento"
               icon={Rocket}
               tone="info"
@@ -162,7 +161,7 @@ export function AdminDashboardPage() {
             />
             <MxMetricCard
               title="Prontos para Ativar"
-              value={statusCounters.prontos_para_ativar}
+              value={bucketCounters.prontos_para_ativar}
               detail="Checklist de ativação cumprido"
               icon={ClipboardList}
               tone="brand"

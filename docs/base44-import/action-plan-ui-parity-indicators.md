@@ -26,7 +26,7 @@ Fonte: prompt Visão do Dono / competência / realizado / cards (heads ~38849–
 - [x] QA visual Lote 4 — PASS parcial (shots em visual-evidence/agent-browser/qa-lote4-2026-08-22/)
 - [x] "Todas as lojas" persiste (não zera loja de identidade; "all" não vira storeId)
 - [x] Período default do Dono = competência M-1 (rótulo Julho/2026, não "Mês atual")
-- [x] Panorama Admin: cards Ativos/Implantação exclusivos; bloqueios incluem falta de Dono Master
+- [x] Panorama Admin: Ativos = status comercial; Em Implantação = jornada incompleta (bucket); jornada não zera Ativos
 - [x] Banner de fallback quando consolidado não cabe; Parcial só no escopo CONSOLIDATED
 
 - [x] Pessoas AG via `vinculos_loja` (22 distintas na matriz + filiais)
@@ -39,25 +39,21 @@ Fonte: prompt Visão do Dono / competência / realizado / cards (heads ~38849–
 
 ## Resta (P0/P1)
 
-- (nenhum bloqueio restante desta correção AG)
+- Parcial N/M + banner: só em tenant multiunidade com Realizado incompleto no escopo CONSOLIDATED (ex.: AG). Tenant 1 loja → banner “consolidado indisponível”, esperado.
+- Admin↔Dono mesma célula (prompt ~40249): diagnóstico de origem ainda aberto (fora deste lote AG).
 
-## Lote 4 — QA visual (2026-08-22, PASS parcial)
+## Lote 4 — QA visual (atualizado 2026-08-23)
 
-Aba MCP: `http://127.0.0.1:3457/painel` (SynVolt). Shots em `visual-evidence/agent-browser/qa-lote4-2026-08-22/`.
+**Corrigido depois do PASS parcial**
+- Pill período Dono: `OwnerFilterButton` + `ownerClosedMonthLabel()` = M-1 (ex. Julho/2026), não “Mês atual”.
+- Cards Ativos/Implantação: `ativo` com PMR incompleto volta aos Ativos; Em Implantação usa bucket de jornada.
+- “Todas as lojas”: persiste `unitId=all`; escopo CONSOLIDATED só se `supportsConsolidated`.
 
-**Passou**
-- Competência workspace = Julho/2026 (M-1). Ago na tabela = `—`.
-- Cards Resumo: Meta / Resultado / Ano Anterior. Seletor Competência visível.
-- Visão Geral: roster Vendas Total 55, Leads 800, Estoque 91, Agendamentos 160, Visitas 53 (não card fixo SP-001). URL ainda `indicator=SP-001`.
-- Admin AG AUTOMÓVEIS: card metas DISTINCT `0 · publicadas 0 · pendentes 45`. Dono Master impeditivo. Pessoas vêm de `vinculos_loja` (22 distintas). Definir Master é clique explícito.
-- Mobile 390×844: Visão Geral + Vendas Total visíveis.
+**Ainda depende de tenant**
+- Clique “Todas as lojas” em cliente 1 loja: pill muda, mas dados = loja única + aviso de consolidado indisponível.
+- Parcial N/M: precisa AG (ou outro multiunidade) com Realizado parcial.
 
-**Falhou / não fechou**
-- Clique “Todas as lojas” não altera escopo visível (pill segue MX CONSULTORIA). Sem Parcial N/M, sem banner fallback neste tenant.
-- Home Dono (`/home`) mostra “Mês atual”, não M-1.
-- Picker N Donos: exercitável — AG tem 1 dono de loja (Gleyson); promoção continua explícita.
-
-Código Lote 1–3 não reaberto. Sem commit.
+Shots antigos: `visual-evidence/agent-browser/qa-lote4-2026-08-22/`.
 
 ## Pessoas da AG via `vinculos_loja` (correção)
 

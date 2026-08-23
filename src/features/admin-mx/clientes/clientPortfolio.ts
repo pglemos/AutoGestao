@@ -105,10 +105,12 @@ export function isActive(client: Pick<PortfolioClient, 'status'>) {
 export function canonicalPortfolioStatus(client: PortfolioStatusSource): PortfolioStatus | null {
   const status = normalizeStatus(client.status)
   if (['suspenso', 'suspended', 'encerrado', 'closed', 'arquivado'].includes(status)) return null
-  if (
-    ['ativo_em_implantacao', 'em_implantacao', 'ativacao_programada'].includes(status) ||
-    (isActive(client) && client.visitsTotal > 0 && client.visitsDone < client.visitsTotal)
-  ) return 'em_implantacao'
+  // Status explícito de implantação. Progresso de visitas NÃO demove `ativo`:
+  // senão todo contrato com PMR incompleto some do card Ativos (vira 0 / N).
+  // A jornada incompleta continua no bucket operacional `em_implantacao`.
+  if (['ativo_em_implantacao', 'em_implantacao', 'ativacao_programada'].includes(status)) {
+    return 'em_implantacao'
+  }
   if (isActive(client)) return 'ativos'
   if (activationBlockers(client).length === 0 && ['pronto_para_ativar', 'pronto', 'ready_to_activate', 'em_validacao'].includes(status)) return 'prontos_para_ativar'
   if (activationBlockers(client).length === 0 && ['inativo', 'inactive', 'coleta_dados', 'rascunho'].includes(status)) return 'prontos_para_ativar'
@@ -122,6 +124,11 @@ export function portfolioStatusLabel(client: PortfolioClient): string {
   if (raw === 'arquivado') return 'Arquivado'
   if (raw === 'ativo_em_implantacao' || raw === 'em_implantacao') return 'Ativo em Implantação'
   if (raw === 'ativacao_programada') return 'Ativação Programada'
+  // Rótulo da tabela: ativo com jornada em curso = "Ativo em Implantação",
+  // sem tirar o cliente do card Ativos (status canônico permanece `ativos`).
+  if (isActive(client) && client.visitsTotal > 0 && client.visitsDone < client.visitsTotal) {
+    return 'Ativo em Implantação'
+  }
   const canonical = canonicalPortfolioStatus(client)
   return canonical ? PORTFOLIO_STATUS_LABEL[canonical] : 'Indefinido'
 }
@@ -133,7 +140,12 @@ export function portfolioStatusLabel(client: PortfolioClient): string {
  */
 export function matchesPortfolioStatusFilter(client: PortfolioClient, filter: PortfolioStatusFilter): boolean {
   if (filter === 'todos') return true
-  if (filter === 'ativos' || filter === 'em_implantacao' || filter === 'prontos_para_ativar' || filter === 'em_configuracao') {
+  if (filter === 'em_implantacao') {
+    // Card "Em Implantação" = status explícito OU jornada incompleta.
+    if (canonicalPortfolioStatus(client) === 'em_implantacao') return true
+    return isActive(client) && client.visitsTotal > 0 && client.visitsDone < client.visitsTotal
+  }
+  if (filter === 'ativos' || filter === 'prontos_para_ativar' || filter === 'em_configuracao') {
     return canonicalPortfolioStatus(client) === filter
   }
 

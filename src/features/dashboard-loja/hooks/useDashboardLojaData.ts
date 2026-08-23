@@ -15,6 +15,7 @@ import { getManagerCalendarDate, getManagerMonthRange } from '@/features/manager
 import { refreshManagerHomeData } from '@/features/manager/home/manager-home-refresh'
 import { useOwnerInventoryMetrics } from './useOwnerInventoryMetrics'
 import { useOwnerConsultingProgram } from './useOwnerConsultingProgram'
+import { ownerClosedMonthLabel } from '@/lib/owner-period'
 import type { RankingEntry } from '@/types/database'
 import type { Database } from '@/types/database.generated'
 
@@ -400,8 +401,9 @@ export function useDashboardLojaData({
     if (period === 'custom') {
       return `${queryStartDate.split('-').reverse().join('/')} — ${queryEndDate.split('-').reverse().join('/')}`
     }
-    const labels = { month: 'Mês atual', quarter: 'Trimestre atual', year: 'Ano atual' }
-    return labels[period || 'month'] || `${queryStartDate.split('-').reverse().join('/')} — ${queryEndDate.split('-').reverse().join('/')}`
+    if (period === 'month') return ownerClosedMonthLabel()
+    const labels = { quarter: 'Trimestre atual', year: 'Ano atual' } as const
+    return labels[period as 'quarter' | 'year'] || `${queryStartDate.split('-').reverse().join('/')} — ${queryEndDate.split('-').reverse().join('/')}`
   }, [period, queryEndDate, queryStartDate])
 
   return {

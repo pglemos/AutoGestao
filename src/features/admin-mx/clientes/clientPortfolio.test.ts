@@ -178,14 +178,16 @@ describe('cards da carteira', () => {
 })
 
 describe('situação canônica da carteira principal', () => {
-  test('não conta um cliente ativo em implantação também como ativo', () => {
-    expect(canonicalPortfolioStatus(client({ visitsDone: 2 }))).toBe('em_implantacao')
+  test('ativo com jornada incompleta continua nos Ativos; implantação é status explícito', () => {
+    expect(canonicalPortfolioStatus(client({ visitsDone: 2 }))).toBe('ativos')
+    expect(portfolioStatusLabel(client({ visitsDone: 2 }))).toBe('Ativo em Implantação')
     expect(portfolioStatusCounters([client({ visitsDone: 2 })])).toEqual({
-      ativos: 0,
-      em_implantacao: 1,
+      ativos: 1,
+      em_implantacao: 0,
       prontos_para_ativar: 0,
       em_configuracao: 0,
     })
+    expect(canonicalPortfolioStatus(client({ status: 'ativo_em_implantacao', visitsDone: 2 }))).toBe('em_implantacao')
   })
 
   test('separa pronto, configuração e suspensão', () => {
