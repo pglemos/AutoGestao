@@ -123,7 +123,8 @@ describe('paridade visual dos módulos MX com o Gerente', () => {
 
   test('a matriz de gestão não tem mais escopo próprio — vale para todo perfil', () => {
     expect(layout).toContain("from '@/components/module/MxRoleVisualScope'")
-    expect(layout).toContain("<MxRoleVisualScope manager={role !== 'vendedor'}>")
+    // viewAs=dono usa shellRole (chrome Dono) sem trocar o auth.role do Admin.
+    expect(layout).toContain("<MxRoleVisualScope manager={shellRole !== 'vendedor'}>")
     expect(roleVisualScope).toContain('data-mx-visual-system="manager"')
     expect(roleVisualScope).not.toContain('mx-manager-scope')
 
