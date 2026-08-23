@@ -5,10 +5,10 @@
 - Rotas públicas: **9**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
-- Tabelas referenciadas pelo runtime: **177**
+- Tabelas referenciadas pelo runtime: **176**
 - RPCs referenciadas pelo runtime: **105**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **375**
+- Pares tabela/operação encontrados: **380**
 
 ## Rotas
 
@@ -140,7 +140,7 @@
 
 | Recurso | Arquivos consumidores |
 |---|---:|
-| `acessos_cliente_consultoria` | 4 |
+| `acessos_cliente_consultoria` | 3 |
 | `agenda_estrategica_marketing` | 1 |
 | `agendamentos` | 10 |
 | `alerts` | 1 |
@@ -159,13 +159,12 @@
 | `carreira_niveis` | 1 |
 | `carteira_empresa` | 1 |
 | `carteira_missoes` | 1 |
-| `catalogo_indicadores_planejamento` | 1 |
-| `catalogo_metricas_consultoria` | 8 |
+| `catalogo_metricas_consultoria` | 7 |
 | `central_execucao_aberturas` | 3 |
 | `ciclos_plano_estrategico` | 4 |
 | `ciclos_plano_estrategico_indicadores` | 1 |
 | `clientes` | 6 |
-| `clientes_consultoria` | 31 |
+| `clientes_consultoria` | 32 |
 | `clientes_oportunidades` | 1 |
 | `comportamental_perfis` | 1 |
 | `comportamental_questoes` | 1 |
@@ -217,7 +216,7 @@
 | `logs_compartilhamento_whatsapp` | 1 |
 | `logs_reprocessamento` | 1 |
 | `logs_rotina_gerente` | 1 |
-| `lojas` | 27 |
+| `lojas` | 30 |
 | `manager_daily_tasks` | 1 |
 | `manager_lead_conferences` | 1 |
 | `marketing_mensal_consultoria` | 1 |
@@ -297,14 +296,14 @@
 | `treinamento_tarefas` | 1 |
 | `treinamentos` | 6 |
 | `trilhas_desenvolvimento` | 1 |
-| `unidades_cliente_consultoria` | 11 |
+| `unidades_cliente_consultoria` | 12 |
 | `universidade_aulas` | 1 |
 | `universidade_certificacoes` | 1 |
 | `universidade_trilhas` | 1 |
 | `user_roles` | 1 |
-| `usuarios` | 27 |
-| `valores_indicadores_planejamento` | 1 |
-| `valores_indicadores_planejamento_vigentes` | 3 |
+| `usuarios` | 28 |
+| `valores_indicadores_planejamento` | 2 |
+| `valores_indicadores_planejamento_vigentes` | 4 |
 | `valores_parametros_consultoria` | 3 |
 | `vehicle_model_catalog` | 1 |
 | `veiculos_estoque` | 4 |
@@ -314,7 +313,7 @@
 | `versoes_metodologia_produto` | 1 |
 | `vinculo_modelo_relatorio_encontro` | 1 |
 | `vinculo_plano_acao_encontro` | 1 |
-| `vinculos_loja` | 19 |
+| `vinculos_loja` | 21 |
 | `visitas_consultoria` | 13 |
 | `vw_jornada_alem_do_contratado` | 1 |
 
@@ -323,7 +322,7 @@
 | Recurso | Arquivos consumidores |
 |---|---:|
 | `acessos_cliente_consultoria:insert` | 2 |
-| `acessos_cliente_consultoria:select` | 4 |
+| `acessos_cliente_consultoria:select` | 3 |
 | `acessos_cliente_consultoria:update` | 2 |
 | `agenda_estrategica_marketing:select` | 1 |
 | `agendamentos:delete` | 1 |
@@ -362,18 +361,20 @@
 | `carreira_niveis:upsert` | 1 |
 | `carteira_empresa:select` | 1 |
 | `carteira_missoes:select` | 1 |
-| `catalogo_indicadores_planejamento:select` | 1 |
-| `catalogo_metricas_consultoria:select` | 8 |
+| `catalogo_metricas_consultoria:select` | 7 |
 | `catalogo_metricas_consultoria:update` | 1 |
 | `catalogo_metricas_consultoria:upsert` | 2 |
 | `central_execucao_aberturas:select` | 1 |
 | `central_execucao_aberturas:upsert` | 2 |
+| `ciclos_plano_estrategico_indicadores:delete` | 1 |
+| `ciclos_plano_estrategico_indicadores:insert` | 1 |
 | `ciclos_plano_estrategico_indicadores:select` | 1 |
+| `ciclos_plano_estrategico_indicadores:update` | 1 |
 | `ciclos_plano_estrategico:select` | 4 |
 | `ciclos_plano_estrategico:update` | 1 |
 | `clientes_consultoria:delete` | 1 |
 | `clientes_consultoria:insert` | 4 |
-| `clientes_consultoria:select` | 30 |
+| `clientes_consultoria:select` | 31 |
 | `clientes_consultoria:update` | 7 |
 | `clientes_oportunidades:select` | 1 |
 | `clientes:delete` | 2 |
@@ -463,6 +464,7 @@
 | `guia_consultor_encontro:upsert` | 1 |
 | `historico_planos_acao:select` | 2 |
 | `historico_valores_indicadores_planejamento:select` | 4 |
+| `horarios_funcionamento_unidade:delete` | 1 |
 | `horarios_funcionamento_unidade:insert` | 1 |
 | `horarios_funcionamento_unidade:select` | 1 |
 | `horarios_funcionamento_unidade:update` | 1 |
@@ -492,7 +494,7 @@
 | `logs_rotina_gerente:upsert` | 1 |
 | `lojas:delete` | 1 |
 | `lojas:insert` | 3 |
-| `lojas:select` | 27 |
+| `lojas:select` | 30 |
 | `lojas:update` | 3 |
 | `manager_daily_tasks:select` | 1 |
 | `manager_daily_tasks:update` | 1 |
@@ -545,6 +547,7 @@
 | `pacotes_indicadores_estrategicos:insert` | 1 |
 | `pacotes_indicadores_estrategicos:select` | 1 |
 | `pacotes_indicadores_estrategicos:update` | 1 |
+| `pacotes_indicadores_itens:delete` | 1 |
 | `pacotes_indicadores_itens:insert` | 1 |
 | `pacotes_indicadores_itens:select` | 5 |
 | `pacotes_indicadores_versoes:insert` | 1 |
@@ -649,8 +652,9 @@
 | `treinamentos:insert` | 1 |
 | `treinamentos:select` | 5 |
 | `trilhas_desenvolvimento:select` | 1 |
+| `unidades_cliente_consultoria:delete` | 1 |
 | `unidades_cliente_consultoria:insert` | 4 |
-| `unidades_cliente_consultoria:select` | 11 |
+| `unidades_cliente_consultoria:select` | 12 |
 | `unidades_cliente_consultoria:update` | 2 |
 | `universidade_aulas:select` | 1 |
 | `universidade_certificacoes:select` | 1 |
@@ -660,11 +664,11 @@
 | `user_roles:update` | 1 |
 | `usuarios:delete` | 2 |
 | `usuarios:insert` | 1 |
-| `usuarios:select` | 24 |
+| `usuarios:select` | 25 |
 | `usuarios:update` | 6 |
 | `usuarios:upsert` | 1 |
-| `valores_indicadores_planejamento_vigentes:select` | 3 |
-| `valores_indicadores_planejamento:select` | 1 |
+| `valores_indicadores_planejamento_vigentes:select` | 4 |
+| `valores_indicadores_planejamento:select` | 2 |
 | `valores_parametros_consultoria:select` | 3 |
 | `valores_parametros_consultoria:upsert` | 2 |
 | `vehicle_model_catalog:select` | 1 |
@@ -690,7 +694,7 @@
 | `vinculo_plano_acao_encontro:update` | 1 |
 | `vinculos_loja:delete` | 1 |
 | `vinculos_loja:insert` | 3 |
-| `vinculos_loja:select` | 17 |
+| `vinculos_loja:select` | 19 |
 | `vinculos_loja:update` | 2 |
 | `visitas_consultoria:delete` | 2 |
 | `visitas_consultoria:insert` | 5 |

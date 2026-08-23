@@ -76,7 +76,7 @@ export function IndicatorPicker(props: {
         {selected ? selected.label : props.placeholder}
       </button>
       {open && !props.disabled ? (
-        <div className="absolute left-0 right-0 z-20 mt-1 max-h-64 overflow-y-auto rounded-lg border border-border bg-background shadow-lg">
+        <div className="absolute left-0 right-0 z-[var(--mx-z-popover)] mt-1 max-h-64 overflow-y-auto rounded-lg border border-border bg-background shadow-lg">
           <div className="border-b border-border p-2">
             <input
               type="text"
@@ -91,7 +91,7 @@ export function IndicatorPicker(props: {
             <button
               type="button"
               onClick={() => { props.onChange(''); setOpen(false) }}
-              className="w-full px-3 py-2 text-left text-sm text-text-secondary hover:bg-surface-alt"
+              className="w-full px-3 py-2 text-left text-sm text-text-secondary hover:bg-surface-alt focus-visible:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
             >
               {props.clearLabel ?? 'Todos os indicadores'}
             </button>
@@ -102,7 +102,7 @@ export function IndicatorPicker(props: {
               type="button"
               onClick={() => { props.onChange(item.code); setOpen(false) }}
               className={cn(
-                'w-full border-t border-border px-3 py-2 text-left text-sm hover:bg-surface-alt',
+                'w-full border-t border-border px-3 py-2 text-left text-sm hover:bg-surface-alt focus-visible:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30',
                 item.code === props.value && 'bg-surface-alt',
               )}
             >

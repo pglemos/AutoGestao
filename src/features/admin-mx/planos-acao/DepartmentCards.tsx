@@ -11,14 +11,14 @@ const CATEGORY_ICON: Record<string, LucideIcon> = {
   operacional: Settings,
 }
 
-/** Cores dos ícones — Base44 `actionPlanConstants.ACTION_PLAN_DEPARTMENTS`. */
+/** Cores dos ícones — Base44 `ACTION_PLAN_DEPARTMENTS`, tokens semânticos MX. */
 const CATEGORY_ICON_TONE: Record<string, string> = {
-  comercial: 'bg-blue-50 text-blue-700',
+  comercial: 'bg-status-info-surface text-status-info-text',
   marketing: 'bg-pink-50 text-pink-700',
-  produto: 'bg-orange-50 text-orange-700',
-  rh: 'bg-teal-50 text-teal-700',
-  financeiro: 'bg-green-50 text-green-700',
-  operacional: 'bg-purple-50 text-purple-700',
+  produto: 'bg-status-warning-surface text-status-warning-text',
+  rh: 'bg-brand-primary-subtle text-brand-primary',
+  financeiro: 'bg-status-success-surface text-status-success-text',
+  operacional: 'bg-status-info-surface text-status-info-text',
 }
 
 /** Cards por categoria de indicador (mesma taxonomia do catálogo do Planejamento Estratégico) — filtra a biblioteca de templates ao clicar. */

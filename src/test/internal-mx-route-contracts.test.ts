@@ -33,7 +33,12 @@ function hasInternalRoleGuard(sourceFile: ts.SourceFile) {
     if (!ts.isCallExpression(node) || !ts.isIdentifier(node.expression)) return
     if (node.expression.text !== 'isPerfilInternoMx') return
     const [argument] = node.arguments
-    found = Boolean(argument && ts.isIdentifier(argument) && argument.text === 'role')
+    // Layout usa shellRole (viewAs=dono) em vez de role bruto do auth.
+    found = Boolean(
+      argument
+      && ts.isIdentifier(argument)
+      && (argument.text === 'role' || argument.text === 'shellRole'),
+    )
   })
   return found
 }
