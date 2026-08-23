@@ -13,6 +13,7 @@ import { readStrategicRouteState, resolveInitialStrategicDisplayMode, writeStrat
 import { usePlanCycle, type PlanCycleState } from './usePlanCycle'
 import { useClientScope } from './useClientScope'
 import { CONSOLIDATION_STATUS, formatPartialUnitsLabel, type ConsolidationIndicator } from './unitConsolidation'
+import { resolveOwnerScopedSeries } from './applyOwnerScopeSeries'
 import type {
   StrategicDisplayMode,
   StrategicPlanRepository,
@@ -56,6 +57,17 @@ export type StrategicPlanController = {
   setSelectedMonthIndex: (index: number) => void
   partialUnitsLabel: string | null
   scopeNotice: string | null
+  /** Contexto de leitura para Diagnóstico de Dados (Admin MX). */
+  diagnosticContext: {
+    clientAccountId: string | null
+    storeId: string | null
+    scopeType: string
+    supportsConsolidated: boolean
+    referenceYear: number
+    referenceMonth: number
+    selectedValueView: StrategicTab
+    strategicPlanVersionId: string | null
+  }
 }
 
 export function useStrategicPlanController(options: {
@@ -201,9 +213,19 @@ export function useStrategicPlanController(options: {
     setDisplayModeState(isMobile && mode === 'both' ? 'table' : mode)
   }, [isMobile])
 
+  const scopedSeries = useMemo(
+    () => resolveOwnerScopedSeries({
+      series,
+      scopeType,
+      supportsConsolidated: clientScope.supportsConsolidated,
+      consolidated: clientScope.consolidated,
+    }),
+    [clientScope.consolidated, clientScope.supportsConsolidated, scopeType, series],
+  )
+
   const indicator = useMemo(
-    () => series.find(item => item.id === selectedIndicatorId) || series[0] || null,
-    [selectedIndicatorId, series],
+    () => scopedSeries.find(item => item.id === selectedIndicatorId) || scopedSeries[0] || null,
+    [selectedIndicatorId, scopedSeries],
   )
   const effectiveDisplayMode = isMobile && displayMode === 'both' ? 'table' : displayMode
   const existingAction = useMemo(
@@ -246,12 +268,32 @@ export function useStrategicPlanController(options: {
     return null
   }, [clientScope.consolidated, clientScope.supportsConsolidated, scopeType, selectedMonthIndex])
 
+  const diagnosticContext = useMemo(() => ({
+    clientAccountId: clientScope.clientId,
+    storeId,
+    scopeType,
+    supportsConsolidated: clientScope.supportsConsolidated,
+    referenceYear: year,
+    referenceMonth: selectedMonthIndex + 1,
+    selectedValueView: tab,
+    strategicPlanVersionId: planCycle.cycle?.id ?? null,
+  }), [
+    clientScope.clientId,
+    clientScope.supportsConsolidated,
+    planCycle.cycle?.id,
+    scopeType,
+    selectedMonthIndex,
+    storeId,
+    tab,
+    year,
+  ])
+
   return {
     repository,
     year,
     loading,
     error,
-    series,
+    series: scopedSeries,
     indicator,
     selectedIndicatorId,
     setSelectedIndicatorId,
@@ -282,5 +324,6 @@ export function useStrategicPlanController(options: {
     setSelectedMonthIndex,
     partialUnitsLabel,
     scopeNotice,
+    diagnosticContext,
   }
 }

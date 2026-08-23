@@ -39,8 +39,14 @@ Fonte: prompt Visão do Dono / competência / realizado / cards (heads ~38849–
 
 ## Resta (P0/P1)
 
-- Parcial N/M + banner: só em tenant multiunidade com Realizado incompleto no escopo CONSOLIDATED (ex.: AG). Tenant 1 loja → banner “consolidado indisponível”, esperado.
-- Admin↔Dono mesma célula (prompt ~40249): diagnóstico de origem ainda aberto (fora deste lote AG).
+- [x] Admin↔Dono mesma célula (prompt ~40249): Etapa A `OwnerDataDiagnosticsPanel` + Etapa B `resolveOwnerScopedSeries` (CONSOLIDATED overlay no view model do Dono)
+- [x] Parcial N/M + banner: código OK; AG live = CONSOLIDATED suportado (3 lojas); banner Parcial só com integrity PARCIAL (mês sem base ≠ Parcial) — ver `QA-admin-dono-diag-2026-08-23.md`
+
+## 2026-08-23 — Diagnóstico + resolver Admin↔Dono
+
+- Etapa A: botão **Diagnóstico de Dados** (Admin MX/Geral) no `StrategicPlanWorkspace` — contexto + tabela META/REALIZADO/AA Admin×Dono (read-only).
+- Etapa B: `applyOwnerScopeSeries` / `resolveOwnerScopedSeries` — Resumo/VG/cards usam consolidado quando `scopeType=CONSOLIDATED`; STORE continua só na loja.
+- Testes: `applyOwnerScopeSeries.test.ts`
 
 ## Lote 4 — QA visual (atualizado 2026-08-23)
 

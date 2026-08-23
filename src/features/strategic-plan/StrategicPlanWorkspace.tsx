@@ -21,6 +21,7 @@ import { CompetenceSelector } from '@/components/owner/strategic/ViewSelector'
 import { usePlanningWorkspace } from '@/features/planning-workspace'
 import { ConditionalPageCanvas } from '@/design-system/page'
 import { PlanCycleBanner } from './PlanCycleBanner'
+import { OwnerDataDiagnosticsPanel } from './OwnerDataDiagnosticsPanel'
 import { useStrategicPlanController, type StrategicPlanController } from './useStrategicPlanController'
 
 export function StrategicPlanWorkspace({ onUpdated, year }: { onUpdated?: (at: Date) => void; year?: number }) {
@@ -93,6 +94,7 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
             {controller.partialUnitsLabel}. O consolidado usa só as unidades com base — não é tratado como completo.
           </AlertMessage>
         ) : null}
+        <OwnerDataDiagnosticsPanel controller={controller} />
         <StrategicPlanTabs tab={controller.tab} onTabChange={controller.setTab} />
 
         {controller.tab === 'resumo' && controller.indicator ? (

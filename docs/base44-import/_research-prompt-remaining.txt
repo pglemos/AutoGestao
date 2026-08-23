@@ -1,0 +1,476 @@
+PROMPT exists=True size=1097688
+PROMPT lines=48802
+CHECKBOXES=2 MARKERS=174 HEADINGS=175
+MARK_COUNTS {"'X'": 2}
+UNCHECKED=0 CHECKED=2
+=== HEADINGS ===
+# L38849 PROMPT DE CORREÇÃO CRÍTICA E CIRÚRGICA BASE44
+## L38851 MX PERFORMANCE — PLANO ESTRATÉGICO MULTIUNIDADE
+## L38853 VISÃO DO DONO, COMPETÊNCIA, REALIZADO, CALCULÁVEIS E CARDS
+## L38857 1. OBJETIVO
+## L38893 2. PROTEÇÃO DA VERSÃO FUNCIONAL
+## L38940 3. CENÁRIO CONFIRMADO NA GRAVAÇÃO
+### L38949 Metas
+### L38963 Realizado — MX BH
+### L38984 Realizado — MX CONTAGEM
+### L38994 Realizado — Matriz
+### L39005 Realizado — Todas as Unidades
+## L39017 4. DIFERENCIAR ERRO DE ESTADO VAZIO LEGÍTIMO
+### L39021 Estado vazio legítimo
+### L39037 Erro real
+## L39050 5. CONTEXTO ÚNICO DA VISÃO DO DONO
+## L39103 6. SERVIÇO ÚNICO PARA RESUMO E VISÃO GERAL
+## L39145 7. REGRA DE COMPETÊNCIA
+## L39177 8. SELETOR DE COMPETÊNCIA VISÍVEL
+## L39207 9. MESMO MÊS EM TODOS OS COMPONENTES
+## L39231 10. REGRA DE ESCOPO POR UNIDADE
+## L39266 11. PROIBIR FALLBACK SILENCIOSO PARA O CONSOLIDADO
+## L39300 12. RESOLUÇÃO DO RESULTADO ATUAL
+## L39325 13. ELIMINAR LISTAS FIXAS DE CALCULÁVEIS
+## L39354 14. LEFT JOIN DO ROSTER
+## L39376 15. CORRIGIR VENDAS TOTAL NO CONSOLIDADO
+## L39400 16. POLÍTICA DE “VENDAS — OUTROS”
+## L39432 17. REPARAÇÃO DOS MESES EXISTENTES
+## L39447 18. CONSOLIDAÇÃO DE TODAS AS UNIDADES
+## L39462 19. RESULTADO PARCIAL
+## L39491 20. ABA RESUMO
+### L39503 Meta do mês
+### L39507 Resultado do mês
+### L39511 % Atingimento
+### L39515 Variação vs. Ano Anterior
+## L39521 21. CÁLCULO DE % DA META
+## L39559 22. COMPARATIVO MENSAL
+## L39586 23. GRÁFICO
+## L39604 24. LEITURA DO INDICADOR
+## L39634 25. ABA VISÃO GERAL
+## L39654 26. CARDS DEVEM ACOMPANHAR A VISÃO SELECIONADA
+### L39660 Quando Meta estiver selecionada
+### L39664 Quando Resultado Atual estiver selecionado
+### L39668 Quando Ano Anterior estiver selecionado
+## L39676 27. MESMO PERÍODO NOS CARDS E NA TABELA
+## L39722 28. CARDS E STATUS
+## L39749 29. VENDAS TOTAL NA VISÃO GERAL
+## L39780 30. INDICADORES COM BASE MAS SEM EXIBIÇÃO
+## L39799 31. QUERY KEYS E CACHE
+## L39840 32. TROCA DE UNIDADE
+## L39856 33. CARREGAMENTO LOCAL
+## L39885 34. REPARAÇÃO DO PLANO EXISTENTE
+## L39915 35. TESTE EXATO — MX BH
+## L39945 36. TESTE EXATO — MX CONTAGEM
+## L39965 37. TESTE EXATO — TODAS AS UNIDADES
+## L40020 38. TESTE — MATRIZ SEM RESULTADO
+## L40036 39. TESTE — AGOSTO
+## L40054 40. TESTE — CARDS DA VISÃO GERAL
+### L40058 Meta — acumulado até Julho
+### L40066 Resultado Atual — acumulado até Julho
+### L40074 Ano Anterior
+## L40082 41. TESTE — CONSISTÊNCIA ENTRE TELAS
+## L40112 42. TESTE — CALCULÁVEIS
+## L40135 43. TESTE — ESTADOS DOS CARDS
+## L40155 44. TESTE — IDEMPOTÊNCIA
+## L40169 45. CRITÉRIOS DE ACEITE
+## L40192 46. RELATÓRIO FINAL
+# L41178 PROMPT DE CORREÇÃO PONTUAL BASE44
+## L41180 MX PERFORMANCE — MÓDULO ADMINISTRADOR
+## L41182 CLIENTES MX — RESUMO DO PLANO ESTRATÉGICO
+## L41184 METAS PUBLICADAS, PENDENTES E VERSÃO EXIBIDA
+## L41188 1. OBJETIVO
+## L41221 2. PROTEÇÃO DA VERSÃO FUNCIONAL
+## L41260 3. DIAGNÓSTICO OBRIGATÓRIO
+## L41288 4. FONTE ÚNICA DO RESUMO
+## L41312 5. DEFINIR A VERSÃO EXIBIDA
+### L41322 Quando existir versão publicada
+### L41332 Quando não existir versão publicada
+## L41350 6. NÃO MISTURAR VERSÃO PUBLICADA E RASCUNHO
+## L41389 7. DEFINIÇÃO DE “INDICADORES COM META”
+## L41425 8. DEFINIÇÃO DE “METAS PUBLICADAS”
+## L41460 9. DEFINIÇÃO DE “METAS PENDENTES”
+## L41490 10. REGRA MULTIUNIDADE
+## L41524 11. COMPLETUDE POR UNIDADE
+### L41528 `PER_UNIT_REQUIRED`
+### L41532 `PER_UNIT_OPTIONAL`
+### L41536 `COMPANY_ONLY`
+### L41540 `SHARED_COMPANY_VALUE`
+## L41550 12. SNAPSHOT DE PUBLICAÇÃO
+## L41589 13. A PUBLICAÇÃO DEVE ATUALIZAR O RESUMO
+## L41614 14. CORREÇÃO DO CLIENTE ATUAL
+## L41658 15. ESTADO INCONSISTENTE
+## L41686 16. ÚLTIMA ATUALIZAÇÃO
+## L41702 17. INVALIDAÇÃO DE CACHE
+## L41727 18. MODAL VALIDAR E ATIVAR
+## L41752 19. TESTES DE ACEITE
+### L41754 TESTE 1 — CLIENTE ATUAL
+### L41767 TESTE 2 — REABRIR A PÁGINA
+### L41777 TESTE 3 — MULTIUNIDADE
+### L41787 TESTE 4 — MODAL DE ATIVAÇÃO
+### L41797 TESTE 5 — PLANO SEM PUBLICAÇÃO
+### L41810 TESTE 6 — NOVA REVISÃO
+### L41829 TESTE 7 — PUBLICAR NOVA REVISÃO
+### L41841 TESTE 8 — INDICADOR NOVO
+### L41858 TESTE 9 — CONSISTÊNCIA
+### L41870 TESTE 10 — RENDERIZAÇÃO
+## L41883 20. RELATÓRIO FINAL OBRIGATÓRIO
+# L41919 PROMPT DE CORREÇÃO CRÍTICA BASE44
+## L41921 MX PERFORMANCE — MÓDULO ADMINISTRADOR
+## L41923 PESSOAS E ACESSOS — DONO MASTER, PAPÉIS E ATIVAÇÃO DO CLIENTE
+## L41927 1. OBJETIVO
+## L41969 2. PROTEÇÃO DA VERSÃO FUNCIONAL
+## L42014 3. REGRA CENTRAL
+### L42018 FUNÇÃO DECLARADA
+### L42038 PERFIL DE ACESSO
+### L42065 DONO MASTER
+## L42082 4. NÃO VALIDAR PELA “VISÃO DONO”
+## L42126 5. MODELO DE DADOS
+### L42132 User / UserProfile
+### L42144 CompanyMembership ou entidade equivalente
+### L42159 RoleGrant
+### L42176 StoreAssignment
+## L42192 6. PAPEL DONO E DESIGNAÇÃO MASTER
+## L42229 7. FORMULÁRIO “ADICIONAR USUÁRIO”
+## L42243 8. BLOCO 1 — DADOS PESSOAIS
+## L42267 9. BLOCO 2 — PERFIS DE ACESSO
+## L42308 10. BLOCO 3 — DONO MASTER
+## L42362 11. BLOCO 4 — ESCOPO E VISÃO PADRÃO
+### L42366 VISÃO PADRÃO
+### L42389 LOJAS AUTORIZADAS
+## L42408 12. EDIÇÃO DE USUÁRIO
+## L42435 13. CARD ESPECÍFICO DO DONO MASTER
+## L42468 14. CONTATO PRINCIPAL NÃO É AUTOMATICAMENTE USUÁRIO
+## L42504 15. REUTILIZAR IDENTIDADE EXISTENTE
+## L42531 16. STATUS QUE SATISFAZ A CONFIGURAÇÃO
+## L42575 17. NÃO PERMITIR DESATIVAR O ÚNICO MASTER
+## L42604 18. CORRIGIR O LINK “CORRIGIR”
+## L42626 19. FLUXO DO BOTÃO “CORRIGIR”
+### L42628 CENÁRIO 1 — EXISTE CONTATO PRINCIPAL E NÃO EXISTE USUÁRIO
+### L42650 CENÁRIO 2 — EXISTE USUÁRIO COM PERFIL DONO, MAS NÃO É MASTER
+### L42660 CENÁRIO 3 — EXISTE USUÁRIO, MAS SEM PERFIL DONO
+### L42669 CENÁRIO 4 — EXISTEM MÚLTIPLOS CANDIDATOS
+## L42681 20. PRESERVAR O RETORNO AO CHECKLIST
+## L42703 21. SERVIÇO ÚNICO DE VALIDAÇÃO DO MASTER
+## L42740 22. NÃO UTILIZAR DEFAULT_VIEW COMO REGRA DE EXISTÊNCIA
+## L42764 23. TEXTO CORRETO DO CHECKLIST
+## L42800 24. CHECKLIST DE PRONTIDÃO
+## L42823 25. CADASTRO DIRETO E AUTOCADASTRO
+### L42827 CADASTRO DIRETO PELA EQUIPE MX
+### L42838 AUTOCADASTRO
+## L42858 26. MÚLTIPLOS PAPÉIS
+### L42862 DONO QUE TAMBÉM É GERENTE E VENDEDOR
+### L42880 GERENTE QUE TAMBÉM VENDE
+### L42889 DONO MASTER
+## L42901 27. PERMISSÕES DO DONO MASTER
+## L42926 28. AUDITORIA
+## L42958 29. CORREÇÃO DO CLIENTE ATUAL
+## L42981 30. TESTES DE ACEITE
+### L42983 TESTE 1 — LINK CORRIGIR
+### L43000 TESTE 2 — CONTATO PRINCIPAL
+### L43012 TESTE 3 — SALVAR
+### L43025 TESTE 4 — REVALIDAÇÃO
+### L43035 TESTE 5 — CONVITE PENDENTE
+### L43045 TESTE 6 — MÚLTIPLOS DONOS
+### L43054 TESTE 7 — SEGUNDO MASTER
+### L43063 TESTE 8 — MÚLTIPLOS PAPÉIS
+### L43078 TESTE 9 — DEFAULT VIEW DIFERENTE
+### L43087 TESTE 10 — DESATIVAÇÃO
+### L43096 TESTE 11 — EDIÇÃO
+### L43108 TESTE 12 — ATIVAÇÃO
+## L43119 31. RELATÓRIO FINAL OBRIGATÓRIO
+### L43678 BROKEN_REFERENCE
+### L43697 USER_NOT_FOUND
+### L43704 OWNER_ROLE_MISSING
+### L43711 GLOBAL_SCOPE_MISSING
+### L43715 DUPLICATE_MASTER
+=== UNCHECKED ===
+=== MARKERS (non-checkbox) ===
+M L407 |ROOT| - Restaurar versão publicada.
+M L541 |ROOT| - Ver Indicadores Dependentes
+M L551 |ROOT| - Indicadores dependentes
+M L817 |ROOT| - recalcular dependentes;
+M L857 |ROOT| - recalcular dependentes com o valor aplicado.
+M L861 |ROOT| “Restaurar cálculo automático”
+M L2304 |ROOT| - Pendente de validação
+M L2407 |ROOT| 5. gerar sugestão pendente;
+M L2429 |ROOT| Pendente de validação do Consultor
+M L2536 |ROOT| - restaurar.
+M L3912 |ROOT| [ ] Disponível para aplicação nos clientes
+M L3913 |ROOT| [ ] Disponível para sugestão ao Dono
+M L5355 |ROOT| - Restaurar versão publicada
+M L5408 |ROOT| A metodologia deve possuir versionamento independente da versão estrutural do produto.
+M L5692 |ROOT| - restaurar;
+M L5723 |ROOT| - não alterar o restante da metodologia sem permissão.
+M L6103 |ROOT| 8. recalcular automaticamente todos os indicadores dependentes;
+M L6480 |ROOT| - recalcular dependentes imediatamente.
+M L7005 |ROOT| 4. recalcular os indicadores dependentes;
+M L7072 |ROOT| 19. RESTAURAR PADRÃO MX
+M L7077 |ROOT| “Restaurar padrão MX”
+M L7347 |ROOT| 2. identificar dependentes;
+M L7355 |ROOT| 1. identificar todos os indicadores diretamente dependentes;
+M L7477 |ROOT| - restauração do padrão MX;
+M L7545 |ROOT| - dependentes recalculados.
+M L7592 |ROOT| TESTE 10 — RESTAURAR PADRÃO
+M L7594 |ROOT| Restaurar padrão MX.
+M L7716 |ROOT| - Restaurar padrão MX;
+M L8193 |ROOT| 1. validar todos os dias abertos;
+M L8208 |ROOT| “Restaurar horário padrão MX”
+M L8798 |ROOT| - fórmulas dependentes;
+M L8836 |ROOT| - mostrar os indicadores dependentes;
+M L9223 |ROOT| TESTE 16 — INDICADOR DEPENDENTE
+M L9630 |ROOT| “Este cliente já possui Plano Estratégico para [ano]. O Plano existente foi aberto.”
+M L10545 |ROOT| - recalcular indicadores dependentes.
+M L10602 |ROOT| 5. recalcular dependentes;
+M L10761 |ROOT| Se qualquer etapa falhar:
+M L10768 |ROOT| - registrar falha técnica.
+M L10901 |ROOT| - listar os indicadores pendentes.
+M L10936 |ROOT| 6. editor aberto;
+M L11304 |ROOT| - recalcular os indicadores dependentes;
+M L11557 |ROOT| - salvar todas as alterações pendentes;
+M L11809 |ROOT| - restauração de valor único;
+M L11995 |ROOT| - os parâmetros não recalcularem os dependentes;
+M L12029 |ROOT| Não trate essas falhas como meros problemas visuais.
+M L12164 |ROOT| - restauração do parâmetro MX;
+M L12211 |ROOT| → mostrar “Parâmetro pendente”.
+M L12655 |ROOT| 5. sem valor válido = Parâmetro pendente.
+M L13098 |ROOT| - Restaurar cálculo automático
+M L13328 |ROOT| - restauração do cálculo;
+M L13570 |ROOT| - restaurar cálculo;
+M L13825 |ROOT| Metas pendentes:
+M L14089 |ROOT| 3. cycleId anteriormente aberto pelo card inferior;
+M L14090 |ROOT| 4. versionId anteriormente aberto pelo card inferior;
+M L15793 |ROOT| - restaurar o checkpoint;
+M L16487 |ROOT| - Metas pendentes
+M L17574 |ROOT| - Plano Estratégico aberto.
+M L17717 |ROOT| - Administrador continua aberto;
+M L17900 |ROOT| 7. não publicar caso exista tela branca, rota quebrada ou erro de console.
+M L18334 |ROOT| - cache independente;
+M L18532 |ROOT| A falha da visualização não pode desmontar o Módulo Administrador.
+M L18656 |ROOT| A visualização deve mostrar o ano do Plano aberto.
+M L19877 |ROOT| → restaurar tela completa
+M L20190 |ROOT| Quando o Plano aberto pertencer a um ano anterior ao ano atual:
+M L20202 |ROOT| Plano aberto:
+M L20486 |ROOT| - preenchido ou pendente;
+M L20632 |ROOT| - não apresentar meses futuros como pendentes críticos.
+M L20681 |ROOT| - Pendente
+M L20917 |ROOT| - o mês atual aberto for selecionado como padrão;
+M L20979 |ROOT| - restaurar o checkpoint;
+M L21919 |ROOT| - restaurar versões anteriores;
+M L22359 |ROOT| → bloqueia somente os indicadores dependentes daquela base.
+M L22389 |ROOT| Não criar dois motores de cálculo independentes.
+M L22479 |ROOT| Não recalcular uma fórmula dependente antes de sua base calculada.
+M L22739 |ROOT| - gera Sem base apenas nas fórmulas dependentes.
+M L22786 |ROOT| A ação “Restaurar cálculo automático” deve:
+M L22823 |ROOT| - restaurar cálculo automático;
+M L22972 |ROOT| quando existirem fórmulas independentes com base suficiente.
+M L23092 |ROOT| - somente os indicadores dependentes ficam Sem base;
+M L23882 |ROOT| - restaurar cálculo automático.
+M L24194 |ROOT| - somente cálculos dependentes do Quadro ficam afetados, se existirem.
+M L24486 |ROOT| - Restaurar Ordem Padrão MX
+M L24753 |ROOT| O departamento continua sendo uma propriedade independente.
+M L24796 |ROOT| Nenhuma dessas áreas pode ordenar alfabeticamente de forma independente.
+M L24902 |ROOT| 23. RESTAURAR ORDEM PADRÃO MX
+M L24912 |ROOT| “Restaurar Ordem Padrão MX”
+M L24984 |ROOT| - restauração da ordem padrão;
+M L25857 |ROOT| - recalcula dependentes.
+M L25981 |ROOT| - restaurar valores anteriores;
+M L25982 |ROOT| - recalcular indicadores dependentes;
+M L26481 |ROOT| - restauração.
+M L26663 |ROOT| 7. recalcular os indicadores dependentes;
+M L26751 |ROOT| Se o salvamento falhar:
+M L26795 |ROOT| 1. salvar todas as alterações pendentes;
+M L26878 |ROOT| 3. salvar alterações pendentes;
+M L26949 |ROOT| Se a publicação falhar:
+M L27015 |ROOT| Se o autosave falhar:
+M L27252 |ROOT| TESTE 12 — FALHA CONTROLADA
+M L27525 |ROOT| - não criar quatro vínculos independentes.
+M L28398 |ROOT| - quantidade de metas pendentes.
+M L28859 |ROOT| - metas pendentes;
+M L28872 |ROOT| - metas pendentes = 0;
+M L28987 |ROOT| 23. FALHA DE ATIVAÇÃO
+M L29373 |ROOT| interromper e restaurar o checkpoint da fase.
+M L29787 |ROOT| Para removê-lo, remova primeiro os indicadores dependentes.”
+M L29793 |ROOT| - Remover indicador e dependentes
+M L29795 |ROOT| Não deixar uma fórmula quebrada.
+M L30240 |ROOT| - desde que não possuam valores ou dependentes;
+M L30570 |ROOT| - fórmulas dependentes;
+M L30637 |ROOT| - falhas de sincronização;
+M L30730 |ROOT| - publicação não ocorre com fórmula quebrada.
+M L31028 |ROOT| Não criar um Plano Estratégico independente para cada Loja.
+M L31778 |ROOT| A política entre unidades é independente da política entre meses.
+M L31895 |ROOT| - diferenças pendentes.
+M L32187 |ROOT| 2 metas pendentes
+M L33082 |ROOT| Pendente
+M L33148 |ROOT| - forem criados Planos independentes por Filial;
+M L33222 |ROOT| - um Plano Estratégico independente por Loja;
+M L33649 |ROOT| - salvar ou confirmar descarte das alterações pendentes;
+M L33982 |ROOT| - nenhuma alteração pendente.
+=== BUCKETED REMAINING ===
+PRIORITY_SNIPS 152
+L407: - Restaurar versão publicada.
+L541: - Ver Indicadores Dependentes
+L551: - Indicadores dependentes
+L817: - recalcular dependentes;
+L857: - recalcular dependentes com o valor aplicado.
+L861: “Restaurar cálculo automático”
+L2304: - Pendente de validação
+L2407: 5. gerar sugestão pendente;
+L2429: Pendente de validação do Consultor
+L2536: - restaurar.
+L5355: - Restaurar versão publicada
+L5408: A metodologia deve possuir versionamento independente da versão estrutural do produto.
+L5692: - restaurar;
+L5723: - não alterar o restante da metodologia sem permissão.
+L6103: 8. recalcular automaticamente todos os indicadores dependentes;
+L6480: - recalcular dependentes imediatamente.
+L7005: 4. recalcular os indicadores dependentes;
+L7072: 19. RESTAURAR PADRÃO MX
+L7077: “Restaurar padrão MX”
+L7347: 2. identificar dependentes;
+L7355: 1. identificar todos os indicadores diretamente dependentes;
+L7477: - restauração do padrão MX;
+L7545: - dependentes recalculados.
+L7592: TESTE 10 — RESTAURAR PADRÃO
+L7594: Restaurar padrão MX.
+L7716: - Restaurar padrão MX;
+L8193: 1. validar todos os dias abertos;
+L8208: “Restaurar horário padrão MX”
+L8798: - fórmulas dependentes;
+L8836: - mostrar os indicadores dependentes;
+L9223: TESTE 16 — INDICADOR DEPENDENTE
+L9630: “Este cliente já possui Plano Estratégico para [ano]. O Plano existente foi aberto.”
+L10545: - recalcular indicadores dependentes.
+L10602: 5. recalcular dependentes;
+L10901: - listar os indicadores pendentes.
+L10936: 6. editor aberto;
+L11304: - recalcular os indicadores dependentes;
+L11557: - salvar todas as alterações pendentes;
+L11809: - restauração de valor único;
+L11995: - os parâmetros não recalcularem os dependentes;
+L12164: - restauração do parâmetro MX;
+L12211: → mostrar “Parâmetro pendente”.
+L12655: 5. sem valor válido = Parâmetro pendente.
+L13098: - Restaurar cálculo automático
+L13328: - restauração do cálculo;
+L13570: - restaurar cálculo;
+L13825: Metas pendentes:
+L14089: 3. cycleId anteriormente aberto pelo card inferior;
+L14090: 4. versionId anteriormente aberto pelo card inferior;
+L15793: - restaurar o checkpoint;
+L16487: - Metas pendentes
+L17574: - Plano Estratégico aberto.
+L17717: - Administrador continua aberto;
+L18334: - cache independente;
+L18656: A visualização deve mostrar o ano do Plano aberto.
+L19877: → restaurar tela completa
+L20190: Quando o Plano aberto pertencer a um ano anterior ao ano atual:
+L20202: Plano aberto:
+L20486: - preenchido ou pendente;
+L20632: - não apresentar meses futuros como pendentes críticos.
+L20681: - Pendente
+L20917: - o mês atual aberto for selecionado como padrão;
+L20979: - restaurar o checkpoint;
+L21919: - restaurar versões anteriores;
+L22359: → bloqueia somente os indicadores dependentes daquela base.
+L22389: Não criar dois motores de cálculo independentes.
+L22479: Não recalcular uma fórmula dependente antes de sua base calculada.
+L22739: - gera Sem base apenas nas fórmulas dependentes.
+L22786: A ação “Restaurar cálculo automático” deve:
+L22823: - restaurar cálculo automático;
+L22972: quando existirem fórmulas independentes com base suficiente.
+L23092: - somente os indicadores dependentes ficam Sem base;
+L23882: - restaurar cálculo automático.
+L24194: - somente cálculos dependentes do Quadro ficam afetados, se existirem.
+L24486: - Restaurar Ordem Padrão MX
+L24753: O departamento continua sendo uma propriedade independente.
+L24796: Nenhuma dessas áreas pode ordenar alfabeticamente de forma independente.
+L24902: 23. RESTAURAR ORDEM PADRÃO MX
+L24912: “Restaurar Ordem Padrão MX”
+L24984: - restauração da ordem padrão;
+L25857: - recalcula dependentes.
+L25981: - restaurar valores anteriores;
+L25982: - recalcular indicadores dependentes;
+L26481: - restauração.
+L26663: 7. recalcular os indicadores dependentes;
+L26795: 1. salvar todas as alterações pendentes;
+L26878: 3. salvar alterações pendentes;
+L27525: - não criar quatro vínculos independentes.
+L28398: - quantidade de metas pendentes.
+L28859: - metas pendentes;
+L28872: - metas pendentes = 0;
+L29373: interromper e restaurar o checkpoint da fase.
+L29787: Para removê-lo, remova primeiro os indicadores dependentes.”
+L29793: - Remover indicador e dependentes
+L30240: - desde que não possuam valores ou dependentes;
+L30570: - fórmulas dependentes;
+L31028: Não criar um Plano Estratégico independente para cada Loja.
+L31778: A política entre unidades é independente da política entre meses.
+L31895: - diferenças pendentes.
+L32187: 2 metas pendentes
+AREA Admin MX N=3
+  - ROOT :: - Administrador continua aberto;
+  - ROOT :: A falha da visualização não pode desmontar o Módulo Administrador.
+  - DUPLICATE_MASTER :: 12. permitir restauração administrativa.
+AREA Dono/home N=1
+  - ROOT :: [ ] Disponível para sugestão ao Dono
+AREA Gerente N=0
+AREA Vendedor N=0
+AREA Strategic plan N=4
+  - ROOT :: “Este cliente já possui Plano Estratégico para [ano]. O Plano existente foi aberto.”
+  - ROOT :: - Plano Estratégico aberto.
+  - ROOT :: Não criar um Plano Estratégico independente para cada Loja.
+  - ROOT :: - um Plano Estratégico independente por Loja;
+AREA Metas N=36
+  - ROOT :: - Ver Indicadores Dependentes
+  - ROOT :: - Indicadores dependentes
+  - ROOT :: 8. recalcular automaticamente todos os indicadores dependentes;
+  - ROOT :: 4. recalcular os indicadores dependentes;
+  - ROOT :: 1. identificar todos os indicadores diretamente dependentes;
+  - ROOT :: - mostrar os indicadores dependentes;
+  - ROOT :: TESTE 16 — INDICADOR DEPENDENTE
+  - ROOT :: - recalcular indicadores dependentes.
+  - ROOT :: - listar os indicadores pendentes.
+  - ROOT :: - recalcular os indicadores dependentes;
+  - ROOT :: Metas pendentes:
+  - ROOT :: - Metas pendentes
+  - ROOT :: → bloqueia somente os indicadores dependentes daquela base.
+  - ROOT :: - somente os indicadores dependentes ficam Sem base;
+  - ROOT :: - recalcular indicadores dependentes;
+  - ROOT :: 7. recalcular os indicadores dependentes;
+  - ROOT :: - quantidade de metas pendentes.
+  - ROOT :: - metas pendentes;
+  - ROOT :: - metas pendentes = 0;
+  - ROOT :: Para removê-lo, remova primeiro os indicadores dependentes.”
+  - ROOT :: - Remover indicador e dependentes
+  - ROOT :: 2 metas pendentes
+  - ROOT :: - dependentes do indicador;
+  - 17. REPARAÇÃO DOS MESES EXISTENTES :: * recalcular todos os indicadores dependentes;
+  - 1. OBJETIVO :: * Metas pendentes: 46;
+AREA Shell/nav N=0
+AREA data parity N=4
+  - ROOT :: A política entre unidades é independente da política entre meses.
+  - ROOT :: - versão independente para o consolidado.
+  - ROOT :: - manter ou restaurar Unidade A;
+  - DUPLICATE_MASTER :: - nenhum job pendente relacionado a dados removidos;
+AREA Other N=120
+  - ROOT :: - Restaurar versão publicada.
+  - ROOT :: - recalcular dependentes;
+  - ROOT :: - recalcular dependentes com o valor aplicado.
+  - ROOT :: “Restaurar cálculo automático”
+  - ROOT :: - Pendente de validação
+  - ROOT :: 5. gerar sugestão pendente;
+  - ROOT :: Pendente de validação do Consultor
+  - ROOT :: - restaurar.
+  - ROOT :: [ ] Disponível para aplicação nos clientes
+  - ROOT :: - Restaurar versão publicada
+  - ROOT :: A metodologia deve possuir versionamento independente da versão estrutural do produto.
+  - ROOT :: - restaurar;
+  - ROOT :: - não alterar o restante da metodologia sem permissão.
+  - ROOT :: - recalcular dependentes imediatamente.
+  - ROOT :: 19. RESTAURAR PADRÃO MX
+  - ROOT :: “Restaurar padrão MX”
+  - ROOT :: 2. identificar dependentes;
+  - ROOT :: - restauração do padrão MX;
+  - ROOT :: - dependentes recalculados.
+  - ROOT :: TESTE 10 — RESTAURAR PADRÃO
+  - ROOT :: Restaurar padrão MX.
+  - ROOT :: - Restaurar padrão MX;
+  - ROOT :: 1. validar todos os dias abertos;
+  - ROOT :: “Restaurar horário padrão MX”
+  - ROOT :: - fórmulas dependentes;
