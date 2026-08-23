@@ -27,10 +27,17 @@ describe('isCompanyLevelIndicator', () => {
 })
 
 describe('edição de metas e realizados', () => {
-  test('indicador calculado bloqueia somente a Meta', () => {
-    const indicator = { code: 'SALES_TOTAL', name: 'Vendas Total', calculado: true }
-    expect(isPlanningFieldEditable(indicator, 'meta')).toBe(false)
-    expect(isPlanningFieldEditable(indicator, 'realizado')).toBe(true)
+  test('fórmula bloqueia a Meta; derivados do Realizado também ficam bloqueados', () => {
+    // SALES_TOTAL: meta calculada E realizado derivado (ACTUAL_CALCULATED).
+    const total = { code: 'SALES_TOTAL', name: 'Vendas Total', calculado: true }
+    expect(isPlanningFieldEditable(total, 'meta')).toBe(false)
+    expect(isPlanningFieldEditable(total, 'realizado')).toBe(false)
+    expect(isPlanningFieldEditable(total, 'ano_anterior')).toBe(false)
+
+    // Indicador manual: meta e realizado são lançamentos operacionais.
+    const walkin = { code: 'SALES_WALKIN', name: 'Vendas Fluxo', calculado: false }
+    expect(isPlanningFieldEditable(walkin, 'meta')).toBe(true)
+    expect(isPlanningFieldEditable(walkin, 'realizado')).toBe(true)
   })
 })
 

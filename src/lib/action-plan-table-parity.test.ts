@@ -121,7 +121,8 @@ describe('Plano de Ação canônico e tabela Base44', () => {
     const page = read('src/features/admin-mx/AdminPlanosAcaoGlobalPage.tsx')
     expect(page).toContain("useState<PlanTab>('templates')")
     expect(page).toContain("label: 'Planos Padrão'")
-    expect(page).toContain("label: 'Planos da rede'")
+    expect(page).not.toContain("label: 'Planos da rede'")
+    expect(page).toContain("label: 'Aplicações nos Clientes'")
     expect(page).toContain("useState<'lista' | 'kanban'>('lista')")
     for (const action of ['Aplicar a Cliente', 'Abrir Histórico', 'Criar Plano Padrão', 'Nova ação']) {
       expect(page).toContain(action)

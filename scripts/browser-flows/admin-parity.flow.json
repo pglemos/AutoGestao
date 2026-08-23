@@ -1,0 +1,16 @@
+{
+  "url": "http://localhost:3457/login",
+  "waitText": "Acessar sistema",
+  "assertVisible": ["#login-email"],
+  "screenshots": ["desktop", "mobile"],
+  "steps": [
+    { "action": "fill", "args": ["#login-email", "synvollt@gmail.com"] },
+    { "action": "fill", "args": ["#login-password", "Mx#2026!"] },
+    { "action": "click", "args": ["button[type=submit]"] },
+    { "action": "wait", "args": ["--url", "*painel*"] },
+    { "action": "open", "args": ["http://localhost:3457/plano-estrategico"] },
+    { "action": "wait", "args": ["--fn", "document.body.innerText.includes('Catálogo de Indicadores')"] },
+    { "action": "open", "args": ["http://localhost:3457/plano-acao"] },
+    { "action": "wait", "args": ["--fn", "document.body.innerText.includes('na biblioteca')"] }
+  ]
+}

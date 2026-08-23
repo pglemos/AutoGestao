@@ -3,9 +3,10 @@ import { Target } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import AdminIndicadoresPage from '@/features/admin-mx/AdminIndicadoresPage'
 import AdminStrategicPlanEditor from '@/features/admin-mx/indicadores/AdminStrategicPlanEditor'
-import { MxErrorState, MxLoadingState } from '@/components/module/MxModuleVisualPrimitives'
+import { MxErrorState, MxLoadingState, MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
 import { fetchCurrentCycle } from '@/features/strategic-plan/planCycleRepository'
 import { StrategicPlanWorkspace } from '@/features/strategic-plan/StrategicPlanWorkspace'
+import { AdminAsOwnerStrategicPlan } from './AdminAsOwnerStrategicPlan'
 import { InternalMxPlanningShell, useInternalPlanningStore } from './InternalMxPlanningShell'
 
 export default function InternalStrategicPlanPage() {
@@ -17,6 +18,7 @@ export default function InternalStrategicPlanPage() {
   const clientId = params.get('clientId')
   const storeId = params.get('storeId')
   const preview = params.get('preview') === '1'
+  const viewAsDono = params.get('viewAs') === 'dono' || params.get('viewAs') === 'owner'
   const isClientRoute = location.pathname.startsWith('/clientes/')
   const requestedYear = Number(params.get('year'))
   const year = Number.isInteger(requestedYear) && requestedYear >= 2020 && requestedYear <= 2100 ? requestedYear : undefined
@@ -51,6 +53,19 @@ export default function InternalStrategicPlanPage() {
     })
     return () => { active = false }
   }, [clientId, cycleId, location.pathname, location.search, navigate, resolveYear])
+
+  // Visualizar como Dono: workspace real do Dono (shell owner), sem chrome Admin.
+  if (viewAsDono) {
+    const ownerStoreId = storeId || store.selectedStoreId || null
+    if (!ownerStoreId) {
+      return (
+        <MxStatusBanner tone="warning">
+          Selecione uma loja (storeId) para Visualizar como Dono.
+        </MxStatusBanner>
+      )
+    }
+    return <AdminAsOwnerStrategicPlan storeId={ownerStoreId} year={year} />
+  }
 
   if (cycleId) {
     return <AdminStrategicPlanEditor cycleId={cycleId} readOnly={preview} />

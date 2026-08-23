@@ -5,8 +5,10 @@ import {
   BASE44_STANDARD_INDICATORS,
   catalogAliasKeys,
   matchCanonicalIndicator,
+  OFFICIAL_CODES_BY_ORDER,
+  officialCatalogOrder,
 } from '@/features/admin-mx/indicadores/canonicalBase44Catalog'
-import { buildOfficialMonthlyGrid, readOfficialMonthValue } from '@/features/admin-mx/indicadores/metasRealizados'
+import { buildOfficialMonthlyGrid, readOfficialMonthValue, applyActualComputedPasses } from '@/features/admin-mx/indicadores/metasRealizados'
 import { planSalesOtherRepairs, repairOwnerStrategicPlanData } from './repairOwnerStrategicPlanData'
 import {
   ownerStrategicPlanQueryKey,
@@ -160,8 +162,9 @@ function officialSeriesTemplate(code: string): StrategicSeries | null {
     metricCode: canon.code,
     name: canon.name,
     area: OFFICIAL_AREA[canon.area] || canon.area,
-    direction: canon.target_calculation_mode === 'CALCULATED_LOCKED' ? 'increase' : 'increase',
+    direction: 'increase',
     formula_expression: canon.formula_expression,
+    display_order: officialCatalogOrder(canon.code),
     displayFormat: 'integer',
     aggregationMode: 'sum',
     decimalPlaces: 0,
@@ -172,23 +175,51 @@ function officialSeriesTemplate(code: string): StrategicSeries | null {
   }
 }
 
+function mergeSeriesValues(target: StrategicSeries, source: StrategicSeries): StrategicSeries {
+  const pick = (a: Array<number | null>, b: Array<number | null>) =>
+    a.map((value, index) => (value != null ? value : b[index] ?? null))
+  return {
+    ...target,
+    targetValues: pick(target.targetValues, source.targetValues),
+    currentValues: pick(target.currentValues, source.currentValues),
+    previousYearValues: pick(target.previousYearValues, source.previousYearValues),
+  }
+}
+
 function mergeOfficialPlanningSeries(
   base: StrategicSeries[],
   byIndicator: Map<string, PersistedValueRow[]>,
 ): StrategicSeries[] {
-  const merged = base.map(item => overlaySeries(item, rowsForSeries(item, byIndicator)))
-  const hasOfficial = [...byIndicator.keys()].some(key => matchCanonicalIndicator(key))
-  if (!hasOfficial) return hydrateOfficialComputed(merged)
-
-  const present = new Set(merged.flatMap(item => seriesLookupKeys(item).map(key => key.toLowerCase())))
-  for (const canon of BASE44_STANDARD_INDICATORS) {
-    if (present.has(canon.code.toLowerCase())) continue
-    const template = officialSeriesTemplate(canon.code)
-    if (!template) continue
-    merged.push(overlaySeries(template, rowsForSeries(template, byIndicator)))
-    present.add(canon.code.toLowerCase())
+  const baseBySpIndex = new Map<number, StrategicSeries>()
+  const baseByCanon = new Map<string, StrategicSeries>()
+  for (const item of base) {
+    const spMatch = String(item.id || item.code || '').match(/^SP-(\d+)$/i)
+    if (spMatch) baseBySpIndex.set(Number(spMatch[1]) - 1, item)
+    const canon = matchCanonicalIndicator(String(item.metricCode || item.code || item.id || ''))
+    if (canon) baseByCanon.set(canon.code, item)
   }
-  return hydrateOfficialComputed(merged)
+
+  const merged: StrategicSeries[] = []
+  for (let index = 0; index < OFFICIAL_CODES_BY_ORDER.length; index += 1) {
+    const code = OFFICIAL_CODES_BY_ORDER[index]
+    const template = officialSeriesTemplate(code)
+    if (!template) continue
+    let series = overlaySeries(template, rowsForSeries(template, byIndicator))
+    const fromCanon = baseByCanon.get(code)
+    if (fromCanon) series = mergeSeriesValues(series, fromCanon)
+    const fromSp = baseBySpIndex.get(index)
+    if (fromSp) series = mergeSeriesValues(series, fromSp)
+    // A série herdou valores de uma série legada (SP-n ou catálogo do
+    // cliente): gravações e histórico precisam usar a chave ORIGINAL sob a
+    // qual os dados persistem, não o código canônico do template.
+    const sourceKey = String(fromSp?.metricCode || fromSp?.code || fromCanon?.metricCode || fromCanon?.code || '')
+    if (sourceKey && sourceKey !== code) series.sourceMetricCode = sourceKey
+    if (fromSp) series.sourceId = String(fromSp.id || fromSp.code)
+    merged.push(series)
+  }
+
+  const hydrated = hydrateOfficialComputed(merged)
+  return hydrated
 }
 
 function hydrateOfficialComputed(seriesList: StrategicSeries[]): StrategicSeries[] {
@@ -211,14 +242,24 @@ function hydrateOfficialComputed(seriesList: StrategicSeries[]): StrategicSeries
       ano_anterior: item.previousYearValues[index] ?? null,
     }))
   })
-  const grid = buildOfficialMonthlyGrid(values, indicators, 'owner')
+  let grid = buildOfficialMonthlyGrid(values, indicators, 'owner')
+  grid = applyActualComputedPasses(grid, indicators)
   return seriesList.map(item => {
     const code = String(item.metricCode || item.code)
     return {
       ...item,
-      targetValues: item.targetValues.map((_, index) => readOfficialMonthValue(grid, indicators, code, index + 1, 'meta')),
-      currentValues: item.currentValues.map((_, index) => readOfficialMonthValue(grid, indicators, code, index + 1, 'realizado')),
-      previousYearValues: item.previousYearValues.map((_, index) => readOfficialMonthValue(grid, indicators, code, index + 1, 'ano_anterior')),
+      targetValues: item.targetValues.map((meta, index) => {
+        const computed = readOfficialMonthValue(grid, indicators, code, index + 1, 'meta')
+        return computed != null ? computed : meta
+      }),
+      currentValues: item.currentValues.map((current, index) => {
+        const computed = grid[code]?.[index + 1]?.realizado ?? null
+        return computed != null ? computed : current
+      }),
+      previousYearValues: item.previousYearValues.map((previous, index) => {
+        const computed = grid[code]?.[index + 1]?.ano_anterior ?? null
+        return computed != null ? computed : previous
+      }),
     }
   })
 }
@@ -333,11 +374,14 @@ export function createStrategicPlanLiveSource({
   }
 
   const findSeries = (id: string): StrategicSeries | null => (
-    cache.series.find(item => item.id === id || item.code === id || item.metricCode === id) ?? null
+    cache.series.find(item => (
+      item.id === id || item.code === id || item.metricCode === id ||
+      item.sourceId === id || item.sourceMetricCode === id
+    )) ?? null
   )
   const canonicalIndicatorCode = (id: string): string => {
     const series = findSeries(id)
-    return String(series?.metricCode || series?.code || id)
+    return String(series?.sourceMetricCode || series?.metricCode || series?.code || id)
   }
   const indicatorAliases = (id: string): string[] => {
     const series = findSeries(id)

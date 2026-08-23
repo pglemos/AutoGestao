@@ -7,6 +7,8 @@
 // A resolução falha por motivos distintos e cada um pede uma ação diferente na
 // tela. Devolver só `null` obrigaria quem chama a adivinhar qual é o caso.
 
+import { matchCanonicalIndicator } from '@/features/admin-mx/indicadores/canonicalBase44Catalog'
+
 export type ProductPackageBlockReason =
   | 'CLIENTE_SEM_PRODUTO'
   | 'PRODUTO_NAO_ENCONTRADO'
@@ -110,8 +112,22 @@ export function decideProductPackage(input: {
   // O catálogo MX grava 'manual'/'calculado' em minúsculas; o Base44 usava
   // 'MANUAL'/'CALCULATED'. Comparar com um só dos dois zera a contagem em
   // silêncio — foi o que aconteceu na primeira versão desta função.
+  // Para códigos oficiais Base44, a fonte de verdade é target_calculation_mode
+  // do catálogo canônico (18 MANUAL / 27 CALCULATED), não o snapshot do pacote.
   const isMode = (value: string | null, ...accepted: string[]) =>
     value != null && accepted.includes(value.trim().toLowerCase())
+
+  const classify = (item: PackageItemRow) => {
+    const canon = matchCanonicalIndicator(item.metric_key)
+    if (canon) {
+      const mode = String(canon.target_calculation_mode ?? '').toUpperCase()
+      return mode === 'MANUAL' ? 'manual' : 'calculated'
+    }
+    if (isMode(item.input_mode_snapshot, 'manual')) return 'manual'
+    return 'calculated'
+  }
+
+  const classes = items.map(classify)
 
   return {
     ok: true,
@@ -120,8 +136,8 @@ export function decideProductPackage(input: {
       packageVersion: input.packageVersion,
       items,
       indicatorCodes: items.map(item => item.metric_key),
-      manualCount: items.filter(item => isMode(item.input_mode_snapshot, 'manual')).length,
-      calculatedCount: items.filter(item => isMode(item.input_mode_snapshot, 'calculated', 'calculado')).length,
+      manualCount: classes.filter(mode => mode === 'manual').length,
+      calculatedCount: classes.filter(mode => mode === 'calculated').length,
       departments: [...new Set(items.map(item => item.area_snapshot).filter((area): area is string => Boolean(area)))],
     },
   }

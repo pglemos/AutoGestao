@@ -11,6 +11,16 @@ const CATEGORY_ICON: Record<string, LucideIcon> = {
   operacional: Settings,
 }
 
+/** Cores dos ícones — Base44 `actionPlanConstants.ACTION_PLAN_DEPARTMENTS`. */
+const CATEGORY_ICON_TONE: Record<string, string> = {
+  comercial: 'bg-blue-50 text-blue-700',
+  marketing: 'bg-pink-50 text-pink-700',
+  produto: 'bg-orange-50 text-orange-700',
+  rh: 'bg-teal-50 text-teal-700',
+  financeiro: 'bg-green-50 text-green-700',
+  operacional: 'bg-purple-50 text-purple-700',
+}
+
 /** Cards por categoria de indicador (mesma taxonomia do catálogo do Planejamento Estratégico) — filtra a biblioteca de templates ao clicar. */
 export function DepartmentCards(props: {
   templates: ActionPlanTemplate[]
@@ -41,14 +51,14 @@ export function DepartmentCards(props: {
             className={`rounded-xl border-2 p-3 text-left transition-all ${selected ? 'border-primary bg-primary/5 shadow-sm' : 'border-border bg-surface-default hover:border-border-strong'}`}
           >
             <div className="mb-2 flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-surface-alt text-text-secondary">
+              <div className={`flex h-7 w-7 items-center justify-center rounded-lg ${CATEGORY_ICON_TONE[card.code] ?? 'bg-surface-alt text-text-secondary'}`}>
                 <Icon size={14} />
               </div>
               <span className="truncate text-xs font-semibold text-text-primary">{card.label}</span>
             </div>
             <div className="text-lg font-bold text-text-primary">{counts.published}</div>
-            <div className="text-[10px] text-text-secondary">Templates publicados</div>
-            <div className="mt-0.5 text-[10px] text-text-disabled">{counts.activeIndicators} indicador(es) ativo(s)</div>
+            <div className="text-[10px] text-text-secondary">Planos Padrão</div>
+            <div className="mt-0.5 text-[10px] text-text-disabled">{counts.activeIndicators} indicadores ativos</div>
             {counts.drafts > 0 ? <div className="mt-0.5 text-[10px] text-status-warning">{counts.drafts} em rascunho</div> : null}
           </button>
         )

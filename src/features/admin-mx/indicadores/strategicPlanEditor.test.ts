@@ -10,6 +10,7 @@ import {
   hydrateEditorGrid,
   patchEditorGrid,
   readEditorSeries,
+  applyEditorMonthToYear,
   recalculateEditorGrid,
   sortEditorIndicators,
 } from './strategicPlanEditor'
@@ -103,9 +104,32 @@ describe('strategicPlanEditor', () => {
     expect(sortEditorIndicators(indicators, 'nome').map(indicator => indicator.metric_key)).toEqual(['a', 'b'])
   })
 
+  it('prefers Base44 global order over stale display_order no ciclo', () => {
+    const indicators = [
+      { metric_key: 'contribution_margin', label: 'Margem', area: 'Financeiro', display_order: 1 },
+      { metric_key: 'sales_total', label: 'Total de Vendas', area: 'Comercial', display_order: 99 },
+      { metric_key: 'sales_walkin', label: 'Balcão', area: 'Comercial', display_order: 2 },
+    ]
+    expect(sortEditorIndicators(indicators).map(indicator => indicator.metric_key))
+      .toEqual(['sales_total', 'sales_walkin', 'contribution_margin'])
+  })
+
   it('returns null for an empty annual series', () => {
     expect(editorAnnualTotal([null, null])).toBeNull()
     expect(editorAnnualTotal([1, null, 2])).toBe(3)
   })
-})
 
+  it('applyEditorMonthToYear marca 11 meses a partir da origem', () => {
+    const grid = hydrateEditorGrid([
+      { loja_id: 'u1', indicator_code: 'SALES_WALKIN', month: 1, meta: 10, realizado: null, ano_anterior: null },
+    ], ['u1'], ['SALES_WALKIN'])
+    const { patches } = applyEditorMonthToYear(grid, {
+      unitId: 'u1',
+      sourceMonth: 1,
+      field: 'meta',
+      indicatorCodes: ['SALES_WALKIN'],
+    })
+    expect(patches).toHaveLength(11)
+    expect(patches.every(p => p.value === 10)).toBe(true)
+  })
+})

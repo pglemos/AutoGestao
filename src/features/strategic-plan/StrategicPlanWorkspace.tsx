@@ -1,7 +1,9 @@
+import { useEffect } from 'react'
 import { AlertMessage } from '@/components/molecules/AlertMessage'
 import { Pencil, Plus, SlidersHorizontal } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/atoms/Button'
+import { ALL_OWNER_UNITS } from '@/components/owner/ownerPlanningAdapter'
 import StrategicHeader from '@/components/owner/strategic/StrategicHeader'
 import StrategicPlanTabs from '@/components/owner/strategic/StrategicPlanTabs'
 import StrategicIndicatorSelector from '@/components/owner/strategic/StrategicIndicatorSelector'
@@ -17,7 +19,7 @@ import StrategicExportMenu from '@/components/owner/strategic/StrategicExportMen
 import TargetHistoryPanel from '@/components/owner/strategic/TargetHistoryPanel'
 import FiltersDrawer from '@/components/owner/strategic/FiltersDrawer'
 import DisplayModeSelector from '@/components/owner/strategic/DisplayModeSelector'
-import { CompetenceSelector } from '@/components/owner/strategic/ViewSelector'
+import ViewSelector, { CompetenceSelector } from '@/components/owner/strategic/ViewSelector'
 import { usePlanningWorkspace } from '@/features/planning-workspace'
 import { ConditionalPageCanvas } from '@/design-system/page'
 import { PlanCycleBanner } from './PlanCycleBanner'
@@ -35,6 +37,7 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
   const pageClass = shell === 'owner'
     ? 'flex min-h-0 flex-1 flex-col space-y-6 pb-20 lg:pb-0'
     : 'space-y-4'
+
 
   if (controller.loading) {
     return (
@@ -94,6 +97,22 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
             {controller.partialUnitsLabel}. O consolidado usa só as unidades com base — não é tratado como completo.
           </AlertMessage>
         ) : null}
+        {controller.supportsConsolidated ? (
+          <div className="flex flex-wrap items-center gap-2 rounded-xl border border-border bg-card px-3 py-2 text-sm">
+            <span className="text-muted-foreground">Escopo</span>
+            <select
+              className="rounded-md border border-border bg-background px-2 py-1.5 text-sm"
+              aria-label="Escopo multiunidade do plano"
+              value={controller.ownerUnitId === ALL_OWNER_UNITS ? ALL_OWNER_UNITS : (controller.ownerUnitId || storeId || '')}
+              onChange={(event) => controller.setOwnerUnitScope(event.target.value)}
+            >
+              <option value={ALL_OWNER_UNITS}>Todas as unidades</option>
+              {controller.clientUnits.filter(unit => unit.active).map(unit => (
+                <option key={unit.id} value={unit.id}>{unit.name}</option>
+              ))}
+            </select>
+          </div>
+        ) : null}
         <OwnerDataDiagnosticsPanel controller={controller} />
         <StrategicPlanTabs tab={controller.tab} onTabChange={controller.setTab} />
 
@@ -113,6 +132,7 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
                   value={controller.selectedMonthIndex}
                   onChange={controller.setSelectedMonthIndex}
                 />
+                <ViewSelector value={controller.valueView} onChange={controller.setValueView} />
                 <DisplayModeSelector
                   value={controller.displayMode}
                   onChange={controller.setDisplayMode}
@@ -177,6 +197,10 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
           <section id="spe-tab-panel-visao-geral" role="tabpanel" aria-label="Visão Geral">
             <StrategicPlanOverview
             repository={controller.repository}
+            series={controller.series}
+            scopeType={controller.diagnosticContext?.scopeType ?? null}
+            valueView={controller.valueView}
+            onValueViewChange={controller.setValueView}
             onCardClick={controller.handleCardClick}
             onRowClick={controller.handleRowClick}
             year={controller.year}

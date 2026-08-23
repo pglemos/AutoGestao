@@ -117,7 +117,10 @@ function deriveValues(rows, year, inventoryRows) {
 }
 
 function buildSeries(indicator, currentValues, previousValues, monthlyGoal, year) {
-  const targetValues = indicator.id === "SP-001" && monthlyGoal != null
+  const metric = String(indicator.metricCode || indicator.code || indicator.id || "")
+  const isSalesTotal = indicator.id === "SP-001"
+    || ["SALES_TOTAL", "sales_total"].includes(metric)
+  const targetValues = isSalesTotal && monthlyGoal != null
     ? Array(12).fill(numberValue(monthlyGoal))
     : EMPTY_BY_MONTH();
   const actual = currentValues || EMPTY_BY_MONTH();

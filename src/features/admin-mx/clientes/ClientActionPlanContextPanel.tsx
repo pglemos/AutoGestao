@@ -17,10 +17,13 @@ import { supabase } from '@/lib/supabase'
 import { fetchClientUnits } from '@/features/strategic-plan/clientPlanningRepository'
 import {
   actionPlanStatusLabel,
+  collapseClientActionPlanRows,
   summarizeClientActionPlans,
   type ClientActionPlanRow,
 } from './clientActionPlanContext'
+import { toast } from '@/lib/toast'
 import {
+  changePlanStatus,
   normalizeBoardChecklist,
   resolveBoardColumn,
   STATUS_LABEL,
@@ -28,6 +31,7 @@ import {
   type PlanStatus,
 } from '@/features/admin-mx/planos-acao/actionPlanBoard'
 import { ActionPlanDetailDrawer } from '@/features/admin-mx/planos-acao/ActionPlanDetailDrawer'
+import { ActionPlanKanban } from '@/features/admin-mx/planos-acao/ActionPlanKanban'
 
 type Props = {
   clientId: string
@@ -38,6 +42,7 @@ type Props = {
 }
 
 type Responsible = { id: string; name: string | null }
+type PanelView = 'quadro' | 'lista'
 
 function formatDate(value: string | null): string {
   if (!value) return '—'
@@ -78,6 +83,7 @@ export function ClientActionPlanContextPanel({ clientId, clientSlug, primaryStor
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedPlan, setSelectedPlan] = useState<BoardPlan | null>(null)
+  const [panelView, setPanelView] = useState<PanelView>('quadro')
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -97,7 +103,7 @@ export function ClientActionPlanContextPanel({ clientId, clientSlug, primaryStor
 
     const { data, error: plansError } = await supabase
       .from('planos_acao')
-      .select('id, codigo, acao, objetivo, indicador, departamento, prazo, status, progresso, scope_id, scope_type, responsavel_id, updated_at, checklist')
+      .select('id, codigo, acao, objetivo, indicador, departamento, prazo, status, progresso, scope_id, scope_type, responsavel_id, updated_at, checklist, origem_ref_id, transition_metadata')
       .eq('scope_type', 'store')
       .in('scope_id', scopeIds)
       .order('updated_at', { ascending: false })
@@ -113,10 +119,12 @@ export function ClientActionPlanContextPanel({ clientId, clientSlug, primaryStor
 
     const unitNames = new Map(unitsResult.units.map(unit => [unit.id, unit.name]))
     if (primaryStoreId && !unitNames.has(primaryStoreId)) unitNames.set(primaryStoreId, 'Matriz operacional')
-    const planRows = ((data ?? []) as Array<Omit<ClientActionPlanRow, 'scope_name'> & { scope_type: string }>).map(row => ({
-      ...row,
-      scope_name: unitNames.get(row.scope_id) ?? 'Unidade não identificada',
-    }))
+    const planRows = collapseClientActionPlanRows(
+      ((data ?? []) as Array<Omit<ClientActionPlanRow, 'scope_name'> & { scope_type: string }>).map(row => ({
+        ...row,
+        scope_name: unitNames.get(row.scope_id) ?? 'Unidade não identificada',
+      })),
+    )
     const responsibleIds = [...new Set(planRows.map(row => row.responsavel_id).filter((id): id is string => Boolean(id)))]
     const peopleResult = responsibleIds.length
       ? await supabase.from('usuarios').select('id, name').in('id', responsibleIds)
@@ -132,6 +140,33 @@ export function ClientActionPlanContextPanel({ clientId, clientSlug, primaryStor
 
   const summary = useMemo(() => summarizeClientActionPlans(rows), [rows])
   const responsibleNames = useMemo(() => new Map(responsibles.map(person => [person.id, person.name ?? 'Sem nome'])), [responsibles])
+  const boardPlans = useMemo(() => rows.map(toBoardPlan), [rows])
+
+  const handleKanbanMove = useCallback(async (plan: BoardPlan, toStatus: PlanStatus) => {
+    if (toStatus === 'atrasado') {
+      toast.info('A coluna Atrasada é definida pelo prazo. Ajuste o prazo no detalhe do plano.')
+      setSelectedPlan(plan)
+      return
+    }
+    if (toStatus === 'concluido') {
+      toast.info('Abra o detalhe para concluir com data efetiva e checklist.')
+      setSelectedPlan(plan)
+      return
+    }
+    const from = (plan.status ?? 'pendente') as PlanStatus
+    const result = await changePlanStatus(plan.id, toStatus, {
+      from,
+      note: 'Movido pelo quadro Admin',
+      checklist: plan.checklist,
+    })
+    if (result.error) {
+      toast.error(result.error)
+      return
+    }
+    toast.success(`Plano movido para ${STATUS_LABEL[toStatus].toLowerCase()}.`)
+    void load()
+  }, [load])
+
 
   if (loading) return <MxSectionCard><div className="p-5"><div className="text-sm text-muted-foreground">Carregando planos de ação do cliente…</div></div></MxSectionCard>
 
@@ -150,6 +185,24 @@ export function ClientActionPlanContextPanel({ clientId, clientSlug, primaryStor
           description="A execução fica junto do cliente, com o escopo da matriz e das filiais identificado em cada linha."
           actions={(
             <div className="flex flex-wrap gap-2">
+              <div className="inline-flex rounded-md border border-border p-0.5" role="group" aria-label="Visualização do plano de ação">
+                <Button
+                  type="button"
+                  size="sm"
+                  variant={panelView === 'quadro' ? 'primary' : 'ghost'}
+                  onClick={() => setPanelView('quadro')}
+                >
+                  Quadro
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant={panelView === 'lista' ? 'primary' : 'ghost'}
+                  onClick={() => setPanelView('lista')}
+                >
+                  Lista
+                </Button>
+              </div>
               <Button variant="outline" size="sm" onClick={() => void load()} aria-label="Atualizar planos de ação do cliente">
                 <RefreshCw size={14} />Atualizar
               </Button>
@@ -172,6 +225,8 @@ export function ClientActionPlanContextPanel({ clientId, clientSlug, primaryStor
               description="Crie uma ação a partir do indicador do cliente para acompanhar problema, responsável, prazo e execução aqui."
               action={<Button onClick={onCreatePlan}><Plus size={16} />Criar plano de ação</Button>}
             />
+          ) : panelView === 'quadro' ? (
+            <ActionPlanKanban plans={boardPlans} onOpen={setSelectedPlan} onMove={handleKanbanMove} />
           ) : (
             <MxTableSurface>
               <Table className="min-w-[1120px]">

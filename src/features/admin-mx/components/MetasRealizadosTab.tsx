@@ -1,5 +1,5 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
-import { Check, Copy, Download, History, RefreshCw, Save, Upload } from 'lucide-react'
+import { Check, Copy, Download, History, RefreshCw, Save, Target, Upload } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { Modal } from '@/components/organisms/Modal'
@@ -8,15 +8,19 @@ import {
   MxErrorState,
   MxField,
   MxLoadingState,
+  MxMetricCard,
+  MxMetricGrid,
   MxSectionCard,
   MxSectionHeader,
   MxSelect,
   MxStatusBanner,
   MxTableSurface,
 } from '@/components/module/MxModuleVisualPrimitives'
+import { BASE44_STANDARD_INDICATORS, matchCanonicalIndicator } from '../indicadores/canonicalBase44Catalog'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/organisms/Table'
 import { toast } from '@/lib/toast'
 import { MONTH_LABELS, getFormatConfig, formatDisplay, formatEditableInput, parseStrategicInput } from '../indicadores/indicatorFormulas'
+import { resolveLastClosedCompetence } from '@/features/strategic-plan/competence'
 import { diagnoseEmptyImport } from '../indicadores/importDiagnosis'
 import {
   buildImportSaveBatches,
@@ -43,6 +47,7 @@ import {
   saveIndicatorTargets,
   type PlanningHistoryRow,
 } from '../indicadores/indicatorData'
+import { saveIndicatorField } from '../indicadores/strategicPlanEditorRepository'
 import {
   CONSOLIDATED_SCOPE,
   CONSOLIDATION_STATUS,
@@ -146,14 +151,34 @@ export function MetasRealizadosTab(props: {
     return () => { active = false }
   }, [])
 
+  /** Digitáveis + calculados do catálogo — motor único para tempo real / consolidado. */
+  const calculationIndicators = useMemo(() => {
+    const byCode = new Map<string, { code: string; formula_expression: string | null }>()
+    for (const indicator of props.indicators) {
+      const canon = matchCanonicalIndicator(indicator.code)?.code ?? indicator.code
+      byCode.set(canon, {
+        code: indicator.code,
+        formula_expression: formulas[indicator.code]
+          ?? matchCanonicalIndicator(indicator.code)?.formula_expression
+          ?? null,
+      })
+    }
+    for (const indicator of BASE44_STANDARD_INDICATORS) {
+      if (indicator.target_calculation_mode === 'MANUAL') continue
+      if (byCode.has(indicator.code)) continue
+      byCode.set(indicator.code, {
+        code: indicator.code,
+        formula_expression: formulas[indicator.code] ?? indicator.formula_expression ?? null,
+      })
+    }
+    return [...byCode.values()]
+  }, [formulas, props.indicators])
+
   // Sem a fórmula, um indicador derivado não tem como ser recalculado sobre as
   // bases consolidadas — sairia como "sem base" no consolidado do cliente.
   const consolidationIndicators = useMemo<ConsolidationIndicator[]>(
-    () => props.indicators.map(indicator => ({
-      code: indicator.code,
-      formula_expression: formulas[indicator.code] ?? null,
-    })),
-    [props.indicators, formulas],
+    () => calculationIndicators,
+    [calculationIndicators],
   )
 
   const clientScope = useClientScope(storeId, year, consolidationIndicators)
@@ -171,12 +196,39 @@ export function MetasRealizadosTab(props: {
 
   const grid = useMemo(() => buildOfficialMonthlyGrid(
     rows,
-    props.indicators.map(indicator => ({
-      code: indicator.code,
-      formula_expression: formulas[indicator.code] ?? null,
-    })),
+    calculationIndicators,
     storeId,
-  ), [formulas, props.indicators, rows, storeId])
+  ), [calculationIndicators, rows, storeId])
+
+  const conferenceMonth = useMemo(() => {
+    const closed = resolveLastClosedCompetence(year)
+    if (closed.actualHasNoClosedMonth) return closed.previousYearMonth ?? 12
+    return closed.targetActualMonth ?? closed.lastClosedMonth ?? 1
+  }, [year])
+  const RESUMO_CALCULADO = useMemo(() => ([
+    { code: 'SALES_TOTAL', label: 'Vendas Total' },
+    { code: 'LEADS_RECEIVED', label: 'Volume de Leads' },
+    { code: 'APPOINTMENTS_VOLUME', label: 'Volume de Agendamentos' },
+    { code: 'VISITS_VOLUME', label: 'Volume de Visitas' },
+    { code: 'INVENTORY_TOTAL', label: 'Estoque Total' },
+    { code: 'NET_PROFIT', label: 'Lucro Líquido' },
+  ]), [])
+
+  const resumoCalculado = useMemo(() => RESUMO_CALCULADO.map(item => {
+    const monthValue = readOfficialMonthValue(grid, calculationIndicators, item.code, conferenceMonth, 'meta')
+    const annual = Array.from({ length: 12 }, (_, index) => (
+      readOfficialMonthValue(grid, calculationIndicators, item.code, index + 1, 'meta')
+    )).reduce<number | null>((sum, value) => {
+      if (value == null) return sum
+      return (sum ?? 0) + value
+    }, null)
+    return { ...item, monthValue, annual }
+  }), [RESUMO_CALCULADO, calculationIndicators, conferenceMonth, grid])
+
+  useEffect(() => {
+    const sales = resumoCalculado.find(item => item.code === 'SALES_TOTAL')
+    const closed = resolveLastClosedCompetence(year)
+  }, [calculationIndicators.length, conferenceMonth, props.indicators.length, resumoCalculado, storeId, year])
 
   const consolidatedGrid = clientScope.consolidated?.meta.valueMap ?? {}
   const consolidatedActualGrid = clientScope.consolidated?.realizado.valueMap ?? {}
@@ -194,17 +246,19 @@ export function MetasRealizadosTab(props: {
     return months.size
   }, [isConsolidated, consolidatedIntegrity])
 
-  const saveIndicator = async (code: string, field: 'meta' | 'realizado') => {
+  const saveIndicator = async (code: string, field: 'meta' | 'realizado' | 'ano_anterior') => {
     const indicator = props.indicators.find(item => item.code === code)
     if (!indicator || !isPlanningFieldEditable(indicator, field)) return
     setSavingKey(`${field}:${code}`)
     const values = Array.from({ length: 12 }, (_, index) => grid[code]?.[index + 1]?.[field] ?? null)
     const result = field === 'meta'
       ? await saveIndicatorTargets({ lojaId: storeId, indicatorCode: code, year, values })
-      : await saveIndicatorActuals({ lojaId: storeId, indicatorCode: code, year, values })
+      : field === 'realizado'
+        ? await saveIndicatorActuals({ lojaId: storeId, indicatorCode: code, year, values })
+        : await saveIndicatorField({ lojaId: storeId, indicatorCode: code, year, field: 'ano_anterior', values })
     if (result.error) toast.error(result.error)
     else {
-      toast.success(field === 'meta' ? 'Metas salvas.' : 'Realizado salvo.')
+      toast.success(field === 'meta' ? 'Metas salvas.' : field === 'realizado' ? 'Realizado salvo.' : 'Ano anterior salvo.')
       props.onSaved?.()
     }
     setSavingKey(null)
@@ -212,7 +266,7 @@ export function MetasRealizadosTab(props: {
     clientScope.reload()
   }
 
-  const updateCell = (code: string, month: number, field: 'meta' | 'realizado', raw: string) => {
+  const updateCell = (code: string, month: number, field: 'meta' | 'realizado' | 'ano_anterior', raw: string) => {
     const indicator = props.indicators.find(item => item.code === code)
     if (!indicator || !isPlanningFieldEditable(indicator, field)) return
     const config = getFormatConfig(indicator.value_type ?? 'number', indicator.casas_decimais ?? 0)
@@ -231,7 +285,7 @@ export function MetasRealizadosTab(props: {
           month,
           meta: field === 'meta' ? value : null,
           realizado: field === 'realizado' ? value : null,
-          ano_anterior: null,
+          ano_anterior: field === 'ano_anterior' ? value : null,
         })
       }
       return next
@@ -328,6 +382,27 @@ export function MetasRealizadosTab(props: {
             </MxStatusBanner>
           ) : null}
 
+          <MxSectionCard>
+            <MxSectionHeader
+              title="Resumo Calculado"
+              description={`Resultados derivados em tempo real · mês de conferência: ${MONTH_LABELS[conferenceMonth - 1]}`}
+            />
+            <div className="p-5">
+              <MxMetricGrid>
+                {resumoCalculado.map(item => (
+                  <MxMetricCard
+                    key={item.code}
+                    title={item.label}
+                    value={formatDisplay(item.monthValue, getFormatConfig('number', 0))}
+                    detail={item.annual == null ? 'Sem base anual' : `Anual ${formatDisplay(item.annual, getFormatConfig('number', 0))}`}
+                    icon={Target}
+                    tone={item.monthValue == null ? 'neutral' : 'info'}
+                  />
+                ))}
+              </MxMetricGrid>
+            </div>
+          </MxSectionCard>
+
           {loading ? <MxLoadingState label="Carregando metas" /> : error ? <MxErrorState description={error} retry={() => void refetch()} /> : (
             <div className="overflow-x-auto">
               <MxTableSurface>
@@ -356,7 +431,7 @@ export function MetasRealizadosTab(props: {
                               const month = index + 1
                               const value = isConsolidated
                                 ? consolidatedGrid[indicator.code]?.[month] ?? null
-                                : resolveStoreScopedValue(readOfficialMonthValue(grid, props.indicators, indicator.code, month, 'meta'))
+                                : resolveStoreScopedValue(readOfficialMonthValue(grid, calculationIndicators, indicator.code, month, 'meta'))
                               const integrity = isConsolidated ? consolidatedIntegrity[month]?.[indicator.code] : undefined
                               return (
                                 <TableCell key={month} className="text-right">
@@ -396,14 +471,19 @@ export function MetasRealizadosTab(props: {
                             </TableCell>
                             {MONTH_LABELS.map((_label, index) => {
                               const month = index + 1
+                              const editable = !isConsolidated && isPlanningFieldEditable(indicator, 'realizado')
                               const value = isConsolidated
                                 ? consolidatedActualGrid[indicator.code]?.[month] ?? null
-                                : resolveStoreScopedValue(grid[indicator.code]?.[month]?.realizado)
+                                : resolveStoreScopedValue(
+                                  editable
+                                    ? grid[indicator.code]?.[month]?.realizado
+                                    : readOfficialMonthValue(grid, calculationIndicators, indicator.code, month, 'realizado'),
+                                )
                               const integrity = isConsolidated ? consolidatedActualIntegrity[month]?.[indicator.code] : undefined
                               return (
                                 <TableCell key={month} className="text-right">
-                                  {isConsolidated ? (
-                                    <span className="text-xs text-muted-foreground" aria-label={`${indicator.name} — Realizado consolidado — ${MONTH_LABELS[index]}`} title={integrity?.explanation || undefined}>
+                                  {!editable ? (
+                                    <span className="text-xs text-muted-foreground" aria-label={`${indicator.name} — Realizado — ${MONTH_LABELS[index]}`} title={integrity?.explanation || undefined}>
                                       {formatDisplay(value, config)}
                                       {partialMark(integrity)}
                                     </span>
@@ -419,7 +499,7 @@ export function MetasRealizadosTab(props: {
                               )
                             })}
                             <TableCell className="text-right">
-                              {!isConsolidated ? (
+                              {!isConsolidated && isPlanningFieldEditable(indicator, 'realizado') ? (
                                 <div className="flex justify-end gap-1">
                                   <Button variant="outline" size="sm" aria-label={`Salvar realizado de ${indicator.name}`} title={`Salvar realizado de ${indicator.name}`} onClick={() => void saveIndicator(indicator.code, 'realizado')} disabled={savingKey === actualKey}>
                                     {savingKey === actualKey ? <RefreshCw size={14} className="animate-spin" /> : <Save size={14} />}
@@ -431,16 +511,41 @@ export function MetasRealizadosTab(props: {
                           <TableRow key={previousKey} className="bg-background-muted/20">
                             <TableCell>
                               <div className="text-xs font-medium text-muted-foreground">Ano anterior</div>
-                              <div className="text-caption text-muted-foreground">Somente leitura</div>
                             </TableCell>
                             {MONTH_LABELS.map((_label, index) => {
                               const month = index + 1
+                              const editable = !isConsolidated && isPlanningFieldEditable(indicator, 'ano_anterior')
                               const value = isConsolidated
                                 ? consolidatedPreviousGrid[indicator.code]?.[month] ?? null
-                                : grid[indicator.code]?.[month]?.ano_anterior ?? null
-                              return <TableCell key={month} className="text-right text-xs text-muted-foreground">{formatDisplay(value, config)}</TableCell>
+                                : resolveStoreScopedValue(
+                                  editable
+                                    ? grid[indicator.code]?.[month]?.ano_anterior
+                                    : readOfficialMonthValue(grid, calculationIndicators, indicator.code, month, 'ano_anterior'),
+                                )
+                              return (
+                                <TableCell key={month} className="text-right">
+                                  {editable ? (
+                                    <Input
+                                      className="w-20 text-right"
+                                      value={formatEditableInput(value, config)}
+                                      aria-label={`${indicator.name} — Ano anterior — ${MONTH_LABELS[index]}`}
+                                      onChange={event => updateCell(indicator.code, month, 'ano_anterior', event.target.value)}
+                                    />
+                                  ) : (
+                                    <span className="text-xs text-muted-foreground">{formatDisplay(value, config)}</span>
+                                  )}
+                                </TableCell>
+                              )
                             })}
-                            <TableCell className="text-right text-xs text-muted-foreground">Somente leitura</TableCell>
+                            <TableCell className="text-right">
+                              {!isConsolidated && isPlanningFieldEditable(indicator, 'ano_anterior') ? (
+                                <div className="flex justify-end gap-1">
+                                  <Button variant="outline" size="sm" aria-label={`Salvar ano anterior de ${indicator.name}`} title={`Salvar ano anterior de ${indicator.name}`} onClick={() => void saveIndicator(indicator.code, 'ano_anterior')} disabled={savingKey === previousKey}>
+                                    {savingKey === previousKey ? <RefreshCw size={14} className="animate-spin" /> : <Save size={14} />}
+                                  </Button>
+                                </div>
+                              ) : <span className="text-xs text-muted-foreground">Somente leitura</span>}
+                            </TableCell>
                           </TableRow>
                         </Fragment>
                       )

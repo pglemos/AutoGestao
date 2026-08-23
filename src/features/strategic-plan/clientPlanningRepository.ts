@@ -140,12 +140,27 @@ export async function fetchUnitsPlanningValues(
 ): Promise<{ rows: PlanningValueRow[]; error: string | null }> {
   if (unitIds.length === 0) return { rows: [], error: null }
 
-  const { data, error } = await supabase
+  const vigentes = await supabase
     .from('valores_indicadores_planejamento_vigentes')
     .select('loja_id, indicator_code, year, month, meta, realizado, ano_anterior')
     .in('loja_id', unitIds)
     .eq('year', year)
 
-  if (error) return { rows: [], error: error.message }
-  return { rows: (data ?? []) as PlanningValueRow[], error: null }
+  // View vigentes pode estar vazia (join matriz/filial). Base por loja+ano
+  // alimenta o consolidado sem depender de publicação na view.
+  const base = await supabase
+    .from('valores_indicadores_planejamento')
+    .select('loja_id, indicator_code, year, month, meta, realizado, ano_anterior')
+    .in('loja_id', unitIds)
+    .eq('year', year)
+
+  const vigentesRows = (vigentes.data ?? []) as PlanningValueRow[]
+  const baseRows = (base.data ?? []) as PlanningValueRow[]
+  const useBase = vigentesRows.length === 0 && baseRows.length > 0
+  const rows = useBase ? baseRows : vigentesRows
+  const error = vigentes.error?.message ?? base.error?.message ?? null
+
+
+  if (error && rows.length === 0) return { rows: [], error }
+  return { rows, error: rows.length ? null : error }
 }

@@ -52,6 +52,12 @@ type NavCategory = {
 const STORE_DASHBOARD_PATH = '__STORE_DASHBOARD__'
 const STORE_TEAM_PATH = '__STORE_TEAM__'
 const STORE_CONSULTOR_IA_PATH = '__STORE_CONSULTOR_IA__'
+
+/** Preview Admin “Visualizar como Dono”: chrome/nav do módulo Dono, sem sidebar MX. */
+function isViewAsDonoSearch(search: string): boolean {
+  const viewAs = new URLSearchParams(search).get('viewAs')
+  return viewAs === 'dono' || viewAs === 'owner'
+}
 const rotulosPerfil: Record<string, string> = {
   administrador_geral: 'Administrador geral',
   administrador_mx: 'Administrador MX',
@@ -252,14 +258,21 @@ function LayoutContent() {
     : 0
   const navigate = useNavigate()
   const location = useLocation()
+  const viewAsDono = isViewAsDonoSearch(location.search)
+  /** Chrome do preview Dono usa papel `dono` sem trocar a sessão Admin. */
+  const shellRole = viewAsDono ? 'dono' : role
   const [ownerLastUpdated, setOwnerLastUpdated] = React.useState(() => new Date())
   const storeManagement = useStoreManagementContext({ storeId: membership?.store_id })
   const commercialAccessMode: 'gestao' | 'acompanhamento' = storeManagement.ownerAssumesManagement ? 'gestao' : 'acompanhamento'
 
+  React.useEffect(() => {
+    if (!viewAsDono) return
+  }, [location.pathname, role, shellRole, viewAsDono])
+
   const storeDashboardPath = membership?.store?.name
     ? `/lojas/${slugify(membership.store.name)}`
-    : role === 'gerente' ? '/classificacao' : '/clientes'
-  const storeTeamPath = role === 'gerente'
+    : shellRole === 'gerente' ? '/classificacao' : '/clientes'
+  const storeTeamPath = shellRole === 'gerente'
     ? '/equipe'
     : storeDashboardPath === '/clientes'
       ? '/clientes'
@@ -268,9 +281,9 @@ function LayoutContent() {
     ? `${storeDashboardPath}/consultor-ia`
     : '/clientes'
   const categories = React.useMemo(() => {
-    const baseCategories = role ? (navConfig[role] || []) : []
-    const ownerStoreCount = role === 'dono' ? vinculos_loja.length : 0
-    const withCommercial = role === 'dono'
+    const baseCategories = shellRole ? (navConfig[shellRole] || []) : []
+    const ownerStoreCount = shellRole === 'dono' ? vinculos_loja.length : 0
+    const withCommercial = shellRole === 'dono'
       ? [
           ...baseCategories,
           ...(ownerStoreCount > 1 ? [ownerNetworkCategory] : []),
@@ -289,23 +302,23 @@ function LayoutContent() {
             }
             return item
           })
-          .filter((item): item is SubItem => item !== null && canAccessPath(item.path, role))
+          .filter((item): item is SubItem => item !== null && canAccessPath(item.path, shellRole))
         return { ...category, items }
       })
       .filter((category) => category.items.length > 0)
-  }, [commercialAccessMode, role, storeConsultorIaPath, storeDashboardPath, storeTeamPath, vinculos_loja])
+  }, [commercialAccessMode, shellRole, storeConsultorIaPath, storeDashboardPath, storeTeamPath, vinculos_loja])
 
-  const perfilVisivel = role
-    ? rotulosPerfil[role] || 'Perfil autorizado'
+  const perfilVisivel = shellRole
+    ? rotulosPerfil[shellRole] || 'Perfil autorizado'
     : 'Perfil autorizado'
-  const moduloVisivel = role
-    ? rotulosModulo[role] || 'Módulo MX'
+  const moduloVisivel = shellRole
+    ? rotulosModulo[shellRole] || 'Módulo MX'
     : 'Módulo MX'
   const perfilBaseVisivel = baseProfile?.name || 'Admin MX'
 
   const sidebarSections = React.useMemo<MxSidebarNavSection[]>(() => {
-    if (role && isPerfilInternoMx(role)) {
-      return buildInternalMxNavigation(role, { unreadNotifications: unreadCount })
+    if (shellRole && isPerfilInternoMx(shellRole) && !viewAsDono) {
+      return buildInternalMxNavigation(shellRole, { unreadNotifications: unreadCount })
     }
 
     const badgeForPath = (path: string) => {
@@ -340,7 +353,7 @@ function LayoutContent() {
       label: category.category,
       items: category.items.map(toSidebarItem),
     }))
-  }, [categories, pendingFeedbackCount, role, unreadCount])
+  }, [categories, pendingFeedbackCount, shellRole, unreadCount, viewAsDono])
 
   if (!profile || !role) return null
 
@@ -359,17 +372,17 @@ function LayoutContent() {
   const pageOutlet = (
     <MotionPage key={location.pathname} className="h-full">
       <Outlet
-        context={role === 'dono'
+        context={shellRole === 'dono'
           ? { setLastUpdated: setOwnerLastUpdated, lastUpdated: ownerLastUpdated }
           : undefined}
       />
     </MotionPage>
   )
   const isOwnerRoute = location.pathname === '/dono' || location.pathname.startsWith('/dono/')
-  const pageContent = role === 'dono' && isOwnerRoute
+  const pageContent = (shellRole === 'dono' && (isOwnerRoute || viewAsDono))
     ? pageOutlet
     : (
-      <MxRoleVisualScope manager={role !== 'vendedor'}>
+      <MxRoleVisualScope manager={shellRole !== 'vendedor'}>
         {pageOutlet}
       </MxRoleVisualScope>
       )
@@ -395,13 +408,13 @@ function LayoutContent() {
       simulationBase={perfilBaseVisivel}
       simulationStore={membership?.store?.name || 'Sandbox MX'}
       onStopSimulation={stopCurrentSimulation}
-      cta={role === 'gerente'
+      cta={shellRole === 'gerente'
         ? { label: 'Falar com Consultor', icon: MessageSquare, path: '/falar-consultor' }
         : undefined}
     >
       {pageContent}
       {/* Tour do Gerente: só monta nas rotas gerenciais que têm roteiro. */}
-      {(role === 'gerente' || role === 'dono') && <ManagerTourLauncher />}
+      {(shellRole === 'gerente' || shellRole === 'dono') && !viewAsDono && <ManagerTourLauncher />}
     </MxSidebarShell>
   )
 }
@@ -413,6 +426,8 @@ function LayoutContent() {
 export default function Layout() {
   const { role } = useAuth()
 
+  // Preview viewAs=dono só troca chrome/nav em LayoutContent (shellRole).
+  // OwnerProvider permanece exclusivo do papel dono autenticado.
   if (role !== 'dono') return <LayoutContent />
 
   return (

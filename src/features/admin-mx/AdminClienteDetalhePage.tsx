@@ -44,8 +44,10 @@ import { buildProgressBars } from './clientes/clientProgress'
 import { useClientHealth } from './clientes/useClientHealth'
 import { runClientRepair, type RepairKey } from './clientes/clientRepairs'
 import { buildClientReadiness, readinessSummary, type ClientReadinessInput } from './clientes/clientReadiness'
+import { PLAN_CYCLE_STATUS_LABEL } from '@/features/strategic-plan/planCycle'
 import { getClientStrategicPlanPublicationSummary } from '@/features/strategic-plan/publicationSummary'
 import { createStrategicPlanFromProduct } from '@/features/strategic-plan/productPackageOps'
+import { openCurrentStrategicPlanHref, resolveAdminEditableCycleId } from '@/features/strategic-plan/adminStrategicPlanHref'
 import { ClientConfigTab } from './clientes/ClientConfigTab'
 import { ClientActionPlanContextPanel } from './clientes/ClientActionPlanContextPanel'
 import { fetchClientActionPlanSummary, type ClientActionPlanSummary } from './clientes/clientActionPlanContext'
@@ -213,6 +215,8 @@ export function AdminClienteDetalhePage() {
   const [linkModal, setLinkModal] = useState(false)
   const [links, setLinks] = useState<EnrollmentLinkRow[]>([])
   const [strategicPlanReadiness, setStrategicPlanReadiness] = useState<ClientReadinessInput['strategic_plan_ready']>(null)
+  const [strategicPlanCycleId, setStrategicPlanCycleId] = useState<string | null>(null)
+  const [strategicPlanYear, setStrategicPlanYear] = useState(() => new Date().getFullYear())
   const [creatingStrategicPlan, setCreatingStrategicPlan] = useState(false)
   const [savingLink, setSavingLink] = useState(false)
 
@@ -353,15 +357,19 @@ export function AdminClienteDetalhePage() {
   const loadStrategicPlan = useCallback(async () => {
     if (!client?.id) return
     const year = new Date().getFullYear()
+    setStrategicPlanYear(year)
     const { summary, error } = await getClientStrategicPlanPublicationSummary({
       clientAccountId: client.id,
       referenceYear: year,
     })
     if (error || !summary) {
       setStrategicPlanReadiness(null)
+      setStrategicPlanCycleId(null)
       return
     }
     const { card, rosterCodes } = summary
+    const editableCycleId = resolveAdminEditableCycleId(summary)
+    setStrategicPlanCycleId(editableCycleId)
     setStrategicPlanReadiness({
       cycleStatus: card.cycleStatus,
       total: rosterCodes.length || card.indicadoresComMeta + card.metasPendentes,
@@ -699,21 +707,47 @@ export function AdminClienteDetalhePage() {
     }
   }
 
-  const createStrategicPlan = async () => {
+  const openCurrentStrategicPlan = async () => {
     if (!client?.id || creatingStrategicPlan) return
     setCreatingStrategicPlan(true)
     try {
-      const result = await createStrategicPlanFromProduct({
-        clientId: client.id,
-        referenceYear: new Date().getFullYear(),
-        userId: supabaseUser?.id,
-      })
-      if (result.error) {
-        toast.error(result.error)
-        return
+      const year = strategicPlanYear || new Date().getFullYear()
+      let cycleId = strategicPlanCycleId
+      let created = false
+      let indicatorCount = 0
+      let manualCount = 0
+      let calculatedCount = 0
+
+      if (!cycleId) {
+        const result = await createStrategicPlanFromProduct({
+          clientId: client.id,
+          referenceYear: year,
+          userId: supabaseUser?.id,
+        })
+        if (result.error) {
+          toast.error(result.error)
+          return
+        }
+        created = result.created
+        indicatorCount = result.indicatorCount
+        manualCount = result.manualCount
+        calculatedCount = result.calculatedCount
+        cycleId = result.cycle?.id ?? null
+        setStrategicPlanCycleId(cycleId)
+        toast.success(created
+          ? `Plano Estratégico criado com ${indicatorCount} indicadores padrão.`
+          : 'Plano Estratégico já existente; abrindo o ciclo atual.')
+        await loadStrategicPlan()
       }
-      toast.success(result.created ? 'Plano Estratégico criado a partir do produto.' : 'Plano Estratégico já existente; ciclo atual carregado.')
-      await loadStrategicPlan()
+
+      const href = openCurrentStrategicPlanHref({
+        clientId: client.id,
+        clientSlug: client.slug,
+        cycleId,
+        year,
+        storeId: client.primary_store_id,
+      })
+      navigate(href)
     } finally {
       setCreatingStrategicPlan(false)
     }
@@ -737,7 +771,7 @@ export function AdminClienteDetalhePage() {
               {client && client.status !== 'ativo'
                 ? <Button onClick={() => setActivationOpen(true)}><CheckCircle2 size={16} />Validar e ativar</Button>
                 : null}
-              {client ? <Button variant="outline" onClick={() => void createStrategicPlan()} disabled={creatingStrategicPlan}><Target size={16} />{creatingStrategicPlan ? 'Sincronizando...' : 'Sincronizar indicadores'}</Button> : null}
+              {client ? <Button variant="outline" onClick={() => void openCurrentStrategicPlan()} disabled={creatingStrategicPlan}><Target size={16} />{creatingStrategicPlan ? 'Abrindo...' : strategicPlanReadiness ? 'Abrir Plano Estratégico' : 'Criar Plano Estratégico'}</Button> : null}
               {client ? <Button variant="outline" onClick={() => { setPlanningTab('plano-acao'); setTab('planejamento') }}><ClipboardList size={16} />Abrir Plano de Ação</Button> : null}
               {client ? <Button asChild variant="outline"><Link to={`/consultoria?clientId=${encodeURIComponent(client.id)}`}><Sparkles size={16} />Abrir Consultoria</Link></Button> : null}
             </>
@@ -777,16 +811,20 @@ export function AdminClienteDetalhePage() {
                         <div className="flex items-center gap-2 text-sm font-semibold text-foreground"><Target size={16} className="text-status-info-text" />Plano Estratégico</div>
                         <p className="mt-2 text-xs text-muted-foreground">Indicadores, metas e ciclo do produto contratado.</p>
                       </div>
-                      <span className="text-xs font-semibold text-foreground">{strategicPlanReadiness ? strategicPlanReadiness.cycleStatus === 'publicado' ? 'Publicado' : 'Rascunho' : '—'}</span>
+                      <span className="text-xs font-semibold text-foreground">
+                        {strategicPlanReadiness
+                          ? PLAN_CYCLE_STATUS_LABEL[strategicPlanReadiness.cycleStatus]
+                          : '—'}
+                      </span>
                     </div>
                     {strategicPlanReadiness ? (
                       <p className="mt-2 text-xs text-muted-foreground">
-                        Indicadores com meta: {strategicPlanReadiness.indicadoresComMeta ?? strategicPlanReadiness.ready}
+                        Indicadores com meta: {strategicPlanReadiness.indicadoresComMeta ?? 0}
                         {' · '}Metas publicadas: {strategicPlanReadiness.ready}
                         {' · '}Metas pendentes: {strategicPlanReadiness.pending}
                       </p>
                     ) : null}
-                    <Button variant="outline" size="sm" className="mt-4" onClick={() => { setPlanningTab('estrategico'); setTab('planejamento') }}>Abrir no cliente</Button>
+                    <Button variant="outline" size="sm" className="mt-4" onClick={() => void openCurrentStrategicPlan()} disabled={creatingStrategicPlan}>Abrir Plano Estratégico</Button>
                   </div>
                   <div className="rounded-xl border border-border bg-surface-alt p-4">
                     <div className="flex items-start justify-between gap-3">
@@ -1055,6 +1093,8 @@ export function AdminClienteDetalhePage() {
                     clientId={client.id}
                     clientSlug={client.slug}
                     primaryStoreId={client.primary_store_id}
+                    cycleId={strategicPlanCycleId}
+                    year={strategicPlanYear}
                   />
                 ) : (
                   <ClientActionPlanContextPanel

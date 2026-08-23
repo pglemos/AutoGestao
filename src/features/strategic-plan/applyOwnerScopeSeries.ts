@@ -7,6 +7,15 @@ export function applyConsolidatedToSeries(
   consolidated: ConsolidatedClientPlanning | null | undefined,
 ): StrategicSeries[] {
   if (!consolidated) return series
+  // Overlay vazio (fetch falhou / sem vigentes) não pode apagar a série da loja-identidade.
+  const hasAnyValue = (['meta', 'realizado', 'ano_anterior'] as const).some(seriesKey => {
+    const map = consolidated[seriesKey]?.valueMap
+    if (!map) return false
+    return Object.values(map).some(byMonth =>
+      Object.values(byMonth ?? {}).some(value => value != null),
+    )
+  })
+  if (!hasAnyValue) return series
   return series.map(item => {
     const code = String(item.metricCode || item.code)
     const metaMap = consolidated.meta.valueMap[code]

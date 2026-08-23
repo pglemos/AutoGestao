@@ -128,7 +128,7 @@ describe('templates de plano de ação — validação', () => {
 
   test('rejeita chave fora do padrão', () => {
     const draft = { ...emptyTemplateDraft(), template_key: 'Ruptura Estoque' }
-    expect(validateTemplateDraft(draft)).toContain('A chave aceita apenas minúsculas, números e underline.')
+    expect(validateTemplateDraft(draft)).toContain('A chave aceita letras, números e underline.')
   })
 
   test('aceita template completo', () => {
@@ -192,7 +192,8 @@ describe('aplicação de template', () => {
   })
 
   test('gera chave canônica e copia a ação para o problema oculto', () => {
-    expect(suggestTemplateKey({ departamento: 'comercial', primary_indicator_code: 'SALES_TOTAL', nome: 'Aumentar vendas' })).toBe('comercial_sales_total_aumentar_vendas')
+    expect(suggestTemplateKey({ departamento: 'comercial', primary_indicator_code: 'SALES_TOTAL', nome: 'Aumentar vendas' })).toMatch(/^PA_COMERCIAL_SALESTOTAL_\d{3}$/)
+    expect(suggestTemplateKey({ departamento: 'COMERCIAL', primary_indicator_code: 'VISIT_TO_SALE_CONVERSION', nome: 'x' })).toMatch(/^PA_COMERCIAL_VISITTOSALECONVERSION_\d{3}$/)
     const prepared = prepareTemplateDraftForSave({
       ...emptyTemplateDraft(),
       departamento: 'comercial',
@@ -200,7 +201,7 @@ describe('aplicação de template', () => {
       nome: 'Aumentar vendas',
       items: [{ ...emptyTemplateItem(1), acao: 'Treinar fechamento' }],
     })
-    expect(prepared.template_key).toBe('comercial_sales_total_aumentar_vendas')
+    expect(prepared.template_key).toMatch(/^PA_COMERCIAL_SALESTOTAL_\d{3}$/)
     expect(prepared.items[0]?.problema).toBe('Treinar fechamento')
     expect(validateTemplateDraft(prepared)).toEqual([])
   })

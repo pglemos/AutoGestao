@@ -13,6 +13,8 @@ import {
   UserRound,
 } from 'lucide-react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { openCurrentStrategicPlanHref, resolveAdminEditableCycleId } from '@/features/strategic-plan/adminStrategicPlanHref'
+import { getClientStrategicPlanPublicationSummary } from '@/features/strategic-plan/publicationSummary'
 import { resolveRouteLayout } from '@/design-system/page'
 import { Badge, type BadgeProps } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
@@ -111,10 +113,21 @@ export function AdminConsultingOverviewPage() {
     navigate(`/consultoria/clientes/${encodeURIComponent(row.clientSlug)}/visitas/${row.visitNumber}`)
   }
 
-  const openStrategicPlan = (row: ConsultingOverviewRow) => {
-    const params = new URLSearchParams({ clientId: row.clientId })
-    if (row.primaryStoreId) params.set('storeId', row.primaryStoreId)
-    navigate(`/plano-estrategico?${params.toString()}`)
+  const openStrategicPlan = async (row: ConsultingOverviewRow) => {
+    const year = new Date().getFullYear()
+    const { summary } = await getClientStrategicPlanPublicationSummary({
+      clientAccountId: row.clientId,
+      referenceYear: year,
+    })
+    const cycleId = resolveAdminEditableCycleId(summary)
+    const href = openCurrentStrategicPlanHref({
+      clientId: row.clientId,
+      clientSlug: row.clientSlug,
+      cycleId,
+      year,
+      storeId: row.primaryStoreId,
+    })
+    navigate(href)
   }
 
   const openActionPlan = (row: ConsultingOverviewRow) => {

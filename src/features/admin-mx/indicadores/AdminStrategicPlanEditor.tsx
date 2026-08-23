@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   ArrowLeft,
   CheckCircle2,
@@ -15,6 +15,7 @@ import {
   Save,
   Send,
   ShieldCheck,
+  Target,
   Users,
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
@@ -44,6 +45,7 @@ import { TabNav, type TabNavItem } from '@/components/molecules/TabNav'
 import { MONTHS, MONTH_LABELS, formatDisplay, formatEditableInput, getFormatConfig, parseStrategicInput } from './indicatorFormulas'
 import {
   applyEditorMonthToUnits,
+  applyEditorMonthToYear,
   clearEditorMonth,
   copyEditorMonth,
   editorAnnualTotal,
@@ -57,11 +59,13 @@ import {
   type EditorCellPatch,
   type EditorField,
   type EditorGrid,
+  type EditorPlanningRow,
 } from './strategicPlanEditor'
 import {
   addCycleIndicator,
   fetchCycleHistory,
   fetchStrategicPlanEditorData,
+  recalculateAndPersistCycle,
   restoreCycleHistory,
   saveIndicatorField,
   toggleCycleIndicatorVisibility,
@@ -72,6 +76,8 @@ import {
   type StrategicPlanHistoryRow,
 } from './strategicPlanEditorRepository'
 import { matchCanonicalIndicator, officialCatalogCode } from './canonicalBase44Catalog'
+import { isPlanningFieldEditable } from './metasRealizados'
+import { resolveLastClosedCompetence } from '@/features/strategic-plan/competence'
 import { PLAN_CYCLE_STATUS_LABEL, type PlanReadiness } from '@/features/strategic-plan/planCycle'
 import { consolidateClientPlanning, resolvePolicies, type PlanningValueRow } from '@/features/strategic-plan/clientPlanningConsolidation'
 import type { ConsolidationIndicator } from '@/features/strategic-plan/unitConsolidation'
@@ -184,12 +190,22 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
   const [addIndicatorOpen, setAddIndicatorOpen] = useState(false)
   const [addSearch, setAddSearch] = useState('')
   const [busyIndicator, setBusyIndicator] = useState<string | null>(null)
+  const gridRef = useRef(grid)
+  useEffect(() => { gridRef.current = grid }, [grid])
 
   const activeUnits = useMemo(() => data?.units.filter(unit => unit.active) ?? [], [data?.units])
   const allIndicators = useMemo(() => data?.indicators ?? [], [data?.indicators])
   const gridIndicators = useMemo(
     () => sortEditorIndicators(allIndicators.filter(indicator => indicator.enabled), sortMode),
     [allIndicators, sortMode],
+  )
+  const digitaveisIndicators = useMemo(
+    () => gridIndicators.filter(indicator => !calculatedIndicator(indicator)),
+    [gridIndicators],
+  )
+  const calculadosIndicators = useMemo(
+    () => gridIndicators.filter(indicator => calculatedIndicator(indicator)),
+    [gridIndicators],
   )
   const areas = useMemo(() => [...new Set(allIndicators.map(indicator => indicator.area).filter(Boolean))].sort(), [allIndicators])
   const filteredIndicators = useMemo(
@@ -201,8 +217,12 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
       if (readOnly || data?.cycle.status === 'revisado') return false
       if (!data?.units.some(unit => unit.id === unitId && unit.active)) return false
       if (data?.cycle.status === 'publicado' && field !== 'realizado') return false
-      if (calculatedIndicator(indicator)) return field === 'realizado'
-      return !companyScopedIndicator(indicator) || unitId === data?.client.primaryStoreId
+      if (companyScopedIndicator(indicator) && unitId !== data?.client.primaryStoreId) return false
+      if (field === 'meta') return !calculatedIndicator(indicator)
+      return isPlanningFieldEditable(
+        { code: officialCatalogCode(indicator.metric_key), calculado: calculatedIndicator(indicator) },
+        field,
+      )
     }).map(indicator => indicator.metric_key)),
     [data?.client.primaryStoreId, data?.cycle.status, data?.units, field, gridIndicators, readOnly, unitId],
   )
@@ -286,7 +306,13 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
 
   const applyPatches = (patches: EditorCellPatch[]) => {
     if (patches.length === 0) return
-    setGrid(current => patches.reduce((next, patch) => patchEditorGrid(next, patch), current))
+    setGrid(current => {
+      const patched = patches.reduce((next, patch) => patchEditorGrid(next, patch), current)
+      if (!data) return patched
+      const unitIds = data.units.map(unit => unit.id)
+      const next = recalculateEditorGrid(patched, unitIds, data.indicators)
+      return next
+    })
     markPatches(patches)
   }
 
@@ -298,11 +324,29 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
     if (!data) return false
     if (effectiveReadOnly) return false
     if (!data.units.some(unit => unit.id === targetUnitId && unit.active)) return false
-    if (calculatedIndicator(indicator) && currentField !== 'realizado') return false
-    if (data?.cycle.status === 'publicado' && currentField !== 'realizado') return false
+    if (data.cycle.status === 'publicado' && currentField !== 'realizado') return false
     if (companyScopedIndicator(indicator) && targetUnitId !== data.client.primaryStoreId) return false
-    return true
+    return isPlanningFieldEditable(
+      { code: officialCatalogCode(indicator.metric_key), calculado: calculatedIndicator(indicator) },
+      currentField,
+    )
   }
+
+
+  useEffect(() => {
+    if (!data || field === 'meta') return
+    const closed = resolveLastClosedCompetence(data.cycle.year)
+    const month = field === 'ano_anterior'
+      ? (closed.previousYearMonth ?? closed.lastClosedMonth)
+      : (closed.targetActualMonth ?? closed.lastClosedMonth)
+    setSourceMonth(month)
+    setTargetMonth(month === 12 ? 11 : month + 1)
+  }, [data, field])
+
+  useEffect(() => {
+    if (!data) return
+    const codes = gridIndicators.map(indicator => officialCatalogCode(indicator.metric_key))
+  }, [data, field, gridIndicators, tab])
 
   const updateCell = (indicator: StrategicPlanEditorIndicator, month: number, raw: string) => {
     if (!canEdit(indicator, field)) return
@@ -347,6 +391,19 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
     toast.info(`${result.patches.length} célula(s) preparadas nas demais unidades.`)
   }
 
+  const applyMonthToYear = () => {
+    if (!data || !unitId || effectiveReadOnly || field !== 'meta') return
+    const result = applyEditorMonthToYear(grid, {
+      unitId,
+      sourceMonth: sourceMonth as (typeof MONTHS)[number],
+      field: 'meta',
+      indicatorCodes: gridIndicators.map(indicator => indicator.metric_key),
+      editableCodes,
+    })
+    applyPatches(result.patches)
+    toast.info(`${result.patches.length} célula(s) preparadas (mês ${MONTH_LABELS[sourceMonth - 1]} → ano). Salve o rascunho para persistir.`)
+  }
+
   const clearMonth = () => {
     if (!unitId || effectiveReadOnly) return
     const result = clearEditorMonth(grid, {
@@ -368,24 +425,61 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
     }
     setSaving(true)
     try {
+      const latestGrid = gridRef.current
+      const saved: Array<{ key: string; code: string; error: string | null; jan: number | null }> = []
       for (const key of dirtyKeys) {
         const parsed = parseDirtyKey(key)
         if (!parsed || !data) continue
         const indicator = allIndicators.find(item => item.metric_key === parsed.indicatorCode)
         if (!indicator || !canEdit(indicator, parsed.field, parsed.unitId)) continue
+        const values = readEditorSeries(latestGrid, parsed.unitId, parsed.indicatorCode, parsed.field)
         const result = await saveIndicatorField({
           lojaId: parsed.unitId,
           indicatorCode: parsed.indicatorCode,
           year: data.cycle.year,
           field: parsed.field,
-          values: readEditorSeries(grid, parsed.unitId, parsed.indicatorCode, parsed.field),
+          values,
           note: 'Editor administrativo do Plano Estratégico',
         })
+        saved.push({ key, code: parsed.indicatorCode, error: result.error, jan: values[0] ?? null })
         if (result.error) {
           toast.error(result.error)
           return false
         }
       }
+
+      // Persistir derivados oficiais após as digitáveis (prompt #20).
+      if (data) {
+        const unitIds = data.units.map(unit => unit.id)
+        const planningRows: EditorPlanningRow[] = []
+        for (const unit of unitIds) {
+          for (const indicator of data.indicators) {
+            for (const month of MONTHS) {
+              const cell = latestGrid[unit]?.[indicator.metric_key]?.[month]
+              planningRows.push({
+                loja_id: unit,
+                indicator_code: indicator.metric_key,
+                month,
+                meta: cell?.meta ?? null,
+                realizado: cell?.realizado ?? null,
+                ano_anterior: cell?.ano_anterior ?? null,
+              })
+            }
+          }
+        }
+        const recalc = await recalculateAndPersistCycle({
+          year: data.cycle.year,
+          status: data.cycle.status,
+          unitIds,
+          indicators: data.indicators,
+          values: planningRows,
+        })
+        if (recalc.error) {
+          toast.error(recalc.error)
+          return false
+        }
+      }
+
       setDirtyKeys(new Set())
       toast.success('Rascunho salvo com histórico por campo.')
       await refresh()
@@ -560,7 +654,7 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
           <div className="flex flex-wrap items-center justify-end gap-2">
             <Button variant="outline" onClick={() => navigate('/plano-estrategico')}><ArrowLeft size={16} />Voltar à gestão</Button>
             <Button variant="outline" onClick={() => void refresh()} disabled={refreshing}><RefreshCw size={16} className={refreshing ? 'animate-spin' : undefined} />Atualizar</Button>
-            <Button variant="outline" disabled={!ownerStoreId} title={!ownerStoreId ? 'Cliente sem unidade vinculada' : undefined} onClick={() => navigate(`/dono/plano-estrategico?storeId=${encodeURIComponent(ownerStoreId ?? '')}&year=${data.cycle.year}`)}><Eye size={16} />Visualizar como Dono</Button>
+            <Button variant="outline" disabled={!ownerStoreId} title={!ownerStoreId ? 'Cliente sem unidade vinculada' : undefined} onClick={() => navigate(`/plano-estrategico?storeId=${encodeURIComponent(ownerStoreId ?? '')}&year=${data.cycle.year}&viewAs=dono`)}><Eye size={16} />Visualizar como Dono</Button>
             {!effectiveReadOnly && data.cycle.status !== 'publicado' && data.cycle.status !== 'revisado' ? <Button onClick={() => void saveChanges()} disabled={saving || dirtyKeys.size === 0}><Save size={16} />Salvar rascunho{dirtyKeys.size ? ` (${dirtyKeys.size})` : ''}</Button> : null}
           </div>
         )}
@@ -616,15 +710,20 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
               <MxField label="Mês de destino"><MxSelect aria-label="Mês de destino" value={targetMonth} onChange={event => setTargetMonth(Number(event.target.value))}>{MONTH_LABELS.map((label, index) => <option key={label} value={index + 1}>{label}</option>)}</MxSelect></MxField>
               <div className="flex flex-wrap items-end gap-2">
                 <Button variant="outline" onClick={copyMonth} disabled={effectiveReadOnly || !unitId || sourceMonth === targetMonth}><Copy size={16} />Copiar mês</Button>
-                <Button variant="outline" onClick={applyMonthToUnits} disabled={effectiveReadOnly || activeUnits.length < 2}><Users size={16} />Aplicar entre unidades</Button>
+                {field === 'meta' ? <Button variant="outline" onClick={applyMonthToYear} disabled={effectiveReadOnly || !unitId}><Copy size={16} />Aplicar {MONTH_LABELS[sourceMonth - 1]} a todos</Button> : null}
+                <Button variant="outline" onClick={applyMonthToUnits} disabled={effectiveReadOnly || activeUnits.length < 2 || field !== 'meta'}><Users size={16} />Aplicar entre unidades</Button>
                 <Button variant="outline" onClick={clearMonth} disabled={effectiveReadOnly || !unitId}><Eraser size={16} />Limpar mês</Button>
               </div>
             </MxToolbar>
+            {field !== 'meta' ? <MxStatusBanner tone="info">Realizado e Ano anterior são por competência mensal (padrão M-1 = {MONTH_LABELS[sourceMonth - 1]}). Não há preenchimento anual automático.</MxStatusBanner> : null}
+            {field === 'realizado' && data && resolveLastClosedCompetence(data.cycle.year).actualHasNoClosedMonth ? (
+              <MxStatusBanner tone="warning">Nenhuma competência do exercício atual foi encerrada. Lançamento de Realizado fica disponível após o fechamento do primeiro mês.</MxStatusBanner>
+            ) : null}
             {data.cycle.status === 'publicado' && field !== 'realizado' ? <MxStatusBanner tone="info">O ciclo publicado é imutável para metas e ano anterior. Abra uma revisão para alterar esses campos; o Realizado continua lançável.</MxStatusBanner> : null}
             {!currentUnit ? <MxEmptyState title="Nenhuma unidade encontrada" description="O ciclo precisa de uma matriz e, quando aplicável, filiais ativas para receber valores." icon={Users} /> : (
               <MxTableSurface aria-label={`Matriz mensal da unidade ${currentUnit.name}`}>
                 <Table className="min-w-[1420px]">
-                  <TableHeader><TableRow><TableHead>Indicador</TableHead>{MONTH_LABELS.map(label => <TableHead key={label} className="text-right">{label}</TableHead>)}<TableHead className="text-right">Total anual</TableHead></TableRow></TableHeader>
+                  <TableHeader><TableRow><TableHead>Indicador</TableHead>{MONTH_LABELS.map((label, index) => <TableHead key={label} className={`text-right${field !== 'meta' && index + 1 === sourceMonth ? ' bg-status-info-surface text-status-info-text' : ''}`}>{label}</TableHead>)}<TableHead className="text-right">Total anual</TableHead></TableRow></TableHeader>
                   <TableBody>
                     {groupEditorIndicatorsByArea(gridIndicators).flatMap(group => [
                       <TableRow key={`area-${group.area}`}>
@@ -664,20 +763,44 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
       </section> : null}
 
       {tab === 'rapido' ? <section id="rapido-panel" role="tabpanel" aria-label="Cadastro rápido" className="space-y-5">
+        <div className="space-y-2">
+          <h2 className="text-lg font-semibold text-foreground">Cadastro Rápido de Metas</h2>
+          <p className="text-sm text-muted-foreground">Preencha somente os indicadores que dependem da definição do consultor. Os demais serão calculados automaticamente.</p>
+        </div>
+        <MxMetricGrid>
+          <MxMetricCard title="Metas digitáveis" value={digitaveisIndicators.length} detail="Entrada manual no cadastro rápido" icon={Target} tone="info" />
+          <MxMetricCard title="Indicadores calculados" value={calculadosIndicators.length} detail="Derivados na revisão completa" icon={Layers3} />
+          <MxMetricCard title="Roster do ciclo" value={gridIndicators.length} detail="Pacote Base44 completo" icon={CheckCircle2} tone="success" />
+        </MxMetricGrid>
         <MetasRealizadosTab
-          indicators={gridIndicators.map(indicator => ({
+          indicators={digitaveisIndicators.map(indicator => ({
             code: indicator.metric_key,
             displayCode: officialCatalogCode(indicator.metric_key),
             name: indicator.label,
             department: indicator.area,
-            calculado: calculatedIndicator(indicator),
+            calculado: false,
             value_type: indicator.value_type,
             casas_decimais: indicator.casas_decimais,
           }))}
           initialStoreId={unitId}
           initialYear={data.cycle.year}
           stores={data.units.map(unit => ({ id: unit.id, name: unit.name }))}
-          onSaved={() => void refresh()}
+          onSaved={() => {
+            void (async () => {
+              const loaded = await fetchStrategicPlanEditorData(cycleId)
+              if (loaded.data) {
+                const unitIds = loaded.data.units.filter(unit => unit.active).map(unit => unit.id)
+                const recalc = await recalculateAndPersistCycle({
+                  year: loaded.data.cycle.year,
+                  status: loaded.data.cycle.status,
+                  unitIds,
+                  indicators: loaded.data.indicators,
+                  values: loaded.data.values,
+                })
+              }
+              await refresh()
+            })()
+          }}
         />
       </section> : null}
 

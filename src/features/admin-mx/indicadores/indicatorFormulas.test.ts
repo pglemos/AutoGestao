@@ -63,6 +63,19 @@ describe('evaluateFormula', () => {
       { trade_sales_rate: 0.5 },
     )).toBe(27.5)
   })
+
+  test('soma aditiva parcial trata canais ausentes como 0', () => {
+    expect(evaluateFormula(
+      'IND("SALES_WALKIN") + IND("SALES_REFERRAL") + IND("SALES_OTHER")',
+      { sales_door_flow: 10 },
+      {},
+    )).toBe(10)
+    expect(evaluateFormula(
+      'IND("SALES_WALKIN") + IND("SALES_REFERRAL")',
+      {},
+      {},
+    )).toBeNull()
+  })
 })
 
 describe('calculateAnnualValue', () => {

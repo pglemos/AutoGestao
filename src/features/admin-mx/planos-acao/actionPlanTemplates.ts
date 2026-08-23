@@ -138,23 +138,22 @@ export function emptyTemplateItem(ordem: number): ActionPlanTemplateItem {
   }
 }
 
-function slugPart(value: string): string {
+function codePart(value: string, max = 30): string {
   return value
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '_')
-    .replace(/^_|_$/g, '')
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, '')
+    .slice(0, max)
 }
 
-/** Gera a chave do Base44 (`generateTemplateCode`) a partir de depto + indicador + título. */
+/** Gera código Base44 `PA_{DEPT}_{INDICATOR}_{NNN}` (`generateTemplateCode`). */
 export function suggestTemplateKey(draft: Pick<TemplateDraft, 'departamento' | 'primary_indicator_code' | 'nome'>): string {
-  const base = [draft.departamento, draft.primary_indicator_code, draft.nome]
-    .map(slugPart)
-    .filter(Boolean)
-    .join('_')
-    .slice(0, 60)
-  return base || 'plano_padrao'
+  const dept = codePart(draft.departamento || 'GENERIC', 24) || 'GENERIC'
+  const indicator = codePart(draft.primary_indicator_code || draft.nome || 'GENERIC', 30) || 'GENERIC'
+  // ponytail: seq estável sem listar templates; colisão rara → usuário edita chave.
+  const seq = String((Date.now() % 1000)).padStart(3, '0')
+  return `PA_${dept}_${indicator}_${seq}`
 }
 
 /** Completa chave e problema ocultos para o save continuar 1:1 com o wizard Base44. */
@@ -313,7 +312,7 @@ export async function fetchPublishedTrainings(): Promise<{ rows: PublishedTraini
 export function validateTemplateDraft(draft: TemplateDraft): string[] {
   const errors: string[] = []
   if (!draft.template_key.trim()) errors.push('Informe a chave do template.')
-  else if (!/^[a-z0-9_]+$/.test(draft.template_key.trim())) errors.push('A chave aceita apenas minúsculas, números e underline.')
+  else if (!/^[A-Za-z0-9_]+$/.test(draft.template_key.trim())) errors.push('A chave aceita letras, números e underline.')
   if (!draft.nome.trim()) errors.push('Informe o nome do template.')
   if (!draft.departamento.trim()) errors.push('Informe o departamento.')
   const items = draft.items.filter(item => item.problema.trim() || item.acao.trim())

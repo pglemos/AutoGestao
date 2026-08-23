@@ -8,11 +8,12 @@ export const TEMPLATE_STATUS_LABEL: Record<ReturnType<typeof deriveTemplateStatu
   arquivado: 'Arquivado',
 }
 
+/** Labels Base44: CRITICA / ATENCAO / EVOLUCAO (valores MX: critica / media|alta / baixa). */
 const PRIORITY_LABEL: Record<string, string> = {
   critica: 'Crítica',
-  alta: 'Alta',
-  media: 'Média',
-  baixa: 'Baixa',
+  alta: 'Atenção',
+  media: 'Atenção',
+  baixa: 'Evolução',
 }
 
 function responsibleRoleLabel(value: string | null | undefined): string {

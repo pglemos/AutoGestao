@@ -95,7 +95,7 @@ export function ApplicationsTab(props: { onOpenPlan: (planId: string) => void; r
       <ActionPlanDiagnosticsPanel />
 
       <MxSectionCard>
-        <MxSectionHeader title="Aplicações nos clientes" description={`${filtered.length} plano(s) aplicado(s) a partir de templates.`} />
+        <MxSectionHeader title="Aplicações nos Clientes" description={`${filtered.length} plano(s) aplicado(s) a partir de templates.`} />
         <div className="space-y-4 p-5">
           <div className="flex flex-wrap gap-2">
             <MxInput value={search} onChange={event => setSearch(event.target.value)} placeholder="Buscar por cliente, plano ou indicador..." aria-label="Buscar aplicação" />

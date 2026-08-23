@@ -93,7 +93,9 @@ export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch
         },
         strategic_plan_ready: planCycle && publicationCard
           ? {
-              cycleStatus: planCycle.status,
+              // Card manda: status exibido pode ser Publicado mesmo se o ciclo
+              // bruto for revisado (versão já publicada ao Dono).
+              cycleStatus: publicationCard.cycleStatus,
               total: rosterLen || publicationCard.indicadoresComMeta + publicationCard.metasPendentes,
               ready: publicationCard.metasPublicadas,
               pending: publicationCard.metasPendentes,

@@ -5,6 +5,7 @@
 // mudanças de importação, e grade de cadastro rápido.
 
 import { catalogAliasKeys, matchCanonicalIndicator, officialParameterDefaults } from './canonicalBase44Catalog'
+import { actualFormulaFor, ACTUAL_BLANK_POLICY, ACTUAL_CALCULATED, isActualCalculated } from './actualCalc'
 import { MONTHS, MONTH_LABELS, applyOfficialComputedMetas, evaluateFormula, type AnnualAggregation } from './indicatorFormulas'
 
 export type StoreTargetValue = {
@@ -28,14 +29,16 @@ export type TargetIndicator = {
 }
 
 /**
- * A fórmula bloqueia apenas a edição da Meta. O Realizado continua sendo um
- * lançamento operacional, inclusive quando a meta do indicador é calculada.
+ * Meta: bloqueada quando calculada (fórmula com PAR).
+ * Realizado/AA: bloqueados só nos 15 ACTUAL_CALCULATED (sem PAR).
  */
 export function isPlanningFieldEditable(
-  indicator: Pick<TargetIndicator, 'calculado'>,
-  field: 'meta' | 'realizado',
+  indicator: Pick<TargetIndicator, 'code' | 'calculado'>,
+  field: 'meta' | 'realizado' | 'ano_anterior',
 ): boolean {
-  return field === 'realizado' || !indicator.calculado
+  const code = matchCanonicalIndicator(indicator.code)?.code ?? indicator.code
+  if (field === 'meta') return !indicator.calculado
+  return !isActualCalculated(code)
 }
 
 export type TargetWorkbookSheet = {
@@ -525,20 +528,55 @@ export function readOfficialMonthValue(
   field: 'meta' | 'realizado' | 'ano_anterior' = 'meta',
 ): number | null {
   const stored = grid[code]?.[month]?.[field] ?? null
-  const formula = matchCanonicalIndicator(code)?.formula_expression
-    ?? indicators.find(item => item.code === code)?.formula_expression
-    ?? null
+  const canonCode = matchCanonicalIndicator(code)?.code ?? code
+  const formula = field === 'meta'
+    ? (matchCanonicalIndicator(code)?.formula_expression
+      ?? indicators.find(item => item.code === code)?.formula_expression
+      ?? null)
+    : actualFormulaFor(canonCode)
   if (!formula) return stored
   const flat: Record<string, number | null> = {}
   for (const indicator of indicators) {
-    const value = grid[indicator.code]?.[month]?.[field] ?? null
+    let value = grid[indicator.code]?.[month]?.[field] ?? null
+    const key = matchCanonicalIndicator(indicator.code)?.code ?? indicator.code
+    if (value == null && field !== 'meta' && ACTUAL_BLANK_POLICY[key] === 'ZERO_IF_EMPTY') value = 0
     flat[indicator.code] = value
     const canon = matchCanonicalIndicator(indicator.code)
     if (!canon) continue
     flat[canon.code] = value
-    for (const key of catalogAliasKeys(canon.code)) flat[key] = value
+    for (const alias of catalogAliasKeys(canon.code)) flat[alias] = value
   }
-  return evaluateFormula(formula, flat, officialParameterDefaults(month)) ?? stored
+  if (field !== 'meta') {
+    for (const [policyCode, policy] of Object.entries(ACTUAL_BLANK_POLICY)) {
+      if (policy === 'ZERO_IF_EMPTY' && (flat[policyCode] == null)) flat[policyCode] = 0
+    }
+  }
+  const params = field === 'meta' ? officialParameterDefaults(month) : {}
+  const usesPar = /\bPAR\s*\(/i.test(formula)
+  const result = evaluateFormula(formula, flat, params) ?? stored
+  return result
+}
+
+/** 3 passagens topológicas (Base44) para derivados do Realizado/AA. */
+export function applyActualComputedPasses(
+  grid: ReturnType<typeof buildMonthlyGrid>,
+  indicators: Array<{ code: string; formula_expression?: string | null }>,
+  fields: Array<'realizado' | 'ano_anterior'> = ['realizado', 'ano_anterior'],
+): ReturnType<typeof buildMonthlyGrid> {
+  const codes = Object.keys(ACTUAL_CALCULATED)
+  for (const field of fields) {
+    for (let pass = 0; pass < 3; pass += 1) {
+      for (const code of codes) {
+        if (!grid[code]) continue
+        for (const month of MONTHS) {
+          const next = readOfficialMonthValue(grid, indicators, code, month, field)
+          if (next == null) continue
+          grid[code][month] = { ...(grid[code][month] ?? { meta: null, realizado: null, ano_anterior: null }), [field]: next }
+        }
+      }
+    }
+  }
+  return grid
 }
 
 /** Soma anual respeitando a política de agregação do indicador. */

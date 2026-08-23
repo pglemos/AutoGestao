@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import { BarChart3, ChevronDown, ChevronRight, DollarSign, Megaphone, Package, Settings, ShoppingCart, Users, Wallet } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { pickExecutiveCards } from '@/features/strategic-plan/pickExecutiveCards'
@@ -39,13 +39,21 @@ function ExecutiveCard({ card, series, view, monthIndex, year, onClick }) {
   )
 }
 
-export default function StrategicPlanOverview({ repository, onCardClick, onRowClick, year, refreshKey = 0, monthIndex = SELECTED_MONTH_INDEX }) {
-  const [view, setView] = useState('meta')
+/**
+ * @param {{ repository?: unknown, series?: Array<Record<string, unknown>>, onCardClick?: (id: string) => void, onRowClick?: (id: string) => void, year?: number|string, refreshKey?: number, monthIndex?: number, scopeType?: string|null, valueView?: 'meta'|'realizado'|'ano_anterior', onValueViewChange?: (v: 'meta'|'realizado'|'ano_anterior') => void }} props
+ */
+export default function StrategicPlanOverview({ repository, series: scopedSeries, onCardClick, onRowClick, year, refreshKey = 0, monthIndex = SELECTED_MONTH_INDEX, scopeType = null, valueView = 'meta', onValueViewChange }) {
+  const view = valueView
   const [search, setSearch] = useState('')
   const [areaFilter, setAreaFilter] = useState('all')
   const [resultFilter, setResultFilter] = useState('all')
-  const [expanded, setExpanded] = useState({})
-  const allSeries = useMemo(() => repository.getOverviewData(year) || [], [repository, year, refreshKey])
+  const [expanded, setExpanded] = useState(() => Object.fromEntries(AREA_LIST.map(area => [area, true])))
+  const repoSeries = useMemo(() => repository.getOverviewData(year) || [], [repository, year, refreshKey])
+  // Prefer scoped series from controller (CONSOLIDATED / STORE) — repository alone is identity-store only.
+  const allSeries = scopedSeries?.length ? scopedSeries : repoSeries
+  const handleViewChange = (next) => {
+    onValueViewChange?.(next)
+  }
   const filtered = useMemo(() => {
     const term = normalizeText(search)
     return allSeries.filter(series => {
@@ -60,6 +68,10 @@ export default function StrategicPlanOverview({ repository, onCardClick, onRowCl
         if (resultFilter === 'critical' && percentage > 80) return false
       }
       return !term || normalizeText(`${series.name} ${series.code} ${series.area}`).includes(term)
+    }).sort((a, b) => {
+      const ao = typeof a.display_order === 'number' ? a.display_order : 999
+      const bo = typeof b.display_order === 'number' ? b.display_order : 999
+      return ao - bo || String(a.name).localeCompare(String(b.name), 'pt-BR')
     })
   }, [allSeries, search, areaFilter, resultFilter, monthIndex])
   const executiveCards = pickExecutiveCards(allSeries).map((series, index) => ({
@@ -72,7 +84,7 @@ export default function StrategicPlanOverview({ repository, onCardClick, onRowCl
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h3 className="text-sm font-semibold text-foreground">Visão Geral</h3>
-        <ViewSelector value={view} onChange={setView} />
+        <ViewSelector value={view} onChange={handleViewChange} />
       </div>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {executiveCards.map(({ config, series }) => (

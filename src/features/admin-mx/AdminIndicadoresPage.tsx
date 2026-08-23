@@ -59,7 +59,7 @@ import {
   type IndicatorParameter,
   type IndicatorStatus,
 } from './indicadores/indicatorCatalog'
-import { BASE44_STANDARD_PARAMETERS, officialCatalogCode, sortCatalogAreas } from './indicadores/canonicalBase44Catalog'
+import { BASE44_STANDARD_PARAMETERS, catalogAliasKeys, officialCatalogCode, sortCatalogAreas } from './indicadores/canonicalBase44Catalog'
 import { saveIndicator } from './hooks/useAdminMxLists'
 import {
   dependentsOfParameter,
@@ -86,8 +86,8 @@ import type { IndicatorWizardDraft } from './indicadores/indicatorWizard'
 type CatalogTab = 'catalogo' | 'parametros' | 'metas' | 'planos' | 'historico'
 
 const TABS = [
-  { key: 'catalogo' as const, label: 'Catálogo' },
-  { key: 'parametros' as const, label: 'Parâmetros' },
+  { key: 'catalogo' as const, label: 'Catálogo de Indicadores' },
+  { key: 'parametros' as const, label: 'Parâmetros e Fórmulas' },
   { key: 'planos' as const, label: 'Planos por Cliente' },
   { key: 'historico' as const, label: 'Histórico' },
 ]
@@ -162,6 +162,7 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
   const [historyLoading, setHistoryLoading] = useState(false)
   const [historyError, setHistoryError] = useState<string | null>(null)
   const [historyFilters, setHistoryFilters] = useState<HistoryFilters>({ search: '', category: 'todas' })
+  const [parametersBootstrapped, setParametersBootstrapped] = useState(false)
 
   const refetch = useCallback(async () => {
     setLoading(true)
@@ -221,20 +222,21 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
   }, [historyRows.length, loadHistory, loadPlanClients, loadPlans, planClients.length, tab])
 
   useEffect(() => {
-    if (tab !== 'parametros' || parameterSetId !== null) return
+    if (tab !== 'parametros' || parametersBootstrapped) return
     void (async () => {
       const [parameterResult, setResult] = await Promise.all([
         fetchIndicatorParameters(),
         fetchActiveParameterSet(),
       ])
       setParameters(parameterResult.rows)
-      setParameterSet(parameterResult.setName)
+      setParameterSet(parameterResult.setName ?? setResult.set?.name ?? null)
       setParameterSetId(setResult.set?.id ?? null)
       const formulas = await fetchFormulaIndicators()
       setFormulaIndicators(formulas.rows)
       setParameterError(parameterResult.error || setResult.error || formulas.error)
+      setParametersBootstrapped(true)
     })()
-  }, [tab, parameterSetId])
+  }, [parametersBootstrapped, tab])
 
   const areas = useMemo(
     () => sortCatalogAreas([...new Set(rows.filter(item => item.status !== 'arquivado').map(item => item.area).filter(Boolean))]),
@@ -512,14 +514,27 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
     }
   }
 
-  const parameterByKey = useMemo(() => new Map(parameters.map(item => [item.metric_key, item])), [parameters])
+  const parameterByKey = useMemo(() => {
+    const map = new Map<string, IndicatorParameter>()
+    for (const parameter of parameters) {
+      for (const alias of catalogAliasKeys(parameter.metric_key)) map.set(alias, parameter)
+    }
+    return map
+  }, [parameters])
+  const resolveParameter = (metricKey: string) => {
+    for (const alias of catalogAliasKeys(metricKey)) {
+      const hit = parameterByKey.get(alias)
+      if (hit) return hit
+    }
+    return undefined
+  }
   const filteredParameterRows = useMemo(() => {
     const term = parameterSearch.trim().toLocaleLowerCase('pt-BR')
     const live = rows.filter(item => item.status !== 'arquivado')
     if (!term) return live
-    return live.filter(item => [item.label, item.metric_key, item.area].some(value => (value ?? '').toLocaleLowerCase('pt-BR').includes(term)))
+    return live.filter(item => [item.label, item.metric_key, officialCatalogCode(item.metric_key), item.area].some(value => (value ?? '').toLocaleLowerCase('pt-BR').includes(term)))
   }, [parameterSearch, rows])
-  const configuredParameterKeys = useMemo(() => new Set(parameters.map(parameter => parameter.metric_key)), [parameters])
+  const configuredParameterKeys = useMemo(() => new Set(parameters.flatMap(parameter => catalogAliasKeys(parameter.metric_key))), [parameters])
 
   const saveParameter = async (values: {
     target_default: number | null
@@ -533,7 +548,11 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
     if (!parameterModal || !parameterSetId) return
     setSubmitting(true)
     try {
-      const result = await saveParameterValue({ ...values, parameterSetId, metric_key: parameterModal.indicator.metric_key })
+      const result = await saveParameterValue({
+        ...values,
+        parameterSetId,
+        metric_key: parameterModal.parameter?.metric_key ?? parameterModal.indicator.metric_key,
+      })
       if (result.error) {
         toast.error(result.error)
         return
@@ -646,12 +665,17 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
       <div className="w-full space-y-5">
         <MxModuleHeader
           icon={Gauge}
-          eyebrow="Administração MX"
-          title="Indicadores e Parâmetros"
-          description="Catálogo oficial da consultoria: ciclo de vida, ordem, visibilidade no Módulo Dono e faixas de referência."
+          eyebrow="Produto e Metodologia"
+          title="Plano Estratégico"
+          description="Configure os indicadores da metodologia MX e aplique as metas estratégicas por cliente e ano."
           actions={(
             <>
-              <Button variant="outline" onClick={() => void (tab === 'planos' ? loadPlans() : tab === 'historico' ? loadHistory() : refetch())}><RefreshCw size={16} />Atualizar</Button>
+              <Button variant="outline" onClick={() => {
+                if (tab === 'planos') void loadPlans()
+                else if (tab === 'historico') void loadHistory()
+                else if (tab === 'parametros') setParametersBootstrapped(false)
+                else void refetch()
+              }}><RefreshCw size={16} />Atualizar</Button>
               {tab === 'catalogo' ? (
                 orderMode
                   ? <><Button variant="outline" onClick={() => { setOrderMode(false); setOrderKeys(rows.map(item => item.metric_key)) }}>Cancelar ordem</Button><Button variant="outline" onClick={() => void restoreDefault()} disabled={submitting}><RotateCcw size={16} />Restaurar padrão</Button><Button onClick={() => void saveOrder()} disabled={submitting}><Save size={16} />Salvar ordem</Button></>
@@ -679,7 +703,7 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
               <MxMetricCard title="Parâmetros globais" value={metrics.parameterCount} detail="Conjunto ativo" icon={Gauge} tone="warning" actionLabel="Abrir parâmetros" onAction={() => setTab('parametros')} />
               <MxMetricCard title="Arquivados" value={metrics.archived} detail="Fora da operação" icon={FileClock} tone="warning" actionLabel="Filtrar arquivados" onAction={() => setQuickFilter('arquivados')} />
             </MxMetricGrid>
-            {parameterError ? <MxStatusBanner tone="warning">Parâmetros globais indisponíveis: {parameterError}. Abra a aba “Parâmetros e fórmulas” para tentar novamente.</MxStatusBanner> : null}
+              {parameterError ? <MxStatusBanner tone="warning">Parâmetros globais indisponíveis: {parameterError}. Abra a aba “Parâmetros e Fórmulas” para tentar novamente.</MxStatusBanner> : null}
 
             {orderMode ? <MxStatusBanner tone="info">Modo de ordenação: use as setas para reordenar e salve a ordem oficial. Os filtros ficam desativados.</MxStatusBanner> : null}
 
@@ -724,7 +748,8 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
             ) : null}
 
             <MxSectionCard>
-              <MxSectionHeader title="Catálogo de indicadores" description={`${(orderMode ? ordered : filtered).length} indicador(es) visível(is) em ${grouped.length} área(s).`} />
+              <MxSectionHeader title="Catálogo de Indicadores" description="Defina quais indicadores compõem a metodologia MX e como cada indicador funciona." />
+              <p className="px-5 pt-2 text-sm text-muted-foreground">{(orderMode ? ordered : filtered).length} indicador(es) visível(is) em {grouped.length} área(s).</p>
               <div className="space-y-4 p-5">
                 {(orderMode ? ordered : filtered).length ? grouped.map(group => {
                   const collapsed = collapsedAreas[group.areaName] === true
@@ -749,7 +774,7 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
         ) : tab === 'parametros' ? (
           <>
             <MxSectionCard>
-              <MxSectionHeader title="Parâmetros e fórmulas" description={parameterSet ? `Conjunto ativo: ${parameterSet}. Configure valores, dependências e faixas sem alterar o histórico.` : 'Nenhum conjunto de parâmetros ativo.'} />
+              <MxSectionHeader title="Parâmetros e Fórmulas" description={parameterSet ? `Conjunto ativo: ${parameterSet}. Configure valores, dependências e faixas sem alterar o histórico.` : 'Nenhum conjunto de parâmetros ativo.'} />
               <div className="p-5">
                 {parameterError ? <MxStatusBanner tone="warning" className="mb-4">{parameterError}</MxStatusBanner> : null}
                 <MxToolbar className="mb-4 shadow-none">
@@ -777,14 +802,14 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
                       </TableHeader>
                       <TableBody>
                         {filteredParameterRows.map(item => {
-                          const parameter = parameterByKey.get(item.metric_key) as IndicatorParameter | undefined
+                          const parameter = resolveParameter(item.metric_key)
                           const problem = parameter ? validateThresholds(parameter, item.direction) : null
                           const dependents = dependentsOfParameter(formulaIndicators, item.metric_key)
                           return (
                             <TableRow key={item.metric_key}>
                               <TableCell>
                                 <div className="font-semibold text-foreground">{item.label}</div>
-                                <div className="text-xs text-muted-foreground">{item.metric_key}</div>
+                                <div className="text-xs text-muted-foreground">{officialCatalogCode(item.metric_key)}</div>
                               </TableCell>
                               <TableCell>{INDICATOR_CALCULATION_MODE_LABEL[indicatorCalculationMode(item)]}</TableCell>
                               <TableCell>{parameter?.target_default ?? '—'}</TableCell>
@@ -866,7 +891,7 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
           open={parameterPickerOpen}
           indicators={rows}
           configuredKeys={configuredParameterKeys}
-          onSelect={indicator => { setParameterPickerOpen(false); setParameterModal({ indicator, parameter: parameterByKey.get(indicator.metric_key) ?? null }) }}
+          onSelect={indicator => { setParameterPickerOpen(false); setParameterModal({ indicator, parameter: resolveParameter(indicator.metric_key) ?? null }) }}
           onClose={() => setParameterPickerOpen(false)}
         />
         <Modal open={Boolean(dependentsFor)} onClose={() => setDependentsFor(null)} title={dependentsFor ? `Dependentes · ${dependentsFor.indicator.label}` : 'Dependentes'} size="md" footer={<Button variant="outline" onClick={() => setDependentsFor(null)}>Fechar</Button>}>

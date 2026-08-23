@@ -22,6 +22,7 @@ import type { ProductPackageResolution } from '@/features/strategic-plan/clientP
 import { type PublicationCardSummary } from '@/features/strategic-plan/planCycle'
 import { fetchCurrentCycle, validateCycleReadiness, type PlanCycle } from '@/features/strategic-plan/planCycleRepository'
 import { getClientStrategicPlanPublicationSummary } from '@/features/strategic-plan/publicationSummary'
+import { buildAdminStrategicPlanHref } from '@/features/strategic-plan/adminStrategicPlanHref'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/organisms/Table'
 
 type PlanningState = {
@@ -46,8 +47,15 @@ function formatValue(value: number | null | undefined): string {
   return value == null ? '—' : value.toLocaleString('pt-BR', { maximumFractionDigits: 2 })
 }
 
-export function ClientPlanningContextPanel(props: { clientId: string; clientSlug?: string | null; primaryStoreId?: string | null }) {
-  const year = new Date().getFullYear()
+export function ClientPlanningContextPanel(props: {
+  clientId: string
+  clientSlug?: string | null
+  primaryStoreId?: string | null
+  /** Ciclo canônico da Visão 360 (prompt #09) — prevalece sobre fetch local. */
+  cycleId?: string | null
+  year?: number | null
+}) {
+  const year = props.year ?? new Date().getFullYear()
   const month = new Date().getMonth() + 1
   const [state, setState] = useState<PlanningState>({
     units: [], packageResolution: null, cycle: null, readiness: null, values: [],
@@ -136,13 +144,14 @@ export function ClientPlanningContextPanel(props: { clientId: string; clientSlug
   const expectedCells = (resolution?.items.length ?? 0) * activeUnits.length
   const metasPreenchidas = state.values.filter(row => row.month === month && row.meta != null).length
   const realizadosPreenchidos = state.values.filter(row => row.month === month && row.realizado != null).length
-  const strategicHref = matrixId
-    ? props.clientSlug
-      ? `/clientes/${encodeURIComponent(props.clientSlug)}/plano-estrategico?clientId=${encodeURIComponent(props.clientId)}&storeId=${encodeURIComponent(matrixId)}`
-      : `/plano-estrategico?clientId=${encodeURIComponent(props.clientId)}&storeId=${encodeURIComponent(matrixId)}`
-    : props.clientSlug
-      ? `/clientes/${encodeURIComponent(props.clientSlug)}/plano-estrategico?clientId=${encodeURIComponent(props.clientId)}`
-      : `/plano-estrategico?clientId=${encodeURIComponent(props.clientId)}`
+  const strategicHref = buildAdminStrategicPlanHref({
+    clientId: props.clientId,
+    clientSlug: props.clientSlug,
+    cycleId: props.cycleId ?? state.cycle?.id ?? null,
+    year,
+    storeId: matrixId || props.primaryStoreId || null,
+  })
+
 
   if (loading) return <MxLoadingState label="Carregando Plano Estratégico do cliente" />
 

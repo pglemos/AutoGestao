@@ -24,7 +24,7 @@ const readCode = (path: string) =>
 describe('App Shell unificado', () => {
   it('renderiza uma única implementação de shell na moldura', () => {
     const appShell = read('src/components/AppShell.tsx')
-    expect(appShell).toContain('<AppShellFrame role={role}>')
+    expect(appShell).toContain('<AppShellFrame role={frameRole}>')
     expect(appShell).toContain('<Layout />')
     expect(appShell).not.toContain('OwnerShell')
     expect(appShell).not.toContain("role === 'dono'")

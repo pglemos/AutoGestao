@@ -1,5 +1,7 @@
 export type StrategicDisplayMode = 'both' | 'table' | 'chart'
 export type StrategicTab = 'resumo' | 'visao-geral'
+/** Visão de valor compartilhada Resumo ↔ Visão Geral ↔ Diagnóstico (prompt Base44 #28). */
+export type StrategicValueView = 'meta' | 'realizado' | 'ano_anterior'
 
 export type StrategicSeries = {
   id: string

@@ -14,14 +14,17 @@ import Layout from './Layout'
 export default function AppShell() {
   const { role } = useAuth()
   const location = useLocation()
+  const viewAs = new URLSearchParams(location.search).get('viewAs')
+  const viewAsDono = viewAs === 'dono' || viewAs === 'owner'
+  const frameRole = viewAsDono ? 'dono' : role
 
-  if (isPerfilInternoMx(role)) {
+  if (isPerfilInternoMx(role) && !viewAsDono) {
     const canonicalRoute = resolveInternalMxCanonicalRoute(location.pathname, location.search)
     if (canonicalRoute) return <Navigate to={canonicalRoute} replace />
   }
 
   return (
-    <AppShellFrame role={role}>
+    <AppShellFrame role={frameRole}>
       <Layout />
     </AppShellFrame>
   )

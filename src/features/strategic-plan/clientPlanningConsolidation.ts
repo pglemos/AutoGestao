@@ -16,6 +16,7 @@ import {
 } from './unitConsolidation'
 import { resolveConsolidationFormula, resolveUnitPolicy, type UnitPolicy } from './unitPolicy'
 import type { ClientUnit } from './clientUnits'
+import { officialCatalogCode } from '@/features/admin-mx/indicadores/canonicalBase44Catalog'
 
 /** Linha de `valores_indicadores_planejamento`. */
 export type PlanningValueRow = {
@@ -85,12 +86,18 @@ function toValueRecords(
   unitIds: Set<string>,
   policies: Record<string, UnitPolicy>,
   companyUnitId: string | null,
+  resolveRowCode: (rowCode: string) => string,
 ): ValueRecord[] {
   const records: ValueRecord[] = []
   for (const row of rows) {
     if (row.month == null) continue
     if (!unitIds.has(row.loja_id)) continue
-    const entryMode = policies[row.indicator_code]?.unit_entry_mode
+    // A persistência mistura vocabulários: o catálogo usa metric_key MX
+    // (sales_total) enquanto algumas fontes gravam o código Base44
+    // (SALES_TOTAL). O código da linha precisa cair no MESMO espaço do
+    // roster — políticas e fórmulas são resolvidas nesse espaço.
+    const code = resolveRowCode(row.indicator_code)
+    const entryMode = policies[code]?.unit_entry_mode
     const isCompanyScoped = entryMode === 'COMPANY_ONLY' || entryMode === 'SHARED_COMPANY_VALUE'
     if (isCompanyScoped) {
       // O schema MX guarda a unidade matriz, não um scope_type COMPANY. A
@@ -98,7 +105,7 @@ function toValueRecords(
       // novamente às filiais.
       if (!companyUnitId || row.loja_id !== companyUnitId) continue
       records.push({
-        indicator_code: row.indicator_code,
+        indicator_code: code,
         month: row.month,
         store_id: null,
         scope_type: 'COMPANY',
@@ -107,7 +114,7 @@ function toValueRecords(
       continue
     }
     records.push({
-      indicator_code: row.indicator_code,
+      indicator_code: code,
       month: row.month,
       store_id: row.loja_id,
       scope_type: 'STORE',
@@ -144,11 +151,27 @@ export function consolidateClientPlanning({
   const unitIds = new Set(active.map(unit => unit.id))
   const companyUnitId = active.find(unit => unit.store_type === 'MATRIZ')?.id ?? active[0]?.id ?? null
 
+  // Resolve o código de uma linha para o espaço do roster: match direto,
+  // depois equivalência canônica (metric_key MX ↔ código Base44).
+  const rosterByCanon = new Map<string, string>()
+  const rosterDirect = new Set(rosterIndicators.map(indicator => indicator.code))
+  for (const indicator of rosterIndicators) {
+    rosterByCanon.set(officialCatalogCode(indicator.code).toUpperCase(), indicator.code)
+  }
+  const resolveRowCode = (rowCode: string): string => {
+    if (rosterDirect.has(rowCode)) return rowCode
+    return (
+      rosterByCanon.get(officialCatalogCode(rowCode).toUpperCase()) ??
+      rosterByCanon.get(rowCode.toUpperCase()) ??
+      (officialCatalogCode(rowCode) || rowCode)
+    )
+  }
+
   const result = {} as ConsolidatedClientPlanning
 
   for (const series of SERIES) {
     const { unitMonthlyMap, companyMonthlyMap } = groupValuesByUnit(
-      toValueRecords(rows, series, unitIds, policies, companyUnitId),
+      toValueRecords(rows, series, unitIds, policies, companyUnitId, resolveRowCode),
       'applied_value',
     )
 

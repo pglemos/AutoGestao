@@ -10,9 +10,8 @@ import { IndicatorPicker } from './IndicatorPicker'
 
 const PRIORITY_OPTIONS = [
   { value: 'critica', label: 'Crítica' },
-  { value: 'alta', label: 'Alta' },
-  { value: 'media', label: 'Média' },
-  { value: 'baixa', label: 'Baixa' },
+  { value: 'media', label: 'Atenção' },
+  { value: 'baixa', label: 'Evolução' },
 ]
 
 /**

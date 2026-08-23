@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ClipboardList, Plus, RefreshCw } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
@@ -24,7 +24,7 @@ import {
 import { TabNav } from '@/components/molecules/TabNav'
 import { ActionPlanKanban } from './planos-acao/ActionPlanKanban'
 import { ActionPlanDetailDrawer } from './planos-acao/ActionPlanDetailDrawer'
-import { boardMetrics, fetchBoardPlanById, normalizeBoardChecklist, planDaysLate, STATUS_LABEL, type BoardPlan, type PlanStatus } from './planos-acao/actionPlanBoard'
+import { boardMetrics, changePlanStatus, fetchBoardPlanById, normalizeBoardChecklist, planDaysLate, STATUS_LABEL, type BoardPlan, type PlanStatus } from './planos-acao/actionPlanBoard'
 import { Modal } from '@/components/organisms/Modal'
 import { ApplyTemplateWizard } from './planos-acao/ApplyTemplateWizard'
 import { ClientActionPlanWizard } from './planos-acao/ClientActionPlanWizard'
@@ -60,19 +60,20 @@ type PlanTab = 'planos' | 'templates' | 'sugestoes' | 'aplicacoes' | 'historico'
 const PLAN_TABS = [
   { key: 'templates' as const, label: 'Planos Padrão' },
   { key: 'sugestoes' as const, label: 'Sugestões ao Dono' },
-  { key: 'aplicacoes' as const, label: 'Aplicações nos clientes' },
+  { key: 'aplicacoes' as const, label: 'Aplicações nos Clientes' },
   { key: 'historico' as const, label: 'Histórico' },
-  { key: 'planos' as const, label: 'Planos da rede' },
 ]
 
 const PLAN_PRIORITY_OPTIONS = [
   { value: 'critica', label: 'Crítica' },
-  { value: 'alta', label: 'Alta' },
-  { value: 'media', label: 'Média' },
-  { value: 'baixa', label: 'Baixa' },
+  { value: 'media', label: 'Atenção' },
+  { value: 'baixa', label: 'Evolução' },
 ]
 
-const PRIORITY_LABEL: Record<string, string> = Object.fromEntries(PLAN_PRIORITY_OPTIONS.map(item => [item.value, item.label]))
+const PRIORITY_LABEL: Record<string, string> = {
+  ...Object.fromEntries(PLAN_PRIORITY_OPTIONS.map(item => [item.value, item.label])),
+  alta: 'Atenção',
+}
 
 const TEMPLATE_STATUS_VARIANT = {
   publicada: 'success',
@@ -91,9 +92,8 @@ export function AdminPlanosAcaoGlobalPage() {
   const { rows, loading, error, refetch } = useAdminActionPlans()
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState('todos')
-  // A entrada global replica a descoberta do Base44: a biblioteca/tabela de
-  // planos padrão é a primeira superfície. O board da rede segue disponível
-  // na aba adjacente, sem esconder a execução persistida.
+  // Biblioteca Base44 `/planos-acao`: Planos Padrão primeiro. Board da rede
+  // fica fora das abas canônicas (4 tabs Base44); abrir via ?tab=planos se precisar.
   const [tab, setTab] = useState<PlanTab>('templates')
   const templates = useActionPlanTemplatesController()
   const [suggestionsRefreshKey, setSuggestionsRefreshKey] = useState(0)
@@ -101,6 +101,31 @@ export function AdminPlanosAcaoGlobalPage() {
   const [view, setView] = useState<'lista' | 'kanban'>('lista')
   const [openPlan, setOpenPlan] = useState<BoardPlan | null>(null)
   const [choiceOpen, setChoiceOpen] = useState(false)
+
+  const handleKanbanMove = useCallback(async (plan: BoardPlan, toStatus: PlanStatus) => {
+    if (toStatus === 'atrasado') {
+      toast.info('A coluna Atrasada é definida pelo prazo. Ajuste o prazo no detalhe do plano.')
+      setOpenPlan(plan)
+      return
+    }
+    if (toStatus === 'concluido') {
+      toast.info('Abra o detalhe para concluir com data efetiva e checklist.')
+      setOpenPlan(plan)
+      return
+    }
+    const from = (plan.status ?? 'pendente') as PlanStatus
+    const result = await changePlanStatus(plan.id, toStatus, {
+      from,
+      note: 'Movido pelo quadro Admin',
+      checklist: plan.checklist,
+    })
+    if (result.error) {
+      toast.error(result.error)
+      return
+    }
+    toast.success(`Plano movido para ${STATUS_LABEL[toStatus].toLowerCase()}.`)
+    void refetch()
+  }, [refetch])
   const [wizardOpen, setWizardOpen] = useState(false)
   const [selectorOpen, setSelectorOpen] = useState(false)
   const [suggestTemplate, setSuggestTemplate] = useState<Awaited<ReturnType<typeof useActionPlanTemplatesController>>['rows'][number] | null>(null)
@@ -132,6 +157,13 @@ export function AdminPlanosAcaoGlobalPage() {
   }, [])
 
   const location = useLocation()
+  useEffect(() => {
+    const requested = new URLSearchParams(location.search).get('tab')
+    if (requested === 'planos' || requested === 'templates' || requested === 'sugestoes' || requested === 'aplicacoes' || requested === 'historico') {
+      setTab(requested)
+    }
+  }, [location.search])
+
   const { width, bottomClearance } = resolveRouteLayout(location.pathname)
 
   const statuses = useMemo(() => (Object.keys(STATUS_LABEL) as PlanStatus[]), [])
@@ -228,7 +260,7 @@ export function AdminPlanosAcaoGlobalPage() {
       <div className="w-full space-y-5">
         <MxModuleHeader
           icon={ClipboardList}
-          title="Planos de Ação e Playbooks"
+          title="Planos de Ação"
           description="Crie modelos de ação da metodologia MX para aplicação nos clientes e sugestão aos Donos."
           actions={tab === 'templates' ? (
             <div className="flex flex-wrap items-center justify-end gap-2">
@@ -265,7 +297,7 @@ export function AdminPlanosAcaoGlobalPage() {
             <MxSectionCard>
               <MxSectionHeader
                 title="Planos padrão de ação"
-                description={`${filteredTemplates.length} template(s) na biblioteca.`}
+                description={`${filteredTemplates.length} plano(s) padrão na biblioteca.`}
                 actions={<Button variant="outline" size="sm" onClick={templates.openNew}><Plus size={16} />Criar Plano Padrão</Button>}
               />
               <div className="p-5">
@@ -394,7 +426,7 @@ export function AdminPlanosAcaoGlobalPage() {
             {view === 'kanban' ? (
               <MxSectionCard>
                 <MxSectionHeader title="Board da rede" description={`${filtered.length} plano(s) no board. Clique num card para abrir o detalhe.`} />
-                <div className="p-5"><ActionPlanKanban plans={boardPlans} onOpen={setOpenPlan} /></div>
+                <div className="p-5"><ActionPlanKanban plans={boardPlans} onOpen={setOpenPlan} onMove={handleKanbanMove} /></div>
               </MxSectionCard>
             ) : (
             <MxSectionCard>

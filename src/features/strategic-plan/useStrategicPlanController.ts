@@ -19,6 +19,7 @@ import type {
   StrategicPlanRepository,
   StrategicSeries,
   StrategicTab,
+  StrategicValueView,
 } from './strategicPlan.types'
 
 export type StrategicPlanController = {
@@ -32,6 +33,8 @@ export type StrategicPlanController = {
   setSelectedIndicatorId: (id: string) => void
   tab: StrategicTab
   setTab: (tab: StrategicTab) => void
+  valueView: StrategicValueView
+  setValueView: (view: StrategicValueView) => void
   areaFilter: string
   setAreaFilter: (area: string) => void
   displayMode: StrategicDisplayMode
@@ -57,6 +60,10 @@ export type StrategicPlanController = {
   setSelectedMonthIndex: (index: number) => void
   partialUnitsLabel: string | null
   scopeNotice: string | null
+  ownerUnitId: string | null
+  setOwnerUnitScope: (unitId: string) => void
+  clientUnits: Array<{ id: string; name: string; active: boolean }>
+  supportsConsolidated: boolean
   /** Contexto de leitura para Diagnóstico de Dados (Admin MX). */
   diagnosticContext: {
     clientAccountId: string | null
@@ -65,7 +72,7 @@ export type StrategicPlanController = {
     supportsConsolidated: boolean
     referenceYear: number
     referenceMonth: number
-    selectedValueView: StrategicTab
+    selectedValueView: StrategicValueView
     strategicPlanVersionId: string | null
   }
 }
@@ -77,8 +84,14 @@ export function useStrategicPlanController(options: {
   useRealtime?: typeof usePlanningRealtime
 } = {}): StrategicPlanController {
   const { storeId, actor, capabilities } = usePlanningWorkspace()
-  const owner = useOwnerOptional() as { unitId?: string } | null
-  const ownerUnitId = owner?.unitId
+  const owner = useOwnerOptional() as { unitId?: string; setUnitId?: (id: string) => void } | null
+  const [unitScopeOverride, setUnitScopeOverride] = useState<string | null>(null)
+  useEffect(() => { setUnitScopeOverride(null) }, [storeId])
+  const ownerUnitId = unitScopeOverride ?? owner?.unitId ?? null
+  const setOwnerUnitScope = useCallback((next: string) => {
+    setUnitScopeOverride(next)
+    owner?.setUnitId?.(next)
+  }, [owner])
   const repository = options.repository ?? strategicPlanDataSource
   const year = options.year ?? REFERENCE_YEAR
   const onUpdated = options.onUpdated
@@ -98,6 +111,7 @@ export function useStrategicPlanController(options: {
   const [error, setError] = useState<string | null>(null)
   const [series, setSeries] = useState<StrategicSeries[]>([])
   const [tab, setTabState] = useState<StrategicTab>(routeState.tab)
+  const [valueView, setValueView] = useState<StrategicValueView>('meta')
   const [selectedIndicatorId, setSelectedIndicatorIdState] = useState(routeState.indicatorId || '')
   const [areaFilter, setAreaFilter] = useState('all')
   const [displayMode, setDisplayModeState] = useState<StrategicDisplayMode>(initialMode)
@@ -259,14 +273,26 @@ export function useStrategicPlanController(options: {
   const partialUnitsLabel = useMemo(() => {
     if (scopeType !== 'CONSOLIDATED' || !clientScope.supportsConsolidated || !clientScope.consolidated) return null
     const month = selectedMonthIndex + 1
-    const byCode = clientScope.consolidated.realizado.integrityByMonth[month] ?? {}
+    const seriesKey = valueView
+    const byCode = clientScope.consolidated[seriesKey]?.integrityByMonth?.[month] ?? {}
     for (const item of Object.values(byCode)) {
       if (item.status === CONSOLIDATION_STATUS.PARCIAL) {
         return formatPartialUnitsLabel(item.unitsWithData, item.totalUnits)
       }
     }
+    // Fallback: qualquer série com parcial no mês (ex.: meta preenchida, realizado vazio)
+    for (const key of ['meta', 'realizado', 'ano_anterior'] as const) {
+      if (key === seriesKey) continue
+      const alt = clientScope.consolidated[key]?.integrityByMonth?.[month] ?? {}
+      for (const item of Object.values(alt)) {
+        if (item.status === CONSOLIDATION_STATUS.PARCIAL) {
+          return formatPartialUnitsLabel(item.unitsWithData, item.totalUnits)
+        }
+      }
+    }
     return null
-  }, [clientScope.consolidated, clientScope.supportsConsolidated, scopeType, selectedMonthIndex])
+  }, [clientScope.consolidated, clientScope.supportsConsolidated, scopeType, selectedMonthIndex, valueView])
+
 
   const diagnosticContext = useMemo(() => ({
     clientAccountId: clientScope.clientId,
@@ -275,7 +301,7 @@ export function useStrategicPlanController(options: {
     supportsConsolidated: clientScope.supportsConsolidated,
     referenceYear: year,
     referenceMonth: selectedMonthIndex + 1,
-    selectedValueView: tab,
+    selectedValueView: valueView,
     strategicPlanVersionId: planCycle.cycle?.id ?? null,
   }), [
     clientScope.clientId,
@@ -284,9 +310,10 @@ export function useStrategicPlanController(options: {
     scopeType,
     selectedMonthIndex,
     storeId,
-    tab,
+    valueView,
     year,
   ])
+
 
   return {
     repository,
@@ -299,6 +326,8 @@ export function useStrategicPlanController(options: {
     setSelectedIndicatorId,
     tab,
     setTab,
+    valueView,
+    setValueView,
     areaFilter,
     setAreaFilter,
     displayMode,
@@ -324,6 +353,10 @@ export function useStrategicPlanController(options: {
     setSelectedMonthIndex,
     partialUnitsLabel,
     scopeNotice,
+    ownerUnitId: ownerUnitId ?? null,
+    setOwnerUnitScope,
+    clientUnits: clientScope.units.map(unit => ({ id: unit.id, name: unit.name, active: unit.active })),
+    supportsConsolidated: clientScope.supportsConsolidated,
     diagnosticContext,
   }
 }

@@ -285,6 +285,16 @@ export const BASE44_GLOBAL_ORDER: Record<string, number> = {
   EMPLOYEE_COUNT: 45,
 }
 
+/** Garante display_order global 1…45 (não reinicia por departamento). */
+for (const item of BASE44_STANDARD_INDICATORS) {
+  const global = BASE44_GLOBAL_ORDER[item.code]
+  if (global != null) (item as { display_order: number }).display_order = global
+}
+
+export const OFFICIAL_CODES_BY_ORDER = Object.entries(BASE44_GLOBAL_ORDER)
+  .sort((a, b) => a[1] - b[1])
+  .map(([code]) => code)
+
 export function officialCatalogCode(metricKey: string) {
   return matchCanonicalIndicator(metricKey)?.code ?? metricKey
 }

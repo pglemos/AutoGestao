@@ -66,7 +66,18 @@ export function extractParameterDeps(formula: string | null | undefined): string
 /**
  * Avalia uma expressão com IND() e PAR(). Devolve null quando falta base
  * (indicador/parâmetro ausente, divisão por zero ou erro de sintaxe).
+ *
+ * Em fórmulas só aditivas (soma de canais Base44), IND ausente vira 0 se
+ * houver ao menos uma base presente — senão o total ficaria nulo até
+ * preencher os 6 canais (bloqueava cadastro rápido / recálculo parcial).
  */
+function formulaRequiresCompleteBase(formula: string): boolean {
+  const stripped = formula
+    .replace(/IND\("[^"]+"\)/g, '1')
+    .replace(/PAR\("[^"]+"\)/g, '1')
+  return /[*/]/.test(stripped)
+}
+
 function lookupLoose(
   map: Record<string, number | null | undefined>,
   code: string,
@@ -102,11 +113,19 @@ export function evaluateFormula(
 ): number | null {
   if (!formula) return null
   try {
+    const strictBase = formulaRequiresCompleteBase(formula)
+    const deps = extractIndicatorDeps(formula)
+    const anyIndicatorBase = deps.some(code => {
+      const value = lookupLoose(indicatorValues, code, 'indicator')
+      return value != null && !Number.isNaN(value)
+    })
+
     let expr = formula
     expr = expr.replace(/IND\("([^"]+)"\)/g, (_match, code: string) => {
       const value = lookupLoose(indicatorValues, code, 'indicator')
-      if (value == null || Number.isNaN(value)) return 'null'
-      return String(value)
+      if (value != null && !Number.isNaN(value)) return String(value)
+      if (strictBase || !anyIndicatorBase) return 'null'
+      return '0'
     })
     expr = expr.replace(/PAR\("([^"]+)"\)/g, (_match, code: string) => {
       const value = lookupLoose(parameterValues, code, 'parameter')
@@ -234,6 +253,11 @@ function formatNumberBR(value: number, minDecimals: number, maxDecimals: number)
 function trimTrailingZerosBR(formatted: string): string {
   if (!formatted.includes(',')) return formatted
   return formatted.replace(/,?0+$/, '').replace(/,$/, '')
+}
+
+/** Alias oficial Base44 (#10): mesmo serviço em Admin, Dono e módulos consumidores. */
+export function formatStrategicValue(value: number | null | undefined, config: FormatConfig): string {
+  return formatDisplay(value, config)
 }
 
 /** Formata um valor para exibição (contexto tabela). */

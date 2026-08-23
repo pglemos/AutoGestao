@@ -29,9 +29,10 @@ export function resolveOwnerPlanningScopeType(
   ownerUnitId: string | null | undefined,
   supportsConsolidated: boolean,
 ): 'CONSOLIDATED' | 'STORE' {
+  // Só consolida com escolha explícita "Todas as lojas". Sem unitId (ex.: Admin
+  // só com storeId do workspace) permanece STORE — nunca inventar CONSOLIDATED.
   if (ownerUnitId === ALL_OWNER_UNITS) return supportsConsolidated ? 'CONSOLIDATED' : 'STORE'
-  if (ownerUnitId) return 'STORE'
-  return supportsConsolidated ? 'CONSOLIDATED' : 'STORE'
+  return 'STORE'
 }
 
 export function toOwnerPlanningActor(user: {

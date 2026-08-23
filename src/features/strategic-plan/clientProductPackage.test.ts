@@ -36,9 +36,9 @@ const item = (metric_key: string, ordem: number, input_mode = 'MANUAL', area = '
 })
 
 const items = [
-  item('visits', 2),
-  item('sales_door_flow', 1),
-  item('visit_to_sale_rate', 3, 'CALCULATED', 'Comercial'),
+  item('visits_custom', 2),
+  item('sales_door_flow_custom', 1),
+  item('visit_to_sale_rate_custom', 3, 'CALCULATED', 'Comercial'),
 ]
 
 describe('decideProductPackage — caminho feliz', () => {
@@ -46,7 +46,7 @@ describe('decideProductPackage — caminho feliz', () => {
     const result = decideProductPackage({ programKey: 'pmr_plus', product, packageVersion, items })
     expect(result.ok).toBe(true)
     if (!result.ok) return
-    expect(result.resolution.indicatorCodes).toEqual(['sales_door_flow', 'visits', 'visit_to_sale_rate'])
+    expect(result.resolution.indicatorCodes).toEqual(['sales_door_flow_custom', 'visits_custom', 'visit_to_sale_rate_custom'])
   })
 
   test('separa manuais de calculados e lista as áreas', () => {
@@ -55,6 +55,17 @@ describe('decideProductPackage — caminho feliz', () => {
     expect(result.resolution.manualCount).toBe(2)
     expect(result.resolution.calculatedCount).toBe(1)
     expect(result.resolution.departments).toEqual(['Comercial'])
+  })
+
+  test('códigos oficiais Base44 usam target_calculation_mode do catálogo', () => {
+    const official = [
+      item('SALES_WALKIN', 1, 'calculated'),
+      item('SALES_TOTAL', 2, 'manual'),
+    ]
+    const result = decideProductPackage({ programKey: 'pmr_plus', product, packageVersion, items: official })
+    if (!result.ok) throw new Error('esperava resolução')
+    expect(result.resolution.manualCount).toBe(1)
+    expect(result.resolution.calculatedCount).toBe(1)
   })
 
   test('conta modos no vocabulário do catálogo MX, em minúsculas', () => {

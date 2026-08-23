@@ -1,5 +1,6 @@
-import { catalogAliasKeys, matchCanonicalIndicator } from './canonicalBase44Catalog'
+import { catalogAliasKeys, matchCanonicalIndicator, officialCatalogOrder } from './canonicalBase44Catalog'
 import { MONTHS, applyOfficialComputedMetas } from './indicatorFormulas'
+import { applyActualComputedPasses, buildMonthlyGrid } from './metasRealizados'
 
 function resolveEditorGridCode(indicatorCode: string, allowed: Set<string>): string | null {
   if (allowed.has(indicatorCode)) return indicatorCode
@@ -113,11 +114,43 @@ export function recalculateEditorGrid(
       }
     }
   }
-  return hydrateEditorGrid(
+  const withMeta = hydrateEditorGrid(
     applyOfficialComputedMetas({ values, indicators, unitIds }),
     unitIds,
     indicators.map(indicator => indicator.metric_key),
   )
+  const codes = indicators.map(indicator => indicator.metric_key)
+  const formulaIndicators = indicators.map(indicator => ({
+    code: indicator.metric_key,
+    formula_expression: indicator.formula_expression ?? null,
+  }))
+  const next: EditorGrid = { ...withMeta }
+  for (const unitId of unitIds) {
+    const unitValues = values.filter(row => row.loja_id === unitId)
+    let monthGrid = buildMonthlyGrid(unitValues.map(row => ({
+      loja_id: unitId,
+      indicator_code: row.indicator_code,
+      year: 0,
+      month: row.month ?? 1,
+      meta: withMeta[unitId]?.[row.indicator_code]?.[row.month ?? 1]?.meta ?? row.meta,
+      realizado: withMeta[unitId]?.[row.indicator_code]?.[row.month ?? 1]?.realizado ?? row.realizado,
+      ano_anterior: withMeta[unitId]?.[row.indicator_code]?.[row.month ?? 1]?.ano_anterior ?? row.ano_anterior,
+    })), codes)
+    monthGrid = applyActualComputedPasses(monthGrid, formulaIndicators)
+    next[unitId] = { ...(next[unitId] ?? {}) }
+    for (const code of codes) {
+      next[unitId][code] = { ...(next[unitId][code] ?? {}) }
+      for (const month of MONTHS) {
+        const cell = monthGrid[code]?.[month]
+        next[unitId][code][month] = {
+          meta: withMeta[unitId]?.[code]?.[month]?.meta ?? null,
+          realizado: cell?.realizado ?? withMeta[unitId]?.[code]?.[month]?.realizado ?? null,
+          ano_anterior: cell?.ano_anterior ?? withMeta[unitId]?.[code]?.[month]?.ano_anterior ?? null,
+        }
+      }
+    }
+  }
+  return next
 }
 
 export function readEditorSeries(
@@ -165,6 +198,35 @@ export function copyEditorMonth(
     const value = grid[unitId]?.[indicatorCode]?.[sourceMonth]?.[field] ?? null
     next = patchEditorGrid(next, { unitId, indicatorCode, month: targetMonth, field, value })
     patches.push({ unitId, indicatorCode, month: targetMonth, field, value })
+  }
+  return { grid: next, patches }
+}
+
+/** Copia o mês de origem para os demais 11 meses (somente Meta — prompt #20). */
+export function applyEditorMonthToYear(
+  grid: EditorGrid,
+  params: {
+    unitId: string
+    sourceMonth: Month
+    field: EditorField
+    indicatorCodes: string[]
+    editableCodes?: Set<string>
+  },
+): { grid: EditorGrid; patches: EditorCellPatch[] } {
+  let next = grid
+  const patches: EditorCellPatch[] = []
+  for (const month of MONTHS) {
+    if (month === params.sourceMonth) continue
+    const result = copyEditorMonth(next, {
+      unitId: params.unitId,
+      sourceMonth: params.sourceMonth,
+      targetMonth: month,
+      field: params.field,
+      indicatorCodes: params.indicatorCodes,
+      editableCodes: params.editableCodes,
+    })
+    next = result.grid
+    patches.push(...result.patches)
   }
   return { grid: next, patches }
 }
@@ -231,11 +293,18 @@ export function groupEditorIndicatorsByArea<T extends { area?: string | null }>(
   return groups
 }
 
+/** Ordem global Base44 (1–45) prevalece sobre display_order local/stale do ciclo. */
+export function resolveEditorIndicatorOrder(indicator: EditorIndicatorLike): number {
+  const canon = matchCanonicalIndicator(indicator.metric_key)
+  if (canon) return officialCatalogOrder(indicator.metric_key)
+  return indicator.sort_order ?? indicator.display_order ?? 999
+}
+
 export function sortEditorIndicators<T extends EditorIndicatorLike>(indicators: T[], order: 'ordem' | 'nome' = 'ordem'): T[] {
   return [...indicators].sort((a, b) => {
     if (order === 'nome') return a.label.localeCompare(b.label, 'pt-BR')
-    const aOrder = a.display_order ?? a.sort_order ?? Number.MAX_SAFE_INTEGER
-    const bOrder = b.display_order ?? b.sort_order ?? Number.MAX_SAFE_INTEGER
+    const aOrder = resolveEditorIndicatorOrder(a)
+    const bOrder = resolveEditorIndicatorOrder(b)
     return aOrder - bOrder || a.label.localeCompare(b.label, 'pt-BR')
   })
 }

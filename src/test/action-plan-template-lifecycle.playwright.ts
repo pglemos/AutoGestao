@@ -7,7 +7,7 @@ test.describe('biblioteca de templates do plano de ação', () => {
   test('diagnóstico de integridade é explícito e somente leitura', async ({ page }, testInfo) => {
     await loginWithCredentials(page, ADMIN_EMAIL, getE2ERolePassword())
     await page.goto('/plano-acao?mode=biblioteca')
-    await page.getByRole('tab', { name: 'Aplicações nos clientes' }).click()
+    await page.getByRole('tab', { name: 'Aplicações nos Clientes' }).click()
 
     await expect(page.getByText('Integridade das aplicações')).toBeVisible()
     await expect(page.getByText(/Nenhum plano ou rascunho é alterado automaticamente/)).toBeVisible()
@@ -22,10 +22,9 @@ test.describe('biblioteca de templates do plano de ação', () => {
 
   test('drawer expõe checklist e justificativa de reabertura sem executar mutações', async ({ page }, testInfo) => {
     await loginWithCredentials(page, ADMIN_EMAIL, getE2ERolePassword())
-    await page.goto('/plano-acao')
+    await page.goto('/plano-acao?tab=planos')
 
-    await page.getByRole('tab', { name: 'Planos da rede' }).click()
-    await expect(page.getByRole('tab', { name: 'Planos da rede' })).toHaveAttribute('aria-selected', 'true')
+    await expect(page.getByRole('button', { name: 'Nova ação' }).first()).toBeVisible()
     await page.getByLabel('Modo de visualização').selectOption('kanban')
 
     const planCards = page.locator('section[aria-label] ul li button')
@@ -76,9 +75,8 @@ test.describe('biblioteca de templates do plano de ação', () => {
 
   test('wizard aplica template pelo cliente, sem escolher loja avulsa', async ({ page }, testInfo) => {
     await loginWithCredentials(page, ADMIN_EMAIL, getE2ERolePassword())
-    await page.goto('/plano-acao?mode=biblioteca')
+    await page.goto('/plano-acao?tab=planos')
 
-    await page.getByRole('tab', { name: 'Planos da rede' }).click()
     await page.getByRole('button', { name: 'Nova ação' }).first().click()
     await page.getByRole('button', { name: /Usar Plano Padrão/ }).click()
 

@@ -31,6 +31,9 @@ test('escopo: all só consolida com mais de uma unidade', () => {
   expect(resolveOwnerPlanningScopeType(ALL_OWNER_UNITS, true)).toBe('CONSOLIDATED')
   expect(resolveOwnerPlanningScopeType(ALL_OWNER_UNITS, false)).toBe('STORE')
   expect(resolveOwnerPlanningScopeType('store-1', true)).toBe('STORE')
+  expect(resolveOwnerPlanningScopeType(undefined, true)).toBe('STORE')
+  expect(resolveOwnerPlanningScopeType(null, true)).toBe('STORE')
+  expect(resolveOwnerPlanningScopeType('', true)).toBe('STORE')
 })
 
 test('adapter força papel dono sem ampliar capacidades', () => {
