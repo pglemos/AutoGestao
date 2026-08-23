@@ -1,7 +1,8 @@
 {
   "url": "http://localhost:3457/login",
   "waitText": "Acessar sistema",
-  "assertVisible": ["#login-email"],
+  "assertVisible": ["main"],
+  "assertText": ["Planos de Ação", "na biblioteca"],
   "screenshots": ["desktop", "mobile"],
   "steps": [
     { "action": "fill", "args": ["#login-email", "synvollt@gmail.com"] },
