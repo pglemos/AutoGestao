@@ -485,9 +485,9 @@ export function applyOfficialComputedMetas<T extends {
               loja_id: unitId,
               indicator_code: code,
               month,
-              meta: field === 'meta' ? computed : null,
-              realizado: field === 'realizado' ? computed : null,
-              ano_anterior: field === 'ano_anterior' ? computed : null,
+              meta: computed,
+              realizado: null,
+              ano_anterior: null,
             } as T)
           }
         }
