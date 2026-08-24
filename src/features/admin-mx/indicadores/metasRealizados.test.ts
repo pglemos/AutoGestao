@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 import {
+  applyActualComputedPasses,
   buildMonthlyGrid,
   buildOfficialMonthlyGrid,
   readOfficialMonthValue,
@@ -260,6 +261,79 @@ describe('cadastro rápido', () => {
       { loja_id: 'u', indicator_code: 'sales_other', year: 2026, month: 1, meta: 0, realizado: null, ano_anterior: null },
     ], indicators.map(item => item.code))
     expect(readOfficialMonthValue(grid, indicators, 'sales_total', 1)).toBe(55)
+  })
+
+  test('Realizado vazio: SALES_OTHER ZERO_IF_EMPTY não inventa SALES_TOTAL=0', () => {
+    const indicators = [
+      { code: 'SALES_WALKIN' },
+      { code: 'SALES_REFERRAL' },
+      { code: 'SALES_COMPANY_PORTFOLIO' },
+      { code: 'SALES_SELLER_PORTFOLIO' },
+      { code: 'SALES_INTERNET' },
+      { code: 'SALES_OTHER' },
+      { code: 'SALES_TOTAL' },
+    ]
+    const empty = buildMonthlyGrid([], indicators.map(item => item.code))
+    expect(readOfficialMonthValue(empty, indicators, 'SALES_TOTAL', 7, 'realizado')).toBeNull()
+
+    const partial = buildMonthlyGrid([
+      { loja_id: 'u', indicator_code: 'SALES_WALKIN', year: 2026, month: 7, meta: null, realizado: 10, ano_anterior: null },
+    ], indicators.map(item => item.code))
+    expect(readOfficialMonthValue(partial, indicators, 'SALES_TOTAL', 7, 'realizado')).toBe(10)
+  })
+
+  test('SALES_TOTAL persistido=0 sem canais não vira Resultado 0', () => {
+    const indicators = [
+      { code: 'SALES_WALKIN' },
+      { code: 'SALES_REFERRAL' },
+      { code: 'SALES_COMPANY_PORTFOLIO' },
+      { code: 'SALES_SELLER_PORTFOLIO' },
+      { code: 'SALES_INTERNET' },
+      { code: 'SALES_OTHER' },
+      { code: 'SALES_TOTAL' },
+    ]
+    const stale = buildMonthlyGrid([
+      { loja_id: 'u', indicator_code: 'SALES_TOTAL', year: 2026, month: 7, meta: 8, realizado: 0, ano_anterior: null },
+    ], indicators.map(item => item.code))
+    expect(readOfficialMonthValue(stale, indicators, 'SALES_TOTAL', 7, 'realizado')).toBeNull()
+    const cleaned = applyActualComputedPasses(stale, indicators)
+    expect(cleaned.SALES_TOTAL[7].realizado).toBeNull()
+  })
+
+  test('SALES_OTHER=0 legado sem canais não inventa SALES_TOTAL=0', () => {
+    const indicators = [
+      { code: 'SALES_WALKIN' },
+      { code: 'SALES_REFERRAL' },
+      { code: 'SALES_COMPANY_PORTFOLIO' },
+      { code: 'SALES_SELLER_PORTFOLIO' },
+      { code: 'SALES_INTERNET' },
+      { code: 'SALES_OTHER' },
+      { code: 'SALES_TOTAL' },
+    ]
+    const staleOther = buildMonthlyGrid([
+      { loja_id: 'u', indicator_code: 'SALES_OTHER', year: 2026, month: 7, meta: 0, realizado: 0, ano_anterior: null },
+    ], indicators.map(item => item.code))
+    expect(readOfficialMonthValue(staleOther, indicators, 'SALES_TOTAL', 7, 'realizado')).toBeNull()
+  })
+
+  test('estoque/crédito com valor não autoriza SALES_OTHER=0 a inventar total', () => {
+    const indicators = [
+      { code: 'SALES_WALKIN' },
+      { code: 'SALES_REFERRAL' },
+      { code: 'SALES_COMPANY_PORTFOLIO' },
+      { code: 'SALES_SELLER_PORTFOLIO' },
+      { code: 'SALES_INTERNET' },
+      { code: 'SALES_OTHER' },
+      { code: 'SALES_TOTAL' },
+      { code: 'ACTIVE_INVENTORY' },
+      { code: 'APPROVED_CREDIT_APPLICATIONS' },
+    ]
+    const noisy = buildMonthlyGrid([
+      { loja_id: 'u', indicator_code: 'SALES_OTHER', year: 2026, month: 7, meta: 0, realizado: 0, ano_anterior: null },
+      { loja_id: 'u', indicator_code: 'ACTIVE_INVENTORY', year: 2026, month: 7, meta: null, realizado: 2, ano_anterior: null },
+      { loja_id: 'u', indicator_code: 'APPROVED_CREDIT_APPLICATIONS', year: 2026, month: 7, meta: null, realizado: 0, ano_anterior: null },
+    ], indicators.map(item => item.code))
+    expect(readOfficialMonthValue(noisy, indicators, 'SALES_TOTAL', 7, 'realizado')).toBeNull()
   })
 
   test('validação de células recusa mês fora do intervalo', () => {

@@ -6,7 +6,7 @@
 
 import { catalogAliasKeys, matchCanonicalIndicator, officialParameterDefaults } from './canonicalBase44Catalog'
 import { actualFormulaFor, ACTUAL_BLANK_POLICY, ACTUAL_CALCULATED, isActualCalculated } from './actualCalc'
-import { MONTHS, MONTH_LABELS, applyOfficialComputedMetas, evaluateFormula, type AnnualAggregation } from './indicatorFormulas'
+import { MONTHS, MONTH_LABELS, applyOfficialComputedMetas, evaluateFormula, extractIndicatorDeps, type AnnualAggregation } from './indicatorFormulas'
 
 export type StoreTargetValue = {
   loja_id: string
@@ -537,9 +537,7 @@ export function readOfficialMonthValue(
   if (!formula) return stored
   const flat: Record<string, number | null> = {}
   for (const indicator of indicators) {
-    let value = grid[indicator.code]?.[month]?.[field] ?? null
-    const key = matchCanonicalIndicator(indicator.code)?.code ?? indicator.code
-    if (value == null && field !== 'meta' && ACTUAL_BLANK_POLICY[key] === 'ZERO_IF_EMPTY') value = 0
+    const value = grid[indicator.code]?.[month]?.[field] ?? null
     flat[indicator.code] = value
     const canon = matchCanonicalIndicator(indicator.code)
     if (!canon) continue
@@ -547,14 +545,43 @@ export function readOfficialMonthValue(
     for (const alias of catalogAliasKeys(canon.code)) flat[alias] = value
   }
   if (field !== 'meta') {
-    for (const [policyCode, policy] of Object.entries(ACTUAL_BLANK_POLICY)) {
-      if (policy === 'ZERO_IF_EMPTY' && (flat[policyCode] == null)) flat[policyCode] = 0
+    // ZERO_IF_EMPTY só olha deps da fórmula (não o flat inteiro: estoque/crédito
+    // com valor não pode “autorizar” Outros=0 a inventar SALES_TOTAL).
+    const depCodes = extractIndicatorDeps(formula)
+    const depValue = (dep: string): number | null => {
+      const key = matchCanonicalIndicator(dep)?.code ?? dep
+      const raw = flat[dep] ?? flat[key] ?? null
+      return raw != null && Number.isFinite(raw) ? raw : null
+    }
+    const hasRealBase = depCodes.some(dep => {
+      const key = matchCanonicalIndicator(dep)?.code ?? dep
+      if (ACTUAL_BLANK_POLICY[key] === 'ZERO_IF_EMPTY') return false
+      return depValue(dep) != null
+    })
+    if (hasRealBase) {
+      for (const [policyCode, policy] of Object.entries(ACTUAL_BLANK_POLICY)) {
+        if (policy !== 'ZERO_IF_EMPTY') continue
+        if (!depCodes.some(dep => (matchCanonicalIndicator(dep)?.code ?? dep) === policyCode || dep === policyCode)) continue
+        if (flat[policyCode] != null) continue
+        flat[policyCode] = 0
+        for (const alias of catalogAliasKeys(policyCode)) {
+          if (flat[alias] == null) flat[alias] = 0
+        }
+      }
+    } else {
+      // Outros=0 legado sem canais reais da fórmula não pode virar base aditiva.
+      for (const [policyCode, policy] of Object.entries(ACTUAL_BLANK_POLICY)) {
+        if (policy !== 'ZERO_IF_EMPTY') continue
+        flat[policyCode] = null
+        for (const alias of catalogAliasKeys(policyCode)) flat[alias] = null
+      }
     }
   }
   const params = field === 'meta' ? officialParameterDefaults(month) : {}
-  const usesPar = /\bPAR\s*\(/i.test(formula)
-  const result = evaluateFormula(formula, flat, params) ?? stored
-  return result
+  const evaluated = evaluateFormula(formula, flat, params)
+  // Realizado/AA calculado: null oficial vence lixo persistido (ex.: total=0).
+  if (field !== 'meta') return evaluated
+  return evaluated ?? stored
 }
 
 /** 3 passagens topológicas (Base44) para derivados do Realizado/AA. */
@@ -570,8 +597,9 @@ export function applyActualComputedPasses(
         if (!grid[code]) continue
         for (const month of MONTHS) {
           const next = readOfficialMonthValue(grid, indicators, code, month, field)
-          if (next == null) continue
-          grid[code][month] = { ...(grid[code][month] ?? { meta: null, realizado: null, ano_anterior: null }), [field]: next }
+          const cell = grid[code][month] ?? { meta: null, realizado: null, ano_anterior: null }
+          // Sempre grava (inclui null) para limpar realizado inventado/persistido.
+          grid[code][month] = { ...cell, [field]: next }
         }
       }
     }

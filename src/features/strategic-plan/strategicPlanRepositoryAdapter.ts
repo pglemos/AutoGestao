@@ -9,6 +9,7 @@ import {
   officialCatalogOrder,
 } from '@/features/admin-mx/indicadores/canonicalBase44Catalog'
 import { buildOfficialMonthlyGrid, readOfficialMonthValue, applyActualComputedPasses } from '@/features/admin-mx/indicadores/metasRealizados'
+import { isActualCalculated } from '@/features/admin-mx/indicadores/actualCalc'
 import { planSalesOtherRepairs, repairOwnerStrategicPlanData } from './repairOwnerStrategicPlanData'
 import {
   ownerStrategicPlanQueryKey,
@@ -253,10 +254,18 @@ function hydrateOfficialComputed(seriesList: StrategicSeries[]): StrategicSeries
         return computed != null ? computed : meta
       }),
       currentValues: item.currentValues.map((current, index) => {
+        const canon = matchCanonicalIndicator(code)?.code ?? code
+        if (isActualCalculated(canon) && grid[code]?.[index + 1]) {
+          return grid[code][index + 1].realizado ?? null
+        }
         const computed = grid[code]?.[index + 1]?.realizado ?? null
         return computed != null ? computed : current
       }),
       previousYearValues: item.previousYearValues.map((previous, index) => {
+        const canon = matchCanonicalIndicator(code)?.code ?? code
+        if (isActualCalculated(canon) && grid[code]?.[index + 1]) {
+          return grid[code][index + 1].ano_anterior ?? null
+        }
         const computed = grid[code]?.[index + 1]?.ano_anterior ?? null
         return computed != null ? computed : previous
       }),
