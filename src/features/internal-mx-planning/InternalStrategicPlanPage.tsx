@@ -3,7 +3,7 @@ import { Target } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import AdminIndicadoresPage from '@/features/admin-mx/AdminIndicadoresPage'
 import AdminStrategicPlanEditor from '@/features/admin-mx/indicadores/AdminStrategicPlanEditor'
-import { MxErrorState, MxLoadingState, MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
+import { MxErrorState, MxLoadingState, MxModulePage, MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
 import { fetchCurrentCycle } from '@/features/strategic-plan/planCycleRepository'
 import { StrategicPlanWorkspace } from '@/features/strategic-plan/StrategicPlanWorkspace'
 import { AdminAsOwnerStrategicPlan } from './AdminAsOwnerStrategicPlan'
@@ -55,13 +55,17 @@ export default function InternalStrategicPlanPage() {
   }, [clientId, cycleId, location.pathname, location.search, navigate, resolveYear])
 
   // Visualizar como Dono: workspace real do Dono (shell owner), sem chrome Admin.
+  // MxModulePage nos estados locais evita o gate adopted-route-canvas seguir
+  // MxStatusBanner/MxLoadingState até MxModuleVisualPrimitives (PageCanvas interno).
   if (viewAsDono) {
     const ownerStoreId = storeId || store.selectedStoreId || null
     if (!ownerStoreId) {
       return (
-        <MxStatusBanner tone="warning">
-          Selecione uma loja (storeId) para Visualizar como Dono.
-        </MxStatusBanner>
+        <MxModulePage id="page-plano-estrategico" width="dashboard" bottomClearance="navigation">
+          <MxStatusBanner tone="warning">
+            Selecione uma loja (storeId) para Visualizar como Dono.
+          </MxStatusBanner>
+        </MxModulePage>
       )
     }
     return <AdminAsOwnerStrategicPlan storeId={ownerStoreId} year={year} />
@@ -72,27 +76,35 @@ export default function InternalStrategicPlanPage() {
   }
 
   if (clientId && resolveState === 'loading') {
-    return <MxLoadingState label="Abrindo o plano estratégico do cliente" />
+    return (
+      <MxModulePage id="page-plano-estrategico" width="dashboard" bottomClearance="navigation">
+        <MxLoadingState label="Abrindo o plano estratégico do cliente" />
+      </MxModulePage>
+    )
   }
 
   if (clientId && resolveState === 'error') {
-    return <MxErrorState description={resolveError ?? 'Não foi possível abrir o ciclo do cliente.'} retry={() => {
-      setResolveState('loading')
-      void fetchCurrentCycle(clientId, resolveYear).then(result => {
-        if (result.error) {
-          setResolveError(result.error)
-          setResolveState('error')
-          return
-        }
-        if (result.cycle) {
-          const next = new URLSearchParams(location.search)
-          next.set('cycleId', result.cycle.id)
-          navigate(`${location.pathname}?${next.toString()}`, { replace: true })
-          return
-        }
-        setResolveState('missing')
-      })
-    }} />
+    return (
+      <MxModulePage id="page-plano-estrategico" width="dashboard" bottomClearance="navigation">
+        <MxErrorState description={resolveError ?? 'Não foi possível abrir o ciclo do cliente.'} retry={() => {
+          setResolveState('loading')
+          void fetchCurrentCycle(clientId, resolveYear).then(result => {
+            if (result.error) {
+              setResolveError(result.error)
+              setResolveState('error')
+              return
+            }
+            if (result.cycle) {
+              const next = new URLSearchParams(location.search)
+              next.set('cycleId', result.cycle.id)
+              navigate(`${location.pathname}?${next.toString()}`, { replace: true })
+              return
+            }
+            setResolveState('missing')
+          })
+        }} />
+      </MxModulePage>
+    )
   }
 
   if (clientId && resolveState === 'missing') {
