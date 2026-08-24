@@ -150,6 +150,9 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
   const [parameterModal, setParameterModal] = useState<{ indicator: CatalogIndicator; parameter: IndicatorParameter | null } | null>(null)
   const [parameterPickerOpen, setParameterPickerOpen] = useState(false)
   const [dependentsFor, setDependentsFor] = useState<{ indicator: CatalogIndicator; rows: Array<{ metric_key: string; label: string }> } | null>(null)
+  const [visibilityTarget, setVisibilityTarget] = useState<{ item: CatalogIndicator; visible: boolean } | null>(null)
+  const [visibilityMotivo, setVisibilityMotivo] = useState('')
+  const [visibilityAno, setVisibilityAno] = useState(String(new Date().getFullYear()))
   const [planRows, setPlanRows] = useState<StrategicPlanAdminRow[]>([])
   const [planLoading, setPlanLoading] = useState(false)
   const [planError, setPlanError] = useState<string | null>(null)
@@ -345,11 +348,11 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
     }
   }
 
-  const updateOwnerVisibility = async (metricKey: string, visible: boolean) => {
+  const updateOwnerVisibility = async (metricKey: string, visible: boolean, audit?: { motivo: string; anoInicial: number }) => {
     if (submitting) return
     setSubmitting(true)
     try {
-      const result = await toggleOwnerVisibility(metricKey, visible)
+      const result = await toggleOwnerVisibility(metricKey, visible, audit)
       if (result.error) {
         toast.error(result.error)
         return
@@ -362,9 +365,32 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
     }
   }
 
-  const toggleVisibility = async (visible: boolean) => {
+  const confirmOwnerVisibility = async () => {
+    if (!visibilityTarget) return
+    const motivo = visibilityMotivo.trim()
+    if (!motivo) {
+      toast.error('Informe o motivo da alteração.')
+      return
+    }
+    const anoInicial = Number(visibilityAno)
+    if (!Number.isInteger(anoInicial) || anoInicial < 2000 || anoInicial > 2100) {
+      toast.error('Informe um ano inicial válido.')
+      return
+    }
+    await updateOwnerVisibility(visibilityTarget.item.metric_key, visibilityTarget.visible, { motivo, anoInicial })
+    setVisibilityTarget(null)
+    setVisibilityMotivo('')
+  }
+
+  const toggleVisibility = (visible: boolean) => {
     if (!detail) return
-    await updateOwnerVisibility(detail.metric_key, visible)
+    requestOwnerVisibility(detail, visible)
+  }
+
+  const requestOwnerVisibility = (item: CatalogIndicator, visible: boolean) => {
+    setVisibilityMotivo('')
+    setVisibilityAno(String(new Date().getFullYear()))
+    setVisibilityTarget({ item, visible })
   }
 
   const openIndicatorHistory = (indicator: CatalogIndicator) => {
@@ -635,7 +661,7 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
                     size="sm"
                     aria-label={item.visivel_dono ? 'Visível no Dono' : 'Oculto no Dono'}
                     aria-pressed={item.visivel_dono}
-                    onClick={() => void updateOwnerVisibility(item.metric_key, !item.visivel_dono)}
+                    onClick={() => requestOwnerVisibility(item, !item.visivel_dono)}
                     disabled={submitting}
                     title={item.visivel_dono ? 'Ocultar no Módulo Dono' : 'Mostrar no Módulo Dono'}
                   >
@@ -899,6 +925,68 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
             <MxStatusBanner tone="info">Indicadores que declaram este código de parâmetro na fórmula. A alteração do parâmetro impacta esses cálculos.</MxStatusBanner>
             {dependentsFor.rows.length ? <ul className="space-y-2">{dependentsFor.rows.map(item => <li key={item.metric_key} className="rounded-xl border border-border p-3"><div className="font-semibold text-foreground">{item.label}</div><div className="text-xs text-muted-foreground">{item.metric_key}</div></li>)}</ul> : <MxEmptyState variant="dataset" title="Nenhum dependente encontrado" description="Este parâmetro não está referenciado pelas fórmulas carregadas." />}
           </div> : null}
+        </Modal>
+        <Modal
+          open={Boolean(visibilityTarget)}
+          onClose={() => setVisibilityTarget(null)}
+          title={visibilityTarget?.visible ? `Reativar indicador no Módulo Dono` : 'Ocultar indicador no Módulo Dono'}
+          size="md"
+          footer={(
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setVisibilityTarget(null)}>Cancelar</Button>
+              <Button
+                variant={visibilityTarget?.visible ? 'primary' : 'danger'}
+                disabled={submitting || !visibilityMotivo.trim()}
+                onClick={() => void confirmOwnerVisibility()}
+              >
+                {visibilityTarget?.visible ? 'Confirmar reativação' : 'Confirmar ocultação'}
+              </Button>
+            </div>
+          )}
+        >
+          {visibilityTarget ? (
+            <div className="mt-5 space-y-4">
+              <MxStatusBanner tone={visibilityTarget.visible ? 'info' : 'warning'}>
+                {visibilityTarget.visible
+                  ? `O indicador ${visibilityTarget.item.label} volta a aparecer no Módulo Dono a partir do ano informado.`
+                  : 'O histórico será preservado. O indicador poderá continuar sendo utilizado em fórmulas.'}
+              </MxStatusBanner>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="block text-sm">
+                  <span className="mb-1 block font-medium text-foreground">A partir de qual ano?</span>
+                  <input
+                    type="number"
+                    min={2000}
+                    max={2100}
+                    value={visibilityAno}
+                    onChange={event => setVisibilityAno(event.target.value)}
+                    className="h-9 w-full rounded-md border border-border bg-background px-3 text-sm"
+                  />
+                </label>
+                <label className="block text-sm">
+                  <span className="mb-1 block font-medium text-foreground">Escopo</span>
+                  <select className="h-9 w-full rounded-md border border-border bg-background px-3 text-sm" disabled>
+                    <option>Todos os clientes</option>
+                  </select>
+                </label>
+              </div>
+              <label className="block text-sm">
+                <span className="mb-1 block font-medium text-foreground">Motivo obrigatório</span>
+                <textarea
+                  rows={3}
+                  value={visibilityMotivo}
+                  onChange={event => setVisibilityMotivo(event.target.value)}
+                  placeholder={visibilityTarget.visible ? 'Ex.: cliente solicitou o retorno do indicador.' : 'Ex.: indicador fora do escopo da consultoria em 2026.'}
+                  className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+                />
+              </label>
+              {visibilityTarget.visible ? (
+                <p className="text-xs text-muted-foreground">
+                  Impacto: {visibilityTarget.item.label} volta a compor os cards e a tabela mensal do Dono a partir de {visibilityAno || '—'}.
+                </p>
+              ) : null}
+            </div>
+          ) : null}
         </Modal>
         <StrategicPlanCreateModal
           open={createPlanOpen}

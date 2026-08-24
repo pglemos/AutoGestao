@@ -242,12 +242,44 @@ export async function changeIndicatorStatus(metricKey: string, status: Indicator
   return { error: error?.message ?? null }
 }
 
-export async function toggleOwnerVisibility(metricKey: string, visible: boolean): Promise<{ error: string | null }> {
+export async function toggleOwnerVisibility(
+  metricKey: string,
+  visible: boolean,
+  audit?: { motivo: string; anoInicial: number },
+): Promise<{ error: string | null }> {
+  if (audit) {
+    // Auditoria antes da mutação: falha de auditoria não pode deixar a
+    // alteração aplicada sem registro (e a UI consistente).
+    // ponytail: escopo fixo "todos os clientes"; seleção por cliente quando houver recorte por Dono
+    let userId: string | null = null
+    let userName: string | null = null
+    try {
+      const { data } = await supabase.auth.getUser()
+      userId = data.user?.id ?? null
+    } catch { /* sessão indisponível: auditoria segue sem usuário */ }
+    if (userId) {
+      const { data: profile } = await supabase.from('usuarios').select('name').eq('id', userId).maybeSingle()
+      userName = (profile as { name?: string | null } | null)?.name ?? null
+    }
+    const { error: auditError } = await supabase.from('logs_auditoria_consultoria_mx').insert({
+      action: visible ? 'indicador_reativado_dono' : 'indicador_ocultado_dono',
+      origin: 'admin-mx',
+      resource: `catalogo_metricas_consultoria:${metricKey}`,
+      user_id: userId,
+      user_name: userName,
+      value_before: visible ? 'oculto no Dono' : 'visível no Dono',
+      value_after: visible
+        ? `visível no Dono a partir de ${audit.anoInicial}`
+        : `oculto no Dono a partir de ${audit.anoInicial} — motivo: ${audit.motivo}`,
+    })
+    if (auditError) return { error: auditError.message }
+  }
   const { error } = await supabase
     .from('catalogo_metricas_consultoria')
     .update({ visivel_dono: visible, updated_at: new Date().toISOString() })
     .eq('metric_key', metricKey)
-  return { error: error?.message ?? null }
+  if (error) return { error: error.message }
+  return { error: null }
 }
 
 export async function persistIndicatorOrder(order: Array<{ metric_key: string; sort_order: number }>): Promise<{ error: string | null }> {
