@@ -211,7 +211,7 @@
 | `lancamentos_diarios` | 16 |
 | `links_autocadastro_cliente` | 1 |
 | `logs_auditoria` | 2 |
-| `logs_auditoria_consultoria_mx` | 2 |
+| `logs_auditoria_consultoria_mx` | 3 |
 | `logs_auditoria_loja` | 2 |
 | `logs_compartilhamento_whatsapp` | 1 |
 | `logs_reprocessamento` | 1 |
@@ -301,7 +301,7 @@
 | `universidade_certificacoes` | 1 |
 | `universidade_trilhas` | 1 |
 | `user_roles` | 1 |
-| `usuarios` | 28 |
+| `usuarios` | 29 |
 | `valores_indicadores_planejamento` | 2 |
 | `valores_indicadores_planejamento_vigentes` | 4 |
 | `valores_parametros_consultoria` | 3 |
@@ -481,7 +481,7 @@
 | `links_autocadastro_cliente:insert` | 1 |
 | `links_autocadastro_cliente:select` | 1 |
 | `links_autocadastro_cliente:update` | 1 |
-| `logs_auditoria_consultoria_mx:insert` | 1 |
+| `logs_auditoria_consultoria_mx:insert` | 2 |
 | `logs_auditoria_consultoria_mx:select` | 2 |
 | `logs_auditoria_loja:insert` | 1 |
 | `logs_auditoria_loja:select` | 1 |
@@ -664,7 +664,7 @@
 | `user_roles:update` | 1 |
 | `usuarios:delete` | 2 |
 | `usuarios:insert` | 1 |
-| `usuarios:select` | 25 |
+| `usuarios:select` | 26 |
 | `usuarios:update` | 6 |
 | `usuarios:upsert` | 1 |
 | `valores_indicadores_planejamento_vigentes:select` | 4 |
