@@ -10,24 +10,14 @@ import { duration, easing } from '@/design/motion'
 import type { RankingEntry } from '@/types/database'
 import type { ViewMode } from '../hooks/useDashboardLojaData'
 import { supabase } from '@/lib/supabase'
+import {
+  filterOfficialSellerSales,
+  getOfficialSaleCompetence,
+  getPeriodEndExclusive,
+  type OfficialSellerSale,
+} from '../lib/official-seller-sales'
 
 type StoreRankingEntry = RankingEntry & { id: string }
-
-type SellerSaleEvent = {
-  id: string
-  data_competencia: string | null
-  data_evento: string
-  canal: string | null
-  oportunidade_id: string | null
-  oportunidade?: {
-    etapa: string | null
-    valor_negociado: number | null
-    veiculo_interesse: string | null
-    placa_veiculo: string | null
-    tipo_veiculo: string | null
-    cliente_nome: string | null
-  }
-}
 
 type RankingSectionProps = {
   viewMode: ViewMode
@@ -74,7 +64,7 @@ function SellerDetailModal({
   periodEnd: string
   onClose: () => void
 }) {
-  const [sales, setSales] = useState<SellerSaleEvent[]>([])
+  const [sales, setSales] = useState<OfficialSellerSale[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -83,6 +73,7 @@ function SellerDetailModal({
     setLoading(true)
     setError(null)
     try {
+      const periodEndExclusive = getPeriodEndExclusive(periodEnd)
       const { data, error: fetchErr } = await supabase
         .from('eventos_comerciais')
         .select(`
@@ -93,6 +84,8 @@ function SellerDetailModal({
           oportunidade_id,
           oportunidades (
             etapa,
+            data_competencia,
+            sale_date,
             valor_negociado,
             veiculo_interesse,
             placa_veiculo,
@@ -103,13 +96,12 @@ function SellerDetailModal({
         .eq('seller_user_id', seller.user_id)
         .eq('loja_id', storeId)
         .eq('tipo_evento', 'venda_realizada')
-        .gte('data_evento', `${periodStart}T00:00:00.000Z`)
-        .lte('data_evento', `${periodEnd}T23:59:59.999Z`)
+        .or(`and(data_competencia.gte.${periodStart},data_competencia.lte.${periodEnd}),and(data_competencia.is.null,data_evento.gte.${periodStart}T00:00:00-03:00,data_evento.lt.${periodEndExclusive})`)
         .order('data_evento', { ascending: false })
 
       if (fetchErr) { setError(fetchErr.message); return }
 
-      const mapped: SellerSaleEvent[] = (data || []).map((row: Record<string, unknown>) => {
+      const mapped: OfficialSellerSale[] = (data || []).map((row: Record<string, unknown>) => {
         const op = row.oportunidades as Record<string, unknown> | null
         const cliente = op ? (op.clientes as Record<string, unknown> | null) : null
         return {
@@ -120,6 +112,8 @@ function SellerDetailModal({
           oportunidade_id: row.oportunidade_id as string | null,
           oportunidade: op ? {
             etapa: op.etapa as string | null,
+            data_competencia: op.data_competencia as string | null,
+            sale_date: op.sale_date as string | null,
             valor_negociado: Number(op.valor_negociado) || null,
             veiculo_interesse: op.veiculo_interesse as string | null,
             placa_veiculo: op.placa_veiculo as string | null,
@@ -128,7 +122,7 @@ function SellerDetailModal({
           } : undefined,
         }
       })
-      setSales(mapped)
+      setSales(filterOfficialSellerSales(mapped, periodStart, periodEnd))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao carregar vendas')
     } finally {
@@ -181,8 +175,7 @@ function SellerDetailModal({
         ) : (
           <div className="divide-y divide-border-subtle overflow-hidden rounded-xl border border-border-subtle">
             {sales.map((sale, i) => {
-              const competencia = sale.data_competencia
-                || new Date(sale.data_evento).toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' })
+              const competencia = getOfficialSaleCompetence(sale)
               return (
                 <div key={sale.id} className="flex items-start gap-3 px-4 py-3 hover:bg-surface-alt transition-colors">
                   <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-status-success-surface text-xs font-bold text-status-success-text mt-0.5">

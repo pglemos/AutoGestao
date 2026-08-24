@@ -246,6 +246,14 @@ Claude (sessão contínua — @dev/@sm/@po atuando como o mesmo agente, ver ARCH
 - `src/hooks/checkins/types.ts` — nova `isAfterAgendaD1SnapshotCutoff` (exportada).
 - `src/hooks/checkins/types.test.ts` — testes para `isAfterAgendaD1SnapshotCutoff`.
 
+**Adendo 2026-08-24 — contabilização canônica do ranking mensal:**
+- `src/features/dashboard-loja/lib/official-seller-sales.ts` e `.test.ts` — competência canônica, exclusão de canceladas/sem competência e deduplicação por oportunidade no modal.
+- `src/features/dashboard-loja/sections/RankingSection.tsx` e `.contract.test.tsx` — modal alinhado ao mesmo período e read model oficial.
+- `src/api/base44Client.js`, `src/features/carteira-clientes/lib/installCarteiraBase44Adapter.js` e `.test.ts` — propagação de `data_competencia` nos dois fluxos de venda.
+- `src/lib/ranking-canonical-sales-migration.test.ts` e `supabase/migrations/20260824173308_fix_ranking_canonical_sales_dedup.sql` — fonte canônica deduplicada compartilhada por Ranking, Performance, Overview, Metas e Base44.
+- `supabase/migrations/20260824182000_harden_ranking_canonical_sales_security.sql` — hardening pós-aplicação dos RPCs e autenticação do overview; aplicado no Supabase remoto.
+- `src/types/database.generated.ts` e `supabase/migrations/.migration-checksums.json` — contrato RPC e manifesto forward-only atualizados.
+
 ## QA Results
 
 **Gate: CONCERNS** — `docs/qa/gates/MX-22.5-closing-managerial-integration.yml`
@@ -260,3 +268,10 @@ Claude (sessão contínua — @dev/@sm/@po atuando como o mesmo agente, ver ARCH
 7. **Documentação** — OK. Dev Notes documentam as duas decisões de arquitetura auto-tomadas (ARCH-002) e o gap de UI (AGENDA-D1-UI-GAP) explicitamente, sem silenciar nenhum dos três achados.
 
 **Decisão:** CONCERNS → Done. Nenhum dos 3 issues é uma regressão ou um AC falso silenciado — todos documentados e rastreáveis, mesmo padrão já aplicado em 22.2/22.3/22.4 desta epic. REL-001 é o único de severidade alta, mas seu tratamento (ação de infra paralela) já foi decidido explicitamente por @po no Change Log v1.1.
+
+### Adendo QA 2026-08-24 — ranking mensal da Vitrine
+
+- **Reprodução remota:** vendedor da loja VITRINE - TIROL tinha 21 eventos `venda_realizada`; o read model canônico retorna 8 oportunidades distintas para `2026-08-01`–`2026-08-24` e também 8 no mês completo de agosto, com competências `2026-08-03` a `2026-08-18`.
+- **Banco:** `20260824182000_harden_ranking_canonical_sales_security.sql` e o follow-up `20260824193000_harden_vendedor_performance_anon_privilege.sql` aplicados; RPCs canônicos com `search_path = public, pg_temp`, execução negada a `anon` e permitida a `authenticated`; `admin_store_live_overview` sem autenticação rejeita com `Não autenticado.`.
+- **Gates locais:** testes focados 17/17; suíte completa 4.394 pass/0 fail; typecheck, build e lint sem erros (2 warnings preexistentes). CodeRabbit sem finding bloqueante; dois findings minor foram corrigidos/isolados em migrations forward-only e documentação anonimizada.
+- **Decisão deste adendo:** PASS para a correção de contabilização mensal; as preocupações históricas da story permanecem documentadas acima e não são reclassificadas por este adendo.

@@ -1426,6 +1426,7 @@ export const base44 = {
           canal: data.canal || null,
           modalidade: data.modalidade || null,
           data_evento: data.data_hora_evento || new Date().toISOString(),
+          data_competencia: data.data_competencia || data.sale_date || data.data_venda || null,
           origem_modulo: 'crm',
           observacao: data.observacao || ''
         };

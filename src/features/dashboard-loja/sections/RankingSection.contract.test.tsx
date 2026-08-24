@@ -6,12 +6,14 @@ import type { RankingEntry } from '@/types/database'
 import type { ViewMode } from '../hooks/useDashboardLojaData'
 
 let saleResult: { data: Record<string, unknown>[] | null; error: { message: string } | null } = { data: [], error: null }
+let lastSalesOrFilter = ''
 
 const salesBuilder = {
   select: () => salesBuilder,
   eq: () => salesBuilder,
   gte: () => salesBuilder,
   lte: () => salesBuilder,
+  or: (filter: string) => { lastSalesOrFilter = filter; return salesBuilder },
   order: async () => saleResult,
 }
 
@@ -66,6 +68,7 @@ describe('contrato RankingSection — modal canônico (C4-2)', () => {
   beforeEach(() => {
     cleanup()
     saleResult = { data: [], error: null }
+    lastSalesOrFilter = ''
   })
   afterEach(() => cleanup())
 
@@ -91,6 +94,7 @@ describe('contrato RankingSection — modal canônico (C4-2)', () => {
     expect(within(dialog).getByText('Leads')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Fechar modal' })).toHaveClass('mx-overlay-close')
     await waitFor(() => expect(within(dialog).getByText('Vendas registradas (0)')).toBeInTheDocument())
+    expect(lastSalesOrFilter).toContain('data_competencia.is.null,data_evento.gte.2026-08-01T00:00:00-03:00,data_evento.lt.2026-08-13T03:00:00.000Z')
   })
 
   it('renderiza a lista de vendas retornada pelo supabase', async () => {

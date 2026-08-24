@@ -26,6 +26,8 @@ describe('Fluxo de Venda Realizada e Transição para Compraram', () => {
     expect(payload.veiculo_comprado).toBe('T-CROSS HIGHLINE 2024')
     expect(payload.placa_veiculo).toBe('ABC1D23')
     expect(payload.data_venda).toBe('2026-08-17')
+    expect(payload.data_competencia).toBe('2026-08-17')
+    expect(payload.evento_metadata.data_competencia).toBe('2026-08-17')
     expect(payload.etapa).toBe('ganho')
     expect(payload.cliente_status).toBe('pos_venda')
     expect(payload.tipo_evento).toBe('venda_realizada')

@@ -228,6 +228,7 @@ export function buildRpcPayload(data, clientId, executionContext) {
   payload.evento_observacao = history?.descricao || data.evento_observacao || (clientId ? 'Carteira atualizada.' : 'Cliente incluído na carteira.')
   payload.evento_metadata = {
     origem: 'base44_1to1_adapter',
+    data_competencia: saleCompetence ?? null,
     situacao_atual: data.situacao_atual ?? data.momento ?? null,
     status_comercial: data.status_comercial ?? null,
     temperatura: data.temperatura ?? null,

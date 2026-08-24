@@ -19154,6 +19154,21 @@ export type Database = {
         Args: { p_competencia_id: string }
         Returns: Json
       }
+      get_vendas_oficiais_periodo: {
+        Args: {
+          p_end_date: string
+          p_seller_id?: string
+          p_start_date: string
+          p_store_id?: string
+        }
+        Returns: {
+          competencia: string
+          faturamento: number
+          seller_user_id: string
+          store_id: string
+          vendas: number
+        }[]
+      }
       get_user_agency_id: { Args: never; Returns: string }
       has_store_role: {
         Args: { p_roles: string[]; p_store_id: string }
@@ -20073,6 +20088,30 @@ export type Database = {
       validar_ciclo_plano_estrategico: {
         Args: { p_cycle_id: string }
         Returns: Json
+      }
+      venda_competencia_canonica: {
+        Args: {
+          p_evento_competencia: string
+          p_oportunidade_competencia: string
+          p_sale_date: string
+        }
+        Returns: string
+      }
+      vendas_oficiais_deduplicadas_periodo: {
+        Args: {
+          p_end_date: string
+          p_seller_id?: string
+          p_start_date: string
+          p_store_id?: string
+        }
+        Returns: {
+          competencia: string
+          evento_id: string
+          oportunidade_id: string
+          seller_user_id: string
+          store_id: string
+          valor_negociado: number
+        }[]
       }
       vendedor_atualizar_pdi_acao: {
         Args: {
