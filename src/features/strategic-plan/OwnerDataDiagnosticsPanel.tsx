@@ -8,6 +8,7 @@ import { ALL_OWNER_UNITS } from '@/components/owner/ownerPlanningAdapter'
 import { supabase } from '@/lib/supabase'
 import {
   buildOwnerFieldRows,
+  resolveAdminStoreDiagnosticSides,
   type DiagnosticValueSide,
   type OwnerDiagnosticContext,
 } from './ownerDataDiagnostics'
@@ -30,27 +31,28 @@ async function fetchAdminStoreCell(input: {
     .select('indicator_code,month,meta,realizado,ano_anterior,loja_id')
     .eq('loja_id', input.storeId)
     .eq('year', input.year)
-    .eq('month', input.month)
-    .eq('indicator_code', input.indicatorCode)
-    .maybeSingle()
 
-  if (error || !data) {
+  if (error) {
     return { META: null, REALIZADO: null, ANO_ANTERIOR: null }
   }
 
-  const base = {
-    sourceEntity: 'valores_indicadores_planejamento_vigentes',
-    sourceRecordId: `${data.loja_id}:${data.indicator_code}:${data.month}`,
-    sourceStoreId: String(data.loja_id),
-    sourceScopeType: 'STORE',
-    sourceYear: input.year,
-    sourceMonth: input.month,
-  }
-  return {
-    META: { ...base, value: data.meta == null ? null : Number(data.meta) },
-    REALIZADO: { ...base, value: data.realizado == null ? null : Number(data.realizado) },
-    ANO_ANTERIOR: { ...base, value: data.ano_anterior == null ? null : Number(data.ano_anterior) },
-  }
+  const rows = (data ?? []).map(row => ({
+    loja_id: String(row.loja_id ?? input.storeId),
+    indicator_code: String(row.indicator_code),
+    year: input.year,
+    month: Number(row.month),
+    meta: row.meta == null ? null : Number(row.meta),
+    realizado: row.realizado == null ? null : Number(row.realizado),
+    ano_anterior: row.ano_anterior == null ? null : Number(row.ano_anterior),
+  }))
+
+  return resolveAdminStoreDiagnosticSides({
+    rows,
+    storeId: input.storeId,
+    year: input.year,
+    month: input.month,
+    indicatorCode: input.indicatorCode,
+  })
 }
 
 /** Painel temporário Etapa A — só Admin MX / Geral. Zero writes. */

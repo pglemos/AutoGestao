@@ -1,5 +1,15 @@
 /** Diagnóstico read-only Admin↔Dono — não altera dados. */
 
+import {
+  OFFICIAL_CODES_BY_ORDER,
+  matchCanonicalIndicator,
+} from '@/features/admin-mx/indicadores/canonicalBase44Catalog'
+import {
+  applyActualComputedPasses,
+  buildOfficialMonthlyGrid,
+  type StoreTargetValue,
+} from '@/features/admin-mx/indicadores/metasRealizados'
+
 export type DiagnosticSituation =
   | 'IGUAL'
   | 'FONTE DIFERENTE'
@@ -43,7 +53,10 @@ export function compareDiagnosticValues(input: {
   admin: DiagnosticValueSide | null
   owner: DiagnosticValueSide
 }): DiagnosticSituation {
-  if (!input.admin) return 'VALOR AUSENTE'
+  // Sem registro Admin ≡ valor null (ex.: calculado só na grade / realizado vazio).
+  if (!input.admin) {
+    return input.owner.value == null ? 'IGUAL' : 'VALOR AUSENTE'
+  }
   if (input.admin.sourceYear !== input.owner.sourceYear || input.admin.sourceMonth !== input.owner.sourceMonth) {
     return 'COMPETÊNCIA DIFERENTE'
   }
@@ -56,6 +69,37 @@ export function compareDiagnosticValues(input: {
   if (a == null || b == null) return 'VALOR AUSENTE'
   if (Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) < 1e-6) return 'IGUAL'
   return 'FONTE DIFERENTE'
+}
+
+/** Mesma grade oficial do editor Admin (meta calculada + realizado/AA). */
+export function resolveAdminStoreDiagnosticSides(input: {
+  rows: StoreTargetValue[]
+  storeId: string
+  year: number
+  month: number
+  indicatorCode: string
+}): Partial<Record<'META' | 'REALIZADO' | 'ANO_ANTERIOR', DiagnosticValueSide | null>> {
+  const code = matchCanonicalIndicator(input.indicatorCode)?.code ?? input.indicatorCode
+  const indicators = OFFICIAL_CODES_BY_ORDER.map(item => ({
+    code: item,
+    formula_expression: matchCanonicalIndicator(item)?.formula_expression ?? null,
+  }))
+  let grid = buildOfficialMonthlyGrid(input.rows, indicators, input.storeId)
+  grid = applyActualComputedPasses(grid, indicators)
+  const cell = grid[code]?.[input.month] ?? { meta: null, realizado: null, ano_anterior: null }
+  const base = {
+    sourceEntity: 'admin_official_monthly_grid',
+    sourceRecordId: `${input.storeId}:${code}:${input.month}`,
+    sourceStoreId: input.storeId,
+    sourceScopeType: 'STORE' as const,
+    sourceYear: input.year,
+    sourceMonth: input.month,
+  }
+  return {
+    META: { ...base, value: cell.meta },
+    REALIZADO: { ...base, value: cell.realizado },
+    ANO_ANTERIOR: { ...base, value: cell.ano_anterior },
+  }
 }
 
 export function ownerSideFromSeries(input: {

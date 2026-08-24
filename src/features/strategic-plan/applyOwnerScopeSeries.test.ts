@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest'
 import { applyConsolidatedToSeries, resolveOwnerScopedSeries } from './applyOwnerScopeSeries'
 import type { StrategicSeries } from './strategicPlan.types'
 import type { ConsolidatedClientPlanning } from './clientPlanningConsolidation'
-import { compareDiagnosticValues, buildOwnerFieldRows } from './ownerDataDiagnostics'
+import { compareDiagnosticValues, buildOwnerFieldRows, resolveAdminStoreDiagnosticSides } from './ownerDataDiagnostics'
 
 function emptySeries(code: string, targets: Array<number | null>): StrategicSeries {
   const empty = Array.from({ length: 12 }, () => null as number | null)
@@ -86,6 +86,28 @@ describe('ownerDataDiagnostics', () => {
       admin: { ...owner, sourceMonth: 8 },
       owner,
     })).toBe('COMPETÊNCIA DIFERENTE')
+    expect(compareDiagnosticValues({ admin: null, owner: { ...owner, value: null } })).toBe('IGUAL')
+    expect(compareDiagnosticValues({ admin: null, owner })).toBe('VALOR AUSENTE')
+  })
+
+  test('resolveAdminStoreDiagnosticSides calcula SALES_TOTAL a partir dos canais', () => {
+    const sides = resolveAdminStoreDiagnosticSides({
+      storeId: 's1',
+      year: 2026,
+      month: 7,
+      indicatorCode: 'SALES_TOTAL',
+      rows: [{
+        loja_id: 's1',
+        indicator_code: 'SALES_WALKIN',
+        year: 2026,
+        month: 7,
+        meta: 8,
+        realizado: null,
+        ano_anterior: null,
+      }],
+    })
+    expect(sides.META?.value).toBe(8)
+    expect(sides.REALIZADO?.value).toBeNull()
   })
 
   test('buildOwnerFieldRows monta META/REALIZADO/AA', () => {

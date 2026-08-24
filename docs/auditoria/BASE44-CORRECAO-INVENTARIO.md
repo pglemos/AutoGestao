@@ -167,3 +167,9 @@ Resumo: **33 DONE**, **0 PARTIAL**; 0 BLOCKED. P33+P05+P25 bb88b1.
 - Correção: herdar só `sourceMetricCode`/`sourceId`; nunca `target`/`current`/`AA` do legado.
 - Evidência Visão Dono AG: Matriz Meta 8/13 + Resultado Sem resultado; 3 PISO Meta —; Consolidado Parcial 1/3.
 
+## G01 Diagnóstico Admin↔Dono (2026-08-24)
+
+- Causa: painel lia só linha bruta `SALES_TOTAL` em vigentes → Meta Admin `—` com Dono `8` (calculado dos canais).
+- Correção: `resolveAdminStoreDiagnosticSides` usa a mesma grade oficial (`buildOfficialMonthlyGrid` + `applyActualComputedPasses`); `admin` ausente + owner null = IGUAL.
+- Evidência AG Matriz Jul `SALES_TOTAL`: META 8=8 IGUAL; REALIZADO —=— IGUAL; fonte Admin `admin_official_monthly_grid`.
+
