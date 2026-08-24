@@ -76,7 +76,11 @@ export function IndicatorPicker(props: {
         {selected ? selected.label : props.placeholder}
       </button>
       {open && !props.disabled ? (
-        <div className="absolute left-0 right-0 z-[var(--mx-z-popover)] mt-1 max-h-64 overflow-y-auto rounded-lg border border-border bg-background shadow-lg">
+        <div
+          role="listbox"
+          aria-label={props['aria-label']}
+          className="absolute left-0 right-0 z-[var(--mx-z-popover)] mt-1 max-h-64 overflow-y-auto rounded-lg border border-border bg-background shadow-lg"
+        >
           <div className="border-b border-border p-2">
             <input
               type="text"
