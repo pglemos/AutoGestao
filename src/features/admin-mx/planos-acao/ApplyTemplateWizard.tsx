@@ -229,7 +229,9 @@ export function ApplyTemplateWizard(props: {
       toast.success(
         result.replayed
           ? 'Aplicação já confirmada. Nenhum plano foi duplicado.'
-          : `${result.created} plano(s) criado(s) em ${targetUnits.length} unidade(s) do cliente.`,
+          : scopeMode === 'cliente'
+            ? `Aplicação registrada no cliente · ${result.created} plano(s) materializado(s) em ${targetUnits.length} unidade(s).`
+            : `${result.created} plano(s) criado(s) na unidade selecionada.`,
       )
       props.onCreated()
       props.onClose()

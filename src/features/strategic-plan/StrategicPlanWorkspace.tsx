@@ -194,7 +194,7 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
         ) : null}
 
         {controller.tab === 'visao-geral' ? (
-          <section id="spe-tab-panel-visao-geral" role="tabpanel" aria-label="Visão Geral">
+          <section id="spe-tab-panel-visao-geral" role="tabpanel" aria-label="Visão do Plano">
             <StrategicPlanOverview
             repository={controller.repository}
             series={controller.series}

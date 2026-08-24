@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+console.warn('[editor-module-loaded] v2')
 import {
   ArrowLeft,
   CheckCircle2,
@@ -331,7 +332,6 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
       currentField,
     )
   }
-
 
   useEffect(() => {
     if (!data || field === 'meta') return

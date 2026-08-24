@@ -1,5 +1,5 @@
-import { Fragment, useMemo, useState } from 'react'
-import { CheckCircle2, ChevronRight, Globe, ShoppingCart, Store, Users } from 'lucide-react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
+import { CheckCircle2, ChevronRight, Globe, ShoppingCart, Sparkles, Store, Users } from 'lucide-react'
 import type { NumericCheckinField } from '../hooks/useCheckinPage'
 import { chartTokens } from "@/lib/charts/tokens"
 
@@ -66,7 +66,23 @@ function clampCounter(value: number): number {
   return Math.min(999, Math.max(0, value))
 }
 
-function StepperInput({ label, value, onDecrement, onIncrement, onSet, disabled }: { label: string; value: number; onDecrement: () => void; onIncrement: () => void; onSet: (v: number) => void; disabled?: boolean }) {
+function StepperInput({
+  label,
+  value,
+  onDecrement,
+  onIncrement,
+  onSet,
+  onEnter,
+  disabled,
+}: {
+  label: string
+  value: number
+  onDecrement: () => void
+  onIncrement: () => void
+  onSet: (v: number) => void
+  onEnter?: () => void
+  disabled?: boolean
+}) {
   const [inputVal, setInputVal] = useState<string | null>(null)
 
   const commit = () => {
@@ -107,19 +123,20 @@ function StepperInput({ label, value, onDecrement, onIncrement, onSet, disabled 
         onChange={event => {
           const digits = event.target.value.replace(/\D/g, '')
           setInputVal(digits)
-          // Propaga já durante a digitação: o autosave só enxerga o que chega
-          // ao formulário, e esperar o blur significava perder o número de
-          // quem digita e fecha a aba. O campo vazio continua sendo estado
-          // local até o blur, para não virar 0 a cada backspace.
           if (digits !== '' && !disabled) {
             const parsed = parseInt(digits, 10)
             if (!Number.isNaN(parsed)) onSet(Math.min(999, Math.max(0, parsed)))
           }
         }}
         onBlur={commit}
-        onKeyDown={event => { if (event.key === 'Enter' || event.key === 'Tab') commit() }}
-        // O rótulo existe visualmente no <span> do FieldRow, mas nada o
-        // associava a este campo: um leitor de tela anunciava só "editar texto".
+        onKeyDown={event => {
+          if (event.key === 'Enter') {
+            commit()
+            onEnter?.()
+          } else if (event.key === 'Tab') {
+            commit()
+          }
+        }}
         aria-label={label}
         className="h-full min-w-0 flex-1 border-none bg-transparent text-center text-[16px] font-bold tabular-nums text-foreground outline-none"
       />
@@ -137,16 +154,33 @@ function StepperInput({ label, value, onDecrement, onIncrement, onSet, disabled 
   )
 }
 
-function FieldRow({ label, value, onDecrement, onIncrement, onSet, disabled }: { label: string; value: number; onDecrement: () => void; onIncrement: () => void; onSet: (v: number) => void; disabled?: boolean }) {
+function FieldRow({
+  label,
+  value,
+  onDecrement,
+  onIncrement,
+  onSet,
+  onEnter,
+  disabled,
+}: {
+  label: string
+  value: number
+  onDecrement: () => void
+  onIncrement: () => void
+  onSet: (v: number) => void
+  onEnter?: () => void
+  disabled?: boolean
+}) {
   return (
     <div className="flex items-center justify-between gap-3">
       <span className={`min-w-0 flex-1 text-body-sm font-semibold leading-tight ${disabled ? 'text-text-disabled' : 'text-muted-foreground'}`}>{label}</span>
       <div className="w-[140px] shrink-0">
-        <StepperInput label={label} value={value} onDecrement={onDecrement} onIncrement={onIncrement} onSet={onSet} disabled={disabled} />
+        <StepperInput label={label} value={value} onDecrement={onDecrement} onIncrement={onIncrement} onSet={onSet} onEnter={onEnter} disabled={disabled} />
       </div>
     </div>
   )
 }
+
 
 function BackButton({ onGoBack }: { onGoBack?: () => void }) {
   if (!onGoBack) return null
@@ -280,6 +314,19 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
     if (prev) setCurrentStep(prev)
   }
 
+  // Atalhos de teclado 1-4 para navegação rápida entre canais quando fora de inputs
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (['INPUT', 'SELECT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) return
+      if (e.key === '1') setCurrentStep('showroom')
+      else if (e.key === '2') setCurrentStep('carteira')
+      else if (e.key === '3') setCurrentStep('internet')
+      else if (e.key === '4') setCurrentStep('vendas')
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
   const totalPct = STEPS.reduce((acc, s) => (completedSteps.has(s.id) ? acc + s.pct : acc), 0)
   const progressColor = totalPct === 100 ? 'bg-brand-primary' : totalPct >= 70 ? 'bg-status-info' : totalPct >= 40 ? 'bg-orange-400' : 'bg-muted'
 
@@ -342,6 +389,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
               onDecrement={() => updateField('visitas_porta', clampCounter(visitasPorta - 1))}
               onIncrement={() => updateField('visitas_porta', clampCounter(visitasPorta + 1))}
               onSet={v => updateField('visitas_porta', clampCounter(v))}
+              onEnter={() => !disabled && handleConfirm('showroom')}
               disabled={disabled}
             />
           </div>
@@ -371,7 +419,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
             <FieldRow label="Leads recebidos" value={leadsCart} onDecrement={() => updateField('leads_cart', clampCounter(leadsCart - 1))} onIncrement={() => updateField('leads_cart', clampCounter(leadsCart + 1))} onSet={v => updateField('leads_cart', clampCounter(v))} disabled={disabled} />
             <FieldRow label="Atendimentos realizados" value={visitasCart} onDecrement={() => updateField('visitas_cart', clampCounter(visitasCart - 1))} onIncrement={() => updateField('visitas_cart', clampCounter(visitasCart + 1))} onSet={v => updateField('visitas_cart', clampCounter(v))} disabled={disabled} />
             {!disabled ? (
-              <FieldRow label="Agendamentos D+1" value={agdCart} onDecrement={() => updateField('agd_cart', clampCounter(agdCart - 1))} onIncrement={() => updateField('agd_cart', clampCounter(agdCart + 1))} onSet={v => updateField('agd_cart', clampCounter(v))} disabled={false} />
+              <FieldRow label="Agendamentos D+1" value={agdCart} onDecrement={() => updateField('agd_cart', clampCounter(agdCart - 1))} onIncrement={() => updateField('agd_cart', clampCounter(agdCart + 1))} onSet={v => updateField('agd_cart', clampCounter(v))} onEnter={() => !disabled && handleConfirm('carteira')} disabled={false} />
             ) : (
               <div className="flex items-center justify-between gap-3">
                 <span className="flex-1 text-body-sm font-semibold text-muted-foreground">Agendamentos D+1 ativos</span>
@@ -407,7 +455,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
             <FieldRow label="Leads recebidos" value={leadsNet} onDecrement={() => updateField('leads_net', clampCounter(leadsNet - 1))} onIncrement={() => updateField('leads_net', clampCounter(leadsNet + 1))} onSet={v => updateField('leads_net', clampCounter(v))} disabled={disabled} />
             <FieldRow label="Atendimentos realizados" value={visitasNet} onDecrement={() => updateField('visitas_net', clampCounter(visitasNet - 1))} onIncrement={() => updateField('visitas_net', clampCounter(visitasNet + 1))} onSet={v => updateField('visitas_net', clampCounter(v))} disabled={disabled} />
             {!disabled ? (
-              <FieldRow label="Agendamentos D+1" value={agdNet} onDecrement={() => updateField('agd_net', clampCounter(agdNet - 1))} onIncrement={() => updateField('agd_net', clampCounter(agdNet + 1))} onSet={v => updateField('agd_net', clampCounter(v))} disabled={false} />
+              <FieldRow label="Agendamentos D+1" value={agdNet} onDecrement={() => updateField('agd_net', clampCounter(agdNet - 1))} onIncrement={() => updateField('agd_net', clampCounter(agdNet + 1))} onSet={v => updateField('agd_net', clampCounter(v))} onEnter={() => !disabled && handleConfirm('internet')} disabled={false} />
             ) : (
               <div className="flex items-center justify-between gap-3">
                 <span className="flex-1 text-body-sm font-semibold text-muted-foreground">Agendamentos D+1 ativos</span>
@@ -439,6 +487,16 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
             </div>
           </div>
           <p className="text-[12px] text-muted-foreground">{vendasMsg}</p>
+
+          {/* Dica amigável de disciplina */}
+          <div className="rounded-xl border border-status-info/20 bg-status-info-surface/60 p-3.5 space-y-1">
+            <p className="text-caption font-bold text-status-info-text uppercase tracking-wider flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-status-info-text" /> Pontuação de Disciplina
+            </p>
+            <p className="text-caption text-foreground leading-snug">
+              Preencher os números dos canais garante <strong>70% de disciplina</strong>. Detalhar seus agendamentos para amanhã através do botão <strong>+ Novo Registro</strong> destrava os <strong>30% restantes</strong> para alcançar a pontuação máxima de <strong>100%</strong>!
+            </p>
+          </div>
         </div>
       )}
     </div>

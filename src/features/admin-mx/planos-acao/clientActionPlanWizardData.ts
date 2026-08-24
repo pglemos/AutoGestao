@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase'
 import { fetchClientProductPackage, fetchClientUnits } from '@/features/strategic-plan/clientPlanningRepository'
 import { BASE44_STANDARD_INDICATORS, matchCanonicalIndicator, officialDefinitionDirection, officialDefinitionUnit } from '../indicadores/canonicalBase44Catalog'
+import { excludeBranchClients } from '../clientes/clientPortfolio'
 
 /**
  * Acesso a dados do wizard de plano por cliente. Os dados de apoio vêm das
@@ -12,6 +13,7 @@ export type WizardClient = {
   id: string
   name: string
   status: string
+  primary_store_id?: string | null
 }
 
 export type WizardStore = {
@@ -34,14 +36,42 @@ export type WizardResponsible = {
   role: string
 }
 
+/** Só contas-cliente (matriz). Filiais importadas como cliente ficam fora — escopo de loja é o passo Escopo. */
 export async function fetchWizardClients(): Promise<{ rows: WizardClient[]; error: string | null }> {
-  const { data, error } = await supabase
-    .from('clientes_consultoria')
-    .select('id, name, status')
-    .order('name', { ascending: true })
-    .limit(200)
-  if (error) return { rows: [], error: error.message }
-  return { rows: (data ?? []).map(client => ({ id: client.id, name: client.name, status: client.status })), error: null }
+  const [clientsResult, lojasResult] = await Promise.all([
+    supabase
+      .from('clientes_consultoria')
+      .select('id, name, status, primary_store_id')
+      .neq('status', 'arquivado')
+      .order('name', { ascending: true })
+      .limit(200),
+    supabase
+      .from('lojas')
+      .select('id, parent_loja_id')
+      .limit(2000),
+  ])
+  if (clientsResult.error) return { rows: [], error: clientsResult.error.message }
+  if (lojasResult.error) return { rows: [], error: lojasResult.error.message }
+
+  const clients = (clientsResult.data ?? []).map(client => ({
+    id: client.id,
+    name: client.name,
+    status: client.status,
+    primary_store_id: client.primary_store_id ?? null,
+  }))
+  const lojas = (lojasResult.data ?? []).map(loja => ({
+    id: loja.id,
+    parent_loja_id: loja.parent_loja_id ?? null,
+  }))
+
+  const rows = excludeBranchClients(clients, lojas).map(client => ({
+    id: client.id,
+    name: client.name,
+    status: client.status,
+    primary_store_id: client.primary_store_id,
+  }))
+
+  return { rows, error: null }
 }
 
 /**

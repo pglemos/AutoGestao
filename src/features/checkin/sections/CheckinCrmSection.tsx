@@ -582,65 +582,76 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
           </div>
         </header>
 
-<div className="md:hidden">
-{clientesList.length === 0 ? (
-<div className="flex min-h-[140px] flex-col items-center justify-center gap-2 px-5 py-8 text-center">
-<span className="grid h-10 w-10 place-items-center rounded-full bg-surface-alt text-muted-foreground">
-<Users size={17} />
-</span>
-<p className="text-body-sm font-bold text-muted-foreground">Nenhum cliente cadastrado ainda</p>
-<p className="text-[12px] font-medium text-muted-foreground">Toque em "+ Novo Registro" para registrar venda ou agendamento.</p>
-</div>
-) : (
-<div className="divide-y divide-border">
-{clientesList.map((row: ClienteRow) => (
-<article key={row.id} className="space-y-3 bg-white px-4 py-4">
-<div className="flex items-start justify-between gap-3">
-<div className="min-w-0">
-<p className="flex items-center gap-1.5 truncate text-body font-extrabold text-status-success">
-{row.nomeCliente}
-<DiasBadge dataAgendamento={row.dataAgendamento} selectedDate={selectedDate} vendaRealizada={row.vendaRealizada} />
-<VendaTipoBadge vendaRealizada={row.vendaRealizada} />
-</p>
-<p className="mt-0.5 truncate text-[12px] font-semibold text-muted-foreground">{formatPhone(row.telefone)} · {row.veiculoInteresse}</p>
-</div>
-<div className="flex shrink-0 items-center gap-1.5">
-<button type="button" onClick={() => handleEdit(row)} className="grid h-8 w-8 place-items-center rounded-lg bg-border text-mx-navy transition-colors hover:bg-surface-alt hover:text-status-success" aria-label={`Editar ${row.nomeCliente}`}>
-<Pencil size={14} />
-</button>
-<button type="button" onClick={() => handleDelete(row)} className="grid h-8 w-8 place-items-center rounded-lg bg-border text-muted-foreground transition-colors hover:bg-status-error-surface hover:text-status-error" aria-label={`Excluir ${row.nomeCliente}`}>
-<Trash2 size={14} />
-</button>
-</div>
-</div>
-<div className="grid grid-cols-2 gap-2 text-[12px]">
-<div className="rounded-xl bg-surface-alt p-3">
-<span className="block text-caption font-extrabold uppercase tracking-wider text-muted-foreground">Valor</span>
-<strong className="mt-1 block text-mx-navy">{formatMoney(row.valorNegociado)}</strong>
-</div>
-<div className="rounded-xl bg-surface-alt p-3">
-<span className="block text-caption font-extrabold uppercase tracking-wider text-muted-foreground">Sinal</span>
-<strong className="mt-1 block text-muted-foreground">{formatMoney(row.sinal)}</strong>
-</div>
-<div className="col-span-2 rounded-xl bg-surface-alt p-3">
-<span className="block text-caption font-extrabold uppercase tracking-wider text-muted-foreground">Agendamento</span>
-<strong className="mt-1 block truncate text-muted-foreground">{formatAgendamentoDateTime(row.dataAgendamento)}</strong>
-</div>
-</div>
-<div className="flex flex-wrap gap-2">
-<ChannelBadge canal={row.canal} />
-<CompareceuBadge value={row.compareceu} />
-<BooleanBadge value={row.carroAvaliado} />
-<FinanciamentoBadge value={row.financiamento} />
-<VendaBadge value={row.vendaRealizada} />
-</div>
-</article>
-))}
-</div>
-)}
-</div>
+      <div className="md:hidden">
+        {clientesList.length === 0 ? (
+          <div className="flex min-h-[160px] flex-col items-center justify-center gap-2.5 px-4 py-8 text-center bg-white">
+            <span className="grid h-12 w-12 place-items-center rounded-2xl bg-brand-primary-subtle text-brand-primary">
+              <Users size={22} />
+            </span>
+            <div className="space-y-1">
+              <p className="text-body-sm font-bold text-mx-navy">Nenhum cliente cadastrado ainda</p>
+              <p className="text-[12px] font-medium text-muted-foreground max-w-xs leading-relaxed">
+                Detalhar seus agendamentos D+1 ou vendas aqui no CRM destrava os <strong>30% restantes</strong> para atingir <strong>100% de disciplina</strong>.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setNovoRegistroModalOpen(true)}
+              className="mt-1 inline-flex items-center gap-1.5 rounded-xl bg-status-info px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-status-info active:scale-95"
+            >
+              <UserPlus size={14} /> + Cadastrar Primeiro Registro
+            </button>
+          </div>
+        ) : (
+          <div className="divide-y divide-border">
+            {clientesList.map((row: ClienteRow) => (
+              <article key={row.id} className="space-y-3 bg-white px-4 py-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="flex items-center gap-1.5 truncate text-body font-extrabold text-status-success">
+                      {row.nomeCliente}
+                      <DiasBadge dataAgendamento={row.dataAgendamento} selectedDate={selectedDate} vendaRealizada={row.vendaRealizada} />
+                      <VendaTipoBadge vendaRealizada={row.vendaRealizada} />
+                    </p>
+                    <p className="mt-0.5 truncate text-[12px] font-semibold text-muted-foreground">{formatPhone(row.telefone)} · {row.veiculoInteresse}</p>
+                  </div>
+                  <div className="flex shrink-0 items-center gap-1.5">
+                    <button type="button" onClick={() => handleEdit(row)} className="grid h-8 w-8 place-items-center rounded-lg bg-border text-mx-navy transition-colors hover:bg-surface-alt hover:text-status-success" aria-label={`Editar ${row.nomeCliente}`}>
+                      <Pencil size={14} />
+                    </button>
+                    <button type="button" onClick={() => handleDelete(row)} className="grid h-8 w-8 place-items-center rounded-lg bg-border text-muted-foreground transition-colors hover:bg-status-error-surface hover:text-status-error" aria-label={`Excluir ${row.nomeCliente}`}>
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-[12px]">
+                  <div className="rounded-xl bg-surface-alt p-3">
+                    <span className="block text-caption font-extrabold uppercase tracking-wider text-muted-foreground">Valor</span>
+                    <strong className="mt-1 block text-mx-navy">{formatMoney(row.valorNegociado)}</strong>
+                  </div>
+                  <div className="rounded-xl bg-surface-alt p-3">
+                    <span className="block text-caption font-extrabold uppercase tracking-wider text-muted-foreground">Sinal</span>
+                    <strong className="mt-1 block text-muted-foreground">{formatMoney(row.sinal)}</strong>
+                  </div>
+                  <div className="col-span-2 rounded-xl bg-surface-alt p-3">
+                    <span className="block text-caption font-extrabold uppercase tracking-wider text-muted-foreground">Agendamento</span>
+                    <strong className="mt-1 block truncate text-muted-foreground">{formatAgendamentoDateTime(row.dataAgendamento)}</strong>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <ChannelBadge canal={row.canal} />
+                  <CompareceuBadge value={row.compareceu} />
+                  <BooleanBadge value={row.carroAvaliado} />
+                  <FinanciamentoBadge value={row.financiamento} />
+                  <VendaBadge value={row.vendaRealizada} />
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+      </div>
 
-{/* Rolagem horizontal alcançável por teclado: sem tabIndex, as colunas
+      {/* Rolagem horizontal alcançável por teclado: sem tabIndex, as colunas
           fora da viewport ficam inacessíveis a quem não usa mouse (§21). */}
       <div className="hidden max-w-full overflow-x-auto md:block" tabIndex={0} role="region" aria-label="Clientes e agendamentos">
   <table className="w-full min-w-[1180px] table-fixed text-left text-body-sm">
@@ -693,12 +704,23 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
               {clientesList.length === 0 ? (
                 <tr>
                   <td colSpan={10} className="bg-white px-5 py-0">
-                    <div className="flex min-h-[96px] flex-col items-center justify-center gap-1.5 py-6">
-                      <span className="grid h-9 w-9 place-items-center rounded-full bg-surface-alt text-muted-foreground">
-                        <Users size={16} />
+                    <div className="flex min-h-[120px] flex-col items-center justify-center gap-2 py-8 text-center">
+                      <span className="grid h-11 w-11 place-items-center rounded-2xl bg-brand-primary-subtle text-brand-primary">
+                        <Users size={20} />
                       </span>
-                      <p className="text-body-sm font-bold text-muted-foreground">Nenhum cliente cadastrado ainda</p>
-                      <p className="text-[12px] font-medium text-muted-foreground">Clique em "+ Novo Registro" para registrar a primeira venda ou agendamento.</p>
+                      <div className="space-y-0.5">
+                        <p className="text-body-sm font-bold text-mx-navy">Nenhum cliente cadastrado ainda</p>
+                        <p className="text-[12px] font-medium text-muted-foreground">
+                          Cadastrar seus agendamentos D+1 ou vendas aqui destrava os <strong>30% restantes</strong> para alcançar <strong>100% de disciplina</strong>.
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setNovoRegistroModalOpen(true)}
+                        className="mt-1 inline-flex items-center gap-1.5 rounded-xl bg-status-info px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-status-info active:scale-95"
+                      >
+                        <UserPlus size={14} /> + Cadastrar Primeiro Registro
+                      </button>
                     </div>
                   </td>
                 </tr>

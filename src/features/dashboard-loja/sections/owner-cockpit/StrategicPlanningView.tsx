@@ -64,7 +64,7 @@ export function StrategicPlanningView({
 
         <div className="inline-flex rounded-2xl border border-border-subtle bg-white p-0.5 shadow-sm">
           <button type="button" onClick={() => setTab('resumo')} className={cn('flex h-mx-10 items-center gap-mx-xs rounded-xl px-mx-md text-sm', tab === 'resumo' ? 'bg-status-success-surface font-bold text-status-success-text' : 'text-muted-foreground')}><BarChart3 size={16} /> Resumo</button>
-          <button type="button" onClick={() => setTab('visao-geral')} className={cn('flex h-mx-10 items-center gap-mx-xs rounded-xl px-mx-md text-sm', tab === 'visao-geral' ? 'bg-status-success-surface font-bold text-status-success-text' : 'text-muted-foreground')}><List size={16} /> Visão Geral</button>
+          <button type="button" onClick={() => setTab('visao-geral')} className={cn('flex h-mx-10 items-center gap-mx-xs rounded-xl px-mx-md text-sm', tab === 'visao-geral' ? 'bg-status-success-surface font-bold text-status-success-text' : 'text-muted-foreground')}><List size={16} /> Visão do Plano</button>
         </div>
 
         {tab === 'resumo' && selected && (

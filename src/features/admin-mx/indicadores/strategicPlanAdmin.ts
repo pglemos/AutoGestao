@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase'
 import { ensureCycle } from '@/features/strategic-plan/planCycleRepository'
 import { fetchClientProductPackage } from '@/features/strategic-plan/clientPlanningRepository'
+import { excludeBranchClients } from '@/features/admin-mx/clientes/clientPortfolio'
 import { fillOfficialDemoForCycle } from './strategicPlanEditorRepository'
 
 export type StrategicPlanAdminRow = {
@@ -109,19 +110,35 @@ export function filterHistoryRows(rows: IndicatorHistoryRow[], filters: HistoryF
 }
 
 export async function fetchStrategicPlanClients(): Promise<{ rows: StrategicPlanClientOption[]; error: string | null }> {
-  const { data, error } = await supabase
-    .from('clientes_consultoria')
-    .select('id, name, legal_name, status, primary_store_id')
-    .or('status.is.null,status.neq.arquivado')
-    .order('name', { ascending: true })
+  const [clientsResult, lojasResult] = await Promise.all([
+    supabase
+      .from('clientes_consultoria')
+      .select('id, name, legal_name, status, primary_store_id')
+      .or('status.is.null,status.neq.arquivado')
+      .order('name', { ascending: true }),
+    supabase.from('lojas').select('id, parent_loja_id'),
+  ])
 
-  if (error) return { rows: [], error: error.message }
+  if (clientsResult.error) return { rows: [], error: clientsResult.error.message }
+  if (lojasResult.error) return { rows: [], error: lojasResult.error.message }
+
+  const clients = ((clientsResult.data ?? []) as Row[]).map(row => ({
+    id: asString(row.id),
+    name: asString(row.name || row.legal_name, asString(row.id)),
+    status: row.status == null ? null : asString(row.status),
+    primary_store_id: row.primary_store_id == null ? null : asString(row.primary_store_id),
+  }))
+  const lojas = ((lojasResult.data ?? []) as Row[]).map(row => ({
+    id: asString(row.id),
+    parent_loja_id: row.parent_loja_id == null ? null : asString(row.parent_loja_id),
+  }))
+
   return {
-    rows: ((data ?? []) as Row[]).map(row => ({
-      id: asString(row.id),
-      name: asString(row.name || row.legal_name, asString(row.id)),
-      status: row.status == null ? null : asString(row.status),
-      primaryStoreId: row.primary_store_id == null ? null : asString(row.primary_store_id),
+    rows: excludeBranchClients(clients, lojas).map(row => ({
+      id: row.id,
+      name: row.name,
+      status: row.status,
+      primaryStoreId: row.primary_store_id,
     })),
     error: null,
   }
@@ -145,7 +162,7 @@ export async function fetchStrategicPlanAdminRows(): Promise<{ rows: StrategicPl
     .filter(Boolean)
   if (cycleRows.length === 0) return { rows: [], error: null }
 
-  const [clientsResult, indicatorCountsResult, unitsResult, packageResult] = await Promise.all([
+  const [clientsResult, indicatorCountsResult, unitsResult, packageResult, lojasResult] = await Promise.all([
     supabase.from('clientes_consultoria').select('id, name, legal_name, status, primary_store_id, implementation_owner_id').in('id', clientIds),
     cyclesWithoutPackageIds.length
       ? supabase.rpc('get_strategic_plan_indicator_counts', { p_cycle_ids: cyclesWithoutPackageIds })
@@ -154,6 +171,7 @@ export async function fetchStrategicPlanAdminRows(): Promise<{ rows: StrategicPl
     packageVersionIds.length
       ? supabase.from('pacotes_indicadores_versoes').select('id, nome, total_indicadores').in('id', packageVersionIds)
       : Promise.resolve({ data: [], error: null }),
+    supabase.from('lojas').select('id, parent_loja_id'),
   ])
 
   // Responsible IDs are on clients; load them after the first batch so this
@@ -164,7 +182,7 @@ export async function fetchStrategicPlanAdminRows(): Promise<{ rows: StrategicPl
     ? await supabase.from('usuarios').select('id, name').in('id', responsibleIds)
     : { data: [], error: null }
 
-  const firstError = [clientsResult.error, indicatorCountsResult.error, unitsResult.error, packageResult.error, responsibleResult.error]
+  const firstError = [clientsResult.error, indicatorCountsResult.error, unitsResult.error, packageResult.error, responsibleResult.error, lojasResult.error]
     .find(Boolean)
   if (firstError) return { rows: [], error: firstError.message }
 
@@ -186,29 +204,45 @@ export async function fetchStrategicPlanAdminRows(): Promise<{ rows: StrategicPl
     }
   }
 
+  const lojas = ((lojasResult.data ?? []) as Row[]).map(row => ({
+    id: asString(row.id),
+    parent_loja_id: row.parent_loja_id == null ? null : asString(row.parent_loja_id),
+  }))
+  const matrixClientIds = new Set(
+    excludeBranchClients(
+      clientRows.map(row => ({
+        id: asString(row.id),
+        primary_store_id: row.primary_store_id == null ? null : asString(row.primary_store_id),
+      })),
+      lojas,
+    ).map(row => row.id),
+  )
+
   return {
-    rows: cycleRows.map(cycle => {
-      const client = clients.get(asString(cycle.client_id))
+    rows: cycleRows.flatMap(cycle => {
+      const clientId = asString(cycle.client_id)
+      if (!matrixClientIds.has(clientId)) return []
+      const client = clients.get(clientId)
       const packageVersion = packages.get(asString(cycle.package_version_id))
       const indicatorCount = packageVersion
         ? asNumber(packageVersion.total_indicadores)
         : indicatorCountsByCycle.get(asString(cycle.id)) ?? 0
-      return {
+      return [{
         cycleId: asString(cycle.id),
-        clientId: asString(cycle.client_id),
-        clientName: asString(client?.name || client?.legal_name, asString(cycle.client_id)),
+        clientId,
+        clientName: asString(client?.name || client?.legal_name, clientId),
         clientStatus: client?.status == null ? null : asString(client.status),
         primaryStoreId: client?.primary_store_id == null ? null : asString(client.primary_store_id),
         year: asNumber(cycle.year),
         versionNumber: asNumber(cycle.version_number, 1),
         status: asString(cycle.status, 'rascunho'),
         indicatorCount,
-        unitCount: unitsByClient.get(asString(cycle.client_id))?.size ?? 0,
+        unitCount: unitsByClient.get(clientId)?.size ?? 0,
         responsibleName: users.get(asString(client?.implementation_owner_id)) ?? 'Não atribuído',
         packageName: packageVersion?.nome == null ? null : asString(packageVersion.nome),
         publishedAt: cycle.published_at == null ? null : asString(cycle.published_at),
         updatedAt: asString(cycle.updated_at),
-      }
+      }]
     }),
     error: null,
   }

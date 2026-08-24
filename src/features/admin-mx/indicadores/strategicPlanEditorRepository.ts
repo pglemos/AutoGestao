@@ -401,21 +401,27 @@ export async function fillOfficialDemoForCycle(cycleId: string): Promise<{ error
 
   for (const indicator of indicators) {
     if (indicator.formula_expression) continue
-    const existing = values.filter(row => row.loja_id === primaryId && row.indicator_code === indicator.metric_key)
-    const firstFilled = existing.find(row => row.meta != null)?.meta ?? officialDemoManualValue(indicator.metric_key)
-    if (firstFilled == null) continue
-    const series = MONTHS.map(month => existing.find(row => row.month === month)?.meta ?? firstFilled)
-    const previous = MONTHS.map(month => existing.find(row => row.month === month)?.meta ?? null)
-    if (series.every((value, index) => value === previous[index])) continue
-    const result = await saveIndicatorField({
-      lojaId: primaryId,
-      indicatorCode: indicator.metric_key,
-      year: cycle.year,
-      field: 'meta',
-      values: series,
-      note: 'Demo oficial Base44',
-    })
-    if (result.error) return { error: result.error }
+    const companyScoped = indicator.unit_entry_mode === 'COMPANY_ONLY'
+      || indicator.unit_entry_mode === 'SHARED_COMPANY_VALUE'
+    const targetUnitIds = companyScoped ? [primaryId] : unitIds
+
+    for (const lojaId of targetUnitIds) {
+      const existing = values.filter(row => row.loja_id === lojaId && row.indicator_code === indicator.metric_key)
+      const firstFilled = existing.find(row => row.meta != null)?.meta ?? officialDemoManualValue(indicator.metric_key)
+      if (firstFilled == null) continue
+      const series = MONTHS.map(month => existing.find(row => row.month === month)?.meta ?? firstFilled)
+      const previous = MONTHS.map(month => existing.find(row => row.month === month)?.meta ?? null)
+      if (series.every((value, index) => value === previous[index])) continue
+      const result = await saveIndicatorField({
+        lojaId,
+        indicatorCode: indicator.metric_key,
+        year: cycle.year,
+        field: 'meta',
+        values: series,
+        note: 'Demo oficial Base44',
+      })
+      if (result.error) return { error: result.error }
+    }
   }
 
   const refreshed = await fetchCyclePlanningValues(cycle.id, cycle.year, unitIds)

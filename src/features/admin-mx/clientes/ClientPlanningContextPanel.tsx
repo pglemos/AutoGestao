@@ -152,7 +152,6 @@ export function ClientPlanningContextPanel(props: {
     storeId: matrixId || props.primaryStoreId || null,
   })
 
-
   if (loading) return <MxLoadingState label="Carregando Plano Estratégico do cliente" />
 
   return (

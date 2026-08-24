@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-23T21:17:44.781Z",
+  "generatedAt": "2026-08-24T05:02:02.283Z",
   "source": "scripts/audit_route_data_inventory.mjs + src/lib/auth/routeAccess.ts",
   "roles": [
     "administrador_geral",
@@ -10,12 +10,12 @@
     "vendedor"
   ],
   "summary": {
-    "routesTotal": 121,
-    "routesProtected": 112,
+    "routesTotal": 122,
+    "routesProtected": 113,
     "routesPublic": 9,
-    "routeRoleTotal": 264,
-    "standardCanvasTotal": 76,
-    "standardCanvasRenderings": 248,
+    "routeRoleTotal": 267,
+    "standardCanvasTotal": 77,
+    "standardCanvasRenderings": 251,
     "redirectTotal": 31,
     "fullscreenTotal": 4,
     "printTotal": 1,
@@ -2504,6 +2504,28 @@
       "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminSegurancaAuditoriaPage />} /> </Susp"
     },
     {
+      "path": "/auditoria",
+      "kind": "route",
+      "surface": "STANDARD_CANVAS",
+      "rulePattern": "/auditoria",
+      "redirect": null,
+      "renderRoles": [
+        "administrador_geral",
+        "administrador_mx",
+        "consultor_mx"
+      ],
+      "roleStatus": {
+        "administrador_geral": "RENDER_STANDARD_CANVAS",
+        "administrador_mx": "RENDER_STANDARD_CANVAS",
+        "consultor_mx": "RENDER_STANDARD_CANVAS",
+        "dono": "FORBIDDEN",
+        "gerente": "FORBIDDEN",
+        "vendedor": "FORBIDDEN"
+      },
+      "applicable": true,
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminSegurancaAuditoriaPage />} /> </Susp"
+    },
+    {
       "path": "/suporte",
       "kind": "route",
       "surface": "STANDARD_CANVAS",
@@ -4367,6 +4389,27 @@
     },
     {
       "path": "/seguranca",
+      "role": "consultor_mx",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminSegurancaAuditoriaPage />} /> </Susp"
+    },
+    {
+      "path": "/auditoria",
+      "role": "administrador_geral",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminSegurancaAuditoriaPage />} /> </Susp"
+    },
+    {
+      "path": "/auditoria",
+      "role": "administrador_mx",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminSegurancaAuditoriaPage />} /> </Susp"
+    },
+    {
+      "path": "/auditoria",
       "role": "consultor_mx",
       "surface": "STANDARD_CANVAS",
       "kind": "route",

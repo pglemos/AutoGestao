@@ -84,7 +84,7 @@ export function ApplicationsTab(props: { onOpenPlan: (planId: string) => void; r
   return (
     <div className="space-y-5">
       <MxMetricGrid>
-        <MxMetricCard title="Planos aplicados" value={metrics.total} detail="A partir de templates" icon={Zap} />
+        <MxMetricCard title="Aplicações" value={metrics.total} detail={`${metrics.units} materialização(ões) em lojas`} icon={Zap} />
         <MxMetricCard title="Clientes utilizando" value={metrics.clients} detail="Com planos de template ativos" icon={ExternalLink} />
         <MxMetricCard title="Em andamento" value={metrics.emAndamento} detail="Execução em curso" icon={Clock} />
         <MxMetricCard title="Atrasados" value={metrics.atrasadas} detail="Prazo vencido em aberto" icon={ClipboardList} tone="danger" />
@@ -95,7 +95,7 @@ export function ApplicationsTab(props: { onOpenPlan: (planId: string) => void; r
       <ActionPlanDiagnosticsPanel />
 
       <MxSectionCard>
-        <MxSectionHeader title="Aplicações nos Clientes" description={`${filtered.length} plano(s) aplicado(s) a partir de templates.`} />
+        <MxSectionHeader title="Aplicações nos Clientes" description={`${filtered.length} aplicação(ões) lógica(s) a partir de templates (agrupadas por request).`} />
         <div className="space-y-4 p-5">
           <div className="flex flex-wrap gap-2">
             <MxInput value={search} onChange={event => setSearch(event.target.value)} placeholder="Buscar por cliente, plano ou indicador..." aria-label="Buscar aplicação" />
@@ -137,7 +137,11 @@ export function ApplicationsTab(props: { onOpenPlan: (planId: string) => void; r
                       <TableRow key={plan.id}>
                         <TableCell>
                           <div className="font-semibold text-foreground">{plan.clientName || plan.storeName || '—'}</div>
-                          {plan.codigo ? <div className="text-xs text-muted-foreground">{plan.codigo}</div> : null}
+                          <div className="text-xs text-muted-foreground">
+                            {plan.unitCount > 1
+                              ? `${plan.unitCount} unidades: ${plan.unitNames.slice(0, 3).join(', ')}${plan.unitNames.length > 3 ? '…' : ''}`
+                              : plan.storeName || plan.codigo || '—'}
+                          </div>
                         </TableCell>
                         <TableCell className="max-w-[260px]">{plan.acao || plan.problema || '—'}</TableCell>
                         <TableCell>{plan.departamento || '—'}</TableCell>

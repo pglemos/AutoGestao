@@ -2,7 +2,7 @@ import { LayoutGrid, List } from "lucide-react";
 
 const TABS = [
   { value: "resumo", label: "Resumo", icon: LayoutGrid },
-  { value: "visao-geral", label: "Visão Geral", icon: List },
+  { value: "visao-geral", label: "Visão do Plano", icon: List },
 ];
 
 export default function StrategicPlanTabs({ tab, onTabChange }) {

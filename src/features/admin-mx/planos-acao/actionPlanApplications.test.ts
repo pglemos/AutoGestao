@@ -4,6 +4,7 @@ import {
   applicationStatusLabel,
   calculateWeightedProgress,
   efficacyLabel,
+  groupApplicationsByRequest,
   type ApplicationPlan,
   type ChecklistItem,
 } from './actionPlanApplications'
@@ -30,6 +31,10 @@ function plan(overrides: Partial<ApplicationPlan> = {}): ApplicationPlan {
     storeName: 'Loja A',
     clientId: 'client-1',
     clientName: 'Auto Up',
+    requestId: null,
+    unitCount: 1,
+    unitNames: ['Loja A'],
+    planIds: ['p1'],
     ...overrides,
   }
 }
@@ -96,9 +101,35 @@ describe('actionPlanApplications — métricas', () => {
     const metrics = applicationMetrics(plans)
     expect(metrics.total).toBe(4)
     expect(metrics.clients).toBe(3)
+    expect(metrics.units).toBe(4)
     expect(metrics.emAndamento).toBe(1)
     expect(metrics.atrasadas).toBe(1)
     expect(metrics.concluidas).toBe(1)
     expect(metrics.validando).toBe(1)
+  })
+})
+
+describe('actionPlanApplications — agrupamento por request', () => {
+  test('mesmo request_id vira uma aplicação com N unidades', () => {
+    const grouped = groupApplicationsByRequest([
+      plan({ id: 'p1', requestId: 'req-1', storeId: 's1', storeName: 'Matriz', progresso: 40, status: 'em_andamento', unitNames: ['Matriz'], planIds: ['p1'] }),
+      plan({ id: 'p2', requestId: 'req-1', storeId: 's2', storeName: 'Filial', progresso: 60, status: 'atrasado', clientId: 'client-1', unitNames: ['Filial'], planIds: ['p2'] }),
+      plan({ id: 'p3', requestId: 'req-2', storeId: 's3', storeName: 'Outra', progresso: 10, status: 'pendente', clientId: 'c2', unitNames: ['Outra'], planIds: ['p3'] }),
+    ])
+    expect(grouped).toHaveLength(2)
+    const multi = grouped.find(row => row.requestId === 'req-1')
+    expect(multi?.unitCount).toBe(2)
+    expect(multi?.planIds).toEqual(['p1', 'p2'])
+    expect(multi?.progresso).toBe(50)
+    expect(multi?.status).toBe('atrasado')
+    expect(multi?.storeName).toBe('2 unidades')
+  })
+
+  test('sem request_id permanece uma linha por plano', () => {
+    const grouped = groupApplicationsByRequest([
+      plan({ id: 'a', requestId: null }),
+      plan({ id: 'b', requestId: null, storeId: 's2' }),
+    ])
+    expect(grouped).toHaveLength(2)
   })
 })

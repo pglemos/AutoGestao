@@ -36,6 +36,69 @@ export type ApplicationPlan = {
   storeName: string | null
   clientId: string | null
   clientName: string | null
+  /** Uma aplicação lógica Base44 (mesmo request) pode cobrir N lojas. */
+  requestId: string | null
+  unitCount: number
+  unitNames: string[]
+  planIds: string[]
+}
+
+const STATUS_RANK: Record<string, number> = {
+  atrasado: 80,
+  bloqueada: 70,
+  em_andamento: 60,
+  aguardando_decisao: 50,
+  validando_eficacia: 40,
+  pendente: 30,
+  concluido: 20,
+  cancelada: 10,
+}
+
+function pickWorstStatus(statuses: string[]): string {
+  return statuses.reduce((best, status) => (
+    (STATUS_RANK[status] ?? 0) > (STATUS_RANK[best] ?? 0) ? status : best
+  ), statuses[0] ?? 'pendente')
+}
+
+function average(values: number[]): number {
+  if (!values.length) return 0
+  return Math.round(values.reduce((sum, value) => sum + value, 0) / values.length)
+}
+
+/**
+ * Consolida materializações de loja que compartilham o mesmo
+ * `template_application_request_id` em uma linha de aplicação (paridade Base44).
+ */
+export function groupApplicationsByRequest(rows: ApplicationPlan[]): ApplicationPlan[] {
+  const groups = new Map<string, ApplicationPlan[]>()
+  for (const row of rows) {
+    const key = row.requestId || row.id
+    groups.set(key, [...(groups.get(key) ?? []), row])
+  }
+
+  return [...groups.values()].map(group => {
+    const first = group[0]
+    const unitNames = [...new Set(group.map(row => row.storeName).filter((name): name is string => Boolean(name)))]
+    const efficacyScores = group
+      .map(row => row.eficacia_score)
+      .filter((score): score is number => typeof score === 'number')
+    return {
+      ...first,
+      status: pickWorstStatus(group.map(row => row.status)),
+      progresso: average(group.map(row => row.progresso)),
+      eficacia_score: efficacyScores.length ? average(efficacyScores) : null,
+      storeId: group.length === 1 ? first.storeId : null,
+      storeName: unitNames.length === 1
+        ? unitNames[0]
+        : unitNames.length > 1
+          ? `${unitNames.length} unidades`
+          : first.storeName,
+      unitCount: group.length,
+      unitNames,
+      planIds: group.map(row => row.id),
+      requestId: first.requestId,
+    }
+  }).sort((a, b) => b.createdAt.localeCompare(a.createdAt))
 }
 
 /**
@@ -84,6 +147,7 @@ export function applicationMetrics(plans: ApplicationPlan[]) {
   return {
     total: plans.length,
     clients: new Set(plans.map(plan => plan.clientId).filter((id): id is string => Boolean(id))).size,
+    units: plans.reduce((sum, plan) => sum + (plan.unitCount || 1), 0),
     emAndamento: plans.filter(plan => plan.status === 'em_andamento').length,
     atrasadas: plans.filter(plan => plan.status === 'atrasado').length,
     concluidas: plans.filter(plan => plan.status === 'concluido').length,
@@ -102,7 +166,7 @@ export async function fetchApplications(input: { limit?: number } = {}): Promise
   const { limit = 300 } = input
   const { data: plans, error } = await supabase
     .from('planos_acao')
-    .select('id, codigo, departamento, indicador, problema, acao, status, prioridade, prazo, progresso, eficacia_score, eficacia_nota, responsavel_id, checklist, created_at, scope_id, scope_type, origem_ref_table')
+    .select('id, codigo, departamento, indicador, problema, acao, status, prioridade, prazo, progresso, eficacia_score, eficacia_nota, responsavel_id, checklist, created_at, scope_id, scope_type, origem_ref_table, transition_metadata')
     .eq('origem_ref_table', 'planos_acao_template_versoes')
     .order('created_at', { ascending: false })
     .limit(limit)
@@ -133,10 +197,15 @@ export async function fetchApplications(input: { limit?: number } = {}): Promise
   const clientByStore = new Map((stores ?? []).map(store => [store.id, clientByMatriz.get(store.parent_loja_id ?? store.id) ?? null]))
   const responsibleNames = new Map((responsibles ?? []).map(responsible => [responsible.id, responsible.name]))
 
-  const rows: ApplicationPlan[] = (plans ?? []).map(plan => {
+  const materializations: ApplicationPlan[] = (plans ?? []).map(plan => {
     const storeId = plan.scope_type === 'store' ? plan.scope_id : null
     const client = storeId ? clientByStore.get(storeId) : null
     const progress = calculateWeightedProgress(plan.checklist as ChecklistItem[] | null, plan.progresso)
+    const metadata = (plan.transition_metadata ?? {}) as Record<string, unknown>
+    const requestId = typeof metadata.template_application_request_id === 'string'
+      ? metadata.template_application_request_id
+      : null
+    const storeName = storeId ? storeNames.get(storeId) ?? null : null
     return {
       id: plan.id,
       codigo: plan.codigo,
@@ -155,11 +224,17 @@ export async function fetchApplications(input: { limit?: number } = {}): Promise
       checklist: plan.checklist as ChecklistItem[] | null,
       createdAt: plan.created_at,
       storeId,
-      storeName: storeId ? storeNames.get(storeId) ?? null : null,
+      storeName,
       clientId: client?.id ?? null,
       clientName: client?.name ?? null,
+      requestId,
+      unitCount: 1,
+      unitNames: storeName ? [storeName] : [],
+      planIds: [plan.id],
     }
   })
+
+  const rows = groupApplicationsByRequest(materializations)
 
   return { rows, error: null }
 }

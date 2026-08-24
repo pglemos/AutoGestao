@@ -8,6 +8,7 @@ import { Typography } from '@/components/atoms/Typography'
 import { CheckinHeader } from './sections/CheckinHeader'
 import { CheckinForm } from './sections/CheckinForm'
 import { CheckinErrorBoundary } from './components/CheckinErrorBoundary'
+import { CheckinFirstTimeBanner } from './components/CheckinFirstTimeBanner'
 import { useCheckinPage } from './hooks/useCheckinPage'
 import { PageCanvas, resolveRouteLayout } from '@/design-system/page'
 
@@ -98,6 +99,8 @@ const previousCard = ctx.activeClosingContext.previousCard
   return (
     <div className="relative min-h-full w-full min-w-0 bg-surface-alt no-scrollbar">
       <PageCanvas width="dashboard" bottomClearance={pageBottomClearance} className="flex flex-col gap-4">
+            <CheckinFirstTimeBanner onOpenHelp={() => setHistoryOpen(true)} />
+
             {checkinLoadError && (
                 <div role="alert" className="rounded-2xl border border-status-error/20 bg-status-error-surface px-mx-md py-mx-sm text-sm font-bold text-status-error-text">
                     {checkinLoadError}
