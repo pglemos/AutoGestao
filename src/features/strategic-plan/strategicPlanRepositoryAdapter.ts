@@ -176,17 +176,6 @@ function officialSeriesTemplate(code: string): StrategicSeries | null {
   }
 }
 
-function mergeSeriesValues(target: StrategicSeries, source: StrategicSeries): StrategicSeries {
-  const pick = (a: Array<number | null>, b: Array<number | null>) =>
-    a.map((value, index) => (value != null ? value : b[index] ?? null))
-  return {
-    ...target,
-    targetValues: pick(target.targetValues, source.targetValues),
-    currentValues: pick(target.currentValues, source.currentValues),
-    previousYearValues: pick(target.previousYearValues, source.previousYearValues),
-  }
-}
-
 function mergeOfficialPlanningSeries(
   base: StrategicSeries[],
   byIndicator: Map<string, PersistedValueRow[]>,
@@ -207,12 +196,10 @@ function mergeOfficialPlanningSeries(
     if (!template) continue
     let series = overlaySeries(template, rowsForSeries(template, byIndicator))
     const fromCanon = baseByCanon.get(code)
-    if (fromCanon) series = mergeSeriesValues(series, fromCanon)
     const fromSp = baseBySpIndex.get(index)
-    if (fromSp) series = mergeSeriesValues(series, fromSp)
-    // A série herdou valores de uma série legada (SP-n ou catálogo do
-    // cliente): gravações e histórico precisam usar a chave ORIGINAL sob a
-    // qual os dados persistem, não o código canônico do template.
+    // A série pode herdar só a chave de persistência do legado (SP-n), nunca os
+    // números: backfill de check-in/meta da loja inventava Meta na Visão Dono
+    // para unidades sem planejamento (Admin vazio → Dono 26).
     const sourceKey = String(fromSp?.metricCode || fromSp?.code || fromCanon?.metricCode || fromCanon?.code || '')
     if (sourceKey && sourceKey !== code) series.sourceMetricCode = sourceKey
     if (fromSp) series.sourceId = String(fromSp.id || fromSp.code)

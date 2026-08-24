@@ -63,9 +63,9 @@ Não commitar tokens. Rotacionar secrets expostos no chat.
 - Deep-link `corrigirMaster=1` → Log M2 `donos:1, persons:22`
 - Depois: Gleyson = Dono Master · Ativo; prontidão 7/12; 1 impeditivo restante (módulos)
 
-### P0 Visão Dono — parcial
+### P0 Visão Dono — CONFIRMADO (AG multiunidade)
 - ViewSelector acima dos cards + resolveActual (código/testes)
-- QA multiunidade AG / logs V ainda pendentes
+- Checklist multiunidade (proxy AG; MX VEÍCULOS TESTE 4 ausente): Matriz Meta 8/Estoque 13; 3 PISO Admin vazio → Dono Meta — (sem herança legado); Consolidado banner Parcial 1/3; Resultado Sem resultado; competência Jul/2026; shell owner via viewAs=dono
 
 ### P1 Planos de ação
 - collapse 7→1 (testes); A1 MX raw=2 collapsed=2
@@ -158,6 +158,12 @@ Resumo: **33 DONE**, **0 PARTIAL**; 0 BLOCKED. P33+P05+P25 bb88b1.
 
 - Commit `311a966c`: ZERO_IF_EMPTY só nas deps da fórmula; limpa SALES_OTHER legado; Realizado calculado não herda 0 persistido.
 - Verificado Visão Dono AG: Resultado **Sem resultado** (não 0%/Crítico).
-- Residual Estoque: **DONE** — `applyOfficialComputedMetas` só recalcula Meta; Realizado manual preservado (AG Resultado Estoque=3, Vendas=Sem resultado).
+- Residual Estoque: **DONE** — `applyOfficialComputedMetas` só recalcula Meta; Realizado manual preservado (AG Resultado Estoque=3, Vendas=Sem resultado). Commit `f7edb7b1`.
 - Push `eeda37fa` (+ auditoria visibilidade Dono).
+
+## Fix herança multiunidade (2026-08-23)
+
+- Causa: `mergeOfficialPlanningSeries` fazia backfill numérico de série legada/check-in → filial sem planejamento Admin mostrava Meta inventada (ex.: 3 PISO Vendas 26 / Estoque 43).
+- Correção: herdar só `sourceMetricCode`/`sourceId`; nunca `target`/`current`/`AA` do legado.
+- Evidência Visão Dono AG: Matriz Meta 8/13 + Resultado Sem resultado; 3 PISO Meta —; Consolidado Parcial 1/3.
 
