@@ -21,10 +21,11 @@ describe('Foundation Zero route × role matrix', () => {
     execFileSync('bun', ['scripts/generate_foundation_zero_route_matrix.ts'], { stdio: 'pipe' })
     const matrix = JSON.parse(readFileSync(artifactPath, 'utf8')) as RouteMatrix
     // The live audit keeps both the root Route and its protected shell
-    // container as records. The route-path denominator remains 119 unique
-    // paths; the ledger row denominator is therefore 121.
-    expect(matrix.summary.routesTotal).toBe(121)
-    expect(matrix.summary.routesProtected).toBe(112)
+    // container as records. The route-path denominator is 121 unique paths;
+    // the ledger row denominator is therefore 123, including the restored
+    // `/vendas` surface.
+    expect(matrix.summary.routesTotal).toBe(123)
+    expect(matrix.summary.routesProtected).toBe(114)
     expect(matrix.summary.routesPublic).toBe(9)
     expect(matrix.summary.routeRoleTotal).toBeGreaterThan(0)
     expect(matrix.summary.ungoverned).toBe(0)
@@ -33,7 +34,7 @@ describe('Foundation Zero route × role matrix', () => {
 
   test('does not silently lose route rows or role status columns', () => {
     const matrix = JSON.parse(readFileSync(artifactPath, 'utf8')) as RouteMatrix
-    expect(matrix.rows).toHaveLength(121)
+    expect(matrix.rows).toHaveLength(123)
     for (const row of matrix.rows) {
       expect(Object.keys(row.roleStatus)).toEqual([
         'administrador_geral',
@@ -69,14 +70,14 @@ describe('Foundation Zero route × role matrix', () => {
     expect(team?.roleStatus.administrador_mx).toBe('RENDER_STANDARD_CANVAS')
 
     expect(matrix.rows.find(row => row.path === '/dono/*')?.surface).toBe('FULLSCREEN')
-    expect(matrix.rows.find(row => row.path === '/treinamentos')?.surface).toBe('STANDARD_CANVAS')
+    expect(matrix.rows.find(row => row.path === '/treinamentos')?.surface).toBe('REDIRECT')
     expect(matrix.rows.find(row => row.path === '/pdi')?.surface).toBe('STANDARD_CANVAS')
 
     const trainings = matrix.rows.find(row => row.path === '/treinamentos')
     const pdi = matrix.rows.find(row => row.path === '/pdi')
     expect(trainings?.roleStatus.vendedor).toBe('REDIRECT_ALLOWED')
     expect(pdi?.roleStatus.vendedor).toBe('REDIRECT_ALLOWED')
-    expect(Object.values(trainings?.roleStatus ?? {}).filter(status => status.startsWith('RENDER_')).length).toBeGreaterThan(0)
+    expect(Object.values(trainings?.roleStatus ?? {}).every(status => status === 'REDIRECT_ALLOWED')).toBe(true)
     expect(Object.values(pdi?.roleStatus ?? {}).filter(status => status.startsWith('RENDER_')).length).toBeGreaterThan(0)
   }, 30000)
 })

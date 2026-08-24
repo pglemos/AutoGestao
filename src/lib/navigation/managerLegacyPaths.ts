@@ -8,6 +8,7 @@ const MANAGER_LEGACY_PATHS: Record<string, string> = {
   'minha-equipe': '/minha-equipe',
   'rotina-equipe': '/rotina-equipe',
   'meta-loja': '/meta-loja',
+  'vendas': '/vendas',
   'mentor': '/mentor',
   'feedbacks-pdis': '/feedbacks-pdis',
   'ranking': '/ranking',

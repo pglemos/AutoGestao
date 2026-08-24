@@ -122,11 +122,11 @@ Navegação (4 seções, 12 destinos):
 | Cabeçalho | altura fixa **52px**, `px-4` (recolhido: `px-2`, conteúdo centralizado) |
 | Nav | `py-4 px-3` (recolhido `px-2`); seções separadas por `mb-5` (20px) |
 | Rótulo de seção | `px-3 pb-1.5` |
-| Item | `px-3 py-2`, altura resultante **36px**, `gap-2.5` (10px) |
+| Item | `px-3 py-2`, altura mínima **44px** (`--mx-sidebar-item-height`), `gap-2.5` (10px) |
 | Ícone do item | 16×16 (`h-4 w-4`) |
-| Subnav | `ml-3 pl-3` com borda esquerda 1px; itens `px-2.5 py-1`, altura 28px, `gap-1.5` |
+| Subnav | `ml-3 pl-3` com borda esquerda 1px; itens `px-2.5 py-1.5`, altura mínima **40px** |
 | Badge | `px-1.5 py-0.5`, 9px, altura 17px |
-| CTA | altura **36px** (`h-9`), `px-4 py-2`, `gap-2.5`, largura total |
+| CTA / toggle | altura **44px** (`h-11`), `px-4`, `gap-2.5` |
 | Cartão de perfil | `min-h-14` (56px, 58px medidos), `px-3.5 py-2`, `gap-3` |
 | Avatar | 40×40 (`size="md"`) |
 | Menu de conta | largura = cartão (231px), `p-2`; itens `min-h-11` (44px) |

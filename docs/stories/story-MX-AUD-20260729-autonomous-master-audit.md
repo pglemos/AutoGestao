@@ -457,6 +457,11 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   não de falha introduzida por este diff: `gitleaks protect --staged` passou,
   enquanto os três achados do scan de `src/` pertencem a fixtures/diagnósticos
   fora dos arquivos desta tarefa.
+- 2026-08-24: regressão do MDV corrigida: `/vendas` voltou como rota própria
+  escopada por `loja_id`, a aba e os menus canônicos foram restaurados, e
+  `/gerente/vendas` voltou a resolver para `/vendas`. Inventários e contratos
+  de rota foram regenerados; a validação autenticada remota, CI e deploy ainda
+  permanecem pendentes.
 
 ### File List
 
@@ -574,6 +579,25 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `supabase/functions/register-user/index.ts`
 - `supabase/functions/send-push-notification/index.ts`
 - `supabase/functions/store-pre-registration/index.ts`
+- `src/features/dashboard-loja/sections/DashboardHeader.tsx`
+- `src/features/dashboard-loja/sections/DashboardHeader.internal.test.tsx`
+- `src/features/dashboard-loja/vendas-route-contract.test.ts`
+- `src/App.tsx`
+- `artifacts/route-role-inventory/route-role-matrix.csv`
+- `artifacts/route-role-inventory/route-role-matrix.json`
+- `artifacts/route-role-inventory/route-role-matrix.md`
+- `docs/reports/layout-route-inventory.json`
+- `docs/reports/layout-route-inventory.md`
+- `src/design-system/page/routeLayoutMetadata.ts`
+- `src/design-system/internal-mx/internalMxNavigation.tsx`
+- `src/design-system/internal-mx/internalMxNavigation.test.ts`
+- `src/features/owner/ownerCommercialNavigation.ts`
+- `src/features/owner/ownerCommercialNavigation.test.ts`
+- `src/lib/navigation/managerLegacyPaths.ts`
+- `src/lib/navigation/managerLegacyPaths.test.ts`
+- `src/features/vendas-loja/VendasFechadasLoja.tsx`
+- `src/features/vendas-loja/hooks/useVendasLoja.ts`
+- `src/features/dashboard-loja/hooks/useStoreResolution.ts`
 - `src/features/dashboard-loja/DashboardLoja.container.tsx`
 - `src/features/dashboard-loja/sections/OwnerExecutiveCockpit.tsx`
 - `src/features/dashboard-loja/sections/OwnerExecutiveCockpit.contract.test.ts`

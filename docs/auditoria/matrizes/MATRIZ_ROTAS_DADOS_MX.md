@@ -1,12 +1,12 @@
 # Matriz reproduzível de rotas, autorização e dados
 
-- Rotas declaradas em `src/App.tsx`: **122**
-- Rotas protegidas: **113**
+- Rotas declaradas em `src/App.tsx`: **123**
+- Rotas protegidas: **114**
 - Rotas públicas: **9**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
 - Tabelas referenciadas pelo runtime: **176**
-- RPCs referenciadas pelo runtime: **105**
+- RPCs referenciadas pelo runtime: **106**
 - Edge Functions invocadas pelo runtime: **14**
 - Pares tabela/operação encontrados: **380**
 
@@ -81,7 +81,7 @@
 | `/ranking` | route | protegida | — | `/ranking` | — | `<Suspense fallback={<Spinner />}><Ranking /></Suspense>` |
 | `/classificacao` | route | protegida | — | `/classificacao` | — | `<Suspense fallback={<Spinner />}><Ranking /></Suspense>` |
 | `/universidade-mx` | route | protegida | — | `/universidade-mx` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<UniversidadeMxRoute />} gerente={<GerenteTreinamentos />} dono={<DashboardLoja />} admin={<ConsultorTreinamentos />} /> </S` |
-| `/treinamentos` | route | protegida | — | `/treinamentos` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<RedirectWithSearch to="/universidade-mx" />} gerente={<GerenteTreinamentos />} dono={<DashboardLoja />} admin={<ConsultorTr` |
+| `/treinamentos` | route | protegida | `/universidade-mx` | `/treinamentos` | — | `<RedirectWithSearch to="/universidade-mx" />` |
 | `/desenvolvimento` | route | protegida | — | `/desenvolvimento` | gerente, dono, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorDesenvolvimento />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense` |
 | `/devolutivas` | route | protegida | — | `/devolutivas` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorDesenvolvimento />} gerente={<GerenteFeedback />} dono={<GerenteFeedback />} admin={<GerenteFeedback />} /> </Suspe` |
 | `/notificacoes` | route | protegida | — | `/notificacoes` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Notificacoes />} gerente={<Notificacoes />} dono={<Notificacoes />} admin={<Notificacoes />} /> </Suspense>` |
@@ -92,6 +92,7 @@
 | `/rotina-equipe` | route | protegida | — | `/rotina-equipe` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerTeamRoutine />} dono={<ManagerTeamRoutine />} admin={<ManagerTeamRoutine />} /></Suspens` |
 | `/minha-equipe` | route | protegida | — | `/minha-equipe` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>` |
 | `/meta-loja` | route | protegida | — | `/meta-loja` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>` |
+| `/vendas` | route | protegida | — | `/vendas` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>` |
 | `/mentor` | route | protegida | — | `/mentor` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerMentor />} dono={<ManagerMentor />} admin={<ManagerMentor />} /></Suspense>` |
 | `/feedbacks-pdis` | route | protegida | — | `/feedbacks-pdis` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerDevelopment />} dono={<ManagerDevelopment />} admin={<ManagerDevelopment />} /></Suspens` |
 | `/lojas/:storeSlug/consultor-ia` | route | protegida | — | `/lojas/:storeSlug/consultor-ia` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<StoreConsultorIa />} gerente={<StoreConsultorIa />} dono={<StoreConsultorIa />} admin={<StoreConsultorIa />} /> </Suspense>` |
@@ -191,7 +192,7 @@
 | `etapas_modelo_visita_consultoria` | 2 |
 | `eventos_agenda_consultoria` | 3 |
 | `eventos_agenda_executiva` | 2 |
-| `eventos_comerciais` | 10 |
+| `eventos_comerciais` | 9 |
 | `evidencias_encontro` | 1 |
 | `evidencias_planos_acao` | 2 |
 | `evidencias_visita` | 2 |
@@ -217,7 +218,7 @@
 | `logs_compartilhamento_whatsapp` | 1 |
 | `logs_reprocessamento` | 1 |
 | `logs_rotina_gerente` | 1 |
-| `lojas` | 30 |
+| `lojas` | 32 |
 | `manager_daily_tasks` | 1 |
 | `manager_lead_conferences` | 1 |
 | `marketing_mensal_consultoria` | 1 |
@@ -435,7 +436,7 @@
 | `eventos_agenda_consultoria:update` | 1 |
 | `eventos_agenda_executiva:select` | 2 |
 | `eventos_comerciais:insert` | 2 |
-| `eventos_comerciais:select` | 9 |
+| `eventos_comerciais:select` | 8 |
 | `eventos_comerciais:update` | 1 |
 | `eventos_comerciais:upsert` | 2 |
 | `evidencias_encontro:insert` | 1 |
@@ -495,7 +496,7 @@
 | `logs_rotina_gerente:upsert` | 1 |
 | `lojas:delete` | 1 |
 | `lojas:insert` | 3 |
-| `lojas:select` | 30 |
+| `lojas:select` | 32 |
 | `lojas:update` | 3 |
 | `manager_daily_tasks:select` | 1 |
 | `manager_daily_tasks:update` | 1 |
@@ -769,6 +770,7 @@
 | `get_prova_aula` | 1 |
 | `get_strategic_plan_indicator_counts` | 1 |
 | `get_suggested_actions` | 1 |
+| `get_vendas_oficiais_periodo` | 2 |
 | `inicializar_cadencia_cliente` | 1 |
 | `inicializar_progresso_trilha` | 1 |
 | `liberar_fechamento_por_token` | 1 |

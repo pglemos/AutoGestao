@@ -170,7 +170,8 @@ html [data-sonner-toaster].mx-toaster {
   --mx-sidebar-drawer-width-sm: 320px;
   --mx-sidebar-drawer-max-width: 85vw;
   --mx-sidebar-header-height: 52px;
-  --mx-sidebar-item-height: 36px;
+  --mx-sidebar-item-height: 44px;
+  --mx-sidebar-nested-item-height: 40px;
   --mx-sidebar-item-radius: var(--mx-radius-md);
   --mx-sidebar-subitem-radius: var(--mx-radius-sm);
   --mx-sidebar-toggle-radius: var(--mx-radius-xl);
@@ -225,19 +226,23 @@ html [data-sonner-toaster].mx-toaster {
 .mx-ds[data-mx-density='comfortable'] {
   --mx-card-padding: var(--mx-space-5);
   --mx-widget-gap: var(--mx-space-6);
-  --mx-sidebar-item-height: 40px;
+  --mx-sidebar-item-height: 48px;
+  --mx-sidebar-nested-item-height: 44px;
 }
 
 .mx-ds[data-mx-density='standard'] {
   --mx-card-padding: var(--mx-space-4);
   --mx-widget-gap: var(--mx-space-6);
-  --mx-sidebar-item-height: 36px;
+  --mx-sidebar-item-height: 44px;
+  --mx-sidebar-nested-item-height: 40px;
 }
 
 .mx-ds[data-mx-density='compact'] {
   --mx-card-padding: var(--mx-space-3);
   --mx-widget-gap: var(--mx-space-4);
-  --mx-sidebar-item-height: 32px;
+  /* Floor de toque: nunca abaixo de 44/40 na sidebar. */
+  --mx-sidebar-item-height: 44px;
+  --mx-sidebar-nested-item-height: 40px;
   --mx-button-height-md: 36px;
   --mx-input-height: 36px;
 }

@@ -23,8 +23,9 @@ describe('design tokens da sidebar', () => {
     expect(SIDEBAR_METRICS.headerHeight).toBe(52)
     expect(SIDEBAR_METRICS.mobileHeaderHeight).toBe(72)
     expect(SIDEBAR_METRICS.touchTargetMin).toBe(44)
-    expect(SIDEBAR_METRICS.itemHeight).toBe(36)
-    expect(SIDEBAR_METRICS.nestedItemHeight).toBe(28)
+    expect(SIDEBAR_METRICS.itemHeight).toBe(44)
+    expect(SIDEBAR_METRICS.nestedItemHeight).toBe(40)
+    expect(SIDEBAR_METRICS.itemHeight).toBeGreaterThanOrEqual(SIDEBAR_METRICS.touchTargetMin)
     expect(SIDEBAR_METRICS.iconSize).toBe(16)
     expect(SIDEBAR_METRICS.desktopBreakpoint).toBe(1280)
     expect(SIDEBAR_METRICS.widthTransitionMs).toBe(300)
@@ -68,7 +69,7 @@ describe('design tokens da sidebar', () => {
 
   test('expõe o CTA do rodapé como token compartilhado', () => {
     expect(SIDEBAR.ctaButton).toContain('bg-mxsb-active')
-    expect(SIDEBAR.ctaButton).toContain('h-9')
+    expect(SIDEBAR.ctaButton).toContain('h-11')
     expect(shell).toContain('SIDEBAR.ctaButton')
   })
 
@@ -179,14 +180,28 @@ describe('consumidores do design system', () => {
 
   test('cumprem os requisitos de acessibilidade documentados', () => {
     // item ativo, grupos e drawer
-    expect(shell).toContain("aria-current={active ? 'page' : false}")
+    expect(shell).toContain("aria-current={active ? 'page' : undefined}")
     expect(shell).toContain('aria-controls={subnavId}')
     expect(shell).toContain('useFocusTrap(drawerRef, mobileOpen)')
     expect(shell).toContain('aria-modal="true"')
-    // rótulo quando recolhida
-    expect(shell).toContain('title={isCollapsed ? item.label : undefined}')
+    // rótulo completo sempre disponível via title
+    expect(shell).toContain('title={item.label}')
     // menu de conta
     expect(profileCard).toContain('aria-haspopup="menu"')
     expect(profileCard).toContain('role="menuitem"')
+  })
+
+  test('usa altura mínima alinhada ao touch target', () => {
+    expect(SIDEBAR.item).toContain('min-h-[var(--mx-sidebar-item-height)]')
+    expect(SIDEBAR.nestedItem).toContain('min-h-[var(--mx-sidebar-nested-item-height)]')
+    expect(SIDEBAR.toggle).toContain('h-11')
+    expect(components).toContain('--mx-sidebar-item-height: 44px')
+    expect(components).toContain('--mx-sidebar-nested-item-height: 40px')
+  })
+
+  test('declara transição de largura com respeito a reduced-motion', () => {
+    expect(SIDEBAR.aside).toContain('motion-safe:transition-[width]')
+    expect(SIDEBAR.aside).toContain('motion-reduce:transition-none')
+    expect(shell).toContain('motion-safe:transition-[padding]')
   })
 })

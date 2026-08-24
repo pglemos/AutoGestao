@@ -24,7 +24,7 @@ describe('buildOwnerCommercialNavigation', () => {
       '/gerente/rotina-equipe',
       '/fechamento-diario',
       '/gerente/meta-loja',
-      '/gerente/vendas',
+      '/vendas',
       '/gerente/mentor',
       '/gerente/feedbacks-pdis',
       '/gerente/ranking',

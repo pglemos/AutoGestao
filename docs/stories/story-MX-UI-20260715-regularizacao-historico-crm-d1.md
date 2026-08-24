@@ -25,6 +25,7 @@ Ready for Review
 - [x] Implementar o drawer sem vendas manuais, com métricas CRM e D+1 pendente.
 - [x] Ajustar o payload do Histórico para usar métricas CRM e razão interna.
 - [x] Rodar gates locais e validar a rota publicada/local, registrando o limite de autenticação local.
+- [x] Corrigir regressão observada no vídeo de 20/08: preservar valores recém-salvos, impedir regressão de `draft_revision` por refetch atrasado e manter a etapa confirmada após remontagem.
 
 ## Dev Agent Record
 
@@ -42,6 +43,7 @@ Dex (AIOX dev)
 - Vendas e D+1 são derivados dos registros CRM; em fechamento pendente, a referência de D+1 é `data_regularizada + 1`.
 - Testes focados: 14 pass / 0 fail. Suíte completa: 1.045 pass / 0 fail. Typecheck, lint, build e `git diff --check` aprovados.
 - Navegador: produção reproduzida autenticada antes da alteração; rota local carregou a tela de login, sem sessão autenticada local disponível para abrir o drawer. Deploy não executado.
+- Vídeo de 20/08 reproduzido autenticado em 24/08: a RPC persistia os números, mas a UI voltava ao snapshot antigo; correção validada localmente em desktop/mobile com avanço Carteira → Internet e resumo imediato 1 lead / 2 atendimentos / 1 agendamento D+1. O rascunho de teste foi restaurado a zero.
 
 ### File List
 
@@ -51,9 +53,14 @@ Dex (AIOX dev)
 - `src/features/checkin/sections/RegularizarFechamentoDrawer.test.tsx`
 - `src/features/checkin/sections/CheckinHeader.tsx`
 - `src/features/checkin/sections/CheckinHeader.test.ts`
+- `src/features/checkin/autosave/checkin-autosave-coordinator.ts`
+- `src/features/checkin/autosave/checkin-autosave-coordinator.test.ts`
+- `src/features/checkin/hooks/useCheckinPage.ts`
+- `src/features/checkin/sections/CheckinForm.responsive-flow.test.ts`
 
 ### Change Log
 
 | Data | Versão | Alteração | Autor |
 |---|---:|---|---|
 | 2026-07-15 | 1.0 | Story criada a partir da reprodução autenticada do Histórico de Fechamentos. | Codex / Dex |
+| 2026-08-24 | 1.1 | Corrigida a falsa perda de atendimentos/agendamentos após salvar: hidratação monotônica da revisão, proteção contra snapshot antigo e etapa efêmera preservada durante refetch/remontagem. | Codex / Dex |

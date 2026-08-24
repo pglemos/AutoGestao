@@ -18,7 +18,7 @@ const ITEMS: OwnerCommercialNavigationItem[] = [
   { label: 'Rotina da Equipe', path: '/gerente/rotina-equipe' },
   { label: 'Fechamento Diário', path: '/fechamento-diario' },
   { label: 'Meta da Loja', path: '/gerente/meta-loja' },
-  { label: 'Vendas', path: '/gerente/vendas' },
+  { label: 'Vendas', path: '/vendas' },
   { label: 'Mentor Gerencial', path: '/gerente/mentor' },
   { label: 'Desenvolvimento', path: '/gerente/feedbacks-pdis' },
   { label: 'Ranking', path: '/gerente/ranking' },

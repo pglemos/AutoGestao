@@ -7,7 +7,7 @@ import {
   Home, CheckSquare, Trophy, GraduationCap, MessageSquare,
   Bell, Settings, Users, Target, Grid, LayoutDashboard, User,
   TrendingUp, ClipboardList, CalendarClock, BarChart3, Bot,
-  Filter, FileBarChart, Activity, BookOpen, CalendarCheck,
+  Filter, FileBarChart, Activity, BookOpen, CalendarCheck, Receipt,
   BrainCircuit, BriefcaseBusiness,
 } from 'lucide-react'
 import { slugify } from '@/lib/utils'
@@ -59,8 +59,8 @@ function isViewAsDonoSearch(search: string): boolean {
   return viewAs === 'dono' || viewAs === 'owner'
 }
 const rotulosPerfil: Record<string, string> = {
-  administrador_geral: 'Administrador geral',
-  administrador_mx: 'Administrador MX',
+  administrador_geral: 'Admin geral',
+  administrador_mx: 'Admin MX',
   consultor_mx: 'Consultor MX',
   dono: 'Dono',
   gerente: 'Gerente',
@@ -68,12 +68,12 @@ const rotulosPerfil: Record<string, string> = {
 }
 
 const rotulosModulo: Record<string, string> = {
-  administrador_geral: 'Módulo Administrativo',
-  administrador_mx: 'Módulo Admin MX',
-  consultor_mx: 'Módulo Consultoria',
-  dono: 'Módulo Executivo',
-  gerente: 'Módulo Gerencial',
-  vendedor: 'Módulo Comercial',
+  administrador_geral: 'Admin',
+  administrador_mx: 'Admin MX',
+  consultor_mx: 'Consultoria',
+  dono: 'Executivo',
+  gerente: 'Gerencial',
+  vendedor: 'Comercial',
 }
 
 const ownerCategoryIcons: Record<string, React.ReactNode> = {
@@ -154,6 +154,7 @@ const ownerCommercialCategory = (mode: 'gestao' | 'acompanhamento'): NavCategory
     { label: 'Rotina da Equipe', path: '/rotina-equipe', icon: <CalendarCheck size={16} /> },
     { label: 'Minha Equipe', path: '/minha-equipe', icon: <Users size={16} /> },
     { label: 'Meta da Loja', path: '/meta-loja', icon: <Target size={16} /> },
+    { label: 'Vendas', path: '/vendas', icon: <Receipt size={16} /> },
     { label: 'Mentor Gerencial', path: '/mentor', icon: <BrainCircuit size={16} /> },
     { label: 'Funil Comercial', path: '/funil-vendas', icon: <Filter size={16} /> },
     { label: 'Feedbacks e PDI', path: '/feedbacks-pdis', icon: <BookOpen size={16} /> },
@@ -190,21 +191,16 @@ const navConfig: Record<string, NavCategory[]> = {
       icon: <Target size={22} />,
       items: [
         { label: 'Meta da Loja', path: '/meta-loja', icon: <Target size={16} /> },
+        { label: 'Vendas', path: '/vendas', icon: <Receipt size={16} /> },
         { label: 'Mentor Gerencial', path: '/mentor', icon: <BrainCircuit size={16} /> },
-      ],
-    },
-    {
-      category: 'DESENVOLVIMENTO DA EQUIPE',
-      icon: <BookOpen size={22} />,
-      items: [
-        { label: 'Desenvolvimento', path: '/feedbacks-pdis', icon: <BookOpen size={16} /> },
-        { label: 'Ranking', path: '/ranking', icon: <Trophy size={16} /> },
       ],
     },
     {
       category: 'DESENVOLVIMENTO',
       icon: <GraduationCap size={22} />,
       items: [
+        { label: 'Feedbacks e PDI', path: '/feedbacks-pdis', icon: <BookOpen size={16} /> },
+        { label: 'Ranking', path: '/ranking', icon: <Trophy size={16} /> },
         { label: 'Universidade MX', path: '/universidade-mx', icon: <GraduationCap size={16} /> },
       ],
     },

@@ -54,48 +54,47 @@ export function AgendaSidebar({
 
   if (isCollapsed) {
     return (
-      <div className="hidden lg:flex flex-col items-center gap-3 w-10 shrink-0 py-1">
+      <div className="hidden lg:flex flex-col items-center gap-3 w-11 shrink-0 py-1">
         <button
           type="button"
           onClick={onToggleCollapse}
           title="Expandir painel lateral"
-          className="min-h-[var(--mx-touch-target-min)] min-w-[var(--mx-touch-target-min)] flex h-8 w-8 items-center justify-center rounded-xl border border-border bg-white text-muted-foreground hover:bg-surface-alt hover:text-foreground transition-colors shadow-2xs"
+          aria-label="Expandir painel lateral"
+          className="flex min-h-[var(--mx-touch-target-min)] min-w-[var(--mx-touch-target-min)] h-11 w-11 items-center justify-center rounded-xl border border-border bg-mxsb-surface text-muted-foreground transition-colors hover:bg-surface-alt hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-success/30 shadow-2xs"
         >
-          <PanelLeftOpen size={16} />
+          <PanelLeftOpen size={16} aria-hidden="true" />
         </button>
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col gap-3 w-full lg:w-56 shrink-0 transition-all">
-      {/* Toggle Collapse Bar */}
-      <div className="hidden lg:flex items-center justify-between px-1">
+    <div className="flex w-full shrink-0 flex-col gap-3 lg:w-56">
+      <div className="hidden items-center justify-between px-1 lg:flex">
         <span className="text-caption font-extrabold uppercase tracking-wider text-muted-foreground">
           Painel Lateral
         </span>
-        {onToggleCollapse && (
+        {onToggleCollapse ? (
           <button
             type="button"
             onClick={onToggleCollapse}
             title="Recolher painel lateral"
-            className="flex h-6 w-6 items-center justify-center rounded-xl text-muted-foreground hover:bg-surface-alt hover:text-foreground transition-colors"
+            aria-label="Recolher painel lateral"
+            className="flex min-h-[var(--mx-touch-target-min)] min-w-[var(--mx-touch-target-min)] h-11 w-11 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-surface-alt hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-success/30"
           >
-            <PanelLeftClose size={15} />
+            <PanelLeftClose size={16} aria-hidden="true" />
           </button>
-        )}
+        ) : null}
       </div>
 
-      {/* Interactive Mini Calendar */}
       <MiniCalendar
         selectedDate={selectedDate}
         onDateSelect={onDateSelect}
         hasEventsOnDate={hasEventsOnDate}
       />
 
-      {/* Status Filters - Compact */}
-      <div className="rounded-2xl border border-border bg-white p-3 shadow-2xs">
-        <h4 className="text-caption font-bold uppercase tracking-wider text-muted-foreground mb-2">
+      <div className="rounded-2xl border border-border bg-mxsb-surface p-3 shadow-2xs">
+        <h4 className="mb-2 text-caption font-bold uppercase tracking-wider text-muted-foreground">
           Status
         </h4>
         <div className="flex flex-wrap gap-1">
@@ -108,19 +107,26 @@ export function AgendaSidebar({
                 key={opt.key}
                 type="button"
                 onClick={() => onStatusChange(opt.key)}
+                aria-pressed={isActive}
                 className={cn(
-                  'flex items-center gap-1.5 rounded-xl px-2 py-1 text-caption font-medium transition-colors',
+                  'flex min-h-11 items-center gap-1.5 rounded-xl px-3 py-2 text-caption font-medium transition-colors',
                   isActive
-                    ? 'bg-brand-primary text-white font-bold shadow-2xs'
+                    ? 'bg-brand-primary font-bold text-[hsl(var(--mx-neutral-0))] shadow-2xs'
                     : 'text-muted-foreground hover:bg-surface-alt hover:text-foreground',
                 )}
               >
-                <Icon size={12} className={isActive ? 'text-white' : 'text-muted-foreground'} />
+                <Icon
+                  size={12}
+                  aria-hidden="true"
+                  className={isActive ? 'text-[hsl(var(--mx-neutral-0))]' : 'text-muted-foreground'}
+                />
                 <span>{opt.label}</span>
                 <span
                   className={cn(
-                    'px-1 py-0.5 rounded-full text-caption font-mono font-semibold',
-                    isActive ? 'bg-surface-overlay/20 text-white' : 'bg-surface-alt text-muted-foreground',
+                    'rounded-full px-1 py-0.5 font-mono text-caption font-semibold',
+                    isActive
+                      ? 'bg-surface-overlay/20 text-[hsl(var(--mx-neutral-0))]'
+                      : 'bg-surface-alt text-muted-foreground',
                   )}
                 >
                   {opt.count}
@@ -131,29 +137,33 @@ export function AgendaSidebar({
         </div>
       </div>
 
-      {/* Consultant Filter - Collapsible */}
-      {canViewAllAgendas && consultants.length > 0 && (
-        <div className="rounded-2xl border border-border bg-white p-3 shadow-2xs">
+      {canViewAllAgendas && consultants.length > 0 ? (
+        <div className="rounded-2xl border border-border bg-mxsb-surface p-3 shadow-2xs">
           <button
             type="button"
             onClick={() => setConsultantsExpanded(!consultantsExpanded)}
-            className="flex w-full items-center justify-between mb-2"
+            aria-expanded={consultantsExpanded}
+            className="mb-2 flex min-h-11 w-full items-center justify-between"
           >
-            <h4 className="text-caption font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-              <Users size={12} /> Consultores
+            <h4 className="flex items-center gap-1.5 text-caption font-bold uppercase tracking-wider text-muted-foreground">
+              <Users size={12} aria-hidden="true" /> Consultores
             </h4>
-            {consultantsExpanded ? <ChevronUp size={14} className="text-muted-foreground" /> : <ChevronDown size={14} className="text-muted-foreground" />}
+            {consultantsExpanded ? (
+              <ChevronUp size={14} className="text-muted-foreground" aria-hidden="true" />
+            ) : (
+              <ChevronDown size={14} className="text-muted-foreground" aria-hidden="true" />
+            )}
           </button>
 
-          {consultantsExpanded && (
-            <ScrollableRegion axis="vertical" label="Filtro de consultores" className="space-y-1 max-h-40 no-scrollbar">
+          {consultantsExpanded ? (
+            <ScrollableRegion axis="vertical" label="Filtro de consultores" className="no-scrollbar max-h-40 space-y-1">
               <button
                 type="button"
                 onClick={() => onConsultantChange('todos')}
                 className={cn(
-                  'flex w-full items-center px-2 py-1.5 rounded-xl text-caption font-medium transition-colors',
+                  'flex min-h-11 w-full items-center rounded-xl px-2 py-2 text-caption font-medium transition-colors',
                   consultantFilter === 'todos'
-                    ? 'bg-brand-primary/10 text-status-success-text font-bold border border-brand-primary/20'
+                    ? 'border border-brand-primary/20 bg-brand-primary/10 font-bold text-status-success-text'
                     : 'text-muted-foreground hover:bg-surface-alt hover:text-foreground',
                 )}
               >
@@ -168,17 +178,20 @@ export function AgendaSidebar({
                     key={c.id}
                     type="button"
                     onClick={() => onConsultantChange(c.id)}
+                    title={c.name}
                     className={cn(
-                      'flex w-full items-center gap-1.5 px-2 py-1.5 rounded-xl text-caption font-medium transition-colors text-left truncate',
+                      'flex min-h-11 w-full items-center gap-1.5 truncate rounded-xl px-2 py-2 text-left text-caption font-medium transition-colors',
                       isSelected
-                        ? 'bg-brand-primary text-white font-bold shadow-2xs'
+                        ? 'bg-brand-primary font-bold text-[hsl(var(--mx-neutral-0))] shadow-2xs'
                         : 'text-muted-foreground hover:bg-surface-alt hover:text-foreground',
                     )}
                   >
                     <span
                       className={cn(
-                        'flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-caption font-bold',
-                        isSelected ? 'bg-white text-status-success-text' : 'bg-brand-primary/10 text-status-success-text',
+                        'flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-caption font-bold',
+                        isSelected
+                          ? 'bg-[hsl(var(--mx-neutral-0))] text-status-success-text'
+                          : 'bg-brand-primary/10 text-status-success-text',
                       )}
                     >
                       {c.name.charAt(0).toUpperCase()}
@@ -188,9 +201,9 @@ export function AgendaSidebar({
                 )
               })}
             </ScrollableRegion>
-          )}
+          ) : null}
         </div>
-      )}
+      ) : null}
     </div>
   )
 }

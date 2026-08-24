@@ -93,13 +93,13 @@ export function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKe
           <div className="grid flex-1 grid-cols-2 gap-3">
             <div className="rounded-xl bg-surface-alt p-3">
               <p className="mb-0.5 text-caption uppercase tracking-wide text-muted-foreground">Faltam</p>
-              <p className="text-h3 font-bold leading-none tabular-nums text-status-error-text">{faltam}</p>
-              <p className="text-caption text-muted-foreground">vendas</p>
+              <p className="text-h3 font-bold leading-none tabular-nums text-status-error-text">{faltam ?? 0}</p>
+              <p className="text-caption text-muted-foreground">{(faltam ?? 0) === 1 ? 'venda' : 'vendas'}</p>
             </div>
             <div className="rounded-xl bg-surface-alt p-3">
               <p className="mb-0.5 text-caption uppercase tracking-wide text-muted-foreground">Dias úteis restantes</p>
-              <p className="text-h3 font-bold leading-none tabular-nums text-foreground">{isCurrentMonth ? diasUteisRestantes : '—'}</p>
-              <p className="text-caption text-muted-foreground">seg–sáb</p>
+              <p className="text-h3 font-bold leading-none tabular-nums text-foreground">{isCurrentMonth ? (diasUteisRestantes ?? 0) : '—'}</p>
+              <p className="text-caption text-muted-foreground">{isCurrentMonth && diasUteisRestantes === 1 ? 'dia (seg–sáb)' : 'dias (seg–sáb)'}</p>
             </div>
             <div className="rounded-xl bg-surface-alt p-3">
               <p className="mb-0.5 text-caption uppercase tracking-wide text-muted-foreground">Ritmo necessário</p>
@@ -130,7 +130,7 @@ export function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKe
                 <>
                   <p className="text-[14px] font-bold leading-tight text-status-warning-text">1 venda a cada</p>
                   <p className="text-h3 font-bold leading-none tabular-nums text-status-warning-text">
-                    {faltam && faltam > 0 ? (diasUteisRestantes / faltam).toFixed(1) : '—'} dias
+                    {faltam && faltam > 0 && diasUteisRestantes > 0 ? (diasUteisRestantes / faltam).toFixed(1) : '—'} dias
                   </p>
                   <p className="mt-1 text-caption text-muted-foreground">≈ {Math.floor(necessarioPorDia * 6)}–{Math.ceil(necessarioPorDia * 6)} por semana</p>
                 </>

@@ -90,7 +90,7 @@ export default function VendedorHomePage() {
     [deterministic.actions],
   )
 
-  const firstName = profile?.name?.trim().split(/\s+/)[0] || 'Nome não informado'
+  const firstName = profile?.name?.trim().split(/\s+/)[0] || 'Você'
 
   const today = new Date()
   const weekday = capitalize(
@@ -100,11 +100,13 @@ export default function VendedorHomePage() {
     day: 'numeric', month: 'long', year: 'numeric', timeZone: 'America/Sao_Paulo',
   }).format(today)
 
-  const meta = home.metrics?.meta ?? 0
-  const vendas = home.metrics?.vendasMes ?? 0
+  const meta = typeof home.metrics?.meta === 'number' && Number.isFinite(home.metrics.meta) ? Math.max(0, home.metrics.meta) : 0
+  const vendas = typeof home.metrics?.vendasMes === 'number' && Number.isFinite(home.metrics.vendasMes) ? Math.max(0, home.metrics.vendasMes) : 0
   const faltam = Math.max(meta - vendas, 0)
-  const atingimento = home.metrics?.atingimento ?? 0
-  const atingimentoPct = Math.min(100, Math.round(atingimento))
+  const atingimento = typeof home.metrics?.atingimento === 'number' && Number.isFinite(home.metrics.atingimento)
+    ? home.metrics.atingimento
+    : (meta > 0 ? (vendas / meta) * 100 : 0)
+  const atingimentoPct = Number.isFinite(atingimento) ? Math.min(100, Math.max(0, Math.round(atingimento))) : 0
 
   const agendaHoje = useMemo(() => agendamentos.filter(a => isToday(a.data_hora)), [agendamentos])
 
@@ -119,17 +121,23 @@ export default function VendedorHomePage() {
     return idx >= 0 ? idx + 1 : null
   }, [home.ranking, profile?.id])
 
-  const disciplina = home.discipline?.percentage ?? 0
+  const rawDiscipline = home.discipline?.percentage
+  const disciplina = typeof rawDiscipline === 'number' && Number.isFinite(rawDiscipline)
+    ? Math.min(100, Math.max(0, rawDiscipline))
+    : 0
+
+  const agendaCount = agendaMetrics?.agendamentosHoje ?? 0
+  const opCount = oportunidadesAtivas.length
 
   const ritualItems = [
     { label: 'Fechamento Diário enviado', done: Boolean(home.todayCheckin) },
     {
-      label: `${agendaMetrics.agendamentosHoje} agendamento${agendaMetrics.agendamentosHoje !== 1 ? 's' : ''} para hoje`,
-      done: agendaMetrics.agendamentosHoje > 0,
+      label: agendaCount === 1 ? '1 agendamento para hoje' : `${agendaCount} agendamentos para hoje`,
+      done: agendaCount > 0,
     },
     {
-      label: `${oportunidadesAtivas.length} oportunidade${oportunidadesAtivas.length !== 1 ? 's' : ''} ativas na carteira`,
-      done: oportunidadesAtivas.length > 0,
+      label: opCount === 1 ? '1 oportunidade ativa na carteira' : `${opCount} oportunidades ativas na carteira`,
+      done: opCount > 0,
     },
   ]
 

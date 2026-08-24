@@ -26,6 +26,12 @@ import type { StepId as ClosingStepId } from '../sections/FluxoFechamento'
 import { useCheckinAutosave } from '../autosave/useCheckinAutosave'
 import { autosaveResultFromSave } from '../autosave/classify-autosave-failure'
 
+// O container troca temporariamente a tela por loading durante refetches. Em
+// algumas árvores de rota isso remonta o hook inteiro; manter apenas useState
+// fazia o clique "Confirmar" voltar para Showroom. O valor é deliberadamente
+// efêmero (por aba/runtime) e não vira preferência persistida do usuário.
+let lastClosingStep: ClosingStepId = 'showroom'
+
 export interface CheckinForm {
     leads: number
     leads_cart: number
@@ -184,7 +190,16 @@ export function useCheckinPage() {
     // Etapa do fluxo mora aqui, não dentro de FluxoFechamento: o container
     // troca o formulário por um skeleton enquanto o refetch do autosave roda,
     // e isso remontava o componente jogando o vendedor de volta ao Showroom.
-    const [closingStep, setClosingStep] = useState<ClosingStepId>('showroom')
+    const [closingStep, setClosingStepState] = useState<ClosingStepId>(lastClosingStep)
+    const setClosingStep = useCallback((step: ClosingStepId) => {
+        lastClosingStep = step
+        setClosingStepState(step)
+    }, [])
+    // Ao salvar explicitamente, `historicalCheckin` ainda pode apontar para o
+    // snapshot carregado antes do POST. Limpar changedFields dispara o efeito
+    // de hidratação abaixo; sem este marcador ele repõe os números antigos na
+    // tela, apesar de o banco já ter confirmado os novos valores.
+    const preserveLocallySavedFormForDateRef = useRef<string | null>(null)
 
     const { checkins, todayCheckin, saveCheckin, loading: hookLoading, referenceDate, fetchCheckinByDate, error: checkinLoadError } = useCheckins()
     const {
@@ -285,6 +300,10 @@ const activeClosingContext = useMemo(
 
     useEffect(() => {
         if (changedFields.size > 0) return
+        if (preserveLocallySavedFormForDateRef.current === selectedDate) {
+            preserveLocallySavedFormForDateRef.current = null
+            return
+        }
         setNumberDrafts({})
         if (historicalCheckin) {
             const { form: reconstructedForm, visitasCanalIndisponivel } = reconstructCheckinFormFromHistorical(historicalCheckin)
@@ -903,6 +922,7 @@ const fechamentoConcluido = metricScope === 'daily'
                 }
             }
 
+            preserveLocallySavedFormForDateRef.current = selectedDate
             setChangedFields(new Set())
             setSaveNotice({
                 title: 'Rascunho salvo.',

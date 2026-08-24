@@ -11,8 +11,8 @@ describe('navegação interna MX', () => {
       // Três grupos da especificação do módulo Administrador + Simulação.
       expect(sections.map((section) => section.label)).toEqual([
         'Operação MX',
-        'Produto e Metodologia',
-        'Plataforma e Governança',
+        'Produto',
+        'Plataforma',
         'Simulação',
       ])
       expect(items.some((item) => item.path === '/painel')).toBe(true)
@@ -21,13 +21,14 @@ describe('navegação interna MX', () => {
       expect(items.some((item) => item.path === '/consultoria')).toBe(true)
       expect(items.some((item) => item.path === '/clientes')).toBe(true)
       expect(items.some((item) => item.path === '/universidade-mx')).toBe(true)
+      expect(items.some((item) => item.path === '/vendas')).toBe(true)
       // Desenvolvimento (/treinamentos) foi removido: canônico é Universidade MX.
       expect(items.some((item) => item.path === '/treinamentos')).toBe(false)
       expect(items.some((item) => item.label === 'Desenvolvimento')).toBe(false)
       expect(items.some((item) => item.path === '/dados')).toBe(true)
       expect(items.some((item) => item.path === '/auditoria')).toBe(true)
-      expect(items.find((item) => item.path === '/dados')?.label).toBe('Dados e Conciliação')
-      expect(items.find((item) => item.path === '/auditoria')?.label).toBe('Segurança e Auditoria')
+      expect(items.find((item) => item.path === '/dados')?.label).toBe('Dados')
+      expect(items.find((item) => item.path === '/auditoria')?.label).toBe('Auditoria')
       // Rotas legadas não possuem entrada própria: são aliases de compatibilidade
       // resolvidos no AppShell, nunca itens concorrentes na navegação canônica.
       expect(items.some((item) => item.path === '/indicadores')).toBe(false)
@@ -38,7 +39,7 @@ describe('navegação interna MX', () => {
       expect(items.some((item) => item.path === '/seguranca')).toBe(false)
       // /produtos agora é o catálogo de consultoria para o interno MX.
       expect(items.filter((item) => item.path === '/produtos')).toHaveLength(1)
-      expect(items.find((item) => item.path === '/produtos')?.label).toBe('Produtos de Consultoria')
+      expect(items.find((item) => item.path === '/produtos')?.label).toBe('Produtos')
       expect(items.find((item) => item.path === '/notificacoes')?.badge).toBe('7')
     })
   }

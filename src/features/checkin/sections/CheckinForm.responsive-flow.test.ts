@@ -27,7 +27,8 @@ describe('fluxo de fechamento unificado entre breakpoints', () => {
   // FluxoFechamento, isso remontava o componente e devolvia o vendedor ao
   // Showroom — ele clicava em Confirmar e a tela não andava.
   test('a etapa atual vive fora do componente que remonta', () => {
-    expect(hookSource).toContain("useState<ClosingStepId>('showroom')")
+    expect(hookSource).toContain('useState<ClosingStepId>(lastClosingStep)')
+    expect(hookSource).toContain('lastClosingStep = step')
     expect(hookSource).toContain('closingStep,')
     expect(hookSource).toContain('setClosingStep,')
     expect(formSource).toContain('currentStep={closingStep}')
@@ -66,6 +67,11 @@ describe('autosave não pode ser desligado por estado de carregamento', () => {
 
   test('a proteção contra gravar durante a hidratação continua sendo changedFields', () => {
     expect(hookSource).toContain('if (!autosaveEnabled || changedFields.size === 0) return')
+  })
+
+  test('salvar rascunho não reidrata imediatamente o formulário com snapshot antigo', () => {
+    expect(hookSource).toContain('preserveLocallySavedFormForDateRef.current = selectedDate')
+    expect(hookSource).toMatch(/if \(preserveLocallySavedFormForDateRef\.current === selectedDate\) \{[\s\S]*?return/)
   })
 
   // O contador do fluxo guardava o valor digitado em estado local e só

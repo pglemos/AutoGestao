@@ -446,7 +446,11 @@ export const base44 = {
             sinal: op.sinal || 0,
             financiamento: op.financiamento || 'Não se aplica',
             carro_avaliado: op.carro_avaliado ? 'Sim' : 'Não',
-            data_venda: op.closed_at || r.updated_at,
+            // Competência comercial é explícita. `closed_at`/`updated_at`
+            // representam persistência e não podem mudar o mês do ranking.
+            data_competencia: op.data_competencia || op.sale_date || null,
+            sale_date: op.sale_date || op.data_competencia || null,
+            data_venda: op.data_competencia || op.sale_date || null,
             valor_venda: op.valor_negociado || 0,
             veiculo_comprado: op.veiculo_interesse || '',
             ativo: r.status !== 'inativo',
@@ -503,6 +507,8 @@ export const base44 = {
             etapa: data.status_comercial === 'Vendido' ? 'ganho' : data.status_comercial === 'Perdido' ? 'perdido' : 'prospeccao',
             loja_id: storeId,
             seller_user_id: me.id,
+            data_competencia: data.data_competencia || data.sale_date || data.data_venda || null,
+            sale_date: data.sale_date || data.data_competencia || data.data_venda || null,
             sinal: toNumberValue(data.sinal),
             financiamento: toCrmFinanciamento(data.financiamento),
             carro_avaliado: data.carro_avaliado === 'Sim'
@@ -547,6 +553,11 @@ export const base44 = {
         const opPayload = {};
         if (data.veiculo_interesse !== undefined) opPayload.veiculo_interesse = data.veiculo_interesse;
         if (data.valor_negociado !== undefined) opPayload.valor_negociado = toNumberValue(data.valor_negociado);
+        if (data.data_competencia || data.sale_date || data.data_venda) {
+          const competence = data.data_competencia || data.sale_date || data.data_venda;
+          opPayload.data_competencia = String(competence).slice(0, 10);
+          opPayload.sale_date = String(competence).slice(0, 10);
+        }
         // Sem esta guarda, salvar a ficha de uma venda cancelada derivava
         // etapa='prospeccao' e reabria a venda, apagando o estado terminal.
         assertNotTerminalPresentation(data.situacao_atual, data.status_comercial);

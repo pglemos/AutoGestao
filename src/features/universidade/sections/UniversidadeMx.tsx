@@ -104,10 +104,13 @@ export function UniversidadeMx({ userId, embedded = false }: Props) {
       />
 
       {error && (
-        <div className="rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">
+        <div className="flex items-center justify-between gap-2 rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">
           <Typography variant="tiny" className="font-bold text-status-error-text">
             {error}
           </Typography>
+          <Button type="button" variant="outline" size="sm" onClick={refresh} disabled={loading} className="shrink-0 text-xs">
+            Tentar novamente
+          </Button>
         </div>
       )}
 
@@ -243,7 +246,7 @@ export function UniversidadeMx({ userId, embedded = false }: Props) {
       {!trilhas.length ? (
         biblioteca.length > 0 ? null : (
         <Card className="p-mx-md">
-          <div className="rounded-xl border border-dashed border-border p-mx-md text-center">
+          <div className="rounded-xl border border-dashed border-border p-mx-md text-center flex flex-col items-center gap-2">
             <Typography variant="tiny" tone="muted" className="font-bold">
               {filtros.length === 0
                 ? 'Selecione ao menos um público para listar trilhas.'
@@ -251,6 +254,15 @@ export function UniversidadeMx({ userId, embedded = false }: Props) {
                   ? `Nenhum resultado para "${searchQuery}".`
                   : 'Nenhuma trilha disponível para os filtros atuais.'}
             </Typography>
+            {searchQuery.trim() && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="mt-1 text-xs font-semibold text-brand-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40"
+              >
+                Limpar busca
+              </button>
+            )}
           </div>
         </Card>
         )

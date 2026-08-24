@@ -6,6 +6,7 @@ describe('resolveManagerLegacyPath', () => {
     expect(resolveManagerLegacyPath('/gerente/minha-equipe')).toBe('/minha-equipe')
     expect(resolveManagerLegacyPath('/gerente/rotina-equipe')).toBe('/rotina-equipe')
     expect(resolveManagerLegacyPath('/gerente/meta-loja')).toBe('/meta-loja')
+    expect(resolveManagerLegacyPath('/gerente/vendas')).toBe('/vendas')
     expect(resolveManagerLegacyPath('/gerente/mentor')).toBe('/mentor')
     expect(resolveManagerLegacyPath('/gerente/feedbacks-pdis')).toBe('/feedbacks-pdis')
     expect(resolveManagerLegacyPath('/gerente/ranking')).toBe('/ranking')
@@ -18,8 +19,7 @@ describe('resolveManagerLegacyPath', () => {
     expect(resolveManagerLegacyPath('/gerente/')).toBe('/home')
   })
 
-  it('cai para /home quando o destino legado não tem rota canônica', () => {
-    expect(resolveManagerLegacyPath('/gerente/vendas')).toBe('/home')
+  it('cai para /home quando o destino legado não existe', () => {
     expect(resolveManagerLegacyPath('/gerente/rota-que-nunca-existiu')).toBe('/home')
   })
 })

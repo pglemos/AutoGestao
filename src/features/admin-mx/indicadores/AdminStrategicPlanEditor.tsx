@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-console.warn('[editor-module-loaded] v2')
 import {
   ArrowLeft,
   CheckCircle2,
@@ -440,6 +439,7 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
           field: parsed.field,
           values,
           note: 'Editor administrativo do Plano Estratégico',
+          cicloId: data.cycle.id,
         })
         saved.push({ key, code: parsed.indicatorCode, error: result.error, jan: values[0] ?? null })
         if (result.error) {
@@ -773,6 +773,7 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
           <MxMetricCard title="Roster do ciclo" value={gridIndicators.length} detail="Pacote Base44 completo" icon={CheckCircle2} tone="success" />
         </MxMetricGrid>
         <MetasRealizadosTab
+          cicloId={data.cycle.id}
           indicators={digitaveisIndicators.map(indicator => ({
             code: indicator.metric_key,
             displayCode: officialCatalogCode(indicator.metric_key),

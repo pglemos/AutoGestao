@@ -7,7 +7,7 @@ const read = (path: string) => readFileSync(join(root, path), 'utf8')
 
 const canonicalPages = [
   'painel', 'lojas', 'loja-detalhe', 'consultoria', 'agenda', 'ranking',
-  'devolutivas', 'treinamentos', 'produtos', 'notificacoes', 'relatorio-matinal',
+  'devolutivas', 'universidade-mx', 'produtos', 'notificacoes', 'relatorio-matinal',
   'performance-vendas', 'performance-vendedor', 'config-remuneracao',
   'config-pmr', 'configuracoes', 'simulacao',
 ] as const

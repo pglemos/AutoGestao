@@ -24,7 +24,7 @@ describe('contrato do módulo Dono Base44 aprovado', () => {
     expect(layout).toContain('<OwnerProvider>')
     expect(layout).toContain('<MxSidebarShell')
     expect(sidebar).toContain('src={SIDEBAR_LOGO}')
-    expect(layout).toContain("'Módulo Executivo'")
+    expect(layout).toContain("'Executivo'")
     expect(sidebar).toContain("isCollapsed ? 'Expandir sidebar' : 'Recolher sidebar'")
     // Cartao de perfil compartilhado com os demais modulos: abre o menu de
     // conta (perfil, preferencias, notificacoes e sair) em vez de navegar.

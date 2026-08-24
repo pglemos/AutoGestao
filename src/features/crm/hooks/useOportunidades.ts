@@ -223,7 +223,7 @@ export function useOportunidades() {
     return { error: null }
   }, [supabaseUser, fetchOportunidades])
 
-  const updateEtapa = useCallback(async (id: string, etapa: CrmEtapaFunil, motivoPerda?: string): Promise<{ error: string | null }> => {
+  const updateEtapa = useCallback(async (id: string, etapa: CrmEtapaFunil, motivoPerda?: string, dataCompetencia?: string | null): Promise<{ error: string | null }> => {
     if (!supabaseUser) return { error: 'Sessão inválida.' }
     // Mudança de etapa e o evento de venda no mesmo commit. A anotação de
     // "venda sem atendimento prévio" e a idempotência vivem no servidor: eram
@@ -233,6 +233,7 @@ export function useOportunidades() {
       p_payload: {
         etapa,
         motivo_perda: etapa === 'perdido' ? (motivoPerda?.trim() || null) : null,
+        ...(dataCompetencia ? { data_competencia: dataCompetencia } : {}),
       } as unknown as Json,
     })
     if (rpcError) return { error: rpcError.message }

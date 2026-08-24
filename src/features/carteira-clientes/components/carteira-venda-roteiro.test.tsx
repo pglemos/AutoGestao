@@ -11,8 +11,8 @@ describe('WhatsAppRoteiro - Fluxo de Registro de Venda', () => {
       nome: 'José',
       veiculo_interesse: 'T-CROSS HIGHLINE 2024',
       valor_negociado: 135000,
-      situacao_atual: 'Financiamento aprovado sem compra',
-      proximo_passo: 'Conduzir para fechamento',
+      situacao_atual: 'Visita agendada',
+      proximo_passo: 'Confirmar agendamento',
       whatsapp: '11999999999',
     }
 

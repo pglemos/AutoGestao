@@ -56,15 +56,15 @@ const pct = vendedorMeta > 0 ? Math.round((v.vendas / vendedorMeta) * 100) : 0
                     )}
                   </td>
                   <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 min-w-0">
                       <RankingAvatar nome={v.nome} foto={v.foto} size={32} />
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-body-sm font-semibold text-foreground">{v.nome}</span>
-                        {isMe && <span className="px-1.5 py-0.5 bg-status-info-surface text-status-info-text text-caption font-bold rounded-full">Você</span>}
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <span className="text-body-sm font-semibold text-foreground truncate max-w-[160px] sm:max-w-[200px]" title={v.nome}>{v.nome || 'Vendedor'}</span>
+                        {isMe && <span className="px-1.5 py-0.5 bg-status-info-surface text-status-info-text text-caption font-bold rounded-full shrink-0">Você</span>}
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-body-sm text-muted-foreground">{v.unidade || '—'}</td>
+                  <td className="px-4 py-3 text-body-sm text-muted-foreground truncate max-w-[120px]" title={v.unidade || '—'}>{v.unidade || '—'}</td>
                   <td className="px-4 py-3">
                     <span className={`text-[14px] font-bold ${isMe ? 'text-status-info-text' : 'text-status-success-text'}`}>{v.vendas}</span>
                   </td>

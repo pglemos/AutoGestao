@@ -93,7 +93,7 @@ describe('sidebar universal MX', () => {
   })
 
   test('mantém navegação, acessibilidade e drawer mobile', () => {
-    expect(shellSource).toContain("aria-current={active ? 'page' : false}")
+    expect(shellSource).toContain("aria-current={active ? 'page' : undefined}")
     expect(shellSource).toContain('aria-modal="true"')
     expect(shellSource).toContain('useFocusTrap(drawerRef, mobileOpen)')
     expect(shellSource).toContain('navSections')
@@ -133,12 +133,12 @@ describe('sidebar universal MX', () => {
 
   test('define a identidade correta de módulo para cada perfil', () => {
     for (const label of [
-      'Módulo Administrativo',
-      'Módulo Admin MX',
-      'Módulo Consultoria',
-      'Módulo Executivo',
-      'Módulo Gerencial',
-      'Módulo Comercial',
+      "administrador_geral: 'Admin'",
+      "administrador_mx: 'Admin MX'",
+      "consultor_mx: 'Consultoria'",
+      "dono: 'Executivo'",
+      "gerente: 'Gerencial'",
+      "vendedor: 'Comercial'",
     ]) {
       expect(layoutSource).toContain(label)
     }

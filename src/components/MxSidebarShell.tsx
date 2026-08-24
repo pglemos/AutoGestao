@@ -139,7 +139,10 @@ function CollapsedTooltip({ label }: { label: string }) {
   return (
     <span
       role="tooltip"
-      className="pointer-events-none absolute left-[calc(100%+10px)] top-1/2 z-[var(--mx-z-tooltip)] -translate-y-1/2 whitespace-nowrap rounded-[var(--mx-radius-lg)] border border-border-subtle bg-white px-3 py-2 text-xs font-semibold text-foreground opacity-0 shadow-[var(--mx-shadow-lg)] transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
+      className={cn(
+        SIDEBAR.floatingSurface,
+        'pointer-events-none absolute left-[calc(100%+10px)] top-1/2 z-[var(--mx-z-tooltip)] -translate-y-1/2 whitespace-nowrap px-3 py-2 text-xs font-semibold opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none',
+      )}
     >
       {label}
     </span>
@@ -264,15 +267,18 @@ export default function MxSidebarShell({
 
   const renderNavItem = (item: MxSidebarNavItem, isCollapsed: boolean) => {
     const active = item === activeNavItem
+    const accessibleLabel = item.badge
+      ? `${item.label} (${item.badge})`
+      : item.label
 
     return (
       <Link
         key={item.key ?? item.path}
         to={item.path}
-        aria-label={item.label}
-        aria-current={active ? 'page' : false}
+        aria-label={accessibleLabel}
+        aria-current={active ? 'page' : undefined}
         onClick={() => setMobileOpen(false)}
-        title={isCollapsed ? item.label : undefined}
+        title={item.label}
         className={cn(
           SIDEBAR.item,
           active ? SIDEBAR.itemActive : SIDEBAR.itemIdle,
@@ -282,7 +288,7 @@ export default function MxSidebarShell({
         <NavItemIcon icon={item.icon} className={SIDEBAR.itemIcon} />
         {!isCollapsed ? (
           <>
-            <span className={SIDEBAR.itemLabel}>
+            <span className={SIDEBAR.itemLabel} title={item.label}>
               {item.label}
             </span>
             {item.badge ? (
@@ -291,26 +297,30 @@ export default function MxSidebarShell({
                   SIDEBAR.badge,
                   item.badgeTone === 'warning' ? SIDEBAR.badgeWarning : SIDEBAR.badgeDefault,
                 )}
+                aria-hidden="true"
               >
                 {item.badge}
               </span>
             ) : null}
           </>
         ) : null}
-        {isCollapsed ? <CollapsedTooltip label={item.label} /> : null}
+        {isCollapsed ? <CollapsedTooltip label={accessibleLabel} /> : null}
       </Link>
     )
   }
 
   const renderNestedNavItem = (item: MxSidebarNavItem) => {
     const active = item === activeNavItem
+    const accessibleLabel = item.badge
+      ? `${item.label} (${item.badge})`
+      : item.label
 
     return (
       <Link
         key={item.key ?? item.path}
         to={item.path}
-        aria-label={item.label}
-        aria-current={active ? 'page' : false}
+        aria-label={accessibleLabel}
+        aria-current={active ? 'page' : undefined}
         onClick={() => setMobileOpen(false)}
         title={item.label}
         className={cn(
@@ -318,13 +328,14 @@ export default function MxSidebarShell({
           active ? SIDEBAR.nestedItemActive : SIDEBAR.nestedItemIdle,
         )}
       >
-        <span className={SIDEBAR.itemLabel}>{item.label}</span>
+        <span className={SIDEBAR.itemLabel} title={item.label}>{item.label}</span>
         {item.badge ? (
           <span
             className={cn(
               SIDEBAR.badge,
               item.badgeTone === 'warning' ? SIDEBAR.badgeWarning : SIDEBAR.badgeDefault,
             )}
+            aria-hidden="true"
           >
             {item.badge}
           </span>
@@ -510,7 +521,7 @@ export default function MxSidebarShell({
     <div className="h-[100dvh] min-w-0 overflow-hidden bg-surface-alt font-display text-foreground">
       <header
         data-mx-mobile-header=""
-        className="fixed left-0 right-0 top-0 z-[var(--mx-z-popover)] grid h-[calc(var(--mx-mobile-header-height)+env(safe-area-inset-top,0px))] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-[var(--mx-space-2)] border-b border-border-subtle bg-white px-[var(--mx-mobile-header-padding-inline)] pt-[env(safe-area-inset-top,0px)] shadow-[var(--mx-shadow-sm)] xl:hidden"
+        className="fixed left-0 right-0 top-0 z-[var(--mx-z-popover)] grid h-[calc(var(--mx-mobile-header-height)+env(safe-area-inset-top,0px))] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-[var(--mx-space-2)] border-b border-border-subtle bg-mxsb-surface px-[var(--mx-mobile-header-padding-inline)] pt-[env(safe-area-inset-top,0px)] shadow-[var(--mx-shadow-sm)] xl:hidden"
       >
         <button
           type="button"
@@ -548,7 +559,7 @@ export default function MxSidebarShell({
             <div
               role="menu"
               aria-label="Opções do perfil"
-              className="absolute right-0 top-[calc(100%+0.5rem)] z-[var(--mx-z-popover)] w-56 rounded-[var(--mx-radius-2xl)] border border-border-subtle bg-white p-2 shadow-[var(--mx-shadow-xl)]"
+              className={cn(SIDEBAR.floatingMenu, 'absolute right-0 top-[calc(100%+0.5rem)] z-[var(--mx-z-popover)] w-56')}
             >
               <button type="button" role="menuitem" onClick={() => goTo(profilePath)} className="flex min-h-11 w-full items-center gap-3 rounded-[var(--mx-radius-xl)] px-3 text-left text-sm font-semibold text-foreground hover:bg-surface-alt focus-visible:ring-2 focus-visible:ring-status-success/30">
                 <UserRound size={20} aria-hidden="true" /> Meu Perfil
@@ -622,6 +633,7 @@ export default function MxSidebarShell({
         className={cn(
           'flex h-[100dvh] min-h-0 min-w-0 flex-col overflow-hidden bg-surface-alt outline-none xl:h-screen',
           'pt-[calc(var(--mx-mobile-header-height)+env(safe-area-inset-top,0px))] xl:pt-0',
+          'motion-safe:transition-[padding] motion-safe:duration-300 motion-safe:ease-out motion-reduce:transition-none',
           collapsed
             ? 'xl:pl-[var(--mx-sidebar-width-collapsed)]'
             : 'xl:pl-[var(--mx-sidebar-width-expanded)]',
@@ -642,7 +654,7 @@ export default function MxSidebarShell({
               <button
                 type="button"
                 onClick={onStopSimulation}
-                className="h-10 rounded-[var(--mx-radius-xl)] bg-brand-primary px-4 text-sm font-semibold text-white outline-none transition-colors hover:bg-brand-primary-hover focus-visible:ring-2 focus-visible:ring-status-success/30"
+                className="h-11 rounded-[var(--mx-radius-xl)] bg-brand-primary px-4 text-sm font-semibold text-[hsl(var(--mx-neutral-0))] outline-none transition-colors hover:bg-brand-primary-hover focus-visible:ring-2 focus-visible:ring-status-success/30"
               >
                 Voltar Admin MX
               </button>

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Bell, ChevronDown, LogOut, Settings, UserRound } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { SIDEBAR } from '@/design-system/sidebar/tokens'
 import { Avatar } from './atoms/Avatar'
 
 export type MxSidebarProfileCardProps = {
@@ -89,7 +90,8 @@ export function MxSidebarProfileCard({
           role="menu"
           aria-label="Opções do perfil"
           className={cn(
-            'absolute z-[var(--mx-z-popover)] rounded-[var(--mx-radius-2xl)] border border-border-subtle bg-white p-2 shadow-[var(--mx-shadow-xl)]',
+            SIDEBAR.floatingMenu,
+            'absolute z-[var(--mx-z-popover)]',
             collapsed
               ? 'bottom-0 left-[calc(100%+10px)] w-64'
               : 'bottom-[calc(100%+10px)] left-0 right-0',

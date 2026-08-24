@@ -125,6 +125,19 @@ function put(target, key, value) {
   if (value !== undefined) target[key] = value
 }
 
+function toDateOnly(value) {
+  if (!value) return null
+  const match = String(value).trim().match(/^\d{4}-\d{2}-\d{2}/)
+  return match ? match[0] : null
+}
+
+// Competência é um fato comercial informado pelo usuário. Nunca derivar de
+// created_at/updated_at/closed_at: esses campos representam o instante de
+// persistência ou de transição, não o mês da venda.
+export function resolveSaleCompetence(data) {
+  return toDateOnly(data.data_competencia ?? data.sale_date ?? data.data_venda)
+}
+
 export function buildRpcPayload(data, clientId, executionContext) {
   const payload = {}
   const history = data.historico || null
@@ -184,6 +197,11 @@ export function buildRpcPayload(data, clientId, executionContext) {
   put(payload, 'veiculo_comprado', data.veiculo_comprado || data.veiculo_interesse)
   put(payload, 'data_venda', data.data_venda)
   put(payload, 'valor_venda', parsedValorVenda ?? undefined)
+  const saleCompetence = resolveSaleCompetence(data)
+  if (saleCompetence) {
+    payload.data_competencia = saleCompetence
+    payload.sale_date = saleCompetence
+  }
   put(payload, 'preferencia_modalidade', data.preferencia_modalidade ?? data.modalidade)
   put(payload, 'urgencia_compra', data.urgencia_compra ?? data.urgencia)
 

@@ -259,9 +259,17 @@ export function createCheckinAutosaveCoordinator<TSnapshot>(
     },
 
     hydrate({ revision, lastSavedAt }) {
+      // Refetches podem terminar fora de ordem. Depois de um autosave local
+      // avançar a revisão, uma resposta GET iniciada antes dele ainda pode
+      // chegar com a revisão antiga. Rebaixar `state.revision` aqui faria a
+      // próxima gravação gerar DRAFT_VERSION_CONFLICT embora esta própria aba
+      // seja a autora da versão mais nova.
+      const hydratedRevision = Math.max(state.revision, revision)
       emit({
-        revision,
-        lastSavedAt: lastSavedAt ?? state.lastSavedAt,
+        revision: hydratedRevision,
+        lastSavedAt: hydratedRevision === revision
+          ? (lastSavedAt ?? state.lastSavedAt)
+          : state.lastSavedAt,
         serverRevision: null,
         error: state.status === 'conflict' ? null : state.error,
         status: state.status === 'conflict' ? 'idle' : state.status,

@@ -324,6 +324,31 @@ describe('createCheckinAutosaveCoordinator', () => {
     expect(coordinator.getState().lastSavedAt).toBe('2026-08-05T16:00:00.000Z')
   })
 
+  test('hydrate atrasado nunca rebaixa a revisão confirmada pelo autosave', async () => {
+    const { timers, advance } = createFakeTimers()
+    const revisions: number[] = []
+    const coordinator = createCheckinAutosaveCoordinator<string>({
+      save: async (_snapshot, expected) => {
+        revisions.push(expected)
+        return ok(expected + 1)
+      },
+      timers,
+    })
+
+    coordinator.markDirty('v1')
+    await advance(800)
+    expect(coordinator.getState().revision).toBe(1)
+
+    // Resposta de um GET iniciado antes do POST volta tarde com revision=0.
+    coordinator.hydrate({ revision: 0, lastSavedAt: '2026-08-05T15:59:00.000Z' })
+    expect(coordinator.getState().revision).toBe(1)
+
+    coordinator.markDirty('v2')
+    await advance(800)
+    expect(revisions).toEqual([0, 1])
+    expect(coordinator.getState().revision).toBe(2)
+  })
+
   test('dispose cancela timers pendentes (unmount não grava depois)', async () => {
     const { timers, advance, pendingCount } = createFakeTimers()
     let calls = 0

@@ -58,6 +58,7 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'vendedor/terminal-mx': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'relatorio-matinal': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'minha-equipe': { width: 'dashboard', adopted: true },
+  vendas: { width: 'dashboard' },
   ranking: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   classificacao: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   mercado: { width: 'dashboard', adopted: true },
@@ -166,7 +167,10 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   // ------------------------------------------- desenvolvimento e conversação
   desenvolvimento: { width: 'focused', adopted: true },
   'vendedor/desenvolvimento': { width: 'focused' },
-  treinamentos: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
+  // Alias legado: a superfície renderizada e governada é /universidade-mx.
+  // Mantemos apenas o contrato de largura para preservar links antigos sem
+  // exigir canvas de uma rota que sempre redireciona.
+  treinamentos: { width: 'dashboard', bottomClearance: 'navigation' },
   'vendedor/treinamentos': { width: 'focused' },
   'universidade-mx': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'vendedor/universidade-mx': { width: 'focused' },

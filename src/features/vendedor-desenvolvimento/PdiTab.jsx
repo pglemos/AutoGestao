@@ -48,6 +48,7 @@ export default function PDIPage({ hideHeader = false }) {
   const [actions, setActions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [creatingAction, setCreatingAction] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [newAction, setNewAction] = useState({ action: "", competency: "", description: "", deadline: "", status: "Pendente", progress: 0 });
 
@@ -63,7 +64,7 @@ export default function PDIPage({ hideHeader = false }) {
   }, []);
 
   const savePDI = async (data) => {
-    if (!canEdit) return;
+    if (!canEdit || saving) return;
     setSaving(true);
     try {
       if (pdi?.id) {
@@ -82,15 +83,28 @@ export default function PDIPage({ hideHeader = false }) {
   };
 
   const createAction = async () => {
-    if (!canEdit) return;
+    if (!canEdit || creatingAction) return;
+    const title = (newAction.action || "").trim();
+    if (!title) {
+      toast.error("Informe o título da ação.");
+      return;
+    }
+    setCreatingAction(true);
     try {
-      const created = await base44.entities.ActionPlan.create(newAction);
+      const created = await base44.entities.ActionPlan.create({
+        ...newAction,
+        action: title,
+        description: (newAction.description || "").trim(),
+        competency: (newAction.competency || "").trim() || "Geral",
+      });
       setActions(prev => [created, ...prev]);
       setNewAction({ action: "", competency: "", description: "", deadline: "", status: "Pendente", progress: 0 });
       setDialogOpen(false);
       toast.info("Ação criada!");
     } catch (error) {
       toast.error("Erro ao criar ação");
+    } finally {
+      setCreatingAction(false);
     }
   };
 
@@ -109,8 +123,12 @@ export default function PDIPage({ hideHeader = false }) {
   }
 
   const currentPDI = pdi || {};
-  const techData = techCompetencies.map(c => ({ subject: c.label, value: currentPDI[c.key] || 5, target: 10 }));
-  const behavData = behavCompetencies.map(c => ({ subject: c.label, value: currentPDI[c.key] || 5, target: 10 }));
+  const sanitizeScore = (v) => {
+    const num = Number(v);
+    return Number.isFinite(num) ? Math.min(10, Math.max(1, num)) : 5;
+  };
+  const techData = techCompetencies.map(c => ({ subject: c.label, value: sanitizeScore(currentPDI[c.key]), target: 10 }));
+  const behavData = behavCompetencies.map(c => ({ subject: c.label, value: sanitizeScore(currentPDI[c.key]), target: 10 }));
 
   const CompetencySlider = ({ comp, value, onChange, onCommit, disabled = false }) => (
     <div className="flex items-center gap-4">

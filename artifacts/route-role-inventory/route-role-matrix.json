@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-24T05:02:02.283Z",
+  "generatedAt": "2026-08-24T17:04:39.663Z",
   "source": "scripts/audit_route_data_inventory.mjs + src/lib/auth/routeAccess.ts",
   "roles": [
     "administrador_geral",
@@ -10,13 +10,13 @@
     "vendedor"
   ],
   "summary": {
-    "routesTotal": 122,
-    "routesProtected": 113,
+    "routesTotal": 123,
+    "routesProtected": 114,
     "routesPublic": 9,
     "routeRoleTotal": 267,
     "standardCanvasTotal": 77,
     "standardCanvasRenderings": 251,
-    "redirectTotal": 31,
+    "redirectTotal": 32,
     "fullscreenTotal": 4,
     "printTotal": 1,
     "ungoverned": 0,
@@ -1345,26 +1345,20 @@
     {
       "path": "/treinamentos",
       "kind": "route",
-      "surface": "STANDARD_CANVAS",
+      "surface": "REDIRECT",
       "rulePattern": "/treinamentos",
-      "redirect": null,
-      "renderRoles": [
-        "administrador_geral",
-        "administrador_mx",
-        "consultor_mx",
-        "dono",
-        "gerente"
-      ],
+      "redirect": "/universidade-mx",
+      "renderRoles": [],
       "roleStatus": {
-        "administrador_geral": "RENDER_STANDARD_CANVAS",
-        "administrador_mx": "RENDER_STANDARD_CANVAS",
-        "consultor_mx": "RENDER_STANDARD_CANVAS",
-        "dono": "RENDER_STANDARD_CANVAS",
-        "gerente": "RENDER_STANDARD_CANVAS",
+        "administrador_geral": "REDIRECT_ALLOWED",
+        "administrador_mx": "REDIRECT_ALLOWED",
+        "consultor_mx": "REDIRECT_ALLOWED",
+        "dono": "REDIRECT_ALLOWED",
+        "gerente": "REDIRECT_ALLOWED",
         "vendedor": "REDIRECT_ALLOWED"
       },
-      "applicable": true,
-      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<RedirectWithSearch to=\"/universidade-mx\" />} gerente={<GerenteTreinamentos />} dono={<DashboardLoja />} admin={<ConsultorTr"
+      "applicable": false,
+      "element": "<RedirectWithSearch to=\"/universidade-mx\" />"
     },
     {
       "path": "/desenvolvimento",
@@ -1568,6 +1562,30 @@
       "kind": "route",
       "surface": "STANDARD_CANVAS",
       "rulePattern": "/meta-loja",
+      "redirect": null,
+      "renderRoles": [
+        "administrador_geral",
+        "administrador_mx",
+        "consultor_mx",
+        "dono",
+        "gerente"
+      ],
+      "roleStatus": {
+        "administrador_geral": "RENDER_STANDARD_CANVAS",
+        "administrador_mx": "RENDER_STANDARD_CANVAS",
+        "consultor_mx": "RENDER_STANDARD_CANVAS",
+        "dono": "RENDER_STANDARD_CANVAS",
+        "gerente": "RENDER_STANDARD_CANVAS",
+        "vendedor": "FORBIDDEN"
+      },
+      "applicable": true,
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
+    },
+    {
+      "path": "/vendas",
+      "kind": "route",
+      "surface": "STANDARD_CANVAS",
+      "rulePattern": "/vendas",
       "redirect": null,
       "renderRoles": [
         "administrador_geral",
@@ -3135,41 +3153,6 @@
       "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<UniversidadeMxRoute />} gerente={<GerenteTreinamentos />} dono={<DashboardLoja />} admin={<ConsultorTreinamentos />} /> </S"
     },
     {
-      "path": "/treinamentos",
-      "role": "administrador_geral",
-      "surface": "STANDARD_CANVAS",
-      "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<RedirectWithSearch to=\"/universidade-mx\" />} gerente={<GerenteTreinamentos />} dono={<DashboardLoja />} admin={<ConsultorTr"
-    },
-    {
-      "path": "/treinamentos",
-      "role": "administrador_mx",
-      "surface": "STANDARD_CANVAS",
-      "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<RedirectWithSearch to=\"/universidade-mx\" />} gerente={<GerenteTreinamentos />} dono={<DashboardLoja />} admin={<ConsultorTr"
-    },
-    {
-      "path": "/treinamentos",
-      "role": "consultor_mx",
-      "surface": "STANDARD_CANVAS",
-      "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<RedirectWithSearch to=\"/universidade-mx\" />} gerente={<GerenteTreinamentos />} dono={<DashboardLoja />} admin={<ConsultorTr"
-    },
-    {
-      "path": "/treinamentos",
-      "role": "dono",
-      "surface": "STANDARD_CANVAS",
-      "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<RedirectWithSearch to=\"/universidade-mx\" />} gerente={<GerenteTreinamentos />} dono={<DashboardLoja />} admin={<ConsultorTr"
-    },
-    {
-      "path": "/treinamentos",
-      "role": "gerente",
-      "surface": "STANDARD_CANVAS",
-      "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<RedirectWithSearch to=\"/universidade-mx\" />} gerente={<GerenteTreinamentos />} dono={<DashboardLoja />} admin={<ConsultorTr"
-    },
-    {
       "path": "/desenvolvimento",
       "role": "vendedor",
       "surface": "STANDARD_CANVAS",
@@ -3402,6 +3385,41 @@
     },
     {
       "path": "/meta-loja",
+      "role": "gerente",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
+    },
+    {
+      "path": "/vendas",
+      "role": "administrador_geral",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
+    },
+    {
+      "path": "/vendas",
+      "role": "administrador_mx",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
+    },
+    {
+      "path": "/vendas",
+      "role": "consultor_mx",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
+    },
+    {
+      "path": "/vendas",
+      "role": "dono",
+      "surface": "STANDARD_CANVAS",
+      "kind": "route",
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
+    },
+    {
+      "path": "/vendas",
       "role": "gerente",
       "surface": "STANDARD_CANVAS",
       "kind": "route",

@@ -154,6 +154,8 @@ Claude Code (Sonnet 5), continuando trabalho iniciado em sessão anterior via Co
 - CI remoto do SHA final passou nos workflows Quality Gates (`30884163091`), Typecheck/unit (`30884163101`), ESLint (`30884163086`), Atomic Design (`30884163063`) e Gitleaks (`30884163095`). Os cinco workflows Dependabot dinâmicos acionados também concluíram sem falha.
 - Supabase remoto permaneceu read-only nesta continuação. Vercel publicou o SHA exato `1b99c0ab82618038fa0826557e7b8762e6247b2b` no deployment `dpl_52J3PrgJceo2Lw43S8mRrF5LZCUL`, em `READY`, com `/api/health` HTTP 200.
 - **Remediação visual/UX Codex em 2026-08-20:** a crítica autenticada do vendedor foi aplicada na fila operacional. O cabeçalho duplicado foi removido para manter um único `h1` por aba; no mobile, os resumos viraram faixa horizontal e a primeira oportunidade/CTA aparecem na primeira dobra; busca, drawer, score, tabs e ações receberam nomes/tamanhos acessíveis; a ficha do cliente deixou de exceder a largura do viewport; o drawer de filtros mantém as ações visíveis; labels dos formulários passaram a apontar para seus controles; a falha de persistência do retorno WhatsApp preserva o modal e mostra recuperação; campanhas ficaram recolhidas como fluxo secundário; labels de compatibilidade foram corrigidos; transições de layout do shell foram removidas. Validação browser autenticada em `390×844` e `1440×900`: `overflow=0`, `h1=Mentor Comercial`, busca nomeada e CTA mobile em `top=689`. Detector Impeccable: limpo. Contratos focados: `16 pass`; `npm run lint`, `npm test` (`4139 pass / 0 fail`), build Vite e Graphify concluídos. `agent-browser` autenticado passou em desktop/mobile com `summary.status=passed`, sem erros JS e auditoria a11y com `0` violações; evidências em `visual-evidence/agent-browser/carteira-clientes-impeccable-final-*`.
+- **Correção direta solicitada em 2026-08-24 (imagem/áudio):** o modal `Executar próximo passo` agora oferece `Venda realizada` em qualquer etapa de contato, inclusive visita agendada/atendimento, sem exigir avanço artificial por várias etapas. A transição existente continua fechando a oportunidade como vendida e abrindo os campos de venda para confirmação; regressões cobrem etapas com agendamento, atendimento, cadência, encerramento e fallback.
+- Transcrição local do áudio confirmou o requisito de venda direta; não houve gravação ou mutação de dados reais durante a validação. Paridade Carteira e contratos de resiliência: `34 pass`, `176 expect()`. Rota autenticada local em `1440×900` e `390×844`: `summary.status=passed`, 0 erros JS, 0 violações a11y; evidências em `visual-evidence/agent-browser/direct-sale-authenticated-route-*` e `direct-sale-modal-manual-*`.
 
 ### File List
 
@@ -184,6 +186,9 @@ Claude Code (Sonnet 5), continuando trabalho iniciado em sessão anterior via Co
 - `src/features/carteira-clientes/lib/carteira-mutation-coordinator.ts`
 - `src/features/carteira-clientes/lib/carteira-mutation-coordinator.test.ts`
 - `src/features/carteira-clientes/lib/carteira-adapter-contract.test.ts`
+- `src/features/carteira-clientes/lib/proximoPassoMx.js`
+- `src/features/carteira-clientes/lib/carteira-meeting-regressions.test.ts`
+- `src/features/carteira-clientes/components/carteira-venda-roteiro.test.tsx`
 - `src/lib/carteira-base44-hardening-migration.test.ts`
 - `src/types/database.generated.ts`
 - `supabase/migrations/20260716210000_carteira_base44_security_hardening.sql` (+ rollback)

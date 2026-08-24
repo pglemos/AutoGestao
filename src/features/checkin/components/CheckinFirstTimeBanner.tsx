@@ -65,7 +65,7 @@ export function CheckinFirstTimeBanner({ onOpenHelp }: CheckinFirstTimeBannerPro
             <button
               type="button"
               onClick={handleDismiss}
-              className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-surface-alt hover:text-foreground"
+              className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-surface-alt hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-info/40"
               aria-label="Fechar guia de introdução"
             >
               <X className="h-4 w-4" />
@@ -104,7 +104,7 @@ export function CheckinFirstTimeBanner({ onOpenHelp }: CheckinFirstTimeBannerPro
                 <button
                   type="button"
                   onClick={onOpenHelp}
-                  className="inline-flex items-center gap-1.5 text-body-sm font-semibold text-status-info-text transition-colors hover:underline"
+                  className="inline-flex items-center gap-1.5 text-body-sm font-semibold text-status-info-text transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-info/40"
                 >
                   <BookOpen className="h-4 w-4" />
                   Entenda como funciona a pontuação
@@ -115,7 +115,7 @@ export function CheckinFirstTimeBanner({ onOpenHelp }: CheckinFirstTimeBannerPro
             <button
               type="button"
               onClick={handleDismiss}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-brand-primary px-4 py-2 text-body-sm font-bold text-white shadow-sm transition-colors hover:bg-brand-primary-hover active:scale-95"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-brand-primary px-4 py-2 text-body-sm font-bold text-white shadow-sm transition-colors hover:bg-brand-primary-hover active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40"
             >
               Começar fechamento
               <ArrowRight className="h-4 w-4" />

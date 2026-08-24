@@ -61,11 +61,11 @@ export default function VendedorConfiguracoes() {
               <span className="grid h-mx-14 w-mx-14 shrink-0 place-items-center rounded-2xl bg-brand-primary/10 text-status-success-text">
                 <ShieldCheck size={26} />
               </span>
-              <div className="min-w-0">
-                <Typography variant="h2">
-                  {profile?.name || 'Nome não informado'}
+              <div className="min-w-0 flex-1">
+                <Typography variant="h2" className="truncate" title={profile?.name || 'Perfil não informado'}>
+                  {profile?.name || 'Perfil não informado'}
                 </Typography>
-                <Typography variant="p" tone="muted" className="mt-mx-xs">
+                <Typography variant="p" tone="muted" className="mt-mx-xs truncate" title={membership?.store?.name || 'Loja não vinculada'}>
                   {membership?.store?.name || 'Loja não vinculada'}
                 </Typography>
               </div>

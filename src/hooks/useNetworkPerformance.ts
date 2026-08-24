@@ -125,6 +125,13 @@ type SupabaseRowsQuery = {
   range(from: number, to: number): PromiseLike<{ data: unknown[] | null; error: unknown }>
 }
 
+type OfficialSaleRow = {
+  seller_user_id: string
+  store_id: string
+  competencia: string
+  vendas: number | string
+}
+
 async function fetchAllRows<T extends Record<string, unknown>>(table: string, select: string, configure?: (query: SupabaseRowsQuery) => SupabaseRowsQuery): Promise<T[]> {
   const rows: T[] = []
   let from = 0
@@ -167,6 +174,7 @@ export function useNetworkPerformance() {
 
       const [
         allCheckins,
+        officialSales,
         lojas,
         metas,
         users,
@@ -175,9 +183,18 @@ export function useNetworkPerformance() {
         consultingClients,
         consultingVisits,
       ] = await Promise.all([
-        fetchAllRows('lancamentos_diarios', 'store_id, seller_user_id, reference_date, metric_scope, vnd_porta_prev_day, vnd_cart_prev_day, vnd_net_prev_day, leads_prev_day, agd_cart_today, agd_net_today, visit_prev_day', q =>
+        fetchAllRows('lancamentos_diarios', 'store_id, seller_user_id, reference_date, metric_scope, leads_prev_day, agd_cart_today, agd_net_today, visit_prev_day, submission_status', q =>
           q.eq('metric_scope', 'daily').gte('reference_date', historyStart).lte('reference_date', today)
         ),
+        supabase.rpc('get_vendas_oficiais_periodo', {
+          p_start_date: historyStart,
+          p_end_date: today,
+          p_store_id: null,
+          p_seller_id: null,
+        }).then(({ data, error }) => {
+          if (error) throw error
+          return (data || []) as OfficialSaleRow[]
+        }),
         fetchAllRows('lojas', 'id, name, active'),
         fetchAllRows('regras_metas_loja', 'store_id, monthly_goal'),
         fetchAllRows('usuarios', 'id, role, active, is_venda_loja'),
@@ -207,7 +224,7 @@ export function useNetworkPerformance() {
       let currentMonthSales = 0, currentMonthCheckins = 0
 
       for (const c of allCheckins) {
-        const sale = Number(c.vnd_porta_prev_day || 0) + Number(c.vnd_cart_prev_day || 0) + Number(c.vnd_net_prev_day || 0)
+        if (c.submission_status === 'draft') continue
         const leads = Number(c.leads_prev_day || 0)
         const agd = Number(c.agd_cart_today || 0) + Number(c.agd_net_today || 0)
         const vis = Number(c.visit_prev_day || 0)
@@ -215,28 +232,22 @@ export function useNetworkPerformance() {
         const referenceDate = c.reference_date as string
         const month = referenceDate?.slice(0, 7)
 
-        totalSales += sale
         totalLeads += leads
         totalAgd += agd
         totalVis += vis
 
         if (referenceDate >= monthStart) {
-          currentMonthSales += sale
           currentMonthCheckins += 1
         }
 
-        if (month) byMonth[month] = (byMonth[month] || 0) + sale
         if (referenceDate) {
           if (!byDay[referenceDate]) byDay[referenceDate] = { sales: 0, leads: 0, agd: 0, vis: 0 }
-          byDay[referenceDate].sales += sale
           byDay[referenceDate].leads += leads
           byDay[referenceDate].agd += agd
           byDay[referenceDate].vis += vis
         }
 
         if (!byStoreMap[sid]) byStoreMap[sid] = { sales: 0, currentMonthSales: 0, leads: 0, agd: 0, vis: 0, days: new Set(), checkins: 0, lastActivity: null }
-        byStoreMap[sid].sales += sale
-        if (referenceDate >= monthStart) byStoreMap[sid].currentMonthSales += sale
         byStoreMap[sid].leads += leads
         byStoreMap[sid].agd += agd
         byStoreMap[sid].vis += vis
@@ -247,6 +258,27 @@ export function useNetworkPerformance() {
             byStoreMap[sid].lastActivity = referenceDate
           }
         }
+      }
+
+      // Vendas oficiais têm uma competência própria. Não derivar de created_at,
+      // closed_at, updated_at ou data_evento evita que vendas importadas para a
+      // carteira reapareçam no mês em que foram cadastradas.
+      for (const row of officialSales) {
+        const sale = Number(row.vendas || 0)
+        const referenceDate = row.competencia
+        const month = referenceDate?.slice(0, 7)
+        const sid = String(row.store_id)
+
+        totalSales += sale
+        if (referenceDate >= monthStart) currentMonthSales += sale
+        if (month) byMonth[month] = (byMonth[month] || 0) + sale
+        if (referenceDate) {
+          if (!byDay[referenceDate]) byDay[referenceDate] = { sales: 0, leads: 0, agd: 0, vis: 0 }
+          byDay[referenceDate].sales += sale
+        }
+        if (!byStoreMap[sid]) byStoreMap[sid] = { sales: 0, currentMonthSales: 0, leads: 0, agd: 0, vis: 0, days: new Set(), checkins: 0, lastActivity: null }
+        byStoreMap[sid].sales += sale
+        if (referenceDate >= monthStart) byStoreMap[sid].currentMonthSales += sale
       }
 
       const sellerCountByStore = new Map<string, number>()

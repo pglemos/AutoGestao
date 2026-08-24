@@ -83,12 +83,12 @@ export function CorridaPeriodo({ vendedores, meta, meuId }: Props) {
                 }}
               >
                 {/* Nome e vendas do vendedor */}
-                <div className={`mb-1 px-1.5 py-0.5 rounded-md text-center whitespace-nowrap shadow-xs text-[11px] font-bold transition-transform ${
+                <div className={`mb-1 px-1.5 py-0.5 rounded-md text-center whitespace-nowrap shadow-xs text-[11px] font-bold transition-transform max-w-[80px] min-w-0 ${
                   isMe
                     ? 'bg-brand-primary text-white border border-brand-primary/40'
                     : 'bg-white text-foreground border border-border'
                 }`}>
-                  <span>{v.nome?.split(' ')[0]}</span>
+                  <span className="truncate block" title={v.nome}>{v.nome?.trim().split(' ')[0] || 'Vendedor'}</span>
                   <span className={`block text-[10px] font-medium ${isMe ? 'text-white/90' : 'text-muted-foreground'}`}>
                     {formatVendas(v.vendas)}
                   </span>
@@ -118,7 +118,7 @@ export function CorridaPeriodo({ vendedores, meta, meuId }: Props) {
         {/* Marcadores de escala 0% e 100% */}
         <div className="flex justify-between mt-2 px-1">
           <span className="text-[11px] font-medium text-muted-foreground">Largada (0 vendas)</span>
-          <span className="text-[11px] font-bold text-brand-primary">Chegada ({meta} vendas)</span>
+          <span className="text-[11px] font-bold text-brand-primary">Chegada ({meta} {meta === 1 ? 'venda' : 'vendas'})</span>
         </div>
       </div>
     </div>

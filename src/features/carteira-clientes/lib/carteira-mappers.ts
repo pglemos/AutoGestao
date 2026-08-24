@@ -16,6 +16,7 @@ type OpportunityRow = {
   cancelada_em?: string | null
   cancelada_por?: string | null
   motivo_cancelamento?: string | null
+  data_competencia?: string | null
   // PRODUCT DELTA 2026-08-07 — sinais do motor mentor (colunas reais).
   current_status_code?: string | null
   categoria_veiculo?: string | null
@@ -267,7 +268,13 @@ export function mapMxClientToCarteiraVisual(client: ClientRow, now = new Date())
     veiculo_comprado: wonOpportunity?.veiculo_interesse || '',
     valor_negociado: isCancelled ? 0 : Number(opportunity?.valor_negociado || wonOpportunity?.valor_negociado || client.potencial_negocio || 0),
     valor_venda: wonOpportunity?.valor_negociado ? Number(wonOpportunity.valor_negociado) : (opportunity?.valor_negociado ? Number(opportunity.valor_negociado) : null),
-    data_venda: wonOpportunity?.closed_at ? String(wonOpportunity.closed_at).slice(0, 10) : (wonOpportunity?.sale_date || null),
+    // `closed_at` é o instante da transição no CRM, não a competência da
+    // venda. A carteira deve expor o mesmo fato que alimenta o ranking.
+    data_venda: wonOpportunity?.data_competencia
+      || wonOpportunity?.sale_date
+      || opportunity?.data_competencia
+      || opportunity?.sale_date
+      || null,
     sinal: isCancelled ? 0 : Number(opportunity?.sinal || wonOpportunity?.sinal || 0),
     financiamento: financingLabel(opportunity?.financiamento || wonOpportunity?.financiamento),
     interesse_financiamento: Boolean((opportunity?.financiamento || wonOpportunity?.financiamento) && (opportunity?.financiamento || wonOpportunity?.financiamento) !== 'nao_aplica'),
@@ -285,6 +292,7 @@ export function mapMxClientToCarteiraVisual(client: ClientRow, now = new Date())
     trade_interest: opportunity?.trade_interest ?? wonOpportunity?.trade_interest ?? null,
     financing_interest: opportunity?.financing_interest ?? wonOpportunity?.financing_interest ?? null,
     catalog_model_id: opportunity?.catalog_model_id || wonOpportunity?.catalog_model_id || null,
+    data_competencia: wonOpportunity?.data_competencia || opportunity?.data_competencia || null,
     sale_date: wonOpportunity?.sale_date || opportunity?.sale_date || null,
     veiculo_troca: isCancelled ? '' : (opportunity?.veiculo_troca || wonOpportunity?.veiculo_troca || ''),
     valor_troca: isCancelled ? 0 : Number(opportunity?.valor_troca || wonOpportunity?.valor_troca || 0),

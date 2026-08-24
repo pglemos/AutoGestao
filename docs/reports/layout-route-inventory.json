@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-21T22:30:44.783Z",
-  "baselineSha": "60a14ac7f5cc919afa608ac70940def0dfb7c90e",
-  "routeCount": 119,
+  "generatedAt": "2026-08-24T16:19:19.663Z",
+  "baselineSha": "8c7510f6761dc3b85267d27fa8d0947cfa2d49f3",
+  "routeCount": 121,
   "routes": [
     {
       "path": "/",
@@ -66,6 +66,26 @@
       ],
       "canvas": 0,
       "template": 4,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/auditoria",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:AdminSegurancaAuditoriaPage"
+      ],
+      "files": [
+        "src/features/admin-mx/AdminSegurancaAuditoriaPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
       "structural": 0,
       "metadata": {
         "width": "dashboard",
@@ -261,7 +281,7 @@
       "files": [
         "src/features/internal-mx-planning/InternalStrategicPlanPage.tsx"
       ],
-      "canvas": 0,
+      "canvas": 1,
       "template": 0,
       "structural": 0,
       "metadata": {
@@ -1470,7 +1490,7 @@
       "files": [
         "src/features/internal-mx-planning/InternalStrategicPlanPage.tsx"
       ],
-      "canvas": 0,
+      "canvas": 1,
       "template": 0,
       "structural": 0,
       "metadata": {
@@ -1493,7 +1513,7 @@
       ],
       "canvas": 0,
       "template": 0,
-      "structural": 0,
+      "structural": 4,
       "metadata": {
         "width": "wide",
         "bottomClearance": "navigation",
@@ -1925,21 +1945,14 @@
     },
     {
       "path": "/treinamentos",
-      "renderCount": 4,
+      "renderCount": 1,
       "routes": [
-        "vendedor:RedirectWithSearch",
-        "gerente:GerenteTreinamentos",
-        "dono:DashboardLoja",
-        "admin:ConsultorTreinamentos"
+        "*:RedirectWithSearch"
       ],
-      "files": [
-        "src/pages/GerenteTreinamentos.tsx",
-        "src/features/dashboard-loja/DashboardLoja.container.tsx",
-        "src/pages/ConsultorTreinamentos.tsx"
-      ],
-      "canvas": 5,
+      "files": [],
+      "canvas": 0,
       "template": 0,
-      "structural": 1,
+      "structural": 0,
       "metadata": {
         "width": "dashboard",
         "source": "default"
@@ -1966,6 +1979,26 @@
         "width": "dashboard",
         "bottomClearance": "navigation",
         "adopted": true
+      }
+    },
+    {
+      "path": "/vendas",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:DashboardLoja",
+        "dono:DashboardLoja",
+        "admin:DashboardLoja"
+      ],
+      "files": [
+        "src/features/dashboard-loja/DashboardLoja.container.tsx"
+      ],
+      "canvas": 5,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
       }
     },
     {

@@ -22,6 +22,13 @@ type LancamentoRow = {
     submission_status?: string | null
 }
 
+type OfficialSaleRow = {
+    seller_user_id: string
+    store_id: string
+    competencia: string
+    vendas: number | string
+}
+
 // MX-22.5 (AC-2; Spec §10.2/FEV-DATA-11): rascunho (submission_status='draft')
 // já é metric_scope='daily' desde a 22.2, então some sem esse filtro é
 // contabilizado no Ranking de rede antes do vendedor finalizar o fechamento.
@@ -377,14 +384,14 @@ export function useGlobalRanking(filters?: { startDate?: string; endDate?: strin
 
         // MX-RANK-UNIFY: busca eventos_comerciais como fonte canônica de vendas
         // (mesma lógica da RPC vendedor_performance_oficial — resolve discrepância ranking vs painel)
-        const salesEventsPromise = supabase
-            .from('eventos_comerciais')
-            .select('seller_user_id, loja_id, data_evento, data_competencia, oportunidade_id')
-            .eq('tipo_evento', 'venda_realizada')
-            .gte('data_evento', `${startOfMonth}T00:00:00.000Z`)
-            .lte('data_evento', `${endOfRange}T23:59:59.999Z`)
+        const officialSalesPromise = supabase.rpc('get_vendas_oficiais_periodo', {
+            p_start_date: startOfMonth,
+            p_end_date: endOfRange,
+            p_store_id: null,
+            p_seller_id: null,
+        })
 
-        const [checkinsRes, tenuresRes, rulesRes, todayCheckinsRes, salesEventsRes] = await Promise.all([
+        const [checkinsRes, tenuresRes, rulesRes, todayCheckinsRes, officialSalesRes] = await Promise.all([
             checkinsPromise,
             supabase.from('vendedores_loja')
                 .select('seller_user_id, store_id, users:usuarios(name, is_venda_loja, avatar_url), lojas:lojas(name)')
@@ -392,7 +399,7 @@ export function useGlobalRanking(filters?: { startDate?: string; endDate?: strin
             supabase.from('regras_metas_loja')
                 .select('store_id, monthly_goal, include_venda_loja_in_individual_goal'),
             todayCheckinsPromise,
-            salesEventsPromise,
+            officialSalesPromise,
         ])
         if (checkinsRes.error || tenuresRes.error || rulesRes.error || todayCheckinsRes.error) {
             const message = checkinsRes.error?.message || tenuresRes.error?.message || rulesRes.error?.message || todayCheckinsRes.error?.message || 'Erro desconhecido'
@@ -402,21 +409,16 @@ export function useGlobalRanking(filters?: { startDate?: string; endDate?: strin
             setLoading(false)
             return
         }
-        if (salesEventsRes.error) {
-            console.error('Audit Error [useGlobalRanking]: sales events fetch fail ->', salesEventsRes.error.message)
+        if (officialSalesRes.error) {
+            console.error('Audit Error [useGlobalRanking]: official sales fetch fail ->', officialSalesRes.error.message)
         }
         const checkins = (checkinsRes.data as LancamentoRow[] | null)?.filter(isOfficialLancamento) ?? null
         const tenures = tenuresRes.data
         const rules = rulesRes.data
         const todayCheckins = (todayCheckinsRes.data as LancamentoRow[] | null)?.filter(isOfficialLancamento) ?? null
-        // Eventos de venda do período — fonte canônica (eventos_comerciais, same as RPC)
-        const salesEvents = (salesEventsRes.data || []) as Array<{
-            seller_user_id: string
-            loja_id: string
-            data_evento: string
-            data_competencia: string | null
-            oportunidade_id: string | null
-        }>
+        // Read model canônico: competência explícita do evento, da oportunidade
+        // ou sale_date. Nunca usa created_at/data_evento como competência.
+        const officialSales = (officialSalesRes.data || []) as OfficialSaleRow[]
 
         if (!checkins || !tenures) { setLoading(false); return }
 
@@ -434,8 +436,10 @@ export function useGlobalRanking(filters?: { startDate?: string; endDate?: strin
         const salesTodayMap = new Map<string, number>()
         for (const c of todayCheckins || []) {
             checkedInToday.add(c.seller_user_id)
-            const v = (c.vnd_porta_prev_day || 0) + (c.vnd_cart_prev_day || 0) + (c.vnd_net_prev_day || 0)
-            salesTodayMap.set(c.seller_user_id, v)
+        }
+        for (const sale of officialSales) {
+            if (sale.competencia !== dias.referencia) continue
+            salesTodayMap.set(sale.seller_user_id, (salesTodayMap.get(sale.seller_user_id) || 0) + Number(sale.vendas || 0))
         }
 
         // Mapa seller → store_id para validar loja dos eventos
@@ -444,17 +448,13 @@ export function useGlobalRanking(filters?: { startDate?: string; endDate?: strin
             sellerStoreMap.set(t.seller_user_id, t.store_id)
         }
 
-        // Contar vendas por vendedor a partir de eventos_comerciais (fonte canônica)
-        // Filtra por loja_id da vendedora para garantir consistência
+        // Contar vendas por vendedor a partir do read model oficial.
+        // Filtra por loja_id da vendedora para garantir consistência.
         const salesBySellerFromEvents = new Map<string, number>()
-        for (const ev of salesEvents) {
-            const expectedStore = sellerStoreMap.get(ev.seller_user_id)
-            if (!expectedStore || ev.loja_id !== expectedStore) continue
-            // Calcular data de competência (mesma lógica da RPC)
-            const eventDate = ev.data_competencia
-                || new Date(ev.data_evento).toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' })
-            if (eventDate < startOfMonth || eventDate > endOfRange) continue
-            salesBySellerFromEvents.set(ev.seller_user_id, (salesBySellerFromEvents.get(ev.seller_user_id) || 0) + 1)
+        for (const sale of officialSales) {
+            const expectedStore = sellerStoreMap.get(sale.seller_user_id)
+            if (!expectedStore || sale.store_id !== expectedStore) continue
+            salesBySellerFromEvents.set(sale.seller_user_id, (salesBySellerFromEvents.get(sale.seller_user_id) || 0) + Number(sale.vendas || 0))
         }
 
         const agg = new Map<string, { vnd: number; vnd_yesterday: number; leads: number; agd: number; vis: number; name: string; avatarUrl: string | null; store: string; storeId: string; isVendaLoja: boolean; checkedIn: boolean }>()
@@ -564,15 +564,23 @@ export function useStorePerformance() {
                 .eq('metric_scope', 'daily')
                 .eq('reference_date', dias.referencia)
 
-        const [lojasRes, rulesRes, checkinsRes, sellersRes, yesterdayCheckinsRes] = await Promise.all([
+        const officialSalesPromise = supabase.rpc('get_vendas_oficiais_periodo', {
+            p_start_date: startOfMonth,
+            p_end_date: dias.referencia,
+            p_store_id: null,
+            p_seller_id: null,
+        })
+
+        const [lojasRes, rulesRes, checkinsRes, sellersRes, yesterdayCheckinsRes, officialSalesRes] = await Promise.all([
             supabase.from('lojas').select('id, name').eq('active', true),
             supabase.from('regras_metas_loja').select('store_id, monthly_goal'),
             perfCheckinsPromise,
             supabase.from('vendedores_loja').select('store_id, is_active').eq('is_active', true),
             perfTodayPromise,
+            officialSalesPromise,
         ])
-        if (lojasRes.error || rulesRes.error || checkinsRes.error || sellersRes.error || yesterdayCheckinsRes.error) {
-            const message = lojasRes.error?.message || rulesRes.error?.message || checkinsRes.error?.message || sellersRes.error?.message || yesterdayCheckinsRes.error?.message || 'Erro desconhecido'
+        if (lojasRes.error || rulesRes.error || checkinsRes.error || sellersRes.error || yesterdayCheckinsRes.error || officialSalesRes.error) {
+            const message = lojasRes.error?.message || rulesRes.error?.message || checkinsRes.error?.message || sellersRes.error?.message || yesterdayCheckinsRes.error?.message || officialSalesRes.error?.message || 'Erro desconhecido'
             console.error('Audit Error [useStorePerformance]: fetch fail ->', message)
             setError('Não foi possível carregar a performance das lojas.')
             setPerformance([])
@@ -584,15 +592,15 @@ export function useStorePerformance() {
         const checkins = ((checkinsRes.data || []) as LancamentoRow[]).filter(isOfficialLancamento)
         const sellers = sellersRes.data
         const yesterdayCheckins = ((yesterdayCheckinsRes.data || []) as LancamentoRow[]).filter(isOfficialLancamento)
+        const officialSales = (officialSalesRes.data || []) as OfficialSaleRow[]
 
         if (!lojas) { setLoading(false); return }
 
         const rulesMap = new Map(rules?.map(r => [r.store_id, r.monthly_goal]) || [])
         const salesMap = new Map<string, number>()
-        checkins.forEach((c) => {
-            const v = (c.vnd_porta_prev_day || 0) + (c.vnd_cart_prev_day || 0) + (c.vnd_net_prev_day || 0)
-            const sid = c.store_id as string
-            salesMap.set(sid, (salesMap.get(sid) || 0) + v)
+        officialSales.forEach((sale) => {
+            const sid = sale.store_id
+            salesMap.set(sid, (salesMap.get(sid) || 0) + Number(sale.vendas || 0))
         })
 
         const sellersCountMap = new Map<string, number>()

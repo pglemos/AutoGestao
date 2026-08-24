@@ -65,9 +65,11 @@ describe('FASE J — DashboardHeader ramificação interna usa TabNavPill canôn
     const performance = screen.getByRole('tab', { name: /Performance/ })
     fireEvent.keyDown(performance, { key: 'ArrowRight' })
     expect(screen.getByRole('tab', { name: /Metas/ }).getAttribute('aria-selected')).toBe('true')
-    fireEvent.keyDown(screen.getByRole('tab', { name: /Metas/ }), { key: 'End' })
+    fireEvent.keyDown(screen.getByRole('tab', { name: /Metas/ }), { key: 'ArrowRight' })
     expect(screen.getByRole('tab', { name: /Equipe/ }).getAttribute('aria-selected')).toBe('true')
-    fireEvent.keyDown(screen.getByRole('tab', { name: /Equipe/ }), { key: 'Home' })
+    fireEvent.keyDown(screen.getByRole('tab', { name: /Equipe/ }), { key: 'End' })
+    expect(screen.getByRole('tab', { name: /Vendas/ }).getAttribute('aria-selected')).toBe('true')
+    fireEvent.keyDown(screen.getByRole('tab', { name: /Vendas/ }), { key: 'Home' })
     expect(screen.getByRole('tab', { name: /Performance/ }).getAttribute('aria-selected')).toBe('true')
   })
 

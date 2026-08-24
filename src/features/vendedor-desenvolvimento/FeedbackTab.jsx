@@ -13,26 +13,45 @@ import { ScrollableRegion } from "@/design-system/page/ScrollableRegion";
 export default function FeedbackPage({ hideHeader = false }) {
   const [feedbacks, setFeedbacks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(null);
+  const [acknowledgingId, setAcknowledgingId] = useState(null);
   const [comments, setComments] = useState({});
 
+  const loadFeedbacks = () => {
+    setLoading(true);
+    setFetchError(null);
+    base44.entities.Feedback.list('-created_date', 50)
+      .then(data => {
+        setFeedbacks(Array.isArray(data) ? data : []);
+      })
+      .catch(err => {
+        setFetchError(err?.message || "Não foi possível carregar os feedbacks.");
+        setFeedbacks([]);
+      })
+      .finally(() => setLoading(false));
+  };
+
   useEffect(() => {
-    base44.entities.Feedback.list('-created_date', 50).then(setFeedbacks).catch(() => []).finally(() => setLoading(false));
+    loadFeedbacks();
   }, []);
 
   const acknowledge = async (id) => {
-    const comment = comments[id] || "";
+    if (acknowledgingId) return;
+    const comment = (comments[id] || "").trim();
+    setAcknowledgingId(id);
     try {
       await base44.entities.Feedback.update(id, {
         acknowledged: true,
         user_comment: comment,
         acknowledged_date: new Date().toISOString()
       });
+      setFeedbacks(prev => prev.map(f => f.id === id ? { ...f, acknowledged: true, user_comment: comment, acknowledged_date: new Date().toISOString() } : f));
+      toast.info("Feedback confirmado!", { description: "Seu líder foi notificado." });
     } catch (error) {
       toast.error("Não foi possível confirmar o feedback.", { description: "Tente novamente." });
-      return;
+    } finally {
+      setAcknowledgingId(null);
     }
-    setFeedbacks(prev => prev.map(f => f.id === id ? { ...f, acknowledged: true, user_comment: comment, acknowledged_date: new Date().toISOString() } : f));
-    toast.info("Feedback confirmado!", { description: "Seu líder foi notificado."  });
   };
 
   const feedbackBadge = (f) => (f.hasAttentionPoints
@@ -51,6 +70,15 @@ export default function FeedbackPage({ hideHeader = false }) {
     <div className="space-y-8">
       {!hideHeader && <PageHeader title="Feedback" subtitle="Comunicação entre líder e liderado" />}
 
+      {fetchError && (
+        <div className="flex items-center justify-between gap-3 rounded-xl border border-status-error/30 bg-status-error-surface p-4">
+          <p className="text-sm font-semibold text-status-error-text">{fetchError}</p>
+          <Button onClick={loadFeedbacks} variant="outline" size="sm" className="shrink-0 text-xs">
+            Tentar novamente
+          </Button>
+        </div>
+      )}
+
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard label="Feedbacks Recebidos" value={feedbacks.length} icon={<MessageSquare />} tone="blue" />
@@ -67,14 +95,14 @@ export default function FeedbackPage({ hideHeader = false }) {
             {pending.map(f => (
               <div key={f.id} className="bg-white rounded-2xl p-6 shadow-sm border border-status-warning/40">
                 <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 mb-2">
                       <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${feedbackBadge(f).className}`}>{feedbackBadge(f).label}</span>
-                      <span className="text-xs text-muted-foreground">{f.competency}</span>
-                      <span className="text-xs text-muted-foreground">· {moment(f.created_date).format("DD/MM/YYYY")}</span>
+                      <span className="text-xs text-muted-foreground truncate max-w-[200px]" title={f.competency}>{f.competency}</span>
+                      <span className="text-xs text-muted-foreground shrink-0">· {moment(f.created_date).format("DD/MM/YYYY")}</span>
                     </div>
-                    <p className="text-sm text-foreground mb-1">{f.message}</p>
-                    <p className="text-xs text-muted-foreground">Por: {f.responsible}</p>
+                    <p className="text-sm text-foreground mb-1 break-words leading-relaxed">{f.message}</p>
+                    <p className="text-xs text-muted-foreground truncate" title={f.responsible}>Por: {f.responsible || "Líder da loja"}</p>
                   </div>
                 </div>
                 <div className="mt-4 space-y-3">
@@ -84,10 +112,16 @@ export default function FeedbackPage({ hideHeader = false }) {
                     onChange={e => setComments(prev => ({ ...prev, [f.id]: e.target.value }))}
                     className="resize-none"
                     rows={2}
+                    maxLength={1000}
+                    disabled={acknowledgingId === f.id}
                   />
-                  <Button onClick={() => acknowledge(f.id)} className="bg-status-info hover:bg-status-info text-white rounded-xl gap-2">
+                  <Button
+                    onClick={() => acknowledge(f.id)}
+                    disabled={acknowledgingId === f.id}
+                    className="bg-status-info hover:bg-status-info text-white rounded-xl gap-2 disabled:opacity-50"
+                  >
                     <CheckCircle2 className="w-4 h-4" />
-                    Li e compreendi
+                    {acknowledgingId === f.id ? "Confirmando..." : "Li e compreendi"}
                   </Button>
                 </div>
               </div>

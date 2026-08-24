@@ -1,0 +1,7 @@
+{
+  "url": "http://localhost:3457/login",
+  "waitText": "MX PERFORMANCE",
+  "assertVisible": ["form", "input"],
+  "screenshots": ["desktop", "mobile"],
+  "steps": []
+}

@@ -49,6 +49,12 @@ const RESULTADOS_PP18 = [
   { label: 'Desistiu', emoji: '❌', cor: 'red' },
 ]
 
+const RESULTADO_VENDA_DIRETA = {
+  label: 'Venda realizada',
+  emoji: '🏆',
+  cor: 'yellow',
+}
+
 const TRANSICAO_PP18 = {
   'Venda realizada': { proximo: null, dias: 0, sit: 'Venda realizada', temp: 'Quente', status: 'Vendido' },
   'Proposta enviada': { proximo: 'PP10', dias: 0, sit: 'Proposta enviada', temp: 'Quente' },
@@ -72,7 +78,17 @@ export function detectarCodigo(proximoPasso) {
 }
 
 export function getResultados(proximoPasso) {
-  return detectarCodigo(proximoPasso) === 'PP18' ? RESULTADOS_PP18 : getResultadosBase(proximoPasso)
+  const resultados = detectarCodigo(proximoPasso) === 'PP18'
+    ? RESULTADOS_PP18
+    : getResultadosBase(proximoPasso)
+
+  // A venda pode acontecer durante qualquer contato, inclusive quando o
+  // próximo passo ainda é confirmar uma visita ou realizar o atendimento.
+  // Mantém os resultados específicos do passo e oferece uma saída direta,
+  // sem obrigar o vendedor a avançar artificialmente pelo funil.
+  return resultados.some(({ label }) => label === RESULTADO_VENDA_DIRETA.label)
+    ? resultados
+    : [...resultados, RESULTADO_VENDA_DIRETA]
 }
 
 export function aplicarTransicao(proximoPassoAtual, resultado) {

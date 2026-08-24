@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
-import { aplicarTransicao, detectarCodigo } from './proximoPassoMx.js'
+import { aplicarTransicao, detectarCodigo, getResultados } from './proximoPassoMx.js'
 import { gerarScriptLocal } from '@/components/carteira/scriptTemplatesLocal.js'
 
 describe('regressões observadas na reunião da Carteira', () => {
@@ -39,6 +39,24 @@ describe('regressões observadas na reunião da Carteira', () => {
       proximo_passo: null,
       proxima_acao_data: null,
     })
+  })
+
+  test('oferece venda realizada como saída direta em qualquer etapa do contato', () => {
+    const etapasComuns = [
+      'Agendar visita ou videochamada',
+      'Confirmar agendamento',
+      'Realizar atendimento comercial',
+      'Retomar contato',
+      'Encerrar oportunidade',
+    ]
+
+    for (const etapa of etapasComuns) {
+      const vendas = getResultados(etapa).filter(resultado => resultado.label === 'Venda realizada')
+      expect(vendas).toHaveLength(1)
+    }
+
+    expect(getResultados('Confirmar venda').filter(resultado => resultado.label === 'Venda realizada')).toHaveLength(1)
+    expect(getResultados('Etapa não mapeada').filter(resultado => resultado.label === 'Venda realizada')).toHaveLength(1)
   })
 
   test('a mensagem permanece coerente com confirmar visita e aprovação', () => {

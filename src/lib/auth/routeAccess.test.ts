@@ -98,6 +98,7 @@ describe('route access matrix', () => {
       '/rotina-equipe',
       '/minha-equipe',
       '/meta-loja',
+      '/vendas',
       '/mentor',
       '/feedbacks-pdis',
     ]

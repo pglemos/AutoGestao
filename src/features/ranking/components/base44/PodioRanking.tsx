@@ -9,12 +9,12 @@ const PEDESTAL = [
 ] as const
 
 function formatVendas(v: number) {
-  return `${v} vendas`
+  return `${v} ${v === 1 ? 'venda' : 'vendas'}`
 }
 
 export function PodioRanking({ top3 }: { top3: RankedVendedor[] }) {
   return (
-    <div className="bg-white rounded-2xl border border-border shadow-sm p-5 flex-1">
+    <div className="bg-white rounded-2xl border border-border shadow-sm p-5 flex-1 min-w-0">
       <h2 className="text-body font-bold text-foreground mb-4">Pódio do Período</h2>
       <div className="flex items-end justify-center gap-3 sm:gap-6 mt-2 pb-2">
         {PEDESTAL.map(({ pos, label, bg, height, order }) => {
@@ -29,8 +29,9 @@ export function PodioRanking({ top3 }: { top3: RankedVendedor[] }) {
               </div>
             )
           }
+          const firstName = v.nome?.trim().split(/\s+/)[0] || 'Vendedor'
           return (
-            <div key={pos} className="flex flex-col items-center gap-1.5" style={{ order }}>
+            <div key={pos} className="flex flex-col items-center gap-1.5 min-w-0" style={{ order }}>
               {pos === 1 && (
                 <Trophy
                   className="w-6 h-6 mb-0.5"
@@ -44,8 +45,8 @@ export function PodioRanking({ top3 }: { top3: RankedVendedor[] }) {
                 size={pos === 1 ? 68 : 56}
                 border={pos === 1 ? '4px solid var(--color-status-warning)' : '3px solid var(--color-border-default)'}
               />
-              <div className="text-center mt-1">
-                <p className="text-body-sm font-bold text-foreground leading-tight">{v.nome?.split(' ')[0]}</p>
+              <div className="text-center mt-1 max-w-[80px] sm:max-w-[96px] min-w-0">
+                <p className="text-body-sm font-bold text-foreground leading-tight truncate" title={v.nome}>{firstName}</p>
                 <p className="text-caption font-semibold" style={{ color: 'var(--color-brand-primary)' }}>{formatVendas(v.vendas)}</p>
               </div>
               <div className="relative rounded-t-md flex items-center justify-center w-16 sm:w-20" style={{ height, background: bg }}>

@@ -575,7 +575,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
               id="checkin-new-client-button"
               type="button"
               onClick={() => setNovoRegistroModalOpen(true)}
-              className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-status-info px-5 text-sm font-bold text-white shadow-[var(--mx-button-shadow)] transition hover:bg-status-info sm:w-auto"
+              className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-status-info px-5 text-sm font-bold text-white shadow-[var(--mx-button-shadow)] transition hover:bg-status-info focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-info/40 sm:w-auto"
             >
               <UserPlus size={16} /> + Novo Registro
             </button>
@@ -597,7 +597,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
             <button
               type="button"
               onClick={() => setNovoRegistroModalOpen(true)}
-              className="mt-1 inline-flex items-center gap-1.5 rounded-xl bg-status-info px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-status-info active:scale-95"
+              className="mt-1 inline-flex items-center gap-1.5 rounded-xl bg-status-info px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-status-info active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-info/40"
             >
               <UserPlus size={14} /> + Cadastrar Primeiro Registro
             </button>
@@ -616,10 +616,10 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                     <p className="mt-0.5 truncate text-[12px] font-semibold text-muted-foreground">{formatPhone(row.telefone)} · {row.veiculoInteresse}</p>
                   </div>
                   <div className="flex shrink-0 items-center gap-1.5">
-                    <button type="button" onClick={() => handleEdit(row)} className="grid h-8 w-8 place-items-center rounded-lg bg-border text-mx-navy transition-colors hover:bg-surface-alt hover:text-status-success" aria-label={`Editar ${row.nomeCliente}`}>
+                    <button type="button" onClick={() => handleEdit(row)} className="grid h-8 w-8 place-items-center rounded-lg bg-border text-mx-navy transition-colors hover:bg-surface-alt hover:text-status-success focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-success/40" aria-label={`Editar ${row.nomeCliente}`}>
                       <Pencil size={14} />
                     </button>
-                    <button type="button" onClick={() => handleDelete(row)} className="grid h-8 w-8 place-items-center rounded-lg bg-border text-muted-foreground transition-colors hover:bg-status-error-surface hover:text-status-error" aria-label={`Excluir ${row.nomeCliente}`}>
+                    <button type="button" onClick={() => handleDelete(row)} className="grid h-8 w-8 place-items-center rounded-lg bg-border text-muted-foreground transition-colors hover:bg-status-error-surface hover:text-status-error focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-error/40" aria-label={`Excluir ${row.nomeCliente}`}>
                       <Trash2 size={14} />
                     </button>
                   </div>
@@ -717,7 +717,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                       <button
                         type="button"
                         onClick={() => setNovoRegistroModalOpen(true)}
-                        className="mt-1 inline-flex items-center gap-1.5 rounded-xl bg-status-info px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-status-info active:scale-95"
+                        className="mt-1 inline-flex items-center gap-1.5 rounded-xl bg-status-info px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-status-info active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-info/40"
                       >
                         <UserPlus size={14} /> + Cadastrar Primeiro Registro
                       </button>
@@ -776,7 +776,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                             <button
                               type="button"
                               onClick={() => handleEdit(row)}
-                              className="grid h-8 w-8 place-items-center rounded-lg bg-border text-mx-navy hover:bg-surface-alt hover:text-status-success transition-colors"
+                              className="grid h-8 w-8 place-items-center rounded-lg bg-border text-mx-navy hover:bg-surface-alt hover:text-status-success transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-success/40"
                               title="Editar cliente"
                             >
                               <Pencil size={14} />
@@ -784,7 +784,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                             <button
                               type="button"
                               onClick={() => handleDelete(row)}
-                              className="grid h-8 w-8 place-items-center rounded-lg bg-border text-muted-foreground hover:bg-status-error-surface hover:text-status-error transition-colors"
+                              className="grid h-8 w-8 place-items-center rounded-lg bg-border text-muted-foreground hover:bg-status-error-surface hover:text-status-error transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-error/40"
                               title="Excluir cliente"
                             >
                               <Trash2 size={14} />
@@ -919,7 +919,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
               <button
                 type="button"
                 onClick={() => setDrawerOpen(false)}
-                className="absolute right-6 top-6 grid h-8 w-8 place-items-center rounded-lg text-muted-foreground hover:text-muted-foreground hover:bg-surface-alt transition-all text-xl font-bold"
+                className="absolute right-6 top-6 grid h-8 w-8 place-items-center rounded-lg text-muted-foreground hover:text-muted-foreground hover:bg-surface-alt transition-all text-xl font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-success/40"
                 aria-label="Fechar cadastro"
               >
                 <X size={18} />
@@ -1183,7 +1183,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
               <button
                 type="button"
                 onClick={() => setDrawerOpen(false)}
-                className="h-[40px] px-6 rounded-full border border-border bg-white text-sm font-bold text-muted-foreground hover:bg-surface-alt transition-colors"
+                className="h-[40px] px-6 rounded-full border border-border bg-white text-sm font-bold text-muted-foreground hover:bg-surface-alt transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-success/40"
               >
                 Cancelar
               </button>
@@ -1192,7 +1192,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                 type="button"
                 onClick={() => handleCadastrar()}
                 disabled={saving}
-                className="h-[40px] px-8 rounded-full bg-status-success text-sm font-bold text-white shadow-[0_4px_12px_rgba(0,168,157,0.2)] hover:bg-status-success disabled:bg-muted-foreground transition-colors"
+                className="h-[40px] px-8 rounded-full bg-status-success text-sm font-bold text-white shadow-[0_4px_12px_rgba(0,168,157,0.2)] hover:bg-status-success disabled:bg-muted-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-success/40"
               >
                 {saving ? 'Salvando...' : 'Salvar Cliente'}
               </button>
@@ -1227,21 +1227,21 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
               <button
                 type="button"
                 onClick={() => handleCadastrar({ coerenciaObservacao: 'Venda de atendimento anterior (confirmado pelo vendedor).' })}
-                className="h-11 rounded-xl bg-status-success px-4 text-sm font-bold text-white shadow-sm transition-colors hover:bg-brand-primary"
+                className="h-11 rounded-xl bg-status-success px-4 text-sm font-bold text-white shadow-sm transition-colors hover:bg-brand-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-success/40"
               >
                 Sim, atendimento anterior
               </button>
               <button
                 type="button"
                 onClick={() => setCoerenciaModalOpen(false)}
-                className="h-11 rounded-xl bg-status-warning px-4 text-sm font-bold text-status-warning-foreground shadow-sm transition-colors hover:bg-status-warning"
+                className="h-11 rounded-xl bg-status-warning px-4 text-sm font-bold text-status-warning-foreground shadow-sm transition-colors hover:bg-status-warning focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-warning/40"
               >
                 Corrigir canal ou atendimento
               </button>
               <button
                 type="button"
                 onClick={() => handleCadastrar({ coerenciaObservacao: 'Venda sem atendimento do canal registrado — salva mesmo assim.' })}
-                className="h-11 rounded-xl border border-border bg-white px-4 text-sm font-bold text-muted-foreground transition-colors hover:bg-surface-alt"
+                className="h-11 rounded-xl border border-border bg-white px-4 text-sm font-bold text-muted-foreground transition-colors hover:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-success/40"
               >
                 Salvar mesmo assim
               </button>

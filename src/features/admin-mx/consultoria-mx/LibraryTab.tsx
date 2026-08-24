@@ -120,7 +120,7 @@ export function LibraryTab(props: {
                   <div key={lesson.id} className="rounded-xl border border-border bg-surface-alt/40 p-4">
                     <div className="mb-2 flex items-center gap-2">
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface-alt"><GraduationCap size={16} className="text-muted-foreground" /></div>
-                      <span className="rounded-full bg-violet-500/10 px-2 py-0.5 text-xs font-medium text-violet-700 dark:text-violet-300">Aula da Universidade MX</span>
+                      <span className="rounded-full bg-status-info-surface px-2 py-0.5 text-xs font-medium text-status-info-text">Aula da Universidade MX</span>
                     </div>
                     <h4 className="text-sm font-semibold text-foreground">{lesson.titulo}</h4>
                     <p className="mt-1 text-xs text-muted-foreground">{lesson.tipo || 'treinamento'}</p>

@@ -11,6 +11,7 @@ import { StoreGoalsPanel } from '@/features/lojas/components/StoreGoalsPanel'
 import { StoreTeamPanel } from '@/features/lojas/components/StoreTeamPanel'
 import { ManagerTeamPerformance } from '@/features/manager/team/ManagerTeamPerformance'
 import { ManagerStoreGoalReference } from '@/features/manager/meta/ManagerStoreGoalReference'
+import { VendasFechadasLoja } from '@/features/vendas-loja/VendasFechadasLoja'
 import { ManagerSellerParityHomeCanonical } from './sections/ManagerSellerParityHomeCanonical'
 import { DashboardHeader, type DashboardTab } from './sections/DashboardHeader'
 import { PerformanceTab } from './sections/PerformanceTab'
@@ -27,7 +28,7 @@ import { DashboardErrorBoundary } from './components/DashboardErrorBoundary'
 
 /**
  * Container do DashboardLoja — orquestra resolução de loja, routing por slug/query,
- * tabs (performance/metas/equipe), modais de admin e ErrorBoundaries por section.
+ * tabs (performance/metas/equipe/vendas), modais de admin e ErrorBoundaries por section.
  * Decomposição de `src/pages/DashboardLoja.tsx` (Story 2.5, ADR-0050).
  */
 export function DashboardLoja() {
@@ -58,8 +59,9 @@ export function DashboardLoja() {
   const activeTab = useMemo<DashboardTab>(() => {
     if (location.pathname === '/minha-equipe') return 'equipe'
     if (location.pathname === '/meta-loja') return 'metas'
+    if (location.pathname === '/vendas') return 'vendas'
     const tab = new URLSearchParams(location.search).get('tab')
-    return tab === 'metas' || tab === 'equipe' ? tab : 'performance'
+    return tab === 'metas' || tab === 'equipe' || tab === 'vendas' ? tab : 'performance'
   }, [location.pathname, location.search])
   const isFocusedRolePerformance = (isOwner || role === 'gerente') && activeTab === 'performance'
   /**
@@ -153,11 +155,10 @@ export function DashboardLoja() {
   /*
    * A margem lateral vinha de um ternário na raiz: `p-mx-lg` só no caso
    * default, nada para `isManagerSection` nem para `isFocusedRolePerformance`,
-   * na expectativa de que as seções internas fornecessem a sua. Em
-   * /vendas nenhuma fornecia, e o título encostava na borda da área de
-   * conteúdo — medido em 0px de respiro por scripts/audit-page-gutters.mjs.
+   * na expectativa de que as seções internas fornecessem a sua.
    *
-   * Todos os ramos de DashboardLoja consomem o mesmo canvas. O componente
+   * Todos os ramos de DashboardLoja, inclusive a lista de vendas fechadas,
+   * consomem o mesmo canvas. O componente
    * canônico do gerente fornece apenas conteúdo e não pode ser um proprietário
    * alternativo de gutter/width. `as="div"` evita aninhar outro landmark
    * `main` dentro do shell.
@@ -207,6 +208,13 @@ export function DashboardLoja() {
         isTeamKanban
           ? <ManagerTeamPerformance data={data} storeName={data.metrics.storeName} selectableStores={selectableStores} onStoreChange={setActiveStoreId} />
           : <StoreTeamPanel storeId={selectedStoreId} storeName={data.metrics.storeName} />
+      ) : activeTab === 'vendas' ? (
+        <VendasFechadasLoja
+          storeId={selectedStoreId}
+          showManagerHeader={role === 'gerente'}
+          selectableStores={selectableStores}
+          onStoreChange={setActiveStoreId}
+        />
       ) : selectedStoreId ? (
         <PerformanceTab
           role={role}
