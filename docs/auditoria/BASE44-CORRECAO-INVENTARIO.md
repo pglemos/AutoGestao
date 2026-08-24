@@ -158,6 +158,6 @@ Resumo: **33 DONE**, **0 PARTIAL**; 0 BLOCKED. P33+P05+P25 bb88b1.
 
 - Commit `311a966c`: ZERO_IF_EMPTY só nas deps da fórmula; limpa SALES_OTHER legado; Realizado calculado não herda 0 persistido.
 - Verificado Visão Dono AG: Resultado **Sem resultado** (não 0%/Crítico).
-- Residual observado: **Estoque Total 0** em Resultado com canais vazios — investigar legado/check-in.
+- Residual Estoque: **DONE** — `applyOfficialComputedMetas` só recalcula Meta; Realizado manual preservado (AG Resultado Estoque=3, Vendas=Sem resultado).
 - Push `eeda37fa` (+ auditoria visibilidade Dono).
 

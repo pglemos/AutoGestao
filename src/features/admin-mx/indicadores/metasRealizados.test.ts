@@ -336,6 +336,20 @@ describe('cadastro rápido', () => {
     expect(readOfficialMonthValue(noisy, indicators, 'SALES_TOTAL', 7, 'realizado')).toBeNull()
   })
 
+  test('buildOfficialMonthlyGrid preserva realizado manual de INVENTORY_TOTAL', () => {
+    const indicators = [
+      { code: 'SALES_TOTAL', formula_expression: 'IND("SALES_WALKIN")' },
+      { code: 'INVENTORY_TOTAL', formula_expression: 'IND("SALES_TOTAL") * PAR("STOCK_TO_SALES_RATIO")' },
+      { code: 'ACTIVE_INVENTORY', formula_expression: 'IND("INVENTORY_TOTAL") * PAR("ACTIVE_STOCK_RATE")' },
+    ]
+    const grid = buildOfficialMonthlyGrid([
+      { loja_id: 'u', indicator_code: 'INVENTORY_TOTAL', year: 2026, month: 7, meta: 13, realizado: 3, ano_anterior: null },
+      { loja_id: 'u', indicator_code: 'ACTIVE_INVENTORY', year: 2026, month: 7, meta: null, realizado: 1.95, ano_anterior: null },
+    ], indicators, 'u')
+    expect(grid.INVENTORY_TOTAL[7].realizado).toBe(3)
+    expect(grid.ACTIVE_INVENTORY[7].realizado).toBe(1.95)
+  })
+
   test('validação de células recusa mês fora do intervalo', () => {
     expect(validateQuickEntryCells([{ indicator_code: 'A', month: 13, value: 1 }])).toHaveLength(1)
     expect(validateQuickEntryCells([{ indicator_code: 'A', month: 1, value: 1 }])).toEqual([])

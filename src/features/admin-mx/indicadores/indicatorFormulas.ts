@@ -416,7 +416,8 @@ export function computeValueMap(
   return { valueMap, calcStatus }
 }
 
-const COMPUTED_FIELDS = ['meta', 'realizado', 'ano_anterior'] as const
+/** Só Meta: Realizado/AA usam actualCalc (applyActualComputedPasses). */
+const COMPUTED_FIELDS = ['meta'] as const
 
 export function applyOfficialComputedMetas<T extends {
   loja_id: string
