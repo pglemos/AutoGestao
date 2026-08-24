@@ -94,6 +94,13 @@ export function buildInternalMxNavigation(
         { key: 'morning-report', label: 'Relatório Matinal', path: '/relatorio-matinal', icon: ClipboardList },
         { key: 'sales-performance', label: 'Performance de Vendas', path: '/relatorios/performance-vendas', icon: TrendingUp },
         { key: 'seller-performance', label: 'Performance por Vendedor', path: '/relatorios/performance-vendedor', icon: User },
+        {
+          key: 'data-reconciliation',
+          label: 'Dados e Conciliação',
+          path: '/dados',
+          icon: Database,
+          activePaths: ['/dados', '/dados-conciliacao'],
+        },
         { key: 'diagnostics', label: 'Segurança e Auditoria', path: '/auditoria', icon: Database, activePaths: ['/auditoria', '/seguranca'] },
         { key: 'pmr-settings', label: 'Parâmetros PMR', path: '/configuracoes/consultoria-pmr', icon: Database },
         { key: 'settings', label: 'Configurações da Plataforma', path: '/configuracoes', icon: Settings },

@@ -529,6 +529,9 @@ export default function App() {
                 <Route path="seguranca" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminSegurancaAuditoriaPage />} />
                 </Suspense>} />
+                <Route path="auditoria" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminSegurancaAuditoriaPage />} />
+                </Suspense>} />
                 <Route path="suporte" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminSuporteIncidentesPage />} />
                 </Suspense>} />

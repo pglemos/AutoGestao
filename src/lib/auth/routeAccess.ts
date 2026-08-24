@@ -63,6 +63,7 @@ export const ROUTE_ACCESS_RULES = [
   { pattern: '/dados', roles: INTERNAL_ROLES },
   { pattern: '/dados-conciliacao', roles: INTERNAL_ROLES },
   { pattern: '/seguranca', roles: INTERNAL_ROLES },
+  { pattern: '/auditoria', roles: INTERNAL_ROLES },
   { pattern: '/suporte', roles: INTERNAL_ROLES },
   { pattern: '/lojas/:storeSlug/consultor-ia', roles: STORE_CONSULTOR_ROLES },
   // Gestão de filiais da matriz: cadastro de rede é da área interna MX, igual a `/lojas`.

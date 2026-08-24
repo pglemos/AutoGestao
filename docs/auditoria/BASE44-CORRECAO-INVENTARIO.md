@@ -173,3 +173,11 @@ Resumo: **33 DONE**, **0 PARTIAL**; 0 BLOCKED. P33+P05+P25 bb88b1.
 - Correção: `resolveAdminStoreDiagnosticSides` usa a mesma grade oficial (`buildOfficialMonthlyGrid` + `applyActualComputedPasses`); `admin` ausente + owner null = IGUAL.
 - Evidência AG Matriz Jul `SALES_TOTAL`: META 8=8 IGUAL; REALIZADO —=— IGUAL; fonte Admin `admin_official_monthly_grid`.
 
+## G06/G07 Sidebar governança (2026-08-24)
+
+- `/auditoria` não estava em `ROUTE_ACCESS_RULES` nem no App (só `/seguranca`) → item “Segurança e Auditoria” sumia do menu.
+- Fix: regra + rota alias `/auditoria`; item **Dados e Conciliação** (`/dados`) na nav Plataforma.
+- Evidência SynVolt: links no sidebar; `/dados` e `/auditoria` abrem páginas Admin (não Forbidden).
+- G05 Benchmark e Mercado: ainda sem superfície Admin (rota `/mercado` é Dono) — fora desta onda.
+- AG card metas: `Metas publicadas: 0 · Pendentes: 30` (ciclo rascunho; G14 dataset).
+

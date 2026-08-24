@@ -9,9 +9,9 @@ Severidade: **P0** bloqueia paridade/aceite · **P1** gap funcional relevante ·
 | G02 | Panorama KPIs | Com Bloqueios não conta mais ativo só por falta de Master; Ativos≠bloqueios | P0→corrigido | clientBuckets |
 | G03 | Clientes onboarding | Coluna Onboarding usa jornada real (`N de M`) em vez de Etapa 1/7 presa | P0→corrigido | PortfolioOverviewTab.onboardingLabel |
 | G04 | Dataset demo | Ausência de MX VEÍCULOS TESTE 4 / demo Base44 na carteira live | P1 | `/clientes` carteira 43 reais |
-| G05 | Sidebar | Falta **Benchmark e Mercado** | P1 | Sidebar admin |
-| G06 | Sidebar | Falta **Dados e Conciliação** | P1 | Sidebar admin |
-| G07 | Sidebar | Falta **Segurança e Auditoria** | P1 | Sidebar admin |
+| G05 | Sidebar | Falta **Benchmark e Mercado** | P1 | Sidebar admin — `/mercado` só Dono; sem página Admin |
+| G06 | Sidebar | Falta **Dados e Conciliação** | P1→corrigido | Nav `/dados` + routeAccess |
+| G07 | Sidebar | Falta **Segurança e Auditoria** | P1→corrigido | Nav `/auditoria` alias + routeAccess (antes só `/seguranca`) |
 | G08 | Sidebar | Falta item **Consultoria MX** sob Produto (só Operação) | P2 | Sidebar |
 | G09 | Rotas | Paths divergentes (`/plano-estrategico` vs `/indicadores`; `/plano-acao` vs `/planos-acao`; `/universidade-mx`) | P2 | Sidebar hrefs |
 | G10 | Início widgets | Ações Rápidas Base44 ≠ Acesso Rápido MX | P2 | `/painel` |

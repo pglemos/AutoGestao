@@ -112,6 +112,7 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   dados: { width: 'wide', bottomClearance: 'navigation', adopted: true },
   'dados-conciliacao': { width: 'wide', bottomClearance: 'navigation', adopted: true },
   seguranca: { width: 'wide', bottomClearance: 'navigation', adopted: true },
+  auditoria: { width: 'wide', bottomClearance: 'navigation', adopted: true },
   suporte: { width: 'wide', bottomClearance: 'navigation', adopted: true },
   'consultoria-mx': { width: 'wide', bottomClearance: 'navigation', adopted: true },
   indicadores: { width: 'wide', bottomClearance: 'navigation', adopted: true },

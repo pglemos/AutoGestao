@@ -1,7 +1,7 @@
 # Matriz reproduzível de rotas, autorização e dados
 
-- Rotas declaradas em `src/App.tsx`: **121**
-- Rotas protegidas: **112**
+- Rotas declaradas em `src/App.tsx`: **122**
+- Rotas protegidas: **113**
 - Rotas públicas: **9**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
@@ -133,6 +133,7 @@
 | `/dados` | route | protegida | — | `/dados` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminDadosConciliacaoPage />} /> </Suspen` |
 | `/dados-conciliacao` | route | protegida | — | `/dados-conciliacao` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminDadosConciliacaoPage />} /> </Suspen` |
 | `/seguranca` | route | protegida | — | `/seguranca` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminSegurancaAuditoriaPage />} /> </Susp` |
+| `/auditoria` | route | protegida | — | `/auditoria` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminSegurancaAuditoriaPage />} /> </Susp` |
 | `/suporte` | route | protegida | — | `/suporte` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminSuporteIncidentesPage />} /> </Suspe` |
 | `/*` | fallback | protegida | — | n/a | — | `<Suspense fallback={<Spinner />}><NotFound /></Suspense>` |
 
