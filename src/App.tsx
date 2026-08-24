@@ -421,9 +421,8 @@ export default function App() {
                 <Route path="universidade-mx" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<UniversidadeMxRoute />} gerente={<GerenteTreinamentos />} dono={<DashboardLoja />} admin={<ConsultorTreinamentos />} />
                 </Suspense>} />
-                <Route path="treinamentos" element={<Suspense fallback={<Spinner />}>
-                  <RoleSwitch vendedor={<RedirectWithSearch to="/universidade-mx" />} gerente={<GerenteTreinamentos />} dono={<DashboardLoja />} admin={<ConsultorTreinamentos />} />
-                </Suspense>} />
+                {/* Alias legado: a UI canônica é /universidade-mx (menu Admin não lista mais Desenvolvimento). */}
+                <Route path="treinamentos" element={<RedirectWithSearch to="/universidade-mx" />} />
                 <Route path="desenvolvimento" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<VendedorDesenvolvimento />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} />
                 </Suspense>} />

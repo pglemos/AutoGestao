@@ -85,7 +85,7 @@ export default function FeedbackPage({ hideHeader = false }) {
                     className="resize-none"
                     rows={2}
                   />
-                  <Button onClick={() => acknowledge(f.id)} className="bg-mx-blue hover:bg-status-info rounded-xl gap-2">
+                  <Button onClick={() => acknowledge(f.id)} className="bg-status-info hover:bg-status-info text-white rounded-xl gap-2">
                     <CheckCircle2 className="w-4 h-4" />
                     Li e compreendi
                   </Button>
@@ -99,7 +99,7 @@ export default function FeedbackPage({ hideHeader = false }) {
       {/* History */}
       <div className="bg-white rounded-2xl shadow-sm border border-border overflow-hidden">
         <div className="p-5 border-b border-border">
-          <h3 className="text-base font-semibold text-mx-navy">Histórico</h3>
+          <h3 className="text-base font-semibold text-foreground">Histórico</h3>
         </div>
         {feedbacks.filter(f => f.acknowledged).length === 0 ? (
           <EmptyState size="sm" variant="dataset" icon={<MessageSquare size={24} />} title="Nenhum feedback confirmado ainda." />

@@ -21,6 +21,9 @@ describe('navegação interna MX', () => {
       expect(items.some((item) => item.path === '/consultoria')).toBe(true)
       expect(items.some((item) => item.path === '/clientes')).toBe(true)
       expect(items.some((item) => item.path === '/universidade-mx')).toBe(true)
+      // Desenvolvimento (/treinamentos) foi removido: canônico é Universidade MX.
+      expect(items.some((item) => item.path === '/treinamentos')).toBe(false)
+      expect(items.some((item) => item.label === 'Desenvolvimento')).toBe(false)
       expect(items.some((item) => item.path === '/dados')).toBe(true)
       expect(items.some((item) => item.path === '/auditoria')).toBe(true)
       expect(items.find((item) => item.path === '/dados')?.label).toBe('Dados e Conciliação')

@@ -123,14 +123,23 @@ export function AdminEquipeMxPage() {
     })
   }, [rows, search, situacao])
 
-  const metrics = useMemo(() => ({
-    total: rows.length,
-    ativos: rows.filter(member => member.active !== false).length,
-    consultores: rows.filter(member => (member.role ?? '').startsWith('consultor')).length,
-    carteiras: rows.reduce((sum, member) => sum + member.assignments, 0),
-    capacidade: rows.reduce((sum, member) => sum + (member.capacidade_total ?? 0), 0),
-    escalaveis: rows.filter(member => (member.situacao ?? 'ativo') === 'ativo' && member.active !== false).length,
-  }), [rows])
+  const metrics = useMemo(() => {
+    const declared = rows
+      .map(member => member.capacidade_total)
+      .filter((value): value is number => typeof value === 'number')
+    const next = {
+      total: rows.length,
+      ativos: rows.filter(member => member.active !== false).length,
+      consultores: rows.filter(member => (member.role ?? '').startsWith('consultor')).length,
+      carteiras: rows.reduce((sum, member) => sum + member.assignments, 0),
+      capacidade: declared.length ? declared.reduce((sum, value) => sum + value, 0) : null,
+      escalaveis: rows.filter(member => (member.situacao ?? 'ativo') === 'ativo' && member.active !== false).length,
+    }
+    // #region agent log
+    fetch('http://127.0.0.1:7506/ingest/ceac55d9-e57e-4aa7-abcd-40a91956c86a',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'bb88b1'},body:JSON.stringify({sessionId:'bb88b1',runId:'post-fix',hypothesisId:'B',location:'AdminEquipeMxPage.tsx:metrics',message:'capacidade metric',data:{total:next.total,declaredCount:declared.length,capacidade:next.capacidade,nullCapacidade:rows.filter(m=>m.capacidade_total==null).length},timestamp:Date.now()})}).catch(()=>{})
+    // #endregion
+    return next
+  }, [rows])
 
   return (
     <MxModulePage id="admin-mx-equipe" width={width} bottomClearance={bottomClearance}>
@@ -154,7 +163,7 @@ export function AdminEquipeMxPage() {
               <MxMetricCard title="Ativos" value={metrics.ativos} detail="Com acesso liberado" icon={Users} tone="success" />
               <MxMetricCard title="Consultores" value={metrics.consultores} detail="Atendem clientes" icon={Users} tone="info" />
               <MxMetricCard title="Vínculos" value={metrics.carteiras} detail="Atribuições ativas de clientes" icon={Users} tone="violet" />
-              <MxMetricCard title="Capacidade" value={`${metrics.capacidade}h`} detail="Horas/mês declaradas pela equipe" icon={Users} tone="info" />
+              <MxMetricCard title="Capacidade" value={metrics.capacidade == null ? '—' : `${metrics.capacidade}h`} detail="Horas/mês declaradas no perfil do consultor" icon={Users} tone="info" />
               <MxMetricCard title="Disponíveis para escala" value={metrics.escalaveis} detail="Ativos e sem afastamento" icon={Users} tone="success" />
             </MxMetricGrid>
             <MxToolbar>

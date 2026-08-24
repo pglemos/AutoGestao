@@ -11,7 +11,7 @@ import type { TabContext } from '@/features/configuracoes/types'
 const SUBTABS = [
     { key: 'agenda', label: 'Assuntos Agenda', icon: ListChecks, route: null, desc: 'Assuntos, motivos e alvos usados nas reuniões da agenda' },
     { key: 'produtos', label: 'Produtos Digitais', icon: Package, route: '/produtos', desc: 'Catálogo de produtos digitais da rede MX' },
-    { key: 'treinamentos', label: 'Treinamentos', icon: GraduationCap, route: '/treinamentos', desc: 'Trilha de treinamentos por audiência' },
+    { key: 'treinamentos', label: 'Universidade MX', icon: GraduationCap, route: '/universidade-mx', desc: 'Trilhas, aulas e conteúdos da Universidade MX' },
     { key: 'pdi', label: 'Níveis PDI por Cargo', icon: TrendingUp, route: '/devolutivas', desc: 'Definições de PDI por hierarquia (vendedor/gerente/dono)' },
 ] as const
 

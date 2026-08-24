@@ -235,6 +235,7 @@ export async function saveIndicatorTargets(params: {
   year: number
   values: Array<number | null>
   note?: string | null
+  cicloId?: string | null
 }): Promise<{ error: string | null; data: unknown }> {
   const { data, error } = await supabase.rpc('salvar_metas_indicador_planejamento', {
     p_store_id: params.lojaId,
@@ -242,6 +243,7 @@ export async function saveIndicatorTargets(params: {
     p_year: params.year,
     p_values: params.values,
     p_note: params.note ?? null,
+    p_ciclo_id: params.cicloId ?? null,
   })
   return { error: error?.message ?? null, data }
 }
@@ -254,6 +256,7 @@ export async function saveIndicatorActuals(params: {
   values: Array<number | null>
   source?: 'manual' | 'importacao' | 'dre' | 'funil' | 'score' | 'sistema'
   note?: string | null
+  cicloId?: string | null
 }): Promise<{ error: string | null; data: unknown }> {
   const { data, error } = await supabase.rpc('salvar_realizado_indicador_planejamento', {
     p_store_id: params.lojaId,
@@ -262,6 +265,7 @@ export async function saveIndicatorActuals(params: {
     p_values: params.values,
     p_source: params.source ?? 'manual',
     p_note: params.note ?? null,
+    p_ciclo_id: params.cicloId ?? null,
   })
   return { error: error?.message ?? null, data }
 }

@@ -170,6 +170,24 @@ export function CentralExecucaoPage() {
     return { error: null }
   }, [createManualAction, refetch, showSuccess])
 
+  // Acelerador de teclado no desktop (1 = Hoje, 2 = Rotina do Dia)
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null
+      const isInput = target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)
+      if (isInput) return
+
+      if (event.key === '1') {
+        setTab('hoje')
+      } else if (event.key === '2') {
+        setTab('rotina')
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
   return (
     <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex min-h-full flex-col bg-surface-alt text-foreground">
       <CentralHeader />

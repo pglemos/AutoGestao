@@ -4,7 +4,7 @@ import { Button } from '@/components/atoms/Button'
 import { Modal } from '@/components/organisms/Modal'
 import { MxEmptyState, MxInput, MxLoadingState, MxSelect, MxStatusBanner, MxTextarea, MxField } from '@/components/module/MxModuleVisualPrimitives'
 import { CONTENT_TYPES, FILE_CATEGORIES, VISIBILITY_LABELS, validateContentTitle } from './methodology'
-import { archiveLibraryMaterial, fetchLibraryMaterials, fetchMaterialUtilizations, saveLibraryMaterial, uploadLibraryFile, type LibraryMaterial } from './consultoriaMxData'
+import { archiveLibraryMaterial, fetchLibraryMaterials, fetchMaterialUtilizations, fetchUniversityLessons, saveLibraryMaterial, uploadLibraryFile, type LibraryMaterial } from './consultoriaMxData'
 import type { ProductWithMethodology } from './consultoriaMxData'
 import type { ConsultoriaMxController } from './useConsultoriaMx'
 
@@ -13,6 +13,7 @@ export function LibraryTab(props: {
   products: ProductWithMethodology[]
 }) {
   const [items, setItems] = useState<LibraryMaterial[]>([])
+  const [lessons, setLessons] = useState<Array<{ id: string; titulo: string; tipo: string }>>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
@@ -24,10 +25,17 @@ export function LibraryTab(props: {
 
   const load = async () => {
     setLoading(true)
-    const result = await fetchLibraryMaterials()
-    setItems(result.rows)
-    setError(result.error)
+    const [library, university] = await Promise.all([
+      fetchLibraryMaterials(),
+      fetchUniversityLessons(),
+    ])
+    setItems(library.rows)
+    setLessons(university.rows)
+    setError(library.error ?? university.error)
     setLoading(false)
+    // #region agent log
+    fetch('http://127.0.0.1:7506/ingest/ceac55d9-e57e-4aa7-abcd-40a91956c86a',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'bb88b1'},body:JSON.stringify({sessionId:'bb88b1',runId:'pre-fix',hypothesisId:'A',location:'LibraryTab.tsx:load',message:'library+university counts',data:{libraryCount:library.rows.length,universityCount:university.rows.length,libraryError:library.error,universityError:university.error},timestamp:Date.now()})}).catch(()=>{})
+    // #endregion
   }
 
   useEffect(() => { void load() }, [])
@@ -44,6 +52,13 @@ export function LibraryTab(props: {
     if (filterType && item.content_type !== filterType) return false
     if (filterStatus && item.status !== filterStatus) return false
     return true
+  })
+
+  const filteredLessons = lessons.filter(lesson => {
+    if (filterType && filterType !== 'UNIVERSITY_LESSON') return false
+    if (filterStatus && filterStatus !== 'publicado') return false
+    if (!search) return true
+    return lesson.titulo.toLowerCase().includes(search.toLowerCase())
   })
 
   const archive = async (item: LibraryMaterial) => {
@@ -67,7 +82,10 @@ export function LibraryTab(props: {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-muted-foreground">{filtered.length} materiais na biblioteca</p>
+        <p className="text-sm text-muted-foreground">
+          {filtered.length} materiais na biblioteca
+          {filteredLessons.length ? ` · ${filteredLessons.length} aulas da Universidade MX` : ''}
+        </p>
         <Button size="sm" onClick={() => setShowAdd(true)}><Plus size={16} />Adicionar Material</Button>
       </div>
 
@@ -87,43 +105,73 @@ export function LibraryTab(props: {
         </MxSelect>
       </div>
 
-      {loading ? <MxLoadingState label="Carregando biblioteca" /> : error ? <MxStatusBanner tone="danger">{error}</MxStatusBanner> : filtered.length === 0 ? (
+      {loading ? <MxLoadingState label="Carregando biblioteca" /> : error ? <MxStatusBanner tone="danger">{error}</MxStatusBanner> : filtered.length === 0 && filteredLessons.length === 0 ? (
         <MxEmptyState title="Nenhum material encontrado" description="Adicione vídeos, aulas, arquivos e materiais à biblioteca." />
       ) : (
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
-          {filtered.map(item => {
-            const Icon = typeIcon(item.content_type)
-            const product = props.products.find(product => product.program_key === item.program_key)
-            return (
-              <div key={item.id} className="rounded-xl border border-border bg-surface-alt/40 p-4">
-                <div className="mb-2 flex items-start justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface-alt"><Icon size={16} className="text-muted-foreground" /></div>
-                    <span className="rounded-full px-2 py-0.5 text-xs font-medium" style={{ background: toneSurface(CONTENT_TYPES[item.content_type]?.tone), color: toneText(CONTENT_TYPES[item.content_type]?.tone) }}>
-                      {CONTENT_TYPES[item.content_type]?.label ?? item.content_type}
-                    </span>
-                  </div>
-                  <StatusBadge status={item.status} />
-                </div>
-                <h4 className="mb-1 text-sm font-semibold text-foreground">{item.title}</h4>
-                {item.description && <p className="mb-2 line-clamp-2 text-xs text-muted-foreground">{item.description}</p>}
-                <div className="mb-3 space-y-0.5 text-xs text-muted-foreground">
-                  {product && <div>Produto: {product.name}</div>}
-                  <div>Visibilidade: {VISIBILITY_LABELS[item.visibility] ?? '—'}</div>
-                  {item.file_asset_path && <div>Arquivo enviado</div>}
-                </div>
-                <div className="flex items-center gap-2 border-t border-border-subtle pt-2">
-                  <Button variant="ghost" size="sm" onClick={() => setEditItem(item)}><Pencil size={16} />Editar</Button>
-                  {item.file_asset_path && (
-                    <Button variant="ghost" size="sm" onClick={() => setUtilizations(item)}><Eye size={16} />Ver utilizações</Button>
-                  )}
-                  {item.status !== 'arquivado' && (
-                    <Button variant="ghost" size="sm" className="ml-auto" onClick={() => void archive(item)}><Archive size={16} />Arquivar</Button>
-                  )}
-                </div>
+        <div className="space-y-5">
+          {filteredLessons.length ? (
+            <div className="space-y-3">
+              <div>
+                <h3 className="text-sm font-semibold text-foreground">Aulas da Universidade MX</h3>
+                <p className="text-xs text-muted-foreground">Catálogo ativo de treinamentos para vincular nos encontros.</p>
               </div>
-            )
-          })}
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+                {filteredLessons.map(lesson => (
+                  <div key={lesson.id} className="rounded-xl border border-border bg-surface-alt/40 p-4">
+                    <div className="mb-2 flex items-center gap-2">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface-alt"><GraduationCap size={16} className="text-muted-foreground" /></div>
+                      <span className="rounded-full bg-violet-500/10 px-2 py-0.5 text-xs font-medium text-violet-700 dark:text-violet-300">Aula da Universidade MX</span>
+                    </div>
+                    <h4 className="text-sm font-semibold text-foreground">{lesson.titulo}</h4>
+                    <p className="mt-1 text-xs text-muted-foreground">{lesson.tipo || 'treinamento'}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {filtered.length ? (
+            <div className="space-y-3">
+              {filteredLessons.length ? <h3 className="text-sm font-semibold text-foreground">Materiais da biblioteca</h3> : null}
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+                {filtered.map(item => {
+                  const Icon = typeIcon(item.content_type)
+                  const product = props.products.find(product => product.program_key === item.program_key)
+                  return (
+                    <div key={item.id} className="rounded-xl border border-border bg-surface-alt/40 p-4">
+                      <div className="mb-2 flex items-start justify-between">
+                        <div className="flex items-center gap-2">
+                          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface-alt"><Icon size={16} className="text-muted-foreground" /></div>
+                          <span className="rounded-full px-2 py-0.5 text-xs font-medium" style={{ background: toneSurface(CONTENT_TYPES[item.content_type]?.tone), color: toneText(CONTENT_TYPES[item.content_type]?.tone) }}>
+                            {CONTENT_TYPES[item.content_type]?.label ?? item.content_type}
+                          </span>
+                        </div>
+                        <StatusBadge status={item.status} />
+                      </div>
+                      <h4 className="mb-1 text-sm font-semibold text-foreground">{item.title}</h4>
+                      {item.description && <p className="mb-2 line-clamp-2 text-xs text-muted-foreground">{item.description}</p>}
+                      <div className="mb-3 space-y-0.5 text-xs text-muted-foreground">
+                        {product && <div>Produto: {product.name}</div>}
+                        <div>Visibilidade: {VISIBILITY_LABELS[item.visibility] ?? '—'}</div>
+                        {item.file_asset_path && <div>Arquivo enviado</div>}
+                      </div>
+                      <div className="flex items-center gap-2 border-t border-border-subtle pt-2">
+                        <Button variant="ghost" size="sm" onClick={() => setEditItem(item)}><Pencil size={16} />Editar</Button>
+                        {item.file_asset_path && (
+                          <Button variant="ghost" size="sm" onClick={() => setUtilizations(item)}><Eye size={16} />Ver utilizações</Button>
+                        )}
+                        {item.status !== 'arquivado' && (
+                          <Button variant="ghost" size="sm" className="ml-auto" onClick={() => void archive(item)}><Archive size={16} />Arquivar</Button>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          ) : filteredLessons.length ? (
+            <MxStatusBanner tone="info">Nenhum upload na biblioteca ainda — as aulas da Universidade acima podem ser vinculadas nos encontros.</MxStatusBanner>
+          ) : null}
         </div>
       )}
 

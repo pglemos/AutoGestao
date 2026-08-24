@@ -74,6 +74,7 @@ export function MetasRealizadosTab(props: {
   initialYear?: number
   stores?: StoreOption[]
   onSaved?: () => void
+  cicloId?: string | null
 }) {
   const [stores, setStores] = useState<StoreOption[]>(props.stores ?? [])
   const [storeId, setStoreId] = useState(props.initialStoreId ?? '')
@@ -252,9 +253,9 @@ export function MetasRealizadosTab(props: {
     setSavingKey(`${field}:${code}`)
     const values = Array.from({ length: 12 }, (_, index) => grid[code]?.[index + 1]?.[field] ?? null)
     const result = field === 'meta'
-      ? await saveIndicatorTargets({ lojaId: storeId, indicatorCode: code, year, values })
+      ? await saveIndicatorTargets({ lojaId: storeId, indicatorCode: code, year, values, cicloId: props.cicloId })
       : field === 'realizado'
-        ? await saveIndicatorActuals({ lojaId: storeId, indicatorCode: code, year, values })
+        ? await saveIndicatorActuals({ lojaId: storeId, indicatorCode: code, year, values, cicloId: props.cicloId })
         : await saveIndicatorField({ lojaId: storeId, indicatorCode: code, year, field: 'ano_anterior', values })
     if (result.error) toast.error(result.error)
     else {

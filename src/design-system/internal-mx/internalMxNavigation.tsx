@@ -82,7 +82,6 @@ export function buildInternalMxNavigation(
         { key: 'admin-scores', label: 'Scores e Alertas', path: '/scores', icon: Target, activePaths: ['/scores', '/scores-alertas'] },
         { key: 'ranking', label: 'Ranking', path: '/classificacao', icon: Trophy },
         { key: 'feedback', label: 'Devolutivas e PDI', path: '/devolutivas', icon: MessageSquare },
-        { key: 'training', label: 'Desenvolvimento', path: '/treinamentos', icon: GraduationCap },
       ],
     },
     {

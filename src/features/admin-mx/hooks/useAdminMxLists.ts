@@ -61,7 +61,11 @@ export function useAdminTeam(): QueryState<AdminTeamMember> {
     const byUser = new Map((profiles ?? []).map(profile => [profile.user_id, profile]))
     return (users ?? []).map(user => {
       const profile = byUser.get(user.id)
-      const capacidade = profile ? (profile.capacidade_online ?? 0) + (profile.capacidade_presencial ?? 0) : null
+      const online = profile?.capacidade_online
+      const presencial = profile?.capacidade_presencial
+      const capacidade = profile && (online != null || presencial != null)
+        ? (Number(online) || 0) + (Number(presencial) || 0)
+        : null
       return {
         ...user,
         assignments: counters.get(user.id) ?? 0,

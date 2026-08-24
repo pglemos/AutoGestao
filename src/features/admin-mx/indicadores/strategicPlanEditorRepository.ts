@@ -567,6 +567,7 @@ export async function saveIndicatorField(params: {
   field: EditorField
   values: Array<number | null>
   note?: string | null
+  cicloId?: string | null
 }): Promise<{ error: string | null; data: unknown }> {
   if (params.field === 'meta') {
     const { data, error } = await supabase.rpc('salvar_metas_indicador_planejamento', {
@@ -575,6 +576,7 @@ export async function saveIndicatorField(params: {
       p_year: params.year,
       p_values: params.values,
       p_note: params.note ?? null,
+      p_ciclo_id: params.cicloId ?? null,
     })
     return { error: error?.message ?? null, data }
   }
@@ -587,6 +589,7 @@ export async function saveIndicatorField(params: {
       p_values: params.values,
       p_source: 'manual',
       p_note: params.note ?? null,
+      p_ciclo_id: params.cicloId ?? null,
     })
     return { error: error?.message ?? null, data }
   }

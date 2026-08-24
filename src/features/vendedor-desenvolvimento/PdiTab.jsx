@@ -105,7 +105,7 @@ export default function PDIPage({ hideHeader = false }) {
   };
 
   if (loading) {
-    return <div className="flex items-center justify-center h-64"><div className="w-8 h-8 border-4 border-border border-t-mx-blue rounded-full animate-spin" /></div>;
+    return <div className="flex items-center justify-center h-64"><div className="w-8 h-8 border-4 border-border border-t-status-info rounded-full animate-spin" /></div>;
   }
 
   const currentPDI = pdi || {};
@@ -126,7 +126,7 @@ export default function PDIPage({ hideHeader = false }) {
         className="flex-1"
       />
       <div className="flex items-center gap-2 w-20">
-        <span className="text-sm font-bold text-mx-navy w-6 text-right">{value}</span>
+        <span className="text-sm font-bold text-foreground w-6 text-right">{value}</span>
         <span className="text-xs text-muted-foreground">/10</span>
       </div>
     </div>
@@ -134,7 +134,7 @@ export default function PDIPage({ hideHeader = false }) {
 
   const statusColors = {
     "Pendente": "bg-surface-muted text-muted-foreground",
-    "Em Andamento": "bg-mx-blue-light text-mx-blue",
+    "Em Andamento": "bg-status-info-surface text-status-info-text",
     "Concluído": "bg-brand-primary-subtle text-brand-primary",
   };
 
@@ -146,7 +146,7 @@ export default function PDIPage({ hideHeader = false }) {
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-border">
         <div className="flex items-center gap-2 mb-6">
           <Trophy className="w-5 h-5 text-status-warning-text" />
-          <h3 className="text-base font-semibold text-mx-navy">Conquistas</h3>
+          <h3 className="text-base font-semibold text-foreground">Conquistas</h3>
           {!canEdit && <span className="ml-auto text-xs font-medium text-muted-foreground">Somente gerente, dono ou Admin MX podem editar</span>}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
