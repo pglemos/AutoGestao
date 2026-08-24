@@ -269,7 +269,7 @@
 | `qualificacoes_produto_consultor` | 1 |
 | `recomendacoes_desenvolvimento` | 1 |
 | `regras_entrega_loja` | 2 |
-| `regras_metas_loja` | 7 |
+| `regras_metas_loja` | 8 |
 | `regularizacao_fechamento` | 2 |
 | `relatorios_devolutivas_semanais` | 1 |
 | `remuneracao_benchmark` | 1 |
@@ -608,7 +608,7 @@
 | `regras_entrega_loja:select` | 2 |
 | `regras_entrega_loja:upsert` | 2 |
 | `regras_metas_loja:delete` | 1 |
-| `regras_metas_loja:select` | 7 |
+| `regras_metas_loja:select` | 8 |
 | `regras_metas_loja:upsert` | 3 |
 | `regularizacao_fechamento:insert` | 1 |
 | `regularizacao_fechamento:select` | 2 |
@@ -770,7 +770,7 @@
 | `get_prova_aula` | 1 |
 | `get_strategic_plan_indicator_counts` | 1 |
 | `get_suggested_actions` | 1 |
-| `get_vendas_oficiais_periodo` | 2 |
+| `get_vendas_oficiais_periodo` | 3 |
 | `inicializar_cadencia_cliente` | 1 |
 | `inicializar_progresso_trilha` | 1 |
 | `liberar_fechamento_por_token` | 1 |

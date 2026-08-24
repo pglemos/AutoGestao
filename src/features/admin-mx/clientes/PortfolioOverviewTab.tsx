@@ -25,6 +25,7 @@ import {
 import type { Store } from '@/types/database'
 import { ClientActionsMenu, type ClientAction } from './ClientActionsMenu'
 import { PendenciasModal } from './PendenciasModal'
+import { ClientSalesOverview } from './ClientSalesOverview'
 import {
   EMPTY_PORTFOLIO_FILTERS,
   PORTFOLIO_STATUS_DETAIL,
@@ -107,7 +108,7 @@ function statusVariant(client: PortfolioClient): 'success' | 'info' | 'warning' 
   return 'outline'
 }
 
-export function PortfolioOverviewTab({ rows, onAction, onRefetch }: PortfolioOverviewTabProps) {
+export function PortfolioOverviewTab({ rows, lojas, onAction, onRefetch }: PortfolioOverviewTabProps) {
   const navigate = useNavigate()
   const [filters, setFilters] = useState<PortfolioFilters>(EMPTY_PORTFOLIO_FILTERS)
   const [advancedOpen, setAdvancedOpen] = useState(false)
@@ -170,6 +171,8 @@ export function PortfolioOverviewTab({ rows, onAction, onRefetch }: PortfolioOve
           )
         })}
       </MxMetricGrid>
+
+      <ClientSalesOverview stores={lojas} />
 
       <MxSectionCard className="overflow-hidden">
         <div className="flex flex-col gap-3 border-b border-border p-4 sm:p-5 lg:flex-row lg:items-center">
