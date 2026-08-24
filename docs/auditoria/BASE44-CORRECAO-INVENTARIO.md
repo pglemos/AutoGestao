@@ -153,3 +153,11 @@ Resumo: **33 DONE**, **0 PARTIAL**; 0 BLOCKED. P33+P05+P25 bb88b1.
 - P14: Visão Dono VG `monthHeaders=12`, `seriesLen=45`, departamentos expandíveis.
 - P16: competência M-1 Jul; AA com Salvar; Resumo Calculado conferência Jul.
 - P21: matriz field=realizado `roster=45` `uniqueCodes=45`.
+
+## Fix SALES_TOTAL=0 (2026-08-23)
+
+- Commit `311a966c`: ZERO_IF_EMPTY só nas deps da fórmula; limpa SALES_OTHER legado; Realizado calculado não herda 0 persistido.
+- Verificado Visão Dono AG: Resultado **Sem resultado** (não 0%/Crítico).
+- Residual observado: **Estoque Total 0** em Resultado com canais vazios — investigar legado/check-in.
+- Push `eeda37fa` (+ auditoria visibilidade Dono).
+
