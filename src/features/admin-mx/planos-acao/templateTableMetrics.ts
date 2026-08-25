@@ -38,8 +38,12 @@ export function summarizeTemplate(template: ActionPlanTemplate): TemplateTableSu
     ?? template.versions[0]
     ?? null
   const items = version?.itens ?? []
-  const priorities = [...new Set(items.map(item => item.prioridade).filter(Boolean))]
-    .map(priority => PRIORITY_LABEL[priority] ?? priority)
+  // Deduplicar depois do rótulo: códigos diferentes ('media' e 'atencao') caem
+  // no mesmo texto e a coluna mostrava "Atenção, Atenção".
+  const priorities = [...new Set(items
+    .map(item => item.prioridade)
+    .filter(Boolean)
+    .map(priority => PRIORITY_LABEL[priority] ?? priority))]
   const responsibleRole = responsibleRoleLabel(template.default_responsible_role
     ?? version?.default_responsible_role
     ?? items.find(item => item.recommended_responsible_role)?.recommended_responsible_role

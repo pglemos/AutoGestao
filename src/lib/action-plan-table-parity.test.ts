@@ -114,7 +114,13 @@ describe('Plano de Ação canônico e tabela Base44', () => {
     const catalog = read('src/features/admin-mx/planos-acao/actionPlanTemplates.ts')
     expect(catalog).toContain('officialActionPlanIndicatorCatalog')
     expect(catalog).toContain('officialDefinitionUnit')
-    expect(catalog).not.toContain('catalogo_indicadores_planejamento')
+    // As opções do wizard são o catálogo oficial Base44, nunca o catálogo legado
+    // de planejamento. Esse catálogo só pode ser lido para resolver a FK de
+    // primary_indicator_code / effectiveness_indicator_code na gravação.
+    expect(catalog).toContain('return { rows: officialActionPlanIndicatorCatalog(), error: null }')
+    const planningCatalogUses = catalog.split('catalogo_indicadores_planejamento').length - 1
+    expect(planningCatalogUses).toBe(2) // JSDoc de resolvePlanningIndicatorCode + o select de fetchPlanningIndicatorCodes
+    expect(catalog).toContain("supabase.from('catalogo_indicadores_planejamento').select('code')")
   })
 
   test('opens the global route on the Base44-equivalent template library', () => {

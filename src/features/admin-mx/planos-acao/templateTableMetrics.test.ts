@@ -61,3 +61,24 @@ describe('resumo da tabela de templates', () => {
     expect(summarizeTemplate(template({ versions: [{ ...template().versions[0], status: 'arquivada' }] })).statusLabel).toBe('Arquivado')
   })
 })
+
+describe('summarizeTemplate — prioridade', () => {
+  test('não repete o mesmo rótulo quando os códigos diferem', () => {
+    const template = {
+      id: 't1',
+      versions: [{
+        id: 'v1',
+        status: 'publicada',
+        versao: 1,
+        itens: [
+          { prioridade: 'media' },
+          { prioridade: 'atencao' },
+          { prioridade: 'critica' },
+        ],
+      }],
+    } as unknown as Parameters<typeof summarizeTemplate>[0]
+    const summary = summarizeTemplate(template)
+    const labels = summary.priority.split(', ')
+    expect(new Set(labels).size).toBe(labels.length)
+  })
+})
