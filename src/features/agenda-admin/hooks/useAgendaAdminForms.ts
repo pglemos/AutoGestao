@@ -28,6 +28,7 @@ const initialSchedule: ScheduleForm = {
   scheduled_at: '', scheduled_time: '09:00', duration_hours: '3',
   modality: 'Presencial', consultant_id: '', auxiliary_consultant_id: '',
   visit_reason: '', target_audience: '', product_name: '', objective: '',
+  fora_do_contrato: false,
 }
 
 const initialEvent: EventForm = {
@@ -102,6 +103,7 @@ export function useAgendaAdminForms(deps: Deps) {
       target_audience: visit.target_audience || '',
       product_name: visit.product_name || '',
       objective: visit.objective || '',
+      fora_do_contrato: Boolean(visit.fora_do_contrato),
     })
     setShowScheduleModal(true)
   }
@@ -182,6 +184,7 @@ export function useAgendaAdminForms(deps: Deps) {
       target_audience: scheduleForm.target_audience || null,
       product_name: scheduleForm.product_name || null,
       objective: scheduleForm.objective || null,
+      fora_do_contrato: Boolean(scheduleForm.fora_do_contrato),
     }
     const { error: createError } = editingVisitId
       ? await updateVisit({ ...payload, id: editingVisitId, status: scheduleForm.status })

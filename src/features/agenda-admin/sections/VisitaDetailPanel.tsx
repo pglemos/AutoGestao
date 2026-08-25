@@ -99,7 +99,7 @@ export function VisitaDetailPanel({
                         <Typography variant="tiny" tone="muted" className="truncate">{visit.consultant.name}</Typography>
                       </div>
                     )}
-                    {(visit.visit_reason || visit.target_audience || visit.product_name) && (
+                    {(visit.visit_reason || visit.target_audience || visit.product_name || visit.fora_do_contrato) && (
                       <div className="mt-mx-xs flex flex-wrap gap-mx-xs">
                         {visit.visit_reason && (
                           <Badge variant="outline" className="max-w-full overflow-hidden text-mx-nano">
@@ -114,6 +114,11 @@ export function VisitaDetailPanel({
                         {visit.product_name && (
                           <Badge variant="brand" className="max-w-full overflow-hidden text-mx-nano">
                             <span className="block max-w-full truncate">{visit.product_name}</span>
+                          </Badge>
+                        )}
+                        {visit.fora_do_contrato && (
+                          <Badge variant="secondary" className="max-w-full overflow-hidden text-mx-nano">
+                            <span className="block max-w-full truncate">Adicional</span>
                           </Badge>
                         )}
                       </div>

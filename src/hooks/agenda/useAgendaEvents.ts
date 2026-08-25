@@ -81,7 +81,7 @@ export function useAgendaEvents(): UseAgendaEventsReturn {
       eventsQuery,
       supabase
         .from('clientes_consultoria')
-        .select('id, name, slug, status, current_visit_step, primary_store_id, program_template_key')
+        .select('id, name, slug, status, current_visit_step, primary_store_id, program_template_key, product_name, modality')
         .order('name', { ascending: true }),
       supabase
         .from('lojas')

@@ -57,7 +57,10 @@ export function useClientHealth(clientId: string | undefined, storeId: string | 
       // excesso de execução. A view existe justamente para a equipe ver isso.
       // Saldo presencial: o produto define a faixa; sem faixa, a função devolve
       // disponíveis = null e a tela mostra "sem limite definido".
-      const { data: balance } = await supabase.rpc('saldo_presencial_cliente', { p_client_id: clientId })
+      const { data: balance } = await supabase.rpc('saldo_presencial_cliente', {
+        p_client_id: clientId,
+        p_exclude_visit_id: null,
+      })
       setPresence(Array.isArray(balance) && balance.length ? (balance[0] as PresenceBalance) : null)
 
       const { data: overrun } = await supabase

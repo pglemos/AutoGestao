@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import * as React from "react";
 import { useAgendaAdminForms } from "@/features/agenda-admin/hooks/useAgendaAdminForms";
 import { getSelectableAgendaClients } from "@/features/agenda-admin/modals/VisitaModal";
@@ -138,5 +138,56 @@ describe("useAgendaAdminForms", () => {
     ];
 
     expect(getSelectableAgendaClients(clients)).toEqual(clients);
+  });
+
+  test("loads and handles fora_do_contrato flag when opening and editing visits", () => {
+    const extraVisit: AgendaVisit = {
+      ...visit,
+      id: "visit-extra",
+      fora_do_contrato: true,
+    };
+
+    let updatedPayload: any = null;
+    let formsRef: any = null;
+
+    function TestExtraVisitHarness() {
+      const forms = useAgendaAdminForms({
+        visits: [extraVisit],
+        clients: [{ id: "client-1", name: "GED Veiculos", status: "ativo", current_visit_step: 6, program_template_key: "pmr_hibrido" }],
+        programTotalVisits: { pmr_hibrido: 12 },
+        consultants,
+        canViewAllAgendas: true,
+        createVisit: ok,
+        updateVisit: async (payload: any) => {
+          updatedPayload = payload;
+          return ok();
+        },
+        updateVisitStatus: ok,
+        deleteVisit: ok,
+        createScheduleEvent: ok,
+        updateScheduleEvent: ok,
+        deleteScheduleEvent: ok,
+        getNextVisitNumber: () => 7,
+      });
+      formsRef = forms;
+      return (
+        <button type="button" onClick={() => forms.handleOpenEditVisit("visit-extra")}>
+          Abrir Extra
+        </button>
+      );
+    }
+
+    render(<TestExtraVisitHarness />);
+    act(() => {
+      fireEvent.click(screen.getByRole("button", { name: "Abrir Extra" }));
+    });
+
+    expect(formsRef.scheduleForm.fora_do_contrato).toBe(true);
+
+    act(() => {
+      formsRef.handleSubmitSchedule({ preventDefault: () => undefined } as React.FormEvent);
+    });
+    expect(updatedPayload).not.toBeNull();
+    expect(updatedPayload.fora_do_contrato).toBe(true);
   });
 });

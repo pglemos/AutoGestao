@@ -119,6 +119,7 @@ export function useAgendaCRUD({
         visit_reason: input.visit_reason || null,
         target_audience: input.target_audience || null,
         product_name: input.product_name || null,
+        fora_do_contrato: Boolean(input.fora_do_contrato),
         status: 'agendada',
       })
       .select('id')
@@ -182,6 +183,7 @@ export function useAgendaCRUD({
         visit_reason: input.visit_reason || null,
         target_audience: input.target_audience || null,
         product_name: input.product_name || null,
+        fora_do_contrato: Boolean(input.fora_do_contrato),
         status: input.status,
       })
       .eq('id', input.id)

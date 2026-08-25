@@ -790,7 +790,7 @@
 | `rejeitar_regularizacao_fechamento` | 1 |
 | `resolve_alert` | 1 |
 | `restaurar_metas_indicador_planejamento` | 3 |
-| `saldo_presencial_cliente` | 1 |
+| `saldo_presencial_cliente` | 2 |
 | `salvar_ano_anterior_indicador_planejamento` | 1 |
 | `salvar_metas_indicador_planejamento` | 3 |
 | `salvar_realizado_indicador_planejamento` | 2 |

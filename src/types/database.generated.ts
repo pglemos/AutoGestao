@@ -19765,7 +19765,7 @@ export type Database = {
       }
       run_store_target_plan_refresh_clock: { Args: never; Returns: undefined }
       saldo_presencial_cliente: {
-        Args: { p_client_id: string }
+        Args: { p_client_id: string; p_exclude_visit_id?: string | null }
         Returns: {
           contratadas: number
           disponiveis: number

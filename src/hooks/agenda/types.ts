@@ -71,6 +71,8 @@ export type AgendaClient = {
   current_visit_step: number
   primary_store_id?: string | null
   program_template_key: string | null
+  modality?: string | null
+  product_name?: string | null
 }
 
 export type AgendaConsultant = {
@@ -112,11 +114,13 @@ export type CreateVisitInput = {
   visit_reason: string | null
   target_audience: string | null
   product_name: string | null
+  fora_do_contrato?: boolean
 }
 
 export type UpdateVisitInput = CreateVisitInput & {
   id: string
   status: string
+  fora_do_contrato?: boolean
 }
 
 export type ScheduleEventInput = {

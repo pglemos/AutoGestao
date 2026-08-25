@@ -1,4 +1,5 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { AlertCircle, Calendar, Sparkles } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { Textarea } from '@/components/atoms/Textarea'
@@ -6,6 +7,8 @@ import { Typography } from '@/components/atoms/Typography'
 import { Modal } from '@/components/organisms/Modal'
 import { Select } from '@/components/atoms/Select'
 import { DatePicker } from '@/components/atoms/DatePicker'
+import { supabase } from '@/lib/supabase'
+import { cn } from '@/lib/utils'
 import type { AgendaClient, AgendaConsultant } from '@/hooks/agenda'
 
 export type ScheduleForm = {
@@ -22,6 +25,14 @@ export type ScheduleForm = {
   target_audience: string
   product_name: string
   objective: string
+  fora_do_contrato: boolean
+}
+
+type PresenceBalance = {
+  contratadas: number | null
+  minimas: number | null
+  usadas: number
+  disponiveis: number | null
 }
 
 interface VisitaModalProps {
@@ -53,8 +64,43 @@ export function VisitaModal({
   visitReasonSelectOptions, targetAudienceSelectOptions, productSelectOptions,
   getNextVisitNumber, getVisitLabel,
 }: VisitaModalProps) {
+  const [presenceBalance, setPresenceBalance] = useState<PresenceBalance | null>(null)
+
+  // Consulta saldo presencial do cliente selecionado
+  useEffect(() => {
+    if (!open || !scheduleForm.client_id) {
+      setPresenceBalance(null)
+      return
+    }
+
+    let cancelled = false
+    supabase
+      .rpc('saldo_presencial_cliente', {
+        p_client_id: scheduleForm.client_id,
+        p_exclude_visit_id: editingVisitId,
+      })
+      .then(({ data, error }) => {
+        if (cancelled) return
+        if (error || !data || !Array.isArray(data) || data.length === 0) {
+          setPresenceBalance(null)
+        } else {
+          setPresenceBalance(data[0] as PresenceBalance)
+        }
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [editingVisitId, open, scheduleForm.client_id])
+
   const handleSelectClient = (clientId: string) => {
-    setScheduleForm((prev) => ({ ...prev, client_id: clientId }))
+    const selectedClient = clients.find((c) => c.id === clientId)
+    setScheduleForm((prev) => ({
+      ...prev,
+      client_id: clientId,
+      product_name: selectedClient?.product_name || '',
+      modality: selectedClient?.modality || 'Presencial',
+    }))
   }
 
   const selectedClientVisitNum = useMemo(() => {
@@ -62,6 +108,13 @@ export function VisitaModal({
     if (editingVisitId) return Number(scheduleForm.visit_number) || null
     return getNextVisitNumber(scheduleForm.client_id)
   }, [editingVisitId, scheduleForm.client_id, scheduleForm.visit_number, getNextVisitNumber])
+
+  const isPresencialExhausted = useMemo(() => {
+    if (!presenceBalance || presenceBalance.disponiveis === null) return false
+    return presenceBalance.disponiveis <= 0
+  }, [presenceBalance])
+
+  const isPresencialSelected = scheduleForm.modality?.toLowerCase() === 'presencial'
 
   return (
     <Modal
@@ -80,6 +133,7 @@ export function VisitaModal({
       }
     >
       <form id="agenda-schedule-form" onSubmit={onSubmit} className="space-y-mx-lg">
+        {/* Seleção do Cliente */}
         <div className="space-y-mx-xs">
           <Select
             id="agenda-client"
@@ -92,11 +146,98 @@ export function VisitaModal({
               <option key={c.id} value={c.id}>{c.name} (Etapa atual: {c.current_visit_step || 0})</option>
             ))}
           </Select>
-          {selectedClientVisitNum && (
-            <Typography variant="tiny" tone="muted">
-              Será {getVisitLabel(scheduleForm.client_id, selectedClientVisitNum).toLowerCase()} deste cliente
-            </Typography>
-          )}
+
+          <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+            {selectedClientVisitNum ? (
+              <Typography variant="tiny" tone="muted" className="flex items-center gap-1">
+                <Calendar size={14} className="text-brand-primary shrink-0" />
+                Será <strong className="text-foreground">{getVisitLabel(scheduleForm.client_id, selectedClientVisitNum).toLowerCase()}</strong> deste cliente
+              </Typography>
+            ) : <span />}
+
+            {presenceBalance && presenceBalance.contratadas !== null && (
+              <div className="flex items-center gap-2">
+                <span className="text-caption text-muted-foreground">
+                  Presenciais do pacote: <strong className="text-foreground">{presenceBalance.usadas}/{presenceBalance.contratadas}</strong>
+                </span>
+                <span className={cn(
+                  "font-medium px-2 py-0.5 rounded-full text-mx-nano",
+                  presenceBalance.disponiveis !== null && presenceBalance.disponiveis > 0
+                    ? "bg-status-success-bg text-status-success-text"
+                    : "bg-status-error-bg text-status-error-text"
+                )}>
+                  {presenceBalance.disponiveis !== null && presenceBalance.disponiveis > 0
+                    ? `${presenceBalance.disponiveis} disponível(is)`
+                    : 'Saldo esgotado'}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Alerta de Saldo Esgotado quando Presencial selecionado */}
+        {isPresencialSelected && isPresencialExhausted && !scheduleForm.fora_do_contrato && (
+          <div className="p-mx-sm rounded-xl border border-status-error/30 bg-status-error-bg/60 text-status-error-text space-y-2">
+            <div className="flex items-center gap-1.5 font-semibold text-xs">
+              <AlertCircle size={14} className="shrink-0 text-status-error-text" />
+              <span>Saldo presencial contratual esgotado ({presenceBalance?.usadas}/{presenceBalance?.contratadas})</span>
+            </div>
+            <p className="text-xs opacity-90">
+              O produto contratado permite {presenceBalance?.contratadas} encontro(s) presencial(is) e já há {presenceBalance?.usadas} marcado(s).
+              Para agendar esta visita presencial como adicional, ative a opção <strong>"Encontro adicional (fora do contrato)"</strong> abaixo ou altere a modalidade para <strong>Online</strong>.
+            </p>
+            <div className="flex gap-2 pt-1">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="text-xs h-7 bg-white text-foreground"
+                onClick={() => setScheduleForm((prev) => ({ ...prev, fora_do_contrato: true }))}
+              >
+                <Sparkles size={14} className="mr-1 text-brand-primary" /> Marcar como Adicional
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="text-xs h-7 text-foreground"
+                onClick={() => setScheduleForm((prev) => ({ ...prev, modality: 'Online' }))}
+              >
+                Mudar para Online
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Opção de Encontro Adicional (Fora do Contrato) */}
+        <div className={cn(
+          "rounded-xl border p-mx-sm transition-colors",
+          scheduleForm.fora_do_contrato
+            ? "border-brand-primary/40 bg-brand-primary/5"
+            : "border-border bg-surface-alt/40"
+        )}>
+          <label className="flex items-start gap-mx-sm cursor-pointer select-none">
+            <input
+              type="checkbox"
+              id="agenda-fora-do-contrato"
+              className="mt-0.5 h-4 w-4 rounded border-border text-brand-primary focus:ring-brand-primary/20"
+              checked={scheduleForm.fora_do_contrato}
+              onChange={(e) => setScheduleForm((prev) => ({ ...prev, fora_do_contrato: e.target.checked }))}
+            />
+            <div className="space-y-0.5 min-w-0">
+              <span className="text-sm font-medium text-foreground flex items-center gap-1.5">
+                Encontro adicional (fora do contrato)
+                {scheduleForm.fora_do_contrato && (
+                  <span className="text-mx-nano font-semibold px-1.5 py-0.2 rounded bg-brand-primary/20 text-brand-primary">
+                    EXTRA
+                  </span>
+                )}
+              </span>
+              <p className="text-xs text-muted-foreground">
+                Marque caso este encontro seja um acompanhamento extra, cortesia ou repactuação além do pacote contratado.
+              </p>
+            </div>
+          </label>
         </div>
 
         {editingVisitId && (

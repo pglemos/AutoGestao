@@ -194,6 +194,11 @@ export function AgendaEventDrawer({
                         {visit.product_name}
                       </Badge>
                     )}
+                    {visit.fora_do_contrato && (
+                      <Badge variant="secondary" className="text-caption font-medium">
+                        Adicional
+                      </Badge>
+                    )}
                   </div>
 
                   {/* Footer Actions */}
