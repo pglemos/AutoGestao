@@ -50,3 +50,53 @@ também estão presentes.
 
 - P0 do `GAP-matrix`: AG sem metas publicadas e prova numérica Admin↔Dono na mesma célula.
 - Contadores do catálogo (45 vs 46 / 17 vs 9 arquivados) dependem de limpeza de dados.
+
+---
+
+## Segunda rodada — três defeitos de dado encontrados na verificação
+
+Provados no AG AUTOMÓVEIS (ciclo `bd5f482d`, publicado, 3 unidades, 1548 células).
+
+### 1. Leitura truncada em 1000 linhas (P0)
+
+O PostgREST devolve no máximo 1000 linhas e não sinaliza corte. O ciclo tem
+1548; a aplicação via 1000. Efeitos medidos antes do fix:
+
+| | Banco | Tela (antes) |
+|---|---|---|
+| Células da filial 3 PISO | 504 | **0** |
+| Células da matriz | 540 | 496 |
+| Consolidado Vendas Total (Mar) | 48+55+55 = 158 | **103 PARCIAL** |
+
+Prontidão, validação e publicação decidiam sobre dado truncado. Corrigido com
+`fetchAllRows` nas três leituras multi-loja. Depois: 540/504/504 e **158 COMPLETO**.
+
+### 2. "12 impedimento(s) críticos" num plano publicado
+
+`UNIT_POLICY_DEFAULTS` é chaveado pelo código canônico (`ADDITIONAL_REVENUE`);
+o roster persistido usa `additional_revenue`. 12 dos 45 indicadores ficavam sem
+política — que conta como impedimento crítico. O fallback agora percorre
+`catalogAliasKeys`. Banner passa a "41 de 45 indicadores prontos, 48 metas
+mensais por preencher" (pendência de dado real, não bug).
+
+### 3. Cabeçalho de área repetido na matriz
+
+`groupEditorIndicatorsByArea` agrupava por sequência, e a ordem oficial intercala
+departamentos: o mesmo bloco aparecia várias vezes e o React acusava chave
+duplicada. Agora são 6 blocos, um por departamento.
+
+## Paridade Admin↔Dono — provada
+
+Mesma célula, `sales_total` · Mar · 2026:
+
+| Origem | Valor |
+|---|---|
+| Banco (matriz) | 48 |
+| Admin → Revisão completa, unidade matriz | 48 |
+| Dono → Visão do Plano, loja matriz | 48 |
+| Banco (soma das 3 unidades) | 158 |
+| Admin → Consolidado | 158 COMPLETO |
+| Dono → escopo "Todas as unidades" | 158 |
+
+Fecha o P0 #1 do `GAP-matrix` (aceite Admin↔Dono na mesma célula). O P0 #4 ("AG
+sem plano publicado") já estava vencido: o ciclo está publicado com 1548 metas.
