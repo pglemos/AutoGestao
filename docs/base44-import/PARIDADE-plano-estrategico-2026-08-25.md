@@ -100,3 +100,42 @@ Mesma célula, `sales_total` · Mar · 2026:
 
 Fecha o P0 #1 do `GAP-matrix` (aceite Admin↔Dono na mesma célula). O P0 #4 ("AG
 sem plano publicado") já estava vencido: o ciclo está publicado com 1548 metas.
+
+---
+
+## Terceira rodada — verificação em produção (2026-08-25, release 51eebdca)
+
+Tudo abaixo conferido em `www.mxperformance.com.br`, autenticado, não em ambiente local.
+
+### Defeito P0 que só existia em produção: CSP bloqueava o cálculo
+
+Todo indicador **calculado** aparecia vazio em produção. `evaluateFormula` e o
+total anual terminavam em `Function('"use strict"; return (...)')()`, e a CSP do
+`vercel.json` declara `script-src 'self'` sem `'unsafe-eval'`: o construtor
+lançava `EvalError` e a exceção morria no `catch { return null }`.
+
+Invisível pelos canais normais — console limpo, suíte verde, mesmo commit, mesmo
+banco. `vite dev` e `vite preview` não aplicam CSP, então local sempre funcionou.
+Só apareceu ao importar o bundle publicado (`/assets/indicatorFormulas-*.js`) e
+executar a função com o mesmo input do bundle local: produção `null`, local `48`.
+
+Anterior a esta sessão: o deployment de 3h antes, sem nenhuma mudança minha,
+mostrava o mesmo "—".
+
+Corrigido com `evaluateArithmetic` (parser de descida recursiva, sem eval) e um
+guard em `src/lib/no-eval-guard.test.ts`.
+
+### Estado verificado em produção
+
+| Verificação | Resultado |
+|---|---|
+| Release servida | `51eebdca` |
+| Vendas Total (matriz, Jan–Mar) | 48 / 48 / 48 · total anual 576 |
+| Células por unidade | 540 / 504 / 504 |
+| Consolidado Vendas Total | 158 COMPLETO |
+| Visão do Dono, mesma célula | 48 |
+| Prontidão do plano | "41 de 45 indicadores prontos" (sem impedimento falso) |
+| Parâmetros estratégicos | 13 linhas; editar gravou 0.275 e restaurar voltou a 0.20 |
+| /plano-acao | 4 abas, filtro de indicador com rótulo certo, prioridade sem repetição |
+| Criar Plano Padrão | gravou `pa_comercial_visittosaleconversion_060` com FK `visit_to_sale_rate` (registro de teste removido) |
+| /classificacao | 52 unidades, 186 vendedores, console limpo |
