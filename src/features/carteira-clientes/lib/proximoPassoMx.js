@@ -55,6 +55,11 @@ const RESULTADO_VENDA_DIRETA = {
   cor: 'yellow',
 }
 
+const RESULTADO_ALIASES = {
+  'visita agendada': 'Agendou visita',
+  'remarcar': 'Pediu para remarcar',
+}
+
 const TRANSICAO_PP18 = {
   'Venda realizada': { proximo: null, dias: 0, sit: 'Venda realizada', temp: 'Quente', status: 'Vendido' },
   'Proposta enviada': { proximo: 'PP10', dias: 0, sit: 'Proposta enviada', temp: 'Quente' },
@@ -66,6 +71,20 @@ const TRANSICAO_PP18 = {
 
 function normalizarRotulo(value) {
   return String(value || '').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+}
+
+export function normalizarResultado(resultado) {
+  return RESULTADO_ALIASES[normalizarRotulo(resultado)] || resultado
+}
+
+export function resultadoExigeAgendamento(resultado) {
+  return [
+    'visita agendada',
+    'agendou visita',
+    'prefere videochamada',
+    'pediu para remarcar',
+    'remarcar',
+  ].includes(normalizarRotulo(resultado))
 }
 
 export const PASSOS = { ...BASE_PASSOS, PP18 }
@@ -91,8 +110,41 @@ export function getResultados(proximoPasso) {
     : [...resultados, RESULTADO_VENDA_DIRETA]
 }
 
+function criarTransicaoAgendamento(resultado) {
+  const agora = new Date().toISOString()
+  const novoPasso = PASSOS.PP08
+
+  return {
+    patch: {
+      ultima_acao_em: agora,
+      ultimo_contato: agora,
+      ultimo_resultado_contato: resultado,
+      situacao_atual: 'Visita agendada',
+      temperatura: 'Quente',
+      proximo_passo: novoPasso.label,
+      objetivo_atual: novoPasso.objetivo,
+      proxima_acao_data: moment().format('YYYY-MM-DD') + 'T09:00:00',
+      status_oportunidade: 'Ativa',
+    },
+    novoPassoLabel: novoPasso.label,
+    criarAgendamento: true,
+  }
+}
+
+function preservarResultadoSelecionado(transition, resultado) {
+  if (transition.patch?.ultimo_resultado_contato === resultado) return transition
+  return {
+    ...transition,
+    patch: {
+      ...transition.patch,
+      ultimo_resultado_contato: resultado,
+    },
+  }
+}
+
 export function aplicarTransicao(proximoPassoAtual, resultado) {
-  const isVenda = resultado === 'Venda realizada' || resultado === 'Comprou' || resultado === 'Venda concluída'
+  const resultadoCanonico = normalizarResultado(resultado)
+  const isVenda = resultadoCanonico === 'Venda realizada' || resultadoCanonico === 'Comprou' || resultadoCanonico === 'Venda concluída'
   if (isVenda) {
     const agora = new Date().toISOString()
     return {
@@ -117,7 +169,14 @@ export function aplicarTransicao(proximoPassoAtual, resultado) {
   }
 
   if (detectarCodigo(proximoPassoAtual) !== 'PP18') {
-    const transition = aplicarTransicaoBase(proximoPassoAtual, resultado)
+    if (resultadoExigeAgendamento(resultado)) {
+      const transition = aplicarTransicaoBase(proximoPassoAtual, resultadoCanonico)
+      return transition.criarAgendamento
+        ? preservarResultadoSelecionado(transition, resultado)
+        : criarTransicaoAgendamento(resultado)
+    }
+
+    const transition = aplicarTransicaoBase(proximoPassoAtual, resultadoCanonico)
     if (transition.patch?.ativo !== false) return transition
     return {
       ...transition,
@@ -129,8 +188,8 @@ export function aplicarTransicao(proximoPassoAtual, resultado) {
     }
   }
 
-  const regra = TRANSICAO_PP18[resultado]
-  if (!regra) return aplicarTransicaoBase(proximoPassoAtual, resultado)
+  const regra = TRANSICAO_PP18[resultadoCanonico]
+  if (!regra) return aplicarTransicaoBase(proximoPassoAtual, resultadoCanonico)
   const agora = new Date().toISOString()
   const novoPasso = regra.proximo ? PASSOS[regra.proximo] : null
   const patch = {

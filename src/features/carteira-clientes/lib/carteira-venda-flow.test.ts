@@ -3,6 +3,26 @@ import { buildRpcPayload } from './installCarteiraBase44Adapter.js'
 import { mapMxClientToCarteiraVisual } from './carteira-mappers'
 
 describe('Fluxo de Venda Realizada e Transição para Compraram', () => {
+  test('buildRpcPayload leva o agendamento e o próximo passo para a RPC canônica', () => {
+    const payload = buildRpcPayload({
+      cliente_id: 'cli-agendamento',
+      nome: 'Joana Santos',
+      situacao_atual: 'Visita agendada',
+      proximo_passo: 'Confirmar agendamento',
+      proxima_acao_data: '2026-08-26T14:30:00',
+      visita_agendada_em: '2026-08-26T14:30:00',
+      canal_comercial: 'Carteira',
+      ativo: true,
+    }, 'cli-agendamento')
+
+    expect(payload.proxima_acao).toBe('Confirmar agendamento')
+    expect(payload.proxima_acao_em).toBe('2026-08-26')
+    expect(payload.agendamento_data_hora).toBe('2026-08-26T14:30:00')
+    expect(payload.agendamento_tipo).toBe('visita')
+    expect(payload.agendamento_status).toBe('confirmado')
+    expect(payload.etapa).toBe('apresentacao')
+  })
+
   test('buildRpcPayload normaliza valor de venda mascarado e campos de fechamento', () => {
     const payload = buildRpcPayload({
       cliente_id: 'cli-123',

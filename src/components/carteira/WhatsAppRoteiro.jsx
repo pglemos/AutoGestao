@@ -8,7 +8,7 @@ import {
   preencherScript,
 } from "./carteiraUtils";
 import {
-  getResultados, aplicarTransicao, detectarCodigo, PASSOS,
+  getResultados, aplicarTransicao, detectarCodigo, PASSOS, resultadoExigeAgendamento,
 } from "@/features/carteira-clientes/lib/proximoPassoMx";
 import ScriptIA from "./ScriptIA";
 import { toast } from "@/lib/toast";
@@ -90,7 +90,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
   }, [open, cliente, autoExpandirRegistro]);
 
   const precisaMotivo = resultado === "Perdeu interesse" || resultado === "Definitivamente perdido";
-  const precisaDataVisita = resultado === "Agendou visita" || resultado === "Prefere videochamada" || resultado === "Pediu para remarcar";
+  const precisaDataVisita = resultadoExigeAgendamento(resultado);
   const isVenda = resultado === "Venda realizada" || resultado === "Comprou" || resultado === "Venda concluída";
   const vendaInvalida = isVenda && (!veiculoComprado?.trim() || !valorVenda || parseCurrencyInput(valorVenda) <= 0 || !dataVenda);
 

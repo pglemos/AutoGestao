@@ -1,6 +1,11 @@
 import { describe, expect, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
-import { aplicarTransicao, detectarCodigo, getResultados } from './proximoPassoMx.js'
+import {
+  aplicarTransicao,
+  detectarCodigo,
+  getResultados,
+  resultadoExigeAgendamento,
+} from './proximoPassoMx.js'
 import { gerarScriptLocal } from '@/components/carteira/scriptTemplatesLocal.js'
 
 describe('regressões observadas na reunião da Carteira', () => {
@@ -10,6 +15,27 @@ describe('regressões observadas na reunião da Carteira', () => {
     expect(detectarCodigo('Conduzir para fechamento')).toBe('PP18')
     expect(detectarCodigo('Conduzir para o fechamento')).toBe('PP18')
     expect(detectarCodigo('Conduzir fechamento')).toBe('PP18')
+  })
+
+  test('trata o card genérico Visita agendada como transição persistível', () => {
+    const passoLegado = 'Enviar mensagem de pós-atendimento e salvar interesse do cliente'
+
+    expect(getResultados(passoLegado).map(resultado => resultado.label)).toContain('Visita agendada')
+    expect(resultadoExigeAgendamento('Visita agendada')).toBe(true)
+
+    const result = aplicarTransicao(passoLegado, 'Visita agendada')
+
+    expect(result).toMatchObject({
+      novoPassoLabel: 'Confirmar agendamento',
+      criarAgendamento: true,
+      patch: expect.objectContaining({
+        ultimo_resultado_contato: 'Visita agendada',
+        situacao_atual: 'Visita agendada',
+        proximo_passo: 'Confirmar agendamento',
+        objetivo_atual: 'Garantir o comparecimento do cliente.',
+        status_oportunidade: 'Ativa',
+      }),
+    })
   })
 
   test('venda realizada fecha a oportunidade e remove o próximo passo', () => {
