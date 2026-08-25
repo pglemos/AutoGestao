@@ -3,6 +3,7 @@ import { format, parseISO, subDays } from 'date-fns'
 import { AlertTriangle, BarChart3, CheckCircle2, Eye, Megaphone, RefreshCw, Search, TrendingUp, Trophy, XCircle } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
+import { fetchAllPaged } from '@/lib/supabasePagination'
 import { toast } from '@/lib/toast'
 import { useAuth } from '@/hooks/useAuth'
 import { useSellersByStore } from '@/hooks/useStores'
@@ -130,15 +131,19 @@ export default function ManagerTeamRoutineCanonical() {
         .eq('loja_id', storeId)
         .gte('data_hora', selectedStart)
         .lte('data_hora', selectedEnd),
+      // Equipe × janela de histórico × versões por dia: a loja maior já passa de
+      // 600 linhas hoje. Paginado para o corte de 1000 não sumir com dias inteiros.
       sellerIds.length
-        ? supabase
+        ? fetchAllPaged((from, to) => supabase
             .from('seller_routine_snapshots')
             .select('seller_user_id,reference_date,version,eligible,reliable_work_base,access_numerator,pending_resolved,pending_expected,attack_executed,attack_expected,prospecting_executed,prospecting_expected,updates_completed,updates_expected,access_points,pending_points,attack_points,prospecting_points,update_points,closing_points,execution_score,routine_status,score_denominator,source_payload')
             .eq('store_id', storeId)
             .gte('reference_date', historyStart)
             .lte('reference_date', date)
             .in('seller_user_id', sellerIds)
+            .order('reference_date', { ascending: true })
             .order('version', { ascending: false })
+            .range(from, to))
         : noRows,
       supabase
         .from('benchmark_snapshots')

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
+import { fetchAllPaged } from '@/lib/supabasePagination'
 import { useAuth } from '@/hooks/useAuth'
 import type { RankingEntry, User } from '@/types/database'
 import { calcularAtingimento, getDiasInfo, getOperationalStatus } from '@/lib/calculations'
@@ -359,18 +360,24 @@ export function useGlobalRanking(filters?: { startDate?: string; endDate?: strin
 
         // Story 1.2: flag ON usa RPCs admin-only (rede + referência dia); flag OFF mantém SELECT direto
         const useRpc = isLancamentosViaRpcEnabled()
-        const directCheckinsQuery = supabase.from('lancamentos_diarios')
+        // Rede inteira × mês: passa das 1000 linhas do PostgREST assim que a
+        // adesão cresce, e o corte é silencioso — ranking com vendedor faltando.
+        // Vale para o SELECT direto e para a RPC, que devolve SETOF.
+        const directCheckinsQuery = fetchAllPaged<LancamentoRow>((from, to) => supabase.from('lancamentos_diarios')
             .select('seller_user_id, store_id, reference_date, leads_prev_day, agd_cart_today, agd_net_today, vnd_porta_prev_day, vnd_cart_prev_day, vnd_net_prev_day, visit_prev_day, submission_status')
             .eq('metric_scope', 'daily')
             .gte('reference_date', startOfMonth)
             .lte('reference_date', endOfRange)
+            .order('reference_date', { ascending: true })
+            .order('seller_user_id', { ascending: true })
+            .range(from, to))
 
         const checkinsPromise = useRpc
-            ? traced(async () => supabase.rpc('get_lancamentos_rede_periodo', {
+            ? traced(async () => fetchAllPaged<LancamentoRow>((from, to) => supabase.rpc('get_lancamentos_rede_periodo', {
                 p_start_date: startOfMonth,
                 p_end_date: endOfRange,
                 p_scope: 'daily',
-            })).then(({ result }) => result)
+            }).range(from, to))).then(({ result }) => result)
             : directCheckinsQuery
         const todayCheckinsPromise = useRpc
             ? traced(async () => supabase.rpc('get_lancamentos_referencia_dia', {

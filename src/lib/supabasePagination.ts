@@ -39,3 +39,16 @@ export async function fetchAllRows<T>(
   }
   return { rows, error: `Consulta excedeu ${MAX_PAGES * pageSize} linhas; refine o filtro.` }
 }
+
+/**
+ * Mesma paginação, no formato `{ data, error }` das respostas do supabase-js —
+ * para trocar uma consulta existente sem mudar quem a consome.
+ */
+export async function fetchAllPaged<T>(
+  build: (from: number, to: number) => PromiseLike<PageResult<T>>,
+  pageSize = SUPABASE_PAGE_SIZE,
+): Promise<{ data: T[] | null; error: { message: string } | null }> {
+  const { rows, error } = await fetchAllRows(build, pageSize)
+  if (error) return { data: null, error: { message: error } }
+  return { data: rows, error: null }
+}
