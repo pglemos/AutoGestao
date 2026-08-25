@@ -106,6 +106,70 @@ function lookupLoose(
   return map[code]
 }
 
+/**
+ * Avalia a expressão aritmética que sobra depois de IND()/PAR() virarem números.
+ *
+ * Trocou `Function("return (...)")`: a CSP de produção declara
+ * `script-src 'self'` sem `'unsafe-eval'`, então o construtor lançava
+ * `EvalError` e a exceção morria no `catch` do `evaluateFormula` — em produção
+ * TODOS os indicadores calculados apareciam vazios, sem nada no console. Só o
+ * ambiente local, sem CSP, calculava.
+ *
+ * Cobre o que as fórmulas do catálogo usam: número, `+ - * /`, parênteses e
+ * menos unário. Devolve `null` para sintaxe inválida ou divisão por zero.
+ */
+export function evaluateArithmetic(expression: string): number | null {
+  const tokens = expression.match(/\d+\.?\d*|[()+\-*/]/g)
+  if (!tokens || tokens.join('').length !== expression.replace(/\s+/g, '').length) return null
+
+  let position = 0
+  const peek = () => tokens[position]
+
+  const parseExpression = (): number | null => {
+    let left = parseTerm()
+    while (left != null && (peek() === '+' || peek() === '-')) {
+      const operator = tokens[position++]
+      const right = parseTerm()
+      if (right == null) return null
+      left = operator === '+' ? left + right : left - right
+    }
+    return left
+  }
+
+  const parseTerm = (): number | null => {
+    let left = parseFactor()
+    while (left != null && (peek() === '*' || peek() === '/')) {
+      const operator = tokens[position++]
+      const right = parseFactor()
+      if (right == null) return null
+      if (operator === '/' && right === 0) return null
+      left = operator === '*' ? left * right : left / right
+    }
+    return left
+  }
+
+  const parseFactor = (): number | null => {
+    const token = peek()
+    if (token === undefined) return null
+    if (token === '-') { position += 1; const value = parseFactor(); return value == null ? null : -value }
+    if (token === '+') { position += 1; return parseFactor() }
+    if (token === '(') {
+      position += 1
+      const value = parseExpression()
+      if (peek() !== ')') return null
+      position += 1
+      return value
+    }
+    if (!/^\d/.test(token)) return null
+    position += 1
+    return Number(token)
+  }
+
+  const result = parseExpression()
+  if (position !== tokens.length) return null
+  return result != null && Number.isFinite(result) ? result : null
+}
+
 export function evaluateFormula(
   formula: string | null | undefined,
   indicatorValues: Record<string, number | null | undefined>,
@@ -133,8 +197,7 @@ export function evaluateFormula(
       return String(value)
     })
     if (expr.includes('null')) return null
-    const result = Function(`"use strict"; return (${expr})`)()
-    return typeof result === 'number' && Number.isFinite(result) ? result : null
+    return evaluateArithmetic(expr)
   } catch {
     return null
   }
@@ -189,12 +252,8 @@ export function calculateAnnualValue(
           return value != null ? String(value) : 'null'
         })
         if (expr.includes('null')) return null
-        try {
-          const result = Function(`"use strict"; return (${expr})`)()
-          return typeof result === 'number' && Number.isFinite(result) ? result : null
-        } catch {
-          return null
-        }
+        // Mesmo motivo do evaluateFormula: a CSP de produção bloqueia Function().
+        return evaluateArithmetic(expr)
       }
       return valid.reduce((sum, value) => sum + value, 0)
     }

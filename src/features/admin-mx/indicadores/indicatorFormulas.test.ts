@@ -6,6 +6,7 @@ import {
   buildDependentsMap,
   calculateAnnualValue,
   computeValueMap,
+  evaluateArithmetic,
   evaluateFormula,
   extractIndicatorDeps,
   extractParameterDeps,
@@ -243,5 +244,38 @@ describe('MONTHS', () => {
     expect(MONTHS).toHaveLength(12)
     expect(MONTHS[0]).toBe(1)
     expect(MONTHS[11]).toBe(12)
+  })
+})
+
+describe('evaluateArithmetic — sem eval (CSP de produção)', () => {
+  test('resolve as operações que as fórmulas do catálogo usam', () => {
+    expect(evaluateArithmetic('8 + 5 + 5 + 10 + 20 + 0')).toBe(48)
+    expect(evaluateArithmetic('(10 + 2) * 3')).toBe(36)
+    expect(evaluateArithmetic('100 / 4')).toBe(25)
+    expect(evaluateArithmetic('10 - 3 - 2')).toBe(5)
+    expect(evaluateArithmetic('2 + 3 * 4')).toBe(14)
+    expect(evaluateArithmetic('-5 + 8')).toBe(3)
+    expect(evaluateArithmetic('0.5 * 40')).toBe(20)
+  })
+
+  test('devolve null em divisão por zero e sintaxe inválida', () => {
+    expect(evaluateArithmetic('10 / 0')).toBeNull()
+    expect(evaluateArithmetic('10 +')).toBeNull()
+    expect(evaluateArithmetic('(1 + 2')).toBeNull()
+    expect(evaluateArithmetic('')).toBeNull()
+  })
+
+  test('não executa código: só aritmética entra', () => {
+    // O antigo Function() avaliaria qualquer coisa; aqui tudo que não é
+    // número/operador/parêntese é recusado.
+    expect(evaluateArithmetic('globalThis')).toBeNull()
+    expect(evaluateArithmetic('1;alert(1)')).toBeNull()
+    expect(evaluateArithmetic('process.exit(1)')).toBeNull()
+  })
+
+  test('a soma oficial de Vendas Total fecha sem eval', () => {
+    const formula = 'IND("SALES_WALKIN") + IND("SALES_REFERRAL") + IND("SALES_COMPANY_PORTFOLIO") + IND("SALES_SELLER_PORTFOLIO") + IND("SALES_INTERNET") + IND("SALES_OTHER")'
+    const bases = { sales_door_flow: 8, sales_referral: 5, sales_company_wallet: 5, sales_seller_wallet: 10, sales_internet: 20, sales_other: 0 }
+    expect(evaluateFormula(formula, bases, {})).toBe(48)
   })
 })
