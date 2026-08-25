@@ -14,6 +14,7 @@ export const CRM_RELACIONAMENTO = ['excelente', 'bom', 'neutro', 'ruim', 'critic
 export const CRM_ETAPAS_FUNIL = ['prospeccao', 'qualificacao', 'apresentacao', 'negociacao', 'fechamento', 'ganho', 'perdido', 'cancelada'] as const
 export const CRM_FINANCIAMENTO = ['aprovado', 'reprovado', 'nao_aplica', 'pendente'] as const
 export const CRM_TIPO_VEICULO = ['carro', 'moto', 'caminhao'] as const
+export const CRM_CATEGORIAS_VEICULO = ['hatch', 'sedan', 'suv', 'picape', 'minivan', 'utilitario', 'moto', 'outro'] as const
 export const CRM_AGENDAMENTO_TIPO = ['visita', 'retorno', 'test_drive', 'entrega', 'negociacao', 'garantia', 'pos_venda'] as const
 export const CRM_AGENDAMENTO_STATUS = ['confirmado', 'aguardando', 'compareceu', 'nao_compareceu'] as const
 export const CRM_EVENTO_TIPO = [
@@ -36,6 +37,7 @@ export type CrmRelacionamento = (typeof CRM_RELACIONAMENTO)[number]
 export type CrmEtapaFunil = (typeof CRM_ETAPAS_FUNIL)[number]
 export type CrmFinanciamento = (typeof CRM_FINANCIAMENTO)[number]
 export type CrmTipoVeiculo = (typeof CRM_TIPO_VEICULO)[number]
+export type CrmCategoriaVeiculo = (typeof CRM_CATEGORIAS_VEICULO)[number]
 export type CrmAgendamentoTipo = (typeof CRM_AGENDAMENTO_TIPO)[number]
 export type CrmAgendamentoStatus = (typeof CRM_AGENDAMENTO_STATUS)[number]
 export type CrmEventoTipo = (typeof CRM_EVENTO_TIPO)[number]
@@ -184,6 +186,11 @@ export const OportunidadeSchema = z.object({
   seller_user_id: z.string().uuid(),
   veiculo_interesse: z.string().nullable(),
   tipo_veiculo: z.enum(CRM_TIPO_VEICULO).nullable().default(null),
+  categoria_veiculo: z.enum(CRM_CATEGORIAS_VEICULO).nullable().default(null),
+  preco_interesse_min: z.coerce.number().nullable().default(null),
+  preco_interesse_max: z.coerce.number().nullable().default(null),
+  catalog_model_id: z.string().uuid().nullable().default(null),
+  classification_source: z.enum(['catalog', 'manual', 'migration']).nullable().default(null),
   valor_negociado: z.coerce.number().default(0),
   etapa: z.enum(CRM_ETAPAS_FUNIL),
   canal: z.enum(CRM_CANAIS).nullable(),

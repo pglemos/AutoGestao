@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { Dialog, DialogBody, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Plus, Zap, Users, X, ArrowLeft, Car, CheckCircle2, AlertTriangle } from "lucide-react";
+import { Plus, Zap, Users, ArrowLeft, Car, CheckCircle2, AlertTriangle, Pencil } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { calcularPrioridade } from "./carteiraUtils";
-import { resolveCatalogModel, normalizeBrand, catalogSearchTokens } from "@/features/mentor-comercial/catalog/vehicleCatalog";
+import { resolveCatalogModel, VEHICLE_CATEGORY_OPTIONS, vehicleCategoryLabel } from "@/features/mentor-comercial/catalog/vehicleCatalog";
 import { matchVehicleAgainstOpportunities } from "@/features/mentor-comercial/engine/vehicleMatch";
 import { captureVehicleMatch, captureCatalogUnresolved, captureCatalogAmbiguous } from "@/features/mentor-comercial/observability/mentorTelemetry";
+import { toast } from "@/lib/toast";
 
 // ─── MATCH VIA MOTOR MENTOR (PRODUCT DELTA 2026-08-07 §19) ───────────────────
 function perfisOportunidades(clientes) {
@@ -19,7 +21,7 @@ function perfisOportunidades(clientes) {
   }));
 }
 
-function clientesCompativeis(clientes, veiculo, catalog) {
+function compatibilidadesClientes(clientes, veiculo, catalog) {
   const criteria = {
     brand: veiculo.marca || null,
     model: veiculo.modelo || null,
@@ -30,17 +32,52 @@ function clientesCompativeis(clientes, veiculo, catalog) {
   const byId = new Map(clientes.map(client => [client.id, client]));
   const ordP = { Máxima: 0, Alta: 1, Média: 2, Baixa: 3 };
   return matches
-    .map(match => byId.get(match.opportunityId))
-    .filter(Boolean)
-    .sort((a, b) => (ordP[calcularPrioridade(a)] ?? 3) - (ordP[calcularPrioridade(b)] ?? 3));
+    .map(match => ({ client: byId.get(match.opportunityId), match }))
+    .filter(entry => Boolean(entry.client))
+    .sort((a, b) => (ordP[calcularPrioridade(a.client)] ?? 3) - (ordP[calcularPrioridade(b.client)] ?? 3));
 }
 
-// ─── MODAL REGISTRAR VEÍCULO ─────────────────────────────────────────────────
-function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
-  const [form, setForm] = useState({
-    marca: "", modelo: "", versao: "", ano: new Date().getFullYear().toString(),
-    preco: "", data_entrada: new Date().toISOString().split("T")[0], observacao: "",
-  });
+function clientesCompativeis(clientes, veiculo, catalog) {
+  return compatibilidadesClientes(clientes, veiculo, catalog).map(entry => entry.client);
+}
+
+function formatPrice(value) {
+  if (value === "" || value === null || value === undefined) return null;
+  const parsed = Number(value);
+  return Number.isFinite(parsed)
+    ? `R$ ${parsed.toLocaleString("pt-BR", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
+    : null;
+}
+
+function optionalNumber(value) {
+  if (value === "" || value === null || value === undefined) return null;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : NaN;
+}
+
+function reasonLabel(reason) {
+  if (reason.kind === "model") return `Modelo: ${reason.detail}`;
+  if (reason.kind === "category") return `Categoria: ${vehicleCategoryLabel(reason.detail)}`;
+  return `Preço: ${reason.detail}`;
+}
+
+// ─── MODAL REGISTRAR / EDITAR VEÍCULO ─────────────────────────────────────────
+function createVehicleForm(veiculo) {
+  return {
+    marca: veiculo?.marca || "",
+    modelo: veiculo?.modelo || "",
+    versao: veiculo?.versao || "",
+    ano: veiculo?.ano || new Date().getFullYear().toString(),
+    preco: veiculo?.preco ?? "",
+    data_entrada: veiculo?.data_entrada || new Date().toISOString().split("T")[0],
+    categoria: veiculo?.categoria || "",
+    observacao: veiculo?.observacao || "",
+  };
+}
+
+function ModalRegistrarVeiculo({ onClose, onSalvo, catalog, veiculo = null }) {
+  const editando = Boolean(veiculo?.id);
+  const [form, setForm] = useState(() => createVehicleForm(veiculo));
   const [salvando, setSalvando] = useState(false);
 
   function set(k, v) { setForm(prev => ({ ...prev, [k]: v })); }
@@ -55,52 +92,70 @@ function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
   const classificacao = resolucao?.kind === "resolved" ? resolucao.entry : null;
   const ambigua = resolucao?.kind === "ambiguous";
   const naoEncontrado = resolucao?.kind === "not_found";
-
-  const ambiguas = useMemo(() => {
-    if (!ambigua || !form.marca || !form.modelo) return [];
-    const marca = normalizeBrand(form.marca);
-    const modelo = normalizeBrand(form.modelo);
-    return catalog.filter(entry => {
-      if (normalizeBrand(entry.brand) !== marca) return false;
-      return catalogSearchTokens(entry).some(token => token.includes(modelo) || modelo.includes(token));
-    });
-  }, [ambigua, form.marca, form.modelo, catalog]);
+  const categoriaSugerida = classificacao?.category || null;
+  const catalogSuggestions = useMemo(() => {
+    const active = catalog.filter(entry => entry.active !== false);
+    const brands = [...new Set(active.map(entry => entry.brand).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b, "pt-BR"));
+    const models = [...new Set(active.flatMap(entry => [entry.model, ...(entry.aliases || [])]).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b, "pt-BR"));
+    return { brands, models };
+  }, [catalog]);
 
   async function salvar() {
-    if (!form.marca || !form.modelo) return;
+    if (!form.marca.trim() || !form.modelo.trim()) {
+      toast.error("Informe marca e modelo do veículo.");
+      return;
+    }
+    const preco = optionalNumber(form.preco);
+    if (form.preco !== "" && (!Number.isFinite(preco) || preco < 0)) {
+      toast.error("O preço do veículo está inválido.", { description: "Informe um valor igual ou maior que zero." });
+      return;
+    }
     setSalvando(true);
     try {
       const me = await base44.auth.me();
-      const novo = await base44.entities.VeiculoChegado.create({
+      const modelChanged = !veiculo
+        || form.marca.trim() !== String(veiculo.marca || "").trim()
+        || form.modelo.trim() !== String(veiculo.modelo || "").trim();
+      const payload = {
         ...form,
-        preco: form.preco ? parseFloat(form.preco) : undefined,
+        preco,
         vendedor_id: me?.id,
-        categoria: classificacao?.category || null,
-        catalog_model_id: classificacao?.id || null,
-        classification_source: classificacao ? "catalog" : null,
-      });
+        categoria: form.categoria || categoriaSugerida || null,
+        catalog_model_id: classificacao?.id || (modelChanged ? null : (veiculo?.catalog_model_id || null)),
+      classification_source: form.categoria
+        ? "manual"
+        : (classificacao ? "catalog" : (modelChanged ? null : (veiculo?.classification_source || null))),
+      };
+      const entidade = base44.entities.VeiculoChegado;
+      const salvo = editando
+        ? await entidade.update(veiculo.id, payload)
+        : await entidade.create(payload);
       if (ambigua) {
         captureCatalogAmbiguous({ kind: "arrived_vehicle" }, { brand: form.marca, model: form.modelo });
       } else if (naoEncontrado) {
         captureCatalogUnresolved({ kind: "arrived_vehicle" }, { brand: form.marca, model: form.modelo });
       }
-      setSalvando(false);
-      onSalvo(novo);
+      toast.success(editando ? "Veículo atualizado." : "Veículo registrado.");
+      onSalvo(salvo, editando);
       onClose();
     } catch (cause) {
+      toast.error(editando ? "Não foi possível atualizar o veículo." : "Não foi possível registrar o veículo.", { description: cause?.message || "Tente novamente." });
+      console.error("[VeiculosChegaram] Falha ao salvar veículo:", cause);
+    } finally {
       setSalvando(false);
-      console.error("[VeiculosChegaram] Falha ao registrar veículo:", cause);
     }
   }
 
   return (
-    <div className="fixed inset-0 z-[var(--mx-z-modal)] flex items-center justify-center bg-surface-overlay/50 px-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 space-y-4">
-        <div className="flex items-center justify-between">
-          <p className="font-black text-mx-navy">Registrar veículo que chegou</p>
-          <button onClick={onClose}><X className="w-5 h-5 text-muted-foreground" /></button>
-        </div>
+    <Dialog open onOpenChange={open => !open && onClose()}>
+      <DialogContent className="rounded-2xl" size="md">
+        <DialogHeader>
+          <DialogTitle className="text-mx-navy font-black">{editando ? "Editar veículo que chegou" : "Registrar veículo que chegou"}</DialogTitle>
+        </DialogHeader>
 
+        <DialogBody className="space-y-4">
         <div className="grid grid-cols-2 gap-3">
           {[
             { k: "marca", label: "Marca *", placeholder: "Honda" },
@@ -109,13 +164,29 @@ function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
             { k: "ano", label: "Ano", placeholder: "2024" },
           ].map(({ k, label, placeholder }) => (
             <div key={k}>
-              <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1">{label}</p>
+              <label htmlFor={`veiculo-${k}`} className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1 block">{label}</label>
               <input
+                id={`veiculo-${k}`} list={k === "marca" ? "veiculo-marcas" : k === "modelo" ? "veiculo-modelos" : undefined}
                 value={form[k]} onChange={e => set(k, e.target.value)} placeholder={placeholder}
-                className="w-full h-9 rounded-xl border border-border px-3 text-sm focus:outline-none focus:ring-1 focus:ring-status-info"
+                className="w-full min-h-11 rounded-xl border border-border px-3 text-sm focus:outline-none focus:ring-1 focus:ring-status-info"
               />
             </div>
           ))}
+        </div>
+
+        <datalist id="veiculo-marcas">
+          {catalogSuggestions.brands.map(brand => <option key={brand} value={brand} />)}
+        </datalist>
+        <datalist id="veiculo-modelos">
+          {catalogSuggestions.models.map(model => <option key={model} value={model} />)}
+        </datalist>
+
+        <div>
+          <label htmlFor="veiculo-categoria" className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1 block">Categoria</label>
+          <select id="veiculo-categoria" value={form.categoria} onChange={e => set("categoria", e.target.value)} className="w-full min-h-11 rounded-xl border border-border bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-status-info">
+            <option value="">Automática do catálogo</option>
+            {VEHICLE_CATEGORY_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
+          </select>
         </div>
 
         {resolucao && (
@@ -133,33 +204,33 @@ function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
           )}
             <div>
               {classificacao && <p>Classificado no catálogo mentor: <strong>{classificacao.brand} {classificacao.model}</strong> · categoria <strong>{classificacao.category}</strong>.</p>}
-              {ambigua && <p>Modelo ambíguo no catálogo — opções: {ambiguas.map(entry => `${entry.brand} ${entry.model}`).join(", ")}. O veículo será salvo sem classificação automática.</p>}
-              {naoEncontrado && <p>Modelo fora do catálogo mentor. O veículo será salvo sem classificação automática (match por texto livre).</p>}
+              {ambigua && <p>Modelo ambíguo no catálogo. O veículo será salvo com a categoria escolhida manualmente e o match continuará usando o texto livre.</p>}
+              {naoEncontrado && <p>Modelo fora do catálogo mentor. O veículo será salvo com a categoria escolhida e o match continuará usando o texto livre.</p>}
             </div>
           </div>
         )}
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1">Preço (opcional)</p>
+            <label htmlFor="veiculo-preco" className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1 block">Preço (opcional)</label>
             <input
-              type="number" value={form.preco} onChange={e => set("preco", e.target.value)} placeholder="Ex: 120000"
-              className="w-full h-9 rounded-xl border border-border px-3 text-sm focus:outline-none focus:ring-1 focus:ring-status-info"
+              id="veiculo-preco" type="number" min="0" value={form.preco} onChange={e => set("preco", e.target.value)} placeholder="Ex: 120000"
+              className="w-full min-h-11 rounded-xl border border-border px-3 text-sm focus:outline-none focus:ring-1 focus:ring-status-info"
             />
           </div>
           <div>
-            <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1">Data de entrada</p>
+            <label htmlFor="veiculo-data-entrada" className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1 block">Data de entrada</label>
             <input
-              type="date" value={form.data_entrada} onChange={e => set("data_entrada", e.target.value)}
-              className="w-full h-9 rounded-xl border border-border px-3 text-sm focus:outline-none focus:ring-1 focus:ring-status-info"
+              id="veiculo-data-entrada" type="date" value={form.data_entrada} onChange={e => set("data_entrada", e.target.value)}
+              className="w-full min-h-11 rounded-xl border border-border px-3 text-sm focus:outline-none focus:ring-1 focus:ring-status-info"
             />
           </div>
         </div>
 
-        <div>
-          <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1">Observação (opcional)</p>
+      <div>
+        <label htmlFor="veiculo-observacao" className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1 block">Observação (opcional)</label>
           <textarea
-            value={form.observacao} onChange={e => set("observacao", e.target.value)} rows={2}
+            id="veiculo-observacao" value={form.observacao} onChange={e => set("observacao", e.target.value)} rows={2}
             placeholder="Ex: baixo km, único dono..."
             className="w-full rounded-xl border border-border px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-status-info"
           />
@@ -167,20 +238,22 @@ function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
 
         <div className="flex gap-2 pt-1">
           <Button variant="outline" onClick={onClose} className="flex-1 rounded-xl">Cancelar</Button>
-          <Button onClick={salvar} disabled={!form.marca || !form.modelo || salvando}
+          <Button onClick={salvar} disabled={!form.marca.trim() || !form.modelo.trim() || salvando}
             className="flex-1 rounded-xl bg-status-info hover:bg-status-info text-white">
-            {salvando ? "Salvando..." : "Salvar veículo"}
+            {salvando ? "Salvando..." : editando ? "Salvar alterações" : "Salvar veículo"}
           </Button>
         </div>
-      </div>
-    </div>
+        </DialogBody>
+      </DialogContent>
+    </Dialog>
   );
 }
 
 // ─── CARD DO VEÍCULO ──────────────────────────────────────────────────────────
-function CardVeiculo({ veiculo, compatíveis, onClick }) {
+function CardVeiculo({ veiculo, compatíveis, onClick, onEdit }) {
   const diasAtras = Math.floor((Date.now() - new Date(veiculo.data_entrada)) / 86400000);
   const entradaLabel = diasAtras === 0 ? "Entrou hoje" : diasAtras === 1 ? "Entrou ontem" : `Entrou há ${diasAtras} dias`;
+  const preco = formatPrice(veiculo.preco);
 
   return (
     <div className="bg-white border border-border-subtle rounded-2xl p-4 space-y-3 hover:shadow-sm transition-all">
@@ -190,7 +263,8 @@ function CardVeiculo({ veiculo, compatíveis, onClick }) {
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-black text-mx-navy truncate">{veiculo.marca} {veiculo.modelo} {veiculo.versao}</p>
-          <p className="text-xs text-muted-foreground">{veiculo.ano}{veiculo.preco ? ` · R$ ${veiculo.preco.toLocaleString("pt-BR")}` : ""}</p>
+          <p className="text-xs text-muted-foreground">{veiculo.ano}{preco ? ` · ${preco}` : ""}</p>
+          {veiculo.categoria && <p className="text-caption text-muted-foreground mt-0.5">Categoria: {vehicleCategoryLabel(veiculo.categoria)}</p>}
           <p className="text-caption text-status-info-text font-semibold mt-0.5">{entradaLabel}</p>
         </div>
       </div>
@@ -204,26 +278,36 @@ function CardVeiculo({ veiculo, compatíveis, onClick }) {
         </div>
       </div>
 
-      <Button
-        onClick={() => onClick(veiculo)}
-        disabled={compatíveis === 0}
-        className="w-full rounded-xl bg-status-info hover:bg-status-info text-white text-sm gap-1.5 disabled:opacity-40"
-      >
-        <Zap className="w-4 h-4" /> Iniciar ataque
-      </Button>
+      <div className="flex gap-2">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => onEdit(veiculo)}
+          className="min-h-11 flex-1 rounded-xl text-sm gap-1.5 border-border"
+        >
+          <Pencil className="w-4 h-4" /> Editar
+        </Button>
+        <Button
+          type="button"
+          onClick={() => onClick(veiculo)}
+          className="min-h-11 flex-1 rounded-xl bg-status-info hover:bg-status-info text-white text-sm gap-1.5"
+        >
+          <Zap className="w-4 h-4" /> Ver clientes
+        </Button>
+      </div>
     </div>
   );
 }
 
 // ─── TELA DE ATAQUE DO VEÍCULO ────────────────────────────────────────────────
 function AtaqueVeiculo({ veiculo, clientes, catalog, onVoltar, onExecutar, onFicha }) {
-  const lista = useMemo(() => clientesCompativeis(clientes, veiculo, catalog), [clientes, veiculo, catalog]);
+  const lista = useMemo(() => compatibilidadesClientes(clientes, veiculo, catalog), [clientes, veiculo, catalog]);
 
   useEffect(() => {
     const criteria = {
       brand: veiculo.marca || null,
       model: veiculo.modelo || null,
-      price: veiculo.preco == null ? null : Number(veiculo.preco),
+      price: veiculo.preco == null || veiculo.preco === "" ? null : Number(veiculo.preco),
       category: veiculo.categoria || null,
     };
     const { matches, unresolved } = matchVehicleAgainstOpportunities(criteria, perfisOportunidades(clientes), catalog);
@@ -241,14 +325,15 @@ function AtaqueVeiculo({ veiculo, clientes, catalog, onVoltar, onExecutar, onFic
 
   return (
     <div className="space-y-5">
-      <button onClick={onVoltar} className="flex items-center gap-1.5 text-sm text-status-info-text hover:underline">
+      <button type="button" onClick={onVoltar} className="flex items-center gap-1.5 text-sm text-status-info-text hover:underline">
         <ArrowLeft className="w-4 h-4" /> Voltar aos veículos
       </button>
 
       <div className="bg-gradient-to-r from-status-info to-status-info rounded-2xl p-5 text-white">
         <p className="text-caption font-bold text-blue-300 uppercase tracking-wider">Veículo que chegou</p>
         <p className="text-xl font-black mt-1">{veiculo.marca} {veiculo.modelo} {veiculo.versao}</p>
-        <p className="text-sm text-blue-200">{veiculo.ano}{veiculo.preco ? ` · R$ ${veiculo.preco.toLocaleString("pt-BR")}` : ""}</p>
+        <p className="text-sm text-blue-200">{veiculo.ano}{formatPrice(veiculo.preco) ? ` · ${formatPrice(veiculo.preco)}` : ""}</p>
+        {veiculo.categoria && <p className="text-xs text-blue-200 mt-1">Categoria: {vehicleCategoryLabel(veiculo.categoria)}</p>}
         <p className="text-xs text-blue-300 mt-2">Próximo passo sugerido: <strong className="text-white">Apresentar veículo recém-chegado</strong></p>
       </div>
 
@@ -261,7 +346,7 @@ function AtaqueVeiculo({ veiculo, clientes, catalog, onVoltar, onExecutar, onFic
       ) : (
         <div className="space-y-3">
           <p className="text-xs font-black text-muted-foreground uppercase tracking-wider">{lista.length} {lista.length === 1 ? "cliente compatível" : "clientes compatíveis"}</p>
-          {lista.map(c => {
+          {lista.map(({ client: c, match }) => {
             const situacao = c.situacao_atual || c.momento || "—";
             const iniciais = (c.nome || "?").split(" ").slice(0, 2).map(p => p[0]).join("").toUpperCase();
             const temUrgente = ["Visita hoje", "Em negociação ativa", "Proposta enviada", "Financiamento aprovado sem compra"].includes(situacao);
@@ -281,15 +366,22 @@ function AtaqueVeiculo({ veiculo, clientes, catalog, onVoltar, onExecutar, onFic
                       Veículo compatível chegou
                     </span>
                   </div>
-                  <p className="text-xs text-muted-foreground truncate">{c.veiculo_interesse} · {situacao}</p>
+                  <p className="text-xs text-muted-foreground truncate">{c.veiculo_interesse || "Interesse não detalhado"} · {situacao}</p>
+                  <div className="flex flex-wrap gap-1 mt-2" aria-label="Razões da compatibilidade">
+                    {match.reasons.map(reason => (
+                      <span key={`${reason.kind}-${reason.detail}`} className="text-caption font-semibold px-2 py-0.5 rounded-full bg-surface-alt text-muted-foreground border border-border-subtle">
+                        {reasonLabel(reason)}
+                      </span>
+                    ))}
+                  </div>
                 </div>
                 <div className="flex gap-1.5 shrink-0">
-                  <button onClick={() => onExecutar(c, veiculo)}
-                    className="flex items-center gap-1 text-caption font-bold text-white bg-status-info hover:bg-status-info px-2.5 py-1.5 rounded-lg transition-colors">
+                  <button type="button" onClick={() => onExecutar(c, veiculo)}
+                    className="min-h-9 flex items-center gap-1 text-caption font-bold text-white bg-status-info hover:bg-status-info px-2.5 py-1.5 rounded-lg transition-colors">
                     <Zap className="w-3 h-3" /> Executar
                   </button>
-                  <button onClick={() => onFicha(c.id)}
-                    className="text-caption font-bold text-muted-foreground border border-border hover:bg-surface-alt px-2.5 py-1.5 rounded-lg transition-colors">
+                  <button type="button" onClick={() => onFicha(c.id)}
+                    className="min-h-9 text-caption font-bold text-muted-foreground border border-border hover:bg-surface-alt px-2.5 py-1.5 rounded-lg transition-colors">
                     Ficha
                   </button>
                 </div>
@@ -318,6 +410,7 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
   const [catalog, setCatalog] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
+  const [veiculoEditando, setVeiculoEditando] = useState(null);
   const [veiculoAtaque, setVeiculoAtaque] = useState(null);
   const [faixaPrecoAtiva, setFaixaPrecoAtiva] = useState("todas");
 
@@ -348,8 +441,8 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
         map[f.id] = veiculos.length;
       } else {
         map[f.id] = veiculos.filter(v => {
-          const p = Number(v.preco) || 0;
-          return p >= f.min && p <= f.max;
+          const p = Number(v.preco);
+          return Number.isFinite(p) && p >= f.min && p <= f.max;
         }).length;
       }
     }
@@ -361,13 +454,30 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
     const f = FAIXAS_PRECO.find(x => x.id === faixaPrecoAtiva);
     if (!f) return veiculos;
     return veiculos.filter(v => {
-      const p = Number(v.preco) || 0;
-      return p >= f.min && p <= f.max;
+      const p = Number(v.preco);
+      return Number.isFinite(p) && p >= f.min && p <= f.max;
     });
   }, [veiculos, faixaPrecoAtiva]);
 
-  function handleSalvo(novo) {
-    setVeiculos(prev => [novo, ...prev]);
+  function handleSalvo(salvo, editando) {
+    setVeiculos(prev => editando
+      ? prev.map(vehicle => vehicle.id === salvo.id ? salvo : vehicle)
+      : [salvo, ...prev]);
+  }
+
+  function abrirNovoVeiculo() {
+    setVeiculoEditando(null);
+    setModalOpen(true);
+  }
+
+  function abrirEdicaoVeiculo(veiculo) {
+    setVeiculoEditando(veiculo);
+    setModalOpen(true);
+  }
+
+  function fecharModal() {
+    setModalOpen(false);
+    setVeiculoEditando(null);
   }
 
   function handleExecutarCompativel(cliente, veiculo) {
@@ -395,7 +505,7 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
           <h2 className="text-lg font-black text-mx-navy">Veículos que chegaram</h2>
           <p className="text-sm text-muted-foreground mt-0.5">Encontre clientes da carteira interessados nos veículos recém-entrados.</p>
         </div>
-        <Button onClick={() => setModalOpen(true)} variant="outline" className="min-h-11 w-full rounded-xl text-sm gap-1.5 border-status-info text-status-info-text hover:bg-status-info-surface whitespace-nowrap sm:w-auto">
+        <Button onClick={abrirNovoVeiculo} variant="outline" className="min-h-11 w-full rounded-xl text-sm gap-1.5 border-status-info text-status-info-text hover:bg-status-info-surface whitespace-nowrap sm:w-auto">
           <Plus className="w-4 h-4" /> Registrar veículo
         </Button>
       </div>
@@ -409,8 +519,8 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
             const ativo = faixaPrecoAtiva === f.id;
             return (
               <button
-                key={f.id}
                 type="button"
+                key={f.id}
                 onClick={() => setFaixaPrecoAtiva(f.id)}
                 className={`min-h-11 px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-colors ${
                   ativo
@@ -439,13 +549,14 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
           </p>
           {veiculos.length > 0 ? (
             <button
+              type="button"
               onClick={() => setFaixaPrecoAtiva("todas")}
               className="mt-3 text-xs text-status-info-text font-bold hover:underline"
             >
               Ver todas as faixas de preço
             </button>
           ) : (
-            <Button onClick={() => setModalOpen(true)} className="mt-4 rounded-xl bg-status-info hover:bg-status-info text-white text-sm gap-1.5">
+            <Button onClick={abrirNovoVeiculo} className="mt-4 rounded-xl bg-status-info hover:bg-status-info text-white text-sm gap-1.5">
               <Plus className="w-4 h-4" /> Registrar veículo que chegou
             </Button>
           )}
@@ -458,12 +569,13 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
               veiculo={v}
               compatíveis={clientesCompativeis(clientes, v, catalog).length}
               onClick={setVeiculoAtaque}
+              onEdit={abrirEdicaoVeiculo}
             />
           ))}
         </div>
       )}
 
-      {modalOpen && <ModalRegistrarVeiculo catalog={catalog} onClose={() => setModalOpen(false)} onSalvo={handleSalvo} />}
+      {modalOpen && <ModalRegistrarVeiculo catalog={catalog} veiculo={veiculoEditando} onClose={fecharModal} onSalvo={handleSalvo} />}
     </div>
   );
 }

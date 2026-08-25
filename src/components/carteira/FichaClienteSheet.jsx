@@ -11,6 +11,7 @@ import { toast } from "@/lib/toast";
 import { useAuth } from "@/hooks/useAuth";
 import { CancelarVendaModal } from "@/features/crm/components/CancelarVendaModal";
 import { formatCurrencyInput } from "@/lib/currency-mask";
+import { resolveInterestText, VEHICLE_CATEGORY_OPTIONS } from "@/features/mentor-comercial/catalog/vehicleCatalog";
 
 moment.locale("pt-br");
 import {
@@ -148,7 +149,7 @@ function Bloco({ title, icon, children, defaultOpen = true }) {
 }
 
 // ─── FORMULÁRIO DE EDIÇÃO ─────────────────────────────────────────────────────
-function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
+function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando, catalog = [] }) {
   const campo = (k, l, span2 = false, type = "text", placeholder = "") => (
     <div key={k} className={span2 ? "col-span-2" : ""}>
       <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">{l}</label>
@@ -165,6 +166,11 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
   const CANAIS_OPTS = Array.from(new Set([...CANAIS_COMERCIAIS, "Porta", "Showroom", "Internet", "Carteira"]));
   const MODALIDADE_OPTS = ["Visita na loja", "Atendimento externo", "Videochamada", "Não informado"];
   const URGENCIA_OPTS = ["Imediato", "30 dias", "60 dias", "90 dias", "Sem prazo", "Não informado"];
+  const resolucao = useMemo(() => {
+    if (!form.veiculo_interesse || catalog.length === 0) return null;
+    return resolveInterestText(form.veiculo_interesse, catalog);
+  }, [form.veiculo_interesse, catalog]);
+  const classificacao = resolucao?.kind === "resolved" ? resolucao.entry : null;
 
   return (
     <div className="space-y-4 bg-surface-alt rounded-2xl p-4">
@@ -219,6 +225,20 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
       {/* Veículo e Negociação */}
       <div className="grid grid-cols-2 gap-3">
         {campo("veiculo_interesse", "Veículo de interesse", true, "text", "Ex: HB20 1.0 COMFORT")}
+        <div>
+          <label htmlFor="cliente-categoria-veiculo" className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Categoria do veículo</label>
+          <select
+            id="cliente-categoria-veiculo"
+            value={form.categoria_veiculo || ""}
+            onChange={e => setForm(p => ({ ...p, categoria_veiculo: e.target.value }))}
+            className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm"
+          >
+            <option value="">Automática do catálogo</option>
+            {VEHICLE_CATEGORY_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
+          </select>
+        </div>
+        {campo("preco_interesse_min", "Orçamento mínimo", false, "number", "Ex: 60000")}
+        {campo("preco_interesse_max", "Orçamento máximo", false, "number", "Ex: 90000")}
         {campo("valor_negociado", "Orçamento / Valor Negociado", false, "text", "R$ 68.900,00")}
         <div>
           <label htmlFor="cliente-financiamento" className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Financiamento</label>
@@ -248,6 +268,15 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
           </select>
         </div>
       </div>
+      {resolucao && (
+        <div className={`rounded-xl border px-3 py-2 text-xs ${classificacao ? "border-brand-primary/30 bg-brand-primary-subtle text-brand-primary-active" : resolucao.kind === "ambiguous" ? "border-status-warning/30 bg-status-warning-surface text-status-warning-text" : "border-border bg-surface-alt text-muted-foreground"}`} role="status" aria-live="polite">
+          {classificacao
+            ? <>Catálogo reconheceu <strong>{classificacao.brand} {classificacao.model}</strong> e sugeriu <strong>{classificacao.category}</strong>. A categoria escolhida acima tem prioridade.</>
+            : resolucao.kind === "ambiguous"
+              ? "O texto corresponde a mais de um modelo. Escolha a categoria manualmente; o match continuará usando o texto livre."
+              : "Modelo não encontrado no catálogo. A categoria e a faixa de preço informadas continuam válidas para o match."}
+        </div>
+      )}
 
       {/* Dados de Venda & Entrega */}
       <div className="grid grid-cols-2 gap-3 border-t border-border pt-3">
@@ -338,6 +367,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
   const [cliente, setCliente] = useState(null);
   const [loading, setLoading] = useState(true);
   const [historico, setHistorico] = useState([]);
+  const [catalog, setCatalog] = useState([]);
   const [editando, setEditando] = useState(false);
   const [form, setForm] = useState({});
   const [salvando, setSalvando] = useState(false);
@@ -350,19 +380,39 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
     if (!open || !clienteId) return;
     setLoading(true);
     setEditando(false);
+    const catalogPromise = typeof base44.entities?.CatalogoModelos?.list === "function"
+      ? base44.entities.CatalogoModelos.list().catch(() => [])
+      : Promise.resolve([]);
     Promise.all([
       base44.entities.CarteiraCliente.get(clienteId),
       base44.entities.CarteiraHistorico.filter({ cliente_id: clienteId }, "-created_date", 30),
-    ]).then(([c, h]) => {
+      catalogPromise,
+    ]).then(([c, h, rows]) => {
       setCliente(c);
       setForm(c);
       setHistorico(h || []);
+      setCatalog(rows || []);
       setLoading(false);
     }).catch(() => setLoading(false));
   }, [open, clienteId]);
 
   async function salvarEdicao() {
+    const min = form.preco_interesse_min === "" || form.preco_interesse_min == null ? null : Number(form.preco_interesse_min);
+    const max = form.preco_interesse_max === "" || form.preco_interesse_max == null ? null : Number(form.preco_interesse_max);
+    if ((min !== null && (!Number.isFinite(min) || min < 0)) || (max !== null && (!Number.isFinite(max) || max < 0))) {
+      toast.error("A faixa de preço está inválida.", { description: "Informe valores positivos ou deixe os campos em branco." });
+      return;
+    }
+    if (min !== null && max !== null && max < min) {
+      toast.error("A faixa de preço está inválida.", { description: "O valor máximo precisa ser maior ou igual ao mínimo." });
+      return;
+    }
     setSalvando(true);
+    const resolucao = form.veiculo_interesse && catalog.length > 0
+      ? resolveInterestText(form.veiculo_interesse, catalog)
+      : null;
+    const textoMudou = form.veiculo_interesse !== cliente?.veiculo_interesse;
+    const classificacao = resolucao?.kind === "resolved" ? resolucao.entry : null;
     const { objetivo, proximoPasso } = calcularObjetivoEProximoPasso(form);
     const isVenda = form.situacao_atual === "Venda realizada";
     const atualizado = {
@@ -370,6 +420,11 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
       objetivo_atual: isVenda ? null : (form.objetivo_atual || objetivo),
       proximo_passo: isVenda ? null : (form.proximo_passo || proximoPasso),
       proxima_acao_data: isVenda ? null : form.proxima_acao_data,
+      categoria_veiculo: form.categoria_veiculo || classificacao?.category || null,
+      preco_interesse_min: min,
+      preco_interesse_max: max,
+      catalog_model_id: classificacao?.id || (textoMudou ? null : (form.catalog_model_id || null)),
+      classification_source: form.categoria_veiculo ? "manual" : (classificacao ? "catalog" : (textoMudou ? null : (form.classification_source || null))),
       historico: {
         tipo: isVenda ? "Venda realizada" : "Ficha atualizada",
         descricao: isVenda ? "Venda confirmada através da edição da ficha." : "Dados do cliente editados manualmente.",
@@ -551,6 +606,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                 <FormularioEdicao
                   form={form}
                   setForm={setForm}
+                  catalog={catalog}
                   onSalvar={salvarEdicao}
                   onCancelar={() => { setEditando(false); setForm(cliente); }}
                   salvando={salvando}

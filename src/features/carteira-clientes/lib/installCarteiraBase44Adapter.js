@@ -179,6 +179,22 @@ export function buildRpcPayload(data, clientId, executionContext) {
   put(payload, 'nova_oportunidade', data.nova_oportunidade)
 
   put(payload, 'veiculo_interesse', data.veiculo_comprado || data.veiculo_interesse)
+  // Sinais estruturados usados pelo match veículo × oportunidade. Eles são
+  // opcionais para preservar o texto livre e permitem limpar um valor com
+  // `null` durante a edição da ficha.
+  put(payload, 'categoria_veiculo', data.categoria_veiculo)
+  put(payload, 'catalog_model_id', data.catalog_model_id)
+  put(payload, 'classification_source', data.classification_source)
+  if (data.preco_interesse_min !== undefined) {
+    payload.preco_interesse_min = data.preco_interesse_min === '' || data.preco_interesse_min === null
+      ? null
+      : Number(data.preco_interesse_min)
+  }
+  if (data.preco_interesse_max !== undefined) {
+    payload.preco_interesse_max = data.preco_interesse_max === '' || data.preco_interesse_max === null
+      ? null
+      : Number(data.preco_interesse_max)
+  }
   put(payload, 'valor_negociado', valorFinal)
   if (data.situacao_atual !== undefined || data.momento !== undefined || data.status_comercial !== undefined) {
     payload.etapa = situationToStage(data)
@@ -466,27 +482,7 @@ async function createArrivedVehicle(data) {
   const context = await getSellerStoreContext()
   if (!context) throw new Error('Vendedor sem vínculo ativo com loja.')
 
-  const price = data.preco === undefined || data.preco === null || data.preco === ''
-    ? null
-    : Number(data.preco)
-  if (price !== null && (!Number.isFinite(price) || price < 0)) throw new Error('Preço do veículo inválido.')
-
-  const payload = {
-    loja_id: context.storeId,
-    created_by: context.userId,
-    marca: data.marca,
-    modelo: data.modelo,
-    versao: data.versao || null,
-    ano: data.ano || null,
-    preco: price,
-    data_entrada: data.data_entrada || new Date().toISOString().slice(0, 10),
-    observacao: data.observacao || null,
-    status: 'disponivel',
-    // PRODUCT DELTA 2026-08-07 §13 — classificação via catálogo mentor.
-    categoria: data.categoria || null,
-    catalog_model_id: data.catalog_model_id || null,
-    classification_source: data.classification_source || null,
-  }
+  const payload = buildArrivedVehiclePayload(data, context)
 
   return carteiraMutationCoordinator.run('carteira:vehicle:create', payload, async key => {
     const { data: created, error } = await supabase
@@ -497,6 +493,53 @@ async function createArrivedVehicle(data) {
 
     if (error) throw error
     return { ...created, vendedor_id: created.created_by, ativo: true }
+  })
+}
+
+export function buildArrivedVehiclePayload(data, context, includeCreatedBy = true) {
+  const price = data.preco === undefined || data.preco === null || data.preco === ''
+    ? null
+    : Number(data.preco)
+  if (price !== null && (!Number.isFinite(price) || price < 0)) throw new Error('Preço do veículo inválido.')
+  if (!String(data.marca || '').trim() || !String(data.modelo || '').trim()) {
+    throw new Error('Informe marca e modelo do veículo.')
+  }
+
+  return {
+    loja_id: context.storeId,
+    ...(includeCreatedBy ? { created_by: context.userId } : {}),
+    marca: String(data.marca).trim(),
+    modelo: String(data.modelo).trim(),
+    versao: String(data.versao || '').trim() || null,
+    ano: String(data.ano || '').trim() || null,
+    preco: price,
+    data_entrada: data.data_entrada || new Date().toISOString().slice(0, 10),
+    observacao: String(data.observacao || '').trim() || null,
+    ...(includeCreatedBy ? { status: data.status || 'disponivel' } : {}),
+    // PRODUCT DELTA 2026-08-07 §13 — classificação via catálogo mentor.
+    categoria: data.categoria || null,
+    catalog_model_id: data.catalog_model_id || null,
+    classification_source: data.classification_source || null,
+  }
+}
+
+async function updateArrivedVehicle(id, data) {
+  const context = await getSellerStoreContext()
+  if (!context) throw new Error('Vendedor sem vínculo ativo com loja.')
+  if (!id) throw new Error('Veículo não identificado.')
+
+  const payload = buildArrivedVehiclePayload(data, context, false)
+  return carteiraMutationCoordinator.run(`carteira:vehicle:update:${id}`, payload, async () => {
+    const { data: updated, error } = await supabase
+      .from('veiculos_estoque')
+      .update(payload)
+      .eq('id', id)
+      .eq('loja_id', context.storeId)
+      .select('*')
+      .single()
+
+    if (error) throw error
+    return { ...updated, vendedor_id: updated.created_by, ativo: updated.status !== 'vendido' }
   })
 }
 
@@ -646,6 +689,7 @@ export function installCarteiraBase44Adapter(base44) {
     filter: listArrivedVehicles,
     list: (order, limit) => listArrivedVehicles(null, order, limit),
     create: createArrivedVehicle,
+    update: updateArrivedVehicle,
   }
 
   base44.entities.CarteiraCampanha = {

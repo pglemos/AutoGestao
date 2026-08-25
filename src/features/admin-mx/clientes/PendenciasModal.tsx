@@ -160,7 +160,7 @@ export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch
               : <MxStatusBanner tone="warning">{`Ativação bloqueada: ${summary.blockers.length} item(ns) impeditivo(s).`}</MxStatusBanner>}
 
             <section className="space-y-2">
-              <h3 className="text-sm font-semibold text-foreground">Impeditivos (${summary.blockers.length})</h3>
+              <h3 className="text-sm font-semibold text-foreground">Impeditivos ({summary.blockers.length})</h3>
               <ul className="space-y-2">
                 {summary.blockers.map(check => (
                   <li key={check.key} className="flex items-start justify-between gap-3 rounded-lg border border-border p-3 text-sm">

@@ -34,6 +34,7 @@ export function useClientSales({ stores, period, customStartDate, customEndDate 
   const [rows, setRows] = useState<ClientStoreSales[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [loadedQueryKey, setLoadedQueryKey] = useState<string | null>(null)
   const requestIdRef = useRef(0)
 
   useEffect(() => {
@@ -52,6 +53,7 @@ export function useClientSales({ stores, period, customStartDate, customEndDate 
   const storeSnapshot = useMemo(() => stores.map(store => ({ id: store.id, name: store.name, parent_loja_id: store.parent_loja_id, active: store.active })), [stores])
   const storeIds = useMemo(() => storeSnapshot.map(store => store.id), [storeSnapshot])
   const storeIdsKey = storeIds.join(',')
+  const queryKey = resolution.range ? `${resolution.range.startDate}:${resolution.range.endDate}:${storeIdsKey}` : null
 
   const refetch = useCallback(async () => {
     const requestId = ++requestIdRef.current
@@ -59,6 +61,7 @@ export function useClientSales({ stores, period, customStartDate, customEndDate 
     if (!resolution.range || !storeSnapshot.length) {
       if (isLatestRequest()) {
         setRows([])
+        setLoadedQueryKey(null)
         setError(null)
         setLoading(false)
       }
@@ -101,16 +104,18 @@ export function useClientSales({ stores, period, customStartDate, customEndDate 
             lastSaleDate: sales.lastSaleDate,
           }
         }))
+        setLoadedQueryKey(queryKey)
       }
     } catch (cause) {
       if (isLatestRequest()) {
-        setRows([])
-        setError(cause instanceof Error ? cause.message : 'Não foi possível carregar as vendas por loja.')
+        // Preserve the last valid snapshot so a transient RPC/network failure
+        // cannot look like zero sales to the operator.
+        setError('Não foi possível atualizar as vendas agora. Os últimos dados válidos foram mantidos; tente novamente.')
       }
     } finally {
       if (isLatestRequest()) setLoading(false)
     }
-  }, [resolution.range, storeIds, storeIdsKey, storeSnapshot])
+  }, [queryKey, resolution.range, storeIds, storeIdsKey, storeSnapshot])
 
   useEffect(() => { void refetch() }, [refetch])
   const totals = useMemo(() => {
@@ -127,5 +132,5 @@ export function useClientSales({ stores, period, customStartDate, customEndDate 
     }
   }, [rows])
 
-  return { range: resolution.range, rangeError: resolution.error, rows, totals, loading, error, refetch }
+  return { range: resolution.range, rangeError: resolution.error, rows, totals, loading, error, loadedQueryKey, queryKey, refetch }
 }

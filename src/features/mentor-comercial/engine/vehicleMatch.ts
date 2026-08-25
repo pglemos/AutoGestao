@@ -15,9 +15,9 @@
 
 import {
   normalizeVehicleText,
-  normalizeBrand,
   resolveInterestText,
   resolveCatalogModel,
+  vehicleTextContainsModel,
   type VehicleCatalogEntry,
 } from '../catalog/vehicleCatalog'
 
@@ -63,6 +63,11 @@ export interface VehicleMatchResult {
 
 const NO_CATEGORY = 'outro'
 
+function normalizedCategory(value: string | null | undefined): string | null {
+  const normalized = normalizeVehicleText(value)
+  return normalized || null
+}
+
 function categorizeVehicle(
   criteria: VehicleMatchCriteria,
   catalog: VehicleCatalogEntry[],
@@ -80,7 +85,15 @@ export function matchVehicleAgainstOpportunities(
   catalog: VehicleCatalogEntry[],
 ): VehicleMatchResult {
   const vehicleEntry = categorizeVehicle(criteria, catalog)
-  const vehicleCategory = criteria.category && criteria.category !== NO_CATEGORY ? criteria.category : null
+  // Registros antigos podem ter `categoria` nula, embora marca/modelo já
+  // resolvam de forma inequívoca no catálogo. Nesse caso a categoria oficial
+  // do catálogo é a fonte de verdade; uma categoria manual explícita continua
+  // tendo precedência.
+  const rawVehicleCategory = criteria.category || vehicleEntry?.category
+  const vehicleCategory = normalizedCategory(rawVehicleCategory)
+    && normalizedCategory(rawVehicleCategory) !== NO_CATEGORY
+    ? normalizedCategory(rawVehicleCategory)
+    : null
 
   const matches: VehicleMatchItem[] = []
   const unresolved: Array<{ opportunityId: string; text: string }> = []
@@ -98,7 +111,10 @@ export function matchVehicleAgainstOpportunities(
       unresolved.push({ opportunityId: opportunity.id, text: opportunity.veiculoInteresse })
     }
 
-    // Critério 1 — modelo exato via catálogo (inclui alias).
+    // Critério 1 — modelo exato via catálogo (inclui alias). O texto do
+    // cliente pode omitir a marca ("T-Cross") ou usar abreviação ("VW"); o
+    // modelo resolvido é a evidência mais específica e não deve depender da
+    // forma como a marca foi digitada.
     if (vehicleEntry && interestResolution.kind === 'resolved' && interestResolution.entry) {
       if (interestResolution.entry.id === vehicleEntry.id) {
         reasons.push({ kind: 'model', detail: `${vehicleEntry.brand} ${vehicleEntry.model}` })
@@ -107,30 +123,37 @@ export function matchVehicleAgainstOpportunities(
       // Fallback determinístico: texto de interesse contém a marca e (modelo
       // oficial OU alias) do veículo (ex.: "Honda HR-V EXL" contém "HR-V").
       const normalizedInterest = normalizeVehicleText(opportunity.veiculoInteresse)
-      const brandToken = normalizeVehicleText(vehicleEntry.brand)
       const tokens = [vehicleEntry.model, ...(vehicleEntry.aliases || [])].map(normalizeVehicleText)
-      if (brandToken && normalizedInterest.includes(brandToken) && tokens.some((token) => token && normalizedInterest.includes(token))) {
+      if (tokens.some((token) => token && vehicleTextContainsModel(normalizedInterest, token))) {
         reasons.push({ kind: 'model', detail: `${vehicleEntry.brand} ${vehicleEntry.model}` })
       }
     } else if (opportunity.veiculoInteresse) {
       // Fallback por texto livre entre a oportunidade e os critérios do veículo (ex.: "TCROSS", "Civic")
       const normalizedInterest = normalizeVehicleText(opportunity.veiculoInteresse)
       const normModel = normalizeVehicleText(criteria.model)
-      const normBrand = normalizeBrand(criteria.brand)
 
       if (normModel && normModel.length >= 3) {
-        const modelMatch = normalizedInterest.includes(normModel) || normModel.includes(normalizedInterest)
-        const brandMatch = !normBrand || normalizedInterest.includes(normBrand) || normBrand.includes(normalizedInterest) || true
-        if (modelMatch && brandMatch) {
+        const modelMatch = vehicleTextContainsModel(normalizedInterest, normModel)
+          || vehicleTextContainsModel(normModel, normalizedInterest)
+        // Quando o catálogo não está disponível, o texto do modelo continua
+        // sendo evidência válida. A marca não bloqueia o fallback: é comum o
+        // cliente escrever "T-Cross" sem repetir "Volkswagen".
+        if (modelMatch) {
           reasons.push({ kind: 'model', detail: `${criteria.brand || ''} ${criteria.model || ''}`.trim() })
         }
       }
     }
 
     // Critério 2 — categoria igual (exclui 'outro' dos dois lados).
-    if (vehicleCategory && opportunity.categoriaVeiculo && opportunity.categoriaVeiculo !== NO_CATEGORY) {
-      if (opportunity.categoriaVeiculo === vehicleCategory) {
-        reasons.push({ kind: 'category', detail: vehicleCategory })
+    // O campo estruturado manual tem precedência. Quando ele ainda não foi
+    // preenchido, uma resolução única do texto livre fornece a categoria
+    // oficial do catálogo sem inventar uma classificação por heurística.
+    const opportunityCategory = normalizedCategory(
+      opportunity.categoriaVeiculo || interestResolution.entry?.category,
+    )
+    if (vehicleCategory && opportunityCategory && opportunityCategory !== NO_CATEGORY) {
+      if (opportunityCategory === vehicleCategory) {
+        reasons.push({ kind: 'category', detail: opportunityCategory })
       }
     }
 
@@ -138,20 +161,26 @@ export function matchVehicleAgainstOpportunities(
     let priceDistance: number | null = null
     const min = opportunity.precoInteresseMin ?? null
     const max = opportunity.precoInteresseMax ?? null
-    if (criteria.price !== null && criteria.price !== undefined && (min !== null || max !== null)) {
-      const price = criteria.price
-      const inside = (min === null || price >= min) && (max === null || price <= max)
+    const numericPrice = criteria.price === null || criteria.price === undefined ? null : Number(criteria.price)
+    const numericMin = min === null || min === undefined ? null : Number(min)
+    const numericMax = max === null || max === undefined ? null : Number(max)
+    if (numericPrice !== null && Number.isFinite(numericPrice)
+      && (numericMin !== null || numericMax !== null)
+      && (numericMin === null || Number.isFinite(numericMin))
+      && (numericMax === null || Number.isFinite(numericMax))) {
+      const price = numericPrice
+      const inside = (numericMin === null || price >= numericMin) && (numericMax === null || price <= numericMax)
       if (inside) {
         // §19.3 — menor diferença ao ponto médio da faixa ordena primeiro.
-        const midpoint = (min ?? max!) + ((max ?? min!) - (min ?? max!)) / 2
+        const midpoint = (numericMin ?? numericMax!) + ((numericMax ?? numericMin!) - (numericMin ?? numericMax!)) / 2
         priceDistance = Math.abs(price - midpoint)
         reasons.push({
           kind: 'price',
-          detail: min !== null && max !== null
-            ? `R$ ${min.toLocaleString('pt-BR')}–R$ ${max.toLocaleString('pt-BR')}`
-            : max === null
-              ? `a partir de R$ ${min!.toLocaleString('pt-BR')}`
-              : `até R$ ${max.toLocaleString('pt-BR')}`,
+          detail: numericMin !== null && numericMax !== null
+            ? `R$ ${numericMin.toLocaleString('pt-BR')}–R$ ${numericMax.toLocaleString('pt-BR')}`
+            : numericMax === null
+              ? `a partir de R$ ${numericMin!.toLocaleString('pt-BR')}`
+              : `até R$ ${numericMax.toLocaleString('pt-BR')}`,
         })
       }
     }

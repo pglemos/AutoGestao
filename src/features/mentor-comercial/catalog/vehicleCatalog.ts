@@ -11,6 +11,25 @@
 
 export type VehicleCategory = 'hatch' | 'sedan' | 'suv' | 'picape' | 'minivan' | 'utilitario' | 'moto' | 'outro'
 
+export const VEHICLE_CATEGORY_OPTIONS: Array<{ value: VehicleCategory; label: string }> = [
+  { value: 'hatch', label: 'Hatch' },
+  { value: 'sedan', label: 'Sedan' },
+  { value: 'suv', label: 'SUV' },
+  { value: 'picape', label: 'Picape' },
+  { value: 'minivan', label: 'Minivan' },
+  { value: 'utilitario', label: 'Utilitário' },
+  { value: 'moto', label: 'Moto' },
+  { value: 'outro', label: 'Outro' },
+]
+
+export const VEHICLE_CATEGORY_LABELS: Record<VehicleCategory, string> = Object.fromEntries(
+  VEHICLE_CATEGORY_OPTIONS.map((option) => [option.value, option.label]),
+) as Record<VehicleCategory, string>
+
+export function vehicleCategoryLabel(value: string | null | undefined): string {
+  return VEHICLE_CATEGORY_LABELS[value as VehicleCategory] || value || 'Não classificado'
+}
+
 export interface VehicleCatalogEntry {
   id: string
   brand: string
@@ -32,6 +51,35 @@ export function normalizeVehicleText(input: string | null | undefined): string {
     .replace(/-/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
+}
+
+/**
+ * Chave de comparação para entradas digitadas de formas equivalentes:
+ * `T-Cross`, `T Cross` e `TCROSS` representam o mesmo modelo. A forma
+ * legível acima continua sendo a canônica para exibição e telemetria.
+ */
+export function compactVehicleText(input: string | null | undefined): string {
+  return normalizeVehicleText(input).replace(/[^a-z0-9]/g, '')
+}
+
+/** Compara textos de veículo preservando aliases de hífen/espaço. */
+export function vehicleTextMatches(left: string | null | undefined, right: string | null | undefined): boolean {
+  const normalizedLeft = normalizeVehicleText(left)
+  const normalizedRight = normalizeVehicleText(right)
+  if (!normalizedLeft || !normalizedRight) return false
+  return normalizedLeft === normalizedRight || compactVehicleText(normalizedLeft) === compactVehicleText(normalizedRight)
+}
+
+/** Testa se o texto livre contém o modelo oficial ou um alias. */
+export function vehicleTextContainsModel(
+  text: string | null | undefined,
+  model: string | null | undefined,
+): boolean {
+  const normalizedText = normalizeVehicleText(text)
+  const normalizedModel = normalizeVehicleText(model)
+  if (!normalizedText || !normalizedModel) return false
+  return normalizedText.includes(normalizedModel)
+    || compactVehicleText(normalizedText).includes(compactVehicleText(normalizedModel))
 }
 
 /** Tokens de busca do modelo: nome oficial + aliases normalizados. */
@@ -58,6 +106,35 @@ export function normalizeBrand(brand: string | null | undefined): string {
     bimmer: 'bmw',
   }
   return synonyms[norm] || norm
+}
+
+/**
+ * Variações de marca aceitas em texto livre. Isso cobre abreviações comuns
+ * sem transformar uma marca digitada em dado novo no banco.
+ */
+export function brandSearchTokens(brand: string | null | undefined): string[] {
+  const canonical = normalizeBrand(brand)
+  const aliases: Record<string, string[]> = {
+    volkswagen: ['vw', 'volks'],
+    chevrolet: ['chevy', 'gm'],
+    'mercedes benz': ['mercedes', 'mb', 'mbenz'],
+    'caoa chery': ['chery', 'caoa'],
+    'land rover': ['lr'],
+    bmw: ['bimmer'],
+  }
+  return [canonical, ...(aliases[canonical] || [])]
+    .map(normalizeVehicleText)
+    .filter(Boolean)
+}
+
+/** Marca oficial ou abreviação presente no interesse digitado. */
+export function brandAppearsInText(
+  brand: string | null | undefined,
+  text: string | null | undefined,
+): boolean {
+  const normalizedText = normalizeVehicleText(text)
+  if (!normalizedText) return false
+  return brandSearchTokens(brand).some((token) => vehicleTextContainsModel(normalizedText, token))
 }
 
 export type CatalogResolutionKind = 'resolved' | 'ambiguous' | 'not_found'
@@ -100,7 +177,7 @@ export function resolveCatalogModel(
 
   // 1. Tenta correspondência exata por token (ex.: "onix plus" === "onix plus")
   const exactCandidates = brandCandidates.filter((entry) => {
-    return catalogSearchTokens(entry).includes(queryModel)
+    return catalogSearchTokens(entry).some((token) => vehicleTextMatches(token, queryModel))
   })
 
   if (exactCandidates.length === 1) {
@@ -115,8 +192,10 @@ export function resolveCatalogModel(
     const tokens = catalogSearchTokens(entry)
     return tokens.some((token) => {
       if (!token) return false
-      return queryModel.includes(token)
-        || (token.length >= 3 && queryModel.length >= 3 && token.includes(queryModel))
+      return vehicleTextContainsModel(queryModel, token)
+        || (compactVehicleText(token).length >= 3
+          && compactVehicleText(queryModel).length >= 3
+          && compactVehicleText(token).includes(compactVehicleText(queryModel)))
     })
   })
 
@@ -145,19 +224,35 @@ export function resolveInterestText(
   }
 
   const active = catalog.filter((entry) => entry.active !== false)
-  const candidates = active.filter((entry) => {
-    const brandToken = normalizeBrand(entry.brand)
-    if (!brandToken || !normalized.includes(brandToken)) return false
+  const brandsInText = active.filter((entry) => brandAppearsInText(entry.brand, normalized))
+  // A marca é preferida quando foi digitada, mas não é obrigatória: no CRM é
+  // comum o vendedor registrar apenas "RENEGADE T270" ou "TCROSS". Sem uma
+  // marca explícita, o modelo só é resolvido quando a evidência é única no
+  // catálogo; isso evita atribuir uma marca por adivinhação.
+  const scopedEntries = brandsInText.length > 0
+    ? brandsInText
+    : active
+  const candidates = scopedEntries.filter((entry) => {
     const tokens = catalogSearchTokens(entry)
-    // Marca presente E (modelo oficial OU qualquer alias) presente no texto.
-    return tokens.some((token) => token && normalized.includes(token))
+    return tokens.some((token) => token && vehicleTextContainsModel(normalized, token))
   })
 
-  if (candidates.length === 1) {
-    return { kind: 'resolved', entry: candidates[0], queryModel: normalized, matches: 1 }
+  if (candidates.length > 0) {
+    // Um modelo curto pode ser substring de outro ("Onix" em "Onix Plus").
+    // Mantém a entrada mais específica quando ela é única; empates continuam
+    // ambíguos e exigem classificação manual.
+    const specificity = (entry: VehicleCatalogEntry) => Math.max(
+      ...catalogSearchTokens(entry)
+        .filter((token) => vehicleTextContainsModel(normalized, token))
+        .map((token) => compactVehicleText(token).length),
+    )
+    const longest = Math.max(...candidates.map(specificity))
+    const specificCandidates = candidates.filter((entry) => specificity(entry) === longest)
+    if (specificCandidates.length === 1) {
+      return { kind: 'resolved', entry: specificCandidates[0], queryModel: normalized, matches: 1 }
+    }
+    return { kind: 'ambiguous', entry: null, queryModel: normalized, matches: specificCandidates.length }
   }
-  if (candidates.length > 1) {
-    return { kind: 'ambiguous', entry: null, queryModel: normalized, matches: candidates.length }
-  }
+
   return { kind: 'not_found', entry: null, queryModel: normalized, matches: 0 }
 }

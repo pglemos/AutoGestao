@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/atoms/Input";
@@ -6,6 +6,7 @@ import { Textarea } from "@/components/atoms/Textarea";
 import { base44 } from "@/api/base44Client";
 import { calcularProximaAcao } from "./carteiraUtils";
 import { toast } from "@/lib/toast";
+import { resolveInterestText, VEHICLE_CATEGORY_OPTIONS } from "@/features/mentor-comercial/catalog/vehicleCatalog";
 
 const MOMENTOS_CADASTRO = [
   { value: "Novo contato", label: "Só demonstrou interesse" },
@@ -50,21 +51,57 @@ function situacaoDoMomento(momento) {
   return momento;
 }
 
-export default function NovoClienteModal({ open, onClose, onCriado, vendedorId }) {
-  const [form, setForm] = useState({
+function createInitialForm() {
+  return {
     nome: "", whatsapp: "", canal_comercial: "Internet", canal_origem: "Internet",
-    veiculo_interesse: "", valor_negociado: "", momento: "Novo contato", situacao_atual: "Novo contato",
+    veiculo_interesse: "", categoria_veiculo: "", preco_interesse_min: "", preco_interesse_max: "",
+    valor_negociado: "", momento: "Novo contato", situacao_atual: "Novo contato",
     visita_agendada_em: "", proposta_enviada: false, financiamento: "nao_aplica",
     interesse_troca: false, veiculo_troca: "", valor_troca: "", interesse_financiamento: false, observacoes: "",
-  });
+  };
+}
+
+function optionalNumber(value) {
+  if (value === "" || value === null || value === undefined) return null;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : NaN;
+}
+
+export default function NovoClienteModal({ open, onClose, onCriado, vendedorId }) {
+  const [form, setForm] = useState(createInitialForm);
+  const [catalog, setCatalog] = useState([]);
   const [saving, setSaving] = useState(false);
 
   const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
+
+  useEffect(() => {
+    if (!open || typeof base44.entities?.CatalogoModelos?.list !== "function") return;
+    base44.entities.CatalogoModelos.list()
+      .then(rows => setCatalog(rows || []))
+      .catch(() => setCatalog([]));
+  }, [open]);
+
+  const resolucao = useMemo(() => {
+    if (!form.veiculo_interesse || catalog.length === 0) return null;
+    return resolveInterestText(form.veiculo_interesse, catalog);
+  }, [form.veiculo_interesse, catalog]);
+  const classificacao = resolucao?.kind === "resolved" ? resolucao.entry : null;
+  const categoriaSugerida = classificacao?.category || null;
 
   async function handleSalvar() {
     const phoneDigits = String(form.whatsapp || "").replace(/\D/g, "");
     if (!form.nome || phoneDigits.length < 10) {
       toast.error("Informe um WhatsApp válido.", { description: "Use DDD e número com 10 ou 11 dígitos." });
+      return;
+    }
+    const min = optionalNumber(form.preco_interesse_min);
+    const max = optionalNumber(form.preco_interesse_max);
+    if ((min !== null && (!Number.isFinite(min) || min < 0)) || (max !== null && (!Number.isFinite(max) || max < 0))) {
+      toast.error("A faixa de preço está inválida.", { description: "Informe valores positivos ou deixe os campos em branco." });
+      return;
+    }
+    if (min !== null && max !== null && max < min) {
+      toast.error("A faixa de preço está inválida.", { description: "O valor máximo precisa ser maior ou igual ao mínimo." });
       return;
     }
     setSaving(true);
@@ -74,6 +111,11 @@ export default function NovoClienteModal({ open, onClose, onCriado, vendedorId }
       whatsapp: phoneDigits,
       telefone: phoneDigits,
       situacao_atual: situacaoDoMomento(form.momento),
+      categoria_veiculo: form.categoria_veiculo || categoriaSugerida || null,
+      preco_interesse_min: min,
+      preco_interesse_max: max,
+      catalog_model_id: classificacao?.id || null,
+      classification_source: form.categoria_veiculo ? "manual" : (classificacao ? "catalog" : null),
       financiamento: form.financiamento || (form.interesse_financiamento ? "pendente" : "nao_aplica"),
       canal_comercial: form.canal_comercial || "Internet",
       canal_origem: form.canal_comercial || form.canal_origem || "Internet",
@@ -101,7 +143,7 @@ export default function NovoClienteModal({ open, onClose, onCriado, vendedorId }
 
     onCriado(criado);
     onClose();
-    setForm({ nome: "", whatsapp: "", canal_comercial: "Internet", canal_origem: "Internet", veiculo_interesse: "", valor_negociado: "", momento: "Novo contato", situacao_atual: "Novo contato", visita_agendada_em: "", proposta_enviada: false, financiamento: "nao_aplica", interesse_troca: false, veiculo_troca: "", valor_troca: "", interesse_financiamento: false, observacoes: "" });
+    setForm(createInitialForm());
   }
 
   return (
@@ -132,13 +174,38 @@ export default function NovoClienteModal({ open, onClose, onCriado, vendedorId }
               <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Veículo de Interesse</label>
               <Input value={form.veiculo_interesse} onChange={e => set("veiculo_interesse", e.target.value)} placeholder="Ex: Corolla XEI 2023" />
             </div>
+            <div>
+              <label htmlFor="novo-cliente-categoria" className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Categoria</label>
+              <select id="novo-cliente-categoria" value={form.categoria_veiculo} onChange={e => set("categoria_veiculo", e.target.value)} className="w-full h-9 rounded-xl border border-input bg-transparent px-3 text-sm">
+                <option value="">Automática do catálogo</option>
+                {VEHICLE_CATEGORY_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="novo-cliente-orcamento-min" className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Orçamento mínimo</label>
+              <Input id="novo-cliente-orcamento-min" type="number" min="0" value={form.preco_interesse_min} onChange={e => set("preco_interesse_min", e.target.value)} placeholder="Ex: 60000" />
+            </div>
+            <div>
+              <label htmlFor="novo-cliente-orcamento-max" className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Orçamento máximo</label>
+              <Input id="novo-cliente-orcamento-max" type="number" min="0" value={form.preco_interesse_max} onChange={e => set("preco_interesse_max", e.target.value)} placeholder="Ex: 90000" />
+            </div>
             {["Proposta enviada", "Em negociação", "Venda realizada"].includes(form.momento) && (
               <div className="col-span-2">
-                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Orçamento</label>
-                <Input type="number" min="0" value={form.valor_negociado} onChange={e => set("valor_negociado", e.target.value)} placeholder="Ex: 60000" />
+                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Valor negociado</label>
+                <Input type="number" min="0" value={form.valor_negociado} onChange={e => set("valor_negociado", e.target.value)} placeholder="Ex: 78000" />
               </div>
             )}
           </div>
+
+          {resolucao && (
+            <div className={`rounded-xl border px-3 py-2 text-xs ${classificacao ? "border-brand-primary/30 bg-brand-primary-subtle text-brand-primary-active" : resolucao.kind === "ambiguous" ? "border-status-warning/30 bg-status-warning-surface text-status-warning-text" : "border-border bg-surface-alt text-muted-foreground"}`} role="status" aria-live="polite">
+              {classificacao
+                ? <>Catálogo reconheceu <strong>{classificacao.brand} {classificacao.model}</strong> e sugeriu a categoria <strong>{categoriaSugerida}</strong>. A categoria escolhida acima tem prioridade.</>
+                : resolucao.kind === "ambiguous"
+                  ? "O texto corresponde a mais de um modelo. Escolha a categoria manualmente; o match continuará usando o texto livre."
+                  : "Modelo ainda não encontrado no catálogo. O texto livre e a categoria/preço informados continuarão válidos para o match."}
+            </div>
+          )}
 
           <div>
             <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2 block">Em que momento esse cliente está?</label>

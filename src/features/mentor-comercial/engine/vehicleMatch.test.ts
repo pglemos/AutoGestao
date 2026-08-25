@@ -16,6 +16,8 @@ const CATALOG: VehicleCatalogEntry[] = [
   { id: 'hrv', brand: 'Honda', model: 'HR-V', category: 'suv', aliases: ['hrv', 'hr v'] },
   { id: 'corolla', brand: 'Toyota', model: 'Corolla', category: 'sedan' },
   { id: 'hilux', brand: 'Toyota', model: 'Hilux', category: 'picape' },
+  { id: 'tcross', brand: 'Volkswagen', model: 'T-Cross', category: 'suv', aliases: ['tcross', 't cross'] },
+  { id: 'renegade', brand: 'Jeep', model: 'Renegade', category: 'suv' },
 ]
 
 const opportunity = (overrides: Partial<OpportunityVehicleProfile> & { id: string }): OpportunityVehicleProfile => ({
@@ -54,7 +56,7 @@ describe('match por modelo via catálogo (§19.2)', () => {
 
   it('sem match por modelo quando veículo não está no catálogo', () => {
     const r = matchVehicleAgainstOpportunities(
-      criteria({ brand: 'MarcaX', model: 'ModeloY' }),
+      criteria({ brand: 'MarcaX', model: 'ModeloY', category: null }),
       [opportunity({ id: 'o1', catalogModelId: 'hrv' })],
       CATALOG,
     )
@@ -78,6 +80,26 @@ describe('match por modelo via catálogo (§19.2)', () => {
     )
     expect(r.matches).toHaveLength(1)
     expect(r.matches[0].reasons.some((x) => x.kind === 'model')).toBe(true)
+  })
+
+  it('casa VW/T-Cross com formas diferentes de hífen, marca e categoria', () => {
+    const r = matchVehicleAgainstOpportunities(
+      criteria({ brand: 'vw', model: 'tcross', price: null, category: null }),
+      [opportunity({ id: 'o1', veiculoInteresse: 'Volkswagen T-Cross HL 2020', categoriaVeiculo: 'suv' })],
+      CATALOG,
+    )
+    expect(r.matches).toHaveLength(1)
+    expect(r.matches[0].reasons.map((reason) => reason.kind).sort()).toEqual(['category', 'model'])
+  })
+
+  it('resolve modelo sem marca e deriva categoria oficial quando cliente ainda não a informou', () => {
+    const r = matchVehicleAgainstOpportunities(
+      criteria({ brand: 'Jeep', model: 'Renegade', category: 'suv', price: null }),
+      [opportunity({ id: 'o1', veiculoInteresse: 'RENEGADE T270' })],
+      CATALOG,
+    )
+    expect(r.matches).toHaveLength(1)
+    expect(r.matches[0].reasons.map((reason) => reason.kind).sort()).toEqual(['category', 'model'])
   })
 })
 

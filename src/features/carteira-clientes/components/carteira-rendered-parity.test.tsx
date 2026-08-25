@@ -367,11 +367,11 @@ describe('Base44 rendered presentation parity', () => {
     ])
 
     const cases = [
-      {
-        runtime: React.createElement(runtime[0].default, { open: true, onClose: () => {}, onCriado: () => {}, vendedorId: 'seller-parity' }),
-        reference: React.createElement(reference[0].default, { open: true, onClose: () => {}, onCriado: () => {}, vendedorId: 'seller-parity' }),
-        readyText: 'Novo Cliente',
-      },
+      // O cadastro novo agora tem campos estruturados de match (categoria e
+      // faixa de preço), portanto sua DOM precisa divergir da referência
+      // congelada. A persistência desses campos é coberta pelos contratos do
+      // adapter/CRM; a paridade visual continua sendo verificada nos fluxos
+      // que não receberam essa extensão de produto.
       {
         runtime: React.createElement(runtime[1].default, { open: true, onClose: () => {}, cliente, onResultadoRegistrado: () => {} }),
         reference: React.createElement(reference[1].default, { open: true, onClose: () => {}, cliente, onResultadoRegistrado: () => {} }),

@@ -11,6 +11,7 @@ import {
   type CrmCanal,
   type CrmFinanciamento,
   type CrmTipoVeiculo,
+  type CrmCategoriaVeiculo,
 } from '@/lib/schemas/crm.schema'
 import { z } from 'zod'
 import { cancelarVendaRpc } from '@/features/crm/lib/cancelarVenda'
@@ -33,6 +34,11 @@ export type OportunidadeInput = {
   cliente_id: string
   veiculo_interesse?: string | null
   tipo_veiculo?: CrmTipoVeiculo | null
+  categoria_veiculo?: CrmCategoriaVeiculo | null
+  preco_interesse_min?: number | string | null
+  preco_interesse_max?: number | string | null
+  catalog_model_id?: string | null
+  classification_source?: 'catalog' | 'manual' | 'migration' | null
   valor_negociado?: number
   etapa?: CrmEtapaFunil
   canal?: CrmCanal | null
@@ -71,6 +77,11 @@ type OportunidadePayload = {
   seller_user_id: string
   veiculo_interesse: string | null
   tipo_veiculo: CrmTipoVeiculo | null
+  categoria_veiculo?: CrmCategoriaVeiculo | null
+  preco_interesse_min?: number | null
+  preco_interesse_max?: number | null
+  catalog_model_id?: string | null
+  classification_source?: 'catalog' | 'manual' | 'migration' | null
   valor_negociado: number
   etapa: CrmEtapaFunil
   canal: CrmCanal | null
@@ -111,6 +122,11 @@ export function buildOportunidadePayload(
     origem_modulo: input.origem_modulo || 'crm',
     fechamento_id: input.fechamento_id || null,
   }
+  if (input.categoria_veiculo !== undefined) payload.categoria_veiculo = input.categoria_veiculo || null
+  if (input.preco_interesse_min !== undefined) payload.preco_interesse_min = optionalNonNegativeNumber(input.preco_interesse_min)
+  if (input.preco_interesse_max !== undefined) payload.preco_interesse_max = optionalNonNegativeNumber(input.preco_interesse_max)
+  if (input.catalog_model_id !== undefined) payload.catalog_model_id = input.catalog_model_id || null
+  if (input.classification_source !== undefined) payload.classification_source = input.classification_source || null
   // P1-05/P0-05a (auditoria 2026-07-10): placa e previsão de entrega são
   // "esparsos" — só entram no payload quando o caller explicitamente os
   // informa. Em UPDATE, uma chave ausente preserva o valor já salvo
@@ -122,6 +138,12 @@ export function buildOportunidadePayload(
   if (input.data_entrega_prevista !== undefined) payload.data_entrega_prevista = input.data_entrega_prevista || null
   if (input.created_at) payload.created_at = input.created_at
   return payload
+}
+
+function optionalNonNegativeNumber(value: number | string | null | undefined): number | null {
+  if (value === null || value === undefined || value === '') return null
+  const parsed = typeof value === 'number' ? value : Number(value)
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : null
 }
 
 function parse(data: unknown): OportunidadeComCliente[] {

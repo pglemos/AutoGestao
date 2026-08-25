@@ -56,6 +56,27 @@ describe('buildOportunidadePayload', () => {
     expect(payload.closed_at).toBe('2026-06-16T10:00:00.000Z')
   })
 
+  it('preserva os sinais estruturados de match sem obrigar o texto livre a mudar', () => {
+    const payload = buildOportunidadePayload({
+      cliente_id: 'cliente-match',
+      veiculo_interesse: 'VW T-Cross',
+      categoria_veiculo: 'suv',
+      preco_interesse_min: '90000',
+      preco_interesse_max: 130000,
+      catalog_model_id: '00000000-0000-0000-0000-000000000001',
+      classification_source: 'catalog',
+    }, { loja_id: 'loja-1', seller_user_id: 'seller-1' })
+
+    expect(payload).toMatchObject({
+      veiculo_interesse: 'VW T-Cross',
+      categoria_veiculo: 'suv',
+      preco_interesse_min: 90000,
+      preco_interesse_max: 130000,
+      catalog_model_id: '00000000-0000-0000-0000-000000000001',
+      classification_source: 'catalog',
+    })
+  })
+
   // P1-05/P0-05a (auditoria 2026-07-10): a previsão de entrega desaparecia ao
   // confirmar venda/perda ou editar outro campo, porque o payload de UPDATE
   // sempre gravava `data_entrega_prevista`/`placa_veiculo` com default null,

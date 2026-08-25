@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'bun:test'
 
 import {
+  brandAppearsInText,
+  compactVehicleText,
   normalizeVehicleText,
   resolveCatalogModel,
   resolveInterestText,
@@ -20,6 +22,8 @@ const CATALOG: VehicleCatalogEntry[] = [
   { id: 'a4', brand: 'Chevrolet', model: 'Onix', category: 'hatch', aliases: ['onix'] },
   { id: 'a5', brand: 'Chevrolet', model: 'Onix Plus', category: 'sedan' },
   { id: 'a6', brand: 'Fiat', model: 'Argo', category: 'hatch', active: false },
+  { id: 'a7', brand: 'Volkswagen', model: 'T-Cross', category: 'suv', aliases: ['tcross', 't cross'] },
+  { id: 'a8', brand: 'Jeep', model: 'Renegade', category: 'suv' },
 ]
 
 describe('normalizeVehicleText — §9.1', () => {
@@ -34,6 +38,10 @@ describe('normalizeVehicleText — §9.1', () => {
 
   it('colapsa espaços múltiplos', () => {
     expect(normalizeVehicleText('  honda   hr-v  ')).toBe('honda hr v')
+  })
+
+  it('compara a forma compacta de hífen/espaço sem alterar o texto exibido', () => {
+    expect(compactVehicleText('VW T-Cross HL')).toBe('vwtcrosshl')
   })
 })
 
@@ -105,5 +113,27 @@ describe('resolveInterestText — §9.3 (texto livre)', () => {
     const r = resolveInterestText('Honda CG 160 Fan', CATALOG)
     expect(r.kind).toBe('resolved')
     expect(r.entry?.id).toBe('a3')
+  })
+
+  it('resolve marca abreviada e modelo sem hífen no texto livre', () => {
+    const r = resolveInterestText('VW TCROSS HL 2020', CATALOG)
+    expect(r.kind).toBe('resolved')
+    expect(r.entry?.id).toBe('a7')
+    expect(brandAppearsInText('Volkswagen', 'VW T-Cross')).toBe(true)
+  })
+
+  it('resolve modelo sem marca quando a evidência é única no catálogo', () => {
+    const r = resolveInterestText('RENEGADE T270', CATALOG)
+    expect(r.kind).toBe('resolved')
+    expect(r.entry?.id).toBe('a8')
+  })
+
+  it('mantém ambiguidade quando modelo sem marca tem entradas igualmente específicas', () => {
+    const r = resolveInterestText('Civic', [
+      { id: 'x1', brand: 'Honda', model: 'Civic', category: 'sedan' },
+      { id: 'x2', brand: 'GAC', model: 'Civic', category: 'sedan' },
+    ])
+    expect(r.kind).toBe('ambiguous')
+    expect(r.entry).toBeNull()
   })
 })

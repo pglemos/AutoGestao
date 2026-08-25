@@ -25,6 +25,7 @@ type OpportunityRow = {
   trade_interest?: boolean | null
   financing_interest?: boolean | null
   catalog_model_id?: string | null
+  classification_source?: string | null
   sale_date?: string | null
 }
 
@@ -292,6 +293,7 @@ export function mapMxClientToCarteiraVisual(client: ClientRow, now = new Date())
     trade_interest: opportunity?.trade_interest ?? wonOpportunity?.trade_interest ?? null,
     financing_interest: opportunity?.financing_interest ?? wonOpportunity?.financing_interest ?? null,
     catalog_model_id: opportunity?.catalog_model_id || wonOpportunity?.catalog_model_id || null,
+    classification_source: opportunity?.classification_source || wonOpportunity?.classification_source || null,
     data_competencia: wonOpportunity?.data_competencia || opportunity?.data_competencia || null,
     sale_date: wonOpportunity?.sale_date || opportunity?.sale_date || null,
     veiculo_troca: isCancelled ? '' : (opportunity?.veiculo_troca || wonOpportunity?.veiculo_troca || ''),
