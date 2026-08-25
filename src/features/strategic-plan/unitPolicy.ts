@@ -16,6 +16,8 @@
 //   COMPANY_VALUE          valor empresarial centralizado
 //   MANUAL_CONSOLIDATED    consolidado digitado à mão
 
+import { catalogAliasKeys } from '@/features/admin-mx/indicadores/canonicalBase44Catalog'
+
 export type UnitEntryMode =
   | 'PER_UNIT_REQUIRED'
   | 'PER_UNIT_OPTIONAL'
@@ -250,7 +252,7 @@ export function resolveUnitPolicy(
     }
   }
 
-  const fallback = (UNIT_POLICY_DEFAULTS as Record<string, PolicyDefault | undefined>)[indicatorCode]
+  const fallback = lookupPolicyDefault(indicatorCode)
   if (fallback) {
     return {
       unit_entry_mode: fallback.unit_entry_mode,
@@ -260,6 +262,24 @@ export function resolveUnitPolicy(
   }
 
   return { unit_entry_mode: null, unit_rollup_method: null, weight_indicator_code: null }
+}
+
+/**
+ * Busca o padrão tolerando o vocabulário do código.
+ *
+ * O roster persistido usa `snake_case` minúsculo (`additional_revenue`) e os
+ * padrões daqui usam o código canônico Base44 (`ADDITIONAL_REVENUE`). O lookup
+ * exato deixava 12 dos 45 indicadores sem política, e política ausente é
+ * impedimento crítico: um plano já publicado exibia "12 impedimento(s)
+ * crítico(s) antes de publicar" no módulo Dono.
+ */
+function lookupPolicyDefault(indicatorCode: string): PolicyDefault | undefined {
+  const table = UNIT_POLICY_DEFAULTS as Record<string, PolicyDefault | undefined>
+  for (const alias of catalogAliasKeys(indicatorCode)) {
+    const hit = table[alias] ?? table[alias.toUpperCase()] ?? table[alias.toLowerCase()]
+    if (hit) return hit
+  }
+  return undefined
 }
 
 /** Política incompleta bloqueia a publicação do plano. */

@@ -185,3 +185,14 @@ describe('vocabulário do catálogo MX', () => {
     }
   })
 })
+
+describe('resolveUnitPolicy — vocabulário do código', () => {
+  test('resolve o padrão para o roster persistido em snake_case minúsculo', () => {
+    // Política ausente é impedimento crítico: com lookup exato, 12 dos 45
+    // indicadores do roster ficavam sem política e travavam a publicação.
+    for (const code of ['additional_revenue', 'approved_credit_applications', 'total_expense', 'vehicles_appraised']) {
+      const policy = resolveUnitPolicy(code)
+      expect(isUnitPolicyDefined(policy)).toBe(true)
+    }
+  })
+})
