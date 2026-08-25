@@ -1,21 +1,14 @@
 import { useMemo, useState } from 'react'
-import type { ComponentType, ReactNode } from 'react'
 import {
   Building2,
   CalendarDays,
-  MoreHorizontal,
   Plus,
   RefreshCw,
 } from 'lucide-react'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import { TabNav } from '@/components/molecules/TabNav'
 import {
   MxErrorState,
   MxLoadingState,
@@ -43,12 +36,6 @@ import { PortfolioOverviewTab } from './clientes/PortfolioOverviewTab'
 import { OnboardingPortfolioTab } from './clientes/OnboardingPortfolioTab'
 import { InscricoesTab } from './clientes/InscricoesTab'
 import { GovernancaBloqueiosTab } from './clientes/GovernancaBloqueiosTab'
-
-// The shared JSX wrapper is JavaScript and its inferred ref-only type drops
-// the children prop when consumed from TypeScript. Keep the cast local to this
-// menu, matching the existing client actions menu contract.
-const Base44DropdownContent = DropdownMenuContent as unknown as ComponentType<{ children: ReactNode; align?: 'end'; className?: string }>
-const Base44DropdownItem = DropdownMenuItem as unknown as ComponentType<{ children: ReactNode; key?: string; onSelect: () => void; className?: string }>
 
 export type AdminClientesTab = 'carteira' | 'onboarding' | 'inscricoes' | 'governanca'
 
@@ -110,11 +97,12 @@ export function AdminClientesPage() {
 
   const counters = useMemo(() => portfolioCounters(rows), [rows])
 
-  const operationalTabs = useMemo(() => [
-    { key: 'onboarding' as const, label: `Onboarding (${counters.em_implantacao + counters.prontos_para_ativar})` },
-    { key: 'inscricoes' as const, label: 'Inscrições & links' },
-    { key: 'governanca' as const, label: `Governança (${counters.com_bloqueios})` },
-  ], [counters])
+  const tabsConfig = useMemo(() => [
+    { key: 'carteira' as const, label: `Carteira 360 (${rows.length})` },
+    { key: 'onboarding' as const, label: `Em Implantação (${counters.em_implantacao + counters.prontos_para_ativar})` },
+    { key: 'inscricoes' as const, label: 'Inscrições & Links' },
+    { key: 'governanca' as const, label: `Governança & Bloqueios (${counters.com_bloqueios})` },
+  ], [rows.length, counters])
 
   const handleCopyLink = (name: string) => {
     const link = getPreRegistrationLink(name)
@@ -285,36 +273,40 @@ export function AdminClientesPage() {
       <div className="w-full space-y-5">
         <MxModuleHeader
           icon={Building2}
-          eyebrow="Administração MX"
-          title="Clientes MX"
-          description={`${rows.length} ${rows.length === 1 ? 'cliente' : 'clientes'} na carteira.`}
+          eyebrow="Administração MX & Rede"
+          title="Clientes & Lojas MX"
+          description="Central unificada de gestão da carteira, onboarding, rede de lojas, metas e acessos."
           actions={
             <div className="flex flex-wrap items-center gap-2">
-              <Button variant="outline" size="sm" onClick={() => void refetchAll()} aria-label="Atualizar carteira de clientes">
-                <RefreshCw size={14} className="mr-1.5" />Atualizar
+              <Button asChild variant="outline" size="sm">
+                <Link to="/agenda">
+                  <CalendarDays size={14} className="mr-1.5" />
+                  Agenda MX
+                </Link>
               </Button>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" aria-label="Abrir operações da carteira">
-                    <MoreHorizontal size={14} className="mr-1.5" />Mais operações
-                  </Button>
-                </DropdownMenuTrigger>
-                <Base44DropdownContent align="end" className="w-56">
-                  <Base44DropdownItem onSelect={() => setIsCreateModalOpen(true)}><Plus size={14} />Cadastro rápido</Base44DropdownItem>
-                  <Base44DropdownItem onSelect={() => navigate('/agenda')}><CalendarDays size={14} />Agenda MX</Base44DropdownItem>
-                  {operationalTabs.map(item => (
-                    <Base44DropdownItem key={item.key} onSelect={() => setActiveTab(item.key)}>{item.label}</Base44DropdownItem>
-                  ))}
-                </Base44DropdownContent>
-              </DropdownMenu>
+              <Button variant="outline" size="sm" onClick={() => void refetchAll()} aria-label="Atualizar carteira de clientes">
+                <RefreshCw size={14} className="mr-1.5" />
+                Atualizar
+              </Button>
+              <Button variant="outline" size="sm" onClick={() => setIsCreateModalOpen(true)}>
+                <Plus size={14} className="mr-1.5" />
+                Cadastro Rápido
+              </Button>
               <Button asChild size="sm">
                 <Link to="/clientes/novo">
                   <Plus size={14} className="mr-1.5" />
-                  Novo cliente
+                  Novo Cliente
                 </Link>
               </Button>
             </div>
           }
+        />
+
+        <TabNav
+          tabs={tabsConfig}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          scrollable
         />
 
         {activeTab !== 'carteira' ? (
@@ -323,12 +315,13 @@ export function AdminClientesPage() {
           </Button>
         ) : null}
 
-        {portfolioLoading ? (
-          <MxLoadingState label="Carregando carteira e rede de lojas" />
-        ) : portfolioError ? (
-          <MxErrorState description={portfolioError} retry={() => void refetchAll()} />
-        ) : (
-          <>
+        <div id={`${activeTab}-panel`} role="tabpanel" aria-labelledby={`${activeTab}-tab`}>
+          {portfolioLoading ? (
+            <MxLoadingState label="Carregando carteira e rede de lojas" />
+          ) : portfolioError ? (
+            <MxErrorState description={portfolioError} retry={() => void refetchAll()} />
+          ) : (
+            <>
             {activeTab === 'carteira' && (
               <PortfolioOverviewTab
                 rows={rows}
@@ -363,8 +356,9 @@ export function AdminClientesPage() {
                 onReactivate={doReactivate}
               />
             )}
-          </>
-        )}
+            </>
+          )}
+        </div>
       </div>
 
       <CreateStoreModal

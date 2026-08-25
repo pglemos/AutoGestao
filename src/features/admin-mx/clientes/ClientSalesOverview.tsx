@@ -60,8 +60,8 @@ export function ClientSalesOverview({ stores }: ClientSalesOverviewProps) {
   return (
     <MxSectionCard data-testid="client-sales-overview">
       <MxSectionHeader
-        title={<span className="flex items-center gap-2"><ShoppingCart size={16} aria-hidden="true" />Vendas por loja</span>}
-        description={range ? `Quantidade de vendas, meta mensal e atingimento · ${formatRange(range.startDate, range.endDate)}` : 'Quantidade de vendas, meta mensal e atingimento por loja.'}
+        title={<span className="flex items-center gap-2"><ShoppingCart size={16} aria-hidden="true" />Vendas e metas por loja</span>}
+        description={range ? `Meta e progresso comerciais, separados da jornada de consultoria · ${formatRange(range.startDate, range.endDate)}` : 'Meta e progresso comerciais por loja, separados da jornada de consultoria.'}
         actions={<div className="flex w-full flex-wrap items-end gap-2 sm:w-auto">
           <label className="flex min-w-44 flex-col gap-1.5 text-xs font-medium text-muted-foreground">
             Período de vendas
@@ -89,13 +89,13 @@ export function ClientSalesOverview({ stores }: ClientSalesOverviewProps) {
               : <>
                 <div className="p-4 pb-0 sm:p-5 sm:pb-0"><MxMetricGrid className="gap-3 lg:grid-cols-4">
                   <MxMetricCard title="Vendas no período" value={formatCount(totals.totalSales)} detail={range ? formatRange(range.startDate, range.endDate) : 'Período inválido'} icon={ShoppingCart} tone="success" />
-                  <MxMetricCard title="Meta mensal da rede" value={formatCount(totals.totalMonthlyGoal)} detail={`${totals.configuredGoalStores} de ${rows.length} lojas com meta`} icon={Target} tone="info" />
-                  <MxMetricCard title="Atingimento" value={formatPercent(totals.totalAttainment)} detail="Vendas do período ÷ meta mensal" icon={TrendingUp} tone={totals.totalAttainment !== null && totals.totalAttainment >= 100 ? 'success' : 'warning'} />
+                  <MxMetricCard title="Meta de vendas da rede" value={formatCount(totals.totalMonthlyGoal)} detail={`${totals.configuredGoalStores} de ${rows.length} lojas com meta`} icon={Target} tone="info" />
+                  <MxMetricCard title="Progresso das vendas" value={formatPercent(totals.totalAttainment)} detail="Vendas do período ÷ meta mensal de vendas" icon={TrendingUp} tone={totals.totalAttainment !== null && totals.totalAttainment >= 100 ? 'success' : 'warning'} />
                   <MxMetricCard title="Lojas com venda" value={`${formatCount(totals.storesWithSales)}/${formatCount(rows.length)}`} detail="Lojas que venderam no período" icon={CheckCircle2} tone="brand" />
                 </MxMetricGrid></div>
                 <div className="p-4 pt-4 sm:p-5 sm:pt-5">{rows.length === 0 ? <MxEmptyState title="Nenhuma venda encontrada" description="Não há vendas oficiais para o período selecionado. Tente outro filtro de data." icon={BarChart3} variant="filter" /> : <MxTableSurface aria-label="Vendas por loja" data-testid="client-sales-table">
                   <Table className="min-w-[920px]"><TableHeader><TableRow>
-                    <TableHead>Loja</TableHead><TableHead className="text-right">Vendas no período</TableHead><TableHead className="text-right">Meta mensal</TableHead><TableHead>Atingimento</TableHead><TableHead>Última venda</TableHead><TableHead>Status</TableHead>
+                    <TableHead>Loja</TableHead><TableHead className="text-right">Vendas no período</TableHead><TableHead className="text-right">Meta de vendas</TableHead><TableHead>Progresso da meta</TableHead><TableHead>Última venda</TableHead><TableHead>Status</TableHead>
                   </TableRow></TableHeader><TableBody>{rows.map(row => <TableRow key={row.storeId} data-store-id={row.storeId}>
                     <TableCell><div className="flex min-w-0 items-center gap-3"><span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-status-success-surface text-status-success-text" aria-hidden="true"><StoreIcon size={16} /></span><div className="min-w-0"><p className="truncate text-sm font-semibold text-foreground" title={row.storeName}>{row.storeName}</p><div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">{row.parentStoreName ? <span>Filial de {row.parentStoreName}</span> : <span>Matriz</span>}{!row.active ? <><span aria-hidden="true">·</span><span>Inativa</span></> : null}</div></div></div></TableCell>
                     <TableCell className="text-right"><span className="text-lg font-bold text-foreground">{formatCount(row.sales)}</span><span className="ml-1 text-xs text-muted-foreground">vendas</span></TableCell>
