@@ -5,6 +5,7 @@ import {
   clearEditorMonth,
   copyEditorMonth,
   createEditorGrid,
+  groupEditorIndicatorsByArea,
   editorAnnualTotal,
   filterEditorIndicators,
   hydrateEditorGrid,
@@ -131,5 +132,18 @@ describe('strategicPlanEditor', () => {
     })
     expect(patches).toHaveLength(11)
     expect(patches.every(p => p.value === 10)).toBe(true)
+  })
+})
+
+describe('groupEditorIndicatorsByArea', () => {
+  it('junta a mesma área em um único bloco mesmo intercalada', () => {
+    const groups = groupEditorIndicatorsByArea([
+      { metric_key: 'a', area: 'Comercial' },
+      { metric_key: 'b', area: 'Marketing' },
+      { metric_key: 'c', area: 'Comercial' },
+      { metric_key: 'd', area: null },
+    ])
+    expect(groups.map(group => group.area)).toEqual(['Comercial', 'Marketing', 'Sem área'])
+    expect(groups[0].items.map(item => item.metric_key)).toEqual(['a', 'c'])
   })
 })

@@ -19,6 +19,7 @@ import {
 } from './canonicalBase44Catalog'
 import { MONTHS, applyOfficialComputedMetas } from './indicatorFormulas'
 import { loadClientParameterSource } from './strategicParameters'
+import { fetchAllRows } from '@/lib/supabasePagination'
 import type { EditorField, EditorPlanningRow } from './strategicPlanEditor'
 
 const CYCLE_COLUMNS = 'id, client_id, year, status, version_number, package_version_id, revised_from_id, published_at, published_by, created_at, updated_at'
@@ -451,15 +452,21 @@ export async function fetchCyclePlanningValues(
   unitIds: string[],
 ): Promise<{ rows: EditorPlanningRow[]; error: string | null }> {
   if (unitIds.length === 0) return { rows: [], error: null }
-  const { data, error } = await supabase
+  // Um cliente com 3 unidades passa de 1600 linhas: sem paginar, o PostgREST
+  // corta em 1000 e a última unidade some da matriz e do consolidado.
+  const { rows: data, error } = await fetchAllRows<Row>((from, to) => supabase
     .from('valores_indicadores_planejamento')
     .select('loja_id, indicator_code, year, month, meta, realizado, ano_anterior')
     .eq('ciclo_id', cycleId)
     .eq('year', year)
     .in('loja_id', unitIds)
-  if (error) return { rows: [], error: error.message }
+    .order('loja_id', { ascending: true })
+    .order('indicator_code', { ascending: true })
+    .order('month', { ascending: true })
+    .range(from, to))
+  if (error) return { rows: [], error }
   return {
-    rows: ((data ?? []) as Row[]).map(row => ({
+    rows: (data as Row[]).map(row => ({
       loja_id: asString(row.loja_id),
       indicator_code: asString(row.indicator_code),
       month: row.month == null ? null : asNumber(row.month),

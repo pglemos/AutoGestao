@@ -282,13 +282,26 @@ function applyPatches(grid: EditorGrid, patches: EditorCellPatch[]) {
   return { grid: next, patches }
 }
 
+/**
+ * Agrupa por área preservando a ordem de entrada (ordem oficial Base44) dentro
+ * de cada área e a ordem de primeira aparição das áreas.
+ *
+ * Agrupar só por sequência quebrava quando a ordem oficial intercala áreas: o
+ * mesmo departamento virava vários blocos, com o cabeçalho repetido e chave de
+ * React duplicada.
+ */
 export function groupEditorIndicatorsByArea<T extends { area?: string | null }>(indicators: T[]) {
   const groups: Array<{ area: string; items: T[] }> = []
+  const byArea = new Map<string, { area: string; items: T[] }>()
   for (const item of indicators) {
     const area = item.area || 'Sem área'
-    const last = groups[groups.length - 1]
-    if (last && last.area === area) last.items.push(item)
-    else groups.push({ area, items: [item] })
+    let group = byArea.get(area)
+    if (!group) {
+      group = { area, items: [] }
+      byArea.set(area, group)
+      groups.push(group)
+    }
+    group.items.push(item)
   }
   return groups
 }

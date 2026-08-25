@@ -5,6 +5,7 @@
 // filiais são as lojas cujo `parent_loja_id` aponta para ela.
 
 import { supabase } from '@/lib/supabase'
+import { fetchAllRows } from '@/lib/supabasePagination'
 import { buildClientUnits, type ClientUnit } from './clientUnits'
 import { decideProductPackage, productPackageDataError, type ProductPackageResolution } from './clientProductPackage'
 import type { PlanningValueRow } from './clientPlanningConsolidation'
@@ -124,13 +125,19 @@ export async function fetchClientProductPackage(clientId: string): Promise<Produ
 export async function fetchCyclePlanningValues(
   cycleId: string,
 ): Promise<{ rows: PlanningValueRow[]; error: string | null }> {
-  const { data, error } = await supabase
+  // Paginado: um ciclo multi-loja passa das 1000 linhas do PostgREST e a leitura
+  // truncada apagava unidades inteiras do consolidado.
+  const { rows, error } = await fetchAllRows<PlanningValueRow>((from, to) => supabase
     .from('valores_indicadores_planejamento')
     .select('loja_id, indicator_code, year, month, meta, realizado, ano_anterior')
     .eq('ciclo_id', cycleId)
+    .order('loja_id', { ascending: true })
+    .order('indicator_code', { ascending: true })
+    .order('month', { ascending: true })
+    .range(from, to))
 
-  if (error) return { rows: [], error: error.message }
-  return { rows: (data ?? []) as PlanningValueRow[], error: null }
+  if (error) return { rows: [], error }
+  return { rows, error: null }
 }
 
 /** Valores vigentes por lojas+ano (fallback legado sem ciclo). */
@@ -140,25 +147,33 @@ export async function fetchUnitsPlanningValues(
 ): Promise<{ rows: PlanningValueRow[]; error: string | null }> {
   if (unitIds.length === 0) return { rows: [], error: null }
 
-  const vigentes = await supabase
+  const vigentes = await fetchAllRows<PlanningValueRow>((from, to) => supabase
     .from('valores_indicadores_planejamento_vigentes')
     .select('loja_id, indicator_code, year, month, meta, realizado, ano_anterior')
     .in('loja_id', unitIds)
     .eq('year', year)
+    .order('loja_id', { ascending: true })
+    .order('indicator_code', { ascending: true })
+    .order('month', { ascending: true })
+    .range(from, to))
 
   // View vigentes pode estar vazia (join matriz/filial). Base por loja+ano
   // alimenta o consolidado sem depender de publicação na view.
-  const base = await supabase
+  const base = await fetchAllRows<PlanningValueRow>((from, to) => supabase
     .from('valores_indicadores_planejamento')
     .select('loja_id, indicator_code, year, month, meta, realizado, ano_anterior')
     .in('loja_id', unitIds)
     .eq('year', year)
+    .order('loja_id', { ascending: true })
+    .order('indicator_code', { ascending: true })
+    .order('month', { ascending: true })
+    .range(from, to))
 
-  const vigentesRows = (vigentes.data ?? []) as PlanningValueRow[]
-  const baseRows = (base.data ?? []) as PlanningValueRow[]
+  const vigentesRows = vigentes.rows
+  const baseRows = base.rows
   const useBase = vigentesRows.length === 0 && baseRows.length > 0
   const rows = useBase ? baseRows : vigentesRows
-  const error = vigentes.error?.message ?? base.error?.message ?? null
+  const error = vigentes.error ?? base.error ?? null
 
 
   if (error && rows.length === 0) return { rows: [], error }
