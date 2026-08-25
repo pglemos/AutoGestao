@@ -61,3 +61,45 @@ departamento, já habilitado. Agora mostra "Todos os indicadores".
   de FK que mede eficácia.
 - `owner_suggestion_enabled` está falso em todos os 8: nenhum plano aparece como
   "Disponível para sugestão".
+
+---
+
+## Matriz de paridade medida — Base44 × MX em produção (2026-08-25)
+
+Levantamento programático dos dois lados, no mesmo dia: Base44 em
+`preview--mx-admin-flow.base44.app/planos-acao` e MX em
+`www.mxperformance.com.br/plano-acao` (release `51eebdca`, autenticado).
+
+| Item medido | Base44 | MX produção | Veredito |
+|---|---|---|---|
+| Botões do topo | Aplicar a Cliente · Abrir Histórico · Criar Plano Padrão | os mesmos três | igual |
+| Abas | 4 | 4, mesmos rótulos | igual |
+| **Planos Padrão** — colunas | `Plano Padrão\|Departamento\|Indicador\|Ações\|Prioridade\|Resp.\|Sug.\|Apl.\|Status\|Versão\|Ações` | as mesmas 11 | igual |
+| **Planos Padrão** — selects de filtro | 5 | 5 | igual |
+| **Planos Padrão** — cards por departamento | 7 | 7 | igual |
+| Filtros nomeados | departamento · indicador · status · disponibilidade · prioridade · responsável | os mesmos 6 + busca por nome | MX superset |
+| Ações por linha | menu de ações | Abrir · Editar · Aplicar a cliente · Sugerir ao Dono · Mais ações | MX superset |
+| **Sugestões ao Dono** — colunas | nenhuma (aba só com filtro de status) | `Problema\|Recomendação\|Regra\|Prioridade\|Status\|Data\|Ações` + 4 KPIs | MX superset |
+| **Aplicações nos Clientes** — colunas | 9 | as mesmas 9 + `Ação` | MX superset |
+| **Aplicações** — KPIs | 6 | 6 | igual |
+| **Aplicações** — filtros | 1 | 3 (status, prioridade, responsável) | MX superset |
+| **Histórico** | timeline de eventos | timeline de eventos | igual |
+| Wizard Criar Plano Padrão | Indicador · Ações · Prazo e Meta · Revisão e Publicação | os mesmos 4 passos | igual |
+| Wizard Aplicar a Cliente | wizard | Cliente · Ano · Depto · Indicador · Plano · Escopo · Revisar | MX superset |
+
+Nenhuma funcionalidade, botão, lista ou tabela do Base44 ficou de fora.
+
+## Design em tokens MX (não é CSS do Base44)
+
+Medido no DOM de produção: o botão primário usa
+`rounded-[var(--mx-button-radius)]` e `gap-mx-xs`, com fundo `rgb(25, 134, 83)`
+(o verde MX `#198653`); o campo de busca resolve `--mx-input-height` em 40px e
+raio de 12px. São os tokens do design system MX, não estilos importados do
+Base44.
+
+## Fluxo de escrita exercitado em produção
+
+Criar Plano Padrão percorrido pela tela até "Salvar rascunho": gravou
+`pa_comercial_visittosaleconversion_060`, departamento `comercial`,
+`primary_indicator_code` `visit_to_sale_rate` (FK resolvida) e 1 item. Registro
+de teste removido em seguida.
