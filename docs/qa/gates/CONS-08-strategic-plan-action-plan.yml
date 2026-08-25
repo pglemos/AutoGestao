@@ -1,0 +1,66 @@
+schema: 1
+story: 'CONS-08'
+story_title: 'Planejamento Estratégico e Plano de Ação PMR'
+gate: CONCERNS
+status_reason: 'A superfície Admin MX /plano-estrategico e o catálogo /indicadores?mode=catalogo foram revalidados em produção com sessão Admin MX, gates locais e CI verdes. Permanece pendente somente o smoke autenticado em produção dos demais perfis exigidos pela story: Dono, Gerente, Vendedor, Administrador MX e Consultor MX.'
+reviewer: 'Quinn'
+updated: '2026-08-24T00:00:00-03:00'
+
+top_issues:
+  - id: 'TEST-E2E-AUTH-MULTIROLE-001'
+    severity: medium
+    finding: 'A validação autenticada em produção cobriu a sessão Admin MX fornecida e confirmou /plano-estrategico e /indicadores?mode=catalogo em desktop e mobile. Não há sessões ou credenciais runtime disponíveis nesta retomada para comprovar Dono, Gerente, Vendedor, Administrador MX e Consultor MX.'
+    suggested_action: 'Reexecutar o smoke multi-role em produção com uma sessão runtime válida por perfil, cobrindo as rotas e ações previstas na matriz da story, sem persistir credenciais.'
+    suggested_owner: 'qa'
+
+waiver:
+  active: false
+
+quality_score: 90
+
+evidence:
+  release_sha: '89ee75d75f3fc2593d21051e9f7f8914ff1de52a'
+  vercel_deployment: 'dpl_B7qWybRcAbJDKZTg6nh7WDcFPTeT'
+  production_health: 'HTTP 200; release coincidente com o SHA; Supabase/database/crons OK'
+  local_gates:
+    typecheck: PASS
+    lint: PASS_WITH_NON_BLOCKING_WARNINGS
+    unit_integration: PASS_4395_0_FAIL_721_FILES
+    build: PASS_NO_PUBLIC_SOURCEMAPS
+    route_data_audit: PASS
+    diff_check: PASS
+  ci: PASS_8_WORKFLOWS
+  browser_authenticated_admin:
+    status: PASS
+    viewports: ['1440x900', '390x844']
+    routes:
+      - '/plano-estrategico'
+      - '/indicadores?mode=catalogo'
+    coverage: 'ACERTT, 45 indicadores, ciclo, metas, comparativos, filtros, abas Resumo/Visão do Plano, editores, histórico, criação de Plano de Ação, tabela mensal Jan-Dez/acumulado, catálogo com 6 áreas, 18 indicadores digitáveis, 27 calculáveis e ações Abrir/Editar/Arquivar/Histórico'
+    console: '0 erros e 0 avisos'
+    layout: 'body sem overflow; rolagem horizontal restrita à tabela no mobile'
+    visual_evidence:
+      - 'output/playwright/plano-estrategico-production-final-20260824/desktop.png'
+      - 'output/playwright/plano-estrategico-production-final-20260824/mobile.png'
+  graphify: 'PASS; runtime TypeScript; needs_update=no; branch não stale'
+  visual_raw_lint: PASS
+
+nfr_validation:
+  security:
+    status: PASS
+    notes: 'Credenciais não foram persistidas nem incluídas em artefatos; validação usa sessão runtime.'
+  reliability:
+    status: PASS_WITH_SCOPE_GAP
+    notes: 'Fluxo validado sem erros de console na sessão Admin MX; falta a matriz autenticada multi-role em produção.'
+  maintainability:
+    status: PASS
+    notes: 'Tokens e componentes MX foram preservados; não houve cópia de CSS do Base44.'
+
+recommendations:
+  immediate:
+    - action: 'Executar smoke autenticado em produção para Dono, Gerente, Vendedor, Administrador MX e Consultor MX.'
+      refs:
+        - 'docs/stories/story-CONS-08-strategic-plan-action-plan.md'
+        - 'docs/auditoria/matrizes/MATRIZ_ROTAS_DADOS_MX.md'
+  future:
+    - action: 'Manter a evidência de release separada da comprovação multi-role e reabrir o gate após a cobertura dos perfis pendentes.'

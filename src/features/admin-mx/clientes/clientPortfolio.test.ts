@@ -3,6 +3,7 @@ import {
   activationBlockers,
   canonicalPortfolioStatus,
   clientBuckets,
+  clientStructureSummary,
   clientStoreIds,
   clientTeamStat,
   excludeBranchClients,
@@ -34,6 +35,14 @@ function client(overrides: Partial<PortfolioClient> = {}): PortfolioClient {
     ...overrides,
   }
 }
+
+describe('linguagem da estrutura do cliente', () => {
+  test('explica loja única e rede como cliente + unidades', () => {
+    expect(clientStructureSummary({ units: 1 })).toBe('Loja única · matriz')
+    expect(clientStructureSummary({ units: 3 })).toBe('Matriz + 2 filiais')
+    expect(clientStructureSummary({ units: 0 })).toBe('Sem unidade vinculada')
+  })
+})
 
 describe('equipe do cliente somada nas lojas dele', () => {
   const lojas = [

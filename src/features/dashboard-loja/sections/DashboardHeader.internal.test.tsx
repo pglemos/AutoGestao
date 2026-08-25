@@ -79,4 +79,13 @@ describe('FASE J — DashboardHeader ramificação interna usa TabNavPill canôn
     fireEvent.keyDown(mes, { key: 'ArrowRight' })
     expect(screen.getByRole('tab', { name: 'D-1' }).getAttribute('aria-selected')).toBe('true')
   })
+
+  test('conecta a troca de unidade ao combobox pesquisável canônico', () => {
+    render(<InternalMxHarness />)
+    const trigger = screen.getByRole('combobox', { name: 'Selecionar unidade' })
+
+    expect(trigger).toHaveAttribute('aria-haspopup', 'dialog')
+    expect(trigger).toHaveAttribute('aria-controls')
+    expect(trigger).toHaveAttribute('aria-expanded', 'false')
+  })
 })

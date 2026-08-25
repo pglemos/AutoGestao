@@ -7,6 +7,7 @@ import { FunnelSection } from './FunnelSection'
 import { RankingSection } from './RankingSection'
 import { AdminSettingsCard } from './AdminSettingsCard'
 import { AdminLiveOperationsPanel } from './AdminLiveOperationsPanel'
+import type { AdminLiveSummary } from '../lib/admin-live-overview'
 import { OwnerExecutiveCockpit } from './OwnerExecutiveCockpit'
 import { ManagerSellerParityHomeCanonical } from './ManagerSellerParityHomeCanonical'
 import type { useDashboardLojaData } from '../hooks/useDashboardLojaData'
@@ -29,6 +30,7 @@ type PerformanceTabProps = {
   onDeleteStore: () => void
   deletingStore: boolean
   onRefetchAll: () => Promise<void>
+  onLiveSummaryChange: (summary: AdminLiveSummary | null) => void
 }
 
 export function PerformanceTab({
@@ -47,6 +49,7 @@ export function PerformanceTab({
   onDeleteStore,
   deletingStore,
   onRefetchAll,
+  onLiveSummaryChange,
 }: PerformanceTabProps) {
   const { alerts, mixCanais } = usePerformanceAlerts({
     role,
@@ -82,6 +85,16 @@ export function PerformanceTab({
 
   const performanceContent = (
     <>
+      {isPerfilInternoMx(role) && (
+        <DashboardErrorBoundary sectionName="AdminLiveOperations">
+          <AdminLiveOperationsPanel
+            storeId={selectedStoreId}
+            referenceDate={data.referenceDate}
+            onSummaryChange={onLiveSummaryChange}
+          />
+        </DashboardErrorBoundary>
+      )}
+
       {isAdminMx && selectedStore && (
         <DashboardErrorBoundary sectionName="AdminSettings">
           <AdminSettingsCard
@@ -104,15 +117,6 @@ export function PerformanceTab({
             onDelete={onDeleteStore}
             deletingStore={deletingStore}
             onRefetchAll={onRefetchAll}
-          />
-        </DashboardErrorBoundary>
-      )}
-
-      {isPerfilInternoMx(role) && (
-        <DashboardErrorBoundary sectionName="AdminLiveOperations">
-          <AdminLiveOperationsPanel
-            storeId={selectedStoreId}
-            referenceDate={data.referenceDate}
           />
         </DashboardErrorBoundary>
       )}

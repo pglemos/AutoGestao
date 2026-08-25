@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { PageCanvas, resolveRouteLayout } from '@/design-system/page'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { isAdministradorMx, isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
@@ -25,6 +25,7 @@ import { useDashboardLojaData } from './hooks/useDashboardLojaData'
 import { useStoreResolution } from './hooks/useStoreResolution'
 import { useStoreActions } from './hooks/useStoreActions'
 import { DashboardErrorBoundary } from './components/DashboardErrorBoundary'
+import type { AdminLiveSummary } from './lib/admin-live-overview'
 
 /**
  * Container do DashboardLoja — orquestra resolução de loja, routing por slug/query,
@@ -55,6 +56,11 @@ export function DashboardLoja() {
   const isAdminMx = isAdministradorMx(role)
 
   const [showAdminSettings, setShowAdminSettings] = useState(false)
+  const [adminLiveSummary, setAdminLiveSummary] = useState<AdminLiveSummary | null>(null)
+
+  useEffect(() => {
+    setAdminLiveSummary(null)
+  }, [selectedStoreId])
 
   const activeTab = useMemo<DashboardTab>(() => {
     if (location.pathname === '/minha-equipe') return 'equipe'
@@ -187,6 +193,7 @@ export function DashboardLoja() {
             setStartDate={data.setStartDate}
             endDate={data.endDate}
             setEndDate={data.setEndDate}
+            liveSummary={adminLiveSummary}
           />
         </DashboardErrorBoundary>
       )}
@@ -232,6 +239,7 @@ export function DashboardLoja() {
           onDeleteStore={actions.handleDeleteStore}
           deletingStore={actions.deletingStore}
           onRefetchAll={onRefetchAll}
+          onLiveSummaryChange={setAdminLiveSummary}
         />
       ) : null}
 

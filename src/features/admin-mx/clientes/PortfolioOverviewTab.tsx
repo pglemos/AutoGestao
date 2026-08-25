@@ -8,8 +8,13 @@ import {
   ExternalLink,
   LayoutGrid,
   Rocket,
+  RefreshCw,
   Search,
+  ShoppingCart,
+  Store as StoreIcon,
   TableProperties,
+  Target,
+  TrendingUp,
   Users,
   X,
 } from 'lucide-react'
@@ -27,7 +32,6 @@ import {
 } from '@/components/module/MxModuleVisualPrimitives'
 import type { Store } from '@/types/database'
 import { ClientActionsMenu, type ClientAction } from './ClientActionsMenu'
-import { ClientSalesOverview } from './ClientSalesOverview'
 import { PendenciasModal } from './PendenciasModal'
 import {
   EMPTY_PORTFOLIO_FILTERS,
@@ -35,16 +39,18 @@ import {
   activationBlockers,
   clientStoreIds,
   clientTeamStat,
+  clientStructureSummary,
   filterPortfolio,
   isActive,
   journeyLabel,
   nextAction,
   portfolioCounters,
-  structureLabel,
   type PortfolioBucket,
   type PortfolioClient,
   type PortfolioFilters,
 } from './clientPortfolio'
+import { aggregateClientSalesForStores, CLIENT_SALES_TIME_ZONE, type ClientSalesPeriod } from './clientSales'
+import { useClientSales, type ClientStoreSales } from './useClientSales'
 
 const PHASE_LABEL: Record<string, string> = {
   ESTRUTURACAO: 'Estruturação',
@@ -66,6 +72,42 @@ const METRIC_BUCKETS: Array<{
   { bucket: 'com_bloqueios', label: 'Com Bloqueios', icon: AlertTriangle, tone: 'danger' },
   { bucket: 'renovacoes_proximas', label: 'Renovações', icon: CalendarClock, tone: 'warning' },
 ]
+
+const SALES_PERIOD_OPTIONS: Array<{ value: ClientSalesPeriod; label: string }> = [
+  { value: 'today', label: 'Hoje' },
+  { value: 'week', label: 'Esta semana' },
+  { value: 'last15days', label: 'Últimos 15 dias' },
+  { value: 'month', label: 'Este mês' },
+  { value: 'custom', label: 'Data personalizada' },
+]
+const SALES_COUNT_FORMATTER = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 })
+const SALES_PERCENT_FORMATTER = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 })
+const SALES_DATE_FORMATTER = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: CLIENT_SALES_TIME_ZONE })
+
+type PortfolioClientSales = ReturnType<typeof aggregateClientSalesForStores> & { units: ClientStoreSales[] }
+
+function formatSalesCount(value: number): string { return SALES_COUNT_FORMATTER.format(Math.round(value)) }
+function formatSalesPercent(value: number | null): string { return value === null ? '—' : `${SALES_PERCENT_FORMATTER.format(value)}%` }
+function formatSalesDate(dateKey: string | null): string {
+  if (!dateKey) return 'Sem venda registrada'
+  const [year, month, day] = dateKey.split('-').map(Number)
+  return SALES_DATE_FORMATTER.format(new Date(Date.UTC(year, month - 1, day, 12)))
+}
+function formatSalesRange(startDate: string, endDate: string): string {
+  return startDate === endDate ? formatSalesDate(startDate) : `${formatSalesDate(startDate)} a ${formatSalesDate(endDate)}`
+}
+function salesProgressTone(attainment: number | null): 'brand' | 'success' | 'warning' | 'neutral' {
+  if (attainment === null) return 'neutral'
+  if (attainment >= 100) return 'success'
+  if (attainment >= 70) return 'brand'
+  return 'warning'
+}
+function salesStatus(rollup: PortfolioClientSales): { label: string; variant: 'success' | 'warning' | 'outline' | 'secondary' } {
+  if (rollup.monthlyGoal > 0 && rollup.attainment !== null && rollup.attainment >= 100) return { label: 'Meta atingida', variant: 'success' }
+  if (rollup.monthlyGoal > 0 && rollup.attainment !== null && rollup.attainment >= 70) return { label: 'Em ritmo', variant: 'warning' }
+  if (rollup.monthlyGoal > 0) return { label: rollup.sales > 0 ? 'Abaixo da meta' : 'Sem vendas', variant: rollup.sales > 0 ? 'warning' : 'outline' }
+  return { label: rollup.sales > 0 ? 'Com vendas' : 'Sem meta', variant: rollup.sales > 0 ? 'secondary' : 'outline' }
+}
 
 export interface PortfolioOverviewTabProps {
   rows: PortfolioClient[]
@@ -90,6 +132,17 @@ export function PortfolioOverviewTab({
   const [filters, setFilters] = useState<PortfolioFilters>(EMPTY_PORTFOLIO_FILTERS)
   const [viewMode, setViewMode] = useState<'tabela' | 'cards'>('tabela')
   const [pendenciasClient, setPendenciasClient] = useState<PortfolioClient | null>(null)
+  const [salesPeriod, setSalesPeriod] = useState<ClientSalesPeriod>('month')
+  const [customStartDate, setCustomStartDate] = useState('')
+  const [customEndDate, setCustomEndDate] = useState('')
+  const {
+    range: salesRange,
+    rangeError: salesRangeError,
+    rows: salesRows,
+    loading: salesLoading,
+    error: salesError,
+    refetch: refetchSales,
+  } = useClientSales({ stores: lojas, period: salesPeriod, customStartDate, customEndDate })
 
   const openPendencias = (client: PortfolioClient) => {
     setPendenciasClient(client)
@@ -101,6 +154,31 @@ export function PortfolioOverviewTab({
 
   const counters = useMemo(() => portfolioCounters(rows), [rows])
   const filtered = useMemo(() => filterPortfolio(rows, filters), [rows, filters])
+  const salesByClient = useMemo(() => {
+    const byClient = new Map<string, PortfolioClientSales>()
+    for (const client of rows) {
+      const storeIds = clientStoreIds(client, lojas)
+      const unitRows = storeIds
+        .map(storeId => salesRows.find(row => row.storeId === storeId))
+        .filter((row): row is ClientStoreSales => Boolean(row))
+      byClient.set(client.id, {
+        ...aggregateClientSalesForStores(storeIds, salesRows),
+        units: unitRows,
+      })
+    }
+    return byClient
+  }, [lojas, rows, salesRows])
+  const salesTotalsForView = useMemo(() => {
+    const visibleStoreIds = [...new Set(filtered.flatMap(client => clientStoreIds(client, lojas)))]
+    const rollup = aggregateClientSalesForStores(visibleStoreIds, salesRows)
+    return {
+      totalSales: rollup.sales,
+      totalMonthlyGoal: rollup.monthlyGoal,
+      totalAttainment: rollup.attainment,
+      storesWithSales: rollup.storesWithSales,
+      totalStores: visibleStoreIds.length,
+    }
+  }, [filtered, lojas, salesRows])
   const phases = useMemo(() => [...new Set(rows.map(r => r.business_phase).filter((v): v is string => Boolean(v)))].sort(), [rows])
   const products = useMemo(() => [...new Set(rows.map(r => r.product_name).filter((v): v is string => Boolean(v)))].sort(), [rows])
   const owners = useMemo(() => {
@@ -124,28 +202,29 @@ export function PortfolioOverviewTab({
   }, [filters])
 
   const clearAllFilters = () => setFilters(EMPTY_PORTFOLIO_FILTERS)
+  const refreshAll = () => { void Promise.all([onRefetch(), refetchSales()]) }
 
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-base font-semibold text-foreground">Carteira e consultoria</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Jornada consultiva, implantação, equipe e governança da carteira.</p>
+        <h2 className="text-base font-semibold text-foreground">Clientes, lojas e consultoria</h2>
+        <p className="mt-1 max-w-3xl text-sm text-muted-foreground">Uma linha por cliente: loja única ou matriz com filiais. A jornada consultiva e o resultado comercial aparecem juntos, cada um no seu bloco.</p>
       </div>
 
       {/* Metric Quick-Filter Segment Buttons */}
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
+      <div className="grid grid-cols-3 gap-2 sm:grid-cols-3 md:grid-cols-6">
         <button
           type="button"
           onClick={() => patch({ bucket: 'todos' })}
-          className={`flex flex-col items-start justify-between rounded-xl border p-3 text-left transition-all outline-none focus-visible:ring-2 focus-visible:ring-status-success/30 ${
+          className={`flex min-w-0 flex-col items-start justify-between rounded-xl border p-2 text-left transition-all outline-none focus-visible:ring-2 focus-visible:ring-status-success/30 sm:p-3 ${
             filters.bucket === 'todos'
               ? 'border-brand-primary bg-brand-primary/10 shadow-xs'
               : 'border-border bg-card hover:border-brand-primary/40 hover:bg-surface-alt'
           }`}
         >
-          <span className="text-caption font-medium text-muted-foreground">Total de Lojas</span>
-          <span className="mt-1 text-2xl font-bold text-foreground">{lojas.length}</span>
-          <span className="text-caption text-muted-foreground">Visão geral da rede</span>
+          <span className="line-clamp-2 text-caption font-medium text-muted-foreground">Clientes na carteira</span>
+          <span className="mt-1 text-xl font-bold text-foreground sm:text-2xl">{rows.length}</span>
+          <span className="line-clamp-2 text-caption text-muted-foreground">{lojas.length} unidades · matriz + filiais</span>
         </button>
 
         {METRIC_BUCKETS.map(item => {
@@ -158,14 +237,14 @@ export function PortfolioOverviewTab({
               key={item.bucket}
               type="button"
               onClick={() => patch({ bucket: isSelected ? 'todos' : item.bucket })}
-              className={`flex flex-col items-start justify-between rounded-xl border p-3 text-left transition-all outline-none focus-visible:ring-2 focus-visible:ring-status-success/30 ${
+              className={`flex min-w-0 flex-col items-start justify-between rounded-xl border p-2 text-left transition-all outline-none focus-visible:ring-2 focus-visible:ring-status-success/30 sm:p-3 ${
                 isSelected
                   ? 'border-brand-primary bg-brand-primary/10 shadow-xs ring-1 ring-brand-primary/30'
                   : 'border-border bg-card hover:border-brand-primary/40 hover:bg-surface-alt'
               }`}
             >
               <div className="flex w-full items-center justify-between">
-                <span className="text-caption font-medium text-muted-foreground">{item.label}</span>
+                <span className="line-clamp-2 text-caption font-medium text-muted-foreground">{item.label}</span>
                 <Icon
                   size={14}
                   className={
@@ -179,8 +258,8 @@ export function PortfolioOverviewTab({
                   }
                 />
               </div>
-              <span className="mt-1 text-2xl font-bold text-foreground">{count}</span>
-              <span className="text-caption text-muted-foreground">{PORTFOLIO_BUCKET_LABEL[item.bucket]}</span>
+              <span className="mt-1 text-xl font-bold text-foreground sm:text-2xl">{count}</span>
+              <span className="line-clamp-2 text-caption text-muted-foreground">{PORTFOLIO_BUCKET_LABEL[item.bucket]}</span>
             </button>
           )
         })}
@@ -195,6 +274,8 @@ export function PortfolioOverviewTab({
             <div className="relative flex-1">
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
               <MxInput
+                id="client-portfolio-search"
+                name="client-search"
                 value={filters.search}
                 onChange={e => patch({ search: e.target.value })}
                 placeholder="Buscar por loja, CNPJ, cidade, produto ou responsável..."
@@ -283,6 +364,67 @@ export function PortfolioOverviewTab({
             </div>
           </div>
 
+          <div className="flex flex-col gap-2 rounded-xl border border-border-subtle bg-surface-alt/50 p-2.5 sm:p-3 lg:flex-row lg:items-center">
+            <div className="flex min-w-0 flex-1 items-center gap-2">
+              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-status-success-surface text-status-success-text" aria-hidden="true">
+                <ShoppingCart size={16} />
+              </span>
+              <div className="min-w-0">
+                <p className="text-xs font-semibold text-foreground sm:text-sm">Vendas, meta e progresso</p>
+                <p className="line-clamp-2 text-caption leading-4 text-muted-foreground">
+                  {salesRange ? `Período: ${formatSalesRange(salesRange.startDate, salesRange.endDate)}` : 'Informe as datas para consultar as vendas.'}
+                  {' · '}Meta mensal · comercial separado da jornada consultiva
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-2 lg:flex lg:flex-wrap">
+              <label className="flex min-w-0 flex-col gap-1 text-caption font-semibold text-muted-foreground sm:min-w-[11rem]">
+                Período de vendas
+                <MxSelect data-testid="client-sales-period" aria-label="Filtrar vendas por período" value={salesPeriod} onChange={event => setSalesPeriod(event.target.value as ClientSalesPeriod)} className="h-9 text-xs">
+                  {SALES_PERIOD_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
+                </MxSelect>
+              </label>
+              {salesPeriod === 'custom' ? (
+                <>
+                  <label htmlFor="client-sales-custom-start" className="col-span-2 flex min-w-0 flex-col gap-1 text-caption font-semibold text-muted-foreground sm:col-span-1 sm:min-w-[9.5rem]">
+                    Data inicial
+                    <MxInput data-testid="client-sales-custom-start" id="client-sales-custom-start" type="date" aria-label="Data inicial das vendas" value={customStartDate} onChange={event => setCustomStartDate(event.target.value)} className="h-9 text-xs" />
+                  </label>
+                  <label htmlFor="client-sales-custom-end" className="col-span-2 flex min-w-0 flex-col gap-1 text-caption font-semibold text-muted-foreground sm:col-span-1 sm:min-w-[9.5rem]">
+                    Data final
+                    <MxInput data-testid="client-sales-custom-end" id="client-sales-custom-end" type="date" aria-label="Data final das vendas" value={customEndDate} onChange={event => setCustomEndDate(event.target.value)} className="h-9 text-xs" />
+                  </label>
+                </>
+              ) : null}
+              <Button variant="outline" size="sm" className="h-9 px-2.5 text-xs" onClick={refreshAll} disabled={salesLoading} aria-label="Atualizar vendas e carteira">
+                <RefreshCw size={14} className="mr-1.5" />Atualizar
+              </Button>
+            </div>
+
+            <dl className="grid grid-cols-4 gap-x-2 border-t border-border-subtle pt-2 text-caption lg:flex lg:items-center lg:gap-x-4 lg:border-l lg:border-t-0 lg:pl-3 lg:pt-0" aria-live="polite">
+              <div className="min-w-0">
+                <dt className="truncate text-muted-foreground">Vendas</dt>
+                <dd className="font-bold text-foreground">{salesLoading ? '...' : formatSalesCount(salesTotalsForView.totalSales)}</dd>
+              </div>
+              <div className="min-w-0">
+                <dt className="truncate text-muted-foreground">Meta mensal</dt>
+                <dd className="font-bold text-foreground">{salesLoading ? '...' : formatSalesCount(salesTotalsForView.totalMonthlyGoal)}</dd>
+              </div>
+              <div className="min-w-0">
+                <dt className="truncate text-muted-foreground">Progresso</dt>
+                <dd className="font-bold text-status-success-text">{salesLoading ? '...' : formatSalesPercent(salesTotalsForView.totalAttainment)}</dd>
+              </div>
+              <div className="min-w-0">
+                <dt className="truncate text-muted-foreground">Unidades com venda</dt>
+                <dd className="font-bold text-foreground">{salesLoading ? '...' : `${salesTotalsForView.storesWithSales}/${salesTotalsForView.totalStores}`}</dd>
+              </div>
+            </dl>
+          </div>
+
+          {salesRangeError ? <div className="rounded-lg border border-status-warning/30 bg-status-warning-surface px-3 py-2 text-xs font-medium text-status-warning-text" role="status">{salesRangeError}</div> : null}
+          {salesError ? <div className="rounded-lg border border-status-error/30 bg-status-error-surface px-3 py-2 text-xs font-medium text-status-error-text" role="alert">{salesError} <button type="button" onClick={() => void refetchSales()} className="ml-1 underline underline-offset-2">Tentar novamente</button></div> : null}
+
           {/* Active Filter Chips */}
           {hasActiveFilters && (
             <div className="flex flex-wrap items-center gap-1.5 pt-1 text-xs">
@@ -368,7 +510,7 @@ export function PortfolioOverviewTab({
               </Button>
 
               <span className="ml-auto text-caption text-muted-foreground">
-                {filtered.length} de {rows.length} {filtered.length === 1 ? 'loja' : 'lojas'}
+                {filtered.length} de {rows.length} {filtered.length === 1 ? 'cliente' : 'clientes'}
               </span>
             </div>
           )}
@@ -379,7 +521,7 @@ export function PortfolioOverviewTab({
           {filtered.length === 0 ? (
             <MxEmptyState
               variant="filter"
-              title="Nenhuma loja ou cliente encontrado"
+              title="Nenhum cliente ou loja encontrado"
               description="Nenhum resultado corresponde aos filtros selecionados. Tente ajustar os termos da busca."
               action={
                 <Button variant="outline" onClick={clearAllFilters}>
@@ -388,23 +530,37 @@ export function PortfolioOverviewTab({
               }
             />
           ) : viewMode === 'tabela' ? (
-            <MxTableSurface>
-              <Table className="min-w-[1056px]">
+            <MxTableSurface aria-label="Carteira de clientes com consultoria e vendas" data-testid="client-portfolio-table">
+              <Table className="w-full min-w-[900px] table-fixed text-xs xl:min-w-0">
+                <colgroup>
+                  <col className="w-[28%] sm:w-[18%]" />
+                  <col className="w-[17%] sm:w-[15%]" />
+                  <col className="w-[17%] sm:w-[15%]" />
+                  <col className="w-[16%] sm:w-[18%]" />
+                  <col className="w-[11%] sm:w-[14%]" />
+                  <col className="w-[6%] sm:w-[10%]" />
+                  <col className="w-[5%] sm:w-[10%]" />
+                </colgroup>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[280px]">Cliente / Loja</TableHead>
-                    <TableHead className="w-[180px]">Programa & Fase</TableHead>
-                    <TableHead className="w-[160px]">Jornada Consultiva</TableHead>
-                    <TableHead className="w-[160px]">Equipe & Presença</TableHead>
-                    <TableHead className="w-[160px]">Responsável MX</TableHead>
-                    <TableHead className="w-[180px]">Próxima Ação</TableHead>
-                    <TableHead className="w-[140px] text-right">Ações</TableHead>
+                    <TableHead className="px-2.5 py-2 text-caption leading-4">Cliente e estrutura</TableHead>
+                    <TableHead className="px-2.5 py-2 text-caption leading-4"><span className="inline-flex items-center gap-1"><StoreIcon size={14} aria-hidden="true" />Vendas</span></TableHead>
+                    <TableHead className="px-2.5 py-2 text-caption leading-4"><span className="inline-flex items-center gap-1"><Target size={14} aria-hidden="true" />Meta mensal / progresso</span></TableHead>
+                    <TableHead className="px-2.5 py-2 text-caption leading-4"><span className="inline-flex items-center gap-1"><TrendingUp size={14} aria-hidden="true" />Consultoria</span></TableHead>
+                    <TableHead className="px-2.5 py-2 text-caption leading-4">Equipe / responsável</TableHead>
+                    <TableHead className="px-2.5 py-2 text-caption leading-4">Próxima ação</TableHead>
+                    <TableHead className="px-2.5 py-2 text-right text-caption leading-4">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filtered.map(client => {
                     const blockers = activationBlockers(client)
-                    const stat = clientTeamStat(clientStoreIds(client, lojas), stats)
+                    const storeIds = clientStoreIds(client, lojas)
+                    const stat = clientTeamStat(storeIds, stats)
+                    const sales = salesByClient.get(client.id) ?? {
+                      ...aggregateClientSalesForStores(storeIds, []),
+                      units: [],
+                    }
                     const storeSlug = client.slug || client.id
                     const clientActive = isActive(client)
                     const progressPct =
@@ -414,23 +570,23 @@ export function PortfolioOverviewTab({
 
                     return (
                       <TableRow key={client.id} className="transition-colors hover:bg-surface-alt/50">
-                        {/* 1. Empresa / Loja */}
-                        <TableCell>
-                          <div className="flex items-center gap-3">
-                            <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-brand-primary/10 text-brand-primary font-bold text-sm">
+                        {/* 1. Cliente = loja única ou matriz com filiais */}
+                        <TableCell className="align-top px-2.5 py-2 text-caption">
+                          <div className="flex min-w-0 items-start gap-2">
+                            <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand-primary/10 text-brand-primary text-sm font-bold">
                               {client.name.charAt(0).toUpperCase()}
                             </div>
                             <div className="min-w-0">
                               <button
                                 type="button"
                                 onClick={() => navigate(`/clientes/${client.slug || client.id}`)}
-                                className="font-semibold text-foreground hover:text-brand-primary focus-visible:text-brand-primary text-left truncate block max-w-[220px] outline-none"
+                                className="block max-w-full truncate text-left font-semibold text-foreground outline-none hover:text-brand-primary focus-visible:text-brand-primary"
                                 title={client.name}
                               >
                                 {client.name}
                               </button>
-                              <div className="text-xs text-muted-foreground flex items-center gap-1.5 flex-wrap">
-                                <span>{client.cnpj ? `CNPJ: ${client.cnpj}` : 'Sem CNPJ'}</span>
+                              <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-caption text-muted-foreground">
+                                <span className="font-medium text-brand-primary">{clientStructureSummary(client)}</span>
                                 {client.primary_store_city && (
                                   <>
                                     <span>•</span>
@@ -438,67 +594,92 @@ export function PortfolioOverviewTab({
                                   </>
                                 )}
                               </div>
+                              <div className="mt-0.5 text-caption text-muted-foreground">{client.cnpj ? `CNPJ: ${client.cnpj}` : 'Sem CNPJ'}</div>
+                              <div className="mt-1.5 space-y-1.5 border-t border-border-subtle pt-1.5 sm:hidden">
+                                <div className="flex items-center justify-between gap-2 text-caption">
+                                  <span className="font-medium text-muted-foreground">Vendas no período</span>
+                                  <span className="font-bold text-foreground">{salesLoading ? '...' : salesError || salesRangeError ? 'Indisponível' : `${formatSalesCount(sales.sales)} vendas`}</span>
+                                </div>
+                                {!salesLoading && !salesError && !salesRangeError && sales.monthlyGoal > 0 && sales.attainment !== null ? <MxProgress value={sales.attainment} tone={salesProgressTone(sales.attainment)} label={`${formatSalesCount(sales.sales)} de ${formatSalesCount(sales.monthlyGoal)} vendas`} /> : <span className="block text-caption text-muted-foreground">{salesLoading ? 'Carregando meta...' : salesError || salesRangeError ? 'Dados comerciais indisponíveis' : 'Meta não configurada'}</span>}
+                              </div>
                             </div>
                           </div>
                         </TableCell>
 
-                        {/* 2. Programa & Fase */}
-                        <TableCell>
-                          <div className="space-y-1">
-                            <div className="font-medium text-foreground text-sm">
-                              {client.product_name || 'Consultoria PMR'}
+                        {/* 2. Resultado comercial do cliente consolidado */}
+                        <TableCell className="align-top px-2.5 py-2 text-caption">
+                          {salesLoading ? <span className="text-muted-foreground">Carregando vendas...</span> : salesError || salesRangeError ? <span className="text-muted-foreground" title={salesError ?? salesRangeError ?? undefined}>Indisponível</span> : (
+                            <div className="min-w-0">
+                              <div className="flex items-baseline gap-1">
+                                <span className="text-lg font-bold leading-none text-foreground">{formatSalesCount(sales.sales)}</span>
+                                <span className="text-caption text-muted-foreground">vendas</span>
+                              </div>
+                              <div className="mt-1 text-caption text-muted-foreground">{sales.storesWithSales}/{Math.max(client.units, 1)} unidades com venda · {formatSalesDate(sales.lastSaleDate)}</div>
+                              {sales.units.length > 0 ? (
+                                <div className="mt-1.5 flex max-w-full flex-wrap gap-1" aria-label="Vendas por unidade">
+                                  {sales.units.slice(0, 3).map(unit => (
+                                    <span key={unit.storeId} className="inline-flex max-w-full min-w-0 items-center gap-1 rounded-md bg-surface-alt px-1.5 py-0.5 text-caption text-muted-foreground" title={`${unit.storeName}: ${formatSalesCount(unit.sales)} vendas`}>
+                                      <span className="truncate">{unit.parentStoreName ? 'Filial' : 'Matriz'} · {unit.storeName}</span>
+                                      <strong className="shrink-0 text-foreground">{formatSalesCount(unit.sales)}</strong>
+                                    </span>
+                                  ))}
+                                  {sales.units.length > 3 ? <span className="rounded-md bg-surface-alt px-1.5 py-0.5 text-caption text-muted-foreground" title={`${sales.units.slice(3).map(unit => `${unit.storeName}: ${formatSalesCount(unit.sales)}`).join(' · ')}`}>+{sales.units.length - 3} unidades</span> : null}
+                                </div>
+                              ) : null}
                             </div>
-                            <Badge variant="outline" className="text-caption py-0">
-                              {PHASE_LABEL[client.business_phase ?? ''] ?? 'Estruturação'}
-                            </Badge>
+                          )}
+                        </TableCell>
+
+                        {/* 3. Meta comercial e progresso */}
+                        <TableCell className="align-top px-2.5 py-2 text-caption">
+                          {salesLoading ? <span className="text-muted-foreground">Aguardando meta...</span> : salesError || salesRangeError ? <span className="text-muted-foreground">Indisponível</span> : sales.monthlyGoal > 0 && sales.attainment !== null ? (
+                            <div className="min-w-0 space-y-1.5">
+                              <MxProgress value={sales.attainment} tone={salesProgressTone(sales.attainment)} label={`${formatSalesCount(sales.sales)} de ${formatSalesCount(sales.monthlyGoal)} vendas`} />
+                              <Badge variant={salesStatus(sales).variant} className="text-caption py-0.5">{salesStatus(sales).label} · {formatSalesPercent(sales.attainment)}</Badge>
+                            </div>
+                          ) : (
+                            <div className="space-y-1">
+                              <span className="block font-semibold text-foreground">{formatSalesCount(sales.sales)} vendas</span>
+                              <span className="block text-caption text-muted-foreground">Meta não configurada</span>
+                            </div>
+                          )}
+                        </TableCell>
+
+                        {/* 4. Consultoria permanece separada do comercial */}
+                        <TableCell className="align-top px-2.5 py-2 text-caption">
+                          <div className="min-w-0 space-y-2">
+                            <div className="min-w-0">
+                              <div className="truncate font-medium text-foreground" title={client.product_name || 'Produto não configurado'}>{client.product_name || 'Produto não configurado'}</div>
+                              <Badge variant="outline" className="mt-1 text-caption py-0">{PHASE_LABEL[client.business_phase ?? ''] ?? 'Fase não informada'}</Badge>
+                            </div>
+                            <div className="border-t border-border-subtle pt-1.5">
+                              <div className="flex items-center justify-between text-caption">
+                                <span className="font-medium text-foreground">Jornada consultiva</span>
+                                <span className="text-muted-foreground">{journeyLabel(client)}</span>
+                              </div>
+                              {client.visitsTotal > 0 ? <MxProgress value={progressPct} tone="brand" label={`${client.visitsDone}/${client.visitsTotal} encontros`} /> : <span className="text-caption text-muted-foreground">Sem jornada contratada</span>}
+                            </div>
                           </div>
                         </TableCell>
 
-                        {/* 3. Jornada Consultiva */}
-                        <TableCell>
+                        {/* 5. Equipe e responsável */}
+                        <TableCell className="align-top px-2.5 py-2 text-caption">
                           <div className="space-y-1.5">
-                            <div className="flex items-center justify-between text-xs">
-                              <span className="font-medium text-foreground">{journeyLabel(client)}</span>
-                              <span className="text-muted-foreground">
-                                {client.visitsTotal > 0 ? `${client.visitsDone}/${client.visitsTotal}` : 'Livre'}
-                              </span>
-                            </div>
-                            {client.visitsTotal > 0 ? (
-                              <div className="h-1.5 w-full">
-                                <MxProgress value={progressPct} tone="brand" />
-                              </div>
-                            ) : null}
-                          </div>
-                        </TableCell>
-
-                        {/* 4. Equipe & Presença */}
-                        <TableCell>
-                          <div className="space-y-1">
                             <div className="flex items-center gap-1.5">
-                              <Users size={14} className="text-muted-foreground" />
+                              <Users size={14} className="text-muted-foreground" aria-hidden="true" />
                               <span className="font-semibold text-foreground">{stat.sellers}</span>
-                              <span className="text-xs text-muted-foreground">vendedores</span>
+                              <span className="text-caption text-muted-foreground">vendedores</span>
                             </div>
-                            {stat.sellers > 0 ? (
-                              <div className="text-caption text-muted-foreground">
-                                <span className="font-medium text-status-success-text">{stat.disciplinePct}%</span> presença hoje
-                              </div>
-                            ) : null}
+                            {stat.sellers > 0 ? <div className="text-caption text-muted-foreground"><span className="font-medium text-status-success-text">{stat.disciplinePct}%</span> presença hoje</div> : null}
+                            <div className="border-t border-border-subtle pt-1.5">
+                              <span className="block text-caption text-muted-foreground">Responsável MX</span>
+                              <span className="block truncate text-xs font-medium text-foreground" title={client.implementation_owner_name ?? undefined}>{client.implementation_owner_name || <span className="italic text-muted-foreground">Não atribuído</span>}</span>
+                            </div>
                           </div>
                         </TableCell>
 
-                        {/* 5. Responsável MX */}
-                        <TableCell>
-                          <div className="text-sm font-medium text-foreground">
-                            {client.implementation_owner_name || (
-                              <span className="text-muted-foreground italic">Não atribuído</span>
-                            )}
-                          </div>
-                          <div className="text-caption text-muted-foreground">{structureLabel(client)}</div>
-                        </TableCell>
-
-                        {/* 6. Próxima Ação */}
-                        <TableCell>
+                        {/* 6. Próxima ação */}
+                        <TableCell className="align-top px-2.5 py-2 text-caption">
                           <div className="space-y-1">
                             {client.suspended_at ? (
                               <Badge variant="danger" className="text-caption">
@@ -530,20 +711,20 @@ export function PortfolioOverviewTab({
                         </TableCell>
 
                         {/* 7. Ações */}
-                        <TableCell className="text-right">
-                          <div className="flex items-center justify-end gap-1.5">
+                        <TableCell className="px-2.5 py-2 text-right text-caption">
+                          <div className="flex min-w-0 items-center justify-end gap-1">
                             <Button
                               variant="outline"
-                              size="sm"
-                              className="h-8 px-2.5 text-xs font-medium"
+                              size="xs"
+                              className="h-8 w-8 shrink-0 p-0"
                               onClick={() => navigate(`/lojas/${storeSlug}`)}
                               title="Acessar Workspace da Loja"
                               aria-label={`Acessar Workspace de ${client.name}`}
                             >
-                              <ExternalLink size={14} className="mr-1" />
-                              Workspace
+                              <ExternalLink size={14} />
+                              <span className="sr-only">Abrir</span>
                             </Button>
-                            <ClientActionsMenu client={client} onAction={action => onAction(client, action)} />
+                            <ClientActionsMenu compact client={client} onAction={action => onAction(client, action)} />
                           </div>
                         </TableCell>
                       </TableRow>
@@ -556,7 +737,12 @@ export function PortfolioOverviewTab({
             /* Cards Operacionais View */
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
               {filtered.map(client => {
-                const stat = clientTeamStat(clientStoreIds(client, lojas), stats)
+                const storeIds = clientStoreIds(client, lojas)
+                const stat = clientTeamStat(storeIds, stats)
+                const sales = salesByClient.get(client.id) ?? {
+                  ...aggregateClientSalesForStores(storeIds, []),
+                  units: [],
+                }
                 const storeSlug = client.slug || client.id
                 const clientActive = isActive(client)
                 const progressPct =
@@ -620,9 +806,25 @@ export function PortfolioOverviewTab({
                         <div>
                           <span className="text-muted-foreground">Estrutura:</span>{' '}
                           <span className="font-medium text-foreground block truncate">
-                            {structureLabel(client)}
+                            {clientStructureSummary(client)}
                           </span>
                         </div>
+                      </div>
+
+                      {/* Commercial result stays visible in the alternate view too */}
+                      <div className="space-y-2 rounded-lg border border-status-success/20 bg-status-success-surface/30 p-3">
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <span className="text-xs font-medium text-muted-foreground">Vendas no período</span>
+                            <div className="mt-0.5 flex items-baseline gap-1">
+                              <span className="text-xl font-bold leading-none text-foreground">{salesLoading ? '...' : formatSalesCount(sales.sales)}</span>
+                              <span className="text-xs text-muted-foreground">vendas</span>
+                            </div>
+                          </div>
+                          {!salesLoading && !salesError && !salesRangeError ? <Badge variant={salesStatus(sales).variant} className="text-caption py-0.5">{salesStatus(sales).label}</Badge> : null}
+                        </div>
+                        {salesLoading || salesError || salesRangeError ? <span className="text-xs text-muted-foreground">{salesLoading ? 'Carregando meta...' : 'Dados comerciais indisponíveis'}</span> : sales.monthlyGoal > 0 && sales.attainment !== null ? <MxProgress value={sales.attainment} tone={salesProgressTone(sales.attainment)} label={`${formatSalesCount(sales.sales)} de ${formatSalesCount(sales.monthlyGoal)} vendas`} /> : <span className="text-xs text-muted-foreground">Meta não configurada</span>}
+                        {!salesLoading && !salesError && !salesRangeError ? <div className="text-caption text-muted-foreground">{sales.monthlyGoal > 0 ? `Meta ${formatSalesCount(sales.monthlyGoal)} · ${formatSalesPercent(sales.attainment)}` : 'Sem meta configurada'} · {sales.storesWithSales}/{Math.max(client.units, 1)} unidades com venda</div> : null}
                       </div>
 
                       {/* Journey Progress */}
@@ -643,7 +845,7 @@ export function PortfolioOverviewTab({
                       {/* Team & Presence */}
                       <div className="flex items-center justify-between text-xs px-1">
                         <div className="flex items-center gap-1.5">
-                          <Users size={14} className="text-muted-foreground" />
+                          <Users size={14} className="text-muted-foreground" aria-hidden="true" />
                           <span className="font-semibold text-foreground">{stat.sellers}</span>
                           <span className="text-muted-foreground">vendedores</span>
                         </div>
@@ -695,8 +897,6 @@ export function PortfolioOverviewTab({
           )}
         </div>
       </MxSectionCard>
-
-      <ClientSalesOverview stores={lojas} />
 
       <PendenciasModal
         open={Boolean(pendenciasClient)}

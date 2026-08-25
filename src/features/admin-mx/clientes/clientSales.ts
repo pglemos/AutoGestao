@@ -14,6 +14,25 @@ export type ClientSalesPeriodResolution = {
   error: string | null
 }
 
+export type ClientSalesRollup = {
+  sales: number
+  revenue: number
+  monthlyGoal: number
+  attainment: number | null
+  gap: number | null
+  storesWithSales: number
+  configuredGoalStores: number
+  lastSaleDate: string | null
+}
+
+export type ClientSalesStoreMetric = {
+  storeId: string
+  sales: number
+  revenue: number
+  monthlyGoal: number
+  lastSaleDate: string | null
+}
+
 export type OfficialStoreSalesRow = {
   store_id: string | null
   competencia: string | null
@@ -141,4 +160,39 @@ export function aggregateOfficialStoreSales(rows: readonly OfficialStoreSalesRow
 
 export function calculateClientSalesAttainment(sales: number, monthlyGoal: number): number | null {
   return monthlyGoal > 0 ? (sales / monthlyGoal) * 100 : null
+}
+
+/** Consolida a matriz e as filiais sem misturar o resultado com a jornada consultiva. */
+export function aggregateClientSalesForStores(
+  storeIds: readonly string[],
+  rows: readonly ClientSalesStoreMetric[],
+): ClientSalesRollup {
+  const includedStoreIds = new Set(storeIds)
+  let sales = 0
+  let revenue = 0
+  let monthlyGoal = 0
+  let storesWithSales = 0
+  let configuredGoalStores = 0
+  let lastSaleDate: string | null = null
+
+  for (const row of rows) {
+    if (!includedStoreIds.has(row.storeId)) continue
+    sales += row.sales
+    revenue += row.revenue
+    monthlyGoal += row.monthlyGoal
+    if (row.sales > 0) storesWithSales += 1
+    if (row.monthlyGoal > 0) configuredGoalStores += 1
+    if (row.lastSaleDate && (!lastSaleDate || row.lastSaleDate > lastSaleDate)) lastSaleDate = row.lastSaleDate
+  }
+
+  return {
+    sales,
+    revenue,
+    monthlyGoal,
+    attainment: calculateClientSalesAttainment(sales, monthlyGoal),
+    gap: monthlyGoal > 0 ? Math.max(monthlyGoal - sales, 0) : null,
+    storesWithSales,
+    configuredGoalStores,
+    lastSaleDate,
+  }
 }

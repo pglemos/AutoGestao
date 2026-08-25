@@ -91,3 +91,5 @@ export function summarizeLiveOverview(rows: readonly StoreLiveOverviewRow[]) {
     },
   )
 }
+
+export type AdminLiveSummary = ReturnType<typeof summarizeLiveOverview>

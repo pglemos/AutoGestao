@@ -344,6 +344,15 @@ export function structureLabel(client: PortfolioClient): string {
   return client.units ? `${client.units} unidade(s)` : 'Não informada'
 }
 
+/** Linguagem da tela: cada cliente é uma carteira; unidades são matriz/filiais. */
+export function clientStructureSummary(client: Pick<PortfolioClient, 'units'>): string {
+  const units = Math.max(0, client.units)
+  if (units === 0) return 'Sem unidade vinculada'
+  if (units === 1) return 'Loja única · matriz'
+  const branchLabel = units - 1 === 1 ? 'filial' : 'filiais'
+  return `Matriz + ${units - 1} ${branchLabel}`
+}
+
 export function journeyLabel(client: PortfolioClient): string {
   if (!client.visitsTotal) return 'Sem jornada'
   return `${client.visitsDone} de ${client.visitsTotal}`

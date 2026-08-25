@@ -67,13 +67,21 @@ const Base44DropdownItem = DropdownMenuItem as unknown as ComponentType<{ childr
 export function ClientActionsMenu(props: {
   client: ClientLifecycleRow & { name?: string }
   onAction: (action: ClientAction) => void
+  compact?: boolean
 }) {
   const actions = useMemo(() => clientActionsFor(props.client), [props.client])
+  const actionLabel = `Ações de ${props.client.name ?? 'cliente'}`
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-8 w-8" aria-label={`Ações de ${props.client.name ?? 'cliente'}`}>
+        <Button
+          variant="ghost"
+          size={props.compact ? 'xs' : 'icon'}
+          className={props.compact ? 'h-8 w-8 p-0' : 'h-8 w-8'}
+          aria-label={actionLabel}
+          title={props.compact ? actionLabel : undefined}
+        >
           <MoreHorizontal size={16} />
         </Button>
       </DropdownMenuTrigger>

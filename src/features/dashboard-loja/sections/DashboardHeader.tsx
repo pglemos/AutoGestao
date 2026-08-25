@@ -1,13 +1,13 @@
 import {
   Building2,
   CalendarDays,
-  ChevronDown,
   Globe,
   Receipt,
   RefreshCw,
   Target,
   Users,
 } from 'lucide-react'
+import type { MouseEvent } from 'react'
 import { cn, slugify } from '@/lib/utils'
 import { useNavigate } from 'react-router-dom'
 import { Typography } from '@/components/atoms/Typography'
@@ -15,10 +15,12 @@ import { Button } from '@/components/atoms/Button'
 import { Card } from '@/components/molecules/Card'
 import { TabNavPill } from '@/components/molecules/TabNavPill'
 import { LastUpdated } from '@/components/molecules/LastUpdated'
-import { isPerfilInternoMx } from '@/hooks/useAuth'
+import { Combobox, type ComboboxOption } from '@/components/atoms/Combobox'
+import { isPerfilInternoMx } from '@/lib/auth/roles'
 import type { Store, UserRole } from '@/types/database'
 import { format, parseISO } from 'date-fns'
 import type { ViewMode } from '../hooks/useDashboardLojaData'
+import type { AdminLiveSummary } from '../lib/admin-live-overview'
 
 export type DashboardTab = 'performance' | 'metas' | 'equipe' | 'vendas'
 
@@ -43,6 +45,7 @@ type DashboardHeaderProps = {
   setStartDate: (d: string) => void
   endDate: string
   setEndDate: (d: string) => void
+  liveSummary?: AdminLiveSummary | null
 }
 
 const LOJA_TABS = [
@@ -78,6 +81,7 @@ export function DashboardHeader({
   setStartDate,
   endDate,
   setEndDate,
+  liveSummary = null,
 }: DashboardHeaderProps) {
   const navigate = useNavigate()
 
@@ -90,6 +94,12 @@ export function DashboardHeader({
         title: 'Intervalo manual',
         description: `Dados consolidados de ${format(parseISO(startDate), 'dd/MM/yyyy')} até ${format(parseISO(endDate), 'dd/MM/yyyy')}.`,
       }
+
+  const storeOptions: ComboboxOption<string>[] = selectableStores.map(store => ({
+    value: store.id,
+    label: store.name,
+    keywords: `${slugify(store.name)} ${store.id}`,
+  }))
 
   const navigateToStore = (newStoreId: string) => {
     const newStore = selectableStores.find(store => store.id === newStoreId)
@@ -116,24 +126,18 @@ export function DashboardHeader({
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              <label className="relative min-w-48">
-                <Building2 size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                <select
-                  id="store-dashboard-select"
-                  name="store-dashboard-select"
-                  aria-label="Selecionar unidade"
-                  value={selectedStoreId || ''}
-                  onChange={event => navigateToStore(event.target.value)}
-                  className="h-10 w-full appearance-none rounded-xl border border-border bg-white pl-9 pr-8 text-sm font-semibold text-foreground outline-none focus:ring-2 focus:ring-status-success"
-                >
-                  {selectableStores.map(store => (
-                    <option key={store.id} value={store.id}>{store.name}</option>
-                  ))}
-                </select>
-                <ChevronDown size={15} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-              </label>
+              <Combobox
+                label="Selecionar unidade"
+                value={selectedStoreId || undefined}
+                onValueChange={navigateToStore}
+                options={storeOptions}
+                placeholder="Selecionar unidade"
+                searchPlaceholder="Buscar unidade por nome..."
+                emptyLabel="Nenhuma unidade encontrada."
+                className="!h-mx-11 w-full sm:min-w-64 sm:w-64"
+              />
 
-              <TabNavPill tabs={LOJA_TABS} activeTab={activeTab} onTabChange={onTabChange} buttonClassName="h-mx-8 px-3" aria-label="Abas da loja" />
+              <TabNavPill tabs={LOJA_TABS} activeTab={activeTab} onTabChange={onTabChange} buttonClassName="h-mx-11 px-3" aria-label="Abas da loja" />
 
               {activeTab === 'performance' && (
                 <button
@@ -142,7 +146,7 @@ export function DashboardHeader({
                   disabled={isRefetching}
                   aria-label={`Atualizar performance. ${lastSyncLabel}`}
                   title={lastSyncLabel}
-                  className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-primary px-4 text-sm font-semibold text-white hover:bg-brand-primary-hover disabled:opacity-50"
+                  className="inline-flex min-h-mx-11 items-center gap-2 rounded-xl bg-brand-primary px-4 text-sm font-semibold text-white hover:bg-brand-primary-hover disabled:opacity-50"
                 >
                   <RefreshCw size={15} className={cn(isRefetching && 'animate-spin')} />
                   Atualizar
@@ -153,13 +157,17 @@ export function DashboardHeader({
         </header>
 
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <LastUpdated value={lastSyncAt} />
+          <LastUpdated value={lastSyncAt} label="Performance" emptyLabel="Ainda não atualizada nesta sessão" />
           {syncWarning && (
-            <div role="alert" className="rounded-xl border border-status-warning/20 bg-status-warning-surface px-3 py-2 text-xs font-medium text-status-warning-text">
+            <div role="alert" aria-live="polite" className="rounded-xl border border-status-warning/20 bg-status-warning-surface px-3 py-2 text-xs font-medium text-status-warning-text">
               {syncWarning}
             </div>
           )}
         </div>
+
+        {activeTab === 'performance' && (
+          <LivePrioritySummary summary={liveSummary} />
+        )}
 
         {activeTab === 'performance' && (
           <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
@@ -175,7 +183,7 @@ export function DashboardHeader({
               </div>
 
               <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
-                <TabNavPill tabs={PERIODO_TABS} activeTab={viewMode} onTabChange={(mode) => setViewMode(mode as ViewMode)} buttonClassName="h-mx-9 px-5" aria-label="Período do dashboard" />
+                <TabNavPill tabs={PERIODO_TABS} activeTab={viewMode} onTabChange={(mode) => setViewMode(mode as ViewMode)} buttonClassName="h-mx-11 px-5" aria-label="Período do dashboard" />
 
                 <label className="text-xs text-muted-foreground">
                   Início
@@ -188,7 +196,7 @@ export function DashboardHeader({
                       setStartDate(event.target.value)
                       setViewMode('month')
                     }}
-                    className="mt-1 block h-10 rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-status-success disabled:bg-surface-alt disabled:text-muted-foreground"
+                    className="mt-1 block h-mx-11 rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-status-success disabled:bg-surface-alt disabled:text-muted-foreground"
                   />
                 </label>
 
@@ -203,7 +211,7 @@ export function DashboardHeader({
                       setEndDate(event.target.value)
                       setViewMode('month')
                     }}
-                    className="mt-1 block h-10 rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-status-success disabled:bg-surface-alt disabled:text-muted-foreground"
+                    className="mt-1 block h-mx-11 rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-status-success disabled:bg-surface-alt disabled:text-muted-foreground"
                   />
                 </label>
               </div>
@@ -211,7 +219,7 @@ export function DashboardHeader({
               <button
                 type="button"
                 onClick={() => onTabChange('metas')}
-                className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-status-success/30 px-3 text-sm font-semibold text-status-success-text hover:bg-status-success-surface"
+                className="inline-flex min-h-mx-11 items-center justify-center gap-2 rounded-xl border border-status-success/30 px-3 text-sm font-semibold text-status-success-text hover:bg-status-success-surface"
               >
                 <Target size={15} />
                 Ver metas
@@ -243,27 +251,21 @@ export function DashboardHeader({
 
           <div className="flex flex-wrap items-center gap-2">
             {isOwner && selectableStores.length > 1 && (
-              <label htmlFor="owner-store-select" className="relative min-w-48">
-                <Building2 size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                <select
-                  aria-label="Trocar unidade"
-                  id="owner-store-select"
-                  name="owner-store-select"
-                  value={selectedStoreId || ''}
-                  onChange={event => navigateToStore(event.target.value)}
-                  className="h-10 w-full appearance-none rounded-xl border border-border bg-white pl-9 pr-8 text-sm font-semibold text-foreground outline-none focus:ring-2 focus:ring-status-success"
-                >
-                  {selectableStores.map(store => (
-                    <option key={store.id} value={store.id}>{store.name}</option>
-                  ))}
-                </select>
-                <ChevronDown size={15} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-              </label>
+              <Combobox
+                label="Trocar unidade"
+                value={selectedStoreId || undefined}
+                onValueChange={navigateToStore}
+                options={storeOptions}
+                placeholder="Selecionar unidade"
+                searchPlaceholder="Buscar unidade por nome..."
+                emptyLabel="Nenhuma unidade encontrada."
+                className="!h-mx-11 w-full sm:min-w-64 sm:w-64"
+              />
             )}
-            <TabNavPill tabs={LOJA_TABS} activeTab={activeTab} onTabChange={onTabChange} className="mx-store-dashboard-tabs max-w-full overflow-x-auto" buttonClassName="h-mx-8 sm:h-mx-10 px-2 sm:px-6 shrink-0" aria-label="Abas da loja" />
+            <TabNavPill tabs={LOJA_TABS} activeTab={activeTab} onTabChange={onTabChange} className="mx-store-dashboard-tabs max-w-full overflow-x-auto" buttonClassName="h-mx-11 px-2 sm:px-6 shrink-0" aria-label="Abas da loja" />
 
             {activeTab === 'performance' && (
-              <Button variant="outline" onClick={onRefresh} aria-label={`Atualizar performance. ${lastSyncLabel}`} title={lastSyncLabel} className="h-10 bg-white px-mx-md hover:bg-surface-alt">
+              <Button variant="outline" onClick={onRefresh} aria-label={`Atualizar performance. ${lastSyncLabel}`} title={lastSyncLabel} className="h-mx-11 bg-white px-mx-md hover:bg-surface-alt">
                 <RefreshCw size={15} className={cn(isRefetching && 'animate-spin')} />
                 Atualizar
               </Button>
@@ -273,9 +275,9 @@ export function DashboardHeader({
       </header>
 
       <div className="flex flex-col gap-mx-sm sm:flex-row sm:items-center sm:justify-between">
-        <LastUpdated value={lastSyncAt} />
+        <LastUpdated value={lastSyncAt} label="Performance" emptyLabel="Ainda não atualizada nesta sessão" />
         {syncWarning && (
-          <div role="alert" className="rounded-xl border border-status-warning/20 bg-status-warning-surface px-mx-md py-mx-sm text-mx-tiny font-bold uppercase tracking-tight text-status-warning-text">
+          <div role="alert" aria-live="polite" className="rounded-xl border border-status-warning/20 bg-status-warning-surface px-mx-md py-mx-sm text-mx-tiny font-bold uppercase tracking-tight text-status-warning-text">
             {syncWarning}
           </div>
         )}
@@ -312,6 +314,41 @@ export function DashboardHeader({
         </Card>
       )}
     </>
+  )
+}
+
+function LivePrioritySummary({ summary }: { summary: AdminLiveSummary | null }) {
+  const scrollToSellers = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault()
+    const target = document.getElementById('admin-live-sellers')
+    if (!target) return
+    window.history.replaceState(null, '', '#admin-live-sellers')
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  return (
+    <section aria-label="Prioridades operacionais" className="flex flex-col gap-3 border-y border-border-subtle px-1 py-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="min-w-0">
+        <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">Prioridades de hoje</p>
+        <p className="mt-1 text-sm font-semibold text-foreground">
+          {summary
+            ? `${summary.pending} fechamento${summary.pending === 1 ? '' : 's'} pendente${summary.pending === 1 ? '' : 's'}${summary.divergences ? ` · ${summary.divergences} divergência${summary.divergences === 1 ? '' : 's'} para revisar` : ''}`
+            : 'Consultando fechamentos e divergências...'}
+        </p>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {summary?.pending ? (
+          <a href="#admin-live-sellers" onClick={scrollToSellers} className="inline-flex min-h-mx-11 items-center rounded-xl border border-status-warning/30 bg-status-warning-surface px-3 text-sm font-semibold text-status-warning-text hover:bg-status-warning/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2">
+            Ver pendências
+          </a>
+        ) : null}
+        {summary?.divergences ? (
+          <a href="#admin-live-sellers" onClick={scrollToSellers} className="inline-flex min-h-mx-11 items-center rounded-xl border border-status-error/20 bg-status-error-surface px-3 text-sm font-semibold text-status-error-text hover:bg-status-error/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2">
+            Revisar divergências
+          </a>
+        ) : null}
+      </div>
+    </section>
   )
 }
 

@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 import {
+  aggregateClientSalesForStores,
   aggregateOfficialStoreSales,
   calculateClientSalesAttainment,
   getClientSalesNextMidnightDelay,
@@ -55,5 +56,21 @@ describe('agregação das vendas oficiais por loja', () => {
     expect(calculateClientSalesAttainment(5, 10)).toBe(50)
     expect(calculateClientSalesAttainment(12, 10)).toBe(120)
     expect(calculateClientSalesAttainment(5, 0)).toBeNull()
+  })
+
+  test('consolida matriz e filiais na linha do mesmo cliente', () => {
+    expect(aggregateClientSalesForStores(['matrix', 'branch-1'], [
+      { storeId: 'matrix', sales: 5, revenue: 100, monthlyGoal: 10, lastSaleDate: '2026-08-10' },
+      { storeId: 'branch-1', sales: 3, revenue: 60, monthlyGoal: 8, lastSaleDate: '2026-08-12' },
+      { storeId: 'other', sales: 99, revenue: 999, monthlyGoal: 99, lastSaleDate: '2026-08-20' },
+    ])).toMatchObject({
+      sales: 8,
+      revenue: 160,
+      monthlyGoal: 18,
+      attainment: (8 / 18) * 100,
+      storesWithSales: 2,
+      configuredGoalStores: 2,
+      lastSaleDate: '2026-08-12',
+    })
   })
 })
