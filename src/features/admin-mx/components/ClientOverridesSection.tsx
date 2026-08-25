@@ -13,6 +13,11 @@ import {
 } from '../indicadores/indicatorData'
 import { evaluateFormula } from '../indicadores/indicatorFormulas'
 import { expandOverrideToRows, type OverrideDraft, type ParameterDefinition } from '../indicadores/parameterCatalog'
+import {
+  applyPersistedParameterValues,
+  fetchStrategicParameterValues,
+  strategicParameterDefinitions,
+} from '../indicadores/strategicParameters'
 import type { CatalogIndicator } from '../indicadores/indicatorCatalog'
 import type { IndicatorParameter } from '../indicadores/indicatorCatalog'
 
@@ -23,7 +28,9 @@ const CURRENT_YEAR = new Date().getFullYear()
 export function ClientOverridesSection(props: {
   rows: CatalogIndicator[]
   parameters: IndicatorParameter[]
+  parameterSetId: string | null
 }) {
+  const [strategicParameters, setStrategicParameters] = useState<ParameterDefinition[]>(strategicParameterDefinitions())
   const [clients, setClients] = useState<ClientOption[]>([])
   const [clientId, setClientId] = useState('')
   const [overrides, setOverrides] = useState<ClientOverrideRow[]>([])
@@ -54,6 +61,16 @@ export function ClientOverridesSection(props: {
   }, [loadClients])
 
   useEffect(() => {
+    if (!props.parameterSetId) {
+      setStrategicParameters(strategicParameterDefinitions())
+      return
+    }
+    void fetchStrategicParameterValues(props.parameterSetId).then(persisted => {
+      setStrategicParameters(applyPersistedParameterValues(strategicParameterDefinitions(), persisted))
+    })
+  }, [props.parameterSetId])
+
+  useEffect(() => {
     if (!clientId) {
       setOverrides([])
       setLoading(false)
@@ -69,7 +86,9 @@ export function ClientOverridesSection(props: {
 
   const parameterDefinitions = useMemo<ParameterDefinition[]>(() => {
     const byKey = new Map(props.parameters.map(parameter => [parameter.metric_key, parameter]))
-    return props.rows.map(indicator => {
+    // Os 13 parâmetros estratégicos vêm primeiro: são eles que o Base44 permite
+    // ajustar por cliente (coluna "Ajuste cliente" da aba de parâmetros).
+    const indicatorDefinitions = props.rows.map(indicator => {
       const parameter = byKey.get(indicator.metric_key)
       return {
         id: indicator.metric_key,
@@ -82,7 +101,8 @@ export function ClientOverridesSection(props: {
         indicator_codes: [indicator.metric_key],
       }
     })
-  }, [props.rows, props.parameters])
+    return [...strategicParameters, ...indicatorDefinitions]
+  }, [props.rows, props.parameters, strategicParameters])
 
   const overrideCountByCode = useMemo(() => {
     const map: Record<string, number> = {}

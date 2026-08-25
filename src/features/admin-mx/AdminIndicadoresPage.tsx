@@ -28,6 +28,7 @@ import { FormulaTesterModal } from './components/FormulaTesterModal'
 import { ParameterFormModal } from './components/ParameterFormModal'
 import { ParameterPickerModal } from './components/ParameterPickerModal'
 import { ClientOverridesSection } from './components/ClientOverridesSection'
+import { StrategicParametersSection } from './components/StrategicParametersSection'
 import { MetasRealizadosTab } from './components/MetasRealizadosTab'
 import { IndicatorDetailDrawer } from './indicadores/IndicatorDetailDrawer'
 import {
@@ -799,6 +800,7 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
           </>
         ) : tab === 'parametros' ? (
           <>
+            <StrategicParametersSection parameterSetId={parameterSetId} />
             <MxSectionCard>
               <MxSectionHeader title="Parâmetros e Fórmulas" description={parameterSet ? `Conjunto ativo: ${parameterSet}. Configure valores, dependências e faixas sem alterar o histórico.` : 'Nenhum conjunto de parâmetros ativo.'} />
               <div className="p-5">
@@ -862,7 +864,7 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
                 ) : <MxEmptyState title="Nenhum indicador encontrado" description="Cadastre indicadores no catálogo ou ajuste a busca para configurar os parâmetros." />}
               </div>
             </MxSectionCard>
-            <ClientOverridesSection rows={rows} parameters={parameters} />
+            <ClientOverridesSection rows={rows} parameters={parameters} parameterSetId={parameterSetId} />
           </>
         ) : tab === 'metas' ? (
           <MetasRealizadosTab indicators={indicatorTargets} />

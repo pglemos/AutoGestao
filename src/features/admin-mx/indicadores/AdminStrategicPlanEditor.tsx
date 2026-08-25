@@ -473,6 +473,7 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
           unitIds,
           indicators: data.indicators,
           values: planningRows,
+          clientId: data.client.id,
         })
         if (recalc.error) {
           toast.error(recalc.error)
@@ -797,6 +798,7 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
                   unitIds,
                   indicators: loaded.data.indicators,
                   values: loaded.data.values,
+                  clientId: loaded.data.client.id,
                 })
               }
               await refresh()
