@@ -73,7 +73,7 @@ export function TemplateFilters(props: {
           value={props.filters.indicador}
           options={indicators}
           disabled={!props.filters.departamento}
-          placeholder="Selecione primeiro um departamento"
+          placeholder={props.filters.departamento ? 'Todos os indicadores' : 'Selecione primeiro um departamento'}
           allowClear
           clearLabel="Todos os indicadores"
           onChange={code => props.onFilterChange('indicador', code)}

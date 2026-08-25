@@ -6,6 +6,8 @@ import {
   nextTemplateVersionNumber,
   prepareTemplateDraftForSave,
   resolveItemDueDate,
+  normalizeTemplateKey,
+  resolvePlanningIndicatorCode,
   suggestTemplateKey,
   validateTemplateDraft,
   officialActionPlanIndicatorCatalog,
@@ -192,8 +194,9 @@ describe('aplicação de template', () => {
   })
 
   test('gera chave canônica e copia a ação para o problema oculto', () => {
-    expect(suggestTemplateKey({ departamento: 'comercial', primary_indicator_code: 'SALES_TOTAL', nome: 'Aumentar vendas' })).toMatch(/^PA_COMERCIAL_SALESTOTAL_\d{3}$/)
-    expect(suggestTemplateKey({ departamento: 'COMERCIAL', primary_indicator_code: 'VISIT_TO_SALE_CONVERSION', nome: 'x' })).toMatch(/^PA_COMERCIAL_VISITTOSALECONVERSION_\d{3}$/)
+    // O banco exige ^[a-z0-9_]+$ (planos_acao_templates_template_key_check).
+    expect(suggestTemplateKey({ departamento: 'comercial', primary_indicator_code: 'SALES_TOTAL', nome: 'Aumentar vendas' })).toMatch(/^pa_comercial_salestotal_\d{3}$/)
+    expect(suggestTemplateKey({ departamento: 'COMERCIAL', primary_indicator_code: 'VISIT_TO_SALE_CONVERSION', nome: 'x' })).toMatch(/^pa_comercial_visittosaleconversion_\d{3}$/)
     const prepared = prepareTemplateDraftForSave({
       ...emptyTemplateDraft(),
       departamento: 'comercial',
@@ -201,8 +204,46 @@ describe('aplicação de template', () => {
       nome: 'Aumentar vendas',
       items: [{ ...emptyTemplateItem(1), acao: 'Treinar fechamento' }],
     })
-    expect(prepared.template_key).toMatch(/^PA_COMERCIAL_SALESTOTAL_\d{3}$/)
+    expect(prepared.template_key).toMatch(/^pa_comercial_salestotal_\d{3}$/)
     expect(prepared.items[0]?.problema).toBe('Treinar fechamento')
     expect(validateTemplateDraft(prepared)).toEqual([])
+  })
+})
+
+describe('normalizeTemplateKey — CHECK do banco', () => {
+  const DB_CHECK = /^[a-z0-9_]+$/
+
+  test('normaliza o que o usuário digita e o que o wizard sugere', () => {
+    expect(normalizeTemplateKey('PA_COMERCIAL_VISITTOSALECONVERSION_189')).toBe('pa_comercial_visittosaleconversion_189')
+    expect(normalizeTemplateKey('Recuperação de Meta')).toBe('recuperacao_de_meta')
+    expect(normalizeTemplateKey('  __chave--suja!!  ')).toBe('chave_suja')
+    expect(normalizeTemplateKey('já_ok_123')).toBe('ja_ok_123')
+  })
+
+  test('toda chave salva passa no CHECK do banco', () => {
+    const drafts = [
+      { departamento: 'comercial', primary_indicator_code: 'SALES_TOTAL', nome: 'Aumentar vendas' },
+      { departamento: 'PESSOAS_RH', primary_indicator_code: '', nome: 'Adequação do Quadro' },
+      { departamento: '', primary_indicator_code: '', nome: '' },
+    ]
+    for (const draft of drafts) expect(suggestTemplateKey(draft)).toMatch(DB_CHECK)
+    expect(normalizeTemplateKey('PA_COMERCIAL_X_001')).toMatch(DB_CHECK)
+  })
+})
+
+describe('resolvePlanningIndicatorCode — FK do catálogo de planejamento', () => {
+  // Vocabulário real de catalogo_indicadores_planejamento (tudo minúsculo).
+  const validCodes = new Set(['sales_total', 'visit_to_sale_rate', 'employee_count', 'leads_received'])
+
+  test('traduz o código canônico do wizard para o do catálogo persistido', () => {
+    expect(resolvePlanningIndicatorCode('SALES_TOTAL', validCodes)).toBe('sales_total')
+    expect(resolvePlanningIndicatorCode('VISIT_TO_SALE_CONVERSION', validCodes)).toBe('visit_to_sale_rate')
+    expect(resolvePlanningIndicatorCode('employee_count', validCodes)).toBe('employee_count')
+  })
+
+  test('devolve null quando nenhum alias existe, em vez de estourar a FK', () => {
+    expect(resolvePlanningIndicatorCode('INDICADOR_INEXISTENTE', validCodes)).toBeNull()
+    expect(resolvePlanningIndicatorCode('', validCodes)).toBeNull()
+    expect(resolvePlanningIndicatorCode('   ', validCodes)).toBeNull()
   })
 })

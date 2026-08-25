@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase'
-import { BASE44_STANDARD_INDICATORS, matchCanonicalIndicator, officialDefinitionDirection, officialDefinitionUnit } from '../indicadores/canonicalBase44Catalog'
+import { BASE44_STANDARD_INDICATORS, catalogAliasKeys, matchCanonicalIndicator, officialDefinitionDirection, officialDefinitionUnit } from '../indicadores/canonicalBase44Catalog'
 import { departmentCategory } from './departmentTaxonomy'
 
 export type TemplateItemPriority = 'baixa' | 'media' | 'alta' | 'critica'
@@ -142,25 +142,43 @@ function codePart(value: string, max = 30): string {
   return value
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
-    .toUpperCase()
-    .replace(/[^A-Z0-9]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '')
     .slice(0, max)
 }
 
-/** Gera código Base44 `PA_{DEPT}_{INDICATOR}_{NNN}` (`generateTemplateCode`). */
+/**
+ * Normaliza a chave para o formato aceito pelo banco.
+ *
+ * `planos_acao_templates_template_key_check` exige `^[a-z0-9_]+$`. A chave
+ * sugerida saía em maiúsculo e o insert era recusado com 23514 — o wizard
+ * inteiro de criação de Plano Padrão falhava, e só no console.
+ */
+export function normalizeTemplateKey(value: string): string {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9_]+/g, '_')
+    .replace(/^_+|_+$/g, '')
+}
+
+/** Gera a chave `pa_{dept}_{indicador}_{nnn}` do plano padrão. */
 export function suggestTemplateKey(draft: Pick<TemplateDraft, 'departamento' | 'primary_indicator_code' | 'nome'>): string {
-  const dept = codePart(draft.departamento || 'GENERIC', 24) || 'GENERIC'
-  const indicator = codePart(draft.primary_indicator_code || draft.nome || 'GENERIC', 30) || 'GENERIC'
+  const dept = codePart(draft.departamento || 'generic', 24) || 'generic'
+  const indicator = codePart(draft.primary_indicator_code || draft.nome || 'generic', 30) || 'generic'
   // ponytail: seq estável sem listar templates; colisão rara → usuário edita chave.
   const seq = String((Date.now() % 1000)).padStart(3, '0')
-  return `PA_${dept}_${indicator}_${seq}`
+  return `pa_${dept}_${indicator}_${seq}`
 }
 
 /** Completa chave e problema ocultos para o save continuar 1:1 com o wizard Base44. */
 export function prepareTemplateDraftForSave(draft: TemplateDraft): TemplateDraft {
   return {
     ...draft,
-    template_key: draft.template_key.trim() || suggestTemplateKey(draft),
+    // A chave também pode ser digitada: normaliza aqui, no ponto único por onde
+    // todo save passa, para nenhuma origem violar o CHECK do banco.
+    template_key: normalizeTemplateKey(draft.template_key.trim()) || suggestTemplateKey(draft),
     items: draft.items.map(item => ({
       ...item,
       problema: item.problema.trim() || item.acao.trim(),
@@ -420,12 +438,49 @@ export async function fetchTemplateItems(versionId: string): Promise<ActionPlanT
  * sem rascunho aberto ganha uma versão nova (última + 1); com rascunho aberto,
  * os itens do rascunho são substituídos.
  */
+/**
+ * Resolve o código do indicador para o vocabulário de `catalogo_indicadores_planejamento`.
+ *
+ * O wizard oferece os códigos canônicos Base44 (`VISIT_TO_SALE_CONVERSION`) e as
+ * colunas `primary_indicator_code` / `effectiveness_indicator_code` têm FK para o
+ * catálogo persistido, que usa outro vocabulário e é todo minúsculo
+ * (`visit_to_sale_rate`). Sem traduzir, salvar um plano padrão estourava a FK.
+ *
+ * Devolve `null` quando nenhum alias existe no catálogo: a coluna é nullable e
+ * perder o vínculo é melhor que impedir o cadastro.
+ */
+export function resolvePlanningIndicatorCode(code: string, validCodes: ReadonlySet<string>): string | null {
+  const raw = code.trim()
+  if (!raw) return null
+  for (const alias of catalogAliasKeys(raw)) {
+    const lower = alias.toLowerCase()
+    if (validCodes.has(lower)) return lower
+  }
+  // Os aliases cobrem só parte do catálogo persistido (`visit_to_sale_rate` não é
+  // alias de `VISIT_TO_SALE_CONVERSION`). Como `matchCanonicalIndicator` reconhece
+  // os dois vocabulários, o encontro pelo canônico em comum fecha o resto sem
+  // precisar de um mapa manual paralelo.
+  const canonical = matchCanonicalIndicator(raw)?.code
+  if (!canonical) return null
+  for (const candidate of validCodes) {
+    if (matchCanonicalIndicator(candidate)?.code === canonical) return candidate
+  }
+  return null
+}
+
+/** Códigos aceitos pela FK do catálogo de planejamento. */
+export async function fetchPlanningIndicatorCodes(): Promise<ReadonlySet<string>> {
+  const { data } = await supabase.from('catalogo_indicadores_planejamento').select('code')
+  return new Set(((data ?? []) as Array<{ code: string }>).map(row => row.code.toLowerCase()))
+}
+
 export async function saveTemplateDraft(draft: TemplateDraft, userId: string): Promise<{ error: string | null; templateId: string | null }> {
   const prepared = prepareTemplateDraftForSave(draft)
   const errors = validateTemplateDraft(prepared)
   if (errors.length) return { error: errors[0], templateId: null }
   if (!userId.trim()) return { error: 'Usuário autenticado não identificado.', templateId: null }
 
+  const planningCodes = await fetchPlanningIndicatorCodes()
   const templatePayload = {
     template_key: prepared.template_key.trim(),
     nome: prepared.nome.trim(),
@@ -434,7 +489,7 @@ export async function saveTemplateDraft(draft: TemplateDraft, userId: string): P
     descricao: prepared.descricao.trim() || null,
     program_key: prepared.program_key.trim() || null,
     active: prepared.active,
-    primary_indicator_code: prepared.primary_indicator_code.trim() || null,
+    primary_indicator_code: resolvePlanningIndicatorCode(prepared.primary_indicator_code, planningCodes),
     improvement_direction: prepared.improvement_direction || null,
     default_responsible_role: prepared.default_responsible_role.trim() || null,
     manual_application_enabled: prepared.manual_application_enabled,
@@ -451,7 +506,7 @@ export async function saveTemplateDraft(draft: TemplateDraft, userId: string): P
     owner_suggestion_title: prepared.owner_suggestion_title.trim() || null,
     owner_suggestion_problem: prepared.owner_suggestion_problem.trim() || null,
     owner_suggestion_recommendation: prepared.owner_suggestion_recommendation.trim() || null,
-    effectiveness_indicator_code: prepared.effectiveness_indicator_code.trim() || null,
+    effectiveness_indicator_code: resolvePlanningIndicatorCode(prepared.effectiveness_indicator_code, planningCodes),
     updated_at: new Date().toISOString(),
   }
   const items = prepared.items.filter(item => item.problema.trim() && item.acao.trim())
