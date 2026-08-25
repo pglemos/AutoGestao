@@ -17,15 +17,23 @@ describe('regressão do MDV — vendas da loja', () => {
 
   test('resolve /vendas e ?tab=vendas para a tabela fechada escopada por loja', () => {
     const dashboard = read('src/features/dashboard-loja/DashboardLoja.container.tsx')
+    const goalReference = read('src/features/manager/meta/ManagerStoreGoalReference.tsx')
     const resolution = read('src/features/dashboard-loja/hooks/useStoreResolution.ts')
     const hook = read('src/features/vendas-loja/hooks/useVendasLoja.ts')
 
     expect(dashboard).toContain("location.pathname === '/vendas'")
     expect(dashboard).toContain("tab === 'metas' || tab === 'equipe' || tab === 'vendas'")
     expect(dashboard).toContain('<VendasFechadasLoja')
+    expect(dashboard).toContain('periodStartDate={data.periodStartDate}')
+    expect(dashboard).toContain('periodEndDate={data.periodEndDate}')
+    expect(goalReference).toContain('periodStartDate={data.periodStartDate}')
+    expect(goalReference).toContain('periodEndDate={data.periodEndDate}')
     expect(resolution).toContain("location.pathname !== '/vendas'")
+    expect(hook).toContain(".from('eventos_comerciais')")
     expect(hook).toContain(".eq('loja_id', storeId)")
-    expect(hook).toContain(".in('etapa', ['ganho', 'cancelada'])")
+    expect(hook).toContain(".eq('tipo_evento', 'venda_realizada')")
+    expect(hook).toContain('.range(from, from + pageSize - 1)')
+    expect(hook).not.toContain(".from('oportunidades')")
   })
 
   test('expõe Vendas no menu canônico e preserva o alias /gerente/vendas', () => {

@@ -105,6 +105,19 @@ describe('Business Calculations (MX Performance)', () => {
         expect(funil.tx_visita_vnd).toBe(50) // 2/4 * 100
     })
 
+    test('calcularFunil aceita vendas oficiais sem reintroduzir o fechamento legado', () => {
+        const checkins: Partial<DailyCheckin>[] = [
+            { leads_prev_day: 19, agd_cart_prev_day: 1, agd_net_prev_day: 1, visit_prev_day: 21, vnd_net_prev_day: 11 },
+        ]
+
+        const funil = calcularFunil(checkins as DailyCheckin[], 10)
+
+        expect(funil.leads).toBe(19)
+        expect(funil.agd_total).toBe(2)
+        expect(funil.visitas).toBe(21)
+        expect(funil.vnd_total).toBe(10)
+    })
+
     test('gerarDiagnosticoMX', () => {
         const rules = {
             store_id: '1',

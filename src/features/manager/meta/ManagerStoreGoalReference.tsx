@@ -385,6 +385,8 @@ export function ManagerStoreGoalReference({
           </div>
           <VendasFechadasLoja
             storeId={data.selectedStoreId}
+            periodStartDate={data.periodStartDate}
+            periodEndDate={data.periodEndDate}
             onVendaCancelada={() => {
               void data.refreshDashboardData()
               void refreshTargetPlans()

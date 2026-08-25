@@ -94,13 +94,20 @@ export function getDiasInfo(referenceDate?: Date | string, mode: 'calendar' | 'b
     return { total, decorridos, restantes, referencia }
 }
 
-/** Calculate funnel data from aggregated checkins */
-export function calcularFunil(checkins: DailyCheckin[]): FunnelData {
+/**
+ * Calculate funnel data from official daily closings.
+ *
+ * Sales may come from the canonical commercial read model while the other
+ * funnel stages still come from the daily closing fields. Keeping the sales
+ * override explicit prevents this view from silently reverting to the legacy
+ * self-reported sales columns.
+ */
+export function calcularFunil(checkins: DailyCheckin[], officialSales?: number): FunnelData {
     const leads = checkins.reduce((s, c) => s + (c.leads_prev_day || 0), 0)
     // Para o Funil de Performance (Auditoria), usamos os agendamentos que eram para o dia de referência (ontem)
     const agd_total = checkins.reduce((s, c) => s + (c.agd_cart_prev_day || 0) + (c.agd_net_prev_day || 0), 0)
     const visitas = checkins.reduce((s, c) => s + (c.visit_prev_day || 0), 0)
-    const vnd_total = checkins.reduce((s, c) => s + (c.vnd_porta_prev_day || 0) + (c.vnd_cart_prev_day || 0) + (c.vnd_net_prev_day || 0), 0)
+    const vnd_total = officialSales ?? checkins.reduce((s, c) => s + (c.vnd_porta_prev_day || 0) + (c.vnd_cart_prev_day || 0) + (c.vnd_net_prev_day || 0), 0)
 
     return {
         leads,

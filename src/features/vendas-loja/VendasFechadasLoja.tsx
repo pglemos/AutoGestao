@@ -7,7 +7,7 @@ import { CancelarVendaModal } from '@/features/crm/components/CancelarVendaModal
 import { useVendasLoja, type VendaLoja } from './hooks/useVendasLoja'
 
 const BRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format
-const formatData = (iso: string | null) => iso ? new Date(iso).toLocaleDateString('pt-BR') : '—'
+const formatData = (iso: string | null) => iso ? new Date(`${iso.slice(0, 10)}T12:00:00`).toLocaleDateString('pt-BR') : '—'
 
 function StatusBadge({ venda }: { venda: VendaLoja }) {
   if (venda.etapa === 'cancelada') {
@@ -22,18 +22,22 @@ function StatusBadge({ venda }: { venda: VendaLoja }) {
 
 export function VendasFechadasLoja({
   storeId,
+  periodStartDate,
+  periodEndDate,
   showManagerHeader = false,
   selectableStores = [],
   onStoreChange,
   onVendaCancelada,
 }: {
   storeId: string | null
+  periodStartDate?: string | null
+  periodEndDate?: string | null
   showManagerHeader?: boolean
   selectableStores?: Store[]
   onStoreChange?: (storeId: string) => void
   onVendaCancelada?: () => void
 }) {
-  const { vendas, loading, error, cancelarVenda } = useVendasLoja(storeId)
+  const { vendas, loading, error, cancelarVenda } = useVendasLoja(storeId, periodStartDate, periodEndDate)
   const [search, setSearch] = useState('')
   const [cancelarVendaAlvo, setCancelarVendaAlvo] = useState<VendaLoja | null>(null)
   const [saving, setSaving] = useState(false)
@@ -70,7 +74,7 @@ export function VendasFechadasLoja({
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <h1 className="text-xl font-bold text-foreground">Vendas da loja</h1>
-              <p className="mt-0.5 text-sm text-muted-foreground">Vendas fechadas por toda a equipe, com opção de cancelamento.</p>
+              <p className="mt-0.5 text-sm text-muted-foreground">Vendas oficiais por competência, com opção de cancelamento.</p>
             </div>
             {selectableStores.length > 1 && onStoreChange && (
               <div>
@@ -101,6 +105,12 @@ export function VendasFechadasLoja({
         />
       </div>
 
+      <p className="text-xs text-muted-foreground" role="status" aria-live="polite">
+        {loading
+          ? 'Consultando vendas oficiais...'
+          : `${vendas.length} venda${vendas.length === 1 ? '' : 's'} no período selecionado.`}
+      </p>
+
       {error && <p className="text-sm text-status-error-text">{error}</p>}
 
       <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
@@ -108,7 +118,7 @@ export function VendasFechadasLoja({
           <table className="w-full min-w-[760px]">
             <thead>
               <tr className="border-b border-border-subtle bg-surface-alt">
-                {['Cliente', 'Vendedor', 'Veículo', 'Valor', 'Fechamento', 'Status', 'Ações'].map(h => (
+                {['Cliente', 'Vendedor', 'Veículo', 'Valor', 'Competência', 'Status', 'Ações'].map(h => (
                   <th key={h} className="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wider text-muted-foreground">{h}</th>
                 ))}
               </tr>
@@ -120,10 +130,10 @@ export function VendasFechadasLoja({
                   <td className="px-4 py-3 text-body-sm text-muted-foreground">{venda.seller_nome}</td>
                   <td className="px-4 py-3 text-body-sm text-muted-foreground">{venda.veiculo_interesse || '—'}</td>
                   <td className="px-4 py-3 text-body-sm font-bold text-foreground">{BRL(venda.valor_negociado)}</td>
-                  <td className="px-4 py-3 text-body-sm text-muted-foreground">{formatData(venda.closed_at)}</td>
+                  <td className="px-4 py-3 text-body-sm text-muted-foreground">{formatData(venda.competencia)}</td>
                   <td className="px-4 py-3"><StatusBadge venda={venda} /></td>
                   <td className="px-4 py-3">
-                    {venda.etapa === 'ganho' && (
+                    {venda.etapa === 'ganho' && venda.oportunidade_id && (
                       <button
                         type="button"
                         onClick={() => setCancelarVendaAlvo(venda)}

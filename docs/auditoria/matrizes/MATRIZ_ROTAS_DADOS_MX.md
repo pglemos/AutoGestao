@@ -8,7 +8,7 @@
 - Tabelas referenciadas pelo runtime: **176**
 - RPCs referenciadas pelo runtime: **106**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **380**
+- Pares tabela/operação encontrados: **381**
 
 ## Rotas
 
@@ -192,7 +192,7 @@
 | `etapas_modelo_visita_consultoria` | 2 |
 | `eventos_agenda_consultoria` | 3 |
 | `eventos_agenda_executiva` | 2 |
-| `eventos_comerciais` | 9 |
+| `eventos_comerciais` | 10 |
 | `evidencias_encontro` | 1 |
 | `evidencias_planos_acao` | 2 |
 | `evidencias_visita` | 2 |
@@ -238,7 +238,7 @@
 | `modulos_sistema` | 1 |
 | `notificacoes` | 4 |
 | `opcoes_agenda_consultoria` | 1 |
-| `oportunidades` | 8 |
+| `oportunidades` | 7 |
 | `organograma_nos` | 1 |
 | `overrides_parametros_cliente` | 1 |
 | `pacotes_indicadores_estrategicos` | 1 |
@@ -436,7 +436,7 @@
 | `eventos_agenda_consultoria:update` | 1 |
 | `eventos_agenda_executiva:select` | 2 |
 | `eventos_comerciais:insert` | 2 |
-| `eventos_comerciais:select` | 8 |
+| `eventos_comerciais:select` | 9 |
 | `eventos_comerciais:update` | 1 |
 | `eventos_comerciais:upsert` | 2 |
 | `evidencias_encontro:insert` | 1 |
@@ -538,7 +538,7 @@
 | `opcoes_agenda_consultoria:update` | 1 |
 | `oportunidades:delete` | 1 |
 | `oportunidades:insert` | 1 |
-| `oportunidades:select` | 8 |
+| `oportunidades:select` | 7 |
 | `oportunidades:update` | 3 |
 | `organograma_nos:delete` | 1 |
 | `organograma_nos:insert` | 1 |
@@ -676,6 +676,7 @@
 | `vehicle_model_catalog:select` | 1 |
 | `veiculos_estoque:insert` | 1 |
 | `veiculos_estoque:select` | 4 |
+| `veiculos_estoque:update` | 1 |
 | `veiculos_estoque:upsert` | 1 |
 | `vendedor_nivel_carreira:select` | 1 |
 | `vendedor_nivel_carreira:upsert` | 1 |

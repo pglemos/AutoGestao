@@ -3,13 +3,14 @@ import { format, parseISO, startOfMonth } from 'date-fns'
 import { toast } from '@/lib/toast'
 import { supabase } from '@/lib/supabase'
 import { useSellersByStore } from '@/hooks/useStores'
+import { isOfficialLancamento } from '@/hooks/useRanking'
 import { calculateReferenceDate, useCheckinsByDateRange } from '@/hooks/useCheckins'
 import { useStoreGoal } from '@/hooks/useGoals'
 import { useOperationalSettings } from '@/hooks/useOperationalSettings'
 import { useStoreSales } from '@/hooks/useStoreSales'
 import { useDRE } from '@/hooks/useDRE'
 import { useOfficialSellerPerformance } from '@/hooks/useOfficialSellerPerformance'
-import { somarVendas, calcularFunil, gerarDiagnosticoMX } from '@/lib/calculations'
+import { calcularFunil, gerarDiagnosticoMX } from '@/lib/calculations'
 import { buildStoreSalesRules } from '@/lib/storeSalesRules'
 import { getManagerCalendarDate, getManagerMonthRange } from '@/features/manager/home/manager-home-parity'
 import { refreshManagerHomeData } from '@/features/manager/home/manager-home-refresh'
@@ -130,6 +131,10 @@ export function useDashboardLojaData({
     managerMonthRange.end,
     null,
     selectedStoreId,
+  )
+  const officialCheckins = useMemo(
+    () => (checkins || []).filter(isOfficialLancamento),
+    [checkins],
   )
 
   const refreshDashboardData = useCallback(async () => {
@@ -295,18 +300,17 @@ export function useDashboardLojaData({
   )
 
   const storeSalesParams = useMemo(() => {
-    const checkinsBySeller = (checkins || []).reduce((acc, c) => {
+    const checkinsBySeller = officialCheckins.reduce((acc, c) => {
       if (!acc[c.seller_user_id]) acc[c.seller_user_id] = []
       acc[c.seller_user_id].push(c)
       return acc
-    }, {} as Record<string, typeof checkins>)
+    }, {} as Record<string, typeof officialCheckins>)
 
     return {
-      checkins,
+      checkins: officialCheckins,
       ranking: (sellers || []).map(s => {
         const sellerCheckins = checkinsBySeller[s.id] || []
-        const officialRows = managerCalendarMode ? officialPerformance.rows : officialPerformance.rows
-        const officialRow = officialRows.find(row => row.seller_user_id === s.id)
+        const officialRow = officialPerformance.rows.find(row => row.seller_user_id === s.id)
         const disciplineValues = sellerCheckins
           .map(checkin => checkin.pontuacao_disciplina_final)
           .filter((value): value is number => typeof value === 'number')
@@ -316,15 +320,13 @@ export function useDashboardLojaData({
           user_name: s.name,
           avatar_url: s.avatar_url,
           is_venda_loja: s.is_venda_loja || false,
-          vnd_total: officialRow
-            ? officialRow.vendas_realizadas
-            : somarVendas(sellerCheckins),
-          leads: sellerCheckins.reduce((acc, c) => acc + (c.leads_prev_day || 0), 0),
-          agd_total: sellerCheckins.reduce(
-            (acc, c) => acc + (c.agd_cart_today || 0) + (c.agd_net_today || 0),
-            0
-          ),
-          visitas: sellerCheckins.reduce((acc, c) => acc + (c.visit_prev_day || 0), 0),
+          // vendedor_performance_oficial is the single source for the
+          // dashboard's period totals. The old fallback reintroduced draft
+          // closings and legacy self-reported sales into the same cards.
+          vnd_total: officialRow?.vendas_realizadas ?? 0,
+          leads: officialRow?.leads ?? 0,
+          agd_total: officialRow?.agendamentos ?? 0,
+          visitas: officialRow?.atendimentos ?? 0,
           meta: effectiveMonthlyGoal,
           atingimento: 0,
           projecao: 0,
@@ -347,9 +349,8 @@ export function useDashboardLojaData({
       }),
     }
   }, [
-    checkins,
     effectiveMonthlyGoal,
-    managerCalendarMode,
+    officialCheckins,
     officialMonthlyPerformance.rows,
     officialPerformance.rows,
     operationalMetaRules,
@@ -369,7 +370,7 @@ export function useDashboardLojaData({
 
   const metrics = useMemo(() => {
     const checkedInCount = periodRange
-      ? new Set((checkins || []).map(checkin => checkin.seller_user_id)).size
+      ? new Set(officialCheckins.map(checkin => checkin.seller_user_id)).size
       : (sellers || []).filter(s => s.checkin_today).length
     return {
       totalSales: storeSales.storeTotalVendas,
@@ -382,9 +383,16 @@ export function useDashboardLojaData({
       ranking: storeSales.processedRanking,
       storeName: selectedStoreName || 'Unidade MX',
     }
-  }, [checkins, periodRange, storeSales, sellers, selectedStoreName, effectiveMonthlyGoal])
+  }, [officialCheckins, periodRange, storeSales, sellers, selectedStoreName, effectiveMonthlyGoal])
 
-  const funilData = useMemo(() => calcularFunil(checkins), [checkins])
+  const officialSalesTotal = useMemo(
+    () => officialPerformance.rows.reduce((total, row) => total + row.vendas_realizadas, 0),
+    [officialPerformance.rows],
+  )
+  const funilData = useMemo(
+    () => calcularFunil(officialCheckins, officialSalesTotal),
+    [officialCheckins, officialSalesTotal],
+  )
   const diagnostics = useMemo(() => gerarDiagnosticoMX(funilData), [funilData])
 
   const pendingDisciplineSellers = useMemo(

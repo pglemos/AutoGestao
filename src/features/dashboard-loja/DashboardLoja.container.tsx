@@ -218,6 +218,8 @@ export function DashboardLoja() {
       ) : activeTab === 'vendas' ? (
         <VendasFechadasLoja
           storeId={selectedStoreId}
+          periodStartDate={data.periodStartDate}
+          periodEndDate={data.periodEndDate}
           showManagerHeader={role === 'gerente'}
           selectableStores={selectableStores}
           onStoreChange={setActiveStoreId}

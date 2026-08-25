@@ -14,6 +14,10 @@ const dayRoutineSource = readFileSync(
   new URL('../features/manager/day-routine/manager-day-routine-sources.ts', import.meta.url),
   'utf8',
 )
+const dashboardSource = readFileSync(
+  new URL('../features/dashboard-loja/hooks/useDashboardLojaData.ts', import.meta.url),
+  'utf8',
+)
 const viewsMigration = readFileSync(
   new URL('../../supabase/migrations/20260805223000_official_read_models_exclude_drafts.sql', import.meta.url),
   'utf8',
@@ -87,6 +91,12 @@ describe('read models existentes seguem excluindo rascunho', () => {
 
   test('rotina do dia trata rascunho como pendente', () => {
     expect(dayRoutineSource).toContain("if (row.submission_status === 'draft') return 'pendente'")
+  })
+
+  test('dashboard da loja remove rascunhos antes de montar os indicadores', () => {
+    expect(dashboardSource).toContain('const officialCheckins = useMemo(')
+    expect(dashboardSource).toContain('(checkins || []).filter(isOfficialLancamento)')
+    expect(dashboardSource).toContain('checkins: officialCheckins')
   })
 
   test('views do schema deixam de somar rascunho', () => {
