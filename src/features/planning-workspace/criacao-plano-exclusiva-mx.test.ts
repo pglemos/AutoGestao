@@ -26,6 +26,9 @@ describe('criação de plano é exclusiva da área interna MX', () => {
       const cap = resolvePlanningCapabilities(role)
       expect(cap.canCreateActions).toBe(false)
       expect(cap.canManageStrategicCycle).toBe(false)
+      // Meta é compromisso do ciclo publicado, que a MX define e o editor trata
+      // como imutável — nenhum desses papéis edita.
+      expect(cap.canEditTargets).toBe(false)
     }
   })
 

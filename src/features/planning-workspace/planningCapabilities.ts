@@ -14,7 +14,12 @@ const INTERNAL: PlanningCapabilities = Object.freeze({
 
 const OWNER: PlanningCapabilities = Object.freeze({
   scope: 'store',
-  canEditTargets: true,
+  // As metas são o compromisso definido pela MX no ciclo publicado, que o
+  // próprio editor trata como imutável ("abra uma revisão para alterar"). O
+  // Dono consome o plano; no Base44 a visão dele também é só leitura. Em
+  // produção, as 248 edições de meta são todas da área interna — nenhuma de
+  // Dono, então isto não tira nada que estivesse em uso.
+  canEditTargets: false,
   canManageStrategicCycle: false,
   // Dono não cria plano de ação — ele executa o que a MX criou. Criar é
   // exclusivo da área interna (admin geral / administrador MX / consultor MX).
