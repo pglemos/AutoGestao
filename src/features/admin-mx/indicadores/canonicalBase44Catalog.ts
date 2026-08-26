@@ -375,6 +375,8 @@ type OverlayCatalogRow = {
   active?: boolean
   value_type?: string
   direction?: string
+  /** `criado_mx` marca indicador adotado pela MX além do conjunto Base44. */
+  created_origin?: string
 }
 
 export function findCatalogRow<T extends OverlayCatalogRow>(rows: T[], canon: CanonicalIndicator, used: Set<string>) {
@@ -448,9 +450,18 @@ export function overlayCanonicalCatalog<T extends OverlayCatalogRow>(rows: T[]) 
     const match = rows.find(row => row.metric_key === key)
     return match ? overlayCanonicalIndicator(match, keyMap) : synthesizeCanonicalIndicator(canon, keyMap) as unknown as T
   })
+  // Fora dos 45 canônicos existem dois casos diferentes:
+  //
+  //  - legado `mx_padrao` que saiu da metodologia: continua exibido como
+  //    arquivado, independente do que o banco diga;
+  //  - indicadores `criado_mx`, que a MX adotou depois do conjunto Base44:
+  //    mantêm o próprio status. Forçá-los a "arquivado" fazia um indicador
+  //    publicado aparecer fora de operação, sem nada explicando por quê.
   const extras = rows
     .filter(row => !used.has(row.metric_key))
-    .map(row => ({ ...row, status: 'arquivado', active: false }))
+    .map(row => (row.created_origin === 'criado_mx'
+      ? row
+      : { ...row, status: 'arquivado', active: false }))
   return [...official, ...extras]
 }
 

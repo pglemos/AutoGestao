@@ -197,6 +197,55 @@ export const UNIT_POLICY_DEFAULTS = {
   trade_in_avg_margin: weighted('trade_in_volume'),
   avg_margin: weighted('sales_total'),
 
+
+  // ── Indicadores do cockpit executivo adotados no catálogo (2026-08-26) ──
+  // Medidas da operação como um todo. Consolidação entre filiais fica como
+  // valor empresarial: a metodologia ainda não definiu como somar ou ponderar
+  // um score executivo entre unidades, e inventar a regra produziria número
+  // plausível e errado.
+
+  sales_volume: companyOnly(),
+  sales_goal_attainment: companyOnly(),
+  daily_sales_rhythm: companyOnly(),
+  lead_to_schedule_rate: companyOnly(),
+  schedule_to_visit_rate: companyOnly(),
+  commercial_pipeline_health: companyOnly(),
+  seller_ranking_spread: companyOnly(),
+  leads_total: companyOnly(),
+  digital_leads_share: companyOnly(),
+  lead_quality_score: companyOnly(),
+  campaign_cadence_score: companyOnly(),
+  channel_mix_score: companyOnly(),
+  marketing_positioning_score: companyOnly(),
+  inventory_total: companyOnly(),
+  inventory_over_90_days: companyOnly(),
+  stock_turnover_rate: companyOnly(),
+  average_vehicle_margin: companyOnly(),
+  pricing_accuracy_score: companyOnly(),
+  preparation_cycle_days: companyOnly(),
+  vehicle_mix_score: companyOnly(),
+  gross_profit: companyOnly(),
+  gross_margin_pct: companyOnly(),
+  cost_per_sale: companyOnly(),
+  fixed_cost_ratio: companyOnly(),
+  cash_flow_balance: companyOnly(),
+  dre_completion_rate: companyOnly(),
+  financial_risk_score: companyOnly(),
+  employees_total: companyOnly(),
+  feedback_cadence_rate: companyOnly(),
+  pdi_completion_rate: companyOnly(),
+  turnover_rate: companyOnly(),
+  happiness_index: companyOnly(),
+  role_clarity_score: companyOnly(),
+  behavioral_fit_score: companyOnly(),
+  routine_discipline_rate: companyOnly(),
+  agenda_fulfillment_rate: companyOnly(),
+  daily_checkin_coverage: companyOnly(),
+  action_plan_on_time_rate: companyOnly(),
+  evidence_completion_rate: companyOnly(),
+  executive_agenda_adherence: companyOnly(),
+  process_quality_score: companyOnly(),
+
   // Presença digital: medida para a empresa, não por unidade.
   instagram_followers: companyOnly(),
   google_rating: companyOnly(),
