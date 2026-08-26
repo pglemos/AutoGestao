@@ -67,13 +67,27 @@ function ReportHeader({ report }: { report: WeeklyFeedbackReport }) {
         </div>
       </div>
       <Badge
-        variant={report.email_status === 'sent' ? 'success' : 'danger'}
+        variant={emailStatusBadge(report.email_status).variant}
         className="px-4 py-1 text-mx-micro shadow-sm border-none"
       >
-        {report.email_status === 'sent' ? 'ENVIADO' : 'FALHA'}
+        {emailStatusBadge(report.email_status).label}
       </Badge>
     </div>
   )
+}
+
+/**
+ * `email_status` tem três estados, não dois. Tratar tudo que não é `sent` como
+ * "FALHA" pintava de vermelho os 30 relatórios da rede — todos `not_sent`, ou
+ * seja, apenas ainda não enviados, sem falha nenhuma no envio.
+ */
+function emailStatusBadge(status: string | null | undefined): {
+  variant: 'success' | 'secondary' | 'danger'
+  label: string
+} {
+  if (status === 'sent') return { variant: 'success', label: 'ENVIADO' }
+  if (status === 'not_sent' || !status) return { variant: 'secondary', label: 'NÃO ENVIADO' }
+  return { variant: 'danger', label: 'FALHA' }
 }
 
 function ReportMetrics({
