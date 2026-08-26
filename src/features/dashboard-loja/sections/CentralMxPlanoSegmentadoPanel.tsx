@@ -16,6 +16,7 @@ import { Card } from '@/components/molecules/Card'
 import { cn } from '@/lib/utils'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
+import { isPerfilInternoMx } from '@/lib/auth/roles'
 import {
   useCentralMxPlanosAcaoSegmentado,
   type CentralMxPlanoScope,
@@ -64,6 +65,7 @@ export function CentralMxPlanoSegmentadoPanel({
   readOnly = false,
 }: Props) {
   const { profile, role } = useAuth()
+  const podeCriarPlano = isPerfilInternoMx(role)
   const segmentado = useCentralMxPlanosAcaoSegmentado(storeId)
   const [activeScope, setActiveScope] = useState<CentralMxPlanoScope>(defaultScope)
   const activeList = segmentado.planos[activeScope]
@@ -179,7 +181,12 @@ export function CentralMxPlanoSegmentadoPanel({
             )}
             <span className="ml-1">Atualizar</span>
           </Button>
-          {!readOnly && (
+          {/* Criar plano de ação é exclusivo da área interna MX. Dono, Gerente e
+              Vendedor executam o plano — a checagem fica aqui, no painel, para
+              valer em qualquer tela que o reaproveite, e não depender de o
+              chamador lembrar de passar `readOnly`. O bloqueio real é do banco
+              (`can_create_mx_action_scope`). */}
+          {!readOnly && podeCriarPlano && (
             <Button
               type="button"
               variant="primary"

@@ -29,10 +29,12 @@ export default function DayDetails({
       {dayActions.length === 0 ? (
         <div className="mt-4 flex flex-col items-center justify-center py-6 text-center">
           <p className="text-sm text-muted-foreground">Nenhuma ação com prazo neste dia.</p>
-          <Button size="sm" variant="outline" className="mt-3" onClick={() => onNewAction(formatDateBR(selectedDate))}>
-            <Plus className="h-4 w-4" />
-            Criar ação para esta data
-          </Button>
+          {onNewAction ? (
+            <Button size="sm" variant="outline" className="mt-3" onClick={() => onNewAction(formatDateBR(selectedDate))}>
+              <Plus className="h-4 w-4" />
+              Criar ação para esta data
+            </Button>
+          ) : null}
         </div>
       ) : (
         <>

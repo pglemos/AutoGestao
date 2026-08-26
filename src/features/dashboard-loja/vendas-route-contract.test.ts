@@ -26,6 +26,8 @@ describe('regressão do MDV — vendas da loja', () => {
     expect(dashboard).toContain('<VendasFechadasLoja')
     expect(dashboard).toContain('periodStartDate={data.periodStartDate}')
     expect(dashboard).toContain('periodEndDate={data.periodEndDate}')
+    expect(dashboard).toContain('activeSellerIds={data.sellersLoading ? null : (data.sellers || []).map(seller => seller.id)}')
+    expect(goalReference).toContain('activeSellerIds={data.sellersLoading ? null : (data.sellers || []).map(seller => seller.id)}')
     expect(goalReference).toContain('periodStartDate={data.periodStartDate}')
     expect(goalReference).toContain('periodEndDate={data.periodEndDate}')
     expect(resolution).toContain("location.pathname !== '/vendas'")

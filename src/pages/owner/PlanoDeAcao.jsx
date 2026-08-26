@@ -19,7 +19,6 @@ import ActionDrawer from "@/components/owner/actionplan/ActionDrawer";
 import ApproveModal from "@/components/owner/actionplan/ApproveModal";
 import DelegateModal from "@/components/owner/actionplan/DelegateModal";
 import EditActionModal from "@/components/owner/actionplan/EditActionModal";
-import NewActionModal from "@/components/owner/actionplan/NewActionModal";
 import BoardView from "@/components/owner/actionplan/board/BoardView";
 import BoardModals from "@/components/owner/actionplan/board/BoardModals";
 import CalendarView from "@/components/owner/actionplan/calendar/CalendarView";
@@ -75,8 +74,6 @@ export default function PlanoDeAcao() {
   const [approveAction, setApproveAction] = useState(null);
   const [delegateAction, setDelegateAction] = useState(null);
   const [editAction, setEditAction] = useState(null);
-  const [newActionOpen, setNewActionOpen] = useState(false);
-  const [newActionInitialDate, setNewActionInitialDate] = useState("");
   const [activeModal, setActiveModal] = useState({ type: null, action: null });
 
   const loadActions = useCallback(async () => {
@@ -205,32 +202,10 @@ export default function PlanoDeAcao() {
     }
   };
 
-  const handleNewAction = (date) => {
-    setNewActionInitialDate(date || "");
-    setNewActionOpen(true);
-  };
-
-  const handleNewActionConfirm = async (payload) => {
-    const dept = DEPARTMENTS.find((d) => d.value === payload.department);
-    const obj = OBJECTIVES.find((o) => o.value === payload.strategicObjective);
-    try {
-      const created = await actionPlanLiveRepository.createAction({
-        ...payload,
-        departmentLabel: dept?.label || payload.department,
-        strategicObjectiveLabel: obj?.label || payload.strategicObjective,
-        executor: payload.responsible,
-        createdBy: user?.full_name || "Nome não informado",
-      }, { storeId: unitId || currentUnits?.[0]?.id });
-      setNewActionOpen(false);
-      setNewActionInitialDate("");
-      await loadActions();
-      toast.info("Ação criada com sucesso.");
-      if (created) openDrawer(created, "resumo");
-    } catch (err) {
-      toast.error("Não foi possível criar a ação.", { description: err instanceof Error ? err.message : "Erro desconhecido" });
-    }
-  };
-
+  // O Dono não cria plano de ação: quem cria é a área interna MX (admin geral,
+  // administrador MX, consultor MX). Esta tela é de EXECUÇÃO — acompanhar,
+  // atualizar status, registrar evidência. O bloqueio real está no banco, em
+  // `can_create_mx_action_scope`; aqui não se oferece o caminho.
   const handleUpdateDeadline = async (id, payload) => {
     try {
       await actionPlanLiveRepository.updateDueDate(id, payload);
@@ -431,7 +406,7 @@ export default function PlanoDeAcao() {
   return (
     <PageCanvas as="div" width="dashboard" bottomClearance="navigation" id="page-plano-acao" aria-label="Plano de Ação" className="flex min-h-0 flex-1 flex-col space-y-6">
       <ActionPlanHeader
-        onNewAction={() => handleNewAction()}
+        onNewAction={undefined}
         onExport={handleExport}
       />
 
@@ -459,7 +434,7 @@ export default function PlanoDeAcao() {
             onModeChange={setMode}
             sortBy={sortBy}
             onSortChange={setSortBy}
-            onNewAction={() => handleNewAction()}
+            onNewAction={undefined}
             isMobile={isMobile}
             onOpenMobileFilters={() => setMobileFiltersOpen(true)}
             responsiblePeople={responsiblePeople}
@@ -476,7 +451,7 @@ export default function PlanoDeAcao() {
               onQuickAction={handleQuickAction}
               onDelete={handleDelete}
               onClearFilters={handleClearFilters}
-              onNewAction={() => handleNewAction()}
+              onNewAction={undefined}
             />
           ) : (
             <BoardView
@@ -489,7 +464,7 @@ export default function PlanoDeAcao() {
               onDelete={handleDelete}
               onMoveTo={handleMoveTo}
               onDragEnd={handleDragEnd}
-              onNewAction={() => handleNewAction()}
+              onNewAction={undefined}
               onOpenGuide={() => setActiveModal({ type: "transitionGuide", action: {} })}
               onClearFilters={handleClearFilters}
               user={user}
@@ -509,7 +484,7 @@ export default function PlanoDeAcao() {
           onClearFilters={handleClearFilters}
           onFilterChange={handleFilterChange}
           onOpenAction={(a) => openDrawer(a, "resumo")}
-          onNewAction={handleNewAction}
+          onNewAction={undefined}
           onTalkToConsultant={handleTalkToConsultant}
           onTalkToConsultantDay={handleTalkToConsultantDay}
           onUpdateDeadline={handleUpdateDeadline}
@@ -574,13 +549,7 @@ export default function PlanoDeAcao() {
         responsiblePeople={responsiblePeople}
       />
 
-      <NewActionModal
-        open={newActionOpen}
-        onOpenChange={(o) => { setNewActionOpen(o); if (!o) setNewActionInitialDate(""); }}
-        onConfirm={handleNewActionConfirm}
-        initialDueDate={newActionInitialDate}
-        responsiblePeople={responsiblePeople}
-      />
+
 
       <BoardModals
         activeModal={activeModal}

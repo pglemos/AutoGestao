@@ -15,10 +15,13 @@ export default function ActionPlanHeader({ onNewAction, onExport }) {
             <Download className="h-4 w-4" />
             Exportar
           </Button>
-          <Button size="sm" onClick={onNewAction} className="bg-primary hover:bg-primary/90">
-            <Plus className="h-4 w-4" />
-            Nova Ação
-          </Button>
+          {/* Sem handler não há criação: o Dono executa o plano que a MX criou. */}
+          {onNewAction ? (
+            <Button size="sm" onClick={onNewAction} className="bg-primary hover:bg-primary/90">
+              <Plus className="h-4 w-4" />
+              Nova Ação
+            </Button>
+          ) : null}
         </>
       )}
     />

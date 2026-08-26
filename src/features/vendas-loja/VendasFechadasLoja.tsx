@@ -24,6 +24,7 @@ export function VendasFechadasLoja({
   storeId,
   periodStartDate,
   periodEndDate,
+  activeSellerIds,
   showManagerHeader = false,
   selectableStores = [],
   onStoreChange,
@@ -32,12 +33,13 @@ export function VendasFechadasLoja({
   storeId: string | null
   periodStartDate?: string | null
   periodEndDate?: string | null
+  activeSellerIds: readonly string[] | null
   showManagerHeader?: boolean
   selectableStores?: Store[]
   onStoreChange?: (storeId: string) => void
   onVendaCancelada?: () => void
 }) {
-  const { vendas, loading, error, cancelarVenda } = useVendasLoja(storeId, periodStartDate, periodEndDate)
+  const { vendas, loading, error, cancelarVenda } = useVendasLoja(storeId, periodStartDate, periodEndDate, activeSellerIds)
   const [search, setSearch] = useState('')
   const [cancelarVendaAlvo, setCancelarVendaAlvo] = useState<VendaLoja | null>(null)
   const [saving, setSaving] = useState(false)

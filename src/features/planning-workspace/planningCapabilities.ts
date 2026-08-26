@@ -16,7 +16,11 @@ const OWNER: PlanningCapabilities = Object.freeze({
   scope: 'store',
   canEditTargets: true,
   canManageStrategicCycle: false,
-  canCreateActions: true,
+  // Dono não cria plano de ação — ele executa o que a MX criou. Criar é
+  // exclusivo da área interna (admin geral / administrador MX / consultor MX).
+  // O bloqueio real está em `can_create_mx_action_scope`, no banco; aqui é só
+  // para não oferecer um botão que o servidor vai recusar.
+  canCreateActions: false,
   canDeleteActions: false,
   canReviewActions: true,
   canManageConsulting: false,
@@ -28,7 +32,8 @@ const MANAGER: PlanningCapabilities = Object.freeze({
   scope: 'store',
   canEditTargets: false,
   canManageStrategicCycle: false,
-  canCreateActions: true,
+  // Mesma regra do Dono: o Gerente executa, não cria.
+  canCreateActions: false,
   canDeleteActions: false,
   canReviewActions: false,
   canManageConsulting: false,

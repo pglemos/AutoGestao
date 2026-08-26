@@ -65,3 +65,17 @@ export function filterStoreSales(
     return true
   })
 }
+
+/**
+ * The store sales detail must use the same active seller scope as the
+ * official performance read model. Historical events for an inactive seller
+ * remain auditable in the database, but cannot inflate the current store
+ * dashboard.
+ */
+export function filterStoreSalesBySellerIds(
+  rows: StoreSaleCandidate[],
+  activeSellerIds: readonly string[],
+): StoreSaleCandidate[] {
+  const activeSellerSet = new Set(activeSellerIds)
+  return rows.filter((row) => row.seller_user_id !== null && activeSellerSet.has(row.seller_user_id))
+}

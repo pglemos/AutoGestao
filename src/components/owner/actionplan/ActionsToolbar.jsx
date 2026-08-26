@@ -93,9 +93,11 @@ export default function ActionsToolbar({
             </SelectContent>
           </Select>
 
-          <Button size="sm" onClick={onNewAction} className="bg-primary hover:bg-primary/90 shrink-0">
-            <Plus className="h-4 w-4" /> Nova Ação
-          </Button>
+          {onNewAction ? (
+            <Button size="sm" onClick={onNewAction} className="bg-primary hover:bg-primary/90 shrink-0">
+              <Plus className="h-4 w-4" /> Nova Ação
+            </Button>
+          ) : null}
         </div>
       </div>
 

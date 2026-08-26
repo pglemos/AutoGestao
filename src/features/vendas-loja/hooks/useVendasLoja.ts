@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { cancelarVendaRpc } from '@/features/crm/lib/cancelarVenda'
-import { filterStoreSales, getStoreSaleCompetence, type StoreSaleCandidate } from '../lib/store-sales'
+import { filterStoreSales, filterStoreSalesBySellerIds, getStoreSaleCompetence, type StoreSaleCandidate } from '../lib/store-sales'
 
 export type VendaLoja = {
   id: string
@@ -48,6 +48,7 @@ function parse(
   rows: unknown,
   periodStart?: string | null,
   periodEnd?: string | null,
+  activeSellerIds?: readonly string[],
 ): VendaLoja[] {
   if (!Array.isArray(rows)) return []
 
@@ -76,7 +77,10 @@ function parse(
     }
   })
 
-  return filterStoreSales(candidates, periodStart, periodEnd).map(row => ({
+  const periodRows = filterStoreSales(candidates, periodStart, periodEnd)
+  const scopedRows = activeSellerIds ? filterStoreSalesBySellerIds(periodRows, activeSellerIds) : periodRows
+
+  return scopedRows.map(row => ({
     id: row.oportunidade_id || row.event_id,
     event_id: row.event_id,
     oportunidade_id: row.oportunidade_id,
@@ -105,20 +109,35 @@ export function useVendasLoja(
   storeId: string | null,
   periodStart?: string | null,
   periodEnd?: string | null,
+  // Opcional porque vem depois de parâmetros opcionais (TS1016). `null` é um
+  // escopo resolvido válido: quer dizer "ainda não sei quem são os vendedores
+  // ativos" e segura a consulta, em vez de cair em toda a história da loja.
+  activeSellerIds?: readonly string[] | null,
 ) {
   const [vendas, setVendas] = useState<VendaLoja[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  // `== null` cobre null e undefined: omitir o argumento é o mesmo que ainda não
+  // ter resolvido o escopo. `Array.from(new Set(undefined))` lançaria.
+  const activeSellerIdsKey = activeSellerIds == null
+    ? null
+    : Array.from(new Set(activeSellerIds)).sort().join(',')
 
   const fetchVendas = useCallback(async () => {
     if (!storeId) { setVendas([]); setLoading(false); return }
+    // Wait for the parent dashboard to resolve the active seller membership.
+    // An empty list is a valid resolved scope: it means there are no active
+    // sellers and must not fall back to all historical store events.
+    if (activeSellerIdsKey === null) { setError(null); setVendas([]); setLoading(true); return }
+    if (activeSellerIdsKey === '') { setError(null); setVendas([]); setLoading(false); return }
     setLoading(true); setError(null)
     try {
       const rows: unknown[] = []
       const pageSize = 500
+      const scopedSellerIds = activeSellerIdsKey.split(',')
 
       for (let from = 0; ; from += pageSize) {
-        const { data, error: fetchError } = await supabase
+        let query = supabase
           .from('eventos_comerciais')
           .select(`
             id,
@@ -145,6 +164,8 @@ export function useVendasLoja(
           `)
           .eq('loja_id', storeId)
           .eq('tipo_evento', 'venda_realizada')
+        if (scopedSellerIds) query = query.in('seller_user_id', scopedSellerIds)
+        const { data, error: fetchError } = await query
           .order('data_evento', { ascending: false })
           .order('id', { ascending: false })
           .range(from, from + pageSize - 1)
@@ -155,14 +176,14 @@ export function useVendasLoja(
         if (page.length < pageSize) break
       }
 
-      setVendas(parse(rows, periodStart, periodEnd))
+      setVendas(parse(rows, periodStart, periodEnd, scopedSellerIds))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao carregar vendas da loja.')
       setVendas([])
     } finally {
       setLoading(false)
     }
-  }, [periodEnd, periodStart, storeId])
+  }, [activeSellerIdsKey, periodEnd, periodStart, storeId])
 
   useEffect(() => { void fetchVendas() }, [fetchVendas])
 

@@ -387,6 +387,7 @@ export function ManagerStoreGoalReference({
             storeId={data.selectedStoreId}
             periodStartDate={data.periodStartDate}
             periodEndDate={data.periodEndDate}
+            activeSellerIds={data.sellersLoading ? null : (data.sellers || []).map(seller => seller.id)}
             onVendaCancelada={() => {
               void data.refreshDashboardData()
               void refreshTargetPlans()

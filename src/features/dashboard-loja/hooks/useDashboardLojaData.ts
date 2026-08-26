@@ -418,6 +418,7 @@ export function useDashboardLojaData({
     // dados brutos
     selectedStoreId,
     sellers,
+    sellersLoading,
     checkins,
     managerMonthlyCheckins,
     loading: checkinsLoading || sellersLoading || officialPerformance.loading || officialMonthlyPerformance.loading || operationalLoading || (managerCalendarMode && managerMonthlyLoading),

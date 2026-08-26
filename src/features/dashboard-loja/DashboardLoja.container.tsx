@@ -220,6 +220,7 @@ export function DashboardLoja() {
           storeId={selectedStoreId}
           periodStartDate={data.periodStartDate}
           periodEndDate={data.periodEndDate}
+          activeSellerIds={data.sellersLoading ? null : (data.sellers || []).map(seller => seller.id)}
           showManagerHeader={role === 'gerente'}
           selectableStores={selectableStores}
           onStoreChange={setActiveStoreId}

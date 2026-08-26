@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { filterStoreSales, getStoreSaleCompetence, type StoreSaleCandidate } from './store-sales'
+import { filterStoreSales, filterStoreSalesBySellerIds, getStoreSaleCompetence, type StoreSaleCandidate } from './store-sales'
 
 function sale(overrides: Partial<StoreSaleCandidate> = {}): StoreSaleCandidate {
   return {
@@ -61,5 +61,15 @@ describe('store sales detail read model', () => {
 
     expect(rows).toHaveLength(1)
     expect(rows[0]?.oportunidade_id).toBeNull()
+  })
+
+  test('excludes sales owned by inactive sellers from the store detail scope', () => {
+    const rows = filterStoreSalesBySellerIds([
+      sale({ event_id: 'active-sale', seller_user_id: 'seller-active' }),
+      sale({ event_id: 'inactive-sale', seller_user_id: 'seller-inactive' }),
+      sale({ event_id: 'missing-seller', seller_user_id: null }),
+    ], ['seller-active'])
+
+    expect(rows.map((row) => row.event_id)).toEqual(['active-sale'])
   })
 })
