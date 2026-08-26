@@ -57,3 +57,32 @@ Com schema canonico e check-in temporal corrigidos, o painel da loja precisa usa
 - `src/hooks/useRanking.ts`
 - `src/hooks/useGoals.ts`
 - `src/pages/DashboardLoja.tsx`
+- `src/features/dashboard-loja/hooks/useDashboardLojaData.ts`
+- `src/lib/storeSalesRules.ts`
+- `src/lib/storeSalesRules.test.ts`
+- `src/lib/dashboard-seller-goal-source.test.ts`
+- `src/lib/vendedor-performance-goal-scope-migration.test.ts`
+- `supabase/migrations/20260826103000_fix_vendedor_performance_goal_scope.sql`
+
+## Dev Agent Record
+
+### Agent Model Used
+
+- Codex GPT-5 / AIOX dev
+
+### Debug Log
+
+- Reproduzido no dashboard autenticado: a meta mensal total da loja era atribuída a todas as linhas de vendedor.
+- O dashboard passou a priorizar `vendedor_performance_oficial.meta` e usa rateio local somente durante o carregamento da RPC.
+- O rateio local considera vendedores ativos elegíveis e exclui a conta operacional `VENDA LOJA`; meta oficial `0` permanece `0`.
+- A migration corrige o divisor da RPC usando a equipe ativa completa da loja, sem `p_seller_id`, com `vendedores_loja` e `vinculos_loja` ativos.
+- CodeRabbit apontou e foi corrigido o retorno `NULL` da meta quando não há regra da loja; a recomendação de trocar `bun:test` por `vitest` foi descartada porque o runner oficial do projeto é `bun test` e o repositório usa `bun:test` nos testes de unidade equivalentes.
+
+### Completion Notes List
+
+- Prova DOM autenticada em `http://localhost:3457/lojas/trend-auto?tab=metas`: 7 vendedores exibidos com meta individual `7` (valor subjacente proporcional `7.857...`), sem repetir a meta total `55`.
+- Evidência visual autenticada: `visual-evidence/agent-browser/goal-scope-auth-2026-08-26T14-54-20/`, desktop `1440x900` e mobile `390x844`, status `passed`, sem falhas.
+- Testes focados: 23 passaram, 0 falharam.
+- Gates já executados: `npm test` (4.476 passaram), `npm run lint`, `npm run typecheck`, `npm run build` e `git diff --check` passaram; `supabase db lint --local` ficou bloqueado pela ausência de Postgres local em `127.0.0.1:54322`.
+- Revalidação final após estabilização do checkout: `npm run lint`, `npm run typecheck`, `npm run build`, `git diff --check`, os 23 testes focados e a suíte completa (`4491 pass / 0 fail` em 736 arquivos) passaram.
+- Migration preparada no repositório, sem aplicação remota nesta solicitação.

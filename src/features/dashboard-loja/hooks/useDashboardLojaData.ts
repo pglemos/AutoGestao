@@ -11,7 +11,7 @@ import { useStoreSales } from '@/hooks/useStoreSales'
 import { useDRE } from '@/hooks/useDRE'
 import { useOfficialSellerPerformance } from '@/hooks/useOfficialSellerPerformance'
 import { calcularFunil, gerarDiagnosticoMX } from '@/lib/calculations'
-import { buildStoreSalesRules } from '@/lib/storeSalesRules'
+import { buildStoreSalesRules, resolveCanonicalIndividualGoal } from '@/lib/storeSalesRules'
 import { getManagerCalendarDate, getManagerMonthRange } from '@/features/manager/home/manager-home-parity'
 import { refreshManagerHomeData } from '@/features/manager/home/manager-home-refresh'
 import { useOwnerInventoryMetrics } from './useOwnerInventoryMetrics'
@@ -289,6 +289,10 @@ export function useDashboardLojaData({
   }, [endDate, periodRange, referenceDate, selectedStoreId, startDate, viewMode])
 
   const effectiveMonthlyGoal = operationalMetaRules?.monthly_goal ?? storeGoal?.target ?? 0
+  const activeIndividualSellerCount = useMemo(
+    () => (sellers || []).filter(seller => seller.active !== false && !seller.is_venda_loja).length,
+    [sellers],
+  )
 
   const funnelBenchmarks = useMemo(
     () => ({
@@ -327,7 +331,12 @@ export function useDashboardLojaData({
           leads: officialRow?.leads ?? 0,
           agd_total: officialRow?.agendamentos ?? 0,
           visitas: officialRow?.atendimentos ?? 0,
-          meta: effectiveMonthlyGoal,
+          meta: resolveCanonicalIndividualGoal({
+            officialGoal: officialRow?.meta,
+            storeMonthlyGoal: effectiveMonthlyGoal,
+            activeSellersCount: activeIndividualSellerCount,
+            isVendaLoja: s.is_venda_loja,
+          }),
           atingimento: 0,
           projecao: 0,
           ritmo: 0,
@@ -350,6 +359,7 @@ export function useDashboardLojaData({
     }
   }, [
     effectiveMonthlyGoal,
+    activeIndividualSellerCount,
     officialCheckins,
     officialMonthlyPerformance.rows,
     officialPerformance.rows,

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { buildStoreSalesRules, resolveIndividualGoal } from './storeSalesRules'
+import { buildStoreSalesRules, resolveCanonicalIndividualGoal, resolveIndividualGoal } from './storeSalesRules'
 
 describe('buildStoreSalesRules', () => {
   test('normalizes partial store meta rules with explicit monthly goal', () => {
@@ -129,5 +129,39 @@ describe('resolveIndividualGoal', () => {
       activeSellersCount: 2,
     })
     expect(value).toBe(30)
+  })
+})
+
+describe('resolveCanonicalIndividualGoal', () => {
+  test('preserves the official individual goal, including fractional division', () => {
+    expect(resolveCanonicalIndividualGoal({
+      officialGoal: 5.5,
+      storeMonthlyGoal: 44,
+      activeSellersCount: 8,
+    })).toBe(5.5)
+  })
+
+  test('falls back to the store goal divided by active eligible sellers', () => {
+    expect(resolveCanonicalIndividualGoal({
+      storeMonthlyGoal: 44,
+      activeSellersCount: 8,
+    })).toBe(5.5)
+  })
+
+  test('does not assign a goal to the Venda Loja operational account', () => {
+    expect(resolveCanonicalIndividualGoal({
+      officialGoal: null,
+      storeMonthlyGoal: 44,
+      activeSellersCount: 8,
+      isVendaLoja: true,
+    })).toBe(0)
+  })
+
+  test('does not replace an official zero with the full store goal', () => {
+    expect(resolveCanonicalIndividualGoal({
+      officialGoal: 0,
+      storeMonthlyGoal: 44,
+      activeSellersCount: 8,
+    })).toBe(0)
   })
 })

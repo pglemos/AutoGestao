@@ -23,6 +23,43 @@ export function buildStoreSalesRules({ storeId, monthlyGoal, metaRules }: StoreS
   }
 }
 
+export type ResolveCanonicalIndividualGoalInput = {
+  /** Meta individual devolvida pelo read model oficial, quando disponível. */
+  officialGoal?: number | null
+  /** Meta mensal da loja usada somente como fallback local. */
+  storeMonthlyGoal?: number | null
+  /** Quantidade de vendedores ativos elegíveis ao rateio. */
+  activeSellersCount?: number | null
+  /** Conta operacional sem meta individual própria. */
+  isVendaLoja?: boolean | null
+}
+
+/**
+ * Resolve a meta individual sem deixar a meta total da loja vazar para cada
+ * linha da equipe. O read model oficial tem precedência (inclusive `0` para
+ * Venda Loja); enquanto ele carrega, o fallback local divide apenas entre os
+ * vendedores ativos elegíveis.
+ */
+export function resolveCanonicalIndividualGoal({
+  officialGoal,
+  storeMonthlyGoal,
+  activeSellersCount,
+  isVendaLoja = false,
+}: ResolveCanonicalIndividualGoalInput): number {
+  if (officialGoal !== null && officialGoal !== undefined) {
+    const canonical = Number(officialGoal)
+    if (Number.isFinite(canonical)) return canonical
+  }
+
+  if (isVendaLoja) return 0
+
+  const storeGoal = Number(storeMonthlyGoal)
+  const sellerCount = Number(activeSellersCount)
+  if (!Number.isFinite(storeGoal) || storeGoal <= 0 || !Number.isFinite(sellerCount) || sellerCount <= 0) return 0
+
+  return storeGoal / sellerCount
+}
+
 /**
  * Deriva a meta individual do vendedor a partir da meta da loja
  * (`regras_metas_loja.monthly_goal`) e do modo de rateio configurado
