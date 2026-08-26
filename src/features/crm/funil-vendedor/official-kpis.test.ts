@@ -45,6 +45,18 @@ describe('official seller kpis', () => {
     expect(resolved.probabilidade).toBeNull()
   })
 
+  it('keeps an explicit official zero instead of restoring the local goal', () => {
+    const resolved = resolveOfficialSellerKpis(dashboardKpis, {
+      meta: 0,
+      vendas_realizadas: 3,
+      vendas_projetadas: 5,
+    })
+
+    expect(resolved.meta).toBe(0)
+    expect(resolved.faltam).toBe(0)
+    expect(resolved.metaBatida).toBe(false)
+  })
+
   it('reports a completed goal and no daily pace when the official goal is met', () => {
     const resolved = resolveOfficialSellerKpis(dashboardKpis, {
       meta: 10,

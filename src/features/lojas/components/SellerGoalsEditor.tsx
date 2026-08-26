@@ -45,6 +45,15 @@ const ATTAINMENT_TONE = {
   sem_meta: 'text-muted-foreground',
 } as const
 
+function parseGoalInput(value: string): number | null {
+  const normalized = value.trim().replace(/\s/g, '')
+  const decimal = normalized.includes(',')
+    ? normalized.replace(/\./g, '').replace(',', '.')
+    : normalized
+  const parsed = Number(decimal)
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : null
+}
+
 interface SellerGoalsEditorProps {
   storeId: string | null
   storeName?: string
@@ -69,9 +78,9 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
   const { rows: performanceRows, loading: perfLoading, refetch: refetchPerformance } = useOfficialSellerPerformance(periodStart, periodEnd, null, storeId)
 
   const canEdit = isPerfilInternoMx(role) || role === 'dono' || role === 'gerente'
-  const storeGoal = metaRules?.monthly_goal || 0
-  const sellerCount = sellers.length
-  const evenShare = sellerCount > 0 ? Math.floor(storeGoal / sellerCount) : 0
+  const storeGoal = metaRules?.monthly_goal ?? 0
+  const eligibleSellerCount = sellers.filter(seller => !seller.is_venda_loja).length
+  const evenShare = eligibleSellerCount > 0 ? storeGoal / eligibleSellerCount : 0
 
   const [edits, setEdits] = useState<Record<string, string>>({})
   const [hasChanges, setHasChanges] = useState(false)
@@ -90,7 +99,7 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
   const resetEdits = useCallback(() => {
     const reset: Record<string, string> = {}
     for (const seller of sellers) {
-      const current = goals[seller.id] ?? evenShare
+      const current = seller.is_venda_loja ? 0 : goals[seller.id] ?? evenShare
       reset[seller.id] = String(current)
     }
     setEdits(reset)
@@ -101,10 +110,10 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
     if (!storeId) return
     const updates: Record<string, number> = {}
     for (const [userId, value] of Object.entries(edits)) {
-      const parsed = Number(value.replace(/\D/g, ''))
-      if (Number.isFinite(parsed) && parsed >= 0) {
-        updates[userId] = parsed
-      }
+      const seller = sellers.find(item => item.id === userId)
+      const parsed = parseGoalInput(value)
+      if (!seller || parsed === null) continue
+      updates[userId] = seller.is_venda_loja ? 0 : parsed
     }
     if (Object.keys(updates).length === 0) return
 
@@ -116,13 +125,13 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
     await refetchPerformance()
     setHasChanges(false)
     toast.success('Metas individuais salvas.')
-  }, [storeId, edits, saveAll, refetchPerformance])
+  }, [storeId, edits, sellers, saveAll, refetchPerformance])
 
   const handleResetToEven = useCallback(async () => {
     if (!storeId) return
     const updates: Record<string, number> = {}
     for (const seller of sellers) {
-      updates[seller.id] = evenShare
+      updates[seller.id] = seller.is_venda_loja ? 0 : evenShare
     }
     const error = await saveAll(updates)
     if (error) {
@@ -142,10 +151,10 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
 
   /** "Aplicar a todos" do Base44: preenche o campo de todos sem salvar sozinho. */
   const handleApplyToAll = useCallback((value: string) => {
-    const parsed = Number(value.replace(/\D/g, ''))
-    if (!Number.isFinite(parsed) || parsed < 0) return
+    const parsed = parseGoalInput(value)
+    if (parsed === null) return
     const next: Record<string, string> = {}
-    for (const seller of sellers) next[seller.id] = String(parsed)
+    for (const seller of sellers) next[seller.id] = String(seller.is_venda_loja ? 0 : parsed)
     setEdits(next)
     setHasChanges(true)
   }, [sellers])
@@ -155,14 +164,14 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
    * não a salva — é o que o gerente enxerga enquanto simula o rateio.
    */
   const insightRows: SellerGoalRow[] = useMemo(() => sellers.map(seller => {
-    const currentGoal = goals[seller.id] ?? evenShare
+    const currentGoal = seller.is_venda_loja ? 0 : goals[seller.id] ?? evenShare
     const editValue = edits[seller.id]
-    const parsed = editValue === undefined ? currentGoal : Number(editValue.replace(/\D/g, ''))
+    const parsed = editValue === undefined ? currentGoal : parseGoalInput(editValue)
     return {
       id: seller.id,
       name: seller.name || 'Vendedor',
       realized: sellerPerformances[seller.id]?.realized ?? 0,
-      goal: Number.isFinite(parsed) ? parsed : 0,
+      goal: parsed ?? 0,
     }
   }), [sellers, goals, evenShare, edits, sellerPerformances])
 
@@ -200,14 +209,14 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
             {embedded ? (
               <p className="text-sm text-muted-foreground">
                 {storeName || 'Unidade MX'} · Meta da loja: <strong>{storeGoal} vendas</strong>
-                {sellerCount > 0 && ` · ${sellerCount} vendedor${sellerCount !== 1 ? 'es' : ''} ativos`}
+                {eligibleSellerCount > 0 && ` · ${eligibleSellerCount} vendedor${eligibleSellerCount !== 1 ? 'es' : ''} ativos`}
               </p>
             ) : (
               <div>
                 <h1 className="text-lg font-bold text-foreground">Metas Individuais</h1>
                 <p className="mt-0.5 text-sm text-muted-foreground">
                   {storeName || 'Unidade MX'} · Meta da loja: <strong>{storeGoal} vendas</strong>
-                  {sellerCount > 0 && ` · ${sellerCount} vendedor${sellerCount !== 1 ? 'es' : ''} ativos`}
+                  {eligibleSellerCount > 0 && ` · ${eligibleSellerCount} vendedor${eligibleSellerCount !== 1 ? 'es' : ''} ativos`}
                 </p>
               </div>
             )}
@@ -331,7 +340,7 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
                   sellers.map((seller, index) => {
                     const perf = sellerPerformances[seller.id]
                     const realized = perf?.realized ?? 0
-                    const currentGoal = goals[seller.id] ?? evenShare
+                    const currentGoal = seller.is_venda_loja ? 0 : goals[seller.id] ?? evenShare
                     const insightRow = insightRows[index]
                     const attainment = attainmentOf(insightRow)
                     const status = classifySellerGoal(insightRow)
@@ -363,8 +372,9 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
                         {canEdit && (
                           <td className="whitespace-nowrap px-4 py-3 text-right">
                             <input
-                              type="text"
-                              inputMode="numeric"
+                              type="number"
+                              inputMode="decimal"
+                              step="any"
                               value={editValue}
                               onChange={(e) => handleValueChange(seller.id, e.target.value)}
                               className="w-20 rounded-lg border border-border px-2 py-1.5 text-right font-mono text-sm outline-none focus:border-status-success focus:ring-1 focus:ring-status-success"
@@ -404,10 +414,8 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
         {/* Info: modo da meta */}
         {metaRules?.individual_goal_mode && (
           <div className="rounded-xl border border-border-subtle bg-surface-alt p-4 text-xs text-muted-foreground">
-            Modo de meta individual: <strong>{metaRules.individual_goal_mode === 'custom' ? 'Customizada' : metaRules.individual_goal_mode === 'even' ? 'Rateio igual' : 'Proporcional'}</strong>
-            {metaRules.individual_goal_mode !== 'custom' && (
-              <span className="ml-1"> — as metas salvas aqui só surtirão efeito quando o modo for alterado para "Customizada".</span>
-            )}
+            Meta individual: <strong>cadastro manual com precedência</strong>
+            <span className="ml-1"> — quando não houver cadastro para o vendedor, a meta da loja é dividida entre os vendedores ativos elegíveis. A conta VENDA LOJA fica com meta 0.</span>
           </div>
         )}
       </div>

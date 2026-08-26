@@ -31,7 +31,7 @@ export function useGoals(storeIdOverride?: string) {
                 .maybeSingle()
 
             if (data) {
-                setStoreGoal({ target: data.monthly_goal || 0, projection_mode: data.projection_mode || 'calendar' })
+                setStoreGoal({ target: data.monthly_goal ?? 0, projection_mode: data.projection_mode || 'calendar' })
             } else {
                 setStoreGoal({ target: 0, projection_mode: 'calendar' })
             }
@@ -175,7 +175,7 @@ export function useStoreGoal(storeIdOverride?: string | null) {
             .eq('store_id', storeId)
             .maybeSingle()
 
-        if (data) setGoal({ target: data.monthly_goal || 0, projection_mode: data.projection_mode || 'calendar' })
+        if (data) setGoal({ target: data.monthly_goal ?? 0, projection_mode: data.projection_mode || 'calendar' })
         else setGoal({ target: 0, projection_mode: 'calendar' })
         setLoading(false)
     }, [storeId])

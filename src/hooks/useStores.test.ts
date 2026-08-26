@@ -125,4 +125,34 @@ describe('useSellersByStore — ciclo de vida das consultas', () => {
       console.error = originalConsoleError
     }
   })
+
+  test('exclui usuários inativos da equipe elegível mesmo com vínculo ativo', async () => {
+    const { result } = renderHook(() => useSellersByStore('store-current'))
+
+    await act(async () => {
+      resolveTable('vendedores_loja', {
+        data: [
+          { seller_user_id: 'seller-active', users: { id: 'seller-active', active: true, role: 'vendedor', name: 'Ativo' } },
+          { seller_user_id: 'seller-inactive', users: { id: 'seller-inactive', active: false, role: 'vendedor', name: 'Inativo' } },
+        ],
+        error: null,
+      })
+      resolveTable('vinculos_loja', {
+        data: [
+          { user_id: 'seller-active', users: { active: true, role: 'vendedor' } },
+          { user_id: 'seller-inactive', users: { active: false, role: 'vendedor' } },
+        ],
+        error: null,
+      })
+      await Promise.resolve()
+    })
+
+    await act(async () => {
+      resolveTable('lancamentos_diarios', { data: [], error: null })
+      await Promise.resolve()
+    })
+
+    await waitFor(() => expect(result.current.loading).toBe(false))
+    expect(result.current.sellers.map((seller) => seller.id)).toEqual(['seller-active'])
+  })
 })

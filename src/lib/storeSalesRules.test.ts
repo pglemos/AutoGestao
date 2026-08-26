@@ -42,13 +42,13 @@ describe('resolveIndividualGoal', () => {
     expect(value).toBe(25)
   })
 
-  test('even mode: falls back to full store goal without an active sellers count', () => {
+  test('does not leak the full store goal when the divisor is unavailable', () => {
     const value = resolveIndividualGoal({
       mode: 'even',
       storeMonthlyGoal: 100,
       activeSellersCount: null,
     })
-    expect(value).toBe(100)
+    expect(value).toBeNull()
   })
 
   test('defaults to even mode when mode is missing (regra ausente)', () => {
@@ -70,23 +70,23 @@ describe('resolveIndividualGoal', () => {
     expect(value).toBe(18)
   })
 
-  test('custom mode: falls back to full store goal when no custom target is configured (valor nulo)', () => {
+  test('falls back to the eligible-seller division when no custom target is configured', () => {
     const value = resolveIndividualGoal({
       mode: 'custom',
       storeMonthlyGoal: 100,
       activeSellersCount: 4,
       customGoal: null,
     })
-    expect(value).toBe(100)
+    expect(value).toBe(25)
   })
 
-  test('custom mode: ignores a zero/invalid custom target and falls back to full store goal', () => {
+  test('custom mode: preserves an explicitly saved zero target', () => {
     const value = resolveIndividualGoal({
       mode: 'custom',
       storeMonthlyGoal: 100,
       customGoal: 0,
     })
-    expect(value).toBe(100)
+    expect(value).toBe(0)
   })
 
   test('proportional mode: applies the configured share of the store goal', () => {
@@ -98,13 +98,14 @@ describe('resolveIndividualGoal', () => {
     expect(value).toBe(40)
   })
 
-  test('proportional mode: falls back to full store goal without a configured share (regra ausente no schema)', () => {
+  test('proportional mode: falls back to the eligible-seller division without a configured share', () => {
     const value = resolveIndividualGoal({
       mode: 'proportional',
       storeMonthlyGoal: 100,
+      activeSellersCount: 4,
       proportionalShare: null,
     })
-    expect(value).toBe(100)
+    expect(value).toBe(25)
   })
 
   test('proportional mode: clamps a share above 1 to the full store goal', () => {
@@ -116,10 +117,20 @@ describe('resolveIndividualGoal', () => {
     expect(value).toBe(100)
   })
 
-  test('returns null when the store has no monthly goal configured (edge case)', () => {
+  test('returns explicit individual goals even when the store has no monthly goal configured', () => {
     expect(resolveIndividualGoal({ mode: 'even', storeMonthlyGoal: null, activeSellersCount: 3 })).toBeNull()
-    expect(resolveIndividualGoal({ mode: 'custom', storeMonthlyGoal: 0, customGoal: 10 })).toBeNull()
+    expect(resolveIndividualGoal({ mode: 'custom', storeMonthlyGoal: 0, customGoal: 10 })).toBe(10)
     expect(resolveIndividualGoal({ mode: 'proportional', storeMonthlyGoal: undefined, proportionalShare: 0.5 })).toBeNull()
+  })
+
+  test('Venda Loja always receives zero and is not assigned a seller goal', () => {
+    expect(resolveIndividualGoal({
+      mode: 'custom',
+      storeMonthlyGoal: 100,
+      activeSellersCount: 4,
+      customGoal: 25,
+      isVendaLoja: true,
+    })).toBe(0)
   })
 
   test('treats an unknown mode string coming from the database as even', () => {

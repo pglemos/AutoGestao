@@ -37,7 +37,7 @@ export function TabelaRanking({ vendedores, meta, meuId }: Props) {
           <tbody>
             {vendedores.map((v, i) => {
               const isMe = v.id === meuId
-const vendedorMeta = v.meta || meta
+const vendedorMeta = v.meta ?? meta
 const pct = vendedorMeta > 0 ? Math.round((v.vendas / vendedorMeta) * 100) : 0
               const medal = MEDAL[i] || null
               return (

@@ -8,6 +8,7 @@ import {
     somarVendasPorCanal
 } from '@/lib/calculations'
 import type { DailyCheckin, User, RankingEntry } from '@/types/database'
+import { resolveCanonicalIndividualGoal } from '@/lib/storeSalesRules'
 
 function getSaoPauloDateOnly(date: Date = new Date()): string {
     return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit' }).format(date)
@@ -51,13 +52,21 @@ export function useSellerMetrics({
         const dias = getDiasInfo(undefined, projectionMode)
 
         const myGoal = sellerGoals.find(g => g.user_id === profile.id)
-        const meta = myGoal?.target || (storeGoal ? Math.round(storeGoal.target / Math.max(ranking.length, 1)) : 0)
+        const myRank = ranking.find(r => r.user_id === profile.id)
+        const eligibleSellerCount = ranking.filter(entry => !entry.is_venda_loja).length
+        const meta = resolveCanonicalIndividualGoal({
+            // Both sources preserve an explicitly saved zero. The ranking is
+            // the official read model; sellerGoals remains a local fallback.
+            officialGoal: myGoal?.target ?? myRank?.meta,
+            storeMonthlyGoal: storeGoal?.target,
+            activeSellersCount: eligibleSellerCount,
+            isVendaLoja: myRank?.is_venda_loja,
+        })
         
         const atingimento = calcularAtingimento(vendasMes, meta)
         const projecao = calcularProjecao(vendasMes, dias.decorridos, dias.total)
         const faltaX = calcularFaltaX(meta, vendasMes)
         
-        const myRank = ranking.find(r => r.user_id === profile.id)
         const myRankIndex = ranking.findIndex(r => r.user_id === profile.id)
         
         const competitors = {

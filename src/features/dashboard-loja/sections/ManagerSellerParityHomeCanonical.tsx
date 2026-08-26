@@ -24,7 +24,7 @@ import {
   type BarRectangleItem,
 } from 'recharts'
 import { useNavigate } from 'react-router-dom'
-import { resolveIndividualGoal } from '@/lib/storeSalesRules'
+import { resolveCanonicalIndividualGoal } from '@/lib/storeSalesRules'
 import { chartTokens } from '@/lib/charts/tokens'
 import {
   AGENDAMENTOS_POR_VENDA,
@@ -87,9 +87,14 @@ export function ManagerSellerParityHomeCanonical({
       Number(row.vendas_realizadas || 0),
     ]),
   )
+  const officialMonthlyGoalsBySeller = new Map(
+    (data.officialMonthlyPerformance || [])
+      .filter(row => row.meta !== null && row.meta !== undefined)
+      .map(row => [row.seller_user_id, Number(row.meta)]),
+  )
   const plan = officialSources.plan
   const monthlyGoal = plan?.monthly_goal
-    ?? Number(data.effectiveMonthlyGoal || data.metrics.goalValue || 0)
+    ?? Number(data.effectiveMonthlyGoal ?? data.metrics.goalValue ?? 0)
   const appointmentsToday = officialSources.totalAppointments
   const appointmentsPerSale = plan?.appointments_per_sale && plan.appointments_per_sale > 0
     ? plan.appointments_per_sale
@@ -108,18 +113,20 @@ export function ManagerSellerParityHomeCanonical({
 
   const businessDaysTotal = plan?.business_days_total ?? 0
   const businessDaysElapsed = plan?.business_days_elapsed ?? 0
-  const individualGoal = resolveIndividualGoal({
-    mode: data.operationalMetaRules?.individual_goal_mode,
-    storeMonthlyGoal: monthlyGoal,
-    activeSellersCount: activeSellers.length,
-  })
+  const activeIndividualSellerCount = activeSellers.length
 
   const team = sortTeamFocus(activeSellers.map((seller): ManagerTeamFocusItem => {
     const sellerAppointments = officialSources.appointmentsBySeller.get(seller.id) || 0
     const sellerForecast = sellerAppointments / appointmentsPerSale
     const sellerMonthlySales = monthlySalesBySeller.get(seller.id) || 0
-    const proportionalGoal = individualGoal && businessDaysTotal > 0
-      ? (individualGoal / businessDaysTotal) * businessDaysElapsed
+    const sellerGoal = resolveCanonicalIndividualGoal({
+      officialGoal: officialMonthlyGoalsBySeller.get(seller.id),
+      storeMonthlyGoal: monthlyGoal,
+      activeSellersCount: activeIndividualSellerCount,
+      isVendaLoja: seller.is_venda_loja,
+    })
+    const proportionalGoal = sellerGoal > 0 && businessDaysTotal > 0
+      ? (sellerGoal / businessDaysTotal) * businessDaysElapsed
       : 0
     const resultPercentage = proportionalGoal > 0
       ? (sellerMonthlySales / proportionalGoal) * 100

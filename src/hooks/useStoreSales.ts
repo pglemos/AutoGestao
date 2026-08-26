@@ -28,7 +28,7 @@ export function useStoreSales({ checkins, ranking, rules }: UseStoreSalesProps) 
     const storeTotalAgd = ranking.reduce((acc, curr) => acc + curr.agd_total, 0)
     const storeTotalVis = ranking.reduce((acc, curr) => acc + curr.visitas, 0)
     
-    const storeGoal = rules?.monthly_goal || 0
+    const storeGoal = rules?.monthly_goal ?? 0
     const storeAttainment = storeGoal > 0 ? Math.round((storeTotalVendas / storeGoal) * 100) : 0
     const storeProjection = Math.round((storeTotalVendas / Math.max(dias.decorridos, 1)) * dias.total)
 
@@ -36,10 +36,9 @@ export function useStoreSales({ checkins, ranking, rules }: UseStoreSalesProps) 
     const processedRanking = ranking.map(entry => {
       const isVendaLoja = entry.is_venda_loja
       
-      // Se for Venda Loja e não deve entrar na meta individual, a meta é 0 ou apenas o que ela vendeu
-      const individualGoal = isVendaLoja 
-        ? (includeVendaLojaInIndividual ? entry.meta : 0)
-        : entry.meta
+      // VENDA LOJA é uma conta operacional: nunca entra no divisor e sempre
+      // fica com meta individual zero, independentemente da flag legada.
+      const individualGoal = isVendaLoja ? 0 : entry.meta
 
       const attainment = individualGoal > 0 ? Math.round((entry.vnd_total / individualGoal) * 100) : 0
       

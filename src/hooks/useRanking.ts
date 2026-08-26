@@ -43,6 +43,7 @@ export function isOfficialLancamento(row: { submission_status?: string | null })
 type OfficialPerformanceRow = {
     seller_user_id: string
     seller_name?: string
+    meta?: number | string | null
     vendas_realizadas: number | string
     vendas_ultimo_dia: number | string
     leads: number | string
@@ -53,6 +54,11 @@ type OfficialPerformanceRow = {
 type RoutineActionRow = {
     seller_id: string
     status: string
+}
+
+type ActiveSellerMembershipRow = {
+    user_id: string
+    users?: { active?: boolean | null; role?: string | null } | null
 }
 
 type StorePerformanceEntry = {
@@ -139,10 +145,12 @@ export function useRanking(storeIdOverride?: string, filters?: { startDate?: str
             return
         }
 
-        // Get active sellers by operational tenure. Fallback keeps old data readable until lojas are configured.
+        // A seller is eligible only when both the operational assignment and the
+        // active seller membership exist. There is no fallback to a partial
+        // relationship: that would inflate the divisor and expose stale users.
         const { data: tenures, error: tenuresError } = await supabase
             .from('vendedores_loja')
-            .select('seller_user_id, users:usuarios(name, is_venda_loja, avatar_url)')
+            .select('seller_user_id, users:usuarios(name, is_venda_loja, avatar_url, active)')
             .eq('store_id', storeId)
             .eq('is_active', true)
         if (tenuresError) {
@@ -152,16 +160,14 @@ export function useRanking(storeIdOverride?: string, filters?: { startDate?: str
             return
         }
 
-        const { data: fallbackMembers, error: fallbackError } = (!tenures || tenures.length === 0)
-            ? await supabase
-                .from('vinculos_loja')
-                .select('user_id, users:usuarios(name, is_venda_loja, avatar_url)')
-                .eq('store_id', storeId)
-                .eq('role', 'vendedor')
-                .eq('is_active', true)
-            : { data: null, error: null }
-        if (fallbackError) {
-            console.error('Audit Error [useRanking]: fallback members fail ->', fallbackError.message)
+        const { data: memberships, error: membershipsError } = await supabase
+            .from('vinculos_loja')
+            .select('user_id, users:usuarios(active, role)')
+            .eq('store_id', storeId)
+            .eq('role', 'vendedor')
+            .eq('is_active', true)
+        if (membershipsError) {
+            console.error('Audit Error [useRanking]: memberships fail ->', membershipsError.message)
             setError('Não foi possível carregar a equipe do ranking.')
             setRanking([])
             return
@@ -174,21 +180,33 @@ export function useRanking(storeIdOverride?: string, filters?: { startDate?: str
             return
         }
 
-        const members = (tenures && tenures.length > 0)
-            ? (tenures as unknown as { seller_user_id: string; users?: User }[]).map((item) => ({ user_id: item.seller_user_id, users: item.users }))
-            : (fallbackMembers || [])
+        const activeMembershipIds = new Set(
+            ((memberships || []) as unknown as ActiveSellerMembershipRow[])
+                .filter((membership) => membership.users?.active === true && membership.users?.role === 'vendedor')
+                .map((membership) => membership.user_id),
+        )
+        const eligibleMembers = (tenures || [])
+            .map((item) => item as unknown as { seller_user_id: string; users?: User })
+            .filter((item) => item.users?.active === true && activeMembershipIds.has(item.seller_user_id))
+            .map((item) => ({ user_id: item.seller_user_id, users: item.users }))
+        const members = Array.from(
+            new Map(eligibleMembers.map((member) => [member.user_id, member])).values(),
+        )
 
-        if (!members) return
-
-        const storeGoal = rules?.monthly_goal || 0
+        const storeGoal = Number(rules?.monthly_goal ?? 0)
 
         const customGoalMap = new Map<string, number>()
         if (customMetas) {
             for (const cm of customMetas) {
-                if (cm.target && Number(cm.target) > 0) {
-                    customGoalMap.set(cm.user_id, Number(cm.target))
-                }
+                const target = cm.target === null || cm.target === undefined ? NaN : Number(cm.target)
+                if (Number.isFinite(target) && target >= 0) customGoalMap.set(cm.user_id, target)
             }
+        }
+
+        const officialGoalMap = new Map<string, number>()
+        for (const row of officialRows) {
+            const target = row.meta === null || row.meta === undefined ? NaN : Number(row.meta)
+            if (Number.isFinite(target) && target >= 0) officialGoalMap.set(row.seller_user_id, target)
         }
 
         const routineBySeller = new Map<string, { completed: number; total: number }>()
@@ -222,31 +240,22 @@ export function useRanking(storeIdOverride?: string, filters?: { startDate?: str
                 if (row.seller_name && current.name === 'Nome não informado') {
                     current.name = row.seller_name
                 }
-            } else if (row.seller_user_id) {
-                aggregated.set(row.seller_user_id, {
-                    leads: Number(row.leads || 0),
-                    agd: Number(row.agendamentos || 0),
-                    visitas: Number(row.atendimentos || 0),
-                    vnd: Number(row.vendas_realizadas || 0),
-                    vnd_yesterday: Number(row.vendas_ultimo_dia || 0),
-                    name: row.seller_name || 'Nome não informado',
-                    avatarUrl: null,
-                    isVendaLoja: false
-                })
             }
         }
 
-        const goalDivisor = Math.max(aggregated.size, 1)
+        const goalDivisor = members.filter((member) => !member.users?.is_venda_loja).length
 
         const entries: RankingEntry[] = Array.from(aggregated.entries())
             .map(([userId, data]) => {
-                const customGoal = customGoalMap.get(userId) || null
+                const savedGoal = customGoalMap.has(userId)
+                    ? customGoalMap.get(userId)
+                    : officialGoalMap.get(userId)
                 const meta = resolveIndividualGoal({
-                    mode: rules?.individual_goal_mode,
                     storeMonthlyGoal: storeGoal,
                     activeSellersCount: goalDivisor,
-                    customGoal,
-                }) ?? Math.round(storeGoal / Math.max(goalDivisor, 1))
+                    customGoal: savedGoal,
+                    isVendaLoja: data.isVendaLoja,
+                }) ?? 0
 
                 const routine = routineBySeller.get(userId)
 
@@ -326,6 +335,16 @@ export function useRanking(storeIdOverride?: string, filters?: { startDate?: str
                 { event: '*', schema: 'public', table: 'lancamentos_diarios', filter: `store_id=eq.${storeId}` },
                 () => { void fetchRanking() }
             )
+            .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: 'metas', filter: `store_id=eq.${storeId}` },
+                () => { void fetchRanking() }
+            )
+            .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: 'regras_metas_loja', filter: `store_id=eq.${storeId}` },
+                () => { void fetchRanking() }
+            )
             .subscribe()
 
         return () => {
@@ -398,18 +417,29 @@ export function useGlobalRanking(filters?: { startDate?: string; endDate?: strin
             p_seller_id: null,
         })
 
-        const [checkinsRes, tenuresRes, rulesRes, todayCheckinsRes, officialSalesRes] = await Promise.all([
+        const goalMonth = Number(startOfMonth.slice(5, 7))
+        const goalYear = Number(startOfMonth.slice(0, 4))
+
+        const [checkinsRes, tenuresRes, membershipsRes, rulesRes, metasRes, todayCheckinsRes, officialSalesRes] = await Promise.all([
             checkinsPromise,
             supabase.from('vendedores_loja')
-                .select('seller_user_id, store_id, users:usuarios(name, is_venda_loja, avatar_url), lojas:lojas(name)')
+                .select('seller_user_id, store_id, users:usuarios(name, is_venda_loja, avatar_url, active), lojas:lojas(name)')
+                .eq('is_active', true),
+            supabase.from('vinculos_loja')
+                .select('store_id, user_id, users:usuarios(active, role)')
+                .eq('role', 'vendedor')
                 .eq('is_active', true),
             supabase.from('regras_metas_loja')
                 .select('store_id, monthly_goal, include_venda_loja_in_individual_goal'),
+            supabase.from('metas')
+                .select('store_id, user_id, target')
+                .eq('month', goalMonth)
+                .eq('year', goalYear),
             todayCheckinsPromise,
             officialSalesPromise,
         ])
-        if (checkinsRes.error || tenuresRes.error || rulesRes.error || todayCheckinsRes.error) {
-            const message = checkinsRes.error?.message || tenuresRes.error?.message || rulesRes.error?.message || todayCheckinsRes.error?.message || 'Erro desconhecido'
+        if (checkinsRes.error || tenuresRes.error || membershipsRes.error || rulesRes.error || todayCheckinsRes.error) {
+            const message = checkinsRes.error?.message || tenuresRes.error?.message || membershipsRes.error?.message || rulesRes.error?.message || todayCheckinsRes.error?.message || 'Erro desconhecido'
             console.error('Audit Error [useGlobalRanking]: fetch fail ->', message)
             setError('Não foi possível carregar o ranking global.')
             setRanking([])
@@ -421,7 +451,9 @@ export function useGlobalRanking(filters?: { startDate?: string; endDate?: strin
         }
         const checkins = (checkinsRes.data as LancamentoRow[] | null)?.filter(isOfficialLancamento) ?? null
         const tenures = tenuresRes.data
+        const memberships = membershipsRes.data
         const rules = rulesRes.data
+        const metas = metasRes.data
         const todayCheckins = (todayCheckinsRes.data as LancamentoRow[] | null)?.filter(isOfficialLancamento) ?? null
         // Read model canônico: competência explícita do evento, da oportunidade
         // ou sale_date. Nunca usa created_at/data_evento como competência.
@@ -431,12 +463,33 @@ export function useGlobalRanking(filters?: { startDate?: string; endDate?: strin
 
         const storeGoals = new Map<string, { goal: number; includeVL: boolean }>()
         for (const r of rules || []) {
-            storeGoals.set(r.store_id, { goal: r.monthly_goal || 0, includeVL: r.include_venda_loja_in_individual_goal || false })
+            storeGoals.set(r.store_id, { goal: Number(r.monthly_goal ?? 0), includeVL: r.include_venda_loja_in_individual_goal ?? false })
         }
 
-        const storeSellerCounts = new Map<string, number>()
-        for (const t of tenures) {
-            storeSellerCounts.set(t.store_id, (storeSellerCounts.get(t.store_id) || 0) + 1)
+        const activeMemberships = new Set(
+            ((memberships || []) as unknown as Array<{ store_id: string; user_id: string; users?: { active?: boolean | null; role?: string | null } | null }>)
+                .filter((membership) => membership.users?.active === true && membership.users?.role === 'vendedor')
+                .map((membership) => `${membership.store_id}:${membership.user_id}`),
+        )
+
+        const eligibleTenures = (tenures || []).filter((tenure) => {
+            const user = (tenure as unknown as { users?: { active?: boolean | null } | null }).users
+            return user?.active === true && activeMemberships.has(`${tenure.store_id}:${tenure.seller_user_id}`)
+        })
+
+        const individualGoals = new Map<string, number>()
+        for (const goal of metas || []) {
+            const target = goal.target === null || goal.target === undefined ? NaN : Number(goal.target)
+            if (Number.isFinite(target) && target >= 0) individualGoals.set(`${goal.store_id}:${goal.user_id}`, target)
+        }
+
+        const eligibleSellerIdsByStore = new Map<string, Set<string>>()
+        for (const t of eligibleTenures) {
+            const user = (t as unknown as { users?: { is_venda_loja?: boolean | null } | null }).users
+            if (user?.is_venda_loja) continue
+            const sellerIds = eligibleSellerIdsByStore.get(t.store_id) || new Set<string>()
+            sellerIds.add(t.seller_user_id)
+            eligibleSellerIdsByStore.set(t.store_id, sellerIds)
         }
 
         const checkedInToday = new Set<string>()
@@ -451,7 +504,7 @@ export function useGlobalRanking(filters?: { startDate?: string; endDate?: strin
 
         // Mapa seller → store_id para validar loja dos eventos
         const sellerStoreMap = new Map<string, string>()
-        for (const t of tenures) {
+        for (const t of eligibleTenures) {
             sellerStoreMap.set(t.seller_user_id, t.store_id)
         }
 
@@ -468,7 +521,7 @@ export function useGlobalRanking(filters?: { startDate?: string; endDate?: strin
         }
 
         const agg = new Map<string, { vnd: number; vnd_yesterday: number; leads: number; agd: number; vis: number; name: string; avatarUrl: string | null; store: string; storeId: string; isVendaLoja: boolean; checkedIn: boolean }>()
-        for (const m of tenures) {
+        for (const m of eligibleTenures) {
             const mu = m as unknown as { users?: User; lojas?: { name: string } }
             agg.set(m.seller_user_id, {
                 // MX-RANK-UNIFY: usa eventos_comerciais como fonte canônica de vendas
@@ -496,12 +549,14 @@ export function useGlobalRanking(filters?: { startDate?: string; endDate?: strin
         const entries: RankingEntry[] = Array.from(agg.entries())
             .map(([uid, d]) => {
                 const sg = storeGoals.get(d.storeId)
-                const storeGoal = sg?.goal || 0
-                const includeVL = sg?.includeVL || false
-                const sellerCount = storeSellerCounts.get(d.storeId) || 1
-                const meta = d.isVendaLoja
-                    ? (includeVL ? Math.round(storeGoal / Math.max(sellerCount, 1)) : 0)
-                    : Math.round(storeGoal / Math.max(sellerCount, 1))
+                const storeGoal = sg?.goal ?? 0
+                const sellerCount = eligibleSellerIdsByStore.get(d.storeId)?.size ?? 0
+                const meta = resolveIndividualGoal({
+                    storeMonthlyGoal: storeGoal,
+                    activeSellersCount: sellerCount,
+                    customGoal: individualGoals.get(`${d.storeId}:${uid}`),
+                    isVendaLoja: d.isVendaLoja,
+                }) ?? 0
 
                 return {
                     user_id: uid,

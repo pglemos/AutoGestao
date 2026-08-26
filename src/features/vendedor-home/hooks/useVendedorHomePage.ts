@@ -12,7 +12,7 @@ import { useSellerMetrics } from '@/hooks/useSellerMetrics'
 import { useOfficialSellerPerformance } from '@/hooks/useOfficialSellerPerformance'
 import { formatWhatsAppMorningReport } from '@/lib/calculations'
 import { calculateDailyRoutineDiscipline } from '@/lib/daily-routine'
-import { resolveIndividualGoal } from '@/lib/storeSalesRules'
+import { resolveCanonicalIndividualGoal } from '@/lib/storeSalesRules'
 import { useOportunidades } from '@/features/crm/hooks/useOportunidades'
 import { useVendedorPerfil } from '@/features/crm/hooks/useVendedorPerfil'
 import {
@@ -93,7 +93,7 @@ export function useVendedorHomePage() {
       .then(({ data, error }) => {
         if (cancelled) return
         const target = !error && data ? Number((data as { target?: number }).target) : null
-        setCustomGoal(Number.isFinite(target) && (target as number) > 0 ? (target as number) : null)
+        setCustomGoal(Number.isFinite(target) && (target as number) >= 0 ? (target as number) : null)
       })
     return () => { cancelled = true }
   }, [storeId, profile?.id])
@@ -119,22 +119,41 @@ export function useVendedorHomePage() {
           void refetchOportunidades()
         },
       )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'metas', filter: `store_id=eq.${storeId}` },
+        () => {
+          void refetchOfficialPerformance()
+          void refetchGoals()
+        },
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'regras_metas_loja', filter: `store_id=eq.${storeId}` },
+        () => {
+          void refetchOfficialPerformance()
+          void refetchGoals()
+        },
+      )
       .subscribe()
 
     return () => {
       void supabase.removeChannel(channel)
     }
-  }, [storeId, profile?.id, refetchOfficialPerformance, refetchOportunidades])
+  }, [storeId, profile?.id, refetchGoals, refetchOfficialPerformance, refetchOportunidades])
 
   const resolvedMeta = useMemo(() => {
     const storeTarget = storeGoal?.target ?? metaRules?.monthly_goal ?? null
-    return resolveIndividualGoal({
-      mode: metaRules?.individual_goal_mode,
+    return resolveCanonicalIndividualGoal({
+      // The official RPC already applies the same precedence server-side.
+      // During its initial load, the direct seller target and local divisor
+      // keep the card from falling back to the full store target.
+      officialGoal: customGoal ?? officialPerformance?.meta,
       storeMonthlyGoal: storeTarget,
-      activeSellersCount: activeSellersCount ?? (ranking.length > 0 ? ranking.length : null),
-      customGoal,
+      activeSellersCount: activeSellersCount ?? (ranking.length > 0 ? ranking.filter(entry => !entry.is_venda_loja).length : null),
+      isVendaLoja: profile?.is_venda_loja,
     })
-  }, [storeGoal?.target, metaRules?.monthly_goal, metaRules?.individual_goal_mode, activeSellersCount, ranking.length, customGoal])
+  }, [storeGoal?.target, metaRules?.monthly_goal, activeSellersCount, ranking, customGoal, officialPerformance?.meta, profile?.is_venda_loja])
 
   const tacticalPrescription = useTacticalPrescription({
     checkins,
@@ -153,7 +172,7 @@ export function useVendedorHomePage() {
   const metrics = useMemo(() => {
     if (!legacyMetrics) return null
     const vendasMes = officialPerformance?.vendas_realizadas ?? legacyMetrics.vendasMes
-    const meta = resolvedMeta ?? (officialPerformance?.meta && officialPerformance.meta > 0 ? officialPerformance.meta : legacyMetrics.meta)
+    const meta = resolvedMeta ?? legacyMetrics.meta
     const atingimento = meta > 0 ? Math.round((vendasMes / meta) * 100 * 100) / 100 : 0
     const faltaX = Math.max(meta - vendasMes, 0)
     const projecao = officialPerformance?.vendas_projetadas ?? legacyMetrics.projecao

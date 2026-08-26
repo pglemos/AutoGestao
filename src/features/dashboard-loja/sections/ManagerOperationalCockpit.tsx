@@ -330,7 +330,7 @@ function ManagerKpiCard({
 }
 
 function TeamRow({ row }: { row: RankingEntry }) {
-  const meta = row.meta || 0
+  const meta = row.meta ?? 0
   const attainment = meta > 0 ? Math.round((row.vnd_total / meta) * 100) : 0
   const discipline = row.checked_in ? 100 : 0
   // 4-tier status: Excelente / Bom / Atenção / Crítico (matches mockup pills)
@@ -365,7 +365,7 @@ function TeamRow({ row }: { row: RankingEntry }) {
         </div>
       </td>
       <td className="px-mx-md py-mx-sm text-center"><Typography variant="mono" tone="brand">{row.vnd_total}</Typography></td>
-      <td className="px-mx-md py-mx-sm text-center"><Typography variant="mono">{row.meta || '-'}</Typography></td>
+      <td className="px-mx-md py-mx-sm text-center"><Typography variant="mono">{row.meta ?? '-'}</Typography></td>
       <td className="px-mx-md py-mx-sm text-center"><Typography variant="mono" tone="info">{row.agd_total}</Typography></td>
       <td className="px-mx-md py-mx-sm">
         <div className="flex items-center gap-mx-xs">

@@ -35,7 +35,7 @@ describe('Elite Arena Integration Logic (useStoreSales)', () => {
     expect(result.current.storeTotalVendas).toBe(3)
   })
 
-  it('should handle individual goal for Venda Loja when enabled', () => {
+  it('keeps Venda Loja at zero even when the legacy individual-goal flag is enabled', () => {
     const { result } = renderHook(() => useStoreSales({
       checkins: mockCheckins as any,
       ranking: mockRanking as any,
@@ -43,7 +43,7 @@ describe('Elite Arena Integration Logic (useStoreSales)', () => {
     }))
     
     const vendaLojaEntry = result.current.processedRanking.find(r => r.is_venda_loja)
-    expect(vendaLojaEntry?.meta).toBe(5)
-    expect(vendaLojaEntry?.atingimento).toBe(100)
+    expect(vendaLojaEntry?.meta).toBe(0)
+    expect(vendaLojaEntry?.atingimento).toBe(0)
   })
 })

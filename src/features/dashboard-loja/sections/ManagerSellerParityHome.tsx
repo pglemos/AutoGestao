@@ -25,7 +25,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { somarVendas } from '@/lib/calculations'
 import { chartTokens } from '@/lib/charts/tokens'
-import { resolveIndividualGoal } from '@/lib/storeSalesRules'
+import { resolveCanonicalIndividualGoal } from '@/lib/storeSalesRules'
 import {
   buildSuggestedAction,
   buildTodayReading,
@@ -90,9 +90,14 @@ export function ManagerSellerParityHome({
   const officialMonthlySalesBySeller = new Map(
     (data.officialMonthlyPerformance || []).map(row => [row.seller_user_id, row.vendas_realizadas]),
   )
+  const officialMonthlyGoalsBySeller = new Map(
+    (data.officialMonthlyPerformance || [])
+      .filter(row => row.meta !== null && row.meta !== undefined)
+      .map(row => [row.seller_user_id, Number(row.meta)]),
+  )
 
   const appointmentsToday = sumAppointments(dailyCheckins)
-  const monthlyGoal = Number(data.effectiveMonthlyGoal || data.metrics.goalValue || 0)
+  const monthlyGoal = Number(data.effectiveMonthlyGoal ?? data.metrics.goalValue ?? 0)
   const salesToday = somarVendas(dailyCheckins)
   const salesForecastToday = calculateSalesForecast(appointmentsToday)
   const elapsedBusinessDays = countElapsedBusinessDays(data.referenceDate)
@@ -102,11 +107,7 @@ export function ManagerSellerParityHome({
   const forecastCoverage = calculateForecastCoverage(salesForecastToday, salesNeededToday)
   const todayReading = buildTodayReading(salesForecastToday, salesNeededToday)
   const suggestedAction = buildSuggestedAction(appointmentGap, salesForecastToday, salesNeededToday)
-  const individualGoal = resolveIndividualGoal({
-    mode: data.operationalMetaRules?.individual_goal_mode,
-    storeMonthlyGoal: monthlyGoal,
-    activeSellersCount: activeSellers.length,
-  })
+  const activeIndividualSellerCount = activeSellers.filter(seller => !seller.is_venda_loja).length
 
   const team = sortTeamFocus(activeSellers.map((seller): ManagerTeamFocusItem => {
     const sellerDailyCheckins = dailyBySeller.get(seller.id) || []
@@ -114,8 +115,14 @@ export function ManagerSellerParityHome({
     const sellerAppointments = sumAppointments(sellerDailyCheckins)
     const sellerForecast = calculateSalesForecast(sellerAppointments)
     const sellerMonthlySales = officialMonthlySalesBySeller.get(seller.id) ?? somarVendas(sellerMonthlyCheckins)
-    const proportionalGoal = individualGoal && DIAS_UTEIS_MES_PADRAO > 0
-      ? (individualGoal / DIAS_UTEIS_MES_PADRAO) * elapsedBusinessDays
+    const sellerGoal = resolveCanonicalIndividualGoal({
+      officialGoal: officialMonthlyGoalsBySeller.get(seller.id),
+      storeMonthlyGoal: monthlyGoal,
+      activeSellersCount: activeIndividualSellerCount,
+      isVendaLoja: seller.is_venda_loja,
+    })
+    const proportionalGoal = sellerGoal > 0 && DIAS_UTEIS_MES_PADRAO > 0
+      ? (sellerGoal / DIAS_UTEIS_MES_PADRAO) * elapsedBusinessDays
       : 0
     const resultPercentage = proportionalGoal > 0 ? (sellerMonthlySales / proportionalGoal) * 100 : null
 

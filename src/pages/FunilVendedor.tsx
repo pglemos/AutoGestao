@@ -148,7 +148,7 @@ export default function FunilVendedor() {
       .then(({ data, error }) => {
         if (cancelled) return
         const target = !error && data ? Number((data as { target?: number }).target) : null
-        setCustomGoal(Number.isFinite(target) && (target as number) > 0 ? (target as number) : null)
+        setCustomGoal(Number.isFinite(target) && (target as number) >= 0 ? (target as number) : null)
       })
     return () => { cancelled = true }
   }, [effectiveStoreId, profile?.id])

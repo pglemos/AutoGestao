@@ -5,6 +5,10 @@ const sql = readFileSync(
   new URL('../../supabase/migrations/20260826103000_fix_vendedor_performance_goal_scope.sql', import.meta.url),
   'utf8',
 )
+const precedenceSql = readFileSync(
+  new URL('../../supabase/migrations/20260826181204_individual_goal_precedence_and_eligible_seller_scope.sql', import.meta.url),
+  'utf8',
+)
 
 describe('vendedor performance goal scope migration', () => {
   test('uses a complete active-store seller set for the divisor', () => {
@@ -38,5 +42,19 @@ describe('vendedor performance goal scope migration', () => {
   test('keeps the official RPC restricted to authenticated callers', () => {
     expect(sql).toContain('REVOKE ALL ON FUNCTION public.vendedor_performance_oficial(date, date, uuid, uuid) FROM PUBLIC, anon')
     expect(sql).toContain('GRANT EXECUTE ON FUNCTION public.vendedor_performance_oficial(date, date, uuid, uuid) TO authenticated')
+  })
+})
+
+describe('individual goal precedence migration', () => {
+  test('uses explicit individual targets, including zero, before the fallback division', () => {
+    expect(precedenceSql).toContain('WHEN saved.target IS NOT NULL THEN saved.target')
+    expect(precedenceSql).toContain('THEN coalesce(sr.monthly_goal, 0) / sr.seller_count')
+    expect(precedenceSql).toContain('WHEN coalesce(s.is_venda_loja, false) THEN 0::numeric')
+    expect(precedenceSql).toContain('count(DISTINCT ax.seller_user_id)')
+  })
+
+  test('keeps the write contract open to manager, owner and Admin MX', () => {
+    expect(precedenceSql).toContain("public.tem_papel_loja(store_id, ARRAY['dono', 'gerente'])")
+    expect(precedenceSql).toContain('public.eh_administrador_mx()')
   })
 })

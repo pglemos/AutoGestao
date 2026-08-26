@@ -615,7 +615,7 @@ export function useSellersByStore(storeId: string | null) {
         user_id: string
         users?: { active?: boolean | null; role?: string | null } | null
       }>)
-        .filter((m) => m.users?.active !== false && m.users?.role === 'vendedor')
+        .filter((m) => m.users?.active === true && m.users?.role === 'vendedor')
         .map((m) => m.user_id),
     )
 
@@ -623,7 +623,7 @@ export function useSellersByStore(storeId: string | null) {
       setSellers(
         sellersData
           .filter((s: { seller_user_id: string; users?: User | null }) =>
-            Boolean(s.users && activeSellerMemberships.has(s.seller_user_id)),
+            Boolean(s.users?.active === true && activeSellerMemberships.has(s.seller_user_id)),
           )
           .map((s: { seller_user_id: string; users?: User | null }) => ({
             ...(s.users as User),

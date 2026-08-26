@@ -218,6 +218,46 @@ export function useDashboardLojaData({
           }, 500)
         },
       )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'metas',
+          filter: `store_id=eq.${selectedStoreId}`,
+        },
+        () => {
+          if (refetchTimerRef.current) clearTimeout(refetchTimerRef.current)
+          refetchTimerRef.current = setTimeout(() => {
+            void refreshDashboardData()
+              .then(() => {
+                setSyncWarning(null)
+                setLastSyncAt(new Date())
+              })
+              .catch(() => setSyncWarning('Falha ao sincronizar automaticamente. Use Atualizar.'))
+          }, 500)
+        },
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'regras_metas_loja',
+          filter: `store_id=eq.${selectedStoreId}`,
+        },
+        () => {
+          if (refetchTimerRef.current) clearTimeout(refetchTimerRef.current)
+          refetchTimerRef.current = setTimeout(() => {
+            void refreshDashboardData()
+              .then(() => {
+                setSyncWarning(null)
+                setLastSyncAt(new Date())
+              })
+              .catch(() => setSyncWarning('Falha ao sincronizar automaticamente. Use Atualizar.'))
+          }, 500)
+        },
+      )
       .subscribe(status => {
         if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
           setSyncWarning('Realtime indisponível. Use Atualizar para confirmar os dados.')

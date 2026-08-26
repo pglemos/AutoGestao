@@ -90,7 +90,7 @@ export function useStoreRankingPageData(options: { referenceMonth?: string } = {
     }
   }, [refetch, fetchMetaRules])
 
-  const metaPeriodo = (metaRules?.monthly_goal || 0) * MESES_POR_PERIODO[periodo]
+  const metaPeriodo = (metaRules?.monthly_goal ?? 0) * MESES_POR_PERIODO[periodo]
 
   const todosVendedores = useMemo<RankedVendedor[]>(() => {
     // Todo integrante da loja aparece no ranking. `is_venda_loja` é marcação de
@@ -105,7 +105,9 @@ export function useStoreRankingPageData(options: { referenceMonth?: string } = {
           foto: r.avatar_url,
           unidade: r.store_name,
           vendas: r.vnd_total,
-          meta: r.meta || metaPeriodo,
+          // `0` may be an explicit individual target; only an absent value
+          // may use the period-level fallback.
+          meta: r.meta ?? metaPeriodo,
           leads: r.leads,
           agendamentos: r.agd_total,
           visitas: r.visitas,

@@ -144,7 +144,7 @@ function SellerDetailModal({
     >
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <KpiCard icon={<ShoppingCart size={16} />} label="Vendas" value={String(seller.vnd_total)} highlight />
-        <KpiCard icon={<Target size={16} />} label="Meta" value={String(seller.meta || '—')} />
+        <KpiCard icon={<Target size={16} />} label="Meta" value={String(seller.meta ?? '—')} />
         <KpiCard
           icon={<TrendingUp size={16} />}
           label="Atingimento"

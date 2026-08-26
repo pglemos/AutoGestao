@@ -46,12 +46,12 @@ export function resolveCanonicalIndividualGoal({
   activeSellersCount,
   isVendaLoja = false,
 }: ResolveCanonicalIndividualGoalInput): number {
+  if (isVendaLoja) return 0
+
   if (officialGoal !== null && officialGoal !== undefined) {
     const canonical = Number(officialGoal)
-    if (Number.isFinite(canonical)) return canonical
+    if (Number.isFinite(canonical) && canonical >= 0) return canonical
   }
-
-  if (isVendaLoja) return 0
 
   const storeGoal = Number(storeMonthlyGoal)
   const sellerCount = Number(activeSellersCount)
@@ -68,19 +68,16 @@ export function resolveCanonicalIndividualGoal({
  * Modos suportados:
  * - `even` (padrão): divide a meta da loja igualmente entre os vendedores
  *   ativos (`activeSellersCount`, ex.: via RPC `contar_vendedores_ativos_loja`).
- * - `custom`: usa o valor individual configurado para o vendedor no mês/ano
- *   vigente (tabela `metas`, colunas `store_id`/`user_id`/`month`/`year`/`target`).
- *   Sem valor configurado (`customGoal` nulo/zero), cai no valor cheio da loja
- *   até o gerente cadastrar a meta individual deste vendedor.
+ * - Meta individual cadastrada (`customGoal`) sempre tem precedência, inclusive
+ *   quando o valor salvo é `0`. Sem cadastro individual, divide a meta da loja
+ *   pelo número de vendedores elegíveis, independentemente do modo legado salvo
+ *   em `individual_goal_mode`.
  * - `proportional`: rateia a meta da loja por uma fração (`proportionalShare`,
  *   0-1) definida por uma regra externa a esta função. Hoje o schema não tem
  *   nenhuma coluna/tabela que armazene peso ou proporção por vendedor (nem em
  *   `regras_metas_loja`, nem em `vendedores_loja`, nem em `vinculos_loja`) —
- *   por isso `proportionalShare` normalmente chega `undefined` e a função cai
- *   no valor cheio da loja (mesmo comportamento de hoje). Ver Artigo IV (No
- *   Invention): a UI não deve inventar essa fonte de dado; quando o schema
- *   ganhar uma fonte de peso/proporção por vendedor, basta passar
- *   `proportionalShare` calculado a partir dela.
+ *   por isso `proportionalShare` normalmente chega `undefined`; quando uma
+ *   fonte de peso existir, ela continua sendo respeitada antes do rateio igual.
  */
 export type IndividualGoalMode = StoreMetaRules['individual_goal_mode']
 
@@ -95,6 +92,8 @@ export type ResolveIndividualGoalInput = {
   customGoal?: number | null
   /** Fração (0-1) da meta da loja atribuída a este vendedor, usada no modo 'proportional'. */
   proportionalShare?: number | null
+  /** Conta operacional que nunca recebe meta individual nem entra no divisor. */
+  isVendaLoja?: boolean | null
 }
 
 export function resolveIndividualGoal({
@@ -103,28 +102,27 @@ export function resolveIndividualGoal({
   activeSellersCount,
   customGoal,
   proportionalShare,
+  isVendaLoja = false,
 }: ResolveIndividualGoalInput): number | null {
+  if (isVendaLoja) return 0
+
+  // `0` is a valid explicit decision. Never use truthiness to decide whether
+  // a manager/owner/Admin MX saved an individual target.
+  const custom = customGoal === null || customGoal === undefined ? NaN : Number(customGoal)
+  if (Number.isFinite(custom) && custom >= 0) return custom
+
   const storeGoal = typeof storeMonthlyGoal === 'number' ? storeMonthlyGoal : Number(storeMonthlyGoal)
   if (!Number.isFinite(storeGoal) || storeGoal <= 0) return null
 
   const resolvedMode = String(mode || 'even')
-
-  if (resolvedMode === 'custom') {
-    const custom = typeof customGoal === 'number' ? customGoal : Number(customGoal)
-    if (Number.isFinite(custom) && custom > 0) return custom
-    return storeGoal
-  }
-
   if (resolvedMode === 'proportional') {
-    const share = typeof proportionalShare === 'number' ? proportionalShare : Number(proportionalShare)
-    if (Number.isFinite(share) && share > 0) {
-      return Math.round(storeGoal * Math.min(share, 1))
-    }
-    return storeGoal
+    const share = proportionalShare === null || proportionalShare === undefined ? NaN : Number(proportionalShare)
+    if (Number.isFinite(share) && share >= 0) return storeGoal * Math.min(share, 1)
   }
 
-  if (activeSellersCount && activeSellersCount > 0) {
-    return Math.round(storeGoal / activeSellersCount)
-  }
-  return storeGoal
+  const sellerCount = typeof activeSellersCount === 'number' ? activeSellersCount : Number(activeSellersCount)
+  if (Number.isFinite(sellerCount) && sellerCount > 0) return storeGoal / sellerCount
+
+  // A missing divisor must not leak the store total into each seller row.
+  return null
 }

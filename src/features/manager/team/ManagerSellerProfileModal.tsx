@@ -63,7 +63,7 @@ export function ManagerSellerProfileModal({
   const result = card.result
   const consistency = card.consistency
   const status = statusCopy(card.overallStatus)
-  const sellerTarget = seller.meta > 0 ? seller.meta : null
+  const sellerTarget = seller.meta
 
   return (
     <div className="fixed inset-0 z-[var(--mx-z-modal)] flex items-center justify-center bg-surface-overlay/30 p-4">
@@ -138,7 +138,7 @@ function OverviewTab({ seller, card, result, consistency, sellerTarget, status }
 }
 
 function PerformanceTab({ seller, card, period, onPeriodChange }: { seller: RankingEntry; card: ManagerTeamCard; period: PerformancePeriod; onPeriodChange: (period: PerformancePeriod) => void }) {
-  const target = seller.meta > 0 ? seller.meta : null
+  const target = seller.meta
   return <div className="space-y-5">
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
       <Metric icon={TrendingUp} label="Vendas no período" value={seller.vnd_total} tone="success" />
