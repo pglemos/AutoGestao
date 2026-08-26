@@ -127,9 +127,12 @@ export function buildCentralMx(
   data: DashboardData,
   marginPercent: number | null,
   strategicParameters: Record<string, number | null> | null = null,
+  salesByChannel: { internet: number | null; doorFlow: number | null } | null = null,
 ) {
   return buildCentralMxEngine({
     strategicParameters,
+    inventory: data.inventory ?? null,
+    salesByChannel,
     storeId: data.operationalStore?.id || data.metrics.storeName || 'loja-mx',
     storeName: data.metrics.storeName,
     period: data.referenceDate.slice(0, 7),

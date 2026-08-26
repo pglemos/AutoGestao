@@ -118,6 +118,23 @@ export type CentralMxEngineInput = {
   }>
   previousYear?: Record<string, number | null>
   /**
+   * Vendas do mês por canal (`eventos_comerciais`), quando a origem distingue.
+   * `carteira` fica de fora: o evento não separa carteira da empresa da do
+   * vendedor, e ratear inventaria a diferença.
+   */
+  salesByChannel?: { internet: number | null; doorFlow: number | null } | null
+  /**
+   * Estoque da unidade, já apurado por `useOwnerInventoryMetrics` sobre
+   * `veiculos_estoque`. Sem ele, os cinco indicadores de estoque do catálogo
+   * ficam sem realizado.
+   */
+  inventory?: {
+    total: number
+    available: number
+    agingOver90: number
+    value: number
+  } | null
+  /**
    * Parâmetros estratégicos da MX (`parametros_estrategicos_mx`), por código.
    *
    * Sem eles, as metas de negócio deste motor eram números cravados no código —
@@ -300,6 +317,12 @@ function getBaseValues(input: CentralMxEngineInput): Record<string, { meta: numb
   const porVendedor = (total: number | null) =>
     total == null || sellerCount <= 0 ? null : total / sellerCount
 
+  const estoque = input.inventory ?? null
+  // Preço médio e % acima de 90 dias só existem com estoque cadastrado: sem
+  // veículo na base, dividir por zero produziria 0 — um número que parece dado.
+  const precoMedioEstoque = estoque && estoque.total > 0 ? estoque.value / estoque.total : null
+  const taxaAcima90 = estoque && estoque.total > 0 ? (estoque.agingOver90 / estoque.total) * 100 : null
+
   // Só entram valores que a operação de fato mede. Indicador do catálogo sem
   // fonte fica sem `realizado` — o cockpit mostra "--", que é a verdade, em vez
   // de um número construído para preencher a linha.
@@ -310,6 +333,8 @@ function getBaseValues(input: CentralMxEngineInput): Record<string, { meta: numb
     appointments: { meta: null, realizado: input.metrics.totalAgd, anoAnterior: anterior('appointments') },
     visits: { meta: null, realizado: input.metrics.totalVis, anoAnterior: anterior('visits') },
     seller_count: { meta: null, realizado: sellerCount || null, anoAnterior: anterior('seller_count') },
+    sales_internet: { meta: null, realizado: input.salesByChannel?.internet ?? null, anoAnterior: anterior('sales_internet') },
+    sales_door_flow: { meta: null, realizado: input.salesByChannel?.doorFlow ?? null, anoAnterior: anterior('sales_door_flow') },
     avg_sales_per_seller: { meta: null, realizado: porVendedor(input.metrics.totalSales), anoAnterior: anterior('avg_sales_per_seller') },
     avg_leads_per_seller: { meta: null, realizado: porVendedor(input.metrics.totalLeads), anoAnterior: anterior('avg_leads_per_seller') },
 
@@ -322,9 +347,12 @@ function getBaseValues(input: CentralMxEngineInput): Record<string, { meta: numb
     net_profit: { meta: null, realizado: input.financial?.netProfit ?? null, anoAnterior: anterior('net_profit') },
     avg_margin: { meta: metaFromParameter(input, 'STOCK_MARGIN_RATE', 100), realizado: input.financial?.grossMarginPct ?? null, anoAnterior: anterior('avg_margin') },
 
-    // Estoque: metas da metodologia, realizado ainda sem fonte no cockpit.
-    stock_over_90_rate: { meta: metaFromParameter(input, 'OVER_90_STOCK_RATE', 100), realizado: null, anoAnterior: anterior('stock_over_90_rate') },
-    active_stock: { meta: metaFromParameter(input, 'ACTIVE_STOCK_RATE', 100), realizado: null, anoAnterior: anterior('active_stock') },
+    // Estoque: `veiculos_estoque` da unidade.
+    stock_total: { meta: null, realizado: estoque?.total ?? null, anoAnterior: anterior('stock_total') },
+    active_stock: { meta: null, realizado: estoque?.available ?? null, anoAnterior: anterior('active_stock') },
+    inventory_over_90_volume: { meta: null, realizado: estoque?.agingOver90 ?? null, anoAnterior: anterior('inventory_over_90_volume') },
+    avg_stock_price: { meta: null, realizado: precoMedioEstoque, anoAnterior: anterior('avg_stock_price') },
+    stock_over_90_rate: { meta: metaFromParameter(input, 'OVER_90_STOCK_RATE', 100), realizado: taxaAcima90, anoAnterior: anterior('stock_over_90_rate') },
     trade_in_to_sales_rate: { meta: metaFromParameter(input, 'TRADE_SALES_RATE', 100), realizado: null, anoAnterior: anterior('trade_in_to_sales_rate') },
     financed_sales_percentage: { meta: metaFromParameter(input, 'FINANCED_SALES_RATE', 100), realizado: null, anoAnterior: anterior('financed_sales_percentage') },
     after_sales_percentage: { meta: metaFromParameter(input, 'POST_SALE_RATE', 100), realizado: null, anoAnterior: anterior('after_sales_percentage') },
