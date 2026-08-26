@@ -30,6 +30,9 @@ Com schema canonico e check-in temporal corrigidos, o painel da loja precisa usa
 - [x] `VENDA LOJA` nao contamina meta individual quando `include_venda_loja_in_individual_goal=false`.
 - [x] Dashboard usa `regras_metas_loja.monthly_goal`.
 - [x] Dashboard respeita `include_venda_loja_in_store_total`.
+- [x] Meta individual cadastrada por Gerente, Dono ou Admin MX prevalece sobre o rateio da loja, inclusive quando o valor cadastrado e `0`.
+- [x] Sem meta individual cadastrada, a meta da loja e dividida entre vendedores ativos elegiveis; `VENDA LOJA` e usuarios inativos ficam fora do divisor.
+- [x] Dashboard, ranking, funil, metricas, editor e realtime compartilham a mesma precedencia de meta.
 - [x] Gates locais passam.
 
 ## Validacao
@@ -53,16 +56,38 @@ Com schema canonico e check-in temporal corrigidos, o painel da loja precisa usa
 
 - `docs/stories/story-store-dashboard-ranking-03/spec/spec.md`
 - `docs/stories/story-store-dashboard-ranking-03/plan/implementation.yaml`
+- `artifacts/route-role-inventory/route-role-matrix.json`
+- `artifacts/route-role-inventory/route-role-matrix.md`
 - `src/hooks/useTeam.ts`
 - `src/hooks/useRanking.ts`
 - `src/hooks/useGoals.ts`
 - `src/pages/DashboardLoja.tsx`
+- `src/features/crm/funil-vendedor/official-kpis.test.ts`
+- `src/features/crm/funil-vendedor/official-kpis.ts`
 - `src/features/dashboard-loja/hooks/useDashboardLojaData.ts`
+- `src/features/dashboard-loja/sections/ManagerOperationalCockpit.tsx`
+- `src/features/dashboard-loja/sections/ManagerSellerParityHome.tsx`
+- `src/features/dashboard-loja/sections/ManagerSellerParityHomeCanonical.tsx`
+- `src/features/dashboard-loja/sections/RankingSection.tsx`
+- `src/features/lojas/components/SellerGoalsEditor.tsx`
+- `src/features/manager/team/ManagerSellerProfileModal.tsx`
+- `src/features/ranking/components/base44/TabelaRanking.tsx`
+- `src/features/ranking/hooks/useStoreRankingPageData.ts`
+- `src/features/ranking/views/ManagerRankingReference.tsx`
+- `src/features/vendedor-home/hooks/useVendedorHomePage.ts`
+- `src/hooks/useSellerMetrics.test.ts`
+- `src/hooks/useSellerMetrics.ts`
+- `src/hooks/useStoreSales.test.ts`
+- `src/hooks/useStoreSales.ts`
+- `src/hooks/useStores.test.ts`
+- `src/hooks/useStores.ts`
 - `src/lib/storeSalesRules.ts`
 - `src/lib/storeSalesRules.test.ts`
 - `src/lib/dashboard-seller-goal-source.test.ts`
 - `src/lib/vendedor-performance-goal-scope-migration.test.ts`
 - `supabase/migrations/20260826103000_fix_vendedor_performance_goal_scope.sql`
+- `supabase/migrations/20260826181204_individual_goal_precedence_and_eligible_seller_scope.sql`
+- `src/pages/FunilVendedor.tsx`
 
 ## Dev Agent Record
 
