@@ -103,3 +103,48 @@ Criar Plano Padrão percorrido pela tela até "Salvar rascunho": gravou
 `pa_comercial_visittosaleconversion_060`, departamento `comercial`,
 `primary_indicator_code` `visit_to_sale_rate` (FK resolvida) e 1 item. Registro
 de teste removido em seguida.
+
+---
+
+## Fechamento dos pendentes de dado (2026-08-26)
+
+### Sugestão ao Dono — não era funcionalidade quebrada
+
+O fluxo inteiro foi exercitado em produção no template de QA: marcar "Disponível
+para sugestão ao Dono" no passo 4 do wizard → grava `owner_suggestion_enabled`
+→ coluna **Sug.** vira "Ativo" → o filtro "Disponível para sugestão" passa a
+retornar o plano → o botão **Sugerir ao Dono** aparece na linha. O dado de teste
+foi revertido a `false` logo depois.
+
+Ou seja: a aba não está inerte por defeito — os 8 planos simplesmente nunca
+foram marcados. **Decisão de curadoria da MX**, não correção de código: marcar
+quais planos padrão podem ser recomendados no Módulo Dono.
+
+### Vínculo de indicador — backfill aplicado
+
+6 dos 8 planos estavam sem `primary_indicator_code`, então não tinham a FK que
+liga o plano ao indicador cuja eficácia ele deve mover. O código canônico estava
+em `indicador`; a migration `20260826011500` traduz para o vocabulário do
+catálogo persistido, com a mesma regra do cadastro novo:
+
+| Plano padrão | `indicador` | `primary_indicator_code` |
+|---|---|---|
+| Recuperação de Meta de Vendas | SALES_TOTAL | sales_total |
+| Redução de Despesas Operacionais | TOTAL_EXPENSE | total_expense |
+| Aumento do Volume de Leads | LEADS_RECEIVED | leads_received |
+| Otimização do Custo e Tempo de Preparação | AVERAGE_PREPARATION_COST | preparation_cost |
+| Adequação do Quadro de Colaboradores | EMPLOYEE_COUNT | employee_count |
+| Redução do Estoque acima de 90 dias | INVENTORY_OVER_90_PERCENTAGE | stock_over_90_rate |
+
+Efeito colateral bem-vindo: a coluna **Indicador** da tabela passou a mostrar o
+nome legível ("Vendas Total", "% Estoque > 90 Dias") no lugar do código cru.
+Sem regressão no wizard: Comercial + Vendas Total continua listando
+"Recuperação de Meta de Vendas".
+
+### Continua aberto
+
+`departamento` convive em dois vocabulários na mesma tabela — `comercial`
+(minúsculo, criado pela tela) e `COMERCIAL`/`PESSOAS_RH` (maiúsculo, dos seeds).
+O filtro casa os dois e a contagem dos cards está correta hoje, então não
+mexi: normalizar é migração de dados que muda o que a tela mostra e merece
+decisão explícita.
