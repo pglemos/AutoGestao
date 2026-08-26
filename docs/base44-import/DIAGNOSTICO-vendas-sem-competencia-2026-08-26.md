@@ -55,3 +55,50 @@ o caso é transferência de loja com venda antiga ficando para trás.
 
 Vale decidir se a venda deve seguir a loja do evento (histórico correto) ou a do
 vínculo (ranking da equipe atual). Hoje a regra é implícita e silenciosa.
+
+---
+
+## Decisões tomadas e aplicadas (2026-08-26)
+
+O critério não foi opinião: a metodologia trata a competência como o mês em que
+o fato aconteceu (no Base44, `competenceUtils` resolve o mês fechado M-1 do
+plano). Venda sem competência não é uma categoria válida — é dado incompleto.
+
+### 1. A torneira, no servidor
+
+`atualizar_etapa_oportunidade_crm` só propagava competência quando alguém
+informava (`IF v_competencia_efetiva IS NOT NULL`), e o CRM **nunca** informa:
+`buildEventoComercialPayload` jamais teve `data_competencia`. Toda venda marcada
+como ganha sem preenchimento manual nascia órfã.
+
+A cadeia agora é: informada → `sale_date` → competência/`sale_date` da
+oportunidade → **`data_evento`** → hoje. Nunca resulta em nulo. Ficou no
+servidor de propósito: todo caminho de escrita passa por lá, não só o CRM.
+
+### 2. O passivo: 117 vendas recuperadas
+
+Backfill com a mesma regra. Não inventa dado — `data_evento` é a data real do
+fato, já registrada. Concentração em VITRINE - TIROL (67 vendas em 8 meses),
+AUTO UP, TREND AUTO e VITRINE - TIROL em agosto (10 cada).
+
+Efeito medido em produção: **Vendas Rede de agosto passou de 228 para 268**.
+Zero vendas órfãs no banco.
+
+Comunicar às lojas afetadas: os números de meses anteriores mudaram para mais,
+porque vendas reais que estavam invisíveis voltaram a contar. Ninguém perdeu
+venda; houve recuperação de crédito que já era devido.
+
+### 3. Venda não some mais em transferência
+
+`useRanking` descartava a venda quando a loja do evento não era a do vínculo
+atual — numa transferência de loja, a venda sumia de *todos* os rankings, sem
+aviso. Agora a venda conta para quem a fez; o escopo de quem enxerga o quê já é
+garantido pela RPC, que é `SECURITY DEFINER` com checagem de papel.
+
+### 4. Um vocabulário só para `departamento`
+
+`planos_acao_templates.departamento` convivia com `comercial` e `COMERCIAL` /
+`PESSOAS_RH` / `PRODUTO_ESTOQUE` / `OPERACOES`. Venceu a categoria canônica
+minúscula do app — é o que o wizard grava e o que a UI usa para agrupar. Antes
+de aplicar, verifiquei que nenhuma função do banco filtra pelos literais
+antigos. Cards e coluna Departamento conferidos em produção depois: inalterados.
