@@ -39,21 +39,38 @@ export function AdminSegurancaAuditoriaPage() {
   const fetchLogs = async () => {
     setLoading(true)
     try {
-      const { data: clients } = await supabase
-        .from('clientes_consultoria')
-        .select('id, name, updated_at, status')
-        .order('updated_at', { ascending: false })
-        .limit(20)
+      // Trilha real: `internal_mx_admin_audit` é gravada por trigger/RPC e só
+      // permite SELECT para a área interna MX (write direto negado por RLS).
+      const { data: entries } = await supabase
+        .from('internal_mx_admin_audit')
+        .select('id, actor_id, actor_role, action, entity_type, store_id, created_at')
+        .order('created_at', { ascending: false })
+        .limit(200)
 
-      const computed: AuditLogRow[] = (clients || []).map((c, i) => ({
-        id: c.id,
-        user: 'Administrador Geral',
-        action: c.status === 'ativo' ? 'ACTIVATE' : 'UPDATE',
-        resource: 'Cadastro do Cliente',
-        client: c.name,
-        date: c.updated_at ? new Date(c.updated_at).toLocaleString('pt-BR') : 'Data não registrada',
-      }))
-      setLogs(computed)
+      const rows = entries || []
+      const actorIds = [...new Set(rows.map(r => r.actor_id).filter(Boolean))] as string[]
+      const storeIds = [...new Set(rows.map(r => r.store_id).filter(Boolean))] as string[]
+
+      const [actorsRes, storesRes] = await Promise.all([
+        actorIds.length
+          ? supabase.from('usuarios').select('id, name, email').in('id', actorIds)
+          : Promise.resolve({ data: [] as Array<{ id: string; name: string | null; email: string | null }> }),
+        storeIds.length
+          ? supabase.from('lojas').select('id, name').in('id', storeIds)
+          : Promise.resolve({ data: [] as Array<{ id: string; name: string | null }> }),
+      ])
+
+      const actorById = new Map((actorsRes.data || []).map(u => [u.id, u.name || u.email || u.id]))
+      const storeById = new Map((storesRes.data || []).map(l => [l.id, l.name || l.id]))
+
+      setLogs(rows.map(r => ({
+        id: r.id,
+        user: (r.actor_id && actorById.get(r.actor_id)) || 'Autor não identificado',
+        action: r.action,
+        resource: r.entity_type,
+        client: (r.store_id && storeById.get(r.store_id)) || (r.actor_role ?? '—'),
+        date: r.created_at ? new Date(r.created_at).toLocaleString('pt-BR') : 'Data não registrada',
+      })))
     } catch {
       setLogs([])
     } finally {

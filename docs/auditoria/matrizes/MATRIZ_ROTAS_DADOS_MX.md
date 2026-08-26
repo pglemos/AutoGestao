@@ -167,7 +167,7 @@
 | `ciclos_plano_estrategico` | 4 |
 | `ciclos_plano_estrategico_indicadores` | 1 |
 | `clientes` | 6 |
-| `clientes_consultoria` | 32 |
+| `clientes_consultoria` | 31 |
 | `clientes_oportunidades` | 1 |
 | `comportamental_perfis` | 1 |
 | `comportamental_questoes` | 1 |
@@ -209,7 +209,7 @@
 | `importacoes_brutas` | 1 |
 | `indice_felicidade_agregado` | 1 |
 | `inscricoes_autocadastro_cliente` | 1 |
-| `internal_mx_admin_audit` | 2 |
+| `internal_mx_admin_audit` | 3 |
 | `itens_plano_acao` | 3 |
 | `lancamentos_diarios` | 16 |
 | `links_autocadastro_cliente` | 1 |
@@ -219,7 +219,7 @@
 | `logs_compartilhamento_whatsapp` | 1 |
 | `logs_reprocessamento` | 1 |
 | `logs_rotina_gerente` | 1 |
-| `lojas` | 32 |
+| `lojas` | 33 |
 | `manager_daily_tasks` | 1 |
 | `manager_lead_conferences` | 1 |
 | `marketing_mensal_consultoria` | 1 |
@@ -306,7 +306,7 @@
 | `universidade_certificacoes` | 1 |
 | `universidade_trilhas` | 1 |
 | `user_roles` | 1 |
-| `usuarios` | 29 |
+| `usuarios` | 30 |
 | `valores_indicadores_planejamento` | 2 |
 | `valores_indicadores_planejamento_vigentes` | 4 |
 | `valores_parametros_consultoria` | 3 |
@@ -380,7 +380,7 @@
 | `ciclos_plano_estrategico:update` | 1 |
 | `clientes_consultoria:delete` | 1 |
 | `clientes_consultoria:insert` | 4 |
-| `clientes_consultoria:select` | 31 |
+| `clientes_consultoria:select` | 30 |
 | `clientes_consultoria:update` | 7 |
 | `clientes_oportunidades:select` | 1 |
 | `clientes:delete` | 2 |
@@ -479,7 +479,7 @@
 | `inscricoes_autocadastro_cliente:select` | 1 |
 | `inscricoes_autocadastro_cliente:update` | 1 |
 | `internal_mx_admin_audit:insert` | 2 |
-| `internal_mx_admin_audit:select` | 1 |
+| `internal_mx_admin_audit:select` | 2 |
 | `itens_plano_acao:insert` | 2 |
 | `itens_plano_acao:select` | 2 |
 | `itens_plano_acao:update` | 1 |
@@ -500,7 +500,7 @@
 | `logs_rotina_gerente:upsert` | 1 |
 | `lojas:delete` | 1 |
 | `lojas:insert` | 3 |
-| `lojas:select` | 32 |
+| `lojas:select` | 33 |
 | `lojas:update` | 3 |
 | `manager_daily_tasks:select` | 1 |
 | `manager_daily_tasks:update` | 1 |
@@ -672,7 +672,7 @@
 | `user_roles:update` | 1 |
 | `usuarios:delete` | 2 |
 | `usuarios:insert` | 1 |
-| `usuarios:select` | 26 |
+| `usuarios:select` | 27 |
 | `usuarios:update` | 6 |
 | `usuarios:upsert` | 1 |
 | `valores_indicadores_planejamento_vigentes:select` | 4 |

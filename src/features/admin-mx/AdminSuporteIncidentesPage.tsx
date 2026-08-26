@@ -3,7 +3,6 @@ import {
   AlertTriangle,
   CheckCircle2,
   Headphones,
-  Plus,
   RefreshCw,
   Search,
 } from 'lucide-react'
@@ -54,6 +53,8 @@ export function AdminSuporteIncidentesPage() {
         .select('id, name, status, updated_at')
         .order('name')
 
+      // Não existe tabela de chamados: a lista abaixo é derivada do estado real
+      // do cadastro do cliente. Por isso também não há abertura de chamado aqui.
       const computed: SupportTicket[] = []
       for (const client of clients || []) {
         if (client.status === 'em_configuracao' || client.status === 'rascunho') {
@@ -64,7 +65,7 @@ export function AdminSuporteIncidentesPage() {
             category: 'Implantação',
             priority: 'MEDIO',
             status: 'EM_ATENDIMENTO',
-            date: client.updated_at ? new Date(client.updated_at).toLocaleDateString('pt-BR') : 'Hoje',
+            date: client.updated_at ? new Date(client.updated_at).toLocaleDateString('pt-BR') : 'Data não registrada',
           })
         }
       }
@@ -94,14 +95,9 @@ export function AdminSuporteIncidentesPage() {
         title="Suporte e Incidentes"
         description="Gestão de chamados operacionais, dúvidas metodológicas e incidentes técnicos."
         actions={
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => void fetchTickets()} disabled={loading}>
-              <RefreshCw size={14} className={loading ? 'animate-spin' : ''} /> Atualizar
-            </Button>
-            <Button variant="primary" size="sm">
-              <Plus size={14} /> Novo Chamado
-            </Button>
-          </div>
+          <Button variant="outline" size="sm" onClick={() => void fetchTickets()} disabled={loading}>
+            <RefreshCw size={14} className={loading ? 'animate-spin' : ''} /> Atualizar
+          </Button>
         }
       />
 

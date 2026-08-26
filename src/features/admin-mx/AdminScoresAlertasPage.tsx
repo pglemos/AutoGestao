@@ -59,10 +59,12 @@ export function AdminScoresAlertasPage() {
     setLoading(true)
     setError(null)
     try {
-      // Simula / busca dados reais de clientes e alertas da plataforma
+      // Alertas derivados do estado real do cadastro do cliente — não há
+      // tabela de alertas de consultoria: a `alerts` do banco é operacional
+      // (loja/vendedor) e pertence a outro escopo.
       const { data: clients } = await supabase
         .from('clientes_consultoria')
-        .select('id, name, status, business_phase')
+        .select('id, name, status, business_phase, updated_at')
         .order('name')
 
       const generatedAlerts: AlertItem[] = []
@@ -75,7 +77,7 @@ export function AdminScoresAlertasPage() {
             title: 'Onboarding em aberto',
             description: 'Cliente com cadastro incompleto aguardando definição de Dono Master ou Lojas.',
             status: 'ATIVO',
-            created_at: new Date().toISOString(),
+            created_at: client.updated_at ?? '',
           })
         }
         if (client.status === 'pronto_para_ativar') {
@@ -86,7 +88,7 @@ export function AdminScoresAlertasPage() {
             title: 'Pronto para Ativação',
             description: 'Checklist inicial concluído. Operação pode ser ativada.',
             status: 'ATIVO',
-            created_at: new Date().toISOString(),
+            created_at: client.updated_at ?? '',
           })
         }
       }
