@@ -97,6 +97,24 @@ Provas colhidas em produção, com a sessão real do navegador:
 
 Os registros de teste foram removidos; as contagens voltaram a 122 / 35 / 156.
 
+**Ramo do gerente, com login real.** As provas acima usaram a sessão de um
+administrador MX, que passa pelo ramo `eh_area_interna_mx` da RPC — o ramo
+`is_manager_of` ficava sem execução. Para fechar isso foi criado um usuário de
+QA dedicado (`qa-rpc-gerente-*@mx-qa.invalid`, nenhuma conta de pessoa real),
+vinculado como gerente da loja VITRINE, autenticado por
+`grant_type=password` de verdade:
+
+| Tentativa | Resultado |
+|---|---|
+| RPC na loja em que é gerente | `200`, id devolvido |
+| RPC em loja alheia | `400 P0001 — sem permissão para auditar esta loja` |
+| `INSERT` direto em `logs_auditoria_loja` | `403 permission denied` |
+| `changed_by` gravado | o uid do gerente, carimbado pela RPC |
+
+Usuário de QA, vínculo e registros de teste foram apagados em seguida
+(`logs_auditoria_loja` de volta a 122; nenhuma sobra em `usuarios`,
+`auth.users` ou `vinculos_loja`).
+
 ### 2. `/scores` — timestamp carimbado com o relógio da requisição
 
 `generatedAlerts` gravava `created_at: new Date().toISOString()`, o que faria
