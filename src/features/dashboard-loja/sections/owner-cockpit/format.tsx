@@ -123,8 +123,13 @@ export function departmentDetail(department: CentralMxDepartmentModule) {
   return `${complete} completos, ${partial} parciais, ${department.alertCount} críticos`
 }
 
-export function buildCentralMx(data: DashboardData, marginPercent: number | null) {
+export function buildCentralMx(
+  data: DashboardData,
+  marginPercent: number | null,
+  strategicParameters: Record<string, number | null> | null = null,
+) {
   return buildCentralMxEngine({
+    strategicParameters,
     storeId: data.operationalStore?.id || data.metrics.storeName || 'loja-mx',
     storeName: data.metrics.storeName,
     period: data.referenceDate.slice(0, 7),

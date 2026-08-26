@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import { useStrategicParameterValues } from '../hooks/useStrategicParameterValues'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
   BookOpen,
@@ -68,7 +69,13 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
   const marginPercent = data.latestDRE && data.latestDRE.gross_margin > 0
     ? (data.latestDRE.gross_profit / data.latestDRE.gross_margin) * 100
     : null
-  const centralMx = useMemo(() => buildCentralMx(data, marginPercent), [data, marginPercent])
+  // As metas de negócio do cockpit vêm dos parâmetros da metodologia, não de
+  // números cravados no motor.
+  const strategicParameters = useStrategicParameterValues()
+  const centralMx = useMemo(
+    () => buildCentralMx(data, marginPercent, strategicParameters),
+    [data, marginPercent, strategicParameters],
+  )
   const departments = useMemo(() => centralMx.departments.map(departmentFromEngine), [centralMx.departments])
   const ownerAlerts = useMemo(() => {
     const generated = centralMx.alerts.map(alertFromEngine)

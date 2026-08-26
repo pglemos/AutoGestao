@@ -8,7 +8,7 @@
 - Tabelas referenciadas pelo runtime: **181**
 - RPCs referenciadas pelo runtime: **107**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **385**
+- Pares tabela/operação encontrados: **388**
 
 ## Rotas
 
@@ -23,6 +23,7 @@
 | `/terms` | route | pública | — | n/a | — | `<Suspense fallback={<Spinner />}><Terms /></Suspense>` |
 | `/dono/*` | route | pública | — | n/a | — | `<OwnerLegacyPathRedirect />` |
 | `/gerente/*` | route | pública | — | n/a | — | `<ManagerLegacyPathRedirect />` |
+| `/pdi/:id/print` | route | protegida | — | `/pdi/:id/print` | — | `<ProtectedRoute><Suspense fallback={<Spinner />}><PDIPrint /></Suspense></ProtectedRoute>` |
 | `/` | container | protegida | — | n/a | — | `<ProtectedRoute><Suspense fallback={<Spinner />}><AppShell /></Suspense></ProtectedRoute>` |
 | `/settings` | route | protegida | `/configuracoes` | `/settings` | — | `<Navigate to="/configuracoes" replace />` |
 | `/plano-estrategico` | route | protegida | — | `/plano-estrategico` | vendedor, gerente | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerPlanoEstrategico />} admin={<InternalStrategicPlanPage />} /></S` |
@@ -101,7 +102,6 @@
 | `/lojas/:storeSlug/equipe` | route | protegida | — | `/lojas/:storeSlug/*` | vendedor | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /> </Suspense>` |
 | `/consultor-ia` | route | protegida | — | `/consultor-ia` | — | `<ConsultorIaAliasRedirect />` |
 | `/pdi` | route | protegida | — | `/pdi` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Navigate to="/desenvolvimento?tab=pdi" replace />} gerente={<GerentePDI />} dono={<GerentePDI />} admin={<GerentePDI />} />` |
-| `/pdi/:id/print` | route | protegida | — | `/pdi/:id/print` | — | `<Suspense fallback={<Spinner />}><PDIPrint /></Suspense>` |
 | `/minhas-lojas` | route | protegida | — | `/minhas-lojas` | vendedor, gerente, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerStoresNetworkPage />} admin={<ForbiddenRoute />} /> </Suspense>` |
 | `/rotina` | route | protegida | — | `/rotina` | vendedor | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<OwnerRoutineRoute />} admin={<RotinaGerente />} /> </Suspense>` |
 | `/painel` | route | protegida | — | `/painel` | — | `<Suspense fallback={<Spinner />}><PainelConsultor /></Suspense>` |
@@ -247,7 +247,7 @@
 | `pacotes_indicadores_estrategicos` | 1 |
 | `pacotes_indicadores_itens` | 5 |
 | `pacotes_indicadores_versoes` | 4 |
-| `parametros_estrategicos_mx` | 1 |
+| `parametros_estrategicos_mx` | 2 |
 | `pdi_avaliacoes_competencia` | 1 |
 | `pdi_metas` | 1 |
 | `pdi_niveis_cargo` | 1 |
@@ -562,12 +562,15 @@
 | `pacotes_indicadores_versoes:insert` | 1 |
 | `pacotes_indicadores_versoes:select` | 4 |
 | `pacotes_indicadores_versoes:update` | 1 |
-| `parametros_estrategicos_mx:select` | 1 |
+| `parametros_estrategicos_mx:select` | 2 |
 | `parametros_estrategicos_mx:upsert` | 1 |
 | `pdi_avaliacoes_competencia:select` | 1 |
+| `pdi_avaliacoes_competencia:update` | 1 |
 | `pdi_metas:select` | 1 |
+| `pdi_metas:update` | 1 |
 | `pdi_niveis_cargo:select` | 1 |
 | `pdi_plano_acao:select` | 2 |
+| `pdi_plano_acao:update` | 1 |
 | `pdi_reviews:insert` | 1 |
 | `pdi_reviews:select` | 1 |
 | `pdi_sessoes:select` | 2 |

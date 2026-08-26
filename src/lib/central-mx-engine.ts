@@ -117,6 +117,15 @@ export type CentralMxEngineInput = {
     checkedIn?: boolean | null
   }>
   previousYear?: Record<string, number | null>
+  /**
+   * Parâmetros estratégicos da MX (`parametros_estrategicos_mx`), por código.
+   *
+   * Sem eles, as metas de negócio deste motor eram números cravados no código —
+   * e divergiam da metodologia: o cockpit mostrava margem-alvo de 18% enquanto
+   * o parâmetro oficial `STOCK_MARGIN_RATE` vale 20%. Quando o parâmetro não é
+   * fornecido, o indicador fica **sem meta** em vez de exibir um alvo inventado.
+   */
+  strategicParameters?: Record<string, number | null> | null
 }
 
 export type CentralMxEngineResult = {
@@ -263,6 +272,23 @@ function definitionByCode(code: string): CentralMxIndicatorDefinition {
   return found
 }
 
+/**
+ * Meta vinda do parâmetro estratégico da MX, convertida para a escala do
+ * indicador. Sem parâmetro, devolve `null`: indicador sem meta é honesto,
+ * indicador com meta inventada não é.
+ *
+ * `scale` existe porque os parâmetros percentuais são guardados como fração
+ * (0.20) e o cockpit exibe pontos percentuais (20).
+ */
+function metaFromParameter(
+  input: CentralMxEngineInput,
+  code: string,
+  scale = 1,
+): number | null {
+  const raw = input.strategicParameters?.[code]
+  return raw == null || Number.isNaN(raw) ? null : raw * scale
+}
+
 function getBaseValues(input: CentralMxEngineInput): Record<string, { meta: number | null; realizado: number | null; anoAnterior: number | null }> {
   const sellerCount = input.metrics.sellerCount
   const routinePct = sellerCount > 0 ? (input.metrics.checkedInCount / sellerCount) * 100 : null
@@ -281,28 +307,28 @@ function getBaseValues(input: CentralMxEngineInput): Record<string, { meta: numb
     schedule_to_visit_rate: { meta: input.benchmarks.scheduleToVisit, realizado: input.funnel.scheduleToVisit, anoAnterior: input.previousYear?.schedule_to_visit_rate ?? null },
     visit_to_sale_rate: { meta: input.benchmarks.visitToSale, realizado: input.funnel.visitToSale, anoAnterior: input.previousYear?.visit_to_sale_rate ?? null },
     commercial_pipeline_health: { meta: 100, realizado: commercialHealth, anoAnterior: null },
-    seller_ranking_spread: { meta: 20, realizado: null, anoAnterior: null },
+    seller_ranking_spread: { meta: null, realizado: null, anoAnterior: null },
 
     leads_total: { meta: null, realizado: input.metrics.totalLeads, anoAnterior: input.previousYear?.leads_total ?? null },
-    digital_leads_share: { meta: 35, realizado: null, anoAnterior: null },
+    digital_leads_share: { meta: null, realizado: null, anoAnterior: null },
     lead_quality_score: { meta: 100, realizado: scoreFromActual(definitionByCode('lead_to_schedule_rate'), input.funnel.leadToSchedule, input.benchmarks.leadToSchedule), anoAnterior: null },
     campaign_cadence_score: { meta: 100, realizado: null, anoAnterior: null },
     channel_mix_score: { meta: 100, realizado: null, anoAnterior: null },
     marketing_positioning_score: { meta: 100, realizado: null, anoAnterior: null },
 
     inventory_total: { meta: null, realizado: null, anoAnterior: null },
-    inventory_over_90_days: { meta: 0, realizado: null, anoAnterior: null },
+    inventory_over_90_days: { meta: metaFromParameter(input, 'OVER_90_STOCK_RATE', 100), realizado: null, anoAnterior: null },
     stock_turnover_rate: { meta: null, realizado: null, anoAnterior: null },
-    average_vehicle_margin: { meta: 18, realizado: input.financial?.grossMarginPct ?? null, anoAnterior: null },
+    average_vehicle_margin: { meta: metaFromParameter(input, 'STOCK_MARGIN_RATE', 100), realizado: input.financial?.grossMarginPct ?? null, anoAnterior: null },
     pricing_accuracy_score: { meta: 100, realizado: null, anoAnterior: null },
-    preparation_cycle_days: { meta: 7, realizado: null, anoAnterior: null },
+    preparation_cycle_days: { meta: null, realizado: null, anoAnterior: null },
     vehicle_mix_score: { meta: 100, realizado: null, anoAnterior: null },
 
     gross_profit: { meta: null, realizado: input.financial?.grossProfit ?? null, anoAnterior: input.previousYear?.gross_profit ?? null },
-    gross_margin_pct: { meta: 18, realizado: input.financial?.grossMarginPct ?? null, anoAnterior: input.previousYear?.gross_margin_pct ?? null },
+    gross_margin_pct: { meta: metaFromParameter(input, 'STOCK_MARGIN_RATE', 100), realizado: input.financial?.grossMarginPct ?? null, anoAnterior: input.previousYear?.gross_margin_pct ?? null },
     net_profit: { meta: null, realizado: input.financial?.netProfit ?? null, anoAnterior: input.previousYear?.net_profit ?? null },
     cost_per_sale: { meta: null, realizado: input.financial?.costPerSale ?? null, anoAnterior: null },
-    fixed_cost_ratio: { meta: 25, realizado: null, anoAnterior: null },
+    fixed_cost_ratio: { meta: null, realizado: null, anoAnterior: null },
     cash_flow_balance: { meta: null, realizado: null, anoAnterior: null },
     dre_completion_rate: { meta: 100, realizado: dreCompletion, anoAnterior: null },
     financial_risk_score: { meta: 100, realizado: input.financial?.netProfit == null ? null : input.financial.netProfit >= 0 ? 85 : 45, anoAnterior: null },
@@ -310,7 +336,7 @@ function getBaseValues(input: CentralMxEngineInput): Record<string, { meta: numb
     employees_total: { meta: null, realizado: sellerCount, anoAnterior: input.previousYear?.employees_total ?? null },
     feedback_cadence_rate: { meta: 100, realizado: null, anoAnterior: null },
     pdi_completion_rate: { meta: 100, realizado: null, anoAnterior: null },
-    turnover_rate: { meta: 5, realizado: null, anoAnterior: null },
+    turnover_rate: { meta: null, realizado: null, anoAnterior: null },
     happiness_index: { meta: 100, realizado: null, anoAnterior: null },
     role_clarity_score: { meta: 100, realizado: null, anoAnterior: null },
     behavioral_fit_score: { meta: 100, realizado: null, anoAnterior: null },
