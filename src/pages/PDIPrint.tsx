@@ -229,7 +229,7 @@ export default function PDIPrint() {
             <div className="w-[210mm] bg-background shadow-2xl print:shadow-none print:w-full print:max-w-none text-foreground flex flex-col gap-y-[20mm] print:gap-y-0">
 
                 {/* --- PÁGINA 1: CAPA --- */}
-                <div className="p-[20mm] min-h-[297mm] print:min-h-0 relative break-after-page flex flex-col border border-border print:border-none">
+                <div className="p-[20mm] print:p-0 min-h-[297mm] print:min-h-0 relative break-after-page flex flex-col border border-border print:border-none">
                     <div className="absolute top-mx-0 left-mx-0 w-full h-mx-lg bg-gray-900" />
                     <header className="flex justify-between items-start mt-10 mb-20 border-b-4 border-mx-black pb-8">
                         <div>
@@ -285,8 +285,8 @@ export default function PDIPrint() {
                 </div>
 
                 {/* --- PÁGINA 2: VENDEDOR 1 / MAPA DE COMPETÊNCIAS --- */}
-                <div className="p-[20mm] min-h-[297mm] print:min-h-0 break-after-page flex flex-col border border-border print:border-none relative">
-                    <header className="flex justify-between items-end border-b-2 border-mx-black pb-4 mb-10">
+                <div className="p-[20mm] print:p-0 min-h-[297mm] print:min-h-0 break-after-page flex flex-col border border-border print:border-none relative">
+                    <header className="flex justify-between items-end border-b-2 border-mx-black pb-4 mb-10 print:mb-5">
                         <div className="flex items-center gap-mx-sm">
                             <Typography variant="h2" className="text-2xl tracking-tighter">Mapa de Competências</Typography>
                             {canEdit && <EditButton label="Editar notas de competência" onClick={openAvaliacoesEditor} />}
@@ -294,7 +294,7 @@ export default function PDIPrint() {
                         <Typography variant="caption" tone="muted" className="text-mx-tiny">Página 2 / Vendedor 1</Typography>
                     </header>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-10 mb-10">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-10 mb-10 print:mb-4">
                         <div className="space-y-mx-sm">
                             <Typography variant="tiny" className="">Mapeamento Técnico & Comportamental</Typography>
                             <table className="w-full text-xs font-bold border-collapse">
@@ -323,7 +323,7 @@ export default function PDIPrint() {
                                 o container é medido antes do layout da folha e o radar
                                 sai colapsado numa linha. A folha é A4 fixa, então o
                                 gráfico pode ser fixo também. */}
-                            <div className="w-mx-80 h-mx-80">
+                            <div className="w-mx-80 h-mx-80 print:scale-90 print:origin-top">
                                 <RadarChart width={320} height={320} cx="50%" cy="50%" outerRadius="75%" data={radarData}>
                                     <PolarGrid stroke="#DFE0E1" />
                                     <PolarAngleAxis dataKey="subject" tick={{ fill: '#526B7A', fontSize: 8, fontWeight: 900 }} />
@@ -347,7 +347,7 @@ export default function PDIPrint() {
                 </div>
 
                 {/* --- PÁGINA 3: PLANO DE AÇÃO (PDI TABULAR) --- */}
-                <div className="p-[20mm] min-h-[297mm] print:min-h-0 flex flex-col border border-border print:border-none">
+                <div className="p-[20mm] print:p-0 min-h-[297mm] print:min-h-0 flex flex-col border border-border print:border-none">
                     <header className="flex justify-between items-end border-b-2 border-mx-black pb-4 mb-10">
                         <div className="flex items-center gap-mx-sm">
                             <Typography variant="h2" className="text-2xl tracking-tighter">Plano de Desenvolvimento Individual</Typography>
@@ -356,7 +356,7 @@ export default function PDIPrint() {
                         <Typography variant="caption" tone="muted" className="text-mx-tiny">Página 3 / Ações Mandatórias</Typography>
                     </header>
 
-                    <div className="mb-14">
+                    <div className="mb-14 print:mb-6">
                         <Typography variant="tiny" className="mb-6 block">Ações de Desenvolvimento (Próximos 6 Meses)</Typography>
                         <table className="w-full text-xs border-collapse">
                             <thead>
@@ -382,7 +382,7 @@ export default function PDIPrint() {
                         </table>
                     </div>
 
-                    <div className="mt-10 p-mx-lg border-4 border-mx-black rounded-2xl flex flex-col items-center justify-center text-center space-y-mx-sm">
+                    <div className="mt-10 print:mt-6 p-mx-lg border-4 border-mx-black rounded-2xl flex flex-col items-center justify-center text-center space-y-mx-sm">
                         <Typography variant="h3" className="">A Equação da Motivação no Trabalho</Typography>
                         <Typography variant="h1" tone="brand" className="text-5xl font-mono-numbers my-4">$ = QI + DC</Typography>
                         <Typography variant="p" className="text-sm font-bold">
@@ -390,7 +390,7 @@ export default function PDIPrint() {
                         </Typography>
                     </div>
 
-                    <footer className="mt-auto pt-24 grid grid-cols-1 sm:grid-cols-2 gap-mx-20">
+                    <footer className="mt-auto pt-24 print:pt-8 grid grid-cols-1 sm:grid-cols-2 gap-mx-20 break-inside-avoid">
                         <div className="text-center space-y-mx-sm">
                             <div className="border-t-2 border-mx-black pt-4">
                                 <Typography variant="p" className="text-sm">Assinatura do Gestor (MX)</Typography>
