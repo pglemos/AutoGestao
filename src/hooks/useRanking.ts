@@ -456,11 +456,14 @@ export function useGlobalRanking(filters?: { startDate?: string; endDate?: strin
         }
 
         // Contar vendas por vendedor a partir do read model oficial.
-        // Filtra por loja_id da vendedora para garantir consistência.
+        //
+        // A venda conta para quem a fez, mesmo que a loja do evento não seja a
+        // do vínculo atual: descartar por loja divergente sumia com a venda de
+        // todo ranking quando o vendedor era transferido — sem nenhum aviso. A
+        // RPC já restringe o escopo ao que o usuário pode ver.
         const salesBySellerFromEvents = new Map<string, number>()
         for (const sale of officialSales) {
-            const expectedStore = sellerStoreMap.get(sale.seller_user_id)
-            if (!expectedStore || sale.store_id !== expectedStore) continue
+            if (!sellerStoreMap.has(sale.seller_user_id)) continue
             salesBySellerFromEvents.set(sale.seller_user_id, (salesBySellerFromEvents.get(sale.seller_user_id) || 0) + Number(sale.vendas || 0))
         }
 
