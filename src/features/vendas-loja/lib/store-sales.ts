@@ -86,6 +86,21 @@ function numericValue(value: number | string | null | undefined): number | null 
   return Number.isFinite(parsed) ? parsed : null
 }
 
+function extractFromDescricao(descricao: string | null | undefined): { veiculo: string | null; valor: number | null } {
+  if (!descricao) return { veiculo: null, valor: null }
+  const match = descricao.match(/Venda concluída:\s*(.*?)\s+por\s+R\$\s*([\d\.,]+)/i)
+  if (match) {
+    const veiculo = match[1]?.trim() || null
+    const rawVal = match[2]?.trim().replace(/\./g, '').replace(',', '.')
+    const parsed = Number(rawVal)
+    return {
+      veiculo,
+      valor: Number.isFinite(parsed) ? parsed : null,
+    }
+  }
+  return { veiculo: null, valor: null }
+}
+
 /**
  * Reconstructs the store-sale detail from the immutable official events.
  * Cancellation events are joined in memory because an orphan sale has no
@@ -110,6 +125,11 @@ export function buildStoreSaleCandidates(rows: readonly StoreSaleEventRow[]): St
         || (row.oportunidade_id ? cancellationByOpportunity.get(row.oportunidade_id) : undefined)
       const opportunityValue = numericValue(opportunity?.valor_negociado)
       const eventValue = metadataNumber(metadata, ['valor_negociado', 'valor_venda'])
+      const descParsed = extractFromDescricao(
+        typeof metadata.descricao === 'string'
+          ? metadata.descricao
+          : (typeof row.observacao === 'string' ? row.observacao : null),
+      )
 
       return {
         event_id: row.id,
@@ -121,8 +141,10 @@ export function buildStoreSaleCandidates(rows: readonly StoreSaleEventRow[]): St
         etapa: cancellation || opportunity?.etapa === 'cancelada' ? 'cancelada' : 'ganho',
         cliente_id: opportunity?.cliente_id || row.cliente_id || null,
         cliente_nome: opportunity?.cliente?.nome || row.cliente?.nome || null,
-        veiculo_interesse: opportunity?.veiculo_interesse || metadataText(metadata, ['veiculo_interesse', 'veiculo', 'veiculo_comprado']),
-        valor_negociado: opportunityValue ?? eventValue ?? 0,
+        veiculo_interesse: opportunity?.veiculo_interesse
+          || metadataText(metadata, ['veiculo_interesse', 'veiculo', 'veiculo_comprado', 'modelo'])
+          || descParsed.veiculo,
+        valor_negociado: opportunityValue ?? eventValue ?? descParsed.valor ?? 0,
         seller_user_id: row.seller_user_id || null,
         seller_nome: opportunity?.seller?.name || row.seller?.name || null,
         closed_at: opportunity?.closed_at || null,

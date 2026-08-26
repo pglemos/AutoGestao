@@ -521,7 +521,7 @@ export default function MxSidebarShell({
     <div className="h-[100dvh] min-w-0 overflow-hidden bg-surface-alt font-display text-foreground">
       <header
         data-mx-mobile-header=""
-        className="fixed left-0 right-0 top-0 z-[var(--mx-z-popover)] grid h-[calc(var(--mx-mobile-header-height)+env(safe-area-inset-top,0px))] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-[var(--mx-space-2)] border-b border-border-subtle bg-mxsb-surface px-[var(--mx-mobile-header-padding-inline)] pt-[env(safe-area-inset-top,0px)] shadow-[var(--mx-shadow-sm)] xl:hidden"
+        className="fixed left-0 right-0 top-0 z-[var(--mx-z-topbar)] grid h-[calc(var(--mx-mobile-header-height)+env(safe-area-inset-top,0px))] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-[var(--mx-space-2)] border-b border-border-subtle bg-mxsb-surface px-[var(--mx-mobile-header-padding-inline)] pt-[env(safe-area-inset-top,0px)] shadow-[var(--mx-shadow-sm)] xl:hidden"
       >
         <button
           type="button"

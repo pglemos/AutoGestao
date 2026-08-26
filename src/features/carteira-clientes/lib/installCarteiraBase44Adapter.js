@@ -581,13 +581,39 @@ async function listVehicleCatalog() {
   return data || []
 }
 
-async function cancelarVenda(oportunidadeId, motivo) {
+async function cancelarVenda(referencia, motivo) {
   await yieldSupabaseClient()
-  const { error } = await cancelarVendaRpc(oportunidadeId, motivo)
+  const ref = typeof referencia === 'string'
+    ? { oportunidadeId: referencia }
+    : (referencia && typeof referencia === 'object' ? { ...referencia } : {})
+
+  if (!ref.oportunidadeId && !ref.eventoId && ref.clienteId) {
+    const { data: ec } = await supabase
+      .from('eventos_comerciais')
+      .select('id, oportunidade_id')
+      .eq('cliente_id', ref.clienteId)
+      .eq('tipo_evento', 'venda_realizada')
+      .order('data_evento', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+    if (ec) {
+      if (ec.oportunidade_id) ref.oportunidadeId = ec.oportunidade_id
+      else ref.eventoId = ec.id
+    }
+  }
+
+  const { error } = await cancelarVendaRpc(ref, motivo)
   if (error) throw new Error(error)
-  const clientId = await (async () => {
-    const { data } = await supabase.from('oportunidades').select('cliente_id').eq('id', oportunidadeId).maybeSingle()
-    return data?.cliente_id || null
+  const clientId = ref.clienteId || await (async () => {
+    if (ref.oportunidadeId) {
+      const { data } = await supabase.from('oportunidades').select('cliente_id').eq('id', ref.oportunidadeId).maybeSingle()
+      if (data?.cliente_id) return data.cliente_id
+    }
+    if (ref.eventoId) {
+      const { data } = await supabase.from('eventos_comerciais').select('cliente_id').eq('id', ref.eventoId).maybeSingle()
+      if (data?.cliente_id) return data.cliente_id
+    }
+    return null
   })()
   return clientId ? getVisualClient(clientId) : null
 }

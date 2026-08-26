@@ -12,7 +12,7 @@ import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, Radar } fro
 import { cn } from '@/lib/utils'
 import { chartTokens } from '@/lib/charts/tokens'
 import { PDI_ORIGEM_NOTA } from '@/lib/pdi-self-assessment'
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
+import { Dialog, DialogBody, DialogContent, DialogTitle } from '@/components/ui/dialog'
 
 type WizardMeta = { prazo: string; tipo: string; descricao: string }
 type WizardAction = { competencia_id: string; descricao_acao: string; data_conclusao: string; impacto: string; custo: string }
@@ -464,15 +464,14 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
 
     return (
         <Dialog open onOpenChange={(open) => { if (!open) onClose() }}>
-            <DialogContent showClose={false} size="xl" scrollable className="max-w-[var(--mx-overlay-size-xl)] border-none bg-white p-0">
-                <Card className="flex min-h-0 w-full max-w-full flex-col border-none bg-white">
-                <header className="sticky top-mx-0 z-[var(--mx-z-sticky)] flex flex-col gap-4 border-b border-border bg-white p-4 shadow-sm sm:gap-5 sm:p-6 lg:p-8">
+            <DialogContent showClose={false} size="xl" className="max-w-[var(--mx-overlay-size-xl)] gap-0 border-none bg-white p-0">
+                <header className="flex shrink-0 flex-col gap-4 border-b border-border bg-white p-4 shadow-sm sm:gap-5 sm:p-6 lg:p-8">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-mx-sm">
                             <div className="w-mx-xl h-mx-xl rounded-2xl bg-brand-primary text-white flex items-center justify-center shadow-sm"><Target size={24} /></div>
                             <div>
                                 <DialogTitle>
-                                    <Typography variant="h2" className="tracking-tighter">Sessão PDI MX 360º</Typography>
+                                    <Typography variant="h2" as="span" className="tracking-tighter">Sessão PDI MX 360º</Typography>
                                 </DialogTitle>
                                 <Typography variant="tiny" tone="brand" className="font-bold">{steps[currentStep].label}</Typography>
                             </div>
@@ -515,7 +514,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                     )}
                 </header>
 
-                <div className="flex-1 p-4 sm:p-6 lg:p-8">
+                <DialogBody className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
                     {loading && !template ? (
                         <div className="flex justify-center py-20"><Typography variant="h3" className="animate-pulse">Sincronizando Metodologia MX...</Typography></div>
                     ) : (
@@ -875,9 +874,9 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                             )}
                         </>
                     )}
-                </div>
+                </DialogBody>
 
-                <footer className="sticky bottom-mx-0 z-[var(--mx-z-sticky)] flex flex-col gap-mx-md border-t border-border bg-white p-4 sm:flex-row sm:justify-between sm:p-6 lg:p-8">
+                <footer className="flex shrink-0 flex-col gap-mx-md border-t border-border bg-white p-4 sm:flex-row sm:justify-between sm:p-6 lg:p-8">
                     <Button type="button" variant="ghost" onClick={() => currentStep > 0 ? setCurrentStep(s => s - 1) : onClose()} className="h-mx-14 w-full rounded-mx-full border border-border px-8 text-xs font-bold uppercase sm:w-auto">
                         <ChevronLeft size={18} className="mr-2" /> {currentStep === 0 ? 'CANCELAR' : 'VOLTAR'}
                     </Button>
@@ -886,7 +885,6 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                         {currentStep === 3 ? 'CONCLUIR SESSÃO & GERAR PDI' : 'PRÓXIMO'}
                     </Button>
                 </footer>
-            </Card>
             </DialogContent>
         </Dialog>
     );

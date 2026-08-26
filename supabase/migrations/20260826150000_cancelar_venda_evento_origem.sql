@@ -143,11 +143,11 @@ BEGIN
        FOR UPDATE;
     END IF;
 
-    v_store_id := v_op.loja_id;
-    v_seller_id := v_op.seller_user_id;
-    v_cliente_id := v_op.cliente_id;
+    v_store_id := coalesce(v_op.loja_id, v_evento_origem.loja_id);
+    v_seller_id := coalesce(v_op.seller_user_id, v_evento_origem.seller_user_id);
+    v_cliente_id := coalesce(v_op.cliente_id, v_evento_origem.cliente_id);
     v_evento_data := coalesce(v_evento_origem.data_evento, v_op.closed_at, now());
-      v_evento_competencia := coalesce(
+    v_evento_competencia := coalesce(
       v_evento_origem.data_competencia,
       v_op.data_competencia,
       v_op.sale_date,
@@ -322,6 +322,13 @@ BEGIN
   ) VALUES (
     v_caller_id, v_cliente_id::text, 'cancelamento_venda', 'ganho', 'cancelada'
   );
+
+  IF v_store_id IS NOT NULL THEN
+    PERFORM public.consolidate_store_target_plan(
+      v_store_id,
+      coalesce(v_evento_competencia, (now() AT TIME ZONE 'America/Sao_Paulo')::date)
+    );
+  END IF;
 
   RETURN jsonb_build_object('ok', true, 'data', jsonb_build_object(
     'oportunidade_id', v_oportunidade_id,

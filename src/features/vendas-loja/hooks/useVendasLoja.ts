@@ -81,7 +81,7 @@ export function useVendasLoja(storeId: string | null) {
             metadata,
             observacao,
             seller:usuarios!eventos_comerciais_seller_user_id_fkey(name),
-            cliente:clientes(nome),
+            cliente:clientes!eventos_comerciais_cliente_id_fkey(nome),
             oportunidade:oportunidades!eventos_comerciais_oportunidade_id_fkey(
               id,
               cliente_id,
@@ -93,7 +93,7 @@ export function useVendasLoja(storeId: string | null) {
               closed_at,
               cancelada_em,
               motivo_cancelamento,
-              cliente:clientes(nome),
+              cliente:clientes!oportunidades_cliente_id_fkey(nome),
               seller:usuarios!oportunidades_seller_user_id_fkey(name)
             )
           `)

@@ -53,7 +53,7 @@ export function VendasFechadasLoja({
     setSaving(true)
     const { error: cancelError } = await cancelarVenda({
       oportunidadeId: cancelarVendaAlvo.oportunidade_id,
-      eventoId: cancelarVendaAlvo.oportunidade_id ? null : cancelarVendaAlvo.event_id,
+      eventoId: cancelarVendaAlvo.event_id,
     }, motivo)
     setSaving(false)
     if (cancelError) {

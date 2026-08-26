@@ -460,13 +460,17 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
 
   async function confirmarCancelarVenda(motivo) {
     const oppId = cliente?.oportunidade_id || cliente?.oportunidade_cancelada_id;
-    if (!oppId) {
-      toast.error("Não foi possível cancelar a venda.", { description: "ID da oportunidade de venda não encontrado." });
+    const eventId = cliente?.evento_id || cliente?.event_id;
+    if (!oppId && !eventId && !clienteId) {
+      toast.error("Não foi possível cancelar a venda.", { description: "ID da venda não encontrado." });
       return;
     }
     setCancelandoVenda(true);
     try {
-      const atualizado = await base44.entities.CarteiraCliente.cancelarVenda(oppId, motivo);
+      const atualizado = await base44.entities.CarteiraCliente.cancelarVenda(
+        oppId ? oppId : { eventoId: eventId, clienteId: cliente?.id || clienteId },
+        motivo
+      );
       toast.info("Venda cancelada com sucesso.");
       setCancelarVendaOpen(false);
       if (atualizado) {
@@ -504,22 +508,27 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
   const motivo = useMemo(() => cliente ? motivoRecomendacao(cliente) : "", [cliente]);
   const { score } = useMemo(() => cliente ? calcularScore(cliente) : { score: 0 }, [cliente]);
   const isGlobalAdmin = role === "administrador_mx" || role === "administrador_geral" || role === "consultor_mx";
-  const isVendaAtiva = cliente?.etapa === "ganho";
-  const isOwnClient = cliente?.vendedor_id === supabaseUser?.id;
+  const situacao = cliente?.situacao_atual || cliente?.momento || "—";
+  const isVendaCancelada = situacao === "Venda cancelada" || cliente?.etapa === "cancelada";
+  const isVendaAtiva = !isVendaCancelada && (
+    cliente?.etapa === "ganho"
+    || cliente?.situacao_atual === "Venda realizada"
+    || cliente?.status_comercial === "Vendido"
+    || cliente?.sale_status === "Sim"
+    || cliente?.momento === "Venda realizada"
+  );
+  const isOwnClient = cliente?.vendedor_id === supabaseUser?.id || cliente?.seller_user_id === supabaseUser?.id;
 
   let podeCancelarVenda = false;
   if (isVendaAtiva) {
     if (isGlobalAdmin || role === "gerente" || role === "dono") {
       podeCancelarVenda = true;
-    } else if (role === "vendedor" && isOwnClient && dentroMesCancelamento(cliente?.closed_at)) {
+    } else if (role === "vendedor" && isOwnClient && dentroMesCancelamento(cliente?.closed_at || cliente?.data_competencia || cliente?.data_evento)) {
       podeCancelarVenda = true;
     }
   }
-
-  const situacao = cliente?.situacao_atual || cliente?.momento || "—";
   // Venda cancelada é estado encerrado: o próximo passo antigo pertencia à
   // venda revertida e não pode ser executado nem editado a partir da ficha.
-  const isVendaCancelada = situacao === "Venda cancelada";
   const canal = cliente?.canal_comercial || cliente?.canal_origem || "—";
   const tel = (cliente?.whatsapp || cliente?.telefone || "").replace(/\D/g, "");
   const iniciais = (cliente?.nome || "?").split(" ").slice(0, 2).map(p => p[0]).join("").toUpperCase();
