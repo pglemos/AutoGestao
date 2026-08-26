@@ -1,13 +1,14 @@
 import assert from 'node:assert/strict'
-import { spawnSync } from 'node:child_process'
 import test from 'node:test'
+import { captureCommandOutput } from './lib/captureSubprocess.mjs'
 
 test('o grafo do Dono bloqueia namespaces runtime retirados', () => {
-  const result = spawnSync(process.execPath, ['scripts/audit-owner-b44-graph.mjs', '--check'], {
+  // C8: `spawnSync` direto devolve stdout vazio sob `bun test` — o wrapper grava
+  // a saída em arquivo e o teste lê via fs.
+  const result = captureCommandOutput(process.execPath, ['scripts/audit-owner-b44-graph.mjs', '--check'], {
     cwd: process.cwd(),
-    encoding: 'utf8',
   })
 
-  assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`)
+  assert.equal(result.status, 0, result.stdout)
   assert.match(result.stdout, /Found 0 runtime imports/)
 })
