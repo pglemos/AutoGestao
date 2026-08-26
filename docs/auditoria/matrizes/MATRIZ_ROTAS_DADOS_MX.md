@@ -5,10 +5,10 @@
 - Rotas públicas: **9**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
-- Tabelas referenciadas pelo runtime: **176**
+- Tabelas referenciadas pelo runtime: **179**
 - RPCs referenciadas pelo runtime: **106**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **381**
+- Pares tabela/operação encontrados: **384**
 
 ## Rotas
 
@@ -161,6 +161,7 @@
 | `carreira_niveis` | 1 |
 | `carteira_empresa` | 1 |
 | `carteira_missoes` | 1 |
+| `catalogo_indicadores_planejamento` | 1 |
 | `catalogo_metricas_consultoria` | 7 |
 | `central_execucao_aberturas` | 3 |
 | `ciclos_plano_estrategico` | 4 |
@@ -173,7 +174,7 @@
 | `comportamental_respostas` | 1 |
 | `comportamental_sessoes` | 1 |
 | `configuracoes_cliente_consultoria` | 1 |
-| `conjuntos_parametros_consultoria` | 3 |
+| `conjuntos_parametros_consultoria` | 4 |
 | `consultor_solucoes` | 3 |
 | `consultoria_itens_entrega` | 3 |
 | `contatos_cliente_consultoria` | 4 |
@@ -240,10 +241,11 @@
 | `opcoes_agenda_consultoria` | 1 |
 | `oportunidades` | 7 |
 | `organograma_nos` | 1 |
-| `overrides_parametros_cliente` | 1 |
+| `overrides_parametros_cliente` | 3 |
 | `pacotes_indicadores_estrategicos` | 1 |
 | `pacotes_indicadores_itens` | 5 |
 | `pacotes_indicadores_versoes` | 4 |
+| `parametros_estrategicos_mx` | 1 |
 | `pdi_avaliacoes_competencia` | 1 |
 | `pdi_metas` | 1 |
 | `pdi_niveis_cargo` | 1 |
@@ -289,6 +291,7 @@
 | `store_target_plans` | 2 |
 | `story_ideas` | 2 |
 | `sugestoes_conteudo` | 1 |
+| `tabela` | 1 |
 | `tempos_encontro_produto` | 1 |
 | `tokens_oauth_consultoria` | 1 |
 | `treinamento_avaliacoes` | 2 |
@@ -363,6 +366,7 @@
 | `carreira_niveis:upsert` | 1 |
 | `carteira_empresa:select` | 1 |
 | `carteira_missoes:select` | 1 |
+| `catalogo_indicadores_planejamento:select` | 1 |
 | `catalogo_metricas_consultoria:select` | 7 |
 | `catalogo_metricas_consultoria:update` | 1 |
 | `catalogo_metricas_consultoria:upsert` | 2 |
@@ -391,7 +395,7 @@
 | `comportamental_sessoes:select` | 1 |
 | `configuracoes_cliente_consultoria:select` | 1 |
 | `configuracoes_cliente_consultoria:upsert` | 1 |
-| `conjuntos_parametros_consultoria:select` | 3 |
+| `conjuntos_parametros_consultoria:select` | 4 |
 | `consultor_solucoes:insert` | 2 |
 | `consultor_solucoes:select` | 2 |
 | `consultor_solucoes:update` | 1 |
@@ -544,7 +548,7 @@
 | `organograma_nos:insert` | 1 |
 | `organograma_nos:select` | 1 |
 | `overrides_parametros_cliente:insert` | 1 |
-| `overrides_parametros_cliente:select` | 1 |
+| `overrides_parametros_cliente:select` | 3 |
 | `overrides_parametros_cliente:update` | 1 |
 | `pacotes_indicadores_estrategicos:insert` | 1 |
 | `pacotes_indicadores_estrategicos:select` | 1 |
@@ -555,6 +559,8 @@
 | `pacotes_indicadores_versoes:insert` | 1 |
 | `pacotes_indicadores_versoes:select` | 4 |
 | `pacotes_indicadores_versoes:update` | 1 |
+| `parametros_estrategicos_mx:select` | 1 |
+| `parametros_estrategicos_mx:upsert` | 1 |
 | `pdi_avaliacoes_competencia:select` | 1 |
 | `pdi_metas:select` | 1 |
 | `pdi_niveis_cargo:select` | 1 |

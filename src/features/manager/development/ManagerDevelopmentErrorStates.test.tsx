@@ -1,3 +1,4 @@
+import { isAdministradorMx, isPerfilInternoMx } from '@/lib/auth/roles'
 import { afterEach, describe, expect, mock, test } from 'bun:test'
 import { cleanup, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
@@ -22,10 +23,17 @@ mock.module('@/features/gerente-feedback/hooks/useStoreFeedback', () => ({
   }),
 }))
 
+// `@/hooks/useAuth` reexporta `isAdministradorMx`/`isPerfilInternoMx` de
+// `@/lib/auth/roles`. Substituí-las aqui não ficava contido neste arquivo: o
+// `mock.module()` do Bun não é desfeito pelo `--isolate` e o override vazava
+// para o módulo de origem, fazendo `isPerfilInternoMx('administrador_mx')`
+// devolver false na suíte inteira — o DashboardHeader caía na ramificação
+// errada. O mock passa a cobrir só o hook, que é o que este teste precisa.
 mock.module('@/hooks/useAuth', () => ({
   useAuth: () => ({ profile: { id: 'manager-1' }, storeId: 'store-1' }),
-  isAdministradorMx: () => false,
-  isPerfilInternoMx: () => false,
+  // Reexporta as funções REAIS: elas são puras e o teste não precisa alterá-las.
+  isAdministradorMx,
+  isPerfilInternoMx,
 }))
 
 mock.module('@/hooks/usePDI_MX', () => ({
