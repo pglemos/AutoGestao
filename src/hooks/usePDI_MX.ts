@@ -210,6 +210,18 @@ export type PDIUpdateActionStatusInput = {
   justificativa?: string
 }
 
+export type PDIDocumentUpdateInput = {
+  metas?: Array<{ id: string; descricao: string; tipo: string }>
+  avaliacoes?: Array<{ id: string; nota: number; alvo: number }>
+  acoes?: Array<{
+    id: string
+    descricaoAcao: string
+    dataConclusao: string
+    impacto: string
+    custo: string
+  }>
+}
+
 export type PDIUpdateGoalsInput = {
   sessaoId: string
   prazo: string
@@ -529,6 +541,56 @@ queryClient.invalidateQueries({ queryKey: ['execution-actions'] })
 return { id: data as string, error: null }
 }, [queryClient])
 
+    /**
+     * Correção do documento de PDI pela liderança (gerente, dono e Admin MX).
+     *
+     * Vai direto nas tabelas em vez de reusar `vendedor_atualizar_pdi_*`: aquelas
+     * RPCs tiveram o EXECUTE revogado de `authenticated` em
+     * `20260714182104_lock_seller_pdi_structural_edits.sql`. A mesma migration
+     * deixou as policies `pdi_*_write_operacional` abertas para
+     * is_admin/is_owner_of/is_manager_of/gerente_id — a autorização é do banco,
+     * não desta função.
+     */
+    const updatePDIDocument = useCallback(async (input: PDIDocumentUpdateInput) => {
+        setLoading(true)
+        setError(null)
+
+        const writes: Array<PromiseLike<{ error: { message: string } | null }>> = []
+
+        for (const meta of input.metas || []) {
+            writes.push(supabase.from('pdi_metas')
+                .update({ descricao: meta.descricao, tipo: meta.tipo })
+                .eq('id', meta.id))
+        }
+        for (const avaliacao of input.avaliacoes || []) {
+            writes.push(supabase.from('pdi_avaliacoes_competencia')
+                .update({ nota_atribuida: avaliacao.nota, alvo: avaliacao.alvo })
+                .eq('id', avaliacao.id))
+        }
+        for (const acao of input.acoes || []) {
+            writes.push(supabase.from('pdi_plano_acao')
+                .update({
+                    descricao_acao: acao.descricaoAcao,
+                    data_conclusao: acao.dataConclusao,
+                    impacto: acao.impacto,
+                    custo: acao.custo,
+                })
+                .eq('id', acao.id))
+        }
+
+        const results = await Promise.all(writes)
+        setLoading(false)
+
+        const failure = results.find(result => result.error)
+        if (failure?.error) {
+            setError(failure.error.message)
+            return { count: 0, error: failure.error.message }
+        }
+
+        queryClient.invalidateQueries({ queryKey: ['pdi-sessions'] })
+        return { count: results.length, error: null }
+    }, [queryClient])
+
 const fetchPrintBundle = useCallback(async (sessaoId: string) => {
         setLoading(true)
         const { data, error } = await supabase.rpc('get_pdi_print_bundle', { p_sessao_id: sessaoId })
@@ -552,6 +614,7 @@ const fetchPrintBundle = useCallback(async (sessaoId: string) => {
         updateSellerPDIGoals,
         linkSellerPDIActionContent,
         sendSellerPDIActionToCentral,
+        updatePDIDocument,
         fetchPrintBundle
     }
 }

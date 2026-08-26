@@ -790,6 +790,14 @@ body {
     display: none !important;
   }
 
+  /* O seletor acima esconde chrome do app, mas engolia também os cabeçalhos
+     das folhas de documentos (cada página do PDI usa <header>). Documentos
+     marcados com .print-document reexpõem sua própria estrutura; botões
+     continuam escondidos porque nenhum documento imprime controles. */
+  .print-document header {
+    display: revert !important;
+  }
+
   /* Forçar renderização de background colors */
   * {
     -webkit-print-color-adjust: exact !important;

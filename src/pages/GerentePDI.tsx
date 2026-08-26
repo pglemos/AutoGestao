@@ -5,7 +5,7 @@ import { canManagePDI as canManagePDICapability } from '@/lib/auth/capabilities'
 import { useState, useCallback, useMemo } from 'react'
 import { 
     Plus, Calendar, TrendingUp, 
-    Search, RefreshCw, Printer, ChevronRight
+    Search, RefreshCw, Printer, Pencil, ChevronRight
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
 import { toast } from '@/lib/toast'
@@ -207,6 +207,11 @@ export default function GerentePDI() {
                                                     <Button type="button" variant="ghost" size="icon" onClick={() => navigate(`/pdi/${p.id}/print`)} className="w-mx-10 h-mx-10 rounded-xl text-muted-foreground hover:text-status-success-text hover:bg-brand-primary-subtle bg-white shadow-sm border border-border-subtle" aria-label={`Imprimir PDI de ${p.seller_name || 'nome não informado'}`}>
                                                         <Printer size={18} />
                                                     </Button>
+                                                    {canManagePDI && (
+                                                        <Button type="button" variant="ghost" size="icon" onClick={() => navigate(`/pdi/${p.id}/print?editar=1`)} className="w-mx-10 h-mx-10 rounded-xl text-muted-foreground hover:text-status-success-text hover:bg-brand-primary-subtle bg-white shadow-sm border border-border-subtle" aria-label={`Editar PDI de ${p.seller_name || 'nome não informado'}`}>
+                                                            <Pencil size={18} />
+                                                        </Button>
+                                                    )}
                                                 </div>
                                                 <Button type="button" variant="outline" size="icon" onClick={() => navigate(`/pdi/${p.id}/print`)} className="w-mx-xl h-mx-xl rounded-xl shadow-sm hover:scale-110 active:scale-95 transition-all" aria-label={`Abrir PDI de ${p.seller_name || 'nome não informado'}`}>
                                                     <ChevronRight size={24} strokeWidth={2} />

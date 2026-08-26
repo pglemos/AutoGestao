@@ -1,31 +1,179 @@
-import { useEffect, useState, useRef } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { usePDI_MX } from '@/hooks/usePDI_MX'
 import type { PDIAvaliacao360, PDIMeta360, PDIPlanoAcao360, PDIPrintBundle } from '@/hooks/usePDI_MX'
+import { useAuth } from '@/hooks/useAuth'
+import { canManagePDI as canManagePDICapability } from '@/lib/auth/capabilities'
 import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, Radar } from 'recharts'
-import { Target, History, Printer, ChevronLeft, Sparkles, User, Calendar, Award } from 'lucide-react'
+import { Target, History, Printer, ChevronLeft, Sparkles, User, Pencil } from 'lucide-react'
 import { format, parseISO } from 'date-fns'
 import { Typography } from '@/components/atoms/Typography'
+import { Button } from '@/components/atoms/Button'
+import { Input } from '@/components/atoms/Input'
+import { Label } from '@/components/atoms/Label'
+import { Textarea } from '@/components/atoms/Textarea'
+import { Modal, ModalBody } from '@/components/organisms/Modal'
+import { toast } from '@/lib/toast'
+
+const PRAZO_LABEL: Record<string, string> = {
+    '6_meses': 'Metas de Curto Prazo (6 Meses)',
+    '12_meses': 'Metas de Médio Prazo (12 Meses)',
+    '24_meses': 'Metas de Longo Prazo (24 Meses)',
+}
+
+type EditTarget =
+    | { kind: 'metas'; prazo: string }
+    | { kind: 'avaliacoes' }
+    | { kind: 'acoes' }
+
+type MetaDraft = { id: string; descricao: string; tipo: string }
+type AvaliacaoDraft = { id: string; competencia: string; nota: string; alvo: string }
+type AcaoDraft = {
+    id: string
+    competencia: string
+    descricaoAcao: string
+    dataConclusao: string
+    impacto: string
+    custo: string
+}
+
+const IMPACTO_CUSTO = ['baixo', 'medio', 'alto']
+
+/** Caneta de correção. Fica fora do papel impresso: `print:hidden`. */
+function EditButton({ label, onClick }: { label: string; onClick: () => void }) {
+    return (
+        <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={onClick}
+            aria-label={label}
+            className="print:hidden w-mx-10 h-mx-10 rounded-xl text-muted-foreground hover:text-status-success-text hover:bg-brand-primary-subtle bg-white shadow-sm border border-border-subtle shrink-0"
+        >
+            <Pencil size={16} />
+        </Button>
+    )
+}
 
 export default function PDIPrint() {
     const { id } = useParams()
     const navigate = useNavigate()
-    const { fetchPrintBundle, loading } = usePDI_MX()
+    const [searchParams] = useSearchParams()
+    const { role } = useAuth()
+    const { fetchPrintBundle, updatePDIDocument, loading } = usePDI_MX()
     const [bundle, setBundle] = useState<PDIPrintBundle | null>(null)
     const [error, setError] = useState(false)
-    const printRef = useRef<HTMLDivElement>(null)
+    const [editTarget, setEditTarget] = useState<EditTarget | null>(null)
+    const [metaDrafts, setMetaDrafts] = useState<MetaDraft[]>([])
+    const [avaliacaoDrafts, setAvaliacaoDrafts] = useState<AvaliacaoDraft[]>([])
+    const [acaoDrafts, setAcaoDrafts] = useState<AcaoDraft[]>([])
+    const [saving, setSaving] = useState(false)
 
-    useEffect(() => {
-        if (id) {
-            fetchPrintBundle(id).then(data => {
-                setBundle(data)
-            }).catch(() => {
-                setError(true)
-            })
+    const canEdit = searchParams.get('editar') === '1' && canManagePDICapability(role)
+
+    const loadBundle = useCallback(async () => {
+        if (!id) return
+        try {
+            setBundle(await fetchPrintBundle(id))
+        } catch {
+            setError(true)
         }
     }, [id, fetchPrintBundle])
 
-    if (loading) return (
+    useEffect(() => {
+        void loadBundle()
+    }, [loadBundle])
+
+    const openMetasEditor = (prazo: string) => {
+        setMetaDrafts((bundle?.metas || [])
+            .filter(m => m.prazo === prazo && m.id)
+            .map(m => ({ id: m.id as string, descricao: m.descricao || '', tipo: m.tipo || 'profissional' })))
+        setEditTarget({ kind: 'metas', prazo })
+    }
+
+    const openAvaliacoesEditor = () => {
+        setAvaliacaoDrafts((bundle?.avaliacoes || [])
+            .filter(a => a.id)
+            .map(a => ({ id: a.id as string, competencia: a.competencia, nota: String(a.nota), alvo: String(a.alvo) })))
+        setEditTarget({ kind: 'avaliacoes' })
+    }
+
+    const openAcoesEditor = () => {
+        setAcaoDrafts((bundle?.plano_acao || [])
+            .filter(a => a.id)
+            .map(a => ({
+                id: a.id as string,
+                competencia: a.competencia,
+                descricaoAcao: a.descricao_acao || '',
+                dataConclusao: (a.data_conclusao || '').slice(0, 10),
+                impacto: a.impacto || 'medio',
+                custo: a.custo || 'medio',
+            })))
+        setEditTarget({ kind: 'acoes' })
+    }
+
+    const handleSave = async () => {
+        if (!editTarget) return
+
+        if (editTarget.kind === 'metas' && metaDrafts.some(m => !m.descricao.trim())) {
+            toast.error('A descrição da meta não pode ficar vazia.')
+            return
+        }
+        if (editTarget.kind === 'avaliacoes') {
+            const invalid = avaliacaoDrafts.some(a => {
+                const nota = Number(a.nota)
+                const alvo = Number(a.alvo)
+                return !Number.isInteger(nota) || !Number.isInteger(alvo) || nota < 0 || nota > 10 || alvo < 0 || alvo > 10
+            })
+            if (invalid) {
+                toast.error('Nota e alvo precisam ser números inteiros entre 0 e 10.')
+                return
+            }
+        }
+        if (editTarget.kind === 'acoes') {
+            const invalid = acaoDrafts.some(a => !a.descricaoAcao.trim() || !/^\d{4}-\d{2}-\d{2}$/.test(a.dataConclusao))
+            if (invalid) {
+                toast.error('Informe a ação e um prazo válido para cada linha.')
+                return
+            }
+        }
+
+        setSaving(true)
+        const { error: saveError } = await updatePDIDocument(
+            editTarget.kind === 'metas'
+                ? { metas: metaDrafts.map(m => ({ id: m.id, descricao: m.descricao.trim(), tipo: m.tipo })) }
+                : editTarget.kind === 'avaliacoes'
+                    ? { avaliacoes: avaliacaoDrafts.map(a => ({ id: a.id, nota: Number(a.nota), alvo: Number(a.alvo) })) }
+                    : {
+                        acoes: acaoDrafts.map(a => ({
+                            id: a.id,
+                            descricaoAcao: a.descricaoAcao.trim(),
+                            dataConclusao: a.dataConclusao,
+                            impacto: a.impacto,
+                            custo: a.custo,
+                        })),
+                    }
+        )
+        setSaving(false)
+
+        if (saveError) {
+            toast.error(saveError)
+            return
+        }
+
+        await loadBundle()
+        setEditTarget(null)
+        toast.success('PDI atualizado.')
+    }
+
+    const radarData = useMemo(() => (bundle?.avaliacoes || []).map((av: PDIAvaliacao360) => ({
+        subject: av.competencia,
+        A: av.nota,
+        alvo: av.alvo,
+        fullMark: av.alvo,
+    })), [bundle])
+
+    if (loading && !bundle) return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-surface-alt">
             <Typography variant="h3" className="animate-pulse">Carregando Bundle Documental...</Typography>
         </div>
@@ -48,25 +196,16 @@ export default function PDIPrint() {
     const gerenteNome = bundle.sessao.gerente_nome || bundle.sessao.manager_name || bundle.sessao.gerente_id
     const lojaNome = bundle.sessao.loja_nome || bundle.sessao.store_name
 
-    const radarData = bundle.avaliacoes.map((av: PDIAvaliacao360) => ({
-        subject: av.competencia,
-        A: av.nota,
-        alvo: av.alvo,
-        fullMark: av.alvo
-    }))
-
-    const metas6 = bundle.metas.filter((m: PDIMeta360) => m.prazo === '6_meses')
-    const metas12 = bundle.metas.filter((m: PDIMeta360) => m.prazo === '12_meses')
-    const metas24 = bundle.metas.filter((m: PDIMeta360) => m.prazo === '24_meses')
+    const metasPorPrazo = (prazo: string) => bundle.metas.filter((m: PDIMeta360) => m.prazo === prazo)
 
     return (
         // lint-page-roots-ignore: documento para impressão. A largura é A4
         // (max-w-[210mm]) e o padding vertical existe só na visualização em
         // tela (print:py-0) — não é margem de página, é folha.
-        <div className="min-h-screen bg-brand-primary-subtle font-sans print:bg-background flex flex-col items-center py-10 print:py-0 overflow-x-hidden">
-            
+        <div className="print-document min-h-screen bg-brand-primary-subtle font-sans print:bg-background flex flex-col items-center py-10 print:py-0 overflow-x-hidden">
+
             {/* Action Bar (Not Printed) */}
-            <div className="w-full max-w-[210mm] flex items-center justify-between mb-8 print:hidden px-4">
+            <div className="w-[210mm] max-w-full flex items-center justify-between mb-8 print:hidden px-4">
                 <button onClick={() => navigate(-1)} className="flex items-center gap-mx-xs px-6 py-3 bg-white border border-border rounded-mx-full text-xs font-bold uppercase tracking-widest shadow-sm hover:bg-surface-alt">
                     <ChevronLeft size={16} /> Voltar
                 </button>
@@ -75,11 +214,22 @@ export default function PDIPrint() {
                 </button>
             </div>
 
+            {canEdit && (
+                <div className="w-[210mm] max-w-full mb-8 print:hidden px-4">
+                    <div className="rounded-2xl border border-status-info/20 bg-status-info-surface p-mx-md">
+                        <Typography variant="h3" className="text-status-info-text">Modo de correção</Typography>
+                        <Typography variant="p" className="mt-mx-xs text-sm text-status-info-text">
+                            Use as canetas ao lado de cada bloco para corrigir metas, notas de competência e o plano de ação. As correções entram no documento impresso.
+                        </Typography>
+                    </div>
+                </div>
+            )}
+
             {/* A4 Document Container */}
-            <div ref={printRef} className="w-[210mm] bg-background shadow-2xl print:shadow-none print:w-full print:max-w-none text-foreground flex flex-col gap-y-[20mm]">
-                
+            <div className="w-[210mm] bg-background shadow-2xl print:shadow-none print:w-full print:max-w-none text-foreground flex flex-col gap-y-[20mm] print:gap-y-0">
+
                 {/* --- PÁGINA 1: CAPA --- */}
-                <div className="p-[20mm] h-[297mm] relative break-after-page flex flex-col border border-border print:border-none">
+                <div className="p-[20mm] min-h-[297mm] print:min-h-0 relative break-after-page flex flex-col border border-border print:border-none">
                     <div className="absolute top-mx-0 left-mx-0 w-full h-mx-lg bg-gray-900" />
                     <header className="flex justify-between items-start mt-10 mb-20 border-b-4 border-mx-black pb-8">
                         <div>
@@ -108,51 +258,39 @@ export default function PDIPrint() {
                     </div>
 
                     <div className="flex-1 flex flex-col justify-center space-y-mx-xl">
-                        <div>
-                            <Typography variant="h3" className="text-brand-secondary border-b border-brand-primary/40 pb-1.5 mb-4">Metas de Curto Prazo (6 Meses)</Typography>
-                            <ul className="space-y-mx-xs pl-8 list-none">
-                                {metas6.map((m, i) => (
-                                    <li key={i} className="text-sm font-bold uppercase relative before:content-[''] before:absolute before:-left-5 before:top-1.5 before:w-2 before:h-2 before:bg-brand-primary before:rounded-full">
-                                        <span className="text-status-success-text text-xs mr-2">[{m.tipo}]</span> {m.descricao}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                        <div>
-                            <Typography variant="h3" className="text-brand-secondary border-b border-brand-primary/40 pb-1.5 mb-4">Metas de Médio Prazo (12 Meses)</Typography>
-                            <ul className="space-y-mx-xs pl-8 list-none">
-                                {metas12.map((m, i) => (
-                                    <li key={i} className="text-sm font-bold uppercase relative before:content-[''] before:absolute before:-left-5 before:top-1.5 before:w-2 before:h-2 before:bg-brand-primary before:rounded-full">
-                                        <span className="text-status-success-text text-xs mr-2">[{m.tipo}]</span> {m.descricao}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                        <div>
-                            <Typography variant="h3" className="text-brand-secondary border-b border-brand-primary/40 pb-1.5 mb-4">Metas de Longo Prazo (24 Meses)</Typography>
-                            <ul className="space-y-mx-xs pl-8 list-none">
-                                {metas24.map((m, i) => (
-                                    <li key={i} className="text-sm font-bold uppercase relative before:content-[''] before:absolute before:-left-5 before:top-1.5 before:w-2 before:h-2 before:bg-brand-primary before:rounded-full">
-                                        <span className="text-status-success-text text-xs mr-2">[{m.tipo}]</span> {m.descricao}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
+                        {['6_meses', '12_meses', '24_meses'].map(prazo => (
+                            <div key={prazo}>
+                                <div className="flex items-center justify-between gap-mx-sm border-b border-brand-primary/40 pb-1.5 mb-4">
+                                    <Typography variant="h3" className="text-brand-secondary">{PRAZO_LABEL[prazo]}</Typography>
+                                    {canEdit && <EditButton label={`Editar ${PRAZO_LABEL[prazo]}`} onClick={() => openMetasEditor(prazo)} />}
+                                </div>
+                                <ul className="space-y-mx-xs pl-8 list-none">
+                                    {metasPorPrazo(prazo).map((m, i) => (
+                                        <li key={m.id || i} className="text-sm font-bold uppercase relative before:content-[''] before:absolute before:-left-5 before:top-1.5 before:w-2 before:h-2 before:bg-brand-primary before:rounded-full">
+                                            <span className="text-status-success-text text-xs mr-2">[{m.tipo}]</span> {m.descricao}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))}
                     </div>
 
                     <footer className="mt-auto pt-10 text-center space-y-mx-sm">
                         <Sparkles size={24} className="mx-auto text-status-success-text opacity-30" />
                         <Typography variant="p" className="text-sm font-bold italic leading-relaxed">
-                            "Comprometa-se com suas metas e encare os obstáculos como etapas para atingir o objetivo final. 
+                            "Comprometa-se com suas metas e encare os obstáculos como etapas para atingir o objetivo final.
                             Disciplina é a ponte entre metas e realizações."
                         </Typography>
                     </footer>
                 </div>
 
                 {/* --- PÁGINA 2: VENDEDOR 1 / MAPA DE COMPETÊNCIAS --- */}
-                <div className="p-[20mm] min-h-[297mm] break-after-page flex flex-col border border-border print:border-none relative">
+                <div className="p-[20mm] min-h-[297mm] print:min-h-0 break-after-page flex flex-col border border-border print:border-none relative">
                     <header className="flex justify-between items-end border-b-2 border-mx-black pb-4 mb-10">
-                        <Typography variant="h2" className="text-2xl tracking-tighter">Mapa de Competências</Typography>
+                        <div className="flex items-center gap-mx-sm">
+                            <Typography variant="h2" className="text-2xl tracking-tighter">Mapa de Competências</Typography>
+                            {canEdit && <EditButton label="Editar notas de competência" onClick={openAvaliacoesEditor} />}
+                        </div>
                         <Typography variant="caption" tone="muted" className="text-mx-tiny">Página 2 / Vendedor 1</Typography>
                     </header>
 
@@ -169,7 +307,7 @@ export default function PDIPrint() {
                                 </thead>
                                 <tbody>
                                     {bundle.avaliacoes.map((av, i) => (
-                                        <tr key={i} className="border-b border-border">
+                                        <tr key={av.id || i} className="border-b border-border break-inside-avoid">
                                             <td className="py-2 px-3">{av.competencia}</td>
                                             <td className="py-2 px-3 text-center text-status-success-text">{av.nota}</td>
                                             <td className="py-2 px-3 text-center text-muted-foreground">{av.alvo}</td>
@@ -197,7 +335,7 @@ export default function PDIPrint() {
                     <div className="mt-auto">
                         <Typography variant="tiny" className="text-status-error-text mb-4">Top 5 Maiores Lacunas (Gaps) Identificadas</Typography>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-sm">                            {bundle.top_5_gaps.map((gap, i) => (
-                                <div key={i} className="bg-status-error-surface p-mx-sm border border-status-error/30 rounded-lg flex justify-between items-center">
+                                <div key={i} className="bg-status-error-surface p-mx-sm border border-status-error/30 rounded-lg flex justify-between items-center break-inside-avoid">
                                     <Typography variant="p" className="text-xs font-bold">{gap.competencia}</Typography>
                                     <Typography variant="h3" tone="error" className="text-lg">-{gap.gap}</Typography>
                                 </div>
@@ -207,9 +345,12 @@ export default function PDIPrint() {
                 </div>
 
                 {/* --- PÁGINA 3: PLANO DE AÇÃO (PDI TABULAR) --- */}
-                <div className="p-[20mm] min-h-[297mm] flex flex-col border border-border print:border-none">
+                <div className="p-[20mm] min-h-[297mm] print:min-h-0 flex flex-col border border-border print:border-none">
                     <header className="flex justify-between items-end border-b-2 border-mx-black pb-4 mb-10">
-                        <Typography variant="h2" className="text-2xl tracking-tighter">Plano de Desenvolvimento Individual</Typography>
+                        <div className="flex items-center gap-mx-sm">
+                            <Typography variant="h2" className="text-2xl tracking-tighter">Plano de Desenvolvimento Individual</Typography>
+                            {canEdit && <EditButton label="Editar plano de ação" onClick={openAcoesEditor} />}
+                        </div>
                         <Typography variant="caption" tone="muted" className="text-mx-tiny">Página 3 / Ações Mandatórias</Typography>
                     </header>
 
@@ -227,7 +368,7 @@ export default function PDIPrint() {
                             </thead>
                             <tbody>
                                 {bundle.plano_acao.map((acao: PDIPlanoAcao360, i: number) => (
-                                    <tr key={i} className="border-b-2 border-border">
+                                    <tr key={acao.id || i} className="border-b-2 border-border break-inside-avoid">
                                         <td className="py-4 px-4 font-bold uppercase text-muted-foreground">{acao.competencia}</td>
                                         <td className="py-4 px-4 font-bold text-foreground">{acao.descricao_acao}</td>
                                         <td className="py-4 px-4 font-bold text-center text-status-success-text">{format(parseISO(acao.data_conclusao), 'dd/MM/yyyy')}</td>
@@ -265,6 +406,141 @@ export default function PDIPrint() {
                 </div>
 
             </div>
+
+            <Modal
+                open={editTarget !== null}
+                onClose={() => setEditTarget(null)}
+                size="xl"
+                title={editTarget?.kind === 'metas'
+                    ? PRAZO_LABEL[editTarget.prazo]
+                    : editTarget?.kind === 'avaliacoes'
+                        ? 'Notas de competência'
+                        : 'Plano de ação'}
+                footer={(
+                    <div className="flex justify-end gap-mx-sm">
+                        <Button type="button" variant="outline" onClick={() => setEditTarget(null)} disabled={saving}>Cancelar</Button>
+                        <Button type="button" onClick={handleSave} disabled={saving}>{saving ? 'Salvando...' : 'Salvar correções'}</Button>
+                    </div>
+                )}
+            >
+                <ModalBody>
+
+                    {editTarget?.kind === 'metas' && (
+                        <div className="space-y-mx-md">
+                            {metaDrafts.map((meta, index) => (
+                                <div key={meta.id} className="space-y-mx-xs">
+                                    <Label htmlFor={`meta-${meta.id}`}>Meta {index + 1}</Label>
+                                    <Textarea
+                                        id={`meta-${meta.id}`}
+                                        value={meta.descricao}
+                                        rows={2}
+                                        onChange={e => setMetaDrafts(drafts => drafts.map(d => d.id === meta.id ? { ...d, descricao: e.target.value } : d))}
+                                    />
+                                    <div className="flex items-center gap-mx-sm">
+                                        <Label htmlFor={`meta-tipo-${meta.id}`} className="text-xs">Tipo</Label>
+                                        <select
+                                            id={`meta-tipo-${meta.id}`}
+                                            value={meta.tipo}
+                                            onChange={e => setMetaDrafts(drafts => drafts.map(d => d.id === meta.id ? { ...d, tipo: e.target.value } : d))}
+                                            className="h-mx-xl px-4 bg-white border border-border rounded-2xl text-sm font-bold outline-none uppercase"
+                                        >
+                                            <option value="pessoal">Pessoal</option>
+                                            <option value="profissional">Profissional</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {editTarget?.kind === 'avaliacoes' && (
+                        <div className="space-y-mx-sm">
+                            {avaliacaoDrafts.map(av => (
+                                <div key={av.id} className="flex items-center justify-between gap-mx-sm border-b border-border pb-3">
+                                    <Typography variant="p" className="text-sm font-bold flex-1">{av.competencia}</Typography>
+                                    <div className="flex items-center gap-mx-xs">
+                                        <Label htmlFor={`nota-${av.id}`} className="text-xs">Nota</Label>
+                                        <Input
+                                            id={`nota-${av.id}`}
+                                            type="number"
+                                            min={0}
+                                            max={10}
+                                            step={1}
+                                            value={av.nota}
+                                            onChange={e => setAvaliacaoDrafts(drafts => drafts.map(d => d.id === av.id ? { ...d, nota: e.target.value } : d))}
+                                            className="w-mx-20 text-center"
+                                        />
+                                    </div>
+                                    <div className="flex items-center gap-mx-xs">
+                                        <Label htmlFor={`alvo-${av.id}`} className="text-xs">Alvo</Label>
+                                        <Input
+                                            id={`alvo-${av.id}`}
+                                            type="number"
+                                            min={0}
+                                            max={10}
+                                            step={1}
+                                            value={av.alvo}
+                                            onChange={e => setAvaliacaoDrafts(drafts => drafts.map(d => d.id === av.id ? { ...d, alvo: e.target.value } : d))}
+                                            className="w-mx-20 text-center"
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {editTarget?.kind === 'acoes' && (
+                        <div className="space-y-mx-md">
+                            {acaoDrafts.map(acao => (
+                                <div key={acao.id} className="space-y-mx-xs border-b border-border pb-4">
+                                    <Typography variant="tiny" tone="muted">{acao.competencia}</Typography>
+                                    <Label htmlFor={`acao-${acao.id}`}>Ação de desenvolvimento</Label>
+                                    <Textarea
+                                        id={`acao-${acao.id}`}
+                                        value={acao.descricaoAcao}
+                                        rows={2}
+                                        onChange={e => setAcaoDrafts(drafts => drafts.map(d => d.id === acao.id ? { ...d, descricaoAcao: e.target.value } : d))}
+                                    />
+                                    <div className="flex flex-wrap items-end gap-mx-sm">
+                                        <div className="space-y-mx-xs">
+                                            <Label htmlFor={`prazo-${acao.id}`} className="text-xs">Prazo</Label>
+                                            <Input
+                                                id={`prazo-${acao.id}`}
+                                                type="date"
+                                                value={acao.dataConclusao}
+                                                onChange={e => setAcaoDrafts(drafts => drafts.map(d => d.id === acao.id ? { ...d, dataConclusao: e.target.value } : d))}
+                                            />
+                                        </div>
+                                        <div className="space-y-mx-xs">
+                                            <Label htmlFor={`impacto-${acao.id}`} className="text-xs">Impacto</Label>
+                                            <select
+                                                id={`impacto-${acao.id}`}
+                                                value={acao.impacto}
+                                                onChange={e => setAcaoDrafts(drafts => drafts.map(d => d.id === acao.id ? { ...d, impacto: e.target.value } : d))}
+                                                className="block h-mx-xl px-4 bg-white border border-border rounded-2xl text-sm font-bold outline-none uppercase"
+                                            >
+                                                {IMPACTO_CUSTO.map(v => <option key={v} value={v}>{v}</option>)}
+                                            </select>
+                                        </div>
+                                        <div className="space-y-mx-xs">
+                                            <Label htmlFor={`custo-${acao.id}`} className="text-xs">Custo</Label>
+                                            <select
+                                                id={`custo-${acao.id}`}
+                                                value={acao.custo}
+                                                onChange={e => setAcaoDrafts(drafts => drafts.map(d => d.id === acao.id ? { ...d, custo: e.target.value } : d))}
+                                                className="block h-mx-xl px-4 bg-white border border-border rounded-2xl text-sm font-bold outline-none uppercase"
+                                            >
+                                                {IMPACTO_CUSTO.map(v => <option key={v} value={v}>{v}</option>)}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                </ModalBody>
+            </Modal>
         </div>
     )
 }

@@ -334,6 +334,14 @@ export default function App() {
               <Route path="/terms" element={<Suspense fallback={<Spinner />}><Terms /></Suspense>} />
               <Route path="/dono/*" element={<OwnerLegacyPathRedirect />} />
               <Route path="/gerente/*" element={<ManagerLegacyPathRedirect />} />
+              {/*
+                O documento do PDI fica FORA do AppShell de propósito: o shell
+                encadeia h-[100dvh] + overflow-hidden/auto (MxSidebarShell,
+                PageViewport) e um transform de motion, e qualquer um deles
+                recorta a impressão na primeira folha. Aqui o documento flui
+                direto no body e o navegador pagina as 3 folhas A4.
+              */}
+              <Route path="/pdi/:id/print" element={<ProtectedRoute><Suspense fallback={<Spinner />}><PDIPrint /></Suspense></ProtectedRoute>} />
               <Route path="/" element={<ProtectedRoute><Suspense fallback={<Spinner />}><AppShell /></Suspense></ProtectedRoute>}>
                 <Route path="settings" element={<Navigate to="/configuracoes" replace />} />
                 <Route path="plano-estrategico" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerPlanoEstrategico />} admin={<InternalStrategicPlanPage />} /></Suspense>} />
@@ -479,7 +487,6 @@ export default function App() {
                 <Route path="pdi" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<Navigate to="/desenvolvimento?tab=pdi" replace />} gerente={<GerentePDI />} dono={<GerentePDI />} admin={<GerentePDI />} />
                 </Suspense>} />
-                <Route path="pdi/:id/print" element={<Suspense fallback={<Spinner />}><PDIPrint /></Suspense>} />
                 <Route path="minhas-lojas" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerStoresNetworkPage />} admin={<ForbiddenRoute />} />
                 </Suspense>} />
