@@ -86,7 +86,7 @@ Com schema canonico e check-in temporal corrigidos, o painel da loja precisa usa
 - `src/lib/dashboard-seller-goal-source.test.ts`
 - `src/lib/vendedor-performance-goal-scope-migration.test.ts`
 - `supabase/migrations/20260826103000_fix_vendedor_performance_goal_scope.sql`
-- `supabase/migrations/20260826181204_individual_goal_precedence_and_eligible_seller_scope.sql`
+- `supabase/migrations/20260826185929_individual_goal_precedence_and_eligible_seller_scope.sql`
 - `src/pages/FunilVendedor.tsx`
 
 ## Dev Agent Record

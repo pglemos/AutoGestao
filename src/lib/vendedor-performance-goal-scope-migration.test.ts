@@ -6,7 +6,7 @@ const sql = readFileSync(
   'utf8',
 )
 const precedenceSql = readFileSync(
-  new URL('../../supabase/migrations/20260826181204_individual_goal_precedence_and_eligible_seller_scope.sql', import.meta.url),
+  new URL('../../supabase/migrations/20260826185929_individual_goal_precedence_and_eligible_seller_scope.sql', import.meta.url),
   'utf8',
 )
 
