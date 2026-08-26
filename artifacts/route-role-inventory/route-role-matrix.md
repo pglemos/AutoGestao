@@ -1,6 +1,6 @@
 # MX Foundation Zero — Matriz atual route × role
 
-Gerado em 2026-08-26T14:33:05.193Z a partir do inventário AST vivo e de ROUTE_ACCESS_RULES.
+Gerado em 2026-08-26T17:34:37.172Z a partir do inventário AST vivo e de ROUTE_ACCESS_RULES.
 
 ## Denominadores
 
@@ -20,6 +20,11 @@ Gerado em 2026-08-26T14:33:05.193Z a partir do inventário AST vivo e de ROUTE_A
 
 | Rota | Perfil | Superfície | Tipo | Elemento |
 |---|---|---|---|---|
+| `/pdi/:id/print` | administrador_geral | PRINT | route | <ProtectedRoute><Suspense fallback={<Spinner />}><PDIPrint /></Suspense></ProtectedRoute> |
+| `/pdi/:id/print` | administrador_mx | PRINT | route | <ProtectedRoute><Suspense fallback={<Spinner />}><PDIPrint /></Suspense></ProtectedRoute> |
+| `/pdi/:id/print` | consultor_mx | PRINT | route | <ProtectedRoute><Suspense fallback={<Spinner />}><PDIPrint /></Suspense></ProtectedRoute> |
+| `/pdi/:id/print` | dono | PRINT | route | <ProtectedRoute><Suspense fallback={<Spinner />}><PDIPrint /></Suspense></ProtectedRoute> |
+| `/pdi/:id/print` | gerente | PRINT | route | <ProtectedRoute><Suspense fallback={<Spinner />}><PDIPrint /></Suspense></ProtectedRoute> |
 | `/plano-estrategico` | administrador_geral | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerPlanoEstrategico />} admin={<InternalStrategicPlanPage />} /></S |
 | `/plano-estrategico` | administrador_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerPlanoEstrategico />} admin={<InternalStrategicPlanPage />} /></S |
 | `/plano-estrategico` | consultor_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerPlanoEstrategico />} admin={<InternalStrategicPlanPage />} /></S |
@@ -174,11 +179,6 @@ Gerado em 2026-08-26T14:33:05.193Z a partir do inventário AST vivo e de ROUTE_A
 | `/pdi` | consultor_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Navigate to="/desenvolvimento?tab=pdi" replace />} gerente={<GerentePDI />} dono={<GerentePDI />} admin={<GerentePDI />} /> |
 | `/pdi` | dono | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Navigate to="/desenvolvimento?tab=pdi" replace />} gerente={<GerentePDI />} dono={<GerentePDI />} admin={<GerentePDI />} /> |
 | `/pdi` | gerente | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Navigate to="/desenvolvimento?tab=pdi" replace />} gerente={<GerentePDI />} dono={<GerentePDI />} admin={<GerentePDI />} /> |
-| `/pdi/:id/print` | administrador_geral | PRINT | route | <Suspense fallback={<Spinner />}><PDIPrint /></Suspense> |
-| `/pdi/:id/print` | administrador_mx | PRINT | route | <Suspense fallback={<Spinner />}><PDIPrint /></Suspense> |
-| `/pdi/:id/print` | consultor_mx | PRINT | route | <Suspense fallback={<Spinner />}><PDIPrint /></Suspense> |
-| `/pdi/:id/print` | dono | PRINT | route | <Suspense fallback={<Spinner />}><PDIPrint /></Suspense> |
-| `/pdi/:id/print` | gerente | PRINT | route | <Suspense fallback={<Spinner />}><PDIPrint /></Suspense> |
 | `/minhas-lojas` | dono | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerStoresNetworkPage />} admin={<ForbiddenRoute />} /> </Suspense> |
 | `/rotina` | administrador_geral | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<OwnerRoutineRoute />} admin={<RotinaGerente />} /> </Suspense> |
 | `/rotina` | administrador_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<OwnerRoutineRoute />} admin={<RotinaGerente />} /> </Suspense> |
@@ -301,6 +301,7 @@ Gerado em 2026-08-26T14:33:05.193Z a partir do inventário AST vivo e de ROUTE_A
 | `/terms` | AUTH_LEGAL_PUBLIC | — | PUBLIC | PUBLIC | PUBLIC | PUBLIC | PUBLIC | PUBLIC |
 | `/dono/*` | FULLSCREEN | — | PUBLIC | PUBLIC | PUBLIC | PUBLIC | PUBLIC | PUBLIC |
 | `/gerente/*` | AUTH_LEGAL_PUBLIC | — | PUBLIC | PUBLIC | PUBLIC | PUBLIC | PUBLIC | PUBLIC |
+| `/pdi/:id/print` | PRINT | `/pdi/:id/print` | RENDER_PRINT | RENDER_PRINT | RENDER_PRINT | RENDER_PRINT | RENDER_PRINT | FORBIDDEN |
 | `/` | STANDARD_CANVAS | — | CONTAINER | CONTAINER | CONTAINER | CONTAINER | CONTAINER | CONTAINER |
 | `/settings` | REDIRECT | `/settings` | REDIRECT_ALLOWED | REDIRECT_ALLOWED | REDIRECT_ALLOWED | REDIRECT_ALLOWED | REDIRECT_ALLOWED | REDIRECT_BLOCKED |
 | `/plano-estrategico` | STANDARD_CANVAS | `/plano-estrategico` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN | FORBIDDEN |
@@ -379,7 +380,6 @@ Gerado em 2026-08-26T14:33:05.193Z a partir do inventário AST vivo e de ROUTE_A
 | `/lojas/:storeSlug/equipe` | STANDARD_CANVAS | `/lojas/:storeSlug/*` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN |
 | `/consultor-ia` | REDIRECT | `/consultor-ia` | REDIRECT_BLOCKED | REDIRECT_BLOCKED | REDIRECT_BLOCKED | REDIRECT_BLOCKED | REDIRECT_BLOCKED | REDIRECT_ALLOWED |
 | `/pdi` | STANDARD_CANVAS | `/pdi` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | REDIRECT_ALLOWED |
-| `/pdi/:id/print` | PRINT | `/pdi/:id/print` | RENDER_PRINT | RENDER_PRINT | RENDER_PRINT | RENDER_PRINT | RENDER_PRINT | FORBIDDEN |
 | `/minhas-lojas` | STANDARD_CANVAS | `/minhas-lojas` | FORBIDDEN | FORBIDDEN | FORBIDDEN | RENDER_STANDARD_CANVAS | FORBIDDEN | FORBIDDEN |
 | `/rotina` | STANDARD_CANVAS | `/rotina` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN |
 | `/painel` | STANDARD_CANVAS | `/painel` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN | FORBIDDEN | FORBIDDEN |

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import { cancelarVendaRpc } from '@/features/crm/lib/cancelarVenda'
-import { filterStoreSales, filterStoreSalesBySellerIds, getStoreSaleCompetence, type StoreSaleCandidate } from '../lib/store-sales'
+import { cancelarVendaRpc, type CancelarVendaReferencia } from '@/features/crm/lib/cancelarVenda'
+import { buildStoreSaleCandidates, filterStoreSales, getStoreSaleDisplayDate, type StoreSaleEventRow } from '../lib/store-sales'
 
 export type VendaLoja = {
   id: string
@@ -20,65 +20,12 @@ export type VendaLoja = {
   motivo_cancelamento: string | null
 }
 
-type VendaLojaEventRow = {
-  id: string
-  cliente_id: string
-  data_evento: string
-  data_competencia: string | null
-  oportunidade_id: string | null
-  seller_user_id: string
-  seller: { name: string } | null
-  oportunidade: {
-    id: string
-    cliente_id: string
-    veiculo_interesse: string | null
-    valor_negociado: number | string | null
-    etapa: string | null
-    data_competencia: string | null
-    sale_date: string | null
-    closed_at: string | null
-    cancelada_em: string | null
-    motivo_cancelamento: string | null
-    cliente: { nome: string } | null
-    seller: { name: string } | null
-  } | null
-}
-
-function parse(
-  rows: unknown,
-  periodStart?: string | null,
-  periodEnd?: string | null,
-  activeSellerIds?: readonly string[],
-): VendaLoja[] {
+function parse(rows: unknown): VendaLoja[] {
   if (!Array.isArray(rows)) return []
 
-  const candidates: StoreSaleCandidate[] = (rows as VendaLojaEventRow[]).map(row => {
-    const opportunity = row.oportunidade
-    return {
-      event_id: row.id,
-      oportunidade_id: row.oportunidade_id || opportunity?.id || null,
-      data_evento: row.data_evento,
-      data_competencia: row.data_competencia,
-      oportunidade_data_competencia: opportunity?.data_competencia || null,
-      oportunidade_sale_date: opportunity?.sale_date || null,
-      // A existência do evento oficial é o fato de venda. A oportunidade
-      // pode ainda estar sem etapa materializada, mas isso não pode remover
-      // a venda da lista nem fazer a contagem detalhada divergir da RPC.
-      etapa: opportunity?.etapa === 'cancelada' ? 'cancelada' : 'ganho',
-      cliente_id: opportunity?.cliente_id || row.cliente_id || null,
-      cliente_nome: opportunity?.cliente?.nome || null,
-      veiculo_interesse: opportunity?.veiculo_interesse || null,
-      valor_negociado: Number(opportunity?.valor_negociado) || 0,
-      seller_user_id: row.seller_user_id || null,
-      seller_nome: opportunity?.seller?.name || row.seller?.name || null,
-      closed_at: opportunity?.closed_at || null,
-      cancelada_em: opportunity?.cancelada_em || null,
-      motivo_cancelamento: opportunity?.motivo_cancelamento || null,
-    }
-  })
+  const candidates = buildStoreSaleCandidates(rows as StoreSaleEventRow[])
 
-  const periodRows = filterStoreSales(candidates, periodStart, periodEnd)
-  const scopedRows = activeSellerIds ? filterStoreSalesBySellerIds(periodRows, activeSellerIds) : periodRows
+  const scopedRows = filterStoreSales(candidates)
 
   return scopedRows.map(row => ({
     id: row.oportunidade_id || row.event_id,
@@ -91,7 +38,7 @@ function parse(
     etapa: row.etapa as 'ganho' | 'cancelada',
     seller_user_id: row.seller_user_id || '',
     seller_nome: row.seller_nome || 'Vendedor',
-    competencia: getStoreSaleCompetence(row) as string,
+    competencia: getStoreSaleDisplayDate(row) || '',
     closed_at: row.closed_at,
     cancelada_em: row.cancelada_em,
     motivo_cancelamento: row.motivo_cancelamento,
@@ -101,52 +48,40 @@ function parse(
 /**
  * Vendas fechadas (ganho + cancelada) de uma loja, para o painel de
  * gerente/dono. Consulta os eventos oficiais de venda e a oportunidade
- * vinculada. O período é aplicado pela competência comercial, igual ao
- * vendedor_performance_oficial, para não misturar histórico antigo com o
- * indicador selecionado.
+ * vinculada. A lista operacional não herda o período do indicador do
+ * dashboard: gerente, dono e área interna MX precisam localizar qualquer
+ * venda histórica da unidade para poder corrigi-la. O período continua sendo
+ * uma regra dos agregadores, não uma limitação da auditoria detalhada.
  */
-export function useVendasLoja(
-  storeId: string | null,
-  periodStart?: string | null,
-  periodEnd?: string | null,
-  // Opcional porque vem depois de parâmetros opcionais (TS1016). `null` é um
-  // escopo resolvido válido: quer dizer "ainda não sei quem são os vendedores
-  // ativos" e segura a consulta, em vez de cair em toda a história da loja.
-  activeSellerIds?: readonly string[] | null,
-) {
+export function useVendasLoja(storeId: string | null) {
   const [vendas, setVendas] = useState<VendaLoja[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  // `== null` cobre null e undefined: omitir o argumento é o mesmo que ainda não
-  // ter resolvido o escopo. `Array.from(new Set(undefined))` lançaria.
-  const activeSellerIdsKey = activeSellerIds == null
-    ? null
-    : Array.from(new Set(activeSellerIds)).sort().join(',')
 
   const fetchVendas = useCallback(async () => {
     if (!storeId) { setVendas([]); setLoading(false); return }
-    // Wait for the parent dashboard to resolve the active seller membership.
-    // An empty list is a valid resolved scope: it means there are no active
-    // sellers and must not fall back to all historical store events.
-    if (activeSellerIdsKey === null) { setError(null); setVendas([]); setLoading(true); return }
-    if (activeSellerIdsKey === '') { setError(null); setVendas([]); setLoading(false); return }
     setLoading(true); setError(null)
     try {
       const rows: unknown[] = []
       const pageSize = 500
-      const scopedSellerIds = activeSellerIdsKey.split(',')
 
       for (let from = 0; ; from += pageSize) {
         let query = supabase
           .from('eventos_comerciais')
           .select(`
             id,
+            tipo_evento,
             cliente_id,
             data_evento,
             data_competencia,
             oportunidade_id,
+            evento_origem_id,
+            agendamento_id,
             seller_user_id,
+            metadata,
+            observacao,
             seller:usuarios!eventos_comerciais_seller_user_id_fkey(name),
+            cliente:clientes(nome),
             oportunidade:oportunidades!eventos_comerciais_oportunidade_id_fkey(
               id,
               cliente_id,
@@ -163,8 +98,7 @@ export function useVendasLoja(
             )
           `)
           .eq('loja_id', storeId)
-          .eq('tipo_evento', 'venda_realizada')
-        if (scopedSellerIds) query = query.in('seller_user_id', scopedSellerIds)
+          .in('tipo_evento', ['venda_realizada', 'venda_cancelada'])
         const { data, error: fetchError } = await query
           .order('data_evento', { ascending: false })
           .order('id', { ascending: false })
@@ -176,19 +110,19 @@ export function useVendasLoja(
         if (page.length < pageSize) break
       }
 
-      setVendas(parse(rows, periodStart, periodEnd, scopedSellerIds))
+      setVendas(parse(rows))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao carregar vendas da loja.')
       setVendas([])
     } finally {
       setLoading(false)
     }
-  }, [activeSellerIdsKey, periodEnd, periodStart, storeId])
+  }, [storeId])
 
   useEffect(() => { void fetchVendas() }, [fetchVendas])
 
-  const cancelarVenda = useCallback(async (id: string, motivo: string): Promise<{ error: string | null }> => {
-    const { error: cancelError } = await cancelarVendaRpc(id, motivo)
+  const cancelarVenda = useCallback(async (referencia: CancelarVendaReferencia, motivo: string): Promise<{ error: string | null }> => {
+    const { error: cancelError } = await cancelarVendaRpc(referencia, motivo)
     if (cancelError) return { error: cancelError }
     await fetchVendas()
     return { error: null }

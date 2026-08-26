@@ -216,7 +216,7 @@ describe('fórmulas de consolidação para o catálogo MX', () => {
     { code: 'sales_total' },
     { code: 'visit_to_sale_rate' },
     { code: 'appointments' },
-    { code: 'no_show_rate' },
+    { code: 'appointment_to_visit_rate' },
   ]
   const mxPolicies = resolvePolicies(mxIndicators)
 
@@ -236,7 +236,9 @@ describe('fórmulas de consolidação para o catálogo MX', () => {
     expect(result.realizado.valueMap.visit_to_sale_rate[1]).toBeCloseTo(0.25, 10)
   })
 
-  test('no-show usa agendamentos menos comparecimentos', () => {
+  // `no_show_rate` saiu do catálogo em 20260826180000. A conversão de
+  // agendamento em visita cobre o mesmo par de bases, sobre o total da rede.
+  test('conversão agendamento > visita recompõe sobre as bases consolidadas', () => {
     const result = consolidateClientPlanning({
       rows: [
         mxRow('matriz', 'appointments', 100), mxRow('matriz', 'visits', 60),
@@ -245,8 +247,8 @@ describe('fórmulas de consolidação para o catálogo MX', () => {
       ],
       units, indicators: mxIndicators, policies: mxPolicies,
     })
-    // (200 - 140) / 200 = 30%
-    expect(result.realizado.valueMap.no_show_rate[1]).toBeCloseTo(0.3, 10)
+    // 140 / 200 = 70%
+    expect(result.realizado.valueMap.appointment_to_visit_rate[1]).toBeCloseTo(0.7, 10)
   })
 
   test('indicador derivado sem base declarada continua sem valor', () => {

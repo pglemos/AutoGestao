@@ -210,7 +210,7 @@ export default function PDIPrint() {
                     <ChevronLeft size={16} /> Voltar
                 </button>
                 <button onClick={handlePrint} className="flex items-center gap-mx-xs px-8 py-3 bg-gray-900 text-white rounded-mx-full text-xs font-bold uppercase tracking-widest shadow-sm hover:scale-105 active:scale-95 transition-transform">
-                    <Printer size={16} /> Imprimir Bundle PDI (A4)
+                    <Printer size={16} /> Imprimir PDI (A4)
                 </button>
             </div>
 

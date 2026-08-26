@@ -1,13 +1,14 @@
 import { describe, expect, test } from 'bun:test'
-import { readFileSync } from 'node:fs'
 import { overlayCanonicalCatalog } from './canonicalBase44Catalog'
 
 /**
- * Os 41 indicadores do cockpit executivo foram adotados no catálogo da
- * metodologia (migration 20260826160000). Sem esta regra, o overlay canônico
- * forçava `status: 'arquivado'` em tudo que não fosse um dos 45 códigos Base44
- * — um indicador publicado aparecia "fora de operação" na tela do Admin, sem
- * nada explicando por quê.
+ * O catálogo da metodologia é exatamente os 45 indicadores do Base44
+ * (migration 20260826180000 removeu tudo o que não pertencia a esse conjunto).
+ *
+ * A regra de exibição abaixo continua valendo para o que a MX vier a criar pela
+ * própria tela ("Criar Indicador" grava `created_origin = 'criado_mx'`): sem
+ * ela, o overlay canônico forçava `status: 'arquivado'` em tudo fora dos 45, e
+ * um indicador recém-criado nascia aparecendo como fora de operação.
  */
 const base = {
   label: 'X',
@@ -17,17 +18,17 @@ const base = {
   sort_order: 9000,
 }
 
-describe('adoção dos indicadores do cockpit no catálogo', () => {
+describe('overlay canônico e indicadores criados pela MX', () => {
   test('indicador criado pela MX mantém o próprio status fora dos 45 canônicos', () => {
     const rows = overlayCanonicalCatalog([
-      { ...base, metric_key: 'commercial_pipeline_health', status: 'publicado', active: true, created_origin: 'criado_mx' },
+      { ...base, metric_key: 'indicador_novo_mx', status: 'publicado', active: true, created_origin: 'criado_mx' },
     ])
-    const adotado = rows.find(row => row.metric_key === 'commercial_pipeline_health')
-    expect(adotado?.status).toBe('publicado')
-    expect(adotado?.active).not.toBe(false)
+    const criado = rows.find(row => row.metric_key === 'indicador_novo_mx')
+    expect(criado?.status).toBe('publicado')
+    expect(criado?.active).not.toBe(false)
   })
 
-  test('legado fora do catálogo continua exibido como arquivado', () => {
+  test('legado fora do conjunto Base44 continua exibido como arquivado', () => {
     const rows = overlayCanonicalCatalog([
       { ...base, metric_key: 'gross_revenue', status: 'publicado', active: true, created_origin: 'mx_padrao' },
     ])
@@ -36,12 +37,8 @@ describe('adoção dos indicadores do cockpit no catálogo', () => {
     expect(legado?.active).toBe(false)
   })
 
-  test('a migration adota exatamente os 41 e não mexe em pacote de produto', () => {
-    const sql = readFileSync('supabase/migrations/20260826160000_adota_indicadores_cockpit_no_catalogo.sql', 'utf8')
-    expect((sql.match(/'criado_mx'/g) || []).length).toBe(41)
-    expect(sql).toContain('ON CONFLICT (metric_key) DO NOTHING')
-    // Planos já publicados não podem ganhar indicador retroativamente.
-    expect(sql).not.toContain('pacotes_indicadores_itens')
-    expect(sql).not.toContain('ciclos_plano_estrategico')
+  test('o overlay entrega os 45 canônicos quando o catálogo só tem eles', () => {
+    const rows = overlayCanonicalCatalog([])
+    expect(rows).toHaveLength(45)
   })
 })

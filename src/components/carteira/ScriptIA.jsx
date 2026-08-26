@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Sparkles, Copy, Check, MessageCircle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getScriptOficial, normalizarTelefoneWhatsApp } from "./carteiraUtils";
+import { getScriptOficial, getScriptParaMissao, normalizarTelefoneWhatsApp } from "./carteiraUtils";
 
 const TONS = [
   { id: "consultivo", label: "Consultivo", desc: "Perguntativo, orientado a entender a necessidade" },
@@ -30,24 +30,23 @@ function descreverBloqueio(oficial) {
   return "Script oficial indisponível para esta situação.";
 }
 
-export default function ScriptIA({ cliente, proximoPasso, onWhatsAppClick }) {
+export default function ScriptIA({ cliente, missaoId, proximoPasso, onWhatsAppClick }) {
   const [tomSelecionado, setTomSelecionado] = useState("consultivo");
   const [script, setScript] = useState("");
   const [bloqueio, setBloqueio] = useState(null);
   const [copiado, setCopiado] = useState(false);
 
-  // FONTE ÚNICA: os 77 scripts oficiais da matriz v1.
-  //
-  // Antes o texto vinha de scriptTemplatesLocal, um banco paralelo que SORTEAVA uma
-  // variação a cada clique. Script comercial sorteado não é determinístico e não é
-  // rastreável à metodologia: dois vendedores no mesmo estado mandavam mensagens
-  // diferentes, e nenhuma delas constava da matriz.
-  //
-  // Quando o script oficial não está disponível — variável obrigatória faltando,
-  // SOURCE_BLOCKER da planilha, ou situação que ainda depende de classificação — a
-  // mensagem NÃO é substituída por outra: o motivo é exibido e o envio fica bloqueado.
+  // FONTE ÚNICA: os 77 scripts oficiais da matriz v1 e missões do plano de ataque.
   const gerarScript = useCallback(() => {
     if (!cliente) return;
+    if (missaoId) {
+      const scriptMissao = getScriptParaMissao(missaoId, cliente);
+      if (scriptMissao) {
+        setScript(scriptMissao);
+        setBloqueio(null);
+        return;
+      }
+    }
     const oficial = getScriptOficial(cliente);
     if (oficial && oficial.scriptReady && oficial.texto) {
       setScript(oficial.texto);
@@ -56,12 +55,12 @@ export default function ScriptIA({ cliente, proximoPasso, onWhatsAppClick }) {
     }
     setScript("");
     setBloqueio(descreverBloqueio(oficial));
-  }, [cliente]);
+  }, [cliente, missaoId]);
 
   useEffect(() => {
     if (!cliente) return;
     gerarScript();
-  }, [cliente?.id, gerarScript]);
+  }, [cliente?.id, missaoId, gerarScript]);
 
   const copiar = useCallback(async () => {
     if (!script) return;

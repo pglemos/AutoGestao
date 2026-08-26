@@ -722,14 +722,154 @@ const SCRIPT_TEMPLATES_EXTRAS = {
   veiculo_chegou: "Avisar sobre veículo recém-chegado",
 };
 
-// `missaoId` chega aqui como o `tipo_missao` persistido (rótulo da missão, ex.:
-// "Recuperar propostas") ou uma chave avulsa de SCRIPT_TEMPLATES_EXTRAS — nunca
-// o uuid da linha em CarteiraMissao, que não tem como casar com nenhum script.
-export function getScriptParaMissao(missaoId) {
-  // DESATIVADO pelo mesmo motivo de getScriptParaProximoPasso. O fallback anterior
-  // era ainda pior aqui: devolvia "Enviar primeira abordagem" para QUALQUER missão
-  // sem script, disparando abordagem inicial numa campanha de recuperação.
-  void missaoId;
+const MISSOES_PRESET_MAP = {
+  "Recuperar propostas": `Oi, {nome}! Tudo bem?\n\nVi que conversamos sobre a proposta do {veiculo}. Conseguiu avaliar as condições?\n\nQuero entender se ficou alguma dúvida ou se podemos ajustar algum detalhe para fecharmos negócio.`,
+  "Converter aprovações": `Boa notícia, {nome}: seu financiamento para o {veiculo} foi aprovado!\n\nAgora precisamos apenas revisar os detalhes e garantir essas condições para seguir com o fechamento.\n\nQual o melhor horário para conversarmos hoje?`,
+  "Reagendar visitas": `Oi, {nome}! Tudo bem?\n\nVi que não conseguimos nos encontrar para você conhecer o {veiculo}. Sei que imprevistos acontecem!\n\nPodemos remarcar nossa visita para hoje ou amanhã? Qual horário fica melhor para você?`,
+  "Confirmar visitas": `Oi, {nome}! Tudo bem?\n\nPassando só para confirmar nossa visita para você conhecer o {veiculo}.\n\nPosso manter o horário combinado? Te aguardo aqui na loja!`,
+  "Agendar visitas (quentes)": `Oi, {nome}! Tudo bem?\n\nO {veiculo} que você tem interesse está disponível aqui na loja para você conhecer de perto e fazer um test-drive.\n\nQue tal passar aqui hoje? Tenho horários disponíveis na parte da manhã e da tarde.`,
+  "Gerar visitas": `Oi, {nome}! Tudo bem?\n\nO {veiculo} que você tem interesse está disponível aqui na loja para você conhecer de perto e fazer um test-drive.\n\nQue tal passar aqui hoje? Tenho horários disponíveis na parte da manhã e da tarde.`,
+  "Recuperar visitas": `Oi, {nome}! Tudo bem?\n\nFoi ótimo receber você aqui na loja para conhecer o {veiculo}!\n\nFicou alguma dúvida sobre o carro ou sobre as condições que possamos conversar para avançar no seu fechamento?`,
+  "Retomar leads": `Oi, {nome}! Tudo bem?\n\nEstou passando para saber se você ainda tem interesse no {veiculo} ou se gostaria de conhecer outras opções que chegaram no estoque.\n\nComo posso te ajudar hoje?`,
+  "Follow-up de decisão": `Oi, {nome}! Tudo bem?\n\nConseguiu pensar sobre as condições que conversamos para o {veiculo}?\n\nSe tiver qualquer ponto que você queira negociar ou ajustar, estou à disposição para viabilizarmos o fechamento!`,
+  "Reativar carteira": `Oi, {nome}! Tudo bem?\n\nFaz algum tempo que não nos falamos. Estou atualizando a carteira e queria saber se você pensa em trocar de veículo neste momento.\n\nRecebemos opções excelentes no estoque que podem combinar com o que você procura!`,
+  "Pós-venda e indicação": `Oi, {nome}! Tudo bem?\n\nComo está sendo a experiência com o seu {veiculo}? Espero que esteja curtindo muito!\n\nSe tiver algum amigo ou familiar pensando em trocar de carro, pode me indicar que cuidarei com o maior carinho.`,
+  "Pedir indicações": `Oi, {nome}! Tudo bem?\n\nComo está sendo a experiência com o seu {veiculo}? Espero que esteja curtindo muito!\n\nSe tiver algum amigo ou familiar pensando em trocar de carro, pode me indicar que cuidarei com o maior carinho.`,
+  "Acompanhar garantias": `Oi, {nome}! Tudo bem?\n\nPassando para saber como está o {veiculo} e se está tudo em ordem com o carro e suas revisões de garantia.\n\nQualquer dúvida ou suporte que precisar, pode contar comigo!`,
+  "Oportunidades de troca": `Oi, {nome}! Tudo bem?\n\nEstamos com uma condição especial de valorização de seminovos para troca aqui na loja.\n\nQue tal avaliarmos o seu carro atual para você sair de {veiculo} novo?`,
+  "Campanha de troca": `Oi, {nome}! Tudo bem?\n\nEstamos com uma condição especial de valorização de seminovos para troca aqui na loja.\n\nQue tal avaliarmos o seu carro atual para você sair de {veiculo} novo?`,
+};
+
+const MISSOES_PRESET_NOMES = new Set(Object.keys(MISSOES_PRESET_MAP));
+
+/**
+ * Gera o script contextualizado para uma missão do Plano de Ataque ou Campanha/Bônus.
+ * 
+ * Se a missão for uma Campanha/Bônus cadastrado (ex.: Bônus de Fechamento, Bônus na Troca, Desconto, Feirão):
+ * Gera um script persuasivo focado na condição comercial cadastrada, considerando os dados da campanha
+ * (título, descrição, desconto, bônus na troca, validade) e o contexto do cliente (financiamento, troca, veículo).
+ *
+ * Se a missão for uma missão oficial do catálogo (ex.: "Converter aprovações", "Recuperar propostas"):
+ * Retorna o script oficial correspondente àquela missão.
+ */
+export function getScriptParaMissao(missaoOuId, cliente) {
+  if (!missaoOuId && !cliente) return null;
+  if (!missaoOuId && cliente) return getScriptOficial(cliente)?.texto || null;
+
+  const missao = typeof missaoOuId === "object" ? missaoOuId : { tipo_missao: missaoOuId };
+  const metadata = missao.metadata || missao.campanha || {};
+  const tipoMissao = (missao.tipo_missao || missao.nome || metadata.campanha_titulo || "").trim();
+
+  // Caso especial extra: veículo recém chegado
+  if (missaoOuId === "veiculo_chegou" || tipoMissao === "veiculo_chegou") {
+    const templateKey = SCRIPT_TEMPLATES_EXTRAS.veiculo_chegou;
+    const template = SCRIPTS_BIBLIOTECA[templateKey]?.texto;
+    return template ? preencherScript(template, cliente) : null;
+  }
+
+  if (!cliente) return null;
+
+  const nome = cliente.nome?.trim() || "Cliente";
+  const veiculo = cliente.veiculo_interesse?.trim() || "veículo";
+  const situacao = cliente.situacao_atual || cliente.momento || "";
+
+  // 1. Campanha ou Bônus cadastrado (ex.: Bônus de Fechamento, Bônus na Troca, Desconto, Feirão)
+  const isCampanhaCadastrada = Boolean(
+    metadata.campanha_id ||
+    metadata.campanha_tipo ||
+    metadata.campanha_descricao ||
+    metadata.valor_desconto ||
+    metadata.bonus_troca ||
+    metadata.targeting_kind ||
+    missao.campanha ||
+    (tipoMissao && !MISSOES_PRESET_NOMES.has(tipoMissao))
+  );
+
+  if (isCampanhaCadastrada && tipoMissao) {
+    const tipo = (metadata.campanha_tipo || metadata.tipo || "").toLowerCase();
+    const titulo = metadata.campanha_titulo || metadata.titulo || tipoMissao;
+    const descricao = (metadata.campanha_descricao || metadata.descricao || "").trim();
+    const valorDesconto = Number(metadata.valor_desconto || 0);
+    const bonusTroca = Number(metadata.bonus_troca || 0);
+    const fimEm = metadata.fim_em;
+    const targetingKind = metadata.targeting_kind || "";
+
+    let validadeStr = "";
+    if (fimEm) {
+      try {
+        const d = moment(fimEm);
+        if (d.isValid()) {
+          validadeStr = ` (válido até ${d.format("DD/MM")})`;
+        }
+      } catch (_) {}
+    }
+
+    const descontoFormatado = valorDesconto > 0 ? `R$ ${valorDesconto.toLocaleString("pt-BR")}` : "";
+    const bonusTrocaFormatado = bonusTroca > 0 ? `R$ ${bonusTroca.toLocaleString("pt-BR")}` : "";
+
+    const isFechamentoOuFinanciamento =
+      tipo === "bonus_fechamento" ||
+      titulo.toLowerCase().includes("fechamento") ||
+      targetingKind === "financing" ||
+      situacao.toLowerCase().includes("financiamento") ||
+      Boolean(cliente.interesse_financiamento) ||
+      Boolean(cliente.financing_interest);
+
+    const isTroca =
+      tipo === "bonus_troca" ||
+      titulo.toLowerCase().includes("troca") ||
+      targetingKind === "trade_interest" ||
+      bonusTroca > 0 ||
+      Boolean(cliente.interesse_troca) ||
+      Boolean(cliente.trade_interest);
+
+    // Cenário A: Bônus de Fechamento / Financiamento
+    if (isFechamentoOuFinanciamento) {
+      if (descricao) {
+        return `Boa notícia, ${nome}!\n\nPassando para te avisar que liberamos uma condição exclusiva de ${titulo} para o seu ${veiculo}!\n\n${descricao}${validadeStr}\n\nComo seu financiamento já tem condições registradas, conseguimos aplicar esse benefício diretamente no seu fechamento.\n\nQual o melhor horário para alinharmos os detalhes e finalizarmos hoje?`;
+      }
+      if (descontoFormatado) {
+        return `Boa notícia, ${nome}!\n\nLiberamos uma condição especial de ${titulo} para o seu ${veiculo}: desconto de ${descontoFormatado} aplicado diretamente no fechamento!${validadeStr}\n\nComo seu financiamento já está com condições aprovadas, conseguimos garantir essa oportunidade para você sair de carro novo.\n\nVamos aproveitar para fechar o negócio hoje?`;
+      }
+      if (bonusTrocaFormatado) {
+        return `Boa notícia, ${nome}!\n\nLiberamos uma condição especial de ${titulo} para o seu ${veiculo}: bônus de ${bonusTrocaFormatado} na avaliação do seu usado para fechamento!${validadeStr}\n\nPodemos incluir essa condição diretamente no seu contrato.\n\nQual o melhor horário para você vir até a loja ou alinharmos por aqui e fecharmos?`;
+      }
+      return `Boa notícia, ${nome}!\n\nPassando para te avisar que liberamos uma condição exclusiva de ${titulo} para você garantir o seu ${veiculo}!${validadeStr}\n\nSeu financiamento já está com condições aprovadas e podemos aplicar esse benefício diretamente no fechamento.\n\nQual o melhor horário para conversarmos e confirmarmos os detalhes?`;
+    }
+
+    // Cenário B: Bônus na Troca
+    if (isTroca) {
+      if (descricao) {
+        return `Olá, ${nome}! Tudo bem?\n\nEstamos com uma oportunidade exclusiva de ${titulo} aqui na loja para o ${veiculo}!\n\n${descricao}${validadeStr}\n\nPodemos fazer uma superavaliação no seu usado e aplicar esse bônus para viabilizar sua troca nas melhores condições.\n\nConsegue passar aqui hoje para avaliarmos seu carro e definirmos os detalhes?`;
+      }
+      if (bonusTrocaFormatado) {
+        return `Olá, ${nome}! Tudo bem?\n\nEstamos com uma condição exclusiva de ${titulo} para o ${veiculo}: bônus de ${bonusTrocaFormatado} na avaliação do seu carro usado!${validadeStr}\n\nPodemos fazer uma superavaliação no seu veículo e aplicar esse benefício diretamente na negociação.\n\nQual o melhor horário para você trazer seu veículo para uma avaliação rápida e fecharmos o negócio?`;
+      }
+      return `Olá, ${nome}! Tudo bem?\n\nLiberamos uma condição especial de ${titulo} aqui na loja para você sair de ${veiculo} novo!${validadeStr}\n\nEstamos com valorização especial na avaliação do seu veículo usado para fecharmos negócio.\n\nQue tal passar aqui hoje para avaliarmos seu carro e conversarmos sobre a proposta?`;
+    }
+
+    // Cenário C: Desconto / Feirão / Campanha Geral
+    if (descricao) {
+      return `Olá, ${nome}! Tudo bem?\n\nEstou entrando em contato porque liberamos a condição especial de ${titulo} para o ${veiculo}!\n\n${descricao}${validadeStr}\n\nEssa condição é por tempo limitado. Podemos conversar agora para eu te passar todos os detalhes e fecharmos essa oportunidade?`;
+    }
+    if (descontoFormatado) {
+      return `Olá, ${nome}! Tudo bem?\n\nLiberamos uma condição imperdível de ${titulo} com desconto exclusivo de ${descontoFormatado} no ${veiculo}!${validadeStr}\n\nVamos aproveitar para garantir seu veículo com essa condição especial hoje? Qual o melhor horário para conversarmos?`;
+    }
+    return `Olá, ${nome}! Tudo bem?\n\nPassando para te apresentar uma condição exclusiva: liberamos a campanha de ${titulo} para quem tem interesse no ${veiculo}!${validadeStr}\n\nPodemos conversar agora para eu te passar todos os detalhes e garantirmos essa oportunidade?`;
+  }
+
+  // 2. Missões pré-definidas do catálogo oficial
+  const scriptPreset = MISSOES_PRESET_MAP[tipoMissao];
+  if (scriptPreset) {
+    return preencherScript(scriptPreset, cliente);
+  }
+
+  // 3. Fallback determinístico para o script oficial do cliente
+  const oficial = getScriptOficial(cliente);
+  if (oficial?.scriptReady && oficial.texto) {
+    return oficial.texto;
+  }
+
   return null;
 }
 

@@ -25,6 +25,14 @@ const FINANCING_SEGMENTOS = [
   { value: "new_simulation", label: "Nova simulação" },
 ];
 
+const TIPO_LABELS = {
+  campanha: "Campanha",
+  feirao: "Feirão",
+  desconto: "Desconto",
+  bonus_troca: "Bônus na troca",
+  bonus_fechamento: "Bônus de fechamento",
+};
+
 function targetingDeCampanha(campanha) {
   const kind = campanha.targeting_kind || "carteira";
   if (kind === "financing") {
@@ -106,7 +114,26 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
     const ids = new Set(missaoRecuperada.clientes_ids || []);
     const queue = clientes.filter((client) => ids.has(client.id));
     if (queue.length > 0) {
-      onIniciarMissao(missaoRecuperada, queue);
+      const campanhaVinculada = campanhas.find(c => c.id === missaoRecuperada.metadata?.campanha_id || c.titulo === missaoRecuperada.tipo_missao);
+      const missaoEnriquecida = {
+        ...missaoRecuperada,
+        campanha: campanhaVinculada || missaoRecuperada.campanha,
+        metadata: {
+          ...(campanhaVinculada ? {
+            campanha_id: campanhaVinculada.id,
+            campanha_tipo: campanhaVinculada.tipo,
+            campanha_titulo: campanhaVinculada.titulo,
+            campanha_descricao: campanhaVinculada.descricao,
+            valor_desconto: campanhaVinculada.valor_desconto,
+            bonus_troca: campanhaVinculada.bonus_troca,
+            fim_em: campanhaVinculada.fim_em,
+            targeting_kind: campanhaVinculada.targeting_kind,
+            targeting_segment: campanhaVinculada.targeting_config?.segment || campanhaVinculada.targeting_segment,
+          } : {}),
+          ...(missaoRecuperada.metadata || {}),
+        },
+      };
+      onIniciarMissao(missaoEnriquecida, queue);
     } else {
       setError("Não foi possível localizar os clientes desta missão.");
       setMissaoRecuperada(null);
@@ -214,7 +241,7 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
     setError("");
     try {
       const user = await base44.auth.me();
-      const mission = await base44.entities.CarteiraMissao.create({
+      const missionPayload = {
         vendedor_id: user.id,
         tipo_missao: campanha.titulo,
         status: "Preparando",
@@ -235,10 +262,23 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
           campanha_id: campanha.id,
           campanha_tipo: campanha.tipo,
           campanha_titulo: campanha.titulo,
+          campanha_descricao: campanha.descricao || null,
+          valor_desconto: campanha.valor_desconto || null,
+          bonus_troca: campanha.bonus_troca || null,
+          fim_em: campanha.fim_em || null,
           targeting_kind: targeting.kind,
           targeting_segment: targeting.segment || null,
         },
-      });
+      };
+      const mission = await base44.entities.CarteiraMissao.create(missionPayload);
+      const missionToStart = {
+        ...mission,
+        campanha,
+        metadata: {
+          ...(mission?.metadata || {}),
+          ...missionPayload.metadata,
+        },
+      };
       captureCampaignEligibility(
         { kind: "campaign", campaignId: campanha.id },
         {
@@ -250,7 +290,7 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
           eligible: elegiveis.length,
         },
       );
-      onIniciarMissao(mission, elegiveis);
+      onIniciarMissao(missionToStart, elegiveis);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Não foi possível iniciar a campanha para a carteira.");
     } finally {
@@ -302,7 +342,7 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
         <div className="border-t border-border-subtle px-5 pb-5">
         <form onSubmit={salvarCampanha} className="mt-4 grid grid-cols-1 gap-3 rounded-xl bg-surface-alt p-4 md:grid-cols-2">
           <select aria-label="Tipo da campanha" value={campanhaForm.tipo} onChange={event => setCampanhaForm(prev => ({ ...prev, tipo: event.target.value }))} className="min-h-11 rounded-xl border border-border bg-white px-3 text-sm">
-            <option value="campanha">Campanha</option><option value="feirao">Feirão</option><option value="desconto">Desconto</option><option value="bonus_troca">Bônus na troca</option>
+            <option value="campanha">Campanha</option><option value="feirao">Feirão</option><option value="desconto">Desconto</option><option value="bonus_troca">Bônus na troca</option><option value="bonus_fechamento">Bônus de fechamento</option>
           </select>
           <input aria-label="Título da campanha" value={campanhaForm.titulo} onChange={event => setCampanhaForm(prev => ({ ...prev, titulo: event.target.value }))} placeholder="Ex.: Feirão de julho" className="min-h-11 rounded-xl border border-border bg-white px-3 text-sm" required />
           <textarea aria-label="Descrição da campanha" value={campanhaForm.descricao} onChange={event => setCampanhaForm(prev => ({ ...prev, descricao: event.target.value }))} placeholder="Condição que pode ser comunicada ao cliente" rows={2} className="rounded-xl border border-border bg-white px-3 py-2 text-sm md:col-span-2" />
@@ -324,7 +364,7 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
           {campanhas.map(campanha => {
             const { resultado } = candidatosElegiveis(clientes, campanha);
             const elegiveis = resultado.eligible;
-            return <div key={campanha.id} className="rounded-xl border border-border-subtle p-4"><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-black text-mx-navy">{campanha.titulo}</p><p className="mt-1 text-xs text-muted-foreground">{campanha.descricao || "Condição comercial cadastrada para a carteira."}</p></div><span className="rounded-full bg-muted px-2 py-1 text-caption font-bold text-muted-foreground">{campanha.tipo}</span></div><button type="button" disabled={!elegiveis || Boolean(missionBlock) || iniciando} onClick={() => iniciarCampanha(campanha)} className="mt-3 flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-status-info px-3 py-2 text-xs font-bold text-status-info-text disabled:cursor-not-allowed disabled:opacity-40"><Zap className="h-3.5 w-3.5" /> Iniciar para {elegiveis} {elegiveis === 1 ? "cliente" : "clientes"}</button></div>;
+            return <div key={campanha.id} className="rounded-xl border border-border-subtle p-4"><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-black text-mx-navy">{campanha.titulo}</p><p className="mt-1 text-xs text-muted-foreground">{campanha.descricao || "Condição comercial cadastrada para a carteira."}</p></div><span className="rounded-full bg-muted px-2 py-1 text-caption font-bold text-muted-foreground">{TIPO_LABELS[campanha.tipo] || campanha.tipo}</span></div><button type="button" disabled={!elegiveis || Boolean(missionBlock) || iniciando} onClick={() => iniciarCampanha(campanha)} className="mt-3 flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-status-info px-3 py-2 text-xs font-bold text-status-info-text disabled:cursor-not-allowed disabled:opacity-40"><Zap className="h-3.5 w-3.5" /> Iniciar para {elegiveis} {elegiveis === 1 ? "cliente" : "clientes"}</button></div>;
           })}
         </div>
         {campanhas.length === 0 && <p className="mt-4 rounded-xl border border-dashed border-border p-5 text-center text-sm text-muted-foreground">Nenhuma campanha ativa cadastrada para esta loja.</p>}

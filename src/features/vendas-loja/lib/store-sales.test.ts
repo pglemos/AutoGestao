@@ -1,5 +1,12 @@
 import { describe, expect, test } from 'bun:test'
-import { filterStoreSales, filterStoreSalesBySellerIds, getStoreSaleCompetence, type StoreSaleCandidate } from './store-sales'
+import {
+  buildStoreSaleCandidates,
+  filterStoreSales,
+  getStoreSaleCompetence,
+  getStoreSaleDisplayDate,
+  type StoreSaleCandidate,
+  type StoreSaleEventRow,
+} from './store-sales'
 
 function sale(overrides: Partial<StoreSaleCandidate> = {}): StoreSaleCandidate {
   return {
@@ -19,6 +26,26 @@ function sale(overrides: Partial<StoreSaleCandidate> = {}): StoreSaleCandidate {
     closed_at: null,
     cancelada_em: null,
     motivo_cancelamento: null,
+    ...overrides,
+  }
+}
+
+function event(overrides: Partial<StoreSaleEventRow> = {}): StoreSaleEventRow {
+  return {
+    id: 'event-1',
+    tipo_evento: 'venda_realizada',
+    cliente_id: 'client-1',
+    data_evento: '2026-08-23T12:00:00Z',
+    data_competencia: '2026-08-23',
+    oportunidade_id: null,
+    evento_origem_id: null,
+    agendamento_id: null,
+    seller_user_id: 'seller-1',
+    metadata: {},
+    observacao: null,
+    seller: { name: 'Vendedor' },
+    cliente: { nome: 'Cliente' },
+    oportunidade: null,
     ...overrides,
   }
 }
@@ -63,13 +90,69 @@ describe('store sales detail read model', () => {
     expect(rows[0]?.oportunidade_id).toBeNull()
   })
 
-  test('excludes sales owned by inactive sellers from the store detail scope', () => {
-    const rows = filterStoreSalesBySellerIds([
-      sale({ event_id: 'active-sale', seller_user_id: 'seller-active' }),
-      sale({ event_id: 'inactive-sale', seller_user_id: 'seller-inactive' }),
-      sale({ event_id: 'missing-seller', seller_user_id: null }),
-    ], ['seller-active'])
+  test('keeps a historical orphan without competence when no period is requested', () => {
+    const orphan = sale({
+      event_id: 'orphan-without-competence',
+      oportunidade_id: null,
+      data_competencia: null,
+      oportunidade_data_competencia: null,
+      oportunidade_sale_date: null,
+    })
 
-    expect(rows.map((row) => row.event_id)).toEqual(['active-sale'])
+    expect(filterStoreSales([orphan])).toEqual([orphan])
+    expect(getStoreSaleDisplayDate(orphan)).toBe('2026-08-23')
+    expect(filterStoreSales([orphan], '2026-08-01', '2026-08-31')).toEqual([])
+  })
+
+  test('joins an orphan cancellation by event origin and keeps its event snapshot', () => {
+    const rows = buildStoreSaleCandidates([
+      event({
+        id: 'orphan-sale',
+        metadata: { valor_venda: '85.000,50', veiculo: 'SUV Turbo' },
+        cliente: { nome: 'Cliente Órfão' },
+      }),
+      event({
+        id: 'orphan-cancel',
+        tipo_evento: 'venda_cancelada',
+        evento_origem_id: 'orphan-sale',
+        data_evento: '2026-08-24T15:00:00Z',
+        observacao: 'Cliente desistiu após a aprovação do crédito.',
+      }),
+    ])
+
+    expect(rows).toHaveLength(1)
+    expect(rows[0]).toMatchObject({
+      event_id: 'orphan-sale',
+      cliente_nome: 'Cliente Órfão',
+      veiculo_interesse: 'SUV Turbo',
+      valor_negociado: 85000.5,
+      etapa: 'cancelada',
+      cancelada_em: '2026-08-24T15:00:00Z',
+      motivo_cancelamento: 'Cliente desistiu após a aprovação do crédito.',
+    })
+  })
+
+  test('does not treat an appointment-closure event as the sale cancellation', () => {
+    const rows = buildStoreSaleCandidates([
+      event({ id: 'sale-with-appointment' }),
+      event({
+        id: 'appointment-close',
+        tipo_evento: 'venda_cancelada',
+        oportunidade_id: null,
+        agendamento_id: 'appointment-1',
+        evento_origem_id: null,
+      }),
+    ])
+
+    expect(rows[0]?.etapa).toBe('ganho')
+  })
+
+  test('keeps historical sales regardless of current seller membership', () => {
+    const rows = filterStoreSales([
+      sale({ event_id: 'active-sale', oportunidade_id: 'op-active', seller_user_id: 'seller-active', data_competencia: '2026-08-20' }),
+      sale({ event_id: 'inactive-sale', oportunidade_id: 'op-inactive', seller_user_id: 'seller-inactive', data_competencia: '2026-08-21' }),
+    ], '2026-08-01', '2026-08-31')
+
+    expect(rows.map((row) => row.event_id)).toEqual(['inactive-sale', 'active-sale'])
   })
 })

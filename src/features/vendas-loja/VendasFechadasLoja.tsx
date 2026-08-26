@@ -22,24 +22,18 @@ function StatusBadge({ venda }: { venda: VendaLoja }) {
 
 export function VendasFechadasLoja({
   storeId,
-  periodStartDate,
-  periodEndDate,
-  activeSellerIds,
   showManagerHeader = false,
   selectableStores = [],
   onStoreChange,
   onVendaCancelada,
 }: {
   storeId: string | null
-  periodStartDate?: string | null
-  periodEndDate?: string | null
-  activeSellerIds: readonly string[] | null
   showManagerHeader?: boolean
   selectableStores?: Store[]
   onStoreChange?: (storeId: string) => void
   onVendaCancelada?: () => void
 }) {
-  const { vendas, loading, error, cancelarVenda } = useVendasLoja(storeId, periodStartDate, periodEndDate, activeSellerIds)
+  const { vendas, loading, error, cancelarVenda } = useVendasLoja(storeId)
   const [search, setSearch] = useState('')
   const [cancelarVendaAlvo, setCancelarVendaAlvo] = useState<VendaLoja | null>(null)
   const [saving, setSaving] = useState(false)
@@ -57,7 +51,10 @@ export function VendasFechadasLoja({
   async function handleConfirmarCancelamento(motivo: string) {
     if (!cancelarVendaAlvo) return
     setSaving(true)
-    const { error: cancelError } = await cancelarVenda(cancelarVendaAlvo.id, motivo)
+    const { error: cancelError } = await cancelarVenda({
+      oportunidadeId: cancelarVendaAlvo.oportunidade_id,
+      eventoId: cancelarVendaAlvo.oportunidade_id ? null : cancelarVendaAlvo.event_id,
+    }, motivo)
     setSaving(false)
     if (cancelError) {
       toast.error(cancelError)
@@ -76,7 +73,7 @@ export function VendasFechadasLoja({
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <h1 className="text-xl font-bold text-foreground">Vendas da loja</h1>
-              <p className="mt-0.5 text-sm text-muted-foreground">Vendas oficiais por competência, com opção de cancelamento.</p>
+              <p className="mt-0.5 text-sm text-muted-foreground">Todas as vendas oficiais da unidade, com opção de cancelamento.</p>
             </div>
             {selectableStores.length > 1 && onStoreChange && (
               <div>
@@ -110,7 +107,7 @@ export function VendasFechadasLoja({
       <p className="text-xs text-muted-foreground" role="status" aria-live="polite">
         {loading
           ? 'Consultando vendas oficiais...'
-          : `${vendas.length} venda${vendas.length === 1 ? '' : 's'} no período selecionado.`}
+          : `${vendas.length} venda${vendas.length === 1 ? '' : 's'} encontrada${vendas.length === 1 ? '' : 's'} em todas as datas.`}
       </p>
 
       {error && <p className="text-sm text-status-error-text">{error}</p>}
@@ -135,10 +132,11 @@ export function VendasFechadasLoja({
                   <td className="px-4 py-3 text-body-sm text-muted-foreground">{formatData(venda.competencia)}</td>
                   <td className="px-4 py-3"><StatusBadge venda={venda} /></td>
                   <td className="px-4 py-3">
-                    {venda.etapa === 'ganho' && venda.oportunidade_id && (
+                    {venda.etapa === 'ganho' && (
                       <button
                         type="button"
                         onClick={() => setCancelarVendaAlvo(venda)}
+                        aria-label={`Cancelar venda de ${venda.cliente_nome}`}
                         className="text-[12px] font-semibold text-status-error-text hover:underline"
                       >
                         Cancelar venda

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, MessageCircle, Copy, Check, ChevronRight, SkipForward } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { getScriptOficial, preencherScript, resultadoParaMomento, calcularProximaAcao, RESULTADOS, normalizarTelefoneWhatsApp } from "./carteiraUtils";
+import { getScriptOficial, getScriptParaMissao, preencherScript, resultadoParaMomento, calcularProximaAcao, RESULTADOS, normalizarTelefoneWhatsApp } from "./carteiraUtils";
 
 export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida }) {
   const [indice, setIndice] = useState(missao?.indice_atual || 0);
@@ -25,14 +25,24 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
   const clienteAtual = clientes[indice];
   const progresso = total > 0 ? Math.round(((enviados + pulados) / total) * 100) : 0;
 
-  // FONTE ÚNICA: script oficial do cliente da vez. O fallback antigo devolvia
-  // "Enviar primeira abordagem" para qualquer missão sem script, disparando
-  // abordagem inicial dentro de uma campanha de recuperação.
+  // Resolve o script da missão/campanha ativa (seja bônus de fechamento, troca, desconto ou missão do catálogo)
+  const scriptMissao = (clienteAtual && missao) ? getScriptParaMissao(missao, clienteAtual) : null;
   const scriptOficial = clienteAtual ? getScriptOficial(clienteAtual) : null;
-  const scriptPreenchido = scriptOficial?.scriptReady ? scriptOficial.texto : "";
+  const scriptPreenchido = scriptMissao || (scriptOficial?.scriptReady ? scriptOficial.texto : "");
   const script = scriptEditado || scriptPreenchido;
   const tel = normalizarTelefoneWhatsApp(clienteAtual?.whatsapp || "");
   const waUrl = tel ? `https://wa.me/${tel}?text=${encodeURIComponent(script)}` : null;
+
+  const meta = missao?.metadata || missao?.campanha || {};
+  const condicaoBadge = meta.campanha_tipo === "bonus_fechamento"
+    ? "Bônus de Fechamento"
+    : meta.campanha_tipo === "bonus_troca" || meta.bonus_troca
+    ? (meta.bonus_troca ? `Bônus troca R$ ${Number(meta.bonus_troca).toLocaleString("pt-BR")}` : "Bônus na Troca")
+    : meta.valor_desconto
+    ? `Desconto R$ ${Number(meta.valor_desconto).toLocaleString("pt-BR")}`
+    : meta.campanha_tipo === "feirao"
+    ? "Feirão Especial"
+    : null;
 
   async function persistirMissao(patch) {
     if (!missao?.id) return false;
@@ -289,6 +299,11 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
         <div className="bg-white border border-border-subtle rounded-2xl p-5 space-y-4">
           <div className="flex items-center justify-between">
             <p className="text-xs font-black text-muted-foreground uppercase tracking-wide">Cliente {indice + 1} de {total}</p>
+            {condicaoBadge && (
+              <span className="text-xs font-bold text-status-info-text bg-status-info-surface px-2.5 py-0.5 rounded-full border border-status-info/20">
+                {condicaoBadge}
+              </span>
+            )}
           </div>
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-full bg-status-info-surface flex items-center justify-center text-base font-black text-status-info-text">
@@ -297,7 +312,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
             <div>
               <p className="text-base font-black text-mx-navy">{clienteAtual.nome}</p>
               <p className="text-sm text-muted-foreground">{clienteAtual.whatsapp} · {clienteAtual.veiculo_interesse || "Sem veículo"}</p>
-              <p className="text-xs text-muted-foreground mt-0.5">{clienteAtual.momento}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{clienteAtual.situacao_atual || clienteAtual.momento || "Em atendimento"}</p>
             </div>
           </div>
 

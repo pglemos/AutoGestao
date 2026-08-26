@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'bun:test'
-import { readFileSync } from 'node:fs'
 import {
   CENTRAL_MX_ENGINE_VERSION,
   CENTRAL_MX_PLANNING_INDICATORS,
   buildCentralMxEngine,
 } from './central-mx-engine'
+import { matchCanonicalIndicator } from '@/features/admin-mx/indicadores/canonicalBase44Catalog'
 
 const baseInput = {
   storeId: 'store-1',
@@ -43,12 +43,11 @@ const baseInput = {
 }
 
 describe('central MX engine', () => {
-  // O catálogo do cockpit tinha 45 entradas, duas delas (`cost_per_lead` e
-  // `training_completion_rate`) arquivadas no catálogo da metodologia e sempre
-  // vazias na tela do Dono. Foram removidas: 43 é o número correto hoje.
+  // O cockpit lista exatamente os 45 indicadores da metodologia. Antes tinha
+  // catálogo próprio, com 41 códigos que não existiam em lugar nenhum.
   test('keeps the planning catalog grouped by the six departments', () => {
-    expect(CENTRAL_MX_PLANNING_INDICATORS).toHaveLength(43)
-    expect(new Set(CENTRAL_MX_PLANNING_INDICATORS.map(item => item.code)).size).toBe(43)
+    expect(CENTRAL_MX_PLANNING_INDICATORS).toHaveLength(45)
+    expect(new Set(CENTRAL_MX_PLANNING_INDICATORS.map(item => item.code)).size).toBe(45)
     expect(new Set(CENTRAL_MX_PLANNING_INDICATORS.map(item => item.department))).toEqual(new Set([
       'comercial',
       'marketing',
@@ -62,7 +61,7 @@ describe('central MX engine', () => {
   test('builds one integrated Central MX result for planning, departments, score, alerts and action plan', () => {
     const engine = buildCentralMxEngine(baseInput)
 
-    expect(engine.planningIndicators).toHaveLength(43)
+    expect(engine.planningIndicators).toHaveLength(45)
     expect(engine.departments.map(department => department.code)).toEqual([
       'comercial',
       'marketing',
@@ -75,7 +74,8 @@ describe('central MX engine', () => {
     expect(engine.departments.every(department => department.playbook.length >= 3)).toBe(true)
     expect(engine.scores.store.calculationVersion).toBe(CENTRAL_MX_ENGINE_VERSION)
     expect(engine.scores.departments).toHaveLength(6)
-    expect(engine.scores.processes).toHaveLength(3)
+    // 'rotina' saiu com o vocabulário paralelo: sobram funil e financeiro.
+    expect(engine.scores.processes).toHaveLength(2)
     expect(engine.scores.individuals).toHaveLength(2)
     expect(engine.alerts.length).toBeGreaterThan(0)
     expect(engine.alerts.every(alert => alert.problem && alert.impact && alert.recommendation && alert.quickActionLabel)).toBe(true)
@@ -85,31 +85,30 @@ describe('central MX engine', () => {
 
   test('does not invent missing strategic values but still exposes every row for the annual table', () => {
     const engine = buildCentralMxEngine({ ...baseInput, financial: null, previousYear: {} })
-    const inventory = engine.planningIndicators.find(item => item.code === 'inventory_total')
-    const dre = engine.planningIndicators.find(item => item.code === 'dre_completion_rate')
+    // Indicador do catálogo sem fonte no cockpit: aparece na tabela, vazio.
+    const estoque = engine.planningIndicators.find(item => item.code === 'stock_total')
+    // Indicador com fonte: o fechamento diário alimenta as vendas.
+    const vendas = engine.planningIndicators.find(item => item.code === 'sales_total')
 
-    expect(inventory).toMatchObject({
+    expect(estoque).toMatchObject({
       meta: null,
       realizado: null,
       anoAnterior: null,
       status: 'pendente',
     })
-    expect(dre?.status).toBe('parcial')
+    expect(vendas?.realizado).toBe(baseInput.metrics.totalSales)
+    expect(engine.planningIndicators).toHaveLength(45)
   })
 
-  // A migration de seed é histórica e imutável: continua com as 45 entradas
-  // originais. O engine hoje expõe 43 — o seed precisa conter todas elas.
-  test('keeps the Supabase Central MX catalog seed aligned with the engine', () => {
-    const migration = readFileSync(
-      new URL('../../supabase/migrations/20260529120000_central_mx_catalog_45_and_action_evidence.sql', import.meta.url),
-      'utf8',
-    )
-
-    for (const indicator of CENTRAL_MX_PLANNING_INDICATORS) {
-      expect(migration).toContain(`('${indicator.code}'`)
-    }
-
-    expect((migration.match(/"central_mx":true/g) || []).length).toBe(45)
-    expect(migration).toContain('CREATE TABLE IF NOT EXISTS public.evidencias_planos_acao')
+  // O catálogo do cockpit é o da metodologia: todo código exibido ao Dono
+  // precisa existir em `catalogo_metricas_consultoria`. A lista canônica dos 45
+  // é a mesma que o Admin usa em /plano-estrategico.
+  test('todo indicador do cockpit existe no catálogo canônico da metodologia', () => {
+    // `matchCanonicalIndicator` é a mesma ponte que o Admin usa entre a chave
+    // do banco e o código canônico Base44.
+    const forasteiros = CENTRAL_MX_PLANNING_INDICATORS
+      .map(item => item.code)
+      .filter(code => !matchCanonicalIndicator(code))
+    expect(forasteiros).toEqual([])
   })
 })

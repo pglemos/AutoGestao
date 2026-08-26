@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Zap, ChevronDown, ChevronUp } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import {
-  calcularObjetivoEProximoPasso, getScriptOficial,
+  calcularObjetivoEProximoPasso, getScriptOficial, getScriptParaMissao,
   preencherScript,
 } from "./carteiraUtils";
 import {
@@ -54,11 +54,10 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
   const passoInfo = codigoPasso ? PASSOS[codigoPasso] : null;
   const objetivoAtual = cliente?.objetivo_atual || passoInfo?.objetivo || objetivo;
 
-  // FONTE ÚNICA: os 77 scripts oficiais. Os getters legados devolvem null desde a
-  // remoção da biblioteca paralela; quando o oficial não está pronto, não existe
-  // texto substituto — o ScriptIA exibe o motivo e o envio fica bloqueado.
+  // FONTE ÚNICA: se houver missão/campanha ativa usa o script da missão; senão o script oficial
+  const scriptMissao = (cliente && missaoId) ? getScriptParaMissao(missaoId, cliente) : null;
   const scriptOficial = cliente ? getScriptOficial(cliente) : null;
-  const scriptPreenchido = scriptOficial?.scriptReady ? scriptOficial.texto : "";
+  const scriptPreenchido = scriptMissao || (scriptOficial?.scriptReady ? scriptOficial.texto : "");
 
   // Resultados contextuais baseados no passo atual
   const resultadosDisponiveis = getResultados(passoAtual);
@@ -204,6 +203,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
           {!mostrarRegistro && (
             <ScriptIA
               cliente={cliente}
+              missaoId={missaoId}
               objetivo={objetivoAtual}
               proximoPasso={passoAtual}
               scriptPadrao={scriptPreenchido}

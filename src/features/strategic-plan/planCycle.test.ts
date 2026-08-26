@@ -61,7 +61,7 @@ describe('transições do ciclo', () => {
 })
 
 describe('validatePlanReadiness', () => {
-  const codes = ['sales_goal', 'visits', 'leads_received']
+  const codes = ['sales_total', 'visits', 'leads_received']
   const units = ['matriz', 'filialA']
 
   test('plano completo pode publicar', () => {
@@ -153,7 +153,7 @@ describe('validatePlanReadiness', () => {
 })
 
 describe('readinessSummary', () => {
-  const codes = ['sales_goal', 'visits', 'leads_received']
+  const codes = ['sales_total', 'visits', 'leads_received']
 
   test('anuncia que pode publicar', () => {
     const readiness = validatePlanReadiness({

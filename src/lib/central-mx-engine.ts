@@ -145,55 +145,60 @@ export type CentralMxEngineResult = {
 
 export const CENTRAL_MX_ENGINE_VERSION = 'central-mx-rules-2026.05.29'
 
+/**
+ * Catálogo do cockpit = os 45 indicadores da metodologia MX
+ * (`catalogo_metricas_consultoria`), nos mesmos seis departamentos do Base44.
+ *
+ * Até 2026-08-26 este motor mantinha catálogo próprio: dos 43 códigos que
+ * expunha ao Dono, apenas dois existiam na metodologia. O resto era vocabulário
+ * paralelo — indicadores que ninguém definiu, alimentava ou reconhecia.
+ */
 export const CENTRAL_MX_PLANNING_INDICATORS: CentralMxIndicatorDefinition[] = [
-  { code: 'sales_volume', label: 'Volume de Vendas', department: 'comercial', unit: 'number', dimension: 'resultado', sortOrder: 10, targetDirection: 'higher' },
-  { code: 'sales_goal_attainment', label: 'Atingimento da Meta', department: 'comercial', unit: 'percent', dimension: 'resultado', sortOrder: 20, targetDirection: 'higher' },
-  { code: 'daily_sales_rhythm', label: 'Ritmo Diário de Vendas', department: 'comercial', unit: 'number', dimension: 'processo', sortOrder: 30, targetDirection: 'higher' },
-  { code: 'lead_to_schedule_rate', label: 'Conversão Lead > Agendamento', department: 'comercial', unit: 'percent', dimension: 'processo', sortOrder: 40, targetDirection: 'higher' },
-  { code: 'schedule_to_visit_rate', label: 'Conversão Agendamento > Visita', department: 'comercial', unit: 'percent', dimension: 'processo', sortOrder: 50, targetDirection: 'higher' },
-  { code: 'visit_to_sale_rate', label: 'Conversão Visita > Venda', department: 'comercial', unit: 'percent', dimension: 'resultado', sortOrder: 60, targetDirection: 'higher' },
-  { code: 'commercial_pipeline_health', label: 'Saúde do Funil de Vendas', department: 'comercial', unit: 'score', dimension: 'processo', sortOrder: 70, targetDirection: 'higher' },
-  { code: 'seller_ranking_spread', label: 'Dispersão do Ranking', department: 'comercial', unit: 'score', dimension: 'resultado', sortOrder: 80, targetDirection: 'lower' },
-
-  { code: 'leads_total', label: 'Leads Recebidos', department: 'marketing', unit: 'number', dimension: 'resultado', sortOrder: 110, targetDirection: 'higher' },
-  { code: 'digital_leads_share', label: 'Participação de Leads Digitais', department: 'marketing', unit: 'percent', dimension: 'resultado', sortOrder: 120, targetDirection: 'higher' },
-  { code: 'lead_quality_score', label: 'Qualidade dos Leads', department: 'marketing', unit: 'score', dimension: 'processo', sortOrder: 130, targetDirection: 'higher' },
-  { code: 'campaign_cadence_score', label: 'Cadência de Campanhas', department: 'marketing', unit: 'score', dimension: 'disciplina', sortOrder: 140, targetDirection: 'higher' },
-  { code: 'channel_mix_score', label: 'Mix de Canais', department: 'marketing', unit: 'score', dimension: 'processo', sortOrder: 150, targetDirection: 'higher' },
-  { code: 'marketing_positioning_score', label: 'Posicionamento de Marketing', department: 'marketing', unit: 'score', dimension: 'processo', sortOrder: 160, targetDirection: 'higher' },
-
-  { code: 'inventory_total', label: 'Estoque Total', department: 'produto', unit: 'number', dimension: 'resultado', sortOrder: 210, targetDirection: 'lower' },
-  { code: 'inventory_over_90_days', label: 'Estoque Acima de 90 Dias', department: 'produto', unit: 'number', dimension: 'resultado', sortOrder: 220, targetDirection: 'lower' },
-  { code: 'stock_turnover_rate', label: 'Giro de Estoque', department: 'produto', unit: 'number', dimension: 'resultado', sortOrder: 230, targetDirection: 'higher' },
-  { code: 'average_vehicle_margin', label: 'Margem Média por Veículo', department: 'produto', unit: 'percent', dimension: 'resultado', sortOrder: 240, targetDirection: 'higher' },
-  { code: 'pricing_accuracy_score', label: 'Aderência de Precificação', department: 'produto', unit: 'score', dimension: 'processo', sortOrder: 250, targetDirection: 'higher' },
-  { code: 'preparation_cycle_days', label: 'Ciclo de Preparação', department: 'produto', unit: 'days', dimension: 'processo', sortOrder: 260, targetDirection: 'lower' },
-  { code: 'vehicle_mix_score', label: 'Mix de Veículos', department: 'produto', unit: 'score', dimension: 'processo', sortOrder: 270, targetDirection: 'higher' },
-
-  { code: 'gross_profit', label: 'Lucro Bruto', department: 'financeiro', unit: 'currency', dimension: 'resultado', sortOrder: 310, targetDirection: 'higher' },
-  { code: 'gross_margin_pct', label: '% Margem', department: 'financeiro', unit: 'percent', dimension: 'resultado', sortOrder: 320, targetDirection: 'higher' },
-  { code: 'net_profit', label: 'Lucro Líquido', department: 'financeiro', unit: 'currency', dimension: 'resultado', sortOrder: 330, targetDirection: 'higher' },
-  { code: 'cost_per_sale', label: 'Custo por Venda', department: 'financeiro', unit: 'currency', dimension: 'resultado', sortOrder: 340, targetDirection: 'lower' },
-  { code: 'fixed_cost_ratio', label: 'Peso do Custo Fixo', department: 'financeiro', unit: 'percent', dimension: 'processo', sortOrder: 350, targetDirection: 'lower' },
-  { code: 'cash_flow_balance', label: 'Saldo de Fluxo de Caixa', department: 'financeiro', unit: 'currency', dimension: 'resultado', sortOrder: 360, targetDirection: 'higher' },
-  { code: 'dre_completion_rate', label: 'Completude do DRE', department: 'financeiro', unit: 'percent', dimension: 'disciplina', sortOrder: 370, targetDirection: 'higher' },
-  { code: 'financial_risk_score', label: 'Risco Financeiro', department: 'financeiro', unit: 'score', dimension: 'processo', sortOrder: 380, targetDirection: 'higher' },
-
-  { code: 'employees_total', label: 'Funcionários Ativos', department: 'rh', unit: 'number', dimension: 'resultado', sortOrder: 410, targetDirection: 'higher' },
-  { code: 'feedback_cadence_rate', label: 'Cadência de Feedbacks', department: 'rh', unit: 'percent', dimension: 'disciplina', sortOrder: 430, targetDirection: 'higher' },
-  { code: 'pdi_completion_rate', label: 'Evolução de PDI', department: 'rh', unit: 'percent', dimension: 'processo', sortOrder: 440, targetDirection: 'higher' },
-  { code: 'turnover_rate', label: 'Turnover', department: 'rh', unit: 'percent', dimension: 'resultado', sortOrder: 450, targetDirection: 'lower' },
-  { code: 'happiness_index', label: 'Índice de Felicidade', department: 'rh', unit: 'score', dimension: 'resultado', sortOrder: 460, targetDirection: 'higher' },
-  { code: 'role_clarity_score', label: 'Clareza de Papéis', department: 'rh', unit: 'score', dimension: 'processo', sortOrder: 470, targetDirection: 'higher' },
-  { code: 'behavioral_fit_score', label: 'Aderência Comportamental', department: 'rh', unit: 'score', dimension: 'processo', sortOrder: 480, targetDirection: 'higher' },
-
-  { code: 'routine_discipline_rate', label: 'Disciplina de Rotina', department: 'operacional', unit: 'percent', dimension: 'disciplina', sortOrder: 510, targetDirection: 'higher' },
-  { code: 'agenda_fulfillment_rate', label: 'Agenda Cumprida', department: 'operacional', unit: 'percent', dimension: 'disciplina', sortOrder: 520, targetDirection: 'higher' },
-  { code: 'daily_checkin_coverage', label: 'Cobertura de Fechamento Diário', department: 'operacional', unit: 'percent', dimension: 'disciplina', sortOrder: 530, targetDirection: 'higher' },
-  { code: 'action_plan_on_time_rate', label: 'Plano de Ação no Prazo', department: 'operacional', unit: 'percent', dimension: 'processo', sortOrder: 540, targetDirection: 'higher' },
-  { code: 'evidence_completion_rate', label: 'Evidências Registradas', department: 'operacional', unit: 'percent', dimension: 'disciplina', sortOrder: 550, targetDirection: 'higher' },
-  { code: 'executive_agenda_adherence', label: 'Aderência à Agenda Executiva', department: 'operacional', unit: 'percent', dimension: 'disciplina', sortOrder: 560, targetDirection: 'higher' },
-  { code: 'process_quality_score', label: 'Qualidade dos Processos', department: 'operacional', unit: 'score', dimension: 'processo', sortOrder: 570, targetDirection: 'higher' },
+  { code: 'sales_total', label: 'Vendas Total', department: 'comercial', unit: 'number', dimension: 'resultado', sortOrder: 10, targetDirection: 'higher' },
+  { code: 'sales_door_flow', label: 'Vendas - Fluxo de Porta', department: 'comercial', unit: 'number', dimension: 'resultado', sortOrder: 20, targetDirection: 'higher' },
+  { code: 'sales_referral', label: 'Vendas - Indicação', department: 'comercial', unit: 'number', dimension: 'resultado', sortOrder: 30, targetDirection: 'higher' },
+  { code: 'sales_company_wallet', label: 'Vendas - Carteira Empresa', department: 'comercial', unit: 'number', dimension: 'resultado', sortOrder: 40, targetDirection: 'higher' },
+  { code: 'sales_seller_wallet', label: 'Vendas - Carteira Vendedor', department: 'comercial', unit: 'number', dimension: 'resultado', sortOrder: 50, targetDirection: 'higher' },
+  { code: 'sales_internet', label: 'Vendas - Internet', department: 'comercial', unit: 'number', dimension: 'resultado', sortOrder: 60, targetDirection: 'higher' },
+  { code: 'sales_other', label: 'Vendas - Outros', department: 'comercial', unit: 'number', dimension: 'resultado', sortOrder: 70, targetDirection: 'higher' },
+  { code: 'seller_count', label: 'Volume de Vendedores', department: 'comercial', unit: 'number', dimension: 'resultado', sortOrder: 80, targetDirection: 'higher' },
+  { code: 'avg_sales_per_seller', label: 'Média de Vendas por Vendedor', department: 'comercial', unit: 'number', dimension: 'processo', sortOrder: 90, targetDirection: 'higher' },
+  { code: 'leads_received', label: 'Volume de Leads Recebidos', department: 'marketing', unit: 'number', dimension: 'resultado', sortOrder: 100, targetDirection: 'higher' },
+  { code: 'avg_leads_per_seller', label: 'Média de Leads por Vendedor', department: 'comercial', unit: 'number', dimension: 'processo', sortOrder: 110, targetDirection: 'higher' },
+  { code: 'vehicles_appraised', label: 'Volume de Carros Avaliados', department: 'comercial', unit: 'number', dimension: 'resultado', sortOrder: 120, targetDirection: 'higher' },
+  { code: 'trade_in_volume', label: 'Volume de Vendas com Troca', department: 'comercial', unit: 'number', dimension: 'resultado', sortOrder: 130, targetDirection: 'higher' },
+  { code: 'trade_in_to_sales_rate', label: '% Venda com Troca', department: 'comercial', unit: 'percent', dimension: 'processo', sortOrder: 140, targetDirection: 'higher' },
+  { code: 'approved_credit_applications', label: 'Volume de Fichas Aprovadas', department: 'comercial', unit: 'number', dimension: 'resultado', sortOrder: 150, targetDirection: 'higher' },
+  { code: 'paid_credit_applications', label: 'Volume de Fichas Pagas', department: 'comercial', unit: 'number', dimension: 'resultado', sortOrder: 160, targetDirection: 'higher' },
+  { code: 'financed_sales_percentage', label: '% Vendas Financiadas', department: 'comercial', unit: 'percent', dimension: 'processo', sortOrder: 170, targetDirection: 'higher' },
+  { code: 'appointments', label: 'Volume de Agendamentos', department: 'comercial', unit: 'number', dimension: 'resultado', sortOrder: 180, targetDirection: 'higher' },
+  { code: 'visits', label: 'Volume de Visitas', department: 'comercial', unit: 'number', dimension: 'resultado', sortOrder: 190, targetDirection: 'higher' },
+  { code: 'appointments_per_sale', label: 'Volume de Agendamentos por Venda', department: 'comercial', unit: 'number', dimension: 'processo', sortOrder: 200, targetDirection: 'lower' },
+  { code: 'lead_to_appointment_rate', label: 'Conversão de Leads em Agendamentos', department: 'comercial', unit: 'percent', dimension: 'processo', sortOrder: 210, targetDirection: 'higher' },
+  { code: 'appointment_to_visit_rate', label: 'Conversão de Agendamentos em Visitas', department: 'comercial', unit: 'percent', dimension: 'processo', sortOrder: 220, targetDirection: 'higher' },
+  { code: 'visit_to_sale_rate', label: 'Conversão de Visitas em Vendas', department: 'comercial', unit: 'percent', dimension: 'processo', sortOrder: 230, targetDirection: 'higher' },
+  { code: 'internet_investment', label: 'Investimento Internet', department: 'marketing', unit: 'currency', dimension: 'resultado', sortOrder: 240, targetDirection: 'lower' },
+  { code: 'internet_cost_per_sale', label: 'Custo por Venda na Internet', department: 'marketing', unit: 'currency', dimension: 'processo', sortOrder: 250, targetDirection: 'lower' },
+  { code: 'instagram_followers', label: 'Volume de Seguidores Instagram', department: 'marketing', unit: 'number', dimension: 'resultado', sortOrder: 260, targetDirection: 'higher' },
+  { code: 'google_rating', label: 'Avaliação Google Meu Negócio', department: 'marketing', unit: 'number', dimension: 'resultado', sortOrder: 270, targetDirection: 'higher' },
+  { code: 'content_quality', label: 'Qualidade do Conteúdo', department: 'marketing', unit: 'number', dimension: 'resultado', sortOrder: 280, targetDirection: 'higher' },
+  { code: 'stock_turnover', label: 'Giro de Estoque', department: 'produto', unit: 'number', dimension: 'resultado', sortOrder: 290, targetDirection: 'higher' },
+  { code: 'active_stock', label: 'Estoque Ativo', department: 'produto', unit: 'number', dimension: 'resultado', sortOrder: 300, targetDirection: 'higher' },
+  { code: 'stock_total', label: 'Estoque Total', department: 'produto', unit: 'number', dimension: 'resultado', sortOrder: 310, targetDirection: 'higher' },
+  { code: 'inventory_over_90_volume', label: 'Tempo de Estoque > 90', department: 'produto', unit: 'number', dimension: 'resultado', sortOrder: 320, targetDirection: 'lower' },
+  { code: 'stock_over_90_rate', label: '% Estoque > 90 Dias', department: 'produto', unit: 'percent', dimension: 'processo', sortOrder: 330, targetDirection: 'lower' },
+  { code: 'avg_stock_price', label: 'Ticket Médio do Estoque', department: 'produto', unit: 'currency', dimension: 'resultado', sortOrder: 340, targetDirection: 'higher' },
+  { code: 'inventory_average_margin', label: 'Margem Média do Estoque', department: 'produto', unit: 'currency', dimension: 'resultado', sortOrder: 350, targetDirection: 'higher' },
+  { code: 'contribution_margin', label: 'Margem de Contribuição', department: 'financeiro', unit: 'currency', dimension: 'resultado', sortOrder: 360, targetDirection: 'higher' },
+  { code: 'additional_revenue', label: 'Receita Adicional', department: 'financeiro', unit: 'currency', dimension: 'resultado', sortOrder: 370, targetDirection: 'higher' },
+  { code: 'total_expense', label: 'Despesa Total', department: 'financeiro', unit: 'currency', dimension: 'resultado', sortOrder: 380, targetDirection: 'lower' },
+  { code: 'net_profit', label: 'Lucro Líquido', department: 'financeiro', unit: 'currency', dimension: 'resultado', sortOrder: 390, targetDirection: 'higher' },
+  { code: 'avg_margin', label: 'Margem Média de Venda', department: 'financeiro', unit: 'currency', dimension: 'resultado', sortOrder: 400, targetDirection: 'higher' },
+  { code: 'preparation_cost', label: 'Custo Médio Preparação', department: 'operacional', unit: 'currency', dimension: 'resultado', sortOrder: 410, targetDirection: 'lower' },
+  { code: 'post_sale_cost', label: 'Custo Médio Pós-Venda', department: 'operacional', unit: 'currency', dimension: 'resultado', sortOrder: 420, targetDirection: 'lower' },
+  { code: 'after_sales_volume', label: 'Volume de Pós-Venda', department: 'operacional', unit: 'number', dimension: 'resultado', sortOrder: 430, targetDirection: 'lower' },
+  { code: 'after_sales_percentage', label: '% de Pós-Venda', department: 'operacional', unit: 'percent', dimension: 'processo', sortOrder: 440, targetDirection: 'lower' },
+  { code: 'employee_count', label: 'Quadro de Colaboradores', department: 'rh', unit: 'number', dimension: 'resultado', sortOrder: 450, targetDirection: 'lower' },
 ]
 
 export const DEPARTMENT_NAMES: Record<MxDepartmentCode, string> = {
@@ -291,63 +296,38 @@ function metaFromParameter(
 
 function getBaseValues(input: CentralMxEngineInput): Record<string, { meta: number | null; realizado: number | null; anoAnterior: number | null }> {
   const sellerCount = input.metrics.sellerCount
-  const routinePct = sellerCount > 0 ? (input.metrics.checkedInCount / sellerCount) * 100 : null
-  const commercialHealth = average([
-    scoreFromActual(definitionByCode('lead_to_schedule_rate'), input.funnel.leadToSchedule, input.benchmarks.leadToSchedule),
-    scoreFromActual(definitionByCode('schedule_to_visit_rate'), input.funnel.scheduleToVisit, input.benchmarks.scheduleToVisit),
-    scoreFromActual(definitionByCode('visit_to_sale_rate'), input.funnel.visitToSale, input.benchmarks.visitToSale),
-  ], 0)
-  const dreCompletion = input.financial ? 100 : null
+  const anterior = (code: string) => input.previousYear?.[code] ?? null
+  const porVendedor = (total: number | null) =>
+    total == null || sellerCount <= 0 ? null : total / sellerCount
 
+  // Só entram valores que a operação de fato mede. Indicador do catálogo sem
+  // fonte fica sem `realizado` — o cockpit mostra "--", que é a verdade, em vez
+  // de um número construído para preencher a linha.
   return {
-    sales_volume: { meta: input.metrics.goalValue || null, realizado: input.metrics.totalSales, anoAnterior: input.previousYear?.sales_volume ?? null },
-    sales_goal_attainment: { meta: 100, realizado: input.metrics.attainment, anoAnterior: input.previousYear?.sales_goal_attainment ?? null },
-    daily_sales_rhythm: { meta: input.metrics.goalValue ? input.metrics.goalValue / 22 : null, realizado: input.metrics.totalSales / 22, anoAnterior: input.previousYear?.daily_sales_rhythm ?? null },
-    lead_to_schedule_rate: { meta: input.benchmarks.leadToSchedule, realizado: input.funnel.leadToSchedule, anoAnterior: input.previousYear?.lead_to_schedule_rate ?? null },
-    schedule_to_visit_rate: { meta: input.benchmarks.scheduleToVisit, realizado: input.funnel.scheduleToVisit, anoAnterior: input.previousYear?.schedule_to_visit_rate ?? null },
-    visit_to_sale_rate: { meta: input.benchmarks.visitToSale, realizado: input.funnel.visitToSale, anoAnterior: input.previousYear?.visit_to_sale_rate ?? null },
-    commercial_pipeline_health: { meta: 100, realizado: commercialHealth, anoAnterior: null },
-    seller_ranking_spread: { meta: null, realizado: null, anoAnterior: null },
+    // Vendas e funil: vêm do fechamento diário da loja.
+    sales_total: { meta: input.metrics.goalValue || null, realizado: input.metrics.totalSales, anoAnterior: anterior('sales_total') },
+    leads_received: { meta: null, realizado: input.metrics.totalLeads, anoAnterior: anterior('leads_received') },
+    appointments: { meta: null, realizado: input.metrics.totalAgd, anoAnterior: anterior('appointments') },
+    visits: { meta: null, realizado: input.metrics.totalVis, anoAnterior: anterior('visits') },
+    seller_count: { meta: null, realizado: sellerCount || null, anoAnterior: anterior('seller_count') },
+    avg_sales_per_seller: { meta: null, realizado: porVendedor(input.metrics.totalSales), anoAnterior: anterior('avg_sales_per_seller') },
+    avg_leads_per_seller: { meta: null, realizado: porVendedor(input.metrics.totalLeads), anoAnterior: anterior('avg_leads_per_seller') },
 
-    leads_total: { meta: null, realizado: input.metrics.totalLeads, anoAnterior: input.previousYear?.leads_total ?? null },
-    digital_leads_share: { meta: null, realizado: null, anoAnterior: null },
-    lead_quality_score: { meta: 100, realizado: scoreFromActual(definitionByCode('lead_to_schedule_rate'), input.funnel.leadToSchedule, input.benchmarks.leadToSchedule), anoAnterior: null },
-    campaign_cadence_score: { meta: 100, realizado: null, anoAnterior: null },
-    channel_mix_score: { meta: 100, realizado: null, anoAnterior: null },
-    marketing_positioning_score: { meta: 100, realizado: null, anoAnterior: null },
+    // Conversões: benchmark da rede é a referência, não uma meta inventada.
+    lead_to_appointment_rate: { meta: input.benchmarks.leadToSchedule, realizado: input.funnel.leadToSchedule, anoAnterior: anterior('lead_to_appointment_rate') },
+    appointment_to_visit_rate: { meta: input.benchmarks.scheduleToVisit, realizado: input.funnel.scheduleToVisit, anoAnterior: anterior('appointment_to_visit_rate') },
+    visit_to_sale_rate: { meta: input.benchmarks.visitToSale, realizado: input.funnel.visitToSale, anoAnterior: anterior('visit_to_sale_rate') },
 
-    inventory_total: { meta: null, realizado: null, anoAnterior: null },
-    inventory_over_90_days: { meta: metaFromParameter(input, 'OVER_90_STOCK_RATE', 100), realizado: null, anoAnterior: null },
-    stock_turnover_rate: { meta: null, realizado: null, anoAnterior: null },
-    average_vehicle_margin: { meta: metaFromParameter(input, 'STOCK_MARGIN_RATE', 100), realizado: input.financial?.grossMarginPct ?? null, anoAnterior: null },
-    pricing_accuracy_score: { meta: 100, realizado: null, anoAnterior: null },
-    preparation_cycle_days: { meta: null, realizado: null, anoAnterior: null },
-    vehicle_mix_score: { meta: 100, realizado: null, anoAnterior: null },
+    // Financeiro: o que o DRE do mês entrega.
+    net_profit: { meta: null, realizado: input.financial?.netProfit ?? null, anoAnterior: anterior('net_profit') },
+    avg_margin: { meta: metaFromParameter(input, 'STOCK_MARGIN_RATE', 100), realizado: input.financial?.grossMarginPct ?? null, anoAnterior: anterior('avg_margin') },
 
-    gross_profit: { meta: null, realizado: input.financial?.grossProfit ?? null, anoAnterior: input.previousYear?.gross_profit ?? null },
-    gross_margin_pct: { meta: metaFromParameter(input, 'STOCK_MARGIN_RATE', 100), realizado: input.financial?.grossMarginPct ?? null, anoAnterior: input.previousYear?.gross_margin_pct ?? null },
-    net_profit: { meta: null, realizado: input.financial?.netProfit ?? null, anoAnterior: input.previousYear?.net_profit ?? null },
-    cost_per_sale: { meta: null, realizado: input.financial?.costPerSale ?? null, anoAnterior: null },
-    fixed_cost_ratio: { meta: null, realizado: null, anoAnterior: null },
-    cash_flow_balance: { meta: null, realizado: null, anoAnterior: null },
-    dre_completion_rate: { meta: 100, realizado: dreCompletion, anoAnterior: null },
-    financial_risk_score: { meta: 100, realizado: input.financial?.netProfit == null ? null : input.financial.netProfit >= 0 ? 85 : 45, anoAnterior: null },
-
-    employees_total: { meta: null, realizado: sellerCount, anoAnterior: input.previousYear?.employees_total ?? null },
-    feedback_cadence_rate: { meta: 100, realizado: null, anoAnterior: null },
-    pdi_completion_rate: { meta: 100, realizado: null, anoAnterior: null },
-    turnover_rate: { meta: null, realizado: null, anoAnterior: null },
-    happiness_index: { meta: 100, realizado: null, anoAnterior: null },
-    role_clarity_score: { meta: 100, realizado: null, anoAnterior: null },
-    behavioral_fit_score: { meta: 100, realizado: null, anoAnterior: null },
-
-    routine_discipline_rate: { meta: 100, realizado: routinePct, anoAnterior: input.previousYear?.routine_discipline_rate ?? null },
-    agenda_fulfillment_rate: { meta: 100, realizado: input.metrics.totalAgd > 0 ? 100 : null, anoAnterior: null },
-    daily_checkin_coverage: { meta: 100, realizado: routinePct, anoAnterior: null },
-    action_plan_on_time_rate: { meta: 100, realizado: null, anoAnterior: null },
-    evidence_completion_rate: { meta: 100, realizado: null, anoAnterior: null },
-    executive_agenda_adherence: { meta: 100, realizado: null, anoAnterior: null },
-    process_quality_score: { meta: 100, realizado: average([routinePct, commercialHealth], 0), anoAnterior: null },
+    // Estoque: metas da metodologia, realizado ainda sem fonte no cockpit.
+    stock_over_90_rate: { meta: metaFromParameter(input, 'OVER_90_STOCK_RATE', 100), realizado: null, anoAnterior: anterior('stock_over_90_rate') },
+    active_stock: { meta: metaFromParameter(input, 'ACTIVE_STOCK_RATE', 100), realizado: null, anoAnterior: anterior('active_stock') },
+    trade_in_to_sales_rate: { meta: metaFromParameter(input, 'TRADE_SALES_RATE', 100), realizado: null, anoAnterior: anterior('trade_in_to_sales_rate') },
+    financed_sales_percentage: { meta: metaFromParameter(input, 'FINANCED_SALES_RATE', 100), realizado: null, anoAnterior: anterior('financed_sales_percentage') },
+    after_sales_percentage: { meta: metaFromParameter(input, 'POST_SALE_RATE', 100), realizado: null, anoAnterior: anterior('after_sales_percentage') },
   }
 }
 
@@ -516,8 +496,10 @@ export function buildCentralMxEngine(input: CentralMxEngineInput): CentralMxEngi
   const storeScore = buildScore('store', input.storeId, input.period, planningIndicators)
   const departmentScores = departments.map(department => buildScore('department', `${input.storeId}:${department.code}`, input.period, department.indicators))
   const processScores = [
-    buildScore('process', `${input.storeId}:funil`, input.period, planningIndicators.filter(item => ['lead_to_schedule_rate', 'schedule_to_visit_rate', 'visit_to_sale_rate', 'commercial_pipeline_health'].includes(item.code))),
-    buildScore('process', `${input.storeId}:rotina`, input.period, planningIndicators.filter(item => ['routine_discipline_rate', 'daily_checkin_coverage', 'agenda_fulfillment_rate'].includes(item.code))),
+    // Os processos passam a ser recortes do catálogo oficial. `rotina` saiu:
+    // os indicadores de disciplina eram do vocabulário paralelo e não têm
+    // equivalente na metodologia.
+    buildScore('process', `${input.storeId}:funil`, input.period, planningIndicators.filter(item => ['lead_to_appointment_rate', 'appointment_to_visit_rate', 'visit_to_sale_rate', 'appointments_per_sale'].includes(item.code))),
     buildScore('process', `${input.storeId}:financeiro`, input.period, planningIndicators.filter(item => item.department === 'financeiro')),
   ]
   const individualScores = (input.ranking || []).map(row => {

@@ -145,7 +145,6 @@ export const UNIT_POLICY_DEFAULTS = {
   // consolidado.
 
   // Contagens e valores aditivos.
-  sales_goal: sum(),
   sales_total: sum(),
   sales_door_flow: sum(),
   sales_referral: sum(),
@@ -158,93 +157,28 @@ export const UNIT_POLICY_DEFAULTS = {
   appointments: sum(),
   visits: sum(),
   internet_investment: sum(),
-  inventory_investment: sum(),
   stock_total: sum(),
   active_stock: sum(),
   trade_in_volume: sum(),
-  gross_revenue: sum(),
-  net_revenue: sum(),
   net_profit: sum(),
   preparation_cost: sum(),
   post_sale_cost: sum(),
 
   // Taxas, razões e médias por vendedor: recalculadas sobre as bases.
-  goal_achievement_rate: recalc(),
-  active_sellers_rate: recalc(),
   avg_sales_per_seller: recalc(),
   avg_leads_per_seller: recalc(),
   appointments_per_sale: recalc(),
   lead_to_appointment_rate: recalc(),
-  internet_sales_share: recalc(),
   appointment_to_visit_rate: recalc(),
   visit_to_sale_rate: recalc(),
-  no_show_rate: recalc(),
-  crm_follow_up_rate: recalc(),
   internet_cost_per_sale: recalc(),
-  cost_per_lead: recalc(),
   stock_turnover: recalc(),
   stock_over_90_rate: recalc(),
   trade_in_to_sales_rate: recalc(),
-  gross_margin_rate: recalc(),
-  fixed_expense_rate: recalc(),
-  training_completion_rate: recalc(),
-
   // Médias de estoque e de margem: ponderadas pelo volume correspondente.
   avg_stock_price: weighted('stock_total'),
-  avg_stock_km: weighted('stock_total'),
-  avg_fipe_delta: weighted('stock_total'),
-  avg_stock_age_days: weighted('stock_total'),
-  trade_in_avg_margin: weighted('trade_in_volume'),
   avg_margin: weighted('sales_total'),
 
-
-  // ── Indicadores do cockpit executivo adotados no catálogo (2026-08-26) ──
-  // Medidas da operação como um todo. Consolidação entre filiais fica como
-  // valor empresarial: a metodologia ainda não definiu como somar ou ponderar
-  // um score executivo entre unidades, e inventar a regra produziria número
-  // plausível e errado.
-
-  sales_volume: companyOnly(),
-  sales_goal_attainment: companyOnly(),
-  daily_sales_rhythm: companyOnly(),
-  lead_to_schedule_rate: companyOnly(),
-  schedule_to_visit_rate: companyOnly(),
-  commercial_pipeline_health: companyOnly(),
-  seller_ranking_spread: companyOnly(),
-  leads_total: companyOnly(),
-  digital_leads_share: companyOnly(),
-  lead_quality_score: companyOnly(),
-  campaign_cadence_score: companyOnly(),
-  channel_mix_score: companyOnly(),
-  marketing_positioning_score: companyOnly(),
-  inventory_total: companyOnly(),
-  inventory_over_90_days: companyOnly(),
-  stock_turnover_rate: companyOnly(),
-  average_vehicle_margin: companyOnly(),
-  pricing_accuracy_score: companyOnly(),
-  preparation_cycle_days: companyOnly(),
-  vehicle_mix_score: companyOnly(),
-  gross_profit: companyOnly(),
-  gross_margin_pct: companyOnly(),
-  cost_per_sale: companyOnly(),
-  fixed_cost_ratio: companyOnly(),
-  cash_flow_balance: companyOnly(),
-  dre_completion_rate: companyOnly(),
-  financial_risk_score: companyOnly(),
-  employees_total: companyOnly(),
-  feedback_cadence_rate: companyOnly(),
-  pdi_completion_rate: companyOnly(),
-  turnover_rate: companyOnly(),
-  happiness_index: companyOnly(),
-  role_clarity_score: companyOnly(),
-  behavioral_fit_score: companyOnly(),
-  routine_discipline_rate: companyOnly(),
-  agenda_fulfillment_rate: companyOnly(),
-  daily_checkin_coverage: companyOnly(),
-  action_plan_on_time_rate: companyOnly(),
-  evidence_completion_rate: companyOnly(),
-  executive_agenda_adherence: companyOnly(),
-  process_quality_score: companyOnly(),
 
   // Presença digital: medida para a empresa, não por unidade.
   instagram_followers: companyOnly(),
@@ -348,25 +282,19 @@ export function isUnitPolicyDefined(policy: Partial<UnitPolicy> | null | undefin
 //
 // Só constam as composições inequívocas a partir do próprio catálogo. Indicadores
 // cuja base não existe no catálogo — `stock_over_90_rate` (falta o volume acima de
-// 90 dias), `active_sellers_rate` (falta o contador de ativos), `crm_follow_up_rate`,
-// `stock_turnover`, `gross_margin_rate`, `fixed_expense_rate`,
-// `training_completion_rate` — ficam de fora de propósito: chutar o denominador
+// 90 dias) e `stock_turnover` — ficam de fora de propósito: chutar o denominador
 // produziria um número plausível e errado, que é exatamente o que este módulo
 // existe para evitar.
 
 export const CONSOLIDATION_FORMULAS: Record<string, string> = {
-  goal_achievement_rate: 'IND("sales_total") / IND("sales_goal")',
   avg_sales_per_seller: 'IND("sales_total") / IND("seller_count")',
   avg_leads_per_seller: 'IND("leads_received") / IND("seller_count")',
   appointments_per_sale: 'IND("appointments") / IND("sales_total")',
   lead_to_appointment_rate: 'IND("appointments") / IND("leads_received")',
   appointment_to_visit_rate: 'IND("visits") / IND("appointments")',
   visit_to_sale_rate: 'IND("sales_total") / IND("visits")',
-  internet_sales_share: 'IND("sales_internet") / IND("sales_total")',
   internet_cost_per_sale: 'IND("internet_investment") / IND("sales_internet")',
-  cost_per_lead: 'IND("internet_investment") / IND("leads_received")',
   trade_in_to_sales_rate: 'IND("trade_in_volume") / IND("sales_total")',
-  no_show_rate: '(IND("appointments") - IND("visits")) / IND("appointments")',
 }
 
 /** Fórmula de consolidação de um indicador, quando o catálogo não traz uma. */

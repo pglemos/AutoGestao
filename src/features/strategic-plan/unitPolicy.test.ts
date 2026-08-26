@@ -145,19 +145,19 @@ describe('isUnitPolicyDefined', () => {
 describe('vocabulário do catálogo MX', () => {
   // O catálogo em produção usa metric_key próprio; sem estas entradas todo
   // indicador MX ficaria sem política e o consolidado sairia vazio.
+  // Os 45 metric_key do catálogo em produção — o mesmo conjunto do Base44.
+  // Legados fora desse conjunto foram removidos do catálogo em
+  // 20260826180000; política para indicador inexistente é código morto.
   const MX_CODES = [
-    'sales_goal', 'sales_total', 'goal_achievement_rate', 'sales_door_flow', 'sales_referral',
+    'vehicles_appraised', 'approved_credit_applications', 'paid_credit_applications', 'financed_sales_percentage', 'sales_total',
+    'inventory_over_90_volume', 'inventory_average_margin', 'contribution_margin', 'additional_revenue', 'total_expense',
+    'sales_door_flow', 'after_sales_volume', 'after_sales_percentage', 'employee_count', 'sales_referral',
     'sales_company_wallet', 'sales_seller_wallet', 'sales_internet', 'sales_other', 'seller_count',
-    'avg_sales_per_seller', 'active_sellers_rate', 'leads_received', 'avg_leads_per_seller',
-    'appointments', 'visits', 'appointments_per_sale', 'lead_to_appointment_rate',
-    'internet_sales_share', 'appointment_to_visit_rate', 'visit_to_sale_rate', 'no_show_rate',
-    'crm_follow_up_rate', 'internet_investment', 'internet_cost_per_sale', 'cost_per_lead',
-    'avg_stock_price', 'avg_stock_km', 'avg_fipe_delta', 'inventory_investment',
-    'instagram_followers', 'google_rating', 'content_quality', 'stock_total', 'active_stock',
-    'stock_turnover', 'stock_over_90_rate', 'avg_stock_age_days', 'trade_in_volume',
-    'trade_in_to_sales_rate', 'trade_in_avg_margin', 'gross_revenue', 'net_revenue', 'net_profit',
-    'avg_margin', 'gross_margin_rate', 'preparation_cost', 'post_sale_cost', 'fixed_expense_rate',
-    'training_completion_rate',
+    'avg_sales_per_seller', 'leads_received', 'avg_leads_per_seller', 'appointments', 'visits',
+    'appointments_per_sale', 'lead_to_appointment_rate', 'appointment_to_visit_rate', 'visit_to_sale_rate', 'internet_investment',
+    'internet_cost_per_sale', 'avg_stock_price', 'instagram_followers', 'google_rating', 'content_quality',
+    'stock_total', 'active_stock', 'stock_turnover', 'stock_over_90_rate', 'trade_in_volume',
+    'trade_in_to_sales_rate', 'net_profit', 'avg_margin', 'preparation_cost', 'post_sale_cost',
   ]
 
   test('todo indicador do catálogo MX tem política declarada', () => {
@@ -176,7 +176,12 @@ describe('vocabulário do catálogo MX', () => {
       unit_rollup_method: 'WEIGHTED_AVERAGE',
       weight_indicator_code: 'stock_total',
     })
-    expect(resolveUnitPolicy('trade_in_avg_margin').weight_indicator_code).toBe('trade_in_volume')
+    // `trade_in_avg_margin` saiu do catálogo em 20260826180000; a média de
+    // margem que restou é a do estoque, ponderada pelo mesmo volume.
+    expect(resolveUnitPolicy('inventory_average_margin')).toMatchObject({
+      unit_rollup_method: 'WEIGHTED_AVERAGE',
+      weight_indicator_code: 'INVENTORY_TOTAL',
+    })
   })
 
   test('presença digital é medida na empresa, não por unidade', () => {

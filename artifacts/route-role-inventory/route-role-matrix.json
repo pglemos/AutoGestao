@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-26T14:33:05.193Z",
+  "generatedAt": "2026-08-26T17:34:37.172Z",
   "source": "scripts/audit_route_data_inventory.mjs + src/lib/auth/routeAccess.ts",
   "roles": [
     "administrador_geral",
@@ -184,6 +184,30 @@
       },
       "applicable": false,
       "element": "<ManagerLegacyPathRedirect />"
+    },
+    {
+      "path": "/pdi/:id/print",
+      "kind": "route",
+      "surface": "PRINT",
+      "rulePattern": "/pdi/:id/print",
+      "redirect": null,
+      "renderRoles": [
+        "administrador_geral",
+        "administrador_mx",
+        "consultor_mx",
+        "dono",
+        "gerente"
+      ],
+      "roleStatus": {
+        "administrador_geral": "RENDER_PRINT",
+        "administrador_mx": "RENDER_PRINT",
+        "consultor_mx": "RENDER_PRINT",
+        "dono": "RENDER_PRINT",
+        "gerente": "RENDER_PRINT",
+        "vendedor": "FORBIDDEN"
+      },
+      "applicable": true,
+      "element": "<ProtectedRoute><Suspense fallback={<Spinner />}><PDIPrint /></Suspense></ProtectedRoute>"
     },
     {
       "path": "/",
@@ -1791,30 +1815,6 @@
       "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Navigate to=\"/desenvolvimento?tab=pdi\" replace />} gerente={<GerentePDI />} dono={<GerentePDI />} admin={<GerentePDI />} />"
     },
     {
-      "path": "/pdi/:id/print",
-      "kind": "route",
-      "surface": "PRINT",
-      "rulePattern": "/pdi/:id/print",
-      "redirect": null,
-      "renderRoles": [
-        "administrador_geral",
-        "administrador_mx",
-        "consultor_mx",
-        "dono",
-        "gerente"
-      ],
-      "roleStatus": {
-        "administrador_geral": "RENDER_PRINT",
-        "administrador_mx": "RENDER_PRINT",
-        "consultor_mx": "RENDER_PRINT",
-        "dono": "RENDER_PRINT",
-        "gerente": "RENDER_PRINT",
-        "vendedor": "FORBIDDEN"
-      },
-      "applicable": true,
-      "element": "<Suspense fallback={<Spinner />}><PDIPrint /></Suspense>"
-    },
-    {
       "path": "/minhas-lojas",
       "kind": "route",
       "surface": "STANDARD_CANVAS",
@@ -2585,6 +2585,41 @@
     }
   ],
   "routeRoleRows": [
+    {
+      "path": "/pdi/:id/print",
+      "role": "administrador_geral",
+      "surface": "PRINT",
+      "kind": "route",
+      "element": "<ProtectedRoute><Suspense fallback={<Spinner />}><PDIPrint /></Suspense></ProtectedRoute>"
+    },
+    {
+      "path": "/pdi/:id/print",
+      "role": "administrador_mx",
+      "surface": "PRINT",
+      "kind": "route",
+      "element": "<ProtectedRoute><Suspense fallback={<Spinner />}><PDIPrint /></Suspense></ProtectedRoute>"
+    },
+    {
+      "path": "/pdi/:id/print",
+      "role": "consultor_mx",
+      "surface": "PRINT",
+      "kind": "route",
+      "element": "<ProtectedRoute><Suspense fallback={<Spinner />}><PDIPrint /></Suspense></ProtectedRoute>"
+    },
+    {
+      "path": "/pdi/:id/print",
+      "role": "dono",
+      "surface": "PRINT",
+      "kind": "route",
+      "element": "<ProtectedRoute><Suspense fallback={<Spinner />}><PDIPrint /></Suspense></ProtectedRoute>"
+    },
+    {
+      "path": "/pdi/:id/print",
+      "role": "gerente",
+      "surface": "PRINT",
+      "kind": "route",
+      "element": "<ProtectedRoute><Suspense fallback={<Spinner />}><PDIPrint /></Suspense></ProtectedRoute>"
+    },
     {
       "path": "/plano-estrategico",
       "role": "administrador_geral",
@@ -3662,41 +3697,6 @@
       "surface": "STANDARD_CANVAS",
       "kind": "route",
       "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Navigate to=\"/desenvolvimento?tab=pdi\" replace />} gerente={<GerentePDI />} dono={<GerentePDI />} admin={<GerentePDI />} />"
-    },
-    {
-      "path": "/pdi/:id/print",
-      "role": "administrador_geral",
-      "surface": "PRINT",
-      "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}><PDIPrint /></Suspense>"
-    },
-    {
-      "path": "/pdi/:id/print",
-      "role": "administrador_mx",
-      "surface": "PRINT",
-      "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}><PDIPrint /></Suspense>"
-    },
-    {
-      "path": "/pdi/:id/print",
-      "role": "consultor_mx",
-      "surface": "PRINT",
-      "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}><PDIPrint /></Suspense>"
-    },
-    {
-      "path": "/pdi/:id/print",
-      "role": "dono",
-      "surface": "PRINT",
-      "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}><PDIPrint /></Suspense>"
-    },
-    {
-      "path": "/pdi/:id/print",
-      "role": "gerente",
-      "surface": "PRINT",
-      "kind": "route",
-      "element": "<Suspense fallback={<Spinner />}><PDIPrint /></Suspense>"
     },
     {
       "path": "/minhas-lojas",

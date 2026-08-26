@@ -31,14 +31,12 @@ describe('metas do cockpit não são inventadas', () => {
   test('sem parâmetros da MX, os indicadores de negócio ficam sem meta', () => {
     const engine = buildCentralMxEngine(baseInput)
     for (const code of [
-      'average_vehicle_margin',
-      'gross_margin_pct',
-      'inventory_over_90_days',
-      'seller_ranking_spread',
-      'digital_leads_share',
-      'fixed_cost_ratio',
-      'turnover_rate',
-      'preparation_cycle_days',
+      'avg_margin',
+      'stock_over_90_rate',
+      'active_stock',
+      'trade_in_to_sales_rate',
+      'financed_sales_percentage',
+      'after_sales_percentage',
     ]) {
       expect(metaDe(engine, code)).toBeNull()
     }
@@ -47,12 +45,12 @@ describe('metas do cockpit não são inventadas', () => {
   test('com os parâmetros da MX, a meta é a da metodologia', () => {
     const engine = buildCentralMxEngine({
       ...baseInput,
-      strategicParameters: { STOCK_MARGIN_RATE: 0.2, OVER_90_STOCK_RATE: 0.15 },
+      strategicParameters: { STOCK_MARGIN_RATE: 0.2, OVER_90_STOCK_RATE: 0.15, TRADE_SALES_RATE: 0.5 },
     })
     // Parâmetro é fração; o cockpit exibe pontos percentuais.
-    expect(metaDe(engine, 'average_vehicle_margin')).toBe(20)
-    expect(metaDe(engine, 'gross_margin_pct')).toBe(20)
-    expect(metaDe(engine, 'inventory_over_90_days')).toBe(15)
+    expect(metaDe(engine, 'avg_margin')).toBe(20)
+    expect(metaDe(engine, 'stock_over_90_rate')).toBe(15)
+    expect(metaDe(engine, 'trade_in_to_sales_rate')).toBe(50)
   })
 
   test('nenhuma meta de negócio volta a ser cravada no motor', () => {
@@ -70,5 +68,8 @@ describe('metas do cockpit não são inventadas', () => {
     const codes = engine.planningIndicators.map(item => item.code)
     expect(codes).not.toContain('cost_per_lead')
     expect(codes).not.toContain('training_completion_rate')
+    // O vocabulário paralelo inteiro saiu junto.
+    expect(codes).not.toContain('channel_mix_score')
+    expect(codes).not.toContain('behavioral_fit_score')
   })
 })

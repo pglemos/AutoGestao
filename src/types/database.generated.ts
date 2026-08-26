@@ -6132,6 +6132,7 @@ export type Database = {
           created_by: string | null
           data_competencia: string | null
           data_evento: string
+          evento_origem_id: string | null
           fechamento_id: string | null
           id: string
           idempotency_key: string | null
@@ -6154,6 +6155,7 @@ export type Database = {
           created_by?: string | null
           data_competencia?: string | null
           data_evento?: string
+          evento_origem_id?: string | null
           fechamento_id?: string | null
           id?: string
           idempotency_key?: string | null
@@ -6176,6 +6178,7 @@ export type Database = {
           created_by?: string | null
           data_competencia?: string | null
           data_evento?: string
+          evento_origem_id?: string | null
           fechamento_id?: string | null
           id?: string
           idempotency_key?: string | null
@@ -6210,6 +6213,13 @@ export type Database = {
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "eventos_comerciais_evento_origem_id_fkey"
+            columns: ["evento_origem_id"]
+            isOneToOne: false
+            referencedRelation: "eventos_comerciais"
             referencedColumns: ["id"]
           },
           {
