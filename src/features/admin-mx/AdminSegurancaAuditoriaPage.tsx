@@ -68,7 +68,9 @@ export function AdminSegurancaAuditoriaPage() {
         user: (r.actor_id && actorById.get(r.actor_id)) || 'Autor não identificado',
         action: r.action,
         resource: r.entity_type,
-        client: (r.store_id && storeById.get(r.store_id)) || (r.actor_role ?? '—'),
+        // 4 dos 189 registros não têm loja resolvível (3 sem store_id, 1 com
+        // loja já removida) — a coluna fica vazia em vez de exibir outro campo.
+        client: (r.store_id && storeById.get(r.store_id)) || '—',
         date: r.created_at ? new Date(r.created_at).toLocaleString('pt-BR') : 'Data não registrada',
       })))
     } catch {
