@@ -4,7 +4,7 @@ import { usePDI_MX } from '@/hooks/usePDI_MX'
 import type { PDIAvaliacao360, PDIMeta360, PDIPlanoAcao360, PDIPrintBundle } from '@/hooks/usePDI_MX'
 import { useAuth } from '@/hooks/useAuth'
 import { canManagePDI as canManagePDICapability } from '@/lib/auth/capabilities'
-import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, Radar } from 'recharts'
+import { RadarChart, PolarGrid, PolarAngleAxis, Radar } from 'recharts'
 import { Target, History, Printer, ChevronLeft, Sparkles, User, Pencil } from 'lucide-react'
 import { format, parseISO } from 'date-fns'
 import { Typography } from '@/components/atoms/Typography'
@@ -319,15 +319,17 @@ export default function PDIPrint() {
 
                         <div className="flex flex-col items-center justify-center border-l-2 border-border pl-10">
                             <Typography variant="tiny" className="mb-4 text-center">Gráfico Radar (Atigimento vs. Alvo)</Typography>
-                            <div className="w-full h-mx-80">
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData}>
-                                        <PolarGrid stroke="#DFE0E1" />
-                                        <PolarAngleAxis dataKey="subject" tick={{ fill: '#526B7A', fontSize: 8, fontWeight: 900 }} />
-                                        <Radar name="Alvo" dataKey="alvo" stroke="#526B7A" strokeDasharray="3 3" fill="transparent" />
-                                        <Radar name="Nota" dataKey="A" stroke="#00A89D" strokeWidth={2} fill="#00A89D" fillOpacity={0.2} />
-                                    </RadarChart>
-                                </ResponsiveContainer>
+                            {/* Largura fixa em vez de ResponsiveContainer: no @media print
+                                o container é medido antes do layout da folha e o radar
+                                sai colapsado numa linha. A folha é A4 fixa, então o
+                                gráfico pode ser fixo também. */}
+                            <div className="w-mx-80 h-mx-80">
+                                <RadarChart width={320} height={320} cx="50%" cy="50%" outerRadius="75%" data={radarData}>
+                                    <PolarGrid stroke="#DFE0E1" />
+                                    <PolarAngleAxis dataKey="subject" tick={{ fill: '#526B7A', fontSize: 8, fontWeight: 900 }} />
+                                    <Radar name="Alvo" dataKey="alvo" stroke="#526B7A" strokeDasharray="3 3" fill="transparent" />
+                                    <Radar name="Nota" dataKey="A" stroke="#00A89D" strokeWidth={2} fill="#00A89D" fillOpacity={0.2} />
+                                </RadarChart>
                             </div>
                         </div>
                     </div>
