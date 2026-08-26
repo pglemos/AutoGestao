@@ -152,7 +152,6 @@ export const CENTRAL_MX_PLANNING_INDICATORS: CentralMxIndicatorDefinition[] = [
   { code: 'campaign_cadence_score', label: 'Cadência de Campanhas', department: 'marketing', unit: 'score', dimension: 'disciplina', sortOrder: 140, targetDirection: 'higher' },
   { code: 'channel_mix_score', label: 'Mix de Canais', department: 'marketing', unit: 'score', dimension: 'processo', sortOrder: 150, targetDirection: 'higher' },
   { code: 'marketing_positioning_score', label: 'Posicionamento de Marketing', department: 'marketing', unit: 'score', dimension: 'processo', sortOrder: 160, targetDirection: 'higher' },
-  { code: 'cost_per_lead', label: 'Custo por Lead', department: 'marketing', unit: 'currency', dimension: 'resultado', sortOrder: 170, targetDirection: 'lower' },
 
   { code: 'inventory_total', label: 'Estoque Total', department: 'produto', unit: 'number', dimension: 'resultado', sortOrder: 210, targetDirection: 'lower' },
   { code: 'inventory_over_90_days', label: 'Estoque Acima de 90 Dias', department: 'produto', unit: 'number', dimension: 'resultado', sortOrder: 220, targetDirection: 'lower' },
@@ -172,7 +171,6 @@ export const CENTRAL_MX_PLANNING_INDICATORS: CentralMxIndicatorDefinition[] = [
   { code: 'financial_risk_score', label: 'Risco Financeiro', department: 'financeiro', unit: 'score', dimension: 'processo', sortOrder: 380, targetDirection: 'higher' },
 
   { code: 'employees_total', label: 'Funcionários Ativos', department: 'rh', unit: 'number', dimension: 'resultado', sortOrder: 410, targetDirection: 'higher' },
-  { code: 'training_completion_rate', label: 'Conclusão de Treinamentos', department: 'rh', unit: 'percent', dimension: 'disciplina', sortOrder: 420, targetDirection: 'higher' },
   { code: 'feedback_cadence_rate', label: 'Cadência de Feedbacks', department: 'rh', unit: 'percent', dimension: 'disciplina', sortOrder: 430, targetDirection: 'higher' },
   { code: 'pdi_completion_rate', label: 'Evolução de PDI', department: 'rh', unit: 'percent', dimension: 'processo', sortOrder: 440, targetDirection: 'higher' },
   { code: 'turnover_rate', label: 'Turnover', department: 'rh', unit: 'percent', dimension: 'resultado', sortOrder: 450, targetDirection: 'lower' },
@@ -253,13 +251,25 @@ export function statusLabel(score: number) {
   return 'Crítico'
 }
 
+/**
+ * Busca a definição pelo código. O acesso posicional anterior
+ * (`CENTRAL_MX_PLANNING_INDICATORS[3]`) quebrava silenciosamente a cada
+ * inserção ou remoção no catálogo — o score passava a usar o benchmark do
+ * indicador vizinho, sem erro nenhum.
+ */
+function definitionByCode(code: string): CentralMxIndicatorDefinition {
+  const found = CENTRAL_MX_PLANNING_INDICATORS.find(item => item.code === code)
+  if (!found) throw new Error(`Indicador do planejamento não encontrado: ${code}`)
+  return found
+}
+
 function getBaseValues(input: CentralMxEngineInput): Record<string, { meta: number | null; realizado: number | null; anoAnterior: number | null }> {
   const sellerCount = input.metrics.sellerCount
   const routinePct = sellerCount > 0 ? (input.metrics.checkedInCount / sellerCount) * 100 : null
   const commercialHealth = average([
-    scoreFromActual(CENTRAL_MX_PLANNING_INDICATORS[3], input.funnel.leadToSchedule, input.benchmarks.leadToSchedule),
-    scoreFromActual(CENTRAL_MX_PLANNING_INDICATORS[4], input.funnel.scheduleToVisit, input.benchmarks.scheduleToVisit),
-    scoreFromActual(CENTRAL_MX_PLANNING_INDICATORS[5], input.funnel.visitToSale, input.benchmarks.visitToSale),
+    scoreFromActual(definitionByCode('lead_to_schedule_rate'), input.funnel.leadToSchedule, input.benchmarks.leadToSchedule),
+    scoreFromActual(definitionByCode('schedule_to_visit_rate'), input.funnel.scheduleToVisit, input.benchmarks.scheduleToVisit),
+    scoreFromActual(definitionByCode('visit_to_sale_rate'), input.funnel.visitToSale, input.benchmarks.visitToSale),
   ], 0)
   const dreCompletion = input.financial ? 100 : null
 
@@ -275,11 +285,10 @@ function getBaseValues(input: CentralMxEngineInput): Record<string, { meta: numb
 
     leads_total: { meta: null, realizado: input.metrics.totalLeads, anoAnterior: input.previousYear?.leads_total ?? null },
     digital_leads_share: { meta: 35, realizado: null, anoAnterior: null },
-    lead_quality_score: { meta: 100, realizado: scoreFromActual(CENTRAL_MX_PLANNING_INDICATORS[3], input.funnel.leadToSchedule, input.benchmarks.leadToSchedule), anoAnterior: null },
+    lead_quality_score: { meta: 100, realizado: scoreFromActual(definitionByCode('lead_to_schedule_rate'), input.funnel.leadToSchedule, input.benchmarks.leadToSchedule), anoAnterior: null },
     campaign_cadence_score: { meta: 100, realizado: null, anoAnterior: null },
     channel_mix_score: { meta: 100, realizado: null, anoAnterior: null },
     marketing_positioning_score: { meta: 100, realizado: null, anoAnterior: null },
-    cost_per_lead: { meta: null, realizado: null, anoAnterior: null },
 
     inventory_total: { meta: null, realizado: null, anoAnterior: null },
     inventory_over_90_days: { meta: 0, realizado: null, anoAnterior: null },
@@ -299,7 +308,6 @@ function getBaseValues(input: CentralMxEngineInput): Record<string, { meta: numb
     financial_risk_score: { meta: 100, realizado: input.financial?.netProfit == null ? null : input.financial.netProfit >= 0 ? 85 : 45, anoAnterior: null },
 
     employees_total: { meta: null, realizado: sellerCount, anoAnterior: input.previousYear?.employees_total ?? null },
-    training_completion_rate: { meta: 100, realizado: null, anoAnterior: null },
     feedback_cadence_rate: { meta: 100, realizado: null, anoAnterior: null },
     pdi_completion_rate: { meta: 100, realizado: null, anoAnterior: null },
     turnover_rate: { meta: 5, realizado: null, anoAnterior: null },

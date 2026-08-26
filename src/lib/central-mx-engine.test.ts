@@ -43,9 +43,12 @@ const baseInput = {
 }
 
 describe('central MX engine', () => {
-  test('keeps the full 45-indicator planning catalog grouped by the six departments', () => {
-    expect(CENTRAL_MX_PLANNING_INDICATORS).toHaveLength(45)
-    expect(new Set(CENTRAL_MX_PLANNING_INDICATORS.map(item => item.code)).size).toBe(45)
+  // O catálogo do cockpit tinha 45 entradas, duas delas (`cost_per_lead` e
+  // `training_completion_rate`) arquivadas no catálogo da metodologia e sempre
+  // vazias na tela do Dono. Foram removidas: 43 é o número correto hoje.
+  test('keeps the planning catalog grouped by the six departments', () => {
+    expect(CENTRAL_MX_PLANNING_INDICATORS).toHaveLength(43)
+    expect(new Set(CENTRAL_MX_PLANNING_INDICATORS.map(item => item.code)).size).toBe(43)
     expect(new Set(CENTRAL_MX_PLANNING_INDICATORS.map(item => item.department))).toEqual(new Set([
       'comercial',
       'marketing',
@@ -59,7 +62,7 @@ describe('central MX engine', () => {
   test('builds one integrated Central MX result for planning, departments, score, alerts and action plan', () => {
     const engine = buildCentralMxEngine(baseInput)
 
-    expect(engine.planningIndicators).toHaveLength(45)
+    expect(engine.planningIndicators).toHaveLength(43)
     expect(engine.departments.map(department => department.code)).toEqual([
       'comercial',
       'marketing',
@@ -94,7 +97,9 @@ describe('central MX engine', () => {
     expect(dre?.status).toBe('parcial')
   })
 
-  test('keeps the Supabase Central MX catalog seed aligned with the 45-indicator engine', () => {
+  // A migration de seed é histórica e imutável: continua com as 45 entradas
+  // originais. O engine hoje expõe 43 — o seed precisa conter todas elas.
+  test('keeps the Supabase Central MX catalog seed aligned with the engine', () => {
     const migration = readFileSync(
       new URL('../../supabase/migrations/20260529120000_central_mx_catalog_45_and_action_evidence.sql', import.meta.url),
       'utf8',

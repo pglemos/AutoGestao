@@ -33,12 +33,13 @@ const PEER_OPTIONS: { value: CentralMxBenchmarkPeerGroup; label: string }[] = [
   { value: 'segmento', label: 'Segmento' },
 ]
 
+// `training_completion_rate` saiu daqui: está arquivado no catálogo da
+// metodologia e não é mais um indicador do planejamento.
 const SUGGESTED_METRICS = [
   'gross_margin_pct',
   'sales_volume',
   'stock_turnover_rate',
   'lead_to_schedule_rate',
-  'training_completion_rate',
 ]
 
 export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
