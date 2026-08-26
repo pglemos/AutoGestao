@@ -25,3 +25,9 @@ CREATE POLICY checkin_audit_logs_internal_mx_select
   FOR SELECT
   TO authenticated
   USING (public.eh_area_interna_mx(auth.uid()));
+
+-- Policy sem grant não lê nada: `data_correction_audit` nunca teve GRANT para
+-- `authenticated` (relacl só tinha postgres e service_role), então o PostgREST
+-- devolvia vazio mesmo com a policy acima. Só SELECT — a escrita continua
+-- restrita a `service_role`, como nas demais trilhas.
+GRANT SELECT ON public.data_correction_audit TO authenticated;

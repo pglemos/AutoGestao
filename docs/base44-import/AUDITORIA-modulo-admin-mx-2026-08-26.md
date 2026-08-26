@@ -36,9 +36,35 @@ produção: autores reais (Mariane, José, SynVolt), ações reais
 4 dos 189 registros não têm loja resolvível (3 sem `store_id`, 1 apontando para
 loja já removida) — a coluna fica vazia (`—`), sem substituir por outro campo.
 
-Outras trilhas reais existentes, ainda não expostas em tela:
-`data_correction_audit` (264), `checkin_audit_logs` (156),
-`logs_auditoria_loja` (122), `d1_audit_log` (35).
+**Segunda leva:** as outras quatro trilhas reais, que existiam com dado e sem
+tela nenhuma, passaram a ser abas da mesma seção (`TabNavPill` canônico), cada
+uma normalizada para a mesma linha e declarando a tabela de origem:
+
+| Aba | Tabela | Registros | Verificado em produção |
+|---|---|---|---|
+| Administração MX | `internal_mx_admin_audit` | 189 | 189 linhas |
+| Cadastro de loja | `logs_auditoria_loja` | 122 | 122 linhas |
+| Check-in | `checkin_audit_logs` | 156 | 156 linhas |
+| Fechamento D1 | `d1_audit_log` | 35 | 35 linhas |
+| Correção de dados | `data_correction_audit` | 264 | 200 (teto da página) |
+
+Duas delas não eram legíveis por quem audita: `data_correction_audit` só tinha
+policy de `service_role`, e `checkin_audit_logs` liberava
+`usuarios.role IN ('admin','dono','gerente')` — vocabulário que não inclui
+`administrador_geral`, `administrador_mx` nem `consultor_mx`. Ambas ganharam
+`SELECT` para `eh_area_interna_mx`, sem nenhuma permissão de escrita.
+
+**Policy sem grant não lê nada.** Com a policy criada, `data_correction_audit`
+continuou devolvendo 403: o `relacl` da tabela nunca teve `authenticated` —
+só `postgres` e `service_role`. Foi preciso `GRANT SELECT`. A aba só voltou
+com dado depois disso; a policy sozinha não bastava, e o teste que pegou isso
+foi abrir a aba em produção, não a suíte.
+
+**Achado lateral, não corrigido:** `checkin_audit_logs`, `d1_audit_log` e
+`logs_auditoria_loja` concedem `arwdm` a `authenticated` — ou seja, INSERT,
+UPDATE e DELETE, contidos apenas por RLS. `internal_mx_admin_audit` é a única
+que concede só `rm` (leitura). Trilha de auditoria não deveria aceitar escrita
+direta de nenhum cliente; vale alinhar as três com o modelo da primeira.
 
 ### 2. `/scores` — timestamp carimbado com o relógio da requisição
 
