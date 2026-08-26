@@ -156,10 +156,16 @@ BEGIN
            greatest(1, (
              SELECT count(*)
                FROM all_store_sellers ax
-              WHERE ax.store_id = rm.store_id
+             WHERE ax.store_id = rm.store_id
                 AND NOT coalesce(ax.is_venda_loja, false)
            )) AS seller_count
       FROM public.regras_metas_loja rm
+     WHERE (p_store_id IS NULL OR rm.store_id = p_store_id)
+       AND EXISTS (
+         SELECT 1
+           FROM all_store_sellers ax
+          WHERE ax.store_id = rm.store_id
+       )
   ), commissions AS (
     SELECT rr.loja_id, coalesce(sum(rr.valor) FILTER (WHERE rr.tipo = 'comissao_por_venda' AND rr.ativo), 0)::numeric AS per_sale
       FROM public.remuneracao_regras rr GROUP BY rr.loja_id

@@ -12,6 +12,8 @@ describe('vendedor performance goal scope migration', () => {
     expect(sql).toContain('FROM all_store_sellers ax')
     expect(sql).toContain('WHERE ax.store_id = rm.store_id')
     expect(sql).toContain('ELSE coalesce(sr.monthly_goal / sr.seller_count, 0)')
+    expect(sql).toContain('WHERE (p_store_id IS NULL OR rm.store_id = p_store_id)')
+    expect(sql).toContain('FROM all_store_sellers ax')
     expect(sql).not.toContain('FROM sellers sx WHERE sx.store_id = rm.store_id')
   })
 

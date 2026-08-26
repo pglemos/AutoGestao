@@ -76,7 +76,7 @@ Com schema canonico e check-in temporal corrigidos, o painel da loja precisa usa
 - O dashboard passou a priorizar `vendedor_performance_oficial.meta` e usa rateio local somente durante o carregamento da RPC.
 - O rateio local considera vendedores ativos elegíveis e exclui a conta operacional `VENDA LOJA`; meta oficial `0` permanece `0`.
 - A migration corrige o divisor da RPC usando a equipe ativa completa da loja, sem `p_seller_id`, com `vendedores_loja` e `vinculos_loja` ativos.
-- CodeRabbit apontou e foi corrigido o retorno `NULL` da meta quando não há regra da loja; a recomendação de trocar `bun:test` por `vitest` foi descartada porque o runner oficial do projeto é `bun test` e o repositório usa `bun:test` nos testes de unidade equivalentes.
+- CodeRabbit apontou e foi corrigido o retorno `NULL` da meta quando não há regra da loja; o teste de origem da meta foi padronizado para `bun:test`, alinhado ao runner oficial `bun test` e aos testes de unidade equivalentes.
 
 ### Completion Notes List
 
