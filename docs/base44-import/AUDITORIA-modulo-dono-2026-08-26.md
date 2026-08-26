@@ -68,3 +68,53 @@ Com a Simulação de Dono ativa:
 
 Teste inverso, como Admin: `criar_plano_acao_v2` respondeu **200** e criou o
 plano — a área interna não foi afetada (registro de teste removido em seguida).
+
+---
+
+## Varredura funcional das 17 rotas do Dono (produção, release `0fe346aa`)
+
+Percorridas com a Simulação de Dono ativa. Todas carregam, nenhuma acusa erro
+de aplicação, console sem erro real:
+
+`/home` · `/decisoes` · `/vendas` · `/meta-loja` · `/minha-equipe` ·
+`/rotina-equipe` · `/mentor` · `/mercado` · `/feedbacks-pdis` · `/departamentos`
+e os 6 departamentos (`comercial`, `marketing`, `produto-e-estoque`,
+`pessoas-rh`, `financeiro`, `operacoes`).
+
+Dois falsos positivos que investiguei e descartei, para não virarem tarefa:
+
+- **Departamentos pareciam repetir a mesma tela.** Não repetem: há um cabeçalho
+  comum com os scores de todas as áreas e, abaixo, o detalhe do departamento da
+  rota. Comercial mostra "Volume de Vendas 12 · Parcial"; Financeiro mostra
+  "Lucro Bruto — · Pendente".
+- **Sentry acusando CORS no console.** O DSN em produção bate com o do projeto,
+  `allowedDomains` é `["*"]` e a chave está ativa — e a própria sessão registrou
+  **66 envelopes com HTTP 200**. O erro vinha da extensão "Network Monitor" do
+  navegador de teste.
+
+## Execução do Dono preservada (contraprova do bloqueio)
+
+O bloqueio de criação não podia derrubar o que é do Dono. O drawer da ação abre
+normalmente e a aba Execução mantém progresso, ações rápidas, checklist
+(adicionar, marcar, editar, remover), bloquear/desbloquear e evidências — sem
+checagem de papel na UI, e com `can_manage_mx_action_scope` autorizando no
+banco, que é justamente a função que **não** foi restringida.
+
+Registro honesto do método: o Radix Tabs ignora clique sintético e o harness não
+conseguiu trocar de aba na tela real, então essa confirmação veio da leitura de
+`ExecutionTab.jsx` somada à permissão do banco, não de um clique.
+
+## Pendência de dado, não de código — Benchmarking
+
+`/mercado` renderiza corretamente (filtros de região, porte, marca e segmento,
+tabela comparativa e MX Score), mas **todo benchmark aparece "--" e "Pendente"**
+porque `benchmark_snapshots` está **vazia** — 0 linhas.
+
+Existe a leitura (`get_benchmark`) e a trava de escrita
+(`prevent_benchmark_mutation`), mas **nenhum job, cron ou função que popule** a
+tabela. Enquanto isso não existir, a tela promete "dados reais do recorte
+mercado" e não tem o que mostrar.
+
+Não populei: benchmark inventado é pior que benchmark ausente — o Dono tomaria
+decisão comparando a loja com número fabricado. Precisa de fonte real e de um
+processo que a alimente.
