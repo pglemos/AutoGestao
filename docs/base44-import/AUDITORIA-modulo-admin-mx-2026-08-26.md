@@ -60,11 +60,42 @@ só `postgres` e `service_role`. Foi preciso `GRANT SELECT`. A aba só voltou
 com dado depois disso; a policy sozinha não bastava, e o teste que pegou isso
 foi abrir a aba em produção, não a suíte.
 
-**Achado lateral, não corrigido:** `checkin_audit_logs`, `d1_audit_log` e
-`logs_auditoria_loja` concedem `arwdm` a `authenticated` — ou seja, INSERT,
-UPDATE e DELETE, contidos apenas por RLS. `internal_mx_admin_audit` é a única
-que concede só `rm` (leitura). Trilha de auditoria não deveria aceitar escrita
-direta de nenhum cliente; vale alinhar as três com o modelo da primeira.
+**Grants alinhados (terceira leva).** `checkin_audit_logs`, `d1_audit_log` e
+`logs_auditoria_loja` concediam `arwdm` a `authenticated` — INSERT, UPDATE e
+DELETE, contidos apenas por RLS. `internal_mx_admin_audit` concede só `rm`.
+Uma trilha que o próprio auditado pode reescrever não é trilha.
+
+O alinhamento respeitou quem escreve em cada uma:
+
+| Trilha | Antes | Depois | Por quê |
+|---|---|---|---|
+| `checkin_audit_logs` | `arwdm` | `rm` | Só é escrita por `aplicar_regularizacao_fechamento` (SECURITY DEFINER) |
+| `logs_auditoria_loja` | `arwdm` | `rm` | Escrita passa a ser a RPC `registrar_auditoria_loja` |
+| `d1_audit_log` | `arwdm` | `arm` | O fechamento D1 insere direto do cliente; perde só UPDATE/DELETE |
+
+As policies `d1_audit_log_admin_write` e `d1_audit_log_admin_delete` foram
+removidas junto: ficariam sem efeito sem o grant, e corrigir um fechamento não
+é reescrever a trilha dele.
+
+**Defeito descoberto no caminho.** O painel de fechamento do gerente inseria
+direto em `logs_auditoria_loja` para registrar o comentário da decisão de
+regularização — e esse INSERT **já falhava**: a tabela tem RLS ligada e nenhuma
+policy de INSERT. O gerente via "Decisão aplicada, mas o comentário não pôde ser
+auditado" em toda decisão, e o comentário nunca entrava na trilha. A RPC
+`registrar_auditoria_loja` (SECURITY DEFINER) resolve: carimba `changed_by` com
+o `auth.uid()` real e confere gerente/dono/interno da loja antes de gravar.
+
+Provas colhidas em produção, com a sessão real do navegador:
+
+| Tentativa | Resultado |
+|---|---|
+| `rpc/registrar_auditoria_loja` | `200`, id devolvido, `changed_by` = uid real |
+| `INSERT` direto em `logs_auditoria_loja` | `403 permission denied` |
+| `INSERT` direto em `checkin_audit_logs` | `403` |
+| `UPDATE` / `DELETE` em `d1_audit_log` | `403` / `403` |
+| `INSERT` em `d1_audit_log` (fechamento) | `201` — segue funcionando |
+
+Os registros de teste foram removidos; as contagens voltaram a 122 / 35 / 156.
 
 ### 2. `/scores` — timestamp carimbado com o relógio da requisição
 

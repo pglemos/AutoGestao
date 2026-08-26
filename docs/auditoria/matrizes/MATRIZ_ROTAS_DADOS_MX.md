@@ -6,9 +6,9 @@
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
 - Tabelas referenciadas pelo runtime: **181**
-- RPCs referenciadas pelo runtime: **106**
+- RPCs referenciadas pelo runtime: **107**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **386**
+- Pares tabela/operação encontrados: **385**
 
 ## Rotas
 
@@ -217,7 +217,7 @@
 | `links_autocadastro_cliente` | 1 |
 | `logs_auditoria` | 2 |
 | `logs_auditoria_consultoria_mx` | 3 |
-| `logs_auditoria_loja` | 3 |
+| `logs_auditoria_loja` | 2 |
 | `logs_compartilhamento_whatsapp` | 1 |
 | `logs_reprocessamento` | 1 |
 | `logs_rotina_gerente` | 1 |
@@ -493,7 +493,6 @@
 | `links_autocadastro_cliente:update` | 1 |
 | `logs_auditoria_consultoria_mx:insert` | 2 |
 | `logs_auditoria_consultoria_mx:select` | 2 |
-| `logs_auditoria_loja:insert` | 1 |
 | `logs_auditoria_loja:select` | 2 |
 | `logs_auditoria:select` | 2 |
 | `logs_compartilhamento_whatsapp:insert` | 1 |
@@ -795,6 +794,7 @@
 | `reconcile_action_plan_template_drafts` | 1 |
 | `record_d1_contact_action` | 1 |
 | `refresh_manager_daily_tasks` | 1 |
+| `registrar_auditoria_loja` | 1 |
 | `registrar_status_acao_cadencia` | 1 |
 | `registrar_venda_direta` | 1 |
 | `rejeitar_regularizacao_fechamento` | 1 |

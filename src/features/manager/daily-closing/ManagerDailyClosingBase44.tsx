@@ -423,23 +423,23 @@ export default function ManagerDailyClosing() {
       comment: string,
     ) => {
       if (!comment || !storeId) return;
-      const { error: logError } = await supabase
-        .from("logs_auditoria_loja")
-        .insert({
-          store_id: storeId,
-          changed_by: profile?.id || null,
-          changes: {
-            type: "regularization_decision_comment",
-            request_id: request.id,
-            action,
-            comment,
-          },
-        });
+      // A trilha não aceita INSERT direto do cliente (grant só de leitura): a
+      // escrita passa pela RPC SECURITY DEFINER, que carimba `changed_by` com
+      // o `auth.uid()` real e confere o vínculo com a loja.
+      const { error: logError } = await supabase.rpc("registrar_auditoria_loja", {
+        p_store_id: storeId,
+        p_changes: {
+          type: "regularization_decision_comment",
+          request_id: request.id,
+          action,
+          comment,
+        },
+      });
       if (logError) {
         toast.warning("Decisão aplicada, mas o comentário não pôde ser auditado.");
       }
     },
-    [profile?.id, storeId],
+    [storeId],
   );
 
   const decide = useCallback(
