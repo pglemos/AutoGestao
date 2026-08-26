@@ -33,10 +33,12 @@ import { useClientPortfolio } from './clientes/useClientPortfolio'
 import { portfolioCounters, journeyLabel, structureLabel, type PortfolioClient } from './clientes/clientPortfolio'
 import { fetchInscricoesPendentes } from './clientes/inscricaoAutocadastroMutations'
 import type { InscricaoRow } from './clientes/inscricaoAutocadastro'
+import { fetchLojasSemMeta, vendedoresImpactados, type LojaSemMeta } from './lojasSemMeta'
 
 export function AdminDashboardPage() {
   const { rows: clients, loading, error, refetch } = useClientPortfolio()
   const [pendingList, setPendingList] = useState<InscricaoRow[]>([])
+  const [lojasSemMeta, setLojasSemMeta] = useState<LojaSemMeta[]>([])
   const location = useLocation()
   const navigate = useNavigate()
   const { width, bottomClearance } = resolveRouteLayout(location.pathname)
@@ -46,6 +48,14 @@ export function AdminDashboardPage() {
       setPendingList(res.rows.slice(0, 5))
     }).catch(() => {
       setPendingList([])
+    })
+  }, [])
+
+  useEffect(() => {
+    fetchLojasSemMeta().then(res => {
+      setLojasSemMeta(res.lojas)
+    }).catch(() => {
+      setLojasSemMeta([])
     })
   }, [])
 
@@ -92,8 +102,19 @@ export function AdminDashboardPage() {
       })
     }
 
+    if (lojasSemMeta.length > 0) {
+      const vendedores = vendedoresImpactados(lojasSemMeta)
+      alerts.push({
+        id: 'loja-sem-meta',
+        title: `${lojasSemMeta.length} loja(s) em operação com meta mensal zerada`,
+        subtitle: `${vendedores} vendedor(es) veem projeção e atingimento em 0%: ${lojasSemMeta.slice(0, 3).map(item => item.loja).join(', ')}${lojasSemMeta.length > 3 ? '…' : ''}`,
+        tone: 'danger',
+        link: '/clientes',
+      })
+    }
+
     return alerts
-  }, [clients])
+  }, [clients, lojasSemMeta])
 
   const todayFormatted = useMemo(() => {
     return new Date().toLocaleDateString('pt-BR', {

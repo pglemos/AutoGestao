@@ -221,7 +221,7 @@
 | `logs_compartilhamento_whatsapp` | 1 |
 | `logs_reprocessamento` | 1 |
 | `logs_rotina_gerente` | 1 |
-| `lojas` | 33 |
+| `lojas` | 34 |
 | `manager_daily_tasks` | 1 |
 | `manager_lead_conferences` | 1 |
 | `marketing_mensal_consultoria` | 1 |
@@ -273,7 +273,7 @@
 | `qualificacoes_produto_consultor` | 1 |
 | `recomendacoes_desenvolvimento` | 1 |
 | `regras_entrega_loja` | 2 |
-| `regras_metas_loja` | 8 |
+| `regras_metas_loja` | 9 |
 | `regularizacao_fechamento` | 2 |
 | `relatorios_devolutivas_semanais` | 1 |
 | `remuneracao_benchmark` | 1 |
@@ -320,7 +320,7 @@
 | `versoes_metodologia_produto` | 1 |
 | `vinculo_modelo_relatorio_encontro` | 1 |
 | `vinculo_plano_acao_encontro` | 1 |
-| `vinculos_loja` | 21 |
+| `vinculos_loja` | 22 |
 | `visitas_consultoria` | 13 |
 | `vw_jornada_alem_do_contratado` | 1 |
 
@@ -503,7 +503,7 @@
 | `logs_rotina_gerente:upsert` | 1 |
 | `lojas:delete` | 1 |
 | `lojas:insert` | 3 |
-| `lojas:select` | 33 |
+| `lojas:select` | 34 |
 | `lojas:update` | 3 |
 | `manager_daily_tasks:select` | 1 |
 | `manager_daily_tasks:update` | 1 |
@@ -617,7 +617,7 @@
 | `regras_entrega_loja:select` | 2 |
 | `regras_entrega_loja:upsert` | 2 |
 | `regras_metas_loja:delete` | 1 |
-| `regras_metas_loja:select` | 8 |
+| `regras_metas_loja:select` | 9 |
 | `regras_metas_loja:upsert` | 3 |
 | `regularizacao_fechamento:insert` | 1 |
 | `regularizacao_fechamento:select` | 2 |
@@ -706,7 +706,7 @@
 | `vinculo_plano_acao_encontro:update` | 1 |
 | `vinculos_loja:delete` | 1 |
 | `vinculos_loja:insert` | 3 |
-| `vinculos_loja:select` | 19 |
+| `vinculos_loja:select` | 20 |
 | `vinculos_loja:update` | 2 |
 | `visitas_consultoria:delete` | 2 |
 | `visitas_consultoria:insert` | 5 |
