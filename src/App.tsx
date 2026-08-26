@@ -179,9 +179,18 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 }
 
 function ForbiddenRoute() {
-  const { role } = useAuth()
+  const { role, isSimulating, stopSimulation } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
+
+  // Esta tela não tem a barra lateral, que é onde mora o botão de encerrar a
+  // simulação. Sem a saída aqui, o Admin que simula um papel e cai numa rota
+  // proibida para ele fica preso: "Voltar para minha área" leva para a área do
+  // papel simulado, que continua sem acesso ao módulo interno.
+  const encerrarSimulacao = () => {
+    stopSimulation()
+    navigate('/painel', { replace: true })
+  }
 
   // Usa o estado de erro do Design System em vez de um layout próprio (§9.5).
   // Em um 403 repetir não resolve, então a saída oferecida é voltar.
@@ -190,13 +199,23 @@ function ForbiddenRoute() {
         <section className="w-full max-w-lg rounded-[var(--mx-card-radius)] border border-border bg-surface-default shadow-[var(--mx-shadow-lg)]">
           <ErrorState
             kind="permission"
-            description={`O perfil ${role || 'indefinido'} não tem permissão para acessar ${location.pathname}. Se esse acesso faz parte da sua rotina, solicite liberação ao Admin MX ou ao gestor responsável pela unidade.`}
+            description={
+              isSimulating
+                ? `A simulação do perfil ${role || 'indefinido'} não tem acesso a ${location.pathname}. Encerre a simulação para voltar ao módulo Admin MX.`
+                : `O perfil ${role || 'indefinido'} não tem permissão para acessar ${location.pathname}. Se esse acesso faz parte da sua rotina, solicite liberação ao Admin MX ou ao gestor responsável pela unidade.`
+            }
             action={(
-              <Button
-                onClick={() => navigate('/', { replace: true })}
-              >
-                Voltar para minha área
-              </Button>
+              <div className="flex flex-wrap items-center justify-center gap-[var(--mx-space-2)]">
+                {isSimulating ? (
+                  <Button onClick={encerrarSimulacao}>Voltar Admin MX</Button>
+                ) : null}
+                <Button
+                  variant={isSimulating ? 'outline' : 'primary'}
+                  onClick={() => navigate('/', { replace: true })}
+                >
+                  Voltar para minha área
+                </Button>
+              </div>
             )}
           />
         </section>
