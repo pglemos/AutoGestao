@@ -308,7 +308,7 @@
 | `universidade_certificacoes` | 1 |
 | `universidade_trilhas` | 1 |
 | `user_roles` | 1 |
-| `usuarios` | 30 |
+| `usuarios` | 31 |
 | `valores_indicadores_planejamento` | 2 |
 | `valores_indicadores_planejamento_vigentes` | 4 |
 | `valores_parametros_consultoria` | 3 |
@@ -675,7 +675,7 @@
 | `user_roles:update` | 1 |
 | `usuarios:delete` | 2 |
 | `usuarios:insert` | 1 |
-| `usuarios:select` | 27 |
+| `usuarios:select` | 28 |
 | `usuarios:update` | 6 |
 | `usuarios:upsert` | 1 |
 | `valores_indicadores_planejamento_vigentes:select` | 4 |

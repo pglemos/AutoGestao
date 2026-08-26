@@ -22,25 +22,32 @@ export interface LojaSemMeta {
 type RegraRow = { store_id: string; monthly_goal: number | null }
 type VinculoRow = { store_id: string; user_id: string; role: string | null }
 type LojaRow = { id: string; name: string | null; active: boolean | null }
+type UsuarioRow = { id: string; active: boolean | null }
 
 export async function fetchLojasSemMeta(): Promise<{ lojas: LojaSemMeta[]; error: string | null }> {
-  const [regrasRes, lojasRes, vinculosRes] = await Promise.all([
+  const [regrasRes, lojasRes, vinculosRes, usuariosRes] = await Promise.all([
     fetchAllRows<RegraRow>((from, to) =>
       supabase.from('regras_metas_loja').select('store_id, monthly_goal').range(from, to)),
     fetchAllRows<LojaRow>((from, to) =>
       supabase.from('lojas').select('id, name, active').range(from, to)),
     fetchAllRows<VinculoRow>((from, to) =>
       supabase.from('vinculos_loja').select('store_id, user_id, role').range(from, to)),
+    fetchAllRows<UsuarioRow>((from, to) =>
+      supabase.from('usuarios').select('id, active').range(from, to)),
   ])
 
-  const erro = regrasRes.error || lojasRes.error || vinculosRes.error
+  const erro = regrasRes.error || lojasRes.error || vinculosRes.error || usuariosRes.error
   if (erro) return { lojas: [], error: erro }
 
   const lojaPorId = new Map(lojasRes.rows.filter(l => l.active !== false).map(l => [l.id, l.name || l.id]))
+  // Vendedor desligado mantém o vínculo com a loja; contá-lo inflaria o alerta
+  // com gente que já não abre o painel.
+  const ativos = new Set(usuariosRes.rows.filter(u => u.active !== false).map(u => u.id))
 
   const vendedoresPorLoja = new Map<string, Set<string>>()
   for (const vinculo of vinculosRes.rows) {
     if (vinculo.role !== 'vendedor') continue
+    if (!ativos.has(vinculo.user_id)) continue
     const atual = vendedoresPorLoja.get(vinculo.store_id) ?? new Set<string>()
     atual.add(vinculo.user_id)
     vendedoresPorLoja.set(vinculo.store_id, atual)
