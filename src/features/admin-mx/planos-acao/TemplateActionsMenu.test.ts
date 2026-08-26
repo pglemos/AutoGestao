@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'bun:test'
+import { readFileSync } from 'node:fs'
 import { availableTemplateLifecycleActions } from './TemplateActionsMenu'
 import { type ActionPlanTemplate, type ActionPlanTemplateVersion } from './actionPlanTemplates'
 
@@ -42,5 +43,25 @@ describe('ações de ciclo de vida do template', () => {
 
   test('arquivado não oferece mutações adicionais', () => {
     expect(availableTemplateLifecycleActions(template(false, ['arquivada']))).toEqual([])
+  })
+})
+
+describe('botão Sugerir ao Dono respeita a disponibilidade', () => {
+  // A tabela usava só `published && active`, então a flag
+  // `owner_suggestion_enabled` não valia nada no caminho principal: um plano
+  // marcado como indisponível continuava sugerível pela linha.
+  const podeSugerir = (t: { publicada: boolean; active: boolean; owner_suggestion_enabled: boolean }) =>
+    t.publicada && t.active && t.owner_suggestion_enabled
+
+  test('só oferece quando publicado, ativo e disponível para sugestão', () => {
+    expect(podeSugerir({ publicada: true, active: true, owner_suggestion_enabled: true })).toBe(true)
+    expect(podeSugerir({ publicada: true, active: true, owner_suggestion_enabled: false })).toBe(false)
+    expect(podeSugerir({ publicada: false, active: true, owner_suggestion_enabled: true })).toBe(false)
+    expect(podeSugerir({ publicada: true, active: false, owner_suggestion_enabled: true })).toBe(false)
+  })
+
+  test('a fonte da tabela usa as três condições', () => {
+    const src = readFileSync('src/features/admin-mx/AdminPlanosAcaoGlobalPage.tsx', 'utf8')
+    expect(src).toContain('published && template.active && template.owner_suggestion_enabled')
   })
 })

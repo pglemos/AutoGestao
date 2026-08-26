@@ -364,7 +364,11 @@ export function AdminPlanosAcaoGlobalPage() {
                                   <Button variant="outline" size="sm" onClick={() => void templates.openEdit(template)}>Editar</Button>
                                   {openDraft ? <Button variant="outline" size="sm" onClick={() => void templates.publish(template)}>Publicar</Button> : null}
                                   {published && template.active && template.manual_application_enabled ? <Button size="sm" onClick={() => templates.setApplying(template)}>Aplicar a cliente</Button> : null}
-                                  {published && template.active ? <Button variant="outline" size="sm" onClick={() => { setSuggestTemplate(template); setSuggestOpen(true) }}>Sugerir ao Dono</Button> : null}
+                                  {/* Respeita `owner_suggestion_enabled`, igual ao drawer: a coluna
+                                      Sug. dizia "—" e o botão continuava na linha, então a flag
+                                      "Disponível para sugestão ao Dono" não valia nada no caminho
+                                      principal. */}
+                                  {published && template.active && template.owner_suggestion_enabled ? <Button variant="outline" size="sm" onClick={() => { setSuggestTemplate(template); setSuggestOpen(true) }}>Sugerir ao Dono</Button> : null}
                                   <TemplateActionsMenu
                                     template={template}
                                     disabled={templates.submitting}
