@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
   Clock,
   Eye,
   FileText,
   Lock,
   RefreshCw,
-  Search,
   Shield,
 } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
+import { TabNavPill } from '@/components/molecules/TabNavPill'
 import {
   MxEmptyState,
   MxLoadingState,
@@ -18,79 +18,40 @@ import {
   MxModulePage,
   MxSectionCard,
 } from '@/components/module/MxModuleVisualPrimitives'
-import { supabase } from '@/lib/supabase'
-
-interface AuditLogRow {
-  id: string
-  user: string
-  action: string
-  resource: string
-  client: string
-  date: string
-}
+import {
+  AUDIT_TRAILS,
+  type AuditTrailEntry,
+  type AuditTrailKey,
+  fetchAuditTrail,
+  formatAuditTimestamp,
+  matchesAuditSearch,
+} from './auditoria/auditTrails'
 
 export function AdminSegurancaAuditoriaPage() {
   const location = useLocation()
   const { width, bottomClearance } = resolveRouteLayout(location.pathname)
-  const [logs, setLogs] = useState<AuditLogRow[]>([])
+  const [trail, setTrail] = useState<AuditTrailKey>('admin_mx')
+  const [entries, setEntries] = useState<AuditTrailEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
 
-  const fetchLogs = async () => {
+  const loadTrail = useCallback(async (key: AuditTrailKey) => {
     setLoading(true)
     try {
-      // Trilha real: `internal_mx_admin_audit` é gravada por trigger/RPC e só
-      // permite SELECT para a área interna MX (write direto negado por RLS).
-      const { data: entries } = await supabase
-        .from('internal_mx_admin_audit')
-        .select('id, actor_id, actor_role, action, entity_type, store_id, created_at')
-        .order('created_at', { ascending: false })
-        .limit(200)
-
-      const rows = entries || []
-      const actorIds = [...new Set(rows.map(r => r.actor_id).filter(Boolean))] as string[]
-      const storeIds = [...new Set(rows.map(r => r.store_id).filter(Boolean))] as string[]
-
-      const [actorsRes, storesRes] = await Promise.all([
-        actorIds.length
-          ? supabase.from('usuarios').select('id, name, email').in('id', actorIds)
-          : Promise.resolve({ data: [] as Array<{ id: string; name: string | null; email: string | null }> }),
-        storeIds.length
-          ? supabase.from('lojas').select('id, name').in('id', storeIds)
-          : Promise.resolve({ data: [] as Array<{ id: string; name: string | null }> }),
-      ])
-
-      const actorById = new Map((actorsRes.data || []).map(u => [u.id, u.name || u.email || u.id]))
-      const storeById = new Map((storesRes.data || []).map(l => [l.id, l.name || l.id]))
-
-      setLogs(rows.map(r => ({
-        id: r.id,
-        user: (r.actor_id && actorById.get(r.actor_id)) || 'Autor não identificado',
-        action: r.action,
-        resource: r.entity_type,
-        // 4 dos 189 registros não têm loja resolvível (3 sem store_id, 1 com
-        // loja já removida) — a coluna fica vazia em vez de exibir outro campo.
-        client: (r.store_id && storeById.get(r.store_id)) || '—',
-        date: r.created_at ? new Date(r.created_at).toLocaleString('pt-BR') : 'Data não registrada',
-      })))
+      setEntries(await fetchAuditTrail(key))
     } catch {
-      setLogs([])
+      setEntries([])
     } finally {
       setLoading(false)
     }
-  }
-
-  useEffect(() => {
-    void fetchLogs()
   }, [])
 
-  const filtered = logs.filter(l =>
-    !search ||
-    l.user.toLowerCase().includes(search.toLowerCase()) ||
-    l.action.toLowerCase().includes(search.toLowerCase()) ||
-    l.resource.toLowerCase().includes(search.toLowerCase()) ||
-    l.client.toLowerCase().includes(search.toLowerCase())
-  )
+  useEffect(() => {
+    void loadTrail(trail)
+  }, [trail, loadTrail])
+
+  const activeTrail = AUDIT_TRAILS.find(item => item.key === trail) ?? AUDIT_TRAILS[0]
+  const filtered = entries.filter(entry => matchesAuditSearch(entry, search))
 
   return (
     <MxModulePage width={width} bottomClearance={bottomClearance}>
@@ -100,7 +61,7 @@ export function AdminSegurancaAuditoriaPage() {
         title="Segurança e Auditoria"
         description="Registro imutável de todas as alterações relevantes, permissões RBAC e acesso assistido."
         actions={
-          <Button variant="outline" size="sm" onClick={() => void fetchLogs()} disabled={loading}>
+          <Button variant="outline" size="sm" onClick={() => void loadTrail(trail)} disabled={loading}>
             <RefreshCw size={14} className={loading ? 'animate-spin' : ''} /> Atualizar
           </Button>
         }
@@ -173,24 +134,38 @@ export function AdminSegurancaAuditoriaPage() {
         </MxSectionCard>
       </div>
 
-      {/* Log de Auditoria */}
+      {/* Trilhas de Auditoria */}
       <MxSectionCard>
-        <div className="p-4 border-b border-[var(--mx-color-border-subtle)] flex items-center justify-between">
-          <div className="flex items-center gap-2">
+        <div className="p-4 border-b border-[var(--mx-color-border-subtle)]">
+          <div className="flex items-center gap-2 mb-3">
             <Clock size={16} className="text-[var(--mx-color-text-secondary)]" />
             <h3 className="font-semibold text-sm text-[var(--mx-color-text-primary)]">
-              Trilha de Auditoria
+              Trilhas de Auditoria
             </h3>
             <span className="text-xs bg-[var(--mx-color-surface-muted)] text-[var(--mx-color-text-secondary)] px-2 py-0.5 rounded-full font-semibold">
               Imutável
             </span>
           </div>
+          <TabNavPill
+            aria-label="Trilha de auditoria"
+            tabs={AUDIT_TRAILS.map(item => ({ key: item.key, label: item.label }))}
+            activeTab={trail}
+            onTabChange={setTrail}
+          />
+          <p className="mt-3 text-xs text-[var(--mx-color-text-secondary)]">
+            {activeTrail.description}{' '}
+            <span className="font-mono">{activeTrail.table}</span>
+          </p>
         </div>
 
         <div className="p-4 border-b border-[var(--mx-color-border-subtle)]">
+          <label className="sr-only" htmlFor="audit-search">
+            Filtrar trilha de auditoria
+          </label>
           <input
+            id="audit-search"
             type="text"
-            placeholder="Filtrar por usuário, ação ou recurso..."
+            placeholder="Filtrar por autor, ação, recurso ou contexto..."
             value={search}
             onChange={e => setSearch(e.target.value)}
             className="w-full sm:w-80 px-3 py-1.5 text-xs rounded-lg border border-[var(--mx-color-border-subtle)] bg-transparent outline-none text-[var(--mx-color-text-primary)]"
@@ -205,8 +180,13 @@ export function AdminSegurancaAuditoriaPage() {
           <div className="p-8">
             <MxEmptyState
               icon={Shield}
-              title="Nenhum registro de auditoria"
-              description="Os logs de auditoria imutáveis serão gerados conforme operações forem realizadas."
+              variant={search ? 'filter' : 'dataset'}
+              title={search ? 'Nenhum registro para o filtro' : 'Nenhum registro nesta trilha'}
+              description={
+                search
+                  ? 'Ajuste o texto do filtro para ver os registros desta trilha.'
+                  : 'Esta trilha ainda não recebeu registros, ou o seu papel não tem leitura sobre ela.'
+              }
             />
           </div>
         ) : (
@@ -215,24 +195,26 @@ export function AdminSegurancaAuditoriaPage() {
               <thead className="bg-[var(--mx-color-surface-muted)] border-b border-[var(--mx-color-border-subtle)] text-xs text-[var(--mx-color-text-secondary)] font-semibold uppercase">
                 <tr>
                   <th className="px-5 py-3">Data / Hora</th>
-                  <th className="px-4 py-3">Usuário</th>
+                  <th className="px-4 py-3">Autor</th>
                   <th className="px-4 py-3">Ação</th>
                   <th className="px-4 py-3">Recurso</th>
-                  <th className="px-4 py-3">Cliente / Contexto</th>
+                  <th className="px-4 py-3">Contexto</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[var(--mx-color-border-subtle)]">
-                {filtered.map(log => (
-                  <tr key={log.id} className="transition-colors">
-                    <td className="px-5 py-3 text-xs text-[var(--mx-color-text-secondary)]">{log.date}</td>
-                    <td className="px-4 py-3 font-semibold text-[var(--mx-color-text-primary)]">{log.user}</td>
+                {filtered.map(entry => (
+                  <tr key={entry.id} className="transition-colors">
+                    <td className="px-5 py-3 text-xs text-[var(--mx-color-text-secondary)] whitespace-nowrap">
+                      {formatAuditTimestamp(entry.timestamp)}
+                    </td>
+                    <td className="px-4 py-3 font-semibold text-[var(--mx-color-text-primary)]">{entry.actor}</td>
                     <td className="px-4 py-3">
                       <span className="text-xs px-2.5 py-0.5 rounded-full font-medium bg-[var(--mx-color-primary-subtle)] text-[var(--mx-color-primary)]">
-                        {log.action}
+                        {entry.action}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-[var(--mx-color-text-primary)]">{log.resource}</td>
-                    <td className="px-4 py-3 text-xs text-[var(--mx-color-text-secondary)]">{log.client}</td>
+                    <td className="px-4 py-3 text-[var(--mx-color-text-primary)]">{entry.resource}</td>
+                    <td className="px-4 py-3 text-xs text-[var(--mx-color-text-secondary)]">{entry.context}</td>
                   </tr>
                 ))}
               </tbody>
@@ -240,6 +222,7 @@ export function AdminSegurancaAuditoriaPage() {
           </div>
         )}
       </MxSectionCard>
+
     </MxModulePage>
   )
 }

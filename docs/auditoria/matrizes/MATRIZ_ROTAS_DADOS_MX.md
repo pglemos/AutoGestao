@@ -5,10 +5,10 @@
 - Rotas públicas: **9**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
-- Tabelas referenciadas pelo runtime: **179**
+- Tabelas referenciadas pelo runtime: **181**
 - RPCs referenciadas pelo runtime: **106**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **384**
+- Pares tabela/operação encontrados: **386**
 
 ## Rotas
 
@@ -164,6 +164,7 @@
 | `catalogo_indicadores_planejamento` | 1 |
 | `catalogo_metricas_consultoria` | 7 |
 | `central_execucao_aberturas` | 3 |
+| `checkin_audit_logs` | 1 |
 | `ciclos_plano_estrategico` | 4 |
 | `ciclos_plano_estrategico_indicadores` | 1 |
 | `clientes` | 6 |
@@ -181,7 +182,8 @@
 | `conteudo_encontro` | 1 |
 | `conteudo_referencia_encontro` | 1 |
 | `cultura_resultado_registros` | 1 |
-| `d1_audit_log` | 2 |
+| `d1_audit_log` | 3 |
+| `data_correction_audit` | 1 |
 | `delegacoes_gerenciais` | 1 |
 | `departamentos_mx` | 2 |
 | `deterministic_action_resolutions` | 1 |
@@ -215,7 +217,7 @@
 | `links_autocadastro_cliente` | 1 |
 | `logs_auditoria` | 2 |
 | `logs_auditoria_consultoria_mx` | 3 |
-| `logs_auditoria_loja` | 2 |
+| `logs_auditoria_loja` | 3 |
 | `logs_compartilhamento_whatsapp` | 1 |
 | `logs_reprocessamento` | 1 |
 | `logs_rotina_gerente` | 1 |
@@ -372,6 +374,7 @@
 | `catalogo_metricas_consultoria:upsert` | 2 |
 | `central_execucao_aberturas:select` | 1 |
 | `central_execucao_aberturas:upsert` | 2 |
+| `checkin_audit_logs:select` | 1 |
 | `ciclos_plano_estrategico_indicadores:delete` | 1 |
 | `ciclos_plano_estrategico_indicadores:insert` | 1 |
 | `ciclos_plano_estrategico_indicadores:select` | 1 |
@@ -412,7 +415,8 @@
 | `conteudo_referencia_encontro:upsert` | 1 |
 | `cultura_resultado_registros:select` | 1 |
 | `d1_audit_log:insert` | 2 |
-| `d1_audit_log:select` | 2 |
+| `d1_audit_log:select` | 3 |
+| `data_correction_audit:select` | 1 |
 | `delegacoes_gerenciais:insert` | 1 |
 | `delegacoes_gerenciais:select` | 1 |
 | `delegacoes_gerenciais:update` | 1 |
@@ -490,7 +494,7 @@
 | `logs_auditoria_consultoria_mx:insert` | 2 |
 | `logs_auditoria_consultoria_mx:select` | 2 |
 | `logs_auditoria_loja:insert` | 1 |
-| `logs_auditoria_loja:select` | 1 |
+| `logs_auditoria_loja:select` | 2 |
 | `logs_auditoria:select` | 2 |
 | `logs_compartilhamento_whatsapp:insert` | 1 |
 | `logs_reprocessamento:insert` | 1 |
