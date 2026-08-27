@@ -73,3 +73,35 @@ describe('metas do cockpit não são inventadas', () => {
     expect(codes).not.toContain('behavioral_fit_score')
   })
 })
+
+/**
+ * Ao trocar o catálogo do cockpit pelos 45 da metodologia, três alertas
+ * passaram a procurar códigos que não existiam mais. O pior era o do DRE:
+ * `indicators.find(...)` devolvia `undefined`, `undefined == null` é `true`, e o
+ * alerta disparava sempre — inclusive com o DRE em dia.
+ */
+describe('alertas apontam para indicadores que existem', () => {
+  const comDre = {
+    ...baseInput,
+    financial: { netProfit: 5000, grossMarginPct: 17 },
+  }
+
+  test('o alerta de DRE some quando o financeiro existe', () => {
+    const semFinanceiro = buildCentralMxEngine({ ...baseInput, financial: null })
+    const comFinanceiro = buildCentralMxEngine(comDre)
+    const temAlertaDre = (r: ReturnType<typeof buildCentralMxEngine>) =>
+      r.alerts.some(a => /DRE/i.test(a.problem))
+    expect(temAlertaDre(semFinanceiro)).toBe(true)
+    expect(temAlertaDre(comFinanceiro)).toBe(false)
+  })
+
+  test('todo alerta aponta para um indicador do catálogo', () => {
+    const engine = buildCentralMxEngine(comDre)
+    const codigos = new Set(engine.planningIndicators.map(item => item.code))
+    const orfaos = engine.alerts
+      .map(alert => (alert.metadata as { sourceIndicator?: string } | null)?.sourceIndicator)
+      .filter((code): code is string => Boolean(code) && code !== 'mx_score')
+      .filter(code => !codigos.has(code))
+    expect(orfaos).toEqual([])
+  })
+})

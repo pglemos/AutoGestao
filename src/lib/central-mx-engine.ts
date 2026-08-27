@@ -390,6 +390,7 @@ function buildScore(scopeType: ScoreScopeType, scopeId: string, period: string, 
 
 function buildAlerts(input: CentralMxEngineInput, indicators: CentralMxIndicatorValue[], storeScore: CentralMxScoreCalculation): ExecutiveAlert[] {
   const alerts: ExecutiveAlert[] = []
+  const sellerCount = input.metrics.sellerCount
   const push = (
     type: ExecutiveAlertType,
     sourceIndicator: string,
@@ -414,9 +415,9 @@ function buildAlerts(input: CentralMxEngineInput, indicators: CentralMxIndicator
     })
   }
 
-  const leadRate = indicators.find(item => item.code === 'lead_to_schedule_rate')
+  const leadRate = indicators.find(item => item.code === 'lead_to_appointment_rate')
   if (leadRate?.realizado != null && leadRate.meta != null && leadRate.realizado < leadRate.meta) {
-    push('critical', 'lead_to_schedule_rate', 'marketing', 'Conversão de lead abaixo do benchmark.', 'Perda de oportunidades antes do showroom.', 'Auditar origem, tempo de resposta e abordagem inicial.', 'Criar ação para primeiro contato')
+    push('critical', 'lead_to_appointment_rate', 'marketing', 'Conversão de lead abaixo do benchmark.', 'Perda de oportunidades antes do showroom.', 'Auditar origem, tempo de resposta e abordagem inicial.', 'Criar ação para primeiro contato')
   }
 
   const visitRate = indicators.find(item => item.code === 'visit_to_sale_rate')
@@ -424,14 +425,17 @@ function buildAlerts(input: CentralMxEngineInput, indicators: CentralMxIndicator
     push('critical', 'visit_to_sale_rate', 'comercial', 'Visita não está virando venda.', 'Volume de loja pode não compensar a meta do mês.', 'Revisar proposta, troca, financiamento e fechamento com casos reais.', 'Criar devolutiva de fechamento')
   }
 
-  const routine = indicators.find(item => item.code === 'routine_discipline_rate')
-  if (routine?.realizado != null && routine.realizado < 100) {
-    push('warning', 'routine_discipline_rate', 'operacional', 'Rotina diária incompleta.', 'A leitura executiva fica frágil sem lançamento da equipe.', 'Cobrar fechamento diário pelo gerente antes da análise de resultado.', 'Cobrar lançamentos pendentes')
+  // A cobertura de fechamento diário vem direto das métricas da loja: não há
+  // indicador de disciplina no catálogo da metodologia.
+  if (sellerCount > 0 && input.metrics.checkedInCount < sellerCount) {
+    push('warning', 'seller_count', 'operacional', 'Rotina diária incompleta.', 'A leitura executiva fica frágil sem lançamento da equipe.', 'Cobrar fechamento diário pelo gerente antes da análise de resultado.', 'Cobrar lançamentos pendentes')
   }
 
-  const dre = indicators.find(item => item.code === 'dre_completion_rate')
-  if (dre?.realizado == null) {
-    push('consultive', 'dre_completion_rate', 'financeiro', 'DRE ainda não conectado ao ciclo executivo.', 'Margem, custo e lucro ficam sem prova operacional.', 'Atualizar DRE para completar a leitura financeira da Central MX.', 'Atualizar DRE')
+  // Antes isto procurava `dre_completion_rate`, que saiu do catálogo: o `find`
+  // devolvia undefined, `undefined == null` é true e o alerta disparava sempre,
+  // inclusive com o DRE em dia.
+  if (!input.financial) {
+    push('consultive', 'net_profit', 'financeiro', 'DRE ainda não conectado ao ciclo executivo.', 'Margem, custo e lucro ficam sem prova operacional.', 'Atualizar DRE para completar a leitura financeira da Central MX.', 'Atualizar DRE')
   }
 
   if (storeScore.value < 70) {
