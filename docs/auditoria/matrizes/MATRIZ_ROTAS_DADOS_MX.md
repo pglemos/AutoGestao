@@ -248,13 +248,13 @@
 | `pacotes_indicadores_itens` | 5 |
 | `pacotes_indicadores_versoes` | 4 |
 | `parametros_estrategicos_mx` | 2 |
-| `pdi_avaliacoes_competencia` | 2 |
+| `pdi_avaliacoes_competencia` | 3 |
 | `pdi_metas` | 2 |
 | `pdi_niveis_cargo` | 1 |
 | `pdi_plano_acao` | 2 |
 | `pdi_reviews` | 1 |
 | `pdi_sessoes` | 4 |
-| `pdis` | 2 |
+| `pdis` | 1 |
 | `perfil_consultor_mx` | 4 |
 | `planejamentos_estrategicos` | 1 |
 | `planos_acao` | 13 |
@@ -564,7 +564,7 @@
 | `pacotes_indicadores_versoes:update` | 1 |
 | `parametros_estrategicos_mx:select` | 2 |
 | `parametros_estrategicos_mx:upsert` | 1 |
-| `pdi_avaliacoes_competencia:select` | 2 |
+| `pdi_avaliacoes_competencia:select` | 3 |
 | `pdi_avaliacoes_competencia:update` | 1 |
 | `pdi_metas:select` | 2 |
 | `pdi_metas:update` | 1 |
@@ -574,7 +574,7 @@
 | `pdi_reviews:insert` | 1 |
 | `pdi_reviews:select` | 1 |
 | `pdi_sessoes:select` | 4 |
-| `pdis:select` | 2 |
+| `pdis:select` | 1 |
 | `pdis:update` | 1 |
 | `perfil_consultor_mx:insert` | 1 |
 | `perfil_consultor_mx:select` | 3 |
