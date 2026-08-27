@@ -3,6 +3,7 @@ import { createClient, type SupabaseClient } from 'https://esm.sh/@supabase/supa
 import { z } from 'https://esm.sh/zod@3.23.8'
 import { findSupabasePublishableKey, findSupabaseSecretKey } from '../_shared/api-keys.ts'
 import { corsHeaders } from '../_shared/cors.ts'
+import { isSamePerson } from '../_shared/person-name.ts'
 
 const internalAdminRoles = ['administrador_geral', 'administrador_mx', 'consultor_mx'] as const
 const globallyCreatableRoles = [
@@ -29,6 +30,7 @@ const payloadSchema = z.object({
   closing_month_grace: z.boolean().optional(),
   is_venda_loja: z.boolean().optional(),
   confirm_transfer: z.boolean().optional(),
+  confirm_duplicate_name: z.boolean().optional(),
 }).strict()
 
 type RegisterUserPayload = z.infer<typeof payloadSchema>
@@ -223,6 +225,44 @@ serve(async (req) => {
         transferred: true,
         user: finalized,
       })
+    }
+  }
+
+  // Duplicata de pessoa, não de e-mail: o mesmo vendedor cadastrado duas vezes
+  // na mesma loja com e-mails diferentes parte as vendas dele entre duas
+  // identidades e estraga ranking, meta e atingimento — sem nenhum sinal na
+  // interface. A checagem por e-mail acima não pega esse caso.
+  //
+  // Homônimo legítimo existe, então isto não é bloqueio definitivo: o operador
+  // reenvia com `confirm_duplicate_name` depois de ver quem já está lá.
+  if (payload.store_id && !payload.confirm_duplicate_name) {
+    const { data: sameStoreMembers, error: sameStoreError } = await adminClient
+      .from('vinculos_loja')
+      .select('user_id, usuarios!inner(id, name, email, active)')
+      .eq('store_id', payload.store_id)
+      .eq('is_active', true)
+
+    if (sameStoreError) {
+      console.error('register-user duplicate-name check failure', { storeId: payload.store_id, sameStoreError })
+      return genericFailure()
+    }
+
+    const alreadyInStore = (sameStoreMembers || [])
+      .map(row => row.usuarios as unknown as { id: string; name: string; email: string; active: boolean })
+      .filter(member => member?.active)
+      .find(member => isSamePerson(member.name || '', normalizedName))
+
+    if (alreadyInStore) {
+      return jsonResponse({
+        success: false,
+        code: 'NAME_EXISTS_IN_STORE',
+        error: `Já existe um cadastro ativo de ${alreadyInStore.name} (${alreadyInStore.email}) nesta loja. Cadastrar de novo divide as vendas da mesma pessoa entre dois logins. Use o cadastro existente ou confirme que são pessoas diferentes.`,
+        existing_user: {
+          id: alreadyInStore.id,
+          name: alreadyInStore.name,
+          email: alreadyInStore.email,
+        },
+      }, 409)
     }
   }
 

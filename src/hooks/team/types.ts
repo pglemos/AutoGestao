@@ -62,6 +62,8 @@ export interface RegisterUserInput {
   closing_month_grace?: boolean
   is_venda_loja?: boolean
   confirm_transfer?: boolean
+  /** Confirma que o homônimo já ativo na loja é outra pessoa. */
+  confirm_duplicate_name?: boolean
 }
 
 export const TEAM_USER_SELECT =

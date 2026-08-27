@@ -15,6 +15,7 @@ import type { Store, UserRole } from '@/types/database'
 import { HelpTooltip } from '@/components/ui/HelpTooltip'
 import { OptionCard } from '@/components/molecules/OptionCard'
 import { TransferConfirmationDialog, type TransferConfirmationData } from '@/features/lojas/components/team-panel/TransferConfirmationDialog'
+import { DuplicateNameConfirmationDialog, type DuplicateNameConfirmationData } from '@/features/lojas/components/team-panel/DuplicateNameConfirmationDialog'
 
 const papeisInternosMx = ['administrador_geral', 'administrador_mx', 'consultor_mx']
 const todayISO = () => new Date().toISOString().slice(0, 10)
@@ -65,6 +66,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
   const { role: currentUserRole } = useAuth()
   const [loading, setLoading] = useState(false)
   const [transferData, setTransferData] = useState<TransferConfirmationData | null>(null)
+  const [duplicateNameData, setDuplicateNameData] = useState<DuplicateNameConfirmationData | null>(null)
   const dialogRef = useRef<HTMLDivElement>(null)
   useFocusTrap(dialogRef, isOpen)
 
@@ -118,6 +120,24 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
     }
   }
 
+  const handleConfirmDuplicateName = async () => {
+    setLoading(true)
+    const payload = papelSelecionadoInterno
+      ? { ...formData, store_id: undefined, ended_at: formData.ended_at || null, confirm_duplicate_name: true }
+      : { ...formData, ended_at: formData.ended_at || null, confirm_duplicate_name: true }
+
+    const result = await registerUser(payload)
+    setLoading(false)
+    if (result.success) {
+      toast.success('Integrante criado com sucesso.')
+      setDuplicateNameData(null)
+      onSuccess()
+      onClose()
+      return
+    }
+    toast.error(result.error || 'Falha ao criar integrante.')
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!papelSelecionadoInterno && !formData.store_id) return toast.error('Selecione uma unidade operacional')
@@ -137,6 +157,13 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
         onSuccess()
         onClose()
       }, 1000)
+    } else if (result.code === 'NAME_EXISTS_IN_STORE' && result.existingUser) {
+      setLoading(false)
+      setDuplicateNameData({
+        existingUser: result.existingUser,
+        targetStoreName: lojas?.find(l => l.id === formData.store_id)?.name,
+        onConfirm: handleConfirmDuplicateName,
+      })
     } else if (result.code === 'EXISTS_IN_OTHER_STORE' && result.existingUser) {
       setLoading(false)
       const targetStore = lojas?.find(l => l.id === formData.store_id)?.name
@@ -405,6 +432,13 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
           </motion.div>
         </div>
       )}
+
+      <DuplicateNameConfirmationDialog
+        data={duplicateNameData}
+        isOpen={!!duplicateNameData}
+        onClose={() => setDuplicateNameData(null)}
+        loading={loading}
+      />
 
       <TransferConfirmationDialog
         data={transferData}
