@@ -23,13 +23,6 @@ const painelConsultor = [
 ].join('\n')
 const lojasContainer = read('../features/lojas/Lojas.container.tsx')
 const lojasHeader = read('../features/lojas/sections/LojasHeader.tsx')
-const consultoriaClientes = [
-  read('../pages/ConsultoriaClientes.tsx'),
-  read('../features/consulting-clients/ConsultingClientsPage.tsx'),
-  read('../features/consulting-clients/ConsultantAssignedClientsPage.tsx'),
-  read('../features/consulting-clients/sections/ConsultingClientMetrics.tsx'),
-  read('../features/consulting-clients/sections/ConsultingClientToolbar.tsx'),
-].join('\n')
 
 const legacyFiles = [
   '../design-system/internal-mx/InternalMxPageFrame.tsx',
@@ -174,23 +167,19 @@ describe('paridade visual dos módulos MX com o Gerente', () => {
     expect(universalPrimitives).not.toContain('ButtonVisualProvider')
   })
 
-  test('landing pages de Admin, Dono e Consultoria usam as mesmas primitives do Gerente', () => {
-    for (const source of [painelConsultor, lojasContainer, consultoriaClientes]) {
+  // A lista de clientes da consultoria saiu em 2026-08-27: nenhuma rota a
+  // montava. Restam Admin e Dono, que continuam sob o mesmo contrato.
+  test('landing pages de Admin e Dono usam as mesmas primitives do Gerente', () => {
+    for (const source of [painelConsultor, lojasContainer]) {
       expect(source).toContain('MxModulePage')
       expect(source).not.toContain('mx-internal-workspace')
     }
-    for (const source of [painelConsultor, lojasHeader, consultoriaClientes]) {
+    for (const source of [painelConsultor, lojasHeader]) {
       expect(source).toContain('MxModuleHeader')
     }
     expect(painelConsultor).toContain('MxMetricCard')
     expect(lojasContainer).toContain('MxStatusBanner')
     expect(lojasContainer).toContain('<LojasHeader')
-    expect(consultoriaClientes).toContain('MxMetricCard')
-    expect(consultoriaClientes).toContain('MxToolbar')
-    expect(consultoriaClientes).toContain('MxSectionCard')
-    expect(consultoriaClientes).not.toContain('bg-brand-secondary')
-    expect(consultoriaClientes).not.toContain('bg-mx-black')
-    expect(consultoriaClientes).not.toContain('shadow-mx-xl')
   })
 
   test('proíbe marcadores do design antigo em todo código executável', () => {

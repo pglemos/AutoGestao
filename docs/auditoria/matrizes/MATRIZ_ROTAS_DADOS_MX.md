@@ -148,7 +148,7 @@
 | `alerts` | 1 |
 | `artefatos_gerados_consultoria` | 1 |
 | `atendimentos` | 2 |
-| `atribuicoes_consultoria` | 14 |
+| `atribuicoes_consultoria` | 13 |
 | `atribuicoes_trilha_desenvolvimento` | 1 |
 | `aula_presencas` | 1 |
 | `aulas_ao_vivo` | 1 |
@@ -168,7 +168,7 @@
 | `ciclos_plano_estrategico` | 4 |
 | `ciclos_plano_estrategico_indicadores` | 1 |
 | `clientes` | 6 |
-| `clientes_consultoria` | 31 |
+| `clientes_consultoria` | 30 |
 | `clientes_oportunidades` | 1 |
 | `comportamental_perfis` | 1 |
 | `comportamental_questoes` | 1 |
@@ -343,7 +343,7 @@
 | `atendimentos:select` | 2 |
 | `atribuicoes_consultoria:delete` | 1 |
 | `atribuicoes_consultoria:insert` | 2 |
-| `atribuicoes_consultoria:select` | 13 |
+| `atribuicoes_consultoria:select` | 12 |
 | `atribuicoes_consultoria:update` | 5 |
 | `atribuicoes_consultoria:upsert` | 4 |
 | `atribuicoes_trilha_desenvolvimento:select` | 1 |
@@ -381,7 +381,7 @@
 | `ciclos_plano_estrategico:update` | 1 |
 | `clientes_consultoria:delete` | 1 |
 | `clientes_consultoria:insert` | 4 |
-| `clientes_consultoria:select` | 30 |
+| `clientes_consultoria:select` | 29 |
 | `clientes_consultoria:update` | 7 |
 | `clientes_oportunidades:select` | 1 |
 | `clientes:delete` | 2 |

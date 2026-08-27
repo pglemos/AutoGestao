@@ -6,14 +6,12 @@ const read = (path: string) => readFileSync(resolve(process.cwd(), path), 'utf8'
 
 const routeAdapters = [
   'src/pages/PainelConsultor.tsx',
-  'src/pages/ConsultoriaClientes.tsx',
   'src/pages/ConsultoriaVisitaExecucao.tsx',
   'src/pages/SellerPerformance.tsx',
 ]
 
 const canonicalPages = [
   'src/features/network-dashboard/NetworkDashboardPage.tsx',
-  'src/features/consulting-clients/ConsultingClientsPage.tsx',
   'src/features/internal-profile/InternalProfilePage.tsx',
   'src/features/morning-report/AdminMorningReportPage.tsx',
   'src/features/seller-performance/SellerPerformancePage.tsx',

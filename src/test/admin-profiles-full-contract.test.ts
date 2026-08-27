@@ -45,8 +45,6 @@ const ADMIN_PAGES: Array<[string, string]> = [
   ['src/features/admin-mx/AdminConsultoriaMxPage.tsx', 'MxModulePage'],
   ['src/features/admin-mx/AdminIndicadoresPage.tsx', 'MxModulePage'],
   ['src/features/admin-mx/AdminPlanosAcaoGlobalPage.tsx', 'MxModulePage'],
-  ['src/features/consulting-clients/ConsultingClientsPage.tsx', 'MxModulePage'],
-  ['src/features/consulting-clients/ConsultantAssignedClientsPage.tsx', 'MxModulePage'],
   // 28.006: detalhes de cliente e execução de visita (Consultoria Clientes).
   ['src/features/consultoria-cliente/ScopedConsultoriaClienteDetalhe.tsx', 'MxModulePage'],
   ['src/features/consultoria-visita/LegacyConsultoriaVisitaExecucaoPage.tsx', 'PageCanvas'],

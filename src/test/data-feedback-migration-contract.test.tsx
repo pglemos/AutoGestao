@@ -66,7 +66,6 @@ describe('contrato FASE R fatia 2 — loading contextual + migração empty', ()
   test('consumers MxEmptyState de filtro passam variant="filter"', () => {
     const filterConsumers = [
       'src/features/network-dashboard/components/StoreHealthTable.tsx',
-      'src/features/consulting-clients/components/ConsultingClientTable.tsx',
       'src/features/manager/development/DevelopmentPdiTable.tsx',
       'src/features/manager/development/DevelopmentFeedbackTable.tsx',
       'src/features/configuracoes/components/tabs/InternalMxUsersTab.tsx',

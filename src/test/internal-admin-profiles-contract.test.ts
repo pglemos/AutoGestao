@@ -21,8 +21,6 @@ const ADMIN_PANELS: Array<[string, string]> = [
   ['src/features/configuracoes/components/ConfiguracoesShell.tsx', 'MxModulePage'],
   ['src/features/reprocessing/LegacyReprocessamentoPage.tsx', 'MxModulePage'],
   ['src/features/operational-diagnostics/OperationalDiagnosticsPage.tsx', 'MxModulePage'],
-  ['src/features/consulting-clients/ConsultingClientsPage.tsx', 'MxModulePage'],
-  ['src/features/consulting-clients/ConsultantAssignedClientsPage.tsx', 'MxModulePage'],
 ]
 
 describe('FASE AB — perfis administrador', () => {
