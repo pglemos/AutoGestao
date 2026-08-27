@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, test } from 'bun:test'
+import { readFileSync } from 'node:fs'
 import {
   onCarteiraSellerFilterChange,
   readCarteiraSellerFilter,
@@ -27,5 +28,15 @@ describe('recorte por vendedor na carteira', () => {
     parar()
     writeCarteiraSellerFilter('vendedor-3')
     expect(avisos).toBe(2)
+  })
+})
+
+describe('a troca de recorte precisa chegar na tela', () => {
+  test('o wrapper escuta a mudanca e remonta a carteira', () => {
+    const src = readFileSync('src/features/carteira-clientes/pages/CarteiraClientesBase44Page.tsx', 'utf8')
+    // Sem escutar, trocar de vendedor mudava o sessionStorage e a lista
+    // continuava igual: a referencia Base44 so busca ao montar.
+    expect(src).toContain('onCarteiraSellerFilterChange')
+    expect(src).toContain('key={recorte')
   })
 })
