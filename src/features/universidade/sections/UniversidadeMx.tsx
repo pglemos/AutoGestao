@@ -14,6 +14,7 @@ import {
   type UniversidadePublico,
 } from '../hooks/useUniversidadeMx'
 import { derivarNivelTrilha, trilhaRecomendadaId, NIVEL_TRILHA_LABEL } from '../lib/trilha-level'
+import { useRecomendacaoTreinamentos } from '../hooks/useRecomendacaoTreinamentos'
 import { AulasAoVivoSection } from './AulasAoVivoSection'
 
 /**
@@ -84,6 +85,10 @@ export function UniversidadeMx({ userId, embedded = false }: Props) {
   })
   const recomendadaId = trilhaRecomendadaId(trilhas, nivelTrilha)
 
+  // Aulas puxadas pelas lacunas do PDI, pelo gargalo do funil e pelas
+  // devolutivas em aberto. A biblioteca já está carregada — o hook só calcula.
+  const { recomendacoes } = useRecomendacaoTreinamentos(resolvedUserId, biblioteca)
+
   return (
     <ConditionalPageCanvas enabled={!embedded} as="section" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-lg" aria-label="Universidade MX">
       <PageHeading
@@ -151,6 +156,47 @@ export function UniversidadeMx({ userId, embedded = false }: Props) {
           aria-label="Buscar trilhas e aulas"
         />
       </div>
+
+      {recomendacoes.length > 0 && (
+        <Card className="p-mx-md">
+          <header className="mb-mx-sm flex items-center gap-mx-xs">
+            <div className="rounded-2xl bg-brand-primary/10 p-mx-xs text-brand-primary">
+              <Sparkles size={18} aria-hidden="true" />
+            </div>
+            <div>
+              <Typography variant="h3" className="font-bold">
+                Recomendado para você
+              </Typography>
+              <Typography variant="tiny" tone="muted" className="block">
+                A partir do seu PDI e da sua operação
+              </Typography>
+            </div>
+          </header>
+          <ul className="grid grid-cols-1 gap-mx-sm md:grid-cols-2 xl:grid-cols-3">
+            {recomendacoes.map(({ id, motivos }) => {
+              const aula = biblioteca.find((item) => item.id === id)
+              if (!aula) return null
+              return (
+              <li key={id} className="rounded-2xl border border-brand-primary/30 bg-brand-primary-subtle/40 p-mx-sm">
+                <Typography variant="caption" className="font-bold">
+                  {aula.title}
+                </Typography>
+                <Typography variant="tiny" tone="muted" className="mt-mx-tiny block uppercase tracking-widest">
+                  {aula.category}
+                </Typography>
+                <ul className="mt-mx-xs space-y-mx-tiny">
+                  {motivos.map((motivo) => (
+                    <li key={motivo} className="text-mx-tiny font-bold text-status-success-text">
+                      {motivo}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+              )
+            })}
+          </ul>
+        </Card>
+      )}
 
       {certificacoes.length > 0 && (
         <Card className="p-mx-md">

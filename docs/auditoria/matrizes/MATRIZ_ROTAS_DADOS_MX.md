@@ -315,7 +315,7 @@
 | `vehicle_model_catalog` | 1 |
 | `veiculos_estoque` | 4 |
 | `vendedor_nivel_carreira` | 1 |
-| `vendedor_perfil` | 4 |
+| `vendedor_perfil` | 5 |
 | `vendedores_loja` | 9 |
 | `versoes_metodologia_produto` | 1 |
 | `vinculo_modelo_relatorio_encontro` | 1 |
@@ -691,7 +691,7 @@
 | `veiculos_estoque:upsert` | 1 |
 | `vendedor_nivel_carreira:select` | 1 |
 | `vendedor_nivel_carreira:upsert` | 1 |
-| `vendedor_perfil:select` | 4 |
+| `vendedor_perfil:select` | 5 |
 | `vendedor_perfil:upsert` | 3 |
 | `vendedores_loja:insert` | 3 |
 | `vendedores_loja:select` | 8 |
