@@ -186,6 +186,18 @@ const pdiSessionBundleSchema = z.object({
 
 type PDISessionBundlePayload = z.infer<typeof pdiSessionBundleSchema>
 
+export type PDIVisitaConsultoriaInput = {
+  colaboradorId: string
+  lojaId: string
+  cargoId: string
+  competenciaId: string
+  meta6m: string
+  meta12m?: string
+  acaoInicial: string
+  prazoAcao: string
+  proximaRevisaoData: string
+}
+
 export type PDIDocumentUpdateInput = {
   metas?: Array<{ id: string; descricao: string; tipo: string }>
   avaliacoes?: Array<{ id: string; nota: number; alvo: number }>
@@ -438,6 +450,56 @@ return { id: data as string, error: null }
 }, [queryClient])
 
     /**
+     * PDI acordado na visita 5 da consultoria.
+     *
+     * Grava em `pdi_sessoes` — a mesma sessão que o gestor abre, corrige e
+     * imprime. Antes isto ia para a tabela `pdis`, que ninguém lê: o PDI
+     * combinado com o consultor simplesmente não existia para a loja.
+     *
+     * Vai sem avaliações de competência de propósito. A visita acorda metas e a
+     * primeira ação; medir as 18 competências é trabalho do gestor no wizard, e
+     * preencher nota por padrão (o legado gravava 3 em tudo) põe número
+     * inventado num documento que é impresso e assinado.
+     */
+    const createConsultingVisitPDI = useCallback(async (input: PDIVisitaConsultoriaInput) => {
+        setLoading(true)
+        setError(null)
+
+        const { data, error } = await supabase.rpc('create_pdi_session_bundle', {
+            p_payload: {
+                colaborador_id: input.colaboradorId,
+                loja_id: input.lojaId,
+                cargo_id: input.cargoId,
+                proxima_revisao_data: input.proximaRevisaoData,
+                metas: [
+                    { prazo: '6_meses', tipo: 'profissional', descricao: input.meta6m.trim() },
+                    ...(input.meta12m?.trim()
+                        ? [{ prazo: '12_meses', tipo: 'profissional', descricao: input.meta12m.trim() }]
+                        : []),
+                ],
+                avaliacoes: [],
+                plano_acao: [{
+                    competencia_id: input.competenciaId,
+                    descricao_acao: input.acaoInicial.trim(),
+                    data_conclusao: input.prazoAcao,
+                    // Classificação inicial; o gestor ajusta no modo de correção.
+                    impacto: 'medio',
+                    custo: 'baixo',
+                }],
+            },
+        })
+
+        setLoading(false)
+        if (error) {
+            setError(error.message)
+            return { id: null, error: error.message }
+        }
+
+        queryClient.invalidateQueries({ queryKey: ['pdi-sessions'] })
+        return { id: data as string, error: null }
+    }, [queryClient])
+
+    /**
      * Correção do documento de PDI pela liderança (gerente, dono e Admin MX).
      *
      * Vai direto nas tabelas em vez de reusar `vendedor_atualizar_pdi_*`: aquelas
@@ -506,6 +568,7 @@ const fetchPrintBundle = useCallback(async (sessaoId: string) => {
         saveSessionBundle,
         linkSellerPDIActionContent,
         sendSellerPDIActionToCentral,
+        createConsultingVisitPDI,
         updatePDIDocument,
         fetchPrintBundle
     }

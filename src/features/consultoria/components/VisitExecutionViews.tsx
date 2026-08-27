@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   CheckCircle2, Zap, Target, ExternalLink, BarChart3,
   Clock, TrendingUp, Award, Rocket,
@@ -12,7 +12,8 @@ import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { Textarea } from '@/components/atoms/Textarea'
 import { useConsultingStrategicPlan } from '@/hooks/useConsultingStrategicPlan'
-import { useFeedbacks, usePDIs } from '@/hooks/useData'
+import { useFeedbacks } from '@/hooks/useData'
+import { usePDI_MX } from '@/hooks/usePDI_MX'
 import { useSellersByStore } from '@/hooks/useTeam'
 import { cn } from '@/lib/utils'
 
@@ -197,43 +198,60 @@ export function VisitFourExecution({ storeId, onGenerateSummary }: { storeId: st
   )
 }
 
+/** Data ISO daqui a N dias — prazo inicial sugerido, ajustável na tela. */
+function addDays(days: number) {
+  const date = new Date()
+  date.setDate(date.getDate() + days)
+  return date.toISOString().slice(0, 10)
+}
+
 export function VisitFiveExecution({ storeId, onGenerateSummary }: { storeId: string, onGenerateSummary: (t: string) => void }) {
   const { sellers, loading } = useSellersByStore(storeId)
-  const { createPDI } = usePDIs(storeId)
+  const { cargos, template, fetchCargos, fetchTemplate, createConsultingVisitPDI } = usePDI_MX()
   const [isSaving, setIsSaving] = useState(false)
   const [sellerId, setSellerId] = useState('')
+  const [cargoId, setCargoId] = useState('')
+  const [competenciaId, setCompetenciaId] = useState('')
   const [goal6m, setGoal6m] = useState('')
   const [goal12m, setGoal12m] = useState('')
   const [action, setAction] = useState('')
+  const [actionDeadline, setActionDeadline] = useState(addDays(90))
   const [notes, setNotes] = useState('')
+
+  useEffect(() => { void fetchCargos() }, [fetchCargos])
+  useEffect(() => {
+    setCompetenciaId('')
+    if (cargoId) void fetchTemplate(cargoId)
+  }, [cargoId, fetchTemplate])
 
   const handleSave = async () => {
     if (!storeId) return toast.error('Vincule este cliente a uma loja antes de criar o PDI.')
     if (!sellerId || !goal6m || !action) return toast.error('Selecione o vendedor e preencha objetivo e ação')
+    if (!cargoId) return toast.error('Selecione o cargo do colaborador.')
+    if (!competenciaId) return toast.error('Selecione a competência que a ação desenvolve.')
     setIsSaving(true)
     try {
-      await createPDI({
-        seller_id: sellerId,
-        meta_6m: goal6m,
-        meta_12m: goal12m || 'A definir',
-        meta_24m: 'A definir',
-        action_1: action,
-        comp_prospeccao: 3,
-        comp_abordagem: 3,
-        comp_demonstracao: 3,
-        comp_fechamento: 3,
-        comp_crm: 3,
-        comp_digital: 3,
-        comp_disciplina: 3,
-        comp_organizacao: 3,
-        comp_negociacao: 3,
-        comp_produto: 3
+      const { error } = await createConsultingVisitPDI({
+        colaboradorId: sellerId,
+        lojaId: storeId,
+        cargoId,
+        competenciaId,
+        meta6m: goal6m,
+        meta12m: goal12m,
+        acaoInicial: action,
+        prazoAcao: actionDeadline,
+        proximaRevisaoData: addDays(180),
       })
+      if (error) {
+        toast.error(error)
+        return
+      }
 
       const sellerName = sellers.find(seller => seller.id === sellerId)?.name || 'Nome não informado'
       onGenerateSummary(`--- PDI VISITA 5: ${sellerName} ---\nObjetivo 6 meses: ${goal6m}\nObjetivo 12 meses: ${goal12m || 'A definir'}\nAção inicial: ${action}\nObservações: ${notes || 'Sem observações adicionais.'}`)
-      toast.success('PDI registrado no sistema')
-      setSellerId(''); setGoal6m(''); setGoal12m(''); setAction(''); setNotes('')
+      toast.success('PDI registrado. O gestor completa as notas de competência no documento.')
+      setSellerId(''); setCargoId(''); setCompetenciaId('')
+      setGoal6m(''); setGoal12m(''); setAction(''); setActionDeadline(addDays(90)); setNotes('')
     } finally {
       setIsSaving(false)
     }
@@ -261,6 +279,13 @@ export function VisitFiveExecution({ storeId, onGenerateSummary }: { storeId: st
             )}
           </div>
           <div className="space-y-mx-xs">
+            <Typography variant="tiny" className="font-bold">Cargo do colaborador</Typography>
+            <select aria-label="Cargo do colaborador" value={cargoId} onChange={e => setCargoId(e.target.value)} className="w-full h-mx-10 px-mx-md rounded-xl border border-border bg-white text-sm font-bold">
+              <option value="">Selecione o cargo...</option>
+              {cargos.map(cargo => <option key={cargo.id} value={cargo.id}>Nível {cargo.nivel} — {cargo.nome}</option>)}
+            </select>
+          </div>
+          <div className="space-y-mx-xs">
             <Typography variant="tiny" className="font-bold">Objetivo em 6 meses</Typography>
             <Textarea value={goal6m} onChange={e => setGoal6m(e.target.value)} placeholder="Onde essa pessoa precisa estar em 6 meses?" className="min-h-mx-20" />
           </div>
@@ -273,6 +298,17 @@ export function VisitFiveExecution({ storeId, onGenerateSummary }: { storeId: st
           <div className="space-y-mx-xs">
             <Typography variant="tiny" className="font-bold">Ação inicial combinada</Typography>
             <Textarea value={action} onChange={e => setAction(e.target.value)} placeholder="Primeira ação prática do PDI" className="min-h-mx-24" />
+          </div>
+          <div className="space-y-mx-xs">
+            <Typography variant="tiny" className="font-bold">Competência que a ação desenvolve</Typography>
+            <select aria-label="Competência que a ação desenvolve" value={competenciaId} onChange={e => setCompetenciaId(e.target.value)} disabled={!cargoId} className="w-full h-mx-10 px-mx-md rounded-xl border border-border bg-white text-sm font-bold disabled:opacity-60">
+              <option value="">{cargoId ? 'Selecione a competência...' : 'Escolha o cargo primeiro'}</option>
+              {(template?.competencias || []).map(comp => <option key={comp.id} value={comp.id}>{comp.nome}</option>)}
+            </select>
+          </div>
+          <div className="space-y-mx-xs">
+            <Typography variant="tiny" className="font-bold">Prazo da ação</Typography>
+            <Input type="date" aria-label="Prazo da ação" value={actionDeadline} onChange={e => setActionDeadline(e.target.value)} className="h-mx-10" />
           </div>
           <div className="space-y-mx-xs">
             <Typography variant="tiny" className="font-bold">Observações do consultor</Typography>

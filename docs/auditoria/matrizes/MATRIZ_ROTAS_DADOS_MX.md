@@ -8,7 +8,7 @@
 - Tabelas referenciadas pelo runtime: **181**
 - RPCs referenciadas pelo runtime: **103**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **388**
+- Pares tabela/operação encontrados: **387**
 
 ## Rotas
 
@@ -574,7 +574,6 @@
 | `pdi_reviews:insert` | 1 |
 | `pdi_reviews:select` | 1 |
 | `pdi_sessoes:select` | 4 |
-| `pdis:insert` | 1 |
 | `pdis:select` | 2 |
 | `pdis:update` | 1 |
 | `perfil_consultor_mx:insert` | 1 |

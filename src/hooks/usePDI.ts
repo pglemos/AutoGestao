@@ -69,32 +69,6 @@ export function usePDIs(storeIdOverride?: string) {
     queryClient.invalidateQueries({ queryKey: ['pdi-reviews', pdiId] })
   }
 
-  const createPDIMut = useMutation({
-    mutationFn: async (data: PDIFormData) => {
-      if (!profile || !storeId) return { error: 'Não autenticado' }
-      if (!canManagePDI(role)) return { error: 'Seu papel permite acompanhar PDIs, mas não criar ou editar.' }
-      const { error } = await supabase.from('pdis').insert({
-        store_id: storeId, manager_id: profile.id, seller_id: data.seller_id,
-        meta_6m: data.meta_6m, meta_12m: data.meta_12m, meta_24m: data.meta_24m,
-        comp_prospeccao: data.comp_prospeccao, comp_abordagem: data.comp_abordagem,
-        comp_demonstracao: data.comp_demonstracao, comp_fechamento: data.comp_fechamento,
-        comp_crm: data.comp_crm, comp_digital: data.comp_digital,
-        comp_disciplina: data.comp_disciplina, comp_organizacao: data.comp_organizacao,
-        comp_negociacao: data.comp_negociacao, comp_produto: data.comp_produto,
-        action_1: data.action_1, action_2: data.action_2 || null,
-        action_3: data.action_3 || null, action_4: data.action_4 || null,
-        action_5: data.action_5 || null,
-        due_date: data.due_date || null,
-      })
-      return { error: error?.message || null }
-    },
-    onSuccess: (result) => {
-      if (!result.error) {
-        queryClient.invalidateQueries({ queryKey: ['pdis'] })
-      }
-    },
-  })
-
   const acknowledgeMut = useMutation({
     mutationFn: async ({ id, type }: { id: string; type: 'seller' | 'manager' }) => {
       const target = pdis?.find(item => item.id === id)
@@ -168,7 +142,6 @@ export function usePDIs(storeIdOverride?: string) {
     pdis: pdis || [],
     usePDIReviews,
     loading,
-    createPDI: (data: PDIFormData) => createPDIMut.mutateAsync(data),
     updateStatus: (id: string, status: PDIStatus) => updateStatusMut.mutateAsync({ id, status }),
     acknowledge: (id: string, type: 'seller' | 'manager') => acknowledgeMut.mutateAsync({ id, type }),
     createReview: (pdiId: string, data: Record<string, unknown>) => createReviewMut.mutateAsync({ pdiId, data }),
