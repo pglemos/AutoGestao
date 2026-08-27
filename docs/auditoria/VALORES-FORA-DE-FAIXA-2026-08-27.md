@@ -6,8 +6,11 @@ Todas as oportunidades com `valor_negociado` acima de R$ 10.000.000. O padrão �
 consistente: **três zeros a mais**. Dividido por mil, cada valor cai numa faixa
 plausível para o veículo da linha.
 
-**Nada foi alterado nestes registros** — a única exceção está marcada na tabela.
-A correção depende da sua validação: são valores de venda de clientes reais.
+> **Resolvido em 2026-08-27.** Os 27 foram corrigidos: 25 pela divisão por mil,
+> a GWM HAVAL H6 da IMPÉRIO para R$ 189.900 (erro de cem vezes, não de mil) e a
+> duplicata da MX CONSULTORIA alinhada ao registro gêmeo. O antes/depois de cada
+> linha está em `data_correction_audit` (27 registros). Nenhuma oportunidade
+> acima de R$ 10 milhões restou, e o CHECK de teto foi validado.
 
 ## Impacto
 
