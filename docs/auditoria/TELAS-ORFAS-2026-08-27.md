@@ -94,3 +94,23 @@ Dá para distinguir pelo cabeçalho:
 
 O risco aqui não é o código morto ocupar espaço: é alguém abrir o arquivo pelo
 nome do símbolo, editar, e não ver efeito nenhum na tela.
+
+## Resolução — AdminClientPortfolioPage removido
+
+`src/features/admin-mx/AdminClientPortfolioPage.tsx` (324 linhas) foi removido.
+
+Não é decisão de produto: o arquivo exportava o símbolo `AdminClientesPage`, o
+mesmo nome exportado por `AdminClientesPage.tsx` — que é o que
+`InternalClientsPage` importa e o que está no ar. Nenhum arquivo do repositório
+referenciava o arquivo removido, nem por caminho nem por símbolo.
+
+O vivo é superconjunto do removido: tem as abas `carteira | onboarding |
+inscricoes | governanca` (tipo `AdminClientesTab`), que o removido não tinha.
+Nada de tela se perdeu.
+
+O risco que isso elimina é de manutenção: alguém procurar `AdminClientesPage`,
+cair no arquivo errado, editar e não ver efeito nenhum em produção.
+
+As outras três órfãs (`ConsultorNotificacoes`, `OAuthHome`, `MinhaRemuneracao`)
+seguem no repositório — são telas inteiras de funcionalidade, e apagá-las é
+decisão de produto.
