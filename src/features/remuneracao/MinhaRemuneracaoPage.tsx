@@ -43,7 +43,11 @@ export default function MinhaRemuneracaoPage() {
     return (
       <div className="h-full w-full flex flex-col items-center justify-center gap-4" style={{ background: 'hsl(var(--mx-color-surface))' }}>
         <p className="text-muted-foreground font-medium">{data.error}</p>
-        <button type="button" className="flex items-center gap-2 px-4 py-2 bg-brand-primary text-foreground rounded-xl text-sm font-semibold">
+        <button
+          type="button"
+          onClick={() => void data.recarregar()}
+          className="flex items-center gap-2 px-4 py-2 bg-brand-primary text-foreground rounded-xl text-sm font-semibold"
+        >
           <RefreshCw className="w-4 h-4" /> Tentar novamente
         </button>
       </div>

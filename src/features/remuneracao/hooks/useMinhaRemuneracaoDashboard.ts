@@ -115,6 +115,9 @@ export function useMinhaRemuneracaoDashboard() {
     historico6Meses,
     calculo,
     detalhesVisiveis: home.remuneracaoDetalhesVisiveis ?? true,
+    // Exposto para o estado de erro: sem isto o botão "Tentar novamente" da
+    // tela ficava sem ação e o vendedor só saía do erro recarregando a página.
+    recarregar: home.handleRefresh,
   }
 }
 
