@@ -64,3 +64,33 @@ qual:
   de `consulting-clients`. Aí o certo é remover, junto dos testes que a varrem.
 - **Ainda vai ser ligada** — aí vale registrar a rota pretendida no próprio
   arquivo, para a próxima auditoria não gastar o mesmo tempo redescobrindo.
+
+
+## Verificação por símbolo — as quatro restantes (2026-08-27)
+
+Refeita a checagem do jeito certo: procurando **todos os símbolos exportados**
+de cada arquivo, não o nome do arquivo. Foi essa diferença que tinha invertido a
+conclusão sobre a cadeia da consultoria.
+
+| Tela | Símbolos | Usada por código? |
+|---|---|---|
+| `AdminClientPortfolioPage.tsx` | `AdminClientPortfolioPage`, **`AdminClientesPage`** | Não — ver abaixo |
+| `ConsultorNotificacoes.tsx` | `ConsultorNotificacoes` | Não |
+| `OAuthHome.tsx` | `OAuthHome` | Não |
+| `MinhaRemuneracao.tsx` → `MinhaRemuneracaoPage.tsx` | idem | Só um pelo outro |
+
+### O sósia da tela de clientes
+
+`AdminClientPortfolioPage.tsx` (324 linhas) exporta **`AdminClientesPage`** — o
+mesmo nome que `AdminClientesPage.tsx` (419 linhas) exporta. Quem está no ar é o
+segundo: `InternalClientsPage` importa de `@/features/admin-mx/AdminClientesPage`.
+
+Dá para distinguir pelo cabeçalho:
+
+- vivo: `eyebrow="Administração MX & Rede"`, título **"Clientes & Lojas MX"** — é
+  o que aparece em produção;
+- órfão: `eyebrow="Administração MX"`, título **"Clientes MX"**, e sem as abas
+  carteira/onboarding/inscrições/governança que o vivo tem.
+
+O risco aqui não é o código morto ocupar espaço: é alguém abrir o arquivo pelo
+nome do símbolo, editar, e não ver efeito nenhum na tela.
