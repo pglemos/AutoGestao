@@ -21,9 +21,13 @@ import { fetchAllRows } from '@/lib/supabasePagination'
 export type SalesByChannel = {
   internet: number | null
   doorFlow: number | null
+  /** Eventos `pos_venda_realizado` no mesmo recorte de competência. */
+  afterSales: number | null
+  /** Total de vendas do mês — denominador de `% de Pós-Venda`. */
+  totalSales: number | null
 }
 
-const VAZIO: SalesByChannel = { internet: null, doorFlow: null }
+const VAZIO: SalesByChannel = { internet: null, doorFlow: null, afterSales: null, totalSales: null }
 
 export function useSalesByChannel(storeId: string | null, period: string): SalesByChannel {
   const [sales, setSales] = useState<SalesByChannel>(VAZIO)
@@ -38,20 +42,23 @@ export function useSalesByChannel(storeId: string | null, period: string): Sales
     const [ano, mes] = period.split('-').map(Number)
     const fim = mes === 12 ? `${ano + 1}-01-01` : `${ano}-${String(mes + 1).padStart(2, '0')}-01`
 
-    void fetchAllRows<{ canal: string | null }>((from, to) =>
+    void fetchAllRows<{ canal: string | null; tipo_evento: string }>((from, to) =>
       supabase
         .from('eventos_comerciais')
-        .select('canal')
+        .select('canal, tipo_evento')
         .eq('loja_id', storeId)
-        .eq('tipo_evento', 'venda_realizada')
+        .in('tipo_evento', ['venda_realizada', 'pos_venda_realizado'])
         .gte('data_competencia', inicio)
         .lt('data_competencia', fim)
         .range(from, to),
     ).then(({ rows, error }) => {
       if (!ativo || error) return
+      const vendas = rows.filter(row => row.tipo_evento === 'venda_realizada')
       setSales({
-        internet: rows.filter(row => row.canal === 'internet').length,
-        doorFlow: rows.filter(row => row.canal === 'showroom' || row.canal === 'porta').length,
+        internet: vendas.filter(row => row.canal === 'internet').length,
+        doorFlow: vendas.filter(row => row.canal === 'showroom' || row.canal === 'porta').length,
+        afterSales: rows.filter(row => row.tipo_evento === 'pos_venda_realizado').length,
+        totalSales: vendas.length,
       })
     })
 

@@ -105,3 +105,51 @@ describe('alertas apontam para indicadores que existem', () => {
     expect(orfaos).toEqual([])
   })
 })
+
+/**
+ * `crm_evento_tipo` sempre teve `pos_venda_realizado`, mas o cockpit deixava
+ * `% de Pós-Venda` e `Volume de Pós-Venda` sem realizado — indicador oficial
+ * exibido vazio com a fonte disponível ao lado, na mesma tabela que já
+ * alimentava os canais de venda.
+ */
+describe('pós-venda sai da fonte que já existia', () => {
+  const comPosVenda = {
+    ...baseInput,
+    salesByChannel: { internet: 3, doorFlow: 5, afterSales: 2, totalSales: 8 },
+  }
+
+  function valorDe(result: ReturnType<typeof buildCentralMxEngine>, code: string) {
+    return result.planningIndicators.find(item => item.code === code)?.realizado ?? null
+  }
+
+  test('volume e taxa saem dos eventos do mês', () => {
+    const engine = buildCentralMxEngine(comPosVenda)
+    expect(valorDe(engine, 'after_sales_volume')).toBe(2)
+    expect(valorDe(engine, 'after_sales_percentage')).toBe(25)
+  })
+
+  test('sem vendas no mês a taxa é nula, não 0%', () => {
+    const engine = buildCentralMxEngine({
+      ...baseInput,
+      salesByChannel: { internet: 0, doorFlow: 0, afterSales: 1, totalSales: 0 },
+    })
+    expect(valorDe(engine, 'after_sales_percentage')).toBeNull()
+  })
+
+  test('sem a fonte, os dois seguem sem realizado', () => {
+    const engine = buildCentralMxEngine(baseInput)
+    expect(valorDe(engine, 'after_sales_volume')).toBeNull()
+    expect(valorDe(engine, 'after_sales_percentage')).toBeNull()
+  })
+
+  /**
+   * Troca e financiamento continuam sem origem: não há tabela de avaliação de
+   * usado nem flag de financiamento na venda. Meta sem realizado é honesto;
+   * inventar o realizado não seria.
+   */
+  test('troca e financiamento seguem sem realizado por falta de fonte', () => {
+    const engine = buildCentralMxEngine(comPosVenda)
+    expect(valorDe(engine, 'trade_in_to_sales_rate')).toBeNull()
+    expect(valorDe(engine, 'financed_sales_percentage')).toBeNull()
+  })
+})

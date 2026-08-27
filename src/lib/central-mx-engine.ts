@@ -124,7 +124,7 @@ export type CentralMxEngineInput = {
    * `carteira` fica de fora: o evento não separa carteira da empresa da do
    * vendedor, e ratear inventaria a diferença.
    */
-  salesByChannel?: { internet: number | null; doorFlow: number | null } | null
+  salesByChannel?: { internet: number | null; doorFlow: number | null; afterSales?: number | null; totalSales?: number | null } | null
   /**
    * Estoque da unidade, já apurado por `useOwnerInventoryMetrics` sobre
    * `veiculos_estoque`. Sem ele, os cinco indicadores de estoque do catálogo
@@ -335,7 +335,15 @@ function getBaseValues(input: CentralMxEngineInput): Record<string, { meta: numb
   // Só entram valores que a operação de fato mede. Indicador do catálogo sem
   // fonte fica sem `realizado` — o cockpit mostra "--", que é a verdade, em vez
   // de um número construído para preencher a linha.
-  return {
+    // `% de Pós-Venda` = eventos de pós-venda sobre as vendas do mesmo mês. Sem
+  // vendas no período o denominador é zero: taxa fica nula, não 0%.
+  const posVenda = input.salesByChannel?.afterSales ?? null
+  const vendasDoMes = input.salesByChannel?.totalSales ?? null
+  const taxaPosVenda = posVenda === null || !vendasDoMes
+    ? null
+    : Math.round((posVenda / vendasDoMes) * 1000) / 10
+
+return {
     // Vendas e funil: vêm do fechamento diário da loja.
     sales_total: { meta: input.metrics.goalValue || null, realizado: input.metrics.totalSales, anoAnterior: anterior('sales_total') },
     leads_received: { meta: null, realizado: input.metrics.totalLeads, anoAnterior: anterior('leads_received') },
@@ -366,7 +374,8 @@ function getBaseValues(input: CentralMxEngineInput): Record<string, { meta: numb
     stock_over_90_rate: { meta: metaFromParameter(input, 'OVER_90_STOCK_RATE', 100), realizado: taxaAcima90, anoAnterior: anterior('stock_over_90_rate') },
     trade_in_to_sales_rate: { meta: metaFromParameter(input, 'TRADE_SALES_RATE', 100), realizado: null, anoAnterior: anterior('trade_in_to_sales_rate') },
     financed_sales_percentage: { meta: metaFromParameter(input, 'FINANCED_SALES_RATE', 100), realizado: null, anoAnterior: anterior('financed_sales_percentage') },
-    after_sales_percentage: { meta: metaFromParameter(input, 'POST_SALE_RATE', 100), realizado: null, anoAnterior: anterior('after_sales_percentage') },
+    after_sales_volume: { meta: null, realizado: input.salesByChannel?.afterSales ?? null, anoAnterior: anterior('after_sales_volume') },
+    after_sales_percentage: { meta: metaFromParameter(input, 'POST_SALE_RATE', 100), realizado: taxaPosVenda, anoAnterior: anterior('after_sales_percentage') },
   }
 }
 
