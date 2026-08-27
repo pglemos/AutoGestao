@@ -121,8 +121,10 @@ const summary = {
   duplicatePaths: inventory.counts.duplicatePaths,
 }
 
+// Sem carimbo de data: o artefato é versionado, e gravar a hora fazia o arquivo
+// aparecer como modificado a cada execução mesmo com a matriz idêntica — ruído
+// que escondia a mudança real quando ela existia.
 const artifact = {
-  generatedAt: new Date().toISOString(),
   source: 'scripts/audit_route_data_inventory.mjs + src/lib/auth/routeAccess.ts',
   roles,
   summary,
@@ -148,7 +150,7 @@ const statusCounts = Object.fromEntries(
 const markdown = [
   '# MX Foundation Zero — Matriz atual route × role',
   '',
-  `Gerado em ${artifact.generatedAt} a partir do inventário AST vivo e de ROUTE_ACCESS_RULES.`,
+  `Gerado por \`${artifact.source}\` a partir do inventário AST vivo e de ROUTE_ACCESS_RULES.`,
   '',
   '## Denominadores',
   '',
