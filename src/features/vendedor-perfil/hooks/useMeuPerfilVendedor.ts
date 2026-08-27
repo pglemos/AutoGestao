@@ -90,7 +90,9 @@ export function useMeuPerfilVendedor() {
                 supabase.from('usuarios').select('name,phone,avatar_url').eq('id', userId).maybeSingle(),
                 supabase.from('vendedor_perfil').select('*').eq('seller_user_id', userId).maybeSingle(),
                 supabase.from('vinculos_loja').select('store_id').eq('user_id', userId).eq('is_active', true).limit(1),
-                supabase.from('pdis').select('id', { count: 'exact', head: true }).eq('seller_id', userId),
+                // `pdi_sessoes` é onde o PDI conduzido pelo gestor vive; a tabela
+                // `pdis` (legado) está vazia e deixava este contador sempre em zero.
+                supabase.from('pdi_sessoes').select('id', { count: 'exact', head: true }).eq('colaborador_id', userId),
             ])
 
             const storeId = vendedorPerfil?.loja_id || vinculos?.[0]?.store_id || ''

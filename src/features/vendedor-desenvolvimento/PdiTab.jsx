@@ -47,7 +47,6 @@ export default function PDIPage({ hideHeader = false }) {
   const [pdi, setPdi] = useState(null);
   const [actions, setActions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [creatingAction, setCreatingAction] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [newAction, setNewAction] = useState({ action: "", competency: "", description: "", deadline: "", status: "Pendente", progress: 0 });
@@ -62,25 +61,6 @@ export default function PDIPage({ hideHeader = false }) {
       setLoading(false);
     });
   }, []);
-
-  const savePDI = async (data) => {
-    if (!canEdit || saving) return;
-    setSaving(true);
-    try {
-      if (pdi?.id) {
-        const updated = await base44.entities.PDI.update(pdi.id, data);
-        setPdi(updated);
-      } else {
-        const created = await base44.entities.PDI.create(data);
-        setPdi(created);
-      }
-      toast.info("PDI salvo!");
-    } catch (error) {
-      toast.error("Erro ao salvar PDI");
-    } finally {
-      setSaving(false);
-    }
-  };
 
   const createAction = async () => {
     if (!canEdit || creatingAction) return;
@@ -127,8 +107,13 @@ export default function PDIPage({ hideHeader = false }) {
     const num = Number(v);
     return Number.isFinite(num) ? Math.min(10, Math.max(1, num)) : 5;
   };
-  const techData = techCompetencies.map(c => ({ subject: c.label, value: sanitizeScore(currentPDI[c.key]), target: 10 }));
-  const behavData = behavCompetencies.map(c => ({ subject: c.label, value: sanitizeScore(currentPDI[c.key]), target: 10 }));
+  // Competência sem nota é competência que o gestor não avaliou nesta sessão —
+  // mostrá-la zerada faria o vendedor ler "nota 0" onde não houve avaliação.
+  const foiAvaliada = c => currentPDI[c.key] !== null && currentPDI[c.key] !== undefined;
+  const techAvaliadas = techCompetencies.filter(foiAvaliada);
+  const behavAvaliadas = behavCompetencies.filter(foiAvaliada);
+  const techData = techAvaliadas.map(c => ({ subject: c.label, value: sanitizeScore(currentPDI[c.key]), target: 10 }));
+  const behavData = behavAvaliadas.map(c => ({ subject: c.label, value: sanitizeScore(currentPDI[c.key]), target: 10 }));
 
   const CompetencySlider = ({ comp, value, onChange, onCommit, disabled = false }) => (
     <div className="flex items-center gap-4">
@@ -165,13 +150,13 @@ export default function PDIPage({ hideHeader = false }) {
         <div className="flex items-center gap-2 mb-6">
           <Trophy className="w-5 h-5 text-status-warning-text" />
           <h3 className="text-base font-semibold text-foreground">Conquistas</h3>
-          {!canEdit && <span className="ml-auto text-xs font-medium text-muted-foreground">Somente gerente, dono ou Admin MX podem editar</span>}
+          <span className="ml-auto text-xs font-medium text-muted-foreground">Metas e notas vêm do PDI conduzido pelo gestor</span>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { label: "Curto Prazo", sublabel: "1 Ano", key: "short_term_goal", badgeColor: "bg-brand-primary/10 text-brand-primary" },
-            { label: "Médio Prazo", sublabel: "2 Anos", key: "medium_term_goal", badgeColor: "bg-status-info/10 text-status-info-text" },
-            { label: "Longo Prazo", sublabel: "3 Anos", key: "long_term_goal", badgeColor: "bg-status-warning/10 text-status-warning-text" },
+            { label: "Curto Prazo", sublabel: "6 Meses", key: "short_term_goal", badgeColor: "bg-brand-primary/10 text-brand-primary" },
+            { label: "Médio Prazo", sublabel: "12 Meses", key: "medium_term_goal", badgeColor: "bg-status-info/10 text-status-info-text" },
+            { label: "Longo Prazo", sublabel: "24 Meses", key: "long_term_goal", badgeColor: "bg-status-warning/10 text-status-warning-text" },
           ].map(goal => (
             <div key={goal.key} className="rounded-xl border border-border bg-surface-alt/40 p-4">
               <div className="flex items-center justify-between gap-2 mb-1">
@@ -180,14 +165,8 @@ export default function PDIPage({ hideHeader = false }) {
               </div>
               <Textarea
                 value={currentPDI[goal.key] || ""}
-                onChange={e => {
-                  const data = { ...currentPDI, [goal.key]: e.target.value };
-                  setPdi(data);
-                }}
-                onBlur={() => savePDI({ [goal.key]: currentPDI[goal.key] || "" })}
-                disabled={!canEdit}
-                readOnly={!canEdit}
-                placeholder="Descreva sua meta..."
+                readOnly
+                placeholder="Sem meta registrada neste prazo."
                 className="mt-2 rounded-xl resize-none border-border"
                 rows={3}
               />
@@ -213,18 +192,14 @@ export default function PDIPage({ hideHeader = false }) {
             </ResponsiveContainer>
           </div>
           <div className="space-y-3">
-            {techCompetencies.map(c => (
+            {techAvaliadas.map(c => (
               <CompetencySlider
                 key={c.key}
                 comp={c}
-                value={currentPDI[c.key] || 5}
-                onChange={v => {
-                  setPdi(prev => ({ ...prev, [c.key]: v }));
-                }}
-                onCommit={v => {
-                  savePDI({ [c.key]: v });
-                }}
-                disabled={!canEdit}
+                value={sanitizeScore(currentPDI[c.key])}
+                onChange={() => {}}
+                onCommit={() => {}}
+                disabled
               />
             ))}
           </div>
@@ -245,18 +220,14 @@ export default function PDIPage({ hideHeader = false }) {
             </ResponsiveContainer>
           </div>
           <div className="space-y-3">
-            {behavCompetencies.map(c => (
+            {behavAvaliadas.map(c => (
               <CompetencySlider
                 key={c.key}
                 comp={c}
-                value={currentPDI[c.key] || 5}
-                onChange={v => {
-                  setPdi(prev => ({ ...prev, [c.key]: v }));
-                }}
-                onCommit={v => {
-                  savePDI({ [c.key]: v });
-                }}
-                disabled={!canEdit}
+                value={sanitizeScore(currentPDI[c.key])}
+                onChange={() => {}}
+                onCommit={() => {}}
+                disabled
               />
             ))}
           </div>

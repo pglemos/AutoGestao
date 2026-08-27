@@ -1024,38 +1024,76 @@ export const base44 = {
     },
 
     PDI: {
+      /**
+       * Fonte do PDI do vendedor: `pdi_sessoes` e suas tabelas filhas — as mesmas
+       * que o gestor preenche no wizard e imprime. A tabela `pdis` (legado) está
+       * vazia em produção; ler dela fazia o vendedor abrir a aba e não encontrar
+       * o próprio PDI, mesmo depois de assinado.
+       *
+       * As 18 competências de `pdi_competencias` casam 1:1 com os campos desta
+       * aba, e o vínculo é feito por `ordem` (1-10 técnicas, 11-18
+       * comportamentais) para não depender do rótulo exibido.
+       */
       list: async () => {
         const me = await base44.auth.me();
-        const { data: rows } = await supabase
-          .from('pdis')
-          .select('*')
-          .eq('seller_id', me.id)
-          .order('created_at', { ascending: false });
+        const { data: sessoes } = await supabase
+          .from('pdi_sessoes')
+          .select('id, created_at')
+          .eq('colaborador_id', me.id)
+          .order('created_at', { ascending: false })
+          .limit(1);
 
-        return (rows || []).map(r => ({
-          id: r.id,
-          short_term_goal: r.meta_6m || '',
-          medium_term_goal: r.meta_12m || '',
-          long_term_goal: r.meta_24m || '',
-          tech_planejamento: r.comp_organizacao ?? null,
-          tech_atendimento: r.comp_demonstracao ?? null,
-          tech_agendamento: r.comp_negociacao ?? null,
-          tech_fechamento: r.comp_fechamento ?? null,
-          tech_carteira: r.comp_crm ?? null,
-          tech_midias: r.comp_digital ?? null,
-          tech_prospeccao: r.comp_prospeccao ?? null,
-          tech_avaliacao: r.comp_abordagem ?? null,
-          tech_financiamentos: r.comp_negociacao ?? null,
-          tech_processos: r.comp_disciplina ?? null,
-          behav_pontualidade: r.comp_disciplina ?? null,
-          behav_urgencia: r.comp_disciplina ?? null,
-          behav_iniciativa: r.comp_prospeccao ?? null,
-          behav_organizacao: r.comp_organizacao ?? null,
-          behav_lideranca: r.comp_produto ?? null,
-          behav_relacionamento: r.comp_crm ?? null,
-          behav_persistencia: r.comp_negociacao ?? null,
-          behav_resiliencia: r.comp_negociacao ?? null
-        }));
+        const sessao = (sessoes || [])[0];
+        if (!sessao) return [];
+
+        const [{ data: metas }, { data: avaliacoes }] = await Promise.all([
+          supabase
+            .from('pdi_metas')
+            .select('prazo, descricao')
+            .eq('sessao_id', sessao.id),
+          supabase
+            .from('pdi_avaliacoes_competencia')
+            .select('nota_atribuida, competencia:pdi_competencias(ordem)')
+            .eq('sessao_id', sessao.id),
+        ]);
+
+        const metaDoPrazo = prazo => (metas || [])
+          .filter(m => m.prazo === prazo)
+          .map(m => (m.descricao || '').trim())
+          .filter(Boolean)
+          .join(' | ');
+
+        const notaPorOrdem = new Map(
+          (avaliacoes || [])
+            .filter(a => a.competencia?.ordem != null)
+            .map(a => [a.competencia.ordem, a.nota_atribuida]),
+        );
+        const nota = ordem => notaPorOrdem.has(ordem) ? notaPorOrdem.get(ordem) : null;
+
+        return [{
+          id: sessao.id,
+          short_term_goal: metaDoPrazo('6_meses'),
+          medium_term_goal: metaDoPrazo('12_meses'),
+          long_term_goal: metaDoPrazo('24_meses'),
+          tech_planejamento: nota(1),
+          tech_atendimento: nota(2),
+          tech_agendamento: nota(3),
+          tech_fechamento: nota(4),
+          tech_carteira: nota(5),
+          tech_midias: nota(6),
+          tech_prospeccao: nota(7),
+          tech_avaliacao: nota(8),
+          tech_financiamentos: nota(9),
+          tech_processos: nota(10),
+          behav_pontualidade: nota(11),
+          behav_urgencia: nota(12),
+          behav_iniciativa: nota(13),
+          behav_organizacao: nota(14),
+          behav_lideranca: nota(15),
+          behav_relacionamento: nota(16),
+          behav_persistencia: nota(17),
+          behav_resiliencia: nota(18),
+        }];
       }
     },
 
