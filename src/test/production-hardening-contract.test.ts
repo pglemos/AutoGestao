@@ -33,6 +33,29 @@ describe('production hardening contracts', () => {
     }
   })
 
+  /**
+   * O fallback de SPA cobria `/(.*)`, inclusive `/assets/`. Um chunk que nao
+   * existia mais — indice antigo em cache pedindo um hash de build anterior —
+   * respondia `200 text/html` em vez de 404. O navegador recusa HTML como
+   * modulo JS e a tela fica branca.
+   *
+   * Pior: o `vite:preloadError` de `src/main.tsx`, que recarrega a pagina
+   * justamente nesse caso, depende do fetch FALHAR. Com 200 na mao, a
+   * recuperacao nunca era acionada. Asset ausente tem que dar 404.
+   */
+  test('o fallback de SPA nao engole requisicoes de asset', () => {
+    const vercel = JSON.parse(readRepoFile('vercel.json')) as {
+      rewrites?: Array<{ source: string; destination: string }>
+    }
+    const paraIndex = (vercel.rewrites ?? []).filter((rule) => rule.destination === '/index.html')
+
+    expect(paraIndex.length).toBeGreaterThan(0)
+    for (const rule of paraIndex) {
+      expect(rule.source).not.toBe('/(.*)')
+      expect(rule.source).toContain('?!assets/')
+    }
+  })
+
   test('the pre-registration cache reset uses an external script allowed by CSP', () => {
     const indexHtml = readRepoFile('index.html')
     const externalScript = readRepoFile('public/pre-cadastro-cache-reset.js')
