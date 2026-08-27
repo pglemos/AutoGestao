@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import { useStrategicParameterValues } from '../hooks/useStrategicParameterValues'
 import { useSalesByChannel } from '../hooks/useSalesByChannel'
+import { useStoreHeadcount } from '../hooks/useStoreHeadcount'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
   BookOpen,
@@ -74,9 +75,10 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
   // números cravados no motor.
   const strategicParameters = useStrategicParameterValues()
   const salesByChannel = useSalesByChannel(data.operationalStore?.id ?? null, data.referenceDate.slice(0, 7))
+  const headcount = useStoreHeadcount(data.operationalStore?.id ?? null)
   const centralMx = useMemo(
-    () => buildCentralMx(data, marginPercent, strategicParameters, salesByChannel),
-    [data, marginPercent, strategicParameters, salesByChannel],
+    () => buildCentralMx(data, marginPercent, strategicParameters, salesByChannel, headcount),
+    [data, marginPercent, strategicParameters, salesByChannel, headcount],
   )
   const departments = useMemo(() => centralMx.departments.map(departmentFromEngine), [centralMx.departments])
   const ownerAlerts = useMemo(() => {

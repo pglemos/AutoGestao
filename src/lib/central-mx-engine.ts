@@ -117,6 +117,8 @@ export type CentralMxEngineInput = {
     checkedIn?: boolean | null
   }>
   previousYear?: Record<string, number | null>
+  /** Colaboradores ativos com vínculo na unidade (`vinculos_loja`). */
+  headcount?: number | null
   /**
    * Vendas do mês por canal (`eventos_comerciais`), quando a origem distingue.
    * `carteira` fica de fora: o evento não separa carteira da empresa da do
@@ -317,6 +319,13 @@ function getBaseValues(input: CentralMxEngineInput): Record<string, { meta: numb
   const porVendedor = (total: number | null) =>
     total == null || sellerCount <= 0 ? null : total / sellerCount
 
+  // Quantos agendamentos foram precisos para cada venda do mês. Sem venda no
+  // período a razão não existe — devolver 0 ou o total de agendamentos daria a
+  // impressão de eficiência que ninguém mediu.
+  const agendamentosPorVenda = input.metrics.totalSales > 0
+    ? input.metrics.totalAgd / input.metrics.totalSales
+    : null
+
   const estoque = input.inventory ?? null
   // Preço médio e % acima de 90 dias só existem com estoque cadastrado: sem
   // veículo na base, dividir por zero produziria 0 — um número que parece dado.
@@ -335,6 +344,8 @@ function getBaseValues(input: CentralMxEngineInput): Record<string, { meta: numb
     seller_count: { meta: null, realizado: sellerCount || null, anoAnterior: anterior('seller_count') },
     sales_internet: { meta: null, realizado: input.salesByChannel?.internet ?? null, anoAnterior: anterior('sales_internet') },
     sales_door_flow: { meta: null, realizado: input.salesByChannel?.doorFlow ?? null, anoAnterior: anterior('sales_door_flow') },
+    employee_count: { meta: null, realizado: input.headcount ?? null, anoAnterior: anterior('employee_count') },
+    appointments_per_sale: { meta: null, realizado: agendamentosPorVenda, anoAnterior: anterior('appointments_per_sale') },
     avg_sales_per_seller: { meta: null, realizado: porVendedor(input.metrics.totalSales), anoAnterior: anterior('avg_sales_per_seller') },
     avg_leads_per_seller: { meta: null, realizado: porVendedor(input.metrics.totalLeads), anoAnterior: anterior('avg_leads_per_seller') },
 

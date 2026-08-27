@@ -128,11 +128,13 @@ export function buildCentralMx(
   marginPercent: number | null,
   strategicParameters: Record<string, number | null> | null = null,
   salesByChannel: { internet: number | null; doorFlow: number | null } | null = null,
+  headcount: number | null = null,
 ) {
   return buildCentralMxEngine({
     strategicParameters,
     inventory: data.inventory ?? null,
     salesByChannel,
+    headcount,
     storeId: data.operationalStore?.id || data.metrics.storeName || 'loja-mx',
     storeName: data.metrics.storeName,
     period: data.referenceDate.slice(0, 7),

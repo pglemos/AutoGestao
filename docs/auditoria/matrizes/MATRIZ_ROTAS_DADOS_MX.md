@@ -308,7 +308,7 @@
 | `universidade_certificacoes` | 1 |
 | `universidade_trilhas` | 1 |
 | `user_roles` | 1 |
-| `usuarios` | 31 |
+| `usuarios` | 32 |
 | `valores_indicadores_planejamento` | 2 |
 | `valores_indicadores_planejamento_vigentes` | 4 |
 | `valores_parametros_consultoria` | 3 |
@@ -320,7 +320,7 @@
 | `versoes_metodologia_produto` | 1 |
 | `vinculo_modelo_relatorio_encontro` | 1 |
 | `vinculo_plano_acao_encontro` | 1 |
-| `vinculos_loja` | 22 |
+| `vinculos_loja` | 23 |
 | `visitas_consultoria` | 13 |
 | `vw_jornada_alem_do_contratado` | 1 |
 
@@ -678,7 +678,7 @@
 | `user_roles:update` | 1 |
 | `usuarios:delete` | 2 |
 | `usuarios:insert` | 1 |
-| `usuarios:select` | 28 |
+| `usuarios:select` | 29 |
 | `usuarios:update` | 6 |
 | `usuarios:upsert` | 1 |
 | `valores_indicadores_planejamento_vigentes:select` | 4 |
@@ -709,7 +709,7 @@
 | `vinculo_plano_acao_encontro:update` | 1 |
 | `vinculos_loja:delete` | 1 |
 | `vinculos_loja:insert` | 3 |
-| `vinculos_loja:select` | 20 |
+| `vinculos_loja:select` | 21 |
 | `vinculos_loja:update` | 2 |
 | `visitas_consultoria:delete` | 2 |
 | `visitas_consultoria:insert` | 5 |
