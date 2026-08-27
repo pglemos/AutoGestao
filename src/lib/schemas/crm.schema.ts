@@ -5,6 +5,27 @@ import { z } from 'zod'
 // Espelha supabase/migrations/20260609120000_mx_crm_vendedor_foundation.sql
 // ============================================================================
 
+/**
+ * Teto de valor para negociação de veículo.
+ *
+ * Em 2026-08-27 havia 27 oportunidades com valor mil vezes maior que o real —
+ * três zeros a mais na digitação, em 15 lojas de clientes. Quinze já estavam
+ * como venda ganha, entrando em faturamento, ticket médio e base de comissão.
+ * Uma delas registrava R$ 228.000.000,00 por um BMW X4.
+ *
+ * O teto é deliberadamente alto: a maior venda real do sistema é R$ 239.990, e
+ * o limite existe para barrar erro de escala, não para julgar preço. Nenhum
+ * veículo de revenda chega perto de R$ 10 milhões.
+ */
+export const CRM_VALOR_MAXIMO = 10_000_000
+
+const valorVeiculo = (campo: string) =>
+  z.coerce.number()
+    .max(CRM_VALOR_MAXIMO, {
+      message: `${campo} acima de R$ 10.000.000 — confira se não sobraram zeros no valor.`,
+    })
+    .nonnegative({ message: `${campo} não pode ser negativo.` })
+
 export const CRM_CANAIS = ['carteira', 'internet', 'showroom', 'porta'] as const
 export const CRM_CLIENTE_STATUS = ['oportunidade', 'ativo', 'pos_venda', 'aguardando_contato', 'inativo'] as const
 export const CRM_RELACIONAMENTO = ['excelente', 'bom', 'neutro', 'ruim', 'critico'] as const
@@ -191,10 +212,10 @@ export const OportunidadeSchema = z.object({
   preco_interesse_max: z.coerce.number().nullable().default(null),
   catalog_model_id: z.string().uuid().nullable().default(null),
   classification_source: z.enum(['catalog', 'manual', 'migration']).nullable().default(null),
-  valor_negociado: z.coerce.number().default(0),
+  valor_negociado: valorVeiculo('Valor negociado').default(0),
   etapa: z.enum(CRM_ETAPAS_FUNIL),
   canal: z.enum(CRM_CANAIS).nullable(),
-  sinal: z.coerce.number().default(0),
+  sinal: valorVeiculo('Sinal').default(0),
   financiamento: z.enum(CRM_FINANCIAMENTO),
   carro_avaliado: z.boolean(),
   motivo_perda: z.string().nullable(),

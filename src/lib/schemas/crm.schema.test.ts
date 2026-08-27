@@ -119,3 +119,21 @@ describe('EventoComercialSchema', () => {
     expect(parsed.success).toBe(false)
   })
 })
+
+describe('teto de valor de veículo', () => {
+  it('recusa valor com zeros sobrando e explica o motivo', () => {
+    const r = OportunidadeSchema.safeParse({ ...baseOportunidade, valor_negociado: '228000000' })
+    expect(r.success).toBe(false)
+    if (!r.success) expect(r.error.issues[0].message).toContain('zeros')
+  })
+
+  it('aceita a maior venda real do sistema', () => {
+    const r = OportunidadeSchema.safeParse({ ...baseOportunidade, valor_negociado: '239990' })
+    expect(r.success).toBe(true)
+  })
+
+  it('recusa valor negativo', () => {
+    const r = OportunidadeSchema.safeParse({ ...baseOportunidade, valor_negociado: '-1000' })
+    expect(r.success).toBe(false)
+  })
+})
