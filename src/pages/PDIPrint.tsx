@@ -217,7 +217,7 @@ export default function PDIPrint() {
 
             {/* Action Bar (Not Printed) */}
             <div className="w-[210mm] max-w-full flex items-center justify-between mb-8 print:hidden px-4">
-                <button onClick={() => navigate(-1)} className="flex items-center gap-mx-xs px-6 py-3 bg-white border border-border rounded-mx-full text-xs font-bold uppercase tracking-widest shadow-sm hover:bg-surface-alt">
+                <button onClick={() => navigate(-1)} className="flex items-center gap-mx-xs px-6 py-3 bg-white border border-border rounded-mx-full text-xs font-bold uppercase tracking-widest shadow-sm hover:bg-surface-alt outline-none focus-visible:ring-4 focus-visible:ring-status-success/20">
                     <ChevronLeft size={16} /> Voltar
                 </button>
                 <div className="flex items-center gap-mx-sm">
@@ -228,12 +228,12 @@ export default function PDIPrint() {
                     {canManage && (
                         <button
                             onClick={toggleEditMode}
-                            className="flex items-center gap-mx-xs px-6 py-3 bg-white border border-border rounded-mx-full text-xs font-bold uppercase tracking-widest shadow-sm hover:bg-surface-alt"
+                            className="flex items-center gap-mx-xs px-6 py-3 bg-white border border-border rounded-mx-full text-xs font-bold uppercase tracking-widest shadow-sm hover:bg-surface-alt outline-none focus-visible:ring-4 focus-visible:ring-status-success/20"
                         >
                             {canEdit ? <><Eye size={16} /> Ver como fica impresso</> : <><Pencil size={16} /> Corrigir PDI</>}
                         </button>
                     )}
-                    <button onClick={handlePrint} className="flex items-center gap-mx-xs px-8 py-3 bg-gray-900 text-white rounded-mx-full text-xs font-bold uppercase tracking-widest shadow-sm hover:scale-105 active:scale-95 transition-transform">
+                    <button onClick={handlePrint} className="flex items-center gap-mx-xs px-8 py-3 bg-gray-900 text-white rounded-mx-full text-xs font-bold uppercase tracking-widest shadow-sm hover:scale-105 active:scale-95 transition-transform outline-none focus-visible:ring-4 focus-visible:ring-status-success/20">
                         <Printer size={16} /> Imprimir PDI (A4)
                     </button>
                 </div>
