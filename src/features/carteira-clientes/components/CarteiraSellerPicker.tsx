@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { Users } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { fetchAllRows } from '@/lib/supabasePagination'
@@ -16,8 +17,18 @@ type Vendedor = { id: string; nome: string }
  * intocada e o recorte chega ao adapter pelo `sessionStorage`.
  */
 export function CarteiraSellerPicker({ storeId }: { storeId: string | null }) {
+  const [searchParams] = useSearchParams()
+  // `?vendedor=` chega de "Ver carteira" em /minha-equipe: o recorte já vem
+  // escolhido, sem obrigar o gerente a procurar a pessoa na lista.
+  const vendedorDaUrl = searchParams.get('vendedor')
   const [vendedores, setVendedores] = useState<Vendedor[]>([])
-  const [selecionado, setSelecionado] = useState<string>(() => readCarteiraSellerFilter() ?? '')
+  const [selecionado, setSelecionado] = useState<string>(
+    () => vendedorDaUrl ?? readCarteiraSellerFilter() ?? '',
+  )
+
+  useEffect(() => {
+    if (vendedorDaUrl) writeCarteiraSellerFilter(vendedorDaUrl)
+  }, [vendedorDaUrl])
 
   useEffect(() => {
     if (!storeId) {

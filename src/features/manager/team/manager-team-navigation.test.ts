@@ -14,3 +14,12 @@ describe('manager team contextual navigation', () => {
     expect(buildManagerTeamActionTarget('training', row)).toBe('/universidade-mx?recomendar=%C3%81lvaro%20Souza')
   })
 })
+
+describe('acao "Ver carteira"', () => {
+  const row = { user_id: 'seller-uuid-1', user_name: 'ROGER LUIS' } as never
+
+  it('abre a carteira recortada pelo id do vendedor, nao pelo nome', () => {
+    const alvo = buildManagerTeamActionTarget('wallet', row)
+    expect(alvo).toBe('/carteira-clientes?vendedor=seller-uuid-1')
+  })
+})

@@ -1,6 +1,6 @@
 import type { RankingEntry } from '@/types/database'
 
-export type ManagerTeamAction = 'routine' | 'feedback' | 'closing' | 'training'
+export type ManagerTeamAction = 'routine' | 'feedback' | 'closing' | 'training' | 'wallet'
 
 export function buildManagerTeamActionTarget(action: ManagerTeamAction, row: RankingEntry, referenceDate = '') {
   const seller = encodeURIComponent(row.user_name)
@@ -9,6 +9,9 @@ export function buildManagerTeamActionTarget(action: ManagerTeamAction, row: Ran
     feedback: { pathname: '/feedbacks-pdis', params: { tab: 'feedbacks', novoFeedback: row.user_name } },
     closing: { pathname: '/fechamento-diario', params: { busca: row.user_name } },
     training: { pathname: '/universidade-mx', params: { recomendar: row.user_name } },
+    // A carteira abre pelo id: o recorte por vendedor no adapter é por
+    // `seller_user_id`, e nome não identifica pessoa com segurança.
+    wallet: { pathname: '/carteira-clientes', params: { vendedor: row.user_id } },
   }
   const target = targets[action]
   const query = Object.entries(target.params)
