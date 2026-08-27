@@ -186,30 +186,6 @@ const pdiSessionBundleSchema = z.object({
 
 type PDISessionBundlePayload = z.infer<typeof pdiSessionBundleSchema>
 
-export type PDICreateActionInput = {
-  sessaoId: string
-  competenciaId: string
-  descricaoAcao: string
-  dataConclusao: string
-  impacto: string
-  custo: string
-  status?: 'pendente' | 'em_andamento'
-}
-
-export type PDIUpdateActionInput = {
-  actionId: string
-  descricaoAcao: string
-  dataConclusao: string
-  impacto: string
-  custo: string
-}
-
-export type PDIUpdateActionStatusInput = {
-  actionId: string
-  status: 'pendente' | 'em_andamento' | 'concluida' | 'justificada'
-  justificativa?: string
-}
-
 export type PDIDocumentUpdateInput = {
   metas?: Array<{ id: string; descricao: string; tipo: string }>
   avaliacoes?: Array<{ id: string; nota: number; alvo: number }>
@@ -220,12 +196,6 @@ export type PDIDocumentUpdateInput = {
     impacto: string
     custo: string
   }>
-}
-
-export type PDIUpdateGoalsInput = {
-  sessaoId: string
-  prazo: string
-  metas: Array<{ descricao: string; tipo?: string }>
 }
 
 function joinMetas(metas: PDIMeta360[], prazo: string) {
@@ -436,80 +406,6 @@ const saveSessionBundle = useCallback(async (payload: PDISessionBundlePayload) =
 return data // Returns session UUID
 }, [queryClient])
 
-const createSellerPDIAction = useCallback(async (input: PDICreateActionInput) => {
-setLoading(true)
-setError(null)
-const { data, error } = await supabase.rpc('vendedor_criar_pdi_acao', {
-p_sessao_id: input.sessaoId,
-p_competencia_id: input.competenciaId,
-p_descricao_acao: input.descricaoAcao,
-p_data_conclusao: input.dataConclusao,
-p_impacto: input.impacto,
-p_custo: input.custo,
-p_status: input.status || 'pendente',
-})
-setLoading(false)
-if (error) {
-setError(error.message)
-return { id: null, error: error.message }
-}
-queryClient.invalidateQueries({ queryKey: ['pdi-sessions'] })
-return { id: data as string, error: null }
-}, [queryClient])
-
-const updateSellerPDIAction = useCallback(async (input: PDIUpdateActionInput) => {
-setLoading(true)
-setError(null)
-const { data, error } = await supabase.rpc('vendedor_atualizar_pdi_acao', {
-p_acao_id: input.actionId,
-p_descricao_acao: input.descricaoAcao,
-p_data_conclusao: input.dataConclusao,
-p_impacto: input.impacto,
-p_custo: input.custo,
-})
-setLoading(false)
-if (error) {
-setError(error.message)
-return { id: null, error: error.message }
-}
-queryClient.invalidateQueries({ queryKey: ['pdi-sessions'] })
-return { id: data as string, error: null }
-}, [queryClient])
-
-const updateSellerPDIActionStatus = useCallback(async (input: PDIUpdateActionStatusInput) => {
-setLoading(true)
-setError(null)
-const { data, error } = await supabase.rpc('vendedor_atualizar_pdi_acao_status', {
-p_acao_id: input.actionId,
-p_status: input.status,
-p_justificativa: input.justificativa || null,
-})
-setLoading(false)
-if (error) {
-setError(error.message)
-return { id: null, error: error.message }
-}
-queryClient.invalidateQueries({ queryKey: ['pdi-sessions'] })
-return { id: data as string, error: null }
-}, [queryClient])
-
-const updateSellerPDIGoals = useCallback(async (input: PDIUpdateGoalsInput) => {
-setLoading(true)
-setError(null)
-const { data, error } = await supabase.rpc('vendedor_atualizar_pdi_metas', {
-p_sessao_id: input.sessaoId,
-p_prazo: input.prazo,
-p_metas: input.metas,
-})
-setLoading(false)
-if (error) {
-setError(error.message)
-return { count: 0, error: error.message }
-}
-queryClient.invalidateQueries({ queryKey: ['pdi-sessions'] })
-return { count: Number(data || 0), error: null }
-}, [queryClient])
-
 const linkSellerPDIActionContent = useCallback(async (actionId: string) => {
 setLoading(true)
 setError(null)
@@ -608,10 +504,6 @@ const fetchPrintBundle = useCallback(async (sessaoId: string) => {
         fetchTemplate,
         fetchSuggestedActions,
         saveSessionBundle,
-        createSellerPDIAction,
-        updateSellerPDIAction,
-        updateSellerPDIActionStatus,
-        updateSellerPDIGoals,
         linkSellerPDIActionContent,
         sendSellerPDIActionToCentral,
         updatePDIDocument,

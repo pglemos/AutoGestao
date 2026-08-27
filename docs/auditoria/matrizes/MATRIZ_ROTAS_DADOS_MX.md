@@ -6,7 +6,7 @@
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
 - Tabelas referenciadas pelo runtime: **181**
-- RPCs referenciadas pelo runtime: **107**
+- RPCs referenciadas pelo runtime: **103**
 - Edge Functions invocadas pelo runtime: **14**
 - Pares tabela/operação encontrados: **388**
 
@@ -820,11 +820,7 @@
 | `update_my_profile` | 1 |
 | `upsert_funnel_metrics_snapshot` | 1 |
 | `validar_ciclo_plano_estrategico` | 1 |
-| `vendedor_atualizar_pdi_acao` | 1 |
-| `vendedor_atualizar_pdi_acao_status` | 1 |
-| `vendedor_atualizar_pdi_metas` | 1 |
 | `vendedor_concluir_execution_action` | 1 |
-| `vendedor_criar_pdi_acao` | 1 |
 | `vendedor_enviar_pdi_acao_central` | 1 |
 | `vendedor_performance_oficial` | 2 |
 | `vendedor_vincular_conteudo_pdi_acao` | 1 |
