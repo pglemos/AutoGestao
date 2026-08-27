@@ -9,6 +9,7 @@ import { carteiraMutationCoordinator } from './carteira-mutation-coordinator'
 import { readSimulationContext } from '@/hooks/auth/authHelpers'
 import { cancelarVendaRpc } from '@/features/crm/lib/cancelarVenda'
 import { parseCurrencyInput } from '@/lib/currency-mask'
+import { readCarteiraSellerFilter } from './carteiraSellerFilter'
 
 const INSTALLED_KEY = '__mxCarteiraBase44AdapterInstalled'
 const missionCache = new Map()
@@ -288,9 +289,18 @@ async function listVisualClients(query, order, limit, executionContext) {
 
     let scopedStoreId = context.isSimulation ? context.storeId : null
 
+    // Recorte por vendedor escolhido por quem enxerga a loja inteira. Não vale
+    // para o vendedor: a carteira dele já é a própria, e aceitar o filtro aqui
+    // deixaria um papel olhar a carteira de outro.
+    const sellerFilter = role === 'vendedor' ? null : readCarteiraSellerFilter()
+
     if (role === 'vendedor') {
       dbQuery = dbQuery.eq('seller_user_id', userId)
-    } else if (role === 'gerente' && !scopedStoreId) {
+    } else if (sellerFilter) {
+      dbQuery = dbQuery.eq('seller_user_id', sellerFilter)
+    }
+
+    if (role === 'gerente' && !scopedStoreId) {
       const { data: storeLink } = await supabase
         .from('vinculos_loja')
         .select('store_id')

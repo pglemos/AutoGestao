@@ -3,6 +3,7 @@ import CarteiraClientesReference from '@/base44-reference/pages/CarteiraClientes
 import { installCarteiraBase44Adapter } from '@/features/carteira-clientes/lib/installCarteiraBase44Adapter'
 import { useAuth } from '@/hooks/useAuth'
 import { PageCanvas } from '@/design-system/page'
+import { CarteiraSellerPicker } from '../components/CarteiraSellerPicker'
 
 installCarteiraBase44Adapter(base44)
 
@@ -24,7 +25,9 @@ export const CARTEIRA_BASE44_PARITY_SURFACE = [
 ] as const
 
 export function CarteiraClientesBase44Page() {
-  const { simulationRole, simulationLoading, isSimulating } = useAuth()
+  const { simulationRole, simulationLoading, isSimulating, role, membership } = useAuth()
+  // Vendedor vê só a própria carteira: para ele não há o que escolher.
+  const podeFiltrarPorVendedor = role === 'gerente' || role === 'dono'
   const waitingForSimulationIdentity = simulationLoading
     || (simulationRole === 'vendedor' && !isSimulating)
 
@@ -38,7 +41,14 @@ export function CarteiraClientesBase44Page() {
         <div className="flex min-h-[320px] flex-1 items-center justify-center text-sm font-semibold text-muted-foreground" role="status" aria-live="polite">
           Preparando carteira do vendedor simulado...
         </div>
-      ) : <CarteiraClientesReference />}
+      ) : (
+        <>
+          {podeFiltrarPorVendedor ? (
+            <CarteiraSellerPicker storeId={membership?.store_id ?? null} />
+          ) : null}
+          <CarteiraClientesReference />
+        </>
+      )}
     </PageCanvas>
   )
 }
