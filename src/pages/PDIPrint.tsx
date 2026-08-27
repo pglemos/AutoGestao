@@ -5,7 +5,7 @@ import type { PDIAvaliacao360, PDIMeta360, PDIPlanoAcao360, PDIPrintBundle } fro
 import { useAuth } from '@/hooks/useAuth'
 import { canManagePDI as canManagePDICapability } from '@/lib/auth/capabilities'
 import { RadarChart, PolarGrid, PolarAngleAxis, Radar } from 'recharts'
-import { Target, History, Printer, ChevronLeft, Sparkles, User, Pencil } from 'lucide-react'
+import { Target, History, Printer, ChevronLeft, Sparkles, User, Pencil, Eye } from 'lucide-react'
 import { format, parseISO } from 'date-fns'
 import { Typography } from '@/components/atoms/Typography'
 import { Button } from '@/components/atoms/Button'
@@ -58,7 +58,7 @@ function EditButton({ label, onClick }: { label: string; onClick: () => void }) 
 export default function PDIPrint() {
     const { id } = useParams()
     const navigate = useNavigate()
-    const [searchParams] = useSearchParams()
+    const [searchParams, setSearchParams] = useSearchParams()
     const { role } = useAuth()
     const { fetchPrintBundle, updatePDIDocument, loading } = usePDI_MX()
     const [bundle, setBundle] = useState<PDIPrintBundle | null>(null)
@@ -69,7 +69,18 @@ export default function PDIPrint() {
     const [acaoDrafts, setAcaoDrafts] = useState<AcaoDraft[]>([])
     const [saving, setSaving] = useState(false)
 
-    const canEdit = searchParams.get('editar') === '1' && canManagePDICapability(role)
+    const canManage = canManagePDICapability(role)
+    const canEdit = searchParams.get('editar') === '1' && canManage
+
+    const toggleEditMode = () => {
+        const next = new URLSearchParams(searchParams)
+        if (canEdit) {
+            next.delete('editar')
+        } else {
+            next.set('editar', '1')
+        }
+        setSearchParams(next, { replace: true })
+    }
 
     const loadBundle = useCallback(async () => {
         if (!id) return
@@ -209,9 +220,23 @@ export default function PDIPrint() {
                 <button onClick={() => navigate(-1)} className="flex items-center gap-mx-xs px-6 py-3 bg-white border border-border rounded-mx-full text-xs font-bold uppercase tracking-widest shadow-sm hover:bg-surface-alt">
                     <ChevronLeft size={16} /> Voltar
                 </button>
-                <button onClick={handlePrint} className="flex items-center gap-mx-xs px-8 py-3 bg-gray-900 text-white rounded-mx-full text-xs font-bold uppercase tracking-widest shadow-sm hover:scale-105 active:scale-95 transition-transform">
-                    <Printer size={16} /> Imprimir PDI (A4)
-                </button>
+                <div className="flex items-center gap-mx-sm">
+                    {/* Quem pode corrigir alterna aqui mesmo: abrir o documento pelo
+                        "Abrir PDI" e ter que voltar ao card só para pegar a caneta
+                        é um caminho que ninguém percorre no meio de uma conversa
+                        de feedback. */}
+                    {canManage && (
+                        <button
+                            onClick={toggleEditMode}
+                            className="flex items-center gap-mx-xs px-6 py-3 bg-white border border-border rounded-mx-full text-xs font-bold uppercase tracking-widest shadow-sm hover:bg-surface-alt"
+                        >
+                            {canEdit ? <><Eye size={16} /> Ver como fica impresso</> : <><Pencil size={16} /> Corrigir PDI</>}
+                        </button>
+                    )}
+                    <button onClick={handlePrint} className="flex items-center gap-mx-xs px-8 py-3 bg-gray-900 text-white rounded-mx-full text-xs font-bold uppercase tracking-widest shadow-sm hover:scale-105 active:scale-95 transition-transform">
+                        <Printer size={16} /> Imprimir PDI (A4)
+                    </button>
+                </div>
             </div>
 
             {canEdit && (
