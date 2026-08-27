@@ -8,7 +8,7 @@ import {
     type VendedorExperienciaDeclarada,
 } from '@/features/crm/lib/maturidade'
 import { atualizarTarefaTreinamento, categoriaDoTreinamento, concluirTreinamento, listarTarefasTreinamento, listarTreinamentosVendedor, type TarefaTreinamento as TarefaServico, type VendedorTreinamento } from '@/features/universidade/services/universidade-service'
-import { recomendarTreinamentos, type CompetenciaPdi, type EtapaFunilAberta, type SinaisRecomendacao } from '@/features/universidade/services/recomendacao'
+import { recomendarTreinamentos, type CompetenciaAvaliada, type EtapaFunilAberta, type SinaisRecomendacao } from '@/features/universidade/services/recomendacao'
 
 /**
  * Dados reais da Universidade MX (aulas do vendedor). Substitui:
@@ -57,6 +57,37 @@ export interface TarefaTreinamento {
     respostaId: string | null
 }
 
+type AvaliacaoPdiRow = {
+    nota_atribuida: number
+    alvo: number
+    sessao: { colaborador_id: string; created_at: string } | null
+    competencia: { nome: string; ordem: number } | null
+}
+
+/**
+ * Reduz as avaliações à sessão de PDI mais recente do vendedor: recomendar com
+ * base num PDI antigo, já substituído, mandaria a pessoa para o treinamento
+ * errado.
+ */
+function competenciasDoPdiVigente(rows: unknown): CompetenciaAvaliada[] | null {
+    const avaliacoes = (rows as AvaliacaoPdiRow[] | null) || []
+    const validas = avaliacoes.filter(row => row.sessao && row.competencia)
+    if (!validas.length) return null
+
+    const maisRecente = validas.reduce((maior, row) =>
+        (row.sessao as { created_at: string }).created_at > maior ? (row.sessao as { created_at: string }).created_at : maior,
+        '')
+
+    return validas
+        .filter(row => (row.sessao as { created_at: string }).created_at === maisRecente)
+        .map(row => ({
+            ordem: (row.competencia as { ordem: number }).ordem,
+            nome: (row.competencia as { nome: string }).nome,
+            nota: row.nota_atribuida,
+            alvo: row.alvo,
+        }))
+}
+
 export function useVendedorTreinamentos() {
     const { supabaseUser } = useAuth()
     const [trainings, setTrainings] = useState<Treinamento[]>([])
@@ -91,13 +122,13 @@ export function useVendedorTreinamentos() {
                     .select('id', { count: 'exact', head: true })
                     .eq('seller_id', supabaseUser.id)
                     .eq('status', 'pendente'),
+                // Competências do PDI vigente. Antes lia `pdis`, tabela vazia em
+                // produção: lacuna de PDI nunca chegava a pesar na recomendação.
                 supabase
-                    .from('pdis')
-                    .select('comp_prospeccao,comp_abordagem,comp_demonstracao,comp_negociacao,comp_fechamento,comp_crm,comp_digital,comp_produto,comp_organizacao,comp_disciplina')
-                    .eq('seller_id', supabaseUser.id)
-                    .order('created_at', { ascending: false })
-                    .limit(1)
-                    .maybeSingle(),
+                    .from('pdi_avaliacoes_competencia')
+                    .select('nota_atribuida, alvo, sessao:pdi_sessoes!inner(colaborador_id, created_at), competencia:pdi_competencias!inner(nome, ordem)')
+                    .eq('sessao.colaborador_id', supabaseUser.id)
+                    .order('created_at', { referencedTable: 'pdi_sessoes', ascending: false }),
             ])
 
             const mappedTrainings: Treinamento[] = Array.isArray(trainingsResult) ? trainingsResult : []
@@ -124,7 +155,7 @@ export function useVendedorTreinamentos() {
             setSinais({
                 etapasAbertas,
                 devolutivaAcoesPendentes: devolutivasRes.count ?? 0,
-                competenciasPdi: (pdiRes.data as Partial<Record<CompetenciaPdi, number>> | null) ?? null,
+                competenciasPdi: competenciasDoPdiVigente(pdiRes.data),
             })
 
             if (mappedTrainings.length > 0) {

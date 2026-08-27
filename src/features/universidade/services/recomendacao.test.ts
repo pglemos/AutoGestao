@@ -29,10 +29,13 @@ describe('recomendarTreinamentos', () => {
         ]
         const [primeira] = recomendarTreinamentos(trainings, {
             ...semSinais,
-            competenciasPdi: { comp_fechamento: 3, comp_abordagem: 9 },
+            competenciasPdi: [
+                { ordem: 4, nome: 'Fechamento de Venda', nota: 3, alvo: 10 },
+                { ordem: 2, nome: 'Atendimento ao Cliente', nota: 10, alvo: 10 },
+            ],
         })
         expect(primeira.id).toBe('fech')
-        expect(primeira.motivos.join(' ')).toContain('Fechamento')
+        expect(primeira.motivos.join(' ')).toContain('Fechamento de Venda')
         expect(primeira.motivos.join(' ')).toContain('3')
     })
 
@@ -76,7 +79,7 @@ describe('recomendarTreinamentos', () => {
             treino({ id: 'd', category: 'Fechamento' }),
             treino({ id: 'e', category: 'Fechamento' }),
         ]
-        const recs = recomendarTreinamentos(trainings, { ...semSinais, competenciasPdi: { comp_fechamento: 2 } })
+        const recs = recomendarTreinamentos(trainings, { ...semSinais, competenciasPdi: [{ ordem: 4, nome: 'Fechamento de Venda', nota: 2, alvo: 10 }] })
         expect(recs).toHaveLength(4)
         expect(recs.map(r => r.id)).not.toContain('feito')
     })

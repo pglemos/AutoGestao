@@ -6,17 +6,9 @@ export type NivelMaturidade = 'N1' | 'N2' | 'N3' | 'N4'
 
 export type EtapaFunilAberta = 'prospeccao' | 'qualificacao' | 'apresentacao' | 'negociacao' | 'fechamento'
 
-export type CompetenciaPdi =
-    | 'comp_prospeccao'
-    | 'comp_abordagem'
-    | 'comp_demonstracao'
-    | 'comp_negociacao'
-    | 'comp_fechamento'
-    | 'comp_crm'
-    | 'comp_digital'
-    | 'comp_produto'
-    | 'comp_organizacao'
-    | 'comp_disciplina'
+import { categoriaDaCompetencia, type CompetenciaAvaliada } from './competencia-pdi-categoria'
+
+export type { CompetenciaAvaliada }
 
 export type SinaisRecomendacao = {
     /** Oportunidades abertas do vendedor por etapa do funil. */
@@ -24,7 +16,8 @@ export type SinaisRecomendacao = {
     /** Ações de devolutiva com status pendente. */
     devolutivaAcoesPendentes: number
     /** Notas do PDI mais recente (0–10); null quando o vendedor não tem PDI. */
-    competenciasPdi: Partial<Record<CompetenciaPdi, number>> | null
+    /** Competências avaliadas no PDI vigente do vendedor (0–10). */
+    competenciasPdi: CompetenciaAvaliada[] | null
     nivelMaturidade: NivelMaturidade
 }
 
@@ -58,38 +51,14 @@ const ETAPA_CATEGORIA: Record<EtapaFunilAberta, string> = {
     fechamento: 'Fechamento',
 }
 
-const COMPETENCIA_CATEGORIA: Record<CompetenciaPdi, string> = {
-    comp_prospeccao: 'Prospecção',
-    comp_abordagem: 'Atendimento',
-    comp_demonstracao: 'Atendimento',
-    comp_negociacao: 'Negociação',
-    comp_fechamento: 'Fechamento',
-    comp_crm: 'Carteira',
-    comp_digital: 'WhatsApp',
-    comp_produto: 'Atendimento',
-    comp_organizacao: 'Mentalidade',
-    comp_disciplina: 'Mentalidade',
-}
-
-const COMPETENCIA_LABEL: Record<CompetenciaPdi, string> = {
-    comp_prospeccao: 'Prospecção',
-    comp_abordagem: 'Abordagem',
-    comp_demonstracao: 'Demonstração',
-    comp_negociacao: 'Negociação',
-    comp_fechamento: 'Fechamento',
-    comp_crm: 'Carteira/CRM',
-    comp_digital: 'Atendimento digital',
-    comp_produto: 'Conhecimento de produto',
-    comp_organizacao: 'Organização',
-    comp_disciplina: 'Disciplina',
-}
-
 /**
- * Nota do PDI abaixo disso é tratada como lacuna de competência.
- * A escala é 0–10 e o default histórico da tabela é 6 — um PDI preenchido
- * com defaults não deve virar lacuna em tudo, por isso o corte é < 6.
+ * Lacuna é nota abaixo do alvo do cargo — a mesma definição do "Top 5 maiores
+ * lacunas" do documento de PDI.
+ *
+ * Um corte fixo não serve: a escala vem do cargo (nível 2 vai de 6 a 10), então
+ * o antigo `nota < 6` nunca disparava para um consultor de vendas. Nota igual
+ * ao alvo é competência atingida, não lacuna.
  */
-const NOTA_PDI_LACUNA = 6
 /** Oportunidades paradas numa etapa a partir das quais ela vira gargalo. */
 const MIN_OPORTUNIDADES_GARGALO = 3
 
@@ -98,15 +67,19 @@ type MotivoPorCategoria = { categoria: string; peso: number; motivo: string }
 function motivosDosSinais(sinais: SinaisRecomendacao): MotivoPorCategoria[] {
     const motivos: MotivoPorCategoria[] = []
 
-    if (sinais.competenciasPdi) {
-        for (const [competencia, nota] of Object.entries(sinais.competenciasPdi) as [CompetenciaPdi, number][]) {
-            if (typeof nota !== 'number' || nota >= NOTA_PDI_LACUNA) continue
-            motivos.push({
-                categoria: COMPETENCIA_CATEGORIA[competencia],
-                peso: 3,
-                motivo: `${COMPETENCIA_LABEL[competencia]} está em ${nota}/10 no seu PDI`,
-            })
-        }
+    for (const competencia of sinais.competenciasPdi || []) {
+        if (typeof competencia.nota !== 'number' || typeof competencia.alvo !== 'number') continue
+        const lacuna = competencia.alvo - competencia.nota
+        if (lacuna <= 0) continue
+        const categoria = categoriaDaCompetencia(competencia.ordem)
+        if (!categoria) continue
+        motivos.push({
+            categoria,
+            // Lacuna maior pesa mais: quem está 4 pontos abaixo do alvo precisa
+            // mais daquele treinamento do que quem está 1 ponto.
+            peso: 2 + lacuna,
+            motivo: `${competencia.nome} está em ${competencia.nota}/${competencia.alvo} no seu PDI`,
+        })
     }
 
     const gargalo = (Object.entries(sinais.etapasAbertas) as [EtapaFunilAberta, number][])
