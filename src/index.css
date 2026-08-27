@@ -165,6 +165,8 @@ to { height: 0; }
   /* Texto sobre o PREENCHIMENTO warning. O amber é claro: branco sobre ele dá
      2.15:1 e reprova AA com folga; o degrau quase preto entrega 9.27:1. */
   --color-status-warning-foreground: hsl(var(--mx-color-warning-foreground));
+  --color-medal-bronze: hsl(var(--mx-medal-bronze));
+  --color-medal-bronze-surface: hsl(var(--mx-medal-bronze) / 0.12);
   --color-status-error: hsl(var(--mx-status-error));
   --color-status-error-strong: hsl(var(--mx-status-error-strong));
   --color-status-error-text: hsl(var(--mx-status-error-text));

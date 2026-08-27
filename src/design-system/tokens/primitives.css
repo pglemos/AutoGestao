@@ -98,6 +98,9 @@
      reprovava o mínimo AA de 4.5:1 para texto normal — medido no contrato
      07.012. 31% leva o par para 4.74:1 sem mudar o matiz. */
   --mx-status-warning-text: 34.2 100% 31%;
+  /* Bronze do pódio. O ranking usava `--mx-status-warning` para 1º E 3º lugar,
+     o que apagava a diferença entre ouro e bronze. */
+  --mx-medal-bronze: 25 55% 44%;
   --mx-status-error: 0 84% 60%;
   --mx-status-error-strong: 0 84% 60%;
   --mx-status-error-text: 0 71% 45%;

@@ -49,7 +49,7 @@ export function GlobalRankingView() {
                 aria-label="Modo da classificação"
               />
 
-              <LastUpdated value={data.lastUpdatedAt} className="hidden 2xl:inline-flex" />
+              <LastUpdated value={data.lastUpdatedAt} />
               <Button
                 variant="outline"
                 onClick={() => data.setHideStoreNames((current) => !current)}

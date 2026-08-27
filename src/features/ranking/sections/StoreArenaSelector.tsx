@@ -33,7 +33,7 @@ export function StoreArenaSelector({ loading, opponents, stores, onToggle, onCle
   return (
     <div className="animate-slide-up">
       {opponents.length < 2 && (
-        <div className="mb-8 text-center animate-pulse">
+        <div className="mb-8 text-center">
           <p className="text-sm font-bold text-muted-foreground bg-white/50 inline-block px-4 py-2 rounded-full border border-white/60 shadow-sm">
             Selecione {2 - opponents.length} {2 - opponents.length === 1 ? 'loja' : 'lojas'} abaixo para iniciar o comparativo de lojas
           </p>

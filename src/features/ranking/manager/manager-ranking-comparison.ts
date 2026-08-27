@@ -25,7 +25,7 @@ export function buildComparisonRadar(a: RankedVendedor, b: RankedVendedor): Comp
   const maxScheduling = Math.max(a.agendamentos, b.agendamentos, 1)
   const maxServed = Math.max(a.visitas, b.visitas, 1)
   return [
-    { metric: 'Meta', a: a.atingimento, b: b.atingimento },
+    { metric: 'Meta', a: a.atingimento ?? 0, b: b.atingimento ?? 0 },
     { metric: 'Conversão', a: a.conversao, b: b.conversao },
     { metric: 'Rotina', a: a.rotina ?? 0, b: b.rotina ?? 0 },
     { metric: 'Agendamentos', a: normalize(a.agendamentos, maxScheduling), b: normalize(b.agendamentos, maxScheduling) },
@@ -48,7 +48,8 @@ function firstName(name: string): string {
 export function buildComparisonInsights(a: RankedVendedor, b: RankedVendedor): string[] {
   const insights: string[] = []
 
-  if (a.atingimento !== b.atingimento) {
+  // Sem meta individual não há atingimento a comparar — mesma regra da rotina.
+  if (a.atingimento !== null && b.atingimento !== null && a.atingimento !== b.atingimento) {
     const [best, other] = a.atingimento > b.atingimento ? [a, b] : [b, a]
     insights.push(`${best.nome} está com melhor atingimento de meta (${best.atingimento}% vs ${other.atingimento}%).`)
   }

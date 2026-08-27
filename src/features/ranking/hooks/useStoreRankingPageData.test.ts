@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { calculateManagerScore, getPeriodoRange } from './useStoreRankingPageData'
+import { calculateManagerScore, getPeriodoRange, lerFiltrosSalvos, RANKING_PREF_KEY } from './useStoreRankingPageData'
 
 describe('calculateManagerScore', () => {
   test('replica os pesos do ranking gerencial Base44', () => {
@@ -28,5 +28,32 @@ describe('getPeriodoRange', () => {
       startDate: '2025-01-01',
       endDate: '2025-12-31',
     })
+  })
+})
+
+describe('lerFiltrosSalvos', () => {
+  const limpar = () => window.localStorage.removeItem(RANKING_PREF_KEY)
+
+  test('devolve vazio quando não há nada salvo', () => {
+    limpar()
+    expect(lerFiltrosSalvos()).toEqual({ periodo: undefined, unidade: undefined })
+  })
+
+  test('recupera período e unidade salvos', () => {
+    window.localStorage.setItem(RANKING_PREF_KEY, JSON.stringify({ periodo: 'Trimestral', unidade: 'Centro' }))
+    expect(lerFiltrosSalvos()).toEqual({ periodo: 'Trimestral', unidade: 'Centro' })
+    limpar()
+  })
+
+  test('descarta período fora da lista em vez de propagar lixo para o hook', () => {
+    window.localStorage.setItem(RANKING_PREF_KEY, JSON.stringify({ periodo: 'Decenal', unidade: 'Centro' }))
+    expect(lerFiltrosSalvos().periodo).toBeUndefined()
+    limpar()
+  })
+
+  test('não quebra com JSON corrompido', () => {
+    window.localStorage.setItem(RANKING_PREF_KEY, '{nao-e-json')
+    expect(lerFiltrosSalvos()).toEqual({})
+    limpar()
   })
 })

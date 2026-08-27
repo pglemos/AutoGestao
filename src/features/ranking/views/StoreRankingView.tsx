@@ -1,29 +1,42 @@
+import { useMemo, useState } from 'react'
 import { Info, Trophy } from 'lucide-react'
 import { SellerPageHeader } from '@/components/seller/SellerPageHeader'
+import { LastUpdated } from '@/components/molecules/LastUpdated'
 import { RankingErrorBoundary } from '@/features/ranking/components/RankingErrorBoundary'
+import { RankingSkeleton } from '@/features/ranking/components/RankingSkeleton'
+import { RankingErrorNotice, RankingPeriodTabs, RankingRefreshButton, RankingUnitSelect } from '@/features/ranking/components/RankingControls'
+import { SellerProfileModal } from '@/features/ranking/components/SellerProfileModal'
 import { PodioRanking } from '@/features/ranking/components/base44/PodioRanking'
 import { SuaPosicao } from '@/features/ranking/components/base44/SuaPosicao'
 import { CorridaPeriodo } from '@/features/ranking/components/base44/CorridaPeriodo'
-import { BonificacaoPeriodo } from '@/features/ranking/components/base44/BonificacaoPeriodo'
 import { TabelaRanking } from '@/features/ranking/components/base44/TabelaRanking'
-import { RANKING_PERIODOS, useStoreRankingPageData } from '@/features/ranking/hooks/useStoreRankingPageData'
+import { useStoreRankingPageData } from '@/features/ranking/hooks/useStoreRankingPageData'
 import { PageCanvas } from '@/design-system/page'
 
+const GOAL_MODE_LABEL: Record<string, string> = {
+  even: 'a meta da loja dividida igualmente entre os vendedores',
+  custom: 'metas individuais definidas vendedor a vendedor',
+  proportional: 'a meta da loja rateada proporcionalmente',
+}
+
 /**
- * Ranking por Loja — reproduz 1:1 a estrutura do protótipo Base44
- * (src/base44-reference/pages/Ranking.jsx): topbar com trófeu + avatar,
- * abas de período, Pódio + Sua posição, Corrida + Bonificação, Tabela.
+ * Ranking por Loja — estrutura do protótipo Base44 (topbar com troféu,
+ * abas de período, Pódio + Sua posição, Corrida, Tabela).
  */
 export function StoreRankingView() {
   const data = useStoreRankingPageData()
+  const [sellerAberto, setSellerAberto] = useState<string | null>(null)
+
+  const sellerSelecionado = useMemo(
+    () => data.rankingEntries.find(entry => entry.user_id === sellerAberto) ?? null,
+    [data.rankingEntries, sellerAberto]
+  )
 
   if (data.loading) {
-    return (
-      <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex min-h-full items-center justify-center">
-        <div className="w-8 h-8 border-4 border-border border-t-green-500 rounded-full animate-spin" />
-      </PageCanvas>
-    )
+    return <RankingSkeleton ariaLabel="Carregando o ranking da loja" variant="store" />
   }
+
+  const modoMeta = data.individualGoalMode ? GOAL_MODE_LABEL[data.individualGoalMode] : null
 
   return (
     <RankingErrorBoundary sectionName="Ranking da Loja">
@@ -32,41 +45,28 @@ export function StoreRankingView() {
           <SellerPageHeader
             icon={Trophy}
             title="Ranking"
-            subtitle="Acompanhe sua posição, a corrida do período e as bonificações da loja."
+            subtitle="Acompanhe sua posição e a corrida do período na sua loja."
             actions={(
               <div className="flex items-center gap-3 flex-wrap">
-                <div className="flex items-center bg-muted rounded-xl p-1 gap-1 flex-wrap">
-                  {RANKING_PERIODOS.map(p => (
-                    <button
-                      key={p}
-                      type="button"
-                      onClick={() => data.setPeriodo(p)}
-                      className={`text-[12px] font-semibold px-3 py-1.5 rounded-lg transition-all ${
-                        data.periodo === p
-                          ? 'bg-white text-brand-primary-hover shadow-sm border border-brand-primary/30'
-                          : 'text-muted-foreground hover:text-foreground'
-                      }`}
-                    >
-                      {p}
-                    </button>
-                  ))}
-                </div>
+                <RankingPeriodTabs value={data.periodo} onChange={data.setPeriodo} />
+                <RankingUnitSelect id="store-ranking-unit" value={data.unidade} unidades={data.unidades} onChange={data.setUnidade} />
+                <LastUpdated value={data.lastUpdatedAt} />
+                <RankingRefreshButton onRefresh={data.handleRefresh} isRefetching={data.isRefetching} />
               </div>
             )}
           />
 
-          <div className="flex items-center gap-2 bg-brand-primary-subtle border border-brand-primary/20 rounded-xl px-4 py-2">
-            <Info className="w-4 h-4 text-status-success-text flex-shrink-0" />
-            <p className="text-[12px] text-brand-primary-active">
-              <strong>Critério configurado pela loja:</strong> Volume de vendas.{' '}
-              <span className="text-status-success-text">A meta individual é calculada pelas regras da unidade.</span>
-            </p>
-          </div>
+          {modoMeta && (
+            <div className="flex items-center gap-2 bg-brand-primary-subtle border border-brand-primary/20 rounded-xl px-4 py-2">
+              <Info className="w-4 h-4 text-brand-primary-active flex-shrink-0" aria-hidden="true" />
+              <p className="text-body-sm text-brand-primary-active">
+                <strong>Ordenado por volume de vendas.</strong> A meta individual segue {modoMeta}.
+              </p>
+            </div>
+          )}
 
           {data.error && (
-            <div role="alert" className="rounded-xl border border-status-error/30 bg-status-error-surface px-4 py-2 text-sm font-bold text-status-error-text">
-              {data.error}
-            </div>
+            <RankingErrorNotice message={data.error} onRetry={data.handleRefresh} isRetrying={data.isRefetching} />
           )}
 
           <div className="flex flex-col sm:flex-row gap-4">
@@ -81,13 +81,23 @@ export function StoreRankingView() {
             )}
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4">
-            <CorridaPeriodo vendedores={data.vendedores.slice(0, 8)} meta={data.metaPeriodo} meuId={data.meuId} />
-            <BonificacaoPeriodo />
-          </div>
+          <CorridaPeriodo
+            vendedores={data.vendedores.slice(0, 8)}
+            metaLoja={data.metaPeriodo}
+            metaCorrida={data.metaCorrida}
+            meuId={data.meuId}
+          />
 
-          <TabelaRanking vendedores={data.vendedores} meta={data.metaPeriodo} meuId={data.meuId} />
+          <TabelaRanking
+            vendedores={data.vendedores}
+            meuId={data.meuId}
+            onSelect={vendedor => setSellerAberto(vendedor.id)}
+          />
         </div>
+
+        {sellerSelecionado && (
+          <SellerProfileModal seller={sellerSelecionado} onClose={() => setSellerAberto(null)} />
+        )}
       </PageCanvas>
     </RankingErrorBoundary>
   )

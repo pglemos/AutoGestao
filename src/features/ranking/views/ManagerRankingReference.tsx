@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react'
-import { Award, BarChart3, ListOrdered, RefreshCw, Star, TrendingUp, Trophy } from 'lucide-react'
+import { Award, BarChart3, ListOrdered, Star, TrendingUp, Trophy } from 'lucide-react'
 import { HelpTooltip } from '@/components/ui/HelpTooltip'
-import { RANKING_PERIODOS, useStoreRankingPageData, type RankedVendedor } from '@/features/ranking/hooks/useStoreRankingPageData'
+import { useStoreRankingPageData, type RankedVendedor } from '@/features/ranking/hooks/useStoreRankingPageData'
+import { getPeriodoRange } from '@/features/ranking/periodos'
+import { RankingErrorNotice, RankingPeriodTabs, RankingRefreshButton, RankingUnitSelect } from '@/features/ranking/components/RankingControls'
 import { ManagerRankingComparison } from '@/features/ranking/manager/ManagerRankingComparison'
 import { ManagerRankingPodium } from '@/features/ranking/manager/ManagerRankingPodium'
 import { PageCanvas } from '@/design-system/page'
@@ -9,6 +11,19 @@ import { PageHeading } from '@/components/molecules/PageHeading'
 import { ScrollableRegion } from '@/design-system/page/ScrollableRegion'
 
 type Criterion = 'geral' | 'vendas' | 'conversao' | 'rotina'
+
+const CRITERION_LABEL: Record<Criterion, string> = {
+  geral: 'pontuação geral',
+  vendas: 'volume de vendas',
+  conversao: 'taxa de conversão',
+  rotina: 'execução da rotina',
+}
+
+const DIA_MES_ANO = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+
+function formatarDia(iso: string): string {
+  return DIA_MES_ANO.format(new Date(`${iso}T12:00:00`))
+}
 
 /** Colunas e textos de ajuda da classificação, na ordem do Base44. */
 const RANKING_COLUMNS: Array<{ label: string; help?: string }> = [
@@ -31,7 +46,11 @@ export function ManagerRankingReference() {
   const data = useStoreRankingPageData({ referenceMonth: selectedMonth })
   const [criterion, setCriterion] = useState<Criterion>('geral')
   const [view, setView] = useState<'classificacao' | 'comparativo'>('classificacao')
-  const month = new Intl.DateTimeFormat('pt-BR', { month: 'long', year: 'numeric' }).format(new Date(`${selectedMonth}-01T12:00:00`))
+  // "Anual" + "março/2026" não dizia nada a ninguém: o mês é a ÂNCORA e o
+  // período é a janela em volta dela. Em vez de explicar a regra, a tela passa
+  // a mostrar a janela que ela realmente consultou.
+  const { startDate, endDate } = getPeriodoRange(data.periodo, selectedMonth)
+  const janela = `${formatarDia(startDate)} a ${formatarDia(endDate)}`
 
   const ranking = useMemo(() => [...data.vendedores].sort((left, right) => {
     if (criterion === 'conversao') return right.conversao - left.conversao
@@ -56,35 +75,30 @@ export function ManagerRankingReference() {
         <PageHeading
           icon={Trophy}
           title="Ranking"
-          subtitle="Acompanhe a classificação da equipe por resultado, conversão e execução."
+          subtitle={`${data.periodo} · ${janela} · ordenado por ${CRITERION_LABEL[criterion]}`}
           actions={
             <div className="flex flex-wrap gap-2">
-              <input id="manager-ranking-reference-month" name="referenceMonth" type="month" value={selectedMonth} onChange={(event) => setSelectedMonth(event.target.value)} aria-label="Mês do ranking" className="rounded-xl border border-border px-3 py-2 text-sm" />
-              {RANKING_PERIODOS.map(periodo => (
-                <button key={periodo} type="button" onClick={() => data.setPeriodo(periodo)} aria-pressed={data.periodo === periodo} className={`rounded-xl border px-3 py-2 text-sm transition-colors ${data.periodo === periodo ? 'border-status-success bg-brand-primary font-semibold text-white' : 'border-border bg-white text-muted-foreground hover:bg-surface-alt'}`}>
-                  {periodo}
-                </button>
-              ))}
-              {data.unidades.length > 1 && (
-                <select id="manager-ranking-store" name="store" value={data.unidade} onChange={(event) => data.setUnidade(event.target.value)} aria-label="Unidade do ranking" className="rounded-xl border border-border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-status-success">
-                  <option value="todas">Todas as unidades</option>
-                  {data.unidades.map(unidade => <option key={unidade} value={unidade}>{unidade}</option>)}
+              <label className="flex items-center gap-2 text-body-sm font-semibold text-muted-foreground" htmlFor="manager-ranking-reference-month">
+                <span className="sr-only sm:not-sr-only">Mês de referência</span>
+                <input id="manager-ranking-reference-month" name="referenceMonth" type="month" value={selectedMonth} onChange={(event) => setSelectedMonth(event.target.value)} aria-label="Mês de referência do período" className="min-h-11 rounded-xl border border-border bg-white px-3 text-body-sm font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40" />
+              </label>
+              <RankingPeriodTabs value={data.periodo} onChange={data.setPeriodo} />
+              <RankingUnitSelect id="manager-ranking-store" value={data.unidade} unidades={data.unidades} onChange={data.setUnidade} />
+              <label className="flex items-center gap-2 text-body-sm font-semibold text-muted-foreground" htmlFor="manager-ranking-criterion">
+                <span className="sr-only sm:not-sr-only">Critério</span>
+                <select id="manager-ranking-criterion" name="criterion" value={criterion} onChange={(event) => setCriterion(event.target.value as Criterion)} aria-label="Critério do ranking" className="min-h-11 rounded-xl border border-border bg-white px-3 text-body-sm font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40">
+                  <option value="geral">Pontuação geral</option>
+                  <option value="vendas">Vendas</option>
+                  <option value="conversao">Conversão</option>
+                  <option value="rotina">Rotina</option>
                 </select>
-              )}
-              <select id="manager-ranking-criterion" name="criterion" value={criterion} onChange={(event) => setCriterion(event.target.value as Criterion)} aria-label="Critério do ranking" className="rounded-xl border border-border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-status-success">
-                <option value="geral">Pontuação geral</option>
-                <option value="vendas">Vendas</option>
-                <option value="conversao">Conversão</option>
-                <option value="rotina">Rotina</option>
-              </select>
-              <button type="button" onClick={() => void data.handleRefresh()} aria-label="Atualizar ranking" className="grid h-10 w-10 place-items-center rounded-xl border border-border text-muted-foreground hover:bg-surface-alt">
-                <RefreshCw size={16} className={data.isRefetching ? 'animate-spin' : ''} />
-              </button>
+              </label>
+              <RankingRefreshButton onRefresh={() => void data.handleRefresh()} isRefetching={data.isRefetching} />
             </div>
           }
         />
 
-        {data.error && <div role="alert" className="rounded-xl border border-status-error/30 bg-status-error-surface px-4 py-3 text-sm font-medium text-status-error-text">{data.error}</div>}
+        {data.error && <RankingErrorNotice message={data.error} onRetry={() => void data.handleRefresh()} isRetrying={data.isRefetching} />}
 
         {/* Toggle de visão do Base44: classificação e comparativo não convivem na mesma tela. */}
         <nav className="rounded-2xl border border-border-subtle bg-white p-3 shadow-sm" aria-label="Visão do ranking">
@@ -105,7 +119,7 @@ export function ManagerRankingReference() {
 
         {view === 'comparativo' ? (
           data.vendedores.length > 1
-            ? <ManagerRankingComparison sellers={data.vendedores} periodLabel={`${data.periodo} · ${month}`} />
+            ? <ManagerRankingComparison sellers={data.vendedores} periodLabel={`${data.periodo} · ${janela}`} />
             : <div className="rounded-2xl border border-border-subtle bg-white p-10 text-center shadow-sm"><BarChart3 className="mx-auto mb-3 text-text-disabled" size={40} /><p className="text-sm font-medium text-muted-foreground">São necessários pelo menos dois vendedores no período para comparar.</p></div>
         ) : (
         <>
@@ -114,7 +128,7 @@ export function ManagerRankingReference() {
         {!data.loading && ranking.length >= 3 && <ManagerRankingPodium ranking={ranking} />}
 
         <section className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm" aria-labelledby="ranking-table-title">
-          <div className="border-b border-border-subtle px-5 py-4"><h2 id="ranking-table-title" className="font-semibold capitalize text-foreground">Classificação — {data.periodo} · {month}</h2><p className="mt-1 text-xs text-muted-foreground">Fórmula provisória aguardando decisão do Dono: 50% resultado, 25% conversão e 25% execução da rotina. Sem execução verificável, a pontuação não é estimada.</p></div>
+          <div className="border-b border-border-subtle px-5 py-4"><h2 id="ranking-table-title" className="font-semibold text-foreground">Classificação por {CRITERION_LABEL[criterion]} — {janela}</h2><p className="mt-1 text-xs text-muted-foreground">Fórmula provisória aguardando decisão do Dono: 50% resultado, 25% conversão e 25% execução da rotina. Sem execução verificável, a pontuação não é estimada.</p></div>
           {data.loading ? <div className="flex justify-center py-12"><div className="h-6 w-6 animate-spin rounded-full border-4 border-status-success/30 border-t-emerald-600" /></div> : ranking.length === 0 ? <div className="flex flex-col items-center justify-center py-16 text-center"><Trophy className="mb-3 text-text-disabled" size={48} /><p className="font-medium text-muted-foreground">Ainda não há dados suficientes para montar o ranking.</p></div> : <ScrollableRegion axis="horizontal" label="Classificação por vendedor" className=""><table className="w-full min-w-[900px] text-sm"><thead className="border-b border-border-subtle bg-surface-alt"><tr>{RANKING_COLUMNS.map(({ label, help }) => <th key={label} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground"><span className="inline-flex items-center gap-1">{label}<HelpTooltip text={help} /></span></th>)}</tr></thead><tbody className="divide-y divide-border-subtle">{ranking.map((seller, index) => <RankingRow key={seller.id} seller={seller} index={index} />)}</tbody></table></ScrollableRegion>}
         </section>
         </>
@@ -124,12 +138,12 @@ export function ManagerRankingReference() {
 }
 
 function Highlight({ label, name, value, icon: Icon, tone, help }: { label: string; name: string; value: string; icon: typeof Trophy; tone: 'yellow' | 'emerald' | 'blue' | 'violet'; help?: string }) {
-  const tones = { yellow: 'border-status-warning/20 bg-status-warning-surface text-status-warning-text', emerald: 'border-status-success/20 bg-status-success-surface text-status-success-text', blue: 'border-status-info/20 bg-status-info-surface text-status-info-text', violet: 'border-status-info/20 bg-status-info-surface text-status-info-text' }
+  const tones = { yellow: 'border-status-warning/20 bg-status-warning-surface text-status-warning-text', emerald: 'border-status-success/20 bg-status-success-surface text-status-success-text', blue: 'border-status-info/20 bg-status-info-surface text-status-info-text', violet: 'border-brand-primary/20 bg-brand-primary-subtle text-brand-primary-hover' }
   return <article className={`rounded-2xl border bg-white p-4 shadow-sm ${tones[tone].split(' ')[0]}`}><div className="mb-2 flex items-center gap-2"><span className={`grid h-8 w-8 place-items-center rounded-lg ${tones[tone].split(' ').slice(1).join(' ')}`}><Icon size={16} /></span><p className="flex items-center gap-1 text-xs text-muted-foreground">{label}<HelpTooltip text={help} /></p></div><p className="font-bold text-foreground">{name}</p><p className="text-sm text-muted-foreground">{value}</p></article>
 }
 
 function RankingRow({ seller, index }: { seller: RankedVendedor; index: number }) {
-  const attainment = seller.meta > 0 ? Math.round((seller.vendas / seller.meta) * 100) : null
+  const attainment = seller.atingimento
   const rowTone = index === 0 ? 'bg-status-warning-surface/60 font-medium' : index === 1 ? 'bg-surface-alt/80 font-medium' : index === 2 ? 'bg-status-warning-surface/40 font-medium' : ''
   const positionTone = index === 0 ? 'bg-status-warning/50 text-status-warning-foreground' : index === 1 ? 'bg-gray-400 text-status-warning-foreground' : index === 2 ? 'bg-status-warning text-status-warning-foreground' : 'bg-muted text-muted-foreground'
   const barTone = attainment === null ? 'bg-muted' : attainment >= 80 ? 'bg-status-success' : attainment >= 50 ? 'bg-status-warning' : 'bg-status-error'

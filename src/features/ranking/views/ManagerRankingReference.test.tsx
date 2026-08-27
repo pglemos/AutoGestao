@@ -53,7 +53,7 @@ describe('ManagerRankingReference', () => {
   test('identifica os campos de filtro para acessibilidade e autofill', () => {
     render(<ManagerRankingReference />)
 
-    expect(screen.getByLabelText('Mês do ranking')).toHaveAttribute('name', 'referenceMonth')
+    expect(screen.getByLabelText('Mês de referência do período')).toHaveAttribute('name', 'referenceMonth')
     expect(screen.getByLabelText('Critério do ranking')).toHaveAttribute('name', 'criterion')
   })
 })
