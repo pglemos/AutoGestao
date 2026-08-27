@@ -5,10 +5,10 @@
 - Rotas públicas: **9**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
-- Tabelas referenciadas pelo runtime: **181**
+- Tabelas referenciadas pelo runtime: **179**
 - RPCs referenciadas pelo runtime: **103**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **387**
+- Pares tabela/operação encontrados: **383**
 
 ## Rotas
 
@@ -252,9 +252,7 @@
 | `pdi_metas` | 2 |
 | `pdi_niveis_cargo` | 1 |
 | `pdi_plano_acao` | 2 |
-| `pdi_reviews` | 1 |
 | `pdi_sessoes` | 4 |
-| `pdis` | 1 |
 | `perfil_consultor_mx` | 4 |
 | `planejamentos_estrategicos` | 1 |
 | `planos_acao` | 13 |
@@ -571,11 +569,7 @@
 | `pdi_niveis_cargo:select` | 1 |
 | `pdi_plano_acao:select` | 2 |
 | `pdi_plano_acao:update` | 1 |
-| `pdi_reviews:insert` | 1 |
-| `pdi_reviews:select` | 1 |
 | `pdi_sessoes:select` | 4 |
-| `pdis:select` | 1 |
-| `pdis:update` | 1 |
 | `perfil_consultor_mx:insert` | 1 |
 | `perfil_consultor_mx:select` | 3 |
 | `perfil_consultor_mx:upsert` | 1 |

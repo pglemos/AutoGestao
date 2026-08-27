@@ -1,6 +1,5 @@
 export { useTrainings, useContentSuggestions, useDevelopmentRecommendations, useDevelopmentTracks } from './useTrainings'
 export { useFeedbacks } from './useFeedbacks'
-export { usePDIs, useMyPDIs } from './usePDI'
 export { useFeedbackReports as useWeeklyFeedbackReports } from './useFeedbackReports'
 export { useNotifications } from './useNotifications'
 export { useBroadcasts as useSystemBroadcasts } from './useBroadcasts'

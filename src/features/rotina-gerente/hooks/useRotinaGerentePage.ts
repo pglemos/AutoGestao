@@ -5,7 +5,8 @@ import { calculateReferenceDate, useCheckins } from '@/hooks/useCheckins'
 import { useGoals, useStoreMetaRules } from '@/hooks/useGoals'
 import { useRanking } from '@/hooks/useRanking'
 import { useManagerRoutine } from '@/hooks/useManagerRoutine'
-import { useFeedbacks, usePDIs, useNotifications } from '@/hooks/useData'
+import { useFeedbacks, useNotifications } from '@/hooks/useData'
+import { usePDISessions } from '@/hooks/usePDI_MX'
 import { isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { useStoreSales } from '@/hooks/useStoreSales'
 import { useCheckinAuditor } from '@/hooks/useCheckinAuditor'
@@ -43,7 +44,9 @@ export function useRotinaGerentePage() {
   const { refetch: refetchFeedbacks } = useFeedbacks(
     isAdmin ? { storeId: effectiveStoreId } : undefined,
   )
-  const { refetch: refetchPDIs } = usePDIs(effectiveStoreId)
+  // Sincroniza a sessão de PDI de verdade; `usePDIs` recarregava a tabela
+  // `pdis`, vazia em produção, e a rotina anunciava "PDI atualizado" à toa.
+  const { refetch: refetchPDIs } = usePDISessions(effectiveStoreId)
   const { sendNotification } = useNotifications()
   const {
     fetchPendingRequests,
