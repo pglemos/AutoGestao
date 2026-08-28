@@ -229,3 +229,45 @@ describe('os indicadores novos chegam ao departamento que a tela renderiza', () 
     expect(orfaos).toEqual([])
   })
 })
+
+/**
+ * `calcularFunil` devolve 0 quando o denominador é 0. O cockpit exibia esse 0
+ * como "0%" e o pontuava como falha — indistinguível de uma conversão que
+ * realmente foi zero.
+ *
+ * Não é hipotético: em produção `agd_cart_prev_day + agd_net_prev_day` está
+ * zerado em 29 de 29 lojas com lançamento, então "Conversão de Agendamentos
+ * em Visitas" marcava 0% na rede inteira, contra meta de 60%, e ajudava a
+ * rotular o comercial como Crítico.
+ */
+describe('taxa de funil sem denominador é ausência, não zero', () => {
+  function taxa(engine: ReturnType<typeof buildCentralMxEngine>, code: string) {
+    const item = engine.planningIndicators.find(i => i.code === code)
+    return { realizado: item?.realizado ?? null, status: item?.status }
+  }
+
+  const semDenominador = buildCentralMxEngine({
+    ...baseInput,
+    funnel: { leadToSchedule: null, scheduleToVisit: null, visitToSale: null },
+  })
+
+  test('as três taxas ficam sem realizado', () => {
+    expect(taxa(semDenominador, 'lead_to_appointment_rate').realizado).toBeNull()
+    expect(taxa(semDenominador, 'appointment_to_visit_rate').realizado).toBeNull()
+    expect(taxa(semDenominador, 'visit_to_sale_rate').realizado).toBeNull()
+  })
+
+  test('não dispara alerta crítico de conversão sem dado', () => {
+    const alertas = semDenominador.alerts.filter(a => /Convers/i.test(a.problem))
+    expect(alertas).toEqual([])
+  })
+
+  test('zero medido continua sendo zero, e ainda alerta', () => {
+    const zeroReal = buildCentralMxEngine({
+      ...baseInput,
+      funnel: { leadToSchedule: 0, scheduleToVisit: 0, visitToSale: 0 },
+    })
+    expect(taxa(zeroReal, 'lead_to_appointment_rate').realizado).toBe(0)
+    expect(zeroReal.alerts.some(a => /Convers/i.test(a.problem))).toBe(true)
+  })
+})

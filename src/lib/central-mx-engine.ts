@@ -92,10 +92,19 @@ export type CentralMxEngineInput = {
     checkedInCount: number
     sellerCount: number
   }
+  /**
+   * Taxas do funil. `null` = não medido, e é diferente de `0`.
+   *
+   * `calcularFunil` devolve 0 quando o denominador é 0, o que fazia o cockpit
+   * exibir "0%" para uma divisão por zero e ainda pontuar isso como falha.
+   * Em produção `agd_*_prev_day` está zerado em 29 de 29 lojas, então
+   * "Conversão de Agendamentos em Visitas" marcava 0% na rede inteira e
+   * derrubava o score do comercial para Crítico.
+   */
   funnel: {
-    leadToSchedule: number
-    scheduleToVisit: number
-    visitToSale: number
+    leadToSchedule: number | null
+    scheduleToVisit: number | null
+    visitToSale: number | null
   }
   benchmarks: {
     leadToSchedule: number

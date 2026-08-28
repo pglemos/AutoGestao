@@ -148,10 +148,12 @@ export function buildCentralMx(
       checkedInCount: data.metrics.checkedInCount,
       sellerCount: data.sellers?.length || 0,
     },
+    // Denominador zerado não vira 0%: vira ausência. Ver a nota em
+    // `CentralMxEngineInput.funnel`.
     funnel: {
-      leadToSchedule: data.funilData.tx_lead_agd,
-      scheduleToVisit: data.funilData.tx_agd_visita,
-      visitToSale: data.funilData.tx_visita_vnd,
+      leadToSchedule: data.funilData.leads > 0 ? data.funilData.tx_lead_agd : null,
+      scheduleToVisit: data.funilData.agd_total > 0 ? data.funilData.tx_agd_visita : null,
+      visitToSale: data.funilData.visitas > 0 ? data.funilData.tx_visita_vnd : null,
     },
     benchmarks: {
       leadToSchedule: data.funnelBenchmarks.leadAgd,
