@@ -12,10 +12,15 @@ import {
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 
 test('o manifesto cobre as superfícies dos cinco perfis de gestão', () => {
-  // 34 entradas canônicas; aliases e superfícies removidas ficam fora do manifesto.
+  // 33 entradas canônicas; aliases e superfícies removidas ficam fora do manifesto.
   // A contagem explícita é tripwire contra rota de gestão adicionada ou removida
   // sem revisão.
-  assert.equal(managementRouteManifest.length, 34)
+  //
+  // Caiu de 34 para 33 quando `/consultoria/clientes` virou alias: a rota agora é
+  // `<Navigate to="/clientes">` (App.tsx) e a página `pages/ConsultoriaClientes.tsx`
+  // deixou de existir. O manifesto seguia apontando para ela e o gate ficou
+  // vermelho em todo commit desde 2026-08-27.
+  assert.equal(managementRouteManifest.length, 33)
   assert.equal(new Set(managementRouteManifest.map((route) => route.key)).size, managementRouteManifest.length)
   assert.equal(new Set(managementSourceEntries).size, managementSourceEntries.length)
   for (const role of ['administrador_geral', 'administrador_mx', 'consultor_mx', 'dono', 'gerente']) {

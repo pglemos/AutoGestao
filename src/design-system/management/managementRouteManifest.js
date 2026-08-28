@@ -20,7 +20,6 @@ export const managementRouteManifest = [
   { key: 'simulacao', path: '/simulacao', source: 'pages/Simulacao.tsx', roles: internalRoles, surface: 'simulation' },
   { key: 'agenda', path: '/agenda', source: 'pages/AgendaAdmin.tsx', roles: internalRoles, surface: 'agenda' },
   { key: 'consultoria', path: '/consultoria', source: 'pages/Consultoria.tsx', roles: internalRoles, surface: 'consulting' },
-  { key: 'consultoria-clientes', path: '/consultoria/clientes', source: 'pages/ConsultoriaClientes.tsx', roles: internalRoles, surface: 'consulting-clients' },
   { key: 'consultoria-cliente', path: '/consultoria/clientes/sandbox-mx', source: 'pages/ConsultoriaClienteDetalhe.tsx', roles: internalRoles, surface: 'consulting-client-detail' },
   { key: 'consultoria-visita', path: '/consultoria/clientes/sandbox-mx/visitas/1', source: 'pages/ConsultoriaVisitaExecucao.tsx', roles: internalRoles, surface: 'consulting-visit' },
   { key: 'produtos', path: '/produtos', source: 'pages/ProdutosDigitais.tsx', roles: allManagementRoles, surface: 'products' },

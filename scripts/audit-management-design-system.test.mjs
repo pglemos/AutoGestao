@@ -53,8 +53,9 @@ test('aliases canônicos da Fase 4 não disparam violações', () => {
 
 test('audita as dependências reais das rotas de gestão', () => {
   const report = auditManagementDesignSystem()
-  // 34 entradas canônicas; aliases e superfícies removidas ficam fora da auditoria.
-  assert.equal(report.entries, 34)
+  // 33 entradas canônicas; aliases e superfícies removidas ficam fora da auditoria.
+  // Caiu de 34 quando `/consultoria/clientes` virou alias (`<Navigate to="/clientes">`).
+  assert.equal(report.entries, 33)
   assert.ok(report.reachableFiles > 0)
   assert.ok(report.auditedFiles > 0)
   assert.ok(report.baselineFiles > 0)
