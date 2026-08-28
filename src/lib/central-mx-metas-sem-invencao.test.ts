@@ -195,3 +195,37 @@ describe('venda sem canal vai para Vendas - Outros', () => {
     expect(valorDe(engine, 'sales_seller_wallet')).toBeNull()
   })
 })
+
+/**
+ * Provar que o motor calcula um indicador não prova que a tela o mostra.
+ * O cockpit renderiza `departments[].indicators`, não `planningIndicators`
+ * direto — `DepartmentsView` faz passthrough de `department.indicators`.
+ * Um indicador que existisse só na lista plana ficaria invisível na aba do
+ * departamento, e nenhum teste anterior pegaria isso.
+ */
+describe('os indicadores novos chegam ao departamento que a tela renderiza', () => {
+  const engine = buildCentralMxEngine({
+    ...baseInput,
+    salesByChannel: { internet: 250, doorFlow: 107, afterSales: 4, other: 48, totalSales: 554 },
+  })
+
+  function noDepartamento(code: string) {
+    const dep = engine.departments.find(item => item.indicators.some(ind => ind.code === code))
+    return dep ? { departamento: dep.code, valor: dep.indicators.find(i => i.code === code)?.realizado } : null
+  }
+
+  test('sales_other aparece no comercial com o valor do motor', () => {
+    expect(noDepartamento('sales_other')).toEqual({ departamento: 'comercial', valor: 48 })
+  })
+
+  test('os indicadores de pós-venda aparecem no operacional', () => {
+    expect(noDepartamento('after_sales_volume')).toEqual({ departamento: 'operacional', valor: 4 })
+    expect(noDepartamento('after_sales_percentage')?.departamento).toBe('operacional')
+  })
+
+  test('todo indicador do catálogo pertence a algum departamento', () => {
+    const emDepartamento = new Set(engine.departments.flatMap(d => d.indicators.map(i => i.code)))
+    const orfaos = engine.planningIndicators.map(i => i.code).filter(code => !emDepartamento.has(code))
+    expect(orfaos).toEqual([])
+  })
+})
