@@ -5,6 +5,13 @@
     "ignoreFiles": [
       "docs/base44-import/_source/**"
     ],
-    "ignoreValues": []
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "createdAt": "2026-08-28T15:16:36.202Z",
+        "reason": "Inter e a face do design system MX desde antes desta sessao (tokens de tipografia e auditorias do DS assumem ela); trocar a fonte do produto inteiro nao e escopo de correcao de dados/PDI"
+      }
+    ]
   }
 }

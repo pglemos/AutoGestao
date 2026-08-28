@@ -1,3 +1,11 @@
+-- ATENÇÃO (28/08/2026): a parte do GUSTAVO desta migration foi REVERTIDA.
+-- GUSTAVO OLIVEIRA e GUSTAVO OLIVEIRA GOMES são duas pessoas da TREND AUTO,
+-- não um cadastro duplicado — a heurística de nome errou. Ver
+-- 20260828100000_reverte_merge_indevido_gustavo.sql e
+-- 20260828100100_estorna_cancelamentos_venda_gustavo_gomes.sql.
+-- Anderson (AG AUTOMÓVEIS) e Edier (PROMAC JPA) seguem unificados, confirmados
+-- com a operação.
+
 -- Unifica três vendedores que tinham dois cadastros ativos na mesma loja.
 --
 -- O caso que motivou: na TREND AUTO, GUSTAVO OLIVEIRA vendia por dois logins ao
