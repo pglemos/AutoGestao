@@ -1118,7 +1118,13 @@ export const base44 = {
           responsible: 'Gestor Comercial',
           acknowledged: r.acknowledged || false,
           user_comment: r.seller_comment || '',
-          acknowledged_date: r.acknowledged_at
+          acknowledged_date: r.acknowledged_at,
+          // Sem este campo, `moment(f.created_date)` recebia `undefined` e
+          // devolvia a data de HOJE — todo feedback aparecia como se tivesse
+          // sido criado agora. E `list('-created_date')` ordenava por um campo
+          // inexistente, ou seja, não ordenava.
+          created_date: r.created_at,
+          updated_date: r.updated_at
         }));
 
         return mapped.filter(r => matchQuery(r, filter));
