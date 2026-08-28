@@ -21,7 +21,9 @@ export function RankingAvatar({ nome, foto, size = 64, border, gradient = 'linea
         minWidth: size,
         background: showFallback ? gradient : undefined,
         border: border ?? '3px solid var(--color-border-default)',
-        fontSize: size * 0.32,
+        // Num avatar de 28px (pista compacta) 0.32 dava 8,96px. Abaixo de 36px o
+        // circulo precisa de proporcao maior para as iniciais serem lidas.
+        fontSize: size <= 36 ? size * 0.42 : size * 0.32,
       }}
     >
       {showFallback ? initials : <img src={foto} alt={nome} className="w-full h-full rounded-full object-cover" loading="lazy" decoding="async" onError={() => setImgError(true)} />}

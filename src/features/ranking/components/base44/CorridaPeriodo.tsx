@@ -204,7 +204,7 @@ export function CorridaPeriodo({ vendedores, metaLoja, metaCorrida, meuId }: Pro
                   }`}
                 >
                   <span className="truncate block">{primeiroNome(v.nome)}</span>
-                  <span className={`block text-mx-micro font-medium ${isMe ? 'text-white/90' : 'text-muted-foreground'}`}>
+                  <span className={`block text-mx-tiny font-medium ${isMe ? 'text-white/90' : 'text-muted-foreground'}`}>
                     {formatVendas(v.vendas)}
                   </span>
                 </div>
@@ -224,7 +224,7 @@ export function CorridaPeriodo({ vendedores, metaLoja, metaCorrida, meuId }: Pro
 
                 {/* Tag VOCÊ */}
                 {isMe && (
-                  <span className="mt-1 text-mx-micro font-extrabold tracking-wider text-white bg-brand-primary px-1.5 py-0.5 rounded-full uppercase shadow-xs">
+                  <span className="mt-1 text-mx-tiny font-extrabold tracking-wider text-white bg-brand-primary px-1.5 py-0.5 rounded-full uppercase shadow-xs">
                     VOCÊ
                   </span>
                 )}
