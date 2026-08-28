@@ -180,11 +180,25 @@ export function useRanking(storeIdOverride?: string, filters?: { startDate?: str
             return
         }
 
-        const activeMembershipIds = new Set(
+        // A elegibilidade continua sendo "vínculo operacional E membership ativa
+        // de vendedor" — o que mudou é de onde vem a confirmação da membership.
+        //
+        // `vinculos_loja` é limitada por RLS: um vendedor lê apenas a própria
+        // linha. O cruzamento no cliente colapsava a equipe inteira para uma
+        // pessoa, e como a posição no ranking é o índice do array, TODO vendedor
+        // via "#1 posição na loja" independentemente do resultado. O gerente,
+        // que lê as 4 linhas, via o ranking correto — por isso passou batido.
+        //
+        // `vendedor_performance_oficial` é SECURITY DEFINER e já exige o mesmo
+        // par (vendedores_loja + vinculos_loja com role 'vendedor' ativa), então
+        // devolve exatamente o conjunto elegível sem truncar por RLS.
+        const officialSellerIds = new Set(officialRows.map((row) => row.seller_user_id))
+        const membershipIdsVisiveis = new Set(
             ((memberships || []) as unknown as ActiveSellerMembershipRow[])
                 .filter((membership) => membership.users?.active === true && membership.users?.role === 'vendedor')
                 .map((membership) => membership.user_id),
         )
+        const activeMembershipIds = officialSellerIds.size > 0 ? officialSellerIds : membershipIdsVisiveis
         const eligibleMembers = (tenures || [])
             .map((item) => item as unknown as { seller_user_id: string; users?: User })
             .filter((item) => item.users?.active === true && activeMembershipIds.has(item.seller_user_id))
