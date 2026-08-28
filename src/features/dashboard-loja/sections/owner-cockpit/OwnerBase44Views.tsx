@@ -163,6 +163,16 @@ export function OwnerRoutineView({
               <Typography variant="p" tone="muted" className="mt-1 text-sm font-bold">
                 {checkedInCount}/{activeSellers.length} vendedores realizaram o fechamento
               </Typography>
+              {/*
+                O status é do dia de referência, mas Vendas, Leads e Agendamentos
+                somam todos os lançamentos do período carregado. Sem dizer isso, a
+                linha se lê como se os números fossem de hoje — e o card "Agenda
+                comercial" logo acima, que filtra pela data de referência, mostra
+                outro valor para a mesma grandeza.
+              */}
+              <Typography variant="tiny" tone="muted" className="mt-1 block">
+                Status referente ao dia; vendas, leads e agendamentos somam o período selecionado.
+              </Typography>
             </div>
           </div>
           {pendingSellers.length > 0 && (
