@@ -115,7 +115,7 @@ describe('alertas apontam para indicadores que existem', () => {
 describe('pós-venda sai da fonte que já existia', () => {
   const comPosVenda = {
     ...baseInput,
-    salesByChannel: { internet: 3, doorFlow: 5, afterSales: 2, totalSales: 8 },
+    salesByChannel: { internet: 3, doorFlow: 5, afterSales: 2, other: 0, totalSales: 8 },
   }
 
   function valorDe(result: ReturnType<typeof buildCentralMxEngine>, code: string) {
@@ -131,7 +131,7 @@ describe('pós-venda sai da fonte que já existia', () => {
   test('sem vendas no mês a taxa é nula, não 0%', () => {
     const engine = buildCentralMxEngine({
       ...baseInput,
-      salesByChannel: { internet: 0, doorFlow: 0, afterSales: 1, totalSales: 0 },
+      salesByChannel: { internet: 0, doorFlow: 0, afterSales: 1, other: 0, totalSales: 0 },
     })
     expect(valorDe(engine, 'after_sales_percentage')).toBeNull()
   })
@@ -151,5 +151,47 @@ describe('pós-venda sai da fonte que já existia', () => {
     const engine = buildCentralMxEngine(comPosVenda)
     expect(valorDe(engine, 'trade_in_to_sales_rate')).toBeNull()
     expect(valorDe(engine, 'financed_sales_percentage')).toBeNull()
+  })
+})
+
+/**
+ * Decisão da MX em 2026-08-27: venda sem canal registrado conta como
+ * "Vendas - Outros". Eram 48 de 554 vendas em produção que não apareciam em
+ * indicador de origem nenhum.
+ */
+describe('venda sem canal vai para Vendas - Outros', () => {
+  function valorDe(result: ReturnType<typeof buildCentralMxEngine>, code: string) {
+    return result.planningIndicators.find(item => item.code === code)?.realizado ?? null
+  }
+
+  test('as vendas sem canal aparecem em sales_other', () => {
+    const engine = buildCentralMxEngine({
+      ...baseInput,
+      salesByChannel: { internet: 250, doorFlow: 107, afterSales: 0, other: 48, totalSales: 554 },
+    })
+    expect(valorDe(engine, 'sales_other')).toBe(48)
+    expect(valorDe(engine, 'sales_internet')).toBe(250)
+  })
+
+  test('zero vendas sem canal é zero, não ausência', () => {
+    const engine = buildCentralMxEngine({
+      ...baseInput,
+      salesByChannel: { internet: 10, doorFlow: 2, afterSales: 0, other: 0, totalSales: 12 },
+    })
+    expect(valorDe(engine, 'sales_other')).toBe(0)
+  })
+
+  test('sem a fonte, sales_other segue sem realizado', () => {
+    expect(valorDe(buildCentralMxEngine(baseInput), 'sales_other')).toBeNull()
+  })
+
+  /** Carteira continua indivisível: o evento não distingue empresa de vendedor. */
+  test('carteira segue sem realizado nos dois indicadores', () => {
+    const engine = buildCentralMxEngine({
+      ...baseInput,
+      salesByChannel: { internet: 250, doorFlow: 107, afterSales: 0, other: 48, totalSales: 554 },
+    })
+    expect(valorDe(engine, 'sales_company_wallet')).toBeNull()
+    expect(valorDe(engine, 'sales_seller_wallet')).toBeNull()
   })
 })

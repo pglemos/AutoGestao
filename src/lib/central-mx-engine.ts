@@ -124,7 +124,7 @@ export type CentralMxEngineInput = {
    * `carteira` fica de fora: o evento não separa carteira da empresa da do
    * vendedor, e ratear inventaria a diferença.
    */
-  salesByChannel?: { internet: number | null; doorFlow: number | null; afterSales?: number | null; totalSales?: number | null } | null
+  salesByChannel?: { internet: number | null; doorFlow: number | null; afterSales?: number | null; other?: number | null; totalSales?: number | null } | null
   /**
    * Estoque da unidade, já apurado por `useOwnerInventoryMetrics` sobre
    * `veiculos_estoque`. Sem ele, os cinco indicadores de estoque do catálogo
@@ -352,6 +352,7 @@ return {
     seller_count: { meta: null, realizado: sellerCount || null, anoAnterior: anterior('seller_count') },
     sales_internet: { meta: null, realizado: input.salesByChannel?.internet ?? null, anoAnterior: anterior('sales_internet') },
     sales_door_flow: { meta: null, realizado: input.salesByChannel?.doorFlow ?? null, anoAnterior: anterior('sales_door_flow') },
+    sales_other: { meta: null, realizado: input.salesByChannel?.other ?? null, anoAnterior: anterior('sales_other') },
     employee_count: { meta: null, realizado: input.headcount ?? null, anoAnterior: anterior('employee_count') },
     appointments_per_sale: { meta: null, realizado: agendamentosPorVenda, anoAnterior: anterior('appointments_per_sale') },
     avg_sales_per_seller: { meta: null, realizado: porVendedor(input.metrics.totalSales), anoAnterior: anterior('avg_sales_per_seller') },

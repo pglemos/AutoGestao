@@ -15,6 +15,11 @@ import { fetchAllRows } from '@/lib/supabasePagination'
  * errados. Esses indicadores seguem sem realizado até a origem registrar a
  * diferença.
  *
+ * Venda sem canal registrado conta como **Vendas - Outros**, por decisão da MX
+ * em 2026-08-27. Eram 48 de 554 vendas invisíveis em todo indicador de origem;
+ * agora têm onde aparecer. A leitura correta de `sales_other` é "venda cuja
+ * origem não foi registrada", não "veio de um quinto canal".
+ *
  * O recorte usa `data_competencia` — a competência canônica da metodologia —,
  * nunca `data_evento`.
  */
@@ -23,11 +28,13 @@ export type SalesByChannel = {
   doorFlow: number | null
   /** Eventos `pos_venda_realizado` no mesmo recorte de competência. */
   afterSales: number | null
+  /** Vendas sem canal registrado — ver nota sobre `sales_other` acima. */
+  other: number | null
   /** Total de vendas do mês — denominador de `% de Pós-Venda`. */
   totalSales: number | null
 }
 
-const VAZIO: SalesByChannel = { internet: null, doorFlow: null, afterSales: null, totalSales: null }
+const VAZIO: SalesByChannel = { internet: null, doorFlow: null, afterSales: null, other: null, totalSales: null }
 
 export function useSalesByChannel(storeId: string | null, period: string): SalesByChannel {
   const [sales, setSales] = useState<SalesByChannel>(VAZIO)
@@ -58,6 +65,7 @@ export function useSalesByChannel(storeId: string | null, period: string): Sales
         internet: vendas.filter(row => row.canal === 'internet').length,
         doorFlow: vendas.filter(row => row.canal === 'showroom' || row.canal === 'porta').length,
         afterSales: rows.filter(row => row.tipo_evento === 'pos_venda_realizado').length,
+        other: vendas.filter(row => row.canal === null || row.canal === undefined).length,
         totalSales: vendas.length,
       })
     })
