@@ -84,7 +84,7 @@ export function AdminNetworkView() {
                 </div>
                 <div className="min-w-0">
                   <Typography variant="h3" className="text-sm sm:text-lg tracking-tight leading-tight whitespace-normal break-words">{store.store_name}</Typography>
-                  <Typography variant="tiny" tone="muted" className="text-mx-nano sm:text-mx-micro">{total} ESPECIALISTAS</Typography>
+                  <Typography variant="tiny" tone="muted">{total} ESPECIALISTAS</Typography>
                 </div>
               </div>
               

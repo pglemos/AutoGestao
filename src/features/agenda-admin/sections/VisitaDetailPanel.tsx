@@ -102,22 +102,22 @@ export function VisitaDetailPanel({
                     {(visit.visit_reason || visit.target_audience || visit.product_name || visit.fora_do_contrato) && (
                       <div className="mt-mx-xs flex flex-wrap gap-mx-xs">
                         {visit.visit_reason && (
-                          <Badge variant="outline" className="max-w-full overflow-hidden text-mx-nano">
+                          <Badge variant="outline" className="max-w-full overflow-hidden">
                             <span className="block max-w-full truncate">{visit.visit_reason}</span>
                           </Badge>
                         )}
                         {visit.target_audience && (
-                          <Badge variant="ghost" className="max-w-full overflow-hidden text-mx-nano">
+                          <Badge variant="ghost" className="max-w-full overflow-hidden">
                             <span className="block max-w-full truncate">{visit.target_audience}</span>
                           </Badge>
                         )}
                         {visit.product_name && (
-                          <Badge variant="brand" className="max-w-full overflow-hidden text-mx-nano">
+                          <Badge variant="brand" className="max-w-full overflow-hidden">
                             <span className="block max-w-full truncate">{visit.product_name}</span>
                           </Badge>
                         )}
                         {visit.fora_do_contrato && (
-                          <Badge variant="secondary" className="max-w-full overflow-hidden text-mx-nano">
+                          <Badge variant="secondary" className="max-w-full overflow-hidden">
                             <span className="block max-w-full truncate">Adicional</span>
                           </Badge>
                         )}
@@ -143,7 +143,7 @@ export function VisitaDetailPanel({
                   <div className="flex items-center gap-mx-xs mb-1">
                     <CalendarDays size={12} className="text-status-success-text shrink-0" />
                     <Typography variant="tiny" className="">{format(startsAt, 'HH:mm')}</Typography>
-                    <Badge variant="outline" className="text-mx-nano">{getEventTypeLabel(event.event_type)}</Badge>
+                    <Badge variant="outline">{getEventTypeLabel(event.event_type)}</Badge>
                   </div>
                   <Typography variant="tiny" className="font-bold truncate block">{event.title}</Typography>
                   {event.responsible_name && (
@@ -152,17 +152,17 @@ export function VisitaDetailPanel({
                   {(event.visit_reason || event.target_audience || event.product_name) && (
                     <div className="mt-mx-xs flex flex-wrap gap-mx-xs">
                       {event.visit_reason && (
-                        <Badge variant="outline" className="max-w-full overflow-hidden text-mx-nano">
+                        <Badge variant="outline" className="max-w-full overflow-hidden">
                           <span className="block max-w-full truncate">{event.visit_reason}</span>
                         </Badge>
                       )}
                       {event.target_audience && (
-                        <Badge variant="ghost" className="max-w-full overflow-hidden text-mx-nano">
+                        <Badge variant="ghost" className="max-w-full overflow-hidden">
                           <span className="block max-w-full truncate">{event.target_audience}</span>
                         </Badge>
                       )}
                       {event.product_name && (
-                        <Badge variant="brand" className="max-w-full overflow-hidden text-mx-nano">
+                        <Badge variant="brand" className="max-w-full overflow-hidden">
                           <span className="block max-w-full truncate">{event.product_name}</span>
                         </Badge>
                       )}

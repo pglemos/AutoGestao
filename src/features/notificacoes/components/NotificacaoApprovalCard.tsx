@@ -59,19 +59,19 @@ export function NotificacaoApprovalCard({
       </div>
       <div className="mt-mx-md grid grid-cols-1 sm:grid-cols-4 gap-mx-sm text-mx-tiny font-bold uppercase">
         <div>
-          <span className="block text-mx-nano text-muted-foreground tracking-mx-widest">Loja</span>
+          <span className="block text-mx-tiny text-muted-foreground tracking-mx-widest">Loja</span>
           {approval.store_name_snapshot}
         </div>
         <div>
-          <span className="block text-mx-nano text-muted-foreground tracking-mx-widest">Função</span>
+          <span className="block text-mx-tiny text-muted-foreground tracking-mx-widest">Função</span>
           {approval.role}
         </div>
         <div>
-          <span className="block text-mx-nano text-muted-foreground tracking-mx-widest">Na loja</span>
+          <span className="block text-mx-tiny text-muted-foreground tracking-mx-widest">Na loja</span>
           {approval.store_tenure}
         </div>
         <div>
-          <span className="block text-mx-nano text-muted-foreground tracking-mx-widest">Mercado</span>
+          <span className="block text-mx-tiny text-muted-foreground tracking-mx-widest">Mercado</span>
           {approval.market_experience}
         </div>
       </div>
@@ -93,7 +93,7 @@ export function NotificacaoApprovalCard({
           type="button"
           onClick={() => void onReview(approval, 'approve', notificationId)}
           disabled={reviewingPreRegistrationId === approval.id}
-          className="h-mx-11 rounded-2xl font-bold uppercase tracking-widest text-mx-nano"
+          className="h-mx-11 rounded-2xl font-bold uppercase tracking-widest text-mx-tiny"
         >
           <CheckCircle2 size={15} className="mr-2" />
           Aprovar login
@@ -103,7 +103,7 @@ export function NotificacaoApprovalCard({
           variant="outline"
           onClick={() => void onReview(approval, 'reject', notificationId)}
           disabled={reviewingPreRegistrationId === approval.id}
-          className="h-mx-11 rounded-2xl font-bold uppercase tracking-widest text-mx-nano text-status-error-text hover:bg-status-error-surface"
+          className="h-mx-11 rounded-2xl font-bold uppercase tracking-widest text-mx-tiny text-status-error-text hover:bg-status-error-surface"
         >
           <X size={15} className="mr-2" />
           Rejeitar

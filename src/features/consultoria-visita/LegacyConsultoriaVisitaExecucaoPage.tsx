@@ -671,7 +671,7 @@ export default function ConsultoriaVisitaExecucao() {
             <div className="flex items-center gap-mx-sm">
                <Typography variant="h1" className="text-2xl text-foreground tracking-tighter">{getPmrVisitDisplayLabel(visitNum, journeyTotalVisits)}</Typography>
                <div className={cn(
-                 "px-mx-sm py-0.5 rounded-mx-full text-mx-nano font-bold tracking-mx-widest uppercase shadow-sm border",
+                 "px-mx-sm py-0.5 rounded-mx-full text-mx-tiny font-bold tracking-mx-widest uppercase shadow-sm border",
                  visit?.status === 'concluida' ? "bg-status-success/10 text-status-success border-status-success/20" : "bg-mx-orange-500/10 text-mx-orange-600 border-mx-orange-200 animate-pulse"
                )}>
                  {visit?.status || 'EM ABERTO'}

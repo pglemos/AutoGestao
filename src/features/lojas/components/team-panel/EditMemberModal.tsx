@@ -74,7 +74,7 @@ export function EditMemberModal({
                   <CardTitle id="edit-team-member-title" className="text-white text-lg sm:text-2xl">
                     Editar integrante
                   </CardTitle>
-                  <Typography variant="caption" tone="white" className="opacity-60 block text-mx-nano">
+                  <Typography variant="caption" tone="white" className="opacity-60 block">
                     Dados de acesso, vínculo e vigência de {editingMember.name}
                   </Typography>
                 </div>

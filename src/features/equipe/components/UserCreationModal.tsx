@@ -222,15 +222,15 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                         <div className="space-y-mx-md pt-mx-lg">
                             <div className="flex items-center gap-mx-sm">
                                 <div className="w-mx-10 h-mx-10 rounded-2xl bg-white border border-border flex items-center justify-center text-status-success-text shadow-sm"><ShieldCheck size={20} /></div>
-                                <Typography variant="tiny" tone="muted" className="text-mx-nano">Acesso ao sistema</Typography>
+                                <Typography variant="tiny" tone="muted">Acesso ao sistema</Typography>
                             </div>
                             <div className="flex items-center gap-mx-sm">
                                 <div className="w-mx-10 h-mx-10 rounded-2xl bg-white border border-border flex items-center justify-center text-status-success-text shadow-sm"><Sparkles size={20} /></div>
-                                <Typography variant="tiny" tone="muted" className="text-mx-nano">Vínculo com a loja</Typography>
+                                <Typography variant="tiny" tone="muted">Vínculo com a loja</Typography>
                             </div>
                             <div className="flex items-center gap-mx-sm">
                                 <div className="w-mx-10 h-mx-10 rounded-2xl bg-white border border-border flex items-center justify-center text-status-warning-text shadow-sm"><Zap size={20} /></div>
-                                <Typography variant="tiny" tone="muted" className="text-mx-nano">Senha provisória obrigatória</Typography>
+                                <Typography variant="tiny" tone="muted">Senha provisória obrigatória</Typography>
                             </div>
                         </div>
                     </div>
@@ -328,7 +328,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                               name="role"
                               value={formData.role} 
                               onChange={e => setFormData({...formData, role: e.target.value as UserRole})}
-                              className="w-full h-mx-14 pl-12 pr-mx-md bg-surface-alt border border-border rounded-2xl text-foreground font-bold uppercase tracking-mx-widest text-mx-nano focus:outline-none focus:border-status-success/50 focus:bg-white transition-all appearance-none cursor-pointer"
+                              className="w-full h-mx-14 pl-12 pr-mx-md bg-surface-alt border border-border rounded-2xl text-foreground font-bold uppercase tracking-mx-widest text-mx-tiny focus:outline-none focus:border-status-success/50 focus:bg-white transition-all appearance-none cursor-pointer"
                             >
                               {allowedRoles.map(role => (
                                 <option key={role} value={role} className="bg-white text-foreground">
@@ -351,7 +351,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                               value={formData.store_id} 
                               onChange={e => setFormData({...formData, store_id: e.target.value})}
                               disabled={(!!initialStoreId && initialStoreId !== 'all') && !isAdministradorMx(currentUserRole)}
-                              className="w-full h-mx-14 pl-12 pr-mx-md bg-surface-alt border border-border rounded-2xl text-foreground font-bold uppercase tracking-mx-widest text-mx-nano focus:outline-none focus:border-status-success/50 focus:bg-white transition-all appearance-none cursor-pointer disabled:opacity-40"
+                              className="w-full h-mx-14 pl-12 pr-mx-md bg-surface-alt border border-border rounded-2xl text-foreground font-bold uppercase tracking-mx-widest text-mx-tiny focus:outline-none focus:border-status-success/50 focus:bg-white transition-all appearance-none cursor-pointer disabled:opacity-40"
                             >
                               <option value="" className="bg-white text-muted-foreground/40">
                                 {papelSelecionadoInterno ? 'SEM UNIDADE OBRIGATÓRIA' : 'SELECIONE A UNIDADE'}

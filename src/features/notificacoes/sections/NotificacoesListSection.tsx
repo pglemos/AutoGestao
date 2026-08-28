@@ -162,7 +162,7 @@ export function NotificacoesListSection({
                               {n.title}
                             </Typography>
                             {!n.read && n.priority === 'high' && (
-                              <Badge variant="danger" className="text-mx-nano sm:text-xs h-mx-5 px-3 rounded-mx-full animate-pulse shadow-sm shrink-0">
+                              <Badge variant="danger" className="h-mx-5 px-3 rounded-mx-full animate-pulse shadow-sm shrink-0">
                                 CRÍTICO
                               </Badge>
                             )}

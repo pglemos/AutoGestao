@@ -48,17 +48,17 @@ export function AdminConsultingCard({ consultingData, metrics }: Props) {
                   {item.name}
                 </Typography>
               </div>
-              <Badge variant="outline" className="text-mx-nano">
+              <Badge variant="outline">
                 {String(item.value)}
               </Badge>
             </div>
           ))}
         </div>
         <div className="grid grid-cols-2 gap-mx-sm mt-auto pt-mx-md border-t border-border-subtle">
-          <Badge variant="success" className="justify-center text-mx-nano">
+          <Badge variant="success" className="justify-center">
             {metrics.completedConsultingVisits} concluidas
           </Badge>
-          <Badge variant="info" className="justify-center text-mx-nano">
+          <Badge variant="info" className="justify-center">
             {metrics.plannedConsultingVisits} abertas
           </Badge>
         </div>

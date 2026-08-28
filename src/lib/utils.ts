@@ -17,7 +17,7 @@ import { extendTailwindMerge } from 'tailwind-merge'
  *
  * Declarar as classes como font-size devolve a precedência à cor.
  */
-const MX_FONT_SIZE_UTILITIES = [
+export const MX_FONT_SIZE_UTILITIES = [
     // Escala semântica (@utility em design-system/tokens/semantic.css)
     'display',
     'h1',
@@ -31,11 +31,12 @@ const MX_FONT_SIZE_UTILITIES = [
     'caption',
     'label',
     'data',
-    // Degraus legados declarados em index.css
+    // Degraus legados declarados em index.css. Todo nome aqui PRECISA existir em
+    // CSS: um degrau registrado e não definido não é inerte — ele vence o merge
+    // e apaga o tamanho que o componente declarou, deixando o elemento herdando
+    // do pai. Foi o que `mx-nano` fez em 75 pontos até 2026-08-27.
     'mx-micro',
     'mx-tiny',
-    'mx-nano',
-    'mx-xs',
 ]
 
 const twMerge = extendTailwindMerge({

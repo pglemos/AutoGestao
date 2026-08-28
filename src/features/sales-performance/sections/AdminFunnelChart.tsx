@@ -61,13 +61,13 @@ export function AdminFunnelChart({ funnelData, metrics }: Props) {
           </BarChart>
         </ResponsiveContainer>
         <div className="grid grid-cols-3 gap-mx-xs pt-mx-md border-t border-border-subtle">
-          <Badge variant="info" className="justify-center text-mx-nano">
+          <Badge variant="info" className="justify-center">
             {formatPercent(metrics.convLeadAgd)} L-A
           </Badge>
-          <Badge variant="warning" className="justify-center text-mx-nano">
+          <Badge variant="warning" className="justify-center">
             {formatPercent(metrics.convAgdVis)} A-V
           </Badge>
-          <Badge variant="success" className="justify-center text-mx-nano">
+          <Badge variant="success" className="justify-center">
             {formatPercent(metrics.convVisVnd)} V-V
           </Badge>
         </div>

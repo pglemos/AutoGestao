@@ -100,22 +100,22 @@ export function VisitCard({
             {(visit.visit_reason || visit.target_audience || visit.product_name || visit.fora_do_contrato) && (
               <div className="mt-mx-xs flex flex-wrap gap-mx-xs">
                 {visit.visit_reason && (
-                  <Badge variant="outline" className="max-w-full overflow-hidden text-mx-nano">
+                  <Badge variant="outline" className="max-w-full overflow-hidden">
                     <span className="block max-w-full truncate">{visit.visit_reason}</span>
                   </Badge>
                 )}
                 {visit.target_audience && (
-                  <Badge variant="ghost" className="max-w-full overflow-hidden text-mx-nano">
+                  <Badge variant="ghost" className="max-w-full overflow-hidden">
                     <span className="block max-w-full truncate">{visit.target_audience}</span>
                   </Badge>
                 )}
                 {visit.product_name && (
-                  <Badge variant="brand" className="max-w-full overflow-hidden text-mx-nano">
+                  <Badge variant="brand" className="max-w-full overflow-hidden">
                     <span className="block max-w-full truncate">{visit.product_name}</span>
                   </Badge>
                 )}
                 {visit.fora_do_contrato && (
-                  <Badge variant="secondary" className="max-w-full overflow-hidden text-mx-nano">
+                  <Badge variant="secondary" className="max-w-full overflow-hidden">
                     <span className="block max-w-full truncate">Adicional</span>
                   </Badge>
                 )}

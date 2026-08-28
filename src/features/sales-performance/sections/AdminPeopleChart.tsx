@@ -52,16 +52,16 @@ export function AdminPeopleChart({ roleData, metrics }: Props) {
           </RechartsPieChart>
         </ResponsiveContainer>
         <div className="grid grid-cols-2 gap-mx-xs">
-          <Badge variant="outline" className="justify-center text-mx-nano">
+          <Badge variant="outline" className="justify-center">
             {metrics.owners} donos
           </Badge>
-          <Badge variant="outline" className="justify-center text-mx-nano">
+          <Badge variant="outline" className="justify-center">
             {metrics.managers} gerentes
           </Badge>
-          <Badge variant="outline" className="justify-center text-mx-nano">
+          <Badge variant="outline" className="justify-center">
             {metrics.sellers} vendedores
           </Badge>
-          <Badge variant="outline" className="justify-center text-mx-nano">
+          <Badge variant="outline" className="justify-center">
             {metrics.internalUsers} MX
           </Badge>
         </div>

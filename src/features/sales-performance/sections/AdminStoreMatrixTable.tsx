@@ -35,7 +35,7 @@ export function AdminStoreMatrixTable({ metrics, onStoreClick }: Props) {
             Leitura executiva para auditoria visual e tomada de decisao
           </CardDescription>
         </div>
-        <Badge variant="brand" className="text-mx-nano">
+        <Badge variant="brand">
           {metrics.byStore.length} linhas
         </Badge>
       </CardHeader>
@@ -46,7 +46,7 @@ export function AdminStoreMatrixTable({ metrics, onStoreClick }: Props) {
               {HEADERS.map((head) => (
                 <th
                   key={head}
-                  className="px-mx-md py-mx-sm text-mx-nano font-bold uppercase tracking-widest text-muted-foreground"
+                  className="px-mx-md py-mx-sm text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground"
                 >
                   {head}
                 </th>
@@ -75,10 +75,10 @@ export function AdminStoreMatrixTable({ metrics, onStoreClick }: Props) {
                 <td className="px-mx-md py-mx-sm font-mono-numbers">{formatNumber(store.leads)}</td>
                 <td className="px-mx-md py-mx-sm font-mono-numbers">{formatNumber(store.agd)}</td>
                 <td className="px-mx-md py-mx-sm font-mono-numbers">{formatNumber(store.vis)}</td>
-                <td className="px-mx-md py-mx-sm text-mx-nano font-bold uppercase">
+                <td className="px-mx-md py-mx-sm text-mx-tiny font-bold uppercase">
                   {store.sellers}V / {store.managers}G / {store.owners}D
                 </td>
-                <td className="px-mx-md py-mx-sm text-mx-nano font-bold uppercase text-muted-foreground">
+                <td className="px-mx-md py-mx-sm text-mx-tiny font-bold uppercase text-muted-foreground">
                   {shortDate(store.lastActivity)}
                 </td>
                 <td className="px-mx-md py-mx-sm">
@@ -92,7 +92,6 @@ export function AdminStoreMatrixTable({ metrics, onStoreClick }: Props) {
                             ? 'warning'
                             : 'outline'
                     }
-                    className="text-mx-nano"
                   >
                     {store.status === 'excellent'
                       ? 'excelencia'

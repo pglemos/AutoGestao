@@ -88,7 +88,7 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
           </div>
           {personalConnected ? (
             <div className="flex min-w-0 flex-col gap-mx-tiny">
-              <Badge variant="success" className="w-fit text-mx-nano">Conectada</Badge>
+              <Badge variant="success" className="w-fit">Conectada</Badge>
               {personalGoogleEmail && (
                 <Typography variant="tiny" tone="muted" className="truncate text-mx-tiny">
                   {personalGoogleEmail}

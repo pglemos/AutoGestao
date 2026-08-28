@@ -161,7 +161,7 @@ export function VisitaModal({
                   Presenciais do pacote: <strong className="text-foreground">{presenceBalance.usadas}/{presenceBalance.contratadas}</strong>
                 </span>
                 <span className={cn(
-                  "font-medium px-2 py-0.5 rounded-full text-mx-nano",
+                  "font-medium px-2 py-0.5 rounded-full text-mx-tiny",
                   presenceBalance.disponiveis !== null && presenceBalance.disponiveis > 0
                     ? "bg-status-success-bg text-status-success-text"
                     : "bg-status-error-bg text-status-error-text"
@@ -228,7 +228,7 @@ export function VisitaModal({
               <span className="text-sm font-medium text-foreground flex items-center gap-1.5">
                 Encontro adicional (fora do contrato)
                 {scheduleForm.fora_do_contrato && (
-                  <span className="text-mx-nano font-semibold px-1.5 py-0.2 rounded bg-brand-primary/20 text-brand-primary">
+                  <span className="text-mx-tiny font-semibold px-1.5 py-0.2 rounded bg-brand-primary/20 text-brand-primary">
                     EXTRA
                   </span>
                 )}

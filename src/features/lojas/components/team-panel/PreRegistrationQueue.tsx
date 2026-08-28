@@ -114,15 +114,15 @@ export function PreRegistrationQueue({
                   </div>
                   <div className="mt-mx-md grid grid-cols-1 sm:grid-cols-3 gap-mx-sm text-mx-tiny font-bold uppercase">
                     <div>
-                      <span className="block text-mx-nano text-muted-foreground tracking-mx-widest">Papel</span>
+                      <span className="block text-mx-tiny text-muted-foreground tracking-mx-widest">Papel</span>
                       {item.role}
                     </div>
                     <div>
-                      <span className="block text-mx-nano text-muted-foreground tracking-mx-widest">Na loja</span>
+                      <span className="block text-mx-tiny text-muted-foreground tracking-mx-widest">Na loja</span>
                       {item.store_tenure}
                     </div>
                     <div>
-                      <span className="block text-mx-nano text-muted-foreground tracking-mx-widest">Mercado</span>
+                      <span className="block text-mx-tiny text-muted-foreground tracking-mx-widest">Mercado</span>
                       {item.market_experience}
                     </div>
                   </div>
@@ -134,7 +134,7 @@ export function PreRegistrationQueue({
                     type="button"
                     variant="ghost"
                     onClick={() => onToggleDetails(item.id)}
-                    className="mt-mx-sm h-mx-9 rounded-xl px-mx-sm text-mx-nano font-bold uppercase tracking-widest text-status-success-text"
+                    className="mt-mx-sm h-mx-9 rounded-xl px-mx-sm text-mx-tiny font-bold uppercase tracking-widest text-status-success-text"
                     aria-expanded={detailsExpanded}
                   >
                     {detailsExpanded ? 'Ocultar dados sensíveis' : 'Ver dados sensíveis'}
@@ -163,7 +163,7 @@ export function PreRegistrationQueue({
                         type="button"
                         onClick={() => onReview(item, 'approve')}
                         disabled={reviewingPreRegistrationId === item.id || pendingConfirmations.has(getPreRegistrationConfirmationKey(item))}
-                        className="h-mx-11 rounded-2xl font-bold uppercase tracking-widest text-mx-nano"
+                        className="h-mx-11 rounded-2xl font-bold uppercase tracking-widest text-mx-tiny"
                       >
                         <Check size={15} className="mr-2" />
                         Aprovar login
@@ -173,7 +173,7 @@ export function PreRegistrationQueue({
                         variant="outline"
                         onClick={() => onReview(item, 'reject')}
                         disabled={reviewingPreRegistrationId === item.id || pendingConfirmations.has(getPreRegistrationConfirmationKey(item))}
-                        className="h-mx-11 rounded-2xl font-bold uppercase tracking-widest text-mx-nano text-status-error-text hover:bg-status-error-surface"
+                        className="h-mx-11 rounded-2xl font-bold uppercase tracking-widest text-mx-tiny text-status-error-text hover:bg-status-error-surface"
                       >
                         <Ban size={15} className="mr-2" />
                         Rejeitar

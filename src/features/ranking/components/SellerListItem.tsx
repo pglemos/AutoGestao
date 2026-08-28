@@ -60,9 +60,9 @@ export function SellerListItem({
           <div className="min-w-0 flex-1 space-y-mx-xs">
             <div className="flex flex-wrap items-center gap-mx-xs sm:gap-mx-sm min-w-0">
               <Typography variant="h2" tone={isTop1 ? 'white' : 'default'} className="min-w-0 max-w-full truncate text-xl sm:text-2xl md:text-3xl tracking-tight">{seller.user_name}</Typography>
-              {isTop1 && <Badge variant="warning" className="animate-pulse px-3 text-mx-nano sm:text-xs">LÍDER</Badge>}
-              {seller.atingimento >= 100 && !isTop1 && <Badge variant="success" className="px-3 text-mx-nano sm:text-xs"><Flame size={12} className="mr-1 inline-block" /> META BATIDA</Badge>}
-              {isMe && !isTop1 && <Badge variant="brand" className="px-3 text-mx-nano sm:text-xs">VOCÊ</Badge>}
+              {isTop1 && <Badge variant="warning" className="animate-pulse px-3">LÍDER</Badge>}
+              {seller.atingimento >= 100 && !isTop1 && <Badge variant="success" className="px-3"><Flame size={12} className="mr-1 inline-block" /> META BATIDA</Badge>}
+              {isMe && !isTop1 && <Badge variant="brand" className="px-3">VOCÊ</Badge>}
             </div>
             {showStoreName && (
               <div className="flex items-center gap-mx-xs mb-mx-xs">
@@ -72,17 +72,17 @@ export function SellerListItem({
             )}
             <div className={cn("flex flex-wrap items-center gap-mx-md sm:gap-mx-10", showStoreName && "pt-2")}>
               <div className="flex flex-col">
-                <Typography variant="caption" tone={isTop1 ? 'white' : 'muted'} className="text-mx-nano sm:text-mx-micro">Vendas</Typography>
+                <Typography variant="caption" tone={isTop1 ? 'white' : 'muted'}>Vendas</Typography>
                 <Typography variant="h2" tone={isTop1 ? 'white' : 'default'} className="text-lg sm:text-2xl font-mono-numbers">{seller.vnd_total} v</Typography>
               </div>
               <div className="w-px h-mx-lg bg-current opacity-10 hidden sm:block" />
               <div className="flex flex-col">
-                <Typography variant="caption" tone={isTop1 ? 'white' : 'muted'} className="text-mx-nano sm:text-mx-micro">Objetivo</Typography>
+                <Typography variant="caption" tone={isTop1 ? 'white' : 'muted'}>Objetivo</Typography>
                 <Typography variant="h2" tone={isTop1 ? 'white' : 'default'} className="text-lg sm:text-2xl font-mono-numbers">{seller.meta} v</Typography>
               </div>
               <div className="w-px h-mx-lg bg-current opacity-10 hidden sm:block" />
               <div className="flex flex-col">
-                <Typography variant="caption" tone={isTop1 ? 'white' : 'muted'} className="text-mx-nano sm:text-mx-micro">Ritmo</Typography>
+                <Typography variant="caption" tone={isTop1 ? 'white' : 'muted'}>Ritmo</Typography>
                 <Typography variant="h2" tone={isTop1 ? 'white' : 'default'} className="text-lg sm:text-2xl font-mono-numbers">{seller.ritmo} v/d</Typography>
               </div>
             </div>

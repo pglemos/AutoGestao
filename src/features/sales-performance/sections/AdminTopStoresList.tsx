@@ -30,7 +30,7 @@ export function AdminTopStoresList({ topStores, onStoreClick }: Props) {
             >
               <span
                 className={cn(
-                  'w-mx-8 h-mx-8 rounded-xl flex items-center justify-center text-mx-nano font-bold',
+                  'w-mx-8 h-mx-8 rounded-xl flex items-center justify-center text-mx-tiny font-bold',
                   i === 0
                     ? 'bg-status-warning text-status-warning-foreground'
                     : i === 1
@@ -49,7 +49,6 @@ export function AdminTopStoresList({ topStores, onStoreClick }: Props) {
                 <Typography
                   variant="tiny"
                   tone="muted"
-                  className="text-mx-nano"
                 >
                   {store.sellers} vend. | {store.managers} ger. | ult.{' '}
                   {shortDate(store.lastActivity)}
@@ -59,7 +58,7 @@ export function AdminTopStoresList({ topStores, onStoreClick }: Props) {
                 <Typography variant="h3" className="text-base font-mono-numbers">
                   {formatNumber(store.sales)}
                 </Typography>
-                <Typography variant="tiny" tone="muted" className="text-mx-nano">
+                <Typography variant="tiny" tone="muted">
                   {formatPercent(store.reaching)}
                 </Typography>
               </span>

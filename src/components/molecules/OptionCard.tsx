@@ -73,7 +73,7 @@ export function OptionCard({
             {tooltip && <HelpTooltip text={tooltip} side="right" />}
           </div>
           {description && (
-            <Typography variant="caption" tone="muted" className="text-mx-nano block">
+            <Typography variant="caption" tone="muted" className="block">
               {description}
             </Typography>
           )}

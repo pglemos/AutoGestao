@@ -56,7 +56,7 @@ export function DuplicateNameConfirmationDialog({
               <AlertDialogTitle className="text-foreground tracking-tight">
                 Já existe alguém com esse nome na loja
               </AlertDialogTitle>
-              <p className="mt-1 text-mx-nano block font-medium text-muted-foreground">
+              <p className="mt-1 text-mx-tiny block font-medium text-muted-foreground">
                 Cadastro ativo encontrado{data.targetStoreName ? ` em ${data.targetStoreName}` : ''}
               </p>
             </div>

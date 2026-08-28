@@ -50,7 +50,7 @@ export function TransferConfirmationDialog({
               <AlertDialogTitle className="text-foreground tracking-tight">
                 Transferir integrante de loja?
               </AlertDialogTitle>
-              <p className="mt-1 text-mx-nano block font-medium text-muted-foreground">
+              <p className="mt-1 text-mx-tiny block font-medium text-muted-foreground">
                 Vínculo ativo identificado em outra unidade
               </p>
             </div>

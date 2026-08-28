@@ -75,7 +75,7 @@ export function RankingPodium({ entries, onSelect }: Props) {
               ${isFirst ? 'h-mx-64 bg-gradient-to-b from-brand-primary/80 to-brand-primary/5' : isSecond ? 'h-mx-48 bg-gradient-to-b from-border-strong/80 to-surface-alt/10' : 'h-mx-32 bg-gradient-to-b from-status-warning/60 to-status-warning/10'}`}>
               <div className={`font-display font-bold text-2xl sm:text-3xl mb-1 drop-shadow-sm ${isFirst ? 'text-mx-black' : 'text-foreground'}`}>{seller.atingimento}%</div>
               <div className={cn(
-                'text-mx-nano sm:text-mx-micro uppercase font-bold tracking-wide sm:tracking-widest max-w-full text-center',
+                'text-mx-tiny uppercase font-bold tracking-wide sm:tracking-widest max-w-full text-center',
                 isFirst ? 'text-brand-secondary' : 'text-muted-foreground',
               )}>
                 <span className="sm:hidden">ATG</span>

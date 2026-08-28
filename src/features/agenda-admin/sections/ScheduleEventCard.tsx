@@ -69,15 +69,15 @@ export function ScheduleEventCard({ event, onEdit, onDelete }: ScheduleEventCard
             {(event.visit_reason || event.target_audience || event.product_name) && (
               <div className="mt-mx-xs flex flex-wrap gap-mx-xs">
                 {event.visit_reason && (
-                  <Badge variant="outline" className="max-w-full text-mx-nano">
+                  <Badge variant="outline" className="max-w-full">
                     <span className="truncate">{event.visit_reason}</span>
                   </Badge>
                 )}
                 {event.target_audience && (
-                  <Badge variant="ghost" className="text-mx-nano">{event.target_audience}</Badge>
+                  <Badge variant="ghost">{event.target_audience}</Badge>
                 )}
                 {event.product_name && (
-                  <Badge variant="brand" className="text-mx-nano">{event.product_name}</Badge>
+                  <Badge variant="brand">{event.product_name}</Badge>
                 )}
               </div>
             )}
