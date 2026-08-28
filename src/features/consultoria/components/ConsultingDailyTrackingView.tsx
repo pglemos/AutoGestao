@@ -77,7 +77,13 @@ export function ConsultingDailyTrackingView({ clientId, storeId }: Props) {
         render: (row) => {
             const leads = row.leads_prev_day || 0
             const totalVnd = (row.vnd_porta_prev_day || 0) + (row.vnd_cart_prev_day || 0) + (row.vnd_net_prev_day || 0)
-            const conv = leads > 0 ? (totalVnd / leads) * 100 : 0
+            // Sem lead no dia não há conversão a medir. Exibir "0.0%" colocava o
+            // dia na pior faixa, igual a quem teve leads e não vendeu — e em
+            // produção 1.735 dos 2.354 lançamentos (74%) têm leads_prev_day = 0.
+            const conv = leads > 0 ? (totalVnd / leads) * 100 : null
+            if (conv === null) {
+                return <Badge variant="outline">Sem lead no dia</Badge>
+            }
             return (
                 <Badge variant={conv >= 3 ? 'success' : conv >= 1 ? 'warning' : 'outline'}>
                     {conv.toFixed(1)}% Conv.
