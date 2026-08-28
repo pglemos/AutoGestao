@@ -1,0 +1,2902 @@
+{
+ "capturadoEm": "2026-08-28T15:08:54.945Z",
+ "total": 362,
+ "clientes": [
+  {
+   "id": "2d34dfe2-9a6f-4ee9-8b18-f3e7f30d6f8c",
+   "status": "oportunidade",
+   "loja_id": "467a19d1-af51-4b4f-9b05-d67187a2a759",
+   "seller_user_id": "65855be5-6486-4bc7-9dd6-95fc5b3dc477",
+   "nome": "Carlos Mendes",
+   "updated_at": "2026-06-09T18:13:57.010946+00:00"
+  },
+  {
+   "id": "67d9535a-cfd5-427b-a7d0-a86c2ff37153",
+   "status": "oportunidade",
+   "loja_id": "467a19d1-af51-4b4f-9b05-d67187a2a759",
+   "seller_user_id": "65855be5-6486-4bc7-9dd6-95fc5b3dc477",
+   "nome": "Francisco",
+   "updated_at": "2026-06-26T14:50:47.303583+00:00"
+  },
+  {
+   "id": "a192ab00-3bb4-4502-aa59-3abf57c9c56c",
+   "status": "oportunidade",
+   "loja_id": "467a19d1-af51-4b4f-9b05-d67187a2a759",
+   "seller_user_id": "2a753a6b-8a62-40dd-b0f9-d8d422f207f6",
+   "nome": "CLEYTON",
+   "updated_at": "2026-07-10T13:59:15.768136+00:00"
+  },
+  {
+   "id": "b96189f0-669c-4618-8c22-b756c535b039",
+   "status": "oportunidade",
+   "loja_id": "467a19d1-af51-4b4f-9b05-d67187a2a759",
+   "seller_user_id": "e4d3e8e9-0129-406d-a343-a7f09fd6abd4",
+   "nome": "Luca",
+   "updated_at": "2026-06-26T14:48:17.25473+00:00"
+  },
+  {
+   "id": "75ab5c5a-35e3-401a-bb1c-8da15a6523b8",
+   "status": "oportunidade",
+   "loja_id": "467a19d1-af51-4b4f-9b05-d67187a2a759",
+   "seller_user_id": "65855be5-6486-4bc7-9dd6-95fc5b3dc477",
+   "nome": "Frederico",
+   "updated_at": "2026-06-26T18:59:18.796894+00:00"
+  },
+  {
+   "id": "9122fdd2-aaa0-4b46-a4b8-4e563b35cf9a",
+   "status": "oportunidade",
+   "loja_id": "467a19d1-af51-4b4f-9b05-d67187a2a759",
+   "seller_user_id": "18d4c7e4-72b4-41f6-8499-b87d028115ac",
+   "nome": "SANDY E JUNIOR",
+   "updated_at": "2026-07-10T22:19:13.832219+00:00"
+  },
+  {
+   "id": "d52f0737-0b6d-4013-8bb7-e86940ac3190",
+   "status": "oportunidade",
+   "loja_id": "172def40-4903-48c8-8b5b-61514e99feee",
+   "seller_user_id": "bfb33112-8582-4581-8e9d-dc8dcdda8c5d",
+   "nome": "JOELMA",
+   "updated_at": "2026-08-04T19:59:06.664633+00:00"
+  },
+  {
+   "id": "754106be-2374-4c00-9605-00104ca9027d",
+   "status": "oportunidade",
+   "loja_id": "467a19d1-af51-4b4f-9b05-d67187a2a759",
+   "seller_user_id": "65855be5-6486-4bc7-9dd6-95fc5b3dc477",
+   "nome": "José Roberto",
+   "updated_at": "2026-07-15T16:00:05.662768+00:00"
+  },
+  {
+   "id": "378e3350-c35b-4a41-a5c1-793b8b6dd8c5",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "a4b6622b-c23c-4f51-925c-823091cb7a67",
+   "nome": "JESSICA CARLA DE OLIVEIRA",
+   "updated_at": "2026-08-04T20:25:53.420971+00:00"
+  },
+  {
+   "id": "b63ea51a-8ea0-4234-b60a-e7cd9fce5c56",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "f8570ef2-f875-4796-88bd-524c62f53d2e",
+   "nome": "JONATAS",
+   "updated_at": "2026-08-10T20:16:58.874919+00:00"
+  },
+  {
+   "id": "0726c743-f194-4ca6-9395-60de79119ffc",
+   "status": "oportunidade",
+   "loja_id": "467a19d1-af51-4b4f-9b05-d67187a2a759",
+   "seller_user_id": "65855be5-6486-4bc7-9dd6-95fc5b3dc477",
+   "nome": "teste",
+   "updated_at": "2026-08-05T21:43:51.483042+00:00"
+  },
+  {
+   "id": "20f3ebc0-7d47-4a5e-be98-d3b1cd73a142",
+   "status": "oportunidade",
+   "loja_id": "467a19d1-af51-4b4f-9b05-d67187a2a759",
+   "seller_user_id": "2a753a6b-8a62-40dd-b0f9-d8d422f207f6",
+   "nome": "CARLOS",
+   "updated_at": "2026-07-10T13:46:29.62446+00:00"
+  },
+  {
+   "id": "6f8b7c35-c876-4717-b561-8ae144cbb424",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f31e6d72-b0d1-4c9d-b12e-742366db6b1e",
+   "nome": "FRANCISCO",
+   "updated_at": "2026-08-12T21:00:52.705883+00:00"
+  },
+  {
+   "id": "6cc0dbd6-a381-4437-918b-3bfaf691634b",
+   "status": "oportunidade",
+   "loja_id": "467a19d1-af51-4b4f-9b05-d67187a2a759",
+   "seller_user_id": "18d4c7e4-72b4-41f6-8499-b87d028115ac",
+   "nome": "DANIEL JOSE DOS SANTOS",
+   "updated_at": "2026-07-10T22:00:14.987544+00:00"
+  },
+  {
+   "id": "f2d7d399-8ccd-4b75-8ed3-e090368fa10a",
+   "status": "oportunidade",
+   "loja_id": "467a19d1-af51-4b4f-9b05-d67187a2a759",
+   "seller_user_id": "18d4c7e4-72b4-41f6-8499-b87d028115ac",
+   "nome": "DEMBELE DUARTE",
+   "updated_at": "2026-07-10T22:11:30.700945+00:00"
+  },
+  {
+   "id": "ff6f78aa-956a-4c54-903b-e3d6223a1bdf",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "a4b6622b-c23c-4f51-925c-823091cb7a67",
+   "nome": "VALERIA DA SILVA FERREIRA SANTOS",
+   "updated_at": "2026-08-03T21:25:29.209174+00:00"
+  },
+  {
+   "id": "c07995ae-b131-430e-8418-b31330cf9685",
+   "status": "oportunidade",
+   "loja_id": "467a19d1-af51-4b4f-9b05-d67187a2a759",
+   "seller_user_id": "18d4c7e4-72b4-41f6-8499-b87d028115ac",
+   "nome": "TESTE DANIEL",
+   "updated_at": "2026-07-12T22:10:50.882603+00:00"
+  },
+  {
+   "id": "f42aaf48-c210-46d9-a2cc-30637895afe0",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "7030c854-1251-45a1-99c0-dc1621f0fa1e",
+   "nome": "SHIRLEY KARINE FIALHO",
+   "updated_at": "2026-07-14T18:18:09.553916+00:00"
+  },
+  {
+   "id": "1e7fb2ce-996b-4cf2-8841-d79aed3cd0c5",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "aa5cdb37-026a-439f-9263-4ba49ca936f3",
+   "nome": "VAGNER RENEGADE MAROM",
+   "updated_at": "2026-07-14T18:20:06.60297+00:00"
+  },
+  {
+   "id": "a25a8ef5-4a2f-4872-a1c6-9b3a8cee56c1",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "aa5cdb37-026a-439f-9263-4ba49ca936f3",
+   "nome": "SERGIO",
+   "updated_at": "2026-07-14T18:22:59.036508+00:00"
+  },
+  {
+   "id": "fcf20eb9-11de-4f89-8c5c-25cd5ff31e55",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "a4b6622b-c23c-4f51-925c-823091cb7a67",
+   "nome": "PEDRO NEI DA SILVEIRA",
+   "updated_at": "2026-08-13T13:03:00.235783+00:00"
+  },
+  {
+   "id": "17086a53-3755-4f8f-bd2d-ef24833c1c71",
+   "status": "oportunidade",
+   "loja_id": "76f55bc4-f02b-4e45-adaa-2b5b8a7533c3",
+   "seller_user_id": "0de21674-af16-4ed8-bd22-ef7ed691254a",
+   "nome": "CLODOALDO",
+   "updated_at": "2026-08-10T21:04:32.033402+00:00"
+  },
+  {
+   "id": "5f98a62c-1350-42ba-8e16-d05fd80da167",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "7030c854-1251-45a1-99c0-dc1621f0fa1e",
+   "nome": "EDSON GUEDES",
+   "updated_at": "2026-07-14T18:17:53.898794+00:00"
+  },
+  {
+   "id": "85044604-19cf-4fa8-a178-8dc038336fd1",
+   "status": "oportunidade",
+   "loja_id": "70cf3f8a-3cde-4bfb-baa7-e74b9eab85f5",
+   "seller_user_id": "59592fb5-1f73-438a-9f8d-42f2ea14f9d8",
+   "nome": "FELIPE FRONTIER",
+   "updated_at": "2026-08-11T11:43:56.545643+00:00"
+  },
+  {
+   "id": "79e788e2-4bd7-465c-ba4a-8fd25e96fc87",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "7030c854-1251-45a1-99c0-dc1621f0fa1e",
+   "nome": "MEIRE FIALHO",
+   "updated_at": "2026-07-14T18:32:32.958035+00:00"
+  },
+  {
+   "id": "a411b3fd-633b-43b3-b74c-03cb256311f9",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "7bd494de-7a2b-4efa-88a1-a643fa5f04d5",
+   "nome": "JUNIA APARECIDA COSTA",
+   "updated_at": "2026-07-14T18:55:19.457742+00:00"
+  },
+  {
+   "id": "aeba90b1-b629-4e23-9f04-d4d3a9e96946",
+   "status": "oportunidade",
+   "loja_id": "7031e288-301d-4d02-b897-0c36c0b74ff5",
+   "seller_user_id": "5ecadafc-e61b-4320-83e3-60d050f2a458",
+   "nome": "LUIS",
+   "updated_at": "2026-08-25T11:58:44.447598+00:00"
+  },
+  {
+   "id": "c158e1e4-8b42-4193-a016-7861a20f6b27",
+   "status": "oportunidade",
+   "loja_id": "467a19d1-af51-4b4f-9b05-d67187a2a759",
+   "seller_user_id": "824f8245-b4a7-4fbe-a5d2-747a0135d1bc",
+   "nome": "JOSÉ",
+   "updated_at": "2026-07-23T12:28:05.390161+00:00"
+  },
+  {
+   "id": "f84bcfc5-5510-4f13-9aa0-034686287d44",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "7bd494de-7a2b-4efa-88a1-a643fa5f04d5",
+   "nome": "JAQUELINE",
+   "updated_at": "2026-07-15T20:24:13.586074+00:00"
+  },
+  {
+   "id": "a8d25154-cc33-4d82-9c4d-bb309c096efe",
+   "status": "inativo",
+   "loja_id": "7031e288-301d-4d02-b897-0c36c0b74ff5",
+   "seller_user_id": "1635f616-4da4-40d2-8291-9216b9e93359",
+   "nome": "BRENO ORNELAS",
+   "updated_at": "2026-08-19T19:10:13.325712+00:00"
+  },
+  {
+   "id": "d4540a1a-a06d-408a-899e-730fb4b27463",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "495b4de5-1b0d-40c5-905c-533e07baaccb",
+   "nome": "TAINA",
+   "updated_at": "2026-08-04T19:07:30.706106+00:00"
+  },
+  {
+   "id": "e0b84f76-e082-4520-b897-76d10df90c33",
+   "status": "oportunidade",
+   "loja_id": "76f55bc4-f02b-4e45-adaa-2b5b8a7533c3",
+   "seller_user_id": "0de21674-af16-4ed8-bd22-ef7ed691254a",
+   "nome": "RINALDO",
+   "updated_at": "2026-08-12T21:12:31.575512+00:00"
+  },
+  {
+   "id": "b89718e5-2ebc-4b02-96df-838d0d7b1154",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "aa5cdb37-026a-439f-9263-4ba49ca936f3",
+   "nome": "PEDRO/ FLAVIO",
+   "updated_at": "2026-07-17T18:40:27.693763+00:00"
+  },
+  {
+   "id": "03367440-07b9-4b8b-9475-eaacfeda9561",
+   "status": "oportunidade",
+   "loja_id": "7031e288-301d-4d02-b897-0c36c0b74ff5",
+   "seller_user_id": "1635f616-4da4-40d2-8291-9216b9e93359",
+   "nome": "DOUGLAS ANSELMO",
+   "updated_at": "2026-08-04T12:16:06.780473+00:00"
+  },
+  {
+   "id": "c4c86ce2-ffdd-4354-80d6-d20ec913e40a",
+   "status": "oportunidade",
+   "loja_id": "ecc1c334-5710-42b0-a777-71d7fb9241e6",
+   "seller_user_id": "0c8b5fb0-794d-48b1-b10a-3af82f1ebc9b",
+   "nome": "RODRIGO LIMA",
+   "updated_at": "2026-07-22T19:17:02.221119+00:00"
+  },
+  {
+   "id": "7edee371-bb13-488b-8a3e-dfdd472d1d8f",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "aa5cdb37-026a-439f-9263-4ba49ca936f3",
+   "nome": "RAFAEL",
+   "updated_at": "2026-07-21T20:53:27.655035+00:00"
+  },
+  {
+   "id": "665af720-243d-4289-a025-bd777aa5444e",
+   "status": "oportunidade",
+   "loja_id": "fc9ac447-9f84-4f86-b216-d384a8dc5fba",
+   "seller_user_id": "bb423841-bec6-454a-a783-70aff1d05943",
+   "nome": "NATHALIA",
+   "updated_at": "2026-07-22T18:10:08.467879+00:00"
+  },
+  {
+   "id": "5a4a9cb5-3558-446b-9479-83dbfdaa9a99",
+   "status": "oportunidade",
+   "loja_id": "fc9ac447-9f84-4f86-b216-d384a8dc5fba",
+   "seller_user_id": "bb423841-bec6-454a-a783-70aff1d05943",
+   "nome": "JOSÉ",
+   "updated_at": "2026-07-22T18:10:26.2063+00:00"
+  },
+  {
+   "id": "eae2b5f6-0844-4a2b-9d87-1a616f719339",
+   "status": "oportunidade",
+   "loja_id": "ecc1c334-5710-42b0-a777-71d7fb9241e6",
+   "seller_user_id": "0c8b5fb0-794d-48b1-b10a-3af82f1ebc9b",
+   "nome": "DANIELI RODRIGUES",
+   "updated_at": "2026-07-22T19:19:57.229585+00:00"
+  },
+  {
+   "id": "151c2561-5598-4ab7-9ed7-1b73e51ee4e0",
+   "status": "oportunidade",
+   "loja_id": "ecc1c334-5710-42b0-a777-71d7fb9241e6",
+   "seller_user_id": "0c8b5fb0-794d-48b1-b10a-3af82f1ebc9b",
+   "nome": "ARIANE FRANCINE",
+   "updated_at": "2026-07-22T19:11:24.464589+00:00"
+  },
+  {
+   "id": "755f2c00-2981-4ec3-a4c9-a723d69e219b",
+   "status": "oportunidade",
+   "loja_id": "ecc1c334-5710-42b0-a777-71d7fb9241e6",
+   "seller_user_id": "0c8b5fb0-794d-48b1-b10a-3af82f1ebc9b",
+   "nome": "SANDRA RODRIGUES",
+   "updated_at": "2026-07-22T19:15:25.246879+00:00"
+  },
+  {
+   "id": "ba95d2b4-b314-4731-b9af-6d83641e42d3",
+   "status": "oportunidade",
+   "loja_id": "ecc1c334-5710-42b0-a777-71d7fb9241e6",
+   "seller_user_id": "232060e1-ade4-4910-a569-d17c9811314b",
+   "nome": "CARLOS EDUARDO",
+   "updated_at": "2026-07-22T19:35:06.456133+00:00"
+  },
+  {
+   "id": "be57d9e9-c759-4ba3-a23e-f8aece0c2c2e",
+   "status": "oportunidade",
+   "loja_id": "ecc1c334-5710-42b0-a777-71d7fb9241e6",
+   "seller_user_id": "232060e1-ade4-4910-a569-d17c9811314b",
+   "nome": "MARCELI CARDOSO",
+   "updated_at": "2026-07-22T19:36:47.801186+00:00"
+  },
+  {
+   "id": "be152758-3757-41da-889a-6a13b81a4392",
+   "status": "oportunidade",
+   "loja_id": "ecc1c334-5710-42b0-a777-71d7fb9241e6",
+   "seller_user_id": "e6531200-bb8b-484b-832f-053493aea126",
+   "nome": "ISABELA SEGANTINI",
+   "updated_at": "2026-07-22T21:18:55.423486+00:00"
+  },
+  {
+   "id": "cbf5e9dd-0ee5-42a8-a579-b472047bfa36",
+   "status": "oportunidade",
+   "loja_id": "ecc1c334-5710-42b0-a777-71d7fb9241e6",
+   "seller_user_id": "e6531200-bb8b-484b-832f-053493aea126",
+   "nome": "ENEAS SIMAS",
+   "updated_at": "2026-07-22T21:19:22.767408+00:00"
+  },
+  {
+   "id": "d62cb76a-c3bb-42fc-913b-dd8f2782301a",
+   "status": "oportunidade",
+   "loja_id": "ecc1c334-5710-42b0-a777-71d7fb9241e6",
+   "seller_user_id": "e6531200-bb8b-484b-832f-053493aea126",
+   "nome": "JOSE CARLOS DE SOUZA BARRETO",
+   "updated_at": "2026-07-22T21:19:56.379848+00:00"
+  },
+  {
+   "id": "89d1ee02-e6ae-4677-b1f5-b8eb9ccec249",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "495b4de5-1b0d-40c5-905c-533e07baaccb",
+   "nome": "GENILSON",
+   "updated_at": "2026-07-23T13:43:34.385356+00:00"
+  },
+  {
+   "id": "af751002-b3ed-4fe4-bc3d-355fc66e4f71",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "495b4de5-1b0d-40c5-905c-533e07baaccb",
+   "nome": "NICOLAS GALLI",
+   "updated_at": "2026-07-23T13:16:38.357216+00:00"
+  },
+  {
+   "id": "4a4860b9-9ce1-434e-9535-62c00ac3d207",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "JOAO",
+   "updated_at": "2026-07-23T13:44:07.174304+00:00"
+  },
+  {
+   "id": "47c18b68-0196-4138-afe0-3290a06bd45f",
+   "status": "oportunidade",
+   "loja_id": "cb4e54e6-b596-4ebf-9d1b-09f5bf9ba598",
+   "seller_user_id": "d9988a22-f2d7-4b8a-85e0-5ad34647f1bd",
+   "nome": "WELLINGTON",
+   "updated_at": "2026-07-23T12:05:18.493064+00:00"
+  },
+  {
+   "id": "432c308f-368b-434b-9fd6-48d772802619",
+   "status": "oportunidade",
+   "loja_id": "cb4e54e6-b596-4ebf-9d1b-09f5bf9ba598",
+   "seller_user_id": "d9988a22-f2d7-4b8a-85e0-5ad34647f1bd",
+   "nome": "EDIPO",
+   "updated_at": "2026-07-23T12:10:04.246652+00:00"
+  },
+  {
+   "id": "a6834be3-a460-4954-92bf-b1accdbcd7e6",
+   "status": "oportunidade",
+   "loja_id": "cb4e54e6-b596-4ebf-9d1b-09f5bf9ba598",
+   "seller_user_id": "d9988a22-f2d7-4b8a-85e0-5ad34647f1bd",
+   "nome": "MARCOS",
+   "updated_at": "2026-07-23T12:12:55.461633+00:00"
+  },
+  {
+   "id": "e3411961-0f96-4c70-a1e5-926f7bd5bd54",
+   "status": "oportunidade",
+   "loja_id": "cb4e54e6-b596-4ebf-9d1b-09f5bf9ba598",
+   "seller_user_id": "d9988a22-f2d7-4b8a-85e0-5ad34647f1bd",
+   "nome": "JOAO",
+   "updated_at": "2026-07-23T12:16:38.842867+00:00"
+  },
+  {
+   "id": "0c7841b9-1e5c-482a-b669-f6c2ab8930e5",
+   "status": "oportunidade",
+   "loja_id": "cb4e54e6-b596-4ebf-9d1b-09f5bf9ba598",
+   "seller_user_id": "81b9fbee-fb49-4ddf-83ee-96696619676c",
+   "nome": "ANTONIO JUNIOR",
+   "updated_at": "2026-07-23T13:02:24.916345+00:00"
+  },
+  {
+   "id": "c3401589-3ac0-4e8f-b21d-034db0ab7e6e",
+   "status": "oportunidade",
+   "loja_id": "2785bbb1-149e-4569-bc5b-002f11331090",
+   "seller_user_id": "73f29046-5eb6-4d78-8cb3-ea91141d80bc",
+   "nome": "JANAINA BUENO",
+   "updated_at": "2026-08-10T17:41:15.24594+00:00"
+  },
+  {
+   "id": "1b192823-46a6-4bed-90ee-75053874b6a2",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "495b4de5-1b0d-40c5-905c-533e07baaccb",
+   "nome": "LUCAS PACHECO",
+   "updated_at": "2026-07-23T13:21:57.945443+00:00"
+  },
+  {
+   "id": "9d7916f6-d833-4ef0-8539-e7ff207a009f",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "495b4de5-1b0d-40c5-905c-533e07baaccb",
+   "nome": "MAIARA MONTEIRO",
+   "updated_at": "2026-07-23T13:24:18.754907+00:00"
+  },
+  {
+   "id": "48d42207-4b90-499d-823b-080e762f01fd",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "495b4de5-1b0d-40c5-905c-533e07baaccb",
+   "nome": "JOAO",
+   "updated_at": "2026-07-23T13:25:42.310456+00:00"
+  },
+  {
+   "id": "eb74dc7a-67ec-4dc1-b678-005b9dc05f63",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "495b4de5-1b0d-40c5-905c-533e07baaccb",
+   "nome": "ANDREZA GOIS",
+   "updated_at": "2026-07-23T13:32:23.578068+00:00"
+  },
+  {
+   "id": "6e09f9f4-3f0f-463c-a6c0-7919067fe101",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "MARIA",
+   "updated_at": "2026-07-23T13:38:35.841996+00:00"
+  },
+  {
+   "id": "228f06f9-3378-4ae0-8957-25960f19612b",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "495b4de5-1b0d-40c5-905c-533e07baaccb",
+   "nome": "DEIVID",
+   "updated_at": "2026-07-23T13:39:16.709199+00:00"
+  },
+  {
+   "id": "0c8c691b-ecb7-49c4-9bba-3bca94ff8b46",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "495b4de5-1b0d-40c5-905c-533e07baaccb",
+   "nome": "BRUNO MACHADO",
+   "updated_at": "2026-07-23T13:40:43.988678+00:00"
+  },
+  {
+   "id": "ba4a90d9-8571-4519-b9f8-461a4936cc67",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "495b4de5-1b0d-40c5-905c-533e07baaccb",
+   "nome": "LUANA ANDRADE",
+   "updated_at": "2026-07-23T13:41:57.258997+00:00"
+  },
+  {
+   "id": "bc8dc752-e242-4495-b378-235ae0e353fc",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "f8570ef2-f875-4796-88bd-524c62f53d2e",
+   "nome": "LETICIA VOLTIM",
+   "updated_at": "2026-07-23T13:49:57.784623+00:00"
+  },
+  {
+   "id": "b354027c-1f43-420c-89ac-37894bd78e9a",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "f8570ef2-f875-4796-88bd-524c62f53d2e",
+   "nome": "LUCIANO",
+   "updated_at": "2026-07-23T13:51:20.221705+00:00"
+  },
+  {
+   "id": "b839e3c4-3b4b-4301-a1ea-898571f7b7a2",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "f8570ef2-f875-4796-88bd-524c62f53d2e",
+   "nome": "LARA",
+   "updated_at": "2026-07-23T13:52:26.970143+00:00"
+  },
+  {
+   "id": "87c72ff1-7a85-483b-906f-098b33483f24",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "f8570ef2-f875-4796-88bd-524c62f53d2e",
+   "nome": "JESSICA",
+   "updated_at": "2026-07-23T13:55:20.160963+00:00"
+  },
+  {
+   "id": "76025450-e474-4562-82b0-c6ea726cddb4",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "ROGERIO",
+   "updated_at": "2026-07-23T13:56:19.726913+00:00"
+  },
+  {
+   "id": "c88bd599-5905-41a5-9ab9-90d0b4ec8250",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "f8570ef2-f875-4796-88bd-524c62f53d2e",
+   "nome": "MARCOS",
+   "updated_at": "2026-07-23T13:56:37.592083+00:00"
+  },
+  {
+   "id": "5bbf6505-d35e-4d9e-a8f5-1b406895d895",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "TIAGO",
+   "updated_at": "2026-07-23T14:01:07.729902+00:00"
+  },
+  {
+   "id": "80c1e92e-3dae-46b4-859d-8f2dcc6dc1fc",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "ANDREY",
+   "updated_at": "2026-07-23T14:06:19.073123+00:00"
+  },
+  {
+   "id": "d0d5980e-6352-4fca-aa34-754d589e4e77",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "MARCOS",
+   "updated_at": "2026-07-23T14:13:14.247006+00:00"
+  },
+  {
+   "id": "cd4dd754-1924-46f8-a191-f9aaeb4b0e1d",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "CLAUDIANO",
+   "updated_at": "2026-07-23T14:17:42.157493+00:00"
+  },
+  {
+   "id": "6c74aa20-93f8-4c61-b200-31fd40c374ba",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "CLAUDIANO",
+   "updated_at": "2026-07-23T14:21:59.472186+00:00"
+  },
+  {
+   "id": "9a992216-4a85-41f5-88f7-ae6c8aca9680",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "MARCIEL",
+   "updated_at": "2026-07-23T14:26:41.659968+00:00"
+  },
+  {
+   "id": "273ebb8c-077d-4755-8c60-855a02c970fb",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "HUDSON",
+   "updated_at": "2026-07-23T14:31:26.624291+00:00"
+  },
+  {
+   "id": "c2c6189b-1aa2-426c-8089-130a6839ed5c",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "7030c854-1251-45a1-99c0-dc1621f0fa1e",
+   "nome": "DANIEL FERNANDES",
+   "updated_at": "2026-08-05T12:27:50.729867+00:00"
+  },
+  {
+   "id": "85502647-60fb-4823-9b56-956fdccc0849",
+   "status": "oportunidade",
+   "loja_id": "1b1f7c6d-1213-4bc7-b6b1-72ec4094f901",
+   "seller_user_id": "8dd0c100-9691-43c8-a89f-aef3b124eb17",
+   "nome": "PAULO AFONSO RIBEIRO",
+   "updated_at": "2026-07-23T18:43:35.707314+00:00"
+  },
+  {
+   "id": "a557d72b-175b-49d0-b3a3-e25a8f116920",
+   "status": "oportunidade",
+   "loja_id": "1b1f7c6d-1213-4bc7-b6b1-72ec4094f901",
+   "seller_user_id": "8dd0c100-9691-43c8-a89f-aef3b124eb17",
+   "nome": "JOSIAS NASCIMENTO DA SILVA",
+   "updated_at": "2026-07-23T18:47:03.246454+00:00"
+  },
+  {
+   "id": "c8fe84fb-e945-4e26-9c6d-59bb3f246c96",
+   "status": "oportunidade",
+   "loja_id": "1b1f7c6d-1213-4bc7-b6b1-72ec4094f901",
+   "seller_user_id": "8dd0c100-9691-43c8-a89f-aef3b124eb17",
+   "nome": "AMAZILES MARIA PEREIRA DUARTE",
+   "updated_at": "2026-07-23T18:49:27.107066+00:00"
+  },
+  {
+   "id": "913410a1-3dcd-4768-9960-2bc295374285",
+   "status": "oportunidade",
+   "loja_id": "1b1f7c6d-1213-4bc7-b6b1-72ec4094f901",
+   "seller_user_id": "8dd0c100-9691-43c8-a89f-aef3b124eb17",
+   "nome": "EMPORIO SAO JOSE LTDA",
+   "updated_at": "2026-07-23T18:51:14.291523+00:00"
+  },
+  {
+   "id": "49a53b24-3822-49c9-8d91-170784f18553",
+   "status": "oportunidade",
+   "loja_id": "1b1f7c6d-1213-4bc7-b6b1-72ec4094f901",
+   "seller_user_id": "8dd0c100-9691-43c8-a89f-aef3b124eb17",
+   "nome": "BENICIO ALVES FERREIRA",
+   "updated_at": "2026-07-23T18:53:15.723553+00:00"
+  },
+  {
+   "id": "bb080ecf-dce9-4daf-ae04-9a7e616f1fd4",
+   "status": "oportunidade",
+   "loja_id": "1b1f7c6d-1213-4bc7-b6b1-72ec4094f901",
+   "seller_user_id": "8dd0c100-9691-43c8-a89f-aef3b124eb17",
+   "nome": "RAFAEL BENATTI FIUZA FILGUEIRAS",
+   "updated_at": "2026-07-23T18:54:59.738696+00:00"
+  },
+  {
+   "id": "b4814961-7c0d-45d7-ba28-eb03a0e013ec",
+   "status": "oportunidade",
+   "loja_id": "0fe488de-4ac5-431a-b3c8-a96f7d30fe6a",
+   "seller_user_id": "8b654763-4474-473f-84df-0011a805395b",
+   "nome": "PEDRO HENRIQUE",
+   "updated_at": "2026-08-13T21:13:40.26813+00:00"
+  },
+  {
+   "id": "c0edb964-c5fe-4e3b-a139-ef1e0d2dac9e",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "7030c854-1251-45a1-99c0-dc1621f0fa1e",
+   "nome": "MEIRE FIALHO",
+   "updated_at": "2026-08-14T17:30:20.510155+00:00"
+  },
+  {
+   "id": "103a9155-aeba-47e9-973a-f830003b1265",
+   "status": "oportunidade",
+   "loja_id": "e4eb82e1-0a43-42b5-bb3a-9c0ee3f0f54a",
+   "seller_user_id": "483f412e-4ca0-49c9-9dc9-9cbe6ddfcaaa",
+   "nome": "SERGIO",
+   "updated_at": "2026-08-06T18:12:20.022202+00:00"
+  },
+  {
+   "id": "06a9d4c6-568e-43e2-a231-17c429f5a2cc",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "7bd494de-7a2b-4efa-88a1-a643fa5f04d5",
+   "nome": "EDMILSON",
+   "updated_at": "2026-08-07T12:16:03.329857+00:00"
+  },
+  {
+   "id": "54b4980d-2bed-487c-bdd2-54c850349c80",
+   "status": "oportunidade",
+   "loja_id": "fc9ac447-9f84-4f86-b216-d384a8dc5fba",
+   "seller_user_id": "bb423841-bec6-454a-a783-70aff1d05943",
+   "nome": "GILBERTO",
+   "updated_at": "2026-07-23T20:21:41.046059+00:00"
+  },
+  {
+   "id": "2f1a0321-be12-49a4-b991-1a32d8961e50",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "408c997f-8f6f-45f1-8dc2-ac49c19880f0",
+   "nome": "JOSE DUTRA",
+   "updated_at": "2026-08-07T20:45:05.708249+00:00"
+  },
+  {
+   "id": "6d48d0f2-7d73-41f0-b45e-b4d3c0720d52",
+   "status": "oportunidade",
+   "loja_id": "2785bbb1-149e-4569-bc5b-002f11331090",
+   "seller_user_id": "2ed9b22c-c441-452d-b7ce-7d2b1524d1bc",
+   "nome": "WASHINTON LUIZ PASSOS",
+   "updated_at": "2026-08-08T13:08:23.194899+00:00"
+  },
+  {
+   "id": "7050209d-0928-4889-8917-e7b17cfa5706",
+   "status": "oportunidade",
+   "loja_id": "cd5642c8-9a69-4b3d-bcec-105fbf338c36",
+   "seller_user_id": "95ce8ce9-9659-4b8c-8ffd-0d06b4e501b5",
+   "nome": "JESSICA MARCHARETH",
+   "updated_at": "2026-08-22T16:07:41.10975+00:00"
+  },
+  {
+   "id": "2daceac1-2b2d-4133-85e2-577769006c07",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "YAN",
+   "updated_at": "2026-07-25T12:26:06.627557+00:00"
+  },
+  {
+   "id": "26171aa3-47df-4bc1-b174-be035262b9d5",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "SOLANGE",
+   "updated_at": "2026-07-25T18:40:27.312128+00:00"
+  },
+  {
+   "id": "9d18bfff-ad6e-4f4a-8050-fcc1f69faaa1",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "f8570ef2-f875-4796-88bd-524c62f53d2e",
+   "nome": "INES",
+   "updated_at": "2026-07-27T11:47:15.563845+00:00"
+  },
+  {
+   "id": "091f316c-e60f-49b4-89ef-9a6f18a8c949",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "f8570ef2-f875-4796-88bd-524c62f53d2e",
+   "nome": "ANA JULIA",
+   "updated_at": "2026-07-27T11:48:51.03345+00:00"
+  },
+  {
+   "id": "8bdd6f84-455b-4d2f-a666-684f167afb67",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "495b4de5-1b0d-40c5-905c-533e07baaccb",
+   "nome": "CONRADO",
+   "updated_at": "2026-07-27T12:04:26.444121+00:00"
+  },
+  {
+   "id": "a7e029da-8b84-4431-8d1e-727d70cd3191",
+   "status": "oportunidade",
+   "loja_id": "1b1f7c6d-1213-4bc7-b6b1-72ec4094f901",
+   "seller_user_id": "8dd0c100-9691-43c8-a89f-aef3b124eb17",
+   "nome": "DANIEL NOGUEIRA RIBEIRO",
+   "updated_at": "2026-07-27T12:11:59.187717+00:00"
+  },
+  {
+   "id": "64400118-5667-442b-9bb5-028604c4e968",
+   "status": "oportunidade",
+   "loja_id": "b8a534f3-637b-4756-bc97-c9bacf48bffb",
+   "seller_user_id": "fba64a48-f206-432e-b7f4-d2367ad3965d",
+   "nome": "MARLOS",
+   "updated_at": "2026-07-27T12:34:59.524059+00:00"
+  },
+  {
+   "id": "7727f4f2-1051-4dd4-8494-92195a37f3e6",
+   "status": "oportunidade",
+   "loja_id": "b8a534f3-637b-4756-bc97-c9bacf48bffb",
+   "seller_user_id": "fba64a48-f206-432e-b7f4-d2367ad3965d",
+   "nome": "MARLONS",
+   "updated_at": "2026-07-27T12:37:39.378957+00:00"
+  },
+  {
+   "id": "bc8f3c13-3e2e-4415-8a61-b4a74e7afe22",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f31e6d72-b0d1-4c9d-b12e-742366db6b1e",
+   "nome": "GUSTAVO",
+   "updated_at": "2026-07-28T19:22:19.84402+00:00"
+  },
+  {
+   "id": "5e1f3e00-38f2-4c18-b367-b79374d3b45e",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "JOSIAS",
+   "updated_at": "2026-08-03T22:10:58.283326+00:00"
+  },
+  {
+   "id": "bbb97e3f-77fb-4875-97ca-062c1bcd6b01",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "aa5cdb37-026a-439f-9263-4ba49ca936f3",
+   "nome": "RHAYANE",
+   "updated_at": "2026-07-27T20:28:10.848698+00:00"
+  },
+  {
+   "id": "02e1bd75-4223-4db5-84c5-8f1985626f51",
+   "status": "oportunidade",
+   "loja_id": "2785bbb1-149e-4569-bc5b-002f11331090",
+   "seller_user_id": "d8906f63-fdb7-456d-bffc-b2f3f04dc4c3",
+   "nome": "EDUARDO MAGELA",
+   "updated_at": "2026-08-08T13:06:47.767982+00:00"
+  },
+  {
+   "id": "b42d32cb-e714-4da3-ba2a-233b9d7b3d2d",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "CRISTIANO",
+   "updated_at": "2026-07-27T21:02:52.517715+00:00"
+  },
+  {
+   "id": "c739604d-a385-47b5-8a11-b1b7fe7a8c0c",
+   "status": "oportunidade",
+   "loja_id": "1b1f7c6d-1213-4bc7-b6b1-72ec4094f901",
+   "seller_user_id": "8dd0c100-9691-43c8-a89f-aef3b124eb17",
+   "nome": "MARCO PAULO DE CARVALHO BIAGGI",
+   "updated_at": "2026-08-21T12:19:38.05491+00:00"
+  },
+  {
+   "id": "30f805c2-71e7-4ef5-b464-93b233ffe8e7",
+   "status": "oportunidade",
+   "loja_id": "ecc1c334-5710-42b0-a777-71d7fb9241e6",
+   "seller_user_id": "0c8b5fb0-794d-48b1-b10a-3af82f1ebc9b",
+   "nome": "RAPHAEL FRANCE CAR",
+   "updated_at": "2026-07-27T21:14:16.410409+00:00"
+  },
+  {
+   "id": "926c97b8-6199-4966-8034-a7f0087133af",
+   "status": "oportunidade",
+   "loja_id": "ecc1c334-5710-42b0-a777-71d7fb9241e6",
+   "seller_user_id": "0c8b5fb0-794d-48b1-b10a-3af82f1ebc9b",
+   "nome": "IVANETE BRAGA",
+   "updated_at": "2026-07-27T21:14:28.538874+00:00"
+  },
+  {
+   "id": "b42009a1-379c-4f80-b3cd-ea872992cb03",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "bf6fa66e-7b3b-49b5-9b45-4d8105de02a5",
+   "nome": "MARCELO",
+   "updated_at": "2026-07-29T12:14:25.347868+00:00"
+  },
+  {
+   "id": "77f5b6e3-19b0-41e9-a25b-dc5c313999fa",
+   "status": "oportunidade",
+   "loja_id": "70cf3f8a-3cde-4bfb-baa7-e74b9eab85f5",
+   "seller_user_id": "59592fb5-1f73-438a-9f8d-42f2ea14f9d8",
+   "nome": "MARCELO PIRES",
+   "updated_at": "2026-08-24T17:03:37.460184+00:00"
+  },
+  {
+   "id": "284e11a1-24dc-42b8-a5f0-d6f7d9272452",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "408c997f-8f6f-45f1-8dc2-ac49c19880f0",
+   "nome": "ANA BEATRIZ",
+   "updated_at": "2026-07-28T18:54:21.686061+00:00"
+  },
+  {
+   "id": "36fbb511-a5b8-4a93-91f5-d411e33a9be5",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "408c997f-8f6f-45f1-8dc2-ac49c19880f0",
+   "nome": "VIVIANE BRAUNE CERQUEIRA LEITE",
+   "updated_at": "2026-07-28T19:16:03.370757+00:00"
+  },
+  {
+   "id": "67e9f75b-e6b1-45b9-b44d-98e78cb46267",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "408c997f-8f6f-45f1-8dc2-ac49c19880f0",
+   "nome": "JOSEMAR MARIO DE GOUVEA",
+   "updated_at": "2026-07-28T19:17:25.562569+00:00"
+  },
+  {
+   "id": "bbdecf43-6e11-43b6-a55f-9a01c18c2715",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "408c997f-8f6f-45f1-8dc2-ac49c19880f0",
+   "nome": "CLEISLA PRISCILA AZEVEDO",
+   "updated_at": "2026-07-28T19:21:19.361471+00:00"
+  },
+  {
+   "id": "38333d43-40b9-4bf3-9e99-dae623c97d92",
+   "status": "oportunidade",
+   "loja_id": "fc9ac447-9f84-4f86-b216-d384a8dc5fba",
+   "seller_user_id": "bb423841-bec6-454a-a783-70aff1d05943",
+   "nome": "NEIVA",
+   "updated_at": "2026-08-11T18:19:04.332909+00:00"
+  },
+  {
+   "id": "04b81f6e-ecc8-4429-916d-28dbcc62a5b2",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f31e6d72-b0d1-4c9d-b12e-742366db6b1e",
+   "nome": "MARCELO",
+   "updated_at": "2026-07-29T12:38:27.711429+00:00"
+  },
+  {
+   "id": "3b2d24c6-fbd6-434a-a91a-ded81cc76357",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f31e6d72-b0d1-4c9d-b12e-742366db6b1e",
+   "nome": "VALERIA",
+   "updated_at": "2026-07-29T12:38:33.165428+00:00"
+  },
+  {
+   "id": "fce68c18-42af-42a7-8c71-b61bb9ace73d",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f31e6d72-b0d1-4c9d-b12e-742366db6b1e",
+   "nome": "THAIS",
+   "updated_at": "2026-07-29T12:38:49.696963+00:00"
+  },
+  {
+   "id": "1370e660-6ff1-4293-8aa0-c706eb23d74f",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f31e6d72-b0d1-4c9d-b12e-742366db6b1e",
+   "nome": "MAURICIO",
+   "updated_at": "2026-07-29T12:38:44.364698+00:00"
+  },
+  {
+   "id": "e28adba1-668f-4b01-a185-f87affa51abc",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f31e6d72-b0d1-4c9d-b12e-742366db6b1e",
+   "nome": "FRANCISCO",
+   "updated_at": "2026-07-29T12:38:54.081894+00:00"
+  },
+  {
+   "id": "d6215e76-5ec9-429c-bdbd-a953db4abf6c",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f31e6d72-b0d1-4c9d-b12e-742366db6b1e",
+   "nome": "SHEILA",
+   "updated_at": "2026-07-29T12:38:58.506365+00:00"
+  },
+  {
+   "id": "3f53e173-86b7-4953-bd26-14fb6744d93e",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f31e6d72-b0d1-4c9d-b12e-742366db6b1e",
+   "nome": "MARCOS",
+   "updated_at": "2026-07-29T12:39:21.513132+00:00"
+  },
+  {
+   "id": "be537738-1d02-475f-9ea7-c3bacabc2fe7",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "aa5cdb37-026a-439f-9263-4ba49ca936f3",
+   "nome": "GUBIO",
+   "updated_at": "2026-08-03T14:22:05.431521+00:00"
+  },
+  {
+   "id": "513cec30-597b-4091-855e-3a17db9201c0",
+   "status": "oportunidade",
+   "loja_id": "cd5642c8-9a69-4b3d-bcec-105fbf338c36",
+   "seller_user_id": "95ce8ce9-9659-4b8c-8ffd-0d06b4e501b5",
+   "nome": "EDMAR HENRIQUE",
+   "updated_at": "2026-08-22T16:03:48.315642+00:00"
+  },
+  {
+   "id": "530e6598-a9d6-4c18-b285-0f5e50759018",
+   "status": "oportunidade",
+   "loja_id": "70cf3f8a-3cde-4bfb-baa7-e74b9eab85f5",
+   "seller_user_id": "59592fb5-1f73-438a-9f8d-42f2ea14f9d8",
+   "nome": "ONI MAIA",
+   "updated_at": "2026-08-24T17:05:21.259796+00:00"
+  },
+  {
+   "id": "fdba0969-63e7-4fbc-918b-8865e9927883",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f31e6d72-b0d1-4c9d-b12e-742366db6b1e",
+   "nome": "AGNALDO",
+   "updated_at": "2026-07-29T12:39:17.731349+00:00"
+  },
+  {
+   "id": "374d7f2b-1c44-44e6-b05f-7446173af89a",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f31e6d72-b0d1-4c9d-b12e-742366db6b1e",
+   "nome": "ROSALIA",
+   "updated_at": "2026-07-29T12:39:26.554496+00:00"
+  },
+  {
+   "id": "2da21d51-d481-4b52-ab8a-e1f97645f1b7",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f31e6d72-b0d1-4c9d-b12e-742366db6b1e",
+   "nome": "YURI",
+   "updated_at": "2026-07-29T12:39:31.061098+00:00"
+  },
+  {
+   "id": "b4dd6c07-c4ca-447e-a851-761379a98d2f",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f31e6d72-b0d1-4c9d-b12e-742366db6b1e",
+   "nome": "JOELMO",
+   "updated_at": "2026-07-29T12:39:35.236366+00:00"
+  },
+  {
+   "id": "e4778d8a-aea6-4f6c-8ce4-3a3769da9bfc",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f31e6d72-b0d1-4c9d-b12e-742366db6b1e",
+   "nome": "ANDREY",
+   "updated_at": "2026-07-29T12:39:39.779474+00:00"
+  },
+  {
+   "id": "faebea67-6758-4119-83da-73a2796d6ac7",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "NELSON",
+   "updated_at": "2026-07-29T18:26:00.042097+00:00"
+  },
+  {
+   "id": "3f0b738c-f9ed-4845-824e-894058cd80b7",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "f8570ef2-f875-4796-88bd-524c62f53d2e",
+   "nome": "ANDERSON",
+   "updated_at": "2026-07-29T19:25:12.375003+00:00"
+  },
+  {
+   "id": "082fe7c4-378c-4ac5-b947-653a97b765cc",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "a4b6622b-c23c-4f51-925c-823091cb7a67",
+   "nome": "JOSE JORGE LAMON",
+   "updated_at": "2026-08-13T13:12:03.722774+00:00"
+  },
+  {
+   "id": "cddb2d1c-35bf-4ba8-9f88-233c1accd9e9",
+   "status": "oportunidade",
+   "loja_id": "172def40-4903-48c8-8b5b-61514e99feee",
+   "seller_user_id": "bfb33112-8582-4581-8e9d-dc8dcdda8c5d",
+   "nome": "GEOVANI",
+   "updated_at": "2026-08-06T18:13:56.989741+00:00"
+  },
+  {
+   "id": "94c835ba-7317-4336-8de3-e281c8fc376b",
+   "status": "oportunidade",
+   "loja_id": "be990a35-63fc-41ea-8cd2-199b926482fc",
+   "seller_user_id": "7ec1c81d-25b1-4338-a2b4-da257a650446",
+   "nome": "MARCIA CRISTINA",
+   "updated_at": "2026-08-04T18:38:21.813682+00:00"
+  },
+  {
+   "id": "7cde54a1-a081-4ac1-9888-1395f86ed815",
+   "status": "oportunidade",
+   "loja_id": "2bff56ad-fbd1-46b2-959a-bcf66b1638cb",
+   "seller_user_id": "0fa4666a-2169-42e9-9a5f-a5c2991d60d8",
+   "nome": "CARLOS LEONARDO",
+   "updated_at": "2026-08-05T15:34:24.316087+00:00"
+  },
+  {
+   "id": "3c5ea240-cbc1-43ad-b4fd-07107ebe301a",
+   "status": "oportunidade",
+   "loja_id": "70cf3f8a-3cde-4bfb-baa7-e74b9eab85f5",
+   "seller_user_id": "05158e34-9810-4324-a404-3e5152e94307",
+   "nome": "MILTON",
+   "updated_at": "2026-07-30T13:53:41.732213+00:00"
+  },
+  {
+   "id": "b9e27095-4116-4671-9772-abb2c720eb86",
+   "status": "oportunidade",
+   "loja_id": "c854fab6-7980-4df5-be52-96f03ab7ee9e",
+   "seller_user_id": "928ab607-ca7a-42ef-80b4-1e2972d8ad6e",
+   "nome": "THIAGO",
+   "updated_at": "2026-08-26T12:24:35.112454+00:00"
+  },
+  {
+   "id": "04404094-d585-4ee2-bc02-3c9ea8d4eac3",
+   "status": "oportunidade",
+   "loja_id": "70cf3f8a-3cde-4bfb-baa7-e74b9eab85f5",
+   "seller_user_id": "05158e34-9810-4324-a404-3e5152e94307",
+   "nome": "ISRAEL",
+   "updated_at": "2026-07-30T13:54:03.699417+00:00"
+  },
+  {
+   "id": "303f61c9-09c7-4345-a2fc-7c5921803983",
+   "status": "oportunidade",
+   "loja_id": "70cf3f8a-3cde-4bfb-baa7-e74b9eab85f5",
+   "seller_user_id": "05158e34-9810-4324-a404-3e5152e94307",
+   "nome": "CARLOS",
+   "updated_at": "2026-07-30T13:54:13.727249+00:00"
+  },
+  {
+   "id": "e497726e-da6f-4761-bf77-fd9787051bfb",
+   "status": "oportunidade",
+   "loja_id": "70cf3f8a-3cde-4bfb-baa7-e74b9eab85f5",
+   "seller_user_id": "05158e34-9810-4324-a404-3e5152e94307",
+   "nome": "EDUARDO",
+   "updated_at": "2026-07-30T13:54:18.655556+00:00"
+  },
+  {
+   "id": "d44a14ac-934d-44cf-96b2-4e9786e25a6f",
+   "status": "oportunidade",
+   "loja_id": "7031e288-301d-4d02-b897-0c36c0b74ff5",
+   "seller_user_id": "5ecadafc-e61b-4320-83e3-60d050f2a458",
+   "nome": "FELIPE",
+   "updated_at": "2026-08-25T12:01:07.771707+00:00"
+  },
+  {
+   "id": "a8e6bd0f-78f7-48db-b646-ed8fda597136",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "f53d6a9c-2a01-41ed-9286-e3bf06d58245",
+   "nome": "ATENILDO",
+   "updated_at": "2026-08-25T13:17:53.631176+00:00"
+  },
+  {
+   "id": "12afec0f-ead5-40f6-ada2-7ae0ee7ccf99",
+   "status": "oportunidade",
+   "loja_id": "3851d947-388c-4ccc-af13-7a46b25158af",
+   "seller_user_id": "5503fc2c-767e-4424-bff4-b26df62002a0",
+   "nome": "WALLACE AMAURY",
+   "updated_at": "2026-08-07T12:45:01.760513+00:00"
+  },
+  {
+   "id": "fb3327d3-fcd9-47e7-b1c0-d20e9e113a54",
+   "status": "oportunidade",
+   "loja_id": "172def40-4903-48c8-8b5b-61514e99feee",
+   "seller_user_id": "9b928669-ae59-4c17-8556-e816b73bc21d",
+   "nome": "RICARDO",
+   "updated_at": "2026-08-04T11:26:23.250634+00:00"
+  },
+  {
+   "id": "9b5e1e59-e64f-4643-bfb3-7676c215c77f",
+   "status": "oportunidade",
+   "loja_id": "0fe488de-4ac5-431a-b3c8-a96f7d30fe6a",
+   "seller_user_id": "b788f5d7-80ff-4554-93c1-d13ec162fe10",
+   "nome": "MICHAEL",
+   "updated_at": "2026-08-12T21:17:30.551589+00:00"
+  },
+  {
+   "id": "493022e2-6f26-447b-ba1d-77d25efa39f7",
+   "status": "oportunidade",
+   "loja_id": "7031e288-301d-4d02-b897-0c36c0b74ff5",
+   "seller_user_id": "93c90a26-360a-4c5c-a5c0-0860a78152b7",
+   "nome": "PAULINHO",
+   "updated_at": "2026-08-10T13:56:20.567074+00:00"
+  },
+  {
+   "id": "46ff4e3c-5ed4-4e90-8f1e-3c0a6fec18a4",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "f53d6a9c-2a01-41ed-9286-e3bf06d58245",
+   "nome": "THAIS COELHO",
+   "updated_at": "2026-08-25T13:22:14.095173+00:00"
+  },
+  {
+   "id": "4660b140-53f2-4bf8-a9ca-8a209223b46b",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "495b4de5-1b0d-40c5-905c-533e07baaccb",
+   "nome": "SIMONE",
+   "updated_at": "2026-07-30T18:25:03.234251+00:00"
+  },
+  {
+   "id": "72ca7b3c-1d8b-4f80-b013-be0b8c488a16",
+   "status": "oportunidade",
+   "loja_id": "c854fab6-7980-4df5-be52-96f03ab7ee9e",
+   "seller_user_id": "4a095835-41d9-4f4c-b30b-862e8da47be1",
+   "nome": "RONILSON",
+   "updated_at": "2026-08-11T15:26:59.470524+00:00"
+  },
+  {
+   "id": "32b1b747-a13b-4184-b905-87bed2fa565a",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "bf6fa66e-7b3b-49b5-9b45-4d8105de02a5",
+   "nome": "LUCAS",
+   "updated_at": "2026-08-28T12:15:18.56541+00:00"
+  },
+  {
+   "id": "38156578-f437-45d6-87e8-bfc6e1f160f4",
+   "status": "oportunidade",
+   "loja_id": "ecc1c334-5710-42b0-a777-71d7fb9241e6",
+   "seller_user_id": "e6531200-bb8b-484b-832f-053493aea126",
+   "nome": "JOSE MAURO DE ALCANTARA",
+   "updated_at": "2026-07-30T20:51:28.091278+00:00"
+  },
+  {
+   "id": "ef272d85-6968-44a0-aabf-bddec0c98adc",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "bf6fa66e-7b3b-49b5-9b45-4d8105de02a5",
+   "nome": "WILLIAN",
+   "updated_at": "2026-08-28T12:15:47.917542+00:00"
+  },
+  {
+   "id": "b2dd95c6-e248-407a-b61b-bdb9462c9795",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "495b4de5-1b0d-40c5-905c-533e07baaccb",
+   "nome": "ROBERTA HELENA",
+   "updated_at": "2026-08-06T17:15:25.564304+00:00"
+  },
+  {
+   "id": "1c9983de-6190-4d31-b2b1-11c790758c65",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "f8570ef2-f875-4796-88bd-524c62f53d2e",
+   "nome": "BARBARA",
+   "updated_at": "2026-08-06T19:00:07.845232+00:00"
+  },
+  {
+   "id": "c3a28769-6df3-4b6a-89b5-e238eb7ffd96",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "ROGERIO",
+   "updated_at": "2026-08-21T12:27:49.66845+00:00"
+  },
+  {
+   "id": "4b3ddced-cb34-4507-8490-035e5ae1da76",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "bf6fa66e-7b3b-49b5-9b45-4d8105de02a5",
+   "nome": "EDUARDO",
+   "updated_at": "2026-07-31T13:04:26.333417+00:00"
+  },
+  {
+   "id": "563729c6-10b9-4bc6-b109-647e44dd48db",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "bf6fa66e-7b3b-49b5-9b45-4d8105de02a5",
+   "nome": "GABRIEL (MARCELE)",
+   "updated_at": "2026-07-31T13:04:45.349175+00:00"
+  },
+  {
+   "id": "f2c98c65-b9c1-4216-a274-14304a8dfd3b",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "bf6fa66e-7b3b-49b5-9b45-4d8105de02a5",
+   "nome": "MARCO",
+   "updated_at": "2026-07-31T13:04:52.252558+00:00"
+  },
+  {
+   "id": "864716d1-55e4-4b2e-9e37-c2e029047ee6",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "bf6fa66e-7b3b-49b5-9b45-4d8105de02a5",
+   "nome": "PAULO",
+   "updated_at": "2026-07-31T13:04:57.921327+00:00"
+  },
+  {
+   "id": "43a1d133-1851-431f-95d4-329570d9f851",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "bf6fa66e-7b3b-49b5-9b45-4d8105de02a5",
+   "nome": "LUCIA HELENA",
+   "updated_at": "2026-08-26T13:08:51.131031+00:00"
+  },
+  {
+   "id": "71cf2b6e-9c66-473c-b2fe-6eb04b3629f3",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "bf6fa66e-7b3b-49b5-9b45-4d8105de02a5",
+   "nome": "MAYARA",
+   "updated_at": "2026-07-31T13:05:08.194283+00:00"
+  },
+  {
+   "id": "e7a5ba0d-195d-428b-94ac-5aa533ebc188",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f31e6d72-b0d1-4c9d-b12e-742366db6b1e",
+   "nome": "IGOR",
+   "updated_at": "2026-07-31T21:18:10.078258+00:00"
+  },
+  {
+   "id": "4d9990d8-9ade-4cd1-be35-059793de9a31",
+   "status": "oportunidade",
+   "loja_id": "be990a35-63fc-41ea-8cd2-199b926482fc",
+   "seller_user_id": "7ec1c81d-25b1-4338-a2b4-da257a650446",
+   "nome": "JAF CONSTRUCOES LTDA",
+   "updated_at": "2026-08-13T13:19:35.038751+00:00"
+  },
+  {
+   "id": "204b0d85-7af0-41f3-9918-e3e50038195c",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "aa5cdb37-026a-439f-9263-4ba49ca936f3",
+   "nome": "WAGNER",
+   "updated_at": "2026-08-15T11:47:13.022604+00:00"
+  },
+  {
+   "id": "25cfd8b6-75df-4621-89c8-57ac82c671ed",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "7030c854-1251-45a1-99c0-dc1621f0fa1e",
+   "nome": "WATSON  VIEIRA",
+   "updated_at": "2026-08-03T17:48:30.988155+00:00"
+  },
+  {
+   "id": "4e771c6e-0a5f-4bb5-8e41-405bce9fa86c",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "7030c854-1251-45a1-99c0-dc1621f0fa1e",
+   "nome": "LUIZ PEREIRA",
+   "updated_at": "2026-08-08T15:02:39.780296+00:00"
+  },
+  {
+   "id": "af739db6-f063-4526-9b64-1a049b1bb24f",
+   "status": "oportunidade",
+   "loja_id": "0fe488de-4ac5-431a-b3c8-a96f7d30fe6a",
+   "seller_user_id": "a7ed8d4d-1494-415f-aa69-67d493c36954",
+   "nome": "SARAH MARIA",
+   "updated_at": "2026-08-10T14:14:06.684184+00:00"
+  },
+  {
+   "id": "50e27533-7ec0-4c4f-a673-66e8182e5e59",
+   "status": "oportunidade",
+   "loja_id": "1b1f7c6d-1213-4bc7-b6b1-72ec4094f901",
+   "seller_user_id": "8dd0c100-9691-43c8-a89f-aef3b124eb17",
+   "nome": "ESTER DE PAULA REIS SILVA",
+   "updated_at": "2026-08-03T12:17:26.559512+00:00"
+  },
+  {
+   "id": "e27fcdf2-b998-4af7-84a4-a0c89efdfda4",
+   "status": "oportunidade",
+   "loja_id": "70cf3f8a-3cde-4bfb-baa7-e74b9eab85f5",
+   "seller_user_id": "05158e34-9810-4324-a404-3e5152e94307",
+   "nome": "MARCO ANTONIO",
+   "updated_at": "2026-08-21T12:44:22.183258+00:00"
+  },
+  {
+   "id": "145074a9-b95d-4212-a4de-b942acfc75ef",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "aa5cdb37-026a-439f-9263-4ba49ca936f3",
+   "nome": "FABIO",
+   "updated_at": "2026-08-03T17:33:49.857648+00:00"
+  },
+  {
+   "id": "4310967b-ba35-40eb-838e-e9eb2b63bf4b",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "7bd494de-7a2b-4efa-88a1-a643fa5f04d5",
+   "nome": "LUCIO PEREIRA DA SILVA",
+   "updated_at": "2026-08-03T19:04:55.179796+00:00"
+  },
+  {
+   "id": "fd73fb3d-ed62-4651-b570-e5b8da3e6451",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "6396d444-34b5-46cf-b09c-9d4ebd39237e",
+   "nome": "DEVANIR",
+   "updated_at": "2026-08-24T12:52:06.106453+00:00"
+  },
+  {
+   "id": "b7e411df-4c98-4b7a-aaa0-8179189473df",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "7bd494de-7a2b-4efa-88a1-a643fa5f04d5",
+   "nome": "MARIANA CORDEIRO NUNES TURIBIO",
+   "updated_at": "2026-08-03T20:13:59.224168+00:00"
+  },
+  {
+   "id": "074b73fb-d9cf-49e9-b8dc-029307fcf7cc",
+   "status": "oportunidade",
+   "loja_id": "70cf3f8a-3cde-4bfb-baa7-e74b9eab85f5",
+   "seller_user_id": "05158e34-9810-4324-a404-3e5152e94307",
+   "nome": "NENE MOTOS",
+   "updated_at": "2026-08-03T20:24:21.281332+00:00"
+  },
+  {
+   "id": "6d8ad2af-e509-4b56-a900-666037373d92",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f31e6d72-b0d1-4c9d-b12e-742366db6b1e",
+   "nome": "JULIANA",
+   "updated_at": "2026-08-12T21:00:44.480864+00:00"
+  },
+  {
+   "id": "24644213-6b7f-45d7-ab05-0f3a388bc9dc",
+   "status": "oportunidade",
+   "loja_id": "cd5642c8-9a69-4b3d-bcec-105fbf338c36",
+   "seller_user_id": "7f4add1e-c70c-4a20-8f31-c629cf5124c2",
+   "nome": "KEYLLA",
+   "updated_at": "2026-08-24T12:54:20.601103+00:00"
+  },
+  {
+   "id": "9c521740-ea1e-4ad2-ad9b-44d367a5060c",
+   "status": "oportunidade",
+   "loja_id": "2785bbb1-149e-4569-bc5b-002f11331090",
+   "seller_user_id": "80fafbf4-381d-4798-be4b-fc1411e6f650",
+   "nome": "WIL",
+   "updated_at": "2026-08-11T12:03:24.669031+00:00"
+  },
+  {
+   "id": "ff798e6c-d8e4-49b9-b834-081f48eda24e",
+   "status": "oportunidade",
+   "loja_id": "fc9ac447-9f84-4f86-b216-d384a8dc5fba",
+   "seller_user_id": "bb423841-bec6-454a-a783-70aff1d05943",
+   "nome": "QUISLOM",
+   "updated_at": "2026-08-25T15:51:34.888561+00:00"
+  },
+  {
+   "id": "2a5fd098-f9a3-4636-98de-d485311987c6",
+   "status": "oportunidade",
+   "loja_id": "1b1f7c6d-1213-4bc7-b6b1-72ec4094f901",
+   "seller_user_id": "8dd0c100-9691-43c8-a89f-aef3b124eb17",
+   "nome": "JULIO CESAR TEODORO DA SILVA",
+   "updated_at": "2026-08-15T12:09:03.499501+00:00"
+  },
+  {
+   "id": "6cfa3e09-3405-422f-9ee1-b31bda4b0c1a",
+   "status": "oportunidade",
+   "loja_id": "7031e288-301d-4d02-b897-0c36c0b74ff5",
+   "seller_user_id": "5ecadafc-e61b-4320-83e3-60d050f2a458",
+   "nome": "JOYCE",
+   "updated_at": "2026-08-04T18:40:07.918594+00:00"
+  },
+  {
+   "id": "75c5c3a6-040d-4c5c-95d9-9027c43db196",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "495b4de5-1b0d-40c5-905c-533e07baaccb",
+   "nome": "CAIQUE PARIZI",
+   "updated_at": "2026-08-04T19:10:54.752479+00:00"
+  },
+  {
+   "id": "0253fbb5-0ea7-46fb-b3ca-a9ef00492e22",
+   "status": "oportunidade",
+   "loja_id": "e4eb82e1-0a43-42b5-bb3a-9c0ee3f0f54a",
+   "seller_user_id": "483f412e-4ca0-49c9-9dc9-9cbe6ddfcaaa",
+   "nome": "VALERIA",
+   "updated_at": "2026-08-10T12:45:02.733571+00:00"
+  },
+  {
+   "id": "73940597-aa91-4bd0-80fd-d718376992f2",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "a4b6622b-c23c-4f51-925c-823091cb7a67",
+   "nome": "JOAO VICTOR DE SOUZA OLIVEIRA",
+   "updated_at": "2026-08-04T20:23:16.746788+00:00"
+  },
+  {
+   "id": "510bb6e9-b346-42f3-9e40-de1d928b3891",
+   "status": "oportunidade",
+   "loja_id": "c854fab6-7980-4df5-be52-96f03ab7ee9e",
+   "seller_user_id": "4a095835-41d9-4f4c-b30b-862e8da47be1",
+   "nome": "YURI",
+   "updated_at": "2026-08-11T15:28:42.433377+00:00"
+  },
+  {
+   "id": "1bf0af4a-fec0-4dfe-9944-96cdecc48baa",
+   "status": "oportunidade",
+   "loja_id": "7031e288-301d-4d02-b897-0c36c0b74ff5",
+   "seller_user_id": "1635f616-4da4-40d2-8291-9216b9e93359",
+   "nome": "DANIEL",
+   "updated_at": "2026-08-14T12:28:09.03908+00:00"
+  },
+  {
+   "id": "609902c7-55b6-486c-9fd9-23841dd734d8",
+   "status": "oportunidade",
+   "loja_id": "76f55bc4-f02b-4e45-adaa-2b5b8a7533c3",
+   "seller_user_id": "0de21674-af16-4ed8-bd22-ef7ed691254a",
+   "nome": "APARECIDO BRAGA",
+   "updated_at": "2026-08-11T21:05:10.241294+00:00"
+  },
+  {
+   "id": "8cf58040-acce-4db4-bd91-41108f6bd405",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "a4b6622b-c23c-4f51-925c-823091cb7a67",
+   "nome": "MANOEL NUNES DE OLIVEIRA",
+   "updated_at": "2026-08-04T20:31:41.542217+00:00"
+  },
+  {
+   "id": "2da901b2-6c31-4a72-97cc-117c16113d13",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "a4b6622b-c23c-4f51-925c-823091cb7a67",
+   "nome": "RAFAEL BENTO MARRA",
+   "updated_at": "2026-08-04T20:34:13.753837+00:00"
+  },
+  {
+   "id": "41ce12a8-7e1d-43aa-a1b0-75fa88db13fc",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "a4b6622b-c23c-4f51-925c-823091cb7a67",
+   "nome": "THIAGO BARRETO DA SILVA DE OLIVEIRA",
+   "updated_at": "2026-08-04T20:50:46.688238+00:00"
+  },
+  {
+   "id": "ae70a947-cfa8-49ff-bac8-5411f868418d",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "a4b6622b-c23c-4f51-925c-823091cb7a67",
+   "nome": "FANUEL TALES DOS SANTOS ROCHA",
+   "updated_at": "2026-08-04T20:54:04.462589+00:00"
+  },
+  {
+   "id": "139e0265-9253-40bf-ae56-a53bbd78dd13",
+   "status": "oportunidade",
+   "loja_id": "df92c72f-9d3c-4ad5-ad99-8544cb2eccb8",
+   "seller_user_id": "65ef5187-928d-4a92-bc04-fd177d778bb8",
+   "nome": "RENE",
+   "updated_at": "2026-08-14T11:57:40.199292+00:00"
+  },
+  {
+   "id": "87a63466-51cd-4b1a-be71-67d9026a25f8",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "6396d444-34b5-46cf-b09c-9d4ebd39237e",
+   "nome": "WANTUIL CARLOS MOREIRA",
+   "updated_at": "2026-08-15T19:07:29.277483+00:00"
+  },
+  {
+   "id": "51455dce-9bee-46dc-9069-078bd45bece6",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "a4b6622b-c23c-4f51-925c-823091cb7a67",
+   "nome": "JORGE CARLOS MIGUEL",
+   "updated_at": "2026-08-04T21:13:15.893392+00:00"
+  },
+  {
+   "id": "d40be409-ecb5-4c43-aa66-b1790813dc51",
+   "status": "oportunidade",
+   "loja_id": "70cf3f8a-3cde-4bfb-baa7-e74b9eab85f5",
+   "seller_user_id": "59592fb5-1f73-438a-9f8d-42f2ea14f9d8",
+   "nome": "HENRIQUE",
+   "updated_at": "2026-08-21T13:12:35.181198+00:00"
+  },
+  {
+   "id": "3916f8be-cc6d-401d-a548-c99d06aa5b73",
+   "status": "oportunidade",
+   "loja_id": "fc9ac447-9f84-4f86-b216-d384a8dc5fba",
+   "seller_user_id": "c8656b3a-9bc8-4a7a-84ac-d0fee9a5a777",
+   "nome": "CARLOS PRAZERES",
+   "updated_at": "2026-08-27T17:25:28.523237+00:00"
+  },
+  {
+   "id": "063a0351-9fa1-429c-9bbf-8e7a27d4524e",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "a7ed8d4d-1494-415f-aa69-67d493c36954",
+   "nome": "NAIARA LILIAN MENDES DE LIMA SOUSA",
+   "updated_at": "2026-08-05T12:53:00.956363+00:00"
+  },
+  {
+   "id": "c3ce53ee-b152-462c-862e-593df98290df",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "ff65bbb5-9093-49c0-b254-f348cb930acd",
+   "nome": "VANIO",
+   "updated_at": "2026-08-10T19:09:27.002587+00:00"
+  },
+  {
+   "id": "93943560-2782-4562-901a-25320365aec1",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "8b654763-4474-473f-84df-0011a805395b",
+   "nome": "JONNY FILIPE",
+   "updated_at": "2026-08-05T17:39:33.006236+00:00"
+  },
+  {
+   "id": "9a6f2c35-8dec-4707-aa77-caa3bbaefcba",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "7bd494de-7a2b-4efa-88a1-a643fa5f04d5",
+   "nome": "JASANIAS GOMES DE BRITO JUNIOR",
+   "updated_at": "2026-08-05T14:34:28.538724+00:00"
+  },
+  {
+   "id": "f6f8ca2b-c291-4c83-aded-6abda10a501c",
+   "status": "oportunidade",
+   "loja_id": "32338f12-fa07-4d09-adb2-5b7cdf6760b1",
+   "seller_user_id": "2a4d04d1-7411-425f-a1db-dd1b059d7026",
+   "nome": "THIAGO SANCHES",
+   "updated_at": "2026-08-10T12:57:26.503845+00:00"
+  },
+  {
+   "id": "b3f91d0f-d3b4-47c4-b429-1b565a48ff7d",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "6396d444-34b5-46cf-b09c-9d4ebd39237e",
+   "nome": "ADAO MG ESCAL",
+   "updated_at": "2026-08-13T19:44:05.379896+00:00"
+  },
+  {
+   "id": "9137faac-1b29-4213-89b2-82c66b42adef",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "ff65bbb5-9093-49c0-b254-f348cb930acd",
+   "nome": "FRANCELINO",
+   "updated_at": "2026-08-10T18:34:27.676942+00:00"
+  },
+  {
+   "id": "41486ea9-79b9-4ec1-9684-39105cefa972",
+   "status": "oportunidade",
+   "loja_id": "cd5642c8-9a69-4b3d-bcec-105fbf338c36",
+   "seller_user_id": "7f4add1e-c70c-4a20-8f31-c629cf5124c2",
+   "nome": "CAMILA",
+   "updated_at": "2026-08-17T11:31:08.91578+00:00"
+  },
+  {
+   "id": "13951fa6-a44e-44b8-bd9e-3625f036e894",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f31e6d72-b0d1-4c9d-b12e-742366db6b1e",
+   "nome": "JOSE",
+   "updated_at": "2026-08-24T18:54:28.731281+00:00"
+  },
+  {
+   "id": "627d8261-1e97-417f-9c97-c06869b10bcf",
+   "status": "oportunidade",
+   "loja_id": "172def40-4903-48c8-8b5b-61514e99feee",
+   "seller_user_id": "bfb33112-8582-4581-8e9d-dc8dcdda8c5d",
+   "nome": "ALEXANDRE",
+   "updated_at": "2026-08-10T13:02:25.520218+00:00"
+  },
+  {
+   "id": "1055b16f-6afb-49be-ade8-322b317db5d7",
+   "status": "oportunidade",
+   "loja_id": "172def40-4903-48c8-8b5b-61514e99feee",
+   "seller_user_id": "157ed0a8-fef0-43de-8b77-e28183daea5f",
+   "nome": "CARLOS",
+   "updated_at": "2026-08-05T18:40:06.363238+00:00"
+  },
+  {
+   "id": "075b9222-216f-4dfe-af5a-0ca8e10a37ae",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f31e6d72-b0d1-4c9d-b12e-742366db6b1e",
+   "nome": "FERNANDO",
+   "updated_at": "2026-08-06T17:14:30.47315+00:00"
+  },
+  {
+   "id": "e93eb324-abfd-4818-86e1-320b57817e95",
+   "status": "oportunidade",
+   "loja_id": "3851d947-388c-4ccc-af13-7a46b25158af",
+   "seller_user_id": "42c3a6c7-4919-4f54-a509-3c5fe0c6aba4",
+   "nome": "LUIS",
+   "updated_at": "2026-08-06T17:33:27.977369+00:00"
+  },
+  {
+   "id": "ee37ecf6-1ae0-46cc-a39f-f08aef42c97b",
+   "status": "oportunidade",
+   "loja_id": "ed197981-4413-4156-9d34-fbc8da90946d",
+   "seller_user_id": "a67b0e86-768a-4280-b238-25f0f4f449e8",
+   "nome": "TATIANE",
+   "updated_at": "2026-08-05T20:23:40.575757+00:00"
+  },
+  {
+   "id": "005d61f3-9ab9-49e6-91a2-da89d9e1deb5",
+   "status": "oportunidade",
+   "loja_id": "c854fab6-7980-4df5-be52-96f03ab7ee9e",
+   "seller_user_id": "bb2376c0-d24f-460b-a6e6-0493390f9d06",
+   "nome": "JAQUELINE DO LAGO HOMEM",
+   "updated_at": "2026-08-10T18:42:12.840961+00:00"
+  },
+  {
+   "id": "1a27985b-bbc9-41ec-9478-460f73cc02d3",
+   "status": "oportunidade",
+   "loja_id": "70cf3f8a-3cde-4bfb-baa7-e74b9eab85f5",
+   "seller_user_id": "05158e34-9810-4324-a404-3e5152e94307",
+   "nome": "RODRIGO",
+   "updated_at": "2026-08-21T15:24:26.363712+00:00"
+  },
+  {
+   "id": "97918036-db38-4e34-aac3-fa7ddeae13f8",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "408c997f-8f6f-45f1-8dc2-ac49c19880f0",
+   "nome": "IGOR SOARES",
+   "updated_at": "2026-08-07T20:23:59.083544+00:00"
+  },
+  {
+   "id": "ad4dd6ec-d6bc-4492-bebd-ffa46c2a3409",
+   "status": "oportunidade",
+   "loja_id": "7031e288-301d-4d02-b897-0c36c0b74ff5",
+   "seller_user_id": "168e6359-bb64-48da-a9e7-3794e56d3d00",
+   "nome": "GUSTAVO MOTORS",
+   "updated_at": "2026-08-14T13:09:09.933796+00:00"
+  },
+  {
+   "id": "7ca5083b-d6de-4981-aed4-5d96b66020cb",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "6396d444-34b5-46cf-b09c-9d4ebd39237e",
+   "nome": "GRACE MARIA",
+   "updated_at": "2026-08-24T19:08:31.67628+00:00"
+  },
+  {
+   "id": "e73e4e80-3ad7-4dd8-a5dd-af930727f227",
+   "status": "oportunidade",
+   "loja_id": "e4eb82e1-0a43-42b5-bb3a-9c0ee3f0f54a",
+   "seller_user_id": "483f412e-4ca0-49c9-9dc9-9cbe6ddfcaaa",
+   "nome": "SAULO",
+   "updated_at": "2026-08-06T18:10:13.763822+00:00"
+  },
+  {
+   "id": "16d3e560-0860-445a-bbbb-e5563bb74080",
+   "status": "oportunidade",
+   "loja_id": "fc9ac447-9f84-4f86-b216-d384a8dc5fba",
+   "seller_user_id": "bb423841-bec6-454a-a783-70aff1d05943",
+   "nome": "XANDY",
+   "updated_at": "2026-08-11T18:19:31.357931+00:00"
+  },
+  {
+   "id": "a008b740-85d8-4705-ae89-7cf97e9a0c47",
+   "status": "oportunidade",
+   "loja_id": "1b1f7c6d-1213-4bc7-b6b1-72ec4094f901",
+   "seller_user_id": "e434ffa3-edc3-4acb-801d-bda9d201cd02",
+   "nome": "GABRIELA MELO",
+   "updated_at": "2026-08-10T15:12:30.14714+00:00"
+  },
+  {
+   "id": "8fb4eb45-3e61-4e54-bf93-144e848b9e3b",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "7bd494de-7a2b-4efa-88a1-a643fa5f04d5",
+   "nome": "MARCELO GOMES DA SILVA",
+   "updated_at": "2026-08-21T21:26:18.717089+00:00"
+  },
+  {
+   "id": "d5b31f17-57ca-4d79-accd-398166d2d287",
+   "status": "oportunidade",
+   "loja_id": "c854fab6-7980-4df5-be52-96f03ab7ee9e",
+   "seller_user_id": "bb2376c0-d24f-460b-a6e6-0493390f9d06",
+   "nome": "EDERSON NASCIMENTO INÁCIO",
+   "updated_at": "2026-08-06T17:10:15.704502+00:00"
+  },
+  {
+   "id": "b7c4295a-cfd5-49a5-8316-f0544ca8faff",
+   "status": "oportunidade",
+   "loja_id": "3851d947-388c-4ccc-af13-7a46b25158af",
+   "seller_user_id": "fb642121-618c-4b83-a520-cd579c938991",
+   "nome": "ROBSON MARQUES LOBATO",
+   "updated_at": "2026-08-06T17:29:55.649843+00:00"
+  },
+  {
+   "id": "2eb15278-6aa5-41d9-9747-2c7078cc541d",
+   "status": "oportunidade",
+   "loja_id": "3851d947-388c-4ccc-af13-7a46b25158af",
+   "seller_user_id": "5503fc2c-767e-4424-bff4-b26df62002a0",
+   "nome": "LEANDRO FERREIRA",
+   "updated_at": "2026-08-06T17:24:19.731328+00:00"
+  },
+  {
+   "id": "46fb7722-f0a2-4e79-8385-c66e9163bc12",
+   "status": "oportunidade",
+   "loja_id": "3851d947-388c-4ccc-af13-7a46b25158af",
+   "seller_user_id": "fb642121-618c-4b83-a520-cd579c938991",
+   "nome": "TIAGO CRISTIANO BAYA",
+   "updated_at": "2026-08-06T17:24:27.976951+00:00"
+  },
+  {
+   "id": "110887b4-a865-46ae-a25a-a52146aadbd7",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "408c997f-8f6f-45f1-8dc2-ac49c19880f0",
+   "nome": "RENATO",
+   "updated_at": "2026-08-07T20:26:07.444621+00:00"
+  },
+  {
+   "id": "258baabf-dbd8-443e-802e-6f0ea66f4cc4",
+   "status": "oportunidade",
+   "loja_id": "a52ae402-6bcb-46ad-b0cf-f97b114d1be5",
+   "seller_user_id": "a83f6efe-a151-4bcb-be3c-da7ed893360e",
+   "nome": "ROGER MARQUES",
+   "updated_at": "2026-08-10T10:58:15.617293+00:00"
+  },
+  {
+   "id": "d4b68e7e-0c4a-48d9-8515-f8077fcd680b",
+   "status": "oportunidade",
+   "loja_id": "70cf3f8a-3cde-4bfb-baa7-e74b9eab85f5",
+   "seller_user_id": "59592fb5-1f73-438a-9f8d-42f2ea14f9d8",
+   "nome": "NAYARA",
+   "updated_at": "2026-08-13T12:29:58.069195+00:00"
+  },
+  {
+   "id": "713021a2-4f13-49ba-b831-d8d4c2af59c9",
+   "status": "oportunidade",
+   "loja_id": "7031e288-301d-4d02-b897-0c36c0b74ff5",
+   "seller_user_id": "168e6359-bb64-48da-a9e7-3794e56d3d00",
+   "nome": "JOSE MARCIO",
+   "updated_at": "2026-08-14T13:10:40.809977+00:00"
+  },
+  {
+   "id": "7dbb180e-86f5-4e0e-ac83-26c9ef004b9e",
+   "status": "oportunidade",
+   "loja_id": "1b1f7c6d-1213-4bc7-b6b1-72ec4094f901",
+   "seller_user_id": "e434ffa3-edc3-4acb-801d-bda9d201cd02",
+   "nome": "LENI VIEIRA DA SILVA",
+   "updated_at": "2026-08-07T19:22:44.75496+00:00"
+  },
+  {
+   "id": "6c86fa0a-c4a6-4b91-9857-c062ff0014d4",
+   "status": "oportunidade",
+   "loja_id": "df92c72f-9d3c-4ad5-ad99-8544cb2eccb8",
+   "seller_user_id": "91e31898-f77c-463f-ad72-19bb4ce040f5",
+   "nome": "ADELAINE",
+   "updated_at": "2026-08-07T12:22:11.778576+00:00"
+  },
+  {
+   "id": "505017d9-8e84-4f43-b3b1-160cd8abcd6b",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f75f3a91-733c-44f8-90ce-829973f8e421",
+   "nome": "José Joaquim",
+   "updated_at": "2026-08-13T11:41:02.917017+00:00"
+  },
+  {
+   "id": "add6d87b-f8aa-4528-9fb2-222838ef6376",
+   "status": "oportunidade",
+   "loja_id": "7031e288-301d-4d02-b897-0c36c0b74ff5",
+   "seller_user_id": "93c90a26-360a-4c5c-a5c0-0860a78152b7",
+   "nome": "ADILSON",
+   "updated_at": "2026-08-13T12:33:58.267299+00:00"
+  },
+  {
+   "id": "49a09c0a-16c9-4b99-b920-d67102f010c5",
+   "status": "oportunidade",
+   "loja_id": "7031e288-301d-4d02-b897-0c36c0b74ff5",
+   "seller_user_id": "5ecadafc-e61b-4320-83e3-60d050f2a458",
+   "nome": "WELBERTH",
+   "updated_at": "2026-08-10T12:24:35.126699+00:00"
+  },
+  {
+   "id": "9f03d888-5ac3-44b4-a694-e8db386c5388",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "f8570ef2-f875-4796-88bd-524c62f53d2e",
+   "nome": "REGINALDO",
+   "updated_at": "2026-08-14T13:53:20.066762+00:00"
+  },
+  {
+   "id": "510594c2-5c05-44be-8c95-74e2a1bd9404",
+   "status": "oportunidade",
+   "loja_id": "cd5642c8-9a69-4b3d-bcec-105fbf338c36",
+   "seller_user_id": "7f4add1e-c70c-4a20-8f31-c629cf5124c2",
+   "nome": "MATHEUS",
+   "updated_at": "2026-08-17T11:34:37.847593+00:00"
+  },
+  {
+   "id": "98901727-b361-47ff-93f5-090ac1665aab",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "495b4de5-1b0d-40c5-905c-533e07baaccb",
+   "nome": "CLARA",
+   "updated_at": "2026-08-17T11:48:53.196793+00:00"
+  },
+  {
+   "id": "111d7250-6c21-4bf9-a2cc-72dac88e2a3c",
+   "status": "oportunidade",
+   "loja_id": "c854fab6-7980-4df5-be52-96f03ab7ee9e",
+   "seller_user_id": "bb2376c0-d24f-460b-a6e6-0493390f9d06",
+   "nome": "EDUARDO MORATO DIAS NASCIMENTO",
+   "updated_at": "2026-08-10T18:49:54.082707+00:00"
+  },
+  {
+   "id": "56e4e3c2-51e9-4c18-bfc5-1d55ac625c49",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f31e6d72-b0d1-4c9d-b12e-742366db6b1e",
+   "nome": "ANA JULIA BRUM",
+   "updated_at": "2026-08-12T21:00:35.703696+00:00"
+  },
+  {
+   "id": "fb6346c9-b449-4aea-90dd-68feae25af3a",
+   "status": "oportunidade",
+   "loja_id": "7031e288-301d-4d02-b897-0c36c0b74ff5",
+   "seller_user_id": "93c90a26-360a-4c5c-a5c0-0860a78152b7",
+   "nome": "BRUNO",
+   "updated_at": "2026-08-13T12:35:41.760994+00:00"
+  },
+  {
+   "id": "3dc9399f-20c6-45b1-add6-1b821b72ebbf",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "495b4de5-1b0d-40c5-905c-533e07baaccb",
+   "nome": "VALERIA",
+   "updated_at": "2026-08-17T11:45:15.882265+00:00"
+  },
+  {
+   "id": "b01698ac-21fc-40c7-8a1b-cf9b8380e393",
+   "status": "oportunidade",
+   "loja_id": "2785bbb1-149e-4569-bc5b-002f11331090",
+   "seller_user_id": "80fafbf4-381d-4798-be4b-fc1411e6f650",
+   "nome": "ELIO",
+   "updated_at": "2026-08-07T19:22:01.943792+00:00"
+  },
+  {
+   "id": "88a47df0-eec6-4e0d-acf1-000cd690b33f",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "aa5cdb37-026a-439f-9263-4ba49ca936f3",
+   "nome": "ADÃO",
+   "updated_at": "2026-08-24T19:41:27.976805+00:00"
+  },
+  {
+   "id": "acaf88a0-d132-4dad-af1d-11fe70b28b01",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "fb18b7b7-4b49-4b21-a98c-16c7b589156b",
+   "nome": "PAULO CESAR ALVES DIONISIO",
+   "updated_at": "2026-08-11T13:19:15.037131+00:00"
+  },
+  {
+   "id": "b8be09a0-d51d-43f8-96d3-67bd5fc7d3c9",
+   "status": "oportunidade",
+   "loja_id": "32338f12-fa07-4d09-adb2-5b7cdf6760b1",
+   "seller_user_id": "2d2e9242-1352-4237-92fb-e547135e3d60",
+   "nome": "MARINA ANDRADE FAGUNDES DOS SANTOS",
+   "updated_at": "2026-08-08T11:29:50.899099+00:00"
+  },
+  {
+   "id": "672c74ae-8060-4b6f-a086-04964a3afa7b",
+   "status": "oportunidade",
+   "loja_id": "cd5642c8-9a69-4b3d-bcec-105fbf338c36",
+   "seller_user_id": "95ce8ce9-9659-4b8c-8ffd-0d06b4e501b5",
+   "nome": "FERNANDO",
+   "updated_at": "2026-08-10T18:25:36.121061+00:00"
+  },
+  {
+   "id": "7be72d96-705f-4c39-beb6-5754ab30b98e",
+   "status": "oportunidade",
+   "loja_id": "cd5642c8-9a69-4b3d-bcec-105fbf338c36",
+   "seller_user_id": "95ce8ce9-9659-4b8c-8ffd-0d06b4e501b5",
+   "nome": "GABRIELLA",
+   "updated_at": "2026-08-10T18:30:31.97143+00:00"
+  },
+  {
+   "id": "9434348f-9069-48f3-9573-1bc9f4143c4f",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "495b4de5-1b0d-40c5-905c-533e07baaccb",
+   "nome": "CESAR",
+   "updated_at": "2026-08-10T18:51:50.030543+00:00"
+  },
+  {
+   "id": "6d311e83-f746-42d2-9dbf-7313f7e1348f",
+   "status": "oportunidade",
+   "loja_id": "76f55bc4-f02b-4e45-adaa-2b5b8a7533c3",
+   "seller_user_id": "0de21674-af16-4ed8-bd22-ef7ed691254a",
+   "nome": "JUNIOR",
+   "updated_at": "2026-08-10T20:57:39.659981+00:00"
+  },
+  {
+   "id": "2d1660a4-87fd-4417-b677-3c9d9d4dfb39",
+   "status": "oportunidade",
+   "loja_id": "a52ae402-6bcb-46ad-b0cf-f97b114d1be5",
+   "seller_user_id": "a83f6efe-a151-4bcb-be3c-da7ed893360e",
+   "nome": "ALISSON SALATIEL",
+   "updated_at": "2026-08-11T11:29:41.171931+00:00"
+  },
+  {
+   "id": "a4321beb-b6e6-4d85-9ded-165f2f78f8ba",
+   "status": "oportunidade",
+   "loja_id": "ecc1c334-5710-42b0-a777-71d7fb9241e6",
+   "seller_user_id": "e6531200-bb8b-484b-832f-053493aea126",
+   "nome": "LEANDRO DOS SANTOS MONTEIRO",
+   "updated_at": "2026-08-11T15:02:54.667131+00:00"
+  },
+  {
+   "id": "5d33919d-00e1-47a8-bfb7-175a8ccf13d9",
+   "status": "oportunidade",
+   "loja_id": "70cf3f8a-3cde-4bfb-baa7-e74b9eab85f5",
+   "seller_user_id": "59592fb5-1f73-438a-9f8d-42f2ea14f9d8",
+   "nome": "FABIO ESCABORA",
+   "updated_at": "2026-08-12T10:39:35.177506+00:00"
+  },
+  {
+   "id": "57090ff1-d31a-499d-a6f8-855d882d03e0",
+   "status": "oportunidade",
+   "loja_id": "2785bbb1-149e-4569-bc5b-002f11331090",
+   "seller_user_id": "3665b120-97cd-4546-bb11-dac4cd5087a6",
+   "nome": "HENRIQUE",
+   "updated_at": "2026-08-11T11:27:09.524593+00:00"
+  },
+  {
+   "id": "06ee3e03-d61a-437d-901a-f49a89923174",
+   "status": "oportunidade",
+   "loja_id": "2785bbb1-149e-4569-bc5b-002f11331090",
+   "seller_user_id": "73f29046-5eb6-4d78-8cb3-ea91141d80bc",
+   "nome": "CARLA CRISTINA",
+   "updated_at": "2026-08-10T19:03:11.783174+00:00"
+  },
+  {
+   "id": "a623bc67-e792-49b8-a5c1-97dac8c5e9c4",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "MAIARA",
+   "updated_at": "2026-08-11T13:31:04.342618+00:00"
+  },
+  {
+   "id": "42c931c6-06a4-423e-aaf2-6d59c8c54a27",
+   "status": "oportunidade",
+   "loja_id": "172def40-4903-48c8-8b5b-61514e99feee",
+   "seller_user_id": "bfb33112-8582-4581-8e9d-dc8dcdda8c5d",
+   "nome": "NEIDE DOS SANTOS",
+   "updated_at": "2026-08-15T13:35:16.544231+00:00"
+  },
+  {
+   "id": "44e544df-7022-440c-a467-cb33f28768c1",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "MARQUINHO",
+   "updated_at": "2026-08-11T13:32:52.612466+00:00"
+  },
+  {
+   "id": "cdc6071b-6dd5-49bf-8428-321567921bd7",
+   "status": "oportunidade",
+   "loja_id": "cd5642c8-9a69-4b3d-bcec-105fbf338c36",
+   "seller_user_id": "489fea32-b699-4b5c-8f5f-d491dd200e27",
+   "nome": "HELSON ANTÔNIO XAVIER",
+   "updated_at": "2026-08-11T15:27:28.791891+00:00"
+  },
+  {
+   "id": "8550da8d-bec2-4fa6-ba95-b5a6afdf156b",
+   "status": "oportunidade",
+   "loja_id": "fc9ac447-9f84-4f86-b216-d384a8dc5fba",
+   "seller_user_id": "bb423841-bec6-454a-a783-70aff1d05943",
+   "nome": "ALEX",
+   "updated_at": "2026-08-14T20:22:25.20866+00:00"
+  },
+  {
+   "id": "0948e445-c8ab-4761-9c2e-742e78ed0a72",
+   "status": "oportunidade",
+   "loja_id": "be990a35-63fc-41ea-8cd2-199b926482fc",
+   "seller_user_id": "f678cadf-e004-46cb-afd4-5f54eb0769cb",
+   "nome": "SERGIO",
+   "updated_at": "2026-08-14T20:55:29.354309+00:00"
+  },
+  {
+   "id": "2a1b3fc7-f8f8-49c2-9f13-037ae588ea71",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "495b4de5-1b0d-40c5-905c-533e07baaccb",
+   "nome": "CAROL",
+   "updated_at": "2026-08-17T11:47:17.585216+00:00"
+  },
+  {
+   "id": "85191474-3537-46da-bc41-a0446eeda6b9",
+   "status": "oportunidade",
+   "loja_id": "fc9ac447-9f84-4f86-b216-d384a8dc5fba",
+   "seller_user_id": "c8656b3a-9bc8-4a7a-84ac-d0fee9a5a777",
+   "nome": "DIJEAN",
+   "updated_at": "2026-08-17T14:26:47.630786+00:00"
+  },
+  {
+   "id": "5624a901-336e-4c6a-8e1e-a76d6658add9",
+   "status": "oportunidade",
+   "loja_id": "9c6ee5df-7992-45b5-a2e7-d17fde096354",
+   "seller_user_id": "dd0e12c5-3f42-4354-a846-333bc4839560",
+   "nome": "THIAGO NONATO",
+   "updated_at": "2026-08-11T16:48:12.01225+00:00"
+  },
+  {
+   "id": "389b6ffd-96aa-4ba1-a52b-13cf97c4600a",
+   "status": "oportunidade",
+   "loja_id": "9c6ee5df-7992-45b5-a2e7-d17fde096354",
+   "seller_user_id": "dd0e12c5-3f42-4354-a846-333bc4839560",
+   "nome": "MARIA DA CONCEIÇÃO MONTEIRO",
+   "updated_at": "2026-08-11T17:45:52.021574+00:00"
+  },
+  {
+   "id": "617a5aae-478e-44e4-ab0a-e2f93c68d0aa",
+   "status": "oportunidade",
+   "loja_id": "fc9ac447-9f84-4f86-b216-d384a8dc5fba",
+   "seller_user_id": "bb423841-bec6-454a-a783-70aff1d05943",
+   "nome": "GISELE",
+   "updated_at": "2026-08-11T18:22:03.715287+00:00"
+  },
+  {
+   "id": "cd319246-acea-45fc-a1c1-4d2258f83d56",
+   "status": "oportunidade",
+   "loja_id": "2785bbb1-149e-4569-bc5b-002f11331090",
+   "seller_user_id": "80fafbf4-381d-4798-be4b-fc1411e6f650",
+   "nome": "JUNIN",
+   "updated_at": "2026-08-11T20:41:02.909123+00:00"
+  },
+  {
+   "id": "9b76b843-628e-47c7-bef9-76ab6950ac3d",
+   "status": "oportunidade",
+   "loja_id": "2785bbb1-149e-4569-bc5b-002f11331090",
+   "seller_user_id": "80fafbf4-381d-4798-be4b-fc1411e6f650",
+   "nome": "VAGNWR",
+   "updated_at": "2026-08-21T19:34:40.59663+00:00"
+  },
+  {
+   "id": "f7ee4806-784a-46b7-90ca-2dc94f560bae",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "6396d444-34b5-46cf-b09c-9d4ebd39237e",
+   "nome": "VANDA LÚCIA",
+   "updated_at": "2026-08-12T13:44:36.790529+00:00"
+  },
+  {
+   "id": "1dab1b41-77fa-4aac-999a-ab67f2d76445",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "7030c854-1251-45a1-99c0-dc1621f0fa1e",
+   "nome": "WALISSON",
+   "updated_at": "2026-08-24T11:36:14.786059+00:00"
+  },
+  {
+   "id": "3ccaaea0-ffc2-425f-854e-e374d0d65276",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "aa5cdb37-026a-439f-9263-4ba49ca936f3",
+   "nome": "ANA PAULA",
+   "updated_at": "2026-08-13T19:28:03.612543+00:00"
+  },
+  {
+   "id": "96991c6d-199e-400c-b245-fa629c049633",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f31e6d72-b0d1-4c9d-b12e-742366db6b1e",
+   "nome": "HUGO",
+   "updated_at": "2026-08-24T18:54:19.375808+00:00"
+  },
+  {
+   "id": "e499f0cd-87ef-451f-aab0-a69a0f02f60d",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "7bd494de-7a2b-4efa-88a1-a643fa5f04d5",
+   "nome": "VALDIR",
+   "updated_at": "2026-08-24T19:46:46.221301+00:00"
+  },
+  {
+   "id": "db6af352-4ce8-4ea5-abd5-bf7118b18ab6",
+   "status": "oportunidade",
+   "loja_id": "1b1f7c6d-1213-4bc7-b6b1-72ec4094f901",
+   "seller_user_id": "8dd0c100-9691-43c8-a89f-aef3b124eb17",
+   "nome": "JOSE AUGUSTO DE ASSIS",
+   "updated_at": "2026-08-12T12:11:40.099595+00:00"
+  },
+  {
+   "id": "eb77e5a2-9195-457e-af31-282761e19e25",
+   "status": "oportunidade",
+   "loja_id": "e4eb82e1-0a43-42b5-bb3a-9c0ee3f0f54a",
+   "seller_user_id": "dd0e12c5-3f42-4354-a846-333bc4839560",
+   "nome": "THIAGO NONATO",
+   "updated_at": "2026-08-12T13:06:19.811143+00:00"
+  },
+  {
+   "id": "d6a7d484-5482-43c5-ae9d-eb9fbaabc472",
+   "status": "oportunidade",
+   "loja_id": "e4eb82e1-0a43-42b5-bb3a-9c0ee3f0f54a",
+   "seller_user_id": "dd0e12c5-3f42-4354-a846-333bc4839560",
+   "nome": "MARIA CONCEIÇÃO",
+   "updated_at": "2026-08-12T13:08:49.023664+00:00"
+  },
+  {
+   "id": "d6dc3093-2a54-40ac-8d84-6c34f69987a9",
+   "status": "oportunidade",
+   "loja_id": "cd5642c8-9a69-4b3d-bcec-105fbf338c36",
+   "seller_user_id": "7f4add1e-c70c-4a20-8f31-c629cf5124c2",
+   "nome": "JOISE",
+   "updated_at": "2026-08-26T11:52:55.509964+00:00"
+  },
+  {
+   "id": "d84c9d29-afa7-4f09-9e47-8a1eaf20f2ce",
+   "status": "oportunidade",
+   "loja_id": "e4eb82e1-0a43-42b5-bb3a-9c0ee3f0f54a",
+   "seller_user_id": "06d5fb46-15c9-4da6-ae51-322dad31df9c",
+   "nome": "PATRICK",
+   "updated_at": "2026-08-12T15:53:41.436474+00:00"
+  },
+  {
+   "id": "4244da46-eb88-4d3c-9cbc-e962f3dcf07f",
+   "status": "oportunidade",
+   "loja_id": "df92c72f-9d3c-4ad5-ad99-8544cb2eccb8",
+   "seller_user_id": "65ef5187-928d-4a92-bc04-fd177d778bb8",
+   "nome": "CARLOS",
+   "updated_at": "2026-08-14T11:57:53.139493+00:00"
+  },
+  {
+   "id": "91ca6e99-1a09-4a59-b07a-9ac6b70c4b8e",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "PAULO",
+   "updated_at": "2026-08-12T16:02:34.239184+00:00"
+  },
+  {
+   "id": "65bb39ba-5607-47d3-b35f-d6e1ee34020b",
+   "status": "oportunidade",
+   "loja_id": "a52ae402-6bcb-46ad-b0cf-f97b114d1be5",
+   "seller_user_id": "bf6e6117-ce63-4de4-b98b-852457a1da47",
+   "nome": "LUIS",
+   "updated_at": "2026-08-21T11:52:08.303433+00:00"
+  },
+  {
+   "id": "ef276b2b-f201-4b52-aea3-f5a6170c4313",
+   "status": "oportunidade",
+   "loja_id": "1b1f7c6d-1213-4bc7-b6b1-72ec4094f901",
+   "seller_user_id": "8dd0c100-9691-43c8-a89f-aef3b124eb17",
+   "nome": "MATHEUS",
+   "updated_at": "2026-08-17T12:26:03.877303+00:00"
+  },
+  {
+   "id": "191c8032-fc85-44e6-8aa6-ad6f3d499f42",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "ff65bbb5-9093-49c0-b254-f348cb930acd",
+   "nome": "POLIANA",
+   "updated_at": "2026-08-17T14:18:05.318842+00:00"
+  },
+  {
+   "id": "1b898804-0bd5-4b06-b093-f802fe58b316",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "7bd494de-7a2b-4efa-88a1-a643fa5f04d5",
+   "nome": "MARIA CLARA DE MIRANDA VIEIRA",
+   "updated_at": "2026-08-17T13:09:26.699902+00:00"
+  },
+  {
+   "id": "973b3a7d-72c2-42ba-bb5c-fc8535538bfd",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "8deba120-0902-48d8-b1f1-f3c9557f92e5",
+   "nome": "KELLY",
+   "updated_at": "2026-08-17T18:26:59.91961+00:00"
+  },
+  {
+   "id": "72c62792-e669-4d06-94c6-7e4a77120300",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "f53d6a9c-2a01-41ed-9286-e3bf06d58245",
+   "nome": "FERNANDO / CRISTIANE",
+   "updated_at": "2026-08-17T14:07:32.697651+00:00"
+  },
+  {
+   "id": "fea61426-25c6-4bf9-949a-43fff4569127",
+   "status": "oportunidade",
+   "loja_id": "1b1f7c6d-1213-4bc7-b6b1-72ec4094f901",
+   "seller_user_id": "8dd0c100-9691-43c8-a89f-aef3b124eb17",
+   "nome": "MARILENE DA SILVA GONÇALVES",
+   "updated_at": "2026-08-24T12:13:23.00579+00:00"
+  },
+  {
+   "id": "dfb29ebe-6421-4d95-9640-52a46c85485f",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "8deba120-0902-48d8-b1f1-f3c9557f92e5",
+   "nome": "JOAO CARLOS",
+   "updated_at": "2026-08-17T14:23:09.763455+00:00"
+  },
+  {
+   "id": "3cbd7f2a-d5b3-4da8-af79-b21a1e8a2cdd",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "8deba120-0902-48d8-b1f1-f3c9557f92e5",
+   "nome": "VANDERLEI",
+   "updated_at": "2026-08-17T14:23:17.9497+00:00"
+  },
+  {
+   "id": "39b9ab53-a2c4-460b-a752-405b98aa58b3",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "8deba120-0902-48d8-b1f1-f3c9557f92e5",
+   "nome": "WELTON",
+   "updated_at": "2026-08-17T18:27:07.222804+00:00"
+  },
+  {
+   "id": "c3f36d93-27be-4929-afbf-b5112c1d786e",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "8deba120-0902-48d8-b1f1-f3c9557f92e5",
+   "nome": "CLAUDIMAR",
+   "updated_at": "2026-08-17T18:27:15.356204+00:00"
+  },
+  {
+   "id": "722a264f-0779-45fc-b1ac-fdc938c44463",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "8deba120-0902-48d8-b1f1-f3c9557f92e5",
+   "nome": "EVERALDO",
+   "updated_at": "2026-08-17T18:27:22.612485+00:00"
+  },
+  {
+   "id": "363f3183-bf18-4193-ad8a-f0c6eeae6cdd",
+   "status": "oportunidade",
+   "loja_id": "cd5642c8-9a69-4b3d-bcec-105fbf338c36",
+   "seller_user_id": "7f4add1e-c70c-4a20-8f31-c629cf5124c2",
+   "nome": "WILLIAN",
+   "updated_at": "2026-08-17T17:00:06.880143+00:00"
+  },
+  {
+   "id": "552263c8-6f3b-465c-a2ef-9eec4beb222d",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "aa5cdb37-026a-439f-9263-4ba49ca936f3",
+   "nome": "GLEYSSON",
+   "updated_at": "2026-08-17T17:40:29.085611+00:00"
+  },
+  {
+   "id": "6496b91d-63e1-4a4c-9fb2-29e8cc373fcd",
+   "status": "oportunidade",
+   "loja_id": "70cf3f8a-3cde-4bfb-baa7-e74b9eab85f5",
+   "seller_user_id": "2cdac870-5abe-4f0d-9474-2a802f64ff45",
+   "nome": "WALTER ANTONIO",
+   "updated_at": "2026-08-24T20:59:11.310856+00:00"
+  },
+  {
+   "id": "a9aabd03-90cc-40d5-806f-f39234f48ed4",
+   "status": "oportunidade",
+   "loja_id": "172def40-4903-48c8-8b5b-61514e99feee",
+   "seller_user_id": "bfb33112-8582-4581-8e9d-dc8dcdda8c5d",
+   "nome": "DEVER LOURDES",
+   "updated_at": "2026-08-17T18:55:27.006948+00:00"
+  },
+  {
+   "id": "c7fff27c-0a01-4563-8311-1d03fc183766",
+   "status": "oportunidade",
+   "loja_id": "a63c46fa-aa16-4587-9725-299f60f2d822",
+   "seller_user_id": "8550590d-2aa0-491b-8cbc-a94491767bb6",
+   "nome": "RONAN FELIPE",
+   "updated_at": "2026-08-17T19:28:36.331268+00:00"
+  },
+  {
+   "id": "226dec19-0b1b-4320-a289-46294354f5c0",
+   "status": "inativo",
+   "loja_id": "7031e288-301d-4d02-b897-0c36c0b74ff5",
+   "seller_user_id": "1635f616-4da4-40d2-8291-9216b9e93359",
+   "nome": "CRISTIAN PEREIRA",
+   "updated_at": "2026-08-19T19:09:44.613489+00:00"
+  },
+  {
+   "id": "0eb041c4-9472-4c41-9482-120da4bde7e9",
+   "status": "oportunidade",
+   "loja_id": "172def40-4903-48c8-8b5b-61514e99feee",
+   "seller_user_id": "bfb33112-8582-4581-8e9d-dc8dcdda8c5d",
+   "nome": "MARIELE ROSA",
+   "updated_at": "2026-08-20T20:56:50.418083+00:00"
+  },
+  {
+   "id": "c072457c-8d03-4531-8b41-c37ad7944c7b",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "JOAO",
+   "updated_at": "2026-08-18T12:38:44.540872+00:00"
+  },
+  {
+   "id": "199e8c0b-1324-4889-8285-40614d9a89f3",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "ANDERSON",
+   "updated_at": "2026-08-18T12:44:31.423122+00:00"
+  },
+  {
+   "id": "b09ad8dd-5e4b-4466-a708-975542b68589",
+   "status": "oportunidade",
+   "loja_id": "32338f12-fa07-4d09-adb2-5b7cdf6760b1",
+   "seller_user_id": "f1f3eaaf-71fa-4846-8824-5e041a82e987",
+   "nome": "SERGIO BADARO",
+   "updated_at": "2026-08-21T14:21:40.505609+00:00"
+  },
+  {
+   "id": "ea16534e-942e-4396-8323-b24d03cfcb6d",
+   "status": "oportunidade",
+   "loja_id": "172def40-4903-48c8-8b5b-61514e99feee",
+   "seller_user_id": "bfb33112-8582-4581-8e9d-dc8dcdda8c5d",
+   "nome": "JOSE AFONSO",
+   "updated_at": "2026-08-18T16:25:41.089013+00:00"
+  },
+  {
+   "id": "693e4f8f-dfa0-4c81-84cb-008896c2458e",
+   "status": "oportunidade",
+   "loja_id": "c854fab6-7980-4df5-be52-96f03ab7ee9e",
+   "seller_user_id": "928ab607-ca7a-42ef-80b4-1e2972d8ad6e",
+   "nome": "REGINALDO",
+   "updated_at": "2026-08-26T12:21:10.082197+00:00"
+  },
+  {
+   "id": "a199e107-83f6-4848-af6e-44efc5f4bddc",
+   "status": "oportunidade",
+   "loja_id": "32338f12-fa07-4d09-adb2-5b7cdf6760b1",
+   "seller_user_id": "f1f3eaaf-71fa-4846-8824-5e041a82e987",
+   "nome": "SARA",
+   "updated_at": "2026-08-19T11:15:59.272635+00:00"
+  },
+  {
+   "id": "a9b70595-de56-43af-ab07-ddf2953392c6",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f31e6d72-b0d1-4c9d-b12e-742366db6b1e",
+   "nome": "FABIO",
+   "updated_at": "2026-08-19T13:05:24.759071+00:00"
+  },
+  {
+   "id": "bec1ef8f-1f17-41f1-8535-3332be736ad8",
+   "status": "oportunidade",
+   "loja_id": "32338f12-fa07-4d09-adb2-5b7cdf6760b1",
+   "seller_user_id": "f1f3eaaf-71fa-4846-8824-5e041a82e987",
+   "nome": "WELISON",
+   "updated_at": "2026-08-19T11:18:01.081558+00:00"
+  },
+  {
+   "id": "361208b1-bfeb-4a45-b22c-695d43365773",
+   "status": "oportunidade",
+   "loja_id": "32338f12-fa07-4d09-adb2-5b7cdf6760b1",
+   "seller_user_id": "2d2e9242-1352-4237-92fb-e547135e3d60",
+   "nome": "WASHINGTON",
+   "updated_at": "2026-08-19T11:25:36.468165+00:00"
+  },
+  {
+   "id": "cce68247-af97-49d8-85fa-c755dc697bb5",
+   "status": "oportunidade",
+   "loja_id": "32338f12-fa07-4d09-adb2-5b7cdf6760b1",
+   "seller_user_id": "f1f3eaaf-71fa-4846-8824-5e041a82e987",
+   "nome": "JOSE FRANCISCO",
+   "updated_at": "2026-08-19T11:31:58.766526+00:00"
+  },
+  {
+   "id": "3b487619-6ee1-4b46-911c-3136eb2e15aa",
+   "status": "oportunidade",
+   "loja_id": "32338f12-fa07-4d09-adb2-5b7cdf6760b1",
+   "seller_user_id": "f1f3eaaf-71fa-4846-8824-5e041a82e987",
+   "nome": "RODRIGO/MARISA",
+   "updated_at": "2026-08-19T11:32:10.500703+00:00"
+  },
+  {
+   "id": "885182e1-c1b6-4f7e-aec2-1ff810a31082",
+   "status": "oportunidade",
+   "loja_id": "7031e288-301d-4d02-b897-0c36c0b74ff5",
+   "seller_user_id": "168e6359-bb64-48da-a9e7-3794e56d3d00",
+   "nome": "FRAN",
+   "updated_at": "2026-08-19T12:08:48.692197+00:00"
+  },
+  {
+   "id": "1e1f1765-d07e-474e-9f82-29b0b66ae27b",
+   "status": "oportunidade",
+   "loja_id": "7031e288-301d-4d02-b897-0c36c0b74ff5",
+   "seller_user_id": "5ecadafc-e61b-4320-83e3-60d050f2a458",
+   "nome": "BRUNO",
+   "updated_at": "2026-08-19T12:30:03.230896+00:00"
+  },
+  {
+   "id": "68ca090b-b659-4b3d-ae07-ae853a98e589",
+   "status": "oportunidade",
+   "loja_id": "7031e288-301d-4d02-b897-0c36c0b74ff5",
+   "seller_user_id": "5ecadafc-e61b-4320-83e3-60d050f2a458",
+   "nome": "ARIELE",
+   "updated_at": "2026-08-19T12:31:06.821594+00:00"
+  },
+  {
+   "id": "5105422b-72a8-4e5c-ac17-9d30afe27a62",
+   "status": "oportunidade",
+   "loja_id": "7031e288-301d-4d02-b897-0c36c0b74ff5",
+   "seller_user_id": "1635f616-4da4-40d2-8291-9216b9e93359",
+   "nome": "CLAÚDIO",
+   "updated_at": "2026-08-21T11:57:40.745476+00:00"
+  },
+  {
+   "id": "a79ab75b-e7e2-4f9f-9b54-228536a1377f",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "8deba120-0902-48d8-b1f1-f3c9557f92e5",
+   "nome": "OTAVIO / CLAUDIO",
+   "updated_at": "2026-08-19T12:56:26.14782+00:00"
+  },
+  {
+   "id": "8737bdb0-7aee-4136-b8a7-c389f2bb0cb4",
+   "status": "oportunidade",
+   "loja_id": "7031e288-301d-4d02-b897-0c36c0b74ff5",
+   "seller_user_id": "1635f616-4da4-40d2-8291-9216b9e93359",
+   "nome": "RAFAEL",
+   "updated_at": "2026-08-21T11:57:47.885845+00:00"
+  },
+  {
+   "id": "064c1a35-5529-42bc-baa7-afa00ee6a640",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "6396d444-34b5-46cf-b09c-9d4ebd39237e",
+   "nome": "MILCA",
+   "updated_at": "2026-08-24T12:44:11.722538+00:00"
+  },
+  {
+   "id": "a1086915-7046-4c92-ac13-689b51333bf1",
+   "status": "oportunidade",
+   "loja_id": "c854fab6-7980-4df5-be52-96f03ab7ee9e",
+   "seller_user_id": "928ab607-ca7a-42ef-80b4-1e2972d8ad6e",
+   "nome": "MARCO",
+   "updated_at": "2026-08-26T12:18:25.66809+00:00"
+  },
+  {
+   "id": "23bf6caa-0bd5-4fdc-a931-3531edc13eb6",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "6396d444-34b5-46cf-b09c-9d4ebd39237e",
+   "nome": "KELLY",
+   "updated_at": "2026-08-20T18:19:04.582193+00:00"
+  },
+  {
+   "id": "c0c9f6a9-833d-4d50-9c6b-361c4242cdcd",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "f53d6a9c-2a01-41ed-9286-e3bf06d58245",
+   "nome": "MATHEUS / ALCIDES",
+   "updated_at": "2026-08-20T13:24:53.79942+00:00"
+  },
+  {
+   "id": "67ba0729-d294-4af7-9bba-5db26818b7e9",
+   "status": "oportunidade",
+   "loja_id": "0fe488de-4ac5-431a-b3c8-a96f7d30fe6a",
+   "seller_user_id": "b788f5d7-80ff-4554-93c1-d13ec162fe10",
+   "nome": "IVANILDO DE FREITAS",
+   "updated_at": "2026-08-20T17:05:00.345183+00:00"
+  },
+  {
+   "id": "ede2d4bf-5321-492e-86ef-ef67bde2b737",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "7030c854-1251-45a1-99c0-dc1621f0fa1e",
+   "nome": "ERNANE NEVES",
+   "updated_at": "2026-08-20T18:27:32.277899+00:00"
+  },
+  {
+   "id": "5067b238-5594-4e86-9435-016a680bc62e",
+   "status": "oportunidade",
+   "loja_id": "0fe488de-4ac5-431a-b3c8-a96f7d30fe6a",
+   "seller_user_id": "a7ed8d4d-1494-415f-aa69-67d493c36954",
+   "nome": "ANTONIA GOMES",
+   "updated_at": "2026-08-20T18:33:06.091907+00:00"
+  },
+  {
+   "id": "7bd73947-8a97-4f36-986f-48669a069e4b",
+   "status": "oportunidade",
+   "loja_id": "0fe488de-4ac5-431a-b3c8-a96f7d30fe6a",
+   "seller_user_id": "a7ed8d4d-1494-415f-aa69-67d493c36954",
+   "nome": "LEANDRO LEMOS",
+   "updated_at": "2026-08-20T18:35:24.064631+00:00"
+  },
+  {
+   "id": "143bcd98-2c58-4f30-b48a-12d6da5441bf",
+   "status": "oportunidade",
+   "loja_id": "0fe488de-4ac5-431a-b3c8-a96f7d30fe6a",
+   "seller_user_id": "a7ed8d4d-1494-415f-aa69-67d493c36954",
+   "nome": "NEI MENDES",
+   "updated_at": "2026-08-20T18:45:20.641772+00:00"
+  },
+  {
+   "id": "ed734e1f-1e11-40bd-a6b3-2c179b634715",
+   "status": "oportunidade",
+   "loja_id": "a52ae402-6bcb-46ad-b0cf-f97b114d1be5",
+   "seller_user_id": "bf6e6117-ce63-4de4-b98b-852457a1da47",
+   "nome": "RAIMAIANA",
+   "updated_at": "2026-08-21T11:53:56.330268+00:00"
+  },
+  {
+   "id": "f833eb86-8851-4e16-ae4c-50a2ea588d55",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "PAULO",
+   "updated_at": "2026-08-21T11:59:28.739447+00:00"
+  },
+  {
+   "id": "7a94c17e-3d90-4903-82fc-152fe48efb6e",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "DIEGO",
+   "updated_at": "2026-08-21T12:09:38.800837+00:00"
+  },
+  {
+   "id": "832e252e-a5be-4937-9e01-437db87c9abf",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "ALEXANDRE",
+   "updated_at": "2026-08-25T11:37:01.332005+00:00"
+  },
+  {
+   "id": "4f89fbb8-e856-4f79-a718-6132fad219d3",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "FABIANA",
+   "updated_at": "2026-08-25T11:42:48.119149+00:00"
+  },
+  {
+   "id": "65f693ea-acb4-4697-a618-96c7eadfc82b",
+   "status": "oportunidade",
+   "loja_id": "70cf3f8a-3cde-4bfb-baa7-e74b9eab85f5",
+   "seller_user_id": "05158e34-9810-4324-a404-3e5152e94307",
+   "nome": "PRISCILA",
+   "updated_at": "2026-08-25T20:22:12.80494+00:00"
+  },
+  {
+   "id": "b516577d-b8a6-460f-8c2a-76cf090d708e",
+   "status": "oportunidade",
+   "loja_id": "70cf3f8a-3cde-4bfb-baa7-e74b9eab85f5",
+   "seller_user_id": "05158e34-9810-4324-a404-3e5152e94307",
+   "nome": "VANDERLEI",
+   "updated_at": "2026-08-26T11:48:38.251037+00:00"
+  },
+  {
+   "id": "059061cd-dbaa-479a-84b7-a01a743095e1",
+   "status": "oportunidade",
+   "loja_id": "70cf3f8a-3cde-4bfb-baa7-e74b9eab85f5",
+   "seller_user_id": "05158e34-9810-4324-a404-3e5152e94307",
+   "nome": "LUIZ",
+   "updated_at": "2026-08-26T12:10:47.133295+00:00"
+  },
+  {
+   "id": "3646955b-6d09-4ad1-acce-b4fb55bfd682",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "408c997f-8f6f-45f1-8dc2-ac49c19880f0",
+   "nome": "VALDENIR RIBEIRO",
+   "updated_at": "2026-08-26T12:27:02.913221+00:00"
+  },
+  {
+   "id": "bfce20c0-b137-42b9-93b1-09a896f65c7d",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "408c997f-8f6f-45f1-8dc2-ac49c19880f0",
+   "nome": "LEANDRO FERRIERA CAMPOS DA SILVA",
+   "updated_at": "2026-08-26T12:29:50.666122+00:00"
+  },
+  {
+   "id": "f69ccecd-91ad-4f39-888e-c070e885ab1f",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "408c997f-8f6f-45f1-8dc2-ac49c19880f0",
+   "nome": "LUIZ CLAUDIO VENTURA DOS REIS SAMPAIO",
+   "updated_at": "2026-08-26T12:33:00.159213+00:00"
+  },
+  {
+   "id": "bfedf8b4-e691-4c27-8fa6-9c87cc9be4e0",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "408c997f-8f6f-45f1-8dc2-ac49c19880f0",
+   "nome": "CARLOS EDUARDO BATISTA FIGURELI",
+   "updated_at": "2026-08-26T12:34:18.77165+00:00"
+  },
+  {
+   "id": "97d0a58f-a4c7-45d8-ae89-5339a63c5826",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "408c997f-8f6f-45f1-8dc2-ac49c19880f0",
+   "nome": "ADANESIO BATISTA AMADEU SILVA",
+   "updated_at": "2026-08-26T12:35:49.183638+00:00"
+  },
+  {
+   "id": "1aab4a1b-8bc5-412e-bc43-6230059c28cc",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "bf6fa66e-7b3b-49b5-9b45-4d8105de02a5",
+   "nome": "CLAUDIO",
+   "updated_at": "2026-08-28T12:14:52.580784+00:00"
+  },
+  {
+   "id": "0291a791-7e8a-4161-9170-cc01e4b34d66",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "bf6fa66e-7b3b-49b5-9b45-4d8105de02a5",
+   "nome": "VALDIR",
+   "updated_at": "2026-08-28T12:15:58.852202+00:00"
+  },
+  {
+   "id": "cd7d4cf4-010c-4dda-93a8-378bc313458a",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "bf6fa66e-7b3b-49b5-9b45-4d8105de02a5",
+   "nome": "MARCOS",
+   "updated_at": "2026-08-28T12:15:41.61069+00:00"
+  },
+  {
+   "id": "980e799c-d254-42d2-a7a8-4d8a1012e023",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "a4b6622b-c23c-4f51-925c-823091cb7a67",
+   "nome": "ROMERITO BORGES DE LIMA",
+   "updated_at": "2026-08-26T14:23:37.494021+00:00"
+  },
+  {
+   "id": "823fcab7-b76b-46ca-ad6b-c75998ec06ca",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "a4b6622b-c23c-4f51-925c-823091cb7a67",
+   "nome": "ANA CAROLINA BARBIERI ELIARR DOS SANTOS",
+   "updated_at": "2026-08-26T14:31:26.471214+00:00"
+  },
+  {
+   "id": "8e5e8040-7d91-4e06-9541-e1d4606f54a5",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "7030c854-1251-45a1-99c0-dc1621f0fa1e",
+   "nome": "HELBERT BATISTA",
+   "updated_at": "2026-08-26T15:01:37.503802+00:00"
+  },
+  {
+   "id": "faf3ccad-ebec-4785-8e46-3561091c75f9",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "7030c854-1251-45a1-99c0-dc1621f0fa1e",
+   "nome": "LUCAS ESTETICA",
+   "updated_at": "2026-08-26T16:08:29.499665+00:00"
+  },
+  {
+   "id": "64c9019e-1af7-467b-b7c0-a5ce5e5c7330",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f75f3a91-733c-44f8-90ce-829973f8e421",
+   "nome": "DIOGO DA SILVA ALVES",
+   "updated_at": "2026-08-26T18:02:45.805406+00:00"
+  },
+  {
+   "id": "9ddb5457-ea5d-45cd-9ddd-bd1ded7a9644",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f75f3a91-733c-44f8-90ce-829973f8e421",
+   "nome": "ISABELA GOMES AMARAL VIEIRA",
+   "updated_at": "2026-08-26T17:58:27.28794+00:00"
+  },
+  {
+   "id": "54cb36a2-e1b8-4ef6-891c-1540b20c1161",
+   "status": "oportunidade",
+   "loja_id": "172def40-4903-48c8-8b5b-61514e99feee",
+   "seller_user_id": "bfb33112-8582-4581-8e9d-dc8dcdda8c5d",
+   "nome": "ALICE MARGARIDA SOARES",
+   "updated_at": "2026-08-26T19:35:50.199695+00:00"
+  },
+  {
+   "id": "77afacfd-1b6a-4a8e-bef9-ab0dae065441",
+   "status": "oportunidade",
+   "loja_id": "172def40-4903-48c8-8b5b-61514e99feee",
+   "seller_user_id": "bfb33112-8582-4581-8e9d-dc8dcdda8c5d",
+   "nome": "DIEGO LUCAS",
+   "updated_at": "2026-08-26T19:39:14.442775+00:00"
+  },
+  {
+   "id": "9e63f395-74d2-4f5a-be5a-0c16b0f9182a",
+   "status": "oportunidade",
+   "loja_id": "855a788c-eb07-4f37-a1ec-090de14e570f",
+   "seller_user_id": "aa5cdb37-026a-439f-9263-4ba49ca936f3",
+   "nome": "JAQUELINE",
+   "updated_at": "2026-08-26T20:28:05.234131+00:00"
+  },
+  {
+   "id": "9d057e9c-a785-47b5-8014-6b592a228653",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "7ff4b06c-445d-4464-b1ec-abb9b548114b",
+   "nome": "JESSICA E ANDERSON",
+   "updated_at": "2026-08-26T21:01:09.771647+00:00"
+  },
+  {
+   "id": "08dda1ed-a481-4847-9283-7d1a80247bb1",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "7ff4b06c-445d-4464-b1ec-abb9b548114b",
+   "nome": "TON E DAIANE",
+   "updated_at": "2026-08-26T21:03:46.220729+00:00"
+  },
+  {
+   "id": "b5110707-33be-4f57-bde6-e85f8aaef0b2",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "bf6fa66e-7b3b-49b5-9b45-4d8105de02a5",
+   "nome": "SHEILA",
+   "updated_at": "2026-08-28T12:15:35.630631+00:00"
+  },
+  {
+   "id": "65c4c521-3986-4f64-94c5-031b1ca93ed3",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "a4b6622b-c23c-4f51-925c-823091cb7a67",
+   "nome": "MILTON FERREIRA BENEDITO",
+   "updated_at": "2026-08-26T21:44:34.529705+00:00"
+  },
+  {
+   "id": "d864d7a8-4121-47bf-b683-a436df78408a",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "a4b6622b-c23c-4f51-925c-823091cb7a67",
+   "nome": "MARCOS OTAVIO GOMES FERREIRA",
+   "updated_at": "2026-08-26T21:46:46.801695+00:00"
+  },
+  {
+   "id": "7f81b1db-88f7-4d64-9f39-a9b43d91c323",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "a4b6622b-c23c-4f51-925c-823091cb7a67",
+   "nome": "JORGE LUIZ VIANA DANTAS",
+   "updated_at": "2026-08-26T21:48:37.14423+00:00"
+  },
+  {
+   "id": "ce2ab33b-311d-4cab-a709-06dd0736ad9e",
+   "status": "oportunidade",
+   "loja_id": "2785bbb1-149e-4569-bc5b-002f11331090",
+   "seller_user_id": "80fafbf4-381d-4798-be4b-fc1411e6f650",
+   "nome": "MIGUEL",
+   "updated_at": "2026-08-27T13:43:21.573727+00:00"
+  },
+  {
+   "id": "7c36a527-7ad7-46ed-a4d9-910af6ddd411",
+   "status": "oportunidade",
+   "loja_id": "e4eb82e1-0a43-42b5-bb3a-9c0ee3f0f54a",
+   "seller_user_id": "dd0e12c5-3f42-4354-a846-333bc4839560",
+   "nome": "ROBSON",
+   "updated_at": "2026-08-27T16:10:25.45205+00:00"
+  },
+  {
+   "id": "70ec3163-240b-4977-8a52-9c4571975350",
+   "status": "oportunidade",
+   "loja_id": "70cf3f8a-3cde-4bfb-baa7-e74b9eab85f5",
+   "seller_user_id": "05158e34-9810-4324-a404-3e5152e94307",
+   "nome": "ANDRES",
+   "updated_at": "2026-08-27T16:41:51.920799+00:00"
+  },
+  {
+   "id": "04c0cf45-130a-4b37-867d-64418e591c8e",
+   "status": "oportunidade",
+   "loja_id": "cd5642c8-9a69-4b3d-bcec-105fbf338c36",
+   "seller_user_id": "7f4add1e-c70c-4a20-8f31-c629cf5124c2",
+   "nome": "GABRIEL",
+   "updated_at": "2026-08-27T19:22:44.411132+00:00"
+  },
+  {
+   "id": "e44e5797-aa3d-4e43-81a8-f822edabe6ee",
+   "status": "oportunidade",
+   "loja_id": "70cf3f8a-3cde-4bfb-baa7-e74b9eab85f5",
+   "seller_user_id": "59592fb5-1f73-438a-9f8d-42f2ea14f9d8",
+   "nome": "NOEMIA",
+   "updated_at": "2026-08-27T21:03:08.509642+00:00"
+  },
+  {
+   "id": "82137833-472c-4906-9036-6dd9c72e3f7e",
+   "status": "oportunidade",
+   "loja_id": "4775c672-f818-4a3d-bfad-98f0ea48d0ec",
+   "seller_user_id": "54f34a16-b428-4a36-82cd-16da03df383e",
+   "nome": "HYAGO SANTOS",
+   "updated_at": "2026-08-28T11:43:01.843509+00:00"
+  },
+  {
+   "id": "22121dec-bacd-4e80-a9d1-e8352c9385bf",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "bf6fa66e-7b3b-49b5-9b45-4d8105de02a5",
+   "nome": "ADILSON",
+   "updated_at": "2026-08-28T12:14:59.697172+00:00"
+  },
+  {
+   "id": "5e00e157-0bf2-4f87-83fd-281a65f2432a",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "bf6fa66e-7b3b-49b5-9b45-4d8105de02a5",
+   "nome": "HYGOR",
+   "updated_at": "2026-08-28T12:15:12.248099+00:00"
+  },
+  {
+   "id": "67ca1b45-2337-4b93-ac6a-a9f5ff0038d0",
+   "status": "oportunidade",
+   "loja_id": "c68d56bd-5410-4c1f-a1d6-f76a361f3c9b",
+   "seller_user_id": "c7fd16c6-9c68-4f6e-9854-77666f2cb4f2",
+   "nome": "NELSON",
+   "updated_at": "2026-08-28T12:19:37.665129+00:00"
+  },
+  {
+   "id": "f1de1724-5f6e-4b7e-bc74-ef7a9208293b",
+   "status": "oportunidade",
+   "loja_id": "d0755355-a501-4b32-ba75-2e34e6728e8d",
+   "seller_user_id": "f75f3a91-733c-44f8-90ce-829973f8e421",
+   "nome": "ANA FLAVIA COSTA",
+   "updated_at": "2026-08-28T13:55:55.245564+00:00"
+  }
+ ]
+}
