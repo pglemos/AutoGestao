@@ -1,8 +1,8 @@
 {
   "_comment": "Congelamento forward-only das migrations aplicadas. NÃO editar à mão. Regenerar apenas ao adicionar migrations novas: node scripts/gen_migration_checksums.mjs",
-  "generated_at": "2026-08-24",
+  "generated_at": "2026-08-28",
   "algorithm": "sha256",
-  "count": 438,
+  "count": 461,
   "checksums": {
     "00000000000000_baseline_legacy_schema.sql": "3a519e3804095af5e9f7d8a7cb70dcc388b04530b6a7911ee1e3cb76af10b0fc",
     "00000000000001_mark_existing_migrations_applied.sql": "a8183b5cc5bd56b549ce8d8d302eb0c5d4f7b20381438586e02dd7353d6f2a45",
@@ -441,6 +441,29 @@
     "20260824170610_harden_canonical_competence_trigger_privileges.sql": "f08d2f7f0e932d5146895375ea5f7f2fbc9f8e34a9cad73bbec0fd70da28acfe",
     "20260824173308_fix_ranking_canonical_sales_dedup.sql": "14d2240868bb179000ace299e5d04af9d6e09ec33ac2abafe3da5275efac2f92",
     "20260824182000_harden_ranking_canonical_sales_security.sql": "815e31c82b3a88c0244491921b44eca6dc24d3befec2caf0c474d68ba5d3a714",
-    "20260824193000_harden_vendedor_performance_anon_privilege.sql": "28e274fc662a325b2652b5b4b1cbdd48b0f6706640f4e49390795585df2fb559"
+    "20260824193000_harden_vendedor_performance_anon_privilege.sql": "28e274fc662a325b2652b5b4b1cbdd48b0f6706640f4e49390795585df2fb559",
+    "20260825120000_carteira_vehicle_match_fields.sql": "b1f62a00c561b61257fc992b66a3c4990bc70208459a09576a6596fd7e019b4f",
+    "20260825123000_crm_vehicle_match_fields.sql": "fa3d45bb9cd261ddefd3548937436688ab2aed3c48449b00d16b4e8dfe41d455",
+    "20260825163000_visita_fora_do_contrato_trigger_update.sql": "506447894dd14ff83fb9dd88c0b4da129528565b0a9fec1aaea50dbaabc0ba5f",
+    "20260825164000_saldo_presencial_exclude_visit.sql": "5e77d8560b712d7a115a161646bf26d2e875bb3c20c3f4389c9f918af53f5825",
+    "20260825180000_parametros_estrategicos_mx.sql": "3d43b066c5c12dc12f1384ee72d4f45162a861ca77651425903a167a359fee61",
+    "20260826011500_backfill_primary_indicator_code_planos_acao.sql": "6ca62102a8cc8df5190ea4d35bee5e436a4f23d0e479d4ae4a4c19fc10c23001",
+    "20260826015500_habilita_sugestao_dono_planos_metodologia.sql": "91770d3c3631acb6cabf25c01e8badf7578368e72301a57951871c7efea5bad9",
+    "20260826020000_competencia_venda_sempre_preenchida.sql": "7fa6381008cf2bc836de296cfe280ee7285073dd265dc8c8fcfd4bf9d37de58b",
+    "20260826021000_backfill_competencia_e_departamento.sql": "0f1b3a9d236736b0521ed130a7c620f3ab5fa2b07432bb04a10a49d2e0188e63",
+    "20260826023000_criacao_plano_acao_exclusiva_area_interna.sql": "7a57efc1fb0924d81c59164ea820d4e4d8bdf8ed1b0147e0743ea26a4e408db9",
+    "20260826103000_fix_vendedor_performance_goal_scope.sql": "261062f2732d73548a8c47a611739c7add763391f14815f89687a740e0b3f82f",
+    "20260826120000_trilhas_auditoria_leitura_area_interna_mx.sql": "8de389c3aa915243668ac556ce0b0117ded69ff2b5a04d2abc38ae88400a160c",
+    "20260826140000_trilhas_auditoria_imutaveis.sql": "1bca7dd92136e07b258d7cdf6ffef28d960ba1682f159fc11dcbaea00173d4e6",
+    "20260826150000_cancelar_venda_evento_origem.sql": "02fc68ba40f132423eaaa71a16857f2b6bd3a4bf34278e9fba5c35ac7cff5a73",
+    "20260826160000_adota_indicadores_cockpit_no_catalogo.sql": "805f6e3f0a0732550ed021d329b006b0c32f0735f3e6e4464bf76ec5bc5e2654",
+    "20260826170000_pdi_print_bundle_expose_ids.sql": "a688b54ec64bea025d28b73cedf0ebb4c794c48e0d9add43ce95f18f0eb5ad34",
+    "20260826180000_catalogo_volta_aos_45_do_base44.sql": "c25ef870244a7feb7ee46260ff23a8aa60eb3a531ec392e9e3bb4bb2357ed337",
+    "20260826185929_individual_goal_precedence_and_eligible_seller_scope.sql": "9873818ce56f9842cb296091a88e6086c7653461ff109665c3df1c4023c21b91",
+    "20260827030000_corrige_valores_oportunidade_mil_vezes.sql": "836b472a00b7354320731a32ef3350540f5f4f2ce3bac8ebb7f1701c1d7e4c0e",
+    "20260827030100_teto_valor_negociado.sql": "cdcdefd9f56d0e0f349c4bd21fd426dfc59bf51d4168106d3e569e2e70acf7e0",
+    "20260827033000_corrige_haval_e_valida_teto.sql": "dd3b9d605fc2a92ec27192730b02d1d234250468a1bbc7d216ac021bd1070025",
+    "20260827120000_merge_cadastros_duplicados_vendedores.sql": "f4ba40134514d7910c433de4523e65ce5435d9806b479b9a9df4efb8e968558c",
+    "20260828120000_cliente_pos_venda_segue_oportunidade_ganha.sql": "ad9ab9a6718582031f597a7ee146d6c286a083c2c247186e48e0c64861e9a92d"
   }
 }
