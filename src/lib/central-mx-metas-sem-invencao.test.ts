@@ -314,7 +314,7 @@ describe('percentual sem meta não vira nota invertida', () => {
     expect(item?.meta).toBe(15)
     // 5% contra alvo de 15% é bom: a nota tem que ser alta, não 5.
     expect(item?.score).not.toBeNull()
-    expect(item?.score!).toBeGreaterThan(60)
+    expect(item?.score ?? 0).toBeGreaterThan(60)
   })
 
   test('"mais é melhor" sem meta continua usando o próprio percentual', () => {
