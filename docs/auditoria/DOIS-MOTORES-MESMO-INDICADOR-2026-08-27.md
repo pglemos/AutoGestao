@@ -107,3 +107,75 @@ se sabe onde estaria a resposta — e que ela vive do outro lado da ponte.
 
 Enquanto isso não for decidido, ligar mais indicadores aumenta a superfície
 de divergência em vez de reduzir a de lacuna.
+
+---
+
+# Verificação em produção — 2026-08-27
+
+Contei as linhas em produção, autenticado como Admin MX, em vez de deixar a
+divergência no plano teórico.
+
+## As fontes do `pmr-engine` estão vazias
+
+| Tabela | Linhas |
+|---|---|
+| `snapshots_estoque_consultoria` | **0** |
+| `itens_estoque_consultoria` | **0** |
+| `marketing_mensal_consultoria` | **0** |
+| `financeiro_consultoria` | **1** |
+| `clientes_consultoria` | 54 |
+
+A única linha de `financeiro_consultoria` é fixture: `revenue: 0`,
+`fixed_expenses: 0`, `marketing_expenses: 0` e `net_profit: 50000` — números
+que não fecham entre si.
+
+**Isso responde a pergunta "qual motor é a fonte da verdade" na prática.** Hoje
+o `pmr-engine` não produz número nenhum, porque não há o que ler. A divergência
+entre os 19 códigos duplicados é um risco latente, não um defeito ativo.
+
+E reenquadra os 9 indicadores que eu não liguei: ligá-los às tabelas de
+consultoria não traria dado, traria os mesmos vazios por um caminho mais longo.
+Foi certo não ligar, mas pelo motivo errado — não é só ordem de decisão, é que
+a coleta de consultoria nunca aconteceu.
+
+## Uma suspeita minha que não se confirmou
+
+Vi 1.676 dos 2.778 eventos sem `data_competencia` e suspeitei que
+`useSalesByChannel`, que filtra por esse campo, estivesse contando sobre uma
+fração dos dados.
+
+Fui medir por tipo de evento. Não procede:
+
+```
+venda_realizada  total 555 · sem data_competencia 1 · com 554
+```
+
+Os nulos estão concentrados em tipos que essa consulta não lê (agendamentos,
+oportunidades). O caminho de vendas do cockpit está íntegro.
+
+## O que os números mostram de fato
+
+**`pos_venda_realizado`: 0 linhas.** O indicador que liguei hoje está correto e
+sem dado — vai exibir vazio até a operação começar a registrar pós-venda. Não é
+defeito, mas convém saber antes de procurar bug na tela.
+
+**48 vendas sem canal**, de 554 com competência:
+
+| Canal | Vendas |
+|---|---|
+| `internet` | 250 |
+| `carteira` | 149 |
+| `showroom` | 103 |
+| `porta` | 4 |
+| *(nulo)* | **48** |
+
+Essas 48 não aparecem em nenhum indicador de origem de venda. O catálogo tem
+`sales_other` (“Vendas - Outros”), hoje sem realizado, que seria o lugar delas.
+
+Não liguei: canal nulo significa **não registrado**, e “Outros” significa **um
+canal que não é os quatro**. Tratar um como o outro seria decidir, no código,
+uma questão de operação. Se a MX definir que canal ausente conta como Outros, é
+uma linha.
+
+**`veiculos_estoque`: 19 veículos em 5 lojas**, de 53 lojas cadastradas. Os
+indicadores de estoque do cockpit são reais, mas cobrem uma fração da rede.
