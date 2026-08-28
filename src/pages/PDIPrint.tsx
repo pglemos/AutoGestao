@@ -256,7 +256,7 @@ export default function PDIPrint() {
                 {/* --- PÁGINA 1: CAPA --- */}
                 <div className="p-[20mm] print:p-0 min-h-[297mm] print:min-h-0 relative break-after-page flex flex-col border border-border print:border-none">
                     <div className="absolute top-mx-0 left-mx-0 w-full h-mx-lg bg-gray-900" />
-                    <header className="flex justify-between items-start mt-10 mb-20 border-b-4 border-mx-black pb-8">
+                    <header className="flex justify-between items-start mt-10 print:mt-4 mb-20 print:mb-10 border-b-4 border-mx-black pb-8 print:pb-5">
                         <div>
                             <div className="flex items-center gap-mx-sm mb-4">
                                 <div className="w-mx-xl h-mx-xl bg-gray-900 text-white flex items-center justify-center rounded-2xl shadow-md"><Target size={24} /></div>
@@ -269,7 +269,7 @@ export default function PDIPrint() {
                         </div>
                     </header>
 
-                    <div className="mb-14 flex gap-mx-md items-center">
+                    <div className="mb-14 print:mb-8 flex gap-mx-md items-center">
                         <div className="w-mx-2xl h-mx-2xl rounded-mx-full bg-surface-alt border border-border flex items-center justify-center">
                             <User size={24} className="text-muted-foreground" />
                         </div>
@@ -300,7 +300,7 @@ export default function PDIPrint() {
                         ))}
                     </div>
 
-                    <footer className="mt-auto pt-10 text-center space-y-mx-sm">
+                    <footer className="mt-auto pt-10 print:pt-6 text-center space-y-mx-sm">
                         <Sparkles size={24} className="mx-auto text-status-success-text opacity-30" />
                         <Typography variant="p" className="text-sm font-bold italic leading-relaxed">
                             "Comprometa-se com suas metas e encare os obstáculos como etapas para atingir o objetivo final.
