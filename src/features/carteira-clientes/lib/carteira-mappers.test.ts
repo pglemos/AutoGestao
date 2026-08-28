@@ -229,3 +229,32 @@ describe('cancelled sale is a terminal state', () => {
     expect(() => assertNotTerminalPresentation(undefined, undefined)).not.toThrow()
   })
 })
+
+describe('venda ganha sobrevive ao cancelamento de outra oportunidade', () => {
+  // Caso real (GABRIEL/TREND AUTO, agosto/2026): o mesmo carro — FIESTA placa
+  // KRT1905 — foi registrado duas vezes para a JULIA ARAUJO. A duplicata foi
+  // cancelada em 26/08, depois da venda real de 15/08. Como o cancelamento era
+  // mais recente, a carteira mostrava "Venda cancelada" e a venda sumia da
+  // contagem, enquanto o Ranking continuava contando.
+  const cliente = {
+    id: 'c1',
+    nome: 'JULIA ARAUJO',
+    oportunidades: [
+      { id: 'o1', etapa: 'ganho', data_competencia: '2026-08-15', closed_at: '2026-08-15T12:00:00Z' },
+      { id: 'o2', etapa: 'cancelada', data_competencia: '2026-08-26', closed_at: '2026-08-26T18:19:00Z' },
+    ],
+    agendamentos: [],
+  }
+
+  test('a venda continua visível mesmo com cancelamento posterior', () => {
+    const visual = mapMxClientToCarteiraVisual(cliente as never)
+    expect(visual.situacao_atual).toBe('Venda realizada')
+    expect(visual.status_comercial).toBe('Vendido')
+  })
+
+  test('cliente sem nenhuma venda ganha segue como cancelado', () => {
+    const semVenda = { ...cliente, oportunidades: [cliente.oportunidades[1]] }
+    const visual = mapMxClientToCarteiraVisual(semVenda as never)
+    expect(visual.situacao_atual).toBe('Venda cancelada')
+  })
+})

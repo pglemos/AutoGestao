@@ -159,11 +159,19 @@ function deriveSituation(
   if (client.do_not_contact) return 'Cadência encerrada'
   if (client.reactivation_at && timestamp(client.reactivation_at) > now.getTime()) return 'Oportunidade futura'
 
-  // Sem oportunidade ativa, a situação deriva exclusivamente do último estado
-  // terminal — nenhum fato da oportunidade encerrada gera estado ativo.
+  // Sem oportunidade ativa, a situação deriva do último estado terminal —
+  // nenhum fato da oportunidade encerrada gera estado ativo.
+  //
+  // Uma venda ganha, porém, é fato consumado: o cancelamento de OUTRA
+  // oportunidade do mesmo cliente não a apaga. O caso real que expôs isto: o
+  // vendedor registrou o mesmo carro duas vezes (mesma placa), cancelou a
+  // duplicata, e como o cancelamento era mais recente que a venda, `latestClosed`
+  // devolvia 'Venda cancelada' e a venda sumia da carteira — enquanto o Ranking
+  // continuava contando. Por isso a venda é checada ANTES do cancelamento.
   if (!opportunity) {
+    const anyWon = (client.oportunidades || []).some(item => String(item.etapa || '') === 'ganho')
+    if (anyWon) return 'Venda realizada'
     if (latestClosed?.etapa === 'cancelada') return 'Venda cancelada'
-    if (latestClosed?.etapa === 'ganho') return 'Venda realizada'
     if (latestClosed?.etapa === 'perdido') return 'Venda perdida'
   }
 
