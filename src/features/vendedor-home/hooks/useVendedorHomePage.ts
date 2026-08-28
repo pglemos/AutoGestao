@@ -173,7 +173,11 @@ export function useVendedorHomePage() {
     if (!legacyMetrics) return null
     const vendasMes = officialPerformance?.vendas_realizadas ?? legacyMetrics.vendasMes
     const meta = resolvedMeta ?? legacyMetrics.meta
-    const atingimento = meta > 0 ? Math.round((vendasMes / meta) * 100 * 100) / 100 : 0
+    // Sem meta não há atingimento: `null`, não `0`. Zero por cento lê-se como
+    // "tem meta e não vendeu" — o painel do Admin MX já contabiliza esse engano
+    // ("32 vendedor(es) veem projeção e atingimento em 0%", ligado a "7 loja(s)
+    // em operação com meta mensal zerada").
+    const atingimento = meta > 0 ? Math.round((vendasMes / meta) * 100 * 100) / 100 : null
     const faltaX = Math.max(meta - vendasMes, 0)
     const projecao = officialPerformance?.vendas_projetadas ?? legacyMetrics.projecao
     const vendasOntem = officialPerformance?.vendas_ultimo_dia ?? legacyMetrics.vendasOntem

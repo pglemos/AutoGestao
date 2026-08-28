@@ -246,7 +246,8 @@ export function somarVendasPorCanal(checkins: DailyCheckin[]) {
 }
 
 type MorningReportMetrics = {
-    reaching: number
+    /** `null` quando a loja não tem meta definida — vira 'sem meta' na mensagem. */
+    reaching: number | null
     teamGoal: number
     currentSales: number
     projection: number
@@ -266,7 +267,7 @@ type MorningReportRankingRow = {
 
 /** Formata o texto do WhatsApp para o Matinal Oficial */
 export function formatWhatsAppMorningReport(storeName: string, dateLabel: string, metrics: MorningReportMetrics, ranking: MorningReportRankingRow[]): string {
-    const statusEmoji = metrics.reaching >= 100 ? '✅' : metrics.reaching >= 70 ? '⚠️' : '🚨';
+    const statusEmoji = metrics.reaching === null ? '📋' : metrics.reaching >= 100 ? '✅' : metrics.reaching >= 70 ? '⚠️' : '🚨';
     const pendingSellers = metrics.pendingSellers || [];
     
     return `*📊 MATINAL OFICIAL MX — ${storeName.toUpperCase()}*
@@ -274,7 +275,7 @@ export function formatWhatsAppMorningReport(storeName: string, dateLabel: string
 
 *${statusEmoji} STATUS ATUAL:*
 🎯 *META MENSAL:* ${metrics.teamGoal}
-📈 *REALIZADO:* ${metrics.currentSales} (${metrics.reaching}%)
+📈 *REALIZADO:* ${metrics.currentSales} (${metrics.reaching === null ? 'sem meta definida' : `${metrics.reaching}%`})
 🚀 *PROJEÇÃO:* ${metrics.projection}
 🔎 *FALTA POUCO:* ${metrics.gap} CARROS
 

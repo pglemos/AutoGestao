@@ -105,8 +105,9 @@ export default function VendedorHomePage() {
   const faltam = Math.max(meta - vendas, 0)
   const atingimento = typeof home.metrics?.atingimento === 'number' && Number.isFinite(home.metrics.atingimento)
     ? home.metrics.atingimento
-    : (meta > 0 ? (vendas / meta) * 100 : 0)
-  const atingimentoPct = Number.isFinite(atingimento) ? Math.min(100, Math.max(0, Math.round(atingimento))) : 0
+    : (meta > 0 ? (vendas / meta) * 100 : null)
+  // `null` quando não há meta — o card mostra ausência em vez de 0%.
+  const atingimentoPct = atingimento === null ? null : Math.min(100, Math.max(0, Math.round(atingimento)))
 
   const agendaHoje = useMemo(() => agendamentos.filter(a => isToday(a.data_hora)), [agendamentos])
 
@@ -203,9 +204,11 @@ export default function VendedorHomePage() {
               </span>
             </div>
             <div>
-              <p className="text-3xl font-bold leading-tight">{atingimentoPct}%</p>
+              <p className="text-3xl font-bold leading-tight">{atingimentoPct === null ? '—' : `${atingimentoPct}%`}</p>
               <p className="mt-1 text-sm text-emerald-100">
-                {atingimentoPct >= 100 ? '🎯 Meta batida!' : `${vendas} de ${meta} vendas realizadas`}
+                {atingimentoPct === null
+                  ? `Meta do mês ainda não definida · ${vendas} ${vendas === 1 ? 'venda' : 'vendas'}`
+                  : atingimentoPct >= 100 ? '🎯 Meta batida!' : `${vendas} de ${meta} vendas realizadas`}
               </p>
             </div>
           </article>
