@@ -8,8 +8,15 @@
  *     line-height-{tight,snug,normal,relaxed,loose}, tracking-{tighter,tight,normal,wide,wider,widest})
  * 2. Mapeamentos em @theme (index.css) cobrem o canônico
  *    (font-sans, font-mono, font-weight-{...}, leading-{...}, tracking-{...})
- * 3. @utility classes semânticas estão em semantic.css
+ * 3. @utility classes semânticas estão em index.css — a RAIZ Tailwind
  *    (text-display, text-h1..text-h6, text-body, text-body-sm, text-caption, text-label, text-data)
+ *
+ *    Este check exigia que morassem em semantic.css, e era essa a premissa
+ *    errada: `@utility` só é compilado no arquivo que tem `@import
+ *    "tailwindcss"`. Em semantic.css os 12 blocos iam CRUS para o bundle e o
+ *    browser descartava — a escala não existia em produção e 662 pontos
+ *    herdavam o tamanho do pai. Agora o gate exige o contrário: os blocos na
+ *    raiz, e nenhum sobrando em semantic.css.
  *
  * Uso: node scripts/audit-typography.mjs
  */
@@ -73,11 +80,19 @@ for (const name of expectedTheme) {
   else { console.log(`FAIL ${name}`); failures++; }
 }
 
-console.log('=== @utility classes em semantic.css');
+console.log('=== @utility classes na raiz Tailwind (index.css)');
 for (const name of expectedUtilities) {
   const re = new RegExp(`@utility\\s+${name}\\b`);
-  if (re.test(semanticSrc)) console.log(`OK   @utility ${name}`);
-  else { console.log(`FAIL @utility ${name}`); failures++; }
+  if (re.test(indexSrc)) console.log(`OK   @utility ${name}`);
+  else { console.log(`FAIL @utility ${name} (ausente da raiz Tailwind)`); failures++; }
+}
+
+console.log('=== nenhum @utility fora da raiz (seria descartado pelo browser)');
+const foraDaRaiz = [...semanticSrc.matchAll(/^@utility\s+([\w-]+)/gm)].map((m) => m[1]);
+if (foraDaRaiz.length === 0) console.log('OK   semantic.css sem @utility');
+else {
+  console.log(`FAIL semantic.css declara @utility que nunca compila: ${foraDaRaiz.join(', ')}`);
+  failures++;
 }
 
 console.log(`--- primitivos: ${Object.keys(expectedPrimitives).length} | theme: ${expectedTheme.length} | utilities: ${expectedUtilities.length} | falhas: ${failures}`);
