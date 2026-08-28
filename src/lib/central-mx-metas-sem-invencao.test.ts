@@ -271,3 +271,60 @@ describe('taxa de funil sem denominador é ausência, não zero', () => {
     expect(zeroReal.alerts.some(a => /Convers/i.test(a.problem))).toBe(true)
   })
 })
+
+/**
+ * Sem meta, `scoreFromActual` usava o próprio percentual como nota. Para
+ * indicador em que "menos é melhor" isso inverte o sinal: 5% de estoque acima
+ * de 90 dias — resultado ótimo — virava score 5, entrava na contagem de
+ * críticos e derrubava o departamento Produto e Estoque.
+ *
+ * Com meta a conta continua valendo nos dois sentidos; o que muda é só o caso
+ * sem meta, onde não há como pontuar direção invertida.
+ */
+describe('percentual sem meta não vira nota invertida', () => {
+  const comEstoque = {
+    ...baseInput,
+    inventory: { total: 100, available: 90, agingOver90: 5, averagePrice: 50000 },
+  }
+
+  function indicador(engine: ReturnType<typeof buildCentralMxEngine>, code: string) {
+    return engine.planningIndicators.find(item => item.code === code)
+  }
+
+  test('estoque acima de 90 dias sem meta fica sem nota, não com nota baixa', () => {
+    const engine = buildCentralMxEngine(comEstoque)
+    const item = indicador(engine, 'stock_over_90_rate')
+    expect(item?.realizado).toBe(5)
+    expect(item?.score).toBeNull()
+  })
+
+  test('o departamento não conta esse indicador como crítico', () => {
+    const engine = buildCentralMxEngine(comEstoque)
+    const produto = engine.departments.find(d => d.code === 'produto')
+    const criticos = produto?.indicators.filter(i => i.score != null && i.score < 60) ?? []
+    expect(criticos.map(i => i.code)).not.toContain('stock_over_90_rate')
+  })
+
+  test('com meta, "menos é melhor" volta a pontuar', () => {
+    const engine = buildCentralMxEngine({
+      ...comEstoque,
+      strategicParameters: { OVER_90_STOCK_RATE: 0.15 },
+    })
+    const item = indicador(engine, 'stock_over_90_rate')
+    expect(item?.meta).toBe(15)
+    // 5% contra alvo de 15% é bom: a nota tem que ser alta, não 5.
+    expect(item?.score).not.toBeNull()
+    expect(item?.score!).toBeGreaterThan(60)
+  })
+
+  test('"mais é melhor" sem meta continua usando o próprio percentual', () => {
+    const engine = buildCentralMxEngine({
+      ...baseInput,
+      funnel: { leadToSchedule: null, scheduleToVisit: null, visitToSale: 80 },
+      benchmarks: { leadToSchedule: 20, scheduleToVisit: 33, visitToSale: null as never },
+    })
+    const item = indicador(engine, 'visit_to_sale_rate')
+    expect(item?.realizado).toBe(80)
+    expect(item?.score).toBe(80)
+  })
+})

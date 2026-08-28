@@ -278,7 +278,14 @@ function average(values: Array<number | null | undefined>, fallback = 0) {
 function scoreFromActual(definition: CentralMxIndicatorDefinition, value: number | null, meta: number | null): number | null {
   if (value == null) return null
   if (definition.unit === 'score') return clampScore(value)
-  if (definition.unit === 'percent' && (meta == null || meta === 100 || meta === 0)) return clampScore(value)
+  // Sem meta, usar o próprio percentual como nota só vale quando "mais é
+  // melhor". Para `targetDirection: 'lower'` isso inverte o sinal: 5% de
+  // estoque acima de 90 dias — que é ótimo — virava score 5 e entrava como
+  // crítico, derrubando o departamento inteiro. Sem meta e com direção
+  // invertida não há como pontuar: fica sem nota.
+  if (definition.unit === 'percent' && (meta == null || meta === 100 || meta === 0)) {
+    return definition.targetDirection === 'lower' ? null : clampScore(value)
+  }
   if (meta == null || meta === 0) return null
   const ratio = definition.targetDirection === 'higher' ? value / meta : meta / Math.max(value, 1)
   return clampScore(ratio * 100)
