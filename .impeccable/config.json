@@ -11,6 +11,15 @@
         "value": "inter",
         "createdAt": "2026-08-28T15:16:36.202Z",
         "reason": "Inter e a face do design system MX desde antes desta sessao (tokens de tipografia e auditorias do DS assumem ela); trocar a fonte do produto inteiro nao e escopo de correcao de dados/PDI"
+      },
+      {
+        "rule": "codex-grid-background",
+        "value": "*",
+        "files": [
+          "src/index.css"
+        ],
+        "createdAt": "2026-08-28T22:14:41.449Z",
+        "reason": "bg-mx-matrix e utility do design system MX anterior a esta sessao (padrao de pontos radial-gradient, nao grade de linhas); nao toquei nela e trocar textura do DS nao e escopo da correcao de PDI/cadastros"
       }
     ]
   }
