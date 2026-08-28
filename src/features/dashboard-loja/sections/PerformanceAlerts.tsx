@@ -13,6 +13,13 @@ export type OwnerPerformanceAlert = {
   ctaLabel: string
   ctaTo: string
   department?: string
+  /**
+   * Indicador que originou o alerta. Existem dois geradores — este arquivo e
+   * `central-mx-engine` — e ambos descrevem os mesmos problemas com palavras
+   * diferentes. A deduplicação da Central de Decisões precisa comparar o
+   * indicador, não o texto.
+   */
+  sourceIndicator?: string
 }
 
 type ChannelTone = 'success' | 'info' | 'brand'
@@ -71,6 +78,7 @@ export function usePerformanceAlerts({
     if (metrics.goalValue > 0 && metrics.attainment < 80) {
       out.push({
         title: 'Meta abaixo do ritmo',
+        sourceIndicator: 'store_attainment',
         description: `${metrics.attainment}% da meta realizada no período selecionado.`,
         recommendation: isOwner
           ? 'Concentrar cobrança em meta, ritmo diário e gargalos que impedem volume.'
@@ -89,6 +97,7 @@ export function usePerformanceAlerts({
     if (sellerCount > 0 && metrics.checkedInCount < sellerCount) {
       out.push({
         title: 'Rotina diária incompleta',
+        sourceIndicator: 'seller_count',
         description: `${metrics.checkedInCount}/${sellerCount} vendedores com registro sincronizado.`,
         recommendation: isOwner
           ? 'Cobrar disciplina pelo gerente sem assumir a execução operacional.'
@@ -107,6 +116,7 @@ export function usePerformanceAlerts({
     if (funilData.tx_lead_agd < funnelBenchmarks.leadAgd) {
       out.push({
         title: 'Baixa conversão de lead',
+        sourceIndicator: 'lead_to_appointment_rate',
         description: `${funilData.tx_lead_agd}% contra benchmark de ${funnelBenchmarks.leadAgd}%.`,
         recommendation: isOwner
           ? 'Revisar origem, qualidade e tratamento dos leads com decisão comercial.'
@@ -125,6 +135,7 @@ export function usePerformanceAlerts({
     if (funilData.tx_visita_vnd < funnelBenchmarks.visitaVnd) {
       out.push({
         title: 'Visita não vira venda',
+        sourceIndicator: 'visit_to_sale_rate',
         description: `${funilData.tx_visita_vnd}% contra benchmark de ${funnelBenchmarks.visitaVnd}%.`,
         recommendation: isOwner
           ? 'Investigar barreiras de preço, troca, financiamento e fechamento.'

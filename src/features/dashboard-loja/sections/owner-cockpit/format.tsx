@@ -211,6 +211,8 @@ export function alertFromEngine(alert: ExecutiveAlert): OwnerPerformanceAlert {
     ctaLabel: alert.quickActionLabel,
     ctaTo: ownerPath('plano-acao'),
     department: DEPARTMENT_NAMES[alert.scopeId.split(':').pop() as MxDepartmentCode],
+    // Preserva a origem para a deduplicação da Central de Decisões.
+    sourceIndicator: (alert.metadata as { sourceIndicator?: string } | null)?.sourceIndicator,
   }
 }
 

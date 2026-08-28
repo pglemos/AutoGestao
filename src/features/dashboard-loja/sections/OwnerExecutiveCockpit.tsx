@@ -58,7 +58,18 @@ type OwnerExecutiveCockpitProps = {
   alerts: OwnerPerformanceAlert[]
 }
 
+/**
+ * A Central de Decisões junta dois geradores de alerta: `central-mx-engine` e
+ * `PerformanceAlerts`. Comparar o texto não dedupe nada, porque os dois
+ * descrevem o mesmo problema com palavras diferentes — "Conversão de lead
+ * abaixo do benchmark." e "Baixa conversão de lead" apareciam lado a lado, e o
+ * Dono via 5 alertas críticos para 3 problemas.
+ *
+ * Quando os dois lados declaram o indicador de origem, ele é a identidade. O
+ * texto continua servindo de reserva para alerta sem indicador.
+ */
 function alertIdentity(alert: OwnerPerformanceAlert) {
+  if (alert.sourceIndicator) return `indicador::${alert.sourceIndicator}::${alert.variant}`
   return [alert.title, alert.description, alert.variant, alert.recommendation].join('::')
 }
 
