@@ -1,6 +1,6 @@
 import { supabase } from '@/lib/supabase'
 
-export type ConsultingOverviewStatus = 'nao_iniciado' | 'agendado' | 'concluido' | 'reagendado'
+export type ConsultingOverviewStatus = 'nao_iniciado' | 'agendado' | 'concluido' | 'reagendado' | 'cancelado'
 export type ConsultingOverviewModality = 'online' | 'presencial' | 'a_definir'
 
 export type ConsultingOverviewRow = {
@@ -33,6 +33,10 @@ export function normalizeConsultingStatus(value: string | null | undefined): Con
   const normalized = String(value ?? '').trim().toLowerCase().replaceAll(' ', '_')
   if (['concluido', 'concluida', 'completed', 'finalizado', 'finalizada'].includes(normalized)) return 'concluido'
   if (['reagendado', 'reagendada', 'rescheduled'].includes(normalized)) return 'reagendado'
+  // Sem este ramo, 'cancelada' caía no default e virava 'Não iniciado' — o
+  // oposto do que é. Em produção há 4 visitas canceladas sendo exibidas como
+  // trabalho pendente.
+  if (['cancelado', 'cancelada', 'canceled', 'cancelled'].includes(normalized)) return 'cancelado'
   if (['agendado', 'agendada', 'scheduled', 'em_andamento', 'in_progress'].includes(normalized)) return 'agendado'
   return 'nao_iniciado'
 }
@@ -49,6 +53,7 @@ export const CONSULTING_STATUS_LABELS: Record<ConsultingOverviewStatus, string> 
   agendado: 'Agendado',
   concluido: 'Concluído',
   reagendado: 'Reagendado',
+  cancelado: 'Cancelado',
 }
 
 export const CONSULTING_MODALITY_LABELS: Record<ConsultingOverviewModality, string> = {

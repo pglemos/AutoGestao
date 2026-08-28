@@ -52,6 +52,7 @@ const STATUS_BADGE_VARIANT: Record<ConsultingOverviewStatus, BadgeProps['variant
   agendado: 'info',
   concluido: 'success',
   reagendado: 'warning',
+  cancelado: 'outline',
 }
 
 const MODALITY_BADGE_VARIANT: Record<ConsultingOverviewModality, BadgeProps['variant']> = {
