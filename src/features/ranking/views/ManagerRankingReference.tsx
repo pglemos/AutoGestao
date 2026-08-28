@@ -64,7 +64,7 @@ export function ManagerRankingReference() {
   const routineLeader = data.vendedores.filter(item => item.rotina !== null).sort((left, right) => (right.rotina || 0) - (left.rotina || 0))[0]
   const scoreLeader = data.vendedores.filter(item => item.pontuacao !== null).sort((left, right) => (right.pontuacao || 0) - (left.pontuacao || 0))[0]
   const highlights = [
-    { label: 'Líder em Vendas', seller: salesLeader, value: salesLeader ? `${salesLeader.vendas} vendas` : 'Sem dados oficiais', icon: Trophy, tone: 'yellow' as const, help: 'Vendedor com o maior número de vendas no mês selecionado.' },
+    { label: 'Líder em Vendas', seller: salesLeader, value: salesLeader ? `${salesLeader.vendas} ${salesLeader.vendas === 1 ? 'venda' : 'vendas'}` : 'Sem dados oficiais', icon: Trophy, tone: 'yellow' as const, help: 'Vendedor com o maior número de vendas no mês selecionado.' },
     { label: 'Maior Conversão', seller: conversionLeader, value: conversionLeader ? `${conversionLeader.conversao}%` : 'Sem dados oficiais', icon: TrendingUp, tone: 'emerald' as const, help: 'Vendedor com a melhor taxa de conversão (vendas ÷ atendimentos + leads de internet) no período.' },
     { label: 'Melhor Rotina', seller: routineLeader, value: routineLeader?.rotina === null || !routineLeader ? 'Sem snapshot oficial' : `${routineLeader.rotina}%`, icon: Star, tone: 'blue' as const, help: 'Vendedor com a maior média de execução da rotina diária no período.' },
     { label: 'Maior Pontuação', seller: scoreLeader, value: scoreLeader?.pontuacao === null || !scoreLeader ? 'Sem dados oficiais' : `${scoreLeader.pontuacao} pts`, icon: Award, tone: 'violet' as const, help: 'Soma ponderada: 50% resultado da meta, 25% conversão e 25% execução da rotina.' },

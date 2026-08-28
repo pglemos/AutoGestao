@@ -45,7 +45,7 @@ export function GlobalStatsCards({
             <stat.icon size={20} strokeWidth={2} />
           </div>
           <div className="min-w-0">
-            <Typography variant="tiny" tone="muted" className="block truncate">{stat.label}</Typography>
+            <Typography variant="tiny" tone="muted" className="block leading-tight">{stat.label}</Typography>
             <Typography variant="h2" className="text-xl tabular-nums leading-none">{stat.value}</Typography>
           </div>
         </Card>
