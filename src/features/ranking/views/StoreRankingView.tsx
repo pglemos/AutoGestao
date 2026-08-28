@@ -59,7 +59,7 @@ export function StoreRankingView() {
           {modoMeta && (
             <div className="flex items-center gap-2 bg-brand-primary-subtle border border-brand-primary/20 rounded-xl px-4 py-2">
               <Info className="w-4 h-4 text-brand-primary-active flex-shrink-0" aria-hidden="true" />
-              <p className="text-body-sm text-brand-primary-active">
+              <p className="text-mx-tiny text-brand-primary-active">
                 <strong>Ordenado por volume de vendas.</strong> A meta individual segue {modoMeta}.
               </p>
             </div>

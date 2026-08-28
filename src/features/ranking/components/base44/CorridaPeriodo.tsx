@@ -142,7 +142,7 @@ export function CorridaPeriodo({ vendedores, metaLoja, metaCorrida, meuId }: Pro
             Meta da loja: <strong className="text-foreground">{formatVendas(metaLoja)}</strong>
           </span>
         </div>
-        <p className="text-body-sm text-muted-foreground mb-6">
+        <p className="text-mx-tiny text-muted-foreground mb-6">
           {temChegada
             ? 'Avanço de cada vendedor no período. A chegada é a sua meta individual.'
             : 'Avanço de cada vendedor no período. Você ainda não tem meta individual cadastrada.'}

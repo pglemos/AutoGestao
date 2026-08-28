@@ -76,23 +76,23 @@ export function SellerProfileModal({ seller, onClose }: SellerProfileModalProps)
                             fallback={seller.user_name}
                             className="h-14 w-14 rounded-full border-2 border-border bg-white"
                         />
-                        <span className="absolute -bottom-1 -right-1 grid h-6 min-w-6 place-items-center rounded-full border border-border bg-white px-1 text-caption font-bold text-foreground">
+                        <span className="absolute -bottom-1 -right-1 grid h-6 min-w-6 place-items-center rounded-full border border-border bg-white px-1 text-mx-tiny font-bold text-foreground">
                             {seller.position}º
                         </span>
                     </div>
 
                     <div className="min-w-0 flex-1">
-                        <h2 id="seller-profile-title" className="truncate text-h3 font-bold text-foreground">{seller.user_name}</h2>
-                        <p className="truncate text-body-sm text-muted-foreground">{seller.store_name || 'Loja não informada'}</p>
+                        <h2 id="seller-profile-title" className="truncate text-xl font-bold text-foreground">{seller.user_name}</h2>
+                        <p className="truncate text-sm text-muted-foreground">{seller.store_name || 'Loja não informada'}</p>
                         {(lidera || bateuMeta) && (
                             <div className="mt-2 flex flex-wrap gap-2">
                                 {lidera && (
-                                    <span className="inline-flex items-center gap-1 rounded-full bg-status-warning-surface px-2.5 py-1 text-caption font-semibold text-status-warning-text">
+                                    <span className="inline-flex items-center gap-1 rounded-full bg-status-warning-surface px-2.5 py-1 text-mx-tiny font-semibold text-status-warning-text">
                                         <Crown className="h-3.5 w-3.5" aria-hidden="true" /> Líder do ranking
                                     </span>
                                 )}
                                 {bateuMeta && (
-                                    <span className="inline-flex items-center gap-1 rounded-full bg-brand-primary-subtle px-2.5 py-1 text-caption font-semibold text-brand-primary-hover">
+                                    <span className="inline-flex items-center gap-1 rounded-full bg-brand-primary-subtle px-2.5 py-1 text-mx-tiny font-semibold text-brand-primary-hover">
                                         <Flame className="h-3.5 w-3.5" aria-hidden="true" /> Meta batida
                                     </span>
                                 )}
@@ -115,9 +115,9 @@ export function SellerProfileModal({ seller, onClose }: SellerProfileModalProps)
                     <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                         {metricas.map(({ label, valor, ajuda, destaque }) => (
                             <div key={label} className="rounded-xl border border-border-subtle bg-white p-3" title={ajuda}>
-                                <dt className="text-caption font-semibold uppercase tracking-wide text-muted-foreground">{label}</dt>
-                                <dd className={`mt-1 text-h3 font-bold leading-tight ${destaque ? 'text-status-success-text' : 'text-foreground'}`}>{valor}</dd>
-                                <p className="mt-1 text-caption leading-snug text-muted-foreground">{ajuda}</p>
+                                <dt className="text-mx-tiny font-semibold uppercase tracking-wide text-muted-foreground">{label}</dt>
+                                <dd className={`mt-1 text-xl font-bold leading-tight ${destaque ? 'text-status-success-text' : 'text-foreground'}`}>{valor}</dd>
+                                <p className="mt-1 text-mx-tiny leading-snug text-muted-foreground">{ajuda}</p>
                             </div>
                         ))}
                     </dl>

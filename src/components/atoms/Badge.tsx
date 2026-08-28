@@ -32,7 +32,7 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
   ({ className, variant, children, ...props }, ref) => (
     <div ref={ref} className={cn(badgeVariants({ variant: variant ?? 'default' }), className)} {...props}>
       {typeof children === 'string' ? (
-        <Typography variant="caption" className="text-inherit tracking-inherit">
+        <Typography variant="caption" className="text-[length:inherit] text-inherit tracking-inherit">
           {children}
         </Typography>
       ) : children}

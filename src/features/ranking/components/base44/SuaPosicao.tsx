@@ -42,7 +42,7 @@ export function SuaPosicao({ posicao, total, atingimento, faltamValor }: Props) 
           <Target className={`w-5 h-5 ${tomAtingimento(pct)}`} aria-hidden="true" />
           <p className="text-caption text-muted-foreground font-medium">Atingimento</p>
           <p className={`text-h3 font-bold leading-tight ${tomAtingimento(pct)}`}>{pct === null ? '—' : `${pct}%`}</p>
-          {pct === null && <p className="text-caption text-muted-foreground text-center">Sem meta definida</p>}
+          {pct === null && <p className="text-mx-tiny text-muted-foreground text-center">Sem meta definida</p>}
         </div>
         <div className="bg-status-info-surface border border-status-info/20 rounded-xl p-3 flex flex-col items-center gap-1 text-center">
           <TrendingUp className="w-5 h-5 text-status-info-text" aria-hidden="true" />
@@ -54,7 +54,7 @@ export function SuaPosicao({ posicao, total, atingimento, faltamValor }: Props) 
       </div>
       <Link
         to="/carteira-clientes"
-        className="mt-4 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-brand-primary px-4 text-body-sm font-bold text-white transition-colors hover:bg-brand-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40"
+        className="mt-4 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-brand-primary px-4 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40"
       >
         Trabalhar minha carteira
         <ArrowRight className="w-4 h-4" aria-hidden="true" />

@@ -56,7 +56,7 @@ export function TabelaRanking({ vendedores, meuId, onSelect }: Props) {
                         <span className="sr-only">{medal.label}</span>
                       </div>
                     ) : (
-                      <span className="text-body-sm font-bold text-muted-foreground">{i + 1}</span>
+                      <span className="text-sm font-bold text-muted-foreground">{i + 1}</span>
                     )}
                   </td>
                   <td className="px-4 py-3">
@@ -79,14 +79,14 @@ export function TabelaRanking({ vendedores, meuId, onSelect }: Props) {
                   </td>
                   <td className="px-4 py-3 text-body-sm text-muted-foreground truncate max-w-[120px]" title={v.unidade || '—'}>{v.unidade || '—'}</td>
                   <td className="px-4 py-3">
-                    <span className={`text-body-sm font-bold ${isMe ? 'text-status-info-text' : 'text-status-success-text'}`}>{v.vendas}</span>
+                    <span className={`text-sm font-bold ${isMe ? 'text-status-info-text' : 'text-status-success-text'}`}>{v.vendas}</span>
                   </td>
                   <td className="px-4 py-3 text-body-sm text-muted-foreground">{v.meta ?? '—'}</td>
                   <td className="px-4 py-3">
                     {pct === null ? (
-                      <span className="text-body-sm font-bold text-muted-foreground">—</span>
+                      <span className="text-sm font-bold text-muted-foreground">—</span>
                     ) : (
-                      <span className={`text-body-sm font-bold ${pct >= 100 ? 'text-status-success-text' : pct >= 80 ? 'text-status-warning-text' : pct >= 50 ? 'text-status-info-text' : 'text-status-error-text'}`}>
+                      <span className={`text-sm font-bold ${pct >= 100 ? 'text-status-success-text' : pct >= 80 ? 'text-status-warning-text' : pct >= 50 ? 'text-status-info-text' : 'text-status-error-text'}`}>
                         {pct}%
                       </span>
                     )}
