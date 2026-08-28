@@ -241,7 +241,7 @@
 | `modulos_sistema` | 1 |
 | `notificacoes` | 4 |
 | `opcoes_agenda_consultoria` | 1 |
-| `oportunidades` | 7 |
+| `oportunidades` | 8 |
 | `organograma_nos` | 1 |
 | `overrides_parametros_cliente` | 3 |
 | `pacotes_indicadores_estrategicos` | 1 |
@@ -543,7 +543,7 @@
 | `opcoes_agenda_consultoria:update` | 1 |
 | `oportunidades:delete` | 1 |
 | `oportunidades:insert` | 1 |
-| `oportunidades:select` | 7 |
+| `oportunidades:select` | 8 |
 | `oportunidades:update` | 3 |
 | `organograma_nos:delete` | 1 |
 | `organograma_nos:insert` | 1 |
