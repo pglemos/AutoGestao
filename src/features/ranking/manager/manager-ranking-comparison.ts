@@ -26,7 +26,7 @@ export function buildComparisonRadar(a: RankedVendedor, b: RankedVendedor): Comp
   const maxServed = Math.max(a.visitas, b.visitas, 1)
   return [
     { metric: 'Meta', a: a.atingimento ?? 0, b: b.atingimento ?? 0 },
-    { metric: 'Conversão', a: a.conversao, b: b.conversao },
+    { metric: 'Conversão', a: a.conversao ?? 0, b: b.conversao ?? 0 },
     { metric: 'Rotina', a: a.rotina ?? 0, b: b.rotina ?? 0 },
     { metric: 'Agendamentos', a: normalize(a.agendamentos, maxScheduling), b: normalize(b.agendamentos, maxScheduling) },
     { metric: 'Atendimentos', a: normalize(a.visitas, maxServed), b: normalize(b.visitas, maxServed) },
@@ -53,7 +53,8 @@ export function buildComparisonInsights(a: RankedVendedor, b: RankedVendedor): s
     const [best, other] = a.atingimento > b.atingimento ? [a, b] : [b, a]
     insights.push(`${best.nome} está com melhor atingimento de meta (${best.atingimento}% vs ${other.atingimento}%).`)
   }
-  if (a.conversao !== b.conversao) {
+  // Sem atendimento não há conversão a comparar — mesma regra do atingimento.
+  if (a.conversao !== null && b.conversao !== null && a.conversao !== b.conversao) {
     const [best, other] = a.conversao > b.conversao ? [a, b] : [b, a]
     insights.push(`${best.nome} converte melhor (${best.conversao}% vs ${other.conversao}%) — repasse a abordagem para ${firstName(other.nome)}.`)
   }

@@ -21,15 +21,16 @@ export type RankedVendedor = {
   agendamentos: number
   visitas: number
   atingimento: number | null
-  conversao: number
+  /** `null` quando não houve atendimento no período — não é 0%. */
+  conversao: number | null
   rotina: number | null
   posicao: number
   pontuacao: number | null
   planoRemuneracao?: string | null
 }
 
-export function calculateManagerScore(input: { attainment: number; conversion: number; routine: number | null }): number | null {
-  if (input.routine === null) return null
+export function calculateManagerScore(input: { attainment: number; conversion: number | null; routine: number | null }): number | null {
+  if (input.routine === null || input.conversion === null) return null
   return Math.round((input.attainment * 0.5) + (input.conversion * 0.25) + (input.routine * 0.25))
 }
 
@@ -112,7 +113,10 @@ export function useStoreRankingPageData(options: { referenceMonth?: string } = {
     // cadastro, não critério de exclusão — ver comentário em useRanking.
     return ranking
       .map(r => {
-        const conversao = r.visitas > 0 ? Math.round((r.vnd_total / r.visitas) * 100) : 0
+        // Sem atendimento no período não há conversão — `null`, não 0%. O mesmo
+        // indicador já era tratado assim em `SellerProfileModal`, que mostra '—'
+        // com a ajuda "Sem atendimentos registrados no período".
+        const conversao = r.visitas > 0 ? Math.round((r.vnd_total / r.visitas) * 100) : null
         const rotina = r.routine_execution ?? null
         const metaResolvida = r.meta > 0 ? r.meta * mesesPeriodo : null
         const metaIndividual = metaResolvida === null ? null : Math.round((r.vnd_total / metaResolvida) * 100)

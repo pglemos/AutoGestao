@@ -53,14 +53,14 @@ export function ManagerRankingReference() {
   const janela = `${formatarDia(startDate)} a ${formatarDia(endDate)}`
 
   const ranking = useMemo(() => [...data.vendedores].sort((left, right) => {
-    if (criterion === 'conversao') return right.conversao - left.conversao
+    if (criterion === 'conversao') return (right.conversao ?? -1) - (left.conversao ?? -1)
     if (criterion === 'rotina') return (right.rotina ?? -1) - (left.rotina ?? -1)
     if (criterion === 'geral') return (right.pontuacao ?? -1) - (left.pontuacao ?? -1) || right.vendas - left.vendas || left.nome.localeCompare(right.nome, 'pt-BR')
     return right.vendas - left.vendas || left.nome.localeCompare(right.nome, 'pt-BR')
   }), [criterion, data.vendedores])
 
   const salesLeader = [...data.vendedores].sort((left, right) => right.vendas - left.vendas)[0]
-  const conversionLeader = [...data.vendedores].sort((left, right) => right.conversao - left.conversao)[0]
+  const conversionLeader = data.vendedores.filter(item => item.conversao !== null).sort((left, right) => (right.conversao || 0) - (left.conversao || 0))[0]
   const routineLeader = data.vendedores.filter(item => item.rotina !== null).sort((left, right) => (right.rotina || 0) - (left.rotina || 0))[0]
   const scoreLeader = data.vendedores.filter(item => item.pontuacao !== null).sort((left, right) => (right.pontuacao || 0) - (left.pontuacao || 0))[0]
   const highlights = [
@@ -148,7 +148,7 @@ function RankingRow({ seller, index }: { seller: RankedVendedor; index: number }
   const positionTone = index === 0 ? 'bg-status-warning/50 text-status-warning-foreground' : index === 1 ? 'bg-gray-400 text-status-warning-foreground' : index === 2 ? 'bg-status-warning text-status-warning-foreground' : 'bg-muted text-muted-foreground'
   const barTone = attainment === null ? 'bg-muted' : attainment >= 80 ? 'bg-status-success' : attainment >= 50 ? 'bg-status-warning' : 'bg-status-error'
   const textTone = attainment === null ? 'text-muted-foreground' : attainment >= 80 ? 'text-status-success-text' : attainment >= 50 ? 'text-status-warning-text' : 'text-status-error-text'
-  return <tr className={rowTone}><td className="px-4 py-3"><span className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${positionTone}`}>{index + 1}</span></td><td className="px-4 py-3 font-semibold text-foreground">{seller.nome}</td><td className="px-4 py-3 text-foreground">{seller.vendas}</td><td className="px-4 py-3 text-foreground">{seller.meta ?? '—'}</td><td className="px-4 py-3"><div className="flex min-w-[88px] items-center gap-2"><div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted"><div className={`h-full rounded-full ${barTone}`} style={{ width: `${Math.min(attainment ?? 0, 100)}%` }} /></div><span className={`text-xs font-medium ${textTone}`}>{attainment === null ? '—' : `${attainment}%`}</span></div></td><td className="px-4 py-3 text-foreground">{seller.agendamentos}</td><td className="px-4 py-3 text-foreground">{seller.conversao}%</td><td className="px-4 py-3 text-foreground">{seller.rotina === null ? '—' : `${seller.rotina}%`}</td><td className="px-4 py-3 font-bold text-status-success-text">{seller.pontuacao ?? '—'}</td></tr>
+  return <tr className={rowTone}><td className="px-4 py-3"><span className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${positionTone}`}>{index + 1}</span></td><td className="px-4 py-3 font-semibold text-foreground">{seller.nome}</td><td className="px-4 py-3 text-foreground">{seller.vendas}</td><td className="px-4 py-3 text-foreground">{seller.meta ?? '—'}</td><td className="px-4 py-3"><div className="flex min-w-[88px] items-center gap-2"><div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted"><div className={`h-full rounded-full ${barTone}`} style={{ width: `${Math.min(attainment ?? 0, 100)}%` }} /></div><span className={`text-xs font-medium ${textTone}`}>{attainment === null ? '—' : `${attainment}%`}</span></div></td><td className="px-4 py-3 text-foreground">{seller.agendamentos}</td><td className="px-4 py-3 text-foreground">{seller.conversao === null ? '—' : `${seller.conversao}%`}</td><td className="px-4 py-3 text-foreground">{seller.rotina === null ? '—' : `${seller.rotina}%`}</td><td className="px-4 py-3 font-bold text-status-success-text">{seller.pontuacao ?? '—'}</td></tr>
 }
 
 export default ManagerRankingReference
