@@ -118,8 +118,14 @@ export function ManagerTeamKanban({ cards, view, storeName, onViewChange, onOpen
     <div className="sticky top-0 z-[var(--mx-z-topbar)] bg-surface-alt py-1">
       <div className="flex items-center justify-center gap-2 py-2">
       <Users size={15} className="text-status-success-text"/>
-      <p className="text-sm font-semibold text-foreground"><span className="text-base text-status-success-text">{summary.onTrackPercentage}%</span> da equipe Em dia</p>
-      <span className="text-xs text-muted-foreground">({summary.eligible} vendedores elegíveis)</span>
+      {summary.onTrackPercentage === null ? (
+        <p className="text-sm font-semibold text-foreground">Nenhum vendedor elegível no período</p>
+      ) : (
+        <>
+          <p className="text-sm font-semibold text-foreground"><span className="text-base text-status-success-text">{summary.onTrackPercentage}%</span> da equipe Em dia</p>
+          <span className="text-xs text-muted-foreground">({summary.eligible} vendedores elegíveis)</span>
+        </>
+      )}
       </div>
     </div>
 

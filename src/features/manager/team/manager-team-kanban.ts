@@ -171,6 +171,8 @@ export function summarizeManagerTeam(groups: ManagerTeamGroups) {
   const eligible = groups.critical.length + groups.attention.length + groups.on_track.length
   return {
     eligible,
-    onTrackPercentage: eligible > 0 ? Math.round((groups.on_track.length / eligible) * 100) : 0,
+    // Sem vendedor elegível não há percentual: `null`, não 0%. "0% da equipe
+    // Em dia" lê-se como time inteiro atrasado quando não há time.
+    onTrackPercentage: eligible > 0 ? Math.round((groups.on_track.length / eligible) * 100) : null,
   }
 }

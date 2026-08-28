@@ -75,3 +75,29 @@ describe('manager team kanban', () => {
     expect(summarizeManagerTeam(groups)).toEqual({ eligible: 2, onTrackPercentage: 50 })
   })
 })
+
+/**
+ * "0% da equipe Em dia" lê-se como time inteiro atrasado. Quando não há
+ * vendedor elegível no período, não há percentual — o kanban passa a dizer
+ * isso em vez de exibir zero.
+ */
+describe('percentual da equipe sem vendedor elegível', () => {
+  const vazio = { critical: [], attention: [], on_track: [] } as never
+
+  test('sem elegíveis, o percentual é nulo e não zero', () => {
+    const resumo = summarizeManagerTeam(vazio)
+    expect(resumo.eligible).toBe(0)
+    expect(resumo.onTrackPercentage).toBeNull()
+  })
+
+  test('zero medido continua sendo 0%', () => {
+    // Há dois elegíveis e nenhum em dia: 0% é afirmação verdadeira.
+    const comAtraso = { critical: [{}], attention: [{}], on_track: [] } as never
+    expect(summarizeManagerTeam(comAtraso).onTrackPercentage).toBe(0)
+  })
+
+  test('metade em dia dá 50%', () => {
+    const meio = { critical: [{}], attention: [], on_track: [{}] } as never
+    expect(summarizeManagerTeam(meio).onTrackPercentage).toBe(50)
+  })
+})
