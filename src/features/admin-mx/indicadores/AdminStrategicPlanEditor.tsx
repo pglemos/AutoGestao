@@ -775,12 +775,12 @@ export function AdminStrategicPlanEditor({ cycleId, readOnly = false }: { cycleI
         </MxMetricGrid>
         <MetasRealizadosTab
           cicloId={data.cycle.id}
-          indicators={digitaveisIndicators.map(indicator => ({
+          indicators={gridIndicators.map(indicator => ({
             code: indicator.metric_key,
             displayCode: officialCatalogCode(indicator.metric_key),
             name: indicator.label,
             department: indicator.area,
-            calculado: false,
+            calculado: calculatedIndicator(indicator),
             value_type: indicator.value_type,
             casas_decimais: indicator.casas_decimais,
           }))}

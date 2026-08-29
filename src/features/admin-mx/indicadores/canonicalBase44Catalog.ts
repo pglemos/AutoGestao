@@ -49,6 +49,7 @@ export const BASE44_STANDARD_INDICATORS: CanonicalIndicator[] = [
   { code: 'LEADS_RECEIVED', name: "Volume de Leads Recebidos", department: 'MARKETING', area: 'Marketing', target_calculation_mode: 'CALCULATED_ADJUSTABLE', formula_expression: "IND(\"SALES_INTERNET\") * PAR(\"LEADS_PER_INTERNET_SALE\")", display_order: 1, aliases: ["leads_received","leads","volume_leads"] },
   { code: 'INTERNET_INVESTMENT', name: "Investimento Internet", department: 'MARKETING', area: 'Marketing', target_calculation_mode: 'CALCULATED_ADJUSTABLE', formula_expression: "IND(\"INTERNET_COST_PER_SALE\") * IND(\"SALES_INTERNET\")", display_order: 2, aliases: ["internet_investment"] },
   { code: 'INTERNET_COST_PER_SALE', name: "Custo por Venda na Internet", department: 'MARKETING', area: 'Marketing', target_calculation_mode: 'MANUAL', formula_expression: null, display_order: 3, aliases: ["internet_cost_per_sale"] },
+  { code: 'VOLUME_DE_LEADS_POR_VENDA', name: "Volume de Leads por Venda", department: 'MARKETING', area: 'Marketing', target_calculation_mode: 'MANUAL', formula_expression: null, display_order: 26, aliases: ["volume_de_leads_por_venda", "volume_leads_por_venda", "leads_per_sale"] },
   { code: 'INSTAGRAM_FOLLOWERS', name: "Volume de Seguidores Instagram", department: 'MARKETING', area: 'Marketing', target_calculation_mode: 'MANUAL', formula_expression: null, display_order: 4, aliases: ["instagram_followers"] },
   { code: 'GOOGLE_BUSINESS_RATING', name: "Avaliação Google Meu Negócio", department: 'MARKETING', area: 'Marketing', target_calculation_mode: 'MANUAL', formula_expression: null, display_order: 5, aliases: ["google_business_rating"] },
   { code: 'CONTENT_QUALITY', name: "Qualidade do Conteúdo", department: 'MARKETING', area: 'Marketing', target_calculation_mode: 'MANUAL', formula_expression: null, display_order: 6, aliases: ["content_quality"] },
@@ -166,7 +167,7 @@ const OFFICIAL_UNIT_LABEL: Record<string, string> = {
   APPROVED_CREDIT_APPLICATIONS: 'fichas', PAID_CREDIT_APPLICATIONS: 'fichas',
   APPOINTMENTS_VOLUME: 'agendamentos', VISITS_VOLUME: 'visitas',
   ACTIVE_INVENTORY: 'veículos', INVENTORY_TOTAL: 'veículos',
-  INVENTORY_OVER_90_VOLUME: 'veículos', AFTER_SALES_VOLUME: 'ocorrências',
+  INVENTORY_OVER_90_VOLUME: 'veículos', AFTER_SALES_VOLUME: 'ocorrências', VOLUME_DE_LEADS_POR_VENDA: 'leads/venda',
   TRADE_SALES_PERCENTAGE: '%', FINANCED_SALES_PERCENTAGE: '%',
   LEAD_TO_APPOINTMENT_CONVERSION: '%', APPOINTMENT_TO_VISIT_CONVERSION: '%',
   VISIT_TO_SALE_CONVERSION: '%', INVENTORY_OVER_90_PERCENTAGE: '%',
@@ -207,6 +208,7 @@ const OFFICIAL_DEFINITION_UNIT: Record<string, string> = {
   NET_PROFIT: 'Moeda', AVERAGE_SALES_MARGIN: 'Moeda',
   AVERAGE_PREPARATION_COST: 'Moeda', AVERAGE_AFTER_SALES_COST: 'Moeda',
   AFTER_SALES_VOLUME: 'Número decimal', AFTER_SALES_PERCENTAGE: 'Percentual',
+  VOLUME_DE_LEADS_POR_VENDA: 'Número decimal',
   EMPLOYEE_COUNT: 'Número inteiro',
 }
 
@@ -276,16 +278,16 @@ export const BASE44_GLOBAL_ORDER: Record<string, number> = {
   PAID_CREDIT_APPLICATIONS: 16, FINANCED_SALES_PERCENTAGE: 17, APPOINTMENTS_VOLUME: 18,
   VISITS_VOLUME: 19, APPOINTMENTS_PER_INTERNET_SALE: 20, LEAD_TO_APPOINTMENT_CONVERSION: 21,
   APPOINTMENT_TO_VISIT_CONVERSION: 22, VISIT_TO_SALE_CONVERSION: 23, INTERNET_INVESTMENT: 24,
-  INTERNET_COST_PER_SALE: 25, INSTAGRAM_FOLLOWERS: 26, GOOGLE_BUSINESS_RATING: 27,
-  CONTENT_QUALITY: 28, INVENTORY_TURNOVER: 29, ACTIVE_INVENTORY: 30, INVENTORY_TOTAL: 31,
-  INVENTORY_OVER_90_VOLUME: 32, INVENTORY_OVER_90_PERCENTAGE: 33, INVENTORY_AVERAGE_TICKET: 34,
-  INVENTORY_AVERAGE_MARGIN: 35, CONTRIBUTION_MARGIN: 36, ADDITIONAL_REVENUE: 37,
-  TOTAL_EXPENSE: 38, NET_PROFIT: 39, AVERAGE_SALES_MARGIN: 40, AVERAGE_PREPARATION_COST: 41,
-  AVERAGE_AFTER_SALES_COST: 42, AFTER_SALES_VOLUME: 43, AFTER_SALES_PERCENTAGE: 44,
-  EMPLOYEE_COUNT: 45,
+  INTERNET_COST_PER_SALE: 25, VOLUME_DE_LEADS_POR_VENDA: 26, INSTAGRAM_FOLLOWERS: 27,
+  GOOGLE_BUSINESS_RATING: 28, CONTENT_QUALITY: 29, INVENTORY_TURNOVER: 30, ACTIVE_INVENTORY: 31,
+  INVENTORY_TOTAL: 32, INVENTORY_OVER_90_VOLUME: 33, INVENTORY_OVER_90_PERCENTAGE: 34,
+  INVENTORY_AVERAGE_TICKET: 35, INVENTORY_AVERAGE_MARGIN: 36, CONTRIBUTION_MARGIN: 37,
+  ADDITIONAL_REVENUE: 38, TOTAL_EXPENSE: 39, NET_PROFIT: 40, AVERAGE_SALES_MARGIN: 41,
+  AVERAGE_PREPARATION_COST: 42, AVERAGE_AFTER_SALES_COST: 43, AFTER_SALES_VOLUME: 44,
+  AFTER_SALES_PERCENTAGE: 45, EMPLOYEE_COUNT: 46,
 }
 
-/** Garante display_order global 1…45 (não reinicia por departamento). */
+/** Garante display_order global 1…46 (não reinicia por departamento). */
 for (const item of BASE44_STANDARD_INDICATORS) {
   const global = BASE44_GLOBAL_ORDER[item.code]
   if (global != null) (item as { display_order: number }).display_order = global
@@ -472,4 +474,3 @@ export function sortCatalogAreas(areas: string[]) {
     return (leftIndex === -1 ? 99 : leftIndex) - (rightIndex === -1 ? 99 : rightIndex) || left.localeCompare(right, 'pt-BR')
   })
 }
-

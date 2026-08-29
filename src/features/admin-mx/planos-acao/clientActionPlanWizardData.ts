@@ -112,11 +112,11 @@ export async function fetchWizardIndicators(clientId?: string): Promise<{ rows: 
   if (!clientId) return { rows: official, error: null }
 
   const packageResult = await fetchClientProductPackage(clientId)
-  if (!packageResult.ok) return { rows: [], error: packageResult.message }
+  if (!packageResult.ok || !packageResult.resolution.items.length) {
+    return { rows: official, error: null }
+  }
 
   const rosterItems = packageResult.resolution.items
-  if (!rosterItems.length) return { rows: [], error: null }
-
   const seen = new Set<string>()
   const rows: WizardIndicator[] = []
   for (const item of rosterItems) {
@@ -131,6 +131,15 @@ export async function fetchWizardIndicators(clientId?: string): Promise<{ rows: 
       unit: officialDefinitionUnit(canon.code),
     })
   }
+
+  // Garantir que todos os indicadores canônicos fiquem disponíveis para seleção
+  for (const off of official) {
+    if (!seen.has(off.metric_key)) {
+      rows.push(off)
+      seen.add(off.metric_key)
+    }
+  }
+
   return { rows, error: null }
 }
 

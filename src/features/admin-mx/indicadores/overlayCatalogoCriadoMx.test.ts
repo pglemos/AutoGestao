@@ -37,8 +37,8 @@ describe('overlay canônico e indicadores criados pela MX', () => {
     expect(legado?.active).toBe(false)
   })
 
-  test('o overlay entrega os 45 canônicos quando o catálogo só tem eles', () => {
+  test('o overlay entrega os 46 canônicos quando o catálogo só tem eles', () => {
     const rows = overlayCanonicalCatalog([])
-    expect(rows).toHaveLength(45)
+    expect(rows).toHaveLength(46)
   })
 })

@@ -17,6 +17,7 @@ import {
 } from '@/components/module/MxModuleVisualPrimitives'
 import { useAuth } from '@/hooks/useAuth'
 import { useStores, useStoresStats, type StoreUpdateFields } from '@/hooks/useStores'
+import { supabase } from '@/lib/supabase'
 import { toast } from '@/lib/toast'
 import { getPreRegistrationLink } from '@/lib/utils'
 import type { Store } from '@/types/database'
@@ -211,13 +212,23 @@ export function AdminClientesPage() {
   const handleHardDeleteConfirm = async () => {
     if (!hardDeleteStore) return
     setHardDeleting(true)
-    const result = await deleteStore(hardDeleteStore.id)
-    setHardDeleting(false)
-    if (!result?.error) {
+    try {
+      const { data, error } = await supabase.rpc('admin_hard_delete_store', {
+        p_store_id: hardDeleteStore.id,
+        p_confirmation: hardDeleteConfirmation.trim(),
+      })
+      if (error) {
+        toast.error(error.message || 'Falha ao excluir loja definitivamente.')
+        return
+      }
       toast.success('Loja excluída com sucesso.')
       setHardDeleteStore(null)
       setHardDeleteConfirmation('')
       await refetchAll()
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Falha ao excluir loja.')
+    } finally {
+      setHardDeleting(false)
     }
   }
 

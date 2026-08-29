@@ -42,11 +42,11 @@ describe('templates de plano de ação — validação', () => {
     expect(draft.items).toHaveLength(1)
   })
 
-  test('usa os 45 indicadores oficiais do Base44 no wizard', () => {
+  test('usa os 46 indicadores oficiais do Base44 no wizard', () => {
     const rows = officialActionPlanIndicatorCatalog()
     const comercial = rows.filter(row => row.category === 'comercial')
 
-    expect(rows).toHaveLength(45)
+    expect(rows).toHaveLength(46)
     expect(comercial).toHaveLength(22)
     expect(comercial.map(row => row.label)).toEqual([
       'Conversão de Visitas em Vendas',

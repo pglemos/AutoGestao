@@ -26,18 +26,21 @@ export async function saveTeamMember(draft: TeamMemberDraft): Promise<{ error: s
   const errors = validateTeamMemberDraft(draft)
   if (errors.length) return { error: errors[0] }
 
-  const { error } = await supabase
-    .from('usuarios')
-    .update({
+  const { data, error } = await supabase.rpc('admin_update_usuario', {
+    p_user_id: draft.id,
+    p_payload: {
       name: draft.name.trim(),
       email: draft.email.trim().toLowerCase(),
       phone: draft.phone.trim() || null,
       role: draft.role,
       active: draft.active,
-      updated_at: new Date().toISOString(),
-    })
-    .eq('id', draft.id)
-  return { error: error?.message ?? null }
+    },
+  })
+  if (error) return { error: error.message }
+  if (data && typeof data === 'object' && 'ok' in data && !(data as { ok: boolean }).ok) {
+    return { error: (data as { error?: string }).error ?? 'Falha ao atualizar usuário.' }
+  }
+  return { error: null }
 }
 
 /**
@@ -45,16 +48,18 @@ export async function saveTeamMember(draft: TeamMemberDraft): Promise<{ error: s
  * os planos criados continuam rastreáveis.
  */
 export async function deactivateTeamMember(userId: string, reason: string): Promise<{ error: string | null }> {
-  const { error } = await supabase
-    .from('usuarios')
-    .update({
+  const { data, error } = await supabase.rpc('admin_update_usuario', {
+    p_user_id: userId,
+    p_payload: {
       active: false,
       deactivated_at: new Date().toISOString(),
       deactivation_reason: reason.trim() || 'Desativado pela administração MX.',
-      updated_at: new Date().toISOString(),
-    })
-    .eq('id', userId)
+    },
+  })
   if (error) return { error: error.message }
+  if (data && typeof data === 'object' && 'ok' in data && !(data as { ok: boolean }).ok) {
+    return { error: (data as { error?: string }).error ?? 'Falha ao desativar usuário.' }
+  }
 
   const { error: assignmentsError } = await supabase
     .from('atribuicoes_consultoria')
@@ -65,11 +70,19 @@ export async function deactivateTeamMember(userId: string, reason: string): Prom
 }
 
 export async function reactivateTeamMember(userId: string): Promise<{ error: string | null }> {
-  const { error } = await supabase
-    .from('usuarios')
-    .update({ active: true, deactivated_at: null, deactivation_reason: null, updated_at: new Date().toISOString() })
-    .eq('id', userId)
-  return { error: error?.message ?? null }
+  const { data, error } = await supabase.rpc('admin_update_usuario', {
+    p_user_id: userId,
+    p_payload: {
+      active: true,
+      deactivated_at: null,
+      deactivation_reason: null,
+    },
+  })
+  if (error) return { error: error.message }
+  if (data && typeof data === 'object' && 'ok' in data && !(data as { ok: boolean }).ok) {
+    return { error: (data as { error?: string }).error ?? 'Falha ao reativar usuário.' }
+  }
+  return { error: null }
 }
 
 export type TeamAssignment = { id: string; client_id: string | null; assignment_role: string | null; active: boolean | null }

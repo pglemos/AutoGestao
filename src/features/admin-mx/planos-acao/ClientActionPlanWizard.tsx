@@ -22,6 +22,7 @@ import {
   type WizardAction,
   type WizardStep,
 } from './actionPlanWizardLogic'
+import { normalizeTemplateKey } from './actionPlanTemplates'
 import {
   fetchWizardClients,
   fetchWizardIndicators,
@@ -192,7 +193,7 @@ export function ClientActionPlanWizard(props: {
       }
 
       if (form.alsoCreateTemplate && form.actions.length) {
-        const templateKey = `plano_${form.department.toLowerCase().replace(/[^a-z0-9_]/g, '_')}`
+        const templateKey = normalizeTemplateKey(`plano_${form.department}_${Date.now()}`)
         const { error: templateError } = await supabase.from('planos_acao_templates').insert({
           template_key: templateKey,
           nome: form.title.trim(),

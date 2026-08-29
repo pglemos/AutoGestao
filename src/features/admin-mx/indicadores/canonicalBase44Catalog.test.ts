@@ -18,8 +18,9 @@ import {
 } from './canonicalBase44Catalog'
 
 describe('catálogo canônico Base44', () => {
-  test('tem 45 indicadores oficiais com 27 calculáveis', () => {
-    expect(BASE44_STANDARD_INDICATORS).toHaveLength(45)
+  test('tem 46 indicadores oficiais com 19 digitáveis e 27 calculáveis', () => {
+    expect(BASE44_STANDARD_INDICATORS).toHaveLength(46)
+    expect(BASE44_STANDARD_INDICATORS.filter(item => item.target_calculation_mode === 'MANUAL')).toHaveLength(19)
     expect(BASE44_STANDARD_INDICATORS.filter(item => item.target_calculation_mode !== 'MANUAL')).toHaveLength(27)
     expect(officialUnitLabel('SALES_WALKIN')).toBe('veículos')
     expect(officialUnitLabel('TRADE_SALES_PERCENTAGE')).toBe('%')
@@ -29,6 +30,14 @@ describe('catálogo canônico Base44', () => {
     expect(officialDefinitionUnit('INTERNET_INVESTMENT')).toBe('Moeda')
     expect(officialDefinitionDirection('SALES_TOTAL')).toBe('AUMENTAR')
     expect(officialDefinitionDirection('APPOINTMENTS_PER_INTERNET_SALE')).toBe('DIMINUIR')
+    expect(matchCanonicalIndicator('VOLUME_DE_LEADS_POR_VENDA')).toMatchObject({
+      name: 'Volume de Leads por Venda',
+      department: 'MARKETING',
+      target_calculation_mode: 'MANUAL',
+      display_order: 26,
+    })
+    expect(officialDefinitionUnit('VOLUME_DE_LEADS_POR_VENDA')).toBe('Número decimal')
+    expect(officialUnitLabel('VOLUME_DE_LEADS_POR_VENDA')).toBe('leads/venda')
   })
 
   test('reconhece chaves MX e códigos oficiais', () => {
@@ -59,7 +68,7 @@ describe('catálogo canônico Base44', () => {
     expect(rewritten).toBe('IND("sales_door_flow") + IND("sales_referral")')
   })
 
-  test('reconstrói os 45 oficiais e arquiva extras MX', () => {
+  test('reconstrói os 46 oficiais e arquiva extras MX', () => {
     const rows = overlayCanonicalCatalog([
       {
         metric_key: 'sales_door_flow',
@@ -114,9 +123,9 @@ describe('catálogo canônico Base44', () => {
     ])
     const live = rows.filter(row => row.status !== 'arquivado')
     const archived = rows.filter(row => row.status === 'arquivado')
-    expect(live).toHaveLength(45)
+    expect(live).toHaveLength(46)
     expect(live.filter(row => row.area === 'Comercial')).toHaveLength(22)
-    expect(live.filter(row => row.target_calculation_mode === 'MANUAL')).toHaveLength(18)
+    expect(live.filter(row => row.target_calculation_mode === 'MANUAL')).toHaveLength(19)
     expect(live.filter(row => row.target_calculation_mode !== 'MANUAL')).toHaveLength(27)
     expect(sortCatalogAreas([...new Set(live.map(row => row.area))])).toEqual([
       'Comercial',

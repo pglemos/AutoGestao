@@ -132,9 +132,9 @@ export async function fetchTeamUserDetail(userId: string): Promise<TeamUserDetai
 }
 
 export async function saveUserPersonal(userId: string, draft: UserPersonalDraft): Promise<{ error: string | null }> {
-  const { error } = await supabase
-    .from('usuarios')
-    .update({
+  const { data, error } = await supabase.rpc('admin_update_usuario', {
+    p_user_id: userId,
+    p_payload: {
       name: draft.full_name.trim(),
       preferred_name: draft.preferred_name.trim() || null,
       birth_date: draft.birth_date || null,
@@ -145,24 +145,29 @@ export async function saveUserPersonal(userId: string, draft: UserPersonalDraft)
       entry_date: draft.entry_date || null,
       notes: draft.notes.trim() || null,
       relationship_consent: draft.relationship_consent,
-      updated_at: new Date().toISOString(),
-    })
-    .eq('id', userId)
-  return { error: error?.message ?? null }
+    },
+  })
+  if (error) return { error: error.message }
+  if (data && typeof data === 'object' && 'ok' in data && !(data as { ok: boolean }).ok) {
+    return { error: (data as { error?: string }).error ?? 'Falha ao salvar dados pessoais.' }
+  }
+  return { error: null }
 }
 
 export async function saveUserAccess(userId: string, status: string, activatedAt: string): Promise<{ error: string | null }> {
   const active = status !== 'DESATIVADO' && status !== 'SUSPENSO'
-  const { error } = await supabase
-    .from('usuarios')
-    .update({
+  const { data, error } = await supabase.rpc('admin_update_usuario', {
+    p_user_id: userId,
+    p_payload: {
       active,
       deactivated_at: status === 'DESATIVADO' ? new Date().toISOString() : null,
       deactivation_reason: status === 'DESATIVADO' ? 'Desativado na edição de usuário.' : null,
-      updated_at: new Date().toISOString(),
-    })
-    .eq('id', userId)
+    },
+  })
   if (error) return { error: error.message }
+  if (data && typeof data === 'object' && 'ok' in data && !(data as { ok: boolean }).ok) {
+    return { error: (data as { error?: string }).error ?? 'Falha ao atualizar acesso do usuário.' }
+  }
 
   if (status === 'DESATIVADO') {
     const now = todayIso()
@@ -195,11 +200,17 @@ export async function saveUserAccess(userId: string, status: string, activatedAt
 }
 
 export async function saveDefaultView(userId: string, defaultView: string): Promise<{ error: string | null }> {
-  const { error } = await supabase
-    .from('usuarios')
-    .update({ default_view: defaultView || null, updated_at: new Date().toISOString() })
-    .eq('id', userId)
-  return { error: error?.message ?? null }
+  const { data, error } = await supabase.rpc('admin_update_usuario', {
+    p_user_id: userId,
+    p_payload: {
+      default_view: defaultView || null,
+    },
+  })
+  if (error) return { error: error.message }
+  if (data && typeof data === 'object' && 'ok' in data && !(data as { ok: boolean }).ok) {
+    return { error: (data as { error?: string }).error ?? 'Falha ao salvar visão padrão.' }
+  }
+  return { error: null }
 }
 
 export async function addRoleGrant(userId: string, grant: RoleGrantDraft): Promise<{ error: string | null }> {

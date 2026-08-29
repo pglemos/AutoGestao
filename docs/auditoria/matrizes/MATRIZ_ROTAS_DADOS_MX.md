@@ -6,7 +6,7 @@
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
 - Tabelas referenciadas pelo runtime: **179**
-- RPCs referenciadas pelo runtime: **103**
+- RPCs referenciadas pelo runtime: **104**
 - Edge Functions invocadas pelo runtime: **14**
 - Pares tabela/operação encontrados: **383**
 
@@ -306,7 +306,7 @@
 | `universidade_certificacoes` | 1 |
 | `universidade_trilhas` | 1 |
 | `user_roles` | 1 |
-| `usuarios` | 33 |
+| `usuarios` | 32 |
 | `valores_indicadores_planejamento` | 2 |
 | `valores_indicadores_planejamento_vigentes` | 4 |
 | `valores_parametros_consultoria` | 3 |
@@ -672,7 +672,7 @@
 | `usuarios:delete` | 2 |
 | `usuarios:insert` | 1 |
 | `usuarios:select` | 30 |
-| `usuarios:update` | 6 |
+| `usuarios:update` | 3 |
 | `usuarios:upsert` | 1 |
 | `valores_indicadores_planejamento_vigentes:select` | 4 |
 | `valores_indicadores_planejamento:select` | 2 |
@@ -718,10 +718,11 @@
 | `adicionar_indicador_ciclo_plano` | 1 |
 | `admin_archive_store` | 1 |
 | `admin_create_store` | 1 |
-| `admin_hard_delete_store` | 2 |
+| `admin_hard_delete_store` | 3 |
 | `admin_restore_store` | 1 |
 | `admin_store_live_overview` | 1 |
 | `admin_update_store` | 1 |
+| `admin_update_usuario` | 2 |
 | `aplicar_regularizacao_fechamento` | 1 |
 | `archive_action_plan_template` | 1 |
 | `atribuir_trilha_maturidade_vendedor` | 1 |
@@ -810,7 +811,7 @@
 | `submit_checkin` | 2 |
 | `toggle_action_plan_checklist_item` | 1 |
 | `update_d1_confirmation` | 1 |
-| `update_my_profile` | 1 |
+| `update_my_profile` | 2 |
 | `upsert_funnel_metrics_snapshot` | 1 |
 | `validar_ciclo_plano_estrategico` | 1 |
 | `vendedor_concluir_execution_action` | 1 |

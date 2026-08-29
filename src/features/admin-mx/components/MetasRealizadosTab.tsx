@@ -1,5 +1,5 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
-import { Check, Copy, Download, History, RefreshCw, Save, Target, Upload } from 'lucide-react'
+import { Check, Copy, Download, History, RefreshCw, Save, Search, Target, Upload } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { Modal } from '@/components/organisms/Modal'
@@ -89,6 +89,10 @@ export function MetasRealizadosTab(props: {
   const [scope, setScope] = useState<string>('')
   const [scopeNotice, setScopeNotice] = useState<string | null>(null)
   const [formulas, setFormulas] = useState<Record<string, string | null>>({})
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedDepartment, setSelectedDepartment] = useState('todos')
+  const [selectedType, setSelectedType] = useState<'todos' | 'digitaveis' | 'calculados'>('todos')
+  const [savingAll, setSavingAll] = useState(false)
 
   const refetch = useCallback(async () => {
     if (!storeId) {
@@ -293,6 +297,119 @@ export function MetasRealizadosTab(props: {
     })
   }
 
+  const replicateMonthToAll = (code: string, field: 'meta' | 'realizado' | 'ano_anterior', sourceMonth: number = 1) => {
+    const indicator = props.indicators.find(item => item.code === code)
+    if (!indicator || !isPlanningFieldEditable(indicator, field)) return
+    const sourceValue = grid[code]?.[sourceMonth]?.[field] ?? null
+    setRows(current => {
+      const next = [...current]
+      for (let m = 1; m <= 12; m++) {
+        const index = next.findIndex(row => row.indicator_code === code && row.month === m)
+        if (index >= 0) {
+          next[index] = { ...next[index], [field]: sourceValue }
+        } else {
+          next.push({
+            loja_id: storeId,
+            indicator_code: code,
+            year,
+            month: m,
+            meta: field === 'meta' ? sourceValue : null,
+            realizado: field === 'realizado' ? sourceValue : null,
+            ano_anterior: field === 'ano_anterior' ? sourceValue : null,
+          })
+        }
+      }
+      return next
+    })
+    toast.success(`Valor de ${MONTH_LABELS[sourceMonth - 1]} aplicado a todos os meses (Jan–Dez) para ${indicator.name}.`)
+  }
+
+  const replicateAllJanToAllMonths = (field: 'meta' | 'realizado' | 'ano_anterior' = 'meta') => {
+    const editableIndicators = props.indicators.filter(ind => !ind.calculado && isPlanningFieldEditable(ind, field))
+    if (!editableIndicators.length) return
+    setRows(current => {
+      const next = [...current]
+      for (const ind of editableIndicators) {
+        const janVal = grid[ind.code]?.[1]?.[field] ?? null
+        for (let m = 1; m <= 12; m++) {
+          const index = next.findIndex(row => row.indicator_code === ind.code && row.month === m)
+          if (index >= 0) {
+            next[index] = { ...next[index], [field]: janVal }
+          } else {
+            next.push({
+              loja_id: storeId,
+              indicator_code: ind.code,
+              year,
+              month: m,
+              meta: field === 'meta' ? janVal : null,
+              realizado: field === 'realizado' ? janVal : null,
+              ano_anterior: field === 'ano_anterior' ? janVal : null,
+            })
+          }
+        }
+      }
+      return next
+    })
+    toast.success(`Valores de Janeiro aplicados a todos os meses (Jan–Dez) em ${editableIndicators.length} indicadores.`)
+  }
+
+  const saveAllChanges = async () => {
+    if (!storeId || isConsolidated) return
+    setSavingAll(true)
+    try {
+      const editableIndicators = props.indicators.filter(ind => !ind.calculado)
+      let savedCount = 0
+      for (const ind of editableIndicators) {
+        const metaValues = Array.from({ length: 12 }, (_, index) => grid[ind.code]?.[index + 1]?.meta ?? null)
+        const hasAnyMeta = metaValues.some(v => v !== null)
+        if (hasAnyMeta) {
+          await saveIndicatorTargets({ lojaId: storeId, indicatorCode: ind.code, year, values: metaValues, cicloId: props.cicloId })
+          savedCount++
+        }
+      }
+      toast.success(`${savedCount} indicadores de metas salvos com sucesso!`)
+      props.onSaved?.()
+      await refetch()
+      clientScope.reload()
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Falha ao salvar metas.')
+    } finally {
+      setSavingAll(false)
+    }
+  }
+
+  const departmentCounts = useMemo(() => {
+    const counts: Record<string, { total: number; filled: number }> = {}
+    for (const ind of props.indicators) {
+      const dept = ind.department || 'Outros'
+      if (!counts[dept]) counts[dept] = { total: 0, filled: 0 }
+      counts[dept].total++
+      const hasMeta = Array.from({ length: 12 }, (_, i) => grid[ind.code]?.[i + 1]?.meta).some(v => v != null)
+      if (hasMeta) counts[dept].filled++
+    }
+    return counts
+  }, [props.indicators, grid])
+
+  const filteredIndicators = useMemo(() => {
+    return props.indicators.filter(indicator => {
+      if (selectedDepartment !== 'todos') {
+        const deptNorm = (indicator.department ?? '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        const selNorm = selectedDepartment.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        if (!deptNorm.includes(selNorm) && !selNorm.includes(deptNorm)) return false
+      }
+      if (selectedType === 'digitaveis' && indicator.calculado) return false
+      if (selectedType === 'calculados' && !indicator.calculado) return false
+      if (searchTerm.trim()) {
+        const query = searchTerm.toLowerCase().trim()
+        const nameMatch = indicator.name.toLowerCase().includes(query)
+        const codeMatch = indicator.code.toLowerCase().includes(query)
+        const displayMatch = (indicator.displayCode ?? '').toLowerCase().includes(query)
+        if (!nameMatch && !codeMatch && !displayMatch) return false
+      }
+      return true
+    })
+  }, [props.indicators, searchTerm, selectedDepartment, selectedType])
+
   const exportXlsx = async () => {
     try {
       const { exportWorkbookToExcel } = await import('@/lib/export')
@@ -338,6 +455,12 @@ export function MetasRealizadosTab(props: {
           description="Cadastro rápido, importação/exportação de planilha, histórico com reversão e cópia entre lojas."
           actions={(
             <div className="flex flex-wrap items-center gap-2">
+              <Button variant="primary" onClick={() => void saveAllChanges()} disabled={!storeId || isConsolidated || savingAll}>
+                <Save size={16} />{savingAll ? 'Salvando tudo...' : 'Salvar todas as metas'}
+              </Button>
+              <Button variant="outline" onClick={() => replicateAllJanToAllMonths('meta')} disabled={!storeId || isConsolidated} title="Replicar valor de Janeiro para os demais meses em todos os indicadores">
+                <Copy size={16} />Replicar Jan em todos os meses
+              </Button>
               <Button variant="outline" onClick={() => void refetch()}><RefreshCw size={16} />Atualizar</Button>
               <Button variant="outline" onClick={() => void exportXlsx()} disabled={!storeId || props.indicators.length === 0}><Download size={16} />Exportar metas preenchidas</Button>
               <Button variant="outline" onClick={() => void downloadBlankTemplate()} disabled={!storeId || props.indicators.length === 0}><Download size={16} />Baixar modelo em branco</Button>
@@ -383,26 +506,110 @@ export function MetasRealizadosTab(props: {
             </MxStatusBanner>
           ) : null}
 
-          <MxSectionCard>
-            <MxSectionHeader
-              title="Resumo Calculado"
-              description={`Resultados derivados em tempo real · mês de conferência: ${MONTH_LABELS[conferenceMonth - 1]}`}
-            />
-            <div className="p-5">
-              <MxMetricGrid>
-                {resumoCalculado.map(item => (
-                  <MxMetricCard
-                    key={item.code}
-                    title={item.label}
-                    value={formatDisplay(item.monthValue, getFormatConfig('number', 0))}
-                    detail={item.annual == null ? 'Sem base anual' : `Anual ${formatDisplay(item.annual, getFormatConfig('number', 0))}`}
-                    icon={Target}
-                    tone={item.monthValue == null ? 'neutral' : 'info'}
+          <div className="mb-5">
+            <MxSectionCard>
+              <MxSectionHeader
+                title="Resumo Calculado"
+                description={`Resultados derivados em tempo real · mês de conferência: ${MONTH_LABELS[conferenceMonth - 1]}`}
+              />
+              <div className="p-5">
+                <MxMetricGrid>
+                  {resumoCalculado.map(item => (
+                    <MxMetricCard
+                      key={item.code}
+                      title={item.label}
+                      value={formatDisplay(item.monthValue, getFormatConfig('number', 0))}
+                      detail={item.annual == null ? 'Sem base anual' : `Anual ${formatDisplay(item.annual, getFormatConfig('number', 0))}`}
+                      icon={Target}
+                      tone={item.monthValue == null ? 'neutral' : 'info'}
+                    />
+                  ))}
+                </MxMetricGrid>
+              </div>
+            </MxSectionCard>
+          </div>
+
+          {/* Barra de Filtros e Departamentos estilo Base44 */}
+          <div className="mb-4 space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-1 items-center gap-2 max-w-md">
+                <div className="relative w-full">
+                  <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    placeholder="Buscar por nome ou código..."
+                    value={searchTerm}
+                    onChange={e => setSearchTerm(e.target.value)}
+                    className="pl-9"
+                    aria-label="Buscar indicadores"
                   />
-                ))}
-              </MxMetricGrid>
+                </div>
+                {searchTerm ? (
+                  <Button variant="ghost" size="sm" onClick={() => setSearchTerm('')}>Limpar</Button>
+                ) : null}
+              </div>
+
+              <div className="flex items-center gap-1 rounded-md border border-border p-1 bg-background-muted/30">
+                <button
+                  type="button"
+                  onClick={() => setSelectedType('todos')}
+                  className={`px-3 py-1 text-xs font-medium rounded ${selectedType === 'todos' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+                >
+                  Todos ({props.indicators.length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedType('digitaveis')}
+                  className={`px-3 py-1 text-xs font-medium rounded ${selectedType === 'digitaveis' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+                >
+                  Digitáveis ({props.indicators.filter(i => !i.calculado).length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedType('calculados')}
+                  className={`px-3 py-1 text-xs font-medium rounded ${selectedType === 'calculados' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+                >
+                  Calculados ({props.indicators.filter(i => i.calculado).length})
+                </button>
+              </div>
             </div>
-          </MxSectionCard>
+
+            {/* Departamentos */}
+            <div className="flex flex-wrap gap-2 pt-1 border-t border-border/50">
+              <button
+                type="button"
+                onClick={() => setSelectedDepartment('todos')}
+                className={`px-3 py-1.5 text-xs font-medium rounded-md border transition-all ${
+                  selectedDepartment === 'todos'
+                    ? 'bg-primary text-primary-foreground border-primary'
+                    : 'bg-card text-foreground border-border hover:bg-muted'
+                }`}
+              >
+                Todos os Departamentos
+              </button>
+              {['Comercial', 'Marketing', 'Produto e Estoque', 'Financeiro', 'Operações', 'Pessoas - RH'].map(dept => {
+                const count = departmentCounts[dept]
+                return (
+                  <button
+                    key={dept}
+                    type="button"
+                    onClick={() => setSelectedDepartment(dept)}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-md border transition-all flex items-center gap-1.5 ${
+                      selectedDepartment === dept
+                        ? 'bg-primary text-primary-foreground border-primary shadow-sm'
+                        : 'bg-card text-foreground border-border hover:bg-muted'
+                    }`}
+                  >
+                    <span>{dept}</span>
+                    {count ? (
+                      <span className={`text-caption px-1.5 py-0.5 rounded-full ${selectedDepartment === dept ? 'bg-white/20 text-white' : 'bg-muted text-muted-foreground'}`}>
+                        {count.filled}/{count.total}
+                      </span>
+                    ) : null}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
 
           {loading ? <MxLoadingState label="Carregando metas" /> : error ? <MxErrorState description={error} retry={() => void refetch()} /> : (
             <div className="overflow-x-auto">
@@ -416,7 +623,13 @@ export function MetasRealizadosTab(props: {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {props.indicators.map(indicator => {
+                    {filteredIndicators.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={14} className="text-center py-8 text-muted-foreground text-sm">
+                          Nenhum indicador encontrado para os filtros selecionados.
+                        </TableCell>
+                      </TableRow>
+                    ) : filteredIndicators.map(indicator => {
                       const config = getFormatConfig(indicator.value_type ?? 'number', indicator.casas_decimais ?? 0)
                       const metaKey = `meta:${indicator.code}`
                       const actualKey = `realizado:${indicator.code}`
@@ -457,6 +670,17 @@ export function MetasRealizadosTab(props: {
                             })}
                             <TableCell className="text-right">
                               <div className="flex justify-end gap-1">
+                                {!indicator.calculado && !isConsolidated ? (
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    aria-label={`Replicar Jan em todos os meses para ${indicator.name}`}
+                                    title="Replicar valor de Janeiro para os demais meses (Fev-Dez)"
+                                    onClick={() => replicateMonthToAll(indicator.code, 'meta', 1)}
+                                  >
+                                    <Copy size={14} className="mr-1" /> Replicar Jan
+                                  </Button>
+                                ) : null}
                                 <Button variant="outline" size="sm" aria-label={`Abrir histórico de ${indicator.name}`} title={`Abrir histórico de ${indicator.name}`} onClick={() => setHistoryFor(indicator.code)} disabled={savingKey === metaKey}><History size={14} /></Button>
                                 {!indicator.calculado && !isConsolidated ? (
                                   <Button variant="outline" size="sm" aria-label={`Salvar metas de ${indicator.name}`} title={`Salvar metas de ${indicator.name}`} onClick={() => void saveIndicator(indicator.code, 'meta')} disabled={savingKey === metaKey}>
@@ -502,6 +726,15 @@ export function MetasRealizadosTab(props: {
                             <TableCell className="text-right">
                               {!isConsolidated && isPlanningFieldEditable(indicator, 'realizado') ? (
                                 <div className="flex justify-end gap-1">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    aria-label={`Replicar Jan em todos os meses para realizado de ${indicator.name}`}
+                                    title="Replicar realizado de Janeiro para os demais meses"
+                                    onClick={() => replicateMonthToAll(indicator.code, 'realizado', 1)}
+                                  >
+                                    <Copy size={14} className="mr-1" /> Replicar Jan
+                                  </Button>
                                   <Button variant="outline" size="sm" aria-label={`Salvar realizado de ${indicator.name}`} title={`Salvar realizado de ${indicator.name}`} onClick={() => void saveIndicator(indicator.code, 'realizado')} disabled={savingKey === actualKey}>
                                     {savingKey === actualKey ? <RefreshCw size={14} className="animate-spin" /> : <Save size={14} />}
                                   </Button>
@@ -541,6 +774,15 @@ export function MetasRealizadosTab(props: {
                             <TableCell className="text-right">
                               {!isConsolidated && isPlanningFieldEditable(indicator, 'ano_anterior') ? (
                                 <div className="flex justify-end gap-1">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    aria-label={`Replicar Jan em todos os meses para ano anterior de ${indicator.name}`}
+                                    title="Replicar ano anterior de Janeiro para os demais meses"
+                                    onClick={() => replicateMonthToAll(indicator.code, 'ano_anterior', 1)}
+                                  >
+                                    <Copy size={14} className="mr-1" /> Replicar Jan
+                                  </Button>
                                   <Button variant="outline" size="sm" aria-label={`Salvar ano anterior de ${indicator.name}`} title={`Salvar ano anterior de ${indicator.name}`} onClick={() => void saveIndicator(indicator.code, 'ano_anterior')} disabled={savingKey === previousKey}>
                                     {savingKey === previousKey ? <RefreshCw size={14} className="animate-spin" /> : <Save size={14} />}
                                   </Button>

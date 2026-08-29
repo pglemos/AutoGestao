@@ -231,11 +231,13 @@ export const base44 = {
 
         // Update usuarios
         if (data.full_name || data.phone || data.avatar_url) {
-          await supabase.from('usuarios').update({
-            name: data.full_name,
-            phone: data.phone,
-            avatar_url: data.avatar_url
-          }).eq('id', me.id);
+          await supabase.rpc('update_my_profile', {
+            p_updates: {
+              name: data.full_name,
+              phone: data.phone,
+              avatar_url: data.avatar_url,
+            },
+          });
         }
 
         // Update vendedor_perfil
