@@ -23,7 +23,7 @@ export interface VisitCardData {
   fora_do_contrato?: boolean
   google_meet_link?: string | null
   status: string
-  consultant?: { name: string } | null
+  consultant?: { name: string | null } | null
 }
 
 export interface VisitCardProps {

@@ -161,8 +161,8 @@ export interface ConsultingVisit {
   attachments?: ConsultingVisitAttachment[]
   created_at: string
   updated_at: string
-  consultant?: { name: string; email: string } | null
-  auxiliary_consultant?: { name: string; email: string } | null
+  consultant?: { name: string | null; email: string | null } | null
+  auxiliary_consultant?: { name: string | null; email: string | null } | null
 }
 
 export interface ConsultingFinancial {
