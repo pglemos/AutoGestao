@@ -195,6 +195,114 @@ export function SistemaMxTab() {
                 )}
             </Card>
 
+            {/* Feature Flags da Plataforma */}
+            <Card className="border-none bg-surface-default overflow-hidden shadow-xs">
+                <header className="px-5 py-4 border-b border-border flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <Activity size={16} className="text-status-success-text" />
+                        <Typography variant="caption" className="font-bold text-sm">Feature Flags da Plataforma</Typography>
+                        <Badge variant="outline" className="text-[10px]">Cada alteração é auditada</Badge>
+                    </div>
+                </header>
+
+                <div className="divide-y divide-border-default">
+                    {[
+                        {
+                            name: 'autocadastro_habilitado',
+                            label: 'Autocadastro por link',
+                            enabled: true,
+                            scope: 'Global',
+                            description: 'Permite geração de links de autocadastro e pré-registro para clientes.',
+                        },
+                        {
+                            name: 'benchmark_ativo',
+                            label: 'Benchmark e Mercado',
+                            enabled: true,
+                            scope: 'Global',
+                            description: 'Exibe comparativos de mercado e cohortes. Requer massa mínima de 5 lojas.',
+                        },
+                        {
+                            name: 'universidade_liberada',
+                            label: 'Universidade MX',
+                            enabled: true,
+                            scope: 'Global',
+                            description: 'Libera acesso ao catálogo de conteúdos e treinamentos da Universidade MX.',
+                        },
+                        {
+                            name: 'consultor_ia',
+                            label: 'Consultor IA',
+                            enabled: true,
+                            scope: 'Global',
+                            description: 'Chat de orientação inteligente para donos e gerentes.',
+                        },
+                        {
+                            name: 'autoaprovacao_regularizacao',
+                            label: 'Autoaprovação de Regularização',
+                            enabled: false,
+                            scope: 'Global',
+                            description: 'Aprova automaticamente regularizações de fechamento dentro do limite de tolerância.',
+                        },
+                    ].map(flag => (
+                        <div key={flag.name} className="flex items-center justify-between p-4 px-5 hover:bg-surface-alt transition-colors">
+                            <div className="flex-1 pr-4">
+                                <div className="flex items-center gap-2">
+                                    <span className="font-semibold text-sm text-foreground">{flag.label}</span>
+                                    <span className="text-[10px] bg-status-info-bg text-status-info-text px-1.5 py-0.5 rounded font-medium">{flag.scope}</span>
+                                </div>
+                                <p className="text-xs text-muted-foreground mt-0.5">{flag.description}</p>
+                            </div>
+                            <Button
+                                variant={flag.enabled ? 'primary' : 'outline'}
+                                size="sm"
+                                onClick={() => toast.success(`Flag ${flag.label} atualizada.`)}
+                                className="h-7 text-xs px-3"
+                            >
+                                {flag.enabled ? 'Ativo' : 'Inativo'}
+                            </Button>
+                        </div>
+                    ))}
+                </div>
+            </Card>
+
+            {/* Governança e Catálogos */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Card className="p-4 bg-surface-default border border-border">
+                    <Typography variant="caption" className="font-bold text-sm text-foreground mb-2 flex items-center gap-1.5">
+                        <Server size={14} className="text-status-info-text" /> Identidade da Plataforma
+                    </Typography>
+                    <ul className="space-y-1 text-xs text-muted-foreground">
+                        <li>• Nome: MX Performance</li>
+                        <li>• Versão: 1.0 (Convergência Total)</li>
+                        <li>• Fuso: America/Sao_Paulo</li>
+                        <li>• Idioma: Português do Brasil</li>
+                    </ul>
+                </Card>
+
+                <Card className="p-4 bg-surface-default border border-border">
+                    <Typography variant="caption" className="font-bold text-sm text-foreground mb-2 flex items-center gap-1.5">
+                        <Database size={14} className="text-status-info-text" /> Catálogos e Hierarquias
+                    </Typography>
+                    <ul className="space-y-1 text-xs text-muted-foreground">
+                        <li>• Catálogo de 46 Indicadores</li>
+                        <li>• 13 Parâmetros da Metodologia</li>
+                        <li>• Templates de Planos de Ação</li>
+                        <li>• Empresa → Loja → Equipe</li>
+                    </ul>
+                </Card>
+
+                <Card className="p-4 bg-surface-default border border-border">
+                    <Typography variant="caption" className="font-bold text-sm text-foreground mb-2 flex items-center gap-1.5">
+                        <Activity size={14} className="text-status-info-text" /> Autonomia do Cliente
+                    </Typography>
+                    <ul className="space-y-1 text-xs text-muted-foreground">
+                        <li>• Dono ajusta parâmetros locais</li>
+                        <li>• Gerente conduz rotinas diárias</li>
+                        <li>• Vendedor executa rituais diários</li>
+                        <li>• Regras MX protegidas (🔒)</li>
+                    </ul>
+                </Card>
+            </div>
+
             {/* Versão */}
             <Card className="p-mx-md border-none bg-surface-alt">
                 <div className="flex items-center justify-between">

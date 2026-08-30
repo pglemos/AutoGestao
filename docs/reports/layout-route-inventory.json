@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-30T02:37:12.587Z",
-  "baselineSha": "a4e03b5830f9ea29d58b3ea42b7e54b0eb53f609",
-  "routeCount": 122,
+  "generatedAt": "2026-08-30T08:02:51.666Z",
+  "baselineSha": "3567d2279ebb79be0aea401294496aadfe54540e",
+  "routeCount": 128,
   "routes": [
     {
       "path": "/",
@@ -110,6 +110,26 @@
       "metadata": {
         "width": "dashboard",
         "adopted": true
+      }
+    },
+    {
+      "path": "/benchmark",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:AdminBenchmarkPage",
+        "admin:AdminBenchmarkPage"
+      ],
+      "files": [
+        "src/features/admin-mx/AdminBenchmarkPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
       }
     },
     {
@@ -249,6 +269,27 @@
       }
     },
     {
+      "path": "/clientes/:clientSlug/consultoria",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:AdminConsultoriaEntregasPage"
+      ],
+      "files": [
+        "src/features/admin-mx/consultoria/AdminConsultoriaEntregasPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 1,
+      "metadata": {
+        "width": "wide",
+        "bottomClearance": "navigation",
+        "adopted": true
+      }
+    },
+    {
       "path": "/clientes/:clientSlug/plano-acao",
       "renderCount": 4,
       "routes": [
@@ -285,7 +326,7 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "wide",
+        "width": "dashboard",
         "bottomClearance": "navigation",
         "adopted": true
       }
@@ -306,7 +347,7 @@
       "template": 0,
       "structural": 0,
       "metadata": {
-        "width": "wide",
+        "width": "dashboard",
         "bottomClearance": "navigation",
         "adopted": true
       }
@@ -1142,6 +1183,27 @@
       }
     },
     {
+      "path": "/mapa-funcional",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:AdminMapaFuncionalPage"
+      ],
+      "files": [
+        "src/features/admin-mx/AdminMapaFuncionalPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "wide",
+        "bottomClearance": "navigation",
+        "adopted": true
+      }
+    },
+    {
       "path": "/mentor",
       "renderCount": 4,
       "routes": [
@@ -1379,6 +1441,26 @@
       "canvas": 0,
       "template": 0,
       "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/observabilidade",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:AdminObservabilidadePage"
+      ],
+      "files": [
+        "src/features/admin-mx/AdminObservabilidadePage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 1,
       "metadata": {
         "width": "dashboard",
         "source": "default"
@@ -1724,6 +1806,27 @@
       }
     },
     {
+      "path": "/roteiro-testes",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:AdminRoteiroTestesPage"
+      ],
+      "files": [
+        "src/features/admin-mx/AdminRoteiroTestesPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "wide",
+        "bottomClearance": "navigation",
+        "adopted": true
+      }
+    },
+    {
       "path": "/rotina",
       "renderCount": 4,
       "routes": [
@@ -1967,6 +2070,21 @@
       "renderCount": 1,
       "routes": [
         "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/universidade",
+      "renderCount": 1,
+      "routes": [
+        "*:Navigate"
       ],
       "files": [],
       "canvas": 0,

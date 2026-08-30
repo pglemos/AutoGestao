@@ -86,6 +86,8 @@ export function MetasRealizadosTab(props: {
   stores?: StoreOption[]
   onSaved?: () => void
   cicloId?: string | null
+  clientId?: string
+  clientName?: string
   variant?: 'matrix' | 'quick'
   activeField?: 'meta' | 'realizado' | 'ano_anterior'
   onRegisterSave?: (save: () => Promise<void>) => void
@@ -565,19 +567,28 @@ export function MetasRealizadosTab(props: {
 
   const exportXlsx = async () => {
     try {
-      const { exportWorkbookToExcel } = await import('@/lib/export')
-      const values = Object.fromEntries(props.indicators.map(indicator => [
+      const { generateStoreTargetTemplateBuffer, downloadExcelBuffer } = await import('@/lib/excelTargetTemplateGenerator')
+      const targetIndicators = props.importIndicators ?? props.indicators
+      const activeFieldName = activeField === 'realizado' ? 'ACTUAL' : activeField === 'ano_anterior' ? 'PRIOR_YEAR' : 'TARGET'
+      const storeName = stores.find(store => store.id === storeId)?.name
+      const values = Object.fromEntries(targetIndicators.map(indicator => [
         indicator.code,
-        Array.from({ length: 12 }, (_, index) => grid[indicator.code]?.[index + 1]?.meta ?? null),
+        Array.from({ length: 12 }, (_, index) => grid[indicator.code]?.[index + 1]?.[activeField] ?? null),
       ]))
-      const exported = exportWorkbookToExcel(buildTargetWorkbookSheets({
-        indicators: props.indicators,
-        year,
+      const { buffer, fileName } = generateStoreTargetTemplateBuffer({
+        clientName: props.clientName,
+        clientId: props.clientId,
+        cycleId: props.cicloId,
+        referenceYear: year,
         storeId,
-        storeName: stores.find(store => store.id === storeId)?.name,
+        storeName,
+        scopeType: isConsolidated ? 'CONSOLIDATED' : 'STORE',
+        viewType: activeFieldName,
+        indicators: targetIndicators,
         values,
-      }), `METAS_${year}_${storeId.slice(0, 8)}`)
-      if (!exported) throw new Error('Não foi possível exportar.')
+        isBlankModel: false,
+      })
+      downloadExcelBuffer(buffer, fileName)
       toast.success('Metas preenchidas exportadas.')
     } catch (cause) {
       toast.error(cause instanceof Error ? cause.message : 'Não foi possível exportar.')
@@ -586,14 +597,23 @@ export function MetasRealizadosTab(props: {
 
   const downloadBlankTemplate = async () => {
     try {
-      const { exportWorkbookToExcel } = await import('@/lib/export')
-      const exported = exportWorkbookToExcel(buildTargetWorkbookSheets({
-        indicators: props.indicators,
-        year,
+      const { generateStoreTargetTemplateBuffer, downloadExcelBuffer } = await import('@/lib/excelTargetTemplateGenerator')
+      const targetIndicators = props.importIndicators ?? props.indicators
+      const activeFieldName = activeField === 'realizado' ? 'ACTUAL' : activeField === 'ano_anterior' ? 'PRIOR_YEAR' : 'TARGET'
+      const storeName = stores.find(store => store.id === storeId)?.name
+      const { buffer, fileName } = generateStoreTargetTemplateBuffer({
+        clientName: props.clientName,
+        clientId: props.clientId,
+        cycleId: props.cicloId,
+        referenceYear: year,
         storeId,
-        storeName: stores.find(store => store.id === storeId)?.name,
-      }), `MODELO_METAS_${year}_${storeId.slice(0, 8)}`)
-      if (!exported) throw new Error('Não foi possível gerar o modelo.')
+        storeName,
+        scopeType: isConsolidated ? 'CONSOLIDATED' : 'STORE',
+        viewType: activeFieldName,
+        indicators: targetIndicators,
+        isBlankModel: true,
+      })
+      downloadExcelBuffer(buffer, fileName)
       toast.success('Modelo em branco baixado.')
     } catch (cause) {
       toast.error(cause instanceof Error ? cause.message : 'Não foi possível gerar o modelo.')

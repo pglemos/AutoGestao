@@ -75,6 +75,11 @@ const AdminIndicadoresPage = lazy(() => import('@/features/admin-mx/AdminIndicad
 const AdminPlanosAcaoGlobalPage = lazy(() => import('@/features/admin-mx/AdminPlanosAcaoGlobalPage'))
 const AdminConsultoriaMxPage = lazy(() => import('@/features/admin-mx/AdminConsultoriaMxPage'))
 const AdminScoresAlertasPage = lazy(() => import('@/features/admin-mx/AdminScoresAlertasPage'))
+const AdminBenchmarkPage = lazy(() => import('@/features/admin-mx/AdminBenchmarkPage'))
+const AdminObservabilidadePage = lazy(() => import('@/features/admin-mx/AdminObservabilidadePage'))
+const AdminMapaFuncionalPage = lazy(() => import('@/features/admin-mx/AdminMapaFuncionalPage'))
+const AdminRoteiroTestesPage = lazy(() => import('@/features/admin-mx/AdminRoteiroTestesPage'))
+const AdminConsultoriaEntregasPage = lazy(() => import('@/features/admin-mx/consultoria/AdminConsultoriaEntregasPage'))
 const AdminDadosConciliacaoPage = lazy(() => import('@/features/admin-mx/AdminDadosConciliacaoPage'))
 const AdminSegurancaAuditoriaPage = lazy(() => import('@/features/admin-mx/AdminSegurancaAuditoriaPage'))
 const AdminSuporteIncidentesPage = lazy(() => import('@/features/admin-mx/AdminSuporteIncidentesPage'))
@@ -519,6 +524,22 @@ export default function App() {
                 </Suspense>} />
                 <Route path="clientes/:clientSlug/plano-estrategico" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} />
+                </Suspense>} />
+                <Route path="universidade" element={<Navigate to="/universidade-mx" replace />} />
+                <Route path="benchmark" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<AdminBenchmarkPage />} admin={<AdminBenchmarkPage />} />
+                </Suspense>} />
+                <Route path="observabilidade" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminObservabilidadePage />} />
+                </Suspense>} />
+                <Route path="mapa-funcional" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminMapaFuncionalPage />} />
+                </Suspense>} />
+                <Route path="roteiro-testes" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminRoteiroTestesPage />} />
+                </Suspense>} />
+                <Route path="clientes/:clientSlug/consultoria" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminConsultoriaEntregasPage />} />
                 </Suspense>} />
                 <Route path="clientes/:clientSlug/plano-acao" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalActionPlanPage />} />

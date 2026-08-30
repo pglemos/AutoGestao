@@ -984,7 +984,7 @@ export function AdminClienteDetalhePage() {
               {client ? <Button variant="outline" onClick={() => setIdentityOpen(true)}><Pencil size={16} />Editar Identificação do Cliente</Button> : null}
               {client ? <Button variant="outline" onClick={() => void openCurrentStrategicPlan()} disabled={creatingStrategicPlan}><Target size={16} />{creatingStrategicPlan ? 'Abrindo...' : strategicPlanReadiness ? 'Abrir Plano' : 'Criar Plano Estratégico'}</Button> : null}
               {client ? <Button variant="outline" onClick={() => { setPlanningTab('plano-acao'); setTab('planejamento') }}><ClipboardList size={16} />Abrir Plano de Ação</Button> : null}
-              {client ? <Button asChild variant="outline"><Link to={`/consultoria?clientId=${encodeURIComponent(client.id)}`}><Sparkles size={16} />Abrir Consultoria</Link></Button> : null}
+              {client ? <Button asChild variant="outline"><Link to={`/clientes/${encodeURIComponent(client.slug || client.id)}/consultoria`}><Sparkles size={16} />Abrir Consultoria</Link></Button> : null}
             </>
           )}
         />
@@ -1061,7 +1061,7 @@ export function AdminClienteDetalhePage() {
                       </span>
                     </div>
                     <p className="mt-2 text-xs text-muted-foreground">{consultingCurrentLine}</p>
-                    <Button asChild variant="outline" size="sm" className="mt-4"><Link to={`/consultoria?clientId=${encodeURIComponent(client.id)}`}>Abrir Consultoria</Link></Button>
+                    <Button asChild variant="outline" size="sm" className="mt-4"><Link to={`/clientes/${encodeURIComponent(client.slug || client.id)}/consultoria`}>Abrir Consultoria</Link></Button>
                   </div>
                 </div>
                 <div className="grid gap-3 p-5 sm:grid-cols-2 lg:grid-cols-3">

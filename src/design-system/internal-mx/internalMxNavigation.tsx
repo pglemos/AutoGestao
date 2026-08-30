@@ -1,4 +1,5 @@
 import {
+  Activity,
   Bell,
   BriefcaseBusiness,
   Building2,
@@ -82,6 +83,7 @@ export function buildInternalMxNavigation(
           activePaths: ['/plano-acao', '/planos-acao'],
         },
         { key: 'admin-scores', label: 'Scores e Alertas', path: '/scores', icon: Target, activePaths: ['/scores', '/scores-alertas'] },
+        { key: 'benchmark', label: 'Benchmark e Mercado', path: '/benchmark', icon: TrendingUp, activePaths: ['/benchmark', '/mercado'] },
         { key: 'ranking', label: 'Ranking', path: '/classificacao', icon: Trophy },
         { key: 'feedback', label: 'Devolutivas', path: '/devolutivas', icon: MessageSquare },
       ],
@@ -103,8 +105,11 @@ export function buildInternalMxNavigation(
           activePaths: ['/dados', '/dados-conciliacao'],
         },
         { key: 'diagnostics', label: 'Auditoria', path: '/auditoria', icon: Database, activePaths: ['/auditoria', '/seguranca'] },
-        { key: 'pmr-settings', label: 'Parâmetros PMR', path: '/configuracoes/consultoria-pmr', icon: Database },
+        { key: 'observability', label: 'Observabilidade', path: '/observabilidade', icon: Activity },
         { key: 'settings', label: 'Configurações', path: '/configuracoes', icon: Settings },
+        { key: 'functional-map', label: 'Mapa Funcional', path: '/mapa-funcional', icon: ClipboardList },
+        { key: 'test-roadmap', label: 'Roteiro de Testes', path: '/roteiro-testes', icon: ClipboardList },
+        { key: 'pmr-settings', label: 'Parâmetros PMR', path: '/configuracoes/consultoria-pmr', icon: Database },
       ],
     },
     {

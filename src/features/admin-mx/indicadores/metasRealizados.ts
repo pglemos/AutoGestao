@@ -6,6 +6,7 @@
 
 import {
   BASE44_GLOBAL_ORDER,
+  BASE44_STANDARD_INDICATORS,
   catalogAliasKeys,
   matchCanonicalIndicator,
   officialCatalogCode,
@@ -104,11 +105,12 @@ export function buildTargetWorkbookSheets(params: {
   storeName?: string
   values?: Record<string, Array<number | null>>
   clientName?: string
+  clientId?: string
   cycleId?: string | null
   scopeType?: string
+  viewType?: 'TARGET' | 'ACTUAL' | 'PRIOR_YEAR'
 }): TargetWorkbookSheet[] {
   const headers = [
-    'Ordem Oficial',
     'Código do Indicador',
     'Departamento',
     'Indicador',
@@ -116,52 +118,73 @@ export function buildTargetWorkbookSheets(params: {
     'Formato',
     ...MONTH_LABELS,
     'Total',
+    'Fonte do Dado',
     'Observação',
   ]
-  const rows = sortTargetIndicators(params.indicators).map(indicator => {
+
+  const roster = BASE44_STANDARD_INDICATORS.map(canonical => {
+    const custom = params.indicators.find(ind => officialCatalogCode(ind.code) === canonical.code)
+    const isCalc = custom?.calculado !== undefined
+      ? custom.calculado
+      : canonical.target_calculation_mode !== 'MANUAL'
+    const name = custom?.name || canonical.name
+    const dept = custom?.department || canonical.area || 'Comercial'
+    const format = custom ? formatLabel(custom) : 'Decimal'
+    return {
+      code: canonical.code,
+      name,
+      department: dept,
+      calculado: isCalc,
+      format,
+    }
+  })
+
+  const rows = roster.map(indicator => {
     const official = officialCatalogCode(indicator.code)
-    const order = BASE44_GLOBAL_ORDER[official] ?? ''
     const monthValues = MONTH_LABELS.map((_, index) => {
       if (indicator.calculado) return 'Calculado'
       const value = params.values?.[indicator.code]?.[index] ?? params.values?.[official]?.[index] ?? null
-      return indicator.value_type === 'percent' && value != null ? value * 100 : value
+      return indicator.format === 'Percentual' && value != null ? value * 100 : value
     })
     const numericMonths = monthValues.filter((value): value is number => typeof value === 'number')
     return {
-      'Ordem Oficial': typeof order === 'number' ? order : '',
       'Código do Indicador': official,
-      Departamento: indicator.department ?? '',
+      Departamento: indicator.department,
       Indicador: indicator.name,
       Tipo: indicator.calculado ? 'Calculado' : 'Digitável',
-      Formato: formatLabel(indicator),
+      Formato: indicator.format,
       ...Object.fromEntries(MONTH_LABELS.map((label, index) => [label, monthValues[index]])),
       Total: indicator.calculado ? '' : numericMonths.reduce((sum, value) => sum + value, 0),
+      'Fonte do Dado': '',
       Observação: '',
     }
   })
 
   return [
-    { name: 'METAS', headers, rows },
     {
       name: 'INSTRUÇÕES',
       headers: ['Instrução'],
       rows: TARGET_TEMPLATE_INSTRUCTION_LINES.map(instruction => ({ Instrução: instruction })),
     },
+    { name: 'DADOS', headers, rows },
     {
       name: 'MX_CONFIG',
       headers: ['Chave', 'Valor'],
       rows: [
         { Chave: 'template_version', Valor: '1.0.0' },
+        { Chave: 'client_account_id', Valor: params.clientId ?? '' },
         { Chave: 'client_name', Valor: params.clientName ?? params.storeName ?? '' },
         { Chave: 'strategic_plan_cycle_id', Valor: params.cycleId ?? '' },
         { Chave: 'reference_year', Valor: String(params.year) },
-        { Chave: 'view_type', Valor: 'TARGET' },
+        { Chave: 'view_type', Valor: params.viewType ?? 'TARGET' },
         { Chave: 'store_id', Valor: params.storeId },
         { Chave: 'store_name', Valor: params.storeName ?? '' },
-        { Chave: 'scope_type', Valor: params.scopeType ?? (params.storeId ? 'UNIDADE' : 'CONSOLIDADO') },
-        { Chave: 'indicator_count', Valor: String(params.indicators.length) },
-        { Chave: 'manual_indicator_count', Valor: String(params.indicators.filter(item => !item.calculado).length) },
-        { Chave: 'calculated_indicator_count', Valor: String(params.indicators.filter(item => item.calculado).length) },
+        { Chave: 'scope_type', Valor: params.scopeType ?? (params.storeId ? 'STORE' : 'CONSOLIDATED') },
+        { Chave: 'generated_at', Valor: new Date().toISOString() },
+        { Chave: 'generated_by', Valor: 'Administrador MX' },
+        { Chave: 'indicator_catalog_version', Valor: '1.0' },
+        { Chave: 'indicator_count', Valor: String(roster.length) },
+        { Chave: 'template_hash', Valor: String(Math.abs(roster.length * params.year)) },
       ],
     },
   ]

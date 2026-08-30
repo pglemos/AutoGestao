@@ -110,9 +110,14 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'clientes/:clientSlug/plano-estrategico': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'clientes/:clientSlug/plano-estrategico/:year': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'clientes/:clientSlug/plano-acao': { width: 'wide', bottomClearance: 'navigation', adopted: true },
+  'clientes/:clientSlug/consultoria': { width: 'wide', bottomClearance: 'navigation', adopted: true },
   'clientes/novo': { width: 'wide', bottomClearance: 'navigation', adopted: true },
   scores: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'scores-alertas': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
+  benchmark: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
+  observabilidade: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
+  'mapa-funcional': { width: 'wide', bottomClearance: 'navigation', adopted: true },
+  'roteiro-testes': { width: 'wide', bottomClearance: 'navigation', adopted: true },
   dados: { width: 'wide', bottomClearance: 'navigation', adopted: true },
   'dados-conciliacao': { width: 'wide', bottomClearance: 'navigation', adopted: true },
   seguranca: { width: 'wide', bottomClearance: 'navigation', adopted: true },
@@ -121,6 +126,7 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'consultoria-mx': { width: 'wide', bottomClearance: 'navigation', adopted: true },
   indicadores: { width: 'wide', bottomClearance: 'navigation', adopted: true },
   'planos-acao': { width: 'wide', bottomClearance: 'navigation', adopted: true },
+  universidade: { width: 'dashboard', bottomClearance: 'navigation' },
 
   // ------------------------------------------------------------------- funis
   // Colunas de funil precisam de largura; a rolagem horizontal é do board,

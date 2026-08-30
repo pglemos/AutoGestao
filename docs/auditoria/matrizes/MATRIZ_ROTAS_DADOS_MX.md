@@ -1,7 +1,7 @@
 # Matriz reproduzível de rotas, autorização e dados
 
-- Rotas declaradas em `src/App.tsx`: **124**
-- Rotas protegidas: **115**
+- Rotas declaradas em `src/App.tsx`: **130**
+- Rotas protegidas: **121**
 - Rotas públicas: **9**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
@@ -119,6 +119,12 @@
 | `/clientes/novo` | route | protegida | — | `/clientes/novo` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminNovoClientePage />} /> </Suspense>` |
 | `/clientes/:clientSlug/plano-estrategico/:year` | route | protegida | — | `/clientes/:clientSlug/plano-estrategico/:year` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen` |
 | `/clientes/:clientSlug/plano-estrategico` | route | protegida | — | `/clientes/:clientSlug/plano-estrategico` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen` |
+| `/universidade` | route | protegida | `/universidade-mx` | **AUSENTE** | — | `<Navigate to="/universidade-mx" replace />` |
+| `/benchmark` | route | protegida | — | `/benchmark` | vendedor, gerente | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<AdminBenchmarkPage />} admin={<AdminBenchmarkPage />} /> </Suspense>` |
+| `/observabilidade` | route | protegida | — | `/observabilidade` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminObservabilidadePage />} /> </Suspens` |
+| `/mapa-funcional` | route | protegida | — | `/mapa-funcional` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminMapaFuncionalPage />} /> </Suspense>` |
+| `/roteiro-testes` | route | protegida | — | `/roteiro-testes` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminRoteiroTestesPage />} /> </Suspense>` |
+| `/clientes/:clientSlug/consultoria` | route | protegida | — | `/clientes/:clientSlug/consultoria` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminConsultoriaEntregasPage />} /> </Sus` |
 | `/clientes/:clientSlug/plano-acao` | route | protegida | — | `/clientes/:clientSlug/plano-acao` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalActionPlanPage />} /> </Suspense>` |
 | `/clientes/:clientSlug` | route | protegida | — | `/clientes/:clientSlug` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminClienteDetalhePage />} /> </Suspense` |
 | `/consultoria-mx` | route | protegida | — | `/consultoria-mx` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminConsultoriaMxPage />} /> </Suspense>` |
@@ -169,7 +175,7 @@
 | `ciclos_plano_estrategico` | 4 |
 | `ciclos_plano_estrategico_indicadores` | 1 |
 | `clientes` | 6 |
-| `clientes_consultoria` | 31 |
+| `clientes_consultoria` | 32 |
 | `clientes_oportunidades` | 1 |
 | `comportamental_perfis` | 1 |
 | `comportamental_questoes` | 1 |
@@ -320,7 +326,7 @@
 | `vinculo_modelo_relatorio_encontro` | 1 |
 | `vinculo_plano_acao_encontro` | 1 |
 | `vinculos_loja` | 24 |
-| `visitas_consultoria` | 13 |
+| `visitas_consultoria` | 15 |
 | `vw_jornada_alem_do_contratado` | 1 |
 
 ## Operações por tabela
@@ -382,7 +388,7 @@
 | `ciclos_plano_estrategico:update` | 1 |
 | `clientes_consultoria:delete` | 1 |
 | `clientes_consultoria:insert` | 4 |
-| `clientes_consultoria:select` | 31 |
+| `clientes_consultoria:select` | 32 |
 | `clientes_consultoria:update` | 8 |
 | `clientes_oportunidades:select` | 1 |
 | `clientes:delete` | 2 |
@@ -707,8 +713,8 @@
 | `vinculos_loja:update` | 2 |
 | `visitas_consultoria:delete` | 2 |
 | `visitas_consultoria:insert` | 5 |
-| `visitas_consultoria:select` | 13 |
-| `visitas_consultoria:update` | 4 |
+| `visitas_consultoria:select` | 15 |
+| `visitas_consultoria:update` | 5 |
 | `vw_jornada_alem_do_contratado:select` | 1 |
 
 ## RPCs

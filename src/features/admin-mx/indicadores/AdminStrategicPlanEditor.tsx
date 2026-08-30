@@ -664,6 +664,8 @@ export function AdminStrategicPlanEditor({
           variant="quick"
           activeField={quickField}
           cicloId={data.cycle.id}
+          clientId={data.client.id}
+          clientName={data.client.name}
           indicators={digitaveisIndicators.map(toTargetIndicator)}
           importIndicators={gridIndicators.map(toTargetIndicator)}
           initialStoreId={unitId}
