@@ -1,7 +1,7 @@
 # Matriz reproduzível de rotas, autorização e dados
 
-- Rotas declaradas em `src/App.tsx`: **130**
-- Rotas protegidas: **121**
+- Rotas declaradas em `src/App.tsx`: **132**
+- Rotas protegidas: **123**
 - Rotas públicas: **9**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
@@ -118,6 +118,8 @@
 | `/clientes` | route | protegida | — | `/clientes` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalClientsPage />} /> </Suspense>` |
 | `/clientes/novo` | route | protegida | — | `/clientes/novo` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminNovoClientePage />} /> </Suspense>` |
 | `/clientes/:clientSlug/plano-estrategico/:year` | route | protegida | — | `/clientes/:clientSlug/plano-estrategico/:year` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen` |
+| `/clientes/:clientSlug/plano-estrategico/:year/preview` | route | protegida | — | `/clientes/:clientSlug/plano-estrategico/:year/preview` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen` |
+| `/clientes/:clientSlug/plano-estrategico/:year/visualizacao-dono` | route | protegida | — | `/clientes/:clientSlug/plano-estrategico/:year/visualizacao-dono` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen` |
 | `/clientes/:clientSlug/plano-estrategico` | route | protegida | — | `/clientes/:clientSlug/plano-estrategico` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen` |
 | `/universidade` | route | protegida | `/universidade-mx` | **AUSENTE** | — | `<Navigate to="/universidade-mx" replace />` |
 | `/benchmark` | route | protegida | — | `/benchmark` | vendedor, gerente | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<AdminBenchmarkPage />} admin={<AdminBenchmarkPage />} /> </Suspense>` |

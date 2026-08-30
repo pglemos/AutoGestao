@@ -4,12 +4,12 @@ Gerado por `scripts/audit_route_data_inventory.mjs + src/lib/auth/routeAccess.ts
 
 ## Denominadores
 
-- **routesTotal:** 130
-- **routesProtected:** 121
+- **routesTotal:** 132
+- **routesProtected:** 123
 - **routesPublic:** 9
-- **routeRoleTotal:** 286
-- **standardCanvasTotal:** 83
-- **standardCanvasRenderings:** 270
+- **routeRoleTotal:** 292
+- **standardCanvasTotal:** 85
+- **standardCanvasRenderings:** 276
 - **redirectTotal:** 33
 - **fullscreenTotal:** 4
 - **printTotal:** 1
@@ -222,6 +222,12 @@ Gerado por `scripts/audit_route_data_inventory.mjs + src/lib/auth/routeAccess.ts
 | `/clientes/:clientSlug/plano-estrategico/:year` | administrador_geral | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen |
 | `/clientes/:clientSlug/plano-estrategico/:year` | administrador_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen |
 | `/clientes/:clientSlug/plano-estrategico/:year` | consultor_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen |
+| `/clientes/:clientSlug/plano-estrategico/:year/preview` | administrador_geral | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen |
+| `/clientes/:clientSlug/plano-estrategico/:year/preview` | administrador_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen |
+| `/clientes/:clientSlug/plano-estrategico/:year/preview` | consultor_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen |
+| `/clientes/:clientSlug/plano-estrategico/:year/visualizacao-dono` | administrador_geral | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen |
+| `/clientes/:clientSlug/plano-estrategico/:year/visualizacao-dono` | administrador_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen |
+| `/clientes/:clientSlug/plano-estrategico/:year/visualizacao-dono` | consultor_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen |
 | `/clientes/:clientSlug/plano-estrategico` | administrador_geral | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen |
 | `/clientes/:clientSlug/plano-estrategico` | administrador_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen |
 | `/clientes/:clientSlug/plano-estrategico` | consultor_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen |
@@ -415,6 +421,8 @@ Gerado por `scripts/audit_route_data_inventory.mjs + src/lib/auth/routeAccess.ts
 | `/clientes` | STANDARD_CANVAS | `/clientes` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN | FORBIDDEN | FORBIDDEN |
 | `/clientes/novo` | STANDARD_CANVAS | `/clientes/novo` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN | FORBIDDEN | FORBIDDEN |
 | `/clientes/:clientSlug/plano-estrategico/:year` | STANDARD_CANVAS | `/clientes/:clientSlug/plano-estrategico/:year` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN | FORBIDDEN | FORBIDDEN |
+| `/clientes/:clientSlug/plano-estrategico/:year/preview` | STANDARD_CANVAS | `/clientes/:clientSlug/plano-estrategico/:year/preview` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN | FORBIDDEN | FORBIDDEN |
+| `/clientes/:clientSlug/plano-estrategico/:year/visualizacao-dono` | STANDARD_CANVAS | `/clientes/:clientSlug/plano-estrategico/:year/visualizacao-dono` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN | FORBIDDEN | FORBIDDEN |
 | `/clientes/:clientSlug/plano-estrategico` | STANDARD_CANVAS | `/clientes/:clientSlug/plano-estrategico` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN | FORBIDDEN | FORBIDDEN |
 | `/universidade` | REDIRECT | — | REDIRECT_BLOCKED | REDIRECT_BLOCKED | REDIRECT_BLOCKED | REDIRECT_BLOCKED | REDIRECT_BLOCKED | REDIRECT_BLOCKED |
 | `/benchmark` | STANDARD_CANVAS | `/benchmark` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN | FORBIDDEN |
@@ -444,9 +452,9 @@ Gerado por `scripts/audit_route_data_inventory.mjs + src/lib/auth/routeAccess.ts
 
 ## Totais de status
 
-- **administrador_geral:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":23,"PUBLIC":9,"REDIRECT_ALLOWED":14,"REDIRECT_BLOCKED":19,"RENDER_FULLSCREEN":3,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":58}
-- **administrador_mx:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":23,"PUBLIC":9,"REDIRECT_ALLOWED":14,"REDIRECT_BLOCKED":19,"RENDER_FULLSCREEN":3,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":58}
-- **consultor_mx:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":23,"PUBLIC":9,"REDIRECT_ALLOWED":14,"REDIRECT_BLOCKED":19,"RENDER_FULLSCREEN":3,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":58}
-- **dono:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":38,"PUBLIC":9,"REDIRECT_ALLOWED":12,"REDIRECT_BLOCKED":21,"RENDER_FULLSCREEN":1,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":45}
-- **gerente:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":54,"PUBLIC":9,"REDIRECT_ALLOWED":12,"REDIRECT_BLOCKED":21,"RENDER_FULLSCREEN":1,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":29}
-- **vendedor:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":62,"PUBLIC":9,"REDIRECT_ALLOWED":28,"REDIRECT_BLOCKED":6,"RENDER_FULLSCREEN":0,"RENDER_PRINT":0,"RENDER_STANDARD_CANVAS":22}
+- **administrador_geral:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":23,"PUBLIC":9,"REDIRECT_ALLOWED":14,"REDIRECT_BLOCKED":19,"RENDER_FULLSCREEN":3,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":60}
+- **administrador_mx:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":23,"PUBLIC":9,"REDIRECT_ALLOWED":14,"REDIRECT_BLOCKED":19,"RENDER_FULLSCREEN":3,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":60}
+- **consultor_mx:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":23,"PUBLIC":9,"REDIRECT_ALLOWED":14,"REDIRECT_BLOCKED":19,"RENDER_FULLSCREEN":3,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":60}
+- **dono:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":40,"PUBLIC":9,"REDIRECT_ALLOWED":12,"REDIRECT_BLOCKED":21,"RENDER_FULLSCREEN":1,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":45}
+- **gerente:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":56,"PUBLIC":9,"REDIRECT_ALLOWED":12,"REDIRECT_BLOCKED":21,"RENDER_FULLSCREEN":1,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":29}
+- **vendedor:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":64,"PUBLIC":9,"REDIRECT_ALLOWED":28,"REDIRECT_BLOCKED":6,"RENDER_FULLSCREEN":0,"RENDER_PRINT":0,"RENDER_STANDARD_CANVAS":22}

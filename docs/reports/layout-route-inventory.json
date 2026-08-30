@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-30T08:02:51.666Z",
-  "baselineSha": "3567d2279ebb79be0aea401294496aadfe54540e",
-  "routeCount": 128,
+  "generatedAt": "2026-08-30T08:43:24.395Z",
+  "baselineSha": "7cb9df9850b03fc3a58d6c085d823b5aaa49c6fd",
+  "routeCount": 130,
   "routes": [
     {
       "path": "/",
@@ -322,7 +322,7 @@
       "files": [
         "src/features/internal-mx-planning/InternalStrategicPlanPage.tsx"
       ],
-      "canvas": 1,
+      "canvas": 0,
       "template": 0,
       "structural": 0,
       "metadata": {
@@ -343,7 +343,49 @@
       "files": [
         "src/features/internal-mx-planning/InternalStrategicPlanPage.tsx"
       ],
-      "canvas": 1,
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "bottomClearance": "navigation",
+        "adopted": true
+      }
+    },
+    {
+      "path": "/clientes/:clientSlug/plano-estrategico/:year/preview",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:InternalStrategicPlanPage"
+      ],
+      "files": [
+        "src/features/internal-mx-planning/InternalStrategicPlanPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "bottomClearance": "navigation",
+        "adopted": true
+      }
+    },
+    {
+      "path": "/clientes/:clientSlug/plano-estrategico/:year/visualizacao-dono",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:InternalStrategicPlanPage"
+      ],
+      "files": [
+        "src/features/internal-mx-planning/InternalStrategicPlanPage.tsx"
+      ],
+      "canvas": 0,
       "template": 0,
       "structural": 0,
       "metadata": {
@@ -1591,7 +1633,7 @@
       "files": [
         "src/features/internal-mx-planning/InternalStrategicPlanPage.tsx"
       ],
-      "canvas": 1,
+      "canvas": 0,
       "template": 0,
       "structural": 0,
       "metadata": {

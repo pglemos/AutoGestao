@@ -522,6 +522,12 @@ export default function App() {
                 <Route path="clientes/:clientSlug/plano-estrategico/:year" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} />
                 </Suspense>} />
+                <Route path="clientes/:clientSlug/plano-estrategico/:year/preview" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} />
+                </Suspense>} />
+                <Route path="clientes/:clientSlug/plano-estrategico/:year/visualizacao-dono" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} />
+                </Suspense>} />
                 <Route path="clientes/:clientSlug/plano-estrategico" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} />
                 </Suspense>} />

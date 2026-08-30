@@ -72,6 +72,7 @@ import { consolidateClientPlanning, resolvePolicies, type PlanningValueRow } fro
 import type { ConsolidationIndicator } from '@/features/strategic-plan/unitConsolidation'
 import { UNIT_ENTRY_MODES, UNIT_ROLLUP_METHODS } from '@/features/strategic-plan/unitPolicy'
 import { MetasRealizadosTab } from '@/features/admin-mx/components/MetasRealizadosTab'
+import { isActualCalculated } from '@/features/admin-mx/indicadores/actualCalc'
 import { ClientOverridesSection } from '@/features/admin-mx/components/ClientOverridesSection'
 import { toast } from '@/lib/toast'
 
@@ -97,20 +98,23 @@ const FIELD_OPTIONS: Array<{ value: EditorField; label: string }> = [
   { value: 'ano_anterior', label: 'Ano Anterior' },
 ]
 
-function calculatedIndicator(indicator: StrategicPlanEditorIndicator) {
+function calculatedIndicator(indicator: StrategicPlanEditorIndicator, field: EditorField = 'meta') {
   const canon = matchCanonicalIndicator(indicator.metric_key)
+  if (field === 'realizado' || field === 'ano_anterior') {
+    return isActualCalculated(canon?.code ?? indicator.metric_key)
+  }
   if (canon) return canon.target_calculation_mode !== 'MANUAL'
   return String(indicator.target_calculation_mode ?? '').toUpperCase().startsWith('CALCULATED')
     || String(indicator.target_calculation_mode ?? '').toLowerCase().startsWith('calculado')
 }
 
-function toTargetIndicator(indicator: StrategicPlanEditorIndicator) {
+function toTargetIndicator(indicator: StrategicPlanEditorIndicator, field: EditorField = 'meta') {
   return {
     code: indicator.metric_key,
     displayCode: officialCatalogCode(indicator.metric_key),
     name: indicator.label,
     department: indicator.area,
-    calculado: calculatedIndicator(indicator),
+    calculado: calculatedIndicator(indicator, field),
     value_type: indicator.value_type,
     casas_decimais: indicator.casas_decimais,
   }
@@ -216,6 +220,9 @@ export function AdminStrategicPlanEditor({
   const saveQuickRef = useRef<() => Promise<void>>(async () => {})
   useEffect(() => { gridRef.current = grid }, [grid])
 
+  const quickField: EditorField = tab === 'realizado' ? 'realizado' : tab === 'ano_anterior' ? 'ano_anterior' : 'meta'
+  const showQuickEntry = tab === 'rapido' || tab === 'realizado' || tab === 'ano_anterior'
+
   const activeUnits = useMemo(() => data?.units.filter(unit => unit.active) ?? [], [data?.units])
   const allIndicators = useMemo(() => data?.indicators ?? [], [data?.indicators])
   const gridIndicators = useMemo(
@@ -223,12 +230,12 @@ export function AdminStrategicPlanEditor({
     [allIndicators, sortMode],
   )
   const digitaveisIndicators = useMemo(
-    () => gridIndicators.filter(indicator => !calculatedIndicator(indicator)),
-    [gridIndicators],
+    () => gridIndicators.filter(indicator => !calculatedIndicator(indicator, quickField)),
+    [gridIndicators, quickField],
   )
   const calculadosIndicators = useMemo(
-    () => gridIndicators.filter(indicator => calculatedIndicator(indicator)),
-    [gridIndicators],
+    () => gridIndicators.filter(indicator => calculatedIndicator(indicator, quickField)),
+    [gridIndicators, quickField],
   )
   const areas = useMemo(() => [...new Set(allIndicators.map(indicator => indicator.area).filter(Boolean))].sort(), [allIndicators])
   const filteredIndicators = useMemo(
@@ -589,8 +596,6 @@ export function AdminStrategicPlanEditor({
   const cycleStatus = ADMIN_PLAN_CYCLE_STATUS_CODE[data.cycle.status] ?? PLAN_CYCLE_STATUS_LABEL[data.cycle.status] ?? data.cycle.status
   const readinessPercent = readiness && readiness.total > 0 ? Math.round((readiness.ready / readiness.total) * 100) : 0
   const readinessIssues = readiness?.issues.slice(0, 24) ?? []
-  const quickField: EditorField = tab === 'realizado' ? 'realizado' : tab === 'ano_anterior' ? 'ano_anterior' : 'meta'
-  const showQuickEntry = tab === 'rapido' || tab === 'realizado' || tab === 'ano_anterior'
   const saveDraft = async () => {
     if (showQuickEntry) {
       await saveQuickRef.current()
@@ -657,7 +662,9 @@ export function AdminStrategicPlanEditor({
 
       {showQuickEntry ? <section id="rapido-panel" role="tabpanel" aria-label="Cadastro Rápido" className="space-y-5">
         <div className="space-y-2">
-          <h2 className="text-lg font-semibold text-foreground">Cadastro Rápido de Metas</h2>
+          <h2 className="text-lg font-semibold text-foreground">
+            {quickField === 'realizado' ? 'Cadastro Rápido do Realizado' : quickField === 'ano_anterior' ? 'Cadastro Rápido do Ano Anterior' : 'Cadastro Rápido de Metas'}
+          </h2>
           <p className="text-sm text-muted-foreground">Preencha os {digitaveisIndicators.length} indicadores digitáveis. Os {calculadosIndicators.length} calculados atualizam em tempo real.</p>
         </div>
         <MetasRealizadosTab
@@ -666,8 +673,8 @@ export function AdminStrategicPlanEditor({
           cicloId={data.cycle.id}
           clientId={data.client.id}
           clientName={data.client.name}
-          indicators={digitaveisIndicators.map(toTargetIndicator)}
-          importIndicators={gridIndicators.map(toTargetIndicator)}
+          indicators={digitaveisIndicators.map(ind => toTargetIndicator(ind, quickField))}
+          importIndicators={gridIndicators.map(ind => toTargetIndicator(ind, quickField))}
           initialStoreId={unitId}
           initialYear={data.cycle.year}
           stores={data.units.map(unit => ({ id: unit.id, name: unit.name }))}

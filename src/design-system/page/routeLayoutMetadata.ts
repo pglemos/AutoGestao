@@ -107,8 +107,10 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   // ------------------------------------------------- administração MX (admin)
   // Listas densas do módulo Administrador: mesma largura do CRM de consultoria.
   'clientes/:clientSlug': { width: 'wide', bottomClearance: 'navigation', adopted: true },
-  'clientes/:clientSlug/plano-estrategico': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'clientes/:clientSlug/plano-estrategico/:year': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
+  'clientes/:clientSlug/plano-estrategico/:year/preview': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
+  'clientes/:clientSlug/plano-estrategico/:year/visualizacao-dono': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
+  'clientes/:clientSlug/plano-estrategico': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'clientes/:clientSlug/plano-acao': { width: 'wide', bottomClearance: 'navigation', adopted: true },
   'clientes/:clientSlug/consultoria': { width: 'wide', bottomClearance: 'navigation', adopted: true },
   'clientes/novo': { width: 'wide', bottomClearance: 'navigation', adopted: true },

@@ -24,8 +24,8 @@ describe('Foundation Zero route × role matrix', () => {
     // container as records. The route-path denominator is 122 unique paths;
     // the ledger row denominator is therefore 124, including the client
     // Cadastro Rápido route `/clientes/:clientSlug/plano-estrategico/:year`.
-    expect(matrix.summary.routesTotal).toBe(130)
-    expect(matrix.summary.routesProtected).toBe(121)
+    expect(matrix.summary.routesTotal).toBe(132)
+    expect(matrix.summary.routesProtected).toBe(123)
     expect(matrix.summary.routesPublic).toBe(9)
     expect(matrix.summary.routeRoleTotal).toBeGreaterThan(0)
     expect(matrix.summary.ungoverned).toBe(0)
@@ -34,7 +34,7 @@ describe('Foundation Zero route × role matrix', () => {
 
   test('does not silently lose route rows or role status columns', () => {
     const matrix = JSON.parse(readFileSync(artifactPath, 'utf8')) as RouteMatrix
-    expect(matrix.rows).toHaveLength(130)
+    expect(matrix.rows).toHaveLength(132)
     for (const row of matrix.rows) {
       expect(Object.keys(row.roleStatus)).toEqual([
         'administrador_geral',

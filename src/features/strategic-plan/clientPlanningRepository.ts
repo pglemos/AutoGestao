@@ -40,7 +40,7 @@ export async function fetchConsultingClientIdBySlug(slug: string): Promise<{ id:
   const { data, error } = await supabase
     .from('clientes_consultoria')
     .select('id')
-    .eq('slug', normalized)
+    .or(`slug.eq.${normalized},id.eq.${normalized}`)
     .maybeSingle()
   if (error) return { id: null, error: error.message }
   return { id: data?.id ?? null, error: null }

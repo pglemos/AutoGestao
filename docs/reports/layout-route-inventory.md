@@ -1,8 +1,8 @@
 # Inventário de Rotas — Layout
 
-- Gerado em: 2026-08-30T08:02:51.666Z
-- Baseline SHA: `3567d2279ebb79be0aea401294496aadfe54540e`
-- Total de rotas: 128
+- Gerado em: 2026-08-30T08:43:24.395Z
+- Baseline SHA: `7cb9df9850b03fc3a58d6c085d823b5aaa49c6fd`
+- Total de rotas: 130
 
 | Path | Rota p/ perfil | Arquivo(s) | Canvas | Template | Estrutural | Width | Clearance | Adotada |
 |---|---|---|---|---|---|---|---|---|
@@ -22,8 +22,10 @@
 | /clientes/:clientSlug | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:AdminClienteDetalhePage | `src/features/admin-mx/AdminClienteDetalhePage.tsx` | 0 | 0 | 0 | wide | navigation | sim |
 | /clientes/:clientSlug/consultoria | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:AdminConsultoriaEntregasPage | `src/features/admin-mx/consultoria/AdminConsultoriaEntregasPage.tsx` | 0 | 0 | 1 | wide | navigation | sim |
 | /clientes/:clientSlug/plano-acao | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:InternalActionPlanPage | `src/features/internal-mx-planning/InternalActionPlanPage.tsx` | 0 | 0 | 0 | wide | navigation | sim |
-| /clientes/:clientSlug/plano-estrategico | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:InternalStrategicPlanPage | `src/features/internal-mx-planning/InternalStrategicPlanPage.tsx` | 1 | 0 | 0 | dashboard | navigation | sim |
-| /clientes/:clientSlug/plano-estrategico/:year | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:InternalStrategicPlanPage | `src/features/internal-mx-planning/InternalStrategicPlanPage.tsx` | 1 | 0 | 0 | dashboard | navigation | sim |
+| /clientes/:clientSlug/plano-estrategico | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:InternalStrategicPlanPage | `src/features/internal-mx-planning/InternalStrategicPlanPage.tsx` | 0 | 0 | 0 | dashboard | navigation | sim |
+| /clientes/:clientSlug/plano-estrategico/:year | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:InternalStrategicPlanPage | `src/features/internal-mx-planning/InternalStrategicPlanPage.tsx` | 0 | 0 | 0 | dashboard | navigation | sim |
+| /clientes/:clientSlug/plano-estrategico/:year/preview | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:InternalStrategicPlanPage | `src/features/internal-mx-planning/InternalStrategicPlanPage.tsx` | 0 | 0 | 0 | dashboard | navigation | sim |
+| /clientes/:clientSlug/plano-estrategico/:year/visualizacao-dono | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:InternalStrategicPlanPage | `src/features/internal-mx-planning/InternalStrategicPlanPage.tsx` | 0 | 0 | 0 | dashboard | navigation | sim |
 | /clientes/novo | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:AdminNovoClientePage | `src/features/admin-mx/AdminNovoClientePage.tsx` | 0 | 0 | 0 | wide | navigation | sim |
 | /configuracoes | vendedor:VendedorConfiguracoes, gerente:Configuracoes, dono:Configuracoes, admin:Configuracoes | `src/pages/VendedorConfiguracoes.tsx`<br>`src/pages/Configuracoes.tsx` | 0 | 4 | 0 | dashboard | — | não |
 | /configuracoes/consultoria-pmr | *:ConsultoriaParametros | `src/pages/ConsultoriaParametros.tsx` | 0 | 0 | 0 | focused | none | sim |
@@ -90,7 +92,7 @@
 | /pdi/:id/print | *:ProtectedRoute | — | 0 | 0 | 0 | reading | none | não |
 | /perfil | vendedor:MeuPerfilVendedor, gerente:Perfil, dono:Perfil, admin:Perfil | `src/features/vendedor-perfil/MeuPerfilVendedor.container.tsx`<br>`src/pages/Perfil.tsx` | 0 | 6 | 0 | dashboard | — | não |
 | /plano-acao | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:OwnerPlanoDeAcao, admin:InternalActionPlanPage | `src/features/internal-mx-planning/InternalActionPlanPage.tsx` | 0 | 0 | 0 | focused | actions | não |
-| /plano-estrategico | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:OwnerPlanoEstrategico, admin:InternalStrategicPlanPage | `src/features/internal-mx-planning/InternalStrategicPlanPage.tsx` | 1 | 0 | 0 | dashboard | navigation | sim |
+| /plano-estrategico | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:OwnerPlanoEstrategico, admin:InternalStrategicPlanPage | `src/features/internal-mx-planning/InternalStrategicPlanPage.tsx` | 0 | 0 | 0 | dashboard | navigation | sim |
 | /planos-acao | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:AdminPlanosAcaoGlobalPage | `src/features/admin-mx/AdminPlanosAcaoGlobalPage.tsx` | 0 | 0 | 4 | wide | navigation | sim |
 | /pre-cadastro/:storeSlug | *:StorePreRegistration | `src/pages/StorePreRegistration.tsx` | 0 | 0 | 0 | dashboard | — | não |
 | /privacy | *:Privacy | `src/pages/Privacy.tsx` | 0 | 0 | 2 | dashboard | — | não |

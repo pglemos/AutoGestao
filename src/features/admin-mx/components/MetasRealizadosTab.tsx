@@ -633,13 +633,13 @@ export function MetasRealizadosTab(props: {
               {isQuick ? null : (
                 <>
                   <Button variant="primary" onClick={() => void saveAllChanges()} disabled={!storeId || isConsolidated || savingAll}>
-                    <Save size={16} />{savingAll ? 'Salvando tudo...' : 'Salvar todas as metas'}
+                    <Save size={16} />{savingAll ? 'Salvando tudo...' : activeField === 'realizado' ? 'Salvar todo o realizado' : activeField === 'ano_anterior' ? 'Salvar todo o ano anterior' : 'Salvar todas as metas'}
                   </Button>
-                  <Button variant="outline" onClick={() => void replicateAllJanToAllMonths('meta')} disabled={!storeId || isConsolidated || savingAll} title="Replicar valor de Janeiro para os demais meses em todos os indicadores">
+                  <Button variant="outline" onClick={() => void replicateAllJanToAllMonths(activeField)} disabled={!storeId || isConsolidated || savingAll} title="Replicar valor de Janeiro para os demais meses em todos os indicadores">
                     <Copy size={16} />Replicar Jan em todos os meses
                   </Button>
                   <Button variant="outline" onClick={() => void refetch()}><RefreshCw size={16} />Atualizar</Button>
-                  <Button variant="outline" onClick={() => void exportXlsx()} disabled={!storeId || props.indicators.length === 0}><Download size={16} />Exportar metas preenchidas</Button>
+                  <Button variant="outline" onClick={() => void exportXlsx()} disabled={!storeId || props.indicators.length === 0}><Download size={16} />{activeField === 'realizado' ? 'Exportar realizado preenchido' : activeField === 'ano_anterior' ? 'Exportar ano anterior preenchido' : 'Exportar metas preenchidas'}</Button>
                 </>
               )}
               <Button variant="outline" onClick={() => void downloadBlankTemplate()} disabled={!storeId || props.indicators.length === 0}><Download size={16} />Baixar Tabela Modelo</Button>
