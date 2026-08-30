@@ -23,13 +23,13 @@ import {
   MxToolbar,
 } from '@/components/module/MxModuleVisualPrimitives'
 import { toast } from '@/lib/toast'
+import { buildAdminStrategicPlanHref } from '@/features/strategic-plan/adminStrategicPlanHref'
 import { CreateIndicatorWizard, fromIndicatorToWizard, toIndicatorInput } from './components/CreateIndicatorWizard'
 import { FormulaTesterModal } from './components/FormulaTesterModal'
 import { ParameterFormModal } from './components/ParameterFormModal'
 import { ParameterPickerModal } from './components/ParameterPickerModal'
 import { ClientOverridesSection } from './components/ClientOverridesSection'
 import { StrategicParametersSection } from './components/StrategicParametersSection'
-import { MetasRealizadosTab } from './components/MetasRealizadosTab'
 import { IndicatorDetailDrawer } from './indicadores/IndicatorDetailDrawer'
 import {
   IndicatorHistoryPanel,
@@ -40,7 +40,6 @@ import {
 import {
   indicatorCalculationMode,
   indicatorHasParameter,
-  indicatorIsCalculated,
   INDICATOR_CALCULATION_MODE_LABEL,
   INDICATOR_STATUSES,
   INDICATOR_STATUS_LABEL,
@@ -84,7 +83,7 @@ import {
 } from './indicadores/strategicPlanAdmin'
 import type { IndicatorWizardDraft } from './indicadores/indicatorWizard'
 
-type CatalogTab = 'catalogo' | 'parametros' | 'metas' | 'planos' | 'historico'
+type CatalogTab = 'catalogo' | 'parametros' | 'planos' | 'historico'
 
 const TABS = [
   { key: 'catalogo' as const, label: 'Catálogo de Indicadores' },
@@ -125,6 +124,13 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [tab, setTab] = useState<CatalogTab>(initialTab)
+  const selectCatalogTab = useCallback((next: CatalogTab) => {
+    setTab(next)
+    const params = new URLSearchParams(location.search)
+    params.set('mode', next)
+    const search = params.toString()
+    navigate(`${location.pathname}${search ? `?${search}` : ''}`, { replace: true })
+  }, [location.pathname, location.search, navigate])
   const [search, setSearch] = useState('')
   const [area, setArea] = useState('todas')
   const [status, setStatus] = useState('todos')
@@ -401,7 +407,7 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
 
   const openTargetsTab = () => {
     setDetail(null)
-    setTab('metas')
+    setTab('planos')
   }
 
   const openCreatePlan = () => {
@@ -424,6 +430,7 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
         cycleId: result.cycle.id,
         clientId: result.cycle.client_id,
         clientName: 'Cliente Demonstração',
+        clientSlug: null,
         clientStatus: null,
         primaryStoreId: null,
         year: result.cycle.year,
@@ -459,9 +466,14 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
   }
 
   const openStrategicPlan = (row: StrategicPlanAdminRow, options: { preview?: boolean } = {}) => {
-    const params = new URLSearchParams({ cycleId: row.cycleId })
-    if (options.preview) params.set('preview', '1')
-    navigate(`/plano-estrategico?${params.toString()}`)
+    const href = buildAdminStrategicPlanHref({
+      clientId: row.clientId,
+      clientSlug: row.clientSlug,
+      cycleId: row.cycleId,
+      year: row.year,
+      storeId: row.primaryStoreId,
+    })
+    navigate(options.preview ? `${href}${href.includes('?') ? '&' : '?'}preview=1` : href)
   }
 
   const createStrategicPlan = async (input: { clientId: string; year: number }) => {
@@ -482,6 +494,7 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
         cycleId: result.cycle.id,
         clientId: input.clientId,
         clientName: client?.name ?? 'Cliente',
+        clientSlug: client?.slug ?? null,
         clientStatus: client?.status ?? null,
         primaryStoreId: client?.primaryStoreId ?? null,
         year: input.year,
@@ -602,15 +615,6 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
     return map
   }, [parameters])
 
-  const indicatorTargets = useMemo(() => rows.map(item => ({
-    code: item.metric_key,
-    name: item.label,
-    department: item.area,
-    calculado: indicatorIsCalculated(item),
-    value_type: item.value_type,
-    casas_decimais: item.casas_decimais,
-  })), [rows])
-
   const renderCatalogTable = (items: CatalogIndicator[], areaName: string) => (
     <MxTableSurface aria-label={`Indicadores da área ${areaName}`}>
       <Table className="min-w-[1480px]">
@@ -706,11 +710,11 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
               {tab === 'catalogo' ? (
                 orderMode
                   ? <><Button variant="outline" onClick={() => { setOrderMode(false); setOrderKeys(rows.map(item => item.metric_key)) }}>Cancelar ordem</Button><Button variant="outline" onClick={() => void restoreDefault()} disabled={submitting}><RotateCcw size={16} />Restaurar padrão</Button><Button onClick={() => void saveOrder()} disabled={submitting}><Save size={16} />Salvar ordem</Button></>
-                  : <><Button variant="outline" onClick={() => setOrderMode(true)}>Editar Ordem</Button><Button variant="outline" onClick={() => void createDemoPlan()} disabled={submitting}>Criar Demo</Button><Button variant="outline" onClick={() => setTab('parametros')}>Parâmetros</Button><Button onClick={openNew}><Plus size={16} />Criar Indicador</Button></>
+                  : <><Button variant="outline" onClick={() => setOrderMode(true)}>Editar Ordem</Button><Button variant="outline" onClick={() => void createDemoPlan()} disabled={submitting}>Criar Demo</Button><Button variant="outline" onClick={() => selectCatalogTab('parametros')}>Parâmetros</Button><Button onClick={openNew}><Plus size={16} />Criar Indicador</Button></>
               ) : tab === 'parametros' ? (
                 <><Button variant="outline" onClick={() => setTesterOpen(true)}><Calculator size={16} />Testar cálculo</Button><Button onClick={() => setParameterPickerOpen(true)} disabled={!parameterSetId}><Plus size={16} />Criar parâmetro</Button></>
               ) : tab === 'planos' ? (
-                <><Button variant="outline" onClick={() => void createDemoPlan()} disabled={submitting}>Criar Demo</Button><Button onClick={openCreatePlan}><Plus size={16} />Criar Plano Estratégico</Button></>
+                <Button onClick={openCreatePlan}><Plus size={16} />Criar Plano Estratégico</Button>
               ) : tab === 'historico' ? (
                 <Button variant="outline" onClick={() => void loadHistory()}><FileClock size={16} />Atualizar histórico</Button>
               ) : null}
@@ -718,7 +722,7 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
           )}
         />
 
-        <TabNav tabs={TABS} activeTab={tab} onTabChange={setTab} scrollable />
+        <TabNav tabs={TABS} activeTab={tab} onTabChange={selectCatalogTab} scrollable />
 
         {loading ? <MxLoadingState label="Carregando indicadores" /> : error ? <MxErrorState description={error} retry={() => void refetch()} /> : tab === 'catalogo' ? (
           <>
@@ -866,8 +870,6 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
             </MxSectionCard>
             <ClientOverridesSection rows={rows} parameters={parameters} parameterSetId={parameterSetId} />
           </>
-        ) : tab === 'metas' ? (
-          <MetasRealizadosTab indicators={indicatorTargets} />
         ) : tab === 'planos' ? (
           planError ? <MxErrorState description={planError} retry={() => void loadPlans()} /> : <StrategicPlanListPanel
             rows={planRows}

@@ -37,6 +37,7 @@ describe('catálogo canônico Base44', () => {
       display_order: 26,
     })
     expect(officialDefinitionUnit('VOLUME_DE_LEADS_POR_VENDA')).toBe('Número decimal')
+    expect(officialDefinitionUnit('volume_de_leads_por_venda')).toBe('Número decimal')
     expect(officialUnitLabel('VOLUME_DE_LEADS_POR_VENDA')).toBe('leads/venda')
   })
 

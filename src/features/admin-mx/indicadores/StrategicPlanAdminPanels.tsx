@@ -94,8 +94,8 @@ export function StrategicPlanListPanel(props: {
 
       <MxSectionCard>
         <MxSectionHeader
-          title="Planos por cliente"
-          description={`${filtered.length} plano(s) encontrado(s).`}
+          title="Planos Estratégicos por Cliente"
+          description="Crie e gerencie os exercícios estratégicos de cada cliente."
           actions={<><Button variant="outline" onClick={props.onRefresh}><RefreshCw size={16} />Atualizar</Button><Button onClick={props.onCreate}><Plus size={16} />Criar Plano Estratégico</Button></>}
         />
         <div className="space-y-4 p-5">

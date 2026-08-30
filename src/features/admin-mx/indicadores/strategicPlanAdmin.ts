@@ -8,6 +8,7 @@ export type StrategicPlanAdminRow = {
   cycleId: string
   clientId: string
   clientName: string
+  clientSlug: string | null
   clientStatus: string | null
   primaryStoreId: string | null
   year: number
@@ -21,9 +22,21 @@ export type StrategicPlanAdminRow = {
   updatedAt: string
 }
 
+/** Contagem da lista: itens reais do pacote vencem o total desatualizado. */
+export function listedIndicatorCount(input: {
+  packageItemCount?: number | null
+  packageTotal?: number | null
+  cycleRosterCount?: number | null
+}): number {
+  if ((input.packageItemCount ?? 0) > 0) return input.packageItemCount as number
+  if ((input.packageTotal ?? 0) > 0) return input.packageTotal as number
+  return input.cycleRosterCount ?? 0
+}
+
 export type StrategicPlanClientOption = {
   id: string
   name: string
+  slug: string | null
   status: string | null
   primaryStoreId: string | null
 }
@@ -113,7 +126,7 @@ export async function fetchStrategicPlanClients(): Promise<{ rows: StrategicPlan
   const [clientsResult, lojasResult] = await Promise.all([
     supabase
       .from('clientes_consultoria')
-      .select('id, name, legal_name, status, primary_store_id')
+      .select('id, name, legal_name, slug, status, primary_store_id')
       .or('status.is.null,status.neq.arquivado')
       .order('name', { ascending: true }),
     supabase.from('lojas').select('id, parent_loja_id'),
@@ -125,6 +138,7 @@ export async function fetchStrategicPlanClients(): Promise<{ rows: StrategicPlan
   const clients = ((clientsResult.data ?? []) as Row[]).map(row => ({
     id: asString(row.id),
     name: asString(row.name || row.legal_name, asString(row.id)),
+    slug: row.slug == null ? null : asString(row.slug),
     status: row.status == null ? null : asString(row.status),
     primary_store_id: row.primary_store_id == null ? null : asString(row.primary_store_id),
   }))
@@ -137,6 +151,7 @@ export async function fetchStrategicPlanClients(): Promise<{ rows: StrategicPlan
     rows: excludeBranchClients(clients, lojas).map(row => ({
       id: row.id,
       name: row.name,
+      slug: row.slug,
       status: row.status,
       primaryStoreId: row.primary_store_id,
     })),
@@ -162,14 +177,17 @@ export async function fetchStrategicPlanAdminRows(): Promise<{ rows: StrategicPl
     .filter(Boolean)
   if (cycleRows.length === 0) return { rows: [], error: null }
 
-  const [clientsResult, indicatorCountsResult, unitsResult, packageResult, lojasResult] = await Promise.all([
-    supabase.from('clientes_consultoria').select('id, name, legal_name, status, primary_store_id, implementation_owner_id').in('id', clientIds),
+  const [clientsResult, indicatorCountsResult, unitsResult, packageResult, packageItemsResult, lojasResult] = await Promise.all([
+    supabase.from('clientes_consultoria').select('id, name, legal_name, slug, status, primary_store_id, implementation_owner_id').in('id', clientIds),
     cyclesWithoutPackageIds.length
       ? supabase.rpc('get_strategic_plan_indicator_counts', { p_cycle_ids: cyclesWithoutPackageIds })
       : Promise.resolve({ data: [], error: null }),
     supabase.from('unidades_cliente_consultoria').select('client_id, id').in('client_id', clientIds),
     packageVersionIds.length
       ? supabase.from('pacotes_indicadores_versoes').select('id, nome, total_indicadores').in('id', packageVersionIds)
+      : Promise.resolve({ data: [], error: null }),
+    packageVersionIds.length
+      ? supabase.from('pacotes_indicadores_itens').select('version_id').in('version_id', packageVersionIds)
       : Promise.resolve({ data: [], error: null }),
     supabase.from('lojas').select('id, parent_loja_id'),
   ])
@@ -182,13 +200,19 @@ export async function fetchStrategicPlanAdminRows(): Promise<{ rows: StrategicPl
     ? await supabase.from('usuarios').select('id, name').in('id', responsibleIds)
     : { data: [], error: null }
 
-  const firstError = [clientsResult.error, indicatorCountsResult.error, unitsResult.error, packageResult.error, responsibleResult.error, lojasResult.error]
+  const firstError = [clientsResult.error, indicatorCountsResult.error, unitsResult.error, packageResult.error, packageItemsResult.error, responsibleResult.error, lojasResult.error]
     .find(Boolean)
   if (firstError) return { rows: [], error: firstError.message }
 
   const clients = new Map(clientRows.map(row => [asString(row.id), row]))
   const users = new Map(((responsibleResult.data ?? []) as Row[]).map(row => [asString(row.id), asString(row.name, 'Não atribuído')]))
   const packages = new Map(((packageResult.data ?? []) as Row[]).map(row => [asString(row.id), row]))
+  const packageItemCounts = new Map<string, number>()
+  for (const row of (packageItemsResult.data ?? []) as Row[]) {
+    const versionId = asString(row.version_id)
+    if (!versionId) continue
+    packageItemCounts.set(versionId, (packageItemCounts.get(versionId) ?? 0) + 1)
+  }
   const indicatorCountsByCycle = new Map(
     ((indicatorCountsResult.data ?? []) as Row[]).map(row => [asString(row.cycle_id), asNumber(row.indicator_count)]),
   )
@@ -224,13 +248,16 @@ export async function fetchStrategicPlanAdminRows(): Promise<{ rows: StrategicPl
       if (!matrixClientIds.has(clientId)) return []
       const client = clients.get(clientId)
       const packageVersion = packages.get(asString(cycle.package_version_id))
-      const indicatorCount = packageVersion
-        ? asNumber(packageVersion.total_indicadores)
-        : indicatorCountsByCycle.get(asString(cycle.id)) ?? 0
+      const indicatorCount = listedIndicatorCount({
+        packageItemCount: packageVersion ? packageItemCounts.get(asString(cycle.package_version_id)) ?? 0 : 0,
+        packageTotal: packageVersion ? asNumber(packageVersion.total_indicadores) : 0,
+        cycleRosterCount: indicatorCountsByCycle.get(asString(cycle.id)) ?? 0,
+      })
       return [{
         cycleId: asString(cycle.id),
         clientId,
         clientName: asString(client?.name || client?.legal_name, clientId),
+        clientSlug: client?.slug == null ? null : asString(client.slug),
         clientStatus: client?.status == null ? null : asString(client.status),
         primaryStoreId: client?.primary_store_id == null ? null : asString(client.primary_store_id),
         year: asNumber(cycle.year),

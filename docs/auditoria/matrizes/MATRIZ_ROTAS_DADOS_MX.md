@@ -1,7 +1,7 @@
 # Matriz reproduzível de rotas, autorização e dados
 
-- Rotas declaradas em `src/App.tsx`: **123**
-- Rotas protegidas: **114**
+- Rotas declaradas em `src/App.tsx`: **124**
+- Rotas protegidas: **115**
 - Rotas públicas: **9**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
@@ -117,6 +117,7 @@
 | `/produtos` | route | protegida | — | `/produtos` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ProdutosDigitais />} gerente={<ProdutosDigitais />} dono={<ProdutosDigitais />} admin={<AdminProdutosConsultoriaPage />} />` |
 | `/clientes` | route | protegida | — | `/clientes` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalClientsPage />} /> </Suspense>` |
 | `/clientes/novo` | route | protegida | — | `/clientes/novo` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminNovoClientePage />} /> </Suspense>` |
+| `/clientes/:clientSlug/plano-estrategico/:year` | route | protegida | — | `/clientes/:clientSlug/plano-estrategico/:year` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen` |
 | `/clientes/:clientSlug/plano-estrategico` | route | protegida | — | `/clientes/:clientSlug/plano-estrategico` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /> </Suspen` |
 | `/clientes/:clientSlug/plano-acao` | route | protegida | — | `/clientes/:clientSlug/plano-acao` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalActionPlanPage />} /> </Suspense>` |
 | `/clientes/:clientSlug` | route | protegida | — | `/clientes/:clientSlug` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<AdminClienteDetalhePage />} /> </Suspense` |
@@ -142,7 +143,7 @@
 
 | Recurso | Arquivos consumidores |
 |---|---:|
-| `acessos_cliente_consultoria` | 3 |
+| `acessos_cliente_consultoria` | 4 |
 | `agenda_estrategica_marketing` | 1 |
 | `agendamentos` | 10 |
 | `alerts` | 1 |
@@ -168,7 +169,7 @@
 | `ciclos_plano_estrategico` | 4 |
 | `ciclos_plano_estrategico_indicadores` | 1 |
 | `clientes` | 6 |
-| `clientes_consultoria` | 30 |
+| `clientes_consultoria` | 31 |
 | `clientes_oportunidades` | 1 |
 | `comportamental_perfis` | 1 |
 | `comportamental_questoes` | 1 |
@@ -178,7 +179,7 @@
 | `conjuntos_parametros_consultoria` | 4 |
 | `consultor_solucoes` | 3 |
 | `consultoria_itens_entrega` | 3 |
-| `contatos_cliente_consultoria` | 4 |
+| `contatos_cliente_consultoria` | 5 |
 | `conteudo_encontro` | 1 |
 | `conteudo_referencia_encontro` | 1 |
 | `cultura_resultado_registros` | 1 |
@@ -215,7 +216,7 @@
 | `itens_plano_acao` | 3 |
 | `lancamentos_diarios` | 16 |
 | `links_autocadastro_cliente` | 1 |
-| `logs_auditoria` | 2 |
+| `logs_auditoria` | 5 |
 | `logs_auditoria_consultoria_mx` | 3 |
 | `logs_auditoria_loja` | 2 |
 | `logs_compartilhamento_whatsapp` | 1 |
@@ -245,7 +246,7 @@
 | `organograma_nos` | 1 |
 | `overrides_parametros_cliente` | 3 |
 | `pacotes_indicadores_estrategicos` | 1 |
-| `pacotes_indicadores_itens` | 5 |
+| `pacotes_indicadores_itens` | 6 |
 | `pacotes_indicadores_versoes` | 4 |
 | `parametros_estrategicos_mx` | 2 |
 | `pdi_avaliacoes_competencia` | 3 |
@@ -301,7 +302,7 @@
 | `treinamento_tarefas` | 1 |
 | `treinamentos` | 6 |
 | `trilhas_desenvolvimento` | 1 |
-| `unidades_cliente_consultoria` | 12 |
+| `unidades_cliente_consultoria` | 13 |
 | `universidade_aulas` | 1 |
 | `universidade_certificacoes` | 1 |
 | `universidade_trilhas` | 1 |
@@ -328,7 +329,7 @@
 |---|---:|
 | `acessos_cliente_consultoria:insert` | 2 |
 | `acessos_cliente_consultoria:select` | 3 |
-| `acessos_cliente_consultoria:update` | 2 |
+| `acessos_cliente_consultoria:update` | 3 |
 | `agenda_estrategica_marketing:select` | 1 |
 | `agendamentos:delete` | 1 |
 | `agendamentos:insert` | 1 |
@@ -381,8 +382,8 @@
 | `ciclos_plano_estrategico:update` | 1 |
 | `clientes_consultoria:delete` | 1 |
 | `clientes_consultoria:insert` | 4 |
-| `clientes_consultoria:select` | 29 |
-| `clientes_consultoria:update` | 7 |
+| `clientes_consultoria:select` | 31 |
+| `clientes_consultoria:update` | 8 |
 | `clientes_oportunidades:select` | 1 |
 | `clientes:delete` | 2 |
 | `clientes:insert` | 2 |
@@ -401,9 +402,9 @@
 | `consultor_solucoes:select` | 2 |
 | `consultor_solucoes:update` | 1 |
 | `consultoria_itens_entrega:select` | 3 |
-| `contatos_cliente_consultoria:insert` | 3 |
-| `contatos_cliente_consultoria:select` | 4 |
-| `contatos_cliente_consultoria:update` | 1 |
+| `contatos_cliente_consultoria:insert` | 4 |
+| `contatos_cliente_consultoria:select` | 5 |
+| `contatos_cliente_consultoria:update` | 2 |
 | `conteudo_encontro:insert` | 1 |
 | `conteudo_encontro:select` | 1 |
 | `conteudo_encontro:upsert` | 1 |
@@ -492,6 +493,7 @@
 | `logs_auditoria_consultoria_mx:insert` | 2 |
 | `logs_auditoria_consultoria_mx:select` | 2 |
 | `logs_auditoria_loja:select` | 2 |
+| `logs_auditoria:insert` | 3 |
 | `logs_auditoria:select` | 2 |
 | `logs_compartilhamento_whatsapp:insert` | 1 |
 | `logs_reprocessamento:insert` | 1 |
@@ -500,9 +502,9 @@
 | `logs_rotina_gerente:select` | 1 |
 | `logs_rotina_gerente:upsert` | 1 |
 | `lojas:delete` | 1 |
-| `lojas:insert` | 3 |
+| `lojas:insert` | 1 |
 | `lojas:select` | 34 |
-| `lojas:update` | 3 |
+| `lojas:update` | 1 |
 | `manager_daily_tasks:select` | 1 |
 | `manager_daily_tasks:update` | 1 |
 | `manager_lead_conferences:select` | 1 |
@@ -556,7 +558,7 @@
 | `pacotes_indicadores_estrategicos:update` | 1 |
 | `pacotes_indicadores_itens:delete` | 1 |
 | `pacotes_indicadores_itens:insert` | 1 |
-| `pacotes_indicadores_itens:select` | 5 |
+| `pacotes_indicadores_itens:select` | 6 |
 | `pacotes_indicadores_versoes:insert` | 1 |
 | `pacotes_indicadores_versoes:select` | 4 |
 | `pacotes_indicadores_versoes:update` | 1 |
@@ -584,7 +586,7 @@
 | `planos_acao_templates:select` | 3 |
 | `planos_acao_templates:update` | 1 |
 | `planos_acao:delete` | 1 |
-| `planos_acao:insert` | 2 |
+| `planos_acao:insert` | 1 |
 | `planos_acao:select` | 13 |
 | `planos_acao:update` | 1 |
 | `posicionamento_empresa:select` | 1 |
@@ -662,15 +664,14 @@
 | `unidades_cliente_consultoria:delete` | 1 |
 | `unidades_cliente_consultoria:insert` | 4 |
 | `unidades_cliente_consultoria:select` | 12 |
-| `unidades_cliente_consultoria:update` | 2 |
+| `unidades_cliente_consultoria:update` | 3 |
 | `universidade_aulas:select` | 1 |
 | `universidade_certificacoes:select` | 1 |
 | `universidade_trilhas:select` | 1 |
 | `user_roles:insert` | 1 |
 | `user_roles:select` | 1 |
 | `user_roles:update` | 1 |
-| `usuarios:delete` | 2 |
-| `usuarios:insert` | 1 |
+| `usuarios:delete` | 1 |
 | `usuarios:select` | 30 |
 | `usuarios:update` | 3 |
 | `usuarios:upsert` | 1 |
@@ -717,18 +718,18 @@
 | `ack_alert` | 1 |
 | `adicionar_indicador_ciclo_plano` | 1 |
 | `admin_archive_store` | 1 |
-| `admin_create_store` | 1 |
+| `admin_create_store` | 2 |
 | `admin_hard_delete_store` | 3 |
 | `admin_restore_store` | 1 |
 | `admin_store_live_overview` | 1 |
-| `admin_update_store` | 1 |
+| `admin_update_store` | 2 |
 | `admin_update_usuario` | 2 |
 | `aplicar_regularizacao_fechamento` | 1 |
 | `archive_action_plan_template` | 1 |
 | `atribuir_trilha_maturidade_vendedor` | 1 |
 | `atualizar_etapa_oportunidade_crm` | 1 |
 | `atualizar_plano_acao` | 2 |
-| `atualizar_plano_acao_patch` | 3 |
+| `atualizar_plano_acao_patch` | 4 |
 | `atualizar_status_agendamento_crm` | 1 |
 | `atualizar_visibilidade_indicador_ciclo` | 1 |
 | `begin_password_change` | 2 |
@@ -755,7 +756,7 @@
 | `criar_agendamento_crm` | 1 |
 | `criar_oportunidade_crm` | 1 |
 | `criar_plano_acao_planejamento_unico` | 1 |
-| `criar_plano_acao_v2` | 3 |
+| `criar_plano_acao_v2` | 4 |
 | `dismiss_alert` | 1 |
 | `duplicate_consulting_product` | 1 |
 | `enviar_cobranca_diaria` | 1 |
@@ -833,7 +834,7 @@
 | `manage-global-user` | 1 |
 | `manage-store-team` | 1 |
 | `openrouter-generate` | 1 |
-| `register-user` | 2 |
+| `register-user` | 3 |
 | `relatorio-${type}` | 1 |
 | `relatorio-matinal` | 1 |
 | `send-visit-report` | 1 |

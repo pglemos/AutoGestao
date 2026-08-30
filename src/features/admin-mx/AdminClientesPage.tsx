@@ -19,6 +19,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useStores, useStoresStats, type StoreUpdateFields } from '@/hooks/useStores'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/lib/toast'
+import { describeAdminRpcError } from './equipe/adminRpcErrors'
 import { getPreRegistrationLink } from '@/lib/utils'
 import type { Store } from '@/types/database'
 import { CreateStoreModal, type NewStoreDraft } from '@/components/organisms/CreateStoreModal'
@@ -218,7 +219,7 @@ export function AdminClientesPage() {
         p_confirmation: hardDeleteConfirmation.trim(),
       })
       if (error) {
-        toast.error(error.message || 'Falha ao excluir loja definitivamente.')
+        toast.error(describeAdminRpcError(error, 'Falha ao excluir loja definitivamente.'))
         return
       }
       toast.success('Loja excluída com sucesso.')

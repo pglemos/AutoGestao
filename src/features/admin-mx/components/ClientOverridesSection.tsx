@@ -29,6 +29,8 @@ export function ClientOverridesSection(props: {
   rows: CatalogIndicator[]
   parameters: IndicatorParameter[]
   parameterSetId: string | null
+  lockedClientId?: string
+  lockedYear?: number
 }) {
   const [strategicParameters, setStrategicParameters] = useState<ParameterDefinition[]>(strategicParameterDefinitions())
   const [clients, setClients] = useState<ClientOption[]>([])
@@ -36,9 +38,11 @@ export function ClientOverridesSection(props: {
   const [overrides, setOverrides] = useState<ClientOverrideRow[]>([])
   const [indicators, setIndicators] = useState<Array<{ code: string; formula_expression: string | null }>>([])
   const [loading, setLoading] = useState(true)
+  const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
     const [modal, setModal] = useState<{ param: ParameterDefinition; existing: ClientOverrideRow[] } | null>(null)
-  const [submitting, setSubmitting] = useState(false)
+  const year = props.lockedYear ?? CURRENT_YEAR
+  const locked = Boolean(props.lockedClientId)
 
   const loadClients = useCallback(async () => {
     const { supabase } = await import('@/lib/supabase')
@@ -56,9 +60,10 @@ export function ClientOverridesSection(props: {
   }, [])
 
   useEffect(() => {
-    void loadClients()
+    if (props.lockedClientId) setClientId(props.lockedClientId)
+    else void loadClients()
     void fetchFormulaIndicators().then(result => setIndicators(result.rows.map(item => ({ code: item.metric_key, formula_expression: item.formula_expression }))))
-  }, [loadClients])
+  }, [loadClients, props.lockedClientId])
 
   useEffect(() => {
     if (!props.parameterSetId) {
@@ -77,12 +82,12 @@ export function ClientOverridesSection(props: {
       return
     }
     setLoading(true)
-    void fetchClientOverrides(clientId, CURRENT_YEAR).then(result => {
+    void fetchClientOverrides(clientId, year).then(result => {
       setOverrides(result.rows)
       setError(result.error)
       setLoading(false)
     })
-  }, [clientId])
+  }, [clientId, year])
 
   const parameterDefinitions = useMemo<ParameterDefinition[]>(() => {
     const byKey = new Map(props.parameters.map(parameter => [parameter.metric_key, parameter]))
@@ -133,7 +138,7 @@ export function ClientOverridesSection(props: {
       }
       toast.success('Parâmetro personalizado para o cliente.')
       setModal(null)
-      const refreshed = await fetchClientOverrides(clientId, CURRENT_YEAR)
+      const refreshed = await fetchClientOverrides(clientId, year)
       setOverrides(refreshed.rows)
     } finally {
       setSubmitting(false)
@@ -143,13 +148,13 @@ export function ClientOverridesSection(props: {
   const restore = async (metricKey: string) => {
     setSubmitting(true)
     try {
-      const result = await restoreParameterToDefault(clientId, metricKey, CURRENT_YEAR)
+      const result = await restoreParameterToDefault(clientId, metricKey, year)
       if (result.error) {
         toast.error(result.error)
         return
       }
       toast.success('Padrão MX restaurado para o cliente.')
-      const refreshed = await fetchClientOverrides(clientId, CURRENT_YEAR)
+      const refreshed = await fetchClientOverrides(clientId, year)
       setOverrides(refreshed.rows)
     } finally {
       setSubmitting(false)
@@ -170,20 +175,33 @@ export function ClientOverridesSection(props: {
     <MxSectionCard>
       <div className="space-y-4">
         <div className="flex flex-wrap items-end gap-3">
-          <MxField label="Cliente">
-            <MxSelect aria-label="Cliente" value={clientId} onChange={event => setClientId(event.target.value)}>
-              {clients.map(client => <option key={client.id} value={client.id}>{client.name}</option>)}
-            </MxSelect>
-          </MxField>
+          {locked ? null : (
+            <MxField label="Cliente">
+              <MxSelect aria-label="Cliente" value={clientId} onChange={event => setClientId(event.target.value)}>
+                {clients.map(client => <option key={client.id} value={client.id}>{client.name}</option>)}
+              </MxSelect>
+            </MxField>
+          )}
           <MxField label="Ano de referência">
-            <MxSelect aria-label="Ano de referência" defaultValue={String(CURRENT_YEAR)} disabled>
-              <option value={String(CURRENT_YEAR)}>{CURRENT_YEAR}</option>
+            <MxSelect aria-label="Ano de referência" value={String(year)} disabled>
+              <option value={String(year)}>{year}</option>
             </MxSelect>
           </MxField>
-          <Button variant="outline" onClick={() => void loadClients()}><RefreshCw size={16} />Atualizar</Button>
+          <Button variant="outline" onClick={() => {
+            if (locked && clientId) {
+              setLoading(true)
+              void fetchClientOverrides(clientId, year).then(result => {
+                setOverrides(result.rows)
+                setError(result.error)
+                setLoading(false)
+              })
+              return
+            }
+            void loadClients()
+          }}><RefreshCw size={16} />Atualizar</Button>
         </div>
 
-        {loading ? <MxLoadingState label="Carregando overrides" /> : error ? <MxErrorState description={error} retry={() => void fetchClientOverrides(clientId, CURRENT_YEAR).then(result => setOverrides(result.rows))} /> : parameterDefinitions.length === 0 ? (
+        {loading ? <MxLoadingState label="Carregando overrides" /> : error ? <MxErrorState description={error} retry={() => void fetchClientOverrides(clientId, year).then(result => setOverrides(result.rows))} /> : parameterDefinitions.length === 0 ? (
           <MxEmptyState variant="dataset" title="Sem parâmetros" description="Cadastre parâmetros no conjunto ativo para personalizar por cliente." />
         ) : (
           <div className="grid gap-2 sm:grid-cols-2">
@@ -219,7 +237,7 @@ export function ClientOverridesSection(props: {
         <ClientOverrideModal
           open
           clientId={clientId}
-          referenceYear={CURRENT_YEAR}
+          referenceYear={year}
           param={modal.param}
           existingOverrides={modal.existing.map(override => ({
             id: override.id,

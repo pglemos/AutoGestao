@@ -2,6 +2,8 @@ import { supabase } from '@/lib/supabase'
 import {
   buildEnrollmentUrl,
   generateEnrollmentToken,
+  inviteProfileFromPersonRoles,
+  resolveEnrollmentLinkStatus,
   validateEnrollmentLinkDraft,
   type EnrollmentLinkDraft,
   type EnrollmentLinkStatus,
@@ -18,6 +20,21 @@ export type EnrollmentLinkRow = {
   usos_consumidos: number
   status: string
   created_at: string
+}
+
+async function logPersonAccessAudit(input: {
+  action: string
+  entityId: string | null
+  actorId: string | null
+  details: Record<string, unknown>
+}): Promise<void> {
+  await supabase.from('logs_auditoria').insert({
+    action: input.action,
+    entity: 'acessos_cliente_consultoria',
+    entity_id: input.entityId,
+    user_id: input.actorId,
+    details_json: input.details,
+  })
 }
 
 export async function createEnrollmentLink(
@@ -68,4 +85,90 @@ export async function cancelEnrollmentLink(linkId: string): Promise<{ error: str
     .update({ status: 'cancelado' as EnrollmentLinkStatus, updated_at: new Date().toISOString() })
     .eq('id', linkId)
   return { error: error?.message ?? null }
+}
+
+/**
+ * Reenvia o convite de uma identidade já cadastrada: reabre status inativo
+ * para em_preparação, reusa um link ativo do mesmo perfil quando possível e
+ * nunca insere outra linha em `acessos_cliente_consultoria`.
+ */
+export async function resendPersonInvite(input: {
+  clientId: string
+  clientSlug: string
+  origin: string
+  createdBy: string
+  person: {
+    id: string
+    nome: string
+    email: string
+    papeis: string[]
+    status: string
+  }
+}): Promise<{ url: string | null; error: string | null; reusedLink: boolean }> {
+  if (!input.clientSlug) return { url: null, error: 'Cliente sem slug não pode gerar link de convite.', reusedLink: false }
+  if (!input.person.email.trim()) return { url: null, error: 'Pessoa sem e-mail não recebe convite.', reusedLink: false }
+
+  if (input.person.status === 'inativo') {
+    const { error: reopenError } = await supabase
+      .from('acessos_cliente_consultoria')
+      .update({ status: 'em_preparacao', updated_at: new Date().toISOString() })
+      .eq('id', input.person.id)
+      .eq('client_id', input.clientId)
+    if (reopenError) return { url: null, error: reopenError.message, reusedLink: false }
+  }
+
+  const perfil = inviteProfileFromPersonRoles(input.person.papeis)
+  const listed = await listEnrollmentLinks(input.clientId)
+  if (listed.error) return { url: null, error: listed.error, reusedLink: false }
+
+  const reusable = listed.rows.find(link => {
+    if (link.perfil_acesso !== perfil) return false
+    return resolveEnrollmentLinkStatus({
+      createdAt: link.created_at,
+      validadeDias: link.validade_dias,
+      limiteUsos: link.limite_usos,
+      usosConsumidos: link.usos_consumidos,
+      status: link.status as EnrollmentLinkStatus,
+    }) === 'ativo'
+  })
+
+  let url: string | null = null
+  let reusedLink = false
+  if (reusable) {
+    url = buildEnrollmentUrl(input.origin, input.clientSlug, reusable.token)
+    reusedLink = true
+  } else {
+    const created = await createEnrollmentLink(
+      input.clientId,
+      input.clientSlug,
+      input.origin,
+      {
+        perfil_acesso: perfil,
+        nome_interno: `Convite ${input.person.nome.trim()}`.slice(0, 80),
+        validade_dias: 7,
+        limite_usos: 1,
+      },
+      input.createdBy,
+    )
+    if (created.error || !created.url) return { url: null, error: created.error ?? 'Não foi possível gerar o convite.', reusedLink: false }
+    url = created.url
+  }
+
+  try {
+    await logPersonAccessAudit({
+      action: 'reenviar_convite_pessoa',
+      entityId: input.person.id,
+      actorId: input.createdBy,
+      details: {
+        client_id: input.clientId,
+        email: input.person.email.trim().toLowerCase(),
+        status_antes: input.person.status,
+        reused_link: reusedLink,
+      },
+    })
+  } catch {
+    /* auditoria não bloqueia o convite */
+  }
+
+  return { url, error: null, reusedLink }
 }

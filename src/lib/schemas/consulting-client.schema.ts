@@ -10,6 +10,8 @@ export const ConsultingVisitSchema = z.object({
   status: z.enum(['agendada', 'concluida', 'cancelada', 'em_andamento']),
   consultant_id: z.string().nullable(),
   auxiliary_consultant_id: z.string().nullable(),
+  consultant: z.object({ name: z.string().nullable(), email: z.string().nullable() }).nullable().optional(),
+  auxiliary_consultant: z.object({ name: z.string().nullable(), email: z.string().nullable() }).nullable().optional(),
   objective: z.string().nullable(),
   visit_reason: z.string().nullable().optional(),
   target_audience: z.string().nullable().optional(),

@@ -106,8 +106,8 @@ describe('clientActionPlanWizard — payload e checklist', () => {
     expect(payload.scope_type).toBe('store')
     expect(payload.scope_id).toBe('store-1')
     expect(payload.acao).toBe('Aumentar vendas totais')
-    expect(payload.departamento).toBe('Vendas')
-    expect(payload.indicador).toBe('Vendas Totais')
+    expect(payload.departamento).toBe('Comercial')
+    expect(payload.indicador).toBe('SALES_TOTAL')
     expect(payload.origem).toBe('consultor')
     expect(payload.participants).toBeNull()
     expect(payload.reference_year).toBe(new Date().getFullYear())
@@ -127,6 +127,16 @@ describe('clientActionPlanWizard — payload e checklist', () => {
     expect((patch.checklist as unknown[]).length).toBe(2)
     expect(patch.participants).toBe('Time comercial')
     expect(patch.iniciado_at).toBe('2026-08-20')
+  })
+
+  test('patch da aplicação ao cliente carimba um request único', () => {
+    const patch = buildCreatedPlanPatch(filledForm(), { requestId: 'req-client-1', unitCount: 3 })
+    expect(patch.transition_metadata).toEqual({
+      client_application_request_id: 'req-client-1',
+      client_id: filledForm().clientId,
+      scope_mode: 'all_units',
+      unit_count: 3,
+    })
   })
 })
 

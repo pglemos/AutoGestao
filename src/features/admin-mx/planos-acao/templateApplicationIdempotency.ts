@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase'
 import { activeUnits, fetchClientOfStore, fetchClientUnits, type ClientUnit } from '@/features/strategic-plan'
+import { describeAdminRpcError } from '../equipe/adminRpcErrors'
 import { fetchTemplateItems, resolveItemDueDate, type ActionPlanTemplateItem } from './actionPlanTemplates'
 import { calculateWeights } from './actionPlanWizardLogic'
 
@@ -20,28 +21,19 @@ export function createTemplateApplicationRequestId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}`
 }
 
-async function resolveConfirmedReplay(input: {
-  versionId: string
+async function fetchMaterializedStoreIds(input: {
   storeIds: string[]
   requestId: string
-  items: PersistedTemplateItem[]
-}): Promise<boolean> {
+}): Promise<Set<string>> {
   const { data, error } = await supabase
     .from('planos_acao')
     .select('id, scope_id, transition_metadata')
     .eq('scope_type', 'store')
     .in('scope_id', input.storeIds)
-    .eq('origem_ref_id', input.versionId)
-    .eq('origem_ref_table', 'planos_acao_template_versoes')
     .contains('transition_metadata', { template_application_request_id: input.requestId })
 
-  if (error) return false
-
-  // Um replay só é replay se TODAS as unidades da requisição tiverem TODOS os
-  // itens materializados. Confirmar por unidade isolada esconderia uma aplicação
-  // que parou no meio.
-  const materializedStores = new Set((data ?? []).map(row => row.scope_id).filter((id): id is string => Boolean(id)))
-  return input.storeIds.every(storeId => materializedStores.has(storeId))
+  if (error) return new Set()
+  return new Set((data ?? []).map(row => row.scope_id).filter((id): id is string => Boolean(id)))
 }
 
 /**
@@ -144,10 +136,10 @@ export async function resolveClientApplicationTargets(
 }
 
 /**
- * Materializa uma versão publicada de Plano Padrão com idempotência por
- * requestId. O banco possui índice UNIQUE por unidade+request; um retry após
- * timeout recebe 23505 e só é tratado como replay se todas as unidades da
- * requisição tiverem o plano comprovado no banco.
+ * Materializa uma versão publicada de Plano Padrão via RPC (não por insert
+ * direto em `planos_acao`). A idempotência é o requestId em
+ * `transition_metadata`: retry da mesma requisição reaproveita as unidades já
+ * materializadas e só cria as que faltam.
  */
 export async function applyTemplateToStoresIdempotent(input: {
   versionId: string
@@ -173,9 +165,17 @@ export async function applyTemplateToStoresIdempotent(input: {
   }
 
   const items = rawItems as PersistedTemplateItem[]
+  const materialized = await fetchMaterializedStoreIds({
+    storeIds: input.storeIds,
+    requestId: input.requestId,
+  })
+  if (input.storeIds.every(storeId => materialized.has(storeId))) {
+    return { error: null, created: input.storeIds.length, replayed: true }
+  }
+
   const rows = buildTemplateApplicationRows({
     items,
-    storeIds: input.storeIds,
+    storeIds: input.storeIds.filter(storeId => !materialized.has(storeId)),
     versionId: input.versionId,
     requestId: input.requestId,
     userId: input.userId,
@@ -188,21 +188,62 @@ export async function applyTemplateToStoresIdempotent(input: {
     indicator: input.indicator,
   })
 
-  const { error } = await supabase.from('planos_acao').insert(rows)
-
-  if (!error) return { error: null, created: rows.length, replayed: false }
-
-  if (error.code === '23505') {
-    const replayConfirmed = await resolveConfirmedReplay({
-      versionId: input.versionId,
-      storeIds: input.storeIds,
-      requestId: input.requestId,
-      items,
+  const ids: string[] = []
+  for (const row of rows) {
+    const { data, error } = await supabase.rpc('criar_plano_acao_v2', {
+      p_scope_type: 'store',
+      p_scope_id: row.scope_id,
+      p_objetivo: row.acao,
+      p_departamento: row.departamento,
+      p_indicador: row.indicador,
+      p_acao: row.acao,
+      p_como: row.como ?? undefined,
+      p_problema: row.problema,
+      p_responsavel_id: row.responsavel_id ?? undefined,
+      p_prazo: row.prazo ?? undefined,
+      p_prioridade: row.prioridade,
+      p_origem: row.origem,
     })
-    if (replayConfirmed) return { error: null, created: rows.length, replayed: true }
+    if (error || !data) {
+      return {
+        error: describeAdminRpcError(error, 'Falha ao aplicar o plano padrão.'),
+        created: ids.length + materialized.size,
+        replayed: false,
+      }
+    }
+    const plan = data as { id: string }
+    const fullPatch = {
+      checklist: row.checklist,
+      transition_metadata: row.transition_metadata,
+      origem_ref_id: input.versionId,
+      origem_ref_table: 'planos_acao_template_versoes',
+      reference_year: row.reference_year,
+      evidence_required: row.evidence_required,
+    }
+    const { error: patchError } = await supabase.rpc('atualizar_plano_acao_patch', {
+      p_plano_id: plan.id,
+      p_patch: fullPatch,
+    })
+    if (patchError) {
+      const { error: retryError } = await supabase.rpc('atualizar_plano_acao_patch', {
+        p_plano_id: plan.id,
+        p_patch: {
+          checklist: row.checklist,
+          transition_metadata: row.transition_metadata,
+        },
+      })
+      if (retryError) {
+        return {
+          error: `Plano criado, mas o banco recusou o vínculo extra (${patchError.message}). O quadro mostra o plano; o checklist pode estar incompleto.`,
+          created: ids.length + 1 + materialized.size,
+          replayed: false,
+        }
+      }
+    }
+    ids.push(plan.id)
   }
 
-  return { error: error.message, created: 0, replayed: false }
+  return { error: null, created: ids.length + materialized.size, replayed: false }
 }
 
 /** Aplicação a uma única unidade. Mantida para chamadas que já resolveram o destino. */

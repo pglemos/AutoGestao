@@ -33,9 +33,6 @@ export function LibraryTab(props: {
     setLessons(university.rows)
     setError(library.error ?? university.error)
     setLoading(false)
-    // #region agent log
-    fetch('http://127.0.0.1:7506/ingest/ceac55d9-e57e-4aa7-abcd-40a91956c86a',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'bb88b1'},body:JSON.stringify({sessionId:'bb88b1',runId:'pre-fix',hypothesisId:'A',location:'LibraryTab.tsx:load',message:'library+university counts',data:{libraryCount:library.rows.length,universityCount:university.rows.length,libraryError:library.error,universityError:university.error},timestamp:Date.now()})}).catch(()=>{})
-    // #endregion
   }
 
   useEffect(() => { void load() }, [])

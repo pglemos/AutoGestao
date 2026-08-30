@@ -7,6 +7,7 @@ import {
   groupIndicatorsByArea,
   inclusionReasonLabel,
   isCalculatedIndicator,
+  packageIndicatorIsCalculated,
   summarizePackageIndicators,
   toPackageIndicator,
   validatePackageDraft,
@@ -37,10 +38,16 @@ describe('plano estratégico — modo de entrada do indicador', () => {
     expect(isCalculatedIndicator('  ')).toBe(false)
   })
 
-  test('toPackageIndicator deriva calculável do catálogo', () => {
+  test('toPackageIndicator deriva calculável do catálogo canônico', () => {
     const row = { metric_key: 'sales_total', label: 'Vendas total', area: 'Vendas', sort_order: 20, value_type: 'number', direction: 'increase', formula_key: 'sum_sales_channels' }
     expect(toPackageIndicator(row)).toMatchObject({ calculavel: true, inclusion_reason: 'selecao_direta' })
-    expect(toPackageIndicator({ ...row, formula_key: null })).toMatchObject({ calculavel: false })
+    expect(toPackageIndicator({ ...row, formula_key: null })).toMatchObject({ calculavel: true })
+  })
+
+  test('VOLUME permanece digitável mesmo com snapshot/fórmula invertidos', () => {
+    expect(packageIndicatorIsCalculated('VOLUME_DE_LEADS_POR_VENDA', 'fx_volume')).toBe(false)
+    expect(packageIndicatorIsCalculated('SALES_WALKIN', 'sum_sales')).toBe(false)
+    expect(packageIndicatorIsCalculated('SALES_TOTAL', null)).toBe(true)
   })
 })
 

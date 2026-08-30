@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase'
-import { validatePersonAccessDraft, type PersonAccessDraft, type PersonStatus } from './personAccess'
+import { describeAdminRpcError } from '../equipe/adminRpcErrors'
+import { uniqueMasterChangeGuard, validatePersonAccessDraft, type PersonAccessDraft, type PersonStatus } from './personAccess'
 import {
   collectClientStoreIds,
   isVinculoPersonId,
@@ -33,6 +34,14 @@ export type PersonAccessRow = {
  * cliente porque as duas metades moram em domínios diferentes e só se
  * encontram pelas lojas do cliente.
  */
+function tableError(
+  error: { message?: string; code?: string } | null | undefined,
+  fallback: string,
+): string | null {
+  if (!error) return null
+  return describeAdminRpcError(error, fallback)
+}
+
 export type ClientPersonsResult = {
   rows: PersonAccessRow[]
   /** Lojas do cliente, para rotular em qual unidade cada pessoa está autorizada. */
@@ -49,7 +58,7 @@ export async function fetchClientPersons(clientId: string): Promise<ClientPerson
   ])
 
   const failure = accessResult.error ?? clientResult.error ?? unitsResult.error ?? lojasResult.error
-  if (failure) return { rows: [], stores: [], error: failure.message }
+  if (failure) return { rows: [], stores: [], error: tableError(failure, 'Não foi possível carregar as pessoas do cliente.') }
 
   const acessos = (accessResult.data ?? []).map(row => ({
     ...row,
@@ -76,7 +85,7 @@ export async function fetchClientPersons(clientId: string): Promise<ClientPerson
     .from('vinculos_loja')
     .select('id, user_id, store_id, role, is_active, ended_at')
     .in('store_id', storeIds)
-  if (vinculosError) return { rows: [], stores, error: vinculosError.message }
+  if (vinculosError) return { rows: [], stores, error: tableError(vinculosError, 'Não foi possível carregar os vínculos das lojas.') }
 
   const vinculos = (vinculosData ?? []) as VinculoLojaRow[]
   const userIds = [...new Set(vinculos.map(vinculo => vinculo.user_id).filter(Boolean))]
@@ -87,7 +96,7 @@ export async function fetchClientPersons(clientId: string): Promise<ClientPerson
       .from('usuarios')
       .select('id, name, email, active, phone, declared_function, default_view')
       .in('id', userIds)
-    if (usuariosError) return { rows: [], stores, error: usuariosError.message }
+    if (usuariosError) return { rows: [], stores, error: tableError(usuariosError, 'Não foi possível carregar os usuários vinculados.') }
     usuarios = (usuariosData ?? []) as UsuarioRow[]
   }
 
@@ -116,7 +125,7 @@ async function ensureAccessRow(
     .eq('client_id', clientId)
     .eq('email', email)
     .maybeSingle()
-  if (findError) return { id: null, error: findError.message }
+  if (findError) return { id: null, error: tableError(findError, 'Não foi possível localizar o acesso desta pessoa.') }
   if (existing?.id) return { id: existing.id, error: null }
 
   const { data: inserted, error: insertError } = await supabase
@@ -135,17 +144,76 @@ async function ensureAccessRow(
     })
     .select('id')
     .single()
-  if (insertError) return { id: null, error: insertError.message }
+  if (insertError) return { id: null, error: tableError(insertError, 'Não foi possível criar o acesso desta pessoa.') }
   return { id: inserted?.id ?? null, error: null }
+}
+
+async function loadAccessMasterRows(clientId: string): Promise<{
+  rows: Array<{ id: string; is_dono_master: boolean; status: string }>
+  error: string | null
+}> {
+  const { data, error } = await supabase
+    .from('acessos_cliente_consultoria')
+    .select('id, is_dono_master, status')
+    .eq('client_id', clientId)
+  if (error) return { rows: [], error: tableError(error, 'Não foi possível conferir o Dono Master.') }
+  return {
+    rows: (data ?? []).map(row => ({
+      id: row.id,
+      is_dono_master: Boolean(row.is_dono_master),
+      status: row.status ?? 'ativo',
+    })),
+    error: null,
+  }
+}
+
+export async function grantStoreToClientDonoMasters(
+  clientId: string,
+  storeId: string,
+): Promise<{ error: string | null }> {
+  const { data, error } = await supabase
+    .from('acessos_cliente_consultoria')
+    .select('id, lojas_autorizadas')
+    .eq('client_id', clientId)
+    .eq('is_dono_master', true)
+  if (error) return { error: tableError(error, 'Não foi possível atualizar o escopo do Dono Master.') }
+  for (const row of data ?? []) {
+    const current = Array.isArray(row.lojas_autorizadas) ? row.lojas_autorizadas as string[] : []
+    if (current.includes(storeId)) continue
+    const { error: updateError } = await supabase
+      .from('acessos_cliente_consultoria')
+      .update({
+        lojas_autorizadas: [...current, storeId],
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', row.id)
+      .eq('client_id', clientId)
+    if (updateError) return { error: tableError(updateError, 'Não foi possível incluir a nova loja no Dono Master.') }
+  }
+  return { error: null }
 }
 
 export async function createClientPerson(
   clientId: string,
   draft: PersonAccessDraft,
   createdBy: string,
-): Promise<{ error: string | null }> {
+): Promise<{ error: string | null; reused?: boolean }> {
   const errors = validatePersonAccessDraft(draft)
   if (errors.length) return { error: errors[0] }
+
+  const email = draft.email.trim().toLowerCase()
+  const { data: existing, error: findError } = await supabase
+    .from('acessos_cliente_consultoria')
+    .select('id, status')
+    .eq('client_id', clientId)
+    .eq('email', email)
+    .maybeSingle()
+  if (findError) return { error: tableError(findError, 'Não foi possível localizar o acesso desta pessoa.') }
+  if (existing?.id) {
+    const nextStatus: PersonStatus = existing.status === 'inativo' ? 'em_preparacao' : (existing.status as PersonStatus)
+    const updated = await updateClientPerson(clientId, existing.id, { ...draft, status: nextStatus })
+    return { error: updated.error, reused: true }
+  }
 
   // Um cliente só pode ter um Dono Master vigente (regra central do doc de
   // correção, item 10/17 de Pessoas e Acessos). Sem isso, marcar "Dono Master"
@@ -158,7 +226,7 @@ export async function createClientPerson(
       .update({ is_dono_master: false, updated_at: new Date().toISOString() })
       .eq('client_id', clientId)
       .eq('is_dono_master', true)
-    if (demoteError) return { error: demoteError.message }
+    if (demoteError) return { error: tableError(demoteError, 'Não foi possível atualizar o Dono Master.') }
   }
 
   const { error } = await supabase.from('acessos_cliente_consultoria').insert({
@@ -174,7 +242,16 @@ export async function createClientPerson(
     status: 'em_preparacao' as PersonStatus,
     created_by: createdBy,
   })
-  return { error: error?.message ?? null }
+  if (!error) {
+    await supabase.from('logs_auditoria').insert({
+      action: 'criar_pessoa_cliente',
+      entity: 'acessos_cliente_consultoria',
+      entity_id: clientId,
+      user_id: createdBy,
+      details_json: { email, is_dono_master: draft.is_dono_master, papeis: draft.papeis },
+    })
+  }
+  return { error: tableError(error, 'Não foi possível criar a pessoa.') }
 }
 
 export async function updateClientPerson(
@@ -198,6 +275,16 @@ export async function updateClientPerson(
   if (resolved.error) return { error: resolved.error }
   if (!resolved.id) return { error: 'Não foi possível localizar o acesso desta pessoa.' }
 
+  const current = await loadAccessMasterRows(clientId)
+  if (current.error) return { error: current.error }
+  const blocked = uniqueMasterChangeGuard({
+    persons: current.rows,
+    targetId: resolved.id,
+    nextMaster: draft.is_dono_master,
+    nextStatus: draft.status,
+  })
+  if (blocked) return { error: blocked }
+
   if (draft.is_dono_master) {
     const { error: demoteError } = await supabase
       .from('acessos_cliente_consultoria')
@@ -205,7 +292,7 @@ export async function updateClientPerson(
       .eq('client_id', clientId)
       .eq('is_dono_master', true)
       .neq('id', resolved.id)
-    if (demoteError) return { error: demoteError.message }
+    if (demoteError) return { error: tableError(demoteError, 'Não foi possível atualizar o Dono Master.') }
   }
 
   const { error } = await supabase
@@ -219,11 +306,27 @@ export async function updateClientPerson(
       lojas_autorizadas: draft.lojas_autorizadas,
       is_dono_master: draft.is_dono_master,
       visao_padrao: draft.visao_padrao || null,
+      status: draft.status,
       updated_at: new Date().toISOString(),
     })
     .eq('id', resolved.id)
     .eq('client_id', clientId)
-  return { error: error?.message ?? null }
+  if (!error) {
+    const { data: session } = await supabase.auth.getUser()
+    await supabase.from('logs_auditoria').insert({
+      action: 'atualizar_pessoa_cliente',
+      entity: 'acessos_cliente_consultoria',
+      entity_id: resolved.id,
+      user_id: session.user?.id ?? null,
+      details_json: {
+        client_id: clientId,
+        email: draft.email.trim().toLowerCase(),
+        is_dono_master: draft.is_dono_master,
+        status: draft.status,
+      },
+    })
+  }
+  return { error: tableError(error, 'Não foi possível atualizar a pessoa.') }
 }
 
 /**
@@ -246,14 +349,76 @@ export async function setClientDonoMaster(
     .update({ is_dono_master: false, updated_at: new Date().toISOString() })
     .eq('client_id', clientId)
     .eq('is_dono_master', true)
-  if (demoteError) return { error: demoteError.message }
+  if (demoteError) return { error: tableError(demoteError, 'Não foi possível atualizar o Dono Master.') }
 
   const { error } = await supabase
     .from('acessos_cliente_consultoria')
     .update({ is_dono_master: true, papeis, updated_at: new Date().toISOString() })
     .eq('id', resolved.id)
     .eq('client_id', clientId)
-  return { error: error?.message ?? null }
+  if (!error) {
+    const { data: session } = await supabase.auth.getUser()
+    await supabase.from('logs_auditoria').insert({
+      action: 'transferir_dono_master',
+      entity: 'acessos_cliente_consultoria',
+      entity_id: resolved.id,
+      user_id: session.user?.id ?? null,
+      details_json: { client_id: clientId, email: person.email },
+    })
+  }
+  if (!error) {
+    await ensurePrimaryContactFromDonoMaster(clientId, person)
+  }
+  return { error: tableError(error, 'Não foi possível promover o Dono Master.') }
+}
+
+/**
+ * Base44 trata o Dono Master como contato principal. Fichas legadas
+ * (ex.: ACERTT) têm o Master em `acessos` e zero linhas em `contatos`.
+ */
+export async function ensurePrimaryContactFromDonoMaster(
+  clientId: string,
+  person: { nome: string; email: string; telefone?: string | null },
+): Promise<{ created: boolean; error: string | null }> {
+  const { data: existing, error: readError } = await supabase
+    .from('contatos_cliente_consultoria')
+    .select('id, name, email, is_primary')
+    .eq('client_id', clientId)
+  if (readError) return { created: false, error: tableError(readError, 'Não foi possível ler os contatos do cliente.') }
+
+  const rows = existing ?? []
+  if (rows.some(row => row.is_primary && (row.name ?? '').trim())) {
+    return { created: false, error: null }
+  }
+
+  const email = person.email.trim().toLowerCase()
+  const match = rows.find(row => (row.email ?? '').trim().toLowerCase() === email)
+    ?? rows.find(row => (row.name ?? '').trim().toLowerCase() === person.nome.trim().toLowerCase())
+
+  if (match) {
+    const { error } = await supabase
+      .from('contatos_cliente_consultoria')
+      .update({
+        is_primary: true,
+        name: person.nome.trim(),
+        email: person.email.trim() || null,
+        phone: person.telefone ?? null,
+        role: 'DONO',
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', match.id)
+    return { created: !error, error: tableError(error, 'Não foi possível marcar o contato principal.') }
+  }
+
+  const { error } = await supabase.from('contatos_cliente_consultoria').insert({
+    client_id: clientId,
+    name: person.nome.trim(),
+    email: person.email.trim() || null,
+    phone: person.telefone ?? null,
+    role: 'DONO',
+    is_primary: true,
+  })
+  return { created: !error, error: tableError(error, 'Não foi possível criar o contato principal.') }
 }
 
 export async function updatePersonStatus(
@@ -265,10 +430,19 @@ export async function updatePersonStatus(
   if (resolved.error) return { error: resolved.error }
   if (!resolved.id) return { error: 'Não foi possível localizar o acesso desta pessoa.' }
 
+  const current = await loadAccessMasterRows(clientId)
+  if (current.error) return { error: current.error }
+  const blocked = uniqueMasterChangeGuard({
+    persons: current.rows,
+    targetId: resolved.id,
+    nextStatus: status,
+  })
+  if (blocked) return { error: blocked }
+
   const { error } = await supabase
     .from('acessos_cliente_consultoria')
     .update({ status, updated_at: new Date().toISOString() })
     .eq('id', resolved.id)
     .eq('client_id', clientId)
-  return { error: error?.message ?? null }
+  return { error: tableError(error, 'Não foi possível atualizar o status da pessoa.') }
 }

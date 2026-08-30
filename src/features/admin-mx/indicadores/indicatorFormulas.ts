@@ -343,6 +343,7 @@ export function formatDisplay(value: number | null | undefined, config: FormatCo
 /** Converte um valor exibido de volta para o valor armazenado (percentual → fração). */
 export function parseStrategicInput(raw: string, config: FormatConfig): number | null {
   if (!raw || raw.trim() === '') return null
+  if (/^limpar$/i.test(raw.trim())) return null
   let cleaned = raw.trim()
     .replace(/^R\$\s*/i, '')
     .replace(/[xX]$/i, '')
@@ -355,6 +356,25 @@ export function parseStrategicInput(raw: string, config: FormatConfig): number |
   if (Number.isNaN(num)) return null
   if (config.value_format === 'PERCENTAGE') return num / 100
   return num
+}
+
+export type StrategicCellDecision =
+  | { action: 'preserve' }
+  | { action: 'clear' }
+  | { action: 'set'; value: number }
+  | { action: 'reject'; message: string }
+
+const STRATEGIC_CELL_REJECT_MESSAGE =
+  'Valor inválido. Use um número, deixe vazio para preservar ou LIMPAR para apagar.'
+
+/** Cadastro rápido: vazio preserva, LIMPAR apaga, 0 é zero. */
+export function decideStrategicCellInput(raw: string, config: FormatConfig): StrategicCellDecision {
+  const trimmed = raw.trim()
+  if (!trimmed) return { action: 'preserve' }
+  if (/^limpar$/i.test(trimmed)) return { action: 'clear' }
+  const value = parseStrategicInput(raw, config)
+  if (value === null) return { action: 'reject', message: STRATEGIC_CELL_REJECT_MESSAGE }
+  return { action: 'set', value }
 }
 
 /**

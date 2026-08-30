@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { emptyPersonAccessDraft, personToAccessDraft, resolveOwnerMaster, validatePersonAccessDraft } from './personAccess'
+import { emptyPersonAccessDraft, personToAccessDraft, resolveOwnerMaster, uniqueMasterChangeGuard, validatePersonAccessDraft } from './personAccess'
 
 describe('pessoas e acessos — lógica pura', () => {
   test('valida nome, e-mail e ao menos um perfil', () => {
@@ -53,6 +53,12 @@ describe('pessoas e acessos — lógica pura', () => {
     }])
     expect(invited.status).toBe('VALID')
 
+    const visaoDepartamental = resolveOwnerMaster([{
+      id: 'p1', nome: 'Ana', email: 'a@b.com', telefone: null, funcao_declarada: 'SOCIO',
+      is_dono_master: true, status: 'ativo', papeis: ['DONO'], visao_padrao: 'VENDEDOR',
+    }])
+    expect(visaoDepartamental.status).toBe('VALID')
+
     const donoSemMaster = resolveOwnerMaster([{
       id: 'p1', nome: 'Ana', email: 'a@b.com', telefone: null, funcao_declarada: null,
       is_dono_master: false, status: 'ativo', papeis: ['DONO'],
@@ -75,5 +81,18 @@ describe('pessoas e acessos — lógica pura', () => {
     expect(draft.papeis).toEqual(['DONO', 'DIRETOR'])
     expect(draft.is_dono_master).toBe(true)
     expect(draft.visao_padrao).toBe('DONO')
+  })
+
+  test('bloqueia demover ou desativar o único Dono Master', () => {
+    const persons = [
+      { id: 'p1', is_dono_master: true, status: 'ativo' },
+      { id: 'p2', is_dono_master: false, status: 'ativo' },
+    ]
+    expect(uniqueMasterChangeGuard({ persons, targetId: 'p1', nextMaster: false }))
+      .toMatch(/Transfira o Dono Master/)
+    expect(uniqueMasterChangeGuard({ persons, targetId: 'p1', nextStatus: 'inativo' }))
+      .toMatch(/desativar o único Master/)
+    expect(uniqueMasterChangeGuard({ persons, targetId: 'p1', nextMaster: true, nextStatus: 'ativo' })).toBeNull()
+    expect(uniqueMasterChangeGuard({ persons, targetId: 'p2', nextStatus: 'inativo' })).toBeNull()
   })
 })

@@ -4,6 +4,7 @@ import {
   departmentLabel,
   departmentMatchesFilter,
   indicatorAreaMatchesDepartment,
+  indicatorsForDepartment,
 } from './departmentTaxonomy'
 
 describe('taxonomia de departamentos do plano de ação', () => {
@@ -23,7 +24,20 @@ describe('taxonomia de departamentos do plano de ação', () => {
 
   test('preserva labels do Base44 e traduz áreas legadas do catálogo', () => {
     expect(departmentLabel('PESSOAS_RH')).toBe('Pessoas - RH')
+    expect(departmentCategory('Produto e Estoque')).toBe('produto')
     expect(indicatorAreaMatchesDepartment('Estoque', 'produto')).toBe(true)
+    expect(indicatorAreaMatchesDepartment('Produto e Estoque', 'produto')).toBe(true)
     expect(indicatorAreaMatchesDepartment('Vendas', 'financeiro')).toBe(false)
+  })
+
+  test('não mistura o catálogo quando o departamento não tem indicadores', () => {
+    const rows = [
+      { area: 'Comercial', label: 'Vendas Total' },
+      { area: 'Marketing', label: 'Leads' },
+    ]
+    expect(indicatorsForDepartment(rows, 'produto')).toEqual([])
+    expect(indicatorsForDepartment(rows, 'comercial')).toEqual([rows[0]])
+    expect(indicatorsForDepartment(rows, '')).toEqual([])
+    expect(indicatorsForDepartment(rows, null)).toEqual([])
   })
 })

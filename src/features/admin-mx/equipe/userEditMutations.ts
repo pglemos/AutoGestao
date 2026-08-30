@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase'
+import { describeAdminRpcError } from './adminRpcErrors'
 import { todayIso, type ManagerDelegationDraft, type RoleGrantDraft, type StoreAssignmentDraft, type UserPersonalDraft } from './userEdit'
 
 export type TeamUserDetail = {
@@ -147,7 +148,7 @@ export async function saveUserPersonal(userId: string, draft: UserPersonalDraft)
       relationship_consent: draft.relationship_consent,
     },
   })
-  if (error) return { error: error.message }
+  if (error) return { error: describeAdminRpcError(error, 'Falha ao salvar dados pessoais.') }
   if (data && typeof data === 'object' && 'ok' in data && !(data as { ok: boolean }).ok) {
     return { error: (data as { error?: string }).error ?? 'Falha ao salvar dados pessoais.' }
   }
@@ -164,7 +165,7 @@ export async function saveUserAccess(userId: string, status: string, activatedAt
       deactivation_reason: status === 'DESATIVADO' ? 'Desativado na edição de usuário.' : null,
     },
   })
-  if (error) return { error: error.message }
+  if (error) return { error: describeAdminRpcError(error, 'Falha ao atualizar acesso do usuário.') }
   if (data && typeof data === 'object' && 'ok' in data && !(data as { ok: boolean }).ok) {
     return { error: (data as { error?: string }).error ?? 'Falha ao atualizar acesso do usuário.' }
   }
@@ -206,7 +207,7 @@ export async function saveDefaultView(userId: string, defaultView: string): Prom
       default_view: defaultView || null,
     },
   })
-  if (error) return { error: error.message }
+  if (error) return { error: describeAdminRpcError(error, 'Falha ao salvar visão padrão.') }
   if (data && typeof data === 'object' && 'ok' in data && !(data as { ok: boolean }).ok) {
     return { error: (data as { error?: string }).error ?? 'Falha ao salvar visão padrão.' }
   }

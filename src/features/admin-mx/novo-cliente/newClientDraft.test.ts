@@ -39,6 +39,8 @@ describe('wizard de novo cliente — validação por passo', () => {
     expect(validateNewClientStep(2, draft)).toContain('Estrutura "Loja única" aceita apenas uma loja.')
     draft.structure_type = 'REDE'
     expect(validateNewClientStep(2, draft)).toEqual([])
+    draft.structure_type = 'GRUPO'
+    expect(validateNewClientStep(2, draft)).toEqual([])
   })
 
   test('passo 2 cobra loja principal quando nenhuma está marcada', () => {

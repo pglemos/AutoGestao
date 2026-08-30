@@ -17,10 +17,15 @@ describe('diagnoseEmptyImport', () => {
     expect(run({ headers: [] })).toContain('planilha está vazia')
   })
 
+  it('aceita a coluna Código do Indicador do modelo consolidado', () => {
+    const message = run({ headers: ['Código do Indicador', 'Indicador', ...MONTH_LABELS], matrix: [{}], codesInFile: ['sales_goal'] })
+    expect(message).toContain('todos os meses estão em branco')
+  })
+
   it('nomeia a coluna Código quando ela some, e lista o que veio no lugar', () => {
-    const message = run({ headers: ['Codigo', 'Indicador', ...MONTH_LABELS] })
-    expect(message).toContain('“Código” não foi encontrada')
-    expect(message).toContain('Codigo')
+    const message = run({ headers: ['Nome', 'Indicador', ...MONTH_LABELS] })
+    expect(message).toContain('“Código”')
+    expect(message).toContain('Nome')
     expect(message).toContain('Exportar planilha')
   })
 
@@ -57,6 +62,16 @@ describe('diagnoseEmptyImport', () => {
     const message = run({ matrix: [{}], codesInFile: ['goal_achievement_rate'] })
     expect(message).toContain('calculados')
     expect(message).toContain('Digitável')
+  })
+
+  it('reconhece a planilha oficial de 46 quando a grade só tem digitáveis', () => {
+    const message = run({
+      indicators: [{ code: 'sales_goal', calculado: false }],
+      matrix: [{}],
+      codesInFile: ['SALES_TOTAL'],
+    })
+    expect(message).toContain('calculados')
+    expect(message).not.toContain('Nenhum código da planilha corresponde')
   })
 
   it('cai no caso benigno quando tudo bate mas os meses estão em branco', () => {

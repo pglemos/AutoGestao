@@ -33,6 +33,7 @@ export type PersonAccessDraft = {
   lojas_autorizadas: string[]
   is_dono_master: boolean
   visao_padrao: PersonDefaultView | ''
+  status: PersonStatus
 }
 
 export function personToAccessDraft(person: {
@@ -44,6 +45,7 @@ export function personToAccessDraft(person: {
   lojas_autorizadas?: unknown
   is_dono_master: boolean
   visao_padrao?: string | null
+  status?: string | null
 }): PersonAccessDraft {
   const papeis = (Array.isArray(person.papeis) ? person.papeis : []).filter(
     (role): role is PersonProfile => PERSON_PROFILES.some(item => item.value === role),
@@ -60,6 +62,7 @@ export function personToAccessDraft(person: {
     lojas_autorizadas: Array.isArray(person.lojas_autorizadas) ? person.lojas_autorizadas as string[] : [],
     is_dono_master: person.is_dono_master,
     visao_padrao: visao,
+    status: PERSON_STATUSES.includes(person.status as PersonStatus) ? person.status as PersonStatus : 'em_preparacao',
   }
 }
 
@@ -73,6 +76,7 @@ export function emptyPersonAccessDraft(): PersonAccessDraft {
     lojas_autorizadas: [],
     is_dono_master: false,
     visao_padrao: '',
+    status: 'em_preparacao',
   }
 }
 
@@ -85,7 +89,28 @@ export function validatePersonAccessDraft(draft: PersonAccessDraft): string[] {
   if (draft.papeis.length === 0) errors.push('Selecione ao menos um perfil de acesso.')
   if (draft.is_dono_master && !draft.papeis.includes('DONO')) errors.push('Dono Master exige o perfil Dono.')
   if (draft.visao_padrao && !PERSON_DEFAULT_VIEWS.includes(draft.visao_padrao)) errors.push('Visão padrão inválida.')
+  if (draft.status && !PERSON_STATUSES.includes(draft.status)) errors.push('Status inválido.')
   return errors
+}
+
+const UNIQUE_MASTER_DEMOTE =
+  'Transfira o Dono Master para outra pessoa antes de remover esta designação.'
+const UNIQUE_MASTER_DEACTIVATE =
+  'Transfira o Dono Master antes de desativar o único Master vigente.'
+
+/** Bloqueia demover/desativar o único Dono Master até haver transferência. */
+export function uniqueMasterChangeGuard(input: {
+  persons: Array<{ id: string; is_dono_master: boolean; status: string }>
+  targetId: string
+  nextMaster?: boolean
+  nextStatus?: string
+}): string | null {
+  const masters = input.persons.filter(person => person.is_dono_master)
+  const target = input.persons.find(person => person.id === input.targetId)
+  if (!target?.is_dono_master || masters.length !== 1) return null
+  if (input.nextMaster === false) return UNIQUE_MASTER_DEMOTE
+  if (input.nextStatus === 'inativo') return UNIQUE_MASTER_DEACTIVATE
+  return null
 }
 
 export type OwnerMasterResolution = {
@@ -116,6 +141,7 @@ export function resolveOwnerMaster(
     is_dono_master: boolean
     status: string
     papeis: unknown
+    visao_padrao?: string | null
   }>,
 ): OwnerMasterResolution {
   const masters = persons.filter(person => person.is_dono_master)

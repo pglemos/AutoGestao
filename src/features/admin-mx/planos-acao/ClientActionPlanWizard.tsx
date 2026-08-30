@@ -33,7 +33,7 @@ import {
   type WizardResponsible,
   type WizardStore,
 } from './clientActionPlanWizardData'
-import { ACTION_PLAN_DEPARTMENT_CARDS, departmentLabel, indicatorAreaMatchesDepartment } from './departmentTaxonomy'
+import { ACTION_PLAN_DEPARTMENT_CARDS, departmentLabel, indicatorsForDepartment } from './departmentTaxonomy'
 
 export function ClientActionPlanWizard(props: {
   open: boolean
@@ -115,10 +115,10 @@ export function ClientActionPlanWizard(props: {
     return { ...current, actions }
   })
 
-  const deptIndicators = useMemo(
-    () => form.department ? indicators.filter(indicator => indicatorAreaMatchesDepartment(indicator.area, form.department)) : [],
-    [form.department, indicators],
-  )
+  const deptIndicators = useMemo(() => {
+    if (!form.department) return indicators
+    return indicatorsForDepartment(indicators, form.department)
+  }, [form.department, indicators])
   const weights = useMemo(() => calculateWeights(form.actions.length), [form.actions.length])
 
   const onClientChange = (clientId: string) => {
@@ -132,7 +132,7 @@ export function ClientActionPlanWizard(props: {
   }
 
   const onIndicatorChange = (metricKey: string) => {
-    const indicator = deptIndicators.find(item => item.metric_key === metricKey)
+    const indicator = deptIndicators.find(item => item.metric_key === metricKey) || indicators.find(item => item.metric_key === metricKey)
     const direction = (indicator?.direction === 'DIMINUIR' || indicator?.direction === 'decrease' ? 'DIMINUIR' : 'AUMENTAR') as ClientActionPlanWizardForm['direction']
     const nextTitle = titleCustomized ? form.title : suggestTitle(direction, indicator?.label ?? '')
     setForm(current => ({
@@ -187,8 +187,16 @@ export function ClientActionPlanWizard(props: {
     setSubmitting(true)
     try {
       const created = await createClientActionPlans({ form, storeIds: targetStoreIds, userId: supabaseUser.id })
-      if (created.error || !created.ids.length) {
-        toast.error(created.error ?? 'Falha ao criar o plano de ação.')
+      if (created.error) {
+        setErrors([created.error])
+        toast.error(created.error)
+        if (created.ids.length) props.onSaved()
+        return
+      }
+      if (!created.ids.length) {
+        const message = 'O banco não retornou o plano criado. Nada foi confirmado como salvo.'
+        setErrors([message])
+        toast.error(message)
         return
       }
 
@@ -198,40 +206,45 @@ export function ClientActionPlanWizard(props: {
           template_key: templateKey,
           nome: form.title.trim(),
           departamento: form.department.trim(),
-          indicador: form.indicatorName.trim() || null,
+          indicador: form.indicatorId.trim() || form.indicatorName.trim() || null,
           descricao: form.problem.trim() || null,
           program_key: null,
           active: true,
           created_by: supabaseUser.id,
         })
-        if (!templateError) {
-          const { data: template } = await supabase
-            .from('planos_acao_templates')
+        if (templateError) {
+          const message = `Plano criado, mas o template falhou: ${templateError.message}`
+          setErrors([message])
+          toast.error(message)
+          props.onSaved()
+          return
+        }
+        const { data: template } = await supabase
+          .from('planos_acao_templates')
+          .select('id')
+          .eq('template_key', templateKey)
+          .maybeSingle()
+        if (template) {
+          const { data: version } = await supabase
+            .from('planos_acao_template_versoes')
+            .insert({ template_id: template.id, versao: 1, status: 'rascunho', created_by: supabaseUser.id })
             .select('id')
-            .eq('template_key', templateKey)
-            .maybeSingle()
-          if (template) {
-            const { data: version } = await supabase
-              .from('planos_acao_template_versoes')
-              .insert({ template_id: template.id, versao: 1, status: 'rascunho', created_by: supabaseUser.id })
-              .select('id')
-              .single()
-            if (version) {
-              await supabase.from('planos_acao_template_itens').insert(
-                form.actions.map((action, index) => ({
-                  version_id: version.id,
-                  ordem: index + 1,
-                  problema: form.problem.trim() || 'Problema identificado na loja.',
-                  acao: action.titulo.trim(),
-                  como: action.como.trim() || null,
-                  departamento: form.department.trim(),
-                  indicador: form.indicatorName.trim() || null,
-                  prioridade: form.priority,
-                  prazo_dias: 30,
-                  evidencia_requerida: false,
-                })),
-              )
-            }
+            .single()
+          if (version) {
+            await supabase.from('planos_acao_template_itens').insert(
+              form.actions.map((action, index) => ({
+                version_id: version.id,
+                ordem: index + 1,
+                problema: form.problem.trim() || 'Problema identificado na loja.',
+                acao: action.titulo.trim(),
+                como: action.como.trim() || null,
+                departamento: form.department.trim(),
+                indicador: form.indicatorId.trim() || form.indicatorName.trim() || null,
+                prioridade: form.priority,
+                prazo_dias: 30,
+                evidencia_requerida: false,
+              })),
+            )
           }
         }
       }
@@ -241,6 +254,10 @@ export function ClientActionPlanWizard(props: {
         : `Plano "${form.title}" criado para ${targetStoreIds.length} unidades.`)
       props.onSaved()
       props.onClose()
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Falha ao criar o plano de ação.'
+      setErrors([message])
+      toast.error(message)
     } finally {
       setSubmitting(false)
     }
@@ -298,7 +315,13 @@ export function ClientActionPlanWizard(props: {
           ))}
         </ol>
 
-        {errors.length ? <MxStatusBanner tone="warning">{errors[0]}</MxStatusBanner> : null}
+        {errors.length ? (
+          <MxStatusBanner tone="warning">
+            <ul className="list-disc space-y-1 pl-5">
+              {errors.map(error => <li key={error}>{error}</li>)}
+            </ul>
+          </MxStatusBanner>
+        ) : null}
 
         {step === 1 ? (
           <div className="grid gap-4 sm:grid-cols-2">
@@ -354,6 +377,9 @@ export function ClientActionPlanWizard(props: {
                 <option value="">{form.department ? 'Selecione um indicador' : 'Selecione um departamento'}</option>
                 {deptIndicators.map(indicator => <option key={indicator.metric_key} value={indicator.metric_key}>{indicator.label}</option>)}
               </MxSelect>
+                {form.department && deptIndicators.length === 0 ? (
+                  <p className="mt-1 text-xs text-muted-foreground">Nenhum indicador deste departamento no roster do cliente. Cadastre o indicador no Plano Estratégico ou escolha outro departamento.</p>
+                ) : null}
             </MxField>
             <MxField label="Título do plano">
               <Input value={form.title} onChange={event => onTitleChange(event.target.value)} placeholder="Título do plano de ação" />

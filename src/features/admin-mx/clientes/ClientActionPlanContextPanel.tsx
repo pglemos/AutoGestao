@@ -24,6 +24,7 @@ import {
 import { toast } from '@/lib/toast'
 import {
   changePlanStatus,
+  formatActionPlanCodigo,
   normalizeBoardChecklist,
   resolveBoardColumn,
   STATUS_LABEL,
@@ -61,7 +62,7 @@ function statusTone(status: string): string {
 function toBoardPlan(row: ClientActionPlanRow): BoardPlan {
   return {
     id: row.id,
-    codigo: row.codigo,
+    codigo: formatActionPlanCodigo(row.codigo, row.id),
     problema: null,
     acao: row.acao,
     status: row.status as PlanStatus,
@@ -74,6 +75,7 @@ function toBoardPlan(row: ClientActionPlanRow): BoardPlan {
     concluido_at: null,
     scope_id: row.scope_id,
     checklist: normalizeBoardChecklist(row.checklist),
+    linkedPlanIds: row.linked_plan_ids,
   }
 }
 
@@ -154,14 +156,17 @@ export function ClientActionPlanContextPanel({ clientId, clientSlug, primaryStor
       return
     }
     const from = (plan.status ?? 'pendente') as PlanStatus
-    const result = await changePlanStatus(plan.id, toStatus, {
-      from,
-      note: 'Movido pelo quadro Admin',
-      checklist: plan.checklist,
-    })
-    if (result.error) {
-      toast.error(result.error)
-      return
+    const ids = [...new Set((plan.linkedPlanIds?.length ? plan.linkedPlanIds : [plan.id]).filter(Boolean))]
+    for (const id of ids) {
+      const result = await changePlanStatus(id, toStatus, {
+        from,
+        note: 'Movido pelo quadro Admin',
+        checklist: plan.checklist,
+      })
+      if (result.error) {
+        toast.error(result.error)
+        return
+      }
     }
     toast.success(`Plano movido para ${STATUS_LABEL[toStatus].toLowerCase()}.`)
     void load()
@@ -249,7 +254,7 @@ export function ClientActionPlanContextPanel({ clientId, clientSlug, primaryStor
                     const statusLabel = STATUS_LABEL[resolvedStatus] ?? actionPlanStatusLabel(row.status)
                     return (
                       <TableRow key={row.id}>
-                        <TableCell className="font-semibold text-foreground">{row.codigo || 'Sem código'}</TableCell>
+                        <TableCell className="font-semibold text-foreground">{formatActionPlanCodigo(row.codigo, row.id)}</TableCell>
                         <TableCell className="max-w-[280px]">
                           <button type="button" className="text-left hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40" onClick={() => setSelectedPlan(toBoardPlan(row))}>
                             <span className="block font-semibold text-foreground">{row.acao || 'Plano sem título'}</span>

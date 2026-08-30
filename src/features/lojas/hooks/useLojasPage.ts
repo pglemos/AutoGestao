@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useFocusTrap } from '@/hooks/useFocusTrap'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/lib/toast'
+import { describeAdminRpcError } from '@/features/admin-mx/equipe/adminRpcErrors'
 import { getPreRegistrationLink } from '@/lib/utils'
 import type { Store } from '@/types/database'
 import { requestToastConfirmation } from '@/lib/ui/confirmAction'
@@ -229,7 +230,7 @@ export function useLojasPage() {
         p_store_id: hardDeleteStore.id,
         p_confirmation: hardDeleteConfirmation,
       })
-      if (error) throw error
+      if (error) throw new Error(describeAdminRpcError(error, 'Não foi possível excluir a loja definitivamente.'))
       toast.success('Loja e dependências excluídas definitivamente.')
       setHardDeleteStore(null)
       setHardDeleteConfirmation('')

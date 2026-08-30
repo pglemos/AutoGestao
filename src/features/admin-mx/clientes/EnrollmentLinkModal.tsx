@@ -60,7 +60,7 @@ export function EnrollmentLinkModal(props: {
           <Button variant="outline" onClick={props.onClose} disabled={props.submitting}>{generated ? 'Fechar' : 'Cancelar'}</Button>
           {!generated ? (
             <Button onClick={() => void generate()} disabled={props.submitting}>
-              <Link2 size={16} />{props.submitting ? 'Gerando...' : 'Gerar link'}
+              <Link2 size={16} />{props.submitting ? 'Gerando...' : 'Gerar Link'}
             </Button>
           ) : null}
         </>

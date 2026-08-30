@@ -1,7 +1,7 @@
 import { useMemo, type CSSProperties } from 'react'
 import { DragDropContext, Draggable, Droppable, type DropResult } from '@hello-pangea/dnd'
 import { MxEmptyState, MxProgress } from '@/components/module/MxModuleVisualPrimitives'
-import { BOARD_COLUMNS, STATUS_LABEL, groupPlansByColumn, type BoardPlan, type PlanStatus } from './actionPlanBoard'
+import { BOARD_COLUMNS, STATUS_LABEL, formatActionPlanCodigo, groupPlansByColumn, type BoardPlan, type PlanStatus } from './actionPlanBoard'
 
 function formatDate(value: string | null) {
   if (!value) return 'sem prazo'
@@ -53,17 +53,17 @@ export function ActionPlanKanban(props: {
                           ref={dragProvided.innerRef}
                           {...dragProvided.draggableProps}
                           style={dragProvided.draggableProps.style as CSSProperties}
-                          {...dragProvided.dragHandleProps}
                           className={dragSnapshot.isDragging ? 'opacity-90 shadow-md' : undefined}
                         >
                           <button
                             type="button"
+                            {...dragProvided.dragHandleProps}
                             onClick={() => props.onOpen(plan)}
                             className="w-full rounded-lg border border-border bg-background p-3 text-left transition-colors hover:border-primary focus-visible:border-primary"
                             data-testid="action-plan-kanban-card"
                             data-progress={plan.progresso ?? 0}
                           >
-                            <div className="text-xs text-muted-foreground">{plan.codigo || 'sem código'} · {plan.departamento || 'sem departamento'}</div>
+                            <div className="text-xs text-muted-foreground">{formatActionPlanCodigo(plan.codigo, plan.id)} · {plan.departamento || 'sem departamento'}</div>
                             <div className="mt-1 line-clamp-2 text-sm font-semibold text-foreground">{plan.acao || plan.problema || 'Plano sem descrição'}</div>
                             <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
                               <span>{formatDate(plan.prazo)}</span>

@@ -20,6 +20,14 @@ export const PLAN_CYCLE_STATUS_LABEL: Record<PlanCycleStatus, string> = {
   revisado: 'Revisado',
 }
 
+/** Código de status do editor admin, alinhado ao preview Base44. */
+export const ADMIN_PLAN_CYCLE_STATUS_CODE: Record<PlanCycleStatus, string> = {
+  rascunho: 'EM_CONFIGURACAO',
+  em_validacao: 'EM_VALIDACAO',
+  publicado: 'PUBLICADO',
+  revisado: 'REVISADO',
+}
+
 /**
  * Transições permitidas.
  *

@@ -16,7 +16,9 @@ export function buildAdminStrategicPlanHref(input: AdminStrategicPlanNavInput): 
   // storeId só como contexto; o editor resolve pelo cycleId/clientId.
   if (input.storeId) params.set('storeId', input.storeId)
   if (input.clientSlug) {
-    return `/clientes/${encodeURIComponent(input.clientSlug)}/plano-estrategico?${params.toString()}`
+    const yearPath = input.year != null ? `/${input.year}` : ''
+    const query = params.toString()
+    return `/clientes/${encodeURIComponent(input.clientSlug)}/plano-estrategico${yearPath}${query ? `?${query}` : ''}`
   }
   return `/plano-estrategico?${params.toString()}`
 }

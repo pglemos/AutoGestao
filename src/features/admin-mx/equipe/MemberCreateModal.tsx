@@ -47,7 +47,11 @@ export function MemberCreateModal(props: {
         setError(result.error)
         return
       }
-      toast.success('Membro da equipe criado.')
+      toast.success(
+        result.temporaryPassword
+          ? `Membro criado. Senha temporária: ${result.temporaryPassword}`
+          : 'Membro da equipe criado.',
+      )
       reset()
       onSaved()
       onClose()
@@ -61,7 +65,7 @@ export function MemberCreateModal(props: {
       open={open}
       onClose={() => { if (!saving) { reset(); onClose() } }}
       title="Adicionar Membro da Equipe"
-      description="Cria um perfil interno MX com papel e situação iniciais."
+      description="Cria um perfil interno MX com papel e situação iniciais. A senha temporária aparece após salvar; o membro troca no primeiro acesso."
       size="lg"
       closeOnEscape={!saving}
       footer={(

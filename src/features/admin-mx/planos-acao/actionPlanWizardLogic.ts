@@ -1,5 +1,8 @@
 import { supabase } from '@/lib/supabase'
+import { describeAdminRpcError } from '../equipe/adminRpcErrors'
 import type { TemplateItemPriority } from './actionPlanTemplates'
+import { departmentLabel } from './departmentTaxonomy'
+import { matchCanonicalIndicator } from '../indicadores/canonicalBase44Catalog'
 
 /**
  * Lógica pura do wizard de plano de ação por cliente (Base44
@@ -176,8 +179,8 @@ export function buildPlanPayload(input: {
   return {
     scope_type: 'store',
     scope_id: storeId,
-    departamento: form.department.trim() || 'Geral',
-    indicador: form.indicatorName.trim() || 'Não definido',
+    departamento: departmentLabel(form.department) === '—' ? (form.department.trim() || 'Geral') : departmentLabel(form.department),
+    indicador: matchCanonicalIndicator(form.indicatorId)?.code ?? form.indicatorId.trim() ?? form.indicatorName.trim() ?? 'Não definido',
     problema: form.problem.trim() || 'Problema identificado pela equipe de consultoria.',
     acao: form.title.trim(),
     como: firstAction?.como.trim() || null,
@@ -195,13 +198,26 @@ export function buildPlanPayload(input: {
 }
 
 /** Campos que a RPC de criação não recebe e precisam ir no patch autenticado. */
-export function buildCreatedPlanPatch(form: ClientActionPlanWizardForm): Record<string, unknown> {
+export function buildCreatedPlanPatch(
+  form: ClientActionPlanWizardForm,
+  application?: { requestId: string; unitCount: number },
+): Record<string, unknown> {
   return {
     checklist: buildChecklistItems(form.actions),
     participants: form.participants.trim() || null,
     efficacy_indicator: form.efficacyIndicatorName.trim() || null,
     reference_year: new Date().getFullYear(),
     iniciado_at: form.startDate || null,
+    ...(application?.requestId
+      ? {
+          transition_metadata: {
+            client_application_request_id: application.requestId,
+            client_id: form.clientId,
+            scope_mode: form.scopeMode,
+            unit_count: application.unitCount,
+          },
+        }
+      : {}),
   }
 }
 
@@ -215,6 +231,11 @@ export async function createClientActionPlans(input: {
   userId: string
 }): Promise<{ error: string | null; created: number; ids: string[] }> {
   const ids: string[] = []
+  const requestId = globalThis.crypto?.randomUUID?.() ?? `client-app-${Date.now()}`
+  const createdPatch = buildCreatedPlanPatch(input.form, {
+    requestId,
+    unitCount: input.storeIds.length,
+  })
   for (const storeId of input.storeIds) {
     const payload = buildPlanPayload({ form: input.form, storeId, userId: input.userId })
     const { data, error } = await supabase.rpc('criar_plano_acao_v2', {
@@ -231,13 +252,35 @@ export async function createClientActionPlans(input: {
       p_prioridade: payload.prioridade as ClientActionPlanWizardForm['priority'],
       p_origem: payload.origem as ClientActionPlanWizardForm['origin'],
     })
-    if (error || !data) return { error: error?.message ?? 'Falha ao criar o plano de ação.', created: ids.length, ids }
+    if (error || !data) {
+      return {
+        error: describeAdminRpcError(error, 'Falha ao criar o plano de ação.'),
+        created: ids.length,
+        ids,
+      }
+    }
     const plan = data as { id: string }
     const { error: patchError } = await supabase.rpc('atualizar_plano_acao_patch', {
       p_plano_id: plan.id,
-      p_patch: buildCreatedPlanPatch(input.form),
+      p_patch: createdPatch,
     })
-    if (patchError) return { error: patchError.message, created: ids.length, ids }
+    if (patchError) {
+      const { error: retryError } = await supabase.rpc('atualizar_plano_acao_patch', {
+        p_plano_id: plan.id,
+        p_patch: {
+          checklist: buildChecklistItems(input.form.actions),
+          transition_metadata: createdPatch.transition_metadata ?? null,
+        },
+      })
+      if (retryError) {
+        ids.push(plan.id)
+        return {
+          error: `Plano criado, mas o banco recusou o vínculo extra (${patchError.message}). O quadro mostra o plano; o indicador já foi gravado na criação, e o checklist pode estar incompleto.`,
+          created: ids.length,
+          ids,
+        }
+      }
+    }
     ids.push(plan.id)
   }
   return { error: null, created: ids.length, ids }

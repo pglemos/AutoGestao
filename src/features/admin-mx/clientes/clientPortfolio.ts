@@ -340,6 +340,7 @@ export function nextAction(client: PortfolioClient): string {
 
 export function structureLabel(client: PortfolioClient): string {
   if (client.structure_type === 'REDE') return `Rede · ${client.units} unidade(s)`
+  if (client.structure_type === 'GRUPO') return `Grupo · ${client.units} unidade(s)`
   if (client.structure_type === 'LOJA_UNICA') return 'Loja única'
   return client.units ? `${client.units} unidade(s)` : 'Não informada'
 }

@@ -5,6 +5,7 @@
 // gravações nas tabelas existentes + a nova overrides_parametros_cliente.
 
 import { supabase } from '@/lib/supabase'
+import { describeAdminRpcError } from '@/features/admin-mx/equipe/adminRpcErrors'
 import { evaluateFormula, extractIndicatorDeps, extractParameterDeps } from './indicatorFormulas'
 import type { IndicatorParameter } from './indicatorCatalog'
 
@@ -245,7 +246,7 @@ export async function saveIndicatorTargets(params: {
     p_note: params.note ?? null,
     p_ciclo_id: params.cicloId ?? null,
   })
-  return { error: error?.message ?? null, data }
+  return { error: error ? describeAdminRpcError(error, 'Não foi possível salvar as metas.') : null, data }
 }
 
 /** Salva o realizado de um indicador de uma loja via RPC oficial (gera histórico). */
@@ -267,7 +268,7 @@ export async function saveIndicatorActuals(params: {
     p_note: params.note ?? null,
     p_ciclo_id: params.cicloId ?? null,
   })
-  return { error: error?.message ?? null, data }
+  return { error: error ? describeAdminRpcError(error, 'Não foi possível salvar o realizado.') : null, data }
 }
 
 export async function restorePlanningHistory(historyId: string, note?: string | null): Promise<{ error: string | null }> {
@@ -275,7 +276,7 @@ export async function restorePlanningHistory(historyId: string, note?: string | 
     p_history_id: historyId,
     p_note: note ?? null,
   })
-  return { error: error?.message ?? null }
+  return { error: error ? describeAdminRpcError(error, 'Não foi possível restaurar o histórico.') : null }
 }
 
 export async function canManageStoreTargets(lojaId: string): Promise<{ allowed: boolean; error: string | null }> {

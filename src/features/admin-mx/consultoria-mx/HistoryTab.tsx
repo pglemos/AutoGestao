@@ -32,18 +32,6 @@ export function HistoryTab() {
       || (log.user_name ?? '').toLowerCase().includes(term)
   })
 
-  // #region agent log
-  useEffect(() => {
-    if (loading) return
-    const origins = logs.reduce<Record<string, number>>((acc, log) => {
-      const key = (log.origin ?? 'null').toLowerCase()
-      acc[key] = (acc[key] ?? 0) + 1
-      return acc
-    }, {})
-    fetch('http://127.0.0.1:7506/ingest/ceac55d9-e57e-4aa7-abcd-40a91956c86a',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'bb88b1'},body:JSON.stringify({sessionId:'bb88b1',runId:'pre-fix',hypothesisId:'C',location:'HistoryTab.tsx:filter',message:'audit origin filter',data:{raw:logs.length,filtered:filtered.length,origins},timestamp:Date.now()})}).catch(()=>{})
-  }, [loading, logs, filtered.length])
-  // #endregion
-
   return (
     <div className="space-y-4">
       <div className="max-w-md">

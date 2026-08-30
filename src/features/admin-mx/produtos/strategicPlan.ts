@@ -1,13 +1,13 @@
 import { supabase } from '@/lib/supabase'
-import { filterOfficialRows, isOfficialBase44Key } from '@/features/admin-mx/indicadores/canonicalBase44Catalog'
+import { filterOfficialRows, isOfficialBase44Key, matchCanonicalIndicator } from '@/features/admin-mx/indicadores/canonicalBase44Catalog'
 
 // ─── Plano Estratégico do produto: pacote de indicadores versionado ──────────
 // Paridade com o Base44 (ProductStrategicPlanTab + productPackageOps): o produto
 // pode ter um pacote de indicadores padrão vinculado (StrategicIndicatorPackage
 // + Version + Item). O cliente que contrata o produto recebe no Plano
 // Estratégico exatamente os indicadores da versão publicada do pacote.
-// No MX o catálogo é `catalogo_metricas_consultoria` e `formula_key` define se o
-// indicador é calculável (fórmula) ou digitável (manual).
+// No MX o catálogo canônico CONS-22 (19 manuais / 27 calculáveis) prevalece
+// sobre `formula_key` e `input_mode_snapshot` desatualizados.
 
 export type PackageStatus = 'rascunho' | 'publicado' | 'substituido' | 'arquivado'
 export type PackageVersionStatus = 'rascunho' | 'publicada' | 'substituida' | 'arquivada'
@@ -84,9 +84,19 @@ export const PACKAGE_VERSION_STATUS_LABEL: Record<PackageVersionStatus, string> 
   arquivada: 'Arquivada',
 }
 
-/** Indicador é calculável quando o catálogo tem fórmula; senão é digitável. */
+/** Fallback só para chaves fora do catálogo canônico. */
 export function isCalculatedIndicator(formulaKey: string | null): boolean {
   return Boolean(formulaKey && formulaKey.trim().length > 0)
+}
+
+/** 19 manuais / 27 calculáveis: o modo canônico vence snapshot e formula_key. */
+export function packageIndicatorIsCalculated(
+  metricKey: string,
+  fallbackFormulaKey?: string | null,
+): boolean {
+  const canon = matchCanonicalIndicator(metricKey)
+  if (canon) return canon.target_calculation_mode !== 'MANUAL'
+  return isCalculatedIndicator(fallbackFormulaKey ?? null)
 }
 
 /** Converte uma linha do catálogo em indicador de pacote com o modo derivado. */
@@ -112,7 +122,7 @@ export function toPackageIndicator(
     sort_order: row.sort_order,
     value_type: row.value_type,
     direction: row.direction,
-    calculavel: isCalculatedIndicator(row.formula_key),
+    calculavel: packageIndicatorIsCalculated(row.metric_key, row.formula_key),
     inclusion_reason: inclusionReason,
     unit_entry_mode: row.unit_entry_mode ?? null,
     unit_rollup_method: row.unit_rollup_method ?? null,
@@ -262,7 +272,7 @@ export async function fetchPackageVersionItems(versionId: string): Promise<{ row
       sort_order: item.ordem_snapshot ?? 0,
       value_type: item.formato_snapshot ?? '—',
       direction: item.direction_snapshot ?? '—',
-      calculavel: item.input_mode_snapshot === 'calculado',
+      calculavel: packageIndicatorIsCalculated(item.metric_key),
       inclusion_reason: (item.inclusion_reason ?? 'selecao_direta') as InclusionReason,
       unit_entry_mode: item.unit_entry_mode_snapshot,
       unit_rollup_method: item.unit_rollup_method_snapshot,

@@ -10,6 +10,7 @@ export type ProgramSummaryInput = {
   visits: Array<{
     visit_number: number | null
     status: string | null
+    scheduled_at?: string | null
     is_onboarding?: boolean | null
     consultant_name?: string | null
   }>
@@ -25,6 +26,7 @@ export type ProgramSummary = {
   contract_end_date: string | null
   visits: number
   completed_visits: number
+  overdue_visits: number
   onboarding_visits: number
   progress: number
   responsible_consultant: string | null
@@ -64,6 +66,7 @@ export function buildProgramSummary(input: ProgramSummaryInput): ProgramSummary 
     contract_end_date: input.contract_end_date ?? null,
     visits: registeredVisits,
     completed_visits: completed,
+    overdue_visits: journey?.overdueVisits ?? 0,
     onboarding_visits: onboarding,
     progress: registeredVisits > 0 ? Math.min(100, Math.round((completed / registeredVisits) * 100)) : 0,
     responsible_consultant: consultant,

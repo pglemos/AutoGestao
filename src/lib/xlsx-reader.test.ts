@@ -25,6 +25,7 @@ describe('readXlsxRows', () => {
     expect(rows[0]).toEqual({ 'Código': 'VND_TOTAL', Indicador: 'Vendas', Janeiro: 1200, Fevereiro: 1500.5 })
     expect(rows[1]?.['Código']).toBe('TKT_MEDIO')
     expect(rows[1]?.Janeiro).toBe(0)
+    expect(rows[1]?.Fevereiro === 0).toBe(false)
   })
 
   it('preserva acentos e caracteres que exigem escape XML', () => {

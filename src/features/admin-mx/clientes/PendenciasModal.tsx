@@ -80,9 +80,13 @@ export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch
         contract_start_date: (client as { contract_start_date?: string | null }).contract_start_date ?? null,
         implementation_owner_id: (client as { implementation_owner_id?: string | null }).implementation_owner_id ?? null,
         units: (unitsRes.data ?? []).map(u => ({ name: u.name ?? null, is_primary: u.is_primary ?? null })),
-        contacts: people.map(a => ({ name: a.nome ?? null, is_primary: false, email: a.email ?? null })),
+        contacts: people.map(a => ({
+          name: a.nome ?? null,
+          is_primary: Boolean(a.is_dono_master),
+          email: a.email ?? null,
+        })),
         modules: (modulesRes.data ?? []).map(m => ({ enabled: m.enabled ?? null })),
-        assignments: (assignmentsRes.data ?? []).map(a => ({ active: a.active ?? null })),
+        assignments: (assignmentsRes.data ?? []).map(a => ({ active: a.active ?? null, assignment_role: a.assignment_role ?? null })),
         storeTakenByOtherClient: busyStores.has(client.primary_store_id),
         owner_master: {
           status: ownerMasterResolution.status,

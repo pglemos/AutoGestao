@@ -31,7 +31,7 @@ export function departmentCategory(value: string | null | undefined): ActionPlan
   const normalized = normalizeDepartment(value)
   if (normalized === 'COMERCIAL' || normalized === 'COMMERCIAL' || normalized === 'VENDAS') return 'comercial'
   if (normalized === 'MARKETING') return 'marketing'
-  if (['PRODUTO', 'PRODUTOESTOQUE', 'ESTOQUE'].includes(normalized)) return 'produto'
+  if (['PRODUTO', 'PRODUTOESTOQUE', 'PRODUTOEESTOQUE', 'ESTOQUE'].includes(normalized)) return 'produto'
   if (['RH', 'PESSOAS', 'PESSOASRH', 'EQUIPE', 'DESENVOLVIMENTO'].includes(normalized)) return 'rh'
   if (normalized === 'FINANCEIRO') return 'financeiro'
   if (['OPERACIONAL', 'OPERACOES'].includes(normalized)) return 'operacional'
@@ -52,16 +52,25 @@ export function departmentLabel(value: string | null | undefined): string {
   return ACTION_PLAN_DEPARTMENT_CARDS.find(card => card.code === category)?.label ?? value ?? '—'
 }
 
-/** Traduz as áreas legadas do catálogo de métricas para a taxonomia dos cards. */
+/** Traduz as áreas do catálogo (Comercial, Produto e Estoque, etc.) para os cards do wizard. */
 export function indicatorAreaMatchesDepartment(area: string | null | undefined, department: string | null | undefined): boolean {
   if (!department) return true
+  const right = departmentCategory(department)
+  const left = departmentCategory(area)
+  if (left && right) return left === right
   const normalized = normalizeDepartment(area)
-  const areaCategory = ['VENDAS', 'FUNIL', 'CRM'].includes(normalized)
-    ? 'comercial'
-    : ['ESTOQUE', 'TROCA'].includes(normalized)
-      ? 'produto'
-      : ['EQUIPE', 'DESENVOLVIMENTO'].includes(normalized)
-        ? 'rh'
-        : departmentCategory(area)
-  return areaCategory !== null && areaCategory === departmentCategory(department)
+  if (['VENDAS', 'FUNIL', 'CRM'].includes(normalized)) return right === 'comercial'
+  if (['ESTOQUE', 'TROCA', 'PRODUTO', 'PRODUTOESTOQUE', 'PRODUTOEESTOQUE'].includes(normalized)) return right === 'produto'
+  if (['EQUIPE', 'DESENVOLVIMENTO'].includes(normalized)) return right === 'rh'
+  return false
+}
+
+/** Lista só os indicadores da área; vazio permanece vazio (não mistura o catálogo). */
+export function indicatorsForDepartment<T extends { area?: string | null }>(
+  indicators: T[],
+  department: string | null | undefined,
+): T[] {
+  if (!department) return []
+  const matched = indicators.filter(indicator => indicatorAreaMatchesDepartment(indicator.area, department))
+  return matched
 }

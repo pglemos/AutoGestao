@@ -27,6 +27,7 @@ describe('programa contratado — lógica pura', () => {
     expect(summary.onboarding_visits).toBe(1)
     expect(summary.progress).toBe(67)
     expect(summary.responsible_consultant).toBe('Marcos')
+    expect(summary.overdue_visits).toBe(0)
   })
 
   test('programa configurado apenas pela chave do template', () => {

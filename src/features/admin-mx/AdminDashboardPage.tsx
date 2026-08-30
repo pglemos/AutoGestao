@@ -294,10 +294,10 @@ export function AdminDashboardPage() {
                   {[
                     { label: 'Clientes & Lojas', icon: BriefcaseBusiness, path: '/clientes', detail: `${clients.length} empresas` },
                     { label: 'Consultoria MX', icon: CalendarDays, path: '/consultoria', detail: 'Metodologia e visitas' },
-                    { label: 'Plano Estratégico', icon: TrendingUp, path: '/plano-estrategico', detail: '45 KPIs e Metas' },
+                    { label: 'Plano Estratégico', icon: TrendingUp, path: '/plano-estrategico', detail: '46 indicadores e metas por cliente' },
                     { label: 'Planos de Ação', icon: ClipboardList, path: '/plano-acao', detail: 'Templates e Execução' },
                     { label: 'Equipe MX', icon: Users, path: '/equipe', detail: 'Consultores e capacidade' },
-                    { label: 'Produtos', icon: Package, path: '/produtos', detail: 'Catálogo de programas' },
+                    { label: 'Produtos de Consultoria', icon: Package, path: '/produtos', detail: 'Catálogo de programas' },
                   ].map(shortcut => {
                     const Icon = shortcut.icon
                     return (

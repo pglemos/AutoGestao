@@ -1,5 +1,8 @@
 import { describe, expect, test } from 'bun:test'
+import { readFileSync } from 'node:fs'
 import { buildStoreHierarchyPlan, resolveUnitStoreId, validateLinkedStore } from './createClientProgram'
+
+const source = readFileSync(new URL('./createClientProgram.ts', import.meta.url), 'utf8')
 
 describe('hierarquia operacional do cadastro de cliente', () => {
   test('separa matriz e filiais na ordem do wizard', () => {
@@ -44,6 +47,14 @@ describe('hierarquia operacional do cadastro de cliente', () => {
   test('prioriza o store_id da filial mesmo quando o nome mudou', () => {
     const hierarchy = { primaryStoreId: 'store-matrix', storeIdsByName: {} }
     expect(resolveUnitStoreId({ name: 'Nome antigo', is_primary: false, store_id: 'store-branch' }, hierarchy)).toBe('store-branch')
+  })
+
+  test('cria e desativa lojas pela RPC administrativa, não por insert direto', () => {
+    expect(source).toContain('createOperationalStore')
+    expect(source).toContain('deactivateOperationalStores')
+    expect(source).toContain('reclaimStoreForClient')
+    expect(source).not.toMatch(/from\('lojas'\)[\s\S]{0,80}\.insert/)
+    expect(source).not.toMatch(/from\('lojas'\)[\s\S]{0,80}\.update\(\{ active: false \}\)/)
   })
 
   test('recusa filial pertencente a outra matriz', () => {

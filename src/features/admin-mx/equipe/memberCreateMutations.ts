@@ -1,19 +1,24 @@
-import { supabase } from '@/lib/supabase'
+import { generateStrongTemporaryPassword } from '@/lib/auth/passwordPolicy'
+import { resolveFunctionInvokeError, supabase } from '@/lib/supabase'
 import { requiresConsultantProfile, validateMemberCreate, type MemberCreateDraft } from './memberCreate'
 
-function newUserId(): string {
-  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) return crypto.randomUUID()
-  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`
+type RegisterUserResponse = {
+  success?: boolean
+  error?: string
+  user_id?: string
 }
 
 /**
- * Cria um membro da equipe MX: grava usuarios (nome, e-mail, papel, acesso) e,
- * quando o papel é consultor_mx, o perfil do consultor (perfil_consultor_mx).
- * A loja principal opcional vira um vínculo ativo em `vinculos_loja` — a
- * mesma tabela que ranking, dashboard, check-in e RLS leem (ver comentário
- * em userEdit.ts sobre por que não é `vinculos_equipe_loja`, tabela morta).
+ * Cria um membro da equipe MX via edge function `register-user` (service role).
+ * Insert direto em `usuarios` toma 403 para consultor MX: RLS exige
+ * `eh_administrador_mx()`. A senha temporária força troca no primeiro acesso
+ * (`must_change_password` vem de `internal_mx_finalize_registered_user`).
  */
-export async function createTeamMember(draft: MemberCreateDraft): Promise<{ error: string | null; id?: string }> {
+export async function createTeamMember(draft: MemberCreateDraft): Promise<{
+  error: string | null
+  id?: string
+  temporaryPassword?: string
+}> {
   const errors = validateMemberCreate(draft)
   if (errors.length) return { error: errors[0] }
 
@@ -27,20 +32,27 @@ export async function createTeamMember(draft: MemberCreateDraft): Promise<{ erro
     .maybeSingle()
   if (duplicate) return { error: 'Este e-mail já está vinculado a outro usuário.' }
 
-  const id = newUserId()
-  const now = new Date().toISOString()
-
-  const { error: userError } = await supabase.from('usuarios').insert({
-    id,
-    name,
-    email,
-    phone: draft.phone.trim() || null,
-    role: draft.role,
-    active: draft.situation !== 'inativo',
-    must_change_password: true,
-    updated_at: now,
+  const temporaryPassword = generateStrongTemporaryPassword()
+  const { data, error: invokeError } = await supabase.functions.invoke<RegisterUserResponse>('register-user', {
+    body: {
+      name,
+      email,
+      password: temporaryPassword,
+      phone: draft.phone.trim() || null,
+      role: draft.role,
+      is_active: draft.situation !== 'inativo',
+    },
   })
-  if (userError) return { error: userError.message }
+  if (invokeError || !data?.success) {
+    return {
+      error: await resolveFunctionInvokeError(invokeError, data, 'Não foi possível criar o membro da equipe.'),
+    }
+  }
+
+  const id = typeof data.user_id === 'string' && data.user_id ? data.user_id : undefined
+  if (!id) return { error: 'O cadastro não devolveu o identificador do usuário.' }
+
+  const now = new Date().toISOString()
 
   if (requiresConsultantProfile(draft.role)) {
     const { error: profileError } = await supabase.from('perfil_consultor_mx').insert({
@@ -50,10 +62,7 @@ export async function createTeamMember(draft: MemberCreateDraft): Promise<{ erro
       created_at: now,
       updated_at: now,
     })
-    if (profileError) {
-      await supabase.from('usuarios').delete().eq('id', id)
-      return { error: profileError.message }
-    }
+    if (profileError) return { error: profileError.message, id }
   }
 
   if (draft.store_id) {
@@ -65,8 +74,8 @@ export async function createTeamMember(draft: MemberCreateDraft): Promise<{ erro
       role: 'gerente',
       is_active: true,
     })
-    if (linkError) return { error: linkError.message }
+    if (linkError) return { error: linkError.message, id }
   }
 
-  return { error: null, id }
+  return { error: null, id, temporaryPassword }
 }

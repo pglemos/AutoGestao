@@ -3,7 +3,7 @@ import { FileText } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { Modal } from '@/components/organisms/Modal'
 import { MxField, MxInput, MxSelect, MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
-import { emptyProgramDraft, validateProgramDraft, type ProgramDraft } from './programMutations'
+import { emptyProgramDraft, normalizeProgramModality, validateProgramDraft, type ProgramDraft } from './programMutations'
 import { resolveVisitVolumeRule } from './visitVolumeRule'
 
 const MODALITIES = [
@@ -33,7 +33,12 @@ export function ProgramEditModal(props: {
 
   useEffect(() => {
     if (!props.open) return
-    setDraft(props.initial ?? emptyProgramDraft())
+    const next = props.initial ?? emptyProgramDraft()
+    const normalized = { ...next, modality: normalizeProgramModality(next.modality) || next.modality }
+    // #region agent log
+    fetch('http://127.0.0.1:7506/ingest/ceac55d9-e57e-4aa7-abcd-40a91956c86a',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'285f20'},body:JSON.stringify({sessionId:'285f20',runId:'post-fix',hypothesisId:'AI',location:'ProgramEditModal.tsx:open',message:'program modality draft',data:{raw:next.modality,normalized:normalized.modality},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
+    setDraft(normalized)
   }, [props.open, props.initial])
 
   const errors = useMemo(() => validateProgramDraft(draft), [draft])

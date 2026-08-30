@@ -14,7 +14,7 @@ describe('adminStrategicPlanHref', () => {
       year: 2026,
       storeId: 'store-1',
     })
-    expect(href).toContain('/clientes/ag-automoveis/plano-estrategico?')
+    expect(href).toContain('/clientes/ag-automoveis/plano-estrategico/2026?')
     expect(href).toContain('clientId=c1')
     expect(href).toContain('cycleId=cycle-1')
     expect(href).toContain('year=2026')

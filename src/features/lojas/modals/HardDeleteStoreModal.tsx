@@ -21,7 +21,7 @@ export function HardDeleteStoreModal({
   onClose,
   onConfirm,
 }: HardDeleteStoreModalProps) {
-  const matches = Boolean(store && confirmation === store.name)
+  const matches = Boolean(store && confirmation.trim() === store.name.trim())
 
   return (
     <Modal
@@ -35,7 +35,7 @@ export function HardDeleteStoreModal({
           <Button variant="outline" onClick={onClose} disabled={deleting}>
             Cancelar
           </Button>
-          <Button onClick={onConfirm} loading={deleting} disabled={!matches}>
+          <Button variant="danger" onClick={onConfirm} loading={deleting} disabled={!matches}>
             Excluir definitivamente
           </Button>
         </>

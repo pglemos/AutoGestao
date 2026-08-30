@@ -24,6 +24,17 @@ export const STATUS_LABEL: Record<PlanStatus, string> = {
 /** Colunas do kanban, na ordem do Base44. */
 export const BOARD_COLUMNS: PlanStatus[] = ['pendente', 'em_andamento', 'atrasado', 'concluido']
 
+/** Código executivo Base44: PA- + 8 hex. RPCs antigas gravaram o UUID inteiro. */
+export function formatActionPlanCodigo(codigo: string | null | undefined, id?: string | null): string {
+  const raw = String(codigo ?? '').trim()
+  const fromCode = raw.replace(/^PA-/i, '').replace(/-/g, '').toUpperCase()
+  if (/^[0-9A-F]{8,}$/.test(fromCode)) return `PA-${fromCode.slice(0, 8)}`
+  if (raw) return raw
+  const fromId = String(id ?? '').replace(/-/g, '').toUpperCase()
+  if (/^[0-9A-F]{8,}$/.test(fromId)) return `PA-${fromId.slice(0, 8)}`
+  return 'sem código'
+}
+
 export type BoardPlan = {
   id: string
   codigo: string | null
@@ -39,6 +50,7 @@ export type BoardPlan = {
   concluido_at: string | null
   scope_id: string | null
   checklist: BoardChecklistItem[]
+  linkedPlanIds?: string[]
 }
 
 export async function fetchBoardPlanById(id: string): Promise<{ plan: BoardPlan | null; error: string | null }> {
@@ -52,7 +64,7 @@ export async function fetchBoardPlanById(id: string): Promise<{ plan: BoardPlan 
   return {
     plan: {
       id: data.id,
-      codigo: data.codigo,
+      codigo: formatActionPlanCodigo(data.codigo, data.id),
       problema: data.problema,
       acao: data.acao,
       status: data.status as PlanStatus | null,
@@ -124,7 +136,8 @@ export function deriveKanbanColumn(plan: Pick<BoardPlan, 'status' | 'prazo'>, to
 }
 
 export function resolveBoardColumn(plan: Pick<BoardPlan, 'status' | 'prazo'>, today = new Date()): PlanStatus {
-  const status = (plan.status ?? 'pendente') as PlanStatus
+  const raw = String(plan.status ?? 'pendente').trim().toLowerCase()
+  const status = (raw === 'concluida' || raw === 'concluído' ? 'concluido' : raw) as PlanStatus
   if (status === 'concluido' || status === 'cancelada' || status === 'validando_eficacia') return status
   if (plan.prazo && plan.prazo < today.toISOString().slice(0, 10)) return 'atrasado'
   return status
@@ -132,7 +145,8 @@ export function resolveBoardColumn(plan: Pick<BoardPlan, 'status' | 'prazo'>, to
 
 export function planDaysLate(status: string | null, prazo: string | null, today = new Date()): number {
   if (!prazo) return 0
-  if (status === 'concluido' || status === 'cancelada' || status === 'validando_eficacia') return 0
+  const normalized = String(status ?? '').trim().toLowerCase()
+  if (normalized === 'concluido' || normalized === 'concluida' || normalized === 'concluído' || normalized === 'cancelada' || normalized === 'validando_eficacia') return 0
   const due = prazo.slice(0, 10)
   const ref = today.toISOString().slice(0, 10)
   if (due >= ref) return 0

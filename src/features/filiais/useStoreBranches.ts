@@ -4,6 +4,7 @@ import { useStores, type StoreWriteFields } from '@/hooks/useStores'
 import { isAdministradorMx, useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/lib/toast'
+import { describeAdminRpcError } from '@/features/admin-mx/equipe/adminRpcErrors'
 import { slugify } from '@/lib/utils'
 import { selectBranches, selectLinkableStores } from './storeBranchesScope'
 import { requestToastConfirmation } from '@/lib/ui/confirmAction'
@@ -128,7 +129,7 @@ export function useStoreBranches() {
         p_store_id: hardDeleteStore.id,
         p_confirmation: hardDeleteConfirmation,
       })
-      if (deleteError) throw deleteError
+      if (deleteError) throw new Error(describeAdminRpcError(deleteError, 'Não foi possível excluir a filial definitivamente.'))
       toast.success('Filial e dependências excluídas definitivamente.')
       setHardDeleteStore(null)
       setHardDeleteConfirmation('')

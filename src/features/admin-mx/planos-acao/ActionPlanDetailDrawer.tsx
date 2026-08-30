@@ -22,6 +22,7 @@ import {
   correctPlanCompletionDate,
   fetchPlanEvidence,
   fetchPlanHistory,
+  formatActionPlanCodigo,
   reschedulePlan,
   resolveBoardColumn,
   validateCompletion,
@@ -227,7 +228,7 @@ export function ActionPlanDetailDrawer(props: { plan: BoardPlan | null; onClose:
     <Modal
       open
       onClose={props.onClose}
-      title={`${plan.codigo || 'Plano de ação'} — ${STATUS_LABEL[column]}`}
+      title={`${formatActionPlanCodigo(plan.codigo, plan.id)} — ${STATUS_LABEL[column]}`}
       size="xl"
       closeOnEscape={!busy}
       footer={(

@@ -1,5 +1,5 @@
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
-import { Check, Copy, Download, History, RefreshCw, Save, Search, Target, Upload } from 'lucide-react'
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Check, Copy, Download, History, RefreshCw, Save, Search, SlidersHorizontal, Target, Upload } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { Modal } from '@/components/organisms/Modal'
@@ -19,16 +19,22 @@ import {
 import { BASE44_STANDARD_INDICATORS, matchCanonicalIndicator } from '../indicadores/canonicalBase44Catalog'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/organisms/Table'
 import { toast } from '@/lib/toast'
-import { MONTH_LABELS, getFormatConfig, formatDisplay, formatEditableInput, parseStrategicInput } from '../indicadores/indicatorFormulas'
+import { MONTH_LABELS, getFormatConfig, formatDisplay, decideStrategicCellInput } from '../indicadores/indicatorFormulas'
 import { resolveLastClosedCompetence } from '@/features/strategic-plan/competence'
-import { diagnoseEmptyImport } from '../indicadores/importDiagnosis'
+import { diagnoseEmptyImport, readIndicatorCodeFromRow } from '../indicadores/importDiagnosis'
 import {
   buildImportSaveBatches,
   buildOfficialMonthlyGrid,
   readOfficialMonthValue,
   buildTargetWorkbookSheets,
   buildStoreCopyMutations,
+  clearMonthSeries,
+  copyPreviousMonthSeries,
+  countQuickEntryProgress,
+  normalizeQuickEntrySeries,
   isPlanningFieldEditable,
+  januaryReplicationSeries,
+  monthSeries,
   processTargetImport,
   previewStoreTargetsCopy,
   type CopyConflictPolicy,
@@ -57,6 +63,8 @@ import {
   type ConsolidationIndicator,
   type IndicatorIntegrity,
 } from '@/features/strategic-plan'
+import { PlanningMonthInput, planningCellDraftKey } from './PlanningMonthInput'
+import { StrategicPlanQuickEntry } from './StrategicPlanQuickEntry'
 
 type StoreOption = { id: string; name: string }
 
@@ -69,12 +77,18 @@ function partialMark(integrity?: IndicatorIntegrity): string {
 
 export function MetasRealizadosTab(props: {
   indicators: TargetIndicator[]
+  /** Catálogo usado na importação (o roster completo). A grade pode ser só digitáveis. */
+  importIndicators?: TargetIndicator[]
   onNavigateToParams?: () => void
+  onNavigateToHistory?: () => void
   initialStoreId?: string
   initialYear?: number
   stores?: StoreOption[]
   onSaved?: () => void
   cicloId?: string | null
+  variant?: 'matrix' | 'quick'
+  activeField?: 'meta' | 'realizado' | 'ano_anterior'
+  onRegisterSave?: (save: () => Promise<void>) => void
 }) {
   const [stores, setStores] = useState<StoreOption[]>(props.stores ?? [])
   const [storeId, setStoreId] = useState(props.initialStoreId ?? '')
@@ -91,8 +105,13 @@ export function MetasRealizadosTab(props: {
   const [formulas, setFormulas] = useState<Record<string, string | null>>({})
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedDepartment, setSelectedDepartment] = useState('todos')
-  const [selectedType, setSelectedType] = useState<'todos' | 'digitaveis' | 'calculados'>('todos')
+  const [selectedType, setSelectedType] = useState<'todos' | 'digitaveis' | 'calculados'>('digitaveis')
   const [savingAll, setSavingAll] = useState(false)
+  const [cellDrafts, setCellDrafts] = useState<Record<string, string>>({})
+  const [entryMonth, setEntryMonth] = useState(1)
+  const importCatalog = props.importIndicators ?? props.indicators
+  const isQuick = props.variant === 'quick'
+  const activeField = props.activeField ?? 'meta'
 
   const refetch = useCallback(async () => {
     if (!storeId) {
@@ -204,6 +223,8 @@ export function MetasRealizadosTab(props: {
     calculationIndicators,
     storeId,
   ), [calculationIndicators, rows, storeId])
+  const gridRef = useRef(grid)
+  gridRef.current = grid
 
   const conferenceMonth = useMemo(() => {
     const closed = resolveLastClosedCompetence(year)
@@ -275,8 +296,20 @@ export function MetasRealizadosTab(props: {
     const indicator = props.indicators.find(item => item.code === code)
     if (!indicator || !isPlanningFieldEditable(indicator, field)) return
     const config = getFormatConfig(indicator.value_type ?? 'number', indicator.casas_decimais ?? 0)
-    const value = parseStrategicInput(raw, config)
-    if (raw.trim() !== '' && value === null) return
+    const key = planningCellDraftKey(field, code, month)
+    setCellDrafts(current => {
+      if (!(key in current)) return current
+      const next = { ...current }
+      delete next[key]
+      return next
+    })
+    const decision = decideStrategicCellInput(raw, config)
+    if (decision.action === 'preserve') return
+    if (decision.action === 'reject') {
+      toast.error(decision.message)
+      return
+    }
+    const value = decision.action === 'clear' ? null : decision.value
     setRows(current => {
       const next = [...current]
       const index = next.findIndex(row => row.indicator_code === code && row.month === month)
@@ -297,10 +330,59 @@ export function MetasRealizadosTab(props: {
     })
   }
 
-  const replicateMonthToAll = (code: string, field: 'meta' | 'realizado' | 'ano_anterior', sourceMonth: number = 1) => {
+  const writeYear = (code: string, field: 'meta' | 'realizado' | 'ano_anterior', values: Array<number | null>) => {
+    setRows(current => {
+      const next = [...current]
+      for (let month = 1; month <= 12; month++) {
+        const value = values[month - 1] ?? null
+        const index = next.findIndex(row => row.indicator_code === code && row.month === month)
+        if (index >= 0) next[index] = { ...next[index], [field]: value }
+        else {
+          next.push({
+            loja_id: storeId,
+            indicator_code: code,
+            year,
+            month,
+            meta: field === 'meta' ? value : null,
+            realizado: field === 'realizado' ? value : null,
+            ano_anterior: field === 'ano_anterior' ? value : null,
+          })
+        }
+      }
+      return next
+    })
+  }
+
+  const commitYear = (code: string, raw: string) => {
+    const indicator = props.indicators.find(item => item.code === code)
+    if (!indicator || !isPlanningFieldEditable(indicator, activeField)) return
+    const config = getFormatConfig(indicator.value_type ?? 'number', indicator.casas_decimais ?? 0)
+    const key = planningCellDraftKey(activeField, code, entryMonth)
+    setCellDrafts(current => {
+      if (!(key in current)) return current
+      const next = { ...current }
+      delete next[key]
+      return next
+    })
+    const decision = decideStrategicCellInput(raw, config)
+    if (decision.action === 'preserve') return
+    if (decision.action === 'reject') {
+      toast.error(decision.message)
+      return
+    }
+    const value = decision.action === 'clear' ? null : decision.value
+    writeYear(code, activeField, Array.from({ length: 12 }, () => value))
+  }
+
+  const replicateMonthToAll = async (code: string, field: 'meta' | 'realizado' | 'ano_anterior', sourceMonth: number = 1) => {
     const indicator = props.indicators.find(item => item.code === code)
     if (!indicator || !isPlanningFieldEditable(indicator, field)) return
     const sourceValue = grid[code]?.[sourceMonth]?.[field] ?? null
+    const values = januaryReplicationSeries(sourceValue)
+    if (!values) {
+      toast.error('Informe Janeiro antes de replicar. Célula vazia não copia para o restante do ano.')
+      return
+    }
     setRows(current => {
       const next = [...current]
       for (let m = 1; m <= 12; m++) {
@@ -321,16 +403,41 @@ export function MetasRealizadosTab(props: {
       }
       return next
     })
-    toast.success(`Valor de ${MONTH_LABELS[sourceMonth - 1]} aplicado a todos os meses (Jan–Dez) para ${indicator.name}.`)
+    setSavingKey(`${field}:${code}`)
+    try {
+      const result = field === 'meta'
+        ? await saveIndicatorTargets({ lojaId: storeId, indicatorCode: code, year, values, cicloId: props.cicloId })
+        : field === 'realizado'
+          ? await saveIndicatorActuals({ lojaId: storeId, indicatorCode: code, year, values, cicloId: props.cicloId })
+          : await saveIndicatorField({ lojaId: storeId, indicatorCode: code, year, field: 'ano_anterior', values, cicloId: props.cicloId })
+      if (result.error) {
+        toast.error(result.error)
+        return
+      }
+      toast.success(`Janeiro replicado e salvo em ${indicator.name}.`)
+      props.onSaved?.()
+    } catch (cause) {
+      toast.error(cause instanceof Error ? cause.message : 'Não foi possível salvar a replicação.')
+    } finally {
+      setSavingKey(null)
+    }
   }
 
-  const replicateAllJanToAllMonths = (field: 'meta' | 'realizado' | 'ano_anterior' = 'meta') => {
+  const replicateAllJanToAllMonths = async (field: 'meta' | 'realizado' | 'ano_anterior' = 'meta') => {
     const editableIndicators = props.indicators.filter(ind => !ind.calculado && isPlanningFieldEditable(ind, field))
     if (!editableIndicators.length) return
+    const withJanuary = editableIndicators.filter(ind => januaryReplicationSeries(grid[ind.code]?.[1]?.[field] ?? null))
+    if (!withJanuary.length) {
+      toast.error(field === 'meta'
+        ? 'Preencha Janeiro nas metas digitáveis antes de replicar.'
+        : 'Janeiro está vazio neste campo. A replicação não altera realizado nem ano anterior vazios.')
+      return
+    }
     setRows(current => {
       const next = [...current]
-      for (const ind of editableIndicators) {
+      for (const ind of withJanuary) {
         const janVal = grid[ind.code]?.[1]?.[field] ?? null
+        if (janVal == null) continue
         for (let m = 1; m <= 12; m++) {
           const index = next.findIndex(row => row.indicator_code === ind.code && row.month === m)
           if (index >= 0) {
@@ -350,24 +457,56 @@ export function MetasRealizadosTab(props: {
       }
       return next
     })
-    toast.success(`Valores de Janeiro aplicados a todos os meses (Jan–Dez) em ${editableIndicators.length} indicadores.`)
+    setSavingAll(true)
+    try {
+      let savedCount = 0
+      const failures: string[] = []
+      for (const ind of withJanuary) {
+        const janVal = grid[ind.code]?.[1]?.[field] ?? null
+        const values = januaryReplicationSeries(janVal)
+        if (!values) continue
+        const result = field === 'meta'
+          ? await saveIndicatorTargets({ lojaId: storeId, indicatorCode: ind.code, year, values, cicloId: props.cicloId })
+          : field === 'realizado'
+            ? await saveIndicatorActuals({ lojaId: storeId, indicatorCode: ind.code, year, values, cicloId: props.cicloId })
+            : await saveIndicatorField({ lojaId: storeId, indicatorCode: ind.code, year, field: 'ano_anterior', values, cicloId: props.cicloId })
+        if (result.error) failures.push(`${ind.name}: ${result.error}`)
+        else savedCount += 1
+      }
+      if (failures.length) toast.error(failures[0] ?? 'Falha ao replicar Janeiro.')
+      else toast.success(`Janeiro replicado e salvo em ${savedCount} indicador(es).`)
+      props.onSaved?.()
+      await refetch()
+      clientScope.reload()
+    } catch (cause) {
+      toast.error(cause instanceof Error ? cause.message : 'Falha ao replicar Janeiro.')
+    } finally {
+      setSavingAll(false)
+    }
   }
 
   const saveAllChanges = async () => {
     if (!storeId || isConsolidated) return
     setSavingAll(true)
     try {
-      const editableIndicators = props.indicators.filter(ind => !ind.calculado)
+      const editableIndicators = props.indicators.filter(ind => !ind.calculado && isPlanningFieldEditable(ind, activeField))
       let savedCount = 0
+      const failures: string[] = []
       for (const ind of editableIndicators) {
-        const metaValues = Array.from({ length: 12 }, (_, index) => grid[ind.code]?.[index + 1]?.meta ?? null)
-        const hasAnyMeta = metaValues.some(v => v !== null)
-        if (hasAnyMeta) {
-          await saveIndicatorTargets({ lojaId: storeId, indicatorCode: ind.code, year, values: metaValues, cicloId: props.cicloId })
-          savedCount++
-        }
+        const liveGrid = gridRef.current
+        const rawValues = Array.from({ length: 12 }, (_, index) => liveGrid[ind.code]?.[index + 1]?.[activeField] ?? null)
+        const values = isQuick ? normalizeQuickEntrySeries(rawValues) : rawValues
+        if (!isQuick && activeField === 'meta' && values.every(value => value == null)) continue
+        const result = activeField === 'meta'
+          ? await saveIndicatorTargets({ lojaId: storeId, indicatorCode: ind.code, year, values, cicloId: props.cicloId })
+          : activeField === 'realizado'
+            ? await saveIndicatorActuals({ lojaId: storeId, indicatorCode: ind.code, year, values, cicloId: props.cicloId })
+            : await saveIndicatorField({ lojaId: storeId, indicatorCode: ind.code, year, field: 'ano_anterior', values, cicloId: props.cicloId })
+        if (result.error) failures.push(`${ind.name}: ${result.error}`)
+        else savedCount++
       }
-      toast.success(`${savedCount} indicadores de metas salvos com sucesso!`)
+      if (failures.length) toast.error(failures[0] ?? 'Não foi possível salvar o cadastro.')
+      else toast.success(savedCount ? `${savedCount} indicador(es) salvos.` : 'Nada para salvar.')
       props.onSaved?.()
       await refetch()
       clientScope.reload()
@@ -377,6 +516,10 @@ export function MetasRealizadosTab(props: {
       setSavingAll(false)
     }
   }
+
+  useEffect(() => {
+    props.onRegisterSave?.(() => saveAllChanges())
+  })
 
   const departmentCounts = useMemo(() => {
     const counts: Record<string, { total: number; filled: number }> = {}
@@ -409,6 +552,16 @@ export function MetasRealizadosTab(props: {
       return true
     })
   }, [props.indicators, searchTerm, selectedDepartment, selectedType])
+
+  const quickProgress = useMemo(() => countQuickEntryProgress({
+    indicators: props.indicators,
+    valuesFor: code => monthSeries(Array.from({ length: 12 }, (_, index) => grid[code]?.[index + 1]?.[activeField] ?? null)),
+  }), [activeField, grid, props.indicators])
+
+  const calculadosRoster = (props.importIndicators ?? props.indicators).filter(indicator => indicator.calculado)
+  const calculadosComBase = calculadosRoster.filter(indicator => (
+    Array.from({ length: 12 }, (_, index) => readOfficialMonthValue(grid, calculationIndicators, indicator.code, index + 1, 'meta')).some(value => value != null)
+  )).length
 
   const exportXlsx = async () => {
     try {
@@ -451,22 +604,34 @@ export function MetasRealizadosTab(props: {
     <div className="space-y-5">
       <MxSectionCard>
         <MxSectionHeader
-          title="Metas e realizados por loja"
-          description="Cadastro rápido, importação/exportação de planilha, histórico com reversão e cópia entre lojas."
+          title={isQuick ? 'Cadastro Rápido' : 'Metas e realizados por loja'}
+          description={isQuick
+            ? 'Importação da planilha de 46 indicadores, histórico e parâmetros do cliente.'
+            : 'Cadastro Rápido, importação/exportação de planilha, histórico com reversão e cópia entre lojas.'}
           actions={(
             <div className="flex flex-wrap items-center gap-2">
-              <Button variant="primary" onClick={() => void saveAllChanges()} disabled={!storeId || isConsolidated || savingAll}>
-                <Save size={16} />{savingAll ? 'Salvando tudo...' : 'Salvar todas as metas'}
-              </Button>
-              <Button variant="outline" onClick={() => replicateAllJanToAllMonths('meta')} disabled={!storeId || isConsolidated} title="Replicar valor de Janeiro para os demais meses em todos os indicadores">
-                <Copy size={16} />Replicar Jan em todos os meses
-              </Button>
-              <Button variant="outline" onClick={() => void refetch()}><RefreshCw size={16} />Atualizar</Button>
-              <Button variant="outline" onClick={() => void exportXlsx()} disabled={!storeId || props.indicators.length === 0}><Download size={16} />Exportar metas preenchidas</Button>
-              <Button variant="outline" onClick={() => void downloadBlankTemplate()} disabled={!storeId || props.indicators.length === 0}><Download size={16} />Baixar modelo em branco</Button>
-              <Button variant="outline" onClick={() => setCopyOpen(true)} disabled={!storeId || isConsolidated}><Copy size={16} />Copiar entre lojas</Button>
-              <Button variant="outline" onClick={() => document.getElementById('metas-import-file')?.click()} disabled={!storeId || isConsolidated}><Upload size={16} />Importar tabela</Button>
-              <input id="metas-import-file" type="file" accept=".xlsx" className="hidden" onChange={event => { setFile(event.target.files?.[0] ?? null); event.currentTarget.value = '' }} />
+              {isQuick ? null : (
+                <>
+                  <Button variant="primary" onClick={() => void saveAllChanges()} disabled={!storeId || isConsolidated || savingAll}>
+                    <Save size={16} />{savingAll ? 'Salvando tudo...' : 'Salvar todas as metas'}
+                  </Button>
+                  <Button variant="outline" onClick={() => void replicateAllJanToAllMonths('meta')} disabled={!storeId || isConsolidated || savingAll} title="Replicar valor de Janeiro para os demais meses em todos os indicadores">
+                    <Copy size={16} />Replicar Jan em todos os meses
+                  </Button>
+                  <Button variant="outline" onClick={() => void refetch()}><RefreshCw size={16} />Atualizar</Button>
+                  <Button variant="outline" onClick={() => void exportXlsx()} disabled={!storeId || props.indicators.length === 0}><Download size={16} />Exportar metas preenchidas</Button>
+                </>
+              )}
+              <Button variant="outline" onClick={() => void downloadBlankTemplate()} disabled={!storeId || props.indicators.length === 0}><Download size={16} />Baixar Tabela Modelo</Button>
+              {isQuick ? null : <Button variant="outline" onClick={() => setCopyOpen(true)} disabled={!storeId || isConsolidated}><Copy size={16} />Copiar entre lojas</Button>}
+              <Button variant="outline" onClick={() => document.getElementById('metas-import-file')?.click()} disabled={!storeId || isConsolidated}><Upload size={16} />Importar Tabela</Button>
+              {props.onNavigateToHistory ? <Button variant="outline" onClick={props.onNavigateToHistory}><History size={16} />Histórico</Button> : null}
+              {props.onNavigateToParams ? <Button variant="outline" onClick={props.onNavigateToParams}><SlidersHorizontal size={16} />Parâmetros</Button> : null}
+              <input id="metas-import-file" type="file" accept=".xlsx" className="hidden" onChange={event => {
+                const next = event.target.files?.[0] ?? null
+                setFile(next)
+                event.currentTarget.value = ''
+              }} />
             </div>
           )}
         />
@@ -478,12 +643,14 @@ export function MetasRealizadosTab(props: {
                 {stores.map(store => <option key={store.id} value={store.id}>{store.name}</option>)}
               </MxSelect>
             </MxField>
-            <MxField label="Ano">
-              <MxSelect aria-label="Ano" value={String(year)} onChange={event => setYear(Number(event.target.value))}>
-                {[year - 1, year, year + 1].map(item => <option key={item} value={String(item)}>{item}</option>)}
-              </MxSelect>
-            </MxField>
-            {clientScope.supportsConsolidated ? (
+            {isQuick ? null : (
+              <MxField label="Ano">
+                <MxSelect aria-label="Ano" value={String(year)} onChange={event => setYear(Number(event.target.value))}>
+                  {[year - 1, year, year + 1].map(item => <option key={item} value={String(item)}>{item}</option>)}
+                </MxSelect>
+              </MxField>
+            )}
+            {!isQuick && clientScope.supportsConsolidated ? (
               <MxField label="Escopo">
                 <MxSelect aria-label="Escopo" value={scope} onChange={event => setScope(event.target.value)}>
                   <option value="">Somente esta unidade</option>
@@ -506,6 +673,56 @@ export function MetasRealizadosTab(props: {
             </MxStatusBanner>
           ) : null}
 
+          {isQuick ? (
+            <div className="space-y-5">
+              <div className="flex flex-wrap items-end gap-3">
+                <MxField label="Mês">
+                  <MxSelect aria-label="Mês do cadastro rápido" value={String(entryMonth)} onChange={event => setEntryMonth(Number(event.target.value))}>
+                    {MONTH_LABELS.map((label, index) => <option key={label} value={String(index + 1)}>{label}</option>)}
+                  </MxSelect>
+                </MxField>
+              </div>
+              <MxMetricGrid>
+                <MxMetricCard title="Metas digitáveis" value={`${quickProgress.digitaveisFilled} de ${quickProgress.digitaveisTotal}`} detail="Ano completo no campo ativo" icon={Target} tone="info" />
+                <MxMetricCard title="Calculados com base" value={`${calculadosComBase} de ${calculadosRoster.length}`} detail="Derivados com entrada suficiente" icon={Target} tone="success" />
+                <MxMetricCard title="Sem base" value={Math.max(calculadosRoster.length - calculadosComBase, 0)} detail="Falta lançamento nos digitáveis" icon={Target} />
+              </MxMetricGrid>
+              <StrategicPlanQuickEntry
+                indicators={filteredIndicators}
+                importIndicators={importCatalog}
+                field={activeField}
+                entryMonth={entryMonth}
+                grid={grid}
+                readMonthValue={(code, month) => (
+                  isConsolidated
+                    ? (activeField === 'realizado' ? consolidatedActualGrid[code]?.[month] : activeField === 'ano_anterior' ? consolidatedPreviousGrid[code]?.[month] : consolidatedGrid[code]?.[month]) ?? null
+                    : resolveStoreScopedValue(
+                      activeField === 'meta'
+                        ? readOfficialMonthValue(grid, calculationIndicators, code, month, 'meta')
+                        : grid[code]?.[month]?.[activeField] ?? null,
+                    )
+                )}
+                drafts={cellDrafts}
+                onDraft={(key, raw) => setCellDrafts(current => ({ ...current, [key]: raw }))}
+                onCommit={(code, month, raw) => updateCell(code, month, activeField, raw)}
+                onCommitYear={commitYear}
+                onApplyJanuary={code => {
+                  const sourceValue = grid[code]?.[1]?.[activeField] ?? null
+                  const values = januaryReplicationSeries(sourceValue)
+                  void replicateMonthToAll(code, activeField, 1)
+                }}
+                onCopyPrevious={code => writeYear(code, activeField, copyPreviousMonthSeries(monthSeries(Array.from({ length: 12 }, (_, index) => grid[code]?.[index + 1]?.[activeField] ?? null))))}
+                onClearYear={code => writeYear(code, activeField, clearMonthSeries())}
+                loading={loading}
+                error={error}
+                onRetry={() => void refetch()}
+                readOnly={isConsolidated}
+                draftKey={(code, month) => planningCellDraftKey(activeField, code, month)}
+                resumo={resumoCalculado}
+              />
+            </div>
+          ) : (
+            <>
           <div className="mb-5">
             <MxSectionCard>
               <MxSectionHeader
@@ -549,27 +766,35 @@ export function MetasRealizadosTab(props: {
               </div>
 
               <div className="flex items-center gap-1 rounded-md border border-border p-1 bg-background-muted/30">
-                <button
-                  type="button"
-                  onClick={() => setSelectedType('todos')}
-                  className={`px-3 py-1 text-xs font-medium rounded ${selectedType === 'todos' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
-                >
-                  Todos ({props.indicators.length})
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSelectedType('digitaveis')}
-                  className={`px-3 py-1 text-xs font-medium rounded ${selectedType === 'digitaveis' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
-                >
-                  Digitáveis ({props.indicators.filter(i => !i.calculado).length})
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSelectedType('calculados')}
-                  className={`px-3 py-1 text-xs font-medium rounded ${selectedType === 'calculados' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
-                >
-                  Calculados ({props.indicators.filter(i => i.calculado).length})
-                </button>
+                {props.indicators.some(indicator => indicator.calculado) ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedType('todos')}
+                      className={`px-3 py-1 text-xs font-medium rounded ${selectedType === 'todos' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+                    >
+                      Todos ({props.indicators.length})
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedType('digitaveis')}
+                      className={`px-3 py-1 text-xs font-medium rounded ${selectedType === 'digitaveis' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+                    >
+                      Digitáveis ({props.indicators.filter(i => !i.calculado).length})
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedType('calculados')}
+                      className={`px-3 py-1 text-xs font-medium rounded ${selectedType === 'calculados' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+                    >
+                      Calculados ({props.indicators.filter(i => i.calculado).length})
+                    </button>
+                  </>
+                ) : (
+                  <span className="px-3 py-1 text-xs font-medium text-muted-foreground">
+                    {props.indicators.length} indicadores digitáveis
+                  </span>
+                )}
               </div>
             </div>
 
@@ -658,11 +883,13 @@ export function MetasRealizadosTab(props: {
                                       {partialMark(integrity)}
                                     </span>
                                   ) : (
-                                    <Input
-                                      className="w-20 text-right"
-                                      value={formatEditableInput(value, config)}
-                                      aria-label={`${indicator.name} — Meta — ${MONTH_LABELS[index]}`}
-                                      onChange={event => updateCell(indicator.code, month, 'meta', event.target.value)}
+                                    <PlanningMonthInput
+                                      ariaLabel={`${indicator.name} — Meta — ${MONTH_LABELS[index]}`}
+                                      displayValue={value}
+                                      config={config}
+                                      draft={cellDrafts[planningCellDraftKey('meta', indicator.code, month)]}
+                                      onDraft={raw => setCellDrafts(current => ({ ...current, [planningCellDraftKey('meta', indicator.code, month)]: raw }))}
+                                      onCommit={raw => updateCell(indicator.code, month, 'meta', raw)}
                                     />
                                   )}
                                 </TableCell>
@@ -676,7 +903,7 @@ export function MetasRealizadosTab(props: {
                                     size="sm"
                                     aria-label={`Replicar Jan em todos os meses para ${indicator.name}`}
                                     title="Replicar valor de Janeiro para os demais meses (Fev-Dez)"
-                                    onClick={() => replicateMonthToAll(indicator.code, 'meta', 1)}
+                                    onClick={() => void replicateMonthToAll(indicator.code, 'meta', 1)}
                                   >
                                     <Copy size={14} className="mr-1" /> Replicar Jan
                                   </Button>
@@ -713,11 +940,13 @@ export function MetasRealizadosTab(props: {
                                       {partialMark(integrity)}
                                     </span>
                                   ) : (
-                                    <Input
-                                      className="w-20 text-right"
-                                      value={formatEditableInput(value, config)}
-                                      aria-label={`${indicator.name} — Realizado — ${MONTH_LABELS[index]}`}
-                                      onChange={event => updateCell(indicator.code, month, 'realizado', event.target.value)}
+                                    <PlanningMonthInput
+                                      ariaLabel={`${indicator.name} — Realizado — ${MONTH_LABELS[index]}`}
+                                      displayValue={value}
+                                      config={config}
+                                      draft={cellDrafts[planningCellDraftKey('realizado', indicator.code, month)]}
+                                      onDraft={raw => setCellDrafts(current => ({ ...current, [planningCellDraftKey('realizado', indicator.code, month)]: raw }))}
+                                      onCommit={raw => updateCell(indicator.code, month, 'realizado', raw)}
                                     />
                                   )}
                                 </TableCell>
@@ -731,7 +960,7 @@ export function MetasRealizadosTab(props: {
                                     size="sm"
                                     aria-label={`Replicar Jan em todos os meses para realizado de ${indicator.name}`}
                                     title="Replicar realizado de Janeiro para os demais meses"
-                                    onClick={() => replicateMonthToAll(indicator.code, 'realizado', 1)}
+                                    onClick={() => void replicateMonthToAll(indicator.code, 'realizado', 1)}
                                   >
                                     <Copy size={14} className="mr-1" /> Replicar Jan
                                   </Button>
@@ -759,11 +988,13 @@ export function MetasRealizadosTab(props: {
                               return (
                                 <TableCell key={month} className="text-right">
                                   {editable ? (
-                                    <Input
-                                      className="w-20 text-right"
-                                      value={formatEditableInput(value, config)}
-                                      aria-label={`${indicator.name} — Ano anterior — ${MONTH_LABELS[index]}`}
-                                      onChange={event => updateCell(indicator.code, month, 'ano_anterior', event.target.value)}
+                                    <PlanningMonthInput
+                                      ariaLabel={`${indicator.name} — Ano anterior — ${MONTH_LABELS[index]}`}
+                                      displayValue={value}
+                                      config={config}
+                                      draft={cellDrafts[planningCellDraftKey('ano_anterior', indicator.code, month)]}
+                                      onDraft={raw => setCellDrafts(current => ({ ...current, [planningCellDraftKey('ano_anterior', indicator.code, month)]: raw }))}
+                                      onCommit={raw => updateCell(indicator.code, month, 'ano_anterior', raw)}
                                     />
                                   ) : (
                                     <span className="text-xs text-muted-foreground">{formatDisplay(value, config)}</span>
@@ -779,7 +1010,7 @@ export function MetasRealizadosTab(props: {
                                     size="sm"
                                     aria-label={`Replicar Jan em todos os meses para ano anterior de ${indicator.name}`}
                                     title="Replicar ano anterior de Janeiro para os demais meses"
-                                    onClick={() => replicateMonthToAll(indicator.code, 'ano_anterior', 1)}
+                                    onClick={() => void replicateMonthToAll(indicator.code, 'ano_anterior', 1)}
                                   >
                                     <Copy size={14} className="mr-1" /> Replicar Jan
                                   </Button>
@@ -797,6 +1028,8 @@ export function MetasRealizadosTab(props: {
                 </Table>
               </MxTableSurface>
             </div>
+          )}
+            </>
           )}
         </div>
       </MxSectionCard>
@@ -830,7 +1063,7 @@ export function MetasRealizadosTab(props: {
           open
           file={file}
           lojaId={storeId}
-          indicators={props.indicators}
+          indicators={importCatalog}
           currentValues={rows.map(row => ({ indicator_code: row.indicator_code, month: row.month, value: row.meta }))}
           year={year}
           onClose={() => setFile(null)}
@@ -1117,7 +1350,7 @@ function TargetImportModal(props: {
         const buffer = await props.file.arrayBuffer()
         const { headers, rows: matrix } = readXlsxTable(buffer)
         const importRows = matrix.map(row => ({
-          code: String(row['Código'] ?? '').trim(),
+          code: readIndicatorCodeFromRow(row),
           months: MONTH_LABELS.map(label => {
             const value = row[label]
             return value === undefined || value === null ? null : value as number | string

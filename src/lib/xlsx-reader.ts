@@ -77,57 +77,77 @@ const cellValue = (cell: string, shared: string[]): unknown => {
   return Number.isFinite(numeric) && decoded.trim() !== '' ? numeric : decoded
 }
 
+/** Informações de uma aba localizada no arquivo .xlsx. */
+export type SheetDescriptor = {
+  name: string
+  sheetId: string
+  path: string
+}
+
 /** Caminho da primeira planilha, seguindo workbook.xml -> rels. */
 const firstSheetPath = (files: Record<string, Uint8Array>) => {
-  const workbook = files['xl/workbook.xml']
-  const rels = files['xl/_rels/workbook.xml.rels']
-  if (workbook && rels) {
-    const id = /<sheet[^>]*r:id="([^"]+)"/.exec(strFromU8(workbook))?.[1]
-    if (id) {
-      const relsXml = strFromU8(rels)
-      const escaped = id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-      const target = new RegExp(`<Relationship[^>]*Id="${escaped}"[^>]*Target="([^"]+)"`).exec(relsXml)?.[1]
-      if (target) {
-        const normalized = target.replace(/^\/?xl\//, '').replace(/^\//, '')
-        const candidate = `xl/${normalized}`
-        if (files[candidate]) return candidate
-      }
-    }
-  }
+  const sheets = listXlsxSheets(files)
+  if (sheets.length > 0) return sheets[0].path
   if (files['xl/worksheets/sheet1.xml']) return 'xl/worksheets/sheet1.xml'
   return Object.keys(files).find(name => name.startsWith('xl/worksheets/') && name.endsWith('.xml'))
 }
 
+/** Lista todas as abas presentes no workbook na ordem declarada. */
+export function listXlsxSheets(files: Record<string, Uint8Array>): SheetDescriptor[] {
+  const workbook = files['xl/workbook.xml']
+  const rels = files['xl/_rels/workbook.xml.rels']
+  if (!workbook || !rels) {
+    if (files['xl/worksheets/sheet1.xml']) return [{ name: 'Sheet1', sheetId: '1', path: 'xl/worksheets/sheet1.xml' }]
+    const fallback = Object.keys(files).find(name => name.startsWith('xl/worksheets/') && name.endsWith('.xml'))
+    return fallback ? [{ name: 'Sheet1', sheetId: '1', path: fallback }] : []
+  }
+
+  const relsXml = strFromU8(rels)
+  const relMap = new Map<string, string>()
+  for (const rel of relsXml.match(/<Relationship[^>]*\/>/g) ?? []) {
+    const id = /Id="([^"]+)"/.exec(rel)?.[1]
+    const target = /Target="([^"]+)"/.exec(rel)?.[1]
+    if (id && target) {
+      const normalized = target.replace(/^\/?xl\//, '').replace(/^\//, '')
+      relMap.set(id, `xl/${normalized}`)
+    }
+  }
+
+  const workbookXml = strFromU8(workbook)
+  const sheets: SheetDescriptor[] = []
+  for (const sheetTag of workbookXml.match(/<sheet[^>]*\/>|<sheet[^>]*>[\s\S]*?<\/sheet>/g) ?? []) {
+    const name = /name="([^"]+)"/.exec(sheetTag)?.[1]
+    const sheetId = /sheetId="([^"]+)"/.exec(sheetTag)?.[1] ?? ''
+    const rId = /r:id="([^"]+)"/.exec(sheetTag)?.[1]
+    const path = rId ? relMap.get(rId) : undefined
+    if (name && path && files[path]) {
+      sheets.push({ name: decodeXml(name), sheetId, path })
+    }
+  }
+
+  if (!sheets.length) {
+    if (files['xl/worksheets/sheet1.xml']) sheets.push({ name: 'Sheet1', sheetId: '1', path: 'xl/worksheets/sheet1.xml' })
+  }
+
+  return sheets
+}
+
 export type XlsxTable = {
+  /** Nome da aba lida. */
+  sheetName?: string
   /** Cabeçalhos na ordem em que aparecem na primeira linha. */
   headers: string[]
   rows: Array<Record<string, unknown>>
 }
 
-/**
- * Converte a primeira planilha do arquivo em registros chaveados pelo
- * cabeçalho, devolvendo também os cabeçalhos lidos — necessários para explicar
- * ao usuário por que uma planilha não gerou nenhum registro (coluna renomeada,
- * aba errada, arquivo de outro relatório).
- *
- * Lança `Error` com mensagem em português quando o arquivo não é um .xlsx
- * legível.
- */
-export function readXlsxTable(buffer: ArrayBuffer): XlsxTable {
-  let files: Record<string, Uint8Array>
-  try {
-    files = unzipSync(new Uint8Array(buffer))
-  } catch {
-    throw new Error('Arquivo não é uma planilha .xlsx válida.')
-  }
+export type XlsxWorkbook = {
+  sheetNames: string[]
+  sheets: Record<string, XlsxTable>
+  config: Record<string, unknown>
+  targetTable: XlsxTable
+}
 
-  const sheetPath = firstSheetPath(files)
-  const sheetFile = sheetPath ? files[sheetPath] : undefined
-  if (!sheetFile) throw new Error('A planilha não contém nenhuma aba legível.')
-
-  const shared = parseSharedStrings(files['xl/sharedStrings.xml'] ? strFromU8(files['xl/sharedStrings.xml']) : undefined)
-  const sheetXml = strFromU8(sheetFile)
-
+function parseSheetXmlToTable(sheetXml: string, shared: string[], sheetName?: string): XlsxTable {
   const rows: unknown[][] = []
   for (const rowXml of sheetXml.match(/<row[^>]*>[\s\S]*?<\/row>/g) ?? []) {
     const cells: unknown[] = []
@@ -140,7 +160,7 @@ export function readXlsxTable(buffer: ArrayBuffer): XlsxTable {
   }
 
   const [header, ...body] = rows
-  if (!header) return { headers: [], rows: [] }
+  if (!header) return { sheetName, headers: [], rows: [] }
 
   const headers = header.map(value => String(value ?? '').trim())
   const records = body
@@ -153,10 +173,112 @@ export function readXlsxTable(buffer: ArrayBuffer): XlsxTable {
       return record
     })
 
-  return { headers: headers.filter(name => name !== ''), rows: records }
+  return { sheetName, headers: headers.filter(name => name !== ''), rows: records }
+}
+
+const DEFAULT_PRIORITY_SHEETS = ['METAS', 'DADOS', 'PLANILHA', 'DATA', 'TARGETS']
+
+function normalizeSheetKey(value: string): string {
+  return value.trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+}
+
+/**
+ * Converte a planilha do arquivo em registros chaveados pelo cabeçalho.
+ * Quando o arquivo contém múltiplas abas (ex: INSTRUÇÕES, METAS, MX_CONFIG),
+ * seleciona prioritariamente a aba de dados (METAS) ou a indicada em `options.sheetName`.
+ */
+export function readXlsxTable(
+  buffer: ArrayBuffer,
+  options?: { sheetName?: string; prioritizeSheetNames?: string[] },
+): XlsxTable {
+  let files: Record<string, Uint8Array>
+  try {
+    files = unzipSync(new Uint8Array(buffer))
+  } catch {
+    throw new Error('Arquivo não é uma planilha .xlsx válida.')
+  }
+
+  const sheets = listXlsxSheets(files)
+  if (!sheets.length) throw new Error('A planilha não contém nenhuma aba legível.')
+
+  let selectedSheet: SheetDescriptor | undefined
+  if (options?.sheetName) {
+    const targetNorm = normalizeSheetKey(options.sheetName)
+    selectedSheet = sheets.find(s => normalizeSheetKey(s.name) === targetNorm)
+  }
+
+  if (!selectedSheet) {
+    const priorityList = options?.prioritizeSheetNames ?? DEFAULT_PRIORITY_SHEETS
+    for (const prio of priorityList) {
+      const prioNorm = normalizeSheetKey(prio)
+      const found = sheets.find(s => normalizeSheetKey(s.name) === prioNorm)
+      if (found) {
+        selectedSheet = found
+        break
+      }
+    }
+  }
+
+  if (!selectedSheet) {
+    // Se não encontrou por nome prioritário, busca a primeira aba que não seja 'INSTRUÇÕES'
+    const nonInstruction = sheets.find(s => !normalizeSheetKey(s.name).startsWith('INSTRU'))
+    selectedSheet = nonInstruction ?? sheets[0]
+  }
+
+  const sheetFile = files[selectedSheet.path]
+  if (!sheetFile) throw new Error(`A aba "${selectedSheet.name}" não pôde ser lida.`)
+
+  const shared = parseSharedStrings(files['xl/sharedStrings.xml'] ? strFromU8(files['xl/sharedStrings.xml']) : undefined)
+  const sheetXml = strFromU8(sheetFile)
+
+  return parseSheetXmlToTable(sheetXml, shared, selectedSheet.name)
 }
 
 /** Atalho para quem só precisa dos registros. */
-export function readXlsxRows(buffer: ArrayBuffer): Array<Record<string, unknown>> {
-  return readXlsxTable(buffer).rows
+export function readXlsxRows(buffer: ArrayBuffer, options?: { sheetName?: string }): Array<Record<string, unknown>> {
+  return readXlsxTable(buffer, options).rows
+}
+
+/** Lê todas as abas e extrai metadados do MX_CONFIG quando disponível. */
+export function readXlsxWorkbook(buffer: ArrayBuffer): XlsxWorkbook {
+  let files: Record<string, Uint8Array>
+  try {
+    files = unzipSync(new Uint8Array(buffer))
+  } catch {
+    throw new Error('Arquivo não é uma planilha .xlsx válida.')
+  }
+
+  const sheets = listXlsxSheets(files)
+  if (!sheets.length) throw new Error('A planilha não contém nenhuma aba legível.')
+
+  const shared = parseSharedStrings(files['xl/sharedStrings.xml'] ? strFromU8(files['xl/sharedStrings.xml']) : undefined)
+  const parsedSheets: Record<string, XlsxTable> = {}
+
+  for (const s of sheets) {
+    const file = files[s.path]
+    if (file) {
+      parsedSheets[s.name] = parseSheetXmlToTable(strFromU8(file), shared, s.name)
+    }
+  }
+
+  // Extrair config de MX_CONFIG se presente
+  const config: Record<string, unknown> = {}
+  const configSheetKey = Object.keys(parsedSheets).find(k => normalizeSheetKey(k) === 'MX_CONFIG' || normalizeSheetKey(k) === 'CONFIG')
+  if (configSheetKey && parsedSheets[configSheetKey]) {
+    const configTable = parsedSheets[configSheetKey]
+    for (const row of configTable.rows) {
+      const key = String(row['Chave'] ?? row['chave'] ?? row['Key'] ?? row['key'] ?? '').trim()
+      const val = row['Valor'] ?? row['valor'] ?? row['Value'] ?? row['value']
+      if (key) config[key] = val
+    }
+  }
+
+  const targetTable = readXlsxTable(buffer)
+
+  return {
+    sheetNames: sheets.map(s => s.name),
+    sheets: parsedSheets,
+    config,
+    targetTable,
+  }
 }

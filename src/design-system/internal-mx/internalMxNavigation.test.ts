@@ -39,7 +39,7 @@ describe('navegação interna MX', () => {
       expect(items.some((item) => item.path === '/seguranca')).toBe(false)
       // /produtos agora é o catálogo de consultoria para o interno MX.
       expect(items.filter((item) => item.path === '/produtos')).toHaveLength(1)
-      expect(items.find((item) => item.path === '/produtos')?.label).toBe('Produtos')
+      expect(items.find((item) => item.path === '/produtos')?.label).toBe('Produtos de Consultoria')
       expect(items.find((item) => item.path === '/notificacoes')?.badge).toBe('7')
     })
   }

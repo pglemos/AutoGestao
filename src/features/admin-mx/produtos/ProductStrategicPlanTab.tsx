@@ -149,6 +149,9 @@ export function ProductStrategicPlanTab(props: { product: ConsultingProduct; onC
 
   return (
     <div className="space-y-4">
+      <MxStatusBanner tone="info">
+        Esta tela configura o pacote de indicadores do produto. O lançamento de metas (Cadastro rápido) é por cliente, em Clientes → Plano Estratégico — não use Produtos como plano da empresa.
+      </MxStatusBanner>
       <div className="rounded-xl border border-border p-4">
         <div className="flex items-center justify-between gap-3">
           <div>

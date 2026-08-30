@@ -5,6 +5,7 @@ import {
   enrollmentLinkRemainingUses,
   generateEnrollmentToken,
   resolveEnrollmentLinkStatus,
+  inviteProfileFromPersonRoles,
   validateEnrollmentLinkDraft,
 } from './enrollmentLink'
 
@@ -32,6 +33,13 @@ describe('link de autocadastro — lógica pura', () => {
     expect(resolveEnrollmentLinkStatus({ createdAt: '2026-08-01T12:00:00Z', validadeDias: 7, limiteUsos: 10, usosConsumidos: 0, status: 'ativo', now })).toBe('expirado')
     expect(resolveEnrollmentLinkStatus({ createdAt: '2026-08-10T12:00:00Z', validadeDias: 7, limiteUsos: 3, usosConsumidos: 3, status: 'ativo', now })).toBe('limite_atingido')
     expect(resolveEnrollmentLinkStatus({ createdAt: '2026-08-10T12:00:00Z', validadeDias: 7, limiteUsos: 10, usosConsumidos: 0, status: 'cancelado', now })).toBe('cancelado')
+  })
+
+  test('o convite usa o papel de acesso, nunca a função declarada', () => {
+    expect(inviteProfileFromPersonRoles(['DONO', 'VENDEDOR'])).toBe('DONO_SOCIO')
+    expect(inviteProfileFromPersonRoles(['GERENTE_COMERCIAL'])).toBe('GERENTE')
+    expect(inviteProfileFromPersonRoles(['RH'])).toBe('PESSOAS_RH')
+    expect(inviteProfileFromPersonRoles([])).toBe('VENDEDOR')
   })
 
   test('remaining uses zera fora do ativo', () => {

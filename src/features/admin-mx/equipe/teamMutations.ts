@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase'
+import { describeAdminRpcError } from './adminRpcErrors'
 
 export const MX_TEAM_ROLES = ['administrador_geral', 'administrador_mx', 'consultor_mx'] as const
 export type MxTeamRole = (typeof MX_TEAM_ROLES)[number]
@@ -36,7 +37,7 @@ export async function saveTeamMember(draft: TeamMemberDraft): Promise<{ error: s
       active: draft.active,
     },
   })
-  if (error) return { error: error.message }
+  if (error) return { error: describeAdminRpcError(error, 'Falha ao atualizar usuário.') }
   if (data && typeof data === 'object' && 'ok' in data && !(data as { ok: boolean }).ok) {
     return { error: (data as { error?: string }).error ?? 'Falha ao atualizar usuário.' }
   }
@@ -56,7 +57,7 @@ export async function deactivateTeamMember(userId: string, reason: string): Prom
       deactivation_reason: reason.trim() || 'Desativado pela administração MX.',
     },
   })
-  if (error) return { error: error.message }
+  if (error) return { error: describeAdminRpcError(error, 'Falha ao desativar usuário.') }
   if (data && typeof data === 'object' && 'ok' in data && !(data as { ok: boolean }).ok) {
     return { error: (data as { error?: string }).error ?? 'Falha ao desativar usuário.' }
   }
@@ -78,7 +79,7 @@ export async function reactivateTeamMember(userId: string): Promise<{ error: str
       deactivation_reason: null,
     },
   })
-  if (error) return { error: error.message }
+  if (error) return { error: describeAdminRpcError(error, 'Falha ao reativar usuário.') }
   if (data && typeof data === 'object' && 'ok' in data && !(data as { ok: boolean }).ok) {
     return { error: (data as { error?: string }).error ?? 'Falha ao reativar usuário.' }
   }

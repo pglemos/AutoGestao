@@ -229,6 +229,7 @@ describe('próxima ação', () => {
 describe('rótulos e filtros', () => {
   test('estrutura e jornada legíveis', () => {
     expect(structureLabel(client({ structure_type: 'REDE', units: 4 }))).toBe('Rede · 4 unidade(s)')
+    expect(structureLabel(client({ structure_type: 'GRUPO', units: 3 }))).toBe('Grupo · 3 unidade(s)')
     expect(journeyLabel(client({ visitsDone: 2, visitsTotal: 7 }))).toBe('2 de 7')
     expect(journeyLabel(client({ visitsTotal: 0 }))).toBe('Sem jornada')
   })

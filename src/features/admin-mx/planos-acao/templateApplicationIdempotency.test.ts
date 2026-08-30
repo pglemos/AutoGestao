@@ -87,3 +87,12 @@ describe('buildTemplateApplicationRows', () => {
     expect(total).toBe(10000)
   })
 })
+
+describe('applyTemplateToStoresIdempotent contrato CONS-22', () => {
+  test('o módulo de aplicação não faz insert direto em planos_acao', async () => {
+    const { readFileSync } = await import('node:fs')
+    const src = readFileSync(new URL('./templateApplicationIdempotency.ts', import.meta.url), 'utf8')
+    expect(src).toContain("rpc('criar_plano_acao_v2'")
+    expect(src).not.toMatch(/from\('planos_acao'\)[\s\S]{0,120}\.insert/)
+  })
+})

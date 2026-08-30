@@ -26,6 +26,27 @@ export function emptyEnrollmentLinkDraft(): EnrollmentLinkDraft {
   return { perfil_acesso: 'VENDEDOR', nome_interno: '', validade_dias: 7, limite_usos: 10 }
 }
 
+const PERSON_ROLE_TO_ENROLLMENT: Record<string, EnrollmentProfile> = {
+  DONO: 'DONO_SOCIO',
+  DIRETOR: 'DIRETOR',
+  GERENTE_COMERCIAL: 'GERENTE',
+  VENDEDOR: 'VENDEDOR',
+  MARKETING: 'MARKETING',
+  PRODUTO_ESTOQUE: 'PRODUTO_ESTOQUE',
+  FINANCEIRO_ADMINISTRATIVO: 'FINANCEIRO',
+  RH: 'PESSOAS_RH',
+  OPERACOES: 'OPERACOES',
+}
+
+/** Perfil do link de autocadastro a partir dos papéis da pessoa — não usa função declarada. */
+export function inviteProfileFromPersonRoles(papeis: readonly string[]): EnrollmentProfile {
+  for (const role of papeis) {
+    const mapped = PERSON_ROLE_TO_ENROLLMENT[role]
+    if (mapped) return mapped
+  }
+  return 'VENDEDOR'
+}
+
 /** Erro bloqueante do link, ou null. */
 export function validateEnrollmentLinkDraft(draft: EnrollmentLinkDraft): string | null {
   if (!ENROLLMENT_PROFILES.some(profile => profile.value === draft.perfil_acesso)) {

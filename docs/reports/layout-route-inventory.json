@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-24T16:19:19.663Z",
-  "baselineSha": "8c7510f6761dc3b85267d27fa8d0947cfa2d49f3",
-  "routeCount": 121,
+  "generatedAt": "2026-08-30T02:37:12.587Z",
+  "baselineSha": "a4e03b5830f9ea29d58b3ea42b7e54b0eb53f609",
+  "routeCount": 122,
   "routes": [
     {
       "path": "/",
@@ -271,6 +271,27 @@
     },
     {
       "path": "/clientes/:clientSlug/plano-estrategico",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:InternalStrategicPlanPage"
+      ],
+      "files": [
+        "src/features/internal-mx-planning/InternalStrategicPlanPage.tsx"
+      ],
+      "canvas": 1,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "wide",
+        "bottomClearance": "navigation",
+        "adopted": true
+      }
+    },
+    {
+      "path": "/clientes/:clientSlug/plano-estrategico/:year",
       "renderCount": 4,
       "routes": [
         "vendedor:ForbiddenRoute",
@@ -1413,8 +1434,8 @@
         "src/pages/GerentePDI.tsx"
       ],
       "canvas": 0,
-      "template": 6,
-      "structural": 1,
+      "template": 8,
+      "structural": 0,
       "metadata": {
         "width": "dashboard",
         "source": "default"
@@ -1424,14 +1445,12 @@
       "path": "/pdi/:id/print",
       "renderCount": 1,
       "routes": [
-        "*:PDIPrint"
+        "*:ProtectedRoute"
       ],
-      "files": [
-        "src/pages/PDIPrint.tsx"
-      ],
+      "files": [],
       "canvas": 0,
       "template": 0,
-      "structural": 1,
+      "structural": 0,
       "metadata": {
         "width": "reading",
         "bottomClearance": "none"

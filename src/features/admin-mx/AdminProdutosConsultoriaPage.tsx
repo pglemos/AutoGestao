@@ -182,9 +182,9 @@ export function AdminProdutosConsultoriaPage() {
         <MxModuleHeader
           icon={Package}
           eyebrow="Administração MX"
-          title="Produtos de consultoria"
+          title="Produtos de Consultoria"
           description="Programas comercializados: ciclo de vida, módulos herdados pelos clientes e capacidade por encontro."
-          actions={<><Button variant="outline" onClick={() => void refetch()}><RefreshCw size={16} />Atualizar</Button><Button onClick={openNew}><Plus size={16} />Novo produto</Button></>}
+          actions={<><Button variant="outline" onClick={() => void refetch()}><RefreshCw size={16} />Atualizar</Button><Button onClick={openNew}><Plus size={16} />Novo Produto</Button></>}
         />
         {loading ? <MxLoadingState label="Carregando produtos" /> : error ? <MxErrorState description={error} retry={() => void refetch()} /> : (
           <>
@@ -263,7 +263,7 @@ export function AdminProdutosConsultoriaPage() {
                       </TableBody>
                     </Table>
                   </MxTableSurface>
-                ) : <MxEmptyState variant={rows.length ? 'filter' : 'dataset'} title={rows.length ? 'Nenhum produto encontrado' : 'Nenhum produto cadastrado'} description={rows.length ? 'Ajuste a busca ou o filtro de status.' : 'Cadastre programas de visita para liberar a jornada de consultoria.'} action={rows.length ? undefined : <Button onClick={openNew}><Plus size={16} />Novo produto</Button>} />}
+                ) : <MxEmptyState variant={rows.length ? 'filter' : 'dataset'} title={rows.length ? 'Nenhum produto encontrado' : 'Nenhum produto cadastrado'} description={rows.length ? 'Ajuste a busca ou o filtro de status.' : 'Cadastre programas de visita para liberar a jornada de consultoria.'} action={rows.length ? undefined : <Button onClick={openNew}><Plus size={16} />Novo Produto</Button>} />}
               </div>
             </MxSectionCard>
           </>

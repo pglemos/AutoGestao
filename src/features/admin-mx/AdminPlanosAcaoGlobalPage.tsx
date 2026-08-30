@@ -24,7 +24,7 @@ import {
 import { TabNav } from '@/components/molecules/TabNav'
 import { ActionPlanKanban } from './planos-acao/ActionPlanKanban'
 import { ActionPlanDetailDrawer } from './planos-acao/ActionPlanDetailDrawer'
-import { boardMetrics, changePlanStatus, fetchBoardPlanById, normalizeBoardChecklist, planDaysLate, STATUS_LABEL, type BoardPlan, type PlanStatus } from './planos-acao/actionPlanBoard'
+import { boardMetrics, changePlanStatus, fetchBoardPlanById, formatActionPlanCodigo, normalizeBoardChecklist, planDaysLate, STATUS_LABEL, type BoardPlan, type PlanStatus } from './planos-acao/actionPlanBoard'
 import { Modal } from '@/components/organisms/Modal'
 import { ApplyTemplateWizard } from './planos-acao/ApplyTemplateWizard'
 import { ClientActionPlanWizard } from './planos-acao/ClientActionPlanWizard'
@@ -200,7 +200,7 @@ export function AdminPlanosAcaoGlobalPage() {
 
   const boardPlans = useMemo<BoardPlan[]>(() => filtered.map(plan => ({
     id: plan.id,
-    codigo: plan.codigo,
+    codigo: formatActionPlanCodigo(plan.codigo, plan.id),
     problema: plan.problema,
     acao: plan.acao,
     status: (plan.status ?? 'pendente') as PlanStatus,
@@ -260,7 +260,7 @@ export function AdminPlanosAcaoGlobalPage() {
       <div className="w-full space-y-5">
         <MxModuleHeader
           icon={ClipboardList}
-          title="Planos de Ação"
+          title="Planos de Ação e Playbooks"
           description="Crie modelos de ação da metodologia MX para aplicação nos clientes e sugestão aos Donos."
           actions={tab === 'templates' ? (
             <div className="flex flex-wrap items-center justify-end gap-2">
@@ -363,7 +363,7 @@ export function AdminPlanosAcaoGlobalPage() {
                                   <Button variant="outline" size="sm" onClick={() => setDetailTemplate(template)}>Abrir</Button>
                                   <Button variant="outline" size="sm" onClick={() => void templates.openEdit(template)}>Editar</Button>
                                   {openDraft ? <Button variant="outline" size="sm" onClick={() => void templates.publish(template)}>Publicar</Button> : null}
-                                  {published && template.active && template.manual_application_enabled ? <Button size="sm" onClick={() => templates.setApplying(template)}>Aplicar a cliente</Button> : null}
+                                  {published && template.active && template.manual_application_enabled ? <Button size="sm" onClick={() => templates.setApplying(template)}>Aplicar a Cliente</Button> : null}
                                   {/* Respeita `owner_suggestion_enabled`, igual ao drawer: a coluna
                                       Sug. dizia "—" e o botão continuava na linha, então a flag
                                       "Disponível para sugestão ao Dono" não valia nada no caminho
@@ -463,7 +463,7 @@ export function AdminPlanosAcaoGlobalPage() {
                           const responsibleName = wizardResponsibles.find(item => item.id === plan.responsavel_id)?.name
                           return (
                           <TableRow key={plan.id}>
-                            <TableCell className="whitespace-nowrap text-xs font-bold text-muted-foreground">{plan.codigo || '—'}</TableCell>
+                            <TableCell className="whitespace-nowrap text-xs font-bold text-muted-foreground">{formatActionPlanCodigo(plan.codigo, plan.id)}</TableCell>
                             <TableCell className="max-w-[240px]">
                               <button type="button" className="block w-full truncate text-left font-semibold text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring" onClick={() => void openPlanById(plan.id)}>
                                 {plan.acao || plan.problema || 'Sem descrição'}

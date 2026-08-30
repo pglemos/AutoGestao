@@ -7,18 +7,25 @@ import {
   emptyPersonAccessDraft,
   PERSON_DEFAULT_VIEWS,
   PERSON_PROFILES,
+  PERSON_STATUSES,
+  PERSON_STATUS_LABELS,
+  uniqueMasterChangeGuard,
   validatePersonAccessDraft,
   type PersonAccessDraft,
   type PersonDefaultView,
   type PersonProfile,
+  type PersonStatus,
 } from './personAccess'
 
 export type PersonStoreOption = { id: string; name: string }
+export type PersonMasterPeer = { id: string; is_dono_master: boolean; status: string }
 
 export function PersonCreateModal(props: {
   open: boolean
   submitting: boolean
   stores: PersonStoreOption[]
+  persons?: PersonMasterPeer[]
+  personId?: string | null
   initial?: Partial<PersonAccessDraft>
   editing?: boolean
   onSubmit: (draft: PersonAccessDraft) => void
@@ -35,9 +42,33 @@ export function PersonCreateModal(props: {
 
   const errors = validatePersonAccessDraft(draft)
   const hasDono = draft.papeis.includes('DONO')
+  const peers = props.persons ?? []
+  const personId = props.personId ?? ''
+  const masterDemoteBlock = uniqueMasterChangeGuard({
+    persons: peers,
+    targetId: personId,
+    nextMaster: false,
+  })
   const patch = (values: Partial<PersonAccessDraft>) => setDraft(current => ({ ...current, ...values }))
 
+  const blockMasterChange = (nextMaster?: boolean, nextStatus?: string) => {
+    const blocked = uniqueMasterChangeGuard({
+      persons: peers,
+      targetId: personId,
+      nextMaster,
+      nextStatus,
+    })
+    if (blocked) {
+      setError(blocked)
+      return true
+    }
+    return false
+  }
+
   const toggleRole = (role: PersonProfile) => {
+    const removingDono = role === 'DONO' && draft.papeis.includes('DONO')
+    if (removingDono && blockMasterChange(false)) return
+    setError('')
     setDraft(current => {
       const next = current.papeis.includes(role)
         ? current.papeis.filter(item => item !== role)
@@ -55,6 +86,8 @@ export function PersonCreateModal(props: {
   }
 
   const toggleMaster = () => {
+    if (draft.is_dono_master && blockMasterChange(false)) return
+    setError('')
     setDraft(current => {
       const next = !current.is_dono_master
       return {
@@ -80,7 +113,7 @@ export function PersonCreateModal(props: {
     <Modal
       open={props.open}
       onClose={props.onClose}
-      title={props.editing ? 'Editar usuário' : 'Adicionar Usuário'}
+      title={props.editing ? 'Editar usuário' : 'Cadastrar Usuário'}
       description="Dados pessoais, perfis de acesso, Dono Master e lojas autorizadas."
       size="lg"
       closeOnEscape={!props.submitting}
@@ -111,8 +144,33 @@ export function PersonCreateModal(props: {
           <MxField label="Nome completo"><MxInput value={draft.nome} onChange={event => patch({ nome: event.target.value })} /></MxField>
           <MxField label="E-mail"><MxInput type="email" value={draft.email} onChange={event => patch({ email: event.target.value })} /></MxField>
           <MxField label="Telefone"><MxInput value={draft.telefone} onChange={event => patch({ telefone: event.target.value })} placeholder="(00) 00000-0000" /></MxField>
-          <MxField label="Função declarada"><MxInput value={draft.funcao_declarada} onChange={event => patch({ funcao_declarada: event.target.value })} placeholder="Sócio" /></MxField>
+          <MxField label="Função declarada" hint="A função declarada não concede permissão."><MxInput value={draft.funcao_declarada} onChange={event => patch({ funcao_declarada: event.target.value })} placeholder="Sócio" /></MxField>
         </div>
+
+        {props.editing ? (
+          <MxField label="Status">
+            <MxSelect aria-label="Status do usuário" value={draft.status} onChange={event => {
+              const nextStatus = event.target.value as PersonStatus
+              if (blockMasterChange(undefined, nextStatus)) return
+              setError('')
+              patch({ status: nextStatus })
+            }}>
+              {PERSON_STATUSES.map(status => (
+                <option
+                  key={status}
+                  value={status}
+                  disabled={status === 'inativo' && Boolean(uniqueMasterChangeGuard({
+                    persons: peers,
+                    targetId: personId,
+                    nextStatus: 'inativo',
+                  }))}
+                >
+                  {PERSON_STATUS_LABELS[status]}
+                </option>
+              ))}
+            </MxSelect>
+          </MxField>
+        ) : null}
 
         <div>
           <h3 className="mb-2 text-sm font-semibold text-foreground">Perfis de acesso</h3>
@@ -122,7 +180,13 @@ export function PersonCreateModal(props: {
               const checked = draft.papeis.includes(profile.value)
               return (
                 <label key={profile.value} className={`flex items-start gap-2 rounded-lg border p-2.5 ${checked ? 'border-primary/50 bg-status-success-bg' : 'border-border'}`}>
-                  <input type="checkbox" checked={checked} onChange={() => toggleRole(profile.value)} className="mt-0.5 rounded" />
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={() => toggleRole(profile.value)}
+                    disabled={profile.value === 'DONO' && checked && Boolean(masterDemoteBlock)}
+                    className="mt-0.5 rounded"
+                  />
                   <div>
                     <div className="text-sm font-medium text-foreground">{profile.label}</div>
                     <div className="text-xs text-muted-foreground">{profile.description}</div>
@@ -136,10 +200,20 @@ export function PersonCreateModal(props: {
         {hasDono ? (
           <div className="rounded-lg border border-amber-300 bg-amber-50 p-3">
             <label className="flex items-start gap-2">
-              <input type="checkbox" checked={draft.is_dono_master} onChange={toggleMaster} className="mt-0.5 rounded" />
+              <input
+                type="checkbox"
+                checked={draft.is_dono_master}
+                onChange={toggleMaster}
+                disabled={Boolean(masterDemoteBlock) && draft.is_dono_master}
+                className="mt-0.5 rounded"
+              />
               <div>
                 <div className="flex items-center gap-1.5 text-sm font-medium text-foreground"><Crown size={14} className="text-status-warning" />Definir como Dono Master desta empresa</div>
-                <div className="mt-1 text-xs text-muted-foreground">Governança principal da conta, acesso global às unidades e autorização para administrar usuários, metas e configurações.</div>
+                <div className="mt-1 text-xs text-muted-foreground">
+                  {masterDemoteBlock && draft.is_dono_master
+                    ? masterDemoteBlock
+                    : 'Governança principal da conta, acesso global às unidades e autorização para administrar usuários, metas e configurações.'}
+                </div>
               </div>
             </label>
           </div>

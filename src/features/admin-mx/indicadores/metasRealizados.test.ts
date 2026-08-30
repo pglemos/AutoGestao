@@ -11,6 +11,15 @@ import {
   previewStoreTargetsCopy,
   processTargetImport,
   validateQuickEntryCells,
+  januaryReplicationSeries,
+  indicatorYearComplete,
+  monthsAreUniform,
+  uniqueFilledValue,
+  fillUniformGaps,
+  fillIsolatedZeros,
+  normalizeQuickEntrySeries,
+  copyPreviousMonthSeries,
+  countQuickEntryProgress,
   validateTargetImport,
 } from './metasRealizados'
 
@@ -39,6 +48,64 @@ describe('edição de metas e realizados', () => {
     const walkin = { code: 'SALES_WALKIN', name: 'Vendas Fluxo', calculado: false }
     expect(isPlanningFieldEditable(walkin, 'meta')).toBe(true)
     expect(isPlanningFieldEditable(walkin, 'realizado')).toBe(true)
+  })
+})
+
+describe('replicação de Janeiro', () => {
+  test('Janeiro vazio não gera série; zero replica o ano inteiro', () => {
+    expect(januaryReplicationSeries(null)).toBeNull()
+    expect(januaryReplicationSeries(0)).toEqual(Array.from({ length: 12 }, () => 0))
+    expect(januaryReplicationSeries(10)?.length).toBe(12)
+    expect(januaryReplicationSeries(10)?.every(value => value === 10)).toBe(true)
+  })
+})
+
+describe('cadastro rápido valor único e personalizar mês', () => {
+  test('ano completo exige os 12 meses; vazio em um mês não conta', () => {
+    expect(indicatorYearComplete(Array.from({ length: 12 }, () => 4))).toBe(true)
+    expect(indicatorYearComplete([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])).toBe(true)
+    expect(indicatorYearComplete([4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, null])).toBe(false)
+  })
+
+  test('meses uniformes colapsam para valor único; 0 é uniforme', () => {
+    expect(monthsAreUniform([6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6])).toBe(true)
+    expect(monthsAreUniform(Array.from({ length: 12 }, () => null))).toBe(true)
+    expect(monthsAreUniform([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])).toBe(true)
+    expect(monthsAreUniform([6, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6])).toBe(false)
+  })
+
+  test('buraco no mesmo valor único preenche o ano; meses diferentes não', () => {
+    const internet = [null, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+    expect(monthsAreUniform(internet)).toBe(false)
+    expect(uniqueFilledValue(internet)).toBe(3)
+    expect(fillUniformGaps(internet)).toEqual(Array.from({ length: 12 }, () => 3))
+    expect(uniqueFilledValue([0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9])).toBeNull()
+    expect(fillUniformGaps([0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9])).toEqual([0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9])
+    expect(fillIsolatedZeros([0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9])).toEqual(Array.from({ length: 12 }, () => 9))
+    expect(normalizeQuickEntrySeries([0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9])).toEqual(Array.from({ length: 12 }, () => 9))
+    expect(fillIsolatedZeros(Array.from({ length: 12 }, () => 0))).toEqual(Array.from({ length: 12 }, () => 0))
+  })
+
+  test('copiar mês anterior preenche para frente e não inventa Janeiro', () => {
+    expect(copyPreviousMonthSeries([6, null, null, 2, null, null, null, null, null, null, null, null])).toEqual(
+      [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+    )
+    expect(copyPreviousMonthSeries(Array.from({ length: 12 }, () => null)).every(value => value == null)).toBe(true)
+  })
+
+  test('progresso por departamento conta só digitáveis com o ano completo', () => {
+    const progress = countQuickEntryProgress({
+      indicators: [
+        { code: 'A', department: 'Comercial' },
+        { code: 'B', department: 'Comercial' },
+        { code: 'C', department: 'Marketing', calculado: true },
+      ],
+      valuesFor: code => code === 'A' ? Array.from({ length: 12 }, () => 1) : Array.from({ length: 12 }, () => null),
+    })
+    expect(progress.digitaveisFilled).toBe(1)
+    expect(progress.digitaveisTotal).toBe(2)
+    expect(progress.byDept.Comercial).toEqual({ filled: 1, total: 2 })
+    expect(progress.byDept.Marketing).toEqual({ filled: 0, total: 0 })
   })
 })
 
@@ -169,6 +236,20 @@ describe('processTargetImport', () => {
     expect(changes[0]).toMatchObject({ month: 1, newValue: 10, action: 'UPDATE' })
     expect(changes[1]).toMatchObject({ month: 2, action: 'CLEAR' })
     expect(changes[2]).toMatchObject({ month: 3, action: 'INVALID' })
+  })
+
+  test('célula vazia não vira zero; zero explícito é UPDATE', () => {
+    const changes = processTargetImport({
+      rows: [
+        { code: 'SALES_WALKIN', months: [0, '', null, '   '], total: null, observation: null },
+      ],
+      indicators: INDICATORS,
+      currentValues: [{ indicator_code: 'SALES_WALKIN', month: 2, value: 8 }],
+      isPercentage: () => false,
+    })
+    expect(changes).toEqual([
+      expect.objectContaining({ month: 1, newValue: 0, action: 'UPDATE' }),
+    ])
   })
 
   test('calculados são pulados', () => {
@@ -370,10 +451,10 @@ describe('modelo XLSX de metas', () => {
       values: { CONVERSION_RATE: [0.25] },
     })
 
-    expect(sheets.map(sheet => sheet.name)).toEqual(['METAS', 'INSTRUCOES', 'MX_CONFIG'])
-    expect(sheets[0]?.rows[0]).toMatchObject({ Código: 'SALES_WALKIN', Jan: null, Tipo: 'Digitável' })
-    expect(sheets[0]?.rows[1]).toMatchObject({ Código: 'CONVERSION_RATE', Jan: 25 })
-    expect(sheets[0]?.rows[2]).toMatchObject({ Código: 'SALES_TOTAL', Jan: 'CALCULADO', Tipo: 'Calculado' })
+    expect(sheets.map(sheet => sheet.name)).toEqual(['METAS', 'INSTRUÇÕES', 'MX_CONFIG'])
+    expect(sheets[0]?.rows[0]).toMatchObject({ 'Código do Indicador': 'SALES_TOTAL', Jan: 'Calculado', Tipo: 'Calculado' })
+    expect(sheets[0]?.rows[1]).toMatchObject({ 'Código do Indicador': 'SALES_WALKIN', Jan: null, Tipo: 'Digitável' })
+    expect(sheets[0]?.rows[2]).toMatchObject({ 'Código do Indicador': 'CONVERSION_RATE', Jan: 25 })
     expect(sheets[1]?.rows.length).toBeGreaterThan(0)
     expect(sheets[2]?.rows).toContainEqual({ Chave: 'view_type', Valor: 'TARGET' })
   })

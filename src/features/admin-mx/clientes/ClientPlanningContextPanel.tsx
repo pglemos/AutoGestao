@@ -24,6 +24,7 @@ import { fetchCurrentCycle, validateCycleReadiness, type PlanCycle } from '@/fea
 import { getClientStrategicPlanPublicationSummary } from '@/features/strategic-plan/publicationSummary'
 import { buildAdminStrategicPlanHref } from '@/features/strategic-plan/adminStrategicPlanHref'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/organisms/Table'
+import AdminStrategicPlanEditor from '@/features/admin-mx/indicadores/AdminStrategicPlanEditor'
 
 type PlanningState = {
   units: ClientUnit[]
@@ -54,6 +55,7 @@ export function ClientPlanningContextPanel(props: {
   /** Ciclo canônico da Visão 360 (prompt #09) — prevalece sobre fetch local. */
   cycleId?: string | null
   year?: number | null
+  onCycleChange?: (cycleId: string) => void
 }) {
   const year = props.year ?? new Date().getFullYear()
   const month = new Date().getMonth() + 1
@@ -144,15 +146,30 @@ export function ClientPlanningContextPanel(props: {
   const expectedCells = (resolution?.items.length ?? 0) * activeUnits.length
   const metasPreenchidas = state.values.filter(row => row.month === month && row.meta != null).length
   const realizadosPreenchidos = state.values.filter(row => row.month === month && row.realizado != null).length
+  const cycleId = props.cycleId ?? state.cycle?.id ?? null
   const strategicHref = buildAdminStrategicPlanHref({
     clientId: props.clientId,
     clientSlug: props.clientSlug,
-    cycleId: props.cycleId ?? state.cycle?.id ?? null,
+    cycleId,
     year,
     storeId: matrixId || props.primaryStoreId || null,
   })
 
   if (loading) return <MxLoadingState label="Carregando Plano Estratégico do cliente" />
+
+  if (cycleId) {
+    return (
+      <div className="space-y-4">
+        {state.error ? <MxStatusBanner tone="warning">Leitura parcial do planejamento: {state.error}</MxStatusBanner> : null}
+        {state.packageResolution && !state.packageResolution.ok ? (
+          <MxStatusBanner tone="warning">
+            <CircleAlert size={16} className="mr-1 inline" />{state.packageResolution.message} <Link className="font-semibold underline" to="/produtos">Revisar produto</Link>
+          </MxStatusBanner>
+        ) : null}
+        <AdminStrategicPlanEditor cycleId={cycleId} embedded onCycleChange={props.onCycleChange} />
+      </div>
+    )
+  }
 
   return (
     <MxSectionCard>

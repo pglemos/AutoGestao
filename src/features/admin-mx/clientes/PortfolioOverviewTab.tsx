@@ -829,7 +829,7 @@ export function PortfolioOverviewTab({
                         <div>
                           <span className="text-muted-foreground">Fase:</span>{' '}
                           <span className="font-medium text-foreground block truncate">
-                            {PHASE_LABEL[client.business_phase ?? ''] ?? 'Estruturação'}
+                            {PHASE_LABEL[client.business_phase ?? ''] ?? 'Não definida'}
                           </span>
                         </div>
                         <div>

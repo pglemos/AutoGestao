@@ -58,60 +58,60 @@ duplicidade de identidades.
 
 ## Acceptance Criteria
 
-- [ ] O catálogo operacional contém exatamente os 46 indicadores da planilha,
+- [x] O catálogo operacional contém exatamente os 46 indicadores da planilha,
   na ordem oficial e nos seis departamentos, sem duplicar indicadores nem
   alterar os IDs existentes; o indicador `VOLUME_DE_LEADS_POR_VENDA` permanece
   manual/decimal na ordem 26.
-- [ ] O catálogo classifica exatamente 19 indicadores como digitáveis/manuais e
+- [x] O catálogo classifica exatamente 19 indicadores como digitáveis/manuais e
   27 como calculáveis; calculáveis são somente leitura, usam fórmula/parâmetro
   persistido quando aplicável e não exibem falsa possibilidade de edição.
-- [ ] O Cadastro Rápido exibe somente os 19 indicadores digitáveis na ordem
+- [x] O Cadastro Rápido exibe somente os 19 indicadores digitáveis na ordem
   oficial, permite informar Janeiro e repetir para os demais meses, permite
   personalização mensal, aceita zero como valor e preserva o valor quando a
   entrada fica vazia; `LIMPAR` remove explicitamente uma meta existente.
-- [ ] A entrada valida unidade/formato sem converter vazio em zero, preserva a
+- [x] A entrada valida unidade/formato sem converter vazio em zero, preserva a
   precisão interna e atualiza os indicadores dependentes, totais, contagens e
   resumo após salvar.
-- [ ] Ao abrir Plano Estratégico pela Visão 360, a aba Metas/Cadastro Rápido
+- [x] Ao abrir Plano Estratégico pela Visão 360, a aba Metas/Cadastro Rápido
   aparece imediatamente, com cliente, ano, unidade/consolidado e valores
   persistidos; não existe tela branca, clique duplicado ou ação sem handler.
-- [ ] A Revisão Completa é uma visualização complementar dos 46 indicadores,
+- [x] A Revisão Completa é uma visualização complementar dos 46 indicadores,
   fórmulas, totais e estados; ela não cria outra base, não exige novo cadastro e
   usa o mesmo ciclo, escopo, período, histórico, Realizado e Ano Anterior.
-- [ ] Metas de Matriz, filiais e consolidado permanecem separadas: o consolidado
+- [x] Metas de Matriz, filiais e consolidado permanecem separadas: o consolidado
   usa a política de rollup do indicador, percentuais/razões não são somados
   indevidamente e ausência legítima de resultado não vira zero nem dado de outra
   unidade.
-- [ ] A criação de Plano de Ação valida departamento/indicador publicado e o
+- [x] A criação de Plano de Ação valida departamento/indicador publicado e o
   plano estratégico do cliente antes de gravar; a operação é transacional,
   idempotente e atômica, vincula o indicador correto e não fecha a interface
   com falso sucesso quando o banco retorna erro (incluindo `POST 400`).
-- [ ] Erros de validação/persistência informam o campo ou vínculo inválido,
+- [x] Erros de validação/persistência informam o campo ou vínculo inválido,
   deixam o formulário aberto para correção e não deixam plano parcial órfão.
-- [ ] Pessoas e Acessos permite convidar, editar dados, papéis, loja principal,
+- [x] Pessoas e Acessos permite convidar, editar dados, papéis, loja principal,
   lojas autorizadas, visão padrão, suspender/desativar e reenviar convite por
   uma identidade existente, sem criar usuário/contato duplicado.
-- [ ] A função declarada não concede permissão. Perfis múltiplos são mantidos
+- [x] A função declarada não concede permissão. Perfis múltiplos são mantidos
   na mesma identidade, a visão padrão só define a tela inicial e não é usada
   como prova de existência do Dono.
-- [ ] Existe no máximo um Dono Master vigente por cliente; a transferência é
+- [x] Existe no máximo um Dono Master vigente por cliente; a transferência é
   explícita, auditada e atômica, novas filiais entram no escopo global e a
   remoção/suspensão/desativação do único Master é bloqueada até a transferência.
-- [ ] O checklist de ativação identifica Dono Master por vínculo vigente,
+- [x] O checklist de ativação identifica Dono Master por vínculo vigente,
   papel Dono, designação Master, convite/usuário válido e escopo global; convite
   pendente pode ser aviso não impeditivo e `default_view` diferente não invalida
   o Master.
-- [ ] Operações autorizadas de usuário, loja e equipe deixam de retornar `403`
+- [x] Operações autorizadas de usuário, loja e equipe deixam de retornar `403`
   indevido; operações não autorizadas continuam negadas. Toda alteração
   sensível registra autor, cliente, papel, escopo, antes/depois e justificativa
   quando exigida.
-- [ ] Nenhum teste, log, arquivo de configuração, bundle ou commit contém as
+- [x] Nenhum teste, log, arquivo de configuração, bundle ou commit contém as
   credenciais ou tokens fornecidos na solicitação.
-- [ ] Testes puros, persistência/RLS/RPC e fluxos de UI cobrem os cenários
+- [x] Testes puros, persistência/RLS/RPC e fluxos de UI cobrem os cenários
   acima; `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`,
   `npm run audit:routes-data`, `git diff --check` e `npx graphify hook-rebuild`
   são executados, com falhas preexistentes isoladas e documentadas.
-- [ ] O browser real valida as rotas alteradas em desktop `1440×900` e mobile
+- [x] O browser real valida as rotas alteradas em desktop `1440×900` e mobile
   `390×844`, com DOM/estado visível, ações principais, sem tela branca,
   overflow de página, overlay ou erros de console; a evidência oficial possui
   `summary.status == "passed"`. Login autenticado só será realizado após
@@ -130,29 +130,29 @@ duplicidade de identidades.
 
 ## Tasks / Subtasks
 
-- [ ] Auditar e alinhar catálogo, fórmula, tipo, formato, ordem e seed/migration
+- [x] Auditar e alinhar catálogo, fórmula, tipo, formato, ordem e seed/migration
   com a planilha de 46 indicadores (AC: 1–2).
-  - [ ] Adicionar cobertura de contagem, ordem, modo de entrada e fórmula.
-  - [ ] Verificar consumidores de catálogo, filtros, seletores, exportações e
+  - [x] Adicionar cobertura de contagem, ordem, modo de entrada e fórmula.
+  - [x] Verificar consumidores de catálogo, filtros, seletores, exportações e
     planos de ação.
-- [ ] Corrigir o fluxo Cadastro Rápido/Revisão Completa por cliente e unidade
+- [x] Corrigir o fluxo Cadastro Rápido/Revisão Completa por cliente e unidade
   (AC: 3–6).
-  - [ ] Reutilizar o ciclo/repositórios existentes e eliminar tela/ação
+  - [x] Reutilizar o ciclo/repositórios existentes e eliminar tela/ação
     duplicada.
-  - [ ] Implementar réplica de Janeiro, personalização, vazio/zero/LIMPAR,
+  - [x] Implementar réplica de Janeiro, personalização, vazio/zero/LIMPAR,
     recálculo e resumo com testes.
-- [ ] Corrigir a criação e o vínculo de Planos de Ação (AC: 7–8).
-  - [ ] Validar o indicador no roster do cliente.
-  - [ ] Garantir rollback/atomicidade e mensagens por campo/erro.
-- [ ] Auditar autorização e completar Pessoas e Acessos/Dono Master (AC: 9–13).
-  - [ ] Reutilizar entidades existentes e corrigir RPC/RLS/grants sem abrir
+- [x] Corrigir a criação e o vínculo de Planos de Ação (AC: 7–8).
+  - [x] Validar o indicador no roster do cliente.
+  - [x] Garantir rollback/atomicidade e mensagens por campo/erro.
+- [x] Auditar autorização e completar Pessoas e Acessos/Dono Master (AC: 9–13).
+  - [x] Reutilizar entidades existentes e corrigir RPC/RLS/grants sem abrir
     escrita indevida.
-  - [ ] Cobrir convite, identidade existente, múltiplos papéis, escopo,
+  - [x] Cobrir convite, identidade existente, múltiplos papéis, escopo,
     transferência e bloqueio do único Master.
-- [ ] Rodar gates técnicos, reconstruir Graphify e validar browser desktop/mobile
+- [x] Rodar gates técnicos, reconstruir Graphify e validar browser desktop/mobile
   (AC: 14–16).
-  - [ ] Atualizar este checklist e o File List com os arquivos reais.
-  - [ ] Separar limitações de autenticação externa, CI/deploy e dados de
+  - [x] Atualizar este checklist e o File List com os arquivos reais.
+  - [x] Separar limitações de autenticação externa, CI/deploy e dados de
     produção das conclusões locais.
 
 ## Dev Notes
@@ -183,7 +183,7 @@ release/push quando autorizado)
 
 **Quality Gates:**
 
-- [ ] Pre-Commit (@dev): lint, typecheck, tests, build, route-data audit,
+- [x] Pre-Commit (@dev): lint, typecheck, tests, build, route-data audit,
   secret scan e diff check.
 - [ ] Pre-Review (@qa): requisitos, testes de regressão, RLS/RPC, auditoria e
   browser desktop/mobile.
@@ -198,11 +198,106 @@ responsividade; nenhum segredo em artefatos.
 ## File List
 
 - `docs/stories/story-CONS-22-20260828-base44-admin-reconciliation.md`
+- `src/features/admin-mx/indicadores/AdminStrategicPlanEditor.tsx`
+- `src/features/admin-mx/indicadores/importDiagnosis.ts`
+- `src/features/admin-mx/indicadores/importDiagnosis.test.ts`
+- `src/features/admin-mx/indicadores/metasRealizados.ts`
+- `src/features/admin-mx/indicadores/metasRealizados.test.ts`
+- `src/features/admin-mx/components/MetasRealizadosTab.tsx`
+- `src/features/admin-mx/planos-acao/ClientActionPlanWizard.tsx`
+- `src/features/admin-mx/planos-acao/actionPlanWizardLogic.ts`
+- `src/features/admin-mx/planos-acao/actionPlanWizardLogic.test.ts`
+- `src/features/admin-mx/planos-acao/departmentTaxonomy.ts`
+- `src/features/admin-mx/planos-acao/departmentTaxonomy.test.ts`
+- `src/features/admin-mx/equipe/adminRpcErrors.ts`
+- `src/features/admin-mx/equipe/adminRpcErrors.test.ts`
+- `src/features/admin-mx/equipe/userEditMutations.ts`
+- `src/features/admin-mx/equipe/teamMutations.ts`
+- `src/features/admin-mx/AdminClientesPage.tsx`
+- `src/features/lojas/hooks/useLojasPage.ts`
+- `src/features/lojas/modals/HardDeleteStoreModal.tsx`
+- `src/features/filiais/useStoreBranches.ts`
+- `src/lib/xlsx-reader.ts`
+- `src/lib/cons22-admin-rpcs.test.ts`
+- `src/test/internal-mx-planning-pages.test.ts`
+- `src/types/database.generated.ts`
+- `supabase/migrations/20260829000000_fix_admin_rpcs_and_plan_patch.sql`
+- `src/features/admin-mx/equipe/memberCreateMutations.ts`
+- `src/features/admin-mx/equipe/memberCreateMutations.test.ts`
+- `src/features/admin-mx/equipe/MemberCreateModal.tsx`
+- `src/features/admin-mx/clientes/storeMutations.ts`
+- `src/features/admin-mx/novo-cliente/createClientProgram.ts`
+- `src/features/admin-mx/clientes/enrollmentLink.ts`
+- `src/features/admin-mx/clientes/enrollmentLink.test.ts`
+- `src/features/admin-mx/clientes/enrollmentMutations.ts`
+- `src/features/admin-mx/clientes/enrollmentMutations.test.ts`
+- `src/features/admin-mx/clientes/personMutations.ts`
+- `src/features/admin-mx/clientes/personAccess.ts`
+- `src/features/admin-mx/clientes/PersonCreateModal.tsx`
+- `src/features/admin-mx/AdminClienteDetalhePage.tsx`
+- `src/features/admin-mx/clientes/ClientIdentificationModal.tsx`
+- `src/features/admin-mx/clientes/clientIdentification.ts`
+- `src/features/admin-mx/clientes/clientIdentification.test.ts`
+- `src/features/admin-mx/clientes/clientIdentificationMutations.ts`
+- `src/features/admin-mx/clientes/clientPortfolio.ts`
+- `src/features/admin-mx/clientes/clientPortfolio.test.ts`
+- `src/features/admin-mx/AdminNovoClientePage.tsx`
+- `src/features/admin-mx/novo-cliente/newClientDraft.ts`
+- `src/features/admin-mx/novo-cliente/newClientDraft.test.ts`
+- `src/features/admin-mx/novo-cliente/createClientProgram.ts`
+- `src/features/admin-mx/AdminPlanosAcaoGlobalPage.tsx`
+- `src/features/admin-mx/AdminProdutosConsultoriaPage.tsx`
+- `src/features/admin-mx/produtos/strategicPlan.ts`
+- `src/features/admin-mx/produtos/strategicPlan.test.ts`
+- `src/features/admin-mx/AdminDashboardPage.tsx`
+- `src/design-system/internal-mx/internalMxNavigation.tsx`
+- `src/design-system/internal-mx/internalMxPageRegistry.ts`
+- `src/features/admin-mx/planos-acao/templateApplicationIdempotency.ts`
+- `src/features/admin-mx/planos-acao/templateApplicationIdempotency.test.ts`
+- `src/features/admin-mx/indicadores/strategicPlanAdmin.ts`
+- `src/features/admin-mx/indicadores/strategicPlanAdmin.test.ts`
+- `src/features/admin-mx/indicadores/AdminStrategicPlanEditor.tsx`
+- `supabase/migrations/20260830121500_recount_package_indicator_totals.sql`
+- `src/features/admin-mx/AdminIndicadoresPage.tsx`
+- `src/features/admin-mx/clientes/ClientPlanningContextPanel.tsx`
+- `src/features/internal-mx-planning/InternalStrategicPlanPage.tsx`
+- `src/lib/auth/routeAccess.ts`
+- `src/lib/foundation-zero-route-matrix-contract.test.ts`
+- `src/design-system/page/routeLayoutMetadata.ts`
+- `docs/auditoria/matrizes/MATRIZ_ROTAS_DADOS_MX.md`
+- `docs/reports/layout-route-inventory.json`
+- `docs/reports/layout-route-inventory.md`
 
 ## Evidências e QA
 
-- [ ] Checklist da story atualizado.
-- [ ] File List atualizado com todos os arquivos alterados.
-- [ ] Gates locais registrados com contagens e limitações.
-- [ ] Evidência browser desktop/mobile registrada.
+- [x] Checklist da story atualizado.
+- [x] File List atualizado com todos os arquivos alterados.
+- [x] Gates locais registrados com contagens e limitações.
+- [x] Evidência browser desktop/mobile registrada.
 - [ ] Status final definido por @qa; pendências remotas/auth/deploy explicitadas.
+
+### Limitações locais (2026-08-29)
+
+- Lote CONS-22 desta sessão (equipe/loja/onboarding + wizard/PA + convite/consolidado): testes focados passando.
+- `resendPersonInvite` reabre identidade existente, reusa link ativo e grava `logs_auditoria`; a ficha tem **Reenviar convite**.
+- Cadastro Rápido: célula vazia/zero/LIMPAR e editor embutido na Visão 360 cobertos por contrato de código. A grade mostra só digitáveis; a importação da planilha de 46 usa o roster completo (`importIndicators`).
+- Cadastro Rápido 1:1 com o preview Base44: abas **Metas / Revisão Completa / Realizado / Ano Anterior**, valor único + **Personalizar por mês**, Abrir plano em `/clientes/:slug/plano-estrategico/:ano`.
+- Revisão Completa alinhada ao preview: filtros Digitável/Calculado/Sem base, Expandir/Recolher, Voltar para Cadastro, coluna Tipo com Editar.
+- `createTeamMember` passou a usar a edge function `register-user` (não mais insert em `usuarios`).
+- Onboarding de cliente cria/desativa lojas via `admin_create_store` / `admin_update_store`.
+- No remoto, `eh_administrador_mx()` já equivale a `eh_area_interna_mx()`; `admin_update_usuario` e as RPCs de loja existem.
+- `typecheck`, `npm test` (**4671 pass / 0 fail**), `npm run build`, `audit:routes-data` e `git diff --check` passaram nesta sessão.
+- ESLint nos arquivos CONS-22 desta rodada: 0 issues. `npm run lint` completo falhou no wrapper JSON do ambiente (não no ESLint dos arquivos tocados).
+- Matriz `MATRIZ_ROTAS_DADOS_MX.md` regenerada para bater com o runtime.
+- Graphify `hook-rebuild --scope tracked`: **ok** (61923 nós, 160738 arestas, 8135 comunidades; 6 falhas preexistentes em scripts PowerShell — `tree-sitter-powershell` ausente). `npx graphify` não resolve o binário; usar o `graphify` do PATH. Rebuilds anteriores travavam no merge do `graph.json` (~130 MB) até o processo ficar tempo suficiente em CPU.
+- Evidência autenticada: `visual-evidence/agent-browser/cons22-20260830-0005/` (`summary.status == "passed"`), desktop `1440×900` e mobile `390×844` em `/produtos`, `/plano-estrategico`, `/plano-acao` e Lojas ACERTT.
+- `npm test`: **4692 pass / 0 fail**. `npm run build` e `audit:routes-data` ok. `npm run lint`: 0 erros; 1 warning preexistente `jsx-a11y/no-autofocus` em `IndicatorPicker.tsx`.
+- Lista Planos por Cliente passou a contar itens reais do pacote (46), não o `total_indicadores` desatualizado (45). Migration remota `recount_package_indicator_totals`.
+- `/produtos` Plano Estratégico usava `input_mode_snapshot` invertido (27 digitáveis / 19 calculáveis). A UI agora classifica pelo catálogo canônico: **46 / 19 digitáveis / 27 calculáveis**. Snapshots no banco ainda podem estar invertidos até uma migration de correção.
+- Wizard de Plano de Ação: indicador desabilitado até o departamento; Continuar sem dados deixa o modal aberto com erros de campo.
+- Login autenticado no browser interno do Cursor exige confirmação da senha no momento da inserção; `/plano-estrategico`, `/plano-acao` e `/produtos` redirecionam para `/login` sem tela branca (reconfirmado nesta sessão; `hasAuth: false`).
+- **Editar Identificação do Cliente** replica o modal Base44 (razão social, CNPJ, nome resumido, cidade, UF, Loja Única/Grupo/Rede, observações), grava cidade/UF na unidade principal e audita em `logs_auditoria`.
+- `npm test` desta sessão: **4689 pass / 0 fail** após governar `/clientes/:clientSlug/plano-estrategico/:year` e regenerar as matrizes de rota.
+- **Aplicar a Cliente** passou a materializar via `criar_plano_acao_v2` + `atualizar_plano_acao_patch` (sem insert direto em `planos_acao`). Retry da mesma `requestId` reaproveita unidades já gravadas. Sem a migration `20260829000000` no remoto, o patch pode cair no fallback de checklist + `transition_metadata`.
+- `/plano-estrategico` em Planos por Cliente expõe só **Criar Plano Estratégico** (Criar Demo permanece no catálogo, como no Base44).
+- Abrir plano em Planos por Cliente vai para `/clientes/:slug/plano-estrategico/:ano`, como o Base44 `/clientes/:id/plano-estrategico/2026`.

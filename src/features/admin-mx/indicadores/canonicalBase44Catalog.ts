@@ -221,14 +221,6 @@ const OFFICIAL_DEFINITION_DIRECTION: Record<string, 'AUMENTAR' | 'DIMINUIR'> = {
   AFTER_SALES_PERCENTAGE: 'DIMINUIR', EMPLOYEE_COUNT: 'DIMINUIR',
 }
 
-export function officialDefinitionUnit(code: string) {
-  return OFFICIAL_DEFINITION_UNIT[code] ?? 'Número inteiro'
-}
-
-export function officialDefinitionDirection(code: string) {
-  return OFFICIAL_DEFINITION_DIRECTION[code] ?? 'AUMENTAR'
-}
-
 const INDEX = new Map<string, CanonicalIndicator>()
 for (const item of BASE44_STANDARD_INDICATORS) {
   INDEX.set(normalizeCatalogKey(item.code), item)
@@ -242,6 +234,16 @@ for (const [code, aliases] of Object.entries(EXTRA_ALIASES)) {
 
 export function matchCanonicalIndicator(metricKey: string) {
   return INDEX.get(normalizeCatalogKey(metricKey)) ?? null
+}
+
+export function officialDefinitionUnit(code: string) {
+  const canon = matchCanonicalIndicator(code)?.code ?? code
+  return OFFICIAL_DEFINITION_UNIT[canon] ?? 'Número inteiro'
+}
+
+export function officialDefinitionDirection(code: string) {
+  const canon = matchCanonicalIndicator(code)?.code ?? code
+  return OFFICIAL_DEFINITION_DIRECTION[canon] ?? 'AUMENTAR'
 }
 
 export function isOfficialBase44Key(metricKey: string) {

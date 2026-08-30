@@ -4,7 +4,13 @@
 // QuickEntryView): prévia e execução de cópia de metas entre lojas, plano de
 // mudanças de importação, e grade de cadastro rápido.
 
-import { catalogAliasKeys, matchCanonicalIndicator, officialParameterDefaults } from './canonicalBase44Catalog'
+import {
+  BASE44_GLOBAL_ORDER,
+  catalogAliasKeys,
+  matchCanonicalIndicator,
+  officialCatalogCode,
+  officialParameterDefaults,
+} from './canonicalBase44Catalog'
 import { actualFormulaFor, ACTUAL_BLANK_POLICY, ACTUAL_CALCULATED, isActualCalculated } from './actualCalc'
 import { MONTHS, MONTH_LABELS, applyOfficialComputedMetas, evaluateFormula, extractIndicatorDeps, type AnnualAggregation } from './indicatorFormulas'
 
@@ -48,16 +54,47 @@ export type TargetWorkbookSheet = {
 }
 
 export const TARGET_TEMPLATE_INSTRUCTION_LINES = [
-  'Não altere os códigos dos indicadores.',
+  'Preencha somente as células brancas (indicadores digitáveis).',
+  'Não altere os códigos dos indicadores (coluna Código do Indicador).',
   'Não altere os nomes dos indicadores.',
   'Não exclua linhas da tabela.',
-  'Preencha somente as células liberadas (indicadores digitáveis).',
-  'Deixe vazio quando não houver atualização para aquele mês.',
-  'Digite zero (0) somente quando o resultado for realmente zero.',
-  'Use "LIMPAR" para remover uma meta existente.',
-  'Indicadores calculados serão recalculados pelo sistema e não devem ser alterados.',
-  'A importação altera somente Metas; não altera Realizado nem Ano anterior.',
+  'Deixe a célula vazia quando não quiser atualizar aquele mês.',
+  'Digite zero (0) somente quando a meta for realmente zero.',
+  'Use "LIMPAR" para remover uma meta já cadastrada.',
+  'Indicadores calculáveis (fundo cinza) serão recalculados pelo sistema.',
+  'A coluna Total é somente conferência — não será importada.',
+  'A importação não altera Realizado nem Ano Anterior.',
 ] as const
+
+function formatLabel(indicator: TargetIndicator) {
+  const type = String(indicator.value_type ?? '').toLowerCase()
+  if (type.includes('percent')) return 'Percentual'
+  if (type.includes('currency') || type.includes('moeda')) return 'Moeda'
+  if ((indicator.casas_decimais ?? 0) > 0) return 'Decimal'
+  return 'Inteiro'
+}
+
+export function sortTargetIndicators<T extends TargetIndicator>(indicators: T[]) {
+  return [...indicators].sort((left, right) => {
+    const leftCode = matchCanonicalIndicator(left.code)?.code ?? left.code
+    const rightCode = matchCanonicalIndicator(right.code)?.code ?? right.code
+    return (BASE44_GLOBAL_ORDER[leftCode] ?? 999) - (BASE44_GLOBAL_ORDER[rightCode] ?? 999)
+  })
+}
+
+export function resolveImportedIndicator<T extends TargetIndicator>(indicators: T[], rawCode: string) {
+  const trimmed = rawCode.trim()
+  if (!trimmed) return undefined
+  const official = matchCanonicalIndicator(trimmed)?.code
+  return indicators.find(indicator => {
+    const code = matchCanonicalIndicator(indicator.code)?.code ?? indicator.code
+    return indicator.code === trimmed
+      || indicator.displayCode === trimmed
+      || code === trimmed
+      || code === official
+      || (official != null && (matchCanonicalIndicator(indicator.code)?.code === official))
+  })
+}
 
 /** Gera as abas do XLSX de metas, tanto preenchido quanto em branco. */
 export function buildTargetWorkbookSheets(params: {
@@ -66,28 +103,47 @@ export function buildTargetWorkbookSheets(params: {
   storeId: string
   storeName?: string
   values?: Record<string, Array<number | null>>
+  clientName?: string
+  cycleId?: string | null
+  scopeType?: string
 }): TargetWorkbookSheet[] {
-  const headers = ['Código', 'Indicador', 'Departamento', 'Tipo', ...MONTH_LABELS]
-  const rows = params.indicators.map(indicator => ({
-    Código: indicator.code,
-      Indicador: indicator.name,
+  const headers = [
+    'Ordem Oficial',
+    'Código do Indicador',
+    'Departamento',
+    'Indicador',
+    'Tipo',
+    'Formato',
+    ...MONTH_LABELS,
+    'Total',
+    'Observação',
+  ]
+  const rows = sortTargetIndicators(params.indicators).map(indicator => {
+    const official = officialCatalogCode(indicator.code)
+    const order = BASE44_GLOBAL_ORDER[official] ?? ''
+    const monthValues = MONTH_LABELS.map((_, index) => {
+      if (indicator.calculado) return 'Calculado'
+      const value = params.values?.[indicator.code]?.[index] ?? params.values?.[official]?.[index] ?? null
+      return indicator.value_type === 'percent' && value != null ? value * 100 : value
+    })
+    const numericMonths = monthValues.filter((value): value is number => typeof value === 'number')
+    return {
+      'Ordem Oficial': typeof order === 'number' ? order : '',
+      'Código do Indicador': official,
       Departamento: indicator.department ?? '',
+      Indicador: indicator.name,
       Tipo: indicator.calculado ? 'Calculado' : 'Digitável',
-      ...Object.fromEntries(MONTH_LABELS.map((label, index) => [
-        label,
-        indicator.calculado
-          ? 'CALCULADO'
-          : (() => {
-            const value = params.values?.[indicator.code]?.[index] ?? null
-            return indicator.value_type === 'percent' && value != null ? value * 100 : value
-          })(),
-      ])),
-  }))
+      Formato: formatLabel(indicator),
+      ...Object.fromEntries(MONTH_LABELS.map((label, index) => [label, monthValues[index]])),
+      Total: indicator.calculado ? '' : numericMonths.reduce((sum, value) => sum + value, 0),
+      Observação: '',
+    }
+  })
 
   return [
     { name: 'METAS', headers, rows },
     {
-      name: 'INSTRUCOES',
+      name: 'INSTRUÇÕES',
       headers: ['Instrução'],
       rows: TARGET_TEMPLATE_INSTRUCTION_LINES.map(instruction => ({ Instrução: instruction })),
     },
@@ -96,10 +152,16 @@ export function buildTargetWorkbookSheets(params: {
       headers: ['Chave', 'Valor'],
       rows: [
         { Chave: 'template_version', Valor: '1.0.0' },
-        { Chave: 'view_type', Valor: 'TARGET' },
+        { Chave: 'client_name', Valor: params.clientName ?? params.storeName ?? '' },
+        { Chave: 'strategic_plan_cycle_id', Valor: params.cycleId ?? '' },
         { Chave: 'reference_year', Valor: String(params.year) },
+        { Chave: 'view_type', Valor: 'TARGET' },
         { Chave: 'store_id', Valor: params.storeId },
         { Chave: 'store_name', Valor: params.storeName ?? '' },
+        { Chave: 'scope_type', Valor: params.scopeType ?? (params.storeId ? 'UNIDADE' : 'CONSOLIDADO') },
+        { Chave: 'indicator_count', Valor: String(params.indicators.length) },
+        { Chave: 'manual_indicator_count', Valor: String(params.indicators.filter(item => !item.calculado).length) },
+        { Chave: 'calculated_indicator_count', Valor: String(params.indicators.filter(item => item.calculado).length) },
       ],
     },
   ]
@@ -336,7 +398,7 @@ export function validateTargetImport(params: {
     if (seen.has(row.code)) errors.push(`Código duplicado: ${row.code}`)
     seen.add(row.code)
 
-    const indicator = params.indicators.find(item => item.code === row.code)
+    const indicator = resolveImportedIndicator(params.indicators, row.code)
     if (!indicator) {
       errors.push(`Indicador não encontrado no catálogo: ${row.code}`)
       continue
@@ -367,22 +429,26 @@ export function processTargetImport(params: {
   const changes: TargetImportChange[] = []
 
   for (const row of params.rows) {
-    const indicator = params.indicators.find(item => item.code === row.code)
+    const indicator = resolveImportedIndicator(params.indicators, row.code)
     if (!indicator) continue
     if (indicator.calculado) continue
+    const persistedCode = indicator.code
 
     for (let month = 1; month <= 12; month++) {
       const cell = row.months[month - 1]
-      if (cell == null || cell === '') continue
-      if (String(cell).trim().toUpperCase() === 'CALCULADO') continue
+      if (cell == null || String(cell).trim() === '') continue
+      const cellText = String(cell).trim().toUpperCase()
+      if (cellText === 'CALCULADO' || cellText === 'CALCULÁVEL') continue
 
-      const current = params.currentValues.find(value =>
-        value.indicator_code === row.code && value.month === month,
-      )?.value ?? null
+      const current = params.currentValues.find(value => {
+        const currentOfficial = matchCanonicalIndicator(value.indicator_code)?.code ?? value.indicator_code
+        const persistedOfficial = matchCanonicalIndicator(persistedCode)?.code ?? persistedCode
+        return (value.indicator_code === persistedCode || currentOfficial === persistedOfficial) && value.month === month
+      })?.value ?? null
 
       if (typeof cell === 'string' && cell.trim().toUpperCase() === 'LIMPAR') {
         if (current != null) {
-          changes.push({ indicatorCode: row.code, indicatorName: indicator.name, month, currentValue: current, newValue: null, action: 'CLEAR' })
+          changes.push({ indicatorCode: persistedCode, indicatorName: indicator.name, month, currentValue: current, newValue: null, action: 'CLEAR' })
         }
         continue
       }
@@ -401,14 +467,14 @@ export function processTargetImport(params: {
       }
 
       if (Number.isNaN(numValue)) {
-        changes.push({ indicatorCode: row.code, indicatorName: indicator.name, month, currentValue: current, newValue: null, action: 'INVALID', error: `Valor inválido: ${String(cell)}` })
+        changes.push({ indicatorCode: persistedCode, indicatorName: indicator.name, month, currentValue: current, newValue: null, action: 'INVALID', error: `Valor inválido: ${String(cell)}` })
         continue
       }
 
-      if (params.isPercentage(row.code)) numValue = numValue / 100
+      if (params.isPercentage(persistedCode) || params.isPercentage(officialCatalogCode(persistedCode))) numValue = numValue / 100
       if (current === numValue) continue
 
-      changes.push({ indicatorCode: row.code, indicatorName: indicator.name, month, currentValue: current, newValue: numValue, action: 'UPDATE' })
+      changes.push({ indicatorCode: persistedCode, indicatorName: indicator.name, month, currentValue: current, newValue: numValue, action: 'UPDATE' })
     }
   }
 
@@ -435,6 +501,118 @@ export function validateQuickEntryCells(cells: QuickEntryCell[]): string[] {
     }
   }
   return errors
+}
+
+/** Janeiro vazio não replica: preserva os demais meses. Zero é valor válido. */
+export function januaryReplicationSeries(january: number | null): number[] | null {
+  if (january == null) return null
+  return Array.from({ length: 12 }, () => january)
+}
+
+export const QUICK_ENTRY_DEPARTMENTS = [
+  'Comercial',
+  'Marketing',
+  'Produto e Estoque',
+  'Financeiro',
+  'Operações',
+  'Pessoas - RH',
+] as const
+
+export const SALES_CHANNEL_CODES = [
+  'SALES_WALKIN',
+  'SALES_REFERRAL',
+  'SALES_COMPANY_PORTFOLIO',
+  'SALES_SELLER_PORTFOLIO',
+  'SALES_INTERNET',
+  'SALES_OTHER',
+] as const
+
+export function monthSeries(values: Array<number | null> | undefined): Array<number | null> {
+  return Array.from({ length: 12 }, (_, index) => values?.[index] ?? null)
+}
+
+export function indicatorYearComplete(values: Array<number | null>): boolean {
+  return values.length === 12 && values.every(value => value != null)
+}
+
+/** Valor único: todos os meses iguais (incluindo todos vazios). */
+export function monthsAreUniform(values: Array<number | null>): boolean {
+  const series = monthSeries(values)
+  return series.every(value => value === series[0])
+}
+
+/** Único valor preenchido do ano, ou null se vazio/misturado. */
+export function uniqueFilledValue(values: Array<number | null>): number | null {
+  const filled = monthSeries(values).filter((value): value is number => value != null)
+  if (filled.length === 0) return null
+  return filled.every(value => value === filled[0]) ? filled[0] : null
+}
+
+/** No cadastro rápido, buracos de um valor único viram esse valor — não misturam 0 com 9. */
+export function fillUniformGaps(values: Array<number | null>): Array<number | null> {
+  const series = monthSeries(values)
+  const unique = uniqueFilledValue(series)
+  if (unique == null) return series
+  return series.map(value => value ?? unique)
+}
+
+/** Zero isolado no meio de um único valor não-zero (ex.: Jan 0 e Fev–Dez 9) não é meta real. */
+export function fillIsolatedZeros(values: Array<number | null>): Array<number | null> {
+  const series = monthSeries(values)
+  const nonzero = series.filter((value): value is number => value != null && value !== 0)
+  if (nonzero.length === 0) return series
+  if (!nonzero.every(value => value === nonzero[0])) return series
+  const unique = nonzero[0]
+  const zeroCount = series.filter(value => value === 0).length
+  if (zeroCount === 0 || zeroCount >= 6) return series
+  return series.map(value => (value === 0 ? unique : value))
+}
+
+export function normalizeQuickEntrySeries(values: Array<number | null>): Array<number | null> {
+  return fillUniformGaps(fillIsolatedZeros(values))
+}
+
+/** Copia o mês anterior para frente (Fev←Jan, Mar←Fev, …). Vazio não sobrescreve o próximo. */
+export function copyPreviousMonthSeries(values: Array<number | null>): Array<number | null> {
+  const next = monthSeries(values)
+  for (let index = 1; index < 12; index++) {
+    if (next[index - 1] != null) next[index] = next[index - 1]
+  }
+  return next
+}
+
+export function clearMonthSeries(): Array<number | null> {
+  return Array.from({ length: 12 }, () => null)
+}
+
+export function matchQuickEntryDepartment(department: string | null | undefined): string {
+  const raw = (department ?? '').toLocaleLowerCase('pt-BR').normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
+  if (!raw) return 'Outros'
+  const matched = QUICK_ENTRY_DEPARTMENTS.find(name => {
+    const normalized = name.toLocaleLowerCase('pt-BR').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    return raw.includes(normalized) || normalized.includes(raw)
+  })
+  return matched ?? (department?.trim() || 'Outros')
+}
+
+export function countQuickEntryProgress(params: {
+  indicators: Array<{ code: string; calculado?: boolean; department?: string | null }>
+  valuesFor: (code: string) => Array<number | null>
+}) {
+  const digitaveis = params.indicators.filter(indicator => !indicator.calculado)
+  const byDept: Record<string, { filled: number; total: number }> = {}
+  for (const dept of QUICK_ENTRY_DEPARTMENTS) byDept[dept] = { filled: 0, total: 0 }
+  let digitaveisFilled = 0
+  for (const indicator of digitaveis) {
+    const dept = matchQuickEntryDepartment(indicator.department)
+    if (!byDept[dept]) byDept[dept] = { filled: 0, total: 0 }
+    byDept[dept].total++
+    if (indicatorYearComplete(monthSeries(params.valuesFor(indicator.code)))) {
+      byDept[dept].filled++
+      digitaveisFilled++
+    }
+  }
+  return { digitaveisFilled, digitaveisTotal: digitaveis.length, byDept }
 }
 
 function resolveMonthlyGridCode(indicatorCode: string, allowed: Set<string>): string | null {

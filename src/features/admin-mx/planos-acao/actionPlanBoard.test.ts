@@ -10,6 +10,7 @@ import {
   planDaysLate,
   deriveKanbanColumn,
   resolveBoardColumn,
+  formatActionPlanCodigo,
   validateCompletion,
   validateChecklistCompletion,
   validateCompletionDateCorrection,
@@ -41,6 +42,16 @@ describe('coluna do kanban', () => {
 
   test('plano concluído não é puxado para atrasada mesmo com prazo vencido', () => {
     expect(resolveBoardColumn(plan({ status: 'concluido', prazo: '2026-01-01' }), HOJE)).toBe('concluido')
+  })
+
+  test('alias concluida do banco cai na coluna Concluída', () => {
+    expect(resolveBoardColumn(plan({ status: 'concluida' as BoardPlan['status'], prazo: '2026-01-01' }), HOJE)).toBe('concluido')
+  })
+
+  test('código PA com UUID inteiro encolhe para 8 hex', () => {
+    expect(formatActionPlanCodigo('PA-4312F82B320944BABA5F2BB885B346F9')).toBe('PA-4312F82B')
+    expect(formatActionPlanCodigo('PA-001')).toBe('PA-001')
+    expect(formatActionPlanCodigo(null, '83ac0666-aaaa-bbbb-cccc-ddddeeeeffff')).toBe('PA-83AC0666')
   })
 
   test('plano do próprio dia ainda não está atrasado', () => {

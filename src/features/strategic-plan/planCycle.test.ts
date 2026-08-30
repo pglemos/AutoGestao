@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 import {
+  ADMIN_PLAN_CYCLE_STATUS_CODE,
   allowedTransitions,
   buildPublicationCardFromRows,
   canTransition,
@@ -32,6 +33,11 @@ describe('transições do ciclo', () => {
     expect(canTransition('rascunho', 'em_validacao')).toBe(true)
     expect(canTransition('em_validacao', 'publicado')).toBe(true)
     expect(canTransition('publicado', 'revisado')).toBe(true)
+  })
+
+  test('o editor admin expõe o código de status do Base44 sem mudar o ciclo MX', () => {
+    expect(ADMIN_PLAN_CYCLE_STATUS_CODE.rascunho).toBe('EM_CONFIGURACAO')
+    expect(ADMIN_PLAN_CYCLE_STATUS_CODE.publicado).toBe('PUBLICADO')
   })
 
   test('validação pode voltar para rascunho', () => {

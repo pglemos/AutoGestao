@@ -17568,6 +17568,10 @@ export type Database = {
         Returns: Json
       }
       admin_restore_store: { Args: { p_store_id: string }; Returns: Json }
+      admin_update_usuario: {
+        Args: { p_payload: Json; p_user_id: string }
+        Returns: Json
+      }
       admin_store_live_overview: {
         Args: { p_reference_date?: string; p_store_id: string }
         Returns: {

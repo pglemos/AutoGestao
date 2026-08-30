@@ -33,6 +33,19 @@ export async function fetchClientUnits(clientId: string): Promise<{ units: Clien
   return { units: buildClientUnits(matrizId, stores ?? []), error: null }
 }
 
+/** Resolve o id do cliente de consultoria a partir do slug da ficha. */
+export async function fetchConsultingClientIdBySlug(slug: string): Promise<{ id: string | null; error: string | null }> {
+  const normalized = slug.trim()
+  if (!normalized) return { id: null, error: null }
+  const { data, error } = await supabase
+    .from('clientes_consultoria')
+    .select('id')
+    .eq('slug', normalized)
+    .maybeSingle()
+  if (error) return { id: null, error: error.message }
+  return { id: data?.id ?? null, error: null }
+}
+
 /**
  * Cliente e matriz aos quais uma loja pertence.
  *

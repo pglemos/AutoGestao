@@ -1,7 +1,14 @@
 import { describe, expect, test } from 'bun:test'
-import { emptyProgramDraft, validateProgramDraft, type ProgramDraft } from './programMutations'
+import { emptyProgramDraft, normalizeProgramModality, programModalityLabel, validateProgramDraft, type ProgramDraft } from './programMutations'
 
 describe('programMutations — validação de dados do programa', () => {
+  test('normaliza modalidade com capitalização e acento para o select', () => {
+    expect(normalizeProgramModality('Presencial')).toBe('presencial')
+    expect(normalizeProgramModality('Híbrido')).toBe('hibrido')
+    expect(programModalityLabel('Presencial')).toBe('Presencial')
+    expect(programModalityLabel(null)).toBe('—')
+  })
+
   test('cria draft vazio', () => {
     const draft = emptyProgramDraft()
     expect(draft.product_name).toBe('')

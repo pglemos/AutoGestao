@@ -1,5 +1,7 @@
 import { supabase } from '@/lib/supabase'
 import { isOrphanTestUnit } from './mergeClientPeople'
+import { grantStoreToClientDonoMasters } from './personMutations'
+import { describeAdminRpcError } from '../equipe/adminRpcErrors'
 import { onlyDigits } from '../novo-cliente/newClientDraft'
 import { validateStoreDraft, type StoreDraft } from './storeForm'
 import { DEFAULT_MX_HOURS, type OperatingHoursMap, type StoredOperatingHourRow } from './storeOperatingHours'
@@ -120,6 +122,46 @@ export async function fetchClientUnits(clientId: string): Promise<{ rows: UnitRo
 
 export type SaveStoreResult = { error: string | null }
 
+export function parseAdminJsonRpc(
+  data: unknown,
+  error: { message?: string; code?: string } | null | undefined,
+  fallback: string,
+): { id: string | null; error: string | null } {
+  if (error) return { id: null, error: describeAdminRpcError(error, fallback) }
+  const payload = data as { ok?: boolean; error?: string; data?: { id?: string } } | null
+  if (!payload?.ok) return { id: null, error: payload?.error || fallback }
+  return { id: payload.data?.id ?? null, error: null }
+}
+
+export async function createOperationalStore(payload: Record<string, unknown>): Promise<{ id: string | null; error: string | null }> {
+  const { data, error } = await supabase.rpc('admin_create_store', { p_payload: payload })
+  const parsed = parseAdminJsonRpc(data, error, 'Não foi possível criar a loja operacional.')
+  if (parsed.error || !parsed.id) return { id: null, error: parsed.error ?? 'A criação da loja não devolveu um identificador.' }
+  return parsed
+}
+
+export async function updateOperationalStore(storeId: string, payload: Record<string, unknown>): Promise<{ error: string | null }> {
+  const { data, error } = await supabase.rpc('admin_update_store', { p_store_id: storeId, p_payload: payload })
+  return { error: parseAdminJsonRpc(data, error, 'Não foi possível atualizar a loja operacional.').error }
+}
+
+export async function reclaimStoreForClient(clientId: string, storeId: string): Promise<{ error: string | null }> {
+  const { error } = await supabase
+    .from('clientes_consultoria')
+    .update({ primary_store_id: null, merged_into_id: clientId })
+    .eq('primary_store_id', storeId)
+    .neq('id', clientId)
+  return { error: error?.message ?? null }
+}
+
+/** Desativa lojas criadas a meio do onboarding — o INSERT direto em `lojas` toma 403 fora de `eh_administrador_mx()`. */
+export async function deactivateOperationalStores(storeIds: readonly string[]): Promise<void> {
+  for (const storeId of storeIds) {
+    if (!storeId) continue
+    await updateOperationalStore(storeId, { active: false })
+  }
+}
+
 /**
  * Cria ou atualiza uma loja do cliente. Ao criar, insere o horário padrão MX
  * para a semana inteira; ao editar, apenas os campos do cadastro mudam.
@@ -180,6 +222,15 @@ export async function saveClientStore(
     }
     if (!realStoreId) return { error: 'A unidade não está vinculada a uma loja operacional. Cadastre a filial na hierarquia antes de editar.' }
 
+    const operational = await updateOperationalStore(realStoreId, {
+      name: draft.name.trim(),
+      legal_name: draft.name.trim(),
+      cnpj: draft.cnpj.trim() ? onlyDigits(draft.cnpj) : '',
+      address: draft.address_street.trim(),
+      active: draft.status === 'ativa',
+    })
+    if (operational.error) return operational
+
     const { error } = await supabase
       .from('unidades_cliente_consultoria')
       .update({
@@ -198,22 +249,18 @@ export async function saveClientStore(
 
   if (draft.store_type === 'matriz') {
     if (client.primary_store_id) return { error: 'Este cliente já possui uma matriz vinculada.' }
-    const { data: matrix, error: matrixError } = await supabase
-      .from('lojas')
-      .insert({
-        name: draft.name.trim(),
-        legal_name: client.legal_name || draft.name.trim(),
-        cnpj: draft.cnpj.trim() ? onlyDigits(draft.cnpj) : client.cnpj || null,
-        address: draft.address_street.trim() || null,
-        active: draft.status === 'ativa',
-        parent_loja_id: null,
-        structure_type: 'matriz',
-      })
-      .select('id')
-      .single()
-    if (matrixError || !matrix?.id) return { error: matrixError?.message ?? 'Não foi possível criar a matriz operacional.' }
-    realStoreId = matrix.id
-    createdRealStoreId = matrix.id
+    const createdStore = await createOperationalStore({
+      name: draft.name.trim(),
+      legal_name: client.legal_name || draft.name.trim(),
+      cnpj: draft.cnpj.trim() ? onlyDigits(draft.cnpj) : client.cnpj || '',
+      address: draft.address_street.trim(),
+      parent_loja_id: null,
+    })
+    if (createdStore.error || !createdStore.id) return { error: createdStore.error ?? 'Não foi possível criar a matriz operacional.' }
+    realStoreId = createdStore.id
+    createdRealStoreId = createdStore.id
+    const reclaimed = await reclaimStoreForClient(clientId, createdStore.id)
+    if (reclaimed.error) return reclaimed
   } else {
     if (!client.primary_store_id) return { error: 'Cadastre a matriz antes de adicionar uma filial.' }
     const { data: matrix, error: matrixError } = await supabase
@@ -229,28 +276,24 @@ export async function saveClientStore(
       .from('lojas')
       .select('id')
       .eq('parent_loja_id', client.primary_store_id)
-      .eq('name', draft.name.trim())
+      .ilike('name', draft.name.trim())
       .maybeSingle()
     if (filialLookupError) return { error: filialLookupError.message }
     if (existingFilial?.id) {
       realStoreId = existingFilial.id
     } else {
-      const { data: filial, error: filialError } = await supabase
-        .from('lojas')
-        .insert({
-          name: draft.name.trim(),
-          legal_name: draft.name.trim(),
-          cnpj: draft.cnpj.trim() ? onlyDigits(draft.cnpj) : null,
-          address: draft.address_street.trim() || null,
-          active: draft.status === 'ativa',
-          parent_loja_id: client.primary_store_id,
-          structure_type: 'filial',
-        })
-        .select('id')
-        .single()
-      if (filialError || !filial?.id) return { error: filialError?.message ?? 'Não foi possível criar a filial operacional.' }
-      realStoreId = filial.id
-      createdRealStoreId = filial.id
+      const createdStore = await createOperationalStore({
+        name: draft.name.trim(),
+        legal_name: draft.name.trim(),
+        cnpj: draft.cnpj.trim() ? onlyDigits(draft.cnpj) : '',
+        address: draft.address_street.trim(),
+        parent_loja_id: client.primary_store_id,
+      })
+      if (createdStore.error || !createdStore.id) return { error: createdStore.error ?? 'Não foi possível criar a filial operacional.' }
+      realStoreId = createdStore.id
+      createdRealStoreId = createdStore.id
+      const reclaimed = await reclaimStoreForClient(clientId, createdStore.id)
+      if (reclaimed.error) return reclaimed
     }
   }
 
@@ -267,7 +310,7 @@ export async function saveClientStore(
     .select('id')
     .single()
   if (error) {
-    if (createdRealStoreId) await supabase.from('lojas').update({ active: false }).eq('id', createdRealStoreId)
+    if (createdRealStoreId) await updateOperationalStore(createdRealStoreId, { active: false })
     return { error: error.message }
   }
 
@@ -277,7 +320,7 @@ export async function saveClientStore(
       .update({ primary_store_id: realStoreId, status: 'ativo', updated_at: new Date().toISOString() })
       .eq('id', clientId)
     if (linkError) {
-      if (createdRealStoreId) await supabase.from('lojas').update({ active: false }).eq('id', createdRealStoreId)
+      if (createdRealStoreId) await updateOperationalStore(createdRealStoreId, { active: false })
       return { error: linkError.message }
     }
   }
@@ -293,7 +336,12 @@ export async function saveClientStore(
       origin: 'Cadastro de Loja',
     })),
   )
-  return { error: hoursError?.message ?? null }
+  if (hoursError) return { error: hoursError.message }
+  if (realStoreId) {
+    const grant = await grantStoreToClientDonoMasters(clientId, realStoreId)
+    if (grant.error) return grant
+  }
+  return { error: null }
 }
 
 export type SaveHoursResult = { error: string | null }

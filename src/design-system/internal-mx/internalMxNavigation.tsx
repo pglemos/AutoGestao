@@ -66,7 +66,7 @@ export function buildInternalMxNavigation(
       key: 'produto-metodologia',
       label: 'Produto',
       items: [
-        { key: 'admin-products', label: 'Produtos', path: '/produtos', icon: Package },
+        { key: 'admin-products', label: 'Produtos de Consultoria', path: '/produtos', icon: Package },
         {
           key: 'strategic-plan',
           label: 'Plano Estratégico',

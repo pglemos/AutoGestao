@@ -135,9 +135,6 @@ export function AdminEquipeMxPage() {
       capacidade: declared.length ? declared.reduce((sum, value) => sum + value, 0) : null,
       escalaveis: rows.filter(member => (member.situacao ?? 'ativo') === 'ativo' && member.active !== false).length,
     }
-    // #region agent log
-    fetch('http://127.0.0.1:7506/ingest/ceac55d9-e57e-4aa7-abcd-40a91956c86a',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'bb88b1'},body:JSON.stringify({sessionId:'bb88b1',runId:'post-fix',hypothesisId:'B',location:'AdminEquipeMxPage.tsx:metrics',message:'capacidade metric',data:{total:next.total,declaredCount:declared.length,capacidade:next.capacidade,nullCapacidade:rows.filter(m=>m.capacidade_total==null).length},timestamp:Date.now()})}).catch(()=>{})
-    // #endregion
     return next
   }, [rows])
 

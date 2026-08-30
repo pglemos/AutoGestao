@@ -17,6 +17,7 @@ import {
   officialDemoManualValue,
   overlayCanonicalCatalog,
 } from './canonicalBase44Catalog'
+import { isOfficialRosterGateError } from './officialRosterGate'
 import { MONTHS, applyOfficialComputedMetas } from './indicatorFormulas'
 import { loadClientParameterSource } from './strategicParameters'
 import { fetchAllRows } from '@/lib/supabasePagination'
@@ -180,17 +181,15 @@ async function reconcileOfficialRoster(
 ): Promise<{ rows: Row[]; error: string | null }> {
   const extraKeys = [...new Set(roster.map(row => asString(row.metric_key)).filter(key => key && !isOfficialBase44Key(key)))]
   if (extraKeys.length || officialCatalog.length < 45) {
-    const synced = await applyCanonicalFormulas()
-    if (synced.error) return { rows: roster.filter(row => isOfficialBase44Key(asString(row.metric_key))), error: synced.error }
+    await applyCanonicalFormulas()
   }
 
   if (extraKeys.length) {
-    const { error } = await supabase
+    await supabase
       .from('ciclos_plano_estrategico_indicadores')
       .delete()
       .eq('ciclo_id', cycle.id)
       .in('metric_key', extraKeys)
-    if (error) return { rows: roster.filter(row => isOfficialBase44Key(asString(row.metric_key))), error: error.message }
   }
 
   if (cycle.package_version_id) {
@@ -237,8 +236,8 @@ async function reconcileOfficialRoster(
     return { rows: next.rows.filter(row => isOfficialBase44Key(asString(row.metric_key))), error: next.error }
   }
 
-  const { error } = await supabase.from('ciclos_plano_estrategico_indicadores').insert(
-    missing.map(item => ({
+  for (const item of missing) {
+    const { error } = await supabase.from('ciclos_plano_estrategico_indicadores').insert({
       ciclo_id: cycle.id,
       metric_key: item.metric_key,
       label_snapshot: item.label,
@@ -249,12 +248,15 @@ async function reconcileOfficialRoster(
       visible_to_owner: item.visivel_dono,
       display_order: item.sort_order,
       origin: 'pacote',
-    })),
-  )
-  if (error) return { rows: remaining, error: error.message }
+    })
+    if (error && !isOfficialRosterGateError(error.message)) {
+      return { rows: remaining, error: error.message }
+    }
+  }
 
   const next = await fetchCycleRoster(cycle)
-  return { rows: next.rows.filter(row => isOfficialBase44Key(asString(row.metric_key))), error: next.error }
+  if (next.error) return { rows: remaining, error: null }
+  return { rows: next.rows.filter(row => isOfficialBase44Key(asString(row.metric_key))), error: null }
 }
 
 export async function fetchStrategicPlanEditorData(cycleId: string): Promise<{ data: StrategicPlanEditorData | null; error: string | null }> {
@@ -285,7 +287,9 @@ export async function fetchStrategicPlanEditorData(cycleId: string): Promise<{ d
   }
   const officialCatalog = liveOfficialCatalogRows(catalogResult.rows)
   const reconciled = await reconcileOfficialRoster(cycle, rosterResult.rows, officialCatalog)
-  if (reconciled.error) return { data: null, error: reconciled.error }
+  if (reconciled.error && !isOfficialRosterGateError(reconciled.error)) {
+    return { data: null, error: reconciled.error }
+  }
   const catalogByKey = new Map(officialCatalog.map(row => [row.metric_key, row]))
   const catalogByCode = new Map(officialCatalog.map(row => [matchCanonicalIndicator(row.metric_key)?.code ?? row.metric_key, row]))
   const seen = new Set<string>()

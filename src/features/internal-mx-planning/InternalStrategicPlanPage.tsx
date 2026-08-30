@@ -1,13 +1,21 @@
 import { useEffect, useState } from 'react'
 import { Target } from 'lucide-react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import AdminIndicadoresPage from '@/features/admin-mx/AdminIndicadoresPage'
 import AdminStrategicPlanEditor from '@/features/admin-mx/indicadores/AdminStrategicPlanEditor'
 import { MxErrorState, MxLoadingState, MxModulePage, MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
 import { fetchCurrentCycle } from '@/features/strategic-plan/planCycleRepository'
+import { fetchConsultingClientIdBySlug } from '@/features/strategic-plan/clientPlanningRepository'
 import { StrategicPlanWorkspace } from '@/features/strategic-plan/StrategicPlanWorkspace'
 import { AdminAsOwnerStrategicPlan } from './AdminAsOwnerStrategicPlan'
 import { InternalMxPlanningShell, useInternalPlanningStore } from './InternalMxPlanningShell'
+
+type StrategicCatalogTab = 'catalogo' | 'parametros' | 'planos' | 'historico'
+
+function resolveStrategicCatalogTab(mode: string | null): StrategicCatalogTab {
+  if (mode === 'catalogo' || mode === 'parametros' || mode === 'historico' || mode === 'planos') return mode
+  return 'planos'
+}
 
 export default function InternalStrategicPlanPage() {
   const store = useInternalPlanningStore()
@@ -19,14 +27,28 @@ export default function InternalStrategicPlanPage() {
   const storeId = params.get('storeId')
   const preview = params.get('preview') === '1'
   const viewAsDono = params.get('viewAs') === 'dono' || params.get('viewAs') === 'owner'
+  const catalogTab = resolveStrategicCatalogTab(params.get('mode'))
+  const { clientSlug, year: yearSegment } = useParams<{ clientSlug?: string; year?: string }>()
   const isClientRoute = location.pathname.startsWith('/clientes/')
-  const requestedYear = Number(params.get('year'))
+  const requestedYear = Number(yearSegment || params.get('year'))
   const year = Number.isInteger(requestedYear) && requestedYear >= 2020 && requestedYear <= 2100 ? requestedYear : undefined
   const resolveYear = year ?? new Date().getFullYear()
   const [resolveState, setResolveState] = useState<'idle' | 'loading' | 'missing' | 'error'>(
     clientId && !cycleId ? 'loading' : 'idle',
   )
   const [resolveError, setResolveError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (clientId || !isClientRoute || !clientSlug) return
+    let active = true
+    void fetchConsultingClientIdBySlug(clientSlug).then(result => {
+      if (!active || !result.id) return
+      const next = new URLSearchParams(location.search)
+      next.set('clientId', result.id)
+      navigate(`${location.pathname}?${next.toString()}`, { replace: true })
+    })
+    return () => { active = false }
+  }, [clientId, clientSlug, isClientRoute, location.pathname, location.search, navigate])
 
   useEffect(() => {
     if (cycleId || !clientId) {
@@ -111,8 +133,16 @@ export default function InternalStrategicPlanPage() {
     return <AdminIndicadoresPage initialTab="planos" />
   }
 
+  if (isClientRoute && !clientId && clientSlug) {
+    return (
+      <MxModulePage id="page-plano-estrategico" width="dashboard" bottomClearance="navigation">
+        <MxLoadingState label="Abrindo o plano estratégico do cliente" />
+      </MxModulePage>
+    )
+  }
+
   if (!storeId && !isClientRoute) {
-    return <AdminIndicadoresPage initialTab="catalogo" />
+    return <AdminIndicadoresPage initialTab={catalogTab} />
   }
 
   // `?storeId=` ou rota de cliente abre o workspace da loja (preview Dono / execução).

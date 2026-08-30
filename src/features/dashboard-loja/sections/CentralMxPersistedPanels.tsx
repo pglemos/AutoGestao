@@ -25,6 +25,7 @@ import {
 } from '../hooks/useCentralMxPlanosAcao'
 import { useCentralMxAgenda, type CentralMxAgendaEvent } from '../hooks/useCentralMxAgenda'
 import { useExecutiveAgendaGoogleSync } from '../hooks/useExecutiveAgendaGoogleSync'
+import { formatActionPlanCodigo } from '@/features/admin-mx/planos-acao/actionPlanBoard'
 
 /**
  * Painéis persistidos do Blitz 48h Dia 2.
@@ -305,7 +306,7 @@ function PersistedPlanoRow({
             </Badge>
           </div>
           <Typography variant="p" className="mt-mx-xs">
-            <span className="mr-mx-xs text-status-success-text">{plano.codigo || `PA-${plano.id.slice(0, 8).toUpperCase()}`}</span>
+            <span className="mr-mx-xs text-status-success-text">{formatActionPlanCodigo(plano.codigo, plano.id)}</span>
             {plano.acao}
           </Typography>
           <Typography variant="tiny" tone="muted" className="block">

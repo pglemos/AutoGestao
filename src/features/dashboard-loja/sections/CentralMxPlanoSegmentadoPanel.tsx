@@ -26,6 +26,7 @@ import type {
   CentralMxPlanoStatus,
 } from '../hooks/useCentralMxPlanosAcao'
 import { CentralMxCriarPlanoModal } from './CentralMxCriarPlanoModal'
+import { formatActionPlanCodigo } from '@/features/admin-mx/planos-acao/actionPlanBoard'
 
 /**
  * Painel segmentado de planos de ação — Sprint 3 (S3-T1, delta N1 da ata).
@@ -344,7 +345,7 @@ function PlanoRow({
             </Badge>
           </div>
           <Typography variant="p" className="mt-mx-xs">
-            <span className="mr-mx-xs text-status-success-text">{plano.codigo || `PA-${plano.id.slice(0, 8).toUpperCase()}`}</span>
+            <span className="mr-mx-xs text-status-success-text">{formatActionPlanCodigo(plano.codigo, plano.id)}</span>
             {plano.acao}
           </Typography>
           <Typography variant="tiny" tone="muted" className="block">

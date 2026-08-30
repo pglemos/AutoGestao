@@ -15,7 +15,7 @@ export type NewClientDraft = {
   cnpj: string
   notes: string
   // 2 — Estrutura e lojas
-  structure_type: 'LOJA_UNICA' | 'REDE'
+  structure_type: 'LOJA_UNICA' | 'GRUPO' | 'REDE'
   /** Loja do sistema (tabela `lojas`) que representa o cliente na operação. */
   primary_store_id: string
   units: NewClientUnit[]
@@ -71,6 +71,17 @@ export function emptyNewClientDraft(): NewClientDraft {
 
 export function onlyDigits(value: string) {
   return value.replace(/\D/g, '')
+}
+
+export function clientAllowsBranches(structureType: NewClientDraft['structure_type']): boolean {
+  return structureType === 'REDE' || structureType === 'GRUPO'
+}
+
+export function clientStructureLabel(structureType: string | null | undefined): string {
+  if (structureType === 'REDE') return 'Rede'
+  if (structureType === 'GRUPO') return 'Grupo'
+  if (structureType === 'LOJA_UNICA') return 'Loja Única'
+  return '—'
 }
 
 /** Validação de CNPJ com os dois dígitos verificadores. */

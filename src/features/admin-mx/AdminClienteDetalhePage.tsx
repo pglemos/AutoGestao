@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   ArrowLeft,
   BriefcaseBusiness,
@@ -8,6 +8,7 @@ import {
   Clock,
   Crown,
   Link2,
+  Mail,
   Pencil,
   Plus,
   RefreshCw,
@@ -28,7 +29,6 @@ import {
   MxMetricGrid,
   MxModuleHeader,
   MxModulePage,
-  MxProgress,
   MxSectionCard,
   MxSectionHeader,
   MxStatusBanner,
@@ -47,13 +47,14 @@ import { buildClientReadiness, readinessSummary, type ClientReadinessInput } fro
 import { PLAN_CYCLE_STATUS_LABEL } from '@/features/strategic-plan/planCycle'
 import { getClientStrategicPlanPublicationSummary } from '@/features/strategic-plan/publicationSummary'
 import { createStrategicPlanFromProduct } from '@/features/strategic-plan/productPackageOps'
-import { openCurrentStrategicPlanHref, resolveAdminEditableCycleId } from '@/features/strategic-plan/adminStrategicPlanHref'
+import { resolveAdminEditableCycleId } from '@/features/strategic-plan/adminStrategicPlanHref'
 import { ClientConfigTab } from './clientes/ClientConfigTab'
 import { ClientActionPlanContextPanel } from './clientes/ClientActionPlanContextPanel'
 import { fetchClientActionPlanSummary, type ClientActionPlanSummary } from './clientes/clientActionPlanContext'
 import { DonoMasterCard } from './clientes/DonoMasterCard'
 import { EnrollmentLinkModal } from './clientes/EnrollmentLinkModal'
 import { PersonCreateModal } from './clientes/PersonCreateModal'
+import { ClientIdentificationModal } from './clientes/ClientIdentificationModal'
 import { ProgramCard } from './clientes/ProgramCard'
 import { ProgramEditModal } from './clientes/ProgramEditModal'
 import { ClientPlanningContextPanel } from './clientes/ClientPlanningContextPanel'
@@ -61,6 +62,7 @@ import { StoreFormModal } from './clientes/StoreFormModal'
 import { StoreOperatingHoursEditor } from './clientes/StoreOperatingHoursEditor'
 import {
   createClientPerson,
+  ensurePrimaryContactFromDonoMaster,
   fetchClientPersons,
   setClientDonoMaster,
   updateClientPerson,
@@ -68,11 +70,14 @@ import {
 } from './clientes/personMutations'
 import { personToAccessDraft, resolveOwnerMaster, type PersonAccessDraft, type OwnerMasterResolution } from './clientes/personAccess'
 import { DonoMasterPickerModal } from './clientes/DonoMasterPickerModal'
-import { createEnrollmentLink, listEnrollmentLinks, type EnrollmentLinkRow } from './clientes/enrollmentMutations'
+import { createEnrollmentLink, listEnrollmentLinks, resendPersonInvite, type EnrollmentLinkRow } from './clientes/enrollmentMutations'
 import { buildProgramSummary } from './clientes/programSummary'
-import { buildClientJourney } from './clientes/clientJourney'
-import { saveClientProgram, type ProgramDraft } from './clientes/programMutations'
-import { emptyStoreDraft, type StoreDraft } from './clientes/storeForm'
+import { buildClientJourney, clientVisitDisplayTitle, clientVisitStatusLabel, isCompletedClientVisit, isOverdueClientVisit, isClientVisitInContract } from './clientes/clientJourney'
+import { saveClientProgram, ensureImplementationOwnerFromAssignments, ensureContractStartFromCreatedAt, normalizeProgramModality, programModalityLabel, type ProgramDraft } from './clientes/programMutations'
+import { saveClientIdentification, ensureOnboardingCompleteWhenActive } from './clientes/clientIdentificationMutations'
+import { completeOverdueConsultingVisits } from './clientes/clientVisitMutations'
+import { buildClientIdentificationDraft, clientBusinessPhaseLabel, clientStructureDisplay, resolveIdentificationUnit } from './clientes/clientIdentification'
+import { emptyStoreDraft, maskStoreCnpj, type StoreDraft } from './clientes/storeForm'
 import { deleteOrphanTestUnits, ensureOperationalUnitRows, fetchUnitOperatingHours, saveClientStore, type UnitRow } from './clientes/storeMutations'
 import { useAdminConsultingProducts, useAdminTeam } from './hooks/useAdminMxLists'
 import { resolveVisitVolumeRule } from './clientes/visitVolumeRule'
@@ -80,22 +85,20 @@ import { ClientActionPlanWizard } from './planos-acao/ClientActionPlanWizard'
 import { groupPeopleByStore, isOrphanTestUnit, mergeOperationalUnits } from './clientes/mergeClientPeople'
 import { canonicalPortfolioStatus, parentClientOf, PORTFOLIO_STATUS_LABEL } from './clientes/clientPortfolio'
 
-type ClientTab = 'visao' | 'lojas' | 'pessoas' | 'jornada' | 'implantacao' | 'planejamento' | 'operacao' | 'dados'
+type ClientTab = 'visao' | 'lojas' | 'pessoas' | 'jornada' | 'implantacao' | 'planejamento' | 'operacao' | 'dados' | 'historico'
 type PlanningTab = 'estrategico' | 'plano-acao'
 type OperationTab = 'modulos' | 'configuracoes'
-type DataTab = 'dados' | 'historico'
 
-// Oito áreas principais. As abas legadas continuam disponíveis como subáreas,
-// para preservar links existentes sem deixar a Visão 360 fragmentada.
+// Oito áreas principais alinhadas ao Base44. Planejamento abre via Abrir Plano.
 const TABS = [
-  { key: 'visao' as const, label: 'Visão geral' },
-  { key: 'lojas' as const, label: 'Empresa e lojas' },
-  { key: 'pessoas' as const, label: 'Pessoas e acessos' },
-  { key: 'jornada' as const, label: 'Programa e jornada' },
-  { key: 'implantacao' as const, label: 'Implantação e aderência' },
-  { key: 'planejamento' as const, label: 'Planejamento e ações' },
-  { key: 'operacao' as const, label: 'Módulos e configurações' },
-  { key: 'dados' as const, label: 'Dados e histórico' },
+  { key: 'visao' as const, label: 'Visão Geral' },
+  { key: 'lojas' as const, label: 'Empresa e Lojas' },
+  { key: 'pessoas' as const, label: 'Pessoas e Acessos' },
+  { key: 'jornada' as const, label: 'Programa e Jornada' },
+  { key: 'operacao' as const, label: 'Configurações' },
+  { key: 'implantacao' as const, label: 'Implantação' },
+  { key: 'dados' as const, label: 'Dados' },
+  { key: 'historico' as const, label: 'Histórico e Auditoria' },
 ]
 
 const PLANNING_TABS = [
@@ -108,29 +111,26 @@ const OPERATION_TABS = [
   { key: 'configuracoes' as const, label: 'Configurações' },
 ]
 
-const DATA_TABS = [
-  { key: 'dados' as const, label: 'Dados e integridade' },
-  { key: 'historico' as const, label: 'Histórico e auditoria' },
-]
-
 function resolveInitialDetailTab(requestedTab: string | null): {
   tab: ClientTab
   planningTab: PlanningTab
   operationTab: OperationTab
-  dataTab: DataTab
 } {
-  if (requestedTab === 'estrategico') return { tab: 'planejamento', planningTab: 'estrategico', operationTab: 'modulos', dataTab: 'dados' }
-  if (requestedTab === 'plano-acao') return { tab: 'planejamento', planningTab: 'plano-acao', operationTab: 'modulos', dataTab: 'dados' }
-  if (requestedTab === 'modulos') return { tab: 'operacao', planningTab: 'estrategico', operationTab: 'modulos', dataTab: 'dados' }
-  if (requestedTab === 'configuracoes') return { tab: 'operacao', planningTab: 'estrategico', operationTab: 'configuracoes', dataTab: 'dados' }
-  if (requestedTab === 'historico') return { tab: 'dados', planningTab: 'estrategico', operationTab: 'modulos', dataTab: 'historico' }
+  if (requestedTab === 'estrategico') return { tab: 'planejamento', planningTab: 'estrategico', operationTab: 'modulos' }
+  if (requestedTab === 'plano-acao') return { tab: 'planejamento', planningTab: 'plano-acao', operationTab: 'modulos' }
+  if (requestedTab === 'modulos') return { tab: 'operacao', planningTab: 'estrategico', operationTab: 'modulos' }
+  if (requestedTab === 'configuracoes') return { tab: 'operacao', planningTab: 'estrategico', operationTab: 'configuracoes' }
+  if (requestedTab === 'historico') return { tab: 'historico', planningTab: 'estrategico', operationTab: 'modulos' }
   const tab = TABS.some(entry => entry.key === requestedTab) ? requestedTab as ClientTab : 'visao'
-  return { tab, planningTab: 'estrategico', operationTab: 'modulos', dataTab: 'dados' }
+  return { tab, planningTab: 'estrategico', operationTab: 'modulos' }
 }
 
 function formatDate(value: string | null | undefined) {
   if (!value) return '—'
-  const date = new Date(value)
+  const trimmed = String(value).trim()
+  const dateOnly = trimmed.match(/^(\d{4})-(\d{2})-(\d{2})$/)
+  if (dateOnly) return `${dateOnly[3]}/${dateOnly[2]}/${dateOnly[1]}`
+  const date = new Date(trimmed)
   return Number.isNaN(date.getTime()) ? '—' : date.toLocaleDateString('pt-BR')
 }
 
@@ -175,7 +175,6 @@ export function AdminClienteDetalhePage() {
   const [tab, setTabState] = useState<ClientTab>(initialTabState.tab)
   const [planningTab, setPlanningTab] = useState<PlanningTab>(initialTabState.planningTab)
   const [operationTab, setOperationTab] = useState<OperationTab>(initialTabState.operationTab)
-  const [dataTab, setDataTab] = useState<DataTab>(initialTabState.dataTab)
 
   const setTab = (next: ClientTab) => setTabState(next)
 
@@ -184,7 +183,6 @@ export function AdminClienteDetalhePage() {
     setTabState(next.tab)
     setPlanningTab(next.planningTab)
     setOperationTab(next.operationTab)
-    setDataTab(next.dataTab)
   }, [requestedTab])
   const [storeTaken, setStoreTaken] = useState(false)
   const [activationOpen, setActivationOpen] = useState(false)
@@ -219,6 +217,9 @@ export function AdminClienteDetalhePage() {
   const [strategicPlanYear, setStrategicPlanYear] = useState(() => new Date().getFullYear())
   const [creatingStrategicPlan, setCreatingStrategicPlan] = useState(false)
   const [savingLink, setSavingLink] = useState(false)
+  const [identityOpen, setIdentityOpen] = useState(false)
+  const [savingIdentity, setSavingIdentity] = useState(false)
+  const [completingOverdue, setCompletingOverdue] = useState(false)
 
   const checkStore = useCallback(async () => {
     if (!client?.primary_store_id || !client.id) {
@@ -377,7 +378,7 @@ export function AdminClienteDetalhePage() {
       pending: card.metasPendentes,
       indicadoresComMeta: card.indicadoresComMeta,
     })
-  }, [client?.id])
+  }, [client?.id, tab])
 
   useEffect(() => { void loadUnits() }, [loadUnits])
   useEffect(() => {
@@ -386,6 +387,11 @@ export function AdminClienteDetalhePage() {
   }, [loadPersons])
   useEffect(() => { void loadLinks() }, [loadLinks])
   useEffect(() => { void loadStrategicPlan() }, [loadStrategicPlan])
+
+  const handleStrategicPlanCycleChange = useCallback((cycleId: string) => {
+    setStrategicPlanCycleId(cycleId)
+    void loadStrategicPlan()
+  }, [loadStrategicPlan])
 
   const loadActionPlanSummary = useCallback(async () => {
     if (!client?.id) {
@@ -448,6 +454,54 @@ export function AdminClienteDetalhePage() {
     })
   }, [client, storeTaken, ownerMasterResolution, strategicPlanReadiness])
 
+  const syncingPrimaryContact = useRef(false)
+  useEffect(() => {
+    if (!client?.id || ownerMasterResolution.status !== 'VALID' || !ownerMasterResolution.person) return
+    const hasPrimary = (client.contacts ?? []).some(contact => contact.is_primary && (contact.name ?? '').trim())
+    if (hasPrimary || syncingPrimaryContact.current) return
+    syncingPrimaryContact.current = true
+    void ensurePrimaryContactFromDonoMaster(client.id, ownerMasterResolution.person).then(result => {
+      syncingPrimaryContact.current = false
+      if (result.created) void refetch()
+    })
+  }, [client?.id, client?.contacts, ownerMasterResolution, refetch])
+
+  const syncingImplementationOwner = useRef(false)
+  useEffect(() => {
+    if (!client?.id || (client as { implementation_owner_id?: string | null }).implementation_owner_id) return
+    const hasResponsible = (client.assignments ?? []).some(item => item.active !== false && item.assignment_role === 'responsavel')
+    if (!hasResponsible || syncingImplementationOwner.current) return
+    syncingImplementationOwner.current = true
+    void ensureImplementationOwnerFromAssignments(client.id).then(result => {
+      syncingImplementationOwner.current = false
+      if (result.updated) void refetch()
+    })
+  }, [client, refetch])
+
+  const syncingContractStart = useRef(false)
+  useEffect(() => {
+    if (!client?.id || (client as { contract_start_date?: string | null }).contract_start_date) return
+    if (syncingContractStart.current) return
+    syncingContractStart.current = true
+    void ensureContractStartFromCreatedAt(client.id).then(result => {
+      syncingContractStart.current = false
+      if (result.updated) void refetch()
+    })
+  }, [client, refetch])
+
+  const syncingOnboarding = useRef(false)
+  useEffect(() => {
+    if (!client?.id) return
+    const ativo = String(client.status ?? '').toLowerCase() === 'ativo'
+    const done = Boolean((client as { onboarding_completed?: boolean | null }).onboarding_completed)
+    if (!ativo || done || syncingOnboarding.current) return
+    syncingOnboarding.current = true
+    void ensureOnboardingCompleteWhenActive(client.id).then(result => {
+      syncingOnboarding.current = false
+      if (result.updated) void refetch()
+    })
+  }, [client, refetch])
+
   const correctDonoMaster = async () => {
     if (!client?.id) return
     const returnToActivation = searchParams.get('returnTo') === 'activation'
@@ -502,6 +556,29 @@ export function AdminClienteDetalhePage() {
     setPersonModal(true)
   }
 
+  const correctReadiness = (key: string) => {
+    if (key === 'dono-master') {
+      void correctDonoMaster()
+      return
+    }
+    if (key === 'contato') {
+      if (client?.id && ownerMasterResolution.status === 'VALID' && ownerMasterResolution.person) {
+        void ensurePrimaryContactFromDonoMaster(client.id, ownerMasterResolution.person).then(result => {
+          if (result.error) toast.error(result.error)
+          else void refetch()
+        })
+        return
+      }
+      setTab('pessoas')
+      return
+    }
+    if (key === 'cnpj') {
+      setIdentityOpen(true)
+      return
+    }
+    if (key === 'contrato' || key === 'responsavel-mx') setProgramModalOpen(true)
+  }
+
   const openPersonEdit = (person: PersonAccessRow) => {
     setEditingPersonId(person.id)
     setPersonPrefill(personToAccessDraft(person))
@@ -516,19 +593,48 @@ export function AdminClienteDetalhePage() {
     const next = new URLSearchParams(searchParams)
     next.delete('corrigirMaster')
     navigate({ search: next.toString() ? `?${next}` : '' }, { replace: true })
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- one-shot deep link após personsReady
   }, [client?.id, loading, personsReady, searchParams.get('corrigirMaster')])
 
   const summary = useMemo(() => readinessSummary(checks), [checks])
   const health = useClientHealth(client?.id, client?.primary_store_id ?? null)
   const visits = client?.visits ?? []
-  const journey = useMemo(() => buildClientJourney({
-    programKey: client?.program_template_key,
-    programTotal: client?.journey_total_visits,
-    visits,
-  }), [client?.journey_total_visits, client?.program_template_key, visits])
+  const journey = useMemo(() => {
+    const next = buildClientJourney({
+      programKey: client?.program_template_key,
+      programTotal: client?.journey_total_visits,
+      visits,
+    })
+    // #region agent log
+    fetch('http://127.0.0.1:7506/ingest/ceac55d9-e57e-4aa7-abcd-40a91956c86a',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'285f20'},body:JSON.stringify({sessionId:'285f20',runId:'post-fix',hypothesisId:'AC',location:'AdminClienteDetalhePage.tsx:journey',message:'360 cycle fields',data:{completed:next.completedVisits,total:next.totalVisits,overdue:next.overdueVisits,phase:client?.business_phase ?? null,contractEnd:(client as { contract_end_date?: string | null } | null)?.contract_end_date ?? null,contractStart:(client as { contract_start_date?: string | null } | null)?.contract_start_date ?? null,visitCount:visits.length},timestamp:Date.now()})}).catch(()=>{});
+    fetch('http://127.0.0.1:7506/ingest/ceac55d9-e57e-4aa7-abcd-40a91956c86a',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'285f20'},body:JSON.stringify({sessionId:'285f20',runId:'post-fix',hypothesisId:'AQ',location:'AdminClienteDetalhePage.tsx:journey-titles',message:'jornada encounter titles',data:{progress:next.progress,firstObjective:visits[0]?.objective ?? null,firstTitle:visits[0] ? clientVisitDisplayTitle(visits[0]) : null,consultant:visits[0]?.consultant?.name ?? null},timestamp:Date.now()})}).catch(()=>{});
+    fetch('http://127.0.0.1:7506/ingest/ceac55d9-e57e-4aa7-abcd-40a91956c86a',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'285f20'},body:JSON.stringify({sessionId:'285f20',runId:'post-fix',hypothesisId:'AV',location:'AdminClienteDetalhePage.tsx:visao',message:'360 overview phase and current encounter',data:{phaseRaw:client?.business_phase ?? null,phaseLabel:clientBusinessPhaseLabel(client?.business_phase),currentTitle:visits[0] ? clientVisitDisplayTitle(visits[0]) : null,completed:next.completedVisits,total:next.totalVisits},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
+    return next
+  }, [client, visits])
   const totalVisits = journey.totalVisits
-  const progress = journey.progress
+  const overdueVisitIds = useMemo(
+    () => visits
+      .filter(visit => isClientVisitInContract(visit.visit_number, totalVisits) && isOverdueClientVisit(visit))
+      .map(visit => visit.id)
+      .filter((id): id is string => Boolean(id)),
+    [visits, totalVisits],
+  )
+
+  const completeOverdue = async () => {
+    if (completingOverdue || !overdueVisitIds.length) return
+    setCompletingOverdue(true)
+    try {
+      const result = await completeOverdueConsultingVisits(overdueVisitIds)
+      if (result.error) {
+        toast.error(result.error)
+        return
+      }
+      toast.success(`${result.updated} encontro(s) marcado(s) como realizado(s).`)
+      await refetch()
+    } finally {
+      setCompletingOverdue(false)
+    }
+  }
   const portfolioStatus = useMemo(() => {
     if (!client) return null
     return canonicalPortfolioStatus({
@@ -561,6 +667,7 @@ export function AdminClienteDetalhePage() {
     visits: visits.map(visit => ({
       visit_number: visit.visit_number,
       status: visit.status,
+      scheduled_at: visit.scheduled_at,
       is_onboarding: visit.visit_number <= 1,
       consultant_name: visit.consultant?.name ?? null,
     })),
@@ -574,6 +681,16 @@ export function AdminClienteDetalhePage() {
     () => resolveVisitVolumeRule(selectedProduct, client?.modality),
     [client?.modality, selectedProduct],
   )
+  const primaryContact = client?.contacts?.find(contact => contact.is_primary) ?? client?.contacts?.[0] ?? null
+  const consultingCurrentLine = useMemo(() => {
+    if (totalVisits > 0 && journey.completedVisits >= totalVisits) return 'Jornada concluída'
+    const open = visits.find(visit => {
+      const status = String(visit.status ?? '').trim().toLowerCase()
+      return !isCompletedClientVisit(visit.status) && status !== 'cancelada' && status !== 'cancelado'
+    })
+    const current = open ?? visits[0]
+    return current ? `Encontro atual: ${clientVisitDisplayTitle(current)}` : 'Sem encontro na jornada'
+  }, [journey.completedVisits, totalVisits, visits])
 
   const programInitialDraft = useMemo<ProgramDraft>(() => {
     const assignments = client?.assignments ?? []
@@ -582,14 +699,45 @@ export function AdminClienteDetalhePage() {
     return {
       product_name: client?.product_name ?? '',
       program_template_key: (client as { program_template_key?: string | null })?.program_template_key ?? '',
-      modality: client?.modality ?? '',
-      contract_start_date: (client as { contract_start_date?: string | null })?.contract_start_date ?? '',
+      modality: normalizeProgramModality(client?.modality) || client?.modality || '',
+      contract_start_date: (client as { contract_start_date?: string | null })?.contract_start_date
+        || (typeof client?.created_at === 'string' ? client.created_at.slice(0, 10) : ''),
       contract_end_date: (client as { contract_end_date?: string | null })?.contract_end_date ?? '',
-      implementation_owner_id: (client as { implementation_owner_id?: string | null })?.implementation_owner_id ?? '',
+      implementation_owner_id: (client as { implementation_owner_id?: string | null })?.implementation_owner_id || responsible,
       responsible_consultant_id: responsible,
       auxiliary_consultant_ids: auxiliaries,
     }
   }, [client])
+
+  const identityUnit = useMemo(() => resolveIdentificationUnit(units), [units])
+  const identityInitial = useMemo(() => {
+    if (!client) return null
+    return buildClientIdentificationDraft({
+      name: client.name,
+      legalName: client.legal_name,
+      cnpj: client.cnpj,
+      notes: client.notes,
+      structureType: client.structure_type ?? null,
+      city: identityUnit?.city ?? null,
+      state: identityUnit?.state ?? null,
+      businessPhase: (client as { business_phase?: string | null }).business_phase ?? null,
+      contractEndDate: (client as { contract_end_date?: string | null }).contract_end_date ?? null,
+    })
+  }, [client, identityUnit])
+
+  const implementationOwnerName = team.rows.find(member => member.id === (client as { implementation_owner_id?: string | null } | null)?.implementation_owner_id)?.name ?? responsibleConsultant
+  const headerLocation = [identityUnit?.city, identityUnit?.state].filter(Boolean).join(', ')
+  const headerMeta = useMemo(() => {
+    const next = {
+      location: headerLocation || null,
+      comercial: responsibleConsultant,
+      implantacao: implementationOwnerName,
+    }
+    // #region agent log
+    fetch('http://127.0.0.1:7506/ingest/ceac55d9-e57e-4aa7-abcd-40a91956c86a',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'285f20'},body:JSON.stringify({sessionId:'285f20',runId:'post-fix',hypothesisId:'AW',location:'AdminClienteDetalhePage.tsx:header',message:'360 header meta vs Base44',data:next,timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
+    return next
+  }, [headerLocation, implementationOwnerName, responsibleConsultant])
 
   const onboardingStep = (client as { onboarding_step?: number | null })?.onboarding_step ?? 1
   const onboardingCompleted = (client as { onboarding_completed?: boolean | null })?.onboarding_completed ?? false
@@ -657,18 +805,77 @@ export function AdminClienteDetalhePage() {
     if (!client?.id || !supabaseUser) return
     setSavingPerson(true)
     try {
-      const { error: personError } = editingPersonId
-        ? await updateClientPerson(client.id, editingPersonId, draft)
+      const { error: personError, reused } = editingPersonId
+        ? { ...(await updateClientPerson(client.id, editingPersonId, draft)), reused: false }
         : await createClientPerson(client.id, draft, supabaseUser.id)
       if (personError) {
         toast.error(personError)
         return
       }
-      toast.success(editingPersonId ? 'Usuário atualizado.' : 'Usuário cadastrado.')
+      toast.success(editingPersonId
+        ? 'Usuário atualizado.'
+        : reused
+          ? 'Identidade existente reaberta. O convite permanece em preparação, sem duplicar o cadastro.'
+          : 'Usuário cadastrado.')
       setPersonModal(false)
       setPersonPrefill(null)
       setEditingPersonId(null)
       await loadPersons()
+    } finally {
+      setSavingPerson(false)
+    }
+  }
+
+  const submitIdentity = async (draft: Parameters<typeof saveClientIdentification>[0]['draft']) => {
+    if (!client?.id || !supabaseUser) return
+    setSavingIdentity(true)
+    try {
+      const { error: identityError } = await saveClientIdentification({
+        clientId: client.id,
+        unitId: identityUnit?.id ?? null,
+        draft,
+        actorId: supabaseUser.id,
+      })
+      if (identityError) {
+        toast.error(identityError)
+        return
+      }
+      toast.success('Identificação do cliente atualizada.')
+      setIdentityOpen(false)
+      await loadUnits()
+      await refetch()
+    } finally {
+      setSavingIdentity(false)
+    }
+  }
+
+  const resendInvite = async (person: PersonAccessRow) => {
+    if (!client?.id || !client.slug || !supabaseUser) return
+    setSavingPerson(true)
+    try {
+      const result = await resendPersonInvite({
+        clientId: client.id,
+        clientSlug: client.slug,
+        origin: window.location.origin,
+        createdBy: supabaseUser.id,
+        person,
+      })
+      if (result.error) {
+        toast.error(result.error)
+        return
+      }
+      if (result.url) {
+        try {
+          await navigator.clipboard.writeText(result.url)
+        } catch {
+          /* clipboard pode falhar em contexto inseguro; o toast ainda entrega o link */
+        }
+        toast.success(result.reusedLink
+          ? `Convite reenviado com o link vigente. ${result.url}`
+          : `Convite gerado. Link copiado: ${result.url}`)
+      }
+      await loadPersons()
+      await loadLinks()
     } finally {
       setSavingPerson(false)
     }
@@ -715,8 +922,6 @@ export function AdminClienteDetalhePage() {
       let cycleId = strategicPlanCycleId
       let created = false
       let indicatorCount = 0
-      let manualCount = 0
-      let calculatedCount = 0
 
       if (!cycleId) {
         const result = await createStrategicPlanFromProduct({
@@ -730,24 +935,16 @@ export function AdminClienteDetalhePage() {
         }
         created = result.created
         indicatorCount = result.indicatorCount
-        manualCount = result.manualCount
-        calculatedCount = result.calculatedCount
         cycleId = result.cycle?.id ?? null
         setStrategicPlanCycleId(cycleId)
         toast.success(created
           ? `Plano Estratégico criado com ${indicatorCount} indicadores padrão.`
-          : 'Plano Estratégico já existente; abrindo o ciclo atual.')
+          : 'Plano Estratégico já existente; abrindo o cadastro rápido.')
         await loadStrategicPlan()
       }
 
-      const href = openCurrentStrategicPlanHref({
-        clientId: client.id,
-        clientSlug: client.slug,
-        cycleId,
-        year,
-        storeId: client.primary_store_id,
-      })
-      navigate(href)
+      setPlanningTab('estrategico')
+      setTab('planejamento')
     } finally {
       setCreatingStrategicPlan(false)
     }
@@ -760,18 +957,32 @@ export function AdminClienteDetalhePage() {
           icon={Building2}
           eyebrow="Administração MX"
           title={client?.name ?? 'Cliente'}
-          description={client ? `${client.legal_name || 'Sem razão social'} · ${client.product_name || 'Produto não definido'}` : 'Visão 360 do cliente na consultoria.'}
+          description={client ? (
+            <>
+              {`${client.legal_name || 'Sem razão social'} · ${client.product_name || 'Produto não definido'}`}
+              {headerMeta.location || headerMeta.comercial || headerMeta.implantacao ? (
+                <span className="mt-1 block">
+                  {[
+                    headerMeta.location,
+                    headerMeta.comercial ? `Comercial: ${headerMeta.comercial}` : null,
+                    headerMeta.implantacao ? `Implantação: ${headerMeta.implantacao}` : null,
+                  ].filter(Boolean).join(' · ')}
+                </span>
+              ) : null}
+            </>
+          ) : 'Visão 360 do cliente na consultoria.'}
           actions={(
             <>
               <Button asChild variant="outline"><Link to="/clientes"><ArrowLeft size={16} />Clientes</Link></Button>
               <Button variant="outline" onClick={() => void refetch()}><RefreshCw size={16} />Atualizar</Button>
-              {client && !onboardingCompleted ? (
+              {client && !onboardingCompleted && String(client.status ?? '').toLowerCase() !== 'ativo' ? (
                 <Button asChild variant="outline"><Link to={`/clientes/novo?continue=${client.id}`}><ArrowLeft size={16} />Continuar onboarding</Link></Button>
               ) : null}
               {client && client.status !== 'ativo'
-                ? <Button onClick={() => setActivationOpen(true)}><CheckCircle2 size={16} />Validar e ativar</Button>
+                ? <Button onClick={() => setActivationOpen(true)}><CheckCircle2 size={16} />Validar e Ativar</Button>
                 : null}
-              {client ? <Button variant="outline" onClick={() => void openCurrentStrategicPlan()} disabled={creatingStrategicPlan}><Target size={16} />{creatingStrategicPlan ? 'Abrindo...' : strategicPlanReadiness ? 'Abrir Plano Estratégico' : 'Criar Plano Estratégico'}</Button> : null}
+              {client ? <Button variant="outline" onClick={() => setIdentityOpen(true)}><Pencil size={16} />Editar Identificação do Cliente</Button> : null}
+              {client ? <Button variant="outline" onClick={() => void openCurrentStrategicPlan()} disabled={creatingStrategicPlan}><Target size={16} />{creatingStrategicPlan ? 'Abrindo...' : strategicPlanReadiness ? 'Abrir Plano' : 'Criar Plano Estratégico'}</Button> : null}
               {client ? <Button variant="outline" onClick={() => { setPlanningTab('plano-acao'); setTab('planejamento') }}><ClipboardList size={16} />Abrir Plano de Ação</Button> : null}
               {client ? <Button asChild variant="outline"><Link to={`/consultoria?clientId=${encodeURIComponent(client.id)}`}><Sparkles size={16} />Abrir Consultoria</Link></Button> : null}
             </>
@@ -824,7 +1035,7 @@ export function AdminClienteDetalhePage() {
                         {' · '}Metas pendentes: {strategicPlanReadiness.pending}
                       </p>
                     ) : null}
-                    <Button variant="outline" size="sm" className="mt-4" onClick={() => void openCurrentStrategicPlan()} disabled={creatingStrategicPlan}>Abrir Plano Estratégico</Button>
+                    <Button variant="outline" size="sm" className="mt-4" onClick={() => void openCurrentStrategicPlan()} disabled={creatingStrategicPlan}>Abrir Plano</Button>
                   </div>
                   <div className="rounded-xl border border-border bg-surface-alt p-4">
                     <div className="flex items-start justify-between gap-3">
@@ -835,7 +1046,7 @@ export function AdminClienteDetalhePage() {
                       <span className="text-xs font-semibold text-foreground">{actionPlanSummary ? `${actionPlanSummary.total} plano(s)` : 'Carregando…'}</span>
                     </div>
                     <p className="mt-2 text-xs text-muted-foreground">{actionPlanSummary ? `${actionPlanSummary.open} em aberto · ${actionPlanSummary.averageProgress}% de progresso médio · ${actionPlanSummary.completed} concluído(s)` : 'Consultando a matriz e as filiais do cliente.'}</p>
-                    <Button variant="outline" size="sm" className="mt-4" onClick={() => { setPlanningTab('plano-acao'); setTab('planejamento') }}>Abrir no cliente</Button>
+                    <Button variant="outline" size="sm" className="mt-4" onClick={() => { setPlanningTab('plano-acao'); setTab('planejamento') }}>Abrir Plano de Ação</Button>
                   </div>
                   <div className="rounded-xl border border-border bg-surface-alt p-4">
                     <div className="flex items-start justify-between gap-3">
@@ -843,23 +1054,38 @@ export function AdminClienteDetalhePage() {
                         <div className="flex items-center gap-2 text-sm font-semibold text-foreground"><Sparkles size={16} className="text-status-success-text" />Consultoria</div>
                         <p className="mt-2 text-xs text-muted-foreground">Jornada, encontros e entregas do programa contratado.</p>
                       </div>
-                      <span className="text-xs font-semibold text-foreground">{visits.length} encontro(s)</span>
+                      <span className="text-xs font-semibold text-foreground">
+                        {totalVisits > 0
+                          ? `${journey.completedVisits}/${totalVisits}${journey.overdueVisits ? ` · ${journey.overdueVisits} atrasada(s)` : ''}`
+                          : `${visits.length} encontro(s)`}
+                      </span>
                     </div>
-                    <Button asChild variant="outline" size="sm" className="mt-4"><Link to={`/consultoria?clientId=${encodeURIComponent(client.id)}`}>Abrir consultoria</Link></Button>
+                    <p className="mt-2 text-xs text-muted-foreground">{consultingCurrentLine}</p>
+                    <Button asChild variant="outline" size="sm" className="mt-4"><Link to={`/consultoria?clientId=${encodeURIComponent(client.id)}`}>Abrir Consultoria</Link></Button>
                   </div>
                 </div>
                 <div className="grid gap-3 p-5 sm:grid-cols-2 lg:grid-cols-3">
                   {[
                     ['Razão social', client.legal_name || '—'],
-                    ['CNPJ', client.cnpj || '—'],
+                    ['CNPJ', client.cnpj ? maskStoreCnpj(client.cnpj) : '—'],
+                    ['Contato principal', primaryContact?.name || '—'],
+                    ['Telefone', primaryContact?.phone || '—'],
+                    ['E-mail', primaryContact?.email || '—'],
+                    ['Cidade', identityUnit?.city || '—'],
+                    ['UF', identityUnit?.state || '—'],
                     ['Produto', client.product_name || '—'],
-                    ['Modalidade', client.modality || '—'],
-                    ['Estrutura', (client as { structure_type?: string | null }).structure_type === 'REDE' ? 'Rede' : (client as { structure_type?: string | null }).structure_type === 'LOJA_UNICA' ? 'Loja única' : '—'],
-                    ['Fase empresarial', (client as { business_phase?: string | null }).business_phase || '—'],
+                    ['Modalidade', programModalityLabel(client.modality)],
+                    ['Estrutura', clientStructureDisplay((client as { structure_type?: string | null }).structure_type)],
+                    ['Fase empresarial', clientBusinessPhaseLabel((client as { business_phase?: string | null }).business_phase)],
                     ['Início do contrato', formatDate((client as { contract_start_date?: string | null }).contract_start_date)],
-                    ['Fim do contrato', formatDate((client as { contract_end_date?: string | null }).contract_end_date)],
+                    ['Fim do contrato', formatDate((client as { contract_end_date?: string | null }).contract_end_date) === '—'
+                      && (client as { contract_start_date?: string | null }).contract_start_date
+                      ? 'sem fim'
+                      : formatDate((client as { contract_end_date?: string | null }).contract_end_date)],
                     ['Onboarding', onboardingCompleted ? 'Concluído' : `Etapa ${onboardingStep}/7`],
-                    ['Ciclo da jornada', totalVisits > 0 ? `${journey.completedVisits}/${totalVisits}` : '—'],
+                    ['Ciclo da jornada', totalVisits > 0
+                      ? `${journey.completedVisits}/${totalVisits}${journey.overdueVisits ? ` · ${journey.overdueVisits} atrasada(s)` : ''}`
+                      : '—'],
                     ['Visitas presenciais', visitRule.label],
                   ].map(([label, value]) => (
                     <div key={label} className="rounded-lg border border-border p-3">
@@ -877,7 +1103,12 @@ export function AdminClienteDetalhePage() {
                           <div className="font-medium text-foreground">{check.label}</div>
                           <div className="text-xs text-muted-foreground">{check.detail}</div>
                         </div>
-                        <span className="text-xs font-semibold text-muted-foreground">{check.ok ? 'OK' : check.severity === 'impeditivo' ? 'Impeditivo' : 'Pendente'}</span>
+                        <div className="flex shrink-0 flex-col items-end gap-1">
+                          <span className="text-xs font-semibold text-muted-foreground">{check.ok ? 'OK' : check.severity === 'impeditivo' ? 'Impeditivo' : 'Pendente'}</span>
+                          {!check.ok && ['dono-master', 'contato', 'cnpj', 'contrato', 'responsavel-mx'].includes(check.key) ? (
+                            <Button size="sm" variant="outline" onClick={() => void correctReadiness(check.key)}>Corrigir</Button>
+                          ) : null}
+                        </div>
                       </li>
                     ))}
                   </ul>
@@ -888,9 +1119,9 @@ export function AdminClienteDetalhePage() {
             {tab === 'lojas' ? (
               <MxSectionCard>
                 <MxSectionHeader
-                  title="Empresa e lojas"
+                  title="Empresa e Lojas"
                   description={`${units.length} loja(s) operacional(is) — matriz e filiais.`}
-                  actions={<Button size="sm" onClick={() => setStoreModal({ open: true, initial: null })}><Plus size={16} />Adicionar loja</Button>}
+                  actions={<Button size="sm" onClick={() => setStoreModal({ open: true, initial: null })}><Plus size={16} />Adicionar Loja</Button>}
                 />
                 <div className="space-y-3 p-5">
                   {units.length ? (
@@ -911,10 +1142,10 @@ export function AdminClienteDetalhePage() {
                             ) : (
                               <>
                             <Button variant="outline" size="sm" onClick={() => setStoreModal({ open: true, initial: { ...emptyStoreDraft(unit.store_type === 'matriz' ? 'matriz' : 'filial'), id: unit.id, store_id: unit.store_id, name: unit.name, cnpj: unit.cnpj ?? '', internal_code: unit.internal_code ?? '', address_street: unit.address_street ?? '', address_city: unit.city ?? '', address_state: unit.state ?? '', address_zip: unit.address_zip ?? '', timezone: unit.timezone ?? 'America/Sao_Paulo', status: unit.status === 'inativa' ? 'inativa' : 'ativa', opening_date: unit.opening_date ?? '', notes: unit.notes ?? '', is_primary: unit.is_primary } })}>
-                              <Pencil size={14} />Editar
+                              <Pencil size={14} />Editar Loja
                             </Button>
                             <Button variant="outline" size="sm" onClick={() => setHoursUnitId(hoursUnitId === unit.id ? null : unit.id)}>
-                              <Clock size={14} />Horário
+                              <Clock size={14} />Configurar Horário
                             </Button>
                               </>
                             )}
@@ -953,17 +1184,17 @@ export function AdminClienteDetalhePage() {
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="rounded-xl border border-border p-4">
                     <div className="mb-2 flex items-center gap-2"><UserPlus size={16} className="text-primary" /><h4 className="text-sm font-medium text-foreground">Cadastro Direto</h4></div>
-                    <p className="mb-3 text-xs text-muted-foreground">Cadastre usuários manualmente com papel, loja e visão padrão.</p>
-                    <Button size="sm" onClick={() => { setEditingPersonId(null); setPersonPrefill(null); setPersonModal(true) }}><UserPlus size={14} />Cadastrar usuário</Button>
+                    <p className="mb-3 text-xs text-muted-foreground">Cadastre usuários manualmente com papel, Loja e visão padrão.</p>
+                    <Button size="sm" onClick={() => { setEditingPersonId(null); setPersonPrefill(null); setPersonModal(true) }}><UserPlus size={14} />Cadastrar Usuário</Button>
                   </div>
                   <div className="rounded-xl border border-border p-4">
                     <div className="mb-2 flex items-center gap-2"><Link2 size={16} className="text-status-info-text" /><h4 className="text-sm font-medium text-foreground">Autocadastro por Link</h4></div>
                     <p className="mb-3 text-xs text-muted-foreground">Gere um link para que a equipe do cliente se cadastre.</p>
-                    <Button size="sm" variant="outline" onClick={() => setLinkModal(true)}><Link2 size={14} />Gerar link</Button>
+                    <Button size="sm" variant="outline" onClick={() => setLinkModal(true)}><Link2 size={14} />Gerar Link</Button>
                   </div>
                 </div>
                 <MxSectionCard>
-                  <MxSectionHeader title={`Usuários (${persons.length})`} description="Equipe por loja: cada filial tem gerente e vendedores próprios." />
+                  <MxSectionHeader title={`Usuários ( ${persons.length} )`} description="Equipe por loja: cada filial tem gerente e vendedores próprios." />
                   <div className="p-5">
                     {persons.length ? (
                       <div className="space-y-6">
@@ -1001,6 +1232,11 @@ export function AdminClienteDetalhePage() {
                               <Button variant="outline" size="sm" onClick={() => openPersonEdit(person)}>
                                 <Pencil size={14} />Editar
                               </Button>
+                              {person.status !== 'ativo' ? (
+                                <Button variant="outline" size="sm" onClick={() => void resendInvite(person)} disabled={savingPerson}>
+                                  <Mail size={14} />Reenviar convite
+                                </Button>
+                              ) : null}
                             </div>
                           </div>
                             ))}
@@ -1039,9 +1275,16 @@ export function AdminClienteDetalhePage() {
               <div className="space-y-5">
                 <ProgramCard summary={programSummary} visitRule={visitRule} onEditProgram={() => setProgramModalOpen(true)} />
                 <MxSectionCard>
-                  <MxSectionHeader title="Jornada de encontros" description={`${visits.length} encontro(s) registrados.`} />
+                  <MxSectionHeader
+                    title="Jornada de encontros"
+                    description={`${journey.completedVisits} concluídos · ${Math.max(0, journey.totalVisits - journey.completedVisits)} restantes${journey.overdueVisits ? ` · ${journey.overdueVisits} atrasada(s)` : ''}`}
+                    actions={overdueVisitIds.length ? (
+                      <Button size="sm" onClick={() => void completeOverdue()} disabled={completingOverdue}>
+                        {completingOverdue ? 'Registrando...' : `Marcar ${overdueVisitIds.length} atrasada(s) como realizada(s)`}
+                      </Button>
+                    ) : undefined}
+                  />
                   <div className="space-y-4 p-5">
-                    <div className="max-w-md"><MxProgress value={progress} label={`${progress}% concluído`} /></div>
                     {health.presence ? (
                       <MxStatusBanner tone={health.presence.disponiveis === 0 ? 'warning' : 'info'}>
                         {health.presence.contratadas === null
@@ -1052,16 +1295,23 @@ export function AdminClienteDetalhePage() {
                     {visits.length ? (
                       <MxTableSurface>
                         <Table className="min-w-[640px]">
-                          <TableHeader><TableRow><TableHead>Encontro</TableHead><TableHead>Data</TableHead><TableHead>Modalidade</TableHead><TableHead>Status</TableHead></TableRow></TableHeader>
+                          <TableHeader><TableRow><TableHead>Encontro</TableHead><TableHead>Consultor</TableHead><TableHead>Data</TableHead><TableHead>Status</TableHead></TableRow></TableHeader>
                           <TableBody>
-                            {visits.map(visit => (
+                            {visits.map(visit => {
+                              const consultantName = visit.consultant?.name ?? team.rows.find(member => member.id === visit.consultant_id)?.name ?? '—'
+                              const modality = String(visit.modality || '').trim().toUpperCase() || '—'
+                              return (
                               <TableRow key={visit.id}>
-                                <TableCell className="font-semibold text-foreground">{visit.visit_number === 1 ? 'Onboarding' : `Visita ${visit.visit_number}`}</TableCell>
+                                <TableCell>
+                                  <div className="font-semibold text-foreground">{clientVisitDisplayTitle(visit)}</div>
+                                  <div className="mt-0.5 text-xs text-muted-foreground">Consultor: {consultantName} · {modality}</div>
+                                </TableCell>
+                                <TableCell>{consultantName}</TableCell>
                                 <TableCell>{formatDate(visit.scheduled_at)}</TableCell>
-                                <TableCell>{visit.modality || '—'}</TableCell>
-                                <TableCell>{visit.status || '—'}</TableCell>
+                                <TableCell>{clientVisitStatusLabel(visit)}</TableCell>
                               </TableRow>
-                            ))}
+                              )
+                            })}
                           </TableBody>
                         </Table>
                       </MxTableSurface>
@@ -1078,7 +1328,7 @@ export function AdminClienteDetalhePage() {
                   onboardingCompleted: client.onboarding_completed ?? null,
                   modulesEnabled: (client.modules ?? []).filter(module => module.enabled !== false).length,
                   modulesTotal: (client.modules ?? []).length,
-                  visitsDone: visits.filter(visit => visit.status === 'concluida').length,
+                  visitsDone: visits.filter(visit => isCompletedClientVisit(visit.status)).length,
                   visitsTotal: totalVisits,
                 })}
                 blockers={checks.filter(check => !check.ok).map(check => `${check.label} — ${check.detail}`)}
@@ -1095,6 +1345,7 @@ export function AdminClienteDetalhePage() {
                     primaryStoreId={client.primary_store_id}
                     cycleId={strategicPlanCycleId}
                     year={strategicPlanYear}
+                    onCycleChange={handleStrategicPlanCycleChange}
                   />
                 ) : (
                   <ClientActionPlanContextPanel
@@ -1109,14 +1360,11 @@ export function AdminClienteDetalhePage() {
             ) : null}
 
             {tab === 'dados' ? (
-              <div className="space-y-4">
-                <TabNav tabs={DATA_TABS} activeTab={dataTab} onTabChange={setDataTab} />
-                {dataTab === 'dados' ? (
-                  <ClientDadosTab sources={health.sources} loading={health.loading} error={health.error} onRetry={() => void health.refetch()} />
-                ) : (
-                  <ClientHistoricoTab events={health.timeline} loading={health.loading} error={health.error} onRetry={() => void health.refetch()} />
-                )}
-              </div>
+              <ClientDadosTab sources={health.sources} loading={health.loading} error={health.error} onRetry={() => void health.refetch()} />
+            ) : null}
+
+            {tab === 'historico' ? (
+              <ClientHistoricoTab events={health.timeline} loading={health.loading} error={health.error} onRetry={() => void health.refetch()} />
             ) : null}
 
             {tab === 'operacao' ? (
@@ -1158,9 +1406,7 @@ export function AdminClienteDetalhePage() {
               submitting={activating}
               onSubmit={() => void activate()}
               onRepair={key => void repair(key)}
-              onCorrect={check => {
-                if (check.key === 'dono-master') void correctDonoMaster()
-              }}
+              onCorrect={check => void correctReadiness(check.key)}
               repairing={repairing}
               onClose={() => setActivationOpen(false)}
             />
@@ -1173,6 +1419,15 @@ export function AdminClienteDetalhePage() {
               team={team.rows}
               onSubmit={draft => void submitProgram(draft)}
               onClose={() => setProgramModalOpen(false)}
+            />
+
+            <ClientIdentificationModal
+              open={identityOpen}
+              submitting={savingIdentity}
+              initial={identityInitial}
+              requireAddress={false}
+              onSubmit={draft => void submitIdentity(draft)}
+              onClose={() => setIdentityOpen(false)}
             />
 
             <StoreFormModal
@@ -1190,6 +1445,8 @@ export function AdminClienteDetalhePage() {
               open={personModal}
               submitting={savingPerson}
               stores={units.map(unit => ({ id: unit.store_id ?? unit.id, name: unit.name }))}
+              persons={persons.map(person => ({ id: person.id, is_dono_master: person.is_dono_master, status: person.status }))}
+              personId={editingPersonId}
               initial={personPrefill ?? undefined}
               editing={Boolean(editingPersonId)}
               onSubmit={draft => void submitPerson(draft)}

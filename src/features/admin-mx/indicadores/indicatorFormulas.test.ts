@@ -14,6 +14,7 @@ import {
   formatEditableInput,
   getFormatConfig,
   parseStrategicInput,
+  decideStrategicCellInput,
 } from './indicatorFormulas'
 
 describe('extração de dependências', () => {
@@ -129,6 +130,31 @@ describe('formatação', () => {
   test('parse de número aceita separador decimal de vírgula', () => {
     const config = getFormatConfig('number', 2)
     expect(parseStrategicInput('1.234,56', config)).toBe(1234.56)
+  })
+
+  test('LIMPAR na célula equivale a apagar o valor', () => {
+    const config = getFormatConfig('number', 0)
+    expect(parseStrategicInput('LIMPAR', config)).toBeNull()
+    expect(parseStrategicInput('limpar', config)).toBeNull()
+  })
+
+  test('vazio permanece ausente e zero é um valor válido', () => {
+    const config = getFormatConfig('number', 0)
+    expect(parseStrategicInput('', config)).toBeNull()
+    expect(parseStrategicInput('   ', config)).toBeNull()
+    expect(parseStrategicInput('0', config)).toBe(0)
+    expect(formatEditableInput(null, config)).toBe('')
+    expect(formatEditableInput(0, config)).toBe('0')
+  })
+
+  test('cadastro rápido distingue vazio, zero e LIMPAR', () => {
+    const config = getFormatConfig('number', 0)
+    expect(decideStrategicCellInput('', config)).toEqual({ action: 'preserve' })
+    expect(decideStrategicCellInput('   ', config)).toEqual({ action: 'preserve' })
+    expect(decideStrategicCellInput('LIMPAR', config)).toEqual({ action: 'clear' })
+    expect(decideStrategicCellInput('limpar', config)).toEqual({ action: 'clear' })
+    expect(decideStrategicCellInput('0', config)).toEqual({ action: 'set', value: 0 })
+    expect(decideStrategicCellInput('abc', config)).toMatchObject({ action: 'reject' })
   })
 })
 

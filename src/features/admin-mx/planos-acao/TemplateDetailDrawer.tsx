@@ -137,7 +137,7 @@ export function TemplateDetailDrawer(props: {
           {hasPublished && !hasDraft && template.active ? (
             <>
               <Button variant="outline" size="sm" disabled={props.submitting} onClick={() => props.onCreateVersion(template)}><RefreshCw size={14} />Nova versão</Button>
-              {template.manual_application_enabled ? <Button size="sm" disabled={props.submitting} onClick={() => props.onApply(template)}><Zap size={14} />Aplicar a cliente</Button> : null}
+              {template.manual_application_enabled ? <Button size="sm" disabled={props.submitting} onClick={() => props.onApply(template)}><Zap size={14} />Aplicar a Cliente</Button> : null}
               {template.owner_suggestion_enabled ? <Button variant="outline" size="sm" disabled={props.submitting} onClick={() => props.onSuggest(template)}><Send size={14} />Sugerir ao Dono</Button> : null}
             </>
           ) : null}

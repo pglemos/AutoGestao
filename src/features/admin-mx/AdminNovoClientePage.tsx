@@ -25,6 +25,8 @@ import { continueClientProgram, createClientProgram } from './novo-cliente/creat
 import { resolveVisitVolumeRule } from './clientes/visitVolumeRule'
 import {
   NEW_CLIENT_STEPS,
+  clientAllowsBranches,
+  clientStructureLabel,
   emptyNewClientDraft,
   pendingNewClientSteps,
   validateNewClientStep,
@@ -108,7 +110,11 @@ export function AdminNovoClientePage() {
       loaded.legal_name = client.legal_name ?? ''
       loaded.cnpj = client.cnpj ?? ''
       loaded.notes = client.notes ?? ''
-      loaded.structure_type = client.structure_type === 'REDE' ? 'REDE' : 'LOJA_UNICA'
+      loaded.structure_type = client.structure_type === 'GRUPO'
+        ? 'GRUPO'
+        : client.structure_type === 'REDE'
+          ? 'REDE'
+          : 'LOJA_UNICA'
       loaded.primary_store_id = client.primary_store_id ?? ''
       loaded.business_phase = client.business_phase ?? ''
       loaded.product_name = client.product_name ?? ''
@@ -335,9 +341,18 @@ export function AdminNovoClientePage() {
               <>
                 {availableStores.error ? <MxStatusBanner tone="warning">Não foi possível carregar as lojas operacionais: {availableStores.error}</MxStatusBanner> : null}
                 <MxField label="Tipo de estrutura">
-                  <MxSelect aria-label="Tipo de estrutura" value={draft.structure_type} onChange={event => patch({ structure_type: event.target.value as NewClientDraft['structure_type'] })}>
-                    <option value="LOJA_UNICA">Loja única</option>
-                    <option value="REDE">Rede (matriz e filiais)</option>
+                  <MxSelect aria-label="Tipo de estrutura" value={draft.structure_type} onChange={event => {
+                    const structure_type = event.target.value as NewClientDraft['structure_type']
+                    patch({
+                      structure_type,
+                      units: clientAllowsBranches(structure_type)
+                        ? draft.units
+                        : draft.units.filter(unit => unit.is_primary).slice(0, 1),
+                    })
+                  }}>
+                    <option value="LOJA_UNICA">Loja Única</option>
+                    <option value="GRUPO">Grupo</option>
+                    <option value="REDE">Rede</option>
                   </MxSelect>
                 </MxField>
                 {draft.units.map((unit, index) => (
@@ -346,7 +361,7 @@ export function AdminNovoClientePage() {
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-semibold text-foreground">Unidade {index + 1}</span>
                         <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${unit.is_primary ? 'bg-primary/10 text-primary' : 'bg-status-info-bg text-status-info-text'}`}>
-                          {draft.structure_type === 'REDE' ? (unit.is_primary ? 'Matriz' : 'Filial') : 'Loja principal'}
+                          {clientAllowsBranches(draft.structure_type) ? (unit.is_primary ? 'Matriz' : 'Filial') : 'Loja principal'}
                         </span>
                       </div>
                       <span className="text-xs text-muted-foreground">{unit.is_primary ? 'Recebe o vínculo do cliente' : 'Vinculada à matriz ao salvar'}</span>
@@ -360,7 +375,7 @@ export function AdminNovoClientePage() {
                       {draft.units.length > 1 ? <Button type="button" variant="outline" size="sm" aria-label={`Remover loja ${index + 1}`} onClick={() => patch({ units: draft.units.filter((_, position) => position !== index) })}><Trash2 size={16} /></Button> : null}
                     </div>
                     </div>
-                    {!unit.is_primary && draft.structure_type === 'REDE' ? (
+                    {!unit.is_primary && clientAllowsBranches(draft.structure_type) ? (
                       <div className="mt-3 max-w-xl">
                         <MxField label="Filial operacional" hint={draft.primary_store_id ? 'Vincule uma filial existente ou deixe vazio para criar uma nova filial nesta matriz.' : 'Selecione a matriz para listar as filiais existentes.'}>
                           <MxSelect aria-label={`Filial operacional da unidade ${index + 1}`} value={unit.store_id ?? ''} onChange={event => selectBranch(index, event.target.value)} disabled={!draft.primary_store_id}>
@@ -372,7 +387,9 @@ export function AdminNovoClientePage() {
                     ) : null}
                   </div>
                 ))}
-                <Button type="button" variant="outline" onClick={() => patch({ units: [...draft.units, { name: '', city: '', state: '', is_primary: false, store_id: null }] })}><Plus size={16} />Adicionar loja</Button>
+                {clientAllowsBranches(draft.structure_type) ? (
+                  <Button type="button" variant="outline" onClick={() => patch({ units: [...draft.units, { name: '', city: '', state: '', is_primary: false, store_id: null }] })}><Plus size={16} />Adicionar loja</Button>
+                ) : null}
                 <MxField label="Matriz operacional do sistema" hint="Vincule a matriz existente por ID. Se deixar vazio, uma nova matriz será criada no final do cadastro.">
                   <MxSelect aria-label="Matriz operacional do sistema" value={draft.primary_store_id} onChange={event => selectMatrix(event.target.value)}>
                     <option value="">Criar nova matriz ao concluir</option>
@@ -508,7 +525,7 @@ export function AdminNovoClientePage() {
                   ['Nome', draft.name || '—'],
                   ['Razão social', draft.legal_name || '—'],
                   ['CNPJ', draft.cnpj || '—'],
-                  ['Estrutura', draft.structure_type === 'LOJA_UNICA' ? 'Loja única' : 'Rede'],
+                  ['Estrutura', clientStructureLabel(draft.structure_type)],
                   ['Lojas', String(draft.units.filter(unit => unit.name.trim()).length)],
                   ['Matriz operacional', matrixOptions.find(store => store.id === draft.primary_store_id)?.name || 'Nova matriz será criada'],
                   ['Filiais vinculadas', String(draft.units.filter(unit => !unit.is_primary && unit.store_id).length)],

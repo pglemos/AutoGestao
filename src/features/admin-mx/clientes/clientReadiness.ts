@@ -32,7 +32,7 @@ export type ClientReadinessInput = {
   units: Array<{ name: string | null; is_primary: boolean | null; store_id?: string | null }>
   contacts: Array<{ name: string | null; is_primary: boolean | null; email: string | null }>
   modules: Array<{ enabled: boolean | null }>
-  assignments: Array<{ active: boolean | null }>
+  assignments: Array<{ active: boolean | null; assignment_role?: string | null }>
   /** Outro cliente já ativo na mesma loja bloqueia a ativação (índice parcial). */
   storeTakenByOtherClient: boolean
   /**
@@ -75,9 +75,15 @@ export type ClientReadinessInput = {
  */
 export function buildClientReadiness(input: ClientReadinessInput): ReadinessCheck[] {
   const namedUnits = input.units.filter(unit => (unit.name ?? '').trim() && !isOrphanTestUnit(unit))
-  const primaryContact = input.contacts.find(contact => contact.is_primary && (contact.name ?? '').trim())
+  const namedPrimary = input.contacts.find(contact => contact.is_primary && (contact.name ?? '').trim())
+  const masterAsContact = input.owner_master?.status === 'VALID' && (input.owner_master.name ?? '').trim()
+    ? { name: input.owner_master.name, is_primary: true, email: input.owner_master.email ?? null }
+    : null
+  const primaryContact = namedPrimary ?? masterAsContact
   const enabledModules = input.modules.filter(module => module.enabled !== false)
   const activeAssignments = input.assignments.filter(assignment => assignment.active !== false)
+  const responsibleAssignment = activeAssignments.find(assignment => assignment.assignment_role === 'responsavel')
+  const hasImplementationOwner = Boolean(input.implementation_owner_id) || Boolean(responsibleAssignment)
 
   const checks: ReadinessCheck[] = [
     {
@@ -165,10 +171,14 @@ export function buildClientReadiness(input: ClientReadinessInput): ReadinessChec
       key: 'responsavel-mx',
       label: 'Responsável MX pela implantação',
       severity: 'informativo',
-      ok: Boolean(input.implementation_owner_id),
-      evaluationStatus: input.implementation_owner_id ? 'VALID' : 'WARNING',
+      ok: hasImplementationOwner,
+      evaluationStatus: hasImplementationOwner ? 'VALID' : 'WARNING',
       correctionRoute: '/equipe',
-      detail: 'Quem responde pelo onboarding.',
+      detail: input.implementation_owner_id
+        ? 'Quem responde pelo onboarding.'
+        : responsibleAssignment
+          ? 'Consultor responsável da carteira assume a implantação.'
+          : 'Quem responde pelo onboarding.',
     },
   ]
 

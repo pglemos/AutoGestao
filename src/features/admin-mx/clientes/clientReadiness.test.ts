@@ -72,6 +72,26 @@ describe('checklist de prontidão do cliente', () => {
     expect(checks.find(item => item.key === 'unidade')?.detail).toBe('1 unidade(s) cadastrada(s).')
   })
 
+  test('dono master válido preenche contato principal quando a tabela de contatos está vazia', () => {
+    const checks = buildClientReadiness(input({
+      contacts: [],
+      owner_master: { status: 'VALID', name: 'LILIA FARIA', email: 'acerttcar@gmail.com' },
+    }))
+    const check = checks.find(item => item.key === 'contato')
+    expect(check?.ok).toBe(true)
+    expect(check?.detail).toBe('LILIA FARIA')
+  })
+
+  test('consultor responsável da carteira preenche responsável MX quando o campo de implantação está vazio', () => {
+    const checks = buildClientReadiness(input({
+      implementation_owner_id: null,
+      assignments: [{ active: true, assignment_role: 'responsavel' }],
+    }))
+    const check = checks.find(item => item.key === 'responsavel-mx')
+    expect(check?.ok).toBe(true)
+    expect(check?.detail).toBe('Consultor responsável da carteira assume a implantação.')
+  })
+
   test('avalia checks adicionais de dono master e jornada gerada quando presentes', () => {
     const checks = buildClientReadiness(input({
       owner_master: { status: 'VALID', name: 'Daniel', email: 'dono@empresa.com' },
