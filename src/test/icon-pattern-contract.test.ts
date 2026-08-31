@@ -68,7 +68,7 @@ describe('FASE U — padrão de ícones (Lucide) e decorativos aria-hidden', () 
       'utf8',
     )
     expect(consultor).not.toContain('aria-label="Ação"')
-    expect(consultor).toContain('aria-label={`Assistir treinamento: ${t.title}`}')
+    expect(consultor).toContain('aria-label={`Abrir conteúdo: ${training.title}`}')
     expect(consultor).toContain('aria-hidden="true"')
   })
 })

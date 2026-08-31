@@ -141,6 +141,7 @@ export const ROUTE_ACCESS_RULES = [
   { pattern: '/vendedor/terminal-mx', roles: ['vendedor'] },
   { pattern: '/vendedor/configuracoes', roles: ['vendedor'] },
   { pattern: '/treinamentos', roles: USER_ROLES },
+  { pattern: '/universidade', roles: USER_ROLES },
   { pattern: '/universidade-mx', roles: USER_ROLES },
   { pattern: '/desenvolvimento', roles: ['vendedor'] },
   { pattern: '/devolutivas', roles: USER_ROLES },

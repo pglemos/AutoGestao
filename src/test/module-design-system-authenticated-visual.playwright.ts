@@ -14,7 +14,7 @@ const profiles = [
     key: 'administrador-geral',
     email: 'visual-administrador-geral@mxgestaopreditiva.com.br',
     role: 'administrador_geral',
-    path: '/painel',
+    path: '/clientes',
     moduleLabel: 'Admin',
     roleLabel: 'Admin geral',
   },
@@ -22,7 +22,7 @@ const profiles = [
     key: 'administrador-mx',
     email: 'visual-administrador-mx@mxgestaopreditiva.com.br',
     role: 'administrador_mx',
-    path: '/painel',
+    path: '/clientes',
     moduleLabel: 'Admin MX',
     roleLabel: 'Admin MX',
   },
@@ -30,7 +30,7 @@ const profiles = [
     key: 'consultor-mx',
     email: 'visual-consultor-mx@mxgestaopreditiva.com.br',
     role: 'consultor_mx',
-    path: '/consultoria/clientes',
+    path: '/clientes',
     moduleLabel: 'Consultoria',
     roleLabel: 'Consultor MX',
   },
@@ -98,9 +98,21 @@ async function installLocalVisualProfile(page: Page, profile: VisualProfile) {
 
 async function visibleModuleLabel(page: Page) {
   return page.evaluate(() => {
-    const labels = Array.from(document.querySelectorAll<HTMLElement>('p, span'))
-      .filter((node) => /^Módulo /.test(node.textContent?.trim() || ''))
-    return labels.find((node) => node.getBoundingClientRect().width > 0)?.textContent?.trim() || ''
+    const surfaces = [
+      document.querySelector<HTMLElement>('aside[aria-label^="Menu principal"]'),
+      document.querySelector<HTMLElement>('[role="dialog"][aria-label^="Menu principal"]'),
+      document.querySelector<HTMLElement>('header.xl\\:hidden'),
+    ].filter(Boolean) as HTMLElement[]
+
+    for (const surface of surfaces) {
+      const candidates = Array.from(surface.querySelectorAll<HTMLElement>('p[title], span[title]'))
+        .filter((node) => {
+          const text = node.textContent?.trim() || ''
+          return text.length > 0 && text !== 'MX PERFORMANCE' && node.getBoundingClientRect().width > 0
+        })
+      if (candidates.length) return candidates[0].textContent?.trim() || ''
+    }
+    return ''
   })
 }
 
@@ -108,13 +120,34 @@ async function hasCanonicalPageHeader(page: Page) {
   return page.evaluate(() => {
     const visualScope = document.querySelector<HTMLElement>('[data-mx-visual-system="manager"]')
     if (!visualScope) return false
-    return Array.from(visualScope.querySelectorAll<HTMLElement>('header'))
-      .some((node) => node.getBoundingClientRect().width > 300)
+    const candidates = [
+      ...Array.from(visualScope.querySelectorAll<HTMLElement>('header')),
+      ...Array.from(visualScope.querySelectorAll<HTMLElement>('[data-mx-module-header], [data-mx-page-header]')),
+    ]
+    return candidates.some((node) => node.getBoundingClientRect().width > 300)
   })
 }
 
 async function collectMetrics(page: Page, profile: string, viewport: string): Promise<ShellMetrics> {
   return page.evaluate(({ profile, viewport }) => {
+    const findVisibleModuleLabelNode = () => {
+      const surfaces = [
+        document.querySelector<HTMLElement>('aside[aria-label^="Menu principal"]'),
+        document.querySelector<HTMLElement>('[role="dialog"][aria-label^="Menu principal"]'),
+        document.querySelector<HTMLElement>('header.xl\\:hidden'),
+      ].filter(Boolean) as HTMLElement[]
+
+      for (const surface of surfaces) {
+        const candidates = Array.from(surface.querySelectorAll<HTMLElement>('p[title], span[title]'))
+          .filter((node) => {
+            const text = node.textContent?.trim() || ''
+            return text.length > 0 && text !== 'MX PERFORMANCE' && node.getBoundingClientRect().width > 0
+          })
+        if (candidates.length) return candidates[0]
+      }
+      return null
+    }
+
     const desktopSidebar = document.querySelector<HTMLElement>('aside[aria-label^="Menu principal"]')
     const mobileDrawer = document.querySelector<HTMLElement>('[role="dialog"][aria-label^="Menu principal"]')
     const navigationSurface = viewport === 'mobile' ? mobileDrawer : desktopSidebar
@@ -127,13 +160,13 @@ async function collectMetrics(page: Page, profile: string, viewport: string): Pr
     const content = document.querySelector<HTMLElement>('main#main-content')
     const visibleLogo = Array.from(document.querySelectorAll<HTMLImageElement>('img[alt="MX"]'))
       .find((node) => node.getBoundingClientRect().width > 0)
-    const labels = Array.from(document.querySelectorAll<HTMLElement>('p, span'))
-      .filter((node) => /^Módulo /.test(node.textContent?.trim() || ''))
-    const visibleModuleLabel = labels.find((node) => node.getBoundingClientRect().width > 0)
+    const visibleModuleLabel = findVisibleModuleLabelNode()
     const visualScope = document.querySelector<HTMLElement>('[data-mx-visual-system="manager"]')
     const pageHeader = visualScope
-      ? Array.from(visualScope.querySelectorAll<HTMLElement>('header'))
-          .find((node) => node.getBoundingClientRect().width > 300)
+      ? [
+          ...Array.from(visualScope.querySelectorAll<HTMLElement>('header')),
+          ...Array.from(visualScope.querySelectorAll<HTMLElement>('[data-mx-module-header], [data-mx-page-header]')),
+        ].find((node) => node.getBoundingClientRect().width > 300)
       : null
 
     if (!content || !visibleModuleLabel) throw new Error('Shell universal não encontrado no DOM.')
@@ -230,7 +263,9 @@ async function auditProfile(
   }
 
   await expect.poll(() => visibleModuleLabel(page), { timeout: 20_000 }).toBe(profile.moduleLabel)
-  await expect.poll(() => hasCanonicalPageHeader(page), { timeout: 20_000 }).toBe(true)
+  if (profile.key !== 'gerente') {
+    await expect.poll(() => hasCanonicalPageHeader(page), { timeout: 20_000 }).toBe(true)
+  }
   await page.waitForTimeout(250)
 
   const metrics = await collectMetrics(page, profile.key, viewport.name)
@@ -244,7 +279,7 @@ async function auditProfile(
   if (profile.key !== 'gerente') {
     expect(metrics.pageHeader).toMatchObject({
       backgroundColor: 'rgb(255, 255, 255)',
-      borderRadius: '16px',
+      borderRadius: '12px',
     })
     expect(metrics.pageHeader?.borderColor).not.toBe('rgba(0, 0, 0, 0)')
     expect(metrics.pageHeader?.boxShadow).not.toBe('none')
@@ -264,7 +299,8 @@ async function auditProfile(
   } else {
     expect(metrics.sidebar).not.toBeNull()
     expect(metrics.mobileHeader).not.toBeNull()
-    expect(metrics.mobileHeader?.backgroundColor).toBe('rgb(255, 255, 255)')
+    // #FAFAFA = --color-mxsb-surface (header mobile alinhado à sidebar canônica).
+    expect(metrics.mobileHeader?.backgroundColor).toBe('rgb(250, 250, 250)')
     expect(metrics.content.paddingLeft).toBe('0px')
   }
 

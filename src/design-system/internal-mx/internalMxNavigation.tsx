@@ -70,7 +70,7 @@ export function buildInternalMxNavigation(
         {
           key: 'strategic-plan',
           label: 'Plano Estratégico',
-          path: '/plano-estrategico',
+          path: '/plano-estrategico?mode=catalogo',
           icon: Target,
           activePaths: ['/plano-estrategico', '/indicadores'],
         },

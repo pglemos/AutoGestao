@@ -6,6 +6,7 @@
 
 import { supabase } from '@/lib/supabase'
 import { fetchAllRows } from '@/lib/supabasePagination'
+import { ensureCycle, fetchCurrentCycle } from './planCycleRepository'
 import { buildClientUnits, type ClientUnit } from './clientUnits'
 import { decideProductPackage, productPackageDataError, type ProductPackageResolution } from './clientProductPackage'
 import type { PlanningValueRow } from './clientPlanningConsolidation'
@@ -44,6 +45,53 @@ export async function fetchConsultingClientIdBySlug(slug: string): Promise<{ id:
     .maybeSingle()
   if (error) return { id: null, error: error.message }
   return { id: data?.id ?? null, error: null }
+}
+
+export type ClientStrategicPlanRouteContext = {
+  clientId: string
+  clientSlug: string | null
+  storeId: string | null
+  cycleId: string | null
+  year: number
+}
+
+/** Hidrata clientId, cycleId, year e storeId a partir do slug — URL direta /clientes/:slug/plano-estrategico/:year. */
+export async function resolveClientStrategicPlanRoute(
+  slug: string,
+  year: number,
+): Promise<{ context: ClientStrategicPlanRouteContext | null; error: string | null }> {
+  const normalized = slug.trim()
+  if (!normalized) return { context: null, error: 'Cliente não informado.' }
+
+  const { data: client, error: clientError } = await supabase
+    .from('clientes_consultoria')
+    .select('id, slug, primary_store_id')
+    .or(`slug.eq.${normalized},id.eq.${normalized}`)
+    .maybeSingle()
+
+  if (clientError) return { context: null, error: clientError.message }
+  if (!client?.id) return { context: null, error: 'Cliente não encontrado.' }
+
+  const current = await fetchCurrentCycle(client.id, year)
+  if (current.error) return { context: null, error: current.error }
+
+  let cycleId = current.cycle?.id ?? null
+  if (!cycleId) {
+    const ensured = await ensureCycle({ clientId: client.id, year })
+    if (ensured.error) return { context: null, error: ensured.error }
+    cycleId = ensured.cycle?.id ?? null
+  }
+
+  return {
+    context: {
+      clientId: client.id,
+      clientSlug: client.slug ?? normalized,
+      storeId: client.primary_store_id ?? null,
+      cycleId,
+      year,
+    },
+    error: null,
+  }
 }
 
 /**

@@ -5,7 +5,7 @@ import AdminIndicadoresPage from '@/features/admin-mx/AdminIndicadoresPage'
 import AdminStrategicPlanEditor from '@/features/admin-mx/indicadores/AdminStrategicPlanEditor'
 import { MxErrorState, MxLoadingState, MxModulePage, MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
 import { fetchCurrentCycle, ensureCycle } from '@/features/strategic-plan/planCycleRepository'
-import { fetchConsultingClientIdBySlug } from '@/features/strategic-plan/clientPlanningRepository'
+import { fetchConsultingClientIdBySlug, resolveClientStrategicPlanRoute } from '@/features/strategic-plan/clientPlanningRepository'
 import { StrategicPlanWorkspace } from '@/features/strategic-plan/StrategicPlanWorkspace'
 import { AdminAsOwnerStrategicPlan } from './AdminAsOwnerStrategicPlan'
 import { InternalMxPlanningShell, useInternalPlanningStore } from './InternalMxPlanningShell'
@@ -32,6 +32,7 @@ export default function InternalStrategicPlanPage() {
   const catalogTab = resolveStrategicCatalogTab(params.get('mode'))
   const { clientSlug, year: yearSegment } = useParams<{ clientSlug?: string; year?: string }>()
   const isClientRoute = location.pathname.startsWith('/clientes/')
+  const isGlobalCatalogRoute = !storeId && !isClientRoute && !clientId && !cycleId
   const requestedYear = Number(yearSegment || params.get('year'))
   const year = Number.isInteger(requestedYear) && requestedYear >= 2020 && requestedYear <= 2100 ? requestedYear : undefined
   const resolveYear = year ?? new Date().getFullYear()
@@ -42,21 +43,77 @@ export default function InternalStrategicPlanPage() {
   const [resolvedOwnerStoreId, setResolvedOwnerStoreId] = useState<string | null>(null)
 
   useEffect(() => {
-    if (clientId || !isClientRoute || !clientSlug) return
+    if (!isGlobalCatalogRoute) return
+    const mode = new URLSearchParams(location.search).get('mode')
+    if (mode) return
+    const next = new URLSearchParams(location.search)
+    next.set('mode', 'catalogo')
+    navigate(`${location.pathname}?${next.toString()}`, { replace: true })
+  }, [isGlobalCatalogRoute, location.pathname, location.search, navigate])
+
+  useEffect(() => {
+    if (!isClientRoute || !clientSlug || cycleId) return
+
     let active = true
-    void fetchConsultingClientIdBySlug(clientSlug).then(result => {
+    setResolveState('loading')
+    setResolveError(null)
+
+    const hydrateFromSlug = () => resolveClientStrategicPlanRoute(clientSlug, resolveYear)
+
+    const hydrateCycleOnly = async () => {
+      const result = await fetchCurrentCycle(clientId!, resolveYear)
       if (!active) return
-      if (result.id) {
-        const next = new URLSearchParams(location.search)
-        next.set('clientId', result.id)
-        navigate(`${location.pathname}?${next.toString()}`, { replace: true })
-      } else {
+      if (result.error) {
+        setResolveError(result.error)
         setResolveState('error')
-        setResolveError('Cliente não encontrado.')
+        return
       }
-    })
+      if (result.cycle) {
+        const next = new URLSearchParams(location.search)
+        next.set('cycleId', result.cycle.id)
+        next.set('year', String(resolveYear))
+        navigate(`${location.pathname}?${next.toString()}`, { replace: true })
+        return
+      }
+      const ensured = await ensureCycle({ clientId: clientId!, year: resolveYear })
+      if (!active) return
+      if (ensured.cycle) {
+        const next = new URLSearchParams(location.search)
+        next.set('cycleId', ensured.cycle.id)
+        next.set('year', String(resolveYear))
+        navigate(`${location.pathname}?${next.toString()}`, { replace: true })
+        return
+      }
+      if (ensured.error) {
+        setResolveError(ensured.error)
+        setResolveState('error')
+        return
+      }
+      setResolveState('missing')
+    }
+
+    void (async () => {
+      if (clientId) {
+        await hydrateCycleOnly()
+        return
+      }
+      const resolved = await hydrateFromSlug()
+      if (!active) return
+      if (resolved.error || !resolved.context) {
+        setResolveError(resolved.error ?? 'Cliente não encontrado.')
+        setResolveState('error')
+        return
+      }
+      const next = new URLSearchParams(location.search)
+      next.set('clientId', resolved.context.clientId)
+      next.set('year', String(resolved.context.year))
+      if (resolved.context.cycleId) next.set('cycleId', resolved.context.cycleId)
+      if (resolved.context.storeId) next.set('storeId', resolved.context.storeId)
+      navigate(`${location.pathname}?${next.toString()}`, { replace: true })
+    })()
+
     return () => { active = false }
-  }, [clientId, clientSlug, isClientRoute, location.pathname, location.search, navigate])
+  }, [clientId, clientSlug, cycleId, isClientRoute, location.pathname, location.search, navigate, resolveYear])
 
   useEffect(() => {
     if (!viewAsDono || storeId || store.selectedStoreId) return
@@ -72,48 +129,6 @@ export default function InternalStrategicPlanPage() {
     })
     return () => { active = false }
   }, [clientId, clientSlug, store.selectedStoreId, storeId, viewAsDono])
-
-  useEffect(() => {
-    if (cycleId || !clientId) {
-      if (!clientId && !clientSlug) {
-        setResolveState('idle')
-        setResolveError(null)
-      }
-      return
-    }
-    let active = true
-    setResolveState('loading')
-    void fetchCurrentCycle(clientId, resolveYear).then(async result => {
-      if (!active) return
-      if (result.error) {
-        setResolveError(result.error)
-        setResolveState('error')
-        return
-      }
-      if (result.cycle) {
-        const next = new URLSearchParams(location.search)
-        next.set('cycleId', result.cycle.id)
-        navigate(`${location.pathname}?${next.toString()}`, { replace: true })
-        return
-      }
-      // Se estamos na rota de cliente, garante/cria o ciclo rascunho
-      const ensured = await ensureCycle({ clientId, year: resolveYear })
-      if (!active) return
-      if (ensured.cycle) {
-        const next = new URLSearchParams(location.search)
-        next.set('cycleId', ensured.cycle.id)
-        navigate(`${location.pathname}?${next.toString()}`, { replace: true })
-        return
-      }
-      if (ensured.error) {
-        setResolveError(ensured.error)
-        setResolveState('error')
-        return
-      }
-      setResolveState('missing')
-    })
-    return () => { active = false }
-  }, [clientId, clientSlug, cycleId, location.pathname, location.search, navigate, resolveYear])
 
   // Visualizar como Dono: workspace real do Dono (shell owner), sem chrome Admin.
   if (viewAsDono) {

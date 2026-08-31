@@ -2227,16 +2227,16 @@
       "path": "/universidade",
       "kind": "route",
       "surface": "REDIRECT",
-      "rulePattern": null,
+      "rulePattern": "/universidade",
       "redirect": "/universidade-mx",
       "renderRoles": [],
       "roleStatus": {
-        "administrador_geral": "REDIRECT_BLOCKED",
-        "administrador_mx": "REDIRECT_BLOCKED",
-        "consultor_mx": "REDIRECT_BLOCKED",
-        "dono": "REDIRECT_BLOCKED",
-        "gerente": "REDIRECT_BLOCKED",
-        "vendedor": "REDIRECT_BLOCKED"
+        "administrador_geral": "REDIRECT_ALLOWED",
+        "administrador_mx": "REDIRECT_ALLOWED",
+        "consultor_mx": "REDIRECT_ALLOWED",
+        "dono": "REDIRECT_ALLOWED",
+        "gerente": "REDIRECT_ALLOWED",
+        "vendedor": "REDIRECT_ALLOWED"
       },
       "applicable": false,
       "element": "<Navigate to=\"/universidade-mx\" replace />"

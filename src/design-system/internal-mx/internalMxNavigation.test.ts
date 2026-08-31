@@ -16,7 +16,7 @@ describe('navegação interna MX', () => {
         'Simulação',
       ])
       expect(items.some((item) => item.path === '/painel')).toBe(true)
-      expect(items.some((item) => item.path === '/plano-estrategico')).toBe(true)
+      expect(items.some((item) => item.path === '/plano-estrategico?mode=catalogo')).toBe(true)
       expect(items.some((item) => item.path === '/plano-acao')).toBe(true)
       expect(items.some((item) => item.path === '/consultoria')).toBe(true)
       expect(items.some((item) => item.path === '/consultoria-mx')).toBe(true)

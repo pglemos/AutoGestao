@@ -7,10 +7,8 @@ import {
   MapPin,
   PackageOpen,
   RefreshCw,
-  Search,
   Sparkles,
   Target,
-  UserRound,
 } from 'lucide-react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { openCurrentStrategicPlanHref, resolveAdminEditableCycleId } from '@/features/strategic-plan/adminStrategicPlanHref'
@@ -19,20 +17,16 @@ import { resolveRouteLayout } from '@/design-system/page'
 import { Badge, type BadgeProps } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
 import { Modal } from '@/components/organisms/Modal'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/organisms/Table'
 import {
   MxEmptyState,
   MxErrorState,
-  MxInput,
   MxLoadingState,
   MxMetricCard,
   MxMetricGrid,
   MxModuleHeader,
   MxModulePage,
   MxSectionCard,
-  MxSectionHeader,
   MxSelect,
-  MxTableSurface,
   MxToolbar,
 } from '@/components/module/MxModuleVisualPrimitives'
 import {
@@ -81,7 +75,6 @@ export function AdminConsultingOverviewPage() {
   const [rows, setRows] = useState<ConsultingOverviewRow[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [search, setSearch] = useState('')
   const [status, setStatus] = useState<ConsultingOverviewFilters['status']>('todos')
   const [modality, setModality] = useState<ConsultingOverviewFilters['modality']>('todas')
   const [selected, setSelected] = useState<ConsultingOverviewRow | null>(null)
@@ -103,7 +96,7 @@ export function AdminConsultingOverviewPage() {
     if (match) setSelected(match)
   }, [rows, searchParams, selected])
 
-  const filteredRows = useMemo(() => filterConsultingOverviewRows(rows, { search, status, modality }), [modality, rows, search, status])
+  const filteredRows = useMemo(() => filterConsultingOverviewRows(rows, { search: '', status, modality }), [modality, rows, status])
   const metrics = useMemo(() => summarizeConsultingOverview(rows), [rows])
 
   const openClient360 = (row: ConsultingOverviewRow) => {
@@ -141,9 +134,8 @@ export function AdminConsultingOverviewPage() {
       <div className="w-full space-y-5">
         <MxModuleHeader
           icon={Sparkles}
-          eyebrow="Administração MX"
           title="Consultoria"
-          description="Acompanhe encontros, consultores, entregas e próximos movimentos da operação consultiva."
+          description="Acompanhe jornadas, encontros, entregas e evidências."
           actions={<Button variant="outline" onClick={() => void refetch()} disabled={loading} aria-label="Atualizar consultoria"><RefreshCw size={16} className={loading ? 'animate-spin' : undefined} />Atualizar</Button>}
         />
 
@@ -157,10 +149,6 @@ export function AdminConsultingOverviewPage() {
             </MxMetricGrid>
 
             <MxToolbar aria-label="Filtros da consultoria">
-              <div className="relative min-w-0 flex-1 sm:min-w-[260px]">
-                <Search size={16} aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                <MxInput value={search} onChange={event => setSearch(event.target.value)} placeholder="Buscar cliente, encontro, objetivo ou consultor" aria-label="Buscar na consultoria" className="pl-9" />
-              </div>
               <MxSelect value={status} onChange={event => setStatus(event.target.value as ConsultingOverviewFilters['status'])} aria-label="Filtrar encontros por status">
                 <option value="todos">Todos os status</option>
                 {(Object.keys(CONSULTING_STATUS_LABELS) as ConsultingOverviewStatus[]).map(value => <option key={value} value={value}>{CONSULTING_STATUS_LABELS[value]}</option>)}
@@ -171,51 +159,42 @@ export function AdminConsultingOverviewPage() {
               </MxSelect>
             </MxToolbar>
 
-            <MxSectionCard>
-              <MxSectionHeader title="Encontros da consultoria" description={`${filteredRows.length} de ${rows.length} encontro(s) visível(is).`} />
-              <div className="p-5">
-                {filteredRows.length ? (
-                  <MxTableSurface aria-label="Tabela de encontros da consultoria">
-                    <Table className="min-w-[1180px]">
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Nº</TableHead>
-                          <TableHead>Cliente e encontro</TableHead>
-                          <TableHead>Objetivo</TableHead>
-                          <TableHead>Consultor</TableHead>
-                          <TableHead>Modalidade</TableHead>
-                          <TableHead>Status</TableHead>
-                          <TableHead>Agenda</TableHead>
-                          <TableHead>Entregas</TableHead>
-                          <TableHead className="text-right">Ações</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {filteredRows.map(row => (
-                          <TableRow key={row.id}>
-                            <TableCell className="font-semibold">{row.visitNumber}</TableCell>
-                            <TableCell>
-                              <div className="min-w-48">
-                                <button type="button" className="text-left font-semibold text-foreground underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring" onClick={() => setSelected(row)}>{row.title}</button>
-                                <button type="button" className="mt-1 block text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring" onClick={() => openClient360(row)}>{row.clientName}</button>
-                                <div className="mt-1 text-xs text-muted-foreground">{row.productName}</div>
-                              </div>
-                            </TableCell>
-                            <TableCell><span className="block max-w-[240px] text-sm text-muted-foreground">{row.objective}</span></TableCell>
-                            <TableCell><span className="inline-flex items-center gap-2 whitespace-nowrap"><UserRound size={14} className="text-muted-foreground" aria-hidden="true" />{row.consultantName}</span></TableCell>
-                            <TableCell><Badge variant={MODALITY_BADGE_VARIANT[row.modality]}>{CONSULTING_MODALITY_LABELS[row.modality]}</Badge></TableCell>
-                            <TableCell><Badge variant={STATUS_BADGE_VARIANT[row.status]}>{CONSULTING_STATUS_LABELS[row.status]}</Badge></TableCell>
-                            <TableCell className="whitespace-nowrap text-sm text-muted-foreground">{formatDateTime(row.scheduledAt)}</TableCell>
-                            <TableCell className="whitespace-nowrap text-sm">{deliverablesLabel(row)}</TableCell>
-                            <TableCell className="text-right">
-                              <Button variant="outline" size="sm" onClick={() => setSelected(row)} aria-label={`Abrir detalhe do encontro ${row.visitNumber} de ${row.clientName}`}><ExternalLink size={14} />Detalhes</Button>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </MxTableSurface>
-                ) : <MxEmptyState variant={rows.length ? 'filter' : 'dataset'} icon={PackageOpen} title={rows.length ? 'Nenhum encontro encontrado' : 'Nenhum encontro cadastrado'} description={rows.length ? 'Ajuste a busca ou os filtros para encontrar outro registro.' : 'Os encontros persistidos aparecerão aqui quando a jornada de consultoria for criada.'} />}
+            <MxSectionCard className="overflow-hidden">
+              <div className="divide-y divide-border">
+                {filteredRows.length ? filteredRows.map(row => (
+                  <button
+                    key={row.id}
+                    type="button"
+                    className="flex w-full items-center gap-4 px-5 py-4 text-left transition-colors hover:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring"
+                    onClick={() => setSelected(row)}
+                  >
+                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-surface-alt text-sm font-semibold text-muted-foreground">
+                      {row.visitNumber}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate font-semibold text-foreground">{row.clientName} — Encontro {row.visitNumber}</div>
+                      <div className="mt-1 truncate text-xs text-muted-foreground">
+                        {[row.title, row.objective, row.consultantName].filter(Boolean).join(' · ')}
+                      </div>
+                    </div>
+                    <span className={
+                      row.modality === 'online'
+                        ? 'shrink-0 text-xs font-semibold text-status-info-text'
+                        : row.modality === 'presencial'
+                        ? 'shrink-0 text-xs font-semibold text-status-warning-text'
+                        : 'shrink-0 text-xs font-semibold text-muted-foreground'
+                    }>
+                      {CONSULTING_MODALITY_LABELS[row.modality]}
+                    </span>
+                    <Badge variant={STATUS_BADGE_VARIANT[row.status]} className="shrink-0 uppercase">
+                      {CONSULTING_STATUS_LABELS[row.status]}
+                    </Badge>
+                  </button>
+                )) : (
+                  <div className="p-5">
+                    <MxEmptyState variant={rows.length ? 'filter' : 'dataset'} icon={PackageOpen} title={rows.length ? 'Nenhum encontro encontrado' : 'Nenhum encontro cadastrado'} description={rows.length ? 'Ajuste os filtros para encontrar outro registro.' : 'Os encontros persistidos aparecerão aqui quando a jornada de consultoria for criada.'} />
+                  </div>
+                )}
               </div>
             </MxSectionCard>
           </>

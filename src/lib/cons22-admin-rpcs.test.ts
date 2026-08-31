@@ -85,8 +85,9 @@ describe('CONS-22 RPCs administrativas', () => {
     expect(page).toContain('Abrir Consultoria')
     expect(page).toContain('aria-label="Editar identificação do cliente"')
     expect(page).toContain('clientStructureDisplay')
-    expect(page).toContain("['Cidade', identityUnit?.city || '—']")
-    expect(page).toContain("['UF', identityUnit?.state || '—']")
+    expect(page).toContain('title="Informações Gerais"')
+    expect(page).toContain('title="Contato Principal"')
+    expect(page).toContain('title="Entrega da Consultoria"')
   })
 
   test('Editar Identificação replica o modal Base44 e audita a alteração', () => {

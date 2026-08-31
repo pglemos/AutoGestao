@@ -165,7 +165,7 @@ export function AdminClienteDetalhePage() {
   const location = useLocation()
   const navigate = useNavigate()
   const { width, bottomClearance } = resolveRouteLayout(location.pathname)
-  const { client, loading, error, refetch } = useConsultingClientDetailBySlug(clientSlug)
+  const { client, loading, enriching, error, refetch } = useConsultingClientDetailBySlug(clientSlug)
   const { supabaseUser } = useAuth()
   const products = useAdminConsultingProducts()
   const team = useAdminTeam()
@@ -311,7 +311,9 @@ export function AdminClienteDetalhePage() {
         units: cadastro,
         lojas: lojasResult.data ?? [],
       })
-      : merged
+      : merged.length > 0
+        ? merged
+        : cadastro
     setUnits(visible.map(unit => ({
       internal_code: null,
       address_street: null,
@@ -410,16 +412,21 @@ export function AdminClienteDetalhePage() {
   useEffect(() => {
     if (!client?.id || !client.program_template_key) return
     let active = true
-    void createStrategicPlanFromProduct({
-      clientId: client.id,
-      referenceYear: new Date().getFullYear(),
-      userId: supabaseUser?.id,
-    }).then(result => {
-      if (!active) return
-      if (result.resolution.ok && result.error) toast.error(result.error)
-      if (result.resolution.ok) void loadStrategicPlan()
-    })
-    return () => { active = false }
+    const timer = window.setTimeout(() => {
+      void createStrategicPlanFromProduct({
+        clientId: client.id,
+        referenceYear: new Date().getFullYear(),
+        userId: supabaseUser?.id,
+      }).then(result => {
+        if (!active) return
+        if (result.resolution.ok && result.error) toast.error(result.error)
+        if (result.resolution.ok) void loadStrategicPlan()
+      })
+    }, 0)
+    return () => {
+      active = false
+      window.clearTimeout(timer)
+    }
   }, [client?.id, client?.program_template_key, loadStrategicPlan, supabaseUser?.id])
 
   const ownerMasterResolution = useMemo<OwnerMasterResolution>(() => {
@@ -734,6 +741,38 @@ export function AdminClienteDetalhePage() {
 
   const onboardingStep = (client as { onboarding_step?: number | null })?.onboarding_step ?? 1
   const onboardingCompleted = (client as { onboarding_completed?: boolean | null })?.onboarding_completed ?? false
+  const plannedStartDate = formatDate(
+    (client as { scheduled_activation_at?: string | null }).scheduled_activation_at
+      ?? (client as { contract_start_date?: string | null }).contract_start_date,
+  )
+  const cadastroUnits = useMemo((): UnitRow[] => {
+    if (!client?.id) return []
+    return (client.units ?? [])
+      .filter(unit => !isOrphanTestUnit(unit))
+      .map(unit => ({
+        id: unit.id,
+        client_id: unit.client_id,
+        store_id: null,
+        name: unit.name,
+        city: unit.city,
+        state: unit.state,
+        is_primary: unit.is_primary,
+        store_type: unit.is_primary ? 'matriz' : null,
+        cnpj: null,
+        internal_code: null,
+        address_street: null,
+        address_zip: null,
+        timezone: null,
+        working_days: null,
+        opening_time: null,
+        closing_time: null,
+        status: 'ativa',
+        opening_date: null,
+        notes: null,
+        synthetic: false,
+      }))
+  }, [client?.id, client?.units])
+  const displayUnits = units.length > 0 ? units : cadastroUnits
 
   const [repairing, setRepairing] = useState<RepairKey | null>(null)
 
@@ -986,12 +1025,15 @@ export function AdminClienteDetalhePage() {
           )}
         />
 
-        {loading ? <MxLoadingState label="Carregando cliente" /> : error ? <MxErrorState description={error} retry={() => void refetch()} /> : !client ? (
+        {loading && !client ? <MxLoadingState label="Carregando cliente" /> : error ? <MxErrorState description={error} retry={() => void refetch()} /> : !client ? (
           <MxEmptyState title="Cliente não encontrado" description="Verifique o endereço ou volte para a lista de clientes." />
         ) : (
           <>
+            {enriching ? (
+              <MxStatusBanner tone="info">Atualizando jornada, contatos e módulos do cliente…</MxStatusBanner>
+            ) : null}
             <MxMetricGrid>
-              <MxMetricCard title="Lojas" value={units.length ?? 0} detail="Matriz e filiais operacionais" icon={Building2} tone="info" />
+              <MxMetricCard title="Lojas" value={displayUnits.length} detail="Matriz e filiais operacionais" icon={Building2} tone="info" />
               <MxMetricCard title="Usuários" value={persons.length} detail="Acessos e vínculos de loja" icon={UserPlus} tone="violet" />
               <MxMetricCard title="Encontros concluídos" value={journey.completedVisits} detail={totalVisits > 0 ? `de ${totalVisits} previstos` : 'Sem jornada contratada'} icon={Clock} tone="info" />
               <MxMetricCard title="Progresso da jornada" value={`${journeyProgressPct}%`} detail={totalVisits > 0 ? `${journey.completedVisits}/${totalVisits} encontros` : '—'} icon={BriefcaseBusiness} tone={journeyProgressPct >= 100 ? 'success' : 'brand'} />
@@ -1000,127 +1042,113 @@ export function AdminClienteDetalhePage() {
             <TabNav tabs={TABS} activeTab={tab} onTabChange={setTab} scrollable />
 
             {tab === 'visao' ? (
-              <MxSectionCard>
-                <MxSectionHeader title="Entrega da Consultoria" description="Plano estratégico, plano de ação e consultoria do programa contratado." />
-                <div className="grid gap-3 p-5 lg:grid-cols-3">
-                  <div className="rounded-xl border border-border bg-surface-alt p-4">
-                    <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Plano Estratégico</div>
-                    <div className="mt-3 space-y-1 text-xs text-muted-foreground">
-                      <div>Ciclo: PE {strategicPlanYear}</div>
-                      <div>Indicadores com meta: {strategicPlanReadiness?.indicadoresComMeta ?? 0}</div>
-                      <div>
-                        Metas publicadas:{' '}
-                        <span className="font-semibold text-status-success-text">{strategicPlanReadiness?.ready ?? 0}</span>
+              <div className="space-y-5">
+                <MxSectionCard>
+                  <MxSectionHeader title="Informações Gerais" description="Fase, estrutura e progresso do onboarding." />
+                  <div className="grid gap-3 p-5 sm:grid-cols-2 lg:grid-cols-4">
+                    {[
+                      ['Fase empresarial', clientBusinessPhaseLabel((client as { business_phase?: string | null }).business_phase)],
+                      ['Estrutura', clientStructureDisplay((client as { structure_type?: string | null }).structure_type)],
+                      ['Onboarding', onboardingCompleted ? 'Concluído' : `Etapa ${onboardingStep}/7`],
+                      ['Início previsto', plannedStartDate],
+                    ].map(([label, value]) => (
+                      <div key={label} className="rounded-lg border border-border p-3">
+                        <dt className="text-xs text-muted-foreground">{label}</dt>
+                        <dd className="font-semibold text-foreground">{value}</dd>
                       </div>
-                      <div>
-                        Metas pendentes:{' '}
-                        <span className="font-semibold text-status-warning-text">{strategicPlanReadiness?.pending ?? 0}</span>
-                      </div>
-                      <div>
-                        Status:{' '}
-                        <span className="font-semibold text-foreground">
-                          {strategicPlanReadiness
-                            ? PLAN_CYCLE_STATUS_LABEL[strategicPlanReadiness.cycleStatus]
-                            : '—'}
-                        </span>
-                      </div>
-                    </div>
-                    <Button variant="outline" size="sm" className="mt-4" onClick={() => void openCurrentStrategicPlan()} disabled={creatingStrategicPlan}>Abrir Plano</Button>
-                  </div>
-                  <div className="rounded-xl border border-border bg-surface-alt p-4">
-                    <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Plano de Ação</div>
-                    <div className="mt-3 space-y-1 text-xs text-muted-foreground">
-                      <div>Ações totais: {actionPlanSummary?.total ?? '—'}</div>
-                      <div>Não iniciadas: {actionPlanSummary?.naoIniciadas ?? '—'}</div>
-                      <div>
-                        Em andamento:{' '}
-                        <span className="font-semibold text-status-info-text">{actionPlanSummary?.emAndamento ?? '—'}</span>
-                      </div>
-                      <div>
-                        Atrasadas:{' '}
-                        <span className="font-semibold text-status-danger-text">{actionPlanSummary?.atrasadas ?? '—'}</span>
-                      </div>
-                      <div>
-                        Concluídas:{' '}
-                        <span className="font-semibold text-status-success-text">{actionPlanSummary?.completed ?? '—'}</span>
-                      </div>
-                    </div>
-                    <Button variant="outline" size="sm" className="mt-4" onClick={() => { setPlanningTab('plano-acao'); setTab('planejamento') }}>Abrir Plano de Ação</Button>
-                  </div>
-                  <div className="rounded-xl border border-border bg-surface-alt p-4">
-                    <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Consultoria e Entregas</div>
-                    <div className="mt-3 space-y-1 text-xs text-muted-foreground">
-                      <div>{consultingCurrentLine}</div>
-                      <div>
-                        Encontros: {totalVisits > 0 ? `${journey.completedVisits}/${totalVisits}` : visits.length}
-                        {journey.overdueVisits ? ` · ${journey.overdueVisits} atrasada(s)` : ''}
-                      </div>
-                    </div>
-                    <Button asChild variant="outline" size="sm" className="mt-4"><Link to={`/clientes/${encodeURIComponent(client.slug || client.id)}/consultoria`}>Abrir Consultoria</Link></Button>
-                  </div>
-                </div>
-                <div className="grid gap-3 p-5 sm:grid-cols-2 lg:grid-cols-3">
-                  {[
-                    ['Razão social', client.legal_name || '—'],
-                    ['CNPJ', client.cnpj ? maskStoreCnpj(client.cnpj) : '—'],
-                    ['Contato principal', primaryContact?.name || '—'],
-                    ['Telefone', primaryContact?.phone || '—'],
-                    ['E-mail', primaryContact?.email || '—'],
-                    ['Cidade', identityUnit?.city || '—'],
-                    ['UF', identityUnit?.state || '—'],
-                    ['Produto', client.product_name || '—'],
-                    ['Modalidade', programModalityLabel(client.modality)],
-                    ['Estrutura', clientStructureDisplay((client as { structure_type?: string | null }).structure_type)],
-                    ['Fase empresarial', clientBusinessPhaseLabel((client as { business_phase?: string | null }).business_phase)],
-                    ['Início do contrato', formatDate((client as { contract_start_date?: string | null }).contract_start_date)],
-                    ['Fim do contrato', formatDate((client as { contract_end_date?: string | null }).contract_end_date) === '—'
-                      && (client as { contract_start_date?: string | null }).contract_start_date
-                      ? 'sem fim'
-                      : formatDate((client as { contract_end_date?: string | null }).contract_end_date)],
-                    ['Onboarding', onboardingCompleted ? 'Concluído' : `Etapa ${onboardingStep}/7`],
-                    ['Ciclo da jornada', totalVisits > 0
-                      ? `${journey.completedVisits}/${totalVisits}${journey.overdueVisits ? ` · ${journey.overdueVisits} atrasada(s)` : ''}`
-                      : '—'],
-                    ['Visitas presenciais', visitRule.label],
-                  ].map(([label, value]) => (
-                    <div key={label} className="rounded-lg border border-border p-3">
-                      <dt className="text-xs text-muted-foreground">{label}</dt>
-                      <dd className="font-semibold text-foreground">{value}</dd>
-                    </div>
-                  ))}
-                </div>
-                <div className="border-t border-border p-5">
-                  <h3 className="mb-3 text-sm font-semibold text-foreground">Checklist de prontidão</h3>
-                  <ul className="grid gap-2 sm:grid-cols-2">
-                    {checks.map(check => (
-                      <li key={check.key} className="flex items-start justify-between gap-3 rounded-lg border border-border p-3 text-sm">
-                        <div>
-                          <div className="font-medium text-foreground">{check.label}</div>
-                          <div className="text-xs text-muted-foreground">{check.detail}</div>
-                        </div>
-                        <div className="flex shrink-0 flex-col items-end gap-1">
-                          <span className="text-xs font-semibold text-muted-foreground">{check.ok ? 'OK' : check.severity === 'impeditivo' ? 'Impeditivo' : 'Pendente'}</span>
-                          {!check.ok && ['dono-master', 'contato', 'cnpj', 'contrato', 'responsavel-mx'].includes(check.key) ? (
-                            <Button size="sm" variant="outline" onClick={() => void correctReadiness(check.key)}>Corrigir</Button>
-                          ) : null}
-                        </div>
-                      </li>
                     ))}
-                  </ul>
-                </div>
-              </MxSectionCard>
+                  </div>
+                </MxSectionCard>
+
+                <MxSectionCard>
+                  <MxSectionHeader title="Contato Principal" description="Canal principal de comunicação com o cliente." />
+                  <div className="grid gap-3 p-5 sm:grid-cols-3">
+                    {[
+                      ['Nome', primaryContact?.name || '—'],
+                      ['Telefone', primaryContact?.phone || '—'],
+                      ['E-mail', primaryContact?.email || '—'],
+                    ].map(([label, value]) => (
+                      <div key={label} className="rounded-lg border border-border p-3">
+                        <dt className="text-xs text-muted-foreground">{label}</dt>
+                        <dd className="font-semibold text-foreground">{value}</dd>
+                      </div>
+                    ))}
+                  </div>
+                </MxSectionCard>
+
+                <MxSectionCard>
+                  <MxSectionHeader title="Entrega da Consultoria" description="Plano estratégico, plano de ação e consultoria do programa contratado." />
+                  <div className="grid gap-3 p-5 lg:grid-cols-3">
+                    <div className="rounded-xl border border-border bg-surface-alt p-4">
+                      <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Plano Estratégico</div>
+                      <div className="mt-3 space-y-1 text-xs text-muted-foreground">
+                        <div>Ciclo: PE {strategicPlanYear}</div>
+                        <div>Indicadores com meta: {strategicPlanReadiness?.indicadoresComMeta ?? 0}</div>
+                        <div>
+                          Metas publicadas:{' '}
+                          <span className="font-semibold text-status-success-text">{strategicPlanReadiness?.ready ?? 0}</span>
+                        </div>
+                        <div>
+                          Metas pendentes:{' '}
+                          <span className="font-semibold text-status-warning-text">{strategicPlanReadiness?.pending ?? 0}</span>
+                        </div>
+                        <div>
+                          Status:{' '}
+                          <span className="font-semibold text-foreground">
+                            {strategicPlanReadiness
+                              ? PLAN_CYCLE_STATUS_LABEL[strategicPlanReadiness.cycleStatus]
+                              : '—'}
+                          </span>
+                        </div>
+                      </div>
+                      <Button variant="outline" size="sm" className="mt-4" onClick={() => void openCurrentStrategicPlan()} disabled={creatingStrategicPlan}>Abrir Plano</Button>
+                    </div>
+                    <div className="rounded-xl border border-border bg-surface-alt p-4">
+                      <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Plano de Ação</div>
+                      <div className="mt-3 space-y-1 text-xs text-muted-foreground">
+                        <div>Ações totais: {actionPlanSummary?.total ?? '—'}</div>
+                        <div>Não iniciadas: {actionPlanSummary?.naoIniciadas ?? '—'}</div>
+                        <div>
+                          Em andamento:{' '}
+                          <span className="font-semibold text-status-info-text">{actionPlanSummary?.emAndamento ?? '—'}</span>
+                        </div>
+                        <div>
+                          Atrasadas:{' '}
+                          <span className="font-semibold text-status-danger-text">{actionPlanSummary?.atrasadas ?? '—'}</span>
+                        </div>
+                        <div>
+                          Concluídas:{' '}
+                          <span className="font-semibold text-status-success-text">{actionPlanSummary?.completed ?? '—'}</span>
+                        </div>
+                      </div>
+                      <Button variant="outline" size="sm" className="mt-4" onClick={() => { setPlanningTab('plano-acao'); setTab('planejamento') }}>Abrir Plano de Ação</Button>
+                    </div>
+                    <div className="rounded-xl border border-border bg-surface-alt p-4">
+                      <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Consultoria e Entregas</div>
+                      <div className="mt-3 space-y-1 text-xs text-muted-foreground">
+                        <div>{consultingCurrentLine}</div>
+                        <div>
+                          Encontros: {totalVisits > 0 ? `${journey.completedVisits}/${totalVisits}` : visits.length}
+                          {journey.overdueVisits ? ` · ${journey.overdueVisits} atrasada(s)` : ''}
+                        </div>
+                      </div>
+                      <Button asChild variant="outline" size="sm" className="mt-4"><Link to={`/clientes/${encodeURIComponent(client.slug || client.id)}/consultoria`}>Abrir Consultoria</Link></Button>
+                    </div>
+                  </div>
+                </MxSectionCard>
+              </div>
             ) : null}
 
             {tab === 'lojas' ? (
               <MxSectionCard>
                 <MxSectionHeader
                   title="Empresa e Lojas"
-                  description={`${units.length} loja(s) operacional(is) — matriz e filiais.`}
+                  description={`${displayUnits.length} loja(s) operacional(is) — matriz e filiais.`}
                   actions={<Button size="sm" onClick={() => setStoreModal({ open: true, initial: null })}><Plus size={16} />Adicionar Loja</Button>}
                 />
                 <div className="space-y-3 p-5">
-                  {units.length ? (
-                    units.map(unit => (
+                  {displayUnits.length ? (
+                    displayUnits.map(unit => (
                       <div key={unit.id} className="rounded-lg border border-border p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
@@ -1327,6 +1355,10 @@ export function AdminClienteDetalhePage() {
                   visitsTotal: totalVisits,
                 })}
                 blockers={checks.filter(check => !check.ok).map(check => `${check.label} — ${check.detail}`)}
+                checks={checks}
+                onCorrect={check => void correctReadiness(check.key)}
+                onRepair={key => void repair(key)}
+                repairing={repairing}
               />
             ) : null}
 
