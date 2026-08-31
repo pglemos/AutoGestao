@@ -73,6 +73,58 @@ describe('Admin MX Base44 parity UI contracts', () => {
     expect(page).toContain('Consultoria e Entregas')
   })
 
+  test('cliente 360 visão geral expõe três blocos Base44', () => {
+    const page = read('AdminClienteDetalhePage.tsx')
+    expect(page).toContain('title="Informações Gerais"')
+    expect(page).toContain('title="Contato Principal"')
+    expect(page).toContain('title="Entrega da Consultoria"')
+    expect(page).toContain('Início previsto')
+    expect(page).not.toContain('Checklist de prontidão')
+  })
+
+  test('kebab de clientes expõe cinco ações Base44 e extras em Mais', () => {
+    const menu = read('clientes/ClientActionsMenu.tsx')
+    expect(menu).toContain('BASE44_PRIMARY_ACTIONS')
+    expect(menu).toContain("'abrir_visao360'")
+    expect(menu).toContain("'adicionar_pessoa'")
+    expect(menu).toContain("'gerar_link_autocadastro'")
+    expect(menu).toContain("'abrir_jornada'")
+    expect(menu).toContain("'abrir_auditoria'")
+    expect(menu).toContain('Mais')
+    expect(menu).toContain('EXTRA_ACTION_GROUPS')
+    expect(menu).not.toContain('const ACTION_GROUPS')
+  })
+
+  test('consultoria operação usa lista Base44 em vez de tabela densa', () => {
+    const page = read('consultoria/AdminConsultingOverviewPage.tsx')
+    expect(page).toContain('Encontro {row.visitNumber}')
+    expect(page).not.toContain('Encontros da consultoria')
+    expect(page).not.toContain('<Table')
+    expect(page).toContain('Acompanhe jornadas, encontros, entregas e evidências')
+  })
+
+  test('plano estratégico global força mode=catalogo no first paint', () => {
+    const strategic = readFileSync(new URL('../internal-mx-planning/InternalStrategicPlanPage.tsx', import.meta.url), 'utf8')
+    const indicators = read('AdminIndicadoresPage.tsx')
+    const nav = readFileSync(new URL('../../design-system/internal-mx/internalMxNavigation.tsx', import.meta.url), 'utf8')
+    expect(strategic).toContain("next.set('mode', 'catalogo')")
+    expect(indicators).toContain("location.pathname === '/plano-estrategico'")
+    expect(nav).toContain('/plano-estrategico?mode=catalogo')
+  })
+
+  test('universidade admin default usa catálogo Base44, não Academy learner', () => {
+    const page = readFileSync(new URL('../../pages/ConsultorTreinamentos.tsx', import.meta.url), 'utf8')
+    expect(page).toContain('Total matrículas')
+    expect(page).toContain('Todos os níveis')
+    expect(page).toContain('Todos os tipos')
+    expect(page).toContain('Novo Conteúdo')
+    expect(page).toContain("view') === 'editorial'")
+    expect(page).toContain('showEditorial')
+    expect(page).toContain('<AulasAoVivoSection />')
+    expect(page).not.toContain('Curadoria Academy')
+    expect(page).not.toContain('Academy MX')
+  })
+
   test('plano estratégico global abre catálogo por padrão', () => {
     const strategic = readFileSync(new URL('../internal-mx-planning/InternalStrategicPlanPage.tsx', import.meta.url), 'utf8')
     const indicators = read('AdminIndicadoresPage.tsx')

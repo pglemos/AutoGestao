@@ -32,6 +32,7 @@ export default function InternalStrategicPlanPage() {
   const catalogTab = resolveStrategicCatalogTab(params.get('mode'))
   const { clientSlug, year: yearSegment } = useParams<{ clientSlug?: string; year?: string }>()
   const isClientRoute = location.pathname.startsWith('/clientes/')
+  const isGlobalCatalogRoute = !storeId && !isClientRoute && !clientId && !cycleId
   const requestedYear = Number(yearSegment || params.get('year'))
   const year = Number.isInteger(requestedYear) && requestedYear >= 2020 && requestedYear <= 2100 ? requestedYear : undefined
   const resolveYear = year ?? new Date().getFullYear()
@@ -40,6 +41,15 @@ export default function InternalStrategicPlanPage() {
   )
   const [resolveError, setResolveError] = useState<string | null>(null)
   const [resolvedOwnerStoreId, setResolvedOwnerStoreId] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!isGlobalCatalogRoute) return
+    const mode = new URLSearchParams(location.search).get('mode')
+    if (mode) return
+    const next = new URLSearchParams(location.search)
+    next.set('mode', 'catalogo')
+    navigate(`${location.pathname}?${next.toString()}`, { replace: true })
+  }, [isGlobalCatalogRoute, location.pathname, location.search, navigate])
 
   useEffect(() => {
     if (clientId || !isClientRoute || !clientSlug) return

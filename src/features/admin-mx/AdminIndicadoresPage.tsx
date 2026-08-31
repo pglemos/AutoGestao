@@ -190,6 +190,17 @@ export function AdminIndicadoresPage({ initialTab = 'catalogo' }: { initialTab?:
   }, [initialTab])
 
   useEffect(() => {
+    const mode = new URLSearchParams(location.search).get('mode')
+    if (mode === 'catalogo' || mode === 'parametros' || mode === 'planos' || mode === 'historico') {
+      setTab(mode)
+      return
+    }
+    if (!mode && location.pathname === '/plano-estrategico') {
+      setTab('catalogo')
+    }
+  }, [location.pathname, location.search])
+
+  useEffect(() => {
     let active = true
     void fetchIndicatorParameters().then(result => {
       if (!active) return
