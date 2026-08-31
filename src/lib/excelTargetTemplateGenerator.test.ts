@@ -40,7 +40,23 @@ describe('excelTargetTemplateGenerator', () => {
       viewType: 'TARGET',
       referenceYear: 2026,
       isBlankModel: true,
-    })).toBe('MODELO_METAS_MX_VEICULOS_TESTE_2026_MATRIZ_PRINCIPAL.xlsx')
+    })).toBe('METAS_MX_VEICULOS_TESTE_2026_MATRIZ_PRINCIPAL.xlsx')
+
+    expect(getTemplateFileName({
+      clientName: 'Auto Up',
+      storeName: 'Auto Up',
+      viewType: 'TARGET',
+      referenceYear: 2026,
+      isBlankModel: true,
+    })).toBe('METAS_AUTO_UP_2026.xlsx')
+
+    expect(getTemplateFileName({
+      clientName: 'Auto Up',
+      scopeType: 'CONSOLIDATED',
+      viewType: 'TARGET',
+      referenceYear: 2026,
+      isBlankModel: true,
+    })).toBe('METAS_AUTO_UP_2026_CONSOLIDADO.xlsx')
 
     expect(getTemplateFileName({
       clientName: 'ACERTT',
@@ -77,7 +93,7 @@ describe('excelTargetTemplateGenerator', () => {
       isBlankModel: true,
     })
 
-    expect(fileName).toBe('MODELO_METAS_ACERTT_2026.xlsx')
+    expect(fileName).toBe('METAS_ACERTT_2026.xlsx')
     expect(buffer.byteLength).toBeGreaterThan(5000)
 
     const unzipped = unzipSync(buffer)

@@ -1590,6 +1590,9 @@ function TargetImportModal(props: {
     }
   }
 
+  const actionableChanges = changes.filter(change => change.action === 'UPDATE' || change.action === 'CLEAR')
+  const invalidChanges = changes.filter(change => change.action === 'INVALID')
+
   return (
     <Modal
       open={props.open}
@@ -1602,7 +1605,7 @@ function TargetImportModal(props: {
           <Button variant="outline" onClick={props.onClose} disabled={importing}>Cancelar</Button>
           {step === 1 ? (
             <Button onClick={() => fileInputRef.current?.click()} disabled={validating}>
-              Selecionar arquivo
+              Escolher arquivo .xlsx
             </Button>
           ) : null}
           {step === 2 ? (
@@ -1611,14 +1614,20 @@ function TargetImportModal(props: {
             </Button>
           ) : null}
           {step === 3 ? (
-            <Button onClick={() => setStep(4)} disabled={changes.length === 0 || changes.some(change => change.action === 'INVALID')}>
-              Revisar confirmação
-            </Button>
+            <>
+              <Button variant="outline" onClick={() => setStep(2)} disabled={importing}>Voltar à validação</Button>
+              <Button onClick={() => setStep(4)} disabled={actionableChanges.length === 0 || invalidChanges.length > 0}>
+                Revisar confirmação
+              </Button>
+            </>
           ) : null}
           {step === 4 ? (
-            <Button onClick={() => void apply()} disabled={importing || changes.length === 0 || changes.some(change => change.action === 'INVALID')}>
-              {importing ? 'Importando...' : 'Confirmar importação'}
-            </Button>
+            <>
+              <Button variant="outline" onClick={() => setStep(3)} disabled={importing}>Voltar à prévia</Button>
+              <Button onClick={() => void apply()} disabled={importing || actionableChanges.length === 0 || invalidChanges.length > 0}>
+                {importing ? 'Importando...' : 'Confirmar importação'}
+              </Button>
+            </>
           ) : null}
         </>
       )}
@@ -1652,7 +1661,7 @@ function TargetImportModal(props: {
             <Upload size={24} className="mx-auto text-muted-foreground" aria-hidden />
             <div className="space-y-1">
               <p className="text-sm font-semibold text-foreground">1. Arquivo</p>
-              <p className="text-sm text-muted-foreground">Arraste a planilha .xlsx do modelo MX Performance ou selecione no computador.</p>
+              <p className="text-sm text-muted-foreground">Arraste a planilha .xlsx do modelo MX Performance ou escolha no computador. A validação começa no próximo passo.</p>
             </div>
             {selectedFile ? (
               <p className="text-xs text-muted-foreground">Selecionado: {selectedFile.name}</p>
@@ -1665,6 +1674,7 @@ function TargetImportModal(props: {
               type="file"
               accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
               className="sr-only"
+              tabIndex={-1}
               onChange={event => {
                 pickFile(event.target.files?.[0] ?? null)
                 event.currentTarget.value = ''
@@ -1672,16 +1682,37 @@ function TargetImportModal(props: {
             />
           </div>
         ) : null}
-        {step >= 2 ? (
+        {step === 2 ? (
+          <div className="space-y-3 rounded-xl border border-border bg-surface-alt p-4">
+            <p className="text-sm font-semibold text-foreground">2. Validação</p>
+            <MxStatusBanner tone={problem ? 'warning' : validating ? 'neutral' : 'info'}>
+              {validating
+                ? 'Validando arquivo...'
+                : problem
+                  ? `${selectedFile?.name ?? 'Arquivo'} · ${problem}`
+                  : `${selectedFile?.name ?? 'Arquivo'} · ${actionableChanges.length} célula(s) pronta(s) para importar.`}
+            </MxStatusBanner>
+            {!validating && invalidChanges.length > 0 ? (
+              <div className="max-h-40 overflow-auto rounded-lg border border-border bg-background p-3 text-xs text-muted-foreground">
+                {invalidChanges.slice(0, 12).map((change, index) => (
+                  <p key={index}>{change.indicatorCode} · {MONTH_LABELS[change.month - 1]} · {change.error ?? 'inválido'}</p>
+                ))}
+                {invalidChanges.length > 12 ? <p>… e mais {invalidChanges.length - 12} célula(s).</p> : null}
+              </div>
+            ) : null}
+            {!validating && !problem ? (
+              <p className="text-xs text-muted-foreground">Célula vazia preserva o valor atual; LIMPAR apaga; Realizado e Ano Anterior não são alterados.</p>
+            ) : null}
+          </div>
+        ) : null}
+        {step >= 3 ? (
           <MxStatusBanner tone={problem ? 'warning' : 'info'}>
-            {validating
-              ? 'Validando arquivo...'
-              : problem
-                ? `${selectedFile?.name ?? 'Arquivo'} · ${problem}`
-                : `${selectedFile?.name ?? 'Arquivo'} · ${changes.length} célula(s) de meta detectada(s). Célula vazia preserva; LIMPAR apaga; Realizado e Ano Anterior não são alterados.`}
+            {`${selectedFile?.name ?? 'Arquivo'} · ${actionableChanges.length} alteração(ões) na prévia.`}
           </MxStatusBanner>
         ) : null}
         {step >= 3 ? (
+        <div className="space-y-2">
+          <p className="text-sm font-semibold text-foreground">3. Prévia</p>
         <div className="max-h-72 overflow-auto rounded-lg border border-border">
           <Table className="min-w-[520px]">
             <TableHeader>
@@ -1711,11 +1742,15 @@ function TargetImportModal(props: {
             </TableBody>
           </Table>
         </div>
+        </div>
         ) : null}
         {step === 4 ? (
-          <p className="text-sm text-muted-foreground">
-            Confirme a importação de {changes.filter(change => change.action === 'UPDATE' || change.action === 'CLEAR').length} alteração(ões) de meta para o ano {props.year}.
-          </p>
+          <div className="space-y-2 rounded-xl border border-border bg-surface-alt p-4">
+            <p className="text-sm font-semibold text-foreground">4. Confirmar</p>
+            <p className="text-sm text-muted-foreground">
+              Confirme a importação de {actionableChanges.length} alteração(ões) de meta para o ano {props.year}.
+            </p>
+          </div>
         ) : null}
       </div>
     </Modal>

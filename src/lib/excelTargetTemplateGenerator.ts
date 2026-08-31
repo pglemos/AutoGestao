@@ -145,11 +145,8 @@ export function getTemplateFileName(params: {
   referenceYear: number
   isBlankModel?: boolean
 }): string {
-  const { viewType, isBlankModel } = params
+  const { viewType } = params
   const stem = buildWorkbookNameStem(params)
-  if (isBlankModel && viewType === 'TARGET') {
-    return `MODELO_METAS_${stem}.xlsx`
-  }
   if (viewType === 'TARGET') {
     return `METAS_${stem}.xlsx`
   }
