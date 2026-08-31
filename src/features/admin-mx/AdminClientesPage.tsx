@@ -331,7 +331,7 @@ export function AdminClientesPage() {
         {activeTab === 'lista' ? (
           <div className="flex justify-end">
             <details className="group relative">
-              <summary className="flex cursor-pointer list-none items-center gap-1 rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:bg-surface-alt hover:text-foreground">
+              <summary className="flex cursor-pointer list-none items-center gap-1 rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:bg-surface-alt hover:text-foreground focus-visible:bg-surface-alt focus-visible:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/20">
                 Mais visões
                 <ChevronDown size={14} className="transition-transform group-open:rotate-180" />
               </summary>
@@ -340,7 +340,7 @@ export function AdminClientesPage() {
                   <button
                     key={tab.key}
                     type="button"
-                    className="block w-full rounded-md px-3 py-2 text-left text-sm hover:bg-surface-alt"
+                    className="block w-full rounded-md px-3 py-2 text-left text-sm hover:bg-surface-alt focus-visible:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/20"
                     onClick={() => setActiveTab(tab.key)}
                   >
                     {tab.label}

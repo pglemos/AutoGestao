@@ -415,16 +415,16 @@ export function AdminDashboardPage() {
                     </h3>
                   </div>
                   <div className="space-y-2 p-4">
-                    <Button className="w-full justify-center bg-emerald-600 hover:bg-emerald-700" onClick={() => navigate('/clientes/novo')}>
+                    <Button className="w-full justify-center" variant="primary" onClick={() => navigate('/clientes/novo')}>
                       Novo Cliente MX
                     </Button>
-                    <Button className="w-full justify-center bg-blue-600 hover:bg-blue-700" onClick={() => navigate('/clientes?tab=inscricoes')}>
+                    <Button className="w-full justify-center" variant="info" onClick={() => navigate('/clientes?tab=inscricoes')}>
                       Validar Cadastros
                     </Button>
-                    <Button className="w-full justify-center bg-violet-600 hover:bg-violet-700" onClick={() => navigate('/produtos')}>
+                    <Button className="w-full justify-center" variant="warning" onClick={() => navigate('/produtos')}>
                       Novo Produto
                     </Button>
-                    <Button className="w-full justify-center bg-neutral-900 hover:bg-neutral-800" onClick={() => navigate('/seguranca')}>
+                    <Button className="w-full justify-center bg-brand-secondary text-white hover:bg-brand-secondary/90 focus-visible:ring-brand-secondary/20" onClick={() => navigate('/seguranca')}>
                       Ver Auditoria
                     </Button>
                   </div>
