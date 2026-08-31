@@ -98,9 +98,21 @@ async function installLocalVisualProfile(page: Page, profile: VisualProfile) {
 
 async function visibleModuleLabel(page: Page) {
   return page.evaluate(() => {
-    const labels = Array.from(document.querySelectorAll<HTMLElement>('p, span'))
-      .filter((node) => /^Módulo /.test(node.textContent?.trim() || ''))
-    return labels.find((node) => node.getBoundingClientRect().width > 0)?.textContent?.trim() || ''
+    const surfaces = [
+      document.querySelector<HTMLElement>('aside[aria-label^="Menu principal"]'),
+      document.querySelector<HTMLElement>('[role="dialog"][aria-label^="Menu principal"]'),
+      document.querySelector<HTMLElement>('header.xl\\:hidden'),
+    ].filter(Boolean) as HTMLElement[]
+
+    for (const surface of surfaces) {
+      const candidates = Array.from(surface.querySelectorAll<HTMLElement>('p[title], span[title]'))
+        .filter((node) => {
+          const text = node.textContent?.trim() || ''
+          return text.length > 0 && text !== 'MX PERFORMANCE' && node.getBoundingClientRect().width > 0
+        })
+      if (candidates.length) return candidates[0].textContent?.trim() || ''
+    }
+    return ''
   })
 }
 
@@ -115,6 +127,24 @@ async function hasCanonicalPageHeader(page: Page) {
 
 async function collectMetrics(page: Page, profile: string, viewport: string): Promise<ShellMetrics> {
   return page.evaluate(({ profile, viewport }) => {
+    const findVisibleModuleLabelNode = () => {
+      const surfaces = [
+        document.querySelector<HTMLElement>('aside[aria-label^="Menu principal"]'),
+        document.querySelector<HTMLElement>('[role="dialog"][aria-label^="Menu principal"]'),
+        document.querySelector<HTMLElement>('header.xl\\:hidden'),
+      ].filter(Boolean) as HTMLElement[]
+
+      for (const surface of surfaces) {
+        const candidates = Array.from(surface.querySelectorAll<HTMLElement>('p[title], span[title]'))
+          .filter((node) => {
+            const text = node.textContent?.trim() || ''
+            return text.length > 0 && text !== 'MX PERFORMANCE' && node.getBoundingClientRect().width > 0
+          })
+        if (candidates.length) return candidates[0]
+      }
+      return null
+    }
+
     const desktopSidebar = document.querySelector<HTMLElement>('aside[aria-label^="Menu principal"]')
     const mobileDrawer = document.querySelector<HTMLElement>('[role="dialog"][aria-label^="Menu principal"]')
     const navigationSurface = viewport === 'mobile' ? mobileDrawer : desktopSidebar
@@ -127,9 +157,7 @@ async function collectMetrics(page: Page, profile: string, viewport: string): Pr
     const content = document.querySelector<HTMLElement>('main#main-content')
     const visibleLogo = Array.from(document.querySelectorAll<HTMLImageElement>('img[alt="MX"]'))
       .find((node) => node.getBoundingClientRect().width > 0)
-    const labels = Array.from(document.querySelectorAll<HTMLElement>('p, span'))
-      .filter((node) => /^Módulo /.test(node.textContent?.trim() || ''))
-    const visibleModuleLabel = labels.find((node) => node.getBoundingClientRect().width > 0)
+    const visibleModuleLabel = findVisibleModuleLabelNode()
     const visualScope = document.querySelector<HTMLElement>('[data-mx-visual-system="manager"]')
     const pageHeader = visualScope
       ? Array.from(visualScope.querySelectorAll<HTMLElement>('header'))
