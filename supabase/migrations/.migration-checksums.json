@@ -2,7 +2,7 @@
   "_comment": "Congelamento forward-only das migrations aplicadas. NÃO editar à mão. Regenerar apenas ao adicionar migrations novas: node scripts/gen_migration_checksums.mjs",
   "generated_at": "2026-08-31",
   "algorithm": "sha256",
-  "count": 469,
+  "count": 471,
   "checksums": {
     "00000000000000_baseline_legacy_schema.sql": "3a519e3804095af5e9f7d8a7cb70dcc388b04530b6a7911ee1e3cb76af10b0fc",
     "00000000000001_mark_existing_migrations_applied.sql": "a8183b5cc5bd56b549ce8d8d302eb0c5d4f7b20381438586e02dd7353d6f2a45",
@@ -472,6 +472,8 @@
     "20260830121500_recount_package_indicator_totals.sql": "38c035c209fc494d3074726bd4251a2fb679421d98dd5288781c29da67173ebd",
     "20260830140000_shorten_action_plan_codigo.sql": "a7643ec3cb7a00e56894a8045ab7debe9fc88ba8baabb73906aa60f4a7b007c5",
     "20260831120000_atomic_action_plan_create.sql": "45df0301c1b0e5434fb9959e4e66722caf06d5e8cdc5e08a7f0d59a2cbc11080",
-    "20260831140000_criar_plano_acao_v2_drop_12arg_evidence_required.sql": "17721dda1f30c342cd715c20479b034bd9432f6d93325f1a84d3f78b51112d7b"
+    "20260831140000_criar_plano_acao_v2_drop_12arg_evidence_required.sql": "17721dda1f30c342cd715c20479b034bd9432f6d93325f1a84d3f78b51112d7b",
+    "20260831150000_align_official_consulting_catalog.sql": "e2129f2d367ec84ad7898aff1316192b39155b0024b937acb8eb1fa07655757b",
+    "20260831160000_fix_plan_patch_departamento_text.sql": "b49a6dd0099f08ed44aef0d815df9ceeb8b3b259b58ba762693569cfecd87ed5"
   }
 }

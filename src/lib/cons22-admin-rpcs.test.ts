@@ -197,10 +197,33 @@ describe('CONS-22 RPCs administrativas', () => {
       new URL('../design-system/internal-mx/internalMxNavigation.tsx', import.meta.url),
       'utf8',
     )
+    const catalog = readFileSync(
+      new URL('../features/admin-mx/produtos/officialConsultingCatalog.ts', import.meta.url),
+      'utf8',
+    )
     expect(app).toContain('admin={<AdminProdutosConsultoriaPage />}')
     expect(page).toContain('title="Produtos de Consultoria"')
+    expect(page).toContain('Catálogo oficial')
+    expect(page).toContain('ConsultingProductCard')
+    expect(page).toContain('Novo Produto')
+    expect(page).not.toContain('Produtos Digitais')
+    expect(catalog).toContain("'pmr_online'")
+    expect(catalog).toContain("'pmr_hibrido'")
+    expect(catalog).toContain("'pmr_plus'")
+    expect(catalog).toContain("'ppa'")
+    expect(nav).toContain("label: 'Produto e Metodologia'")
     expect(nav).toContain("label: 'Produtos de Consultoria'")
     expect(nav).toContain("path: '/produtos'")
+  })
+
+  test('patch de plano usa departamento text, não department_type inexistente', () => {
+    const fix = readFileSync(
+      new URL('../../supabase/migrations/20260831160000_fix_plan_patch_departamento_text.sql', import.meta.url),
+      'utf8',
+    )
+    const upSection = fix.split('-- DOWN')[0]
+    expect(upSection).toContain('NULLIF(BTRIM(v_patch ->> \'departamento\'), \'\')')
+    expect(upSection).not.toMatch(/::public\.department_type/)
   })
 
   test('a rota admin /plano-acao abre a biblioteca Base44, não o board da loja', () => {
