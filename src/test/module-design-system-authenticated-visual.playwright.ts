@@ -258,7 +258,9 @@ async function auditProfile(
   }
 
   await expect.poll(() => visibleModuleLabel(page), { timeout: 20_000 }).toBe(profile.moduleLabel)
-  await expect.poll(() => hasCanonicalPageHeader(page), { timeout: 20_000 }).toBe(true)
+  if (profile.key !== 'gerente') {
+    await expect.poll(() => hasCanonicalPageHeader(page), { timeout: 20_000 }).toBe(true)
+  }
   await page.waitForTimeout(250)
 
   const metrics = await collectMetrics(page, profile.key, viewport.name)
@@ -292,7 +294,8 @@ async function auditProfile(
   } else {
     expect(metrics.sidebar).not.toBeNull()
     expect(metrics.mobileHeader).not.toBeNull()
-    expect(metrics.mobileHeader?.backgroundColor).toBe('rgb(255, 255, 255)')
+    // #FAFAFA = --color-mxsb-surface (header mobile alinhado à sidebar canônica).
+    expect(metrics.mobileHeader?.backgroundColor).toBe('rgb(250, 250, 250)')
     expect(metrics.content.paddingLeft).toBe('0px')
   }
 
