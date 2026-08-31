@@ -66,7 +66,7 @@ export function ConsultingProductCard(props: {
         <span className={`hidden rounded-full px-2.5 py-0.5 text-xs font-medium sm:inline ${STATUS_TONE[product.status]}`}>
           {productStatusLabel(product.status)}
         </span>
-        <button type="button" className="shrink-0 p-1 text-muted-foreground hover:text-foreground" onClick={props.onToggle} aria-label={props.expanded ? 'Recolher detalhes' : 'Expandir detalhes'}>
+        <button type="button" className="shrink-0 rounded-md p-1 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30" onClick={props.onToggle} aria-label={props.expanded ? 'Recolher detalhes' : 'Expandir detalhes'}>
           {props.expanded ? <ChevronUp size={16} aria-hidden="true" /> : <ChevronDown size={16} aria-hidden="true" />}
         </button>
         {!isPublished ? (

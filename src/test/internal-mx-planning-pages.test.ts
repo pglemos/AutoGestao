@@ -17,21 +17,29 @@ describe('páginas de planejamento do módulo interno MX', () => {
       expect(source).not.toContain('OwnerProvider')
     }
     expect(read(pages.strategic)).toContain('InternalMxPlanningShell')
-    expect(read(pages.action)).toContain('InternalMxPlanningShell')
     expect(read('src/features/internal-mx-planning/InternalMxPlanningShell.tsx')).toContain('PlanningWorkspaceProvider')
+    expect(read(pages.action)).toContain('ClientActionPlanPage')
+    expect(read(pages.action)).toContain('AdminPlanosAcaoGlobalPage')
   })
 
   test('monta as três superfícies funcionais canônicas', () => {
     expect(read(pages.strategic)).toContain('StrategicPlanWorkspace')
-    expect(read(pages.action)).toContain('ActionPlanWorkspace')
+    expect(read(pages.action)).toContain('<ClientActionPlanPage />')
+    expect(read(pages.action)).toContain('<AdminPlanosAcaoGlobalPage />')
     expect(read(pages.consulting)).toContain('AdminConsultingOverviewPage')
+    expect(read('src/features/admin-mx/clientes/ClientActionPlanPage.tsx')).toContain('ClientActionPlanContextPanel')
   })
 
   test('abre o plano de ação administrativo no contexto do cliente', () => {
     const actionPage = read(pages.action)
-    expect(actionPage).toContain("label: 'Gestão global'")
-    expect(actionPage).toContain("fallback: isClientRoute ? 'cliente' : 'biblioteca'")
+    const clientPage = read('src/features/admin-mx/clientes/ClientActionPlanPage.tsx')
+    const panel = read('src/features/admin-mx/clientes/ClientActionPlanContextPanel.tsx')
     expect(actionPage).toContain("location.pathname.startsWith('/clientes/')")
+    expect(actionPage).toContain("location.pathname.endsWith('/plano-acao')")
+    expect(actionPage).toContain('isClientRoute')
+    expect(clientPage).toContain('<ClientActionPlanContextPanel')
+    expect(panel).toContain("setPanelView('quadro')")
+    expect(panel).toContain('Reconciliar')
   })
 
   test('abre Plano Estratégico pelos planos do cliente e honra mode=catalogo', () => {
