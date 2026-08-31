@@ -12,14 +12,14 @@ describe('resumo de planos de ação do cliente', () => {
       { status: 'em_andamento', progresso: 50 },
       { status: 'concluida', progresso: 100 },
       { status: 'bloqueada', progresso: 30 },
-    ])).toEqual({ total: 4, open: 2, completed: 1, blocked: 1, cancelled: 0, averageProgress: 45 })
+    ])).toEqual({ total: 4, open: 2, completed: 1, blocked: 1, cancelled: 0, averageProgress: 45, naoIniciadas: 1, emAndamento: 1, atrasadas: 0 })
   })
 
   test('conta status Base44 concluido como plano concluído', () => {
     expect(summarizeClientActionPlans([
       { status: 'pendente', progresso: 0 },
       { status: 'concluido', progresso: 100 },
-    ])).toEqual({ total: 2, open: 1, completed: 1, blocked: 0, cancelled: 0, averageProgress: 50 })
+    ])).toEqual({ total: 2, open: 1, completed: 1, blocked: 0, cancelled: 0, averageProgress: 50, naoIniciadas: 1, emAndamento: 0, atrasadas: 0 })
   })
 
   test('traduz estados conhecidos sem esconder estado desconhecido', () => {

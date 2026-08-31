@@ -48,6 +48,10 @@ export type MemberCreateDraft = {
   store_id: string
   situation: MemberSituation
   enabled_programs: string[]
+  city: string
+  state: string
+  capacidade_online: string
+  capacidade_presencial: string
 }
 
 export function emptyMemberCreate(): MemberCreateDraft {
@@ -59,7 +63,18 @@ export function emptyMemberCreate(): MemberCreateDraft {
     store_id: '',
     situation: 'ativo',
     enabled_programs: [],
+    city: '',
+    state: '',
+    capacidade_online: '',
+    capacidade_presencial: '',
   }
+}
+
+export function formatMemberCityUf(city: string, state: string): string {
+  const trimmedCity = city.trim()
+  const trimmedState = state.trim().toUpperCase()
+  if (trimmedCity && trimmedState) return `${trimmedCity}, ${trimmedState}`
+  return trimmedCity || trimmedState
 }
 
 export function resolveMemberRoleOption(role: MemberRole): MemberRoleOption {

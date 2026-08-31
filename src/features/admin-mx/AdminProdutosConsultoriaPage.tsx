@@ -94,12 +94,13 @@ export function AdminProdutosConsultoriaPage() {
     return OFFICIAL_CONSULTING_PRODUCT_DEFINITIONS.map(definition => byKey.get(definition.program_key) ?? null)
   }, [catalog.official])
 
-  const metrics = useMemo(() => ({
-    produtos: rows.length,
-    contratos: rows.reduce((sum, product) => sum + product.clients, 0),
-    encontros: rows.reduce((sum, product) => sum + (product.total_visits ?? 0), 0),
-    presenciais: rows.reduce((sum, product) => sum + (product.max_presenciais ?? product.min_presenciais ?? 0), 0),
-  }), [rows])
+  const officialPublishedCount = useMemo(
+    () => officialRows.filter(product => product?.status === 'publicado').length,
+    [officialRows],
+  )
+
+  const showCatalogMetrics = new URLSearchParams(location.search).get('view') === 'metrics'
+  const showCatalogFilters = new URLSearchParams(location.search).get('view') === 'filters' || showCatalogMetrics
 
   const openNew = () => {
     setDraft(emptyProductDraft())
@@ -222,9 +223,8 @@ export function AdminProdutosConsultoriaPage() {
       <div className="w-full space-y-5">
         <MxModuleHeader
           icon={Package}
-          eyebrow="Administração MX"
           title="Produtos de Consultoria"
-          description="Catálogo oficial MX: PMR Online, PMR Híbrido, PMR Plus e PPA — ciclo de vida, módulos, tempos e plano estratégico por programa."
+          description={`${officialPublishedCount} produto${officialPublishedCount === 1 ? '' : 's'} no catálogo`}
           actions={(
             <>
               <Button variant="outline" onClick={() => void refetch()}><RefreshCw size={16} />Atualizar</Button>
@@ -234,12 +234,14 @@ export function AdminProdutosConsultoriaPage() {
         />
         {loading ? <MxLoadingState label="Carregando produtos" /> : error ? <MxErrorState description={error} retry={() => void refetch()} /> : (
           <>
-            <MxMetricGrid>
-              <MxMetricCard title="Produtos" value={metrics.produtos} detail="Catálogo completo incl. legado oculto" icon={Package} />
-              <MxMetricCard title="Encontros previstos" value={metrics.encontros} detail="Somatório das jornadas" icon={Package} tone="violet" />
-              <MxMetricCard title="Presenciais" value={metrics.presenciais} detail="Limite máximo das jornadas" icon={Package} tone="info" />
-              <MxMetricCard title="Contratos ativos" value={metrics.contratos} detail="Clientes vinculados" icon={Package} tone="success" />
-            </MxMetricGrid>
+            {showCatalogMetrics ? (
+              <MxMetricGrid>
+                <MxMetricCard title="Produtos" value={rows.length} detail="Catálogo completo incl. legado oculto" icon={Package} />
+                <MxMetricCard title="Encontros previstos" value={rows.reduce((sum, product) => sum + (product.total_visits ?? 0), 0)} detail="Somatório das jornadas" icon={Package} tone="violet" />
+                <MxMetricCard title="Presenciais" value={rows.reduce((sum, product) => sum + (product.max_presenciais ?? product.min_presenciais ?? 0), 0)} detail="Limite máximo das jornadas" icon={Package} tone="info" />
+                <MxMetricCard title="Contratos ativos" value={rows.reduce((sum, product) => sum + product.clients, 0)} detail="Clientes vinculados" icon={Package} tone="success" />
+              </MxMetricGrid>
+            ) : null}
             <MxStatusBanner tone="info" className="space-y-2">
               <div className="flex items-center gap-2">
                 <ShieldCheck size={16} aria-hidden="true" />
@@ -252,6 +254,7 @@ export function AdminProdutosConsultoriaPage() {
                 <li>Para editar um produto publicado, uma nova versão em rascunho deve ser criada.</li>
               </ul>
             </MxStatusBanner>
+            {showCatalogFilters ? (
             <MxToolbar>
               <MxInput value={search} onChange={event => setSearch(event.target.value)} placeholder="Buscar produto" aria-label="Buscar produto" />
               <MxSelect value={status} onChange={event => setStatus(event.target.value)} aria-label="Filtrar por status">
@@ -275,6 +278,7 @@ export function AdminProdutosConsultoriaPage() {
                 <option value="status">Ordenar: status</option>
               </MxSelect>
             </MxToolbar>
+            ) : null}
 
             <MxSectionCard>
               <MxSectionHeader title="Catálogo oficial" description="Quatro programas comercializados conforme metodologia MX / Base44." />

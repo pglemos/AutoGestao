@@ -222,6 +222,12 @@ export function MetasRealizadosTab(props: {
   // Trocar de loja invalida um escopo consolidado que talvez não exista no cliente novo.
   // A troca é visível: sem aviso o usuário pensaria que ainda está no consolidado.
   useEffect(() => {
+    if (scope === '' && clientScope.supportsConsolidated) {
+      setScope(CONSOLIDATED_SCOPE)
+    }
+  }, [clientScope.supportsConsolidated, scope])
+
+  useEffect(() => {
     if (scope === CONSOLIDATED_SCOPE && !clientScope.loading && !clientScope.supportsConsolidated) {
       setScope('')
       setScopeNotice('Consolidado indisponível: este cliente tem uma única unidade. Exibindo a unidade selecionada.')

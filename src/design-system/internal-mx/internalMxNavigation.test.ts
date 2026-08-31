@@ -5,39 +5,31 @@ const internalRoles = ['administrador_geral', 'administrador_mx', 'consultor_mx'
 
 describe('navegação interna MX', () => {
   for (const role of internalRoles) {
-    test(`${role} recebe o mesmo mapa visual filtrado por autorização`, () => {
+    test(`${role} recebe o mapa Base44 com grupos canônicos filtrados por autorização`, () => {
       const sections = buildInternalMxNavigation(role, { unreadNotifications: 7 })
       const items = sections.flatMap((section) => section.items)
-      // Três grupos da especificação do módulo Administrador + Simulação.
       expect(sections.map((section) => section.label)).toEqual([
         'Operação MX',
         'Produto e Metodologia',
-        'Plataforma',
+        'Plataforma e Governança',
+        'Operação comercial',
         'Simulação',
       ])
       expect(items.some((item) => item.path === '/painel')).toBe(true)
       expect(items.some((item) => item.path === '/plano-estrategico')).toBe(true)
       expect(items.some((item) => item.path === '/plano-acao')).toBe(true)
       expect(items.some((item) => item.path === '/consultoria')).toBe(true)
+      expect(items.some((item) => item.path === '/consultoria-mx')).toBe(true)
       expect(items.some((item) => item.path === '/clientes')).toBe(true)
       expect(items.some((item) => item.path === '/universidade-mx')).toBe(true)
       expect(items.some((item) => item.path === '/vendas')).toBe(true)
-      // Desenvolvimento (/treinamentos) foi removido: canônico é Universidade MX.
       expect(items.some((item) => item.path === '/treinamentos')).toBe(false)
       expect(items.some((item) => item.label === 'Desenvolvimento')).toBe(false)
-      expect(items.some((item) => item.path === '/dados')).toBe(true)
-      expect(items.some((item) => item.path === '/auditoria')).toBe(true)
-      expect(items.find((item) => item.path === '/dados')?.label).toBe('Dados')
-      expect(items.find((item) => item.path === '/auditoria')?.label).toBe('Auditoria')
-      // Rotas legadas não possuem entrada própria: são aliases de compatibilidade
-      // resolvidos no AppShell, nunca itens concorrentes na navegação canônica.
+      expect(items.find((item) => item.path === '/consultoria')?.label).toBe('Consultoria')
+      expect(items.find((item) => item.path === '/dados')?.label).toBe('Dados e Conciliação')
+      expect(items.find((item) => item.path === '/seguranca')?.label).toBe('Segurança e Auditoria')
       expect(items.some((item) => item.path === '/indicadores')).toBe(false)
       expect(items.some((item) => item.path === '/planos-acao')).toBe(false)
-      expect(items.some((item) => item.path === '/consultoria-mx')).toBe(false)
-      expect(items.some((item) => item.path === '/consultoria/clientes')).toBe(false)
-      expect(items.some((item) => item.path === '/dados-conciliacao')).toBe(false)
-      expect(items.some((item) => item.path === '/seguranca')).toBe(false)
-      // /produtos agora é o catálogo de consultoria para o interno MX.
       expect(items.filter((item) => item.path === '/produtos')).toHaveLength(1)
       expect(items.find((item) => item.path === '/produtos')?.label).toBe('Produtos de Consultoria')
       expect(items.find((item) => item.path === '/notificacoes')?.badge).toBe('7')

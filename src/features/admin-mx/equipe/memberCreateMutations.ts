@@ -1,6 +1,6 @@
 import { generateStrongTemporaryPassword } from '@/lib/auth/passwordPolicy'
 import { resolveFunctionInvokeError, supabase } from '@/lib/supabase'
-import { requiresConsultantProfile, resolveMemberRoleOption, validateMemberCreate, type MemberCreateDraft } from './memberCreate'
+import { requiresConsultantProfile, resolveMemberRoleOption, validateMemberCreate, formatMemberCityUf, type MemberCreateDraft } from './memberCreate'
 import { saveConsultantQualifications } from './consultantProfile'
 
 type RegisterUserResponse = {
@@ -54,10 +54,16 @@ export async function createTeamMember(draft: MemberCreateDraft): Promise<{
   const now = new Date().toISOString()
 
   if (requiresConsultantProfile(draft.role)) {
+    const cidade = formatMemberCityUf(draft.city, draft.state)
+    const capacidadeOnline = draft.capacidade_online.trim() ? Number(draft.capacidade_online) : null
+    const capacidadePresencial = draft.capacidade_presencial.trim() ? Number(draft.capacidade_presencial) : null
     const { error: profileError } = await supabase.from('perfil_consultor_mx').insert({
       user_id: id,
       papel_interno: roleOption.papelInterno ?? 'consultor_mx',
       situacao: draft.situation,
+      cidade: cidade || null,
+      capacidade_online: Number.isFinite(capacidadeOnline) ? capacidadeOnline : null,
+      capacidade_presencial: Number.isFinite(capacidadePresencial) ? capacidadePresencial : null,
       created_at: now,
       updated_at: now,
     })

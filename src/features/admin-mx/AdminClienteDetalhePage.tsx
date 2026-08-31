@@ -1001,53 +1001,61 @@ export function AdminClienteDetalhePage() {
 
             {tab === 'visao' ? (
               <MxSectionCard>
-                <MxSectionHeader title="Informações gerais" description="Cadastro, contrato e situação do cliente." />
-                <div className="grid gap-3 border-b border-border p-5 lg:grid-cols-3">
+                <MxSectionHeader title="Entrega da Consultoria" description="Plano estratégico, plano de ação e consultoria do programa contratado." />
+                <div className="grid gap-3 p-5 lg:grid-cols-3">
                   <div className="rounded-xl border border-border bg-surface-alt p-4">
-                    <div className="flex items-start justify-between gap-3">
+                    <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Plano Estratégico</div>
+                    <div className="mt-3 space-y-1 text-xs text-muted-foreground">
+                      <div>Ciclo: PE {strategicPlanYear}</div>
+                      <div>Indicadores com meta: {strategicPlanReadiness?.indicadoresComMeta ?? 0}</div>
                       <div>
-                        <div className="flex items-center gap-2 text-sm font-semibold text-foreground"><Target size={16} className="text-status-info-text" />Plano Estratégico</div>
-                        <p className="mt-2 text-xs text-muted-foreground">Indicadores, metas e ciclo do produto contratado.</p>
+                        Metas publicadas:{' '}
+                        <span className="font-semibold text-status-success-text">{strategicPlanReadiness?.ready ?? 0}</span>
                       </div>
-                      <span className="text-xs font-semibold text-foreground">
-                        {strategicPlanReadiness
-                          ? PLAN_CYCLE_STATUS_LABEL[strategicPlanReadiness.cycleStatus]
-                          : '—'}
-                      </span>
+                      <div>
+                        Metas pendentes:{' '}
+                        <span className="font-semibold text-status-warning-text">{strategicPlanReadiness?.pending ?? 0}</span>
+                      </div>
+                      <div>
+                        Status:{' '}
+                        <span className="font-semibold text-foreground">
+                          {strategicPlanReadiness
+                            ? PLAN_CYCLE_STATUS_LABEL[strategicPlanReadiness.cycleStatus]
+                            : '—'}
+                        </span>
+                      </div>
                     </div>
-                    {strategicPlanReadiness ? (
-                      <p className="mt-2 text-xs text-muted-foreground">
-                        Indicadores com meta: {strategicPlanReadiness.indicadoresComMeta ?? 0}
-                        {' · '}Metas publicadas: {strategicPlanReadiness.ready}
-                        {' · '}Metas pendentes: {strategicPlanReadiness.pending}
-                      </p>
-                    ) : null}
                     <Button variant="outline" size="sm" className="mt-4" onClick={() => void openCurrentStrategicPlan()} disabled={creatingStrategicPlan}>Abrir Plano</Button>
                   </div>
                   <div className="rounded-xl border border-border bg-surface-alt p-4">
-                    <div className="flex items-start justify-between gap-3">
+                    <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Plano de Ação</div>
+                    <div className="mt-3 space-y-1 text-xs text-muted-foreground">
+                      <div>Ações totais: {actionPlanSummary?.total ?? '—'}</div>
+                      <div>Não iniciadas: {actionPlanSummary?.naoIniciadas ?? '—'}</div>
                       <div>
-                        <div className="flex items-center gap-2 text-sm font-semibold text-foreground"><ClipboardList size={16} className="text-status-warning-text" />Plano de Ação</div>
-                        <p className="mt-2 text-xs text-muted-foreground">Problemas, responsáveis, prazos e evidências da execução.</p>
+                        Em andamento:{' '}
+                        <span className="font-semibold text-status-info-text">{actionPlanSummary?.emAndamento ?? '—'}</span>
                       </div>
-                      <span className="text-xs font-semibold text-foreground">{actionPlanSummary ? `${actionPlanSummary.total} plano(s)` : 'Carregando…'}</span>
+                      <div>
+                        Atrasadas:{' '}
+                        <span className="font-semibold text-status-danger-text">{actionPlanSummary?.atrasadas ?? '—'}</span>
+                      </div>
+                      <div>
+                        Concluídas:{' '}
+                        <span className="font-semibold text-status-success-text">{actionPlanSummary?.completed ?? '—'}</span>
+                      </div>
                     </div>
-                    <p className="mt-2 text-xs text-muted-foreground">{actionPlanSummary ? `${actionPlanSummary.open} em aberto · ${actionPlanSummary.averageProgress}% de progresso médio · ${actionPlanSummary.completed} concluído(s)` : 'Consultando a matriz e as filiais do cliente.'}</p>
                     <Button variant="outline" size="sm" className="mt-4" onClick={() => { setPlanningTab('plano-acao'); setTab('planejamento') }}>Abrir Plano de Ação</Button>
                   </div>
                   <div className="rounded-xl border border-border bg-surface-alt p-4">
-                    <div className="flex items-start justify-between gap-3">
+                    <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Consultoria e Entregas</div>
+                    <div className="mt-3 space-y-1 text-xs text-muted-foreground">
+                      <div>{consultingCurrentLine}</div>
                       <div>
-                        <div className="flex items-center gap-2 text-sm font-semibold text-foreground"><Sparkles size={16} className="text-status-success-text" />Consultoria</div>
-                        <p className="mt-2 text-xs text-muted-foreground">Jornada, encontros e entregas do programa contratado.</p>
+                        Encontros: {totalVisits > 0 ? `${journey.completedVisits}/${totalVisits}` : visits.length}
+                        {journey.overdueVisits ? ` · ${journey.overdueVisits} atrasada(s)` : ''}
                       </div>
-                      <span className="text-xs font-semibold text-foreground">
-                        {totalVisits > 0
-                          ? `${journey.completedVisits}/${totalVisits}${journey.overdueVisits ? ` · ${journey.overdueVisits} atrasada(s)` : ''}`
-                          : `${visits.length} encontro(s)`}
-                      </span>
                     </div>
-                    <p className="mt-2 text-xs text-muted-foreground">{consultingCurrentLine}</p>
                     <Button asChild variant="outline" size="sm" className="mt-4"><Link to={`/clientes/${encodeURIComponent(client.slug || client.id)}/consultoria`}>Abrir Consultoria</Link></Button>
                   </div>
                 </div>

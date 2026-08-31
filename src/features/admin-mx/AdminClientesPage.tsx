@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import {
   Building2,
   CalendarDays,
+  ChevronDown,
   Plus,
   RefreshCw,
 } from 'lucide-react'
@@ -287,47 +288,75 @@ export function AdminClientesPage() {
       <div className="w-full space-y-5">
         <MxModuleHeader
           icon={Building2}
-          eyebrow="Administração MX & Rede"
           title="Clientes MX"
           description={`${rows.length} cliente${rows.length === 1 ? '' : 's'} na carteira`}
           actions={
-            <div className="flex flex-wrap items-center gap-2">
-              <Button asChild variant="outline" size="sm">
-                <Link to="/agenda">
-                  <CalendarDays size={14} className="mr-1.5" />
-                  Agenda MX
-                </Link>
-              </Button>
-              <Button variant="outline" size="sm" onClick={() => void refetchAll()} aria-label="Atualizar carteira de clientes">
-                <RefreshCw size={14} className="mr-1.5" />
-                Atualizar
-              </Button>
-              <Button variant="outline" size="sm" onClick={() => setIsCreateModalOpen(true)}>
-                <Plus size={14} className="mr-1.5" />
-                Cadastro Rápido
-              </Button>
+            activeTab === 'lista' ? (
               <Button asChild size="sm">
                 <Link to="/clientes/novo">
                   <Plus size={14} className="mr-1.5" />
                   Novo Cliente
                 </Link>
               </Button>
-            </div>
+            ) : (
+              <div className="flex flex-wrap items-center gap-2">
+                <Button variant="ghost" size="sm" onClick={() => setActiveTab('lista')}>
+                  ← Voltar para a lista
+                </Button>
+                <Button asChild variant="outline" size="sm">
+                  <Link to="/agenda">
+                    <CalendarDays size={14} className="mr-1.5" />
+                    Agenda MX
+                  </Link>
+                </Button>
+                <Button variant="outline" size="sm" onClick={() => void refetchAll()} aria-label="Atualizar carteira de clientes">
+                  <RefreshCw size={14} className="mr-1.5" />
+                  Atualizar
+                </Button>
+                <Button variant="outline" size="sm" onClick={() => setIsCreateModalOpen(true)}>
+                  <Plus size={14} className="mr-1.5" />
+                  Cadastro Rápido
+                </Button>
+                <Button asChild size="sm">
+                  <Link to="/clientes/novo">
+                    <Plus size={14} className="mr-1.5" />
+                    Novo Cliente
+                  </Link>
+                </Button>
+              </div>
+            )
           }
         />
 
-        <TabNav
-          tabs={tabsConfig}
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          scrollable
-        />
-
-        {activeTab !== 'lista' ? (
-          <Button variant="ghost" size="sm" onClick={() => setActiveTab('lista')}>
-            ← Voltar para a lista
-          </Button>
-        ) : null}
+        {activeTab === 'lista' ? (
+          <div className="flex justify-end">
+            <details className="group relative">
+              <summary className="flex cursor-pointer list-none items-center gap-1 rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:bg-surface-alt hover:text-foreground focus-visible:bg-surface-alt focus-visible:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/20">
+                Mais visões
+                <ChevronDown size={14} className="transition-transform group-open:rotate-180" />
+              </summary>
+              <div className="absolute right-0 z-[var(--mx-z-popover)] mt-1 min-w-[220px] rounded-lg border border-border bg-card p-1 shadow-md">
+                {tabsConfig.filter(tab => tab.key !== 'lista').map(tab => (
+                  <button
+                    key={tab.key}
+                    type="button"
+                    className="block w-full rounded-md px-3 py-2 text-left text-sm hover:bg-surface-alt focus-visible:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/20"
+                    onClick={() => setActiveTab(tab.key)}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+            </details>
+          </div>
+        ) : (
+          <TabNav
+            tabs={tabsConfig}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            scrollable
+          />
+        )}
 
         <div id={`${activeTab}-panel`} role="tabpanel" aria-labelledby={`${activeTab}-tab`}>
           {portfolioLoading ? (

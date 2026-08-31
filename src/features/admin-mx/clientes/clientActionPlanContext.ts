@@ -29,6 +29,9 @@ export type ClientActionPlanSummary = {
   blocked: number
   cancelled: number
   averageProgress: number
+  naoIniciadas: number
+  emAndamento: number
+  atrasadas: number
 }
 
 export function normalizeActionPlanStatus(value: string | null | undefined): string {
@@ -177,14 +180,21 @@ export function collapseClientActionPlanRows<T extends {
   return collapsed
 }
 
-export function summarizeClientActionPlans(rows: Array<Pick<ClientActionPlanRow, 'status' | 'progresso'>>): ClientActionPlanSummary {
+export function summarizeClientActionPlans(rows: Array<Pick<ClientActionPlanRow, 'status' | 'progresso' | 'prazo'>>): ClientActionPlanSummary {
+  const today = new Date().toISOString().slice(0, 10)
   const completed = rows.filter(row => COMPLETED_PLAN_STATUSES.has(normalizeActionPlanStatus(row.status))).length
   const blocked = rows.filter(row => ['bloqueada', 'bloqueado'].includes(normalizeActionPlanStatus(row.status))).length
   const cancelled = rows.filter(row => ['cancelada', 'cancelado'].includes(normalizeActionPlanStatus(row.status))).length
+  const naoIniciadas = rows.filter(row => normalizeActionPlanStatus(row.status) === 'pendente').length
+  const emAndamento = rows.filter(row => normalizeActionPlanStatus(row.status) === 'em_andamento').length
+  const atrasadas = rows.filter(row => {
+    const status = normalizeActionPlanStatus(row.status)
+    if (COMPLETED_PLAN_STATUSES.has(status) || ['cancelada', 'cancelado', 'bloqueada', 'bloqueado'].includes(status)) return false
+    return Boolean(row.prazo && row.prazo < today)
+  }).length
   const open = rows.length - completed - blocked - cancelled
   const averageProgress = rows.length ? Math.round(rows.reduce((sum, row) => sum + Math.max(0, Math.min(100, row.progresso ?? 0)), 0) / rows.length) : 0
-  const summary = { total: rows.length, open, completed, blocked, cancelled, averageProgress }
-  return summary
+  return { total: rows.length, open, completed, blocked, cancelled, averageProgress, naoIniciadas, emAndamento, atrasadas }
 }
 
 /** Resumo leve para a Visão geral, sem deixar a ficha com texto fixo. */
@@ -198,7 +208,7 @@ export async function fetchClientActionPlanSummary(
 
   const { data, error } = await supabase
     .from('planos_acao')
-    .select('id, status, progresso, scope_id, acao, indicador, checklist, origem_ref_id, transition_metadata, updated_at')
+    .select('id, status, progresso, prazo, scope_id, acao, indicador, checklist, origem_ref_id, transition_metadata, updated_at')
     .eq('scope_type', 'store')
     .in('scope_id', scopeIds)
     .limit(300)
