@@ -84,6 +84,7 @@ import { resolveVisitVolumeRule } from './clientes/visitVolumeRule'
 import { ClientActionPlanWizard } from './planos-acao/ClientActionPlanWizard'
 import { groupPeopleByStore, isOrphanTestUnit, mergeOperationalUnits } from './clientes/mergeClientPeople'
 import { canonicalPortfolioStatus, isActive, parentClientOf, PORTFOLIO_STATUS_LABEL } from './clientes/clientPortfolio'
+import { resolveClientPlannedStartDate } from './clientes/clientDetailDates'
 
 type ClientTab = 'visao' | 'lojas' | 'pessoas' | 'jornada' | 'implantacao' | 'planejamento' | 'operacao' | 'dados' | 'historico'
 type PlanningTab = 'estrategico' | 'plano-acao'
@@ -741,10 +742,7 @@ export function AdminClienteDetalhePage() {
 
   const onboardingStep = (client as { onboarding_step?: number | null })?.onboarding_step ?? 1
   const onboardingCompleted = (client as { onboarding_completed?: boolean | null })?.onboarding_completed ?? false
-  const plannedStartDate = formatDate(
-    (client as { scheduled_activation_at?: string | null }).scheduled_activation_at
-      ?? (client as { contract_start_date?: string | null }).contract_start_date,
-  )
+  const plannedStartDate = formatDate(resolveClientPlannedStartDate(client))
   const cadastroUnits = useMemo((): UnitRow[] => {
     if (!client?.id) return []
     return (client.units ?? [])
