@@ -279,7 +279,7 @@ async function auditProfile(
   if (profile.key !== 'gerente') {
     expect(metrics.pageHeader).toMatchObject({
       backgroundColor: 'rgb(255, 255, 255)',
-      borderRadius: '16px',
+      borderRadius: '12px',
     })
     expect(metrics.pageHeader?.borderColor).not.toBe('rgba(0, 0, 0, 0)')
     expect(metrics.pageHeader?.boxShadow).not.toBe('none')
