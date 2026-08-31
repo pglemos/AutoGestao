@@ -1,6 +1,8 @@
 import { describe, expect, test } from 'bun:test'
 import type { ConsultingProduct } from './consultingProducts'
 import {
+  evolutionGroupLabel,
+  filterConsultingCatalog,
   formatPresenciaisRange,
   isLegacyConsultingProductKey,
   isOfficialConsultingProductKey,
@@ -55,15 +57,34 @@ describe('catálogo oficial de consultoria', () => {
     expect(partitioned.legacy.map(item => item.program_key)).toEqual(['mx_start', 'pmr_7'])
   })
 
-  test('ações visíveis seguem ciclo de vida Base44, sem CRUD genérico', () => {
+  test('ações visíveis seguem ciclo de vida produção MX (kebab overflow)', () => {
     expect(visibleProductActions({ status: 'rascunho', clients: 0 }).map(item => item.action)).toEqual([
-      'abrir', 'editar', 'enviar_revisao', 'excluir_rascunho',
+      'abrir', 'editar', 'enviar_revisao', 'arquivar', 'nova_versao', 'duplicar', 'excluir_rascunho',
     ])
     expect(visibleProductActions({ status: 'publicado', clients: 2 }, { requiresNewVersion: true }).map(item => item.label)).toContain('Editar / nova versão')
     expect(visibleProductActions({ status: 'publicado', clients: 2 }).map(item => item.action)).toEqual([
-      'abrir', 'editar', 'suspender', 'arquivar', 'nova_versao',
+      'abrir', 'editar', 'suspender', 'arquivar', 'nova_versao', 'duplicar',
     ])
+    expect(visibleProductActions({ status: 'suspenso_novas_contratacoes', clients: 0 }).map(item => item.action)).toContain('publicar')
     expect(visibleProductActions({ status: 'rascunho', clients: 3 }).some(item => item.action === 'excluir_rascunho')).toBe(false)
+  })
+
+  test('filtros de modalidade e ordenação por contratos', () => {
+    const rows = [
+      product({ program_key: 'pmr_online', modalidade: 'online', clients: 0 }),
+      product({ program_key: 'pmr_plus', modalidade: 'presencial', clients: 36 }),
+      product({ program_key: 'pmr_hibrido', modalidade: 'hibrido', clients: 15 }),
+    ]
+    const online = filterConsultingCatalog(rows, { search: '', status: 'todos', modalidade: 'online', sort: 'nome' })
+    expect(online.map(item => item.program_key)).toEqual(['pmr_online'])
+    const byContracts = filterConsultingCatalog(rows, { search: '', status: 'todos', modalidade: 'todas', sort: 'contratos' })
+    expect(byContracts.map(item => item.program_key)).toEqual(['pmr_plus', 'pmr_hibrido', 'pmr_online'])
+  })
+
+  test('rótulos de grupo evolutivo', () => {
+    expect(evolutionGroupLabel('CONSULTORIA_EVOLUTIVA_PRINCIPAL')).toBe('PMR evolutivo')
+    expect(evolutionGroupLabel('CONSULTORIA_EVOLUTIVA_PMR_PLUS')).toBe('PMR Plus')
+    expect(evolutionGroupLabel(null)).toBe('—')
   })
 
   test('faixa de presenciais formata mínimo e máximo', () => {

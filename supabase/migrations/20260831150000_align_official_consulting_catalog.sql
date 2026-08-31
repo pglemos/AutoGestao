@@ -1,6 +1,7 @@
 -- Migration: 20260831150000_align_official_consulting_catalog.sql
--- Alinha o catálogo comercial ao contrato Base44 (PMR Online, PMR Híbrido, PMR Plus, PPA),
--- remapeia clientes ainda presos em chaves legadas e arquiva programas históricos sem contrato.
+-- Alinha o catálogo comercial ao contrato Base44 (PMR Online, PMR Híbrido, PMR Plus, PPA).
+-- Não remapeia clientes legados (pmr_7 permanece operacional com contratos).
+-- Arquiva apenas legado sem contrato (pmr_9, mx_start).
 
 BEGIN;
 
@@ -55,42 +56,10 @@ BEGIN
   END IF;
 END $$;
 
--- Remapeia contratos legados para o catálogo oficial com base na jornada executada.
-WITH legacy_clients AS (
-  SELECT
-    c.id,
-    c.program_template_key AS legacy_key,
-    coalesce(max(v.visit_number), 0)::integer AS maior_encontro
-  FROM public.clientes_consultoria c
-  LEFT JOIN public.visitas_consultoria v ON v.client_id = c.id
-  WHERE c.program_template_key IN ('pmr_7', 'pmr_9')
-    AND lower(coalesce(c.status, '')) <> 'arquivado'
-  GROUP BY c.id, c.program_template_key
-),
-destinos AS (
-  SELECT
-    id,
-    CASE
-      WHEN maior_encontro <= 9 THEN 'pmr_plus'
-      ELSE 'pmr_hibrido'
-    END AS target_key,
-    CASE
-      WHEN maior_encontro <= 9 THEN 'PMR Plus'
-      ELSE 'PMR Híbrido'
-    END AS target_name
-  FROM legacy_clients
-)
-UPDATE public.clientes_consultoria c
-SET
-  program_template_key = d.target_key,
-  product_name = d.target_name,
-  updated_at = now()
-FROM destinos d
-WHERE c.id = d.id;
-
+-- pmr_7 nunca é arquivado nem remapeado — contratos ativos dependem desta chave.
 UPDATE public.programas_visita_consultoria legacy
 SET status = 'arquivado', active = false, updated_at = now()
-WHERE legacy.program_key IN ('pmr_7', 'pmr_9', 'mx_start')
+WHERE legacy.program_key IN ('pmr_9', 'mx_start')
   AND NOT EXISTS (
     SELECT 1
     FROM public.clientes_consultoria cc
@@ -101,13 +70,12 @@ WHERE legacy.program_key IN ('pmr_7', 'pmr_9', 'mx_start')
 COMMIT;
 
 -- DOWN
--- Não reverte remapeamento de clientes legados → catálogo oficial (irreversível sem backup manual).
--- Reativa programas legados arquivados quando não há clientes remanescentes neles.
+-- Reativa programas legados arquivados (exceto pmr_7, que nunca é arquivado por esta migration).
 BEGIN;
 
 UPDATE public.programas_visita_consultoria legacy
 SET status = 'publicado', active = true, updated_at = now()
-WHERE legacy.program_key IN ('pmr_7', 'pmr_9')
+WHERE legacy.program_key IN ('pmr_9', 'mx_start')
   AND legacy.status = 'arquivado'
   AND NOT EXISTS (
     SELECT 1

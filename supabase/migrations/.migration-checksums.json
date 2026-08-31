@@ -473,7 +473,7 @@
     "20260830140000_shorten_action_plan_codigo.sql": "a7643ec3cb7a00e56894a8045ab7debe9fc88ba8baabb73906aa60f4a7b007c5",
     "20260831120000_atomic_action_plan_create.sql": "45df0301c1b0e5434fb9959e4e66722caf06d5e8cdc5e08a7f0d59a2cbc11080",
     "20260831140000_criar_plano_acao_v2_drop_12arg_evidence_required.sql": "17721dda1f30c342cd715c20479b034bd9432f6d93325f1a84d3f78b51112d7b",
-    "20260831150000_align_official_consulting_catalog.sql": "58df8865308bb430ee778ed4acd8b6ab4b37cc4d4e1b3ae33ccaa7c554903379",
+    "20260831150000_align_official_consulting_catalog.sql": "e2129f2d367ec84ad7898aff1316192b39155b0024b937acb8eb1fa07655757b",
     "20260831160000_fix_plan_patch_departamento_text.sql": "b49a6dd0099f08ed44aef0d815df9ceeb8b3b259b58ba762693569cfecd87ed5"
   }
 }

@@ -90,7 +90,17 @@ export type ProductCatalogAction =
   | 'arquivar'
   | 'restaurar_rascunho'
   | 'nova_versao'
+  | 'duplicar'
   | 'excluir_rascunho'
+
+export type CatalogSortKey = 'nome' | 'contratos' | 'encontros' | 'status'
+
+export type CatalogFilterInput = {
+  search: string
+  status: string
+  modalidade: string
+  sort: CatalogSortKey
+}
 
 export type ProductCatalogActionDescriptor = {
   action: ProductCatalogAction
@@ -125,6 +135,42 @@ export function officialProductSortIndex(programKey: string) {
 
 export function productStatusLabel(status: ProductStatus) {
   return STATUS_LABEL[status]
+}
+
+export function evolutionGroupLabel(group: string | null | undefined) {
+  if (!group) return '—'
+  if (group === 'CONSULTORIA_EVOLUTIVA_PRINCIPAL') return 'PMR evolutivo'
+  if (group === 'CONSULTORIA_EVOLUTIVA_PMR_PLUS') return 'PMR Plus'
+  if (group === 'CONSULTORIA_EVOLUTIVA_PPA') return 'PPA'
+  if (group.startsWith('CONSULTORIA_LEGADO')) return 'Legado'
+  return group
+}
+
+const STATUS_SORT: Record<ProductStatus, number> = {
+  publicado: 0,
+  suspenso_novas_contratacoes: 1,
+  em_revisao: 2,
+  rascunho: 3,
+  arquivado: 4,
+}
+
+/** Filtros de catálogo — busca, status, modalidade e ordenação. */
+export function filterConsultingCatalog(rows: ConsultingProduct[], filters: CatalogFilterInput): ConsultingProduct[] {
+  const term = filters.search.trim().toLowerCase()
+  const filtered = rows.filter(product => {
+    if (filters.status !== 'todos' && product.status !== filters.status) return false
+    if (filters.modalidade !== 'todas' && (product.modalidade ?? '') !== filters.modalidade) return false
+    if (!term) return true
+    return [product.name, product.program_key, product.modalidade, product.evolution_group]
+      .some(value => (value ?? '').toLowerCase().includes(term))
+  })
+
+  return [...filtered].sort((left, right) => {
+    if (filters.sort === 'contratos') return right.clients - left.clients || left.program_key.localeCompare(right.program_key)
+    if (filters.sort === 'encontros') return (right.total_visits ?? 0) - (left.total_visits ?? 0) || left.program_key.localeCompare(right.program_key)
+    if (filters.sort === 'status') return STATUS_SORT[left.status] - STATUS_SORT[right.status] || left.program_key.localeCompare(right.program_key)
+    return (left.name ?? left.program_key).localeCompare(right.name ?? right.program_key, 'pt-BR')
+  })
 }
 
 export function formatPresenciaisRange(product: Pick<ConsultingProduct, 'min_presenciais' | 'max_presenciais'>) {
@@ -180,6 +226,9 @@ export function visibleProductActions(product: Pick<ConsultingProduct, 'status' 
   if (product.status === 'rascunho') {
     actions.push({ action: 'editar', label: 'Editar' })
     actions.push({ action: 'enviar_revisao', label: 'Enviar para revisão', primary: true })
+    actions.push({ action: 'arquivar', label: 'Arquivar' })
+    actions.push({ action: 'nova_versao', label: 'Nova versão' })
+    actions.push({ action: 'duplicar', label: 'Duplicar' })
     if (product.clients === 0) actions.push({ action: 'excluir_rascunho', label: 'Excluir rascunho' })
     return actions
   }
@@ -201,6 +250,7 @@ export function visibleProductActions(product: Pick<ConsultingProduct, 'status' 
     }
     actions.push({ action: 'arquivar', label: 'Arquivar' })
     actions.push({ action: 'nova_versao', label: 'Nova versão' })
+    actions.push({ action: 'duplicar', label: 'Duplicar' })
     return actions
   }
 

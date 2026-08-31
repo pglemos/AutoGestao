@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Package, RefreshCw, ShieldCheck } from 'lucide-react'
+import { Package, Plus, RefreshCw, ShieldCheck } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
@@ -25,8 +25,9 @@ import { ConsultingProductCard } from './produtos/ConsultingProductCard'
 import { ProductDetailDrawer } from './produtos/ProductDetailDrawer'
 import {
   OFFICIAL_CONSULTING_PRODUCT_DEFINITIONS,
-  isOfficialConsultingProductKey,
+  filterConsultingCatalog,
   partitionConsultingCatalog,
+  type CatalogSortKey,
   type ProductCatalogAction,
 } from './produtos/officialConsultingCatalog'
 import {
@@ -62,6 +63,9 @@ export function AdminProdutosConsultoriaPage() {
   const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState('todos')
+  const [modalidade, setModalidade] = useState('todas')
+  const [sort, setSort] = useState<CatalogSortKey>('nome')
+  const [showLegacy, setShowLegacy] = useState(false)
   const [draft, setDraft] = useState<ProductDraft>(emptyProductDraft())
   const [formOpen, setFormOpen] = useState(false)
   const [editing, setEditing] = useState(false)
@@ -80,14 +84,10 @@ export function AdminProdutosConsultoriaPage() {
 
   useEffect(() => { void refetch() }, [refetch])
 
-  const filtered = useMemo(() => {
-    const term = search.trim().toLowerCase()
-    return rows.filter(product => {
-      if (status !== 'todos' && product.status !== status) return false
-      if (!term) return true
-      return [product.name, product.program_key, product.modalidade].some(value => (value ?? '').toLowerCase().includes(term))
-    })
-  }, [rows, search, status])
+  const filtered = useMemo(
+    () => filterConsultingCatalog(rows, { search, status, modalidade, sort }),
+    [rows, search, status, modalidade, sort],
+  )
 
   const catalog = useMemo(() => partitionConsultingCatalog(filtered), [filtered])
 
@@ -96,17 +96,19 @@ export function AdminProdutosConsultoriaPage() {
     return OFFICIAL_CONSULTING_PRODUCT_DEFINITIONS.map(definition => byKey.get(definition.program_key) ?? null)
   }, [catalog.official])
 
-  const metricsSource = useMemo(
-    () => catalog.official.length ? catalog.official : rows.filter(product => isOfficialConsultingProductKey(product.program_key)),
-    [catalog.official, rows],
-  )
-
   const metrics = useMemo(() => ({
-    produtos: metricsSource.length,
-    contratos: metricsSource.reduce((sum, product) => sum + product.clients, 0),
-    encontros: metricsSource.reduce((sum, product) => sum + (product.total_visits ?? 0), 0),
-    presenciais: metricsSource.reduce((sum, product) => sum + (product.max_presenciais ?? product.min_presenciais ?? 0), 0),
-  }), [metricsSource])
+    produtos: rows.length,
+    contratos: rows.reduce((sum, product) => sum + product.clients, 0),
+    encontros: rows.reduce((sum, product) => sum + (product.total_visits ?? 0), 0),
+    presenciais: rows.reduce((sum, product) => sum + (product.max_presenciais ?? product.min_presenciais ?? 0), 0),
+  }), [rows])
+
+  const openNew = () => {
+    setDraft(emptyProductDraft())
+    setEditing(false)
+    setEditingProduct(null)
+    setFormOpen(true)
+  }
 
   const openEdit = (product: ConsultingProduct) => {
     if (productRequiresNewVersion(product)) {
@@ -197,6 +199,10 @@ export function AdminProdutosConsultoriaPage() {
       void duplicate(product, true)
       return
     }
+    if (action === 'duplicar') {
+      void duplicate(product, false)
+      return
+    }
     if (action === 'excluir_rascunho') {
       if (!canDeleteProduct(product)) {
         toast.error('Só é possível excluir rascunho sem cliente vinculado.')
@@ -221,12 +227,17 @@ export function AdminProdutosConsultoriaPage() {
           eyebrow="Administração MX"
           title="Produtos de Consultoria"
           description="Catálogo oficial MX: PMR Online, PMR Híbrido, PMR Plus e PPA — ciclo de vida, módulos, tempos e plano estratégico por programa."
-          actions={<Button variant="outline" onClick={() => void refetch()}><RefreshCw size={16} />Atualizar</Button>}
+          actions={(
+            <>
+              <Button variant="outline" onClick={() => void refetch()}><RefreshCw size={16} />Atualizar</Button>
+              <Button onClick={openNew}><Plus size={16} />Novo Produto</Button>
+            </>
+          )}
         />
         {loading ? <MxLoadingState label="Carregando produtos" /> : error ? <MxErrorState description={error} retry={() => void refetch()} /> : (
           <>
             <MxMetricGrid>
-              <MxMetricCard title="Produtos oficiais" value={metrics.produtos} detail="PMR Online · Híbrido · Plus · PPA" icon={Package} />
+              <MxMetricCard title="Produtos" value={metrics.produtos} detail="Catálogo completo incl. legado oculto" icon={Package} />
               <MxMetricCard title="Encontros previstos" value={metrics.encontros} detail="Somatório das jornadas" icon={Package} tone="violet" />
               <MxMetricCard title="Presenciais" value={metrics.presenciais} detail="Limite máximo das jornadas" icon={Package} tone="info" />
               <MxMetricCard title="Contratos ativos" value={metrics.contratos} detail="Clientes vinculados" icon={Package} tone="success" />
@@ -252,6 +263,18 @@ export function AdminProdutosConsultoriaPage() {
                 <option value="publicado">Publicado</option>
                 <option value="suspenso_novas_contratacoes">Suspenso</option>
                 <option value="arquivado">Arquivado</option>
+              </MxSelect>
+              <MxSelect value={modalidade} onChange={event => setModalidade(event.target.value)} aria-label="Filtrar por modalidade">
+                <option value="todas">Todas as modalidades</option>
+                <option value="online">Online</option>
+                <option value="hibrido">Híbrido</option>
+                <option value="presencial">Presencial</option>
+              </MxSelect>
+              <MxSelect value={sort} onChange={event => setSort(event.target.value as CatalogSortKey)} aria-label="Ordenar catálogo">
+                <option value="nome">Ordenar: nome</option>
+                <option value="contratos">Ordenar: contratos</option>
+                <option value="encontros">Ordenar: encontros</option>
+                <option value="status">Ordenar: status</option>
               </MxSelect>
             </MxToolbar>
 
@@ -311,19 +334,33 @@ export function AdminProdutosConsultoriaPage() {
 
             {catalog.legacy.length ? (
               <MxSectionCard>
-                <MxSectionHeader title="Programas legados" description="Chaves históricas (pmr_7, pmr_9, mx_start) fora do catálogo comercial Base44." />
-                <div className="space-y-4 p-5">
-                  {catalog.legacy.map(product => (
-                    <ConsultingProductCard
-                      key={product.program_key}
-                      product={product}
-                      expanded={Boolean(expandedKeys[product.program_key])}
-                      requiresNewVersion={productRequiresNewVersion(product)}
-                      onToggle={() => toggleExpanded(product.program_key)}
-                      onAction={handleAction}
-                    />
-                  ))}
-                </div>
+                <MxSectionHeader
+                  title="Programas legados"
+                  description={`${catalog.legacy.length} chave(s) histórica(s) fora do catálogo Base44 (pmr_7, pmr_9, mx_start).`}
+                  actions={(
+                    <Button variant="outline" size="sm" onClick={() => setShowLegacy(current => !current)}>
+                      {showLegacy ? 'Ocultar legado' : 'Mostrar legado'}
+                    </Button>
+                  )}
+                />
+                {showLegacy ? (
+                  <div className="space-y-4 p-5">
+                    {catalog.legacy.map(product => (
+                      <ConsultingProductCard
+                        key={product.program_key}
+                        product={product}
+                        expanded={Boolean(expandedKeys[product.program_key])}
+                        requiresNewVersion={productRequiresNewVersion(product)}
+                        onToggle={() => toggleExpanded(product.program_key)}
+                        onAction={handleAction}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="px-5 pb-5 text-sm text-muted-foreground">
+                    Oculto por padrão. pmr_7 permanece operacional enquanto houver contratos — nunca é excluído automaticamente.
+                  </div>
+                )}
               </MxSectionCard>
             ) : null}
           </>
