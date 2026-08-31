@@ -11,7 +11,7 @@ describe('navegação interna MX', () => {
       // Três grupos da especificação do módulo Administrador + Simulação.
       expect(sections.map((section) => section.label)).toEqual([
         'Operação MX',
-        'Produto',
+        'Produto e Metodologia',
         'Plataforma',
         'Simulação',
       ])
