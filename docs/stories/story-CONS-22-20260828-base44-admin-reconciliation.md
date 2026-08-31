@@ -220,6 +220,7 @@ responsividade; nenhum segredo em artefatos.
 - `src/features/filiais/useStoreBranches.ts`
 - `src/lib/xlsx-reader.ts`
 - `src/lib/cons22-admin-rpcs.test.ts`
+- `src/test/no-local-debug-endpoints.test.ts`
 - `src/test/internal-mx-planning-pages.test.ts`
 - `src/types/database.generated.ts`
 - `supabase/migrations/20260829000000_fix_admin_rpcs_and_plan_patch.sql`
@@ -242,6 +243,9 @@ responsividade; nenhum segredo em artefatos.
 - `src/features/admin-mx/clientes/clientIdentificationMutations.ts`
 - `src/features/admin-mx/clientes/clientPortfolio.ts`
 - `src/features/admin-mx/clientes/clientPortfolio.test.ts`
+- `src/features/admin-mx/clientes/ProgramEditModal.tsx`
+- `src/features/admin-mx/clientes/clientJourney.ts`
+- `src/features/admin-mx/clientes/clientVisitMutations.ts`
 - `src/features/admin-mx/clientes/AdminClientPlanoAcaoPage.tsx`
 - `src/features/admin-mx/clientes/clientDetailDates.ts`
 - `src/features/admin-mx/clientes/clientDetailDates.test.ts`
@@ -312,7 +316,9 @@ responsividade; nenhum segredo em artefatos.
 ### Candidato de release (2026-08-31)
 
 - Correção do crash de detalhe de cliente quando o cliente é `null`, com helper e teste de regressão; atualização da consulta por slug preservando fallback seguro para IDs UUID.
-- `npm run typecheck`, `npm run lint`, `npm test` (**4754 pass / 0 fail**), `npm run build`, `npm run audit:routes-data` e `git diff --check` passaram.
+- `npm run typecheck`, `npm run lint`, `npm test` (**4756 pass / 0 fail**), `npm run build`, `npm run audit:routes-data` e `git diff --check` passaram.
 - Graphify foi reconstruído com runtime TypeScript; seis scripts PowerShell continuam sem parser `tree-sitter-powershell`, limitação preexistente e fora do runtime.
 - CodeRabbit não encontrou achados críticos no diff; os dois achados registrados apontam arquivos já presentes em `origin/main`, fora deste candidato.
 - A revisão QA visual autenticada e a prova pós-deploy permanecem pendentes até a publicação e validação deste SHA.
+- Removidos os três `fetch` de debug para `127.0.0.1:7506` dos fluxos de cliente; o contrato `no-local-debug-endpoints` impede o retorno desse endpoint ao runtime.
+- Validação oficial pós-correção local: `agent-browser` passou em `1440×900` e `390×844`, com axe em `0` violações e `0` incompletos; a publicação ainda precisa de novo deploy para substituir os dois chunks lazy antigos.

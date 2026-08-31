@@ -35,9 +35,6 @@ export function ProgramEditModal(props: {
     if (!props.open) return
     const next = props.initial ?? emptyProgramDraft()
     const normalized = { ...next, modality: normalizeProgramModality(next.modality) || next.modality }
-    // #region agent log
-    fetch('http://127.0.0.1:7506/ingest/ceac55d9-e57e-4aa7-abcd-40a91956c86a',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'285f20'},body:JSON.stringify({sessionId:'285f20',runId:'post-fix',hypothesisId:'AI',location:'ProgramEditModal.tsx:open',message:'program modality draft',data:{raw:next.modality,normalized:normalized.modality},timestamp:Date.now()})}).catch(()=>{});
-    // #endregion
     setDraft(normalized)
   }, [props.open, props.initial])
 

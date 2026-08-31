@@ -161,10 +161,6 @@ export function buildClientJourney(input: {
     .filter(Number.isInteger)
   const nextVisitNumber = scheduledOrInProgress.length ? Math.min(...scheduledOrInProgress) : null
 
-  // #region agent log
-  fetch('http://127.0.0.1:7506/ingest/ceac55d9-e57e-4aa7-abcd-40a91956c86a',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'285f20'},body:JSON.stringify({sessionId:'285f20',runId:'post-fix',hypothesisId:'W',location:'clientJourney.ts:buildClientJourney',message:'journey cycle',data:{programKey,totalVisits,completedVisits,overdueVisits,registered:contractedVisits.length,statuses:contractedVisits.map(visit => visit.status)},timestamp:Date.now()})}).catch(()=>{});
-  // #endregion
-
   return {
     programKey,
     totalVisits,
