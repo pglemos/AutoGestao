@@ -14,7 +14,7 @@ const profiles = [
     key: 'administrador-geral',
     email: 'visual-administrador-geral@mxgestaopreditiva.com.br',
     role: 'administrador_geral',
-    path: '/painel',
+    path: '/clientes',
     moduleLabel: 'Admin',
     roleLabel: 'Admin geral',
   },
@@ -22,7 +22,7 @@ const profiles = [
     key: 'administrador-mx',
     email: 'visual-administrador-mx@mxgestaopreditiva.com.br',
     role: 'administrador_mx',
-    path: '/painel',
+    path: '/clientes',
     moduleLabel: 'Admin MX',
     roleLabel: 'Admin MX',
   },
@@ -30,7 +30,7 @@ const profiles = [
     key: 'consultor-mx',
     email: 'visual-consultor-mx@mxgestaopreditiva.com.br',
     role: 'consultor_mx',
-    path: '/consultoria/clientes',
+    path: '/clientes',
     moduleLabel: 'Consultoria',
     roleLabel: 'Consultor MX',
   },
@@ -120,8 +120,11 @@ async function hasCanonicalPageHeader(page: Page) {
   return page.evaluate(() => {
     const visualScope = document.querySelector<HTMLElement>('[data-mx-visual-system="manager"]')
     if (!visualScope) return false
-    return Array.from(visualScope.querySelectorAll<HTMLElement>('header'))
-      .some((node) => node.getBoundingClientRect().width > 300)
+    const candidates = [
+      ...Array.from(visualScope.querySelectorAll<HTMLElement>('header')),
+      ...Array.from(visualScope.querySelectorAll<HTMLElement>('[data-mx-module-header], [data-mx-page-header]')),
+    ]
+    return candidates.some((node) => node.getBoundingClientRect().width > 300)
   })
 }
 
@@ -160,8 +163,10 @@ async function collectMetrics(page: Page, profile: string, viewport: string): Pr
     const visibleModuleLabel = findVisibleModuleLabelNode()
     const visualScope = document.querySelector<HTMLElement>('[data-mx-visual-system="manager"]')
     const pageHeader = visualScope
-      ? Array.from(visualScope.querySelectorAll<HTMLElement>('header'))
-          .find((node) => node.getBoundingClientRect().width > 300)
+      ? [
+          ...Array.from(visualScope.querySelectorAll<HTMLElement>('header')),
+          ...Array.from(visualScope.querySelectorAll<HTMLElement>('[data-mx-module-header], [data-mx-page-header]')),
+        ].find((node) => node.getBoundingClientRect().width > 300)
       : null
 
     if (!content || !visibleModuleLabel) throw new Error('Shell universal não encontrado no DOM.')
