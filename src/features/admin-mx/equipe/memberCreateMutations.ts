@@ -1,6 +1,7 @@
 import { generateStrongTemporaryPassword } from '@/lib/auth/passwordPolicy'
 import { resolveFunctionInvokeError, supabase } from '@/lib/supabase'
-import { requiresConsultantProfile, validateMemberCreate, type MemberCreateDraft } from './memberCreate'
+import { requiresConsultantProfile, resolveMemberRoleOption, validateMemberCreate, type MemberCreateDraft } from './memberCreate'
+import { saveConsultantQualifications } from './consultantProfile'
 
 type RegisterUserResponse = {
   success?: boolean
@@ -10,9 +11,6 @@ type RegisterUserResponse = {
 
 /**
  * Cria um membro da equipe MX via edge function `register-user` (service role).
- * Insert direto em `usuarios` toma 403 para consultor MX: RLS exige
- * `eh_administrador_mx()`. A senha temporária força troca no primeiro acesso
- * (`must_change_password` vem de `internal_mx_finalize_registered_user`).
  */
 export async function createTeamMember(draft: MemberCreateDraft): Promise<{
   error: string | null
@@ -24,6 +22,7 @@ export async function createTeamMember(draft: MemberCreateDraft): Promise<{
 
   const email = draft.email.trim().toLowerCase()
   const name = draft.name.trim()
+  const roleOption = resolveMemberRoleOption(draft.role)
 
   const { data: duplicate } = await supabase
     .from('usuarios')
@@ -39,7 +38,7 @@ export async function createTeamMember(draft: MemberCreateDraft): Promise<{
       email,
       password: temporaryPassword,
       phone: draft.phone.trim() || null,
-      role: draft.role,
+      role: roleOption.authRole,
       is_active: draft.situation !== 'inativo',
     },
   })
@@ -57,20 +56,34 @@ export async function createTeamMember(draft: MemberCreateDraft): Promise<{
   if (requiresConsultantProfile(draft.role)) {
     const { error: profileError } = await supabase.from('perfil_consultor_mx').insert({
       user_id: id,
-      papel_interno: 'consultor_mx',
+      papel_interno: roleOption.papelInterno ?? 'consultor_mx',
       situacao: draft.situation,
       created_at: now,
       updated_at: now,
     })
     if (profileError) return { error: profileError.message, id }
+
+    if (draft.enabled_programs.length) {
+      const { data: products } = await supabase
+        .from('programas_visita_consultoria')
+        .select('program_key, name, total_visits')
+        .in('program_key', draft.enabled_programs)
+      const qualifications = (products ?? []).map(product => ({
+        program_key: product.program_key,
+        name: product.name ?? product.program_key,
+        total_visits: product.total_visits ?? 0,
+        enabled: true,
+        encounters: [] as number[],
+      }))
+      const saved = await saveConsultantQualifications(id, qualifications)
+      if (saved.error) return { error: saved.error, id }
+    }
   }
 
   if (draft.store_id) {
     const { error: linkError } = await supabase.from('vinculos_loja').insert({
       user_id: id,
       store_id: draft.store_id,
-      // Membro interno MX não é vendedor nem dono da loja; entra como gerente,
-      // que é o papel de acesso operacional em `vinculos_loja`.
       role: 'gerente',
       is_active: true,
     })

@@ -23,15 +23,17 @@ describe('criação de membro da equipe MX', () => {
     expect(errors).toContain('E-mail é obrigatório.')
   })
 
-  test('aceita os três papéis internos MX', () => {
-    for (const role of ['administrador_geral', 'administrador_mx', 'consultor_mx'] as const) {
+  test('aceita papéis Base44 mapeados para auth canônica', () => {
+    for (const role of ['consultor_mx', 'consultor_especialista', 'administrador_principal', 'suporte_mx'] as const) {
       expect(validateMemberCreate(draft({ role }))).toEqual([])
     }
   })
 
-  test('consultor_mx exige perfil; admins não', () => {
+  test('consultores e coordenadores exigem perfil; admins não', () => {
     expect(requiresConsultantProfile('consultor_mx')).toBe(true)
-    expect(requiresConsultantProfile('administrador_mx')).toBe(false)
-    expect(requiresConsultantProfile('administrador_geral')).toBe(false)
+    expect(requiresConsultantProfile('consultor_especialista')).toBe(true)
+    expect(requiresConsultantProfile('coordenador_consultoria')).toBe(true)
+    expect(requiresConsultantProfile('administrador_implantacao')).toBe(false)
+    expect(requiresConsultantProfile('administrador_principal')).toBe(false)
   })
 })

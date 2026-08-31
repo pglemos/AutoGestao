@@ -35,11 +35,12 @@ import { reactivateClient, scheduleActivation, suspendClient } from './clientes/
 import { isActive, portfolioCounters, type PortfolioClient } from './clientes/clientPortfolio'
 import { useClientPortfolio } from './clientes/useClientPortfolio'
 import { PortfolioOverviewTab } from './clientes/PortfolioOverviewTab'
+import { PortfolioBase44ListTab } from './clientes/PortfolioBase44ListTab'
 import { OnboardingPortfolioTab } from './clientes/OnboardingPortfolioTab'
 import { InscricoesTab } from './clientes/InscricoesTab'
 import { GovernancaBloqueiosTab } from './clientes/GovernancaBloqueiosTab'
 
-export type AdminClientesTab = 'carteira' | 'onboarding' | 'inscricoes' | 'governanca'
+export type AdminClientesTab = 'lista' | 'carteira360' | 'onboarding' | 'inscricoes' | 'governanca'
 
 export function AdminClientesPage() {
   const { rows, loading: portfolioLoading, error: portfolioError, refetch: refetchPortfolio } = useClientPortfolio()
@@ -61,16 +62,16 @@ export function AdminClientesPage() {
   // Current Active Tab
   const requestedTab = searchParams.get('tab') as AdminClientesTab | null
   const [activeTab, setActiveTabState] = useState<AdminClientesTab>(
-    requestedTab && ['carteira', 'onboarding', 'inscricoes', 'governanca'].includes(requestedTab)
+    requestedTab && ['lista', 'carteira360', 'onboarding', 'inscricoes', 'governanca'].includes(requestedTab)
       ? requestedTab
-      : 'carteira'
+      : 'lista'
   )
 
   const setActiveTab = (tab: AdminClientesTab) => {
     setActiveTabState(tab)
     setSearchParams(prev => {
       const next = new URLSearchParams(prev)
-      if (tab === 'carteira') next.delete('tab')
+      if (tab === 'lista') next.delete('tab')
       else next.set('tab', tab)
       return next
     }, { replace: true })
@@ -100,7 +101,8 @@ export function AdminClientesPage() {
   const counters = useMemo(() => portfolioCounters(rows), [rows])
 
   const tabsConfig = useMemo(() => [
-    { key: 'carteira' as const, label: `Carteira 360 (${rows.length})` },
+    { key: 'lista' as const, label: `Clientes MX (${rows.length})` },
+    { key: 'carteira360' as const, label: `Carteira 360 (${rows.length})` },
     { key: 'onboarding' as const, label: `Em Implantação (${counters.em_implantacao + counters.prontos_para_ativar})` },
     { key: 'inscricoes' as const, label: 'Inscrições & Links' },
     { key: 'governanca' as const, label: `Governança & Bloqueios (${counters.com_bloqueios})` },
@@ -286,8 +288,8 @@ export function AdminClientesPage() {
         <MxModuleHeader
           icon={Building2}
           eyebrow="Administração MX & Rede"
-          title="Clientes & Lojas MX"
-          description="Central unificada de gestão da carteira, onboarding, rede de lojas, metas e acessos."
+          title="Clientes MX"
+          description={`${rows.length} cliente${rows.length === 1 ? '' : 's'} na carteira`}
           actions={
             <div className="flex flex-wrap items-center gap-2">
               <Button asChild variant="outline" size="sm">
@@ -321,9 +323,9 @@ export function AdminClientesPage() {
           scrollable
         />
 
-        {activeTab !== 'carteira' ? (
-          <Button variant="ghost" size="sm" onClick={() => setActiveTab('carteira')}>
-            ← Voltar para a carteira
+        {activeTab !== 'lista' ? (
+          <Button variant="ghost" size="sm" onClick={() => setActiveTab('lista')}>
+            ← Voltar para a lista
           </Button>
         ) : null}
 
@@ -334,7 +336,14 @@ export function AdminClientesPage() {
             <MxErrorState description={portfolioError} retry={() => void refetchAll()} />
           ) : (
             <>
-            {activeTab === 'carteira' && (
+            {activeTab === 'lista' && (
+              <PortfolioBase44ListTab
+                rows={rows}
+                onAction={handleAction}
+              />
+            )}
+
+            {activeTab === 'carteira360' && (
               <PortfolioOverviewTab
                 rows={rows}
                 lojas={lojas}

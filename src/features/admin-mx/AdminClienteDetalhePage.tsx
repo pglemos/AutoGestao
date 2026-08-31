@@ -83,7 +83,7 @@ import { useAdminConsultingProducts, useAdminTeam } from './hooks/useAdminMxList
 import { resolveVisitVolumeRule } from './clientes/visitVolumeRule'
 import { ClientActionPlanWizard } from './planos-acao/ClientActionPlanWizard'
 import { groupPeopleByStore, isOrphanTestUnit, mergeOperationalUnits } from './clientes/mergeClientPeople'
-import { canonicalPortfolioStatus, parentClientOf, PORTFOLIO_STATUS_LABEL } from './clientes/clientPortfolio'
+import { canonicalPortfolioStatus, isActive, parentClientOf, PORTFOLIO_STATUS_LABEL } from './clientes/clientPortfolio'
 
 type ClientTab = 'visao' | 'lojas' | 'pessoas' | 'jornada' | 'implantacao' | 'planejamento' | 'operacao' | 'dados' | 'historico'
 type PlanningTab = 'estrategico' | 'plano-acao'
@@ -598,19 +598,11 @@ export function AdminClienteDetalhePage() {
   const summary = useMemo(() => readinessSummary(checks), [checks])
   const health = useClientHealth(client?.id, client?.primary_store_id ?? null)
   const visits = client?.visits ?? []
-  const journey = useMemo(() => {
-    const next = buildClientJourney({
-      programKey: client?.program_template_key,
-      programTotal: client?.journey_total_visits,
-      visits,
-    })
-    // #region agent log
-    fetch('http://127.0.0.1:7506/ingest/ceac55d9-e57e-4aa7-abcd-40a91956c86a',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'285f20'},body:JSON.stringify({sessionId:'285f20',runId:'post-fix',hypothesisId:'AC',location:'AdminClienteDetalhePage.tsx:journey',message:'360 cycle fields',data:{completed:next.completedVisits,total:next.totalVisits,overdue:next.overdueVisits,phase:client?.business_phase ?? null,contractEnd:(client as { contract_end_date?: string | null } | null)?.contract_end_date ?? null,contractStart:(client as { contract_start_date?: string | null } | null)?.contract_start_date ?? null,visitCount:visits.length},timestamp:Date.now()})}).catch(()=>{});
-    fetch('http://127.0.0.1:7506/ingest/ceac55d9-e57e-4aa7-abcd-40a91956c86a',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'285f20'},body:JSON.stringify({sessionId:'285f20',runId:'post-fix',hypothesisId:'AQ',location:'AdminClienteDetalhePage.tsx:journey-titles',message:'jornada encounter titles',data:{progress:next.progress,firstObjective:visits[0]?.objective ?? null,firstTitle:visits[0] ? clientVisitDisplayTitle(visits[0]) : null,consultant:visits[0]?.consultant?.name ?? null},timestamp:Date.now()})}).catch(()=>{});
-    fetch('http://127.0.0.1:7506/ingest/ceac55d9-e57e-4aa7-abcd-40a91956c86a',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'285f20'},body:JSON.stringify({sessionId:'285f20',runId:'post-fix',hypothesisId:'AV',location:'AdminClienteDetalhePage.tsx:visao',message:'360 overview phase and current encounter',data:{phaseRaw:client?.business_phase ?? null,phaseLabel:clientBusinessPhaseLabel(client?.business_phase),currentTitle:visits[0] ? clientVisitDisplayTitle(visits[0]) : null,completed:next.completedVisits,total:next.totalVisits},timestamp:Date.now()})}).catch(()=>{});
-    // #endregion
-    return next
-  }, [client, visits])
+  const journey = useMemo(() => buildClientJourney({
+    programKey: client?.program_template_key,
+    programTotal: client?.journey_total_visits,
+    visits,
+  }), [client?.program_template_key, client?.journey_total_visits, visits])
   const totalVisits = journey.totalVisits
   const overdueVisitIds = useMemo(
     () => visits
@@ -648,6 +640,13 @@ export function AdminClienteDetalhePage() {
     })
   }, [client, journey.completedVisits, totalVisits])
   const portfolioStatusLabel = portfolioStatus ? PORTFOLIO_STATUS_LABEL[portfolioStatus] : formatClientStatus(client?.status)
+  const journeyProgressPct = totalVisits > 0 ? Math.round((journey.completedVisits / totalVisits) * 100) : 0
+  const showValidateActivate = useMemo(() => {
+    if (!client) return false
+    if (!isActive(client)) return true
+    if (portfolioStatus === 'em_configuracao' || portfolioStatus === 'prontos_para_ativar') return true
+    return !summary.canActivate
+  }, [client, portfolioStatus, summary.canActivate])
   const responsibleConsultant = useMemo(() => {
     const primary = client?.assignments?.find(a => a.active && a.assignment_role === 'responsavel')?.user?.name
     if (primary) return primary
@@ -978,10 +977,14 @@ export function AdminClienteDetalhePage() {
               {client && !onboardingCompleted && String(client.status ?? '').toLowerCase() !== 'ativo' ? (
                 <Button asChild variant="outline"><Link to={`/clientes/novo?continue=${client.id}`}><ArrowLeft size={16} />Continuar onboarding</Link></Button>
               ) : null}
-              {client && client.status !== 'ativo'
+              {client && showValidateActivate
                 ? <Button onClick={() => setActivationOpen(true)}><CheckCircle2 size={16} />Validar e Ativar</Button>
                 : null}
-              {client ? <Button variant="outline" onClick={() => setIdentityOpen(true)}><Pencil size={16} />Editar Identificação do Cliente</Button> : null}
+              {client ? (
+                <Button variant="outline" size="icon" aria-label="Editar identificação do cliente" onClick={() => setIdentityOpen(true)}>
+                  <Pencil size={16} />
+                </Button>
+              ) : null}
               {client ? <Button variant="outline" onClick={() => void openCurrentStrategicPlan()} disabled={creatingStrategicPlan}><Target size={16} />{creatingStrategicPlan ? 'Abrindo...' : strategicPlanReadiness ? 'Abrir Plano' : 'Criar Plano Estratégico'}</Button> : null}
               {client ? <Button variant="outline" onClick={() => { setPlanningTab('plano-acao'); setTab('planejamento') }}><ClipboardList size={16} />Abrir Plano de Ação</Button> : null}
               {client ? <Button asChild variant="outline"><Link to={`/clientes/${encodeURIComponent(client.slug || client.id)}/consultoria`}><Sparkles size={16} />Abrir Consultoria</Link></Button> : null}
@@ -994,20 +997,10 @@ export function AdminClienteDetalhePage() {
         ) : (
           <>
             <MxMetricGrid>
-              <MxMetricCard
-                title="Status"
-                value={portfolioStatusLabel}
-                detail={portfolioStatus === 'em_implantacao'
-                  ? `Jornada em andamento · ${journey.completedVisits}/${totalVisits}`
-                  : summary.canActivate
-                  ? portfolioStatus === 'ativos' ? 'Pronto para operar' : 'Pronto para ativar'
-                  : `${summary.blockers.length} impeditivo(s)`}
-                icon={BriefcaseBusiness}
-                tone={portfolioStatus === 'ativos' ? 'success' : portfolioStatus === 'em_implantacao' ? 'info' : 'warning'}
-              />
               <MxMetricCard title="Lojas" value={units.length ?? 0} detail="Matriz e filiais operacionais" icon={Building2} tone="info" />
-              <MxMetricCard title="Pessoas" value={persons.length} detail="Acessos e vínculos de loja" icon={UserPlus} tone="violet" />
-              <MxMetricCard title="Prontidão" value={`${summary.completed}/${summary.total}`} detail="Itens do checklist concluídos" icon={BriefcaseBusiness} />
+              <MxMetricCard title="Usuários" value={persons.length} detail="Acessos e vínculos de loja" icon={UserPlus} tone="violet" />
+              <MxMetricCard title="Encontros concluídos" value={journey.completedVisits} detail={totalVisits > 0 ? `de ${totalVisits} previstos` : 'Sem jornada contratada'} icon={Clock} tone="info" />
+              <MxMetricCard title="Progresso da jornada" value={`${journeyProgressPct}%`} detail={totalVisits > 0 ? `${journey.completedVisits}/${totalVisits} encontros` : '—'} icon={BriefcaseBusiness} tone={journeyProgressPct >= 100 ? 'success' : 'brand'} />
             </MxMetricGrid>
 
             <TabNav tabs={TABS} activeTab={tab} onTabChange={setTab} scrollable />

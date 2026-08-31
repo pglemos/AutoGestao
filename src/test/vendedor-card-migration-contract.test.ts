@@ -92,16 +92,18 @@ describe('FASE M 13.014 — vendedor usa família canônica de cards', () => {
   })
 
   test('13.014 admin-mx: páginas usam MxSectionCard (canônico) sem cards crus', () => {
-    const pages = [
+    const sectionCardPages = [
       'src/features/admin-mx/AdminIndicadoresPage.tsx',
-      'src/features/admin-mx/AdminEquipeMxPage.tsx',
       'src/features/admin-mx/AdminConsultoriaMxPage.tsx',
     ]
-    for (const f of pages) {
+    for (const f of sectionCardPages) {
       const src = read(f)
       expect(src, f).toContain('MxSectionCard')
       // Sem card cru (div/section rounded-2xl + shadow-sm)
       expect(src, f).not.toMatch(/<(div|section)[^>]*rounded-2xl[^>]*shadow-sm/)
     }
+    const equipe = read('src/features/admin-mx/AdminEquipeMxPage.tsx')
+    expect(equipe).toContain('<TeamMemberCard')
+    expect(equipe).not.toMatch(/<(div|section)[^>]*rounded-2xl[^>]*shadow-sm/)
   })
 })

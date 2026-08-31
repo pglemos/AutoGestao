@@ -38,6 +38,8 @@ export type AdminTeamMember = {
   situacao: string | null
   papel_interno: string | null
   capacidade_total: number | null
+  cidade: string | null
+  specialties: string[]
 }
 
 export function useAdminTeam(): QueryState<AdminTeamMember> {
@@ -48,9 +50,11 @@ export function useAdminTeam(): QueryState<AdminTeamMember> {
       .in('role', ['administrador_geral', 'administrador_mx', 'consultor_mx'])
       .order('name', { ascending: true })
     if (error) throw new Error(error.message)
-    const [{ data: assignments }, { data: profiles }] = await Promise.all([
+    const [{ data: assignments }, { data: profiles }, { data: qualifications }, { data: products }] = await Promise.all([
       supabase.from('atribuicoes_consultoria').select('user_id, active').eq('active', true),
-      supabase.from('perfil_consultor_mx').select('user_id, situacao, papel_interno, capacidade_online, capacidade_presencial'),
+      supabase.from('perfil_consultor_mx').select('user_id, situacao, papel_interno, capacidade_online, capacidade_presencial, cidade'),
+      supabase.from('qualificacoes_produto_consultor').select('user_id, program_key'),
+      supabase.from('programas_visita_consultoria').select('program_key, name'),
     ])
     const counters = new Map<string, number>()
     for (const item of assignments ?? []) {
@@ -59,6 +63,12 @@ export function useAdminTeam(): QueryState<AdminTeamMember> {
       counters.set(userId, (counters.get(userId) ?? 0) + 1)
     }
     const byUser = new Map((profiles ?? []).map(profile => [profile.user_id, profile]))
+    const productNames = new Map((products ?? []).map(product => [product.program_key, product.name ?? product.program_key]))
+    const specialtiesByUser = new Map<string, string[]>()
+    for (const item of qualifications ?? []) {
+      const label = productNames.get(item.program_key) ?? item.program_key
+      specialtiesByUser.set(item.user_id, [...(specialtiesByUser.get(item.user_id) ?? []), label])
+    }
     return (users ?? []).map(user => {
       const profile = byUser.get(user.id)
       const online = profile?.capacidade_online
@@ -72,6 +82,8 @@ export function useAdminTeam(): QueryState<AdminTeamMember> {
         situacao: profile?.situacao ?? null,
         papel_interno: profile?.papel_interno ?? null,
         capacidade_total: capacidade,
+        cidade: profile?.cidade ?? null,
+        specialties: specialtiesByUser.get(user.id) ?? [],
       }
     }) as AdminTeamMember[]
   })

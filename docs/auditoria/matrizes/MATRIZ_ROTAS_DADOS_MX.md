@@ -271,13 +271,13 @@
 | `posicionamento_empresa` | 1 |
 | `pre_cadastros_loja` | 2 |
 | `produtos_digitais` | 2 |
-| `programas_visita_consultoria` | 10 |
+| `programas_visita_consultoria` | 11 |
 | `progresso_etapa_trilha` | 1 |
 | `progresso_treinamentos` | 3 |
 | `prospecting_schedule` | 3 |
 | `push_subscriptions` | 1 |
 | `qualificacoes_encontro_consultor` | 1 |
-| `qualificacoes_produto_consultor` | 1 |
+| `qualificacoes_produto_consultor` | 2 |
 | `recomendacoes_desenvolvimento` | 1 |
 | `regras_entrega_loja` | 2 |
 | `regras_metas_loja` | 9 |
@@ -604,7 +604,7 @@
 | `produtos_digitais:update` | 1 |
 | `programas_visita_consultoria:delete` | 1 |
 | `programas_visita_consultoria:insert` | 1 |
-| `programas_visita_consultoria:select` | 9 |
+| `programas_visita_consultoria:select` | 10 |
 | `programas_visita_consultoria:update` | 2 |
 | `progresso_etapa_trilha:select` | 1 |
 | `progresso_treinamentos:select` | 3 |
@@ -617,7 +617,7 @@
 | `qualificacoes_encontro_consultor:select` | 1 |
 | `qualificacoes_produto_consultor:delete` | 1 |
 | `qualificacoes_produto_consultor:insert` | 1 |
-| `qualificacoes_produto_consultor:select` | 1 |
+| `qualificacoes_produto_consultor:select` | 2 |
 | `recomendacoes_desenvolvimento:select` | 1 |
 | `recomendacoes_desenvolvimento:update` | 1 |
 | `regras_entrega_loja:select` | 2 |

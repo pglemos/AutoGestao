@@ -83,7 +83,7 @@ describe('CONS-22 RPCs administrativas', () => {
     expect(page).toContain('Configurar Horário')
     expect(page).toContain('>Abrir Plano de Ação</Button>')
     expect(page).toContain('Abrir Consultoria')
-    expect(page).toContain('>Editar Identificação do Cliente</Button>')
+    expect(page).toContain('aria-label="Editar identificação do cliente"')
     expect(page).toContain('clientStructureDisplay')
     expect(page).toContain("['Cidade', identityUnit?.city || '—']")
     expect(page).toContain("['UF', identityUnit?.state || '—']")
