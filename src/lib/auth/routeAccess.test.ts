@@ -255,6 +255,13 @@ describe('route access matrix', () => {
     expect(canAccessPath('/configuracoes', 'vendedor')).toBe(true)
   })
 
+  it('allows legacy /universidade alias for internal profiles before App redirect', () => {
+    for (const role of ['administrador_geral', 'administrador_mx', 'consultor_mx', 'dono', 'gerente', 'vendedor'] as const) {
+      expect(canAccessPath('/universidade', role)).toBe(true)
+    }
+    expect(getRouteAccessRule('/universidade')?.pattern).toBe('/universidade')
+  })
+
   it('keeps seller funnel aliases exclusive to the seller flow rendered by App', () => {
     for (const route of ['/funil', '/vendedor/funil', '/vendedor/meu-funil']) {
       expect(canAccessPath(route, 'vendedor')).toBe(true)

@@ -165,7 +165,7 @@ export function AdminClienteDetalhePage() {
   const location = useLocation()
   const navigate = useNavigate()
   const { width, bottomClearance } = resolveRouteLayout(location.pathname)
-  const { client, loading, error, refetch } = useConsultingClientDetailBySlug(clientSlug)
+  const { client, loading, enriching, error, refetch } = useConsultingClientDetailBySlug(clientSlug)
   const { supabaseUser } = useAuth()
   const products = useAdminConsultingProducts()
   const team = useAdminTeam()
@@ -311,7 +311,9 @@ export function AdminClienteDetalhePage() {
         units: cadastro,
         lojas: lojasResult.data ?? [],
       })
-      : merged
+      : merged.length > 0
+        ? merged
+        : cadastro
     setUnits(visible.map(unit => ({
       internal_code: null,
       address_street: null,
@@ -410,16 +412,21 @@ export function AdminClienteDetalhePage() {
   useEffect(() => {
     if (!client?.id || !client.program_template_key) return
     let active = true
-    void createStrategicPlanFromProduct({
-      clientId: client.id,
-      referenceYear: new Date().getFullYear(),
-      userId: supabaseUser?.id,
-    }).then(result => {
-      if (!active) return
-      if (result.resolution.ok && result.error) toast.error(result.error)
-      if (result.resolution.ok) void loadStrategicPlan()
-    })
-    return () => { active = false }
+    const timer = window.setTimeout(() => {
+      void createStrategicPlanFromProduct({
+        clientId: client.id,
+        referenceYear: new Date().getFullYear(),
+        userId: supabaseUser?.id,
+      }).then(result => {
+        if (!active) return
+        if (result.resolution.ok && result.error) toast.error(result.error)
+        if (result.resolution.ok) void loadStrategicPlan()
+      })
+    }, 0)
+    return () => {
+      active = false
+      window.clearTimeout(timer)
+    }
   }, [client?.id, client?.program_template_key, loadStrategicPlan, supabaseUser?.id])
 
   const ownerMasterResolution = useMemo<OwnerMasterResolution>(() => {
@@ -738,6 +745,34 @@ export function AdminClienteDetalhePage() {
     (client as { scheduled_activation_at?: string | null }).scheduled_activation_at
       ?? (client as { contract_start_date?: string | null }).contract_start_date,
   )
+  const cadastroUnits = useMemo((): UnitRow[] => {
+    if (!client?.id) return []
+    return (client.units ?? [])
+      .filter(unit => !isOrphanTestUnit(unit))
+      .map(unit => ({
+        id: unit.id,
+        client_id: unit.client_id,
+        store_id: null,
+        name: unit.name,
+        city: unit.city,
+        state: unit.state,
+        is_primary: unit.is_primary,
+        store_type: unit.is_primary ? 'matriz' : null,
+        cnpj: null,
+        internal_code: null,
+        address_street: null,
+        address_zip: null,
+        timezone: null,
+        working_days: null,
+        opening_time: null,
+        closing_time: null,
+        status: 'ativa',
+        opening_date: null,
+        notes: null,
+        synthetic: false,
+      }))
+  }, [client?.id, client?.units])
+  const displayUnits = units.length > 0 ? units : cadastroUnits
 
   const [repairing, setRepairing] = useState<RepairKey | null>(null)
 
@@ -990,12 +1025,15 @@ export function AdminClienteDetalhePage() {
           )}
         />
 
-        {loading ? <MxLoadingState label="Carregando cliente" /> : error ? <MxErrorState description={error} retry={() => void refetch()} /> : !client ? (
+        {loading && !client ? <MxLoadingState label="Carregando cliente" /> : error ? <MxErrorState description={error} retry={() => void refetch()} /> : !client ? (
           <MxEmptyState title="Cliente não encontrado" description="Verifique o endereço ou volte para a lista de clientes." />
         ) : (
           <>
+            {enriching ? (
+              <MxStatusBanner tone="info">Atualizando jornada, contatos e módulos do cliente…</MxStatusBanner>
+            ) : null}
             <MxMetricGrid>
-              <MxMetricCard title="Lojas" value={units.length ?? 0} detail="Matriz e filiais operacionais" icon={Building2} tone="info" />
+              <MxMetricCard title="Lojas" value={displayUnits.length} detail="Matriz e filiais operacionais" icon={Building2} tone="info" />
               <MxMetricCard title="Usuários" value={persons.length} detail="Acessos e vínculos de loja" icon={UserPlus} tone="violet" />
               <MxMetricCard title="Encontros concluídos" value={journey.completedVisits} detail={totalVisits > 0 ? `de ${totalVisits} previstos` : 'Sem jornada contratada'} icon={Clock} tone="info" />
               <MxMetricCard title="Progresso da jornada" value={`${journeyProgressPct}%`} detail={totalVisits > 0 ? `${journey.completedVisits}/${totalVisits} encontros` : '—'} icon={BriefcaseBusiness} tone={journeyProgressPct >= 100 ? 'success' : 'brand'} />
@@ -1105,12 +1143,12 @@ export function AdminClienteDetalhePage() {
               <MxSectionCard>
                 <MxSectionHeader
                   title="Empresa e Lojas"
-                  description={`${units.length} loja(s) operacional(is) — matriz e filiais.`}
+                  description={`${displayUnits.length} loja(s) operacional(is) — matriz e filiais.`}
                   actions={<Button size="sm" onClick={() => setStoreModal({ open: true, initial: null })}><Plus size={16} />Adicionar Loja</Button>}
                 />
                 <div className="space-y-3 p-5">
-                  {units.length ? (
-                    units.map(unit => (
+                  {displayUnits.length ? (
+                    displayUnits.map(unit => (
                       <div key={unit.id} className="rounded-lg border border-border p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
@@ -1317,6 +1355,10 @@ export function AdminClienteDetalhePage() {
                   visitsTotal: totalVisits,
                 })}
                 blockers={checks.filter(check => !check.ok).map(check => `${check.label} — ${check.detail}`)}
+                checks={checks}
+                onCorrect={check => void correctReadiness(check.key)}
+                onRepair={key => void repair(key)}
+                repairing={repairing}
               />
             ) : null}
 

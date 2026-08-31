@@ -82,6 +82,36 @@ describe('Admin MX Base44 parity UI contracts', () => {
     expect(page).not.toContain('Checklist de prontidão')
   })
 
+  test('cliente 360 first paint mostra shell antes do enrich e checklist fica em Implantação', () => {
+    const page = read('AdminClienteDetalhePage.tsx')
+    const tabs = read('clientes/ClientHealthTabs.tsx')
+    const hook = readFileSync(new URL('../../hooks/useConsultingClientBySlug.ts', import.meta.url), 'utf8')
+    expect(hook).toContain('setEnriching(true)')
+    expect(hook).toContain('setLoading(false)')
+    expect(page).toContain('loading && !client')
+    expect(page).toContain('enriching')
+    expect(page).toContain('displayUnits')
+    expect(page).toContain('checks={checks}')
+    expect(tabs).toContain('Checklist de prontidão')
+  })
+
+  test('plano estratégico por slug hidrata clientId cycleId storeId na URL direta', () => {
+    const repo = readFileSync(new URL('../strategic-plan/clientPlanningRepository.ts', import.meta.url), 'utf8')
+    const page = readFileSync(new URL('../internal-mx-planning/InternalStrategicPlanPage.tsx', import.meta.url), 'utf8')
+    expect(repo).toContain('resolveClientStrategicPlanRoute')
+    expect(repo).toContain('primary_store_id')
+    expect(page).toContain('resolveClientStrategicPlanRoute(clientSlug, resolveYear)')
+    expect(page).toContain("next.set('clientId'")
+    expect(page).toContain("next.set('cycleId'")
+  })
+
+  test('/universidade legado autoriza perfis internos antes do redirect', () => {
+    const routeAccess = readFileSync(new URL('../../lib/auth/routeAccess.ts', import.meta.url), 'utf8')
+    const app = readFileSync(new URL('../../App.tsx', import.meta.url), 'utf8')
+    expect(routeAccess).toContain("{ pattern: '/universidade', roles: USER_ROLES }")
+    expect(app).toContain('<Navigate to="/universidade-mx" replace />')
+  })
+
   test('kebab de clientes expõe cinco ações Base44 e extras em Mais', () => {
     const menu = read('clientes/ClientActionsMenu.tsx')
     expect(menu).toContain('BASE44_PRIMARY_ACTIONS')

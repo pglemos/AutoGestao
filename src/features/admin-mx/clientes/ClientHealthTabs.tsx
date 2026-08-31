@@ -1,4 +1,5 @@
 import { Activity, Database, History } from 'lucide-react'
+import { Button } from '@/components/atoms/Button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/organisms/Table'
 import {
   MxEmptyState,
@@ -12,6 +13,8 @@ import {
   MxTableSurface,
 } from '@/components/module/MxModuleVisualPrimitives'
 import { dataIntegritySummary, type DataSourceHealth, type ProgressBar, type TimelineEvent } from './clientProgress'
+import { REPAIRABLE_CHECKS, type RepairKey } from './clientRepairs'
+import type { ReadinessCheck } from './clientReadiness'
 
 const STATUS_LABEL: Record<DataSourceHealth['status'], string> = {
   ok: 'Em dia',
@@ -24,8 +27,15 @@ function formatDateTime(value: string) {
   return Number.isNaN(date.getTime()) ? value : date.toLocaleString('pt-BR')
 }
 
-/** Aba "Implantação e Aderência": os três progressos lado a lado. */
-export function ClientImplantacaoTab(props: { bars: ProgressBar[]; blockers: string[] }) {
+/** Aba "Implantação e Aderência": progresso + checklist de prontidão (fora da Visão Geral). */
+export function ClientImplantacaoTab(props: {
+  bars: ProgressBar[]
+  blockers: string[]
+  checks?: ReadinessCheck[]
+  onCorrect?: (check: ReadinessCheck) => void
+  onRepair?: (key: RepairKey) => void
+  repairing?: string | null
+}) {
   return (
     <div className="space-y-5">
       <MxSectionCard>
@@ -61,6 +71,35 @@ export function ClientImplantacaoTab(props: { bars: ProgressBar[]; blockers: str
           )}
         </div>
       </MxSectionCard>
+
+      {props.checks?.length ? (
+        <MxSectionCard>
+          <MxSectionHeader title="Checklist de prontidão" description="Itens impeditivos e informativos para ativação do cliente." />
+          <ul className="grid gap-2 p-5 sm:grid-cols-2">
+            {props.checks.map(check => (
+              <li key={check.key} className="flex items-start justify-between gap-3 rounded-lg border border-border p-3 text-sm">
+                <div>
+                  <div className="font-medium text-foreground">{check.label}</div>
+                  <div className="text-xs text-muted-foreground">{check.detail}</div>
+                </div>
+                <div className="flex shrink-0 flex-col items-end gap-1">
+                  <span className="text-xs font-semibold text-muted-foreground">
+                    {check.ok ? 'OK' : check.severity === 'impeditivo' ? 'Impeditivo' : 'Pendente'}
+                  </span>
+                  {!check.ok && props.onRepair && (REPAIRABLE_CHECKS as string[]).includes(check.key) ? (
+                    <Button size="sm" variant="outline" disabled={Boolean(props.repairing)} onClick={() => props.onRepair?.(check.key as RepairKey)}>
+                      {props.repairing === check.key ? 'Reparando...' : 'Reparar'}
+                    </Button>
+                  ) : null}
+                  {!check.ok && props.onCorrect && check.correctionRoute && !(REPAIRABLE_CHECKS as string[]).includes(check.key) ? (
+                    <Button size="sm" variant="outline" onClick={() => props.onCorrect?.(check)}>Corrigir</Button>
+                  ) : null}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </MxSectionCard>
+      ) : null}
     </div>
   )
 }

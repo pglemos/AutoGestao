@@ -78,6 +78,7 @@ export function useConsultingClientDetailBySlug(slug?: string) {
   const [client, setClient] = useState<ConsultingClientDetail | null>(null)
   const [assignableUsers, setAssignableUsers] = useState<ConsultingAssignableUser[]>([])
   const [loading, setLoading] = useState(true)
+  const [enriching, setEnriching] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const fetchGenerationRef = useRef(0)
   const loadedSlugRef = useRef<string | null>(null)
@@ -134,6 +135,31 @@ export function useConsultingClientDetailBySlug(slug?: string) {
       }
 
       const clientId = clientData.id
+
+      const shellDetail: ConsultingClientDetail = {
+        ...(clientData as ConsultingClient),
+        id: clientData.id,
+        store_id: clientData.store_id || null,
+        primary_store_id: clientData.primary_store_id || null,
+        units: [],
+        contacts: [],
+        assignments: [],
+        visits: [],
+        financials: [],
+        modules: [],
+        inventory_snapshots: [],
+        journey_completed_visits: 0,
+        journey_total_visits: 0,
+      }
+
+      if (generation !== fetchGenerationRef.current) return
+
+      setClient(shellDetail)
+      loadedSlugRef.current = slug ?? null
+      if (fetchMode === 'initial') {
+        setLoading(false)
+        setEnriching(true)
+      }
 
       const [unitsRes, contactsRes, assignmentsRes, visitsRes, financialsRes, modulesRes, usersRes, inventoryRes, programRes] = await Promise.all([
       supabase.from('unidades_cliente_consultoria').select('*').eq('client_id', clientId).order('is_primary', { ascending: false }).order('name', { ascending: true }),
@@ -211,8 +237,11 @@ export function useConsultingClientDetailBySlug(slug?: string) {
         loadedSlugRef.current = null
       }
     } finally {
-      if (fetchMode === 'initial' && generation === fetchGenerationRef.current) {
-        setLoading(false)
+      if (generation === fetchGenerationRef.current) {
+        setEnriching(false)
+        if (fetchMode === 'initial') {
+          setLoading(false)
+        }
       }
     }
   }, [initialized, slug, supabaseUser])
@@ -459,6 +488,7 @@ export function useConsultingClientDetailBySlug(slug?: string) {
     setAssignableUsers([])
     setError(null)
     setLoading(true)
+    setEnriching(false)
   }, [slug])
 
   useEffect(() => {
@@ -474,7 +504,8 @@ export function useConsultingClientDetailBySlug(slug?: string) {
   return { 
     client, 
     assignableUsers, 
-    loading, 
+    loading,
+    enriching,
     error, 
     canManage,
     refetch: () => fetchClient({ background: true }),
