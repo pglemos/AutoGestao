@@ -1,8 +1,8 @@
 {
   "_comment": "Congelamento forward-only das migrations aplicadas. NÃO editar à mão. Regenerar apenas ao adicionar migrations novas: node scripts/gen_migration_checksums.mjs",
-  "generated_at": "2026-08-28",
+  "generated_at": "2026-08-31",
   "algorithm": "sha256",
-  "count": 461,
+  "count": 469,
   "checksums": {
     "00000000000000_baseline_legacy_schema.sql": "3a519e3804095af5e9f7d8a7cb70dcc388b04530b6a7911ee1e3cb76af10b0fc",
     "00000000000001_mark_existing_migrations_applied.sql": "a8183b5cc5bd56b549ce8d8d302eb0c5d4f7b20381438586e02dd7353d6f2a45",
@@ -464,6 +464,14 @@
     "20260827030100_teto_valor_negociado.sql": "cdcdefd9f56d0e0f349c4bd21fd426dfc59bf51d4168106d3e569e2e70acf7e0",
     "20260827033000_corrige_haval_e_valida_teto.sql": "dd3b9d605fc2a92ec27192730b02d1d234250468a1bbc7d216ac021bd1070025",
     "20260827120000_merge_cadastros_duplicados_vendedores.sql": "f4ba40134514d7910c433de4523e65ce5435d9806b479b9a9df4efb8e968558c",
-    "20260828120000_cliente_pos_venda_segue_oportunidade_ganha.sql": "ad9ab9a6718582031f597a7ee146d6c286a083c2c247186e48e0c64861e9a92d"
+    "20260828100000_reverte_merge_indevido_gustavo.sql": "cbfd3456dd2ece86ae8581cee7045be9d143df1ef061ff39f33d88751e82d41a",
+    "20260828100100_estorna_cancelamentos_venda_gustavo_gomes.sql": "3789420e9881ac189e180bbbcca713e6a41517f7cac3e71df272811293a44f6d",
+    "20260828120000_cliente_pos_venda_segue_oportunidade_ganha.sql": "ad9ab9a6718582031f597a7ee146d6c286a083c2c247186e48e0c64861e9a92d",
+    "20260829000000_fix_admin_rpcs_and_plan_patch.sql": "5c2fbeb2f0c36eaaeaa58953f0ba56202db50ac9d857311c1d96b52b1714be11",
+    "20260829120000_allow_volume_de_leads_por_venda.sql": "13d216120bd6ffcfdd6d5fe54d1470853ba32719bf4e888c077bc4ec954ea9f8",
+    "20260830121500_recount_package_indicator_totals.sql": "38c035c209fc494d3074726bd4251a2fb679421d98dd5288781c29da67173ebd",
+    "20260830140000_shorten_action_plan_codigo.sql": "a7643ec3cb7a00e56894a8045ab7debe9fc88ba8baabb73906aa60f4a7b007c5",
+    "20260831120000_atomic_action_plan_create.sql": "45df0301c1b0e5434fb9959e4e66722caf06d5e8cdc5e08a7f0d59a2cbc11080",
+    "20260831140000_criar_plano_acao_v2_drop_12arg_evidence_required.sql": "17721dda1f30c342cd715c20479b034bd9432f6d93325f1a84d3f78b51112d7b"
   }
 }

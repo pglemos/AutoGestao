@@ -18765,17 +18765,26 @@ export type Database = {
       criar_plano_acao_v2: {
         Args: {
           p_acao: string
+          p_checklist?: Json
           p_como?: string
           p_departamento: string
+          p_efficacy_indicator?: string
+          p_evidence_required?: boolean
           p_indicador: string
+          p_iniciado_at?: string
           p_objetivo: string
           p_origem?: Database["public"]["Enums"]["action_origin"]
+          p_origem_ref_id?: string
+          p_origem_ref_table?: string
+          p_participants?: string
           p_prazo?: string
           p_prioridade?: Database["public"]["Enums"]["action_priority"]
           p_problema: string
+          p_reference_year?: number
           p_responsavel_id?: string
           p_scope_id: string
           p_scope_type: Database["public"]["Enums"]["score_scope_type"]
+          p_transition_metadata?: Json
         }
         Returns: {
           acao: string
