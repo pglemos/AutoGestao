@@ -40,7 +40,7 @@ export function ConsultingProductCard(props: {
           aria-expanded={props.expanded}
         >
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-            <Package size={18} aria-hidden="true" />
+            <Package size={20} aria-hidden="true" />
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
@@ -72,7 +72,7 @@ export function ConsultingProductCard(props: {
             </div>
           </div>
           <div className="pt-1 text-muted-foreground">
-            {props.expanded ? <ChevronUp size={18} aria-hidden="true" /> : <ChevronDown size={18} aria-hidden="true" />}
+            {props.expanded ? <ChevronUp size={16} aria-hidden="true" /> : <ChevronDown size={16} aria-hidden="true" />}
           </div>
         </button>
         <ProductActionsMenu
