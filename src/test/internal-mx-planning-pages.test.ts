@@ -49,7 +49,7 @@ describe('páginas de planejamento do módulo interno MX', () => {
     expect(strategicPage).not.toContain("label: 'Gestão global'")
     expect(strategicPage).toContain('fetchCurrentCycle')
     expect(strategicPage).toContain('resolveStrategicCatalogTab')
-    expect(strategicPage).toContain("return 'planos'")
+    expect(strategicPage).toContain("return 'catalogo'")
     expect(strategicPage).toContain('<AdminIndicadoresPage initialTab="planos" />')
     expect(strategicPage).toContain('fetchConsultingClientIdBySlug')
     expect(strategicPage).toContain('<AdminIndicadoresPage initialTab={catalogTab} />')

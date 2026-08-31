@@ -116,10 +116,24 @@ export function MemberCreateModal(props: {
               {MEMBER_SITUATION_OPTIONS.map(situation => <option key={situation.value} value={situation.value}>{situation.label}</option>)}
             </MxSelect>
           </MxField>
+          <MxField label="Cidade">
+            <Input value={draft.city} onChange={event => update('city', event.target.value)} placeholder="São Paulo" />
+          </MxField>
+          <MxField label="UF">
+            <Input value={draft.state} onChange={event => update('state', event.target.value)} placeholder="SP" maxLength={2} />
+          </MxField>
         </div>
 
         {requiresConsultantProfile(draft.role) ? (
           <div className="space-y-3 rounded-lg border border-border bg-surface-alt/40 p-4">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <MxField label="Capacidade online (h/mês)">
+                <Input type="number" min={0} step="0.5" value={draft.capacidade_online} onChange={event => update('capacidade_online', event.target.value)} />
+              </MxField>
+              <MxField label="Capacidade presencial (h/mês)">
+                <Input type="number" min={0} step="0.5" value={draft.capacidade_presencial} onChange={event => update('capacidade_presencial', event.target.value)} />
+              </MxField>
+            </div>
             <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
               <UserPlus size={16} className="text-status-success-text" />
               Programas Habilitados

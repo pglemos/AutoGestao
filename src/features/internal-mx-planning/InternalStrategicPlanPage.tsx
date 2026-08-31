@@ -14,7 +14,7 @@ type StrategicCatalogTab = 'catalogo' | 'parametros' | 'planos' | 'historico'
 
 function resolveStrategicCatalogTab(mode: string | null): StrategicCatalogTab {
   if (mode === 'catalogo' || mode === 'parametros' || mode === 'historico' || mode === 'planos') return mode
-  return 'planos'
+  return 'catalogo'
 }
 
 export default function InternalStrategicPlanPage() {
