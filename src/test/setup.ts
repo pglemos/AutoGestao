@@ -4,6 +4,11 @@ import * as matchers from "@testing-library/jest-dom/matchers";
 
 expect.extend(matchers);
 
+// Credenciais dummy para módulos que instanciam o cliente Supabase no import.
+const testEnv = import.meta.env as Record<string, string | undefined>
+testEnv.VITE_SUPABASE_URL ??= 'https://test-project.supabase.co'
+testEnv.VITE_SUPABASE_ANON_KEY ??= 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test-anon-key'
+
 declare module "bun:test" {
   interface Matchers<T> extends matchers.TestingLibraryMatchers<typeof expect.stringContaining, T> {}
 }

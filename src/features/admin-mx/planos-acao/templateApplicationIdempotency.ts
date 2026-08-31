@@ -203,6 +203,12 @@ export async function applyTemplateToStoresIdempotent(input: {
       p_prazo: row.prazo ?? undefined,
       p_prioridade: row.prioridade,
       p_origem: row.origem,
+      p_checklist: row.checklist,
+      p_reference_year: row.reference_year,
+      p_transition_metadata: row.transition_metadata,
+      p_origem_ref_id: input.versionId,
+      p_origem_ref_table: 'planos_acao_template_versoes',
+      p_evidence_required: row.evidence_required,
     })
     if (error || !data) {
       return {
@@ -212,34 +218,6 @@ export async function applyTemplateToStoresIdempotent(input: {
       }
     }
     const plan = data as { id: string }
-    const fullPatch = {
-      checklist: row.checklist,
-      transition_metadata: row.transition_metadata,
-      origem_ref_id: input.versionId,
-      origem_ref_table: 'planos_acao_template_versoes',
-      reference_year: row.reference_year,
-      evidence_required: row.evidence_required,
-    }
-    const { error: patchError } = await supabase.rpc('atualizar_plano_acao_patch', {
-      p_plano_id: plan.id,
-      p_patch: fullPatch,
-    })
-    if (patchError) {
-      const { error: retryError } = await supabase.rpc('atualizar_plano_acao_patch', {
-        p_plano_id: plan.id,
-        p_patch: {
-          checklist: row.checklist,
-          transition_metadata: row.transition_metadata,
-        },
-      })
-      if (retryError) {
-        return {
-          error: `Plano criado, mas o banco recusou o vínculo extra (${patchError.message}). O quadro mostra o plano; o checklist pode estar incompleto.`,
-          created: ids.length + 1 + materialized.size,
-          replayed: false,
-        }
-      }
-    }
     ids.push(plan.id)
   }
 

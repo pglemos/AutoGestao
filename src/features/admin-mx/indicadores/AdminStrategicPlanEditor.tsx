@@ -23,6 +23,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import {
   MxEmptyState,
   MxErrorState,
+  MxField,
   MxInput,
   MxLoadingState,
   MxMetricCard,
@@ -216,6 +217,7 @@ export function AdminStrategicPlanEditor({
   const [reviewSemBase, setReviewSemBase] = useState(true)
   const [collapsedReviewAreas, setCollapsedReviewAreas] = useState<Set<string>>(new Set())
   const [busyIndicator, setBusyIndicator] = useState<string | null>(null)
+  const [quickFooterProgress, setQuickFooterProgress] = useState<{ digitaveisFilled: number; digitaveisTotal: number; calculadosComBase: number; calculadosTotal: number } | null>(null)
   const gridRef = useRef(grid)
   const saveQuickRef = useRef<() => Promise<void>>(async () => {})
   useEffect(() => { gridRef.current = grid }, [grid])
@@ -447,9 +449,8 @@ export function AdminStrategicPlanEditor({
       clientId: data.client.id,
     })
     if (recalc.error) toast.error(recalc.error)
-    else toast.success('Cálculos atualizados na Revisão Completa.')
+    else toast.success('Cálculos atualizados.')
     await refresh()
-    setTab('revisao')
     setSaving(false)
   }
 
@@ -612,7 +613,7 @@ export function AdminStrategicPlanEditor({
         icon={Layers3}
         eyebrow="Administração MX · Plano Estratégico"
         title={`${data.client.name} — ${data.cycle.year}`}
-        description="Cadastro Rápido, Revisão Completa, Realizado e Ano Anterior do mesmo ciclo."
+        description="Metas, Revisão Completa, Realizado e Ano Anterior do mesmo ciclo."
         actions={(
           <div className="flex flex-wrap items-center justify-end gap-2">
             <Button variant="outline" onClick={() => navigate('/plano-estrategico')}><ArrowLeft size={16} />Voltar à gestão</Button>
@@ -673,6 +674,8 @@ export function AdminStrategicPlanEditor({
           cicloId={data.cycle.id}
           clientId={data.client.id}
           clientName={data.client.name}
+          planStatusLabel={PLAN_CYCLE_STATUS_LABEL[data.cycle.status] ?? data.cycle.status}
+          onQuickProgress={setQuickFooterProgress}
           indicators={digitaveisIndicators.map(ind => toTargetIndicator(ind, quickField))}
           importIndicators={gridIndicators.map(ind => toTargetIndicator(ind, quickField))}
           initialStoreId={unitId}
@@ -701,19 +704,26 @@ export function AdminStrategicPlanEditor({
           }}
         />
         {!effectiveReadOnly ? (
-          <div className="flex flex-wrap justify-end gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border-subtle bg-muted/30 px-4 py-3">
+            <p className="text-sm text-muted-foreground">
+              {quickFooterProgress
+                ? `${quickFooterProgress.digitaveisFilled} de ${quickFooterProgress.digitaveisTotal} metas preenchidas · ${quickFooterProgress.calculadosComBase} de ${quickFooterProgress.calculadosTotal} calculados`
+                : 'Preencha os indicadores digitáveis — cada meta mensal aplica jan–dez.'}
+            </p>
+            <div className="flex flex-wrap justify-end gap-2">
             <Button variant="outline" onClick={() => void saveDraft()} disabled={saving || (!showQuickEntry && dirtyKeys.size === 0)}><Save size={16} />Salvar Rascunho</Button>
             <Button variant="outline" onClick={() => void reviewCalculations()} disabled={saving}><Layers3 size={16} />Revisar Cálculos</Button>
             <Button onClick={() => void validatePlan()} disabled={saving || readinessLoading}><CheckCircle2 size={16} />Concluir Cadastro</Button>
+            </div>
           </div>
         ) : null}
       </section> : null}
 
-      {tab === 'revisao' ? <section id="revisao-panel" role="tabpanel" aria-label="Revisão Completa" className="space-y-5">
+      {tab === 'revisao' ? <section id="revisao-panel" role="tabpanel" aria-label="Revisão completa" className="space-y-5">
         <MxSectionCard>
           <MxSectionHeader
             title="Revisão Completa"
-            description={`${gridIndicators.length} indicadores na ordem oficial — valores calculados em tempo real`}
+            description={`${gridIndicators.length} indicadores na ordem oficial — valores calculados em tempo real. Visualização opcional; o cadastro principal fica no Cadastro Rápido.`}
             actions={(
               <div className="flex flex-wrap items-center gap-2">
                 <MxSelect aria-label="Unidade da revisão" value={unitId} onChange={event => setUnitId(event.target.value)}>

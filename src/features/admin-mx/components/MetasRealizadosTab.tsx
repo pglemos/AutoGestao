@@ -37,6 +37,7 @@ import {
   monthSeries,
   processTargetImport,
   previewStoreTargetsCopy,
+  resolvePlanningPersistenceCode,
   type CopyConflictPolicy,
   type CopyPreview,
   type StoreTargetValue,
@@ -63,7 +64,7 @@ import {
   type ConsolidationIndicator,
   type IndicatorIntegrity,
 } from '@/features/strategic-plan'
-import { PlanningMonthInput, planningCellDraftKey } from './PlanningMonthInput'
+import { PlanningMonthInput, planningCellDraftKey, planningYearDraftKey } from './PlanningMonthInput'
 import { StrategicPlanQuickEntry } from './StrategicPlanQuickEntry'
 
 type StoreOption = { id: string; name: string }
@@ -90,6 +91,8 @@ export function MetasRealizadosTab(props: {
   clientName?: string
   variant?: 'matrix' | 'quick'
   activeField?: 'meta' | 'realizado' | 'ano_anterior'
+  planStatusLabel?: string
+  onQuickProgress?: (progress: { digitaveisFilled: number; digitaveisTotal: number; calculadosComBase: number; calculadosTotal: number }) => void
   onRegisterSave?: (save: () => Promise<void>) => void
 }) {
   const [stores, setStores] = useState<StoreOption[]>(props.stores ?? [])
@@ -101,7 +104,7 @@ export function MetasRealizadosTab(props: {
   const [savingKey, setSavingKey] = useState<string | null>(null)
   const [copyOpen, setCopyOpen] = useState(false)
   const [historyFor, setHistoryFor] = useState<string | null>(null)
-  const [file, setFile] = useState<File | null>(null)
+  const [importOpen, setImportOpen] = useState(false)
   const [scope, setScope] = useState<string>('')
   const [scopeNotice, setScopeNotice] = useState<string | null>(null)
   const [formulas, setFormulas] = useState<Record<string, string | null>>({})
@@ -114,6 +117,12 @@ export function MetasRealizadosTab(props: {
   const importCatalog = props.importIndicators ?? props.indicators
   const isQuick = props.variant === 'quick'
   const activeField = props.activeField ?? 'meta'
+
+  const resolvePlanningIndicator = useCallback((code: string) => {
+    const officialCode = matchCanonicalIndicator(code)?.code ?? code
+    return props.indicators.find(item => item.code === code || matchCanonicalIndicator(item.code)?.code === officialCode)
+      ?? importCatalog.find(item => item.code === code || matchCanonicalIndicator(item.code)?.code === officialCode)
+  }, [importCatalog, props.indicators])
 
   const refetch = useCallback(async () => {
     if (!storeId) {
@@ -242,8 +251,10 @@ export function MetasRealizadosTab(props: {
     { code: 'NET_PROFIT', label: 'Lucro Líquido' },
   ]), [])
 
+  const summaryMonth = isQuick ? entryMonth : conferenceMonth
+
   const resumoCalculado = useMemo(() => RESUMO_CALCULADO.map(item => {
-    const monthValue = readOfficialMonthValue(grid, calculationIndicators, item.code, conferenceMonth, 'meta')
+    const monthValue = readOfficialMonthValue(grid, calculationIndicators, item.code, summaryMonth, 'meta')
     const annual = Array.from({ length: 12 }, (_, index) => (
       readOfficialMonthValue(grid, calculationIndicators, item.code, index + 1, 'meta')
     )).reduce<number | null>((sum, value) => {
@@ -251,7 +262,7 @@ export function MetasRealizadosTab(props: {
       return (sum ?? 0) + value
     }, null)
     return { ...item, monthValue, annual }
-  }), [RESUMO_CALCULADO, calculationIndicators, conferenceMonth, grid])
+  }), [RESUMO_CALCULADO, calculationIndicators, grid, summaryMonth])
 
   useEffect(() => {
     const sales = resumoCalculado.find(item => item.code === 'SALES_TOTAL')
@@ -275,15 +286,16 @@ export function MetasRealizadosTab(props: {
   }, [isConsolidated, consolidatedIntegrity])
 
   const saveIndicator = async (code: string, field: 'meta' | 'realizado' | 'ano_anterior') => {
-    const indicator = props.indicators.find(item => item.code === code)
+    const indicator = resolvePlanningIndicator(code)
     if (!indicator || !isPlanningFieldEditable(indicator, field)) return
     setSavingKey(`${field}:${code}`)
     const values = Array.from({ length: 12 }, (_, index) => grid[code]?.[index + 1]?.[field] ?? null)
+    const persistenceCode = resolvePlanningPersistenceCode(indicator.code)
     const result = field === 'meta'
-      ? await saveIndicatorTargets({ lojaId: storeId, indicatorCode: code, year, values, cicloId: props.cicloId })
+      ? await saveIndicatorTargets({ lojaId: storeId, indicatorCode: persistenceCode, year, values, cicloId: props.cicloId })
       : field === 'realizado'
-        ? await saveIndicatorActuals({ lojaId: storeId, indicatorCode: code, year, values, cicloId: props.cicloId })
-        : await saveIndicatorField({ lojaId: storeId, indicatorCode: code, year, field: 'ano_anterior', values })
+        ? await saveIndicatorActuals({ lojaId: storeId, indicatorCode: persistenceCode, year, values, cicloId: props.cicloId })
+        : await saveIndicatorField({ lojaId: storeId, indicatorCode: persistenceCode, year, field: 'ano_anterior', values })
     if (result.error) toast.error(result.error)
     else {
       toast.success(field === 'meta' ? 'Metas salvas.' : field === 'realizado' ? 'Realizado salvo.' : 'Ano anterior salvo.')
@@ -295,7 +307,7 @@ export function MetasRealizadosTab(props: {
   }
 
   const updateCell = (code: string, month: number, field: 'meta' | 'realizado' | 'ano_anterior', raw: string) => {
-    const indicator = props.indicators.find(item => item.code === code)
+    const indicator = resolvePlanningIndicator(code)
     if (!indicator || !isPlanningFieldEditable(indicator, field)) return
     const config = getFormatConfig(indicator.value_type ?? 'number', indicator.casas_decimais ?? 0)
     const key = planningCellDraftKey(field, code, month)
@@ -332,6 +344,64 @@ export function MetasRealizadosTab(props: {
     })
   }
 
+  const commitCell = async (code: string, month: number, field: 'meta' | 'realizado' | 'ano_anterior', raw: string) => {
+    const indicator = resolvePlanningIndicator(code)
+    if (!indicator || !isPlanningFieldEditable(indicator, field) || !storeId || isConsolidated) return
+    const config = getFormatConfig(indicator.value_type ?? 'number', indicator.casas_decimais ?? 0)
+    const key = planningCellDraftKey(field, code, month)
+    setCellDrafts(current => {
+      if (!(key in current)) return current
+      const next = { ...current }
+      delete next[key]
+      return next
+    })
+    const decision = decideStrategicCellInput(raw, config)
+    if (decision.action === 'preserve') return
+    if (decision.action === 'reject') {
+      toast.error(decision.message)
+      return
+    }
+    const value = decision.action === 'clear' ? null : decision.value
+    const values = Array.from({ length: 12 }, (_, index) => {
+      if (index + 1 === month) return value
+      return gridRef.current[code]?.[index + 1]?.[field] ?? null
+    })
+    writeYear(code, field, values)
+    setSavingKey(`${field}:${code}`)
+    try {
+      const result = await persistIndicatorYearValues(code, field, values)
+      if (result.error) {
+        toast.error(`${indicator.name}: ${result.error}`)
+        return
+      }
+      props.onSaved?.()
+      await refetch()
+      clientScope.reload()
+    } catch (cause) {
+      toast.error(cause instanceof Error ? cause.message : 'Não foi possível salvar a meta.')
+    } finally {
+      setSavingKey(null)
+    }
+  }
+
+  const persistIndicatorYearValues = async (
+    code: string,
+    field: 'meta' | 'realizado' | 'ano_anterior',
+    values: Array<number | null>,
+  ) => {
+    const indicator = resolvePlanningIndicator(code)
+    if (!indicator || !isPlanningFieldEditable(indicator, field) || !storeId || isConsolidated) {
+      return { error: 'Não foi possível salvar este indicador.' }
+    }
+    const normalized = isQuick ? normalizeQuickEntrySeries(values) : values
+    const saveCode = resolvePlanningPersistenceCode(indicator.code)
+    return field === 'meta'
+      ? saveIndicatorTargets({ lojaId: storeId, indicatorCode: saveCode, year, values: normalized, cicloId: props.cicloId })
+      : field === 'realizado'
+        ? saveIndicatorActuals({ lojaId: storeId, indicatorCode: saveCode, year, values: normalized, cicloId: props.cicloId })
+        : saveIndicatorField({ lojaId: storeId, indicatorCode: saveCode, year, field: 'ano_anterior', values: normalized, cicloId: props.cicloId })
+  }
+
   const writeYear = (code: string, field: 'meta' | 'realizado' | 'ano_anterior', values: Array<number | null>) => {
     setRows(current => {
       const next = [...current]
@@ -355,15 +425,15 @@ export function MetasRealizadosTab(props: {
     })
   }
 
-  const commitYear = (code: string, raw: string) => {
-    const indicator = props.indicators.find(item => item.code === code)
+  const commitYear = async (code: string, raw: string) => {
+    const indicator = resolvePlanningIndicator(code)
     if (!indicator || !isPlanningFieldEditable(indicator, activeField)) return
     const config = getFormatConfig(indicator.value_type ?? 'number', indicator.casas_decimais ?? 0)
-    const key = planningCellDraftKey(activeField, code, entryMonth)
+    const yearKey = planningYearDraftKey(activeField, code)
     setCellDrafts(current => {
-      if (!(key in current)) return current
+      if (!(yearKey in current)) return current
       const next = { ...current }
-      delete next[key]
+      delete next[yearKey]
       return next
     })
     const decision = decideStrategicCellInput(raw, config)
@@ -373,16 +443,34 @@ export function MetasRealizadosTab(props: {
       return
     }
     const value = decision.action === 'clear' ? null : decision.value
-    writeYear(code, activeField, Array.from({ length: 12 }, () => value))
+    const values = Array.from({ length: 12 }, () => value)
+    writeYear(code, activeField, values)
+    setSavingKey(`${activeField}:${code}`)
+    try {
+      const result = await persistIndicatorYearValues(code, activeField, values)
+      if (result.error) {
+        toast.error(`${indicator.name}: ${result.error}`)
+        return
+      }
+      toast.success(`Meta aplicada nos 12 meses de ${indicator.name}.`)
+      props.onSaved?.()
+      await refetch()
+      clientScope.reload()
+    } catch (cause) {
+      toast.error(cause instanceof Error ? cause.message : 'Não foi possível salvar a meta.')
+    } finally {
+      setSavingKey(null)
+    }
   }
 
-  const replicateMonthToAll = async (code: string, field: 'meta' | 'realizado' | 'ano_anterior', sourceMonth: number = 1) => {
-    const indicator = props.indicators.find(item => item.code === code)
+  const replicateMonthToAll = async (code: string, field: 'meta' | 'realizado' | 'ano_anterior', sourceMonth: number = entryMonth) => {
+    const indicator = resolvePlanningIndicator(code)
     if (!indicator || !isPlanningFieldEditable(indicator, field)) return
+    const persistenceCode = resolvePlanningPersistenceCode(indicator.code)
     const sourceValue = grid[code]?.[sourceMonth]?.[field] ?? null
     const values = januaryReplicationSeries(sourceValue)
     if (!values) {
-      toast.error('Informe Janeiro antes de replicar. Célula vazia não copia para o restante do ano.')
+      toast.error(`Informe ${MONTH_LABELS[sourceMonth - 1]} antes de replicar. Célula vazia não copia para o restante do ano.`)
       return
     }
     setRows(current => {
@@ -408,15 +496,15 @@ export function MetasRealizadosTab(props: {
     setSavingKey(`${field}:${code}`)
     try {
       const result = field === 'meta'
-        ? await saveIndicatorTargets({ lojaId: storeId, indicatorCode: code, year, values, cicloId: props.cicloId })
+        ? await saveIndicatorTargets({ lojaId: storeId, indicatorCode: persistenceCode, year, values, cicloId: props.cicloId })
         : field === 'realizado'
-          ? await saveIndicatorActuals({ lojaId: storeId, indicatorCode: code, year, values, cicloId: props.cicloId })
-          : await saveIndicatorField({ lojaId: storeId, indicatorCode: code, year, field: 'ano_anterior', values, cicloId: props.cicloId })
+          ? await saveIndicatorActuals({ lojaId: storeId, indicatorCode: persistenceCode, year, values, cicloId: props.cicloId })
+          : await saveIndicatorField({ lojaId: storeId, indicatorCode: persistenceCode, year, field: 'ano_anterior', values, cicloId: props.cicloId })
       if (result.error) {
         toast.error(result.error)
         return
       }
-      toast.success(`Janeiro replicado e salvo em ${indicator.name}.`)
+      toast.success(`${MONTH_LABELS[sourceMonth - 1]} replicado e salvo em ${indicator.name}.`)
       props.onSaved?.()
     } catch (cause) {
       toast.error(cause instanceof Error ? cause.message : 'Não foi possível salvar a replicação.')
@@ -467,11 +555,12 @@ export function MetasRealizadosTab(props: {
         const janVal = grid[ind.code]?.[1]?.[field] ?? null
         const values = januaryReplicationSeries(janVal)
         if (!values) continue
+        const persistenceCode = resolvePlanningPersistenceCode(ind.code)
         const result = field === 'meta'
-          ? await saveIndicatorTargets({ lojaId: storeId, indicatorCode: ind.code, year, values, cicloId: props.cicloId })
+          ? await saveIndicatorTargets({ lojaId: storeId, indicatorCode: persistenceCode, year, values, cicloId: props.cicloId })
           : field === 'realizado'
-            ? await saveIndicatorActuals({ lojaId: storeId, indicatorCode: ind.code, year, values, cicloId: props.cicloId })
-            : await saveIndicatorField({ lojaId: storeId, indicatorCode: ind.code, year, field: 'ano_anterior', values, cicloId: props.cicloId })
+            ? await saveIndicatorActuals({ lojaId: storeId, indicatorCode: persistenceCode, year, values, cicloId: props.cicloId })
+            : await saveIndicatorField({ lojaId: storeId, indicatorCode: persistenceCode, year, field: 'ano_anterior', values, cicloId: props.cicloId })
         if (result.error) failures.push(`${ind.name}: ${result.error}`)
         else savedCount += 1
       }
@@ -499,11 +588,12 @@ export function MetasRealizadosTab(props: {
         const rawValues = Array.from({ length: 12 }, (_, index) => liveGrid[ind.code]?.[index + 1]?.[activeField] ?? null)
         const values = isQuick ? normalizeQuickEntrySeries(rawValues) : rawValues
         if (!isQuick && activeField === 'meta' && values.every(value => value == null)) continue
+        const persistenceCode = resolvePlanningPersistenceCode(ind.code)
         const result = activeField === 'meta'
-          ? await saveIndicatorTargets({ lojaId: storeId, indicatorCode: ind.code, year, values, cicloId: props.cicloId })
+          ? await saveIndicatorTargets({ lojaId: storeId, indicatorCode: persistenceCode, year, values, cicloId: props.cicloId })
           : activeField === 'realizado'
-            ? await saveIndicatorActuals({ lojaId: storeId, indicatorCode: ind.code, year, values, cicloId: props.cicloId })
-            : await saveIndicatorField({ lojaId: storeId, indicatorCode: ind.code, year, field: 'ano_anterior', values, cicloId: props.cicloId })
+            ? await saveIndicatorActuals({ lojaId: storeId, indicatorCode: persistenceCode, year, values, cicloId: props.cicloId })
+            : await saveIndicatorField({ lojaId: storeId, indicatorCode: persistenceCode, year, field: 'ano_anterior', values, cicloId: props.cicloId })
         if (result.error) failures.push(`${ind.name}: ${result.error}`)
         else savedCount++
       }
@@ -562,8 +652,18 @@ export function MetasRealizadosTab(props: {
 
   const calculadosRoster = (props.importIndicators ?? props.indicators).filter(indicator => indicator.calculado)
   const calculadosComBase = calculadosRoster.filter(indicator => (
-    Array.from({ length: 12 }, (_, index) => readOfficialMonthValue(grid, calculationIndicators, indicator.code, index + 1, 'meta')).some(value => value != null)
+    readOfficialMonthValue(grid, calculationIndicators, indicator.code, summaryMonth, 'meta') != null
   )).length
+
+  useEffect(() => {
+    if (!isQuick || !props.onQuickProgress) return
+    props.onQuickProgress({
+      digitaveisFilled: quickProgress.digitaveisFilled,
+      digitaveisTotal: quickProgress.digitaveisTotal,
+      calculadosComBase,
+      calculadosTotal: calculadosRoster.length,
+    })
+  }, [calculadosComBase, calculadosRoster.length, isQuick, props.onQuickProgress, quickProgress.digitaveisFilled, quickProgress.digitaveisTotal])
 
   const exportXlsx = async () => {
     try {
@@ -629,7 +729,14 @@ export function MetasRealizadosTab(props: {
             ? 'Importação da planilha de 46 indicadores, histórico e parâmetros do cliente.'
             : 'Cadastro Rápido, importação/exportação de planilha, histórico com reversão e cópia entre lojas.'}
           actions={(
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-end gap-2">
+              {isQuick ? (
+                <MxField label="Mês de conferência">
+                  <MxSelect aria-label="Mês de conferência do cadastro rápido" value={String(entryMonth)} onChange={event => setEntryMonth(Number(event.target.value))}>
+                    {MONTH_LABELS.map((label, index) => <option key={label} value={String(index + 1)}>{label}</option>)}
+                  </MxSelect>
+                </MxField>
+              ) : null}
               {isQuick ? null : (
                 <>
                   <Button variant="primary" onClick={() => void saveAllChanges()} disabled={!storeId || isConsolidated || savingAll}>
@@ -644,14 +751,9 @@ export function MetasRealizadosTab(props: {
               )}
               <Button variant="outline" onClick={() => void downloadBlankTemplate()} disabled={!storeId || props.indicators.length === 0}><Download size={16} />Baixar Tabela Modelo</Button>
               {isQuick ? null : <Button variant="outline" onClick={() => setCopyOpen(true)} disabled={!storeId || isConsolidated}><Copy size={16} />Copiar entre lojas</Button>}
-              <Button variant="outline" onClick={() => document.getElementById('metas-import-file')?.click()} disabled={!storeId || isConsolidated}><Upload size={16} />Importar Tabela</Button>
+              <Button variant="outline" onClick={() => setImportOpen(true)} disabled={!storeId || isConsolidated}><Upload size={16} />Importar Tabela</Button>
               {props.onNavigateToHistory ? <Button variant="outline" onClick={props.onNavigateToHistory}><History size={16} />Histórico</Button> : null}
               {props.onNavigateToParams ? <Button variant="outline" onClick={props.onNavigateToParams}><SlidersHorizontal size={16} />Parâmetros</Button> : null}
-              <input id="metas-import-file" type="file" accept=".xlsx" className="hidden" onChange={event => {
-                const next = event.target.files?.[0] ?? null
-                setFile(next)
-                event.currentTarget.value = ''
-              }} />
             </div>
           )}
         />
@@ -695,17 +797,11 @@ export function MetasRealizadosTab(props: {
 
           {isQuick ? (
             <div className="space-y-5">
-              <div className="flex flex-wrap items-end gap-3">
-                <MxField label="Mês">
-                  <MxSelect aria-label="Mês do cadastro rápido" value={String(entryMonth)} onChange={event => setEntryMonth(Number(event.target.value))}>
-                    {MONTH_LABELS.map((label, index) => <option key={label} value={String(index + 1)}>{label}</option>)}
-                  </MxSelect>
-                </MxField>
-              </div>
               <MxMetricGrid>
                 <MxMetricCard title="Metas digitáveis" value={`${quickProgress.digitaveisFilled} de ${quickProgress.digitaveisTotal}`} detail="Ano completo no campo ativo" icon={Target} tone="info" />
                 <MxMetricCard title="Calculados com base" value={`${calculadosComBase} de ${calculadosRoster.length}`} detail="Derivados com entrada suficiente" icon={Target} tone="success" />
                 <MxMetricCard title="Sem base" value={Math.max(calculadosRoster.length - calculadosComBase, 0)} detail="Falta lançamento nos digitáveis" icon={Target} />
+                {props.planStatusLabel ? <MxMetricCard title="Status do Plano" value={props.planStatusLabel} detail="Ciclo do plano estratégico" icon={Target} /> : null}
               </MxMetricGrid>
               <StrategicPlanQuickEntry
                 indicators={filteredIndicators}
@@ -724,15 +820,15 @@ export function MetasRealizadosTab(props: {
                 )}
                 drafts={cellDrafts}
                 onDraft={(key, raw) => setCellDrafts(current => ({ ...current, [key]: raw }))}
-                onCommit={(code, month, raw) => updateCell(code, month, activeField, raw)}
+                onCommit={(code, month, raw) => void (isQuick ? commitCell(code, month, activeField, raw) : updateCell(code, month, activeField, raw))}
                 onCommitYear={commitYear}
-                onApplyJanuary={code => {
-                  const sourceValue = grid[code]?.[1]?.[activeField] ?? null
-                  const values = januaryReplicationSeries(sourceValue)
-                  void replicateMonthToAll(code, activeField, 1)
-                }}
                 onCopyPrevious={code => writeYear(code, activeField, copyPreviousMonthSeries(monthSeries(Array.from({ length: 12 }, (_, index) => grid[code]?.[index + 1]?.[activeField] ?? null))))}
-                onClearYear={code => writeYear(code, activeField, clearMonthSeries())}
+                onClearYear={code => { void (async () => {
+                  writeYear(code, activeField, clearMonthSeries())
+                  await persistIndicatorYearValues(code, activeField, clearMonthSeries())
+                  await refetch()
+                  clientScope.reload()
+                })() }}
                 loading={loading}
                 error={error}
                 onRetry={() => void refetch()}
@@ -741,9 +837,25 @@ export function MetasRealizadosTab(props: {
                 resumo={resumoCalculado}
               />
             </div>
-          ) : (
-            <>
-          <div className="mb-5">
+          ) : null}
+
+          {isQuick ? (
+            <div className="mt-8 space-y-4 border-t border-border-subtle pt-6">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-base font-semibold text-foreground">Metas e realizadas por loja</h3>
+                  <p className="text-sm text-muted-foreground">{props.clientName ? `${props.clientName} · ${year}` : `Ano ${year}`}</p>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Button variant="outline" onClick={() => void refetch()}><RefreshCw size={16} />Atualizar</Button>
+                  <Button variant="outline" onClick={() => void exportXlsx()} disabled={!storeId || props.indicators.length === 0}><Download size={16} />{activeField === 'realizado' ? 'Exportar realizado preenchido' : activeField === 'ano_anterior' ? 'Exportar ano anterior preenchido' : 'Exportar metas preenchidas'}</Button>
+                </div>
+              </div>
+            </div>
+          ) : null}
+
+          {!isQuick ? (
+            <div className="mb-5">
             <MxSectionCard>
               <MxSectionHeader
                 title="Resumo Calculado"
@@ -765,6 +877,7 @@ export function MetasRealizadosTab(props: {
               </div>
             </MxSectionCard>
           </div>
+          ) : null}
 
           {/* Barra de Filtros e Departamentos estilo Base44 */}
           <div className="mb-4 space-y-3">
@@ -1049,8 +1162,6 @@ export function MetasRealizadosTab(props: {
               </MxTableSurface>
             </div>
           )}
-            </>
-          )}
         </div>
       </MxSectionCard>
 
@@ -1078,18 +1189,16 @@ export function MetasRealizadosTab(props: {
         />
       ) : null}
 
-      {file ? (
-        <TargetImportModal
-          open
-          file={file}
-          lojaId={storeId}
-          indicators={importCatalog}
-          currentValues={rows.map(row => ({ indicator_code: row.indicator_code, month: row.month, value: row.meta }))}
-          year={year}
-          onClose={() => setFile(null)}
-          onImported={async () => { setFile(null); await refetch(); clientScope.reload(); props.onSaved?.() }}
-        />
-      ) : null}
+      <TargetImportModal
+        open={importOpen}
+        lojaId={storeId}
+        indicators={importCatalog}
+        currentValues={rows.map(row => ({ indicator_code: row.indicator_code, month: row.month, value: row.meta }))}
+        year={year}
+        clientName={props.clientName}
+        onClose={() => setImportOpen(false)}
+        onImported={async () => { setImportOpen(false); await refetch(); clientScope.reload(); props.onSaved?.() }}
+      />
     </div>
   )
 }
@@ -1350,62 +1459,95 @@ function PlanningHistoryDrawer(props: {
 
 function TargetImportModal(props: {
   open: boolean
-  file: File
   lojaId: string
   indicators: TargetIndicator[]
   currentValues: Array<{ indicator_code: string; month: number; value: number | null }>
   year: number
+  clientName?: string
   onClose: () => void
   onImported: () => void
 }) {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [changes, setChanges] = useState<TargetImportChange[]>([])
   const [problem, setProblem] = useState<string | null>(null)
   const [importing, setImporting] = useState(false)
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(1)
+  const [validating, setValidating] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
+
+  const steps = ['Arquivo', 'Validação', 'Prévia', 'Confirmar'] as const
+
+  const reset = useCallback(() => {
+    setSelectedFile(null)
+    setChanges([])
+    setProblem(null)
+    setStep(1)
+    setValidating(false)
+    setImporting(false)
+  }, [])
 
   useEffect(() => {
-    let active = true
-    void (async () => {
-      try {
-        const { readXlsxTable } = await import('@/lib/xlsx-reader')
-        const buffer = await props.file.arrayBuffer()
-        const { headers, rows: matrix } = readXlsxTable(buffer)
-        const importRows = matrix.map(row => ({
-          code: readIndicatorCodeFromRow(row),
-          months: MONTH_LABELS.map(label => {
-            const value = row[label]
-            return value === undefined || value === null ? null : value as number | string
-          }),
-          total: (row['Total'] ?? null) as number | string | null,
-          observation: (row['Observação'] ?? row['Observacao'] ?? null) as string | null,
-        }))
-        const next = processTargetImport({
-          rows: importRows,
-          indicators: props.indicators,
-          currentValues: props.currentValues,
-          isPercentage: code => {
-            const indicator = props.indicators.find(item => item.code === code)
-            return getFormatConfig(indicator?.value_type ?? 'number', indicator?.casas_decimais ?? 0).value_format === 'PERCENTAGE'
-          },
-        })
-        const codesInFile = importRows.map(row => row.code).filter(Boolean)
-        const invalid = next.filter(change => change.action === 'INVALID')
-        const actionable = next.filter(change => change.action === 'UPDATE' || change.action === 'CLEAR')
-        if (!active) return
-        setChanges(next)
-        setProblem(invalid.length > 0
-          ? `${invalid.length} célula(s) precisam de correção. ${invalid[0]?.error ?? ''}`
-          : actionable.length > 0
-            ? null
-            : diagnoseEmptyImport({ headers, matrix, codesInFile, indicators: props.indicators }))
-      } catch (cause) {
-        if (active) {
-          setChanges([])
-          setProblem(cause instanceof Error ? cause.message : 'Não foi possível ler a planilha.')
-        }
-      }
-    })()
-    return () => { active = false }
-  }, [props.file, props.indicators])
+    if (!props.open) {
+      reset()
+      return
+    }
+    reset()
+  }, [props.open, reset])
+
+  const validateFile = useCallback(async (file: File) => {
+    setValidating(true)
+    setProblem(null)
+    setChanges([])
+    try {
+      const { readXlsxTable } = await import('@/lib/xlsx-reader')
+      const buffer = await file.arrayBuffer()
+      const { headers, rows: matrix } = readXlsxTable(buffer)
+      const importRows = matrix.map(row => ({
+        code: readIndicatorCodeFromRow(row),
+        months: MONTH_LABELS.map(label => {
+          const value = row[label]
+          return value === undefined || value === null ? null : value as number | string
+        }),
+        total: (row['Total'] ?? null) as number | string | null,
+        observation: (row['Observação'] ?? row['Observacao'] ?? null) as string | null,
+      }))
+      const next = processTargetImport({
+        rows: importRows,
+        indicators: props.indicators,
+        currentValues: props.currentValues,
+        isPercentage: code => {
+          const indicator = props.indicators.find(item => item.code === code)
+          return getFormatConfig(indicator?.value_type ?? 'number', indicator?.casas_decimais ?? 0).value_format === 'PERCENTAGE'
+        },
+      })
+      const codesInFile = importRows.map(row => row.code).filter(Boolean)
+      const invalid = next.filter(change => change.action === 'INVALID')
+      const actionable = next.filter(change => change.action === 'UPDATE' || change.action === 'CLEAR')
+      setChanges(next)
+      setProblem(invalid.length > 0
+        ? `${invalid.length} célula(s) precisam de correção. ${invalid[0]?.error ?? ''}`
+        : actionable.length > 0
+          ? null
+          : diagnoseEmptyImport({ headers, matrix, codesInFile, indicators: props.indicators }))
+      setStep(2)
+    } catch (cause) {
+      setChanges([])
+      setProblem(cause instanceof Error ? cause.message : 'Não foi possível ler a planilha.')
+      setStep(2)
+    } finally {
+      setValidating(false)
+    }
+  }, [props.currentValues, props.indicators])
+
+  const pickFile = (file: File | null) => {
+    if (!file) return
+    if (!file.name.toLowerCase().endsWith('.xlsx')) {
+      toast.error('Selecione um arquivo .xlsx gerado pelo modelo MX Performance.')
+      return
+    }
+    setSelectedFile(file)
+    void validateFile(file)
+  }
 
   const apply = async () => {
     if (!props.lojaId) {
@@ -1432,7 +1574,7 @@ function TargetImportModal(props: {
     for (const batch of batches) {
       const result = await saveIndicatorTargets({
         lojaId: props.lojaId,
-        indicatorCode: batch.indicatorCode,
+        indicatorCode: resolvePlanningPersistenceCode(batch.indicatorCode),
         year: props.year,
         values: batch.values,
       })
@@ -1452,22 +1594,94 @@ function TargetImportModal(props: {
     <Modal
       open={props.open}
       onClose={props.onClose}
-      title="Importar planilha de metas"
+      title="Importar Tabela — Metas"
       size="lg"
       closeOnEscape={!importing}
       footer={(
         <>
           <Button variant="outline" onClick={props.onClose} disabled={importing}>Cancelar</Button>
-          <Button onClick={() => void apply()} disabled={importing || changes.length === 0 || changes.some(change => change.action === 'INVALID')}>{importing ? 'Importando...' : 'Confirmar importação'}</Button>
+          {step === 1 ? (
+            <Button onClick={() => fileInputRef.current?.click()} disabled={validating}>
+              Selecionar arquivo
+            </Button>
+          ) : null}
+          {step === 2 ? (
+            <Button onClick={() => setStep(problem ? 1 : 3)} disabled={validating || !selectedFile}>
+              {problem ? 'Voltar ao arquivo' : 'Ver prévia'}
+            </Button>
+          ) : null}
+          {step === 3 ? (
+            <Button onClick={() => setStep(4)} disabled={changes.length === 0 || changes.some(change => change.action === 'INVALID')}>
+              Revisar confirmação
+            </Button>
+          ) : null}
+          {step === 4 ? (
+            <Button onClick={() => void apply()} disabled={importing || changes.length === 0 || changes.some(change => change.action === 'INVALID')}>
+              {importing ? 'Importando...' : 'Confirmar importação'}
+            </Button>
+          ) : null}
         </>
       )}
     >
       <div className="mt-5 space-y-4">
-        <MxStatusBanner tone={problem ? 'warning' : 'info'}>
-          {problem
-            ? `${props.file.name} · ${problem}`
-            : `${props.file.name} · ${changes.length} célula(s) de meta detectada(s).`}
+        <ol className="flex flex-wrap gap-2 text-xs font-medium">
+          {steps.map((label, index) => {
+            const current = index + 1
+            const active = step === current
+            const done = step > current
+            return (
+              <li key={label} className={`rounded-full px-3 py-1 ${active ? 'bg-primary text-primary-foreground' : done ? 'bg-muted text-foreground' : 'bg-background-muted text-muted-foreground'}`}>
+                {current}. {label}
+              </li>
+            )
+          })}
+        </ol>
+        <MxStatusBanner tone="neutral">
+          Cliente: {props.clientName ?? '—'} · Visão: Metas · Ano: {props.year} · Unidade: {props.lojaId ? 'selecionada' : '—'}
         </MxStatusBanner>
+        {step === 1 ? (
+          <div
+            className="space-y-4 rounded-xl border border-dashed border-border bg-surface-alt p-6 text-center"
+            onDragOver={event => { event.preventDefault(); event.stopPropagation() }}
+            onDrop={event => {
+              event.preventDefault()
+              event.stopPropagation()
+              pickFile(event.dataTransfer.files?.[0] ?? null)
+            }}
+          >
+            <Upload size={24} className="mx-auto text-muted-foreground" aria-hidden />
+            <div className="space-y-1">
+              <p className="text-sm font-semibold text-foreground">1. Arquivo</p>
+              <p className="text-sm text-muted-foreground">Arraste a planilha .xlsx do modelo MX Performance ou selecione no computador.</p>
+            </div>
+            {selectedFile ? (
+              <p className="text-xs text-muted-foreground">Selecionado: {selectedFile.name}</p>
+            ) : null}
+            <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()} disabled={validating}>
+              {validating ? 'Validando...' : 'Escolher arquivo .xlsx'}
+            </Button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              className="sr-only"
+              onChange={event => {
+                pickFile(event.target.files?.[0] ?? null)
+                event.currentTarget.value = ''
+              }}
+            />
+          </div>
+        ) : null}
+        {step >= 2 ? (
+          <MxStatusBanner tone={problem ? 'warning' : 'info'}>
+            {validating
+              ? 'Validando arquivo...'
+              : problem
+                ? `${selectedFile?.name ?? 'Arquivo'} · ${problem}`
+                : `${selectedFile?.name ?? 'Arquivo'} · ${changes.length} célula(s) de meta detectada(s). Célula vazia preserva; LIMPAR apaga; Realizado e Ano Anterior não são alterados.`}
+          </MxStatusBanner>
+        ) : null}
+        {step >= 3 ? (
         <div className="max-h-72 overflow-auto rounded-lg border border-border">
           <Table className="min-w-[520px]">
             <TableHeader>
@@ -1497,6 +1711,12 @@ function TargetImportModal(props: {
             </TableBody>
           </Table>
         </div>
+        ) : null}
+        {step === 4 ? (
+          <p className="text-sm text-muted-foreground">
+            Confirme a importação de {changes.filter(change => change.action === 'UPDATE' || change.action === 'CLEAR').length} alteração(ões) de meta para o ano {props.year}.
+          </p>
+        ) : null}
       </div>
     </Modal>
   )

@@ -129,6 +129,9 @@ describe('CONS-22 RPCs administrativas', () => {
       'utf8',
     )
     expect(tab).toContain('decideStrategicCellInput')
+    expect(tab).toContain('persistIndicatorYearValues')
+    expect(tab).toContain('Meta aplicada nos 12 meses')
+    expect(input).toContain('planningYearDraftKey')
     expect(input).toContain('Vazio preserva o valor atual. 0 é zero. LIMPAR apaga a meta.')
   })
 
@@ -159,12 +162,22 @@ describe('CONS-22 RPCs administrativas', () => {
       'utf8',
     )
     expect(quick).toContain('Personalizar por mês')
-    expect(quick).toContain('Aplicar jan a todos')
-    expect(quick).toContain('Meta mensal:')
+    expect(quick).toContain('Voltar para valor único')
+    expect(quick).toContain('aplicado a jan–dez')
+    expect(quick).not.toContain('Aplicar em todos')
+    expect(quick).toContain('Meta mensal (aplicado a jan–dez)')
     expect(quick).toContain('Resumo Calculado')
-    expect(editor).toContain('Voltar para Cadastro')
+    const tab = readFileSync(
+      new URL('../features/admin-mx/components/MetasRealizadosTab.tsx', import.meta.url),
+      'utf8',
+    )
+    expect(tab).toContain('Mês de conferência do cadastro rápido')
+    expect(tab).toContain('planStatusLabel')
+    expect(tab).toContain('onQuickProgress')
+    expect(tab).toContain('resolvePlanningPersistenceCode')
+    expect(tab).toContain('persistIndicatorYearValues')
     expect(editor).toContain('Expandir todos')
-    expect(editor).toContain('>Digitável</label>')
+    expect(editor).toContain('Voltar para Cadastro')
     expect(editor).toContain('Dono verá estado vazio (não publicado)')
     expect(editor).toContain('ADMIN_PLAN_CYCLE_STATUS_CODE')
     expect(editor).toContain('CLIENT_EDITOR_TAB_KEYS')
@@ -222,7 +235,8 @@ describe('CONS-22 RPCs administrativas', () => {
       'utf8',
     )
     expect(apply).toContain("rpc('criar_plano_acao_v2'")
-    expect(apply).toContain("rpc('atualizar_plano_acao_patch'")
+    expect(apply).toContain('p_checklist:')
+    expect(apply).not.toContain("rpc('atualizar_plano_acao_patch'")
     expect(apply).not.toMatch(/from\('planos_acao'\)[\s\S]{0,120}\.insert/)
   })
 
@@ -242,6 +256,22 @@ describe('CONS-22 RPCs administrativas', () => {
     expect(draft).toContain("'LOJA_UNICA' | 'GRUPO' | 'REDE'")
     expect(page).toContain('<option value="GRUPO">Grupo</option>')
     expect(create).toContain('clientAllowsBranches(draft.structure_type)')
+  })
+
+  test('criação atômica de plano de ação grava checklist na mesma RPC', () => {
+    const atomic = readFileSync(
+      new URL('../../supabase/migrations/20260831120000_atomic_action_plan_create.sql', import.meta.url),
+      'utf8',
+    )
+    const wizard = readFileSync(
+      new URL('../features/admin-mx/planos-acao/actionPlanWizardLogic.ts', import.meta.url),
+      'utf8',
+    )
+    expect(atomic).toContain('p_checklist jsonb')
+    expect(atomic).toContain('Campo obrigatório inválido: indicador')
+    expect(wizard).toContain('p_checklist: createdPatch.checklist')
+    expect(wizard).toContain('needsLegacyActionPlanCreate')
+    expect(wizard).toContain("rpc('atualizar_plano_acao_patch'")
   })
 
   test('o editor do cliente não aborta o Cadastro Rápido quando o gate remoto recusa VOLUME', () => {

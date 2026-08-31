@@ -40,7 +40,7 @@ describe('excelTargetTemplateGenerator', () => {
       viewType: 'TARGET',
       referenceYear: 2026,
       isBlankModel: true,
-    })).toBe('MODELO_METAS_MX_VEICULOS_TESTE_MATRIZ_PRINCIPAL_2026.xlsx')
+    })).toBe('MODELO_METAS_MX_VEICULOS_TESTE_2026_MATRIZ_PRINCIPAL.xlsx')
 
     expect(getTemplateFileName({
       clientName: 'ACERTT',
@@ -48,21 +48,21 @@ describe('excelTargetTemplateGenerator', () => {
       viewType: 'TARGET',
       referenceYear: 2026,
       isBlankModel: false,
-    })).toBe('METAS_ACERTT_ACERTT_2026.xlsx')
+    })).toBe('METAS_ACERTT_2026.xlsx')
 
     expect(getTemplateFileName({
       clientName: 'ACERTT',
       storeName: 'ACERTT',
       viewType: 'ACTUAL',
       referenceYear: 2026,
-    })).toBe('REALIZADO_ACERTT_ACERTT_2026.xlsx')
+    })).toBe('REALIZADO_ACERTT_2026.xlsx')
 
     expect(getTemplateFileName({
       clientName: 'ACERTT',
       storeName: 'ACERTT',
       viewType: 'PRIOR_YEAR',
       referenceYear: 2026,
-    })).toBe('ANO_ANTERIOR_ACERTT_ACERTT_2026.xlsx')
+    })).toBe('ANO_ANTERIOR_ACERTT_2026.xlsx')
   })
 
   test('generates valid OpenXML zip archive for TARGET model', () => {
@@ -77,7 +77,7 @@ describe('excelTargetTemplateGenerator', () => {
       isBlankModel: true,
     })
 
-    expect(fileName).toBe('MODELO_METAS_ACERTT_ACERTT_2026.xlsx')
+    expect(fileName).toBe('MODELO_METAS_ACERTT_2026.xlsx')
     expect(buffer.byteLength).toBeGreaterThan(5000)
 
     const unzipped = unzipSync(buffer)
@@ -92,7 +92,7 @@ describe('excelTargetTemplateGenerator', () => {
 
     const workbookXml = new TextDecoder().decode(unzipped['xl/workbook.xml'])
     expect(workbookXml).toContain('name="INSTRUÇÕES"')
-    expect(workbookXml).toContain('name="DADOS"')
+    expect(workbookXml).toContain('name="METAS"')
     expect(workbookXml).toContain('name="MX_CONFIG"')
     expect(workbookXml).toContain('state="hidden"')
 
@@ -120,7 +120,7 @@ describe('excelTargetTemplateGenerator', () => {
       isBlankModel: false,
     })
 
-    expect(fileName).toBe('REALIZADO_MX_VEICULOS_TESTE_4_MATRIZ_2026.xlsx')
+    expect(fileName).toBe('REALIZADO_MX_VEICULOS_TESTE_4_2026_MATRIZ.xlsx')
     expect(buffer.byteLength).toBeGreaterThan(5000)
 
     const unzipped = unzipSync(buffer)
@@ -143,7 +143,7 @@ describe('excelTargetTemplateGenerator', () => {
 
     const unzipped = unzipSync(buffer)
     const sheet3Xml = new TextDecoder().decode(unzipped['xl/worksheets/sheet3.xml'])
-    expect(sheet3Xml).toContain('ref="A1:B15"')
+    expect(sheet3Xml).toContain('ref="A1:B19"')
 
     const sharedXml = new TextDecoder().decode(unzipped['xl/sharedStrings.xml'])
     expect(sharedXml).toContain('template_version')
@@ -157,6 +157,10 @@ describe('excelTargetTemplateGenerator', () => {
     expect(sharedXml).toContain('view_type')
     expect(sharedXml).toContain('TARGET')
     expect(sharedXml).toContain('indicator_count')
+    expect(sharedXml).toContain('manual_indicator_count')
+    expect(sharedXml).toContain('calculated_indicator_count')
+    expect(sharedXml).toContain('catalog_order_version')
+    expect(sharedXml).toContain('strategic_plan_version_id')
     expect(sharedXml).toContain('46')
   })
 })

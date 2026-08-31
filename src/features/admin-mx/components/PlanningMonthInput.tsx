@@ -5,6 +5,11 @@ export function planningCellDraftKey(field: 'meta' | 'realizado' | 'ano_anterior
   return `${field}:${code}:${month}`
 }
 
+/** Rascunho do valor único anual (cadastro rápido padrão — replica nos 12 meses ao salvar). */
+export function planningYearDraftKey(field: 'meta' | 'realizado' | 'ano_anterior', code: string) {
+  return `${field}:${code}:year`
+}
+
 export function PlanningMonthInput(props: {
   ariaLabel: string
   displayValue: number | null

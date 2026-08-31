@@ -48,11 +48,26 @@ export function isPlanningFieldEditable(
   return !isActualCalculated(code)
 }
 
+/**
+ * Traduz o código exibido (Base44/canônico) para o vocabulário de
+ * `catalogo_indicadores_planejamento`, que usa `metric_key` minúsculo.
+ * Sem isso, marketing (`INTERNET_COST_PER_SALE`) falha no RPC com
+ * "Indicador estratégico inválido." enquanto comercial salva.
+ */
+export function resolvePlanningPersistenceCode(code: string): string {
+  for (const alias of catalogAliasKeys(code)) {
+    if (alias === alias.toLowerCase()) return alias
+  }
+  return code.trim().toLowerCase()
+}
+
 export type TargetWorkbookSheet = {
   name: string
   headers: string[]
   rows: Array<Record<string, unknown>>
 }
+
+export const TARGET_WORKBOOK_DATA_SHEET = 'METAS' as const
 
 export const TARGET_TEMPLATE_INSTRUCTION_LINES = [
   'Preencha somente as células brancas (indicadores digitáveis).',
@@ -97,6 +112,44 @@ export function resolveImportedIndicator<T extends TargetIndicator>(indicators: 
   })
 }
 
+export function buildMxConfigRows(params: {
+  clientId?: string
+  clientName?: string
+  cycleId?: string | null
+  cycleVersionId?: string | null
+  year: number
+  storeId: string
+  storeName?: string
+  scopeType?: string
+  viewType?: 'TARGET' | 'ACTUAL' | 'PRIOR_YEAR'
+  indicatorCount: number
+  manualCount: number
+  calculatedCount: number
+  templateHash?: string
+}): Array<{ Chave: string; Valor: string }> {
+  const hash = params.templateHash ?? String(Math.abs(params.indicatorCount * params.year))
+  return [
+    { Chave: 'template_version', Valor: '1.0.0' },
+    { Chave: 'client_account_id', Valor: params.clientId ?? '' },
+    { Chave: 'client_name', Valor: params.clientName ?? params.storeName ?? '' },
+    { Chave: 'strategic_plan_cycle_id', Valor: params.cycleId ?? '' },
+    { Chave: 'strategic_plan_version_id', Valor: params.cycleVersionId ?? '' },
+    { Chave: 'reference_year', Valor: String(params.year) },
+    { Chave: 'view_type', Valor: params.viewType ?? 'TARGET' },
+    { Chave: 'store_id', Valor: params.storeId },
+    { Chave: 'store_name', Valor: params.storeName ?? '' },
+    { Chave: 'scope_type', Valor: params.scopeType ?? (params.storeId ? 'LOJA' : 'CONSOLIDADO') },
+    { Chave: 'generated_at', Valor: new Date().toISOString() },
+    { Chave: 'generated_by', Valor: 'Administrador MX' },
+    { Chave: 'indicator_catalog_version', Valor: '1.0' },
+    { Chave: 'catalog_order_version', Valor: '1.0' },
+    { Chave: 'indicator_count', Valor: String(params.indicatorCount) },
+    { Chave: 'manual_indicator_count', Valor: String(params.manualCount) },
+    { Chave: 'calculated_indicator_count', Valor: String(params.calculatedCount) },
+    { Chave: 'template_hash', Valor: hash },
+  ]
+}
+
 /** Gera as abas do XLSX de metas, tanto preenchido quanto em branco. */
 export function buildTargetWorkbookSheets(params: {
   indicators: TargetIndicator[]
@@ -107,10 +160,12 @@ export function buildTargetWorkbookSheets(params: {
   clientName?: string
   clientId?: string
   cycleId?: string | null
+  cycleVersionId?: string | null
   scopeType?: string
   viewType?: 'TARGET' | 'ACTUAL' | 'PRIOR_YEAR'
 }): TargetWorkbookSheet[] {
   const headers = [
+    'Ordem Oficial',
     'Código do Indicador',
     'Departamento',
     'Indicador',
@@ -118,11 +173,10 @@ export function buildTargetWorkbookSheets(params: {
     'Formato',
     ...MONTH_LABELS,
     'Total',
-    'Fonte do Dado',
     'Observação',
   ]
 
-  const roster = BASE44_STANDARD_INDICATORS.map(canonical => {
+  const roster = BASE44_STANDARD_INDICATORS.map((canonical, index) => {
     const custom = params.indicators.find(ind => officialCatalogCode(ind.code) === canonical.code)
     const isCalc = custom?.calculado !== undefined
       ? custom.calculado
@@ -132,12 +186,16 @@ export function buildTargetWorkbookSheets(params: {
     const format = custom ? formatLabel(custom) : 'Decimal'
     return {
       code: canonical.code,
+      officialOrder: BASE44_GLOBAL_ORDER[canonical.code] ?? index + 1,
       name,
       department: dept,
       calculado: isCalc,
       format,
     }
   })
+
+  const manualCount = roster.filter(indicator => !indicator.calculado).length
+  const calculatedCount = roster.length - manualCount
 
   const rows = roster.map(indicator => {
     const official = officialCatalogCode(indicator.code)
@@ -148,6 +206,7 @@ export function buildTargetWorkbookSheets(params: {
     })
     const numericMonths = monthValues.filter((value): value is number => typeof value === 'number')
     return {
+      'Ordem Oficial': indicator.officialOrder,
       'Código do Indicador': official,
       Departamento: indicator.department,
       Indicador: indicator.name,
@@ -155,7 +214,6 @@ export function buildTargetWorkbookSheets(params: {
       Formato: indicator.format,
       ...Object.fromEntries(MONTH_LABELS.map((label, index) => [label, monthValues[index]])),
       Total: indicator.calculado ? '' : numericMonths.reduce((sum, value) => sum + value, 0),
-      'Fonte do Dado': '',
       Observação: '',
     }
   })
@@ -166,26 +224,24 @@ export function buildTargetWorkbookSheets(params: {
       headers: ['Instrução'],
       rows: TARGET_TEMPLATE_INSTRUCTION_LINES.map(instruction => ({ Instrução: instruction })),
     },
-    { name: 'DADOS', headers, rows },
+    { name: TARGET_WORKBOOK_DATA_SHEET, headers, rows },
     {
       name: 'MX_CONFIG',
       headers: ['Chave', 'Valor'],
-      rows: [
-        { Chave: 'template_version', Valor: '1.0.0' },
-        { Chave: 'client_account_id', Valor: params.clientId ?? '' },
-        { Chave: 'client_name', Valor: params.clientName ?? params.storeName ?? '' },
-        { Chave: 'strategic_plan_cycle_id', Valor: params.cycleId ?? '' },
-        { Chave: 'reference_year', Valor: String(params.year) },
-        { Chave: 'view_type', Valor: params.viewType ?? 'TARGET' },
-        { Chave: 'store_id', Valor: params.storeId },
-        { Chave: 'store_name', Valor: params.storeName ?? '' },
-        { Chave: 'scope_type', Valor: params.scopeType ?? (params.storeId ? 'STORE' : 'CONSOLIDATED') },
-        { Chave: 'generated_at', Valor: new Date().toISOString() },
-        { Chave: 'generated_by', Valor: 'Administrador MX' },
-        { Chave: 'indicator_catalog_version', Valor: '1.0' },
-        { Chave: 'indicator_count', Valor: String(roster.length) },
-        { Chave: 'template_hash', Valor: String(Math.abs(roster.length * params.year)) },
-      ],
+      rows: buildMxConfigRows({
+        clientId: params.clientId,
+        clientName: params.clientName,
+        cycleId: params.cycleId,
+        cycleVersionId: params.cycleVersionId,
+        year: params.year,
+        storeId: params.storeId,
+        storeName: params.storeName,
+        scopeType: params.scopeType,
+        viewType: params.viewType,
+        indicatorCount: roster.length,
+        manualCount,
+        calculatedCount,
+      }),
     },
   ]
 }
@@ -549,6 +605,20 @@ export const SALES_CHANNEL_CODES = [
   'SALES_INTERNET',
   'SALES_OTHER',
 ] as const
+
+/** Distribui um total inteiro entre N canais, preservando a soma (resto nos primeiros). */
+export function distributeIntegerTotalEvenly(total: number, parts: number): number[] {
+  if (parts <= 0) return []
+  const normalized = Math.max(0, Math.trunc(total))
+  const base = Math.floor(normalized / parts)
+  const remainder = normalized - base * parts
+  return Array.from({ length: parts }, (_, index) => base + (index < remainder ? 1 : 0))
+}
+
+export function distributeSalesTotalToChannels(total: number): Record<string, number> {
+  const shares = distributeIntegerTotalEvenly(total, SALES_CHANNEL_CODES.length)
+  return Object.fromEntries(SALES_CHANNEL_CODES.map((code, index) => [code, shares[index] ?? 0]))
+}
 
 export function monthSeries(values: Array<number | null> | undefined): Array<number | null> {
   return Array.from({ length: 12 }, (_, index) => values?.[index] ?? null)

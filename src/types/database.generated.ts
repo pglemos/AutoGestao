@@ -15,7 +15,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.1"
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
@@ -2855,6 +2855,88 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "ciclos_plano_estrategico"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      ciclos_plano_estrategico_indicadores: {
+        Row: {
+          area_snapshot: string | null
+          calculation_mode_snapshot: string | null
+          ciclo_id: string
+          created_at: string
+          created_by: string | null
+          display_order: number
+          enabled: boolean
+          id: string
+          label_snapshot: string | null
+          metric_key: string
+          origin: string
+          unit_entry_mode_snapshot: string | null
+          unit_rollup_method_snapshot: string | null
+          updated_at: string
+          value_type_snapshot: string | null
+          visible_to_owner: boolean
+          weight_indicator_code_snapshot: string | null
+        }
+        Insert: {
+          area_snapshot?: string | null
+          calculation_mode_snapshot?: string | null
+          ciclo_id: string
+          created_at?: string
+          created_by?: string | null
+          display_order?: number
+          enabled?: boolean
+          id?: string
+          label_snapshot?: string | null
+          metric_key: string
+          origin?: string
+          unit_entry_mode_snapshot?: string | null
+          unit_rollup_method_snapshot?: string | null
+          updated_at?: string
+          value_type_snapshot?: string | null
+          visible_to_owner?: boolean
+          weight_indicator_code_snapshot?: string | null
+        }
+        Update: {
+          area_snapshot?: string | null
+          calculation_mode_snapshot?: string | null
+          ciclo_id?: string
+          created_at?: string
+          created_by?: string | null
+          display_order?: number
+          enabled?: boolean
+          id?: string
+          label_snapshot?: string | null
+          metric_key?: string
+          origin?: string
+          unit_entry_mode_snapshot?: string | null
+          unit_rollup_method_snapshot?: string | null
+          updated_at?: string
+          value_type_snapshot?: string | null
+          visible_to_owner?: boolean
+          weight_indicator_code_snapshot?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ciclos_plano_estrategico_indicadores_ciclo_id_fkey"
+            columns: ["ciclo_id"]
+            isOneToOne: false
+            referencedRelation: "ciclos_plano_estrategico"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ciclos_plano_estrategico_indicadores_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ciclos_plano_estrategico_indicadores_metric_key_fkey"
+            columns: ["metric_key"]
+            isOneToOne: false
+            referencedRelation: "catalogo_metricas_consultoria"
+            referencedColumns: ["metric_key"]
           },
         ]
       }
@@ -9991,8 +10073,8 @@ export type Database = {
       }
       modulos_produto_consultoria: {
         Row: {
-          created_at: string
           configuration_origin: string
+          created_at: string
           display_order: number
           etapa: string | null
           id: string
@@ -10001,20 +10083,20 @@ export type Database = {
           menu_code: string | null
           menu_label: string | null
           module_code: string | null
-          module_label: string | null
           module_key: string
+          module_label: string | null
           obrigatorio: boolean
           program_key: string
           release_stage: string
           status: string
           technical_status: string
           updated_at: string
-          visibility: string
           visibilidade: string
+          visibility: string
         }
         Insert: {
-          created_at?: string
           configuration_origin?: string
+          created_at?: string
           display_order?: number
           etapa?: string | null
           id?: string
@@ -10023,20 +10105,20 @@ export type Database = {
           menu_code?: string | null
           menu_label?: string | null
           module_code?: string | null
-          module_label?: string | null
           module_key: string
+          module_label?: string | null
           obrigatorio?: boolean
           program_key: string
           release_stage?: string
           status?: string
           technical_status?: string
           updated_at?: string
-          visibility?: string
           visibilidade?: string
+          visibility?: string
         }
         Update: {
-          created_at?: string
           configuration_origin?: string
+          created_at?: string
           display_order?: number
           etapa?: string | null
           id?: string
@@ -10045,16 +10127,16 @@ export type Database = {
           menu_code?: string | null
           menu_label?: string | null
           module_code?: string | null
-          module_label?: string | null
           module_key?: string
+          module_label?: string | null
           obrigatorio?: boolean
           program_key?: string
           release_stage?: string
           status?: string
           technical_status?: string
           updated_at?: string
-          visibility?: string
           visibilidade?: string
+          visibility?: string
         }
         Relationships: [
           {
@@ -10916,6 +10998,66 @@ export type Database = {
           {
             foreignKeyName: "pacotes_indicadores_versoes_published_by_fkey"
             columns: ["published_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      parametros_estrategicos_mx: {
+        Row: {
+          code: string
+          created_at: string
+          default_value: number
+          id: string
+          monthly_defaults: number[] | null
+          name: string
+          notes: string | null
+          parameter_set_id: string
+          status: string
+          unit: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          default_value: number
+          id?: string
+          monthly_defaults?: number[] | null
+          name: string
+          notes?: string | null
+          parameter_set_id: string
+          status?: string
+          unit?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          default_value?: number
+          id?: string
+          monthly_defaults?: number[] | null
+          name?: string
+          notes?: string | null
+          parameter_set_id?: string
+          status?: string
+          unit?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "parametros_estrategicos_mx_parameter_set_id_fkey"
+            columns: ["parameter_set_id"]
+            isOneToOne: false
+            referencedRelation: "conjuntos_parametros_consultoria"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "parametros_estrategicos_mx_updated_by_fkey"
+            columns: ["updated_by"]
             isOneToOne: false
             referencedRelation: "usuarios"
             referencedColumns: ["id"]
@@ -12531,9 +12673,9 @@ export type Database = {
       programas_visita_consultoria: {
         Row: {
           active: boolean
+          change_summary: string | null
           created_at: string
           descricao: string | null
-          change_summary: string | null
           effective_from: string | null
           evolution_group: string
           indicator_package_version_id: string | null
@@ -12553,9 +12695,9 @@ export type Database = {
         }
         Insert: {
           active?: boolean
+          change_summary?: string | null
           created_at?: string
           descricao?: string | null
-          change_summary?: string | null
           effective_from?: string | null
           evolution_group?: string
           indicator_package_version_id?: string | null
@@ -12575,9 +12717,9 @@ export type Database = {
         }
         Update: {
           active?: boolean
+          change_summary?: string | null
           created_at?: string
           descricao?: string | null
-          change_summary?: string | null
           effective_from?: string | null
           evolution_group?: string
           indicator_package_version_id?: string | null
@@ -15760,8 +15902,8 @@ export type Database = {
           opening_date: string | null
           opening_time: string | null
           state: string | null
-          store_id: string | null
           status: string
+          store_id: string | null
           store_type: string | null
           timezone: string
           updated_at: string
@@ -15784,8 +15926,8 @@ export type Database = {
           opening_date?: string | null
           opening_time?: string | null
           state?: string | null
-          store_id?: string | null
           status?: string
+          store_id?: string | null
           store_type?: string | null
           timezone?: string
           updated_at?: string
@@ -15808,8 +15950,8 @@ export type Database = {
           opening_date?: string | null
           opening_time?: string | null
           state?: string | null
-          store_id?: string | null
           status?: string
+          store_id?: string | null
           store_type?: string | null
           timezone?: string
           updated_at?: string
@@ -17561,6 +17703,10 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      adicionar_indicador_ciclo_plano: {
+        Args: { p_cycle_id: string; p_metric_key: string }
+        Returns: Json
+      }
       admin_archive_store: { Args: { p_store_id: string }; Returns: Json }
       admin_create_store: { Args: { p_payload: Json }; Returns: Json }
       admin_hard_delete_store: {
@@ -17568,11 +17714,30 @@ export type Database = {
         Returns: Json
       }
       admin_restore_store: { Args: { p_store_id: string }; Returns: Json }
-      admin_update_usuario: {
-        Args: { p_payload: Json; p_user_id: string }
-        Returns: Json
-      }
       admin_store_live_overview: {
+        Args: { p_reference_date?: string; p_store_id: string }
+        Returns: {
+          closing_status: string
+          declared_appointments: number
+          declared_attendances: number
+          declared_leads: number
+          declared_sales: number
+          discipline_score: number
+          has_divergence: boolean
+          last_activity_at: string
+          live_appointments: number
+          live_attendances: number
+          live_leads: number
+          live_sales: number
+          reference_date: string
+          seller_name: string
+          seller_user_id: string
+          submission_status: string
+          submitted_at: string
+          submitted_late: boolean
+        }[]
+      }
+      admin_store_live_overview_legacy: {
         Args: { p_reference_date?: string; p_store_id: string }
         Returns: {
           closing_status: string
@@ -17597,6 +17762,10 @@ export type Database = {
       }
       admin_update_store: {
         Args: { p_payload: Json; p_store_id: string }
+        Returns: Json
+      }
+      admin_update_usuario: {
+        Args: { p_payload: Json; p_user_id: string }
         Returns: Json
       }
       aplicar_regularizacao_fechamento: {
@@ -17624,6 +17793,10 @@ export type Database = {
         Returns: string
       }
       atualizar_etapa_oportunidade_crm: {
+        Args: { p_oportunidade_id: string; p_payload: Json }
+        Returns: Json
+      }
+      atualizar_etapa_oportunidade_crm_legacy: {
         Args: { p_oportunidade_id: string; p_payload: Json }
         Returns: Json
       }
@@ -17834,6 +18007,10 @@ export type Database = {
         Args: { p_agendamento_id: string; p_payload: Json }
         Returns: Json
       }
+      atualizar_visibilidade_indicador_ciclo: {
+        Args: { p_cycle_id: string; p_metric_key: string; p_visible: boolean }
+        Returns: Json
+      }
       begin_password_change: { Args: never; Returns: Json }
       buscar_cliente_loja_por_telefone: {
         Args: { p_telefone: string }
@@ -17854,6 +18031,14 @@ export type Database = {
         Returns: boolean
       }
       can_access_mx_scope: {
+        Args: {
+          p_scope_id: string
+          p_scope_type: Database["public"]["Enums"]["score_scope_type"]
+          uid?: string
+        }
+        Returns: boolean
+      }
+      can_create_mx_action_scope: {
         Args: {
           p_scope_id: string
           p_scope_type: Database["public"]["Enums"]["score_scope_type"]
@@ -17967,6 +18152,10 @@ export type Database = {
         Returns: Json
       }
       carteira_salvar_cliente: {
+        Args: { p_idempotency_key?: string; p_payload: Json }
+        Returns: Json
+      }
+      carteira_salvar_cliente_legacy: {
         Args: { p_idempotency_key?: string; p_payload: Json }
         Returns: Json
       }
@@ -18387,6 +18576,10 @@ export type Database = {
       create_pdi_session_bundle: { Args: { p_payload: Json }; Returns: string }
       criar_agendamento_crm: { Args: { p_payload: Json }; Returns: Json }
       criar_oportunidade_crm: { Args: { p_payload: Json }; Returns: Json }
+      criar_oportunidade_crm_legacy_vehicle_match: {
+        Args: { p_payload: Json }
+        Returns: Json
+      }
       criar_plano_acao: {
         Args: {
           p_acao: string
@@ -18703,9 +18896,22 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      duplicate_consulting_product: {
+        Args: {
+          p_source_key: string
+          p_target_key: string
+          p_target_name: string
+          p_version: number
+        }
+        Returns: string
+      }
       eh_admin_master_mx: { Args: { uid?: string }; Returns: boolean }
       eh_administrador_mx: { Args: { uid?: string }; Returns: boolean }
       eh_area_interna_mx: { Args: { uid?: string }; Returns: boolean }
+      eh_indicador_oficial_base44: {
+        Args: { p_metric_key: string }
+        Returns: boolean
+      }
       enviar_cobranca_diaria: {
         Args: {
           p_link?: string
@@ -18755,6 +18961,14 @@ export type Database = {
         Args: { p_sessao_id: string }
         Returns: number
       }
+      get_admin_indicator_target_aggregates: {
+        Args: { p_year: number }
+        Returns: {
+          annual_target: number
+          metric_key: string
+          target_count: number
+        }[]
+      }
       get_benchmark: {
         Args: {
           p_loja_id: string
@@ -18779,6 +18993,10 @@ export type Database = {
       }
       get_correlation_id: { Args: never; Returns: string }
       get_internal_mx_network_cockpit: {
+        Args: { p_end_date: string; p_start_date: string }
+        Returns: Json
+      }
+      get_internal_mx_network_cockpit_legacy: {
         Args: { p_end_date: string; p_start_date: string }
         Returns: Json
       }
@@ -19126,6 +19344,10 @@ export type Database = {
         Args: { p_end_date: string; p_start_date: string }
         Returns: Json
       }
+      get_owner_network_cockpit_legacy: {
+        Args: { p_end_date: string; p_start_date: string }
+        Returns: Json
+      }
       get_pdi_form_template: { Args: { p_cargo_id: string }; Returns: Json }
       get_pdi_print_bundle: { Args: { p_sessao_id: string }; Returns: Json }
       get_prova_aula: { Args: { p_aula_id: string }; Returns: Json }
@@ -19164,10 +19386,18 @@ export type Database = {
         }
         Returns: Json
       }
+      get_strategic_plan_indicator_counts: {
+        Args: { p_cycle_ids: string[] }
+        Returns: {
+          cycle_id: string
+          indicator_count: number
+        }[]
+      }
       get_suggested_actions: {
         Args: { p_competencia_id: string }
         Returns: Json
       }
+      get_user_agency_id: { Args: never; Returns: string }
       get_vendas_oficiais_periodo: {
         Args: {
           p_end_date: string
@@ -19183,7 +19413,6 @@ export type Database = {
           vendas: number
         }[]
       }
-      get_user_agency_id: { Args: never; Returns: string }
       has_store_role: {
         Args: { p_roles: string[]; p_store_id: string }
         Returns: boolean
@@ -19383,22 +19612,9 @@ export type Database = {
           isSetofReturn: false
         }
       }
-      duplicate_consulting_product: {
-        Args: {
-          p_source_key: string
-          p_target_key: string
-          p_target_name: string
-          p_version: number
-        }
-        Returns: string
-      }
       normalize_mx_role: { Args: { p_role: string }; Returns: string }
       open_action_plan_template_revision: {
         Args: { p_notes?: string; p_template_id: string }
-        Returns: string
-      }
-      save_action_plan_template_draft: {
-        Args: { p_payload: Json }
         Returns: string
       }
       operar_ciclo_plano_estrategico: {
@@ -19432,6 +19648,10 @@ export type Database = {
         }
       }
       papel_usuario: { Args: { uid?: string }; Returns: string }
+      patch_network_cockpit_sales: {
+        Args: { p_end_date: string; p_payload: Json; p_start_date: string }
+        Returns: Json
+      }
       pode_acessar_cliente_consultoria: {
         Args: { p_cliente_id: string }
         Returns: boolean
@@ -19611,6 +19831,10 @@ export type Database = {
         }
         Returns: string
       }
+      registrar_auditoria_loja: {
+        Args: { p_changes: Json; p_store_id: string }
+        Returns: string
+      }
       registrar_evidencia_consultoria: {
         Args: {
           p_external_url?: string
@@ -19779,7 +20003,7 @@ export type Database = {
       }
       run_store_target_plan_refresh_clock: { Args: never; Returns: undefined }
       saldo_presencial_cliente: {
-        Args: { p_client_id: string; p_exclude_visit_id?: string | null }
+        Args: { p_client_id: string; p_exclude_visit_id?: string }
         Returns: {
           contratadas: number
           disponiveis: number
@@ -19787,7 +20011,7 @@ export type Database = {
           usadas: number
         }[]
       }
-      salvar_metas_indicador_planejamento: {
+      salvar_ano_anterior_indicador_planejamento: {
         Args: {
           p_indicator_code: string
           p_note?: string
@@ -19797,6 +20021,28 @@ export type Database = {
         }
         Returns: Json
       }
+      salvar_metas_indicador_planejamento:
+        | {
+            Args: {
+              p_indicator_code: string
+              p_note?: string
+              p_store_id: string
+              p_values: Json
+              p_year: number
+            }
+            Returns: Json
+          }
+        | {
+            Args: {
+              p_ciclo_id?: string
+              p_indicator_code: string
+              p_note?: string
+              p_store_id: string
+              p_values: Json
+              p_year: number
+            }
+            Returns: Json
+          }
       salvar_progresso_aula_consultoria: {
         Args: {
           p_client_id: string
@@ -19831,16 +20077,33 @@ export type Database = {
           isSetofReturn: false
         }
       }
-      salvar_realizado_indicador_planejamento: {
-        Args: {
-          p_indicator_code: string
-          p_note?: string
-          p_source?: string
-          p_store_id: string
-          p_values: Json
-          p_year: number
-        }
-        Returns: Json
+      salvar_realizado_indicador_planejamento:
+        | {
+            Args: {
+              p_indicator_code: string
+              p_note?: string
+              p_source?: string
+              p_store_id: string
+              p_values: Json
+              p_year: number
+            }
+            Returns: Json
+          }
+        | {
+            Args: {
+              p_ciclo_id?: string
+              p_indicator_code: string
+              p_note?: string
+              p_source?: string
+              p_store_id: string
+              p_values: Json
+              p_year: number
+            }
+            Returns: Json
+          }
+      save_action_plan_template_draft: {
+        Args: { p_payload: Json }
+        Returns: string
       }
       save_manager_lead_conference: {
         Args: {
