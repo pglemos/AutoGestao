@@ -22,7 +22,6 @@ import { useAuth } from '@/hooks/useAuth'
 import { toast } from '@/lib/toast'
 import { ConsultingProductFormModal } from './produtos/ConsultingProductFormModal'
 import { ConsultingProductCard } from './produtos/ConsultingProductCard'
-import { ProductDetailDrawer } from './produtos/ProductDetailDrawer'
 import {
   OFFICIAL_CONSULTING_PRODUCT_DEFINITIONS,
   filterConsultingCatalog,
@@ -71,7 +70,6 @@ export function AdminProdutosConsultoriaPage() {
   const [editing, setEditing] = useState(false)
   const [editingProduct, setEditingProduct] = useState<ConsultingProduct | null>(null)
   const [submitting, setSubmitting] = useState(false)
-  const [detail, setDetail] = useState<ConsultingProduct | null>(null)
   const [expandedKeys, setExpandedKeys] = useState<Record<string, boolean>>({})
 
   const refetch = useCallback(async () => {
@@ -188,7 +186,7 @@ export function AdminProdutosConsultoriaPage() {
 
   const handleAction = (action: ProductCatalogAction, product: ConsultingProduct) => {
     if (action === 'abrir') {
-      setDetail(product)
+      toggleExpanded(product.program_key)
       return
     }
     if (action === 'editar') {
@@ -307,6 +305,7 @@ export function AdminProdutosConsultoriaPage() {
                         requiresNewVersion={productRequiresNewVersion(product)}
                         onToggle={() => toggleExpanded(product.program_key)}
                         onAction={handleAction}
+                        onChanged={() => void refetch()}
                       />
                     )
                   })
@@ -353,6 +352,7 @@ export function AdminProdutosConsultoriaPage() {
                         requiresNewVersion={productRequiresNewVersion(product)}
                         onToggle={() => toggleExpanded(product.program_key)}
                         onAction={handleAction}
+                        onChanged={() => void refetch()}
                       />
                     ))}
                   </div>
@@ -374,7 +374,6 @@ export function AdminProdutosConsultoriaPage() {
           onSubmit={() => void submit()}
           onClose={() => setFormOpen(false)}
         />
-        <ProductDetailDrawer product={detail} onClose={() => setDetail(null)} onChanged={() => void refetch()} />
       </div>
     </MxModulePage>
   )

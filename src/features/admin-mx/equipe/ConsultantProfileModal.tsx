@@ -33,12 +33,14 @@ import {
   type ProductQualification,
 } from './consultantProfile'
 
-type ProfileTab = 'dados' | 'programas' | 'carteira'
+type ProfileTab = 'visao' | 'clientes' | 'programas' | 'capacidade' | 'historico'
 
 const TABS = [
-  { key: 'dados' as const, label: 'Dados do consultor' },
-  { key: 'programas' as const, label: 'Programas e encontros' },
-  { key: 'carteira' as const, label: 'Clientes ativos' },
+  { key: 'visao' as const, label: 'Visão Geral' },
+  { key: 'clientes' as const, label: 'Clientes' },
+  { key: 'programas' as const, label: 'Programas e Especialidades' },
+  { key: 'capacidade' as const, label: 'Capacidade' },
+  { key: 'historico' as const, label: 'Histórico' },
 ]
 
 export function ConsultantProfileModal(props: {
@@ -47,7 +49,7 @@ export function ConsultantProfileModal(props: {
   onSaved: () => void
 }) {
   const { member } = props
-  const [tab, setTab] = useState<ProfileTab>('dados')
+  const [tab, setTab] = useState<ProfileTab>('visao')
   const [profile, setProfile] = useState<ConsultantProfile | null>(null)
   const [qualifications, setQualifications] = useState<ProductQualification[]>([])
   const [clients, setClients] = useState<ConsultantClient[]>([])
@@ -56,7 +58,7 @@ export function ConsultantProfileModal(props: {
 
   useEffect(() => {
     if (!member) return
-    setTab('dados')
+    setTab('visao')
     setLoading(true)
     void Promise.all([
       fetchConsultantProfile(member.id),
@@ -127,7 +129,7 @@ export function ConsultantProfileModal(props: {
         {error ? <MxStatusBanner tone="warning">{error}</MxStatusBanner> : null}
         {loading || !profile ? <MxLoadingState label="Carregando perfil" /> : null}
 
-        {!loading && profile && tab === 'dados' ? (
+        {!loading && profile && tab === 'visao' ? (
           <div className="space-y-4">
             <MxMetricGrid>
               <MxMetricCard title="Clientes ativos" value={clients.length} detail="Carteira atual" icon={Users} />
@@ -147,15 +149,23 @@ export function ConsultantProfileModal(props: {
                 </MxSelect>
               </MxField>
               <MxField label="Cidade"><Input value={profile.cidade} onChange={event => setProfile({ ...profile, cidade: event.target.value })} /></MxField>
-              <MxField label="Capacidade online (h/mês)">
-                <Input type="number" min={0} step="0.5" value={profile.capacidade_online === null ? '' : String(profile.capacidade_online)} onChange={event => setProfile({ ...profile, capacidade_online: event.target.value === '' ? null : Number(event.target.value) })} />
-              </MxField>
-              <MxField label="Capacidade presencial (h/mês)">
-                <Input type="number" min={0} step="0.5" value={profile.capacidade_presencial === null ? '' : String(profile.capacidade_presencial)} onChange={event => setProfile({ ...profile, capacidade_presencial: event.target.value === '' ? null : Number(event.target.value) })} />
-              </MxField>
               <MxField label="Observações" className="sm:col-span-2">
                 <MxTextarea rows={3} value={profile.observacoes} onChange={event => setProfile({ ...profile, observacoes: event.target.value })} />
               </MxField>
+            </div>
+          </div>
+        ) : null}
+
+        {!loading && profile && tab === 'capacidade' ? (
+          <div className="grid gap-4 sm:grid-cols-2">
+            <MxField label="Capacidade online (h/mês)">
+              <Input type="number" min={0} step="0.5" value={profile.capacidade_online === null ? '' : String(profile.capacidade_online)} onChange={event => setProfile({ ...profile, capacidade_online: event.target.value === '' ? null : Number(event.target.value) })} />
+            </MxField>
+            <MxField label="Capacidade presencial (h/mês)">
+              <Input type="number" min={0} step="0.5" value={profile.capacidade_presencial === null ? '' : String(profile.capacidade_presencial)} onChange={event => setProfile({ ...profile, capacidade_presencial: event.target.value === '' ? null : Number(event.target.value) })} />
+            </MxField>
+            <div className="sm:col-span-2 rounded-lg border border-border bg-surface-alt p-4 text-sm text-muted-foreground">
+              Total declarado: <strong className="text-foreground">{capacity.total}h/mês</strong>
             </div>
           </div>
         ) : null}
@@ -198,7 +208,7 @@ export function ConsultantProfileModal(props: {
           ) : <MxEmptyState title="Nenhum produto disponível" description="Cadastre e publique produtos de consultoria para habilitar consultores." />
         ) : null}
 
-        {!loading && tab === 'carteira' ? (
+        {!loading && tab === 'clientes' ? (
           clients.length ? (
             <ul className="space-y-2">
               {clients.map(client => (
@@ -209,6 +219,10 @@ export function ConsultantProfileModal(props: {
               ))}
             </ul>
           ) : <MxEmptyState title="Nenhum cliente alocado no momento" description="Use a edição da equipe para vincular clientes a este consultor." />
+        ) : null}
+
+        {!loading && tab === 'historico' ? (
+          <MxEmptyState title="Histórico em breve" description="Alterações de papel, capacidade e carteira aparecerão aqui conforme forem registradas na auditoria MX." />
         ) : null}
       </div>
     </Modal>

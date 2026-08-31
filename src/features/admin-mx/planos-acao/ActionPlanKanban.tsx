@@ -80,7 +80,7 @@ export function ActionPlanKanban(props: {
                   {provided.placeholder}
                   {groups[column].length === 0 ? (
                     <li className="rounded-lg border border-dashed border-border p-4 text-center text-xs text-muted-foreground">
-                      Sem planos nesta coluna
+                      Arraste cards para cá
                     </li>
                   ) : null}
                 </ul>

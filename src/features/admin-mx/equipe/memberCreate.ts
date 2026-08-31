@@ -4,14 +4,23 @@
  * Supabase, testável sem banco.
  */
 
-/** Papéis internos MX criáveis pela página /equipe (usuarios.role). */
+import { OFFICIAL_CONSULTING_PRODUCT_KEYS } from '../produtos/officialConsultingCatalog'
+
+/** Papéis exibidos no Base44, mapeados para roles canônicas do app. */
 export const MEMBER_ROLE_OPTIONS = [
-  { value: 'administrador_geral', label: 'Administrador Geral' },
-  { value: 'administrador_mx', label: 'Administrador MX' },
-  { value: 'consultor_mx', label: 'Consultor MX' },
+  { value: 'consultor_mx', label: 'Consultor MX', authRole: 'consultor_mx', papelInterno: 'consultor_mx' },
+  { value: 'consultor_especialista', label: 'Consultor Especialista', authRole: 'consultor_mx', papelInterno: 'consultor_especialista' },
+  { value: 'coordenador_consultoria', label: 'Coordenador de Consultoria', authRole: 'consultor_mx', papelInterno: 'coordenador_consultoria' },
+  { value: 'administrador_implantacao', label: 'Administrador de Implantação', authRole: 'administrador_mx', papelInterno: 'administrador_implantacao' },
+  { value: 'administrador_principal', label: 'Administrador Principal', authRole: 'administrador_geral', papelInterno: null },
+  { value: 'administrador_produto', label: 'Administrador de Produto', authRole: 'administrador_mx', papelInterno: 'administrador_produto' },
+  { value: 'administrador_dados', label: 'Administrador de Dados', authRole: 'administrador_mx', papelInterno: 'administrador_dados' },
+  { value: 'suporte_mx', label: 'Suporte MX', authRole: 'administrador_mx', papelInterno: 'suporte_mx' },
+  { value: 'gestao_mx', label: 'Gestão MX', authRole: 'administrador_mx', papelInterno: 'gestao_mx' },
 ] as const
 
-export type MemberRole = (typeof MEMBER_ROLE_OPTIONS)[number]['value']
+export type MemberRoleOption = (typeof MEMBER_ROLE_OPTIONS)[number]
+export type MemberRole = MemberRoleOption['value']
 
 /** Situações do perfil do consultor (perfil_consultor_mx.situacao). */
 export const MEMBER_SITUATION_OPTIONS = [
@@ -23,6 +32,14 @@ export const MEMBER_SITUATION_OPTIONS = [
 
 export type MemberSituation = (typeof MEMBER_SITUATION_OPTIONS)[number]['value']
 
+export const MEMBER_PROGRAM_OPTIONS = OFFICIAL_CONSULTING_PRODUCT_KEYS.map(key => ({
+  value: key,
+  label: key === 'pmr_online' ? 'PMR Online'
+    : key === 'pmr_hibrido' ? 'PMR Híbrido'
+    : key === 'pmr_plus' ? 'PMR Plus'
+    : 'PPA',
+}))
+
 export type MemberCreateDraft = {
   name: string
   email: string
@@ -30,6 +47,7 @@ export type MemberCreateDraft = {
   role: MemberRole
   store_id: string
   situation: MemberSituation
+  enabled_programs: string[]
 }
 
 export function emptyMemberCreate(): MemberCreateDraft {
@@ -40,7 +58,12 @@ export function emptyMemberCreate(): MemberCreateDraft {
     role: 'consultor_mx',
     store_id: '',
     situation: 'ativo',
+    enabled_programs: [],
   }
+}
+
+export function resolveMemberRoleOption(role: MemberRole): MemberRoleOption {
+  return MEMBER_ROLE_OPTIONS.find(option => option.value === role) ?? MEMBER_ROLE_OPTIONS[0]
 }
 
 /** Erros bloqueantes da criação — espelha os NOT NULL e CHECKs do banco. */
@@ -54,7 +77,8 @@ export function validateMemberCreate(draft: MemberCreateDraft): string[] {
   return errors
 }
 
-/** Consultores MX ganham perfil (perfil_consultor_mx); admins só usuarios. */
+/** Consultores e coordenadores ganham perfil (perfil_consultor_mx). */
 export function requiresConsultantProfile(role: MemberRole): boolean {
-  return role === 'consultor_mx'
+  const option = resolveMemberRoleOption(role)
+  return option.authRole === 'consultor_mx'
 }

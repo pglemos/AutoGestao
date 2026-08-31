@@ -324,6 +324,14 @@ export function clientBuckets(client: PortfolioClient, today = new Date()): Port
   return buckets
 }
 
+/** Rótulo de onboarding para a tabela Base44. */
+export function onboardingPortfolioLabel(client: Pick<PortfolioClient, 'onboarding_completed' | 'onboarding_step'>): string {
+  if (client.onboarding_completed) return 'Concluído'
+  const step = client.onboarding_step ?? 0
+  if (step > 0) return `Etapa ${step}/7`
+  return 'Pendente'
+}
+
 /** Próxima ação recomendada — a coluna que diz à equipe o que fazer hoje. */
 export function nextAction(client: PortfolioClient): string {
   const blockers = activationBlockers(client)
