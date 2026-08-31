@@ -14,7 +14,7 @@ import {
   normalizeQuickEntrySeries,
   type TargetIndicator,
 } from '../indicadores/metasRealizados'
-import { PlanningMonthInput } from './PlanningMonthInput'
+import { PlanningMonthInput, planningYearDraftKey } from './PlanningMonthInput'
 
 type PlanningField = 'meta' | 'realizado' | 'ano_anterior'
 
@@ -31,7 +31,6 @@ export function StrategicPlanQuickEntry(props: {
   onDraft: (key: string, raw: string) => void
   onCommit: (code: string, month: number, raw: string) => void
   onCommitYear: (code: string, raw: string) => void
-  onApplyJanuary: (code: string) => void
   onCopyPrevious: (code: string) => void
   onClearYear: (code: string) => void
   loading: boolean
@@ -117,9 +116,9 @@ export function StrategicPlanQuickEntry(props: {
               <h3 className="text-sm font-semibold text-foreground">Distribuição da Meta de Vendas</h3>
               <MxMetricGrid>
                 {salesTotal.channels.map(channel => (
-                  <MxMetricCard key={channel.code} title={channel.name.replace('Vendas - ', '')} value={channel.value ?? '—'} detail="Canal no mês selecionado" icon={Target} />
+                  <MxMetricCard key={channel.code} title={channel.name.replace('Vendas - ', '')} value={channel.value ?? '—'} detail={`Canal · mês de conferência ${MONTH_LABELS[props.entryMonth - 1]}`} icon={Target} />
                 ))}
-                <MxMetricCard title="Vendas Total (mês)" value={salesTotal.total ?? '—'} detail="Soma dos canais digitáveis" icon={Target} tone="success" />
+                <MxMetricCard title="Vendas Total" value={salesTotal.total ?? 'Sem base no mês'} detail="Calculado (fx) — soma dos 6 canais" icon={Target} tone="success" />
               </MxMetricGrid>
             </div>
           </MxSectionCard>
@@ -134,7 +133,7 @@ export function StrategicPlanQuickEntry(props: {
             <MxSectionCard key={dept}>
               <div className="space-y-4 p-5">
                 <button type="button" className="flex w-full items-center justify-between text-left" onClick={() => toggleDept(dept)}>
-                  <span className="font-semibold text-foreground">{dept} {filled} de {items.length} preenchidas</span>
+                  <span className="font-semibold text-foreground">{dept} · {filled} de {items.length} preenchidas</span>
                   {expandedDepts.has(dept) ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
                 </button>
                 <div className="space-y-4">
@@ -154,8 +153,9 @@ export function StrategicPlanQuickEntry(props: {
                           {customizedRow ? (
                             <Button variant="ghost" size="sm" onClick={() => {
                               setCustomized(current => { const next = new Set(current); next.delete(indicator.code); return next })
-                              if (uniqueFilled != null && !monthsAreUniform(series)) {
-                                props.onCommitYear(indicator.code, String(uniqueFilled))
+                              const valueToRestore = uniqueFilled ?? monthValue
+                              if (valueToRestore != null) {
+                                props.onCommitYear(indicator.code, String(valueToRestore))
                               }
                             }}>
                               Voltar para valor único
@@ -185,7 +185,6 @@ export function StrategicPlanQuickEntry(props: {
                             </div>
                             {props.readOnly ? null : (
                               <div className="flex flex-wrap gap-2">
-                                <Button variant="outline" size="sm" onClick={() => props.onApplyJanuary(indicator.code)}>Aplicar jan a todos</Button>
                                 <Button variant="outline" size="sm" onClick={() => props.onCopyPrevious(indicator.code)}>Copiar mês anterior</Button>
                                 <Button variant="outline" size="sm" onClick={() => props.onClearYear(indicator.code)}>Limpar todos</Button>
                               </div>
@@ -193,13 +192,13 @@ export function StrategicPlanQuickEntry(props: {
                           </div>
                         ) : (
                           <div className="space-y-1">
-                            <p className="text-xs text-muted-foreground">{props.field === 'meta' ? 'Meta mensal:' : props.field === 'realizado' ? 'Realizado mensal:' : 'Ano anterior:'}</p>
+                            <p className="text-xs text-muted-foreground">{props.field === 'meta' ? 'Meta mensal (aplicado a jan–dez)' : props.field === 'realizado' ? 'Realizado mensal (aplicado a jan–dez)' : 'Ano anterior (aplicado a jan–dez)'}</p>
                             <PlanningMonthInput
-                              ariaLabel={`${indicator.name} — valor único`}
+                              ariaLabel={`${indicator.name} — valor único aplicado a jan–dez`}
                               displayValue={monthValue}
                               config={config}
-                              draft={props.drafts[props.draftKey(indicator.code, props.entryMonth)]}
-                              onDraft={raw => props.onDraft(props.draftKey(indicator.code, props.entryMonth), raw)}
+                              draft={props.drafts[planningYearDraftKey(props.field, indicator.code)]}
+                              onDraft={raw => props.onDraft(planningYearDraftKey(props.field, indicator.code), raw)}
                               onCommit={raw => props.onCommitYear(indicator.code, raw)}
                             />
                           </div>
@@ -216,13 +215,14 @@ export function StrategicPlanQuickEntry(props: {
           <MxSectionCard>
             <div className="space-y-3 p-5">
               <h3 className="text-sm font-semibold text-foreground">Resumo Calculado</h3>
+              <p className="text-xs text-muted-foreground">Mês de conferência: {MONTH_LABELS[props.entryMonth - 1]}</p>
               <MxMetricGrid>
                 {props.resumo.map(item => (
                   <MxMetricCard
                     key={item.code}
                     title={item.label}
                     value={formatDisplay(item.monthValue, getFormatConfig('number', 0))}
-                    detail={item.annual == null ? 'Sem base anual' : `Anual ${formatDisplay(item.annual, getFormatConfig('number', 0))}`}
+                    detail={item.annual == null ? 'Sem base no mês' : `Anual ${formatDisplay(item.annual, getFormatConfig('number', 0))}`}
                     icon={Target}
                     tone={item.monthValue == null ? 'neutral' : 'info'}
                   />
@@ -231,7 +231,6 @@ export function StrategicPlanQuickEntry(props: {
             </div>
           </MxSectionCard>
         ) : null}
-        <p className="text-xs text-muted-foreground">Resultados calculados em tempo real · {formatDisplay(salesTotal.total, getFormatConfig('number', 0))}</p>
       </div>
     </div>
   )

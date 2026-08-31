@@ -8,6 +8,8 @@ import { isActualCalculated } from '@/features/admin-mx/indicadores/actualCalc'
 import { MONTH_LABELS } from '@/features/admin-mx/indicadores/indicatorFormulas'
 import { EXCEL_STYLES_XML } from './excelStylesXml'
 import { EXCEL_THEME1_XML } from './excelTheme1Xml'
+import { buildMxConfigRows, TARGET_WORKBOOK_DATA_SHEET } from '@/features/admin-mx/indicadores/metasRealizados'
+import { BASE44_GLOBAL_ORDER } from '@/features/admin-mx/indicadores/canonicalBase44Catalog'
 
 export const TEMPLATE_VERSION = '1.0.0'
 
@@ -119,26 +121,39 @@ export function sanitizeFileName(name: string | null | undefined): string {
     .toUpperCase()
 }
 
+/** Monta METAS_<CLIENTE>_<ANO>_<ESCOPO>.xlsx sem repetir slug quando cliente = unidade. */
+export function buildWorkbookNameStem(params: {
+  clientName?: string
+  storeName?: string
+  scopeType?: 'CONSOLIDATED' | 'STORE'
+  referenceYear: number
+}): string {
+  const client = sanitizeFileName(params.clientName)
+  const scopeSlug = params.scopeType === 'CONSOLIDATED' || !params.storeName
+    ? 'CONSOLIDADO'
+    : sanitizeFileName(params.storeName)
+  const parts = [client, String(params.referenceYear)]
+  if (scopeSlug !== client) parts.push(scopeSlug)
+  return parts.join('_')
+}
+
 export function getTemplateFileName(params: {
   clientName?: string
   storeName?: string
+  scopeType?: 'CONSOLIDATED' | 'STORE'
   viewType: 'TARGET' | 'ACTUAL' | 'PRIOR_YEAR'
   referenceYear: number
   isBlankModel?: boolean
 }): string {
-  const { clientName, storeName, viewType, referenceYear, isBlankModel } = params
-  const client = sanitizeFileName(clientName)
-  const store = storeName ? sanitizeFileName(storeName) : 'CONSOLIDADO'
-  if (isBlankModel && viewType === 'TARGET') {
-    return `MODELO_METAS_${client}_${store}_${referenceYear}.xlsx`
-  }
+  const { viewType } = params
+  const stem = buildWorkbookNameStem(params)
   if (viewType === 'TARGET') {
-    return `METAS_${client}_${store}_${referenceYear}.xlsx`
+    return `METAS_${stem}.xlsx`
   }
   if (viewType === 'ACTUAL') {
-    return `REALIZADO_${client}_${store}_${referenceYear}.xlsx`
+    return `REALIZADO_${stem}.xlsx`
   }
-  return `ANO_ANTERIOR_${client}_${store}_${referenceYear}.xlsx`
+  return `ANO_ANTERIOR_${stem}.xlsx`
 }
 
 export function generateTemplateHash(config: Record<string, unknown>): string {
@@ -213,10 +228,11 @@ export type StoreTargetTemplateParams = {
   clientName?: string
   clientId?: string
   cycleId?: string | null
+  cycleVersionId?: string | null
   referenceYear: number
   storeId: string
   storeName?: string
-  scopeType?: string
+  scopeType?: 'CONSOLIDATED' | 'STORE'
   viewType?: 'TARGET' | 'ACTUAL' | 'PRIOR_YEAR'
   isBlankModel?: boolean
   indicators?: Array<{
@@ -280,7 +296,8 @@ export function buildStoreTargetTemplateWorkbook(params: StoreTargetTemplatePara
   }
 
   // Header strings
-  const DADOS_HEADERS = [
+  const METAS_HEADERS = [
+    'Ordem Oficial',
     'Código do Indicador',
     'Departamento',
     'Indicador',
@@ -288,15 +305,14 @@ export function buildStoreTargetTemplateWorkbook(params: StoreTargetTemplatePara
     'Formato',
     ...MONTH_LABELS,
     'Total',
-    'Fonte do Dado',
     'Observação',
   ]
-  for (const h of DADOS_HEADERS) {
+  for (const h of METAS_HEADERS) {
     getSharedIndex(h)
   }
 
   // Build Indicator Roster (All 46 Standard Indicators in canonical order)
-  const roster = BASE44_STANDARD_INDICATORS.map(canonical => {
+  const roster = BASE44_STANDARD_INDICATORS.map((canonical, index) => {
     const custom = params.indicators?.find(ind => officialCatalogCode(ind.code) === canonical.code)
     const isCalc = viewType === 'TARGET'
       ? (custom?.calculado !== undefined ? custom.calculado : canonical.target_calculation_mode !== 'MANUAL')
@@ -310,6 +326,7 @@ export function buildStoreTargetTemplateWorkbook(params: StoreTargetTemplatePara
 
     return {
       code: canonical.code,
+      officialOrder: BASE44_GLOBAL_ORDER[canonical.code] ?? index + 1,
       name,
       deptKey,
       deptName,
@@ -360,15 +377,16 @@ export function buildStoreTargetTemplateWorkbook(params: StoreTargetTemplatePara
   const sheet1Xml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac"><sheetPr><tabColor rgb="FF198653"/></sheetPr><dimension ref="A1:A${curRow}"/><sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" outlineLevelCol="0" x14ac:dyDescent="55"/><cols><col min="1" max="1" width="90" customWidth="1"/></cols><sheetData>${s1RowsXml}</sheetData><pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3"/><pageSetup orientation="portrait" horizontalDpi="4294967295" verticalDpi="4294967295" scale="100" fitToWidth="1" fitToHeight="1"/></worksheet>`
 
-  // ── Sheet 2: DADOS XML ────────────────────────────────────────────────
+  // ── Sheet 2: METAS XML ────────────────────────────────────────────────
   const STYLE_HEADER_LEFT = 8
   const STYLE_HEADER_RIGHT = 9
+  const STYLE_ORDER_LOCKED = 75
 
   let s2RowsXml = ''
   let headerCellsXml = ''
-  DADOS_HEADERS.forEach((h, colIdx) => {
+  METAS_HEADERS.forEach((h, colIdx) => {
     const colLetter = String.fromCharCode(65 + colIdx)
-    const isRight = colIdx >= 5 && colIdx <= 17
+    const isRight = colIdx >= 6 && colIdx <= 18
     const s = isRight ? STYLE_HEADER_RIGHT : STYLE_HEADER_LEFT
     headerCellsXml += `<c r="${colLetter}1" s="${s}" t="s"><v>${getSharedIndex(h)}</v></c>`
   })
@@ -376,9 +394,10 @@ export function buildStoreTargetTemplateWorkbook(params: StoreTargetTemplatePara
 
   roster.forEach((item, rIdx) => {
     const rowNum = rIdx + 2
-    const baseRowStyles = ACTUAL_REFERENCE_ROW_STYLES[rowNum] || [10, 11, 12, 19, 12, 20, 20, 20, 20, 20, 20, 21, 22, 22, 22, 22, 22, 17, 18, 18]
-    
-    // In TARGET, all month columns use the base Jan month style (index 5)
+    const legacyStyles = ACTUAL_REFERENCE_ROW_STYLES[rowNum] || [10, 11, 12, 19, 12, 20, 20, 20, 20, 20, 20, 21, 22, 22, 22, 22, 22, 17, 18, 18]
+    const baseRowStyles = [STYLE_ORDER_LOCKED, ...legacyStyles.slice(0, 18), legacyStyles[19]]
+
+    // In TARGET, all month columns use the base Jan month style (index 6)
     const rowStyles = viewType === 'ACTUAL'
       ? baseRowStyles
       : [
@@ -387,31 +406,33 @@ export function buildStoreTargetTemplateWorkbook(params: StoreTargetTemplatePara
           baseRowStyles[2],
           item.isCalc ? 13 : baseRowStyles[3],
           baseRowStyles[4],
-          ...Array(12).fill(item.isCalc && baseRowStyles[5] === 20 ? 14 : item.isCalc && baseRowStyles[5] === 27 ? 23 : item.isCalc && baseRowStyles[5] === 48 ? 52 : baseRowStyles[5]),
-          baseRowStyles[17],
+          baseRowStyles[5],
+          ...Array(12).fill(item.isCalc && baseRowStyles[6] === 20 ? 14 : item.isCalc && baseRowStyles[6] === 27 ? 23 : item.isCalc && baseRowStyles[6] === 48 ? 52 : baseRowStyles[6]),
           baseRowStyles[18],
           baseRowStyles[19],
         ]
 
     let rowCellsXml = ''
-    // Col A (1): Código
-    rowCellsXml += `<c r="A${rowNum}" s="${rowStyles[0]}" t="s"><v>${getSharedIndex(item.code)}</v></c>`
-    // Col B (2): Departamento
-    rowCellsXml += `<c r="B${rowNum}" s="${rowStyles[1]}" t="s"><v>${getSharedIndex(item.deptName)}</v></c>`
-    // Col C (3): Indicador
-    rowCellsXml += `<c r="C${rowNum}" s="${rowStyles[2]}" t="s"><v>${getSharedIndex(item.name)}</v></c>`
-    // Col D (4): Tipo
-    rowCellsXml += `<c r="D${rowNum}" s="${rowStyles[3]}" t="s"><v>${getSharedIndex(item.isCalc ? 'Calculado' : 'Digitável')}</v></c>`
-    // Col E (5): Formato
-    rowCellsXml += `<c r="E${rowNum}" s="${rowStyles[4]}" t="s"><v>${getSharedIndex(item.formatLabel)}</v></c>`
+    // Col A (1): Ordem Oficial
+    rowCellsXml += `<c r="A${rowNum}" s="${rowStyles[0]}"><v>${item.officialOrder}</v></c>`
+    // Col B (2): Código
+    rowCellsXml += `<c r="B${rowNum}" s="${rowStyles[1]}" t="s"><v>${getSharedIndex(item.code)}</v></c>`
+    // Col C (3): Departamento
+    rowCellsXml += `<c r="C${rowNum}" s="${rowStyles[2]}" t="s"><v>${getSharedIndex(item.deptName)}</v></c>`
+    // Col D (4): Indicador
+    rowCellsXml += `<c r="D${rowNum}" s="${rowStyles[3]}" t="s"><v>${getSharedIndex(item.name)}</v></c>`
+    // Col E (5): Tipo
+    rowCellsXml += `<c r="E${rowNum}" s="${rowStyles[4]}" t="s"><v>${getSharedIndex(item.isCalc ? 'Calculado' : 'Digitável')}</v></c>`
+    // Col F (6): Formato
+    rowCellsXml += `<c r="F${rowNum}" s="${rowStyles[5]}" t="s"><v>${getSharedIndex(item.formatLabel)}</v></c>`
 
-    // Col F..Q (6..17): Months (Jan..Dez)
+    // Col G..R (7..18): Months (Jan..Dez)
     let rowSum = 0
     let hasNumericValue = false
 
     for (let m = 1; m <= 12; m++) {
-      const colLetter = String.fromCharCode(65 + 4 + m)
-      const monthStyle = rowStyles[4 + m]
+      const colLetter = String.fromCharCode(65 + 5 + m)
+      const monthStyle = rowStyles[5 + m]
       const monthVal = params.values?.[item.code]?.[m - 1] ?? null
 
       if (item.isCalc) {
@@ -435,16 +456,14 @@ export function buildStoreTargetTemplateWorkbook(params: StoreTargetTemplatePara
       }
     }
 
-    // Col R (18): Total
-    const totalStyle = rowStyles[17]
+    // Col S (19): Total
+    const totalStyle = rowStyles[18]
     if (hasNumericValue) {
-      rowCellsXml += `<c r="R${rowNum}" s="${totalStyle}"><v>${rowSum}</v></c>`
+      rowCellsXml += `<c r="S${rowNum}" s="${totalStyle}"><v>${rowSum}</v></c>`
     } else {
-      rowCellsXml += `<c r="R${rowNum}" s="${totalStyle}"/>`
+      rowCellsXml += `<c r="S${rowNum}" s="${totalStyle}"/>`
     }
 
-    // Col S (19): Fonte do Dado
-    rowCellsXml += `<c r="S${rowNum}" s="${rowStyles[18]}"/>`
     // Col T (20): Observação
     rowCellsXml += `<c r="T${rowNum}" s="${rowStyles[19]}"/>`
 
@@ -454,38 +473,42 @@ export function buildStoreTargetTemplateWorkbook(params: StoreTargetTemplatePara
   const sheet2Xml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac"><dimension ref="A1:T47"/><sheetViews><sheetView workbookViewId="0"><pane xSplit="3" ySplit="1" topLeftCell="D2" activePane="bottomRight" state="frozen"/><selection pane="bottomRight"/></sheetView></sheetViews><sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" outlineLevelCol="0" x14ac:dyDescent="55"/><cols><col min="1" max="1" width="22" customWidth="1"/><col min="2" max="2" width="20" customWidth="1"/><col min="3" max="3" width="36" customWidth="1"/><col min="4" max="5" width="14" customWidth="1"/><col min="6" max="17" width="12" customWidth="1"/><col min="18" max="18" width="16" customWidth="1"/><col min="19" max="19" width="18" customWidth="1"/><col min="20" max="20" width="30" customWidth="1"/></cols><sheetData>${s2RowsXml}</sheetData><sheetProtection sheet="1" algorithmName="SHA-512" hashValue="CegfAmJRsFl/aSUReqPyyByK6w6sR37qQ3XFUrdkP7ikBVK1EAWZGAZcPTQoDmDhEoSPuC5NmJV7Gtl/HfwuNw==" saltValue="hhyyCru0ANiekrQyEWhBVQ==" spinCount="100000"/><dataValidations count="2"><dataValidation type="list" allowBlank="1" sqref="S10:S47"><formula1>&quot;Loja,Equipe MX,Sistema MX,Planilha da Loja,CRM,ERP,DRE,Estoque,Financeiro,Outro&quot;</formula1></dataValidation><dataValidation type="list" allowBlank="1" sqref="S2:S47"><formula1>&quot;Loja,Equipe MX,Sistema MX,Planilha da Loja,CRM,ERP,DRE,Estoque,Financeiro,Outro&quot;</formula1></dataValidation></dataValidations><pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3"/><pageSetup orientation="portrait" horizontalDpi="4294967295" verticalDpi="4294967295" scale="100" fitToWidth="1" fitToHeight="1"/></worksheet>`
 
-  // ── Sheet 3: MX_CONFIG XML ────────────────────────────────────────────
-  const configObj: Record<string, string> = {
-    template_version: TEMPLATE_VERSION,
-    client_account_id: clientId,
-    client_name: clientName,
-    strategic_plan_cycle_id: cycleId,
-    reference_year: String(referenceYear),
-    view_type: viewType,
-    store_id: params.storeId,
-    store_name: storeName,
-    scope_type: params.scopeType ?? 'STORE',
-    generated_at: nowIso,
-    generated_by: generatedBy,
-    indicator_catalog_version: '1.0',
-    indicator_count: String(roster.length),
-  }
-  configObj.template_hash = generateTemplateHash(configObj)
+  const manualCount = roster.filter(item => !item.isCalc).length
+  const configRows = buildMxConfigRows({
+    clientId,
+    clientName,
+    cycleId,
+    cycleVersionId: params.cycleVersionId ?? null,
+    year: referenceYear,
+    storeId: params.storeId,
+    storeName,
+    scopeType: params.scopeType,
+    viewType,
+    indicatorCount: roster.length,
+    manualCount,
+    calculatedCount: roster.length - manualCount,
+    templateHash: generateTemplateHash({
+      template_version: TEMPLATE_VERSION,
+      client_account_id: clientId,
+      reference_year: referenceYear,
+      store_id: params.storeId,
+      indicator_count: roster.length,
+    }),
+  })
 
-  const configEntries = Object.entries(configObj)
-  for (const [k, v] of configEntries) {
-    getSharedIndex(k)
-    getSharedIndex(v)
+  for (const row of configRows) {
+    getSharedIndex(row.Chave)
+    getSharedIndex(row.Valor)
   }
 
   let s3RowsXml = `<row r="1" spans="1:2" x14ac:dyDescent="0.25"><c r="A1" s="75" t="s"><v>${getSharedIndex('Chave')}</v></c><c r="B1" s="75" t="s"><v>${getSharedIndex('Valor')}</v></c></row>`
-  configEntries.forEach(([k, v], idx) => {
+  configRows.forEach((row, idx) => {
     const rowNum = idx + 2
-    s3RowsXml += `<row r="${rowNum}" spans="1:2" x14ac:dyDescent="0.25"><c r="A${rowNum}" t="s"><v>${getSharedIndex(k)}</v></c><c r="B${rowNum}" t="s"><v>${getSharedIndex(v)}</v></c></row>`
+    s3RowsXml += `<row r="${rowNum}" spans="1:2" x14ac:dyDescent="0.25"><c r="A${rowNum}" t="s"><v>${getSharedIndex(row.Chave)}</v></c><c r="B${rowNum}" t="s"><v>${getSharedIndex(row.Valor)}</v></c></row>`
   })
 
   const sheet3Xml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac"><dimension ref="A1:B${configEntries.length + 1}"/><sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" outlineLevelCol="0" x14ac:dyDescent="55"/><cols><col min="1" max="1" width="30" customWidth="1"/><col min="2" max="2" width="50" customWidth="1"/></cols><sheetData>${s3RowsXml}</sheetData><sheetProtection sheet="1" algorithmName="SHA-512" hashValue="Tacz1WIG7/ey5jtoDfp+3LL+GRaKJJaIkeimkN9Am3p4WPVCjfK57xlrgedh8ETgxRrbk9mlxub1wn8MGgsl9g==" saltValue="E1t697Lqk8B2uU51XcsyVQ==" spinCount="100000"/><pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3"/><pageSetup orientation="portrait" horizontalDpi="4294967295" verticalDpi="4294967295" scale="100" fitToWidth="1" fitToHeight="1"/></worksheet>`
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac"><dimension ref="A1:B${configRows.length + 1}"/><sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" outlineLevelCol="0" x14ac:dyDescent="55"/><cols><col min="1" max="1" width="30" customWidth="1"/><col min="2" max="2" width="50" customWidth="1"/></cols><sheetData>${s3RowsXml}</sheetData><sheetProtection sheet="1" algorithmName="SHA-512" hashValue="Tacz1WIG7/ey5jtoDfp+3LL+GRaKJJaIkeimkN9Am3p4WPVCjfK57xlrgedh8ETgxRrbk9mlxub1wn8MGgsl9g==" saltValue="E1t697Lqk8B2uU51XcsyVQ==" spinCount="100000"/><pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3"/><pageSetup orientation="portrait" horizontalDpi="4294967295" verticalDpi="4294967295" scale="100" fitToWidth="1" fitToHeight="1"/></worksheet>`
 
   // ── Shared Strings Table XML ──────────────────────────────────────────
   const sharedStringsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -499,7 +522,7 @@ export function buildStoreTargetTemplateWorkbook(params: StoreTargetTemplatePara
 
   // ── Workbook XML ──────────────────────────────────────────────────────
   const workbookXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x15" xmlns:x15="http://schemas.microsoft.com/office/spreadsheetml/2010/11/main"><fileVersion appName="xl" lastEdited="5" lowestEdited="5" rupBuild="9303"/><workbookPr defaultThemeVersion="164011" filterPrivacy="1"/><sheets><sheet sheetId="1" name="INSTRUÇÕES" state="visible" r:id="rId4"/><sheet sheetId="2" name="DADOS" state="visible" r:id="rId5"/><sheet sheetId="3" name="MX_CONFIG" state="hidden" r:id="rId6"/></sheets><calcPr calcId="171027"/></workbook>`
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x15" xmlns:x15="http://schemas.microsoft.com/office/spreadsheetml/2010/11/main"><fileVersion appName="xl" lastEdited="5" lowestEdited="5" rupBuild="9303"/><workbookPr defaultThemeVersion="164011" filterPrivacy="1"/><sheets><sheet sheetId="1" name="INSTRUÇÕES" state="visible" r:id="rId4"/><sheet sheetId="2" name="${TARGET_WORKBOOK_DATA_SHEET}" state="visible" r:id="rId5"/><sheet sheetId="3" name="MX_CONFIG" state="hidden" r:id="rId6"/></sheets><calcPr calcId="171027"/></workbook>`
 
   const workbookRelsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" Target="theme/theme1.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings" Target="sharedStrings.xml"/><Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId5" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/><Relationship Id="rId6" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet3.xml"/></Relationships>`
@@ -508,7 +531,7 @@ export function buildStoreTargetTemplateWorkbook(params: StoreTargetTemplatePara
 <cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dcmitype="http://purl.org/dc/dcmitype/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:creator>MX Performance Admin</dc:creator><dc:title></dc:title><dc:subject></dc:subject><dc:description></dc:description><cp:keywords></cp:keywords><cp:category></cp:category><cp:lastModifiedBy>Unknown</cp:lastModifiedBy><dcterms:created xsi:type="dcterms:W3CDTF">${nowIso}</dcterms:created><dcterms:modified xsi:type="dcterms:W3CDTF">${nowIso}</dcterms:modified></cp:coreProperties>`
 
   const appPropsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"><Application>Microsoft Excel</Application><DocSecurity>0</DocSecurity><ScaleCrop>false</ScaleCrop><HeadingPairs><vt:vector size="2" baseType="variant"><vt:variant><vt:lpstr>Worksheets</vt:lpstr></vt:variant><vt:variant><vt:i4>3</vt:i4></vt:variant></vt:vector></HeadingPairs><TitlesOfParts><vt:vector size="3" baseType="lpstr"><vt:lpstr>INSTRUÇÕES</vt:lpstr><vt:lpstr>DADOS</vt:lpstr><vt:lpstr>MX_CONFIG</vt:lpstr></vt:vector></TitlesOfParts><Company></Company><Manager></Manager><LinksUpToDate>false</LinksUpToDate><SharedDoc>false</SharedDoc><HyperlinksChanged>false</HyperlinksChanged><AppVersion>16.0300</AppVersion></Properties>`
+<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"><Application>Microsoft Excel</Application><DocSecurity>0</DocSecurity><ScaleCrop>false</ScaleCrop><HeadingPairs><vt:vector size="2" baseType="variant"><vt:variant><vt:lpstr>Worksheets</vt:lpstr></vt:variant><vt:variant><vt:i4>3</vt:i4></vt:variant></vt:vector></HeadingPairs><TitlesOfParts><vt:vector size="3" baseType="lpstr"><vt:lpstr>INSTRUÇÕES</vt:lpstr><vt:lpstr>${TARGET_WORKBOOK_DATA_SHEET}</vt:lpstr><vt:lpstr>MX_CONFIG</vt:lpstr></vt:vector></TitlesOfParts><Company></Company><Manager></Manager><LinksUpToDate>false</LinksUpToDate><SharedDoc>false</SharedDoc><HyperlinksChanged>false</HyperlinksChanged><AppVersion>16.0300</AppVersion></Properties>`
 
   const contentTypesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet3.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/theme/theme1.xml" ContentType="application/vnd.openxmlformats-officedocument.theme+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/xl/sharedStrings.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml"/><Default Extension="vml" ContentType="application/vnd.openxmlformats-officedocument.vmlDrawing"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/><Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/></Types>`
@@ -538,6 +561,7 @@ export function generateStoreTargetTemplateBuffer(params: StoreTargetTemplatePar
   const fileName = getTemplateFileName({
     clientName: params.clientName,
     storeName: params.storeName,
+    scopeType: params.scopeType,
     viewType: params.viewType ?? 'TARGET',
     referenceYear: params.referenceYear,
     isBlankModel: params.isBlankModel,

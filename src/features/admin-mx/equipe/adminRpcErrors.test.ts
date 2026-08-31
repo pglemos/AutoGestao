@@ -16,8 +16,10 @@ describe('describeAdminRpcError', () => {
     )).toContain('Sem permissão')
   })
 
-  test('mensagem desconhecida usa o texto do banco', () => {
-    expect(describeAdminRpcError({ message: 'A confirmação deve ser exatamente o nome da loja.' }, 'Falha'))
-      .toBe('A confirmação deve ser exatamente o nome da loja.')
+  test('patch com campo inválido nomeia o campo', () => {
+    expect(describeAdminRpcError({ message: 'Patch contém campo não permitido.' }, 'Falha'))
+      .toContain('campo não permitido')
+    expect(describeAdminRpcError({ message: 'Campo obrigatório inválido: indicador.' }, 'Falha'))
+      .toContain('indicador')
   })
 })

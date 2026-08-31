@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Building2, CircleAlert, CircleCheck, ClipboardList, ExternalLink, Gauge, Plus, RefreshCw } from 'lucide-react'
+import { Building2, CircleAlert, CircleCheck, ClipboardList, ExternalLink, Gauge, Plus, Wrench } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/atoms/Button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/organisms/Table'
@@ -14,6 +14,7 @@ import {
   MxTableSurface,
 } from '@/components/module/MxModuleVisualPrimitives'
 import { supabase } from '@/lib/supabase'
+import { useAuth } from '@/hooks/useAuth'
 import { fetchClientUnits } from '@/features/strategic-plan/clientPlanningRepository'
 import {
   actionPlanStatusLabel,
@@ -33,6 +34,7 @@ import {
 } from '@/features/admin-mx/planos-acao/actionPlanBoard'
 import { ActionPlanDetailDrawer } from '@/features/admin-mx/planos-acao/ActionPlanDetailDrawer'
 import { ActionPlanKanban } from '@/features/admin-mx/planos-acao/ActionPlanKanban'
+import { reconcileClientActionPlanDuplicates } from './clientActionPlanReconciliation'
 
 type Props = {
   clientId: string
@@ -80,12 +82,15 @@ function toBoardPlan(row: ClientActionPlanRow): BoardPlan {
 }
 
 export function ClientActionPlanContextPanel({ clientId, clientSlug, primaryStoreId, refreshKey = 0, onCreatePlan }: Props) {
+  const { supabaseUser } = useAuth()
   const [rows, setRows] = useState<ClientActionPlanRow[]>([])
   const [responsibles, setResponsibles] = useState<Responsible[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedPlan, setSelectedPlan] = useState<BoardPlan | null>(null)
   const [panelView, setPanelView] = useState<PanelView>('quadro')
+  const [reconciling, setReconciling] = useState(false)
+  const [scopeIds, setScopeIds] = useState<string[]>([])
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -98,11 +103,13 @@ export function ClientActionPlanContextPanel({ clientId, clientSlug, primaryStor
     if (!scopeIds.length) {
       setRows([])
       setResponsibles([])
+      setScopeIds([])
       setError(unitsResult.error)
       setLoading(false)
       return
     }
 
+    setScopeIds(scopeIds)
     const { data, error: plansError } = await supabase
       .from('planos_acao')
       .select('id, codigo, acao, objetivo, indicador, departamento, prazo, status, progresso, scope_id, scope_type, responsavel_id, updated_at, checklist, origem_ref_id, transition_metadata')
@@ -172,6 +179,26 @@ export function ClientActionPlanContextPanel({ clientId, clientSlug, primaryStor
     void load()
   }, [load])
 
+  const handleReconcile = useCallback(async () => {
+    if (reconciling || !supabaseUser || !scopeIds.length) return
+    setReconciling(true)
+    try {
+      const result = await reconcileClientActionPlanDuplicates(scopeIds, supabaseUser.id)
+      if (result.error) {
+        toast.error(result.error)
+        return
+      }
+      if (result.reconciled > 0) {
+        toast.success(`${result.reconciled} duplicata(s) reconciliada(s).`)
+        void load()
+      } else {
+        toast.info('Nenhuma duplicata para reconciliar neste cliente.')
+      }
+    } finally {
+      setReconciling(false)
+    }
+  }, [load, reconciling, scopeIds, supabaseUser])
+
 
   if (loading) return <MxSectionCard><div className="p-5"><div className="text-sm text-muted-foreground">Carregando planos de ação do cliente…</div></div></MxSectionCard>
 
@@ -197,7 +224,7 @@ export function ClientActionPlanContextPanel({ clientId, clientSlug, primaryStor
                   variant={panelView === 'quadro' ? 'primary' : 'ghost'}
                   onClick={() => setPanelView('quadro')}
                 >
-                  Quadro
+                  Kanban
                 </Button>
                 <Button
                   type="button"
@@ -208,8 +235,8 @@ export function ClientActionPlanContextPanel({ clientId, clientSlug, primaryStor
                   Lista
                 </Button>
               </div>
-              <Button variant="outline" size="sm" onClick={() => void load()} aria-label="Atualizar planos de ação do cliente">
-                <RefreshCw size={14} />Atualizar
+              <Button variant="outline" size="sm" onClick={() => void handleReconcile()} disabled={reconciling || !scopeIds.length}>
+                <Wrench size={14} />{reconciling ? 'Reconciliando...' : 'Reconciliar'}
               </Button>
               <Button variant="outline" size="sm" asChild>
                 <Link to={clientSlug
@@ -217,7 +244,7 @@ export function ClientActionPlanContextPanel({ clientId, clientSlug, primaryStor
                   : `/plano-acao?clientId=${encodeURIComponent(clientId)}${primaryStoreId ? `&storeId=${encodeURIComponent(primaryStoreId)}` : ''}`
                 }><ExternalLink size={14} />Abrir plano completo</Link>
               </Button>
-              <Button size="sm" onClick={onCreatePlan}><Plus size={14} />Novo plano</Button>
+              <Button size="sm" onClick={onCreatePlan}><Plus size={14} />Nova Ação</Button>
             </div>
           )}
         />

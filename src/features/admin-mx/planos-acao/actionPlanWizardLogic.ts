@@ -221,6 +221,44 @@ export function buildCreatedPlanPatch(
   }
 }
 
+/** Indica se a RPC atômica ainda não está publicada no banco remoto. */
+export function needsLegacyActionPlanCreate(error: { message?: string; code?: string } | null | undefined): boolean {
+  const blob = `${error?.code ?? ''} ${error?.message ?? ''}`
+  return /PGRST202|PGRST203|Could not find the function|schema cache|does not exist|argument/i.test(blob)
+}
+
+async function createPlanViaLegacyRpc(input: {
+  payload: Record<string, unknown>
+  patch: Record<string, unknown>
+}): Promise<{ data: { id: string } | null; error: string | null }> {
+  const { data, error } = await supabase.rpc('criar_plano_acao_v2', {
+    p_scope_type: 'store',
+    p_scope_id: String(input.payload.scope_id),
+    p_objetivo: String(input.payload.objetivo ?? ''),
+    p_departamento: String(input.payload.departamento),
+    p_indicador: String(input.payload.indicador),
+    p_problema: String(input.payload.problema),
+    p_acao: String(input.payload.acao),
+    p_como: input.payload.como as string | null,
+    p_responsavel_id: input.payload.responsavel_id as string | null,
+    p_prazo: input.payload.prazo as string,
+    p_prioridade: input.payload.prioridade as ClientActionPlanWizardForm['priority'],
+    p_origem: input.payload.origem as ClientActionPlanWizardForm['origin'],
+  })
+  if (error || !data) {
+    return { data: null, error: describeAdminRpcError(error, 'Falha ao criar o plano de ação.') }
+  }
+  const plan = data as { id: string }
+  const { error: patchError } = await supabase.rpc('atualizar_plano_acao_patch', {
+    p_plano_id: plan.id,
+    p_patch: input.patch,
+  })
+  if (patchError) {
+    return { data: plan, error: describeAdminRpcError(patchError, 'Plano criado, mas falhou ao gravar checklist e metadados.') }
+  }
+  return { data: plan, error: null }
+}
+
 /**
  * Cria um plano por unidade via RPC autorizada, depois grava checklist e
  * campos extras. Insert direto em `planos_acao` cai no RLS/hardening.
@@ -238,8 +276,8 @@ export async function createClientActionPlans(input: {
   })
   for (const storeId of input.storeIds) {
     const payload = buildPlanPayload({ form: input.form, storeId, userId: input.userId })
-    const { data, error } = await supabase.rpc('criar_plano_acao_v2', {
-      p_scope_type: 'store',
+    const atomicArgs = {
+      p_scope_type: 'store' as const,
       p_scope_id: storeId,
       p_objetivo: String(payload.objetivo ?? ''),
       p_departamento: String(payload.departamento),
@@ -251,37 +289,31 @@ export async function createClientActionPlans(input: {
       p_prazo: payload.prazo as string,
       p_prioridade: payload.prioridade as ClientActionPlanWizardForm['priority'],
       p_origem: payload.origem as ClientActionPlanWizardForm['origin'],
-    })
-    if (error || !data) {
+      p_checklist: createdPatch.checklist ?? buildChecklistItems(input.form.actions),
+      p_participants: createdPatch.participants as string | null,
+      p_efficacy_indicator: createdPatch.efficacy_indicator as string | null,
+      p_reference_year: createdPatch.reference_year as number,
+      p_iniciado_at: createdPatch.iniciado_at as string | null,
+      p_transition_metadata: createdPatch.transition_metadata ?? null,
+    }
+    const { data, error } = await supabase.rpc('criar_plano_acao_v2', atomicArgs)
+    let planId: string | null = data ? (data as { id: string }).id : null
+    let createError: { message?: string; code?: string } | null = error
+
+    if ((error || !data) && needsLegacyActionPlanCreate(error)) {
+      const legacy = await createPlanViaLegacyRpc({ payload, patch: createdPatch })
+      planId = legacy.data?.id ?? null
+      createError = legacy.error ? { message: legacy.error } : null
+    }
+
+    if (createError || !planId) {
       return {
-        error: describeAdminRpcError(error, 'Falha ao criar o plano de ação.'),
+        error: describeAdminRpcError(createError, 'Falha ao criar o plano de ação.'),
         created: ids.length,
         ids,
       }
     }
-    const plan = data as { id: string }
-    const { error: patchError } = await supabase.rpc('atualizar_plano_acao_patch', {
-      p_plano_id: plan.id,
-      p_patch: createdPatch,
-    })
-    if (patchError) {
-      const { error: retryError } = await supabase.rpc('atualizar_plano_acao_patch', {
-        p_plano_id: plan.id,
-        p_patch: {
-          checklist: buildChecklistItems(input.form.actions),
-          transition_metadata: createdPatch.transition_metadata ?? null,
-        },
-      })
-      if (retryError) {
-        ids.push(plan.id)
-        return {
-          error: `Plano criado, mas o banco recusou o vínculo extra (${patchError.message}). O quadro mostra o plano; o indicador já foi gravado na criação, e o checklist pode estar incompleto.`,
-          created: ids.length,
-          ids,
-        }
-      }
-    }
-    ids.push(plan.id)
+    ids.push(planId)
   }
   return { error: null, created: ids.length, ids }
 }

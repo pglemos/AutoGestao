@@ -21,6 +21,9 @@ import {
   copyPreviousMonthSeries,
   countQuickEntryProgress,
   validateTargetImport,
+  distributeSalesTotalToChannels,
+  distributeIntegerTotalEvenly,
+  resolvePlanningPersistenceCode,
 } from './metasRealizados'
 
 const INDICATORS = [
@@ -451,15 +454,66 @@ describe('modelo XLSX de metas', () => {
       values: { CONVERSION_RATE: [0.25] },
     })
 
-    expect(sheets.map(sheet => sheet.name)).toEqual(['INSTRUÇÕES', 'DADOS', 'MX_CONFIG'])
-    const dadosSheet = sheets.find(s => s.name === 'DADOS')
-    expect(dadosSheet).toBeDefined()
-    expect(dadosSheet?.rows[0]).toMatchObject({ 'Código do Indicador': 'SALES_TOTAL', Jan: 'Calculado', Tipo: 'Calculado' })
-    expect(dadosSheet?.rows[1]).toMatchObject({ 'Código do Indicador': 'SALES_WALKIN', Jan: null, Tipo: 'Digitável' })
-    expect(dadosSheet?.rows.length).toBe(46)
+    expect(sheets.map(sheet => sheet.name)).toEqual(['INSTRUÇÕES', 'METAS', 'MX_CONFIG'])
+    const metasSheet = sheets.find(s => s.name === 'METAS')
+    expect(metasSheet).toBeDefined()
+    expect(metasSheet?.rows[0]).toMatchObject({ 'Ordem Oficial': 1, 'Código do Indicador': 'SALES_TOTAL', Jan: 'Calculado', Tipo: 'Calculado' })
+    expect(metasSheet?.rows[1]).toMatchObject({ 'Código do Indicador': 'SALES_WALKIN', Jan: null, Tipo: 'Digitável' })
+    expect(metasSheet?.rows.length).toBe(46)
     const instrucoesSheet = sheets.find(s => s.name === 'INSTRUÇÕES')
     expect(instrucoesSheet?.rows.length).toBeGreaterThan(0)
     const configSheet = sheets.find(s => s.name === 'MX_CONFIG')
     expect(configSheet?.rows).toContainEqual({ Chave: 'view_type', Valor: 'TARGET' })
+    expect(configSheet?.rows).toContainEqual({ Chave: 'manual_indicator_count', Valor: '19' })
+    expect(configSheet?.rows).toContainEqual({ Chave: 'calculated_indicator_count', Valor: '27' })
+  })
+})
+
+describe('resolvePlanningPersistenceCode', () => {
+  test('marketing digitáveis usam metric_key minúsculo do catálogo', () => {
+    expect(resolvePlanningPersistenceCode('INTERNET_COST_PER_SALE')).toBe('internet_cost_per_sale')
+    expect(resolvePlanningPersistenceCode('VOLUME_DE_LEADS_POR_VENDA')).toBe('volume_de_leads_por_venda')
+    expect(resolvePlanningPersistenceCode('INSTAGRAM_FOLLOWERS')).toBe('instagram_followers')
+    expect(resolvePlanningPersistenceCode('GOOGLE_BUSINESS_RATING')).toBe('google_business_rating')
+    expect(resolvePlanningPersistenceCode('CONTENT_QUALITY')).toBe('content_quality')
+  })
+
+  test('preserva metric_key já persistido no roster', () => {
+    expect(resolvePlanningPersistenceCode('internet_cost_per_sale')).toBe('internet_cost_per_sale')
+    expect(resolvePlanningPersistenceCode('sales_walkin')).toBe('sales_walkin')
+  })
+})
+
+describe('cadastro rápido — aplicar em todos', () => {
+  test('distribui Vendas Total igualmente nos 6 canais com soma preservada', () => {
+    const channels = distributeSalesTotalToChannels(100)
+    expect(Object.keys(channels)).toHaveLength(6)
+    expect(Object.values(channels).reduce((sum, value) => sum + value, 0)).toBe(100)
+  })
+
+  test('distributeIntegerTotalEvenly reparte resto nos primeiros canais', () => {
+    expect(distributeIntegerTotalEvenly(10, 3)).toEqual([4, 3, 3])
+  })
+
+  test('catálogo tem 19 digitáveis incluindo marketing e estoque/financeiro', () => {
+    const sheets = buildTargetWorkbookSheets({
+      indicators: [],
+      year: 2026,
+      storeId: 'store-1',
+    })
+    const metas = sheets.find(sheet => sheet.name === 'METAS')
+    const digitaveis = metas?.rows.filter(row => row.Tipo === 'Digitável') ?? []
+    const codes = digitaveis.map(row => row['Código do Indicador'])
+    expect(digitaveis.length).toBe(19)
+    expect(codes).toEqual(expect.arrayContaining([
+      'INTERNET_COST_PER_SALE',
+      'VOLUME_DE_LEADS_POR_VENDA',
+      'INSTAGRAM_FOLLOWERS',
+      'GOOGLE_BUSINESS_RATING',
+      'CONTENT_QUALITY',
+      'INVENTORY_AVERAGE_TICKET',
+      'CONTRIBUTION_MARGIN',
+      'EMPLOYEE_COUNT',
+    ]))
   })
 })
