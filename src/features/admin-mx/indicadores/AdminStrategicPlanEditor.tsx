@@ -604,7 +604,7 @@ export function AdminStrategicPlanEditor({
     }
     await saveChanges()
   }
-  const ownerPreviewHref = `/plano-estrategico?storeId=${encodeURIComponent(ownerStoreId ?? '')}&year=${data.cycle.year}&viewAs=dono`
+  const ownerPreviewHref = `/clientes/${encodeURIComponent(data.client.id)}/plano-estrategico/${data.cycle.year}/visualizacao-dono`
 
   const editorBody = (
     <>
@@ -633,6 +633,18 @@ export function AdminStrategicPlanEditor({
           <span className="text-sm text-muted-foreground">Versão {data.cycle.version_number}</span>
           <span className="text-sm text-muted-foreground">{activeUnits.length} unidade(s) ativa(s)</span>
           <span className="text-sm text-muted-foreground">{gridIndicators.length} indicador(es) no roster</span>
+          {activeUnits.length > 1 ? (
+            <div className="ml-2 flex items-center gap-1.5">
+              <span className="text-xs font-medium text-muted-foreground">Loja:</span>
+              <MxSelect aria-label="Seletor de unidade ativa" value={unitId} onChange={e => setUnitId(e.target.value)} className="h-7 text-xs">
+                {data.units.map(unit => (
+                  <option key={unit.id} value={unit.id}>
+                    {unit.name} ({unit.store_type === 'MATRIZ' ? 'Matriz' : 'Filial'})
+                  </option>
+                ))}
+              </MxSelect>
+            </div>
+          ) : null}
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Button variant="outline" size="sm" onClick={() => setAddIndicatorOpen(true)} disabled={effectiveReadOnly || !['rascunho', 'em_validacao'].includes(data.cycle.status)}><Plus size={16} />Adicionar Indicador</Button>
@@ -644,6 +656,26 @@ export function AdminStrategicPlanEditor({
           {!effectiveReadOnly && data.cycle.status === 'publicado' ? <Button variant="outline" size="sm" onClick={() => void revise()} disabled={saving}><RotateCcw size={16} />Abrir revisão</Button> : null}
         </div>
       </div>
+
+      {gridIndicators.length === 0 ? (
+        <div className="my-4 rounded-xl border border-border-subtle bg-white p-8 text-center shadow-sm">
+          <Layers3 size={24} className="mx-auto mb-3 text-status-warning-text" />
+          <p className="mb-1 text-sm font-medium text-foreground">Plano Estratégico sem indicadores</p>
+          <p className="mb-4 text-xs text-muted-foreground">Sincronize com o pacote do produto para carregar os indicadores padrão.</p>
+          <Button size="sm" onClick={() => setAddIndicatorOpen(true)}>
+            <Plus size={14} className="mr-1.5" /> Adicionar Indicador do Catálogo
+          </Button>
+        </div>
+      ) : null}
+
+      {gridIndicators.length > 0 && activeUnits.length === 0 ? (
+        <MxStatusBanner tone="warning">
+          <div className="flex items-center justify-between gap-3">
+            <span>Este Plano não possui escopos de Loja. As metas não estão separadas por unidade.</span>
+            <Button size="sm" variant="outline" onClick={() => setTab('unidades')}>Criar Escopos de Loja</Button>
+          </div>
+        </MxStatusBanner>
+      ) : null}
 
       {readiness ? <MxStatusBanner tone={readinessTone(readiness)}>
         <div className="flex flex-wrap items-center justify-between gap-2">

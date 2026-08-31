@@ -31,8 +31,8 @@ interface JourneyEncounter {
   title: string
   modality: 'presencial' | 'online' | 'a_definir'
   status: 'agendado' | 'em_andamento' | 'concluido' | 'cancelado' | 'pendente'
-  scheduled_date?: string
-  responsible_consultant_name?: string
+  scheduled_date?: string | null
+  responsible_consultant_name?: string | null
   applied_time_hours?: number
   is_onboarding?: boolean
   description?: string
@@ -90,24 +90,27 @@ export function AdminConsultoriaEntregasPage() {
         .from('visitas_consultoria')
         .select('*')
         .eq('client_id', clientData.id)
-        .order('numero_visita', { ascending: true })
 
       if (!active) return
 
       if (encData && encData.length > 0) {
+        const sorted = [...encData].sort((a, b) => ((a.visit_number ?? a.numero_visita ?? 0) - (b.visit_number ?? b.numero_visita ?? 0)))
         setEncounters(
-          encData.map(v => ({
-            id: v.id,
-            encounter_number: v.numero_visita,
-            title: v.titulo || (v.numero_visita === 0 ? 'Onboarding Inicial' : `Encontro ${v.numero_visita}`),
-            modality: (v.modalidade as any) || 'online',
-            status: (v.status as any) || 'agendado',
-            scheduled_date: v.data_agendada,
-            responsible_consultant_name: v.consultor_responsavel_nome,
-            applied_time_hours: v.horas_aplicadas || 2,
-            is_onboarding: v.numero_visita === 0,
-            description: v.objetivo || '',
-          }))
+          sorted.map((v: Record<string, unknown>) => {
+            const vNum = (v.visit_number ?? v.numero_visita ?? 0) as number
+            return {
+              id: String(v.id),
+              encounter_number: vNum,
+              title: (v.title || v.titulo || (vNum === 0 ? 'Onboarding Inicial' : `Encontro ${vNum}`)) as string,
+              modality: (v.modality || v.modalidade || 'online') as JourneyEncounter['modality'],
+              status: (v.status === 'concluida' || v.status === 'concluido' ? 'concluido' : v.status === 'em_andamento' ? 'em_andamento' : v.status === 'cancelada' ? 'cancelado' : 'agendado') as JourneyEncounter['status'],
+              scheduled_date: (v.scheduled_at || v.data_agendada || null) as string | null,
+              responsible_consultant_name: (v.consultant_name || v.consultor_responsavel_nome || null) as string | null,
+              applied_time_hours: ((v.duration_hours ?? v.horas_aplicadas ?? 2) as number),
+              is_onboarding: vNum === 0,
+              description: (v.objective || v.objetivo || '') as string,
+            }
+          })
         )
       } else {
         // Standard methodology 12 visits roadmap

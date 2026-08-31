@@ -1,6 +1,7 @@
 # Story CONS-22 — Reconciliação Base44 do Planejamento e Acessos no Admin MX
 
-**Status:** InProgress  
+**Status:** Ready for Review
+
 **Agent:** @dev  
 **Quality Gate:** @qa  
 **Priority:** HIGH
@@ -241,6 +242,12 @@ responsividade; nenhum segredo em artefatos.
 - `src/features/admin-mx/clientes/clientIdentificationMutations.ts`
 - `src/features/admin-mx/clientes/clientPortfolio.ts`
 - `src/features/admin-mx/clientes/clientPortfolio.test.ts`
+- `src/features/admin-mx/clientes/AdminClientPlanoAcaoPage.tsx`
+- `src/features/admin-mx/clientes/clientDetailDates.ts`
+- `src/features/admin-mx/clientes/clientDetailDates.test.ts`
+- `src/features/admin-mx/consultoria/AdminConsultoriaEntregasPage.tsx`
+- `src/features/internal-mx-planning/InternalActionPlanPage.tsx`
+- `src/hooks/useConsultingClientBySlug.ts`
 - `src/features/admin-mx/AdminNovoClientePage.tsx`
 - `src/features/admin-mx/novo-cliente/newClientDraft.ts`
 - `src/features/admin-mx/novo-cliente/newClientDraft.test.ts`
@@ -301,3 +308,11 @@ responsividade; nenhum segredo em artefatos.
 - **Aplicar a Cliente** passou a materializar via `criar_plano_acao_v2` + `atualizar_plano_acao_patch` (sem insert direto em `planos_acao`). Retry da mesma `requestId` reaproveita unidades já gravadas. Sem a migration `20260829000000` no remoto, o patch pode cair no fallback de checklist + `transition_metadata`.
 - `/plano-estrategico` em Planos por Cliente expõe só **Criar Plano Estratégico** (Criar Demo permanece no catálogo, como no Base44).
 - Abrir plano em Planos por Cliente vai para `/clientes/:slug/plano-estrategico/:ano`, como o Base44 `/clientes/:id/plano-estrategico/2026`.
+
+### Candidato de release (2026-08-31)
+
+- Correção do crash de detalhe de cliente quando o cliente é `null`, com helper e teste de regressão; atualização da consulta por slug preservando fallback seguro para IDs UUID.
+- `npm run typecheck`, `npm run lint`, `npm test` (**4754 pass / 0 fail**), `npm run build`, `npm run audit:routes-data` e `git diff --check` passaram.
+- Graphify foi reconstruído com runtime TypeScript; seis scripts PowerShell continuam sem parser `tree-sitter-powershell`, limitação preexistente e fora do runtime.
+- CodeRabbit não encontrou achados críticos no diff; os dois achados registrados apontam arquivos já presentes em `origin/main`, fora deste candidato.
+- A revisão QA visual autenticada e a prova pós-deploy permanecem pendentes até a publicação e validação deste SHA.

@@ -264,7 +264,7 @@
 | `pdi_sessoes` | 4 |
 | `perfil_consultor_mx` | 4 |
 | `planejamentos_estrategicos` | 1 |
-| `planos_acao` | 14 |
+| `planos_acao` | 15 |
 | `planos_acao_template_itens` | 4 |
 | `planos_acao_template_versoes` | 6 |
 | `planos_acao_templates` | 3 |
@@ -315,7 +315,7 @@
 | `universidade_certificacoes` | 1 |
 | `universidade_trilhas` | 1 |
 | `user_roles` | 1 |
-| `usuarios` | 32 |
+| `usuarios` | 33 |
 | `valores_indicadores_planejamento` | 2 |
 | `valores_indicadores_planejamento_vigentes` | 4 |
 | `valores_parametros_consultoria` | 3 |
@@ -595,7 +595,7 @@
 | `planos_acao_templates:update` | 1 |
 | `planos_acao:delete` | 1 |
 | `planos_acao:insert` | 1 |
-| `planos_acao:select` | 14 |
+| `planos_acao:select` | 15 |
 | `planos_acao:update` | 1 |
 | `posicionamento_empresa:select` | 1 |
 | `pre_cadastros_loja:select` | 2 |
@@ -680,7 +680,7 @@
 | `user_roles:select` | 1 |
 | `user_roles:update` | 1 |
 | `usuarios:delete` | 1 |
-| `usuarios:select` | 30 |
+| `usuarios:select` | 31 |
 | `usuarios:update` | 3 |
 | `usuarios:upsert` | 1 |
 | `valores_indicadores_planejamento_vigentes:select` | 4 |

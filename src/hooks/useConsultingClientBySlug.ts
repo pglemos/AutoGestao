@@ -115,13 +115,14 @@ export function useConsultingClientDetailBySlug(slug?: string) {
     setError(null)
 
     try {
-      const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug!)
-      
+      const normalized = slug!.trim()
+      const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(normalized)
+
       let query = supabase.from('clientes_consultoria').select('*')
       if (isUuid) {
-        query = query.or(`slug.eq.${slug},id.eq.${slug}`)
+        query = query.or(`slug.eq.${normalized},id.eq.${normalized}`)
       } else {
-        query = query.eq('slug', slug!)
+        query = query.eq('slug', normalized)
       }
 
       const { data: clientData, error: clientError } = await query.maybeSingle()
