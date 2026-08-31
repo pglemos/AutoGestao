@@ -726,17 +726,11 @@ export function AdminClienteDetalhePage() {
 
   const implementationOwnerName = team.rows.find(member => member.id === (client as { implementation_owner_id?: string | null } | null)?.implementation_owner_id)?.name ?? responsibleConsultant
   const headerLocation = [identityUnit?.city, identityUnit?.state].filter(Boolean).join(', ')
-  const headerMeta = useMemo(() => {
-    const next = {
-      location: headerLocation || null,
-      comercial: responsibleConsultant,
-      implantacao: implementationOwnerName,
-    }
-    // #region agent log
-    fetch('http://127.0.0.1:7506/ingest/ceac55d9-e57e-4aa7-abcd-40a91956c86a',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'285f20'},body:JSON.stringify({sessionId:'285f20',runId:'post-fix',hypothesisId:'AW',location:'AdminClienteDetalhePage.tsx:header',message:'360 header meta vs Base44',data:next,timestamp:Date.now()})}).catch(()=>{});
-    // #endregion
-    return next
-  }, [headerLocation, implementationOwnerName, responsibleConsultant])
+  const headerMeta = useMemo(() => ({
+    location: headerLocation || null,
+    comercial: responsibleConsultant,
+    implantacao: implementationOwnerName,
+  }), [headerLocation, implementationOwnerName, responsibleConsultant])
 
   const onboardingStep = (client as { onboarding_step?: number | null })?.onboarding_step ?? 1
   const onboardingCompleted = (client as { onboarding_completed?: boolean | null })?.onboarding_completed ?? false

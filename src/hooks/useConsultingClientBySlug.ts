@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { getCentralSyncError, syncVisitToGoogle } from '@/hooks/useAgendaAdmin'
@@ -46,45 +46,96 @@ function normalizeVisitQuantData(value: unknown): ConsultingVisit['quant_data'] 
   return null
 }
 
+export type ClientDetailFetchMode = 'initial' | 'background'
+
+export function resolveClientDetailFetchMode(input: {
+  slug?: string
+  loadedSlug: string | null
+  background?: boolean
+}): ClientDetailFetchMode {
+  if (input.background === true) return 'background'
+  if (input.background === false) return 'initial'
+  if (input.slug && input.loadedSlug === input.slug) return 'background'
+  return 'initial'
+}
+
+export type ClientDetailFetchReady = 'wait-auth' | 'missing-input' | 'ready'
+
+export function resolveClientDetailFetchReady(input: {
+  initialized: boolean
+  supabaseUser: unknown
+  slug?: string
+}): ClientDetailFetchReady {
+  if (!input.initialized) return 'wait-auth'
+  if (!input.supabaseUser || !input.slug || input.slug === 'undefined') return 'missing-input'
+  return 'ready'
+}
+
+type FetchClientOptions = { background?: boolean }
+
 export function useConsultingClientDetailBySlug(slug?: string) {
-  const { supabaseUser, role, profile } = useAuth()
+  const { supabaseUser, role, initialized } = useAuth()
   const [client, setClient] = useState<ConsultingClientDetail | null>(null)
   const [assignableUsers, setAssignableUsers] = useState<ConsultingAssignableUser[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const fetchGenerationRef = useRef(0)
+  const loadedSlugRef = useRef<string | null>(null)
   const canManage = isPerfilInternoMx(role)
 
-  const fetchClient = useCallback(async () => {
-    if (!supabaseUser || !slug || slug === 'undefined') {
-      setClient(null)
-      setLoading(false)
+  const fetchClient = useCallback(async (options?: FetchClientOptions) => {
+    const fetchMode = resolveClientDetailFetchMode({
+      slug,
+      loadedSlug: loadedSlugRef.current,
+      background: options?.background,
+    })
+    const ready = resolveClientDetailFetchReady({ initialized, supabaseUser, slug })
+
+    if (ready === 'wait-auth') {
+      setLoading(true)
       return
     }
 
-    setLoading(true)
+    if (ready === 'missing-input') {
+      fetchGenerationRef.current += 1
+      setClient(null)
+      setAssignableUsers([])
+      setError(null)
+      setLoading(false)
+      loadedSlugRef.current = null
+      return
+    }
+
+    const generation = ++fetchGenerationRef.current
+
+    if (fetchMode === 'initial') {
+      setLoading(true)
+    }
     setError(null)
 
-    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug)
-    
-    let query = supabase.from('clientes_consultoria').select('*')
-    if (isUuid) {
-      query = query.or(`slug.eq.${slug},id.eq.${slug}`)
-    } else {
-      query = query.eq('slug', slug)
-    }
+    try {
+      const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug!)
+      
+      let query = supabase.from('clientes_consultoria').select('*')
+      if (isUuid) {
+        query = query.or(`slug.eq.${slug},id.eq.${slug}`)
+      } else {
+        query = query.eq('slug', slug!)
+      }
 
-    const { data: clientData, error: clientError } = await query.maybeSingle()
+      const { data: clientData, error: clientError } = await query.maybeSingle()
 
-    if (clientError || !clientData) {
-      setError(clientError?.message || 'Cliente não encontrado.')
-      setClient(null)
-      setLoading(false)
-      return
-    }
+      if (clientError || !clientData) {
+        if (generation !== fetchGenerationRef.current) return
+        setError(clientError?.message || 'Cliente não encontrado.')
+        setClient(null)
+        loadedSlugRef.current = null
+        return
+      }
 
-    const clientId = clientData.id
+      const clientId = clientData.id
 
-    const [unitsRes, contactsRes, assignmentsRes, visitsRes, financialsRes, modulesRes, usersRes, inventoryRes, programRes] = await Promise.all([
+      const [unitsRes, contactsRes, assignmentsRes, visitsRes, financialsRes, modulesRes, usersRes, inventoryRes, programRes] = await Promise.all([
       supabase.from('unidades_cliente_consultoria').select('*').eq('client_id', clientId).order('is_primary', { ascending: false }).order('name', { ascending: true }),
       supabase.from('contatos_cliente_consultoria').select('*').eq('client_id', clientId).order('is_primary', { ascending: false }).order('name', { ascending: true }),
       supabase.from('atribuicoes_consultoria').select('*, user:usuarios(id,name,email,role)').eq('client_id', clientId).order('created_at', { ascending: true }),
@@ -100,57 +151,71 @@ export function useConsultingClientDetailBySlug(slug?: string) {
       clientData.program_template_key
         ? supabase.from('programas_visita_consultoria').select('program_key,total_visits').eq('program_key', clientData.program_template_key).maybeSingle()
         : Promise.resolve({ data: null, error: null }),
-    ])
+      ])
 
-    const journey = buildClientJourney({
-      programKey: clientData.program_template_key,
-      programTotal: programRes.data?.total_visits,
-      visits: (visitsRes.data || []) as VisitRowIdentity[],
-    })
-    const visitRows = ((visitsRes.data || []) as VisitRowIdentity[]).filter((visit) => isClientVisitInScope(visit.visit_number, journey.totalVisits))
-    const visitIds = visitRows.map((visit) => visit.id).filter(Boolean)
-    const { data: evidenceRows } = visitIds.length
-      ? await supabase.from('evidencias_visita').select('*').in('visita_id', visitIds)
-      : { data: [] as VisitEvidenceRow[] }
-    const evidenceByVisit = new Map<string, ConsultingVisitAttachment[]>()
-    for (const evidence of (evidenceRows || []) as VisitEvidenceRow[]) {
-      const list = evidenceByVisit.get(evidence.visita_id) || []
-      list.push({
-        id: evidence.id,
-        filename: evidence.nome_arquivo || evidence.tipo || 'evidencia',
-        storage_path: evidence.caminho_storage,
-        content_type: evidence.content_type,
-        size_bytes: evidence.tamanho_bytes || 0,
-        uploaded_at: evidence.created_at,
+      const journey = buildClientJourney({
+        programKey: clientData.program_template_key,
+        programTotal: programRes.data?.total_visits,
+        visits: (visitsRes.data || []) as VisitRowIdentity[],
       })
-      evidenceByVisit.set(evidence.visita_id, list)
-    }
-    const visitsWithEvidence: ConsultingVisit[] = parseConsultingVisitArray(visitRows).map((visit) => ({
-      ...visit,
-      quant_data: normalizeVisitQuantData(visit.quant_data),
-      attachments: evidenceByVisit.get(visit.id) || [],
-    }))
+      const visitRows = ((visitsRes.data || []) as VisitRowIdentity[]).filter((visit) => isClientVisitInScope(visit.visit_number, journey.totalVisits))
+      const visitIds = visitRows.map((visit) => visit.id).filter(Boolean)
+      const { data: evidenceRows } = visitIds.length
+        ? await supabase.from('evidencias_visita').select('*').in('visita_id', visitIds)
+        : { data: [] as VisitEvidenceRow[] }
+      const evidenceByVisit = new Map<string, ConsultingVisitAttachment[]>()
+      for (const evidence of (evidenceRows || []) as VisitEvidenceRow[]) {
+        const list = evidenceByVisit.get(evidence.visita_id) || []
+        list.push({
+          id: evidence.id,
+          filename: evidence.nome_arquivo || evidence.tipo || 'evidencia',
+          storage_path: evidence.caminho_storage,
+          content_type: evidence.content_type,
+          size_bytes: evidence.tamanho_bytes || 0,
+          uploaded_at: evidence.created_at,
+        })
+        evidenceByVisit.set(evidence.visita_id, list)
+      }
+      const visitsWithEvidence: ConsultingVisit[] = parseConsultingVisitArray(visitRows).map((visit) => ({
+        ...visit,
+        quant_data: normalizeVisitQuantData(visit.quant_data),
+        attachments: evidenceByVisit.get(visit.id) || [],
+      }))
 
-    const detail: ConsultingClientDetail = {
-      ...(clientData as ConsultingClient),
-      id: clientData.id,
-      store_id: clientData.store_id || null,
-      primary_store_id: clientData.primary_store_id || null,
-      units: parseConsultingClientUnitArray(unitsRes.data || []),
-      contacts: parseConsultingClientContactArray(contactsRes.data || []),
-      assignments: parseConsultingAssignmentArray(assignmentsRes.data || []),
-      visits: visitsWithEvidence,
-      financials: parseConsultingFinancialArray(financialsRes.data || []),
-      modules: parseConsultingClientModuleArray(modulesRes.data || []),
-      inventory_snapshots: (inventoryRes.data || []) as ConsultingInventorySnapshot[],
-      journey_completed_visits: journey.completedVisits,
-      journey_total_visits: journey.totalVisits,
-    }
+      const detail: ConsultingClientDetail = {
+        ...(clientData as ConsultingClient),
+        id: clientData.id,
+        store_id: clientData.store_id || null,
+        primary_store_id: clientData.primary_store_id || null,
+        units: parseConsultingClientUnitArray(unitsRes.data || []),
+        contacts: parseConsultingClientContactArray(contactsRes.data || []),
+        assignments: parseConsultingAssignmentArray(assignmentsRes.data || []),
+        visits: visitsWithEvidence,
+        financials: parseConsultingFinancialArray(financialsRes.data || []),
+        modules: parseConsultingClientModuleArray(modulesRes.data || []),
+        inventory_snapshots: (inventoryRes.data || []) as ConsultingInventorySnapshot[],
+        journey_completed_visits: journey.completedVisits,
+        journey_total_visits: journey.totalVisits,
+      }
 
-    setClient(detail)
-    setAssignableUsers((usersRes.data || []) as ConsultingAssignableUser[])
-    setLoading(false)
-  }, [slug, supabaseUser])
+      if (generation !== fetchGenerationRef.current) return
+
+      setClient(detail)
+      setAssignableUsers((usersRes.data || []) as ConsultingAssignableUser[])
+      loadedSlugRef.current = slug ?? null
+    } catch (cause) {
+      if (generation !== fetchGenerationRef.current) return
+      setError(cause instanceof Error ? cause.message : 'Falha ao carregar cliente.')
+      if (fetchMode === 'initial') {
+        setClient(null)
+        loadedSlugRef.current = null
+      }
+    } finally {
+      if (fetchMode === 'initial' && generation === fetchGenerationRef.current) {
+        setLoading(false)
+      }
+    }
+  }, [initialized, slug, supabaseUser])
 
   const clientId = client?.id
 
@@ -388,7 +453,16 @@ export function useConsultingClientDetailBySlug(slug?: string) {
   }, [canManage, clientId, fetchClient, supabaseUser])
 
   useEffect(() => {
-    fetchClient()
+    fetchGenerationRef.current += 1
+    loadedSlugRef.current = null
+    setClient(null)
+    setAssignableUsers([])
+    setError(null)
+    setLoading(true)
+  }, [slug])
+
+  useEffect(() => {
+    void fetchClient()
   }, [fetchClient])
 
   useEffect(() => {
@@ -403,7 +477,7 @@ export function useConsultingClientDetailBySlug(slug?: string) {
     loading, 
     error, 
     canManage,
-    refetch: fetchClient,
+    refetch: () => fetchClient({ background: true }),
     createUnit,
     createContact,
     upsertAssignment,
