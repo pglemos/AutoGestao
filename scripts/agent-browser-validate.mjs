@@ -158,8 +158,27 @@ const ab = (args, { timeout = 30000 } = {}) => {
 
 const splitViewport = (s) => s.split(/[xX]/).map(Number);
 
+// Replaces __ENV_NAME__ placeholders in a flow with process.env values so
+// credentials stay out of the committed flow files.
+const resolveEnvPlaceholders = (value, file) => {
+  if (typeof value === 'string') {
+    return value.replace(/__([A-Z0-9_]+)__/g, (match, name) => {
+      const resolved = process.env[name];
+      if (resolved === undefined || resolved === '') {
+        throw new Error(`Flow ${file} needs env var ${name} (placeholder ${match} is unresolved).`);
+      }
+      return resolved;
+    });
+  }
+  if (Array.isArray(value)) return value.map(item => resolveEnvPlaceholders(item, file));
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, resolveEnvPlaceholders(v, file)]));
+  }
+  return value;
+};
+
 const parseFlowFile = (file) => {
-  const raw = JSON.parse(fs.readFileSync(path.resolve(ROOT, file), 'utf8'));
+  const raw = resolveEnvPlaceholders(JSON.parse(fs.readFileSync(path.resolve(ROOT, file), 'utf8')), file);
   return {
     url: raw.url || opts.url,
     waitText: raw.waitText || null,

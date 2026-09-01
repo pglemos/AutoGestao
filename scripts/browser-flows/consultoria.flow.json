@@ -1,0 +1,15 @@
+{
+  "url": "http://localhost:3457/login",
+  "waitText": "Acessar sistema",
+  "assertVisible": ["main"],
+  "assertText": ["Fila operacional", "Para revisar", "Revisar status"],
+  "screenshots": ["desktop", "mobile"],
+  "steps": [
+    { "action": "fill", "args": ["#login-email", "__E2E_ADMIN_EMAIL__"] },
+    { "action": "fill", "args": ["#login-password", "__E2E_ROLE_PASSWORD__"] },
+    { "action": "click", "args": ["button[type=submit]"] },
+    { "action": "wait", "args": ["--url", "*painel*"] },
+    { "action": "open", "args": ["http://localhost:3457/consultoria"] },
+    { "action": "wait", "args": ["--fn", "document.body.innerText.includes('Fila operacional')"] }
+  ]
+}
