@@ -10,7 +10,7 @@ import {
   ShieldAlert,
   UserCheck,
 } from 'lucide-react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
 import { getSafeUserFacingDataError } from '@/lib/errors/user-facing-error'
@@ -41,6 +41,7 @@ import {
   type CarteiraRow,
 } from './painel/carteiraOperacional'
 import { CarteiraOperacionalTable, type CarteiraSort } from './painel/CarteiraOperacionalTable'
+import { applyCarteiraParams, readCarteiraParams } from './painel/carteiraUrlState'
 
 const CARTEIRA_FILTER_LABELS: Record<CarteiraFilter, string> = {
   todos: 'Todas as situações',
@@ -201,8 +202,16 @@ export function AdminDashboardPage() {
     await Promise.all([refetchClients(), loadPending(), loadStoresWithoutGoal()])
   }, [loadPending, loadStoresWithoutGoal, refetchClients])
 
-  const [carteiraSearch, setCarteiraSearch] = useState('')
-  const [carteiraFilter, setCarteiraFilter] = useState<CarteiraFilter>('todos')
+  // O recorte da carteira mora na URL: sobrevive ao reload e pode ser enviado
+  // para outra pessoa. `replace` porque digitar na busca não é navegação — sem
+  // isso cada tecla vira uma entrada no histórico.
+  const [searchParams, setSearchParams] = useSearchParams()
+  const { search: carteiraSearch, filter: carteiraFilter } = readCarteiraParams(searchParams)
+  const updateCarteiraParams = useCallback((next: Partial<{ search: string; filter: CarteiraFilter }>) => {
+    setSearchParams(current => applyCarteiraParams(current, { ...readCarteiraParams(current), ...next }), { replace: true })
+  }, [setSearchParams])
+  const setCarteiraSearch = useCallback((value: string) => updateCarteiraParams({ search: value }), [updateCarteiraParams])
+  const setCarteiraFilter = useCallback((value: CarteiraFilter) => updateCarteiraParams({ filter: value }), [updateCarteiraParams])
   const [carteiraSort, setCarteiraSort] = useState<CarteiraSort | null>(null)
 
   const systemAlerts = useMemo(() => {

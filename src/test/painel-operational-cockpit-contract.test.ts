@@ -36,6 +36,18 @@ describe('contrato do cockpit operacional do /painel', () => {
     expect(table).toContain('md:hidden')
   })
 
+  test('recorte da carteira sobrevive ao reload pela URL', () => {
+    const page = read('src/features/admin-mx/AdminDashboardPage.tsx')
+    const urlState = read('src/features/admin-mx/painel/carteiraUrlState.ts')
+
+    expect(page).toContain('useSearchParams')
+    expect(page).toContain('readCarteiraParams(searchParams)')
+    // Digitar na busca não é navegação: sem replace cada tecla vira histórico.
+    expect(page).toContain('{ replace: true }')
+    // A URL é entrada não confiável.
+    expect(urlState).toContain('CARTEIRA_FILTERS.includes(value as CarteiraFilter)')
+  })
+
   test('não apresenta atingimento calculado sobre base incompleta', () => {
     const metrics = read('src/features/network-dashboard/sections/NetworkMetricsSection.tsx')
 
