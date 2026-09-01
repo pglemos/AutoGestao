@@ -186,6 +186,7 @@ const parseFlowFile = (file) => {
     assertText: raw.assertText || [],
     screenshots: raw.screenshots || ['desktop', 'mobile'],
     steps: raw.steps || [],
+    measure: raw.measure || [],
   };
 };
 
@@ -249,6 +250,7 @@ const main = async () => {
     errors: [],
     a11y: null,
     serverStarted: false,
+    measurements: {},
   };
 
   try {
@@ -317,9 +319,47 @@ const main = async () => {
     const wanted = flow?.screenshots || ['desktop', 'mobile'];
     const desktopShot = path.join(evDir, 'desktop.png');
     const mobileShot = path.join(evDir, 'mobile.png');
+    // Geometria dos seletores pedidos, no viewport corrente. Um PNG não diz se
+    // um elemento está deslocado; o retângulo diz.
+    const measure = (name) => {
+      if (!flow?.measure?.length) return;
+      const expr = flow.measure[0] === 'ANCESTORS'
+        ? `JSON.stringify((()=>{let el=document.querySelector('[data-mx-page-canvas]');const out=[];while(el&&el!==document.documentElement){const r=el.getBoundingClientRect();const c=getComputedStyle(el);out.push({tag:el.tagName.toLowerCase(),cls:(el.className||'').toString().slice(0,90),x:Math.round(r.x),w:Math.round(r.width),padL:c.paddingLeft,ml:c.marginLeft,display:c.display,pos:c.position,left:c.left});el=el.parentElement}return out})())`
+        : `JSON.stringify({viewport:{w:innerWidth,h:innerHeight},scrollWidth:document.documentElement.scrollWidth,nodes:${JSON.stringify(flow.measure)}.map(sel=>{const el=document.querySelector(sel);if(!el)return{sel,found:false};const r=el.getBoundingClientRect();const c=getComputedStyle(el);return{sel,found:true,x:Math.round(r.x),y:Math.round(r.y),w:Math.round(r.width),h:Math.round(r.height),padL:c.paddingLeft,padR:c.paddingRight,maxW:c.maxWidth,ml:c.marginLeft,mr:c.marginRight}})})`;
+      const r = ab([...sessionArgs, 'eval', expr]);
+      const parsed = r.ok ? safeParse(safeParse(r.out) ?? r.out) : null;
+      summary.measurements[name] = parsed ?? { error: r.err || r.out };
+      log(`Measure ${name}: ${JSON.stringify(summary.measurements[name])}`);
+    };
+
+    /**
+     * Espera o layout assentar depois de trocar o viewport.
+     *
+     * `set viewport` retorna antes de o app reflowar. Capturar nesse instante
+     * produzia PNGs mobile com o conteúdo deslocado lateralmente — um defeito
+     * que não existe na tela, só na foto. Duas leituras iguais e consecutivas
+     * do retângulo do conteúdo bastam para saber que parou de mexer.
+     */
+    const settleLayout = () => {
+      const readRect = () => {
+        const r = ab([...sessionArgs, 'eval', "JSON.stringify((()=>{const el=document.querySelector('[data-mx-page-canvas]')||document.body;const b=el.getBoundingClientRect();return [Math.round(b.x),Math.round(b.width),innerWidth]})())"]);
+        return r.ok ? r.out : null;
+      };
+      let previous = null;
+      for (let attempt = 0; attempt < 12; attempt += 1) {
+        const current = readRect();
+        if (current && current === previous) return true;
+        previous = current;
+        execFileSync('sleep', ['0.25']);
+      }
+      warn(`Layout did not settle after viewport change (last: ${previous})`);
+      return false;
+    };
+
     const shoot = (shotPath, w, h, name) => {
       log(`Screenshot ${name} (${w}x${h})...`);
       const set = run(['set', 'viewport', String(w), String(h)]);
+      settleLayout();
       let r = ab([...sessionArgs, 'screenshot', '--full', shotPath], { timeout: 45000 });
       if (!r.ok && /timedout|ETIMEDOUT/i.test(r.err)) {
         warn(`Screenshot ${name} timed out — retrying...`);
@@ -327,6 +367,7 @@ const main = async () => {
       }
       if (!r.ok) summary.failures.push({ cmd: `screenshot ${name}`, error: r.err || r.out });
       summary.screenshots.push(shotPath);
+      measure(name);
     };
     if (wanted.includes('desktop')) shoot(desktopShot, dW, dH, 'DESKTOP');
     if (wanted.includes('mobile')) shoot(mobileShot, mW, mH, 'MOBILE');
