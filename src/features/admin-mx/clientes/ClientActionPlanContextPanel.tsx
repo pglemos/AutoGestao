@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Building2, CircleAlert, CircleCheck, ClipboardList, ExternalLink, Gauge, Plus, Wrench } from 'lucide-react'
+import { Building2, CircleAlert, CircleCheck, ClipboardList, ExternalLink, Gauge, MoveHorizontal, Plus, Wrench } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/atoms/Button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/organisms/Table'
@@ -47,10 +47,10 @@ type Props = {
 type Responsible = { id: string; name: string | null }
 type PanelView = 'quadro' | 'lista'
 
-function formatDate(value: string | null): string {
-  if (!value) return '—'
+function formatDate(value: string | null, fallback = 'Data não registrada'): string {
+  if (!value) return fallback
   const date = new Date(value)
-  return Number.isNaN(date.getTime()) ? '—' : date.toLocaleDateString('pt-BR')
+  return Number.isNaN(date.getTime()) ? fallback : date.toLocaleDateString('pt-BR')
 }
 
 function statusTone(status: string): string {
@@ -148,7 +148,7 @@ export function ClientActionPlanContextPanel({ clientId, clientSlug, primaryStor
   useEffect(() => { void load() }, [load, refreshKey])
 
   const summary = useMemo(() => summarizeClientActionPlans(rows), [rows])
-  const responsibleNames = useMemo(() => new Map(responsibles.map(person => [person.id, person.name ?? 'Sem nome'])), [responsibles])
+  const responsibleNames = useMemo(() => new Map(responsibles.map(person => [person.id, person.name ?? 'Nome não informado'])), [responsibles])
   const boardPlans = useMemo(() => rows.map(toBoardPlan), [rows])
 
   const handleKanbanMove = useCallback(async (plan: BoardPlan, toStatus: PlanStatus) => {
@@ -260,8 +260,13 @@ export function ClientActionPlanContextPanel({ clientId, clientSlug, primaryStor
           ) : panelView === 'quadro' ? (
             <ActionPlanKanban plans={boardPlans} onOpen={setSelectedPlan} onMove={handleKanbanMove} />
           ) : (
+            <>
+            <p className="mb-2 flex items-center gap-1.5 text-xs text-muted-foreground medium:hidden">
+              <MoveHorizontal size={14} aria-hidden="true" />
+              Deslize horizontalmente para consultar prazo, status e responsável.
+            </p>
             <MxTableSurface>
-              <Table className="min-w-[1120px]">
+              <Table className="min-w-[1120px]" aria-label="Plano de ação do cliente em formato de lista">
                 <TableHeader>
                   <TableRow>
                     <TableHead>Código</TableHead>
@@ -289,19 +294,19 @@ export function ClientActionPlanContextPanel({ clientId, clientSlug, primaryStor
                           </button>
                         </TableCell>
                         <TableCell>
-                          <span className="block text-sm text-foreground">{row.indicador || '—'}</span>
+                          <span className="block text-sm text-foreground">{row.indicador || 'Indicador não definido'}</span>
                           <span className="block text-xs text-muted-foreground">{row.departamento || 'Sem departamento'}</span>
                         </TableCell>
                         <TableCell><span className="inline-flex items-center gap-1.5 text-sm"><Building2 size={14} className="text-primary" />{row.scope_name}</span></TableCell>
                         <TableCell>{row.responsavel_id ? responsibleNames.get(row.responsavel_id) ?? 'Usuário interno' : 'Não definido'}</TableCell>
-                        <TableCell>{formatDate(row.prazo)}</TableCell>
+                        <TableCell>{formatDate(row.prazo, 'Prazo não definido')}</TableCell>
                         <TableCell>
                           <div className="space-y-1.5">
                             <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${statusTone(resolvedStatus)}`}>{statusLabel}</span>
                             <MxProgress value={row.progresso} label={`${row.progresso}%`} />
                           </div>
                         </TableCell>
-                        <TableCell>{formatDate(row.updated_at)}</TableCell>
+                        <TableCell>{formatDate(row.updated_at, 'Atualização não registrada')}</TableCell>
                         <TableCell className="text-right"><Button variant="outline" size="sm" onClick={() => setSelectedPlan(toBoardPlan(row))}>Abrir</Button></TableCell>
                       </TableRow>
                     )
@@ -309,6 +314,7 @@ export function ClientActionPlanContextPanel({ clientId, clientSlug, primaryStor
                 </TableBody>
               </Table>
             </MxTableSurface>
+            </>
           )}
         </div>
       </MxSectionCard>

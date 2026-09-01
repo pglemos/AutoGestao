@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   Building2,
   CalendarDays,
@@ -43,6 +43,14 @@ import { GovernancaBloqueiosTab } from './clientes/GovernancaBloqueiosTab'
 
 export type AdminClientesTab = 'lista' | 'carteira360' | 'onboarding' | 'inscricoes' | 'governanca'
 
+const ADMIN_CLIENTES_TABS: AdminClientesTab[] = ['lista', 'carteira360', 'onboarding', 'inscricoes', 'governanca']
+
+function resolveAdminClientesTab(value: string | null): AdminClientesTab {
+  return value && ADMIN_CLIENTES_TABS.includes(value as AdminClientesTab)
+    ? value as AdminClientesTab
+    : 'carteira360'
+}
+
 export function AdminClientesPage() {
   const { rows, loading: portfolioLoading, error: portfolioError, refetch: refetchPortfolio } = useClientPortfolio()
   const {
@@ -61,18 +69,18 @@ export function AdminClientesPage() {
   const { width, bottomClearance } = resolveRouteLayout(location.pathname)
 
   // Current Active Tab
-  const requestedTab = searchParams.get('tab') as AdminClientesTab | null
-  const [activeTab, setActiveTabState] = useState<AdminClientesTab>(
-    requestedTab && ['lista', 'carteira360', 'onboarding', 'inscricoes', 'governanca'].includes(requestedTab)
-      ? requestedTab
-      : 'lista'
-  )
+  const requestedTab = searchParams.get('tab')
+  const [activeTab, setActiveTabState] = useState<AdminClientesTab>(() => resolveAdminClientesTab(requestedTab))
+
+  useEffect(() => {
+    setActiveTabState(resolveAdminClientesTab(requestedTab))
+  }, [requestedTab])
 
   const setActiveTab = (tab: AdminClientesTab) => {
     setActiveTabState(tab)
     setSearchParams(prev => {
       const next = new URLSearchParams(prev)
-      if (tab === 'lista') next.delete('tab')
+      if (tab === 'carteira360') next.delete('tab')
       else next.set('tab', tab)
       return next
     }, { replace: true })
@@ -102,12 +110,17 @@ export function AdminClientesPage() {
   const counters = useMemo(() => portfolioCounters(rows), [rows])
 
   const tabsConfig = useMemo(() => [
-    { key: 'lista' as const, label: `Clientes MX (${rows.length})` },
     { key: 'carteira360' as const, label: `Carteira 360 (${rows.length})` },
-    { key: 'onboarding' as const, label: `Em Implantação (${counters.em_implantacao + counters.prontos_para_ativar})` },
-    { key: 'inscricoes' as const, label: 'Inscrições & Links' },
-    { key: 'governanca' as const, label: `Governança & Bloqueios (${counters.com_bloqueios})` },
-  ], [rows.length, counters])
+    { key: 'lista' as const, label: `Cadastro e status (${rows.length})` },
+    { key: 'onboarding' as const, label: 'Implantação' },
+    { key: 'governanca' as const, label: `Governança (${counters.com_bloqueios})` },
+  ], [rows.length, counters.com_bloqueios])
+
+  const visibleTabsConfig = useMemo(() => (
+    activeTab === 'inscricoes'
+      ? [...tabsConfig, { key: 'inscricoes' as const, label: 'Inscrições e links' }]
+      : tabsConfig
+  ), [activeTab, tabsConfig])
 
   const handleCopyLink = (name: string) => {
     const link = getPreRegistrationLink(name)
@@ -291,72 +304,56 @@ export function AdminClientesPage() {
           title="Clientes MX"
           description={`${rows.length} cliente${rows.length === 1 ? '' : 's'} na carteira`}
           actions={
-            activeTab === 'lista' ? (
+            <div className="flex flex-wrap items-center justify-end gap-2">
               <Button asChild size="sm">
                 <Link to="/clientes/novo">
                   <Plus size={14} className="mr-1.5" />
-                  Novo Cliente
+                  Novo cliente
                 </Link>
               </Button>
-            ) : (
-              <div className="flex flex-wrap items-center gap-2">
-                <Button variant="ghost" size="sm" onClick={() => setActiveTab('lista')}>
-                  ← Voltar para a lista
-                </Button>
-                <Button asChild variant="outline" size="sm">
-                  <Link to="/agenda">
-                    <CalendarDays size={14} className="mr-1.5" />
-                    Agenda MX
-                  </Link>
-                </Button>
-                <Button variant="outline" size="sm" onClick={() => void refetchAll()} aria-label="Atualizar carteira de clientes">
-                  <RefreshCw size={14} className="mr-1.5" />
-                  Atualizar
-                </Button>
-                <Button variant="outline" size="sm" onClick={() => setIsCreateModalOpen(true)}>
-                  <Plus size={14} className="mr-1.5" />
-                  Cadastro Rápido
-                </Button>
-                <Button asChild size="sm">
-                  <Link to="/clientes/novo">
-                    <Plus size={14} className="mr-1.5" />
-                    Novo Cliente
-                  </Link>
-                </Button>
-              </div>
-            )
+              <Button variant="outline" size="sm" onClick={() => setIsCreateModalOpen(true)}>
+                <Plus size={14} className="mr-1.5" />
+                Cadastro rápido
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <Link to="/agenda">
+                  <CalendarDays size={14} className="mr-1.5" />
+                  Agenda MX
+                </Link>
+              </Button>
+              <Button variant="ghost" size="sm" onClick={() => void refetchAll()} aria-label="Atualizar carteira de clientes">
+                <RefreshCw size={14} className="mr-1.5" />
+                Atualizar
+              </Button>
+            </div>
           }
         />
 
-        {activeTab === 'lista' ? (
-          <div className="flex justify-end">
-            <details className="group relative">
-              <summary className="flex cursor-pointer list-none items-center gap-1 rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:bg-surface-alt hover:text-foreground focus-visible:bg-surface-alt focus-visible:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/20">
-                Mais visões
-                <ChevronDown size={14} className="transition-transform group-open:rotate-180" />
-              </summary>
-              <div className="absolute right-0 z-[var(--mx-z-popover)] mt-1 min-w-[220px] rounded-lg border border-border bg-card p-1 shadow-md">
-                {tabsConfig.filter(tab => tab.key !== 'lista').map(tab => (
-                  <button
-                    key={tab.key}
-                    type="button"
-                    className="block w-full rounded-md px-3 py-2 text-left text-sm hover:bg-surface-alt focus-visible:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/20"
-                    onClick={() => setActiveTab(tab.key)}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
-            </details>
-          </div>
-        ) : (
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:gap-3">
           <TabNav
-            tabs={tabsConfig}
+            tabs={visibleTabsConfig}
             activeTab={activeTab}
             onTabChange={setActiveTab}
             scrollable
+            className="mb-0 min-w-0 flex-1"
           />
-        )}
+          <details className="group relative shrink-0 sm:mb-1">
+            <summary className="flex min-h-11 cursor-pointer list-none items-center justify-center gap-1 rounded-md border border-border px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-surface-alt hover:text-foreground focus-visible:bg-surface-alt focus-visible:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/20">
+              {activeTab === 'inscricoes' ? 'Mais operações · Inscrições e links' : 'Mais operações'}
+              <ChevronDown size={14} aria-hidden="true" className="transition-transform group-open:rotate-180" />
+            </summary>
+            <div className="absolute right-0 z-[var(--mx-z-popover)] mt-1 min-w-[220px] rounded-lg border border-border bg-card p-1 shadow-md">
+              <button
+                id="inscricoes-tab-menu"
+                type="button"
+                className="block min-h-11 w-full rounded-md px-3 py-2 text-left text-sm hover:bg-surface-alt focus-visible:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/20"
+                onClick={() => setActiveTab('inscricoes')}
+              >
+                Inscrições e links
+              </button>
+            </div>
+          </details>
+        </div>
 
         <div id={`${activeTab}-panel`} role="tabpanel" aria-labelledby={`${activeTab}-tab`}>
           {portfolioLoading ? (
@@ -378,8 +375,6 @@ export function AdminClientesPage() {
                 lojas={lojas}
                 stats={stats}
                 onAction={handleAction}
-                onCopyLink={handleCopyLink}
-                onEditStore={setEditingStore}
                 onRefetch={refetchAll}
               />
             )}

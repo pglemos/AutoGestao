@@ -62,7 +62,7 @@ export const CLIENT_BUSINESS_PHASES = [
 
 export function clientBusinessPhaseLabel(value: string | null | undefined) {
   const normalized = String(value ?? '').trim()
-  if (!normalized) return 'Não definida'
+  if (!normalized) return 'Não configurada'
   return CLIENT_BUSINESS_PHASES.find(phase => phase.value === normalized)?.label ?? normalized
 }
 

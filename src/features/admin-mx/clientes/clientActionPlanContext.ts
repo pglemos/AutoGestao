@@ -51,7 +51,7 @@ export function actionPlanStatusLabel(value: string | null | undefined): string 
     em_validacao: 'Em validação',
   }
   const normalized = normalizeActionPlanStatus(value)
-  return labels[normalized] ?? (value?.trim() || 'Sem status')
+  return labels[normalized] ?? (value?.trim() || 'Status não informado')
 }
 
 function metadataRecord(metadata: unknown): Record<string, unknown> | null {

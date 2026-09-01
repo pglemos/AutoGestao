@@ -25,6 +25,7 @@ import {
 import { ClientActionsMenu, type ClientAction } from './ClientActionsMenu'
 import {
   activationBlockers,
+  formatCityName,
   isActive,
   journeyLabel,
   nextAction,
@@ -239,7 +240,7 @@ export function OnboardingPortfolioTab({ rows, onAction }: OnboardingPortfolioTa
                               </button>
                               <div className="text-xs text-muted-foreground flex items-center gap-1.5">
                                 <span>{client.product_name || 'Consultoria PMR'}</span>
-                                {client.primary_store_city && <span>• {client.primary_store_city}</span>}
+                                {client.primary_store_city && <span>• {formatCityName(client.primary_store_city)}</span>}
                               </div>
                             </div>
                           </div>

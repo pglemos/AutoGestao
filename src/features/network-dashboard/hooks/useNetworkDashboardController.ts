@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { endOfMonth, format } from 'date-fns'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/lib/toast'
+import { getSafeUserFacingDataError } from '@/lib/errors/user-facing-error'
 import { networkCockpitRepository, ownerNetworkCockpitRepository, type NetworkCockpitScope } from '../data/networkCockpitRepository'
 import { resolveNetworkDateRange, validateNetworkDateRange } from '../lib/networkDashboardCalculations'
 import { filterAndSortStoreDiagnostics } from '../lib/networkDashboardFilters'
@@ -73,7 +74,9 @@ export function useNetworkDashboardController(scope: NetworkCockpitScope = 'inte
         setError(null)
         setLastUpdatedAt(new Date())
       } catch (cause) {
-        if (requestId === requestSequence.current) setError(cause instanceof Error ? cause.message : 'Não foi possível atualizar a rede.')
+        if (requestId === requestSequence.current) {
+          setError(getSafeUserFacingDataError(cause, 'Não foi possível atualizar o cockpit operacional.'))
+        }
       } finally {
         if (requestId === requestSequence.current) { setLoading(false); setRefreshing(false) }
       }

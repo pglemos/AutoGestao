@@ -1,20 +1,21 @@
-import * as React from 'react'
-import { cn } from '@/lib/utils'
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
 export interface TabNavItem<T extends string = string> {
-  key: T
-  label: string
-  controls?: string
-  disabled?: boolean
+  key: T;
+  label: string;
+  controls?: string;
+  disabled?: boolean;
 }
 
 interface TabNavProps<T extends string = string> {
-  tabs: TabNavItem<T>[]
-  activeTab: T
-  onTabChange: (tab: T) => void
-  className?: string
+  tabs: TabNavItem<T>[];
+  activeTab: T;
+  onTabChange: (tab: T) => void;
+  className?: string;
+  ariaLabel?: string;
   /** Scroll horizontal em vez de quebra de linha em mobile (10.014). */
-  scrollable?: boolean
+  scrollable?: boolean;
 }
 
 /**
@@ -34,65 +35,67 @@ export function TabNav<T extends string = string>({
   activeTab,
   onTabChange,
   className,
+  ariaLabel = "Abas da seção",
   scrollable = false,
 }: TabNavProps<T>) {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-    const currentIndex = tabs.findIndex((tab) => tab.key === activeTab)
+    const currentIndex = tabs.findIndex((tab) => tab.key === activeTab);
 
-    const moveTo = (nextIndex: number) => {
-      let index = nextIndex
+    const moveTo = (nextIndex: number, direction = nextIndex > 0 ? 1 : -1) => {
+      let index = nextIndex;
       // Roving pulando abas disabled: anda até achar uma aba habilitada.
       for (let step = 0; step < tabs.length; step += 1) {
-        const normalized = (index + tabs.length) % tabs.length
-        const target = tabs[normalized]
+        const normalized = (index + tabs.length) % tabs.length;
+        const target = tabs[normalized];
         if (!target?.disabled) {
-          onTabChange(target.key)
-          document.getElementById(`${String(target.key)}-tab`)?.focus()
-          return
+          onTabChange(target.key);
+          document.getElementById(`${String(target.key)}-tab`)?.focus();
+          return;
         }
-        index += nextIndex > 0 ? 1 : -1
+        index += direction;
       }
-    }
+    };
 
     switch (event.key) {
-      case 'ArrowRight':
-      case 'ArrowDown':
-        event.preventDefault()
-        moveTo(currentIndex + 1)
-        break
-      case 'ArrowLeft':
-      case 'ArrowUp':
-        event.preventDefault()
-        moveTo(currentIndex - 1)
-        break
-      case 'Home':
-        event.preventDefault()
-        moveTo(0)
-        break
-      case 'End':
-        event.preventDefault()
-        moveTo(tabs.length - 1)
-        break
+      case "ArrowRight":
+      case "ArrowDown":
+        event.preventDefault();
+        moveTo(currentIndex + 1);
+        break;
+      case "ArrowLeft":
+      case "ArrowUp":
+        event.preventDefault();
+        moveTo(currentIndex - 1);
+        break;
+      case "Home":
+        event.preventDefault();
+        moveTo(0, 1);
+        break;
+      case "End":
+        event.preventDefault();
+        moveTo(tabs.length - 1, -1);
+        break;
     }
-  }
+  };
 
   return (
     <nav
       className={cn(
         scrollable
-          ? 'relative flex max-w-full gap-mx-xs overflow-x-auto overscroll-x-contain border-b border-border-subtle mb-mx-md whitespace-nowrap pr-mx-md [scrollbar-width:thin]'
-          : 'flex flex-wrap gap-mx-xs border-b border-border-subtle mb-mx-md overflow-visible',
-        className
+          ? "relative flex max-w-full gap-mx-xs overflow-x-auto overscroll-x-contain border-b border-border-subtle mb-mx-md whitespace-nowrap pr-mx-md [scrollbar-width:thin]"
+          : "flex flex-wrap gap-mx-xs border-b border-border-subtle mb-mx-md overflow-visible",
+        className,
       )}
       role="tablist"
+      aria-label={ariaLabel}
     >
       {tabs.map(({ key, label, controls, disabled }) => {
-        const tabId = `${String(key)}-tab`
-        const panelId = controls ?? `${String(key)}-panel`
+        const tabId = `${String(key)}-tab`;
+        const panelId = controls ?? `${String(key)}-panel`;
         // Consumers that mount only the active panel do not have valid targets
         // for inactive tabs. Explicit controls keep the all-panels contract;
         // generated ids are linked only while their panel is mounted.
-        const shouldControlPanel = controls !== undefined || activeTab === key
+        const shouldControlPanel = controls !== undefined || activeTab === key;
 
         return (
           <button
@@ -108,18 +111,18 @@ export function TabNav<T extends string = string>({
             onClick={() => !disabled && onTabChange(key)}
             onKeyDown={handleKeyDown}
             className={cn(
-              'inline-flex min-h-[44px] items-center px-mx-md py-mx-sm text-label font-medium transition-colors border-b-2 whitespace-nowrap outline-none focus-visible:ring-[length:var(--mx-input-focus-ring-width)] focus-visible:ring-focus-ring focus-visible:ring-offset-2',
+              "inline-flex min-h-[44px] items-center px-mx-md py-mx-sm text-label font-medium transition-colors border-b-2 whitespace-nowrap outline-none focus-visible:ring-[length:var(--mx-input-focus-ring-width)] focus-visible:ring-focus-ring focus-visible:ring-offset-2",
               disabled
-                ? 'cursor-not-allowed border-transparent text-text-disabled'
+                ? "cursor-not-allowed border-transparent text-text-disabled"
                 : activeTab === key
-                  ? 'border-brand-primary text-status-success-text bg-brand-primary/5'
-                  : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-surface-alt'
+                  ? "border-brand-primary text-status-success-text bg-brand-primary/5"
+                  : "border-transparent text-muted-foreground hover:text-foreground hover:bg-surface-alt",
             )}
           >
             {label}
           </button>
-        )
+        );
       })}
     </nav>
-  )
+  );
 }

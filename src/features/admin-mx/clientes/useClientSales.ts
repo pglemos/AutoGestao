@@ -20,6 +20,8 @@ export type ClientStoreSales = {
   attainment: number | null
   gap: number | null
   lastSaleDate: string | null
+  /** Verdadeiro quando a fonte oficial devolveu ao menos uma linha no período. */
+  hasSalesRecord: boolean
 }
 
 type UseClientSalesProps = {
@@ -88,7 +90,8 @@ export function useClientSales({ stores, period, customStartDate, customEndDate 
       const storeNames = new Map(storeSnapshot.map(store => [store.id, store.name]))
       if (isLatestRequest()) {
         setRows(storeSnapshot.map(store => {
-          const sales = salesByStore.get(store.id) ?? { sales: 0, revenue: 0, lastSaleDate: null }
+          const salesRecord = salesByStore.get(store.id)
+          const sales = salesRecord ?? { sales: 0, revenue: 0, lastSaleDate: null }
           const monthlyGoal = goals.get(store.id) ?? 0
           const attainment = calculateClientSalesAttainment(sales.sales, monthlyGoal)
           return {
@@ -102,6 +105,7 @@ export function useClientSales({ stores, period, customStartDate, customEndDate 
             attainment,
             gap: monthlyGoal > 0 ? Math.max(monthlyGoal - sales.sales, 0) : null,
             lastSaleDate: sales.lastSaleDate,
+            hasSalesRecord: Boolean(salesRecord),
           }
         }))
         setLoadedQueryKey(queryKey)

@@ -4,13 +4,13 @@ import { buildProgramSummary, type ProgramSummary } from './programSummary'
 import { programModalityLabel } from './programMutations'
 import type { VisitVolumeRule } from './visitVolumeRule'
 
-function formatDate(value: string | null) {
-  if (!value) return '—'
+function formatDate(value: string | null, fallback = 'Data não registrada') {
+  if (!value) return fallback
   const trimmed = String(value).trim()
   const dateOnly = trimmed.match(/^(\d{4})-(\d{2})-(\d{2})$/)
   if (dateOnly) return `${dateOnly[3]}/${dateOnly[2]}/${dateOnly[1]}`
   const date = new Date(trimmed)
-  return Number.isNaN(date.getTime()) ? '—' : date.toLocaleDateString('pt-BR')
+  return Number.isNaN(date.getTime()) ? fallback : date.toLocaleDateString('pt-BR')
 }
 
 export function ProgramCard(props: { summary: ProgramSummary; visitRule?: VisitVolumeRule | null; onEditProgram: () => void }) {
@@ -30,28 +30,32 @@ export function ProgramCard(props: { summary: ProgramSummary; visitRule?: VisitV
           <FileText size={16} className="text-muted-foreground" />
           <h4 className="text-sm font-semibold text-foreground">Programa Contratado</h4>
         </div>
-        <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
+        <div className="mt-2 flex flex-col items-start gap-3 text-xs text-muted-foreground sm:flex-row sm:items-center">
           <AlertCircle size={14} className="text-status-error-text" />
           <span>Nenhum programa contratado. Configure o produto na Etapa 3 do onboarding.</span>
+          <button type="button" onClick={props.onEditProgram} className="shrink-0 font-semibold text-primary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
+            Configurar programa
+          </button>
         </div>
       </div>
     )
   }
 
+  const modality = programModalityLabel(summary.modality)
   const info: Array<[string, string]> = [
-    ['Produto', summary.product_name ?? summary.program_template_key ?? '—'],
-    ['Modalidade', programModalityLabel(summary.modality)],
-    ['Início', formatDate(summary.contract_start_date)],
+    ['Produto', summary.product_name ?? summary.program_template_key ?? 'Produto não configurado'],
+    ['Modalidade', modality === '—' ? 'Modalidade não definida' : modality],
+    ['Início', formatDate(summary.contract_start_date, 'Início não definido')],
     ['Fim', summary.contract_end_date
       ? formatDate(summary.contract_end_date)
       : summary.contract_start_date
-        ? 'sem fim'
-        : '—'],
+        ? 'Sem prazo'
+        : 'Fim não definido'],
         ['Encontros', summary.overdue_visits > 0
           ? `${summary.completed_visits} concluídos de ${summary.visits} · ${summary.overdue_visits} atrasada(s)`
           : `${summary.completed_visits} concluídos de ${summary.visits}`],
         ['Onboarding', `${summary.onboarding_visits} encontro(s)`],
-        ['Consultor responsável', summary.responsible_consultant ?? '—'],
+        ['Consultor responsável', summary.responsible_consultant ?? 'Responsável não atribuído'],
   ]
 
   return (

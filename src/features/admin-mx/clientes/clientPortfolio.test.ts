@@ -7,6 +7,8 @@ import {
   clientStoreIds,
   clientTeamStat,
   excludeBranchClients,
+  formatCityName,
+  formatCnpj,
   filterPortfolio,
   parentClientOf,
   branchClientsToArchive,
@@ -14,6 +16,8 @@ import {
   journeyLabel,
   nextAction,
   portfolioCounters,
+  portfolioOperationalLabel,
+  portfolioOwnerOptions,
   portfolioStatusCounters,
   portfolioStatusLabel,
   structureLabel,
@@ -190,7 +194,8 @@ describe('cards da carteira', () => {
 describe('situação canônica da carteira principal', () => {
   test('ativo com jornada incompleta continua nos Ativos; implantação é status explícito', () => {
     expect(canonicalPortfolioStatus(client({ visitsDone: 2 }))).toBe('ativos')
-    expect(portfolioStatusLabel(client({ visitsDone: 2 }))).toBe('Ativo em Implantação')
+    expect(portfolioStatusLabel(client({ visitsDone: 2 }))).toBe('Ativos')
+    expect(portfolioOperationalLabel(client({ visitsDone: 2 }))).toBe('Jornada em andamento')
     expect(portfolioStatusCounters([client({ visitsDone: 2 })])).toEqual({
       ativos: 1,
       em_implantacao: 0,
@@ -205,6 +210,10 @@ describe('situação canônica da carteira principal', () => {
     expect(canonicalPortfolioStatus(client({ status: 'em_configuracao' }))).toBe('em_configuracao')
     expect(canonicalPortfolioStatus(client({ status: 'suspenso' }))).toBeNull()
     expect(portfolioStatusLabel(client({ status: 'suspenso' }))).toBe('Suspenso')
+  })
+
+  test('não exibe ativação programada para cliente suspenso', () => {
+    expect(portfolioOperationalLabel(client({ status: 'suspenso', scheduled_activation_at: '2026-09-01' }))).toBeNull()
   })
 })
 
@@ -231,7 +240,28 @@ describe('rótulos e filtros', () => {
     expect(structureLabel(client({ structure_type: 'REDE', units: 4 }))).toBe('Rede · 4 unidade(s)')
     expect(structureLabel(client({ structure_type: 'GRUPO', units: 3 }))).toBe('Grupo · 3 unidade(s)')
     expect(journeyLabel(client({ visitsDone: 2, visitsTotal: 7 }))).toBe('2 de 7')
-    expect(journeyLabel(client({ visitsTotal: 0 }))).toBe('Sem jornada')
+    expect(journeyLabel(client({ visitsTotal: 0 }))).toBe('Não configurada')
+  })
+
+  test('deduplica responsável por id e desambigua homônimos por e-mail', () => {
+    const options = portfolioOwnerOptions([
+      { implementation_owner_id: 'u2', implementation_owner_name: 'Daniel', implementation_owner_email: 'daniel.b@mx.com' },
+      { implementation_owner_id: 'u1', implementation_owner_name: 'Daniel', implementation_owner_email: 'daniel.a@mx.com' },
+      { implementation_owner_id: 'u1', implementation_owner_name: 'Daniel', implementation_owner_email: 'outro@mx.com' },
+    ])
+    expect(options).toHaveLength(2)
+    expect(options.map(option => option.label)).toEqual([
+      'Daniel — daniel.a@mx.com',
+      'Daniel — daniel.b@mx.com',
+    ])
+  })
+
+  test('formata CNPJ e corrige cidades conhecidas sem alterar o valor original', () => {
+    expect(formatCnpj('11222333000181')).toBe('11.222.333/0001-81')
+    expect(formatCnpj('11.222.333/0001-81')).toBe('11.222.333/0001-81')
+    expect(formatCnpj('123')).toBe('123')
+    expect(formatCityName('Sao Paulo')).toBe('São Paulo')
+    expect(formatCityName('Recife')).toBe('Recife')
   })
 
   test('busca por nome, responsável e CNPJ', () => {

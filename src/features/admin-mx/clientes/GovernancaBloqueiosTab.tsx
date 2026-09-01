@@ -27,6 +27,8 @@ import {
 } from '@/components/module/MxModuleVisualPrimitives'
 import {
   activationBlockers,
+  formatCnpj,
+  formatCityName,
   isActive,
   isRenewalNear,
   type PortfolioClient,
@@ -207,7 +209,9 @@ export function GovernancaBloqueiosTab({ rows, onAction, onReactivate }: Governa
                                 {client.name}
                               </button>
                               <div className="text-xs text-muted-foreground">
-                                {client.cnpj ? `CNPJ: ${client.cnpj}` : 'Sem CNPJ'}
+                                {client.primary_store_city ? formatCityName(client.primary_store_city) : 'Cidade não informada'}
+                                {' · '}
+                                {client.cnpj ? `CNPJ: ${formatCnpj(client.cnpj)}` : 'CNPJ não informado'}
                               </div>
                             </div>
                           </div>

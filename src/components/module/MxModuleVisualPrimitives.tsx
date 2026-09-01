@@ -110,13 +110,13 @@ export function MxMetricCard({ title, value, detail, icon: Icon, tone = 'brand',
     <Card className={cn('group flex min-h-40 flex-col border bg-white p-4', styles.surface, className)}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <Typography as="h2" variant="h3" className="text-sm font-semibold text-foreground">{title}</Typography>
+          <Typography as="h3" variant="h3" className="text-sm font-semibold text-foreground">{title}</Typography>
           <Typography variant="p" className="mt-1 text-sm leading-5 text-muted-foreground">{detail}</Typography>
         </div>
         <span className={cn('grid h-10 w-10 shrink-0 place-items-center rounded-xl', styles.icon)}><Icon size={18} strokeWidth={1.8} aria-hidden="true" /></span>
       </div>
       <div className="mt-4 flex flex-1 items-end justify-between gap-3">
-        <Typography variant="h2" className={cn('text-3xl font-bold leading-none', styles.value)}>{value}</Typography>
+        <Typography as="div" variant="h2" className={cn('text-3xl font-bold leading-none', styles.value)}>{value}</Typography>
         {children}
       </div>
       {actionLabel && onAction ? <Button variant="ghost" size="sm" className="mt-3 min-h-10 w-full justify-between px-0 text-status-success-text" onClick={onAction}>{actionLabel}<span aria-hidden="true">→</span></Button> : null}

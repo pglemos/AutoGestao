@@ -55,8 +55,8 @@ describe('identificação do cliente', () => {
     expect(clientStructureDisplay(null)).toBe('—')
   })
 
-  test('fase vazia segue o Base44: Não definida', () => {
-    expect(clientBusinessPhaseLabel(null)).toBe('Não definida')
+  test('fase vazia comunica ausência de configuração', () => {
+    expect(clientBusinessPhaseLabel(null)).toBe('Não configurada')
     expect(clientBusinessPhaseLabel('CRESCIMENTO')).toBe('Crescimento')
   })
 

@@ -87,7 +87,7 @@ export function classifyDataSource(input: {
   const staleDays = input.staleDays ?? 45
 
   if (!rows) {
-    return { key, label, rows, lastAt, status: 'vazio', detail: 'Nenhum registro para este cliente.' }
+    return { key, label, rows, lastAt, status: 'vazio', detail: 'Sem dados recebidos para este cliente.' }
   }
   if (!lastAt) {
     return { key, label, rows, lastAt, status: 'ok', detail: `${rows} registro(s).` }

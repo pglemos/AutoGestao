@@ -264,7 +264,7 @@
 | `pdi_sessoes` | 4 |
 | `perfil_consultor_mx` | 4 |
 | `planejamentos_estrategicos` | 1 |
-| `planos_acao` | 15 |
+| `planos_acao` | 16 |
 | `planos_acao_template_itens` | 4 |
 | `planos_acao_template_versoes` | 6 |
 | `planos_acao_templates` | 3 |
@@ -310,7 +310,7 @@
 | `treinamento_tarefas` | 1 |
 | `treinamentos` | 6 |
 | `trilhas_desenvolvimento` | 1 |
-| `unidades_cliente_consultoria` | 13 |
+| `unidades_cliente_consultoria` | 14 |
 | `universidade_aulas` | 1 |
 | `universidade_certificacoes` | 1 |
 | `universidade_trilhas` | 1 |
@@ -595,7 +595,7 @@
 | `planos_acao_templates:update` | 1 |
 | `planos_acao:delete` | 1 |
 | `planos_acao:insert` | 1 |
-| `planos_acao:select` | 15 |
+| `planos_acao:select` | 16 |
 | `planos_acao:update` | 1 |
 | `posicionamento_empresa:select` | 1 |
 | `pre_cadastros_loja:select` | 2 |
@@ -671,7 +671,7 @@
 | `trilhas_desenvolvimento:select` | 1 |
 | `unidades_cliente_consultoria:delete` | 1 |
 | `unidades_cliente_consultoria:insert` | 4 |
-| `unidades_cliente_consultoria:select` | 12 |
+| `unidades_cliente_consultoria:select` | 13 |
 | `unidades_cliente_consultoria:update` | 3 |
 | `universidade_aulas:select` | 1 |
 | `universidade_certificacoes:select` | 1 |

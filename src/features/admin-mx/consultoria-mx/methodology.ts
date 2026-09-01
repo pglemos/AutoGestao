@@ -11,6 +11,13 @@ export const METHODOLOGY_TABS = [
   { id: 'historico', label: 'Histórico e Versões' },
 ] as const
 
+/** Navegação principal agrupada; detalhes menos frequentes ficam no menu de ações. */
+export const METHODOLOGY_NAV_TABS = [
+  { id: 'visao', label: 'Metodologia' },
+  { id: 'biblioteca', label: 'Conteúdo' },
+  { id: 'relatorios', label: 'Publicação' },
+] as const
+
 export const ENCOUNTER_INNER_TABS = [
   { id: 'objetivo', label: 'Objetivo', shortLabel: 'Objetivo' },
   { id: 'orientacao', label: 'Orientação do Consultor', shortLabel: 'Orientação' },
@@ -264,4 +271,3 @@ export function parsePreparationChecklist(raw: unknown): Array<{ name: string; d
     responsible: String(item?.responsible ?? ''),
   }))
 }
-

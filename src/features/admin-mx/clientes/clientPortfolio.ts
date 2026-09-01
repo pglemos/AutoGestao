@@ -13,6 +13,8 @@ export type PortfolioClient = {
   primary_store_id: string | null
   implementation_owner_id: string | null
   implementation_owner_name: string | null
+  /** E-mail do responsável, usado para desambiguar homônimos na carteira. */
+  implementation_owner_email?: string | null
   contract_end_date: string | null
   onboarding_step: number | null
   onboarding_completed: boolean | null
@@ -81,6 +83,46 @@ export const PORTFOLIO_BUCKET_LABEL: Record<PortfolioBucket, string> = {
   cadastros_pendentes: 'Cadastros pendentes',
 }
 
+export type PortfolioOwnerOption = {
+  id: string
+  name: string | null
+  email: string | null
+  label: string
+}
+
+/**
+ * Deduplica responsáveis pela identidade estável e desambigua homônimos pelo
+ * e-mail. O nome sozinho não é uma chave segura para a carteira.
+ */
+export function portfolioOwnerOptions(rows: ReadonlyArray<Pick<PortfolioClient, 'implementation_owner_id' | 'implementation_owner_name' | 'implementation_owner_email'>>): PortfolioOwnerOption[] {
+  const byId = new Map<string, { name: string | null; email: string | null }>()
+  for (const row of rows) {
+    const id = row.implementation_owner_id?.trim()
+    if (!id || byId.has(id)) continue
+    byId.set(id, {
+      name: row.implementation_owner_name?.trim() || null,
+      email: row.implementation_owner_email?.trim().toLowerCase() || null,
+    })
+  }
+
+  const nameCounts = new Map<string, number>()
+  for (const { name } of byId.values()) {
+    if (name) nameCounts.set(name.toLocaleLowerCase('pt-BR'), (nameCounts.get(name.toLocaleLowerCase('pt-BR')) ?? 0) + 1)
+  }
+
+  return [...byId.entries()]
+    .map(([id, value]) => {
+      const baseName = value.name ?? 'Responsável sem nome'
+      const duplicateName = value.name && (nameCounts.get(value.name.toLocaleLowerCase('pt-BR')) ?? 0) > 1
+      return {
+        id,
+        ...value,
+        label: duplicateName && value.email ? `${baseName} — ${value.email}` : baseName,
+      }
+    })
+    .sort((a, b) => a.label.localeCompare(b.label, 'pt-BR'))
+}
+
 const ATIVO = ['ativo', 'ativa', 'active']
 
 function normalizeStatus(value: string | null | undefined): string {
@@ -122,15 +164,21 @@ export function portfolioStatusLabel(client: PortfolioClient): string {
   if (raw === 'suspenso' || raw === 'suspended') return 'Suspenso'
   if (raw === 'encerrado' || raw === 'closed') return 'Encerrado'
   if (raw === 'arquivado') return 'Arquivado'
-  if (raw === 'ativo_em_implantacao' || raw === 'em_implantacao') return 'Ativo em Implantação'
-  if (raw === 'ativacao_programada') return 'Ativação Programada'
-  // Rótulo da tabela: ativo com jornada em curso = "Ativo em Implantação",
-  // sem tirar o cliente do card Ativos (status canônico permanece `ativos`).
-  if (isActive(client) && client.visitsTotal > 0 && client.visitsDone < client.visitsTotal) {
-    return 'Ativo em Implantação'
-  }
+  // A situação é um eixo único. Jornada, onboarding e ativação programada
+  // aparecem em `portfolioOperationalLabel`, para não fazer um cliente ativo
+  // parecer simultaneamente ativo e em implantação.
   const canonical = canonicalPortfolioStatus(client)
   return canonical ? PORTFOLIO_STATUS_LABEL[canonical] : 'Indefinido'
+}
+
+/** Segundo eixo visual: fatos operacionais que podem coexistir com a situação. */
+export function portfolioOperationalLabel(client: PortfolioClient): string | null {
+  const raw = normalizeStatus(client.status)
+  if (['suspenso', 'suspended', 'encerrado', 'closed', 'arquivado'].includes(raw)) return null
+  if (raw === 'ativacao_programada' || client.scheduled_activation_at) return 'Ativação programada'
+  if (client.onboarding_completed === false) return 'Configuração inicial pendente'
+  if (client.visitsTotal > 0 && client.visitsDone < client.visitsTotal) return 'Jornada em andamento'
+  return null
 }
 
 /**
@@ -363,8 +411,31 @@ export function clientStructureSummary(client: Pick<PortfolioClient, 'units'>): 
 }
 
 export function journeyLabel(client: PortfolioClient): string {
-  if (!client.visitsTotal) return 'Sem jornada'
+  if (!client.visitsTotal) return 'Não configurada'
   return `${client.visitsDone} de ${client.visitsTotal}`
+}
+
+/** Máscara de apresentação; o valor persistido continua sendo somente dígitos. */
+export function formatCnpj(value: string | null | undefined): string | null {
+  const original = value?.trim() ?? ''
+  if (!original) return null
+  const digits = original.replace(/\D/g, '')
+  if (digits.length !== 14) return original
+  return digits.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5')
+}
+
+/** Corrige apenas nomes de cidades sem acento que têm forma inequívoca. */
+export function formatCityName(value: string | null | undefined): string | null {
+  const original = value?.trim() ?? ''
+  if (!original) return null
+  const key = original.toLocaleLowerCase('pt-BR').replace(/[._-]+/g, ' ').replace(/\s+/g, ' ')
+  const knownNames: Record<string, string> = {
+    'sao paulo': 'São Paulo',
+    'sao jose': 'São José',
+    'sao jose dos campos': 'São José dos Campos',
+    'sao bernardo do campo': 'São Bernardo do Campo',
+  }
+  return knownNames[key] ?? original
 }
 
 export type PortfolioFilters = {

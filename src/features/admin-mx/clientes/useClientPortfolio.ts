@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { getSafeUserFacingDataError } from '@/lib/errors/user-facing-error'
 import { archiveBranchClients } from './lifecycleMutations'
 import { branchClientsToArchive, clientStoreIds, excludeBranchClients, type PortfolioClient } from './clientPortfolio'
 import { buildClientJourney } from './clientJourney'
 import { isVinculoActive, personIdentityKey } from './mergeClientPeople'
 
-type State = { rows: PortfolioClient[]; loading: boolean; error: string | null; refetch: () => Promise<void> }
+type State = { rows: PortfolioClient[]; loading: boolean; error: string | null; lastUpdatedAt: Date | null; refetch: () => Promise<void> }
 
 function countBy<T>(rows: T[], key: (row: T) => string | null | undefined) {
   const counters = new Map<string, number>()
@@ -25,6 +26,7 @@ export function useClientPortfolio(): State {
   const [rows, setRows] = useState<PortfolioClient[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [lastUpdatedAt, setLastUpdatedAt] = useState<Date | null>(null)
 
   const refetch = useCallback(async () => {
     setLoading(true)
@@ -40,6 +42,7 @@ export function useClientPortfolio(): State {
       const ids = (clients ?? []).map(client => client.id)
       if (!ids.length) {
         setRows([])
+        setLastUpdatedAt(new Date())
         return
       }
 
@@ -53,6 +56,10 @@ export function useClientPortfolio(): State {
         supabase.from('programas_visita_consultoria').select('program_key, total_visits'),
         supabase.from('lojas').select('id, parent_loja_id'),
       ])
+      const relatedQueryError = [units, visits, modules, assignments, access, owners, programs, lojas]
+        .map(result => result.error)
+        .find(Boolean)
+      if (relatedQueryError) throw new Error(relatedQueryError.message)
 
       const primaryUnitCity = new Map<string, string>()
       for (const row of (units.data ?? [])) {
@@ -76,7 +83,7 @@ export function useClientPortfolio(): State {
       }
       const moduleCount = countBy((modules.data ?? []).filter(row => row.enabled !== false), row => row.client_id)
       const assignmentCount = countBy((assignments.data ?? []).filter(row => row.active !== false), row => row.client_id)
-      const ownerNames = new Map((owners.data ?? []).map(row => [row.id, row.name]))
+      const ownersById = new Map((owners.data ?? []).map(row => [row.id, row]))
 
       // "Pessoas" precisa contar quem existe de fato: o cadastro da consultoria
       // mais a equipe com vínculo ativo nas lojas do cliente. Contar só acessos
@@ -158,7 +165,8 @@ export function useClientPortfolio(): State {
         // O id acompanha o nome para o filtro por responsável continuar casando
         // com a coluna, e para dois consultores homônimos não colapsarem em um.
         implementation_owner_id: ownerId,
-        implementation_owner_name: ownerId ? ownerNames.get(ownerId) ?? null : null,
+        implementation_owner_name: ownerId ? ownersById.get(ownerId)?.name ?? null : null,
+        implementation_owner_email: ownerId ? ownersById.get(ownerId)?.email ?? null : null,
         primary_store_city: primaryUnitCity.get(client.id) ?? null,
         main_contact_name: primaryContact.get(client.id) ?? null,
         hasDonoMaster: masterClients.has(client.id),
@@ -177,9 +185,9 @@ export function useClientPortfolio(): State {
         if (archived.error) throw new Error(archived.error)
       }
       setRows(excludeBranchClients(mapped, lojaRows))
+      setLastUpdatedAt(new Date())
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Falha ao carregar a carteira de clientes.')
-      setRows([])
+      setError(getSafeUserFacingDataError(cause, 'Não foi possível carregar a carteira de clientes.'))
     } finally {
       setLoading(false)
     }
@@ -187,5 +195,5 @@ export function useClientPortfolio(): State {
 
   useEffect(() => { void refetch() }, [refetch])
 
-  return { rows, loading, error, refetch }
+  return { rows, loading, error, lastUpdatedAt, refetch }
 }

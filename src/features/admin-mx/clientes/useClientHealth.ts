@@ -38,7 +38,7 @@ export function useClientHealth(clientId: string | undefined, storeId: string | 
     setLoading(true)
     setError(null)
     try {
-      const [visits, targets, results, plans, launches, evidences, audit, planHistory] = await Promise.all([
+      const [visits, targets, results, plans, launches, evidences, audit, clientUnits] = await Promise.all([
         supabase.from('visitas_consultoria').select('id, status, effective_visit_date, scheduled_at, visit_number, updated_at').eq('client_id', clientId).order('scheduled_at', { ascending: false }),
         supabase.from('metas_metricas_cliente').select('id, updated_at').eq('client_id', clientId),
         supabase.from('resultados_metricas_cliente').select('id, reference_date').eq('client_id', clientId).order('reference_date', { ascending: false }).limit(400),
@@ -47,27 +47,62 @@ export function useClientHealth(clientId: string | undefined, storeId: string | 
           // A tabela usa store_id/date; loja_id/data devolvia 400 e a fonte
           // aparecia como "sem dado" mesmo com lançamento na loja.
           ? supabase.from('lancamentos_diarios').select('id, date').eq('store_id', storeId).order('date', { ascending: false }).limit(400)
-          : Promise.resolve({ data: [] as Array<{ id: string; date: string | null }> }),
+          : Promise.resolve({ data: [] as Array<{ id: string; date: string | null }>, error: null }),
         supabase.from('consultoria_itens_entrega').select('id, updated_at, status').eq('client_id', clientId),
         supabase.from('logs_auditoria').select('id, action, entity, entity_id, created_at, user_id').eq('entity_id', clientId).order('created_at', { ascending: false }).limit(40),
-        supabase.from('historico_planos_acao').select('id, event_type, event_note, changed_at, changed_by, plano_id').order('changed_at', { ascending: false }).limit(40),
+        supabase.from('unidades_cliente_consultoria').select('store_id').eq('client_id', clientId),
       ])
+
+      const scopeIds = [...new Set([
+        storeId,
+        ...(clientUnits.data ?? []).map(unit => unit.store_id),
+      ].filter((id): id is string => Boolean(id)))]
+      const canonicalPlans = scopeIds.length
+        ? await supabase.from('planos_acao').select('id').eq('scope_type', 'store').in('scope_id', scopeIds).limit(300)
+        : { data: [] as Array<{ id: string }>, error: null }
+      const planIds = (canonicalPlans.data ?? []).map(plan => plan.id).filter(Boolean)
+      const planHistory = planIds.length
+        ? await supabase.from('historico_planos_acao').select('id, event_type, event_note, changed_at, changed_by, plano_id').in('plano_id', planIds).order('changed_at', { ascending: false }).limit(40)
+        : { data: [] as Array<{ id: string; event_type: string | null; event_note: string | null; changed_at: string; changed_by: string | null; plano_id: string }>, error: null }
+
+      const sourceError = [visits, targets, results, plans, launches, evidences, audit, clientUnits, canonicalPlans, planHistory]
+        .find(result => result.error)?.error
+      if (sourceError) {
+        setPresence(null)
+        setSources([])
+        setTimeline([])
+        setError(`Não foi possível confirmar a integridade das fontes: ${sourceError.message}`)
+        return
+      }
 
       // Jornada além do contratado: sintoma de produto mal vinculado, não de
       // excesso de execução. A view existe justamente para a equipe ver isso.
       // Saldo presencial: o produto define a faixa; sem faixa, a função devolve
       // disponíveis = null e a tela mostra "sem limite definido".
-      const { data: balance } = await supabase.rpc('saldo_presencial_cliente', {
+      const { data: balance, error: balanceError } = await supabase.rpc('saldo_presencial_cliente', {
         p_client_id: clientId,
         p_exclude_visit_id: null,
       })
+      if (balanceError) {
+        setPresence(null)
+        setSources([])
+        setTimeline([])
+        setError(`Não foi possível confirmar o saldo presencial: ${balanceError.message}`)
+        return
+      }
       setPresence(Array.isArray(balance) && balance.length ? (balance[0] as PresenceBalance) : null)
 
-      const { data: overrun } = await supabase
+      const { data: overrun, error: overrunError } = await supabase
         .from('vw_jornada_alem_do_contratado')
         .select('contratadas, maior_encontro')
         .eq('client_id', clientId)
         .maybeSingle()
+      if (overrunError) {
+        setSources([])
+        setTimeline([])
+        setError(`Não foi possível confirmar o limite da jornada: ${overrunError.message}`)
+        return
+      }
 
       const first = <T extends Record<string, unknown>>(rows: T[] | null | undefined, field: string) =>
         rows?.length ? (rows[0][field] as string | null) ?? null : null
@@ -129,7 +164,7 @@ export function useClientHealth(clientId: string | undefined, storeId: string | 
           at: visit.effective_visit_date ?? visit.updated_at ?? '',
           actor: null,
           action: 'encontro concluído',
-          entity: `visita ${visit.visit_number ?? '—'}`,
+          entity: `visita ${visit.visit_number ?? 'etapa não informada'}`,
           detail: null,
         })),
       ]))

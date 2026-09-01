@@ -65,25 +65,26 @@ describe('CONS-22 RPCs administrativas', () => {
       new URL('../features/admin-mx/AdminClienteDetalhePage.tsx', import.meta.url),
       'utf8',
     )
-    expect(page).toContain("label: 'Visão Geral'")
-    expect(page).toContain("label: 'Empresa e Lojas'")
-    expect(page).toContain("label: 'Pessoas e Acessos'")
-    expect(page).toContain("label: 'Programa e Jornada'")
-    expect(page).toContain("label: 'Configurações'")
-    expect(page).toContain("label: 'Implantação'")
-    expect(page).toContain("label: 'Histórico e Auditoria'")
-    expect(page).not.toContain("label: 'Planejamento e ações'")
-    expect(page).toContain('>Abrir Plano</Button>')
-    expect(page).toContain('>Validar e Ativar</Button>')
-    expect(page).toContain('>Cadastrar Usuário</Button>')
-    expect(page).toContain('>Gerar Link</Button>')
-    expect(page).toContain('Cadastre usuários manualmente com papel, Loja e visão padrão.')
-    expect(page).toContain('>Adicionar Loja</Button>')
+    const headerActions = readFileSync(
+      new URL('../features/admin-mx/clientes/ClientDetailHeaderActions.tsx', import.meta.url),
+      'utf8',
+    )
+    for (const label of ['Visão Geral', 'Empresa e Lojas', 'Pessoas e Acessos', 'Programa e Jornada', 'Configurações', 'Implantação', 'Histórico e Auditoria']) {
+      expect(page).toContain(label)
+    }
+    expect(page).not.toContain('Planejamento e ações')
+    expect(page).toContain('Abrir Plano')
+    expect(page).toContain('Validar e Ativar')
+    expect(page).toContain('Cadastrar Usuário')
+    expect(page).toContain('Gerar Link')
+    expect(page).toMatch(/Cadastre usuários manualmente com papel, Loja e visão\s+padrão\./)
+    expect(page).toContain('Adicionar Loja')
     expect(page).toContain('Editar Loja')
     expect(page).toContain('Configurar Horário')
-    expect(page).toContain('>Abrir Plano de Ação</Button>')
+    expect(page).toContain('Abrir Plano de Ação')
     expect(page).toContain('Abrir Consultoria')
-    expect(page).toContain('aria-label="Editar identificação do cliente"')
+    expect(page).toMatch(/<ClientDetailHeaderActions\b/)
+    expect(headerActions).toContain('Editar identificação')
     expect(page).toContain('clientStructureDisplay')
     expect(page).toContain('title="Informações Gerais"')
     expect(page).toContain('title="Contato Principal"')

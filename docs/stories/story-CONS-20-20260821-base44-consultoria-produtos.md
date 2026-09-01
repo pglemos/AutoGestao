@@ -77,6 +77,9 @@ Como administrador MX, quero operar consultoria e produtos nas rotas `/consultor
 - `src/features/internal-mx-planning/InternalConsultingPage.tsx`
 - `src/test/internal-mx-planning-pages.test.ts`
 - `src/features/admin-mx/consultoria/AdminConsultingOverviewPage.tsx`
+- `src/features/admin-mx/AdminConsultoriaMxPage.tsx`
+- `src/features/admin-mx/consultoria-mx/OverviewTab.tsx`
+- `src/features/admin-mx/consultoria-mx/methodology.ts`
 - `src/features/admin-mx/consultoria/consultingOverview.ts`
 - `src/features/admin-mx/consultoria/consultingOverview.test.ts`
 - `src/features/admin-mx/AdminProdutosConsultoriaPage.tsx`
@@ -115,6 +118,10 @@ Como administrador MX, quero operar consultoria e produtos nas rotas `/consultor
 ### Completion Notes
 
 - Implementação local concluída para o overview operacional de `/consultoria`, catálogo/ciclo de vida/matriz de `/produtos`, bridges produto → plano estratégico e detalhe 360.
+- **Atualização Impeccable de `/consultoria` — 2026-09-01:** correção local aplicada no overview, shell da página, aba de overview/metodologia e contratos puros. A frente agora suporta busca por cliente/encontro/consultor/objetivo/produto, filtros de período/status/modalidade, ordenação por prioridade/data/recentes/cliente, contagem filtrada, atualização e atrasos, alerta de status/data efetiva inconsistente, modal responsivo, `Executar encontro` como ação primária, `Visão 360 do cliente` como ação secundária, Planos em `Mais ações`, metodologia agrupada e resumo/KPIs recolhíveis no mobile. Esta alteração ainda não recebeu commit, push ou deploy; o deployment descrito abaixo é anterior e não comprova este delta local.
+- A validação manual autenticada desta rodada usou a sessão `SynVolt` (`Admin geral`) no Chrome real: ACERTT retornou 13 resultados; concluídos 9; concluídos online 4; atrasados 338; próximos 7 dias 8. Foram exercidos detalhe/modal, fechamento por Escape, `Mais ações`, execução do encontro, Visão 360, Plano de Ação, Plano Estratégico, metodologia e conteúdo, em `1440×900` e `390×844`, sem overflow ou erros de console.
+- Gates desta rodada: `npm run lint` passou com 0 erros e apenas os 2 avisos preexistentes de `MetasRealizadosTab.tsx` e `IndicatorPicker.tsx`; `npm run typecheck` passou; testes focados passaram com 14 testes/104 expectativas; `npm test` passou com 4.774 testes/27.509 expectativas; `npm run build` passou com 5.274 módulos transformados e verificação de sourcemaps sem `.map` em `dist/`.
+- O detector Impeccable executado nos três componentes TSX alterados (`AdminConsultingOverviewPage.tsx`, `AdminConsultoriaMxPage.tsx` e `OverviewTab.tsx`) retornou `[]` (exit 0). Para a URL de produção, a injeção do detector de navegador permaneceu bloqueada pela CSP; portanto, o snapshot automático não deve ser tratado como evidência autenticada nem como “clean” determinístico.
 - `/consultoria` e `/produtos` foram validadas com dados persistidos em navegador real, desktop 1440×900 e mobile 390×844; as duas evidências finais têm `status: passed`, axe com 0 violações e 0 erros de runtime/console.
 - Gates locais verdes no SHA `6b7ad31ab231ad7321b0ab72192306954e6890d6`: `npm run lint`, `npm run typecheck`, `npm test` (4.246 testes, 25.277 expectativas, 705 arquivos), `npm run build`, reversibilidade de migrations e testes direcionados (24 testes / 65 expectativas); o build também confirmou ausência de sourcemaps públicos.
 - `npx graphify hook-rebuild` concluído com runtime TypeScript; seis scripts PowerShell ficaram fora da extração por ausência de `tree-sitter-powershell`, limitação conhecida do parser.
@@ -125,6 +132,11 @@ Como administrador MX, quero operar consultoria e produtos nas rotas `/consultor
 
 ### Debug Log References
 
+- `.impeccable/critique/2026-09-01T02-37-25Z__www-mxperformance-com-br-consultoria.md` — snapshot da crítica da URL; registra a CSP que bloqueou `detect.js` no navegador e a ausência de overlay/conclusão determinística para a página publicada.
+- Evidência manual autenticada desta rodada: sessão `SynVolt` (`Admin geral`) no Chrome real; ACERTT, filtros, detalhe, ações, metodologia/conteúdo, desktop `1440×900` e mobile `390×844` verificados sem overflow ou erros de console. O `agent-browser` automático caiu na tela de login e não foi usado como prova autenticada.
+- `node .agents/skills/impeccable/scripts/detect.mjs --json src/features/admin-mx/consultoria/AdminConsultingOverviewPage.tsx src/features/admin-mx/AdminConsultoriaMxPage.tsx src/features/admin-mx/consultoria-mx/OverviewTab.tsx` — `[]`, exit 0.
+- Gates desta rodada: `npm run lint` exit 0 (2 warnings preexistentes), `npm run typecheck` exit 0, `npm test` com 4.774/4.774 testes e 27.509 expectativas, `npm run build` exit 0; `dist/` sem sourcemaps públicos.
+- `viewportCap.reset()` executado após a inspeção autenticada para restaurar o viewport temporário do navegador.
 - `visual-evidence/agent-browser/cons20-produtos-final-2026-08-21T20-08-56/summary.json` — `status: passed`, `1440x900`/`390x844`, axe 0, sem falhas/erros.
 - `visual-evidence/agent-browser/cons20-consultoria-final-2026-08-21T20-09-09/summary.json` — `status: passed`, `1440x900`/`390x844`, axe 0, sem falhas/erros.
 - As ações manuais do detalhe da consultoria navegaram para `/plano-estrategico?storeId=...` e `/plano-acao?storeId=...`, sem alertas na página.
@@ -139,6 +151,7 @@ Como administrador MX, quero operar consultoria e produtos nas rotas `/consultor
 
 ### QA Results
 
+- **Addendum 2026-09-01 — correção Impeccable de `/consultoria`:** gates locais e inspeção autenticada manual concluídos para o delta desta rodada. Não houve publicação; a validação `agent-browser` automática sem sessão autenticada foi deliberadamente excluída da prova de produção. O aceite externo/deploy do delta permanece pendente de autorização e execução de release.
 - **Decision:** PASS WITH CONCERNS — implementação publicada e validada em produção; permanecem apenas gates externos não bloqueantes para este release.
 - **PASS:** push em `main`, SHA remoto, Vercel `Ready`, CI completo (Quality Gates, Typecheck/unit, Gitleaks, a11y e Atomic Design), lint/typecheck/test/build locais, cinco migrations aplicadas, secret scan e browser autenticado desktop/mobile de `/consultoria` e `/produtos`.
 - **OPEN:** liberar `npm run gen:db-types` e repetir CodeRabbit com quota/seat disponível; registrar separadamente as vulnerabilidades Dependabot reportadas pelo GitHub e a depreciação do Node 20 nas actions.

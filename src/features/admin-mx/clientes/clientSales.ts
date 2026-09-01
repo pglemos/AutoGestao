@@ -46,6 +46,14 @@ export type AggregatedStoreSales = {
   lastSaleDate: string | null
 }
 
+export type ClientSalesEvidence = 'recorded' | 'zero_confirmed' | 'no_record'
+
+/** Diferencia zero devolvido pela fonte oficial de ausência de linha no período. */
+export function resolveClientSalesEvidence(sales: number, hasRecord: boolean): ClientSalesEvidence {
+  if (sales > 0) return 'recorded'
+  return hasRecord ? 'zero_confirmed' : 'no_record'
+}
+
 const PERIOD_LABELS: Record<ClientSalesPeriod, string> = {
   today: 'Hoje',
   week: 'Esta semana',

@@ -49,6 +49,15 @@ describe('route access matrix', () => {
     }
   })
 
+  it('authorizes the client detail cockpit only for the three internal MX profiles', () => {
+    for (const role of ['administrador_geral', 'administrador_mx', 'consultor_mx'] as const) {
+      expect(canAccessPath('/clientes/acertt', role)).toBe(true)
+    }
+    for (const role of ['dono', 'gerente', 'vendedor'] as const) {
+      expect(canAccessPath('/clientes/acertt', role)).toBe(false)
+    }
+  })
+
   it('keeps simulation routes restricted to internal MX profiles', () => {
     for (const role of ['administrador_mx', 'consultor_mx', 'administrador_geral'] as const) {
       expect(canAccessPath('/simulacao/vendedor', role)).toBe(true)

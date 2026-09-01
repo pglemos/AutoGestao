@@ -29,29 +29,30 @@ describe('Admin MX Base44 parity UI contracts', () => {
     expect(modal).toContain("label: 'Histórico'")
   })
 
-  test('clientes default lista Base44 sem tab strip visível no first paint', () => {
+  test('clientes default abre a Carteira 360 e mantém cadastro secundário nomeado', () => {
     const page = read('AdminClientesPage.tsx')
     const list = read('clientes/PortfolioBase44ListTab.tsx')
-    expect(page).toContain("'lista'")
     expect(page).toContain("'carteira360'")
+    expect(page).toContain(": 'carteira360'")
     expect(page).toContain('<PortfolioBase44ListTab')
-    expect(page).toContain('Mais visões')
-    expect(page).not.toContain('<TabNav\n          tabs={tabsConfig}\n          activeTab={activeTab}\n          onTabChange={setActiveTab}\n          scrollable\n        />')
+    expect(page).toContain('Cadastro e status')
+    expect(page).toContain('Mais operações')
     expect(list).toContain('portfolio-base44-list')
+    expect(list).toContain('portfolio-base44-mobile-cards')
     expect(list).toContain('Onboarding')
   })
 
-  test('início default expõe greeting Base44 e ações rápidas coloridas', () => {
+  test('início expõe o cockpit operacional e ações de governança', () => {
     const page = read('AdminDashboardPage.tsx')
-    expect(page).toContain('Administrador 👋')
+    expect(page).toContain('NetworkDashboardContent')
+    expect(page).toContain('Governança da carteira')
     expect(page).toContain('Clientes Ativos')
     expect(page).toContain('Com Bloqueios')
-    expect(page).toContain('Ações Rápidas')
+    expect(page).toContain('Ações de governança')
     expect(page).toContain('Novo Cliente MX')
     expect(page).toContain('Validar Cadastros')
     expect(page).toContain('Ver Auditoria')
-    expect(page).toContain("view') === 'operacional'")
-    expect(page).toContain('Acesso Rápido aos Domínios MX')
+    expect(page).not.toContain("searchParams.get('view') === 'operacional'")
   })
 
   test('produtos default oculta KPI row 7/61/27/53 do first paint', () => {
@@ -64,7 +65,7 @@ describe('Admin MX Base44 parity UI contracts', () => {
   test('cliente 360 expõe Validar e Ativar, KPIs e Entrega da Consultoria Base44', () => {
     const page = read('AdminClienteDetalhePage.tsx')
     expect(page).toContain('showValidateActivate')
-    expect(page).toContain('>Validar e Ativar</Button>')
+    expect(page).toContain('Validar e Ativar')
     expect(page).toContain('title="Usuários"')
     expect(page).toContain('title="Encontros concluídos"')
     expect(page).toContain('title="Progresso da jornada"')

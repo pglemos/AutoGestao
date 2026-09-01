@@ -5,6 +5,7 @@ import {
   calculateClientSalesAttainment,
   getClientSalesNextMidnightDelay,
   getClientSalesTodayKey,
+  resolveClientSalesEvidence,
   resolveClientSalesPeriod,
 } from './clientSales'
 
@@ -40,6 +41,12 @@ describe('períodos de vendas da carteira', () => {
 })
 
 describe('agregação das vendas oficiais por loja', () => {
+  test('separa venda registrada, zero confirmado e ausência de registro', () => {
+    expect(resolveClientSalesEvidence(2, true)).toBe('recorded')
+    expect(resolveClientSalesEvidence(0, true)).toBe('zero_confirmed')
+    expect(resolveClientSalesEvidence(0, false)).toBe('no_record')
+  })
+
   test('soma linhas da RPC por loja e preserva a última competência', () => {
     const result = aggregateOfficialStoreSales([
       { store_id: 'store-1', competencia: '2026-08-02', vendas: 2, faturamento: '120000' },

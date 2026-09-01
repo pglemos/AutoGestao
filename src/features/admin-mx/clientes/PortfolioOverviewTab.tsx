@@ -6,10 +6,12 @@ import {
   CheckCircle2,
   ClipboardList,
   ExternalLink,
+  Info,
   LayoutGrid,
   Rocket,
   RefreshCw,
   Search,
+  Settings2,
   ShoppingCart,
   Store as StoreIcon,
   TableProperties,
@@ -23,6 +25,7 @@ import { Button } from '@/components/atoms/Button'
 import { Badge } from '@/components/atoms/Badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/organisms/Table'
 import { ScrollableRegion } from '@/design-system/page/ScrollableRegion'
+import { useIsMobile } from '@/hooks/useIsMobile'
 import {
   MxEmptyState,
   MxInput,
@@ -38,19 +41,27 @@ import {
   EMPTY_PORTFOLIO_FILTERS,
   PORTFOLIO_BUCKET_LABEL,
   activationBlockers,
+  canonicalPortfolioStatus,
   clientStoreIds,
   clientTeamStat,
   clientStructureSummary,
   filterPortfolio,
+  formatCityName,
+  formatCnpj,
   isActive,
   journeyLabel,
   nextAction,
   portfolioCounters,
+  portfolioOperationalLabel,
+  portfolioOwnerOptions,
+  portfolioStatusCounters,
+  portfolioStatusLabel,
   type PortfolioBucket,
   type PortfolioClient,
   type PortfolioFilters,
+  type PortfolioStatus,
 } from './clientPortfolio'
-import { aggregateClientSalesForStores, CLIENT_SALES_TIME_ZONE, type ClientSalesPeriod } from './clientSales'
+import { aggregateClientSalesForStores, CLIENT_SALES_TIME_ZONE, resolveClientSalesEvidence, type ClientSalesPeriod } from './clientSales'
 import { useClientSales, type ClientStoreSales } from './useClientSales'
 
 const PHASE_LABEL: Record<string, string> = {
@@ -61,17 +72,29 @@ const PHASE_LABEL: Record<string, string> = {
   RECUPERACAO: 'Recuperação',
 }
 
-const METRIC_BUCKETS: Array<{
+const STATUS_METRICS: Array<{
+  status: PortfolioStatus
+  label: string
+  detail: string
+  icon: typeof Building2
+  tone: 'brand' | 'success' | 'info' | 'danger'
+}> = [
+  { status: 'ativos', label: 'Ativos', detail: 'Situação única da conta', icon: CheckCircle2, tone: 'success' },
+  { status: 'em_implantacao', label: 'Em implantação', detail: 'Implantação como situação da conta', icon: Rocket, tone: 'info' },
+  { status: 'prontos_para_ativar', label: 'Prontos para ativar', detail: 'Sem bloqueio estrutural', icon: ClipboardList, tone: 'brand' },
+  { status: 'em_configuracao', label: 'Em configuração', detail: 'Cadastro ou configuração pendente', icon: Settings2, tone: 'danger' },
+]
+
+const OPERATIONAL_METRICS: Array<{
   bucket: PortfolioBucket
   label: string
+  detail: string
   icon: typeof Building2
-  tone: 'brand' | 'success' | 'info' | 'danger' | 'warning' | 'violet'
+  tone: 'info' | 'danger' | 'warning'
 }> = [
-  { bucket: 'ativos', label: 'Ativos', icon: CheckCircle2, tone: 'success' },
-  { bucket: 'em_implantacao', label: 'Em Implantação', icon: Rocket, tone: 'info' },
-  { bucket: 'prontos_para_ativar', label: 'Prontos p/ Ativar', icon: ClipboardList, tone: 'brand' },
-  { bucket: 'com_bloqueios', label: 'Com Bloqueios', icon: AlertTriangle, tone: 'danger' },
-  { bucket: 'renovacoes_proximas', label: 'Renovações', icon: CalendarClock, tone: 'warning' },
+  { bucket: 'em_implantacao', label: 'Jornada em andamento', detail: 'Visitas consultivas pendentes', icon: TrendingUp, tone: 'info' },
+  { bucket: 'com_bloqueios', label: 'Com bloqueios', detail: 'Pendências para ativar', icon: AlertTriangle, tone: 'danger' },
+  { bucket: 'renovacoes_proximas', label: 'Renovações próximas', detail: 'Vencimento em até 60 dias', icon: CalendarClock, tone: 'warning' },
 ]
 
 const SALES_PERIOD_OPTIONS: Array<{ value: ClientSalesPeriod; label: string }> = [
@@ -88,9 +111,10 @@ const SALES_DATE_FORMATTER = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', 
 type PortfolioClientSales = ReturnType<typeof aggregateClientSalesForStores> & { units: ClientStoreSales[] }
 
 function formatSalesCount(value: number): string { return SALES_COUNT_FORMATTER.format(Math.round(value)) }
+function formatSalesLabel(value: number): string { return `${formatSalesCount(value)} ${value === 1 ? 'venda' : 'vendas'}` }
 function formatSalesPercent(value: number | null): string { return value === null ? '—' : `${SALES_PERCENT_FORMATTER.format(value)}%` }
 function formatSalesDate(dateKey: string | null): string {
-  if (!dateKey) return 'Sem venda registrada'
+  if (!dateKey) return 'Nenhuma venda registrada no período'
   const [year, month, day] = dateKey.split('-').map(Number)
   return SALES_DATE_FORMATTER.format(new Date(Date.UTC(year, month - 1, day, 12)))
 }
@@ -109,16 +133,47 @@ function salesProgressTextClass(attainment: number | null): string {
   if (attainment >= 70) return 'text-brand-primary'
   return 'text-status-warning-text'
 }
-function salesStatus(rollup: Pick<PortfolioClientSales, 'sales' | 'monthlyGoal' | 'attainment'>): { label: string; variant: 'success' | 'warning' | 'outline' | 'secondary' } {
-  if (rollup.monthlyGoal > 0 && rollup.attainment !== null && rollup.attainment >= 100) return { label: 'Meta atingida', variant: 'success' }
-  if (rollup.monthlyGoal > 0 && rollup.attainment !== null && rollup.attainment >= 70) return { label: 'Em ritmo', variant: 'warning' }
-  if (rollup.monthlyGoal > 0) return { label: rollup.sales > 0 ? 'Abaixo da meta' : 'Sem vendas', variant: rollup.sales > 0 ? 'warning' : 'outline' }
-  return { label: rollup.sales > 0 ? 'Com vendas' : 'Sem meta', variant: rollup.sales > 0 ? 'secondary' : 'outline' }
+function hasSalesRecord(rollup: Pick<PortfolioClientSales, 'units'>): boolean {
+  return rollup.units.some(unit => unit.hasSalesRecord)
 }
 
-function getInitialPortfolioViewMode(): 'tabela' | 'cards' {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return 'tabela'
-  return window.matchMedia('(max-width: 767px)').matches ? 'cards' : 'tabela'
+function salesEvidenceLabel(rollup: PortfolioClientSales): string {
+  if (rollup.units.length === 0) return 'Sem unidade vinculada'
+  const evidence = resolveClientSalesEvidence(rollup.sales, hasSalesRecord(rollup))
+  if (evidence === 'recorded') return formatSalesLabel(rollup.sales)
+  return evidence === 'zero_confirmed' ? '0 confirmado' : 'Nenhum registro'
+}
+
+function salesEvidenceDetail(rollup: PortfolioClientSales): string {
+  if (rollup.units.length === 0) return 'Cadastre uma unidade para consultar vendas.'
+  if (rollup.sales > 0) return `${formatSalesLabel(rollup.sales)} no período`
+  return hasSalesRecord(rollup) ? '0 confirmado no período' : 'Nenhum registro no período'
+}
+
+function unitSalesEvidenceLabel(unit: ClientStoreSales): string {
+  const evidence = resolveClientSalesEvidence(unit.sales, unit.hasSalesRecord)
+  if (evidence === 'recorded') return formatSalesLabel(unit.sales)
+  return evidence === 'zero_confirmed' ? '0 confirmado' : 'Nenhum registro'
+}
+
+function salesStatus(rollup: PortfolioClientSales): { label: string; variant: 'success' | 'warning' | 'outline' | 'secondary' } {
+  if (rollup.units.length === 0) return { label: 'Sem unidade vinculada', variant: 'outline' }
+  if (rollup.monthlyGoal > 0 && rollup.attainment !== null && rollup.attainment >= 100) return { label: 'Meta atingida', variant: 'success' }
+  if (rollup.monthlyGoal > 0 && rollup.attainment !== null && rollup.attainment >= 70) return { label: 'Em ritmo', variant: 'warning' }
+  if (rollup.monthlyGoal > 0) return { label: rollup.sales > 0 ? 'Abaixo da meta' : hasSalesRecord(rollup) ? '0 confirmado' : 'Nenhum registro', variant: rollup.sales > 0 ? 'warning' : 'outline' }
+  return { label: rollup.sales > 0 ? 'Meta não configurada' : hasSalesRecord(rollup) ? '0 confirmado' : 'Nenhum registro', variant: rollup.sales > 0 ? 'secondary' : 'outline' }
+}
+
+function statusBadgeVariant(status: PortfolioStatus | null): 'success' | 'info' | 'brand' | 'secondary' | 'outline' {
+  if (status === 'ativos') return 'success'
+  if (status === 'em_implantacao') return 'info'
+  if (status === 'prontos_para_ativar') return 'brand'
+  if (status === 'em_configuracao') return 'secondary'
+  return 'outline'
+}
+
+function sellerLabel(value: number): string {
+  return value === 1 ? 'vendedor' : 'vendedores'
 }
 
 function ViewModeSwitch({ viewMode, onChange }: { viewMode: 'tabela' | 'cards'; onChange: (mode: 'tabela' | 'cards') => void }) {
@@ -155,8 +210,6 @@ export interface PortfolioOverviewTabProps {
   lojas: Store[]
   stats: Record<string, { sellers: number; checkedIn?: number; disciplinePct: number }>
   onAction: (client: PortfolioClient, action: ClientAction) => void
-  onCopyLink: (name: string) => void
-  onEditStore: (store: Store) => void
   onRefetch: () => void
 }
 
@@ -165,13 +218,13 @@ export function PortfolioOverviewTab({
   lojas,
   stats,
   onAction,
-  onCopyLink,
-  onEditStore,
   onRefetch,
 }: PortfolioOverviewTabProps) {
   const navigate = useNavigate()
+  const isMobile = useIsMobile()
   const [filters, setFilters] = useState<PortfolioFilters>(EMPTY_PORTFOLIO_FILTERS)
-  const [viewMode, setViewMode] = useState<'tabela' | 'cards'>(getInitialPortfolioViewMode)
+  const [viewPreference, setViewPreference] = useState<'auto' | 'tabela' | 'cards'>('auto')
+  const viewMode = viewPreference === 'auto' ? (isMobile ? 'cards' : 'tabela') : viewPreference
   const [pendenciasClient, setPendenciasClient] = useState<PortfolioClient | null>(null)
   const [salesPeriod, setSalesPeriod] = useState<ClientSalesPeriod>('month')
   const [customStartDate, setCustomStartDate] = useState('')
@@ -196,6 +249,7 @@ export function PortfolioOverviewTab({
   }
 
   const counters = useMemo(() => portfolioCounters(rows), [rows])
+  const statusCounters = useMemo(() => portfolioStatusCounters(rows), [rows])
   const filtered = useMemo(() => filterPortfolio(rows, filters), [rows, filters])
   const salesByClient = useMemo(() => {
     const byClient = new Map<string, PortfolioClientSales>()
@@ -214,12 +268,14 @@ export function PortfolioOverviewTab({
   const salesTotalsForView = useMemo(() => {
     const visibleStoreIds = [...new Set(filtered.flatMap(client => clientStoreIds(client, lojas)))]
     const rollup = aggregateClientSalesForStores(visibleStoreIds, salesRows)
+    const visibleSalesRows = salesRows.filter(row => visibleStoreIds.includes(row.storeId))
     return {
       totalSales: rollup.sales,
       totalMonthlyGoal: rollup.monthlyGoal,
       totalAttainment: rollup.attainment,
       storesWithSales: rollup.storesWithSales,
       totalStores: visibleStoreIds.length,
+      hasSalesRecord: visibleSalesRows.some(row => row.hasSalesRecord),
     }
   }, [filtered, lojas, salesRows])
   const salesDataReady = Boolean(salesQueryKey && salesLoadedQueryKey === salesQueryKey)
@@ -229,19 +285,14 @@ export function PortfolioOverviewTab({
   const salesRefreshing = Boolean(salesLoading && salesDataReady)
   const phases = useMemo(() => [...new Set(rows.map(r => r.business_phase).filter((v): v is string => Boolean(v)))].sort(), [rows])
   const products = useMemo(() => [...new Set(rows.map(r => r.product_name).filter((v): v is string => Boolean(v)))].sort(), [rows])
-  const owners = useMemo(() => {
-    const map = new Map<string, string>()
-    for (const r of rows) {
-      if (r.implementation_owner_id) map.set(r.implementation_owner_id, r.implementation_owner_name ?? 'Sem nome')
-    }
-    return [...map.entries()]
-  }, [rows])
+  const owners = useMemo(() => portfolioOwnerOptions(rows), [rows])
 
   const patch = (values: Partial<PortfolioFilters>) => setFilters(cur => ({ ...cur, ...values }))
 
   const hasActiveFilters = useMemo(() => {
     return (
       Boolean(filters.search.trim()) ||
+      filters.status !== 'todos' ||
       filters.bucket !== 'todos' ||
       filters.phase !== 'todas' ||
       filters.product !== 'todos' ||
@@ -256,74 +307,98 @@ export function PortfolioOverviewTab({
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <h2 className="text-base font-semibold text-foreground">Clientes, lojas e consultoria</h2>
-          <p className="mt-1 max-w-3xl text-sm text-muted-foreground">Uma linha por cliente: loja única ou matriz com filiais. A jornada consultiva e o resultado comercial aparecem juntos, cada um no seu bloco.</p>
+          <h2 className="text-base font-semibold text-foreground">Carteira operacional de clientes</h2>
+          <p className="mt-1 max-w-3xl text-sm text-muted-foreground">{rows.length} clientes · {lojas.length} unidades. Cada cliente reúne a matriz e as filiais; resultado comercial e jornada consultiva permanecem em blocos separados.</p>
         </div>
-        <ViewModeSwitch viewMode={viewMode} onChange={setViewMode} />
+        <ViewModeSwitch viewMode={viewMode} onChange={mode => setViewPreference(mode)} />
       </div>
 
-      {/* Metric Quick-Filter Segment Buttons */}
-      <ScrollableRegion axis="horizontal" label="Indicadores da carteira" className="flex gap-2 pb-1 md:grid md:grid-cols-6 md:overflow-visible">
-        <button
-          type="button"
-          onClick={() => patch({ bucket: 'todos' })}
-          className={`flex min-h-[5.25rem] w-[9.25rem] shrink-0 flex-col items-start justify-between rounded-xl border p-2 text-left transition-all outline-none focus-visible:ring-2 focus-visible:ring-status-success/30 sm:p-3 md:min-h-0 md:w-auto md:min-w-0 ${
-            filters.bucket === 'todos'
-              ? 'border-brand-primary bg-brand-primary/10 shadow-xs'
-              : 'border-border bg-card hover:border-brand-primary/40 hover:bg-surface-alt'
-          }`}
-        >
-          <span className="line-clamp-2 text-caption font-medium text-muted-foreground">Clientes na carteira</span>
-          <span className="mt-1 text-xl font-bold text-foreground sm:text-2xl">{rows.length}</span>
-          <span className="line-clamp-2 text-caption text-muted-foreground">{lojas.length} unidades · matriz + filiais</span>
-        </button>
+      <section aria-labelledby="client-account-status-heading">
+        <div className="mb-2 flex flex-wrap items-baseline justify-between gap-2">
+          <h3 id="client-account-status-heading" className="text-sm font-semibold text-foreground">Situação da conta</h3>
+          <span className="text-caption text-muted-foreground">Uma situação canônica por cliente</span>
+        </div>
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          {STATUS_METRICS.map(item => {
+            const count = statusCounters[item.status]
+            const isSelected = filters.status === item.status
+            const Icon = item.icon
 
-        {METRIC_BUCKETS.map(item => {
-          const count = counters[item.bucket]
-          const isSelected = filters.bucket === item.bucket
-          const Icon = item.icon
+            return (
+              <button
+                key={item.status}
+                type="button"
+                aria-pressed={isSelected}
+                onClick={() => patch({ status: isSelected ? 'todos' : item.status, bucket: 'todos' })}
+                className={`flex min-h-[6.25rem] min-w-0 flex-col items-start justify-between rounded-xl border p-3 text-left transition-all outline-none focus-visible:ring-2 focus-visible:ring-status-success/30 ${
+                  isSelected
+                    ? 'border-brand-primary bg-brand-primary/10 shadow-xs ring-1 ring-brand-primary/30'
+                    : 'border-border bg-card hover:border-brand-primary/40 hover:bg-surface-alt'
+                }`}
+              >
+                <div className="flex w-full items-start justify-between gap-2">
+                  <span className="text-caption font-medium leading-4 text-muted-foreground">{item.label}</span>
+                  <Icon
+                    size={15}
+                    aria-hidden="true"
+                    className={item.tone === 'success' ? 'text-status-success-text' : item.tone === 'danger' ? 'text-status-error-text' : item.tone === 'info' ? 'text-status-info-text' : 'text-brand-primary'}
+                  />
+                </div>
+                <span className="mt-2 text-2xl font-bold leading-none text-foreground">{count}</span>
+                <span className="mt-1 text-caption leading-4 text-muted-foreground">{item.detail}</span>
+              </button>
+            )
+          })}
+        </div>
+      </section>
 
-          return (
-            <button
-              key={item.bucket}
-              type="button"
-              onClick={() => patch({ bucket: isSelected ? 'todos' : item.bucket })}
-              className={`flex min-h-[5.25rem] w-[9.25rem] shrink-0 flex-col items-start justify-between rounded-xl border p-2 text-left transition-all outline-none focus-visible:ring-2 focus-visible:ring-status-success/30 sm:p-3 md:min-h-0 md:w-auto md:min-w-0 ${
-                isSelected
-                  ? 'border-brand-primary bg-brand-primary/10 shadow-xs ring-1 ring-brand-primary/30'
-                  : 'border-border bg-card hover:border-brand-primary/40 hover:bg-surface-alt'
-              }`}
-            >
-              <div className="flex w-full items-center justify-between">
-                <span className="line-clamp-2 text-caption font-medium text-muted-foreground">{item.label}</span>
-                <Icon
-                  size={14}
-                  className={
-                    item.tone === 'success'
-                      ? 'text-status-success-text'
-                      : item.tone === 'danger'
-                      ? 'text-status-error-text'
-                      : item.tone === 'warning'
-                      ? 'text-status-warning-text'
-                      : 'text-brand-primary'
-                  }
-                />
-              </div>
-              <span className="mt-1 text-xl font-bold text-foreground sm:text-2xl">{count}</span>
-              <span className="line-clamp-2 text-caption text-muted-foreground">{PORTFOLIO_BUCKET_LABEL[item.bucket]}</span>
-            </button>
-          )
-        })}
-      </ScrollableRegion>
-      <p className="-mt-2 text-caption text-muted-foreground md:hidden">Deslize para ver todos os indicadores da carteira.</p>
+      <section aria-labelledby="client-operational-queue-heading">
+        <div className="mb-2 flex flex-wrap items-baseline justify-between gap-2">
+          <h3 id="client-operational-queue-heading" className="text-sm font-semibold text-foreground">Fila operacional</h3>
+          <span className="text-caption text-muted-foreground">Sinais independentes; um cliente pode aparecer em mais de um</span>
+        </div>
+        <ScrollableRegion axis="horizontal" label="Fila operacional da carteira" className="flex gap-2 pb-1 md:grid md:grid-cols-3 md:overflow-visible">
+          {OPERATIONAL_METRICS.map(item => {
+            const count = counters[item.bucket]
+            const isSelected = filters.bucket === item.bucket
+            const Icon = item.icon
+            return (
+              <button
+                key={item.bucket}
+                type="button"
+                aria-pressed={isSelected}
+                onClick={() => patch({ bucket: isSelected ? 'todos' : item.bucket, status: 'todos' })}
+                className={`flex min-h-[5.25rem] w-[13rem] shrink-0 flex-col items-start justify-between rounded-xl border p-3 text-left transition-all outline-none focus-visible:ring-2 focus-visible:ring-status-success/30 md:w-auto ${
+                  isSelected
+                    ? 'border-brand-primary bg-brand-primary/10 shadow-xs ring-1 ring-brand-primary/30'
+                    : 'border-border bg-card hover:border-brand-primary/40 hover:bg-surface-alt'
+                }`}
+              >
+                <div className="flex w-full items-start justify-between gap-2">
+                  <span className="text-caption font-medium leading-4 text-muted-foreground">{item.label}</span>
+                  <Icon size={16} aria-hidden="true" className={item.tone === 'danger' ? 'text-status-error-text' : item.tone === 'warning' ? 'text-status-warning-text' : 'text-status-info-text'} />
+                </div>
+                <span className="mt-2 text-xl font-bold leading-none text-foreground">{count}</span>
+                <span className="mt-1 text-caption leading-4 text-muted-foreground">{item.detail}</span>
+              </button>
+            )
+          })}
+        </ScrollableRegion>
+        <p className="mt-1 text-caption text-muted-foreground md:hidden">Deslize para consultar os sinais operacionais.</p>
+      </section>
+
+      <aside className="flex items-start gap-2 rounded-xl border border-border-subtle bg-surface-alt/60 px-3 py-2.5 text-caption text-muted-foreground" aria-label="Como interpretar os indicadores da carteira" data-testid="portfolio-indicator-legend">
+        <Info size={16} className="mt-0.5 shrink-0 text-brand-primary" aria-hidden="true" />
+        <p><span className="font-semibold text-foreground">Como ler:</span> situação da conta é exclusiva; jornada, bloqueios e renovação são sinais que podem se sobrepor. Em vendas, <span className="font-medium text-foreground">0 confirmado</span> é um registro com zero, enquanto <span className="font-medium text-foreground">Nenhum registro</span> indica ausência de linha oficial no período.</p>
+      </aside>
 
       {/* Main Container */}
       <MxSectionCard>
         {/* Toolbar with Search and Filters */}
         <div className="border-b border-border p-4 sm:p-5 space-y-3">
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-col gap-3 2xl:grid 2xl:grid-cols-[minmax(24rem,1fr)_auto] 2xl:items-center">
             {/* Search Input */}
-            <div className="relative flex-1 lg:min-w-0">
+            <div className="relative min-w-0">
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
               <MxInput
                 id="client-portfolio-search"
@@ -347,12 +422,22 @@ export function PortfolioOverviewTab({
             </div>
 
             {/* Filter Selects & View Mode Toggle */}
-            <div className="grid grid-cols-2 items-center gap-2 lg:flex lg:flex-wrap">
+            <div className="grid grid-cols-2 items-center gap-2 sm:grid-cols-4 2xl:flex 2xl:flex-wrap 2xl:justify-end">
+              <MxSelect
+                aria-label="Filtrar por situação da conta"
+                value={filters.status}
+                onChange={e => patch({ status: e.target.value as PortfolioFilters['status'] })}
+                className="h-10 w-full min-w-0 text-xs 2xl:w-[156px]"
+              >
+                <option value="todos">Todas as situações</option>
+                {STATUS_METRICS.map(item => <option key={item.status} value={item.status}>{item.label}</option>)}
+              </MxSelect>
+
               <MxSelect
                 aria-label="Filtrar por fase empresarial"
                 value={filters.phase}
                 onChange={e => patch({ phase: e.target.value })}
-                className="h-10 w-full min-w-0 text-xs lg:w-auto lg:min-w-[140px]"
+                className="h-10 w-full min-w-0 text-xs 2xl:w-[140px]"
               >
                 <option value="todas">Todas as fases</option>
                 {phases.map(phase => (
@@ -366,7 +451,7 @@ export function PortfolioOverviewTab({
                 aria-label="Filtrar por produto"
                 value={filters.product}
                 onChange={e => patch({ product: e.target.value })}
-                className="h-10 w-full min-w-0 text-xs lg:w-auto lg:min-w-[140px]"
+                className="h-10 w-full min-w-0 text-xs 2xl:w-[220px]"
               >
                 <option value="todos">Todos os produtos</option>
                 {products.map(product => (
@@ -380,12 +465,12 @@ export function PortfolioOverviewTab({
                 aria-label="Filtrar por responsável MX"
                 value={filters.owner}
                 onChange={e => patch({ owner: e.target.value })}
-                className="h-10 w-full min-w-0 text-xs lg:w-auto lg:min-w-[160px]"
+                className="h-10 w-full min-w-0 text-xs 2xl:w-[220px]"
               >
                 <option value="todos">Todos os responsáveis</option>
-                {owners.map(([id, name]) => (
-                  <option key={id} value={id}>
-                    {name}
+                {owners.map(owner => (
+                  <option key={owner.id} value={owner.id}>
+                    {owner.label}
                   </option>
                 ))}
               </MxSelect>
@@ -402,7 +487,7 @@ export function PortfolioOverviewTab({
                 <p className="text-xs font-semibold text-foreground sm:text-sm">Vendas, meta e progresso comercial</p>
                 <p className="line-clamp-2 text-caption leading-4 text-muted-foreground">
                   {salesRange ? `Período: ${formatSalesRange(salesRange.startDate, salesRange.endDate)}` : 'Informe as datas para consultar as vendas.'}
-                  {' · '}progresso sobre a meta mensal · consultoria separada
+                  {' · '}vendas oficiais · presença referente a hoje · consultoria separada
                   {salesRefreshing ? ' · atualizando' : ''}
                   {salesStale ? ' · últimos dados válidos' : ''}
                 </p>
@@ -436,21 +521,21 @@ export function PortfolioOverviewTab({
             <dl className="grid grid-cols-4 gap-x-2 border-t border-border-subtle pt-2 text-caption lg:flex lg:items-center lg:gap-x-4 lg:border-l lg:border-t-0 lg:pl-3 lg:pt-0" aria-busy={salesLoading} aria-live="polite">
               <div className="min-w-0">
                 <dt className="truncate text-muted-foreground">Vendas</dt>
-                <dd className="font-bold text-foreground">{salesInitialLoading ? 'Atualizando' : salesUnavailable ? '—' : formatSalesCount(salesTotalsForView.totalSales)}</dd>
+                <dd className="font-bold text-foreground">{salesInitialLoading ? 'Atualizando' : salesUnavailable ? 'Indisponível' : salesTotalsForView.totalSales > 0 ? formatSalesLabel(salesTotalsForView.totalSales) : salesTotalsForView.hasSalesRecord ? '0 confirmado' : 'Nenhum registro'}</dd>
               </div>
               <div className="min-w-0">
                 <dt className="truncate text-muted-foreground">Meta mensal</dt>
-                <dd className="font-bold text-foreground">{salesInitialLoading ? 'Atualizando' : salesUnavailable ? '—' : formatSalesCount(salesTotalsForView.totalMonthlyGoal)}</dd>
+                <dd className="font-bold text-foreground">{salesInitialLoading ? 'Atualizando' : salesUnavailable ? 'Indisponível' : salesTotalsForView.totalMonthlyGoal > 0 ? formatSalesLabel(salesTotalsForView.totalMonthlyGoal) : 'Não configurada'}</dd>
               </div>
               <div className="min-w-0">
                 <dt className="truncate text-muted-foreground">Atingimento</dt>
                 <dd className={`font-bold ${salesInitialLoading || salesUnavailable ? 'text-foreground' : salesProgressTextClass(salesTotalsForView.totalAttainment)}`}>
-                  {salesInitialLoading ? 'Atualizando' : salesUnavailable ? '—' : formatSalesPercent(salesTotalsForView.totalAttainment)}
+                  {salesInitialLoading ? 'Atualizando' : salesUnavailable ? 'Indisponível' : salesTotalsForView.totalAttainment === null ? 'Não calculado' : formatSalesPercent(salesTotalsForView.totalAttainment)}
                 </dd>
               </div>
               <div className="min-w-0">
                 <dt className="truncate text-muted-foreground">Unidades com venda</dt>
-                <dd className="font-bold text-foreground">{salesInitialLoading ? 'Atualizando' : salesUnavailable ? '—' : `${salesTotalsForView.storesWithSales}/${salesTotalsForView.totalStores}`}</dd>
+                <dd className="font-bold text-foreground">{salesInitialLoading ? 'Atualizando' : salesUnavailable ? 'Indisponível' : `${salesTotalsForView.storesWithSales}/${salesTotalsForView.totalStores}`}</dd>
               </div>
             </dl>
           </div>
@@ -477,14 +562,28 @@ export function PortfolioOverviewTab({
                 </span>
               )}
 
+              {filters.status !== 'todos' && (
+                <span className="inline-flex items-center gap-1 rounded-md bg-brand-primary/10 px-2 py-0.5 text-brand-primary border border-brand-primary/30">
+                  Situação: {STATUS_METRICS.find(item => item.status === filters.status)?.label ?? filters.status}
+                  <button
+                    type="button"
+                    onClick={() => patch({ status: 'todos' })}
+                    className="hover:text-status-error-text focus-visible:text-status-error-text focus-visible:outline-none"
+                    aria-label="Remover filtro de situação da conta"
+                  >
+                    <X size={12} />
+                  </button>
+                </span>
+              )}
+
               {filters.bucket !== 'todos' && (
                 <span className="inline-flex items-center gap-1 rounded-md bg-brand-primary/10 px-2 py-0.5 text-brand-primary border border-brand-primary/30">
-                  {PORTFOLIO_BUCKET_LABEL[filters.bucket]}
+                  Fila: {OPERATIONAL_METRICS.find(item => item.bucket === filters.bucket)?.label ?? PORTFOLIO_BUCKET_LABEL[filters.bucket]}
                   <button
                     type="button"
                     onClick={() => patch({ bucket: 'todos' })}
                     className="hover:text-status-error-text focus-visible:text-status-error-text focus-visible:outline-none"
-                    aria-label="Remover filtro de situação"
+                    aria-label="Remover filtro da fila operacional"
                   >
                     <X size={12} />
                   </button>
@@ -521,7 +620,7 @@ export function PortfolioOverviewTab({
 
               {filters.owner !== 'todos' && (
                 <span className="inline-flex items-center gap-1 rounded-md bg-surface-alt px-2 py-0.5 text-foreground border border-border">
-                  Responsável: {owners.find(([id]) => id === filters.owner)?.[1] ?? filters.owner}
+                  Responsável: {owners.find(owner => owner.id === filters.owner)?.label ?? filters.owner}
                   <button
                     type="button"
                     onClick={() => patch({ owner: 'todos' })}
@@ -591,6 +690,10 @@ export function PortfolioOverviewTab({
                     const blockers = activationBlockers(client)
                     const storeIds = clientStoreIds(client, lojas)
                     const stat = clientTeamStat(storeIds, stats)
+                    const teamDataAvailable = storeIds.some(storeId => Boolean(stats[storeId]))
+                    const accountStatus = canonicalPortfolioStatus(client)
+                    const accountStatusLabel = portfolioStatusLabel(client)
+                    const operationalLabel = portfolioOperationalLabel(client)
                     const sales = salesByClient.get(client.id) ?? {
                       ...aggregateClientSalesForStores(storeIds, []),
                       units: [],
@@ -619,22 +722,26 @@ export function PortfolioOverviewTab({
                               >
                                 {client.name}
                               </button>
+                              <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                                <Badge variant={statusBadgeVariant(accountStatus)} className="py-0.5 text-caption">{accountStatusLabel}</Badge>
+                                {operationalLabel ? <span className="text-caption text-muted-foreground">{operationalLabel}</span> : null}
+                              </div>
                               <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-caption text-muted-foreground">
                                 <span className="font-medium text-brand-primary">{clientStructureSummary(client)}</span>
                                 {client.primary_store_city && (
                                   <>
                                     <span>•</span>
-                                    <span>{client.primary_store_city}</span>
+                                    <span>{formatCityName(client.primary_store_city)}</span>
                                   </>
                                 )}
                               </div>
-                              <div className="mt-0.5 text-caption text-muted-foreground">{client.cnpj ? `CNPJ: ${client.cnpj}` : 'Sem CNPJ'}</div>
+                              <div className="mt-0.5 text-caption text-muted-foreground">{client.cnpj ? `CNPJ: ${formatCnpj(client.cnpj)}` : 'CNPJ não informado'}</div>
                               <div className="mt-1.5 space-y-1.5 border-t border-border-subtle pt-1.5 sm:hidden">
                                 <div className="flex items-center justify-between gap-2 text-caption">
                                   <span className="font-medium text-muted-foreground">Vendas no período</span>
-                                  <span className="font-bold text-foreground">{salesInitialLoading ? 'Atualizando' : salesUnavailable ? 'Indisponível' : `${formatSalesCount(sales.sales)} vendas`}</span>
+                                  <span className="text-right font-bold text-foreground">{salesInitialLoading ? 'Atualizando' : salesUnavailable ? 'Indisponível' : salesEvidenceLabel(sales)}</span>
                                 </div>
-                                {!salesInitialLoading && !salesUnavailable && sales.monthlyGoal > 0 && sales.attainment !== null ? <MxProgress value={sales.attainment} tone={salesProgressTone(sales.attainment)} label={`${formatSalesCount(sales.sales)} de ${formatSalesCount(sales.monthlyGoal)} vendas · meta do mês`} /> : <span className="block text-caption text-muted-foreground">{salesInitialLoading ? 'Atualizando vendas e meta...' : salesUnavailable ? 'Dados comerciais indisponíveis' : 'Meta não configurada'}</span>}
+                                {!salesInitialLoading && !salesUnavailable && sales.monthlyGoal > 0 && sales.attainment !== null ? <MxProgress value={sales.attainment} tone={salesProgressTone(sales.attainment)} label={`${formatSalesLabel(sales.sales)} de ${formatSalesLabel(sales.monthlyGoal)} · meta do mês`} /> : <span className="block text-caption text-muted-foreground">{salesInitialLoading ? 'Atualizando vendas e meta...' : salesUnavailable ? 'Dados comerciais indisponíveis' : `${salesEvidenceDetail(sales)} · meta não configurada`}</span>}
                               </div>
                             </div>
                           </div>
@@ -644,20 +751,17 @@ export function PortfolioOverviewTab({
                         <TableCell className="align-top px-2.5 py-2 text-caption">
                           {salesInitialLoading ? <span className="text-muted-foreground">Atualizando vendas...</span> : salesUnavailable ? <span className="text-muted-foreground" title={salesRangeError ?? salesError ?? undefined}>Indisponível</span> : (
                             <div className="min-w-0">
-                              <div className="flex items-baseline gap-1">
-                                <span className="text-lg font-bold leading-none text-foreground">{formatSalesCount(sales.sales)}</span>
-                                <span className="text-caption text-muted-foreground">vendas</span>
-                              </div>
-                              <div className="mt-1 text-caption text-muted-foreground">{sales.storesWithSales}/{Math.max(client.units, 1)} unidades com venda · {formatSalesDate(sales.lastSaleDate)}</div>
+                              <div className="text-lg font-bold leading-tight text-foreground">{salesEvidenceLabel(sales)}</div>
+                              <div className="mt-1 text-caption text-muted-foreground">{sales.storesWithSales}/{client.units} unidades com venda · {formatSalesDate(sales.lastSaleDate)}</div>
                               {sales.units.length > 0 ? (
                                 <div className="mt-1.5 flex max-w-full flex-wrap gap-1" role="list" aria-label="Vendas por unidade">
                                   {sales.units.slice(0, 3).map(unit => (
-                                    <span key={unit.storeId} role="listitem" className="inline-flex max-w-full min-w-0 items-center gap-1 rounded-md bg-surface-alt px-1.5 py-0.5 text-caption text-muted-foreground" title={`${unit.storeName}: ${formatSalesCount(unit.sales)} vendas`}>
+                                    <span key={unit.storeId} role="listitem" className="inline-flex max-w-full min-w-0 items-center gap-1 rounded-md bg-surface-alt px-1.5 py-0.5 text-caption text-muted-foreground" title={`${unit.storeName}: ${unitSalesEvidenceLabel(unit)}`}>
                                       <span className="truncate">{unit.parentStoreName ? 'Filial' : 'Matriz'} · {unit.storeName}</span>
-                                      <strong className="shrink-0 text-foreground">{formatSalesCount(unit.sales)}</strong>
+                                      <strong className="shrink-0 text-foreground">{unitSalesEvidenceLabel(unit)}</strong>
                                     </span>
                                   ))}
-                                  {sales.units.length > 3 ? <span role="listitem" className="rounded-md bg-surface-alt px-1.5 py-0.5 text-caption text-muted-foreground" title={`${sales.units.slice(3).map(unit => `${unit.storeName}: ${formatSalesCount(unit.sales)}`).join(' · ')}`}>+{sales.units.length - 3} unidades</span> : null}
+                                  {sales.units.length > 3 ? <span role="listitem" className="rounded-md bg-surface-alt px-1.5 py-0.5 text-caption text-muted-foreground" title={`${sales.units.slice(3).map(unit => `${unit.storeName}: ${unitSalesEvidenceLabel(unit)}`).join(' · ')}`}>+{sales.units.length - 3} unidades</span> : null}
                                 </div>
                               ) : null}
                             </div>
@@ -668,12 +772,12 @@ export function PortfolioOverviewTab({
                         <TableCell className="align-top px-2.5 py-2 text-caption">
                           {salesInitialLoading ? <span className="text-muted-foreground">Atualizando meta...</span> : salesUnavailable ? <span className="text-muted-foreground">Indisponível</span> : sales.monthlyGoal > 0 && sales.attainment !== null ? (
                             <div className="min-w-0 space-y-1.5">
-                              <MxProgress value={sales.attainment} tone={salesProgressTone(sales.attainment)} label={`${formatSalesCount(sales.sales)} de ${formatSalesCount(sales.monthlyGoal)} vendas`} />
+                              <MxProgress value={sales.attainment} tone={salesProgressTone(sales.attainment)} label={`${formatSalesLabel(sales.sales)} de ${formatSalesLabel(sales.monthlyGoal)} · meta do mês`} />
                               <Badge variant={salesStatus(sales).variant} className="text-caption py-0.5">{salesStatus(sales).label} · {formatSalesPercent(sales.attainment)}</Badge>
                             </div>
                           ) : (
                             <div className="space-y-1">
-                              <span className="block font-semibold text-foreground">{formatSalesCount(sales.sales)} vendas</span>
+                              <span className="block font-semibold text-foreground">{salesEvidenceLabel(sales)}</span>
                               <span className="block text-caption text-muted-foreground">Meta não configurada</span>
                             </div>
                           )}
@@ -691,7 +795,7 @@ export function PortfolioOverviewTab({
                                 <span className="font-medium text-foreground">Jornada consultiva</span>
                                 <span className="text-muted-foreground">{journeyLabel(client)}</span>
                               </div>
-                              {client.visitsTotal > 0 ? <MxProgress value={progressPct} tone="brand" label={`${client.visitsDone}/${client.visitsTotal} encontros`} /> : <span className="text-caption text-muted-foreground">Sem jornada contratada</span>}
+                              {client.visitsTotal > 0 ? <MxProgress value={progressPct} tone="brand" label={`${client.visitsDone}/${client.visitsTotal} encontros`} /> : <span className="text-caption text-muted-foreground">Jornada não configurada</span>}
                             </div>
                           </div>
                         </TableCell>
@@ -702,12 +806,13 @@ export function PortfolioOverviewTab({
                             <div className="flex items-center gap-1.5">
                               <Users size={14} className="text-muted-foreground" aria-hidden="true" />
                               <span className="font-semibold text-foreground">{stat.sellers}</span>
-                              <span className="text-caption text-muted-foreground">vendedores</span>
+                              <span className="text-caption text-muted-foreground">{sellerLabel(stat.sellers)}</span>
                             </div>
-                            {stat.sellers > 0 ? <div className="text-caption text-muted-foreground"><span className="font-medium text-status-success-text">{stat.disciplinePct}%</span> presença hoje</div> : null}
+                            {teamDataAvailable ? stat.sellers > 0 ? <div className="text-caption text-muted-foreground"><span className="font-medium text-status-success-text">{stat.disciplinePct}%</span> presença hoje</div> : <div className="text-caption text-muted-foreground">Nenhum vendedor cadastrado</div> : <div className="text-caption text-muted-foreground">Equipe indisponível</div>}
                             <div className="border-t border-border-subtle pt-1.5">
                               <span className="block text-caption text-muted-foreground">Responsável MX</span>
-                              <span className="block truncate text-xs font-medium text-foreground" title={client.implementation_owner_name ?? undefined}>{client.implementation_owner_name || <span className="italic text-muted-foreground">Não atribuído</span>}</span>
+                              {client.implementation_owner_name ? <span className="block truncate text-xs font-medium text-foreground" title={client.implementation_owner_email ?? client.implementation_owner_name}>{client.implementation_owner_name}</span> : <span className="block text-xs italic text-muted-foreground">Não atribuído</span>}
+                              {client.implementation_owner_email ? <span className="block truncate text-caption text-muted-foreground" title={client.implementation_owner_email}>{client.implementation_owner_email}</span> : null}
                             </div>
                           </div>
                         </TableCell>
@@ -727,7 +832,7 @@ export function PortfolioOverviewTab({
                             <button
                               type="button"
                               onClick={() => openPendencias(client)}
-                              className="w-full text-left text-xs font-medium leading-4 text-foreground line-clamp-2 hover:text-brand-primary focus-visible:text-brand-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-primary/30"
+                              className="w-full break-words text-left text-xs font-medium leading-4 text-foreground hover:text-brand-primary focus-visible:text-brand-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-primary/30"
                               title={nextAction(client)}
                             >
                               {nextAction(client)}
@@ -738,7 +843,7 @@ export function PortfolioOverviewTab({
                                 onClick={() => openPendencias(client)}
                                 className="text-caption font-medium text-status-error-text block hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-status-error/30"
                               >
-                                +{blockers.length - 1} pendência(s)
+                                +{blockers.length - 1} {blockers.length - 1 === 1 ? 'pendência' : 'pendências'}
                               </button>
                             )}
                           </div>
@@ -750,13 +855,13 @@ export function PortfolioOverviewTab({
                             <Button
                               variant="outline"
                               size="xs"
-                              className="h-8 w-8 shrink-0 p-0"
+                              className="h-8 shrink-0 px-2"
                               onClick={() => navigate(`/lojas/${storeSlug}`)}
                               title="Abrir área da loja"
                               aria-label={`Abrir área da loja de ${client.name}`}
                             >
                               <ExternalLink size={14} />
-                              <span className="sr-only">Abrir</span>
+                              Abrir loja
                             </Button>
                             <ClientActionsMenu compact client={client} onAction={action => onAction(client, action)} />
                           </div>
@@ -774,12 +879,15 @@ export function PortfolioOverviewTab({
                 const blockers = activationBlockers(client)
                 const storeIds = clientStoreIds(client, lojas)
                 const stat = clientTeamStat(storeIds, stats)
+                const teamDataAvailable = storeIds.some(storeId => Boolean(stats[storeId]))
+                const accountStatus = canonicalPortfolioStatus(client)
+                const accountStatusLabel = portfolioStatusLabel(client)
+                const operationalLabel = portfolioOperationalLabel(client)
                 const sales = salesByClient.get(client.id) ?? {
                   ...aggregateClientSalesForStores(storeIds, []),
                   units: [],
                 }
                 const storeSlug = client.slug || client.id
-                const clientActive = isActive(client)
                 const progressPct =
                   client.visitsTotal > 0
                     ? Math.min(100, Math.round((client.visitsDone / client.visitsTotal) * 100))
@@ -805,16 +913,18 @@ export function PortfolioOverviewTab({
                             >
                               {client.name}
                             </button>
-                            <p className="text-xs text-muted-foreground truncate">
-                              {client.cnpj ? `CNPJ: ${client.cnpj}` : 'Sem CNPJ'}
-                              {client.primary_store_city ? ` • ${client.primary_store_city}` : ''}
+                            <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                              <Badge variant={statusBadgeVariant(accountStatus)} className="py-0.5 text-caption">{accountStatusLabel}</Badge>
+                              {operationalLabel ? <span className="text-caption text-muted-foreground">{operationalLabel}</span> : null}
+                            </div>
+                            <p className="mt-1 truncate text-xs text-muted-foreground">
+                              {client.cnpj ? `CNPJ: ${formatCnpj(client.cnpj)}` : 'CNPJ não informado'}
+                              {client.primary_store_city ? ` • ${formatCityName(client.primary_store_city)}` : ''}
                             </p>
                           </div>
                         </div>
                         {client.suspended_at ? (
                           <Badge variant="danger">Suspenso</Badge>
-                        ) : !clientActive ? (
-                          <Badge variant="outline">Inativo</Badge>
                         ) : null}
                       </div>
 
@@ -829,14 +939,13 @@ export function PortfolioOverviewTab({
                         <div>
                           <span className="text-muted-foreground">Fase:</span>{' '}
                           <span className="font-medium text-foreground block truncate">
-                            {PHASE_LABEL[client.business_phase ?? ''] ?? 'Não definida'}
+                            {PHASE_LABEL[client.business_phase ?? ''] ?? 'Não configurada'}
                           </span>
                         </div>
                         <div>
                           <span className="text-muted-foreground">Responsável:</span>{' '}
-                          <span className="font-medium text-foreground block truncate">
-                            {client.implementation_owner_name || '—'}
-                          </span>
+                          {client.implementation_owner_name ? <span className="block truncate font-medium text-foreground" title={client.implementation_owner_email ?? client.implementation_owner_name}>{client.implementation_owner_name}</span> : <span className="block font-medium italic text-muted-foreground">Não atribuído</span>}
+                          {client.implementation_owner_email ? <span className="block truncate text-caption text-muted-foreground" title={client.implementation_owner_email}>{client.implementation_owner_email}</span> : null}
                         </div>
                         <div>
                           <span className="text-muted-foreground">Estrutura:</span>{' '}
@@ -852,14 +961,13 @@ export function PortfolioOverviewTab({
                           <div>
                             <span className="text-xs font-medium text-muted-foreground">Vendas no período</span>
                             <div className="mt-0.5 flex items-baseline gap-1">
-                              <span className="text-xl font-bold leading-none text-foreground">{salesInitialLoading ? 'Atualizando' : salesUnavailable ? '—' : formatSalesCount(sales.sales)}</span>
-                              <span className="text-xs text-muted-foreground">vendas</span>
+                              <span className="text-xl font-bold leading-tight text-foreground">{salesInitialLoading ? 'Atualizando' : salesUnavailable ? 'Indisponível' : salesEvidenceLabel(sales)}</span>
                             </div>
                           </div>
                           {!salesInitialLoading && !salesUnavailable ? <Badge variant={salesStatus(sales).variant} className="text-caption py-0.5">{salesStatus(sales).label}</Badge> : null}
                         </div>
-                        {salesInitialLoading ? <span className="text-xs text-muted-foreground">Atualizando vendas e meta...</span> : salesUnavailable ? <span className="text-xs text-muted-foreground">Dados comerciais indisponíveis</span> : sales.monthlyGoal > 0 && sales.attainment !== null ? <MxProgress value={sales.attainment} tone={salesProgressTone(sales.attainment)} label={`${formatSalesCount(sales.sales)} de ${formatSalesCount(sales.monthlyGoal)} vendas`} /> : <span className="text-xs text-muted-foreground">Meta não configurada</span>}
-                        {!salesInitialLoading && !salesUnavailable ? <div className="text-caption text-muted-foreground">{sales.monthlyGoal > 0 ? `Meta ${formatSalesCount(sales.monthlyGoal)} · ${formatSalesPercent(sales.attainment)}` : 'Sem meta configurada'} · {sales.storesWithSales}/{Math.max(client.units, 1)} unidades com venda</div> : null}
+                        {salesInitialLoading ? <span className="text-xs text-muted-foreground">Atualizando vendas e meta...</span> : salesUnavailable ? <span className="text-xs text-muted-foreground">Dados comerciais indisponíveis</span> : sales.monthlyGoal > 0 && sales.attainment !== null ? <MxProgress value={sales.attainment} tone={salesProgressTone(sales.attainment)} label={`${formatSalesLabel(sales.sales)} de ${formatSalesLabel(sales.monthlyGoal)} · meta do mês`} /> : <span className="text-xs text-muted-foreground">{salesEvidenceDetail(sales)} · meta não configurada</span>}
+                        {!salesInitialLoading && !salesUnavailable ? <div className="text-caption text-muted-foreground">{sales.monthlyGoal > 0 ? `Meta ${formatSalesLabel(sales.monthlyGoal)} · ${formatSalesPercent(sales.attainment)}` : 'Meta não configurada'} · {sales.storesWithSales}/{client.units} unidades com venda</div> : null}
                       </div>
 
                       {/* Journey Progress */}
@@ -867,7 +975,7 @@ export function PortfolioOverviewTab({
                         <div className="flex items-center justify-between text-xs">
                           <span className="font-medium text-foreground">{journeyLabel(client)}</span>
                           <span className="text-muted-foreground">
-                            {client.visitsTotal > 0 ? `${client.visitsDone}/${client.visitsTotal} encontros` : 'Livre'}
+                            {client.visitsTotal > 0 ? `${client.visitsDone}/${client.visitsTotal} encontros` : 'Não configurada'}
                           </span>
                         </div>
                         {client.visitsTotal > 0 && (
@@ -883,7 +991,7 @@ export function PortfolioOverviewTab({
                         <button
                           type="button"
                           onClick={() => openPendencias(client)}
-                          className="w-full text-left text-xs font-medium leading-4 text-foreground line-clamp-2 hover:text-brand-primary focus-visible:text-brand-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-primary/30"
+                          className="w-full break-words text-left text-xs font-medium leading-4 text-foreground hover:text-brand-primary focus-visible:text-brand-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-primary/30"
                           title={nextAction(client)}
                         >
                           {nextAction(client)}
@@ -906,13 +1014,13 @@ export function PortfolioOverviewTab({
                         <div className="flex items-center gap-1.5">
                           <Users size={14} className="text-muted-foreground" aria-hidden="true" />
                           <span className="font-semibold text-foreground">{stat.sellers}</span>
-                          <span className="text-muted-foreground">vendedores</span>
+                          <span className="text-muted-foreground">{sellerLabel(stat.sellers)}</span>
                         </div>
-                        {stat.sellers > 0 ? (
+                        {teamDataAvailable && stat.sellers > 0 ? (
                           <div className="font-medium text-foreground">
                             <span className="text-status-success-text">{stat.disciplinePct}%</span> presença hoje
                           </div>
-                        ) : null}
+                        ) : teamDataAvailable ? <span className="text-caption text-muted-foreground">Nenhum vendedor cadastrado</span> : <span className="text-caption text-muted-foreground">Equipe indisponível</span>}
                       </div>
                     </div>
 

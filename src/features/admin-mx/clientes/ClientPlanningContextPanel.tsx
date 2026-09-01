@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { ArrowUpRight, Building2, CheckCircle2, CircleAlert, RefreshCw, Target } from 'lucide-react'
+import { ArrowUpRight, Building2, CheckCircle2, CircleAlert, MoveHorizontal, RefreshCw, Target } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/atoms/Button'
 import {
@@ -44,8 +44,8 @@ const CYCLE_STATUS_LABEL: Record<string, string> = {
   revisado: 'Revisado',
 }
 
-function formatValue(value: number | null | undefined): string {
-  return value == null ? '—' : value.toLocaleString('pt-BR', { maximumFractionDigits: 2 })
+function formatValue(value: number | null | undefined, fallback = 'Não lançado'): string {
+  return value == null ? fallback : value.toLocaleString('pt-BR', { maximumFractionDigits: 2 })
 }
 
 export function ClientPlanningContextPanel(props: {
@@ -206,7 +206,7 @@ export function ClientPlanningContextPanel(props: {
           <div className="rounded-lg border border-border bg-surface-alt p-3"><div className="text-xs text-muted-foreground">Ciclo {year}</div><div className="mt-1 font-semibold text-foreground">{publicationCard ? publicationCard.statusLabel : state.cycle ? CYCLE_STATUS_LABEL[state.cycle.status] ?? state.cycle.status : 'Sem ciclo'}</div></div>
           <div className="rounded-lg border border-border bg-surface-alt p-3"><div className="text-xs text-muted-foreground">Indicadores do pacote</div><div className="mt-1 font-semibold text-foreground">{resolution?.items.length ?? 0}</div><div className="text-xs text-muted-foreground">{resolution ? `${resolution.manualCount} manuais · ${resolution.calculatedCount} calculados` : 'Produto sem roster'}</div></div>
           <div className="rounded-lg border border-border bg-surface-alt p-3"><div className="text-xs text-muted-foreground">Unidades consolidadas</div><div className="mt-1 font-semibold text-foreground">{activeUnits.length}</div><div className="text-xs text-muted-foreground">matriz + filiais ativas</div></div>
-          <div className="rounded-lg border border-border bg-surface-alt p-3"><div className="text-xs text-muted-foreground">Indicadores com meta</div><div className="mt-1 font-semibold text-foreground">{publicationCard ? publicationCard.indicadoresComMeta : '—'}</div><div className="text-xs text-muted-foreground">{publicationCard ? `Metas publicadas: ${publicationCard.metasPublicadas} · Pendentes: ${publicationCard.metasPendentes}` : 'Validação ainda não iniciada'}</div></div>
+          <div className="rounded-lg border border-border bg-surface-alt p-3"><div className="text-xs text-muted-foreground">Indicadores com meta</div><div className="mt-1 font-semibold text-foreground">{publicationCard ? publicationCard.indicadoresComMeta : 'Aguardando validação'}</div><div className="text-xs text-muted-foreground">{publicationCard ? `Metas publicadas: ${publicationCard.metasPublicadas} · Pendentes: ${publicationCard.metasPendentes}` : 'Validação ainda não iniciada'}</div></div>
         </div>
 
         {state.readiness && !state.readiness.canPublish ? (
@@ -217,19 +217,25 @@ export function ClientPlanningContextPanel(props: {
 
         {resolution && activeUnits.length ? (
           <>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="rounded-lg border border-border p-3"><div className="text-xs text-muted-foreground">Metas preenchidas · mês {month}</div><div className="mt-1 text-lg font-semibold text-foreground">{metasPreenchidas}/{expectedCells || '—'}</div></div>
-              <div className="rounded-lg border border-border p-3"><div className="text-xs text-muted-foreground">Realizados carregados · mês {month}</div><div className="mt-1 text-lg font-semibold text-foreground">{realizadosPreenchidos}/{expectedCells || '—'}</div></div>
+              <div className="grid gap-3 sm:grid-cols-2">
+              <div className="rounded-lg border border-border p-3"><div className="text-xs text-muted-foreground">Metas preenchidas · mês {month}</div><div className="mt-1 text-lg font-semibold text-foreground">{expectedCells ? `${metasPreenchidas}/${expectedCells}` : 'Pacote sem células'}</div></div>
+              <div className="rounded-lg border border-border p-3"><div className="text-xs text-muted-foreground">Realizados carregados · mês {month}</div><div className="mt-1 text-lg font-semibold text-foreground">{expectedCells ? `${realizadosPreenchidos}/${expectedCells}` : 'Pacote sem células'}</div></div>
             </div>
             {currentIndicators.length ? (
+              <>
+              <p className="mb-2 flex items-center gap-1.5 text-xs text-muted-foreground medium:hidden">
+                <MoveHorizontal size={14} aria-hidden="true" />
+                Deslize horizontalmente para consultar os valores consolidados.
+              </p>
               <MxTableSurface>
-                <Table className="min-w-[520px]">
+                <Table className="min-w-[520px]" aria-label="Indicadores consolidados do Plano Estratégico">
                   <TableHeader><TableRow><TableHead>Indicador do pacote</TableHead><TableHead>Meta consolidada</TableHead><TableHead>Realizado consolidado</TableHead></TableRow></TableHeader>
                   <TableBody>
                     {currentIndicators.map(indicator => <TableRow key={indicator.code}><TableCell className="font-semibold text-foreground">{indicator.label}</TableCell><TableCell>{formatValue(indicator.meta)}</TableCell><TableCell>{formatValue(indicator.realizado)}</TableCell></TableRow>)}
                   </TableBody>
                 </Table>
               </MxTableSurface>
+              </>
             ) : <MxEmptyState title="Sem valores no mês atual" description="O roster está vinculado, mas ainda não há metas ou realizados para esta competência." />}
           </>
         ) : null}

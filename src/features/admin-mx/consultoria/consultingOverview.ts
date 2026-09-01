@@ -2,6 +2,8 @@ import { supabase } from '@/lib/supabase'
 
 export type ConsultingOverviewStatus = 'nao_iniciado' | 'agendado' | 'concluido' | 'reagendado' | 'cancelado'
 export type ConsultingOverviewModality = 'online' | 'presencial' | 'a_definir'
+export type ConsultingOverviewPeriod = 'todos' | 'hoje' | 'proximos_7_dias' | 'atrasados'
+export type ConsultingOverviewSort = 'prioridade' | 'data_proxima' | 'recentes' | 'cliente'
 
 export type ConsultingOverviewRow = {
   id: string
@@ -27,10 +29,65 @@ export type ConsultingOverviewFilters = {
   search: string
   status: 'todos' | ConsultingOverviewStatus
   modality: 'todas' | ConsultingOverviewModality
+  period?: ConsultingOverviewPeriod
+  sort?: ConsultingOverviewSort
+}
+
+export const CONSULTING_PERIOD_LABELS: Record<ConsultingOverviewPeriod, string> = {
+  todos: 'Todos os períodos',
+  hoje: 'Hoje',
+  proximos_7_dias: 'Próximos 7 dias',
+  atrasados: 'Atrasados',
+}
+
+export const CONSULTING_SORT_LABELS: Record<ConsultingOverviewSort, string> = {
+  prioridade: 'Prioridade',
+  data_proxima: 'Data mais próxima',
+  recentes: 'Mais recentes',
+  cliente: 'Cliente A–Z',
+}
+
+function normalizeLookupValue(value: string | null | undefined) {
+  return String(value ?? '')
+    .trim()
+    .toLocaleLowerCase('pt-BR')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[\s-]+/g, '_')
+}
+
+function startOfDay(date: Date) {
+  const result = new Date(date)
+  result.setHours(0, 0, 0, 0)
+  return result
+}
+
+function endOfDay(date: Date) {
+  const result = startOfDay(date)
+  result.setHours(23, 59, 59, 999)
+  return result
+}
+
+export function parseConsultingOverviewDate(value: string | null): Date | null {
+  if (!value) return null
+  const date = /^\d{4}-\d{2}-\d{2}$/.test(value)
+    ? new Date(`${value}T00:00:00`)
+    : new Date(value)
+  return Number.isNaN(date.getTime()) ? null : date
+}
+
+export function getConsultingOverviewRowDate(row: ConsultingOverviewRow): Date | null {
+  return parseConsultingOverviewDate(row.scheduledAt) ?? parseConsultingOverviewDate(row.effectiveVisitDate)
+}
+
+export function isConsultingOverviewRowOverdue(row: ConsultingOverviewRow, referenceDate = new Date()): boolean {
+  if (!['nao_iniciado', 'agendado', 'reagendado'].includes(row.status)) return false
+  const date = getConsultingOverviewRowDate(row)
+  return Boolean(date && date.getTime() < referenceDate.getTime())
 }
 
 export function normalizeConsultingStatus(value: string | null | undefined): ConsultingOverviewStatus {
-  const normalized = String(value ?? '').trim().toLowerCase().replaceAll(' ', '_')
+  const normalized = normalizeLookupValue(value)
   if (['concluido', 'concluida', 'completed', 'finalizado', 'finalizada'].includes(normalized)) return 'concluido'
   if (['reagendado', 'reagendada', 'rescheduled'].includes(normalized)) return 'reagendado'
   // Sem este ramo, 'cancelada' caía no default e virava 'Não iniciado' — o
@@ -42,7 +99,7 @@ export function normalizeConsultingStatus(value: string | null | undefined): Con
 }
 
 export function normalizeConsultingModality(value: string | null | undefined): ConsultingOverviewModality {
-  const normalized = String(value ?? '').trim().toLowerCase()
+  const normalized = normalizeLookupValue(value)
   if (normalized.includes('pres')) return 'presencial'
   if (normalized.includes('online') || normalized.includes('remot')) return 'online'
   return 'a_definir'
@@ -63,14 +120,72 @@ export const CONSULTING_MODALITY_LABELS: Record<ConsultingOverviewModality, stri
 }
 
 export function filterConsultingOverviewRows(rows: ConsultingOverviewRow[], filters: ConsultingOverviewFilters): ConsultingOverviewRow[] {
-  const term = filters.search.trim().toLocaleLowerCase('pt-BR')
-  return rows.filter(row => {
+  const term = normalizeLookupValue(filters.search)
+  const today = new Date()
+  const period = filters.period ?? 'todos'
+  const filtered = rows.filter(row => {
     if (filters.status !== 'todos' && row.status !== filters.status) return false
     if (filters.modality !== 'todas' && row.modality !== filters.modality) return false
+    if (period === 'atrasados' && !isConsultingOverviewRowOverdue(row, today)) return false
+    if (period === 'hoje') {
+      const date = getConsultingOverviewRowDate(row)
+      if (!date || date < startOfDay(today) || date > endOfDay(today)) return false
+    }
+    if (period === 'proximos_7_dias') {
+      const date = getConsultingOverviewRowDate(row)
+      const start = startOfDay(today)
+      const end = endOfDay(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7))
+      if (!date || date < start || date > end) return false
+    }
     if (!term) return true
     return [row.clientName, row.title, row.objective, row.consultantName, row.productName, String(row.visitNumber)]
-      .some(value => value.toLocaleLowerCase('pt-BR').includes(term))
+      .some(value => normalizeLookupValue(value).includes(term))
   })
+  return sortConsultingOverviewRows(filtered, filters.sort ?? 'prioridade')
+}
+
+function priorityRank(row: ConsultingOverviewRow) {
+  if (isConsultingOverviewRowOverdue(row)) return 0
+  if (row.status === 'nao_iniciado') return 1
+  if (row.status === 'reagendado') return 2
+  if (row.status === 'agendado') return 3
+  if (row.status === 'concluido') return 4
+  return 5
+}
+
+export function sortConsultingOverviewRows(rows: ConsultingOverviewRow[], sort: ConsultingOverviewSort): ConsultingOverviewRow[] {
+  return rows
+    .map((row, index) => ({ row, index }))
+    .sort((a, b) => {
+      const dateA = getConsultingOverviewRowDate(a.row)?.getTime() ?? null
+      const dateB = getConsultingOverviewRowDate(b.row)?.getTime() ?? null
+      if (sort === 'cliente') {
+        const byClient = a.row.clientName.localeCompare(b.row.clientName, 'pt-BR', { sensitivity: 'base' })
+        if (byClient !== 0) return byClient
+      } else if (sort === 'recentes') {
+        if (dateA !== dateB) {
+          if (dateA === null) return 1
+          if (dateB === null) return -1
+          return dateB - dateA
+        }
+      } else if (sort === 'data_proxima') {
+        if (dateA !== dateB) {
+          if (dateA === null) return 1
+          if (dateB === null) return -1
+          return dateA - dateB
+        }
+      } else {
+        const byPriority = priorityRank(a.row) - priorityRank(b.row)
+        if (byPriority !== 0) return byPriority
+        if (dateA !== dateB) {
+          if (dateA === null) return 1
+          if (dateB === null) return -1
+          return dateA - dateB
+        }
+      }
+      return a.index - b.index
+    })
+    .map(({ row }) => row)
 }
 
 export function summarizeConsultingOverview(rows: ConsultingOverviewRow[]) {
