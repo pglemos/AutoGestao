@@ -41,9 +41,9 @@ describe('contrato do cockpit operacional do /painel', () => {
   test('mantém alvos de toque confortáveis nos filtros mobile', () => {
     const filters = read('src/features/network-dashboard/sections/NetworkFiltersSection.tsx')
 
-    expect(filters).toContain('className="h-mx-11 pl-9 sm:h-10"')
-    expect(filters).toContain('className="h-mx-11 rounded-xl border border-border bg-white px-3 text-sm sm:h-10"')
-    expect(filters).toContain('className="h-mx-11 sm:h-10"')
+    expect(filters).toContain('h-mx-10 min-h-[var(--mx-touch-target-min)] pl-9 sm:min-h-[var(--mx-input-height)]')
+    expect(filters).toContain('h-mx-10 min-h-[var(--mx-touch-target-min)] rounded-xl border border-border bg-white px-3 text-sm sm:min-h-[var(--mx-input-height)]')
+    expect(filters).toContain('h-mx-10 min-h-[var(--mx-touch-target-min)] sm:min-h-[var(--mx-input-height)]')
   })
 
   test('não transforma falhas parciais em listas vazias', () => {

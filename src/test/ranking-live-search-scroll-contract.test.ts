@@ -65,6 +65,6 @@ describe('contrato da classificação global', () => {
     expect(css).toContain(':where(.relative, [data-search-field]):has(svg.lucide-search) > input')
     expect(css).toContain('padding-left: 2.75rem !important')
     expect(lojasHeader).toContain('className="pl-mx-10"')
-    expect(networkFilters).toContain('className="pl-9"')
+    expect(networkFilters).toMatch(/className="[^"]*\bpl-9\b[^"]*"/)
   })
 })
