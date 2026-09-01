@@ -1,8 +1,8 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { slugify } from '@/lib/utils'
-import { MxErrorState, MxLoadingState, MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
+import { MxErrorState, MxSkeleton, MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
 import { NetworkDashboardHeader } from './components/NetworkDashboardHeader'
 import { NetworkDrilldownDrawer, type NetworkDrilldownTarget } from './components/NetworkDrilldownDrawer'
 import { NetworkReportActions } from './components/NetworkReportActions'
@@ -43,7 +43,22 @@ function focusElement(id: string) {
   element.focus({ preventScroll: true })
 }
 
-export function NetworkDashboardContent({ scope = 'internal' }: { scope?: NetworkCockpitScope }) {
+/** Esqueleto com a forma real da tela: 4 cartões e 5 linhas de fila. */
+function NetworkCockpitSkeleton() {
+  return (
+    <div className="space-y-5" role="status" aria-label="Carregando cockpit operacional">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {[0, 1, 2, 3].map(index => <MxSkeleton key={index} className="h-40 rounded-2xl" />)}
+      </div>
+      <MxSkeleton className="h-20 rounded-2xl" />
+      <div className="space-y-3 rounded-2xl border border-border-subtle bg-white p-4">
+        {[0, 1, 2, 3, 4].map(index => <MxSkeleton key={index} className="h-16 rounded-xl" />)}
+      </div>
+    </div>
+  )
+}
+
+export function NetworkDashboardContent({ scope = 'internal', carteiraSlot, onConfigureGoals }: { scope?: NetworkCockpitScope; carteiraSlot?: (rows: NetworkCockpitStore[]) => ReactNode; onConfigureGoals?: () => void }) {
   const controller = useNetworkDashboardController(scope)
   const navigate = useNavigate()
   const { role, profile, setActiveStoreId } = useAuth()
@@ -70,14 +85,14 @@ export function NetworkDashboardContent({ scope = 'internal' }: { scope?: Networ
 
   const showPriorities = useCallback(() => focusElement('network-priorities'), [])
   const title = scope === 'internal' ? 'Cockpit operacional' : 'Painel Geral'
-  const description = [
-    `${greeting}.`,
-    scope === 'internal' ? 'Vendas, metas, disciplina e prioridades da rede.' : 'Visão consolidada da rede, disciplina operacional e prioridades.',
-    'Use os filtros abaixo para trocar o período e a situação.',
-    controller.lastUpdatedAt
-      ? `Consulta realizada às ${controller.lastUpdatedAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}.`
-      : 'Aguardando a primeira sincronização.',
-  ].join(' ')
+  // Uma linha de contexto no cabeçalho; saudação e horário descem para os
+  // metadados. Concatenar tudo custava a primeira dobra inteira no telefone.
+  const description = scope === 'internal'
+    ? 'Vendas, metas, disciplina e prioridades da rede.'
+    : 'Visão consolidada da rede, disciplina operacional e prioridades.'
+  const syncLabel = controller.lastUpdatedAt
+    ? `Consulta realizada às ${controller.lastUpdatedAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`
+    : 'Aguardando a primeira sincronização'
 
   return (
     <>
@@ -89,13 +104,15 @@ export function NetworkDashboardContent({ scope = 'internal' }: { scope?: Networ
         realtimeStatus={controller.realtimeStatus}
         onRefresh={controller.refresh}
       />
+      <p className="-mt-2 text-xs text-muted-foreground">{greeting} · {syncLabel} · {periodLabel}</p>
       <p className="sr-only">Período: {periodLabel}. O seletor de período abaixo controla a leitura exibida no cockpit.</p>
       {controller.realtimeStatus === 'degraded' ? <MxStatusBanner tone="warning">A conexão em tempo real foi interrompida. Os dados anteriores permanecem disponíveis e serão reconciliados após a reconexão.</MxStatusBanner> : null}
       {controller.error && controller.allRows.length > 0 ? <MxStatusBanner tone="warning">Leitura anterior mantida. {controller.error}</MxStatusBanner> : null}
-      {controller.loading && !controller.allRows.length ? <MxLoadingState label="Carregando cockpit operacional..." /> : controller.error && !controller.allRows.length ? <MxErrorState description={controller.error} retry={controller.refresh} /> : <>
-        <NetworkMetricsSection metrics={controller.metrics} periodLabel={periodLabel} onShowPriorities={showPriorities} />
+      {controller.loading && !controller.allRows.length ? <NetworkCockpitSkeleton /> : controller.error && !controller.allRows.length ? <MxErrorState description={controller.error} retry={controller.refresh} /> : <>
+        <NetworkMetricsSection metrics={controller.metrics} periodLabel={periodLabel} onShowPriorities={showPriorities} onConfigureGoals={onConfigureGoals} />
         <NetworkFiltersSection search={controller.search} onSearch={controller.setSearch} status={controller.status} onStatus={controller.setStatus} timeframe={controller.timeframe} onTimeframe={controller.setTimeframe} customRange={controller.customRange} onCustomRange={controller.setCustomRange} onReset={controller.resetFilters} />
         <NetworkPrioritiesSection rows={controller.rows} sort={controller.sort} onSort={controller.setSort} onOpen={setSelectedStore} />
+        {carteiraSlot ? carteiraSlot(controller.rows) : null}
         {canTrigger ? <NetworkReportActions loading={controller.reportLoading} onTrigger={controller.triggerReport} /> : null}
       </>}
       <NetworkDrilldownDrawer store={selectedStore} open={Boolean(selectedStore)} onOpenChange={open => { if (!open) setSelectedStore(null) }} onNavigate={navigateStore} onOpenPerson={openPerson} />

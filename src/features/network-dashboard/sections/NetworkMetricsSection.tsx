@@ -65,15 +65,29 @@ function salesValue(metrics: NetworkDashboardMetrics): string | number {
 
 function attainmentValue(metrics: NetworkDashboardMetrics): string {
   if (metrics.attainmentState === 'no_data' || metrics.attainmentState === 'unknown' || metrics.attainmentState === 'not_configured' || metrics.goal <= 0) return '—'
+  // Base incompleta não vira percentual: um número calculado sobre parte da
+  // rede, exibido com peso máximo, é exatamente o que "dados que não mentem"
+  // proíbe. O vazio informado vale mais que o falso preciso.
+  if (metrics.attainmentState === 'partial') return '—'
   return `${((metrics.sales / metrics.goal) * 100).toFixed(1)}%`
 }
 
-export function NetworkMetricsSection({ metrics, periodLabel, onShowPriorities }: {
+/** Quantas lojas ficaram fora do cálculo do atingimento. */
+function attainmentBaseNote(metrics: NetworkDashboardMetrics): string | null {
+  if (metrics.attainmentState !== 'partial') return null
+  const missing = metrics.storesWithoutGoal + metrics.storesWithUnknownGoal
+  if (missing <= 0) return null
+  return `Sem base confiável · ${formatCount(missing)} de ${formatCount(metrics.stores)} lojas sem meta`
+}
+
+export function NetworkMetricsSection({ metrics, periodLabel, onShowPriorities, onConfigureGoals }: {
   metrics: NetworkDashboardMetrics
   periodLabel: string
   onShowPriorities: () => void
+  onConfigureGoals?: () => void
 }) {
   const attainment = attainmentValue(metrics)
+  const baseNote = onConfigureGoals ? attainmentBaseNote(metrics) : null
   const priorityCount = metrics.critical + metrics.attention
   const priorityDetail = nonZeroLabels([
     metrics.critical > 0 ? countLabel(metrics.critical, 'loja crítica', 'lojas críticas') : null,
@@ -108,11 +122,11 @@ export function NetworkMetricsSection({ metrics, periodLabel, onShowPriorities }
         <MxMetricCard
           title="Atingimento"
           value={attainment}
-          detail={attainmentDetail(metrics, periodLabel)}
+          detail={baseNote ?? attainmentDetail(metrics, periodLabel)}
           icon={Target}
           tone={metrics.attainmentState === 'value' && Number.parseFloat(attainment) >= 100 ? 'success' : 'warning'}
-          actionLabel="Ver fila de prioridades"
-          onAction={onShowPriorities}
+          actionLabel={baseNote ? 'Configurar metas' : 'Ver fila de prioridades'}
+          onAction={baseNote ? onConfigureGoals : onShowPriorities}
         >
           <MetricStateChip state={metrics.attainmentState} />
         </MxMetricCard>
