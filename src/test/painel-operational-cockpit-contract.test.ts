@@ -38,6 +38,14 @@ describe('contrato do cockpit operacional do /painel', () => {
     expect(table).toContain('0 confirmado')
   })
 
+  test('mantém alvos de toque confortáveis nos filtros mobile', () => {
+    const filters = read('src/features/network-dashboard/sections/NetworkFiltersSection.tsx')
+
+    expect(filters).toContain('className="h-mx-11 pl-9 sm:h-10"')
+    expect(filters).toContain('className="h-mx-11 rounded-xl border border-border bg-white px-3 text-sm sm:h-10"')
+    expect(filters).toContain('className="h-mx-11 sm:h-10"')
+  })
+
   test('não transforma falhas parciais em listas vazias', () => {
     const portfolio = read('src/features/admin-mx/clientes/useClientPortfolio.ts')
     const page = read('src/features/admin-mx/AdminDashboardPage.tsx')

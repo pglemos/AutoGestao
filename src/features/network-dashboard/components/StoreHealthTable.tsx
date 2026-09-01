@@ -29,15 +29,15 @@ function statusFor(row: NetworkCockpitStore) {
 }
 
 function hasConfiguredGoal(row: NetworkCockpitStore): boolean {
-  return row.dataQuality?.goal === 'configured' || (!row.dataQuality && row.goal > 0)
+  return row.dataQuality?.goal === 'configured'
 }
 
 function hasOperationalData(row: NetworkCockpitStore): boolean {
-  return row.dataQuality ? row.dataQuality.operational === 'available' : true
+  return row.dataQuality?.operational === 'available'
 }
 
 function hasConfirmedDiscipline(row: NetworkCockpitStore): boolean {
-  return row.dataQuality ? row.dataQuality.discipline === 'available' : true
+  return row.dataQuality?.discipline === 'available'
 }
 
 function formatCount(value: number): string {
@@ -55,7 +55,7 @@ function salesValue(row: NetworkCockpitStore): string {
 }
 
 function goalValue(row: NetworkCockpitStore): string {
-  if (row.dataQuality?.goal === 'unknown') return 'Meta não confirmada'
+  if (!row.dataQuality || row.dataQuality.goal === 'unknown') return 'Meta não confirmada'
   return hasConfiguredGoal(row) ? formatCount(row.goal) : 'Não configurada'
 }
 
@@ -75,7 +75,7 @@ function disciplineValue(row: NetworkCockpitStore): string {
 
 function qualityNote(row: NetworkCockpitStore): string | null {
   if (row.dataQuality?.operational === 'no_data') return 'Sem fechamento validado no período.'
-  if (row.dataQuality?.operational === 'unknown') return 'A disponibilidade operacional não foi confirmada.'
+  if (!row.dataQuality || row.dataQuality.operational === 'unknown') return 'A disponibilidade operacional não foi confirmada.'
   if (row.dataQuality?.goal === 'not_configured') return 'A meta mensal precisa ser configurada.'
   if (row.dataQuality?.goal === 'unknown') return 'A configuração da meta não foi confirmada.'
   if (row.dataQuality?.discipline === 'no_data') return 'Sem fechamento de disciplina validado no período.'
@@ -174,7 +174,7 @@ export function StoreHealthTable({ rows, sort, onSort, onOpen }: {
         {rows.map(row => {
           const note = qualityNote(row)
           return (
-            <article key={row.id} className="rounded-2xl border border-border-subtle bg-white p-4 shadow-sm">
+            <article key={row.id} className="rounded-2xl border border-border-subtle bg-white p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <h3 className="truncate text-base font-semibold text-foreground">{row.name}</h3>

@@ -4,7 +4,7 @@ import type { NetworkDashboardMetrics, NetworkMetricState } from '../types'
 
 const stateCopy: Record<NetworkMetricState, { label: string; className: string; icon: LucideIcon }> = {
   value: { label: 'Leitura disponível', className: 'bg-status-success-surface text-status-success-text', icon: CircleCheck },
-  zero: { label: 'Zero real', className: 'bg-status-info-surface text-status-info-text', icon: CircleCheck },
+  zero: { label: 'Zero confirmado', className: 'bg-status-info-surface text-status-info-text', icon: CircleCheck },
   partial: { label: 'Leitura parcial', className: 'bg-status-warning-surface text-status-warning-text', icon: CircleAlert },
   no_data: { label: 'Sem dados no período', className: 'bg-status-warning-surface text-status-warning-text', icon: CircleX },
   not_configured: { label: 'Sem configuração', className: 'bg-status-warning-surface text-status-warning-text', icon: CircleAlert },
@@ -17,22 +17,55 @@ function MetricStateChip({ state }: { state: NetworkMetricState }) {
   return <span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-caption font-semibold leading-4 ${copy.className}`}><Icon size={14} aria-hidden="true" />{copy.label}</span>
 }
 
+function formatCount(value: number): string {
+  return value.toLocaleString('pt-BR', { maximumFractionDigits: 0 })
+}
+
+function countLabel(value: number, singular: string, plural: string): string {
+  return `${formatCount(value)} ${value === 1 ? singular : plural}`
+}
+
+function nonZeroLabels(labels: Array<string | null>): string {
+  return labels.filter((label): label is string => Boolean(label)).join(' · ')
+}
+
 function salesDetail(metrics: NetworkDashboardMetrics, periodLabel: string): string {
   if (metrics.salesState === 'no_data') return `Nenhuma fonte operacional confirmou leitura · ${periodLabel}`
   if (metrics.salesState === 'unknown') return `A fonte não confirmou a disponibilidade da leitura · ${periodLabel}`
-  if (metrics.salesState === 'partial') return `${metrics.sales} confirmada(s) · ${metrics.storesWithoutData} sem leitura · ${metrics.storesWithUnknownData} sem confirmação · ${periodLabel}`
-  return `${metrics.sales} venda(s) confirmada(s) · ${periodLabel}`
+  if (metrics.salesState === 'partial') {
+    const qualifiers = nonZeroLabels([
+      metrics.storesWithoutData > 0 ? countLabel(metrics.storesWithoutData, 'loja sem leitura', 'lojas sem leitura') : null,
+      metrics.storesWithUnknownData > 0 ? countLabel(metrics.storesWithUnknownData, 'loja sem confirmação', 'lojas sem confirmação') : null,
+    ])
+    return `${countLabel(metrics.sales, 'venda confirmada', 'vendas confirmadas')}${qualifiers ? ` · ${qualifiers}` : ''} · ${periodLabel}`
+  }
+  return `${countLabel(metrics.sales, 'venda confirmada', 'vendas confirmadas')} · ${periodLabel}`
 }
 
 function attainmentDetail(metrics: NetworkDashboardMetrics, periodLabel: string): string {
-  if (metrics.attainmentState === 'not_configured') return `${metrics.storesWithoutGoal} de ${metrics.stores} loja(s) sem meta mensal · ${periodLabel}`
+  if (metrics.attainmentState === 'not_configured') return `${countLabel(metrics.storesWithoutGoal, 'loja sem meta mensal', 'lojas sem meta mensal')} · ${periodLabel}`
   if (metrics.attainmentState === 'unknown') return metrics.storesWithUnknownGoal > 0
-    ? `${metrics.storesWithUnknownGoal} loja(s) sem configuração de meta confirmada · ${periodLabel}`
+    ? `${countLabel(metrics.storesWithUnknownGoal, 'loja sem configuração de meta confirmada', 'lojas sem configuração de meta confirmada')} · ${periodLabel}`
     : `A disponibilidade da leitura não foi confirmada · ${periodLabel}`
   if (metrics.attainmentState === 'no_data') return `Meta cadastrada, mas sem leitura operacional confirmada · ${periodLabel}`
   if (metrics.goal === 0) return `Meta não configurada · ${periodLabel}`
-  if (metrics.attainmentState === 'partial') return `${metrics.sales} de ${metrics.goal} vendas · ${metrics.storesWithoutGoal} sem meta · ${metrics.storesWithUnknownGoal} sem confirmação · ${periodLabel}`
-  return `${metrics.sales} de ${metrics.goal} vendas · ${periodLabel}`
+  if (metrics.attainmentState === 'partial') {
+    const qualifiers = nonZeroLabels([
+      metrics.storesWithoutGoal > 0 ? countLabel(metrics.storesWithoutGoal, 'loja sem meta', 'lojas sem meta') : null,
+      metrics.storesWithUnknownGoal > 0 ? countLabel(metrics.storesWithUnknownGoal, 'loja sem confirmação', 'lojas sem confirmação') : null,
+    ])
+    return `${formatCount(metrics.sales)} de ${formatCount(metrics.goal)} vendas${qualifiers ? ` · ${qualifiers}` : ''} · ${periodLabel}`
+  }
+  return `${formatCount(metrics.sales)} de ${formatCount(metrics.goal)} vendas · ${periodLabel}`
+}
+
+function salesValue(metrics: NetworkDashboardMetrics): string | number {
+  return metrics.salesState === 'no_data' || metrics.salesState === 'unknown' ? '—' : formatCount(metrics.sales)
+}
+
+function attainmentValue(metrics: NetworkDashboardMetrics): string {
+  if (metrics.attainmentState === 'no_data' || metrics.attainmentState === 'unknown' || metrics.attainmentState === 'not_configured' || metrics.goal <= 0) return '—'
+  return `${((metrics.sales / metrics.goal) * 100).toFixed(1)}%`
 }
 
 export function NetworkMetricsSection({ metrics, periodLabel, onShowPriorities }: {
@@ -40,8 +73,12 @@ export function NetworkMetricsSection({ metrics, periodLabel, onShowPriorities }
   periodLabel: string
   onShowPriorities: () => void
 }) {
-  const attainmentAvailable = metrics.attainmentState === 'value' || metrics.attainmentState === 'zero' || metrics.attainmentState === 'partial'
-  const attainment = attainmentAvailable && metrics.goal > 0 ? `${((metrics.sales / metrics.goal) * 100).toFixed(1)}%` : '—'
+  const attainment = attainmentValue(metrics)
+  const priorityCount = metrics.critical + metrics.attention
+  const priorityDetail = nonZeroLabels([
+    metrics.critical > 0 ? countLabel(metrics.critical, 'loja crítica', 'lojas críticas') : null,
+    metrics.attention > 0 ? countLabel(metrics.attention, 'loja em atenção', 'lojas em atenção') : null,
+  ]) || 'Nenhuma prioridade na leitura'
 
   return (
     <section aria-labelledby="network-metrics-title" className="space-y-3">
@@ -50,7 +87,7 @@ export function NetworkMetricsSection({ metrics, periodLabel, onShowPriorities }
         <MxMetricCard
           title="Lojas ativas"
           value={metrics.stores}
-          detail={`${metrics.stores} unidade(s) no escopo · ${periodLabel}`}
+          detail={`${countLabel(metrics.stores, 'unidade no escopo', 'unidades no escopo')} · ${periodLabel}`}
           icon={Building2}
           actionLabel="Abrir fila por prioridade"
           onAction={onShowPriorities}
@@ -59,7 +96,7 @@ export function NetworkMetricsSection({ metrics, periodLabel, onShowPriorities }
         </MxMetricCard>
         <MxMetricCard
           title="Vendas"
-          value={metrics.sales}
+          value={salesValue(metrics)}
           detail={salesDetail(metrics, periodLabel)}
           icon={TrendingUp}
           tone="success"
@@ -81,10 +118,10 @@ export function NetworkMetricsSection({ metrics, periodLabel, onShowPriorities }
         </MxMetricCard>
         <MxMetricCard
           title="Prioridades"
-          value={metrics.critical}
-          detail={`${metrics.critical} crítica(s) · ${metrics.attention} em atenção · ${periodLabel}`}
+          value={priorityCount}
+          detail={`${priorityDetail} · ${periodLabel}`}
           icon={AlertTriangle}
-          tone={metrics.critical > 0 ? 'danger' : metrics.attention > 0 ? 'warning' : 'success'}
+          tone={priorityCount > 0 ? metrics.critical > 0 ? 'danger' : 'warning' : 'success'}
           actionLabel="Abrir fila de prioridades"
           onAction={onShowPriorities}
         >
@@ -97,10 +134,11 @@ export function NetworkMetricsSection({ metrics, periodLabel, onShowPriorities }
           <Info size={16} className="shrink-0 text-status-info-text" aria-hidden="true" />
           Como ler os estados dos números
         </summary>
-        <div className="grid gap-3 border-t border-border-subtle px-4 py-4 text-xs leading-5 text-muted-foreground sm:grid-cols-3">
-          <p><strong className="text-foreground">Zero real:</strong> a fonte confirmou a leitura e o valor é zero.</p>
+        <div className="grid gap-3 border-t border-border-subtle px-4 py-4 text-xs leading-5 text-muted-foreground sm:grid-cols-2 lg:grid-cols-4">
+          <p><strong className="text-foreground">Zero confirmado:</strong> a fonte confirmou a leitura e o valor é zero.</p>
           <p><strong className="text-foreground">Sem configuração:</strong> a meta ainda não foi cadastrada; o percentual não é calculado.</p>
           <p><strong className="text-foreground">Sem dados:</strong> não houve leitura operacional confirmada para o período.</p>
+          <p><strong className="text-foreground">Não confirmado:</strong> a fonte não trouxe qualidade suficiente para validar o número.</p>
         </div>
       </details>
     </section>

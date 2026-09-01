@@ -62,6 +62,10 @@ function formatTime(value: Date | null): string {
   return value ? value.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : 'ainda não sincronizado'
 }
 
+function countPhrase(value: number, singular: string, plural: string): string {
+  return `${value.toLocaleString('pt-BR')} ${value === 1 ? singular : plural}`
+}
+
 export function AdminDashboardPage() {
   const { rows: clients, loading: clientsLoading, error: clientsError, lastUpdatedAt: clientsUpdatedAt, refetch: refetchClients } = useClientPortfolio()
   const [pendingList, setPendingList] = useState<InscricaoRow[]>([])
@@ -127,7 +131,7 @@ export function AdminDashboardPage() {
     if (unassigned.length > 0) {
       alerts.push({
         id: 'unassigned',
-        title: `${unassigned.length} cliente(s) ativo(s) sem consultor atribuído`,
+        title: countPhrase(unassigned.length, 'cliente ativo sem consultor atribuído', 'clientes ativos sem consultor atribuído'),
         subtitle: 'Atribua um consultor MX qualificado para iniciar o acompanhamento.',
         tone: 'warning',
         link: '/clientes?bucket=com_bloqueios',
@@ -138,7 +142,7 @@ export function AdminDashboardPage() {
     if (readyToActivate.length > 0) {
       alerts.push({
         id: 'ready-activate',
-        title: `${readyToActivate.length} cliente(s) pronto(s) para ativação`,
+        title: countPhrase(readyToActivate.length, 'cliente pronto para ativação', 'clientes prontos para ativação'),
         subtitle: 'Todos os pré-requisitos cumpridos. Agende ou confirme a ativação.',
         tone: 'info',
         link: '/clientes?bucket=prontos_para_ativar',
@@ -149,7 +153,7 @@ export function AdminDashboardPage() {
     if (withoutOwner.length > 0) {
       alerts.push({
         id: 'no-owner',
-        title: `${withoutOwner.length} cliente(s) sem Dono Master cadastrado`,
+        title: countPhrase(withoutOwner.length, 'cliente sem Dono Master cadastrado', 'clientes sem Dono Master cadastrado'),
         subtitle: 'Necessário para conceder acessos executivos à conta.',
         tone: 'danger',
         link: '/clientes?bucket=com_bloqueios',
@@ -160,8 +164,8 @@ export function AdminDashboardPage() {
       const vendedores = vendedoresImpactados(lojasSemMeta)
       alerts.push({
         id: 'loja-sem-meta',
-        title: `${lojasSemMeta.length} loja(s) em operação com meta mensal zerada`,
-        subtitle: `${vendedores} vendedor(es) veem projeção e atingimento em 0%: ${lojasSemMeta.slice(0, 3).map(item => item.loja).join(', ')}${lojasSemMeta.length > 3 ? '…' : ''}`,
+        title: countPhrase(lojasSemMeta.length, 'loja em operação com meta mensal zerada', 'lojas em operação com meta mensal zerada'),
+        subtitle: `${countPhrase(vendedores, 'vendedor vê', 'vendedores veem')} projeção e atingimento em 0%: ${lojasSemMeta.slice(0, 3).map(item => item.loja).join(', ')}${lojasSemMeta.length > 3 ? '…' : ''}`,
         tone: 'danger',
         link: '/clientes',
       })
@@ -178,6 +182,10 @@ export function AdminDashboardPage() {
 
   const governanceLoading = clientsLoading || pendingLoading || lojasLoading
   const exceptionTotal = systemAlerts.length + pendingTotal
+  const exceptionSummary = [
+    systemAlerts.length > 0 ? countPhrase(systemAlerts.length, 'alerta agrupado', 'alertas agrupados') : null,
+    pendingTotal > 0 ? countPhrase(pendingTotal, 'cadastro aguardando validação', 'cadastros aguardando validação') : null,
+  ].filter((value): value is string => Boolean(value)).join(' · ')
 
   return (
     <MxModulePage width={width} bottomClearance={bottomClearance}>
@@ -213,7 +221,7 @@ export function AdminDashboardPage() {
               <MxSectionCard id="governanca-excecoes" aria-labelledby="governanca-excecoes-title">
                 <MxSectionHeader
                   title={<span id="governanca-excecoes-title">Fila de exceções</span>}
-                  description={`${exceptionTotal} item(ns) pedem decisão ou validação. Cada item aponta o próximo destino.`}
+                  description={exceptionSummary ? `${exceptionSummary}. Cada item aponta o próximo destino.` : 'Nenhuma exceção ativa nesta leitura.'}
                   actions={exceptionTotal > 0 ? <Button variant="ghost" size="sm" onClick={() => navigate('/clientes?tab=governanca')} className="text-[var(--mx-color-primary)]">Abrir governança <ArrowRight size={12} aria-hidden="true" /></Button> : undefined}
                 />
 
@@ -266,7 +274,7 @@ export function AdminDashboardPage() {
 
                 {pendingTotal > pendingList.length ? (
                   <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--mx-color-border-subtle)] px-4 py-3">
-                    <p className="text-xs text-[var(--mx-color-text-secondary)]">Mostrando {pendingList.length} de {pendingTotal} cadastros aguardando validação.</p>
+                    <p className="text-xs text-[var(--mx-color-text-secondary)]">Mostrando {pendingList.length.toLocaleString('pt-BR')} de {pendingTotal.toLocaleString('pt-BR')} {pendingTotal === 1 ? 'cadastro' : 'cadastros'} aguardando validação.</p>
                     <Button variant="outline" size="sm" onClick={() => navigate('/clientes?tab=inscricoes')}>Ver todos os cadastros</Button>
                   </div>
                 ) : null}

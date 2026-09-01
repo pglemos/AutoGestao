@@ -158,19 +158,19 @@ export function useNetworkDashboardController(scope: NetworkCockpitScope = 'inte
 
   const visibleRows = useMemo(() => filterAndSortStoreDiagnostics({ rows, search, status, sort }), [rows, search, status, sort])
   const metrics = useMemo<NetworkDashboardMetrics>(() => {
-    const operationalRows = rows.filter(row => !row.dataQuality || row.dataQuality.operational === 'available')
-    const unknownOperationalRows = rows.filter(row => row.dataQuality?.operational === 'unknown')
-    const configuredGoalRows = rows.filter(row => row.dataQuality?.goal === 'configured' || (!row.dataQuality && row.goal > 0))
-    const unknownGoalRows = rows.filter(row => row.dataQuality?.goal === 'unknown')
-    const storesWithoutGoal = rows.filter(row => row.dataQuality?.goal === 'not_configured' || (!row.dataQuality && row.goal <= 0)).length
+    const operationalRows = rows.filter(row => row.dataQuality?.operational === 'available')
+    const unknownOperationalRows = rows.filter(row => !row.dataQuality || row.dataQuality.operational === 'unknown')
+    const configuredGoalRows = rows.filter(row => row.dataQuality?.goal === 'configured')
+    const unknownGoalRows = rows.filter(row => !row.dataQuality || row.dataQuality.goal === 'unknown')
+    const storesWithoutGoal = rows.filter(row => row.dataQuality?.goal === 'not_configured').length
     const storesWithoutData = rows.filter(row => row.dataQuality?.operational === 'no_data').length
     const statusCounts = rows.reduce((acc, row) => {
       const rowStatus = getStoreDiagnosticStatus(row)
       acc[rowStatus] += 1
       return acc
     }, { critical: 0, alert: 0, target: 0, healthy: 0 } as Record<'critical' | 'alert' | 'target' | 'healthy', number>)
-    const sales = rows.reduce((total, row) => total + row.sales, 0)
-    const goal = rows.reduce((total, row) => total + row.goal, 0)
+    const sales = operationalRows.reduce((total, row) => total + row.sales, 0)
+    const goal = configuredGoalRows.reduce((total, row) => total + row.goal, 0)
     return {
       stores: rows.length,
       sales,

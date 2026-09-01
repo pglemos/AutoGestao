@@ -18,7 +18,7 @@ describe('networkCockpitRepository', () => {
     expect(result[0]).toMatchObject({ id: 'store-1', gap: 2, proj: 12, ritmo: 120, efficiency: 50, pendingClosures: 1 })
     expect(result[0].strategicProgress).toMatchObject({ value: 20, universe: 45, percentage: 44 })
     expect(result[0].riskReasons).toContain('2 ações atrasadas')
-    expect(result[0].dataQuality).toBeUndefined()
+    expect(result[0].dataQuality).toEqual({ operational: 'unknown', goal: 'unknown', discipline: 'unknown' })
   })
 
   test('preserva zero confirmado e separa ausência de leitura de configuração', async () => {

@@ -2,7 +2,7 @@ import { describe, expect, test } from 'bun:test'
 import { filterAndSortStoreDiagnostics, getStoreDiagnosticStatus, getStorePendingCount, prioritizeStoreDiagnostics } from './networkDashboardFilters'
 import type { NetworkCockpitStore, StoreDiagnostic } from '../types'
 
-const make = (id: string, name: string, sales: number, goal = 10, disciplinePct = 100, dataQuality?: StoreDiagnostic['dataQuality'], riskReasons: string[] = []): StoreDiagnostic => ({
+const make = (id: string, name: string, sales: number, goal = 10, disciplinePct = 100, dataQuality: StoreDiagnostic['dataQuality'] = { operational: 'available', goal: 'configured', discipline: 'available' }, riskReasons: string[] = []): StoreDiagnostic => ({
   id, name, sales, goal, disciplinePct, dataQuality, riskReasons, leads: 10, agd: 1, vis: 1, gap: Math.max(0, goal - sales), proj: sales, ritmo: goal ? sales / goal * 100 : 0, efficiency: sales * 10, sellers: 1, checkedInToday: 1,
 })
 
@@ -42,6 +42,7 @@ describe('network dashboard filters', () => {
     expect(getStoreDiagnosticStatus(make('unknown-discipline', 'Disciplina desconhecida', 0, 10, 0, { operational: 'available', goal: 'configured', discipline: 'unknown' }))).toBe('alert')
     expect(getStoreDiagnosticStatus(make('target', 'Meta', 10))).toBe('target')
     expect(getStoreDiagnosticStatus(make('healthy', 'Em dia', 6))).toBe('healthy')
+    expect(getStoreDiagnosticStatus({ ...make('legacy', 'Legado', 10), dataQuality: undefined })).toBe('alert')
   })
 
   test('prioriza risco e pendências sem alterar a entrada', () => {

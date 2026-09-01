@@ -6,10 +6,11 @@ function normalize(value: string): string {
 
 export function getStoreDiagnosticStatus(row: StoreDiagnostic): Exclude<NetworkStatusFilter, 'all'> {
   const quality = row.dataQuality
+  if (!quality) return 'alert'
   if (quality?.operational === 'no_data' || quality?.operational === 'unknown') return 'alert'
   if (quality?.goal === 'not_configured' || quality?.goal === 'unknown') return 'alert'
   if (quality?.discipline === 'no_data' || quality?.discipline === 'unknown') return 'alert'
-  if ((!quality || quality.discipline === 'available') && (row.disciplinePct < 50 || row.ritmo < 50)) return 'critical'
+  if (quality.discipline === 'available' && (row.disciplinePct < 50 || row.ritmo < 50)) return 'critical'
   if (row.riskReasons?.length) return 'alert'
   if (row.goal > 0 && row.sales >= row.goal) return 'target'
   return 'healthy'

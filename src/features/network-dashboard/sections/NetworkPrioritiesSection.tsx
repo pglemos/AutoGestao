@@ -22,11 +22,11 @@ function statusFor(row: NetworkCockpitStore) {
 }
 
 function hasConfiguredGoal(row: NetworkCockpitStore): boolean {
-  return row.dataQuality?.goal === 'configured' || (!row.dataQuality && row.goal > 0)
+  return row.dataQuality?.goal === 'configured'
 }
 
 function hasOperationalData(row: NetworkCockpitStore): boolean {
-  return row.dataQuality ? row.dataQuality.operational === 'available' : true
+  return row.dataQuality?.operational === 'available'
 }
 
 function resultSummary(row: NetworkCockpitStore): string {
@@ -38,9 +38,9 @@ function resultSummary(row: NetworkCockpitStore): string {
 }
 
 function nextStep(row: NetworkCockpitStore): string {
+  if (!hasOperationalData(row)) return 'Verificar os lançamentos do período'
   if (row.dataQuality?.goal === 'unknown') return 'Confirmar a configuração da meta mensal'
   if (!hasConfiguredGoal(row)) return 'Configurar a meta mensal da loja'
-  if (!hasOperationalData(row)) return 'Verificar os lançamentos do período'
   if (row.overdueActions > 0 || row.blockedActions > 0 || row.awaitingValidationActions > 0) return 'Revisar o plano de ação'
   if (row.dataQuality?.discipline === 'no_data' || row.dataQuality?.discipline === 'unknown') return 'Confirmar o fechamento da disciplina'
   if (row.disciplinePct < 50) return 'Revisar a disciplina da equipe'
@@ -65,7 +65,7 @@ function PriorityRow({ row, position, onOpen }: { row: NetworkCockpitStore; posi
         <p className="mt-1 text-xs leading-5 text-muted-foreground"><span className="font-semibold text-foreground">Próximo passo:</span> {nextStep(row)}</p>
         <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-xs text-muted-foreground">
           <span><span className="font-semibold text-foreground">Resultado:</span> {resultSummary(row)}</span>
-          <span><span className="font-semibold text-foreground">Pendências:</span> {pending}</span>
+          <span><span className="font-semibold text-foreground">Pendências:</span> {pending.toLocaleString('pt-BR')}</span>
         </div>
       </div>
       <Button variant="outline" size="sm" className="w-full sm:w-auto" onClick={() => onOpen(row)} aria-label={`Analisar ${row.name}`}>
@@ -96,7 +96,7 @@ export function NetworkPrioritiesSection(props: { rows: NetworkCockpitStore[]; s
           <div className="border-b border-border-subtle px-4 py-3 sm:px-5" role="status" aria-live="polite">
             <p className="text-sm font-medium text-foreground">
               {actionableRows.length > 0
-                ? `${actionableRows.length} loja(s) exigem atenção · mostrando ${priorityRows.length} mais urgente(s)`
+                ? `${actionableRows.length} ${actionableRows.length === 1 ? 'loja exige' : 'lojas exigem'} atenção · mostrando ${priorityRows.length} ${priorityRows.length === 1 ? 'mais urgente' : 'mais urgentes'}`
                 : 'Nenhuma exceção operacional na leitura atual.'}
             </p>
           </div>

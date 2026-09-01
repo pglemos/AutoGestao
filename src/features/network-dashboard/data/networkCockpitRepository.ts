@@ -118,7 +118,6 @@ function mapStore(raw: RawStore, range: NetworkDateRange): NetworkCockpitStore {
   const strategic = objectValue(raw.strategic)
   const consulting = objectValue(raw.consulting)
   const rawDataQuality = objectValue(raw.dataQuality)
-  const hasDataQuality = Object.keys(rawDataQuality).length > 0
   const sources = Object.fromEntries(
     Object.entries(objectValue(raw.sources)).map(([key, value]) => [key, textValue(value, 'fonte não informada')]),
   )
@@ -141,11 +140,13 @@ function mapStore(raw: RawStore, range: NetworkDateRange): NetworkCockpitStore {
   const goalFlag = nullableBoolean(rawDataQuality.goal)
   const disciplineFlag = nullableBoolean(rawDataQuality.discipline)
   const hasQualityField = (key: string): boolean => Object.prototype.hasOwnProperty.call(rawDataQuality, key)
-  const dataQuality: NetworkDataQuality | undefined = hasDataQuality ? {
+  // Sem contrato explícito, o número pode ser legado ou estar desatualizado;
+  // nunca o promovemos silenciosamente a leitura disponível.
+  const dataQuality: NetworkDataQuality = {
     operational: !hasQualityField('operational') ? 'unknown' : operationalFlag === true ? 'available' : operationalFlag === false ? 'no_data' : 'unknown',
     goal: !hasQualityField('goal') ? 'unknown' : goalFlag === true ? 'configured' : goalFlag === false ? 'not_configured' : 'unknown',
     discipline: !hasQualityField('discipline') ? 'unknown' : disciplineFlag === true ? 'available' : disciplineFlag === false ? 'no_data' : 'unknown',
-  } : undefined
+  }
 
   const strategicCompleted = numberValue(strategic.completed)
   const strategicTotal = numberValue(strategic.total)
@@ -211,10 +212,10 @@ function mapStore(raw: RawStore, range: NetworkDateRange): NetworkCockpitStore {
       consultingEvidencePending,
       consultingParticipantsPending,
       awaitingValidationActions,
-      goalConfigured: dataQuality ? dataQuality.goal === 'configured' : goal > 0,
-      goalDataState: dataQuality?.goal ?? (goal > 0 ? 'configured' : 'not_configured'),
-      operationalDataState: dataQuality?.operational ?? 'available',
-      disciplineDataState: dataQuality?.discipline ?? 'available',
+      goalConfigured: dataQuality.goal === 'configured',
+      goalDataState: dataQuality.goal,
+      operationalDataState: dataQuality.operational,
+      disciplineDataState: dataQuality.discipline,
     }),
     sources,
   }

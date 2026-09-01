@@ -2,7 +2,7 @@
   "_comment": "Congelamento forward-only das migrations aplicadas. NÃO editar à mão. Regenerar apenas ao adicionar migrations novas: node scripts/gen_migration_checksums.mjs",
   "generated_at": "2026-09-01",
   "algorithm": "sha256",
-  "count": 472,
+  "count": 473,
   "checksums": {
     "00000000000000_baseline_legacy_schema.sql": "3a519e3804095af5e9f7d8a7cb70dcc388b04530b6a7911ee1e3cb76af10b0fc",
     "00000000000001_mark_existing_migrations_applied.sql": "a8183b5cc5bd56b549ce8d8d302eb0c5d4f7b20381438586e02dd7353d6f2a45",
@@ -475,6 +475,7 @@
     "20260831140000_criar_plano_acao_v2_drop_12arg_evidence_required.sql": "17721dda1f30c342cd715c20479b034bd9432f6d93325f1a84d3f78b51112d7b",
     "20260831150000_align_official_consulting_catalog.sql": "e2129f2d367ec84ad7898aff1316192b39155b0024b937acb8eb1fa07655757b",
     "20260831160000_fix_plan_patch_departamento_text.sql": "b49a6dd0099f08ed44aef0d815df9ceeb8b3b259b58ba762693569cfecd87ed5",
-    "20260901170000_network_cockpit_data_quality.sql": "843d4b1b85f7f31f6a3d7d088047deb5edc9a035167b42bf54546a987c7320c2"
+    "20260901170000_network_cockpit_data_quality.sql": "843d4b1b85f7f31f6a3d7d088047deb5edc9a035167b42bf54546a987c7320c2",
+    "20260901173000_network_cockpit_data_quality_hardening.sql": "6e52201f7ca922c4679355f4204dc3e8a2590bf881af7f5f0404bdd349571475"
   }
 }
