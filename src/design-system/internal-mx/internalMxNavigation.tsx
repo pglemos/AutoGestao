@@ -42,6 +42,7 @@ export function buildInternalMxNavigation(
     {
       key: 'operacao-mx',
       label: 'Operação MX',
+      defaultExpanded: true,
       items: [
         { key: 'dashboard', label: 'Início', path: '/painel', icon: LayoutDashboard },
         {

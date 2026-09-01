@@ -2,6 +2,7 @@ import { supabase } from '@/lib/supabase'
 import { buildStoreRiskReasons, calculateTraceableProgress } from '../lib/networkCockpitCalculations'
 import type {
   NetworkCockpitStore,
+  NetworkDataQuality,
   NetworkDateRange,
   PersonEvolution,
   TraceableMetric,
@@ -45,6 +46,13 @@ const nullableNumber = (value: unknown): number | null => {
   if (value === null || value === undefined || value === '') return null
   const parsed = Number(value)
   return Number.isFinite(parsed) ? parsed : null
+}
+
+const nullableBoolean = (value: unknown): boolean | null => {
+  if (typeof value === 'boolean') return value
+  if (value === 'true') return true
+  if (value === 'false') return false
+  return null
 }
 
 const textValue = (value: unknown, fallback = ''): string =>
@@ -109,6 +117,8 @@ function mapStore(raw: RawStore, range: NetworkDateRange): NetworkCockpitStore {
   const actions = objectValue(raw.actions)
   const strategic = objectValue(raw.strategic)
   const consulting = objectValue(raw.consulting)
+  const rawDataQuality = objectValue(raw.dataQuality)
+  const hasDataQuality = Object.keys(rawDataQuality).length > 0
   const sources = Object.fromEntries(
     Object.entries(objectValue(raw.sources)).map(([key, value]) => [key, textValue(value, 'fonte não informada')]),
   )
@@ -118,13 +128,24 @@ function mapStore(raw: RawStore, range: NetworkDateRange): NetworkCockpitStore {
   const agd = numberValue(raw.agd)
   const goal = numberValue(raw.goal)
   const projectedSales = numberValue(raw.projectedSales)
+  const sellers = numberValue(raw.sellerCount)
   const disciplinePct = numberValue(raw.disciplinePct)
   const overdueActions = numberValue(actions.overdue)
   const blockedActions = numberValue(actions.blocked)
+  const awaitingValidationActions = numberValue(actions.awaitingValidation)
   const pendingClosures = numberValue(raw.pendingClosures)
   const consultingEvidencePending = numberValue(consulting.evidencePending)
   const consultingParticipantsPending = numberValue(consulting.participantsPending)
   const projectionPct = goal > 0 ? (projectedSales / goal) * 100 : 0
+  const operationalFlag = nullableBoolean(rawDataQuality.operational)
+  const goalFlag = nullableBoolean(rawDataQuality.goal)
+  const disciplineFlag = nullableBoolean(rawDataQuality.discipline)
+  const hasQualityField = (key: string): boolean => Object.prototype.hasOwnProperty.call(rawDataQuality, key)
+  const dataQuality: NetworkDataQuality | undefined = hasDataQuality ? {
+    operational: !hasQualityField('operational') ? 'unknown' : operationalFlag === true ? 'available' : operationalFlag === false ? 'no_data' : 'unknown',
+    goal: !hasQualityField('goal') ? 'unknown' : goalFlag === true ? 'configured' : goalFlag === false ? 'not_configured' : 'unknown',
+    discipline: !hasQualityField('discipline') ? 'unknown' : disciplineFlag === true ? 'available' : disciplineFlag === false ? 'no_data' : 'unknown',
+  } : undefined
 
   const strategicCompleted = numberValue(strategic.completed)
   const strategicTotal = numberValue(strategic.total)
@@ -145,13 +166,14 @@ function mapStore(raw: RawStore, range: NetworkDateRange): NetworkCockpitStore {
     proj: projectedSales,
     ritmo: projectionPct,
     efficiency: leads > 0 ? (agd / leads) * 100 : 0,
-    sellers: numberValue(raw.sellerCount),
+    sellers,
     checkedInToday: numberValue(raw.checkedInToday),
     disciplinePct,
+    dataQuality,
     pendingClosures,
     overdueActions,
     blockedActions,
-    awaitingValidationActions: numberValue(actions.awaitingValidation),
+    awaitingValidationActions,
     completedActions: numberValue(actions.completed),
     totalActions: numberValue(actions.total),
     strategicProgress: mapTraceableMetric(strategic, {
@@ -188,6 +210,11 @@ function mapStore(raw: RawStore, range: NetworkDateRange): NetworkCockpitStore {
       pendingClosures,
       consultingEvidencePending,
       consultingParticipantsPending,
+      awaitingValidationActions,
+      goalConfigured: dataQuality ? dataQuality.goal === 'configured' : goal > 0,
+      goalDataState: dataQuality?.goal ?? (goal > 0 ? 'configured' : 'not_configured'),
+      operationalDataState: dataQuality?.operational ?? 'available',
+      disciplineDataState: dataQuality?.discipline ?? 'available',
     }),
     sources,
   }

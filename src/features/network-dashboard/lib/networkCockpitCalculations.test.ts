@@ -11,4 +11,19 @@ describe('network cockpit calculations', () => {
     expect(calculateTraceableProgress({ completed: 6, total: 10 })).toEqual({ completed: 6, total: 10, percentage: 60 })
     expect(calculateTraceableProgress({ completed: 0, total: 0 })).toEqual({ completed: 0, total: 0, percentage: null })
   })
+
+  test('não transforma qualidade desconhecida em risco numérico crítico', () => {
+    expect(buildStoreRiskReasons({
+      disciplinePct: 0,
+      projectionPct: 100,
+      overdueActions: 0,
+      blockedActions: 0,
+      pendingClosures: 0,
+      consultingEvidencePending: 0,
+      consultingParticipantsPending: 0,
+      goalConfigured: true,
+      operationalDataState: 'available',
+      disciplineDataState: 'unknown',
+    })).toEqual(['Disponibilidade da disciplina não confirmada'])
+  })
 })

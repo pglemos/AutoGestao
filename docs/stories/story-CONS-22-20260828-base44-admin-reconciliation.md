@@ -278,6 +278,28 @@ responsividade; nenhum segredo em artefatos.
 - `docs/auditoria/matrizes/MATRIZ_ROTAS_DADOS_MX.md`
 - `docs/reports/layout-route-inventory.json`
 - `docs/reports/layout-route-inventory.md`
+- `src/components/Layout.tsx`
+- `src/components/MxSidebarShell.tsx`
+- `src/design-system/internal-mx/internalMxNavigation.tsx`
+- `src/design-system/sidebar/tokens.ts`
+- `src/features/admin-mx/AdminDashboardPage.tsx`
+- `src/features/network-dashboard/NetworkDashboardContent.tsx`
+- `src/features/network-dashboard/components/NetworkDashboardHeader.tsx`
+- `src/features/network-dashboard/components/NetworkReportActions.tsx`
+- `src/features/network-dashboard/components/StoreHealthTable.tsx`
+- `src/features/network-dashboard/data/networkCockpitRepository.test.ts`
+- `src/features/network-dashboard/data/networkCockpitRepository.ts`
+- `src/features/network-dashboard/hooks/useNetworkDashboardController.ts`
+- `src/features/network-dashboard/lib/networkCockpitCalculations.test.ts`
+- `src/features/network-dashboard/lib/networkCockpitCalculations.ts`
+- `src/features/network-dashboard/lib/networkDashboardFilters.test.ts`
+- `src/features/network-dashboard/lib/networkDashboardFilters.ts`
+- `src/features/network-dashboard/sections/NetworkFiltersSection.tsx`
+- `src/features/network-dashboard/sections/NetworkMetricsSection.tsx`
+- `src/features/network-dashboard/sections/NetworkPrioritiesSection.tsx`
+- `src/features/network-dashboard/types.ts`
+- `src/test/network-cockpit-data-quality-migration-contract.test.ts`
+- `supabase/migrations/20260901170000_network_cockpit_data_quality.sql`
 
 ## Evidências e QA
 
@@ -322,3 +344,45 @@ responsividade; nenhum segredo em artefatos.
 - A revisão QA visual autenticada e a prova pós-deploy permanecem pendentes até a publicação e validação deste SHA.
 - Removidos os três `fetch` de debug para `127.0.0.1:7506` dos fluxos de cliente; o contrato `no-local-debug-endpoints` impede o retorno desse endpoint ao runtime.
 - Validação oficial pós-correção local: `agent-browser` passou em `1440×900` e `390×844`, com axe em `0` violações e `0` incompletos; a publicação ainda precisa de novo deploy para substituir os dois chunks lazy antigos.
+
+### Remediação Impeccable — cockpit e governança (2026-09-01)
+
+- O cockpit interno agora abre pela fila de prioridades: mostra as 3–5 lojas
+  mais urgentes, ordena por risco e pendências, e deixa a tabela completa sob
+  demanda.
+- Valores do cockpit preservam a diferença entre zero confirmado, ausência de
+  leitura, meta não configurada e disponibilidade desconhecida; a origem dessa
+  qualidade é carregada pelo RPC e não é inferida apenas do número exibido.
+- A governança do Admin MX reúne exceções de cadastro, Dono Master, consultor
+  e metas em uma fila acionável, mantendo a carteira completa como contexto e
+  informando o total real de cadastros pendentes.
+- A sidebar interna permite recolher grupos, abre o grupo do item ativo e
+  mantém foco/estado acessível; a consultoria foi organizada em fila por
+  urgência, cliente e próximo passo, com CTA de execução/revisão mais direto.
+- A migration `20260901170000_network_cockpit_data_quality.sql` fecha a fonte
+  canônica de dados operacionais e adiciona `dataQuality` ao patch autenticado;
+  sua aplicação no projeto Supabase ainda deve seguir o processo de migrations
+  do ambiente.
+- O lote final passou pelos gates completos: `npm run typecheck`, `npm test`
+  (**4794 pass / 0 fail**), `npm run lint` (**0 erros; 2 warnings já
+  existentes**), `npm run build`, `npm run audit:routes-data` e
+  `git diff --check`.
+- O browser de produção continuou sem sessão autenticada nesta execução. Não
+  houve inserção automática de senha; portanto, não se declara prova
+  autenticada da rota remota neste lote.
+
+### Fechamento de QA do lote (2026-09-01)
+
+- `npx graphify hook-rebuild`: **ok** — 62.432 nós, 166.496 arestas e 8.159
+  comunidades. As 6 falhas de extração em scripts PowerShell permanecem
+  preexistentes por ausência de `tree-sitter-powershell`.
+- `graphify portable-check .graphify`: falhou somente nos artefatos ignorados
+  de descrição/studio gerados pelo Graphify, que ainda carregam caminhos
+  absolutos. Nenhum `.graphify` é tracked ou será incluído no commit.
+- `agent-browser` local da rota protegida passou em `1440×900` e `390×844`,
+  sem erros JS, com axe em **0 violações / 0 incompletos**. A URL redirecionou
+  para `/login` porque não havia sessão; a navegação autenticada de produção
+  continua pendente de confirmação explícita da senha.
+- Warnings restantes do lint: `jsx-a11y/no-static-element-interactions` em
+  `MetasRealizadosTab.tsx` e `jsx-a11y/no-autofocus` em `IndicatorPicker.tsx`;
+  nenhum pertence ao lote final.

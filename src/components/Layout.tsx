@@ -47,6 +47,7 @@ type NavCategory = {
   category: string
   icon: React.ReactNode
   items: SubItem[]
+  defaultExpanded?: boolean
 }
 
 const STORE_DASHBOARD_PATH = '__STORE_DASHBOARD__'
@@ -345,8 +346,9 @@ function LayoutContent() {
       }
     }
 
-    return categories.map((category): MxSidebarNavSection => ({
+    return categories.map((category, index): MxSidebarNavSection => ({
       label: category.category,
+      defaultExpanded: category.defaultExpanded ?? index === 0,
       items: category.items.map(toSidebarItem),
     }))
   }, [categories, pendingFeedbackCount, shellRole, unreadCount, viewAsDono])

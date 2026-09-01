@@ -5,11 +5,25 @@ import { toast } from '@/lib/toast'
 import { getSafeUserFacingDataError } from '@/lib/errors/user-facing-error'
 import { networkCockpitRepository, ownerNetworkCockpitRepository, type NetworkCockpitScope } from '../data/networkCockpitRepository'
 import { resolveNetworkDateRange, validateNetworkDateRange } from '../lib/networkDashboardCalculations'
-import { filterAndSortStoreDiagnostics } from '../lib/networkDashboardFilters'
-import type { NetworkCockpitStore, NetworkDateRange, NetworkReportType, NetworkSort, NetworkStatusFilter, NetworkTimeframe } from '../types'
+import { filterAndSortStoreDiagnostics, getStoreDiagnosticStatus } from '../lib/networkDashboardFilters'
+import type { NetworkCockpitStore, NetworkDashboardMetrics, NetworkDateRange, NetworkMetricState, NetworkReportType, NetworkSort, NetworkStatusFilter, NetworkTimeframe } from '../types'
 
 const reportLabels: Record<NetworkReportType, string> = {
   matinal: 'Relatório matinal', semanal: 'Relatório semanal', mensal: 'Relatório mensal',
+}
+
+function aggregateMetricState({ total, available, unknown, value, configured, unknownConfigured = 0 }: { total: number; available: number; unknown: number; value: number; configured?: number; unknownConfigured?: number }): NetworkMetricState {
+  if (total === 0) return 'no_data'
+  if (available === 0) {
+    if (unknown > 0) return 'unknown'
+    if (configured === 0) return unknownConfigured > 0 ? 'unknown' : 'not_configured'
+    return 'no_data'
+  }
+  if (configured === 0) return unknownConfigured > 0 ? 'unknown' : 'not_configured'
+  if (configured !== undefined && configured < total) return 'partial'
+  if (unknown > 0 || available < total) return 'partial'
+  if (value === 0) return 'zero'
+  return 'value'
 }
 
 export const REALTIME_DEBOUNCE_MS = 450
@@ -143,16 +157,49 @@ export function useNetworkDashboardController(scope: NetworkCockpitScope = 'inte
   }, [reportLoading])
 
   const visibleRows = useMemo(() => filterAndSortStoreDiagnostics({ rows, search, status, sort }), [rows, search, status, sort])
-  const metrics = useMemo(() => rows.reduce((acc, row) => ({
-    stores: acc.stores + 1,
-    sales: acc.sales + row.sales,
-    goal: acc.goal + row.goal,
-    critical: acc.critical + (row.riskReasons.length > 0 && (row.ritmo < 50 || row.disciplinePct < 50) ? 1 : 0),
-  }), { stores: 0, sales: 0, goal: 0, critical: 0 }), [rows])
+  const metrics = useMemo<NetworkDashboardMetrics>(() => {
+    const operationalRows = rows.filter(row => !row.dataQuality || row.dataQuality.operational === 'available')
+    const unknownOperationalRows = rows.filter(row => row.dataQuality?.operational === 'unknown')
+    const configuredGoalRows = rows.filter(row => row.dataQuality?.goal === 'configured' || (!row.dataQuality && row.goal > 0))
+    const unknownGoalRows = rows.filter(row => row.dataQuality?.goal === 'unknown')
+    const storesWithoutGoal = rows.filter(row => row.dataQuality?.goal === 'not_configured' || (!row.dataQuality && row.goal <= 0)).length
+    const storesWithoutData = rows.filter(row => row.dataQuality?.operational === 'no_data').length
+    const statusCounts = rows.reduce((acc, row) => {
+      const rowStatus = getStoreDiagnosticStatus(row)
+      acc[rowStatus] += 1
+      return acc
+    }, { critical: 0, alert: 0, target: 0, healthy: 0 } as Record<'critical' | 'alert' | 'target' | 'healthy', number>)
+    const sales = rows.reduce((total, row) => total + row.sales, 0)
+    const goal = rows.reduce((total, row) => total + row.goal, 0)
+    return {
+      stores: rows.length,
+      sales,
+      goal,
+      critical: statusCounts.critical,
+      attention: statusCounts.alert,
+      target: statusCounts.target,
+      healthy: statusCounts.healthy,
+      storesWithData: operationalRows.length,
+      storesWithoutData,
+      storesWithUnknownData: unknownOperationalRows.length,
+      storesWithGoal: configuredGoalRows.length,
+      storesWithoutGoal,
+      storesWithUnknownGoal: unknownGoalRows.length,
+      salesState: aggregateMetricState({ total: rows.length, available: operationalRows.length, unknown: unknownOperationalRows.length, value: sales }),
+      attainmentState: aggregateMetricState({ total: rows.length, available: operationalRows.length, unknown: unknownOperationalRows.length, value: sales, configured: configuredGoalRows.length, unknownConfigured: unknownGoalRows.length }),
+    }
+  }, [rows])
+
+  const resetFilters = useCallback(() => {
+    setSearch('')
+    setStatus('all')
+    setTimeframe('mensal')
+    setCustomRange(initialRange)
+  }, [initialRange])
 
   return {
     rows: visibleRows, allRows: rows, metrics, loading, refreshing, error, lastUpdatedAt, realtimeStatus,
     search, setSearch, status, setStatus, timeframe, setTimeframe, customRange, setCustomRange,
-    sort, setSort, reportLoading, refresh: () => fetchSnapshot(true), triggerReport,
+    sort, setSort, reportLoading, refresh: () => fetchSnapshot(true), triggerReport, resetFilters,
   }
 }

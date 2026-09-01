@@ -73,9 +73,9 @@ export function NetworkDashboardContent({ scope = 'internal' }: { scope?: Networ
   const description = [
     `${greeting}.`,
     scope === 'internal' ? 'Vendas, metas, disciplina e prioridades da rede.' : 'Visão consolidada da rede, disciplina operacional e prioridades.',
-    `Período: ${periodLabel}.`,
+    'Use os filtros abaixo para trocar o período e a situação.',
     controller.lastUpdatedAt
-      ? `Atualizado às ${controller.lastUpdatedAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}.`
+      ? `Consulta realizada às ${controller.lastUpdatedAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}.`
       : 'Aguardando a primeira sincronização.',
   ].join(' ')
 
@@ -89,11 +89,12 @@ export function NetworkDashboardContent({ scope = 'internal' }: { scope?: Networ
         realtimeStatus={controller.realtimeStatus}
         onRefresh={controller.refresh}
       />
+      <p className="sr-only">Período: {periodLabel}. O seletor de período abaixo controla a leitura exibida no cockpit.</p>
       {controller.realtimeStatus === 'degraded' ? <MxStatusBanner tone="warning">A conexão em tempo real foi interrompida. Os dados anteriores permanecem disponíveis e serão reconciliados após a reconexão.</MxStatusBanner> : null}
       {controller.error && controller.allRows.length > 0 ? <MxStatusBanner tone="warning">Leitura anterior mantida. {controller.error}</MxStatusBanner> : null}
       {controller.loading && !controller.allRows.length ? <MxLoadingState label="Carregando cockpit operacional..." /> : controller.error && !controller.allRows.length ? <MxErrorState description={controller.error} retry={controller.refresh} /> : <>
         <NetworkMetricsSection metrics={controller.metrics} periodLabel={periodLabel} onShowPriorities={showPriorities} />
-        <NetworkFiltersSection search={controller.search} onSearch={controller.setSearch} status={controller.status} onStatus={controller.setStatus} timeframe={controller.timeframe} onTimeframe={controller.setTimeframe} customRange={controller.customRange} onCustomRange={controller.setCustomRange} />
+        <NetworkFiltersSection search={controller.search} onSearch={controller.setSearch} status={controller.status} onStatus={controller.setStatus} timeframe={controller.timeframe} onTimeframe={controller.setTimeframe} customRange={controller.customRange} onCustomRange={controller.setCustomRange} onReset={controller.resetFilters} />
         <NetworkPrioritiesSection rows={controller.rows} sort={controller.sort} onSort={controller.setSort} onOpen={setSelectedStore} />
         {canTrigger ? <NetworkReportActions loading={controller.reportLoading} onTrigger={controller.triggerReport} /> : null}
       </>}

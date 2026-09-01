@@ -19,7 +19,7 @@ export function NetworkReportActions({ loading, onTrigger }: {
       <MxActionGroup className="p-5">
         {options.map(option => (
           <Button key={option.type} variant="outline" disabled={Boolean(loading)} onClick={() => onTrigger(option.type)}>
-            <FileText size={17} />
+            <FileText size={16} aria-hidden="true" />
             {loading === option.type ? 'Disparando...' : option.label}
           </Button>
         ))}

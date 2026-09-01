@@ -65,6 +65,7 @@ function formatTime(value: Date | null): string {
 export function AdminDashboardPage() {
   const { rows: clients, loading: clientsLoading, error: clientsError, lastUpdatedAt: clientsUpdatedAt, refetch: refetchClients } = useClientPortfolio()
   const [pendingList, setPendingList] = useState<InscricaoRow[]>([])
+  const [pendingTotal, setPendingTotal] = useState(0)
   const [pendingLoading, setPendingLoading] = useState(true)
   const [pendingError, setPendingError] = useState<string | null>(null)
   const [pendingUpdatedAt, setPendingUpdatedAt] = useState<Date | null>(null)
@@ -82,6 +83,7 @@ export function AdminDashboardPage() {
     try {
       const result = await fetchInscricoesPendentes()
       if (result.error) throw new Error(result.error)
+      setPendingTotal(result.rows.length)
       setPendingList(result.rows.slice(0, 5))
       setPendingUpdatedAt(new Date())
     } catch (cause) {
@@ -175,6 +177,7 @@ export function AdminDashboardPage() {
   }, [clientsUpdatedAt, lojasUpdatedAt, pendingUpdatedAt])
 
   const governanceLoading = clientsLoading || pendingLoading || lojasLoading
+  const exceptionTotal = systemAlerts.length + pendingTotal
 
   return (
     <MxModulePage width={width} bottomClearance={bottomClearance}>
@@ -207,111 +210,122 @@ export function AdminDashboardPage() {
                 <MxMetricCard title="Com Bloqueios" value={bucketCounters.com_bloqueios} detail="Pendências que exigem decisão" icon={AlertTriangle} tone="danger" actionLabel="Abrir bloqueios" onAction={() => navigate('/clientes?bucket=com_bloqueios')} />
               </MxMetricGrid>
 
-              <div className="grid grid-cols-1 gap-5 xl:grid-cols-3">
-                <div className="order-2 space-y-5 xl:order-1 xl:col-span-2">
-                  <MxSectionCard>
-                    <MxSectionHeader
-                      title="Carteira de Clientes MX"
-                      description="Contas recentes para abrir a ficha completa."
-                      actions={<Button variant="ghost" size="sm" onClick={() => navigate('/clientes')} className="text-[var(--mx-color-primary)]">Ver todos <ArrowRight size={12} aria-hidden="true" /></Button>}
-                    />
-                    {recentClients.length === 0 ? (
-                      <div className="p-8">
-                        <MxEmptyState
-                          icon={Building2}
-                          title="Nenhum cliente cadastrado"
-                          description="Inicie a carteira criando o primeiro cliente da consultoria MX."
-                          action={<Button variant="primary" size="sm" onClick={() => navigate('/clientes/novo')}><Plus size={14} /> Novo Cliente MX</Button>}
-                        />
-                      </div>
-                    ) : (
-                      <div className="divide-y divide-[var(--mx-color-border-subtle)]">
-                        {recentClients.map(client => {
-                          const label = statusLabel(client.status)
-                          return (
-                            <button
-                              type="button"
-                              key={client.id}
-                              onClick={() => navigate(`/clientes/${client.slug || client.id}`)}
-                              aria-label={`Abrir ficha de ${client.name}`}
-                              className="flex min-h-16 w-full cursor-pointer items-center justify-between gap-3 p-4 text-left transition-colors hover:bg-[var(--mx-color-surface-muted)] focus-visible:bg-[var(--mx-color-surface-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mx-color-primary)]"
-                            >
-                              <div className="flex min-w-0 items-center gap-3">
-                                <div aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--mx-color-surface-muted)] text-xs font-bold text-[var(--mx-color-text-primary)]">{client.name.charAt(0).toUpperCase()}</div>
-                                <div className="min-w-0">
-                                  <div className="truncate text-sm font-semibold text-[var(--mx-color-text-primary)]">{client.name}</div>
-                                  <div className="mt-0.5 truncate text-xs text-[var(--mx-color-text-secondary)]">{client.primary_store_city || 'Cidade a definir'} • {client.implementation_owner_name || 'Responsável MX não atribuído'}</div>
-                                </div>
-                              </div>
-                              <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${statusClass(client.status)}`}>{label}</span>
-                            </button>
-                          )
-                        })}
-                      </div>
-                    )}
-                  </MxSectionCard>
+              <MxSectionCard id="governanca-excecoes" aria-labelledby="governanca-excecoes-title">
+                <MxSectionHeader
+                  title={<span id="governanca-excecoes-title">Fila de exceções</span>}
+                  description={`${exceptionTotal} item(ns) pedem decisão ou validação. Cada item aponta o próximo destino.`}
+                  actions={exceptionTotal > 0 ? <Button variant="ghost" size="sm" onClick={() => navigate('/clientes?tab=governanca')} className="text-[var(--mx-color-primary)]">Abrir governança <ArrowRight size={12} aria-hidden="true" /></Button> : undefined}
+                />
 
-                  <MxSectionCard>
-                    <MxSectionHeader title="Ações de governança" description="Atalhos para tarefas administrativas recorrentes da carteira MX." />
-                    <div className="grid grid-cols-1 gap-2 p-4 sm:grid-cols-2">
-                      <Button className="w-full justify-center" variant="primary" onClick={() => navigate('/clientes/novo')}><Plus size={16} /> Novo Cliente MX</Button>
-                      <Button className="w-full justify-center" variant="outline" onClick={() => navigate('/clientes?tab=inscricoes')}><UserCheck size={16} /> Validar Cadastros</Button>
-                      <Button className="w-full justify-center" variant="outline" onClick={() => navigate('/produtos')}><Package size={16} /> Produtos de consultoria</Button>
-                      <Button className="w-full justify-center" variant="outline" onClick={() => navigate('/seguranca')}><ShieldAlert size={16} /> Ver Auditoria</Button>
-                    </div>
-                  </MxSectionCard>
+                <div className="divide-y divide-[var(--mx-color-border-subtle)]">
+                  {lojasError && !lojasSemMeta.length ? <div className="p-4"><MxErrorState title="Alertas de meta indisponíveis" description={lojasError} retry={() => void loadStoresWithoutGoal()} /></div> : null}
+                  {pendingError && !pendingList.length ? <div className="p-4"><MxErrorState title="Cadastros indisponíveis" description={pendingError} retry={() => void loadPending()} /></div> : null}
+                  {lojasLoading && !lojasSemMeta.length && !systemAlerts.length ? <div className="px-4"><MxLoadingState context="initial" label="Verificando metas das lojas..." /></div> : null}
+                  {pendingLoading && !pendingList.length && !pendingError ? <div className="px-4"><MxLoadingState context="initial" label="Carregando cadastros..." /></div> : null}
+
+                  {systemAlerts.map(alert => (
+                    <button
+                      type="button"
+                      key={alert.id}
+                      onClick={() => navigate(alert.link)}
+                      aria-label={alert.title}
+                      className="flex w-full cursor-pointer items-start justify-between gap-4 p-4 text-left transition-colors hover:bg-[var(--mx-color-surface-muted)] focus-visible:bg-[var(--mx-color-surface-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mx-color-primary)]"
+                    >
+                      <span className="flex min-w-0 items-start gap-3">
+                        {alert.tone === 'danger' ? <ShieldAlert size={20} aria-hidden="true" className="mt-0.5 shrink-0 text-[var(--mx-color-danger)]" /> : alert.tone === 'warning' ? <AlertTriangle size={20} aria-hidden="true" className="mt-0.5 shrink-0 text-[var(--mx-color-warning)]" /> : <CheckCircle2 size={20} aria-hidden="true" className="mt-0.5 shrink-0 text-[var(--mx-color-primary)]" />}
+                        <span className="min-w-0">
+                          <span className="block text-sm font-semibold text-[var(--mx-color-text-primary)]">{alert.title}</span>
+                          <span className="mt-0.5 block text-xs leading-5 text-[var(--mx-color-text-secondary)]">{alert.subtitle}</span>
+                        </span>
+                      </span>
+                      <span className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-[var(--mx-color-primary)]">Abrir <ArrowRight size={14} aria-hidden="true" /></span>
+                    </button>
+                  ))}
+
+                  {pendingList.map(item => (
+                    <button
+                      type="button"
+                      key={item.id}
+                      onClick={() => navigate('/clientes?tab=inscricoes')}
+                      aria-label={`Validar cadastro de ${item.nome || 'solicitação de acesso'}`}
+                      className="flex w-full cursor-pointer items-start justify-between gap-4 p-4 text-left transition-colors hover:bg-[var(--mx-color-surface-muted)] focus-visible:bg-[var(--mx-color-surface-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mx-color-primary)]"
+                    >
+                      <span className="flex min-w-0 items-start gap-3">
+                        <UserCheck size={20} aria-hidden="true" className="mt-0.5 shrink-0 text-[var(--mx-color-primary)]" />
+                        <span className="min-w-0">
+                          <span className="block text-sm font-semibold text-[var(--mx-color-text-primary)]">{item.nome || 'Solicitação de acesso'}</span>
+                          <span className="mt-0.5 block text-xs leading-5 text-[var(--mx-color-text-secondary)]">{item.email || item.telefone || 'Sem contato'} • {item.funcao_declarada || 'Aguardando validação'}</span>
+                        </span>
+                      </span>
+                      <span className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-[var(--mx-color-primary)]">Validar <ArrowRight size={14} aria-hidden="true" /></span>
+                    </button>
+                  ))}
+
+                  {exceptionTotal === 0 && !pendingError && !lojasError && !pendingLoading && !lojasLoading ? <MxEmptyState className="px-4 py-8" title="Nenhuma exceção ativa" description="Cadastros, acessos e metas estão sem bloqueios nesta leitura." /> : null}
                 </div>
 
-                <div className="order-1 space-y-5 xl:order-2">
-                  <MxSectionCard>
-                    <MxSectionHeader
-                      title="Cadastros pendentes"
-                      description="Solicitações aguardando validação."
-                      actions={pendingList.length > 0 ? <Button variant="ghost" size="sm" onClick={() => navigate('/clientes?tab=inscricoes')} className="text-[var(--mx-color-primary)]">Ver todos</Button> : undefined}
-                    />
-                    {pendingLoading && !pendingList.length ? <MxLoadingState context="initial" label="Carregando cadastros..." /> : pendingError && !pendingList.length ? <MxErrorState title="Cadastros indisponíveis" description={pendingError} retry={() => void loadPending()} /> : pendingList.length === 0 ? <MxEmptyState className="px-4 py-6" title="Nenhum cadastro aguardando validação" description="A fila está vazia nesta leitura." /> : (
-                      <div className="divide-y divide-[var(--mx-color-border-subtle)]">
-                        {pendingList.map(item => (
-                          <div key={item.id} className="p-3.5">
-                            <div className="text-sm font-semibold text-[var(--mx-color-text-primary)]">{item.nome || 'Solicitação de acesso'}</div>
-                            <div className="mt-0.5 text-xs text-[var(--mx-color-text-secondary)]">{item.email || item.telefone || 'Sem contato'} • {item.funcao_declarada || 'Aguardando validação'}</div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </MxSectionCard>
+                {pendingTotal > pendingList.length ? (
+                  <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--mx-color-border-subtle)] px-4 py-3">
+                    <p className="text-xs text-[var(--mx-color-text-secondary)]">Mostrando {pendingList.length} de {pendingTotal} cadastros aguardando validação.</p>
+                    <Button variant="outline" size="sm" onClick={() => navigate('/clientes?tab=inscricoes')}>Ver todos os cadastros</Button>
+                  </div>
+                ) : null}
 
-                  <MxSectionCard>
-                    <MxSectionHeader
-                      title="Alertas ativos"
-                      description="Bloqueios e riscos que precisam de encaminhamento."
-                      actions={systemAlerts.length > 0 ? <Button variant="ghost" size="sm" onClick={() => navigate('/clientes?tab=governanca')} className="text-[var(--mx-color-primary)]">Ver governança</Button> : undefined}
+                <div className="border-t border-[var(--mx-color-border-subtle)] p-4">
+                  <div className="mb-3">
+                    <h3 className="text-sm font-semibold text-[var(--mx-color-text-primary)]">Ações de governança</h3>
+                    <p className="mt-1 text-xs leading-5 text-[var(--mx-color-text-secondary)]">Atalhos para corrigir a fila e manter a carteira pronta para operar.</p>
+                  </div>
+                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-4">
+                    <Button className="w-full justify-center" variant="primary" onClick={() => navigate('/clientes/novo')}><Plus size={16} /> Novo Cliente MX</Button>
+                    <Button className="w-full justify-center" variant="outline" onClick={() => navigate('/clientes?tab=inscricoes')}><UserCheck size={16} /> Validar Cadastros</Button>
+                    <Button className="w-full justify-center" variant="outline" onClick={() => navigate('/produtos')}><Package size={16} /> Produtos de consultoria</Button>
+                    <Button className="w-full justify-center" variant="outline" onClick={() => navigate('/seguranca')}><ShieldAlert size={16} /> Ver Auditoria</Button>
+                  </div>
+                </div>
+              </MxSectionCard>
+
+              <MxSectionCard>
+                <MxSectionHeader
+                  title="Carteira de Clientes MX"
+                  description="Contas recentes para abrir a ficha completa."
+                  actions={<Button variant="ghost" size="sm" onClick={() => navigate('/clientes')} className="text-[var(--mx-color-primary)]">Ver todos <ArrowRight size={12} aria-hidden="true" /></Button>}
+                />
+                {recentClients.length === 0 ? (
+                  <div className="p-8">
+                    <MxEmptyState
+                      icon={Building2}
+                      title="Nenhum cliente cadastrado"
+                      description="Inicie a carteira criando o primeiro cliente da consultoria MX."
+                      action={<Button variant="primary" size="sm" onClick={() => navigate('/clientes/novo')}><Plus size={14} /> Novo Cliente MX</Button>}
                     />
-                    {lojasError && !lojasSemMeta.length ? <div className="border-b border-[var(--mx-color-border-subtle)] p-4"><MxErrorState title="Alertas de meta indisponíveis" description={lojasError} retry={() => void loadStoresWithoutGoal()} /></div> : null}
-                    {lojasLoading && !lojasSemMeta.length && !systemAlerts.length ? <MxLoadingState context="initial" label="Verificando metas das lojas..." /> : systemAlerts.length === 0 ? lojasError && !lojasSemMeta.length ? null : <MxEmptyState className="px-4 py-6" title="Nenhum bloqueio crítico no momento" description="A leitura não encontrou alertas ativos." /> : (
-                      <div className="divide-y divide-[var(--mx-color-border-subtle)]">
-                        {systemAlerts.slice(0, 4).map(alert => (
-                          <button
-                            type="button"
-                            key={alert.id}
-                            onClick={() => navigate(alert.link)}
-                            aria-label={alert.title}
-                            className="w-full cursor-pointer p-3.5 text-left transition-colors hover:bg-[var(--mx-color-surface-muted)] focus-visible:bg-[var(--mx-color-surface-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mx-color-primary)]"
-                          >
-                            <div className="flex items-start gap-2">
-                              {alert.tone === 'danger' ? <ShieldAlert size={16} aria-hidden="true" className="mt-0.5 shrink-0 text-[var(--mx-color-danger)]" /> : alert.tone === 'warning' ? <AlertTriangle size={16} aria-hidden="true" className="mt-0.5 shrink-0 text-[var(--mx-color-warning)]" /> : <CheckCircle2 size={16} aria-hidden="true" className="mt-0.5 shrink-0 text-[var(--mx-color-primary)]" />}
-                              <div>
-                                <div className="text-sm font-semibold text-[var(--mx-color-text-primary)]">{alert.title}</div>
-                                <div className="mt-0.5 text-xs leading-5 text-[var(--mx-color-text-secondary)]">{alert.subtitle}</div>
-                              </div>
+                  </div>
+                ) : (
+                  <div className="divide-y divide-[var(--mx-color-border-subtle)]">
+                    {recentClients.map(client => {
+                      const label = statusLabel(client.status)
+                      return (
+                        <button
+                          type="button"
+                          key={client.id}
+                          onClick={() => navigate(`/clientes/${client.slug || client.id}`)}
+                          aria-label={`Abrir ficha de ${client.name}`}
+                          className="flex min-h-16 w-full cursor-pointer items-center justify-between gap-3 p-4 text-left transition-colors hover:bg-[var(--mx-color-surface-muted)] focus-visible:bg-[var(--mx-color-surface-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mx-color-primary)]"
+                        >
+                          <div className="flex min-w-0 items-center gap-3">
+                            <div aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--mx-color-surface-muted)] text-xs font-bold text-[var(--mx-color-text-primary)]">{client.name.charAt(0).toUpperCase()}</div>
+                            <div className="min-w-0">
+                              <div className="truncate text-sm font-semibold text-[var(--mx-color-text-primary)]">{client.name}</div>
+                              <div className="mt-0.5 truncate text-xs text-[var(--mx-color-text-secondary)]">{client.primary_store_city || 'Cidade a definir'} • {client.implementation_owner_name || 'Responsável MX não atribuído'}</div>
                             </div>
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </MxSectionCard>
-                </div>
-              </div>
+                          </div>
+                          <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${statusClass(client.status)}`}>{label}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                )}
+              </MxSectionCard>
             </>
           )}
         </section>

@@ -1,6 +1,36 @@
 export type NetworkDateRange = { start: string; end: string }
 export type NetworkTimeframe = 'hoje' | 'ontem' | 'semanal' | 'mensal' | 'personalizada'
-export type NetworkStatusFilter = 'all' | 'alert' | 'critical' | 'target'
+export type NetworkStatusFilter = 'all' | 'alert' | 'critical' | 'target' | 'healthy'
+
+export type NetworkDataAvailability = 'available' | 'no_data' | 'unknown'
+export type NetworkGoalAvailability = 'configured' | 'not_configured' | 'unknown'
+
+/** Estado de qualidade separado do valor numérico exibido no cockpit. */
+export type NetworkDataQuality = {
+  operational: NetworkDataAvailability
+  goal: NetworkGoalAvailability
+  discipline: NetworkDataAvailability
+}
+
+export type NetworkMetricState = 'value' | 'zero' | 'partial' | 'no_data' | 'not_configured' | 'unknown'
+
+export type NetworkDashboardMetrics = {
+  stores: number
+  sales: number
+  goal: number
+  critical: number
+  attention: number
+  target: number
+  healthy: number
+  storesWithData: number
+  storesWithoutData: number
+  storesWithUnknownData: number
+  storesWithGoal: number
+  storesWithoutGoal: number
+  storesWithUnknownGoal: number
+  salesState: NetworkMetricState
+  attainmentState: NetworkMetricState
+}
 
 export type TraceableMetric = {
   value: number | null
@@ -35,6 +65,9 @@ export type StoreDiagnostic = {
   sellers: number
   checkedInToday: number
   disciplinePct: number
+  dataQuality?: NetworkDataQuality
+  /** Presente no cockpit completo; opcional para manter os filtros reutilizáveis. */
+  riskReasons?: string[]
 }
 
 export type NetworkCockpitStore = StoreDiagnostic & {

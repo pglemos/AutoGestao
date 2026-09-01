@@ -36,6 +36,7 @@ export type MxSidebarNavSection = {
   key?: string
   label: string
   items: MxSidebarNavItem[]
+  defaultExpanded?: boolean
 }
 
 export type MxSidebarShellProps = {
@@ -172,6 +173,7 @@ export default function MxSidebarShell({
   const [mobileOpen, setMobileOpen] = useState(false)
   const [mobileProfileOpen, setMobileProfileOpen] = useState(false)
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({})
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({})
   const location = useLocation()
   const navigate = useNavigate()
   const drawerRef = useRef<HTMLDivElement>(null)
@@ -228,6 +230,24 @@ export default function MxSidebarShell({
       let changed = false
       for (const group of activeGroups) {
         const key = group.key ?? group.path
+        if (next[key] === true) continue
+        next[key] = true
+        changed = true
+      }
+      return changed ? next : current
+    })
+  }, [activeNavItem, navSections])
+
+  useEffect(() => {
+    if (!activeNavItem) return
+    const activeSections = navSections.filter(section => section.items.some(item => item === activeNavItem || containsNavItem(item, activeNavItem)))
+    if (activeSections.length === 0) return
+
+    setExpandedSections(current => {
+      const next = { ...current }
+      let changed = false
+      for (const section of activeSections) {
+        const key = section.key ?? section.label
         if (next[key] === true) continue
         next[key] = true
         changed = true
@@ -473,20 +493,35 @@ export default function MxSidebarShell({
         )}
         aria-label={sidebarLabel}
       >
-        {navSections.map((section) => (
-          <section key={section.key ?? section.label} className={SIDEBAR.section}>
-            {!isCollapsed && section.label !== 'MENU' ? (
-              <p className={SIDEBAR.sectionLabel} title={section.label}>
-                {section.label}
-              </p>
-            ) : null}
-            <div className={SIDEBAR.sectionItems}>
-              {section.items.map(item => item.children?.length
-                ? renderNavGroup(item, isCollapsed)
-                : renderNavItem(item, isCollapsed))}
-            </div>
-          </section>
-        ))}
+        {navSections.map((section) => {
+          const key = section.key ?? section.label
+          const containsActiveItem = section.items.some(item => item === activeNavItem || containsNavItem(item, activeNavItem))
+          const expanded = expandedSections[key] ?? section.defaultExpanded ?? containsActiveItem
+          const collapsible = !isCollapsed && section.label !== 'MENU'
+          const contentIdSuffix = canCollapse ? 'desktop' : 'mobile'
+          const sectionContentId = `sidebar-section-${key.replace(/[^a-zA-Z0-9_-]+/g, '-').toLowerCase()}-${contentIdSuffix}`
+          return (
+            <section key={key} data-sidebar-section={section.label} className={SIDEBAR.section}>
+              {collapsible ? (
+                <button
+                  type="button"
+                  aria-expanded={expanded}
+                  aria-controls={sectionContentId}
+                  onClick={() => setExpandedSections(current => ({ ...current, [key]: !expanded }))}
+                  className={SIDEBAR.sectionTrigger}
+                >
+                  <span className={SIDEBAR.sectionLabel} title={section.label}>{section.label}</span>
+                  <ChevronDown className={cn(SIDEBAR.sectionChevron, expanded && 'rotate-180')} aria-hidden="true" />
+                </button>
+              ) : null}
+              <div id={collapsible ? sectionContentId : undefined} hidden={collapsible && !expanded} className={SIDEBAR.sectionItems}>
+                {section.items.map(item => item.children?.length
+                  ? renderNavGroup(item, isCollapsed)
+                  : renderNavItem(item, isCollapsed))}
+              </div>
+            </section>
+          )
+        })}
       </nav>
 
       {cta ? (

@@ -72,7 +72,10 @@ export const SIDEBAR = {
   navCollapsed: 'px-2',
   section: 'mb-5',
   sectionLabel:
-    'truncate px-3 pb-1.5 text-caption font-semibold uppercase tracking-wider text-mxsb-muted',
+    'min-w-0 flex-1 truncate text-caption font-semibold uppercase tracking-wider text-mxsb-muted',
+  sectionTrigger:
+    'flex min-h-9 w-full items-center justify-between gap-2 rounded-[var(--mx-sidebar-item-radius)] px-3 py-1.5 text-left outline-none transition-colors hover:bg-mxsb-hover focus-visible:ring-2 focus-visible:ring-status-success/30',
+  sectionChevron: 'h-3.5 w-3.5 shrink-0 text-mxsb-muted transition-transform duration-200',
   sectionItems: 'space-y-0.5',
 
   /** Item de navegação. */
