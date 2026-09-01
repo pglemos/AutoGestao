@@ -386,3 +386,27 @@ responsividade; nenhum segredo em artefatos.
 - Warnings restantes do lint: `jsx-a11y/no-static-element-interactions` em
   `MetasRealizadosTab.tsx` e `jsx-a11y/no-autofocus` em `IndicatorPicker.tsx`;
   nenhum pertence ao lote final.
+
+### Registro final do agente — ajuste responsivo do `/painel` (2026-09-01)
+
+- Os filtros de busca, situação, período e datas usam `h-mx-10` como altura
+  base e `min-height: var(--mx-touch-target-min)` no mobile, com mínimo de
+  `var(--mx-input-height)` a partir de `sm`; a medição no Chrome real confirmou
+  **44 px em 390×844** e **40 px em 1440×900** para `input`, `select` e data.
+- Após o ajuste final: `npm test` (**4796 pass / 0 fail**),
+  `npm run typecheck`, `npm run lint` (**0 erros; 2 warnings preexistentes**),
+  `npm run build` (sem `.map` público), `npm run audit:routes-data` e
+  `git diff --check` passaram.
+- `npx graphify hook-rebuild` concluiu com **62454 nós, 166557 arestas e 8165
+  comunidades**; não há `needs_update` no estado do grafo.
+- A validação local da URL exata `/painel` gerou
+  `visual-evidence/agent-browser/painel-final-local-2026-09-01T17-03-21/`,
+  com `summary.status == "passed"`, ambos os viewports, 0 erros JS e 0
+  violações/incompletudes a11y. Sem sessão autenticada, a rota redirecionou
+  para `/login`; portanto, a prova de conteúdo, dados e ações do cockpit
+  autenticado permanece pendente de confirmação explícita da senha.
+- O fallback público `/login` mantém um `<h1>` visível também no mobile; a
+  validação local em 390×844 e 1440×900 confirmou 0 violações axe e nenhum
+  overflow horizontal.
+- A revisão CodeRabbit do delta responsivo não concluiu por falha de conexão
+  (`WebSocket closed`); não houve achado técnico retornado.

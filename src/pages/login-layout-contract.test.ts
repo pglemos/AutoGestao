@@ -15,4 +15,12 @@ describe('contrato de layout do Login — painel flex-1 com min-w-0 (FASE I 09.0
       expect(panel).toContain('min-w-0')
     }
   })
+
+  test('marca visível no mobile mantém o heading principal da página', () => {
+    const source = readFileSync('src/pages/Login.tsx', 'utf8')
+    const mobileBrand = source.match(/<div className="lg:hidden mb-12 text-center">([\s\S]*?)<\/div>/)?.[1] ?? ''
+
+    expect(mobileBrand).toContain('<h1')
+    expect(mobileBrand).not.toContain('<h2')
+  })
 })
