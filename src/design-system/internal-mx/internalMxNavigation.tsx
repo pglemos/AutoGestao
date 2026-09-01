@@ -84,7 +84,7 @@ export function buildInternalMxNavigation(
         },
         {
           key: 'consultoria-mx',
-          label: 'Consultoria MX',
+          label: 'Metodologia MX',
           path: '/consultoria-mx',
           icon: MessageSquare,
           activePaths: ['/consultoria-mx'],

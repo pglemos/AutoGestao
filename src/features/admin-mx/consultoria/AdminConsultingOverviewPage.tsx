@@ -152,13 +152,13 @@ export function AdminConsultingOverviewPage() {
   const activeFilterCount = [status !== 'todos', modality !== 'todas', period !== 'todos', sort !== 'prioridade'].filter(Boolean).length
   const metricCards = [
     {
-      title: 'Atrasados para revisar',
+      title: 'Para revisar',
       value: metrics.filaRevisao,
-      detail: `${metrics.atrasados} fora do prazo${metrics.revisarStatus ? ` · ${metrics.revisarStatus} com conflito` : ''}`,
+      detail: `${metrics.atrasados} fora do prazo · ${metrics.revisarStatus} com conflito de status`,
       icon: AlertTriangle,
       tone: metrics.filaRevisao ? 'danger' as const : 'neutral' as const,
-      actionLabel: metrics.filaRevisao ? 'Ver pendências' : undefined,
-      onAction: metrics.filaRevisao ? () => setPeriod('atrasados') : undefined,
+      actionLabel: 'Ver pendências',
+      onAction: () => setPeriod('atrasados'),
     },
     {
       title: 'Agenda ativa',
@@ -166,8 +166,8 @@ export function AdminConsultingOverviewPage() {
       detail: `${metrics.hoje} hoje · ${metrics.proximos7Dias} nos próximos 7 dias`,
       icon: CalendarClock,
       tone: 'info' as const,
-      actionLabel: metrics.agendaAtiva ? 'Ver próxima agenda' : undefined,
-      onAction: metrics.agendaAtiva ? () => setPeriod('proximos_7_dias') : undefined,
+      actionLabel: 'Ver próxima agenda',
+      onAction: () => setPeriod('proximos_7_dias'),
     },
     {
       title: 'Concluídos',
@@ -175,17 +175,17 @@ export function AdminConsultingOverviewPage() {
       detail: 'Encontros encerrados',
       icon: CheckCircle2,
       tone: 'success' as const,
-      actionLabel: metrics.concluidos ? 'Ver concluídos' : undefined,
-      onAction: metrics.concluidos ? () => setStatus('concluido') : undefined,
+      actionLabel: 'Ver concluídos',
+      onAction: () => setStatus('concluido'),
     },
     {
       title: 'Cancelados',
       value: metrics.cancelados,
       detail: 'Fora da agenda operacional',
       icon: XCircle,
-      tone: metrics.cancelados ? 'neutral' as const : 'neutral' as const,
-      actionLabel: metrics.cancelados ? 'Ver cancelados' : undefined,
-      onAction: metrics.cancelados ? () => setStatus('cancelado') : undefined,
+      tone: 'neutral' as const,
+      actionLabel: 'Ver cancelados',
+      onAction: () => setStatus('cancelado'),
     },
   ]
   const renderMetricGrid = (className?: string) => (
@@ -319,7 +319,7 @@ export function AdminConsultingOverviewPage() {
                   <MxInput
                     value={search}
                     onChange={event => setSearch(event.target.value)}
-                    placeholder="Buscar cliente, encontro ou consultor"
+                    placeholder="Buscar cliente ou consultor"
                     aria-label="Buscar cliente, encontro ou consultor"
                     className="pl-10 pr-11"
                   />
