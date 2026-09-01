@@ -50,9 +50,9 @@ export function AdminConsultoriaMxPage() {
       <div className="w-full space-y-5">
         <MxModuleHeader
           icon={Sparkles}
-          eyebrow="Administração MX"
-          title="Consultoria MX"
-          description="Configure a metodologia, os conteúdos e as entregas padrão de cada encontro da consultoria."
+          eyebrow="Configuração da metodologia"
+          title="Metodologia de consultoria"
+          description="Administre produtos, conteúdos e entregas padrão de cada encontro da consultoria MX."
           actions={
             <div className="flex flex-wrap items-center gap-2">
               <Button variant="primary" size="sm" onClick={go('produtos')} aria-label="Configurar produto">

@@ -1,19 +1,20 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   AlertTriangle,
+  CalendarClock,
   CalendarDays,
   CheckCircle2,
   ClipboardList,
   ChevronDown,
   ChevronRight,
   ExternalLink,
-  MapPin,
   PackageOpen,
   RefreshCw,
   RotateCcw,
   Search,
   Sparkles,
   Target,
+  XCircle,
 } from 'lucide-react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { openCurrentStrategicPlanHref, resolveAdminEditableCycleId } from '@/features/strategic-plan/adminStrategicPlanHref'
@@ -39,12 +40,16 @@ import {
 } from '@/components/module/MxModuleVisualPrimitives'
 import {
   CONSULTING_MODALITY_LABELS,
-  CONSULTING_PERIOD_LABELS,
+  CONSULTING_MODALITY_FILTER_LABELS,
+  CONSULTING_PERIOD_FILTER_LABELS,
   CONSULTING_SORT_LABELS,
   CONSULTING_STATUS_LABELS,
+  CONSULTING_STATUS_FILTER_LABELS,
   fetchConsultingOverview,
   filterConsultingOverviewRows,
-  isConsultingOverviewRowOverdue,
+  getConsultingOverviewRowState,
+  groupConsultingOverviewRows,
+  hasEffectiveDateConflict,
   parseConsultingOverviewDate,
   summarizeConsultingOverview,
   type ConsultingOverviewFilters,
@@ -87,12 +92,21 @@ function deliverablesLabel(row: ConsultingOverviewRow) {
 }
 
 function rowStatusPresentation(row: ConsultingOverviewRow) {
-  if (isConsultingOverviewRowOverdue(row)) return { label: 'Atrasado', variant: 'danger' as const }
-  return { label: CONSULTING_STATUS_LABELS[row.status], variant: STATUS_BADGE_VARIANT[row.status] }
+  const state = getConsultingOverviewRowState(row)
+  if (state === 'revisar_status') return { label: 'Revisar status', variant: 'warning' as const, derived: true }
+  if (state === 'atrasado') return { label: 'Atrasado', variant: 'danger' as const, derived: true }
+  return { label: CONSULTING_STATUS_LABELS[row.status], variant: STATUS_BADGE_VARIANT[row.status], derived: false }
 }
 
-function hasEffectiveDateConflict(row: ConsultingOverviewRow) {
-  return Boolean(row.effectiveVisitDate && ['agendado', 'reagendado'].includes(row.status))
+function groupRowsByClient(rows: ConsultingOverviewRow[]) {
+  const groups = new Map<string, { clientId: string; clientName: string; rows: ConsultingOverviewRow[] }>()
+  for (const row of rows) {
+    const key = row.clientId || row.clientName
+    const group = groups.get(key) ?? { clientId: row.clientId, clientName: row.clientName, rows: [] }
+    group.rows.push(row)
+    groups.set(key, group)
+  }
+  return [...groups.values()]
 }
 
 export function AdminConsultingOverviewPage() {
@@ -132,18 +146,93 @@ export function AdminConsultingOverviewPage() {
   }, [rows, searchParams, selected])
 
   const filteredRows = useMemo(() => filterConsultingOverviewRows(rows, { search, status, modality, period, sort }), [modality, period, rows, search, sort, status])
+  const groupedRows = useMemo(() => groupConsultingOverviewRows(filteredRows), [filteredRows])
   const metrics = useMemo(() => summarizeConsultingOverview(rows), [rows])
-  const overdueCount = useMemo(() => rows.filter(row => isConsultingOverviewRowOverdue(row)).length, [rows])
+  const hasActiveFilters = Boolean(search || status !== 'todos' || modality !== 'todas' || period !== 'todos' || sort !== 'prioridade')
+  const activeFilterCount = [status !== 'todos', modality !== 'todas', period !== 'todos', sort !== 'prioridade'].filter(Boolean).length
   const metricCards = [
-    { title: 'Agendados', value: metrics.agendados, detail: 'Encontros em agenda', icon: CalendarDays, tone: 'info' as const },
-    { title: 'Concluídos', value: metrics.concluidos, detail: 'Encontros encerrados', icon: CheckCircle2, tone: 'success' as const },
-    { title: 'Presenciais', value: metrics.presenciais, detail: 'Encontros presenciais', icon: MapPin, tone: 'violet' as const },
-    { title: 'Não iniciados', value: metrics.naoIniciados, detail: 'Aguardando execução', icon: Target, tone: metrics.naoIniciados ? 'warning' as const : 'neutral' as const },
+    {
+      title: 'Atrasados para revisar',
+      value: metrics.filaRevisao,
+      detail: `${metrics.atrasados} fora do prazo${metrics.revisarStatus ? ` · ${metrics.revisarStatus} com conflito` : ''}`,
+      icon: AlertTriangle,
+      tone: metrics.filaRevisao ? 'danger' as const : 'neutral' as const,
+      actionLabel: metrics.filaRevisao ? 'Ver pendências' : undefined,
+      onAction: metrics.filaRevisao ? () => setPeriod('atrasados') : undefined,
+    },
+    {
+      title: 'Agenda ativa',
+      value: metrics.agendaAtiva,
+      detail: `${metrics.hoje} hoje · ${metrics.proximos7Dias} nos próximos 7 dias`,
+      icon: CalendarClock,
+      tone: 'info' as const,
+      actionLabel: metrics.agendaAtiva ? 'Ver próxima agenda' : undefined,
+      onAction: metrics.agendaAtiva ? () => setPeriod('proximos_7_dias') : undefined,
+    },
+    {
+      title: 'Concluídos',
+      value: metrics.concluidos,
+      detail: 'Encontros encerrados',
+      icon: CheckCircle2,
+      tone: 'success' as const,
+      actionLabel: metrics.concluidos ? 'Ver concluídos' : undefined,
+      onAction: metrics.concluidos ? () => setStatus('concluido') : undefined,
+    },
+    {
+      title: 'Cancelados',
+      value: metrics.cancelados,
+      detail: 'Fora da agenda operacional',
+      icon: XCircle,
+      tone: metrics.cancelados ? 'neutral' as const : 'neutral' as const,
+      actionLabel: metrics.cancelados ? 'Ver cancelados' : undefined,
+      onAction: metrics.cancelados ? () => setStatus('cancelado') : undefined,
+    },
   ]
   const renderMetricGrid = (className?: string) => (
     <MxMetricGrid className={className}>
       {metricCards.map(card => <MxMetricCard key={card.title} {...card} className="min-h-32 p-3 sm:min-h-40 sm:p-4" />)}
     </MxMetricGrid>
+  )
+
+  const renderFilterControls = (className: string) => (
+    <div className={className}>
+      <MxSelect
+        label="Período"
+        value={period}
+        onChange={event => setPeriod(event.target.value as ConsultingOverviewPeriod)}
+      >
+        {(Object.keys(CONSULTING_PERIOD_FILTER_LABELS) as ConsultingOverviewPeriod[]).map(value => (
+          <option key={value} value={value}>{CONSULTING_PERIOD_FILTER_LABELS[value]}</option>
+        ))}
+      </MxSelect>
+      <MxSelect
+        label="Status"
+        value={status}
+        onChange={event => setStatus(event.target.value as ConsultingOverviewFilters['status'])}
+      >
+        {(Object.keys(CONSULTING_STATUS_FILTER_LABELS) as Array<ConsultingOverviewFilters['status']>).map(value => (
+          <option key={value} value={value}>{CONSULTING_STATUS_FILTER_LABELS[value]}</option>
+        ))}
+      </MxSelect>
+      <MxSelect
+        label="Modalidade"
+        value={modality}
+        onChange={event => setModality(event.target.value as ConsultingOverviewFilters['modality'])}
+      >
+        {(Object.keys(CONSULTING_MODALITY_FILTER_LABELS) as Array<ConsultingOverviewFilters['modality']>).map(value => (
+          <option key={value} value={value}>{CONSULTING_MODALITY_FILTER_LABELS[value]}</option>
+        ))}
+      </MxSelect>
+      <MxSelect
+        label="Ordenar"
+        value={sort}
+        onChange={event => setSort(event.target.value as ConsultingOverviewSort)}
+      >
+        {(Object.keys(CONSULTING_SORT_LABELS) as ConsultingOverviewSort[]).map(value => (
+          <option key={value} value={value}>{CONSULTING_SORT_LABELS[value]}</option>
+        ))}
+      </MxSelect>
+    </div>
   )
 
   const clearFilters = () => {
@@ -214,7 +303,7 @@ export function AdminConsultingOverviewPage() {
                 <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-left [&::-webkit-details-marker]:hidden">
                   <span className="min-w-0">
                     <span className="block text-sm font-semibold text-foreground">Resumo da operação</span>
-                    <span className="mt-0.5 block break-words text-xs text-muted-foreground">{metrics.agendados} agendados · {metrics.concluidos} concluídos · {metrics.presenciais} presenciais · {metrics.naoIniciados} não iniciados</span>
+                    <span className="mt-0.5 block break-words text-xs text-muted-foreground">{metrics.filaRevisao} para revisar · {metrics.agendaAtiva} na agenda · {metrics.concluidos} concluídos · {metrics.cancelados} cancelados</span>
                   </span>
                   <ChevronDown size={16} aria-hidden="true" className="shrink-0 text-muted-foreground transition-transform group-open:rotate-180" />
                 </summary>
@@ -230,81 +319,143 @@ export function AdminConsultingOverviewPage() {
                   <MxInput
                     value={search}
                     onChange={event => setSearch(event.target.value)}
-                    placeholder="Buscar cliente, encontro, consultor ou objetivo"
-                    aria-label="Buscar cliente, encontro, consultor ou objetivo"
+                    placeholder="Buscar cliente, encontro ou consultor"
+                    aria-label="Buscar cliente, encontro ou consultor"
                     className="pl-10 pr-11"
                   />
                   {search ? <Button type="button" variant="ghost" size="icon" className="absolute right-1 top-1/2 h-9 w-9 -translate-y-1/2" onClick={() => setSearch('')} aria-label="Limpar busca"><span aria-hidden="true">×</span></Button> : null}
                 </div>
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                  <MxSelect value={period} onChange={event => setPeriod(event.target.value as ConsultingOverviewPeriod)} aria-label="Filtrar encontros por período">
-                    {(Object.keys(CONSULTING_PERIOD_LABELS) as ConsultingOverviewPeriod[]).map(value => <option key={value} value={value}>{CONSULTING_PERIOD_LABELS[value]}</option>)}
-                  </MxSelect>
-                  <MxSelect value={status} onChange={event => setStatus(event.target.value as ConsultingOverviewFilters['status'])} aria-label="Filtrar encontros por status">
-                    <option value="todos">Todos os status</option>
-                    {(Object.keys(CONSULTING_STATUS_LABELS) as ConsultingOverviewStatus[]).map(value => <option key={value} value={value}>{CONSULTING_STATUS_LABELS[value]}</option>)}
-                  </MxSelect>
-                  <MxSelect value={modality} onChange={event => setModality(event.target.value as ConsultingOverviewFilters['modality'])} aria-label="Filtrar encontros por modalidade">
-                    <option value="todas">Todas as modalidades</option>
-                    {(Object.keys(CONSULTING_MODALITY_LABELS) as ConsultingOverviewModality[]).map(value => <option key={value} value={value}>{CONSULTING_MODALITY_LABELS[value]}</option>)}
-                  </MxSelect>
-                  <MxSelect value={sort} onChange={event => setSort(event.target.value as ConsultingOverviewSort)} aria-label="Ordenar encontros">
-                    {(Object.keys(CONSULTING_SORT_LABELS) as ConsultingOverviewSort[]).map(value => <option key={value} value={value}>{CONSULTING_SORT_LABELS[value]}</option>)}
-                  </MxSelect>
-                </div>
+                <details className="group rounded-xl border border-border-subtle sm:hidden">
+                  <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 px-3 py-2 text-sm font-semibold text-foreground [&::-webkit-details-marker]:hidden">
+                    <span>Filtros e ordenação</span>
+                    <span className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+                      {activeFilterCount ? `${activeFilterCount} ativo${activeFilterCount === 1 ? '' : 's'}` : 'Todos'}
+                      <ChevronDown size={16} aria-hidden="true" className="transition-transform group-open:rotate-180" />
+                    </span>
+                  </summary>
+                  <div className="border-t border-border-subtle p-3">{renderFilterControls('grid grid-cols-2 gap-3')}</div>
+                </details>
+                {renderFilterControls('hidden grid-cols-4 gap-3 sm:grid')}
               </div>
-              {search || status !== 'todos' || modality !== 'todas' || period !== 'todos' || sort !== 'prioridade' ? <Button type="button" variant="ghost" className="shrink-0 justify-center sm:self-end" onClick={clearFilters}><RotateCcw size={16} />Limpar filtros</Button> : null}
+              {hasActiveFilters ? <Button type="button" variant="ghost" className="shrink-0 justify-center sm:self-end" onClick={clearFilters}><RotateCcw size={16} />Limpar filtros</Button> : null}
             </MxToolbar>
+
+            {metrics.revisarStatus ? (
+              <MxStatusBanner tone="warning" className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <strong>{metrics.revisarStatus} encontro{metrics.revisarStatus === 1 ? '' : 's'} aguardam confirmação.</strong>
+                  <span className="mt-1 block font-normal">A data efetiva existe, mas o status persistido ainda não registra a conclusão.</span>
+                </div>
+                <Button type="button" variant="outline" size="sm" className="shrink-0" onClick={() => setPeriod('atrasados')}>Ver conflitos</Button>
+              </MxStatusBanner>
+            ) : null}
 
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm" aria-live="polite">
               <span className="font-semibold text-foreground">Exibindo {filteredRows.length} de {rows.length} encontros</span>
-              {overdueCount ? <span className="inline-flex items-center gap-1.5 font-medium text-status-error-text"><AlertTriangle size={14} aria-hidden="true" />{overdueCount} atrasado{overdueCount === 1 ? '' : 's'} para revisar</span> : null}
+              {metrics.filaRevisao ? <span className="inline-flex items-center gap-1.5 font-medium text-status-error-text"><AlertTriangle size={14} aria-hidden="true" />{metrics.filaRevisao} encontro{metrics.filaRevisao === 1 ? '' : 's'} para revisar</span> : null}
               <span className="text-muted-foreground">Dados {formatLastUpdated(lastUpdated)} · horário local</span>
             </div>
 
             <MxSectionCard className="overflow-hidden">
               <div className="border-b border-border-subtle px-4 py-3 sm:px-5 sm:py-4">
-                <h2 className="text-base font-semibold text-foreground">Encontros</h2>
-                <p className="sr-only mt-1 text-sm text-muted-foreground sm:not-sr-only">Selecione um encontro para executar a próxima etapa ou abrir o contexto completo do cliente.</p>
-              </div>
-              <div className="divide-y divide-border">
-                {filteredRows.length ? filteredRows.map(row => (
-                  <button
-                    key={row.id}
-                    type="button"
-                    className="group flex w-full items-start gap-3 px-4 py-4 text-left transition-colors hover:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring sm:gap-4 sm:px-5"
-                    onClick={() => { setSelected(row); setActionError(null) }}
-                    aria-label={`${row.clientName}, Encontro ${row.visitNumber}, ${rowStatusPresentation(row).label}, ${formatDateTime(row.scheduledAt)}`}
-                  >
-                    <div className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-surface-alt text-sm font-semibold text-muted-foreground sm:h-10 sm:w-10">
-                      {row.visitNumber}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                        <span className="break-words font-semibold text-foreground">{row.clientName}</span>
-                        <span className="text-xs text-muted-foreground">Encontro {row.visitNumber}</span>
-                      </div>
-                      <p className="mt-1 break-words text-sm leading-5 text-muted-foreground">{row.title || row.objective}</p>
-                      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-                        <span>Consultor: {row.consultantName}</span>
-                        <span>{CONSULTING_MODALITY_LABELS[row.modality]}</span>
-                      </div>
-                      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-                        <span className="inline-flex items-center gap-1.5 text-muted-foreground"><CalendarDays size={14} aria-hidden="true" />Agenda: {formatDateTime(row.scheduledAt)}</span>
-                        {hasEffectiveDateConflict(row) ? <span className="font-medium text-status-warning-text">Data efetiva registrada</span> : null}
-                      </div>
-                    </div>
-                    <div className="flex shrink-0 items-center gap-2 pt-0.5">
-                      <Badge variant={rowStatusPresentation(row).variant} className="uppercase">{rowStatusPresentation(row).label}</Badge>
-                      <ChevronRight size={16} aria-hidden="true" className="text-muted-foreground transition-transform group-hover:translate-x-0.5" />
-                    </div>
-                  </button>
-                )) : (
-                  <div className="p-5">
-                    <MxEmptyState variant={rows.length ? 'filter' : 'dataset'} icon={PackageOpen} title={rows.length ? 'Nenhum encontro encontrado' : 'Nenhum encontro cadastrado'} description={rows.length ? 'Ajuste os filtros para encontrar outro registro.' : 'Os encontros persistidos aparecerão aqui quando a jornada de consultoria for criada.'} />
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <h2 className="text-base font-semibold text-foreground">Fila operacional</h2>
+                    <p className="mt-1 text-sm text-muted-foreground">Prioridade primeiro; histórico ao final. Selecione um encontro para abrir o contexto completo.</p>
                   </div>
-                )}
+                  <span className="shrink-0 text-xs font-medium text-muted-foreground">{groupedRows.length} grupos</span>
+                </div>
               </div>
+              {groupedRows.length ? groupedRows.map(group => {
+                const clientGroups = groupRowsByClient(group.rows)
+                return (
+                  <section key={group.key} aria-labelledby={`consulting-group-${group.key}`} className="border-b border-border-subtle last:border-b-0">
+                    <div className="flex flex-wrap items-start justify-between gap-3 bg-surface-alt px-4 py-3 sm:px-5">
+                      <div>
+                        <h3 id={`consulting-group-${group.key}`} className="text-sm font-semibold text-foreground">{group.label}</h3>
+                        <p className="mt-0.5 text-xs text-muted-foreground">{group.description}</p>
+                      </div>
+                      <Badge variant={group.key === 'revisar_status' ? 'warning' : group.key === 'atrasados' ? 'danger' : group.key === 'concluidos' ? 'success' : group.key === 'cancelados' ? 'outline' : 'secondary'}>{group.rows.length}</Badge>
+                    </div>
+                    {clientGroups.map(clientGroup => (
+                      <div key={clientGroup.clientId}>
+                        {clientGroups.length > 1 ? (
+                          <div className="flex items-center justify-between gap-3 border-t border-border-subtle px-4 py-2.5 sm:px-5">
+                            <h4 className="text-xs font-semibold text-foreground">{clientGroup.clientName}</h4>
+                            <span className="text-xs text-muted-foreground">{clientGroup.rows.length} encontro{clientGroup.rows.length === 1 ? '' : 's'}</span>
+                          </div>
+                        ) : null}
+                        <div className="divide-y divide-border">
+                          {clientGroup.rows.map(row => {
+                            const presentation = rowStatusPresentation(row)
+                            const actionLabel = hasEffectiveDateConflict(row) ? 'Revisar status' : 'Executar encontro'
+                            const actionIcon = hasEffectiveDateConflict(row) ? <AlertTriangle size={14} /> : <Sparkles size={14} />
+                            const canExecute = !['concluido', 'cancelado'].includes(row.status)
+                            return (
+                              <article key={row.id} className="flex flex-col gap-3 px-4 py-4 transition-colors hover:bg-surface-alt sm:grid sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start sm:gap-4 sm:px-5">
+                                <div className="flex min-w-0 items-start gap-3">
+                                  <div className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-surface-alt text-sm font-semibold text-muted-foreground sm:h-10 sm:w-10">
+                                    {row.visitNumber}
+                                  </div>
+                                  <div className="min-w-0 flex-1">
+                                    <button
+                                      type="button"
+                                      className="block w-full rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring"
+                                      onClick={() => { setSelected(row); setActionError(null) }}
+                                      aria-label={`Abrir detalhes de ${row.clientName}, Encontro ${row.visitNumber}, ${presentation.label}`}
+                                    >
+                                      <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                                        <span className="break-words font-semibold text-foreground">{row.clientName}</span>
+                                        <span className="text-xs text-muted-foreground">Encontro {row.visitNumber}</span>
+                                      </span>
+                                      <span className="mt-1 block line-clamp-2 break-words text-sm leading-5 text-muted-foreground" title={row.objective}>
+                                        {row.title || row.objective}
+                                      </span>
+                                      {row.objective.length > 120 ? <span className="mt-1 block text-xs font-medium text-status-info-text">Ver objetivo completo no detalhe</span> : null}
+                                    </button>
+                                    <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+                                      <span>Consultor: {row.consultantName}</span>
+                                      <span>{CONSULTING_MODALITY_LABELS[row.modality]}</span>
+                                      {row.deliverables ? <span>{deliverablesLabel(row)}</span> : null}
+                                    </div>
+                                    <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+                                      <span className="inline-flex items-center gap-1.5 text-muted-foreground"><CalendarDays size={14} aria-hidden="true" />Agenda: {formatDateTime(row.scheduledAt)}</span>
+                                      {row.effectiveVisitDate ? <span className="inline-flex items-center gap-1.5 font-medium text-status-warning-text"><CalendarClock size={14} aria-hidden="true" />Efetiva: {formatDateTime(row.effectiveVisitDate)}</span> : null}
+                                      {presentation.derived ? <span className="text-muted-foreground">Status registrado: {CONSULTING_STATUS_LABELS[row.status]}</span> : null}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="flex flex-col items-stretch gap-2 sm:items-end">
+                                  <div className="flex items-center justify-between gap-2 sm:justify-end">
+                                    <Badge variant={presentation.variant} className="uppercase">{presentation.label}</Badge>
+                                    <ChevronRight size={16} aria-hidden="true" className="text-muted-foreground" />
+                                  </div>
+                                  {canExecute ? (
+                                    <Button
+                                      type="button"
+                                      variant={hasEffectiveDateConflict(row) ? 'warning' : 'primary'}
+                                      size="sm"
+                                      className="w-full justify-center sm:w-auto"
+                                      onClick={() => openVisit(row)}
+                                      aria-label={`${actionLabel} de ${row.clientName}, Encontro ${row.visitNumber}`}
+                                    >
+                                      {actionIcon}{actionLabel}
+                                    </Button>
+                                  ) : null}
+                                </div>
+                              </article>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </section>
+                )
+              }) : (
+                <div className="p-5">
+                  <MxEmptyState variant={rows.length ? 'filter' : 'dataset'} icon={PackageOpen} title={rows.length ? 'Nenhum encontro encontrado' : 'Nenhum encontro cadastrado'} description={rows.length ? 'Ajuste os filtros para encontrar outro registro.' : 'Os encontros persistidos aparecerão aqui quando a jornada de consultoria for criada.'} />
+                </div>
+              )}
             </MxSectionCard>
           </>
         )}
@@ -316,6 +467,22 @@ export function AdminConsultingOverviewPage() {
         title={selected ? `${selected.clientName} · Encontro ${selected.visitNumber}` : 'Detalhe do encontro'}
         description={selected?.title}
         size="lg"
+        footer={selected ? (
+          <>
+            <Button
+              type="button"
+              variant={hasEffectiveDateConflict(selected) ? 'warning' : 'primary'}
+              className="w-full sm:w-auto"
+              onClick={() => openVisit(selected)}
+            >
+              {hasEffectiveDateConflict(selected) ? <AlertTriangle size={14} /> : <Sparkles size={14} />}
+              {hasEffectiveDateConflict(selected) ? 'Revisar status' : 'Executar encontro'}
+            </Button>
+            <Button type="button" variant="outline" className="w-full sm:w-auto" onClick={() => openClient360(selected)}>
+              <ExternalLink size={14} />Visão 360 do cliente
+            </Button>
+          </>
+        ) : undefined}
       >
         {selected ? (
           <div className="space-y-5">
@@ -333,16 +500,12 @@ export function AdminConsultingOverviewPage() {
               <div className="rounded-xl border border-border-subtle bg-surface-alt p-3"><dt className="text-xs text-muted-foreground">Entregáveis</dt><dd className="mt-1 text-sm font-semibold text-foreground">{deliverablesLabel(selected)}</dd></div>
             </dl>
 
-            {hasEffectiveDateConflict(selected) ? <MxStatusBanner tone="warning"><strong>Revisar status do encontro.</strong> Há uma data efetiva registrada, mas o status persistido ainda é “{CONSULTING_STATUS_LABELS[selected.status]}”. Confirme a execução antes de encerrar o encontro.</MxStatusBanner> : null}
+            {hasEffectiveDateConflict(selected) ? <MxStatusBanner tone="warning"><strong>Revisar status do encontro.</strong> Há uma data efetiva registrada, mas o status persistido ainda é “{CONSULTING_STATUS_LABELS[selected.status]}”. Confirme a execução usando o botão principal no rodapé.</MxStatusBanner> : null}
 
             <div className="rounded-xl border border-border-subtle p-4">
               <div className="flex items-start gap-3">
                 <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-status-info-surface text-status-info-text"><Target size={20} aria-hidden="true" /></div>
                 <div><h3 className="text-sm font-semibold text-foreground">Próxima ação</h3><p className="mt-1 text-sm leading-6 text-muted-foreground">Abra a execução para registrar o encontro. A visão 360 mantém o contexto completo do cliente.</p></div>
-              </div>
-              <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                <Button variant="primary" className="justify-start" onClick={() => openVisit(selected)}><Sparkles size={14} />Executar encontro</Button>
-                <Button variant="outline" className="justify-start" onClick={() => openClient360(selected)}><ExternalLink size={14} />Visão 360 do cliente</Button>
               </div>
               {actionError ? <p className="mt-3 text-sm text-status-error-text" role="alert">{actionError}</p> : null}
               <details className="group mt-3 rounded-xl border border-border-subtle">

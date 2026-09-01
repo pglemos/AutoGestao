@@ -4,6 +4,24 @@ export type ConsultingOverviewStatus = 'nao_iniciado' | 'agendado' | 'concluido'
 export type ConsultingOverviewModality = 'online' | 'presencial' | 'a_definir'
 export type ConsultingOverviewPeriod = 'todos' | 'hoje' | 'proximos_7_dias' | 'atrasados'
 export type ConsultingOverviewSort = 'prioridade' | 'data_proxima' | 'recentes' | 'cliente'
+export type ConsultingOverviewOperationalState =
+  | 'revisar_status'
+  | 'atrasado'
+  | 'hoje'
+  | 'agenda_ativa'
+  | 'sem_agenda'
+  | 'concluido'
+  | 'cancelado'
+
+export type ConsultingOverviewGroupKey =
+  | 'revisar_status'
+  | 'atrasados'
+  | 'hoje'
+  | 'proximos_7_dias'
+  | 'agenda_futura'
+  | 'sem_agenda'
+  | 'concluidos'
+  | 'cancelados'
 
 export type ConsultingOverviewRow = {
   id: string
@@ -25,12 +43,20 @@ export type ConsultingOverviewRow = {
   deliverablesDone: number
 }
 
+export type ConsultingOverviewGroup = {
+  key: ConsultingOverviewGroupKey
+  label: string
+  description: string
+  rows: ConsultingOverviewRow[]
+}
+
 export type ConsultingOverviewFilters = {
   search: string
   status: 'todos' | ConsultingOverviewStatus
   modality: 'todas' | ConsultingOverviewModality
   period?: ConsultingOverviewPeriod
   sort?: ConsultingOverviewSort
+  referenceDate?: Date
 }
 
 export const CONSULTING_PERIOD_LABELS: Record<ConsultingOverviewPeriod, string> = {
@@ -80,10 +106,39 @@ export function getConsultingOverviewRowDate(row: ConsultingOverviewRow): Date |
   return parseConsultingOverviewDate(row.scheduledAt) ?? parseConsultingOverviewDate(row.effectiveVisitDate)
 }
 
+export function hasEffectiveDateConflict(row: ConsultingOverviewRow): boolean {
+  return Boolean(row.effectiveVisitDate && ['agendado', 'reagendado', 'nao_iniciado'].includes(row.status))
+}
+
 export function isConsultingOverviewRowOverdue(row: ConsultingOverviewRow, referenceDate = new Date()): boolean {
-  if (!['nao_iniciado', 'agendado', 'reagendado'].includes(row.status)) return false
+  if (hasEffectiveDateConflict(row) || !['nao_iniciado', 'agendado', 'reagendado'].includes(row.status)) return false
   const date = getConsultingOverviewRowDate(row)
   return Boolean(date && date.getTime() < referenceDate.getTime())
+}
+
+function addDays(date: Date, days: number) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days)
+}
+
+function isSameLocalDay(left: Date, right: Date) {
+  return left.getFullYear() === right.getFullYear()
+    && left.getMonth() === right.getMonth()
+    && left.getDate() === right.getDate()
+}
+
+function isOpenConsultingStatus(status: ConsultingOverviewStatus) {
+  return ['nao_iniciado', 'agendado', 'reagendado'].includes(status)
+}
+
+export function getConsultingOverviewRowState(row: ConsultingOverviewRow, referenceDate = new Date()): ConsultingOverviewOperationalState {
+  if (hasEffectiveDateConflict(row)) return 'revisar_status'
+  if (row.status === 'concluido') return 'concluido'
+  if (row.status === 'cancelado') return 'cancelado'
+  if (isConsultingOverviewRowOverdue(row, referenceDate)) return 'atrasado'
+  const date = getConsultingOverviewRowDate(row)
+  if (!date) return 'sem_agenda'
+  if (isSameLocalDay(date, referenceDate)) return 'hoje'
+  return 'agenda_ativa'
 }
 
 export function normalizeConsultingStatus(value: string | null | undefined): ConsultingOverviewStatus {
@@ -119,41 +174,134 @@ export const CONSULTING_MODALITY_LABELS: Record<ConsultingOverviewModality, stri
   a_definir: 'A definir',
 }
 
+export const CONSULTING_PERIOD_FILTER_LABELS: Record<ConsultingOverviewPeriod, string> = {
+  todos: 'Todos',
+  hoje: 'Hoje',
+  proximos_7_dias: 'Próximos 7 dias',
+  atrasados: 'Atrasados',
+}
+
+export const CONSULTING_STATUS_FILTER_LABELS: Record<'todos' | ConsultingOverviewStatus, string> = {
+  todos: 'Todos',
+  ...CONSULTING_STATUS_LABELS,
+}
+
+export const CONSULTING_MODALITY_FILTER_LABELS: Record<'todas' | ConsultingOverviewModality, string> = {
+  todas: 'Todas',
+  ...CONSULTING_MODALITY_LABELS,
+}
+
 export function filterConsultingOverviewRows(rows: ConsultingOverviewRow[], filters: ConsultingOverviewFilters): ConsultingOverviewRow[] {
   const term = normalizeLookupValue(filters.search)
-  const today = new Date()
+  const today = filters.referenceDate ?? new Date()
   const period = filters.period ?? 'todos'
   const filtered = rows.filter(row => {
     if (filters.status !== 'todos' && row.status !== filters.status) return false
     if (filters.modality !== 'todas' && row.modality !== filters.modality) return false
-    if (period === 'atrasados' && !isConsultingOverviewRowOverdue(row, today)) return false
+    const rowDate = getConsultingOverviewRowDate(row)
+    const rowState = getConsultingOverviewRowState(row, today)
+    if (period === 'atrasados' && !['revisar_status', 'atrasado'].includes(rowState)) return false
     if (period === 'hoje') {
-      const date = getConsultingOverviewRowDate(row)
-      if (!date || date < startOfDay(today) || date > endOfDay(today)) return false
+      if (!isOpenConsultingStatus(row.status) || !rowDate || rowDate < startOfDay(today) || rowDate > endOfDay(today)) return false
     }
     if (period === 'proximos_7_dias') {
-      const date = getConsultingOverviewRowDate(row)
-      const start = startOfDay(today)
-      const end = endOfDay(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7))
-      if (!date || date < start || date > end) return false
+      const end = endOfDay(addDays(today, 7))
+      if (!isOpenConsultingStatus(row.status) || !rowDate || rowDate <= endOfDay(today) || rowDate > end) return false
     }
     if (!term) return true
     return [row.clientName, row.title, row.objective, row.consultantName, row.productName, String(row.visitNumber)]
       .some(value => normalizeLookupValue(value).includes(term))
   })
-  return sortConsultingOverviewRows(filtered, filters.sort ?? 'prioridade')
+  return sortConsultingOverviewRows(filtered, filters.sort ?? 'prioridade', today)
 }
 
-function priorityRank(row: ConsultingOverviewRow) {
-  if (isConsultingOverviewRowOverdue(row)) return 0
-  if (row.status === 'nao_iniciado') return 1
-  if (row.status === 'reagendado') return 2
-  if (row.status === 'agendado') return 3
-  if (row.status === 'concluido') return 4
-  return 5
+function getConsultingOverviewGroupKey(row: ConsultingOverviewRow, referenceDate = new Date()): ConsultingOverviewGroupKey {
+  const state = getConsultingOverviewRowState(row, referenceDate)
+  if (state === 'revisar_status') return 'revisar_status'
+  if (state === 'atrasado') return 'atrasados'
+  if (state === 'hoje') return 'hoje'
+  if (state === 'concluido') return 'concluidos'
+  if (state === 'cancelado') return 'cancelados'
+  if (state === 'sem_agenda') return 'sem_agenda'
+
+  const date = getConsultingOverviewRowDate(row)
+  if (date && date <= endOfDay(addDays(referenceDate, 7))) return 'proximos_7_dias'
+  return 'agenda_futura'
 }
 
-export function sortConsultingOverviewRows(rows: ConsultingOverviewRow[], sort: ConsultingOverviewSort): ConsultingOverviewRow[] {
+const CONSULTING_GROUP_DEFINITIONS: Record<ConsultingOverviewGroupKey, Omit<ConsultingOverviewGroup, 'rows'>> = {
+  revisar_status: {
+    key: 'revisar_status',
+    label: 'Revisar status',
+    description: 'Há uma data efetiva, mas o status persistido ainda está pendente.',
+  },
+  atrasados: {
+    key: 'atrasados',
+    label: 'Atrasados',
+    description: 'Encontros pendentes cuja agenda prevista já passou.',
+  },
+  hoje: {
+    key: 'hoje',
+    label: 'Hoje',
+    description: 'Encontros previstos para o dia atual.',
+  },
+  proximos_7_dias: {
+    key: 'proximos_7_dias',
+    label: 'Próximos 7 dias',
+    description: 'Agenda ativa para a próxima semana.',
+  },
+  agenda_futura: {
+    key: 'agenda_futura',
+    label: 'Agenda futura',
+    description: 'Encontros além dos próximos 7 dias.',
+  },
+  sem_agenda: {
+    key: 'sem_agenda',
+    label: 'Sem agenda',
+    description: 'Registros pendentes sem data prevista.',
+  },
+  concluidos: {
+    key: 'concluidos',
+    label: 'Concluídos',
+    description: 'Encontros com execução encerrada.',
+  },
+  cancelados: {
+    key: 'cancelados',
+    label: 'Cancelados',
+    description: 'Encontros retirados da agenda operacional.',
+  },
+}
+
+const CONSULTING_GROUP_ORDER: ConsultingOverviewGroupKey[] = [
+  'revisar_status',
+  'atrasados',
+  'hoje',
+  'proximos_7_dias',
+  'agenda_futura',
+  'sem_agenda',
+  'concluidos',
+  'cancelados',
+]
+
+export function groupConsultingOverviewRows(rows: ConsultingOverviewRow[], referenceDate = new Date()): ConsultingOverviewGroup[] {
+  const grouped = new Map<ConsultingOverviewGroupKey, ConsultingOverviewRow[]>()
+  for (const row of rows) {
+    const key = getConsultingOverviewGroupKey(row, referenceDate)
+    const groupRows = grouped.get(key) ?? []
+    groupRows.push(row)
+    grouped.set(key, groupRows)
+  }
+
+  return CONSULTING_GROUP_ORDER
+    .filter(key => grouped.has(key))
+    .map(key => ({ ...CONSULTING_GROUP_DEFINITIONS[key], rows: grouped.get(key) ?? [] }))
+}
+
+function priorityRank(row: ConsultingOverviewRow, referenceDate: Date) {
+  return CONSULTING_GROUP_ORDER.indexOf(getConsultingOverviewGroupKey(row, referenceDate))
+}
+
+export function sortConsultingOverviewRows(rows: ConsultingOverviewRow[], sort: ConsultingOverviewSort, referenceDate = new Date()): ConsultingOverviewRow[] {
   return rows
     .map((row, index) => ({ row, index }))
     .sort((a, b) => {
@@ -175,7 +323,7 @@ export function sortConsultingOverviewRows(rows: ConsultingOverviewRow[], sort: 
           return dateA - dateB
         }
       } else {
-        const byPriority = priorityRank(a.row) - priorityRank(b.row)
+        const byPriority = priorityRank(a.row, referenceDate) - priorityRank(b.row, referenceDate)
         if (byPriority !== 0) return byPriority
         if (dateA !== dateB) {
           if (dateA === null) return 1
@@ -188,10 +336,19 @@ export function sortConsultingOverviewRows(rows: ConsultingOverviewRow[], sort: 
     .map(({ row }) => row)
 }
 
-export function summarizeConsultingOverview(rows: ConsultingOverviewRow[]) {
+export function summarizeConsultingOverview(rows: ConsultingOverviewRow[], referenceDate = new Date()) {
+  const rowState = (row: ConsultingOverviewRow) => getConsultingOverviewRowState(row, referenceDate)
   return {
+    total: rows.length,
+    filaRevisao: rows.filter(row => ['revisar_status', 'atrasado'].includes(rowState(row))).length,
+    atrasados: rows.filter(row => rowState(row) === 'atrasado').length,
+    revisarStatus: rows.filter(row => rowState(row) === 'revisar_status').length,
+    agendaAtiva: rows.filter(row => isOpenConsultingStatus(row.status) && !['revisar_status', 'atrasado'].includes(rowState(row))).length,
+    hoje: rows.filter(row => getConsultingOverviewGroupKey(row, referenceDate) === 'hoje').length,
+    proximos7Dias: rows.filter(row => getConsultingOverviewGroupKey(row, referenceDate) === 'proximos_7_dias').length,
     agendados: rows.filter(row => row.status === 'agendado').length,
     concluidos: rows.filter(row => row.status === 'concluido').length,
+    cancelados: rows.filter(row => row.status === 'cancelado').length,
     presenciais: rows.filter(row => row.modality === 'presencial').length,
     naoIniciados: rows.filter(row => row.status === 'nao_iniciado').length,
   }
