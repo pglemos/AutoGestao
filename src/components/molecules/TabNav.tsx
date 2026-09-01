@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 export interface TabNavItem<T extends string = string> {
@@ -38,6 +39,15 @@ export function TabNav<T extends string = string>({
   ariaLabel = "Abas da seção",
   scrollable = false,
 }: TabNavProps<T>) {
+  const tablistRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!scrollable) return;
+    const activeElement = document.getElementById(`${String(activeTab)}-tab`);
+    if (!activeElement || !tablistRef.current?.contains(activeElement)) return;
+    activeElement?.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }, [activeTab, scrollable]);
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
     const currentIndex = tabs.findIndex((tab) => tab.key === activeTab);
 
@@ -80,6 +90,7 @@ export function TabNav<T extends string = string>({
 
   return (
     <nav
+      ref={tablistRef}
       className={cn(
         scrollable
           ? "relative flex max-w-full gap-mx-xs overflow-x-auto overscroll-x-contain border-b border-border-subtle mb-mx-md whitespace-nowrap pr-mx-md [scrollbar-width:thin]"

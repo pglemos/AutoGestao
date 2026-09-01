@@ -10,6 +10,7 @@ import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-do
 import { resolveRouteLayout } from '@/design-system/page'
 import { Button } from '@/components/atoms/Button'
 import { TabNav } from '@/components/molecules/TabNav'
+import { LastUpdated } from '@/components/molecules/LastUpdated'
 import {
   MxErrorState,
   MxLoadingState,
@@ -33,7 +34,7 @@ import { SuspendClientModal } from './clientes/SuspendClientModal'
 import { createEnrollmentLink } from './clientes/enrollmentMutations'
 import type { EnrollmentLinkDraft } from './clientes/enrollmentLink'
 import { reactivateClient, scheduleActivation, suspendClient } from './clientes/lifecycleMutations'
-import { isActive, portfolioCounters, type PortfolioClient } from './clientes/clientPortfolio'
+import { isActive, portfolioGovernanceAttentionCount, type PortfolioClient } from './clientes/clientPortfolio'
 import { useClientPortfolio } from './clientes/useClientPortfolio'
 import { PortfolioOverviewTab } from './clientes/PortfolioOverviewTab'
 import { PortfolioBase44ListTab } from './clientes/PortfolioBase44ListTab'
@@ -52,7 +53,7 @@ function resolveAdminClientesTab(value: string | null): AdminClientesTab {
 }
 
 export function AdminClientesPage() {
-  const { rows, loading: portfolioLoading, error: portfolioError, refetch: refetchPortfolio } = useClientPortfolio()
+  const { rows, loading: portfolioLoading, error: portfolioError, lastUpdatedAt, refetch: refetchPortfolio } = useClientPortfolio()
   const {
     lojas,
     refetch: refetchStores,
@@ -107,14 +108,14 @@ export function AdminClientesPage() {
     await Promise.all([refetchPortfolio(), refetchStores(), refetchStats()])
   }
 
-  const counters = useMemo(() => portfolioCounters(rows), [rows])
+  const governanceAttentionCount = useMemo(() => portfolioGovernanceAttentionCount(rows), [rows])
 
   const tabsConfig = useMemo(() => [
     { key: 'carteira360' as const, label: `Carteira 360 (${rows.length})` },
     { key: 'lista' as const, label: `Cadastro e status (${rows.length})` },
     { key: 'onboarding' as const, label: 'Implantação' },
-    { key: 'governanca' as const, label: `Governança (${counters.com_bloqueios})` },
-  ], [rows.length, counters.com_bloqueios])
+    { key: 'governanca' as const, label: `Governança · ${governanceAttentionCount} clientes` },
+  ], [governanceAttentionCount, rows.length])
 
   const visibleTabsConfig = useMemo(() => (
     activeTab === 'inscricoes'
@@ -273,17 +274,27 @@ export function AdminClientesPage() {
     return null
   }
 
-  const doReactivate = async (client: PortfolioClient) => {
-    if (!supabaseUser) return
-    setSubmitting(true)
-    const result = await reactivateClient({ clientId: client.id, activatedBy: supabaseUser.id })
-    setSubmitting(false)
-    if (result.error) {
-      toast.error(result.error)
-      return
+  const doReactivate = async (client: PortfolioClient): Promise<boolean> => {
+    if (!supabaseUser) {
+      toast.error('Sua sessão não está disponível. Atualize a página e tente novamente.')
+      return false
     }
-    toast.success('Cliente reativado.')
-    await refetchAll()
+    setSubmitting(true)
+    try {
+      const result = await reactivateClient({ clientId: client.id, activatedBy: supabaseUser.id })
+      if (result.error) {
+        toast.error(result.error)
+        return false
+      }
+      toast.success('Cliente reativado e removido da fila de suspensão.')
+      await refetchAll()
+      return true
+    } catch (cause) {
+      toast.error(cause instanceof Error ? cause.message : 'Não foi possível reativar o cliente.')
+      return false
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const doCreateEnrollmentLink = async (draft: EnrollmentLinkDraft) => {
@@ -311,20 +322,41 @@ export function AdminClientesPage() {
                   Novo cliente
                 </Link>
               </Button>
-              <Button variant="outline" size="sm" onClick={() => setIsCreateModalOpen(true)}>
-                <Plus size={14} className="mr-1.5" />
-                Cadastro rápido
-              </Button>
-              <Button asChild variant="outline" size="sm">
-                <Link to="/agenda">
-                  <CalendarDays size={14} className="mr-1.5" />
-                  Agenda MX
-                </Link>
-              </Button>
+              <div className="hidden items-center gap-2 sm:flex">
+                <Button variant="outline" size="sm" onClick={() => setIsCreateModalOpen(true)}>
+                  <Plus size={14} className="mr-1.5" />
+                  Cadastro rápido
+                </Button>
+                <Button asChild variant="outline" size="sm">
+                  <Link to="/agenda">
+                    <CalendarDays size={14} className="mr-1.5" />
+                    Agenda MX
+                  </Link>
+                </Button>
+              </div>
+              <details className="group relative sm:hidden">
+                <summary className="flex min-h-11 cursor-pointer list-none items-center gap-1 rounded-md border border-border px-3 py-2 text-sm font-medium text-muted-foreground outline-none hover:bg-surface-alt hover:text-foreground focus-visible:ring-2 focus-visible:ring-brand-primary/20 [&::-webkit-details-marker]:hidden">
+                  Ações rápidas
+                  <ChevronDown size={14} aria-hidden="true" className="transition-transform group-open:rotate-180" />
+                </summary>
+                <div className="absolute right-0 z-[var(--mx-z-popover)] mt-1 flex min-w-52 flex-col gap-1 rounded-lg border border-border bg-card p-1 shadow-md">
+                  <Button variant="outline" size="sm" className="min-h-11 justify-start text-sm" onClick={() => setIsCreateModalOpen(true)}>
+                    <Plus size={14} className="mr-1.5" />
+                    Cadastro rápido
+                  </Button>
+                  <Button asChild variant="outline" size="sm" className="min-h-11 justify-start text-sm">
+                    <Link to="/agenda">
+                      <CalendarDays size={14} className="mr-1.5" />
+                      Agenda MX
+                    </Link>
+                  </Button>
+                </div>
+              </details>
               <Button variant="ghost" size="sm" onClick={() => void refetchAll()} aria-label="Atualizar carteira de clientes">
                 <RefreshCw size={14} className="mr-1.5" />
                 Atualizar
               </Button>
+              <LastUpdated value={lastUpdatedAt} label="Carteira" emptyLabel="Ainda não sincronizada nesta sessão" className="max-w-[14rem] sm:max-w-none" />
             </div>
           }
         />

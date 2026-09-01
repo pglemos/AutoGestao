@@ -22,6 +22,8 @@ export type PortfolioClient = {
   suspended_reason: string | null
   activated_at: string | null
   scheduled_activation_at: string | null
+  /** Última alteração persistida do cadastro, usada como referência temporal. */
+  updated_at?: string | null
   primary_store_city: string | null
   main_contact_name: string | null
   hasDonoMaster: boolean
@@ -381,7 +383,7 @@ export function onboardingPortfolioLabel(client: Pick<PortfolioClient, 'onboardi
 }
 
 /** Próxima ação recomendada — a coluna que diz à equipe o que fazer hoje. */
-export function nextAction(client: PortfolioClient): string {
+export function nextAction(client: PortfolioClient, today = new Date()): string {
   const blockers = activationBlockers(client)
   if (!isActive(client) && blockers.length) return `Resolver: ${blockers[0]}`
   if (!client.hasDonoMaster) return 'Definir Dono Master'
@@ -390,8 +392,48 @@ export function nextAction(client: PortfolioClient): string {
   if (!client.users) return 'Cadastrar pessoas e acessos'
   if (client.visitsTotal > 0 && client.visitsDone === 0) return 'Agendar primeiro encontro'
   if (client.visitsTotal > 0 && client.visitsDone < client.visitsTotal) return `Conduzir encontro ${client.visitsDone + 1} de ${client.visitsTotal}`
-  if (isRenewalNear(client)) return 'Tratar renovação de contrato'
+  if (isRenewalNear(client, today)) return 'Tratar renovação de contrato'
   return 'Acompanhar execução'
+}
+
+/**
+ * Ordem operacional da carteira: primeiro o que bloqueia uma ativação ou pede
+ * uma decisão, depois a execução consultiva e, por fim, o acompanhamento.
+ * O valor é deliberadamente derivado dos mesmos fatos de `nextAction`, para a
+ * ordenação nunca sugerir uma prioridade diferente da ação exibida.
+ */
+export function portfolioActionPriority(client: PortfolioClient, today = new Date()): number {
+  const blockers = activationBlockers(client)
+  if (client.suspended_at || (!isActive(client) && blockers.length > 0)) return 0
+  if (!client.hasDonoMaster) return 1
+  if (!isActive(client)) return 2
+  if (client.onboarding_completed === false) return 3
+  if (!client.users) return 4
+  if (client.visitsTotal > 0 && client.visitsDone === 0) return 5
+  if (client.visitsTotal > 0 && client.visitsDone < client.visitsTotal) return 6
+  if (isRenewalNear(client, today)) return 7
+  return 8
+}
+
+/** Retorna uma cópia ordenada; a ordem original da consulta nunca é mutada. */
+export function sortPortfolioByAction(rows: ReadonlyArray<PortfolioClient>, today = new Date()): PortfolioClient[] {
+  return [...rows].sort((a, b) => {
+    const priority = portfolioActionPriority(a, today) - portfolioActionPriority(b, today)
+    if (priority !== 0) return priority
+    const blockerCount = activationBlockers(b).length - activationBlockers(a).length
+    if (blockerCount !== 0) return blockerCount
+    return a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' })
+  })
+}
+
+/** Clientes únicos que aparecem na visão padrão da auditoria de governança. */
+export function portfolioGovernanceAttentionCount(rows: ReadonlyArray<PortfolioClient>, today = new Date()): number {
+  return rows.filter(client => (
+    (isActive(client) && !client.implementation_owner_id) ||
+    (!isActive(client) && activationBlockers(client).length > 0) ||
+    isRenewalNear(client, today) ||
+    Boolean(client.suspended_at)
+  )).length
 }
 
 export function structureLabel(client: PortfolioClient): string {

@@ -142,7 +142,7 @@ export function ClientActionsMenu(props: {
         <Button
           variant="ghost"
           size={props.compact ? 'xs' : 'icon'}
-          className={props.compact ? 'h-8 w-8 p-0' : 'h-8 w-8'}
+          className={props.compact ? 'h-11 w-11 min-h-11 min-w-11 p-0' : 'h-11 w-11 min-h-11 min-w-11'}
           aria-label={actionLabel}
           title={props.compact ? actionLabel : undefined}
         >

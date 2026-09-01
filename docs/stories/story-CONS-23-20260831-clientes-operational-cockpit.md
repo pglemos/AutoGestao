@@ -1,6 +1,6 @@
 # Story CONS-23 — Carteira operacional de Clientes MX
 
-**Status:** Done (validação local; sem commit, push ou deploy)
+**Status:** Done (validação local; commit e push nesta entrega; sem deploy)
 **Agent:** @dev
 **Quality Gate:** @qa
 **Priority:** HIGH
@@ -41,7 +41,7 @@ Como consultor ou administrador MX, quero abrir a carteira já orientado pela op
 - [x] O menu de ações mantém abrir Visão 360, loja, equipe, onboarding, autocadastro, pessoas, jornada, ativação, suspensão, auditoria, edição e arquivamento, com ações de risco claramente separadas das rotineiras.
 - [x] Testes unitários/contratuais cobrem a fonte canônica de status, deduplicação de responsáveis, estados de métrica, escolha de view por viewport e preservação das ações existentes.
 - [x] `npm run lint`, `npm run typecheck`, `npm test` e `npm run build` passam, ou qualquer falha preexistente é isolada e documentada.
-- [x] A validação autenticada da rota em `1440×900` e `390×844` comprova a visão inicial, filtros, modo mobile, ação principal, estados de loading/erro/vazio e console sem erros; a evidência é referenciada na story.
+- [x] A validação autenticada da rota em `1440×900` e `390×844` comprova a visão inicial, filtros, modo mobile, ação principal, estados de loading/erro/vazio e console sem erros de aplicação; o único 404 observado é o script de Insights da Vercel ausente no servidor local, já classificado como ruído de ambiente.
 
 ## Dev Notes
 
@@ -77,6 +77,8 @@ Como consultor ou administrador MX, quero abrir a carteira já orientado pela op
 - `src/features/admin-mx/clientes/ClientHealthTabs.tsx`
 - `src/features/admin-mx/clientes/ClientPlanningContextPanel.tsx`
 - `src/features/admin-mx/clientes/GovernancaBloqueiosTab.tsx`
+- `src/features/admin-mx/clientes/clientGovernance.ts`
+- `src/features/admin-mx/clientes/clientGovernance.test.ts`
 - `src/features/admin-mx/clientes/OnboardingPortfolioTab.tsx`
 - `src/features/admin-mx/clientes/PortfolioBase44ListTab.tsx`
 - `src/features/admin-mx/clientes/PortfolioOverviewTab.tsx`
@@ -111,6 +113,7 @@ Implementação concluída preservando os tokens/primitivos MX, o modelo `client
 - Crítica base: `.impeccable/critique/2026-09-01T02-26-10Z__www-mxperformance-com-br-clientes.md`.
 - Evidência final: `visual-evidence/agent-browser/cons23-final-20260901-2026-09-01T03-05-49/summary.json` (desktop `1440×900`, mobile `390×844`, status `passed`, axe `0` violações, console sem erros).
 - Verificação interativa adicional: fila `Com bloqueios` (`34` → `29` ao combinar `Ativos`), chip `Filtros ativos`, `Limpar todos`, busca desktop com `1078px` e `scrollWidth === clientWidth` em `1440px`.
+- Revalidação pós-correção: Playwright/MCP autenticado em `http://localhost:3458/clientes`, com `Carteira 360 (44)`, busca `ACERTT` (1 resultado), modo `Cards`, `Mais filtros`, fila `Com bloqueios` (34 resultados), aba Governança (11; 2 bloqueios) e `scrollWidth === viewport` em `390×844`; capturas locais em `output/playwright/clientes-desktop.png`, `output/playwright/clientes-mobile.png` e `output/playwright/clientes-governanca-mobile.png`.
 - Ficha `/clientes/acertt`: recaptura manual autenticada no navegador como Administrador Geral em `1440×900` e `390×844`; `scrollWidth === clientWidth`, `0` erros/avisos de console, `Não configurada` para fase vazia, CTA de próxima ação visível no primeiro viewport mobile, tabs por intenção e menu com saída por `Escape`.
 - Cobertura dos papéis internos: `26/26` contratos de paridade/RBAC passaram para Administrador Geral, Administrador MX e Consultor MX; a recaptura visual autenticada disponível nesta execução foi do Administrador Geral.
 
@@ -122,15 +125,15 @@ Entrega local concluída. A evidência autenticada oficial mostrou `Carteira 360
 
 - `npm run lint`: passou sem erros; dois avisos do ESLint e alertas de dívida visual não bloqueante permanecem registrados pelos auditores.
 - `npm run typecheck`: passou.
-- `npm test`: passou (`4.774 pass`, `0 fail`, `27.509 expect() calls`, 772 arquivos).
+- `npm test`: passou (`4.794 pass`, `0 fail`, `27.580 expect() calls`, 775 arquivos).
 - Testes focados pós-patch: `52 pass`, `0 fail` (identificação, carteira, cockpit da ficha e contrato do painel); contratos de perfis/paridade: `26 pass`, `0 fail`.
 - Contrato do cockpit operacional: passou (`5 pass`, `0 fail`).
-- `npm run build`: passou (`✓ built in 9.48s`); nenhum sourcemap público em `dist/`.
+- `npm run build`: passou (`✓ built in 19.60s`); nenhum sourcemap público em `dist/`.
 - Detector Impeccable: `[]`.
 - `git diff --check`: passou.
 - Browser/axe autenticado: `summary.status = passed`, `0` violações e `0` incompletudes em `1440×900` e `390×844`; console sem erros, conforme `visual-evidence/agent-browser/cons23-final-20260901-2026-09-01T03-05-49/summary.json`.
 - Browser rerun técnico: `visual-evidence/agent-browser/cons23-rerun-20260901-2026-09-01T03-42-42/summary.json` passou em ambos os viewports, sem erros JS e com axe `0`, mas foi não autenticado (tela de login).
-- Graphify: `graphify summary --graph .graphify/graph.json` continua funcional; o rebuild anterior atualizou manifest/scope/detecção e registrou seis arquivos `.ps1` sem `tree-sitter-powershell`. A nova tentativa pós-patch percorreu os `4.511` arquivos, mas terminou com `SIGTERM`/exit `143` antes da conclusão; nenhum artefato versionado foi apagado ou resetado e o `graph.json` existente permaneceu preservado.
+- Graphify: `npx graphify hook-rebuild` percorreu a árvore, registrou seis arquivos `.ps1` sem `tree-sitter-powershell` e foi encerrado após a extração para limpar execuções duplicadas de longa duração; nenhum artefato versionado foi apagado, resetado ou incluído no commit.
 
 ### Change Log
 
@@ -140,3 +143,4 @@ Entrega local concluída. A evidência autenticada oficial mostrou `Carteira 360
 - 2026-09-01: gates completos repetidos após reparos concorrentes; contrato do cockpit, suíte, lint e build ficaram verdes.
 - 2026-09-01: rerun visual técnico encontrou login sem sessão persistida; credenciais não foram inseridas automaticamente.
 - 2026-09-01: recaptura autenticada da ficha ACERTT e correção final de `Não definida` para `Não configurada`; gates focados, typecheck, lint e build repetidos.
+- 2026-09-01: correção final de largura tokenizada e escala canônica de ícones; suíte completa, lint, build, detector e revalidação autenticada desktop/mobile concluídos.

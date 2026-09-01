@@ -34,7 +34,7 @@ export function useClientPortfolio(): State {
     try {
       const { data: clients, error: clientsError } = await supabase
         .from('clientes_consultoria')
-        .select('id, name, slug, cnpj, status, business_phase, product_name, program_template_key, structure_type, primary_store_id, implementation_owner_id, contract_end_date, onboarding_step, onboarding_completed, suspended_at, suspended_reason, activated_at, scheduled_activation_at')
+        .select('id, name, slug, cnpj, status, business_phase, product_name, program_template_key, structure_type, primary_store_id, implementation_owner_id, contract_end_date, onboarding_step, onboarding_completed, suspended_at, suspended_reason, activated_at, scheduled_activation_at, updated_at')
         .neq('status', 'arquivado')
         .order('name', { ascending: true })
       if (clientsError) throw new Error(clientsError.message)

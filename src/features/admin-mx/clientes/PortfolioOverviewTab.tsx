@@ -4,8 +4,10 @@ import {
   Building2,
   CalendarClock,
   CheckCircle2,
+  ChevronDown,
+  ChevronRight,
   ClipboardList,
-  ExternalLink,
+  Filter,
   Info,
   LayoutGrid,
   Rocket,
@@ -13,7 +15,6 @@ import {
   Search,
   Settings2,
   ShoppingCart,
-  Store as StoreIcon,
   TableProperties,
   Target,
   TrendingUp,
@@ -24,13 +25,11 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/atoms/Button'
 import { Badge } from '@/components/atoms/Badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/organisms/Table'
-import { ScrollableRegion } from '@/design-system/page/ScrollableRegion'
 import { useIsMobile } from '@/hooks/useIsMobile'
 import {
   MxEmptyState,
   MxInput,
   MxProgress,
-  MxSectionCard,
   MxSelect,
   MxTableSurface,
 } from '@/components/module/MxModuleVisualPrimitives'
@@ -48,14 +47,15 @@ import {
   filterPortfolio,
   formatCityName,
   formatCnpj,
-  isActive,
   journeyLabel,
   nextAction,
+  portfolioActionPriority,
   portfolioCounters,
   portfolioOperationalLabel,
   portfolioOwnerOptions,
   portfolioStatusCounters,
   portfolioStatusLabel,
+  sortPortfolioByAction,
   type PortfolioBucket,
   type PortfolioClient,
   type PortfolioFilters,
@@ -79,10 +79,10 @@ const STATUS_METRICS: Array<{
   icon: typeof Building2
   tone: 'brand' | 'success' | 'info' | 'danger'
 }> = [
-  { status: 'ativos', label: 'Ativos', detail: 'Situação única da conta', icon: CheckCircle2, tone: 'success' },
-  { status: 'em_implantacao', label: 'Em implantação', detail: 'Implantação como situação da conta', icon: Rocket, tone: 'info' },
+  { status: 'ativos', label: 'Ativos', detail: 'Situação da conta', icon: CheckCircle2, tone: 'success' },
+  { status: 'em_implantacao', label: 'Em implantação', detail: 'Status explícito da conta', icon: Rocket, tone: 'info' },
   { status: 'prontos_para_ativar', label: 'Prontos para ativar', detail: 'Sem bloqueio estrutural', icon: ClipboardList, tone: 'brand' },
-  { status: 'em_configuracao', label: 'Em configuração', detail: 'Cadastro ou configuração pendente', icon: Settings2, tone: 'danger' },
+  { status: 'em_configuracao', label: 'Em configuração', detail: 'Cadastro incompleto', icon: Settings2, tone: 'danger' },
 ]
 
 const OPERATIONAL_METRICS: Array<{
@@ -92,8 +92,8 @@ const OPERATIONAL_METRICS: Array<{
   icon: typeof Building2
   tone: 'info' | 'danger' | 'warning'
 }> = [
+  { bucket: 'com_bloqueios', label: 'Com bloqueios', detail: 'Pendência estrutural', icon: AlertTriangle, tone: 'danger' },
   { bucket: 'em_implantacao', label: 'Jornada em andamento', detail: 'Visitas consultivas pendentes', icon: TrendingUp, tone: 'info' },
-  { bucket: 'com_bloqueios', label: 'Com bloqueios', detail: 'Pendências para ativar', icon: AlertTriangle, tone: 'danger' },
   { bucket: 'renovacoes_proximas', label: 'Renovações próximas', detail: 'Vencimento em até 60 dias', icon: CalendarClock, tone: 'warning' },
 ]
 
@@ -182,7 +182,7 @@ function ViewModeSwitch({ viewMode, onChange }: { viewMode: 'tabela' | 'cards'; 
       <Button
         variant={viewMode === 'tabela' ? 'primary' : 'ghost'}
         size="sm"
-        className="h-9 px-3 text-xs"
+        className="min-h-11 px-3 text-sm"
         onClick={() => onChange('tabela')}
         aria-label="Visualização em tabela"
         aria-pressed={viewMode === 'tabela'}
@@ -193,7 +193,7 @@ function ViewModeSwitch({ viewMode, onChange }: { viewMode: 'tabela' | 'cards'; 
       <Button
         variant={viewMode === 'cards' ? 'primary' : 'ghost'}
         size="sm"
-        className="h-9 px-3 text-xs"
+        className="min-h-11 px-3 text-sm"
         onClick={() => onChange('cards')}
         aria-label="Visualização em cards"
         aria-pressed={viewMode === 'cards'}
@@ -205,6 +205,67 @@ function ViewModeSwitch({ viewMode, onChange }: { viewMode: 'tabela' | 'cards'; 
   )
 }
 
+type PortfolioClientViewData = {
+  client: PortfolioClient
+  blockers: string[]
+  storeIds: string[]
+  stat: ReturnType<typeof clientTeamStat>
+  teamDataAvailable: boolean
+  accountStatus: PortfolioStatus | null
+  accountStatusLabel: string
+  operationalLabel: string | null
+  sales: PortfolioClientSales
+  storeSlug: string
+  progressPct: number
+  action: string
+  actionPriority: number
+}
+
+function buildPortfolioClientViewData(
+  client: PortfolioClient,
+  lojas: Store[],
+  stats: Record<string, { sellers: number; checkedIn?: number; disciplinePct: number }>,
+  salesByClient: Map<string, PortfolioClientSales>,
+): PortfolioClientViewData {
+  const blockers = activationBlockers(client)
+  const storeIds = clientStoreIds(client, lojas)
+  const sales = salesByClient.get(client.id) ?? {
+    ...aggregateClientSalesForStores(storeIds, []),
+    units: [],
+  }
+
+  return {
+    client,
+    blockers,
+    storeIds,
+    stat: clientTeamStat(storeIds, stats),
+    teamDataAvailable: storeIds.some(storeId => Boolean(stats[storeId])),
+    accountStatus: canonicalPortfolioStatus(client),
+    accountStatusLabel: portfolioStatusLabel(client),
+    operationalLabel: portfolioOperationalLabel(client),
+    sales,
+    storeSlug: client.slug || client.id,
+    progressPct: client.visitsTotal > 0 ? Math.min(100, Math.round((client.visitsDone / client.visitsTotal) * 100)) : 0,
+    action: nextAction(client),
+    actionPriority: portfolioActionPriority(client),
+  }
+}
+
+function ClientPrimaryAction({ data, onOpen }: { data: PortfolioClientViewData; onOpen: (client: PortfolioClient) => void }) {
+  return (
+    <button
+      type="button"
+      onClick={() => onOpen(data.client)}
+      className="flex min-h-11 w-full items-center justify-between gap-3 rounded-lg border border-brand-primary/40 bg-brand-primary/5 px-3 py-2 text-left text-sm font-semibold leading-5 text-brand-primary transition-colors hover:border-brand-primary hover:bg-brand-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30"
+      aria-label={`Executar próxima ação: ${data.action} para ${data.client.name}`}
+      title={data.action}
+    >
+      <span className="min-w-0 break-words">{data.action}</span>
+      <ChevronRight size={16} className="shrink-0" aria-hidden="true" />
+    </button>
+  )
+}
+
 export interface PortfolioOverviewTabProps {
   rows: PortfolioClient[]
   lojas: Store[]
@@ -213,17 +274,12 @@ export interface PortfolioOverviewTabProps {
   onRefetch: () => void
 }
 
-export function PortfolioOverviewTab({
-  rows,
-  lojas,
-  stats,
-  onAction,
-  onRefetch,
-}: PortfolioOverviewTabProps) {
+export function PortfolioOverviewTab({ rows, lojas, stats, onAction, onRefetch }: PortfolioOverviewTabProps) {
   const navigate = useNavigate()
   const isMobile = useIsMobile()
   const [filters, setFilters] = useState<PortfolioFilters>(EMPTY_PORTFOLIO_FILTERS)
   const [viewPreference, setViewPreference] = useState<'auto' | 'tabela' | 'cards'>('auto')
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
   const viewMode = viewPreference === 'auto' ? (isMobile ? 'cards' : 'tabela') : viewPreference
   const [pendenciasClient, setPendenciasClient] = useState<PortfolioClient | null>(null)
   const [salesPeriod, setSalesPeriod] = useState<ClientSalesPeriod>('month')
@@ -240,17 +296,12 @@ export function PortfolioOverviewTab({
     refetch: refetchSales,
   } = useClientSales({ stores: lojas, period: salesPeriod, customStartDate, customEndDate })
 
-  const openPendencias = (client: PortfolioClient) => {
-    setPendenciasClient(client)
-  }
-
-  const closePendencias = () => {
-    setPendenciasClient(null)
-  }
-
+  const openPendencias = (client: PortfolioClient) => setPendenciasClient(client)
+  const closePendencias = () => setPendenciasClient(null)
   const counters = useMemo(() => portfolioCounters(rows), [rows])
   const statusCounters = useMemo(() => portfolioStatusCounters(rows), [rows])
   const filtered = useMemo(() => filterPortfolio(rows, filters), [rows, filters])
+  const prioritized = useMemo(() => sortPortfolioByAction(filtered), [filtered])
   const salesByClient = useMemo(() => {
     const byClient = new Map<string, PortfolioClientSales>()
     for (const client of rows) {
@@ -283,81 +334,54 @@ export function PortfolioOverviewTab({
   const salesInitialLoading = Boolean(salesQueryKey && !salesDataReady && !salesUnavailable)
   const salesStale = Boolean(salesError && salesDataReady)
   const salesRefreshing = Boolean(salesLoading && salesDataReady)
-  const phases = useMemo(() => [...new Set(rows.map(r => r.business_phase).filter((v): v is string => Boolean(v)))].sort(), [rows])
-  const products = useMemo(() => [...new Set(rows.map(r => r.product_name).filter((v): v is string => Boolean(v)))].sort(), [rows])
+  const phases = useMemo(() => [...new Set(rows.map(row => row.business_phase).filter((value): value is string => Boolean(value)))].sort(), [rows])
+  const products = useMemo(() => [...new Set(rows.map(row => row.product_name).filter((value): value is string => Boolean(value)))].sort(), [rows])
   const owners = useMemo(() => portfolioOwnerOptions(rows), [rows])
+  const clientViewData = useMemo(
+    () => prioritized.map(client => buildPortfolioClientViewData(client, lojas, stats, salesByClient)),
+    [lojas, prioritized, salesByClient, stats],
+  )
+  const actionQueueCount = useMemo(() => rows.filter(client => portfolioActionPriority(client) < 8).length, [rows])
 
-  const patch = (values: Partial<PortfolioFilters>) => setFilters(cur => ({ ...cur, ...values }))
-
-  const hasActiveFilters = useMemo(() => {
-    return (
-      Boolean(filters.search.trim()) ||
-      filters.status !== 'todos' ||
-      filters.bucket !== 'todos' ||
-      filters.phase !== 'todas' ||
-      filters.product !== 'todos' ||
-      filters.owner !== 'todos'
-    )
-  }, [filters])
-
+  const patch = (values: Partial<PortfolioFilters>) => setFilters(current => ({ ...current, ...values }))
+  const hasActiveFilters = useMemo(() => (
+    Boolean(filters.search.trim()) ||
+    filters.status !== 'todos' ||
+    filters.bucket !== 'todos' ||
+    filters.phase !== 'todas' ||
+    filters.product !== 'todos' ||
+    filters.owner !== 'todos'
+  ), [filters])
+  const activeFilterCount = useMemo(() => [
+    filters.search.trim(),
+    filters.status !== 'todos' ? filters.status : '',
+    filters.bucket !== 'todos' ? filters.bucket : '',
+    filters.phase !== 'todas' ? filters.phase : '',
+    filters.product !== 'todos' ? filters.product : '',
+    filters.owner !== 'todos' ? filters.owner : '',
+  ].filter(Boolean).length, [filters])
+  const additionalFilterCount = Number(filters.phase !== 'todas') + Number(filters.product !== 'todos') + Number(filters.owner !== 'todos')
   const clearAllFilters = () => setFilters(EMPTY_PORTFOLIO_FILTERS)
   const refreshAll = () => { void Promise.all([onRefetch(), refetchSales()]) }
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div className="min-w-0">
-          <h2 className="text-base font-semibold text-foreground">Carteira operacional de clientes</h2>
-          <p className="mt-1 max-w-3xl text-sm text-muted-foreground">{rows.length} clientes · {lojas.length} unidades. Cada cliente reúne a matriz e as filiais; resultado comercial e jornada consultiva permanecem em blocos separados.</p>
-        </div>
-        <ViewModeSwitch viewMode={viewMode} onChange={mode => setViewPreference(mode)} />
-      </div>
+    <div className="space-y-5">
+      <header className="min-w-0">
+        <h2 className="text-lg font-semibold tracking-tight text-foreground">Fila de clientes</h2>
+        <p className="mt-1 max-w-3xl text-sm leading-5 text-muted-foreground">
+          {rows.length} clientes · {lojas.length} unidades. A lista começa pela próxima ação; matriz e filiais permanecem agrupadas, com resultado comercial e jornada consultiva separados.
+        </p>
+      </header>
 
-      <section aria-labelledby="client-account-status-heading">
-        <div className="mb-2 flex flex-wrap items-baseline justify-between gap-2">
-          <h3 id="client-account-status-heading" className="text-sm font-semibold text-foreground">Situação da conta</h3>
-          <span className="text-caption text-muted-foreground">Uma situação canônica por cliente</span>
+      <section aria-labelledby="client-operational-queue-heading" className="space-y-2">
+        <div className="flex flex-wrap items-end justify-between gap-2">
+          <div>
+            <h3 id="client-operational-queue-heading" className="text-base font-semibold text-foreground">Fila de decisão</h3>
+            <p className="mt-0.5 text-sm text-muted-foreground">Sinais independentes para escolher o próximo trabalho.</p>
+          </div>
+          <span className="text-sm font-medium text-status-error-text">{actionQueueCount} {actionQueueCount === 1 ? 'cliente com ação prioritária' : 'clientes com ação prioritária'}</span>
         </div>
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-          {STATUS_METRICS.map(item => {
-            const count = statusCounters[item.status]
-            const isSelected = filters.status === item.status
-            const Icon = item.icon
-
-            return (
-              <button
-                key={item.status}
-                type="button"
-                aria-pressed={isSelected}
-                onClick={() => patch({ status: isSelected ? 'todos' : item.status, bucket: 'todos' })}
-                className={`flex min-h-[6.25rem] min-w-0 flex-col items-start justify-between rounded-xl border p-3 text-left transition-all outline-none focus-visible:ring-2 focus-visible:ring-status-success/30 ${
-                  isSelected
-                    ? 'border-brand-primary bg-brand-primary/10 shadow-xs ring-1 ring-brand-primary/30'
-                    : 'border-border bg-card hover:border-brand-primary/40 hover:bg-surface-alt'
-                }`}
-              >
-                <div className="flex w-full items-start justify-between gap-2">
-                  <span className="text-caption font-medium leading-4 text-muted-foreground">{item.label}</span>
-                  <Icon
-                    size={15}
-                    aria-hidden="true"
-                    className={item.tone === 'success' ? 'text-status-success-text' : item.tone === 'danger' ? 'text-status-error-text' : item.tone === 'info' ? 'text-status-info-text' : 'text-brand-primary'}
-                  />
-                </div>
-                <span className="mt-2 text-2xl font-bold leading-none text-foreground">{count}</span>
-                <span className="mt-1 text-caption leading-4 text-muted-foreground">{item.detail}</span>
-              </button>
-            )
-          })}
-        </div>
-      </section>
-
-      <section aria-labelledby="client-operational-queue-heading">
-        <div className="mb-2 flex flex-wrap items-baseline justify-between gap-2">
-          <h3 id="client-operational-queue-heading" className="text-sm font-semibold text-foreground">Fila operacional</h3>
-          <span className="text-caption text-muted-foreground">Sinais independentes; um cliente pode aparecer em mais de um</span>
-        </div>
-        <ScrollableRegion axis="horizontal" label="Fila operacional da carteira" className="flex gap-2 pb-1 md:grid md:grid-cols-3 md:overflow-visible">
+        <div className="grid grid-cols-3 gap-2">
           {OPERATIONAL_METRICS.map(item => {
             const count = counters[item.bucket]
             const isSelected = filters.bucket === item.bucket
@@ -367,703 +391,504 @@ export function PortfolioOverviewTab({
                 key={item.bucket}
                 type="button"
                 aria-pressed={isSelected}
+                aria-label={`${item.label}: ${count} clientes`}
                 onClick={() => patch({ bucket: isSelected ? 'todos' : item.bucket, status: 'todos' })}
-                className={`flex min-h-[5.25rem] w-[13rem] shrink-0 flex-col items-start justify-between rounded-xl border p-3 text-left transition-all outline-none focus-visible:ring-2 focus-visible:ring-status-success/30 md:w-auto ${
+                className={`flex min-h-[6.25rem] min-w-0 flex-col items-start justify-between rounded-xl border p-3 text-left transition-colors outline-none focus-visible:ring-2 focus-visible:ring-status-success/30 ${
+                  isSelected
+                    ? 'border-brand-primary bg-brand-primary/10 shadow-xs ring-1 ring-brand-primary/30'
+                    : 'border-border bg-card hover:border-brand-primary/40 hover:bg-surface-alt'
+                }`}
+              >
+                <div className="flex w-full items-start justify-between gap-1.5">
+                  <span className="text-sm font-semibold leading-4 text-foreground">{item.label}</span>
+                  <Icon size={16} aria-hidden="true" className={item.tone === 'danger' ? 'text-status-error-text' : item.tone === 'warning' ? 'text-status-warning-text' : 'text-status-info-text'} />
+                </div>
+                <span className="mt-2 text-2xl font-bold leading-none text-foreground">{count}</span>
+                <span className="mt-1 text-xs leading-4 text-muted-foreground">{item.detail}</span>
+              </button>
+            )
+          })}
+        </div>
+      </section>
+
+      <section aria-labelledby="client-account-status-heading" className="space-y-2">
+        <div className="flex flex-wrap items-end justify-between gap-2">
+          <div>
+            <h3 id="client-account-status-heading" className="text-base font-semibold text-foreground">Situação da conta</h3>
+            <p className="mt-0.5 text-sm text-muted-foreground">Uma situação canônica por cliente.</p>
+          </div>
+          <span className="text-xs text-muted-foreground">Suspensos e encerrados aparecem no cadastro e na governança.</span>
+        </div>
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          {STATUS_METRICS.map(item => {
+            const count = statusCounters[item.status]
+            const isSelected = filters.status === item.status
+            const Icon = item.icon
+            return (
+              <button
+                key={item.status}
+                type="button"
+                aria-pressed={isSelected}
+                aria-label={`${item.label}: ${count} clientes`}
+                onClick={() => patch({ status: isSelected ? 'todos' : item.status, bucket: 'todos' })}
+                className={`flex min-h-[5.5rem] min-w-0 flex-col items-start justify-between rounded-xl border p-3 text-left transition-colors outline-none focus-visible:ring-2 focus-visible:ring-status-success/30 ${
                   isSelected
                     ? 'border-brand-primary bg-brand-primary/10 shadow-xs ring-1 ring-brand-primary/30'
                     : 'border-border bg-card hover:border-brand-primary/40 hover:bg-surface-alt'
                 }`}
               >
                 <div className="flex w-full items-start justify-between gap-2">
-                  <span className="text-caption font-medium leading-4 text-muted-foreground">{item.label}</span>
-                  <Icon size={16} aria-hidden="true" className={item.tone === 'danger' ? 'text-status-error-text' : item.tone === 'warning' ? 'text-status-warning-text' : 'text-status-info-text'} />
+                  <span className="text-sm font-semibold leading-4 text-foreground">{item.label}</span>
+                  <Icon size={16} aria-hidden="true" className={item.tone === 'success' ? 'text-status-success-text' : item.tone === 'danger' ? 'text-status-error-text' : item.tone === 'info' ? 'text-status-info-text' : 'text-brand-primary'} />
                 </div>
-                <span className="mt-2 text-xl font-bold leading-none text-foreground">{count}</span>
-                <span className="mt-1 text-caption leading-4 text-muted-foreground">{item.detail}</span>
+                <span className="mt-2 text-2xl font-bold leading-none text-foreground">{count}</span>
+                <span className="mt-1 text-xs leading-4 text-muted-foreground">{item.detail}</span>
               </button>
             )
           })}
-        </ScrollableRegion>
-        <p className="mt-1 text-caption text-muted-foreground md:hidden">Deslize para consultar os sinais operacionais.</p>
+        </div>
       </section>
 
-      <aside className="flex items-start gap-2 rounded-xl border border-border-subtle bg-surface-alt/60 px-3 py-2.5 text-caption text-muted-foreground" aria-label="Como interpretar os indicadores da carteira" data-testid="portfolio-indicator-legend">
-        <Info size={16} className="mt-0.5 shrink-0 text-brand-primary" aria-hidden="true" />
-        <p><span className="font-semibold text-foreground">Como ler:</span> situação da conta é exclusiva; jornada, bloqueios e renovação são sinais que podem se sobrepor. Em vendas, <span className="font-medium text-foreground">0 confirmado</span> é um registro com zero, enquanto <span className="font-medium text-foreground">Nenhum registro</span> indica ausência de linha oficial no período.</p>
-      </aside>
+      <details className="rounded-xl border border-border-subtle bg-surface-alt/60">
+        <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-3 py-2 text-sm font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30 [&::-webkit-details-marker]:hidden">
+          <span className="flex items-center gap-2"><Info size={16} className="text-brand-primary" aria-hidden="true" />Como interpretar status e métricas</span>
+          <ChevronDown size={16} aria-hidden="true" />
+        </summary>
+        <div className="border-t border-border-subtle px-3 py-3 text-sm leading-5 text-muted-foreground">
+          <p><span className="font-semibold text-foreground">Situação da conta</span> é exclusiva. Jornada, bloqueios e renovação são sinais que podem se sobrepor.</p>
+          <p className="mt-2">Em vendas, <span className="font-medium text-foreground">0 confirmado</span> é um registro oficial com zero; <span className="font-medium text-foreground">Nenhum registro</span> indica ausência de linha no período; <span className="font-medium text-foreground">Não configurada</span> indica que a meta ou jornada não foi cadastrada; <span className="font-medium text-foreground">Indisponível</span> indica falha na consulta.</p>
+        </div>
+      </details>
 
-      {/* Main Container */}
-      <MxSectionCard>
-        {/* Toolbar with Search and Filters */}
-        <div className="border-b border-border p-4 sm:p-5 space-y-3">
-          <div className="flex flex-col gap-3 2xl:grid 2xl:grid-cols-[minmax(24rem,1fr)_auto] 2xl:items-center">
-            {/* Search Input */}
-            <div className="relative min-w-0">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+      <section aria-labelledby="client-portfolio-list-heading" className="space-y-3">
+        <div className="sticky top-2 z-[var(--mx-z-sticky)] rounded-xl border border-border bg-white/95 p-3 shadow-sm backdrop-blur-sm sm:p-4">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <div className="relative min-w-0 flex-1">
+              <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <MxInput
                 id="client-portfolio-search"
                 name="client-search"
                 value={filters.search}
-                onChange={e => patch({ search: e.target.value })}
+                onChange={event => patch({ search: event.target.value })}
                 placeholder="Buscar por loja, CNPJ, cidade, produto ou responsável..."
                 aria-label="Buscar cliente na carteira"
-                className="pl-9 pr-8 h-10 w-full"
+                className="h-11 w-full pl-9 pr-10 text-sm"
               />
               {filters.search ? (
                 <button
                   type="button"
                   onClick={() => patch({ search: '' })}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus-visible:text-foreground focus-visible:outline-none"
+                  className="absolute right-1.5 top-1/2 grid min-h-9 min-w-9 -translate-y-1/2 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-surface-alt hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30"
                   aria-label="Limpar busca"
                 >
                   <X size={14} />
                 </button>
               ) : null}
             </div>
-
-            {/* Filter Selects & View Mode Toggle */}
-            <div className="grid grid-cols-2 items-center gap-2 sm:grid-cols-4 2xl:flex 2xl:flex-wrap 2xl:justify-end">
-              <MxSelect
-                aria-label="Filtrar por situação da conta"
-                value={filters.status}
-                onChange={e => patch({ status: e.target.value as PortfolioFilters['status'] })}
-                className="h-10 w-full min-w-0 text-xs 2xl:w-[156px]"
-              >
-                <option value="todos">Todas as situações</option>
-                {STATUS_METRICS.map(item => <option key={item.status} value={item.status}>{item.label}</option>)}
-              </MxSelect>
-
-              <MxSelect
-                aria-label="Filtrar por fase empresarial"
-                value={filters.phase}
-                onChange={e => patch({ phase: e.target.value })}
-                className="h-10 w-full min-w-0 text-xs 2xl:w-[140px]"
-              >
-                <option value="todas">Todas as fases</option>
-                {phases.map(phase => (
-                  <option key={phase} value={phase}>
-                    {PHASE_LABEL[phase] ?? phase}
-                  </option>
-                ))}
-              </MxSelect>
-
-              <MxSelect
-                aria-label="Filtrar por produto"
-                value={filters.product}
-                onChange={e => patch({ product: e.target.value })}
-                className="h-10 w-full min-w-0 text-xs 2xl:w-[220px]"
-              >
-                <option value="todos">Todos os produtos</option>
-                {products.map(product => (
-                  <option key={product} value={product}>
-                    {product}
-                  </option>
-                ))}
-              </MxSelect>
-
-              <MxSelect
-                aria-label="Filtrar por responsável MX"
-                value={filters.owner}
-                onChange={e => patch({ owner: e.target.value })}
-                className="h-10 w-full min-w-0 text-xs 2xl:w-[220px]"
-              >
-                <option value="todos">Todos os responsáveis</option>
-                {owners.map(owner => (
-                  <option key={owner.id} value={owner.id}>
-                    {owner.label}
-                  </option>
-                ))}
-              </MxSelect>
-
+            <div className="flex items-center justify-between gap-2 sm:justify-end">
+              <span className="whitespace-nowrap text-sm font-medium text-muted-foreground" aria-live="polite">
+                {filtered.length} de {rows.length} {filtered.length === 1 ? 'cliente' : 'clientes'}
+              </span>
+              <ViewModeSwitch viewMode={viewMode} onChange={mode => setViewPreference(mode)} />
             </div>
           </div>
 
-          <div className="flex flex-col gap-2 rounded-xl border border-border-subtle bg-surface-alt/50 p-2.5 sm:p-3 lg:flex-row lg:items-center">
-            <div className="flex min-w-0 flex-1 items-center gap-2">
-              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-status-success-surface text-status-success-text" aria-hidden="true">
+          <div className="mt-3 grid grid-cols-2 gap-2 md:grid-cols-4">
+            <MxSelect
+              aria-label="Filtrar por situação da conta"
+              value={filters.status}
+              onChange={event => patch({ status: event.target.value as PortfolioFilters['status'] })}
+              className="h-11 w-full min-w-0 text-sm"
+            >
+              <option value="todos">Todas as situações</option>
+              {STATUS_METRICS.map(item => <option key={item.status} value={item.status}>{item.label}</option>)}
+            </MxSelect>
+            <MxSelect
+              aria-label="Filtrar pela fila de decisão"
+              value={filters.bucket}
+              onChange={event => patch({ bucket: event.target.value as PortfolioFilters['bucket'] })}
+              className="h-11 w-full min-w-0 text-sm"
+            >
+              <option value="todos">Todas as filas</option>
+              {OPERATIONAL_METRICS.map(item => <option key={item.bucket} value={item.bucket}>{item.label}</option>)}
+              <option value="cadastros_pendentes">Cadastros pendentes</option>
+            </MxSelect>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="col-span-2 min-h-11 text-sm md:hidden"
+              onClick={() => setShowAdvancedFilters(current => !current)}
+              aria-expanded={showAdvancedFilters}
+            >
+              <Filter size={14} className="mr-1.5" />
+              {showAdvancedFilters ? 'Ocultar filtros adicionais' : 'Mais filtros'}
+              {additionalFilterCount > 0 ? ` · ${additionalFilterCount}` : ''}
+            </Button>
+          </div>
+
+          <div className={`${showAdvancedFilters ? 'grid' : 'hidden'} mt-2 grid-cols-1 gap-2 sm:grid-cols-3 md:grid`}>
+            <MxSelect
+              aria-label="Filtrar por fase empresarial"
+              value={filters.phase}
+              onChange={event => patch({ phase: event.target.value })}
+              className="h-11 w-full min-w-0 text-sm"
+            >
+              <option value="todas">Todas as fases</option>
+              {phases.map(phase => <option key={phase} value={phase}>{PHASE_LABEL[phase] ?? phase}</option>)}
+            </MxSelect>
+            <MxSelect
+              aria-label="Filtrar por produto"
+              value={filters.product}
+              onChange={event => patch({ product: event.target.value })}
+              className="h-11 w-full min-w-0 text-sm"
+            >
+              <option value="todos">Todos os produtos</option>
+              {products.map(product => <option key={product} value={product}>{product}</option>)}
+            </MxSelect>
+            <MxSelect
+              aria-label="Filtrar por responsável MX"
+              value={filters.owner}
+              onChange={event => patch({ owner: event.target.value })}
+              className="h-11 w-full min-w-0 text-sm"
+            >
+              <option value="todos">Todos os responsáveis</option>
+              {owners.map(owner => <option key={owner.id} value={owner.id}>{owner.label}</option>)}
+            </MxSelect>
+          </div>
+        </div>
+
+        <aside className="rounded-xl border border-border-subtle bg-surface-alt/60 p-3 sm:p-4" aria-label="Resumo comercial da carteira">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex min-w-0 items-start gap-2.5">
+              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-status-success-surface text-status-success-text" aria-hidden="true">
                 <ShoppingCart size={16} />
               </span>
               <div className="min-w-0">
-                <p className="text-xs font-semibold text-foreground sm:text-sm">Vendas, meta e progresso comercial</p>
-                <p className="line-clamp-2 text-caption leading-4 text-muted-foreground">
-                  {salesRange ? `Período: ${formatSalesRange(salesRange.startDate, salesRange.endDate)}` : 'Informe as datas para consultar as vendas.'}
-                  {' · '}vendas oficiais · presença referente a hoje · consultoria separada
-                  {salesRefreshing ? ' · atualizando' : ''}
-                  {salesStale ? ' · últimos dados válidos' : ''}
+                <p className="text-sm font-semibold text-foreground">Resultado comercial</p>
+                <p className="mt-0.5 break-words text-xs leading-4 text-muted-foreground">
+                  Vendas oficiais · período de referência: {salesRange ? formatSalesRange(salesRange.startDate, salesRange.endDate) : 'aguardando datas'} · presença referente a hoje
+                  {salesRefreshing ? ' · atualizando' : ''}{salesStale ? ' · últimos dados válidos' : ''}
                 </p>
               </div>
             </div>
-
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-2 lg:flex lg:flex-wrap">
-              <label className="flex min-w-0 flex-col gap-1 text-caption font-semibold text-muted-foreground sm:min-w-[11rem]">
+            <div className="flex flex-wrap items-end gap-2">
+              <label className="flex min-w-[10rem] flex-col gap-1 text-xs font-semibold text-muted-foreground">
                 Período de vendas
-                <MxSelect data-testid="client-sales-period" aria-label="Filtrar vendas por período" value={salesPeriod} onChange={event => setSalesPeriod(event.target.value as ClientSalesPeriod)} className="h-9 text-xs">
+                <MxSelect data-testid="client-sales-period" aria-label="Filtrar vendas por período" value={salesPeriod} onChange={event => setSalesPeriod(event.target.value as ClientSalesPeriod)} className="h-10 text-sm">
                   {SALES_PERIOD_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
                 </MxSelect>
               </label>
               {salesPeriod === 'custom' ? (
                 <>
-                  <label htmlFor="client-sales-custom-start" className="col-span-2 flex min-w-0 flex-col gap-1 text-caption font-semibold text-muted-foreground sm:col-span-1 sm:min-w-[9.5rem]">
+                  <label htmlFor="client-sales-custom-start" className="flex min-w-[9.5rem] flex-col gap-1 text-xs font-semibold text-muted-foreground">
                     Data inicial
-                    <MxInput data-testid="client-sales-custom-start" id="client-sales-custom-start" type="date" aria-label="Data inicial das vendas" value={customStartDate} onChange={event => setCustomStartDate(event.target.value)} className="h-9 text-xs" />
+                    <MxInput data-testid="client-sales-custom-start" id="client-sales-custom-start" type="date" aria-label="Data inicial das vendas" value={customStartDate} onChange={event => setCustomStartDate(event.target.value)} className="h-10 text-sm" />
                   </label>
-                  <label htmlFor="client-sales-custom-end" className="col-span-2 flex min-w-0 flex-col gap-1 text-caption font-semibold text-muted-foreground sm:col-span-1 sm:min-w-[9.5rem]">
+                  <label htmlFor="client-sales-custom-end" className="flex min-w-[9.5rem] flex-col gap-1 text-xs font-semibold text-muted-foreground">
                     Data final
-                    <MxInput data-testid="client-sales-custom-end" id="client-sales-custom-end" type="date" aria-label="Data final das vendas" value={customEndDate} onChange={event => setCustomEndDate(event.target.value)} className="h-9 text-xs" />
+                    <MxInput data-testid="client-sales-custom-end" id="client-sales-custom-end" type="date" aria-label="Data final das vendas" value={customEndDate} onChange={event => setCustomEndDate(event.target.value)} className="h-10 text-sm" />
                   </label>
                 </>
               ) : null}
-              <Button variant="outline" size="sm" className="h-9 px-2.5 text-xs" onClick={refreshAll} disabled={salesLoading} aria-label="Atualizar vendas e carteira">
-                <RefreshCw size={14} className="mr-1.5" />Atualizar vendas
+              <Button variant="outline" size="sm" className="min-h-10 text-sm" onClick={refreshAll} disabled={salesLoading} aria-label="Atualizar vendas e carteira">
+                <RefreshCw size={14} className="mr-1.5" />Atualizar
               </Button>
             </div>
-
-            <dl className="grid grid-cols-4 gap-x-2 border-t border-border-subtle pt-2 text-caption lg:flex lg:items-center lg:gap-x-4 lg:border-l lg:border-t-0 lg:pl-3 lg:pt-0" aria-busy={salesLoading} aria-live="polite">
-              <div className="min-w-0">
-                <dt className="truncate text-muted-foreground">Vendas</dt>
-                <dd className="font-bold text-foreground">{salesInitialLoading ? 'Atualizando' : salesUnavailable ? 'Indisponível' : salesTotalsForView.totalSales > 0 ? formatSalesLabel(salesTotalsForView.totalSales) : salesTotalsForView.hasSalesRecord ? '0 confirmado' : 'Nenhum registro'}</dd>
-              </div>
-              <div className="min-w-0">
-                <dt className="truncate text-muted-foreground">Meta mensal</dt>
-                <dd className="font-bold text-foreground">{salesInitialLoading ? 'Atualizando' : salesUnavailable ? 'Indisponível' : salesTotalsForView.totalMonthlyGoal > 0 ? formatSalesLabel(salesTotalsForView.totalMonthlyGoal) : 'Não configurada'}</dd>
-              </div>
-              <div className="min-w-0">
-                <dt className="truncate text-muted-foreground">Atingimento</dt>
-                <dd className={`font-bold ${salesInitialLoading || salesUnavailable ? 'text-foreground' : salesProgressTextClass(salesTotalsForView.totalAttainment)}`}>
-                  {salesInitialLoading ? 'Atualizando' : salesUnavailable ? 'Indisponível' : salesTotalsForView.totalAttainment === null ? 'Não calculado' : formatSalesPercent(salesTotalsForView.totalAttainment)}
-                </dd>
-              </div>
-              <div className="min-w-0">
-                <dt className="truncate text-muted-foreground">Unidades com venda</dt>
-                <dd className="font-bold text-foreground">{salesInitialLoading ? 'Atualizando' : salesUnavailable ? 'Indisponível' : `${salesTotalsForView.storesWithSales}/${salesTotalsForView.totalStores}`}</dd>
-              </div>
-            </dl>
           </div>
 
-          {salesRangeError ? <div className="rounded-lg border border-status-warning/30 bg-status-warning-surface px-3 py-2 text-xs font-medium text-status-warning-text" role="status">{salesRangeError}</div> : null}
-          {salesError ? <div className="rounded-lg border border-status-error/30 bg-status-error-surface px-3 py-2 text-xs font-medium text-status-error-text" role="alert">{salesError} <button type="button" onClick={() => void refetchSales()} className="ml-1 underline underline-offset-2">Tentar novamente</button></div> : null}
-
-          {/* Active Filter Chips */}
-          {hasActiveFilters && (
-            <div className="flex flex-wrap items-center gap-1.5 pt-1 text-xs">
-              <span className="font-medium text-muted-foreground">Filtros ativos:</span>
-
-              {filters.search.trim() && (
-                <span className="inline-flex items-center gap-1 rounded-md bg-surface-alt px-2 py-0.5 text-foreground border border-border">
-                  Busca: &ldquo;{filters.search}&rdquo;
-                  <button
-                    type="button"
-                    onClick={() => patch({ search: '' })}
-                    className="hover:text-status-error-text focus-visible:text-status-error-text focus-visible:outline-none"
-                    aria-label="Remover filtro de busca"
-                  >
-                    <X size={12} />
-                  </button>
-                </span>
-              )}
-
-              {filters.status !== 'todos' && (
-                <span className="inline-flex items-center gap-1 rounded-md bg-brand-primary/10 px-2 py-0.5 text-brand-primary border border-brand-primary/30">
-                  Situação: {STATUS_METRICS.find(item => item.status === filters.status)?.label ?? filters.status}
-                  <button
-                    type="button"
-                    onClick={() => patch({ status: 'todos' })}
-                    className="hover:text-status-error-text focus-visible:text-status-error-text focus-visible:outline-none"
-                    aria-label="Remover filtro de situação da conta"
-                  >
-                    <X size={12} />
-                  </button>
-                </span>
-              )}
-
-              {filters.bucket !== 'todos' && (
-                <span className="inline-flex items-center gap-1 rounded-md bg-brand-primary/10 px-2 py-0.5 text-brand-primary border border-brand-primary/30">
-                  Fila: {OPERATIONAL_METRICS.find(item => item.bucket === filters.bucket)?.label ?? PORTFOLIO_BUCKET_LABEL[filters.bucket]}
-                  <button
-                    type="button"
-                    onClick={() => patch({ bucket: 'todos' })}
-                    className="hover:text-status-error-text focus-visible:text-status-error-text focus-visible:outline-none"
-                    aria-label="Remover filtro da fila operacional"
-                  >
-                    <X size={12} />
-                  </button>
-                </span>
-              )}
-
-              {filters.phase !== 'todas' && (
-                <span className="inline-flex items-center gap-1 rounded-md bg-surface-alt px-2 py-0.5 text-foreground border border-border">
-                  Fase: {PHASE_LABEL[filters.phase] ?? filters.phase}
-                  <button
-                    type="button"
-                    onClick={() => patch({ phase: 'todas' })}
-                    className="hover:text-status-error-text focus-visible:text-status-error-text focus-visible:outline-none"
-                    aria-label="Remover filtro de fase"
-                  >
-                    <X size={12} />
-                  </button>
-                </span>
-              )}
-
-              {filters.product !== 'todos' && (
-                <span className="inline-flex items-center gap-1 rounded-md bg-surface-alt px-2 py-0.5 text-foreground border border-border">
-                  Produto: {filters.product}
-                  <button
-                    type="button"
-                    onClick={() => patch({ product: 'todos' })}
-                    className="hover:text-status-error-text focus-visible:text-status-error-text focus-visible:outline-none"
-                    aria-label="Remover filtro de produto"
-                  >
-                    <X size={12} />
-                  </button>
-                </span>
-              )}
-
-              {filters.owner !== 'todos' && (
-                <span className="inline-flex items-center gap-1 rounded-md bg-surface-alt px-2 py-0.5 text-foreground border border-border">
-                  Responsável: {owners.find(owner => owner.id === filters.owner)?.label ?? filters.owner}
-                  <button
-                    type="button"
-                    onClick={() => patch({ owner: 'todos' })}
-                    className="hover:text-status-error-text focus-visible:text-status-error-text focus-visible:outline-none"
-                    aria-label="Remover filtro de responsável"
-                  >
-                    <X size={12} />
-                  </button>
-                </span>
-              )}
-
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-6 px-2 text-xs text-muted-foreground hover:text-status-error-text"
-                onClick={clearAllFilters}
-              >
-                Limpar todos
-              </Button>
-
-              <span className="ml-auto text-caption text-muted-foreground">
-                {filtered.length} de {rows.length} {filtered.length === 1 ? 'cliente' : 'clientes'}
-              </span>
+          <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 border-t border-border-subtle pt-3 sm:grid-cols-4" aria-busy={salesLoading} aria-live="polite">
+            <div className="min-w-0">
+              <dt className="text-xs text-muted-foreground">Vendas</dt>
+              <dd className="mt-0.5 break-words text-sm font-bold text-foreground">{salesInitialLoading ? 'Atualizando' : salesUnavailable ? 'Indisponível' : salesTotalsForView.totalSales > 0 ? formatSalesLabel(salesTotalsForView.totalSales) : salesTotalsForView.hasSalesRecord ? '0 confirmado' : 'Nenhum registro'}</dd>
             </div>
-          )}
+            <div className="min-w-0">
+              <dt className="text-xs text-muted-foreground">Meta do mês</dt>
+              <dd className="mt-0.5 break-words text-sm font-bold text-foreground">{salesInitialLoading ? 'Atualizando' : salesUnavailable ? 'Indisponível' : salesTotalsForView.totalMonthlyGoal > 0 ? formatSalesLabel(salesTotalsForView.totalMonthlyGoal) : 'Não configurada'}</dd>
+            </div>
+            <div className="min-w-0">
+              <dt className="text-xs text-muted-foreground">Atingimento</dt>
+              <dd className={`mt-0.5 text-sm font-bold ${salesInitialLoading || salesUnavailable ? 'text-foreground' : salesProgressTextClass(salesTotalsForView.totalAttainment)}`}>
+                {salesInitialLoading ? 'Atualizando' : salesUnavailable ? 'Indisponível' : salesTotalsForView.totalAttainment === null ? 'Não calculado' : formatSalesPercent(salesTotalsForView.totalAttainment)}
+              </dd>
+            </div>
+            <div className="min-w-0">
+              <dt className="text-xs text-muted-foreground">Unidades com venda</dt>
+              <dd className="mt-0.5 text-sm font-bold text-foreground">{salesInitialLoading ? 'Atualizando' : salesUnavailable ? 'Indisponível' : `${salesTotalsForView.storesWithSales}/${salesTotalsForView.totalStores}`}</dd>
+            </div>
+          </dl>
+        </aside>
+
+        {salesRangeError ? <div className="rounded-lg border border-status-warning/30 bg-status-warning-surface px-3 py-2 text-sm font-medium text-status-warning-text" role="status">{salesRangeError}</div> : null}
+        {salesError ? <div className="rounded-lg border border-status-error/30 bg-status-error-surface px-3 py-2 text-sm font-medium text-status-error-text" role="alert">{salesError} <button type="button" onClick={() => void refetchSales()} className="ml-1 min-h-9 rounded px-1 underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-error/30">Tentar novamente</button></div> : null}
+
+        {hasActiveFilters ? (
+          <div className="flex flex-wrap items-center gap-1.5 text-sm" aria-label="Filtros ativos">
+            <span className="font-semibold text-foreground">Filtros ativos:</span>
+            {filters.search.trim() ? (
+              <span className="inline-flex min-h-8 items-center gap-1 rounded-md border border-border bg-surface-alt px-2 text-foreground">
+                Busca: “{filters.search}”
+                <button type="button" onClick={() => patch({ search: '' })} className="grid min-h-7 min-w-7 place-items-center rounded hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30" aria-label="Remover filtro de busca"><X size={14} /></button>
+              </span>
+            ) : null}
+            {filters.status !== 'todos' ? (
+              <span className="inline-flex min-h-8 items-center gap-1 rounded-md border border-brand-primary/30 bg-brand-primary/10 px-2 text-brand-primary">
+                Situação: {STATUS_METRICS.find(item => item.status === filters.status)?.label ?? filters.status}
+                <button type="button" onClick={() => patch({ status: 'todos' })} className="grid min-h-7 min-w-7 place-items-center rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30" aria-label="Remover filtro de situação da conta"><X size={14} /></button>
+              </span>
+            ) : null}
+            {filters.bucket !== 'todos' ? (
+              <span className="inline-flex min-h-8 items-center gap-1 rounded-md border border-brand-primary/30 bg-brand-primary/10 px-2 text-brand-primary">
+                Fila: {OPERATIONAL_METRICS.find(item => item.bucket === filters.bucket)?.label ?? PORTFOLIO_BUCKET_LABEL[filters.bucket]}
+                <button type="button" onClick={() => patch({ bucket: 'todos' })} className="grid min-h-7 min-w-7 place-items-center rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30" aria-label="Remover filtro da fila de decisão"><X size={14} /></button>
+              </span>
+            ) : null}
+            {filters.phase !== 'todas' ? (
+              <span className="inline-flex min-h-8 items-center gap-1 rounded-md border border-border bg-surface-alt px-2 text-foreground">
+                Fase: {PHASE_LABEL[filters.phase] ?? filters.phase}
+                <button type="button" onClick={() => patch({ phase: 'todas' })} className="grid min-h-7 min-w-7 place-items-center rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30" aria-label="Remover filtro de fase"><X size={14} /></button>
+              </span>
+            ) : null}
+            {filters.product !== 'todos' ? (
+              <span className="inline-flex min-h-8 items-center gap-1 rounded-md border border-border bg-surface-alt px-2 text-foreground">
+                Produto: {filters.product}
+                <button type="button" onClick={() => patch({ product: 'todos' })} className="grid min-h-7 min-w-7 place-items-center rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30" aria-label="Remover filtro de produto"><X size={14} /></button>
+              </span>
+            ) : null}
+            {filters.owner !== 'todos' ? (
+              <span className="inline-flex min-h-8 items-center gap-1 rounded-md border border-border bg-surface-alt px-2 text-foreground">
+                Responsável: {owners.find(owner => owner.id === filters.owner)?.label ?? filters.owner}
+                <button type="button" onClick={() => patch({ owner: 'todos' })} className="grid min-h-7 min-w-7 place-items-center rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30" aria-label="Remover filtro de responsável"><X size={14} /></button>
+              </span>
+            ) : null}
+            <Button variant="ghost" size="sm" className="min-h-9 text-sm text-muted-foreground hover:text-status-error-text" onClick={clearAllFilters}>Limpar todos</Button>
+            <span className="ml-auto text-sm text-muted-foreground">{activeFilterCount} {activeFilterCount === 1 ? 'filtro ativo' : 'filtros ativos'}</span>
+          </div>
+        ) : null}
+
+        <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h3 id="client-portfolio-list-heading" className="text-base font-semibold text-foreground">Clientes</h3>
+            <p className="mt-0.5 text-sm text-muted-foreground">{filtered.length} {filtered.length === 1 ? 'resultado ordenado' : 'resultados ordenados'} pela próxima ação.</p>
+          </div>
+          <span className="text-xs text-muted-foreground">Ação principal destacada em cada registro</span>
         </div>
 
-        {/* Content View */}
-        <div className="p-4 sm:p-5">
-          {filtered.length === 0 ? (
-            <MxEmptyState
-              variant="filter"
-              title="Nenhum cliente ou loja encontrado"
-              description="Nenhum resultado corresponde aos filtros selecionados. Tente ajustar os termos da busca."
-              action={
-                <Button variant="outline" onClick={clearAllFilters}>
-                  Limpar filtros
-                </Button>
-              }
-            />
-          ) : viewMode === 'tabela' ? (
-            <MxTableSurface aria-label="Carteira de clientes com consultoria e vendas" data-testid="client-portfolio-table">
-              <p className="mb-2 text-caption text-muted-foreground md:hidden">Deslize horizontalmente para consultar todas as colunas.</p>
-              <Table className="w-full min-w-[1040px] table-fixed text-xs xl:min-w-0">
-                <colgroup>
-                  <col className="w-[24%] sm:w-[18%]" />
-                  <col className="w-[14%] sm:w-[14%]" />
-                  <col className="w-[16%] sm:w-[15%]" />
-                  <col className="w-[17%] sm:w-[17%]" />
-                  <col className="w-[13%] sm:w-[13%]" />
-                  <col className="w-[11%] sm:w-[13%]" />
-                  <col className="w-[5%] sm:w-[10%]" />
-                </colgroup>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="px-2.5 py-2 text-caption leading-4">Cliente e estrutura</TableHead>
-                    <TableHead className="px-2.5 py-2 text-caption leading-4"><span className="inline-flex items-center gap-1"><StoreIcon size={14} aria-hidden="true" />Vendas</span></TableHead>
-                    <TableHead className="px-2.5 py-2 text-caption leading-4"><span className="inline-flex items-center gap-1"><Target size={14} aria-hidden="true" />Meta do mês / atingimento</span></TableHead>
-                    <TableHead className="px-2.5 py-2 text-caption leading-4"><span className="inline-flex items-center gap-1"><TrendingUp size={14} aria-hidden="true" />Consultoria</span></TableHead>
-                    <TableHead className="px-2.5 py-2 text-caption leading-4">Equipe / responsável</TableHead>
-                    <TableHead className="px-2.5 py-2 text-caption leading-4">Próxima ação</TableHead>
-                    <TableHead className="px-2.5 py-2 text-right text-caption leading-4">Ações</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filtered.map(client => {
-                    const blockers = activationBlockers(client)
-                    const storeIds = clientStoreIds(client, lojas)
-                    const stat = clientTeamStat(storeIds, stats)
-                    const teamDataAvailable = storeIds.some(storeId => Boolean(stats[storeId]))
-                    const accountStatus = canonicalPortfolioStatus(client)
-                    const accountStatusLabel = portfolioStatusLabel(client)
-                    const operationalLabel = portfolioOperationalLabel(client)
-                    const sales = salesByClient.get(client.id) ?? {
-                      ...aggregateClientSalesForStores(storeIds, []),
-                      units: [],
-                    }
-                    const storeSlug = client.slug || client.id
-                    const clientActive = isActive(client)
-                    const progressPct =
-                      client.visitsTotal > 0
-                        ? Math.min(100, Math.round((client.visitsDone / client.visitsTotal) * 100))
-                        : 0
-
-                    return (
-                      <TableRow key={client.id} className="transition-colors hover:bg-surface-alt/50">
-                        {/* 1. Cliente = loja única ou matriz com filiais */}
-                        <TableCell className="align-top px-2.5 py-2 text-caption">
-                          <div className="flex min-w-0 items-start gap-2">
-                            <div aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand-primary/10 text-brand-primary text-sm font-bold">
-                              {client.name.charAt(0).toUpperCase()}
+        {filtered.length === 0 ? (
+          <MxEmptyState
+            variant="filter"
+            title="Nenhum cliente ou loja encontrado"
+            description="Nenhum resultado corresponde aos filtros selecionados. Tente ajustar a busca ou remover um filtro."
+            action={<Button variant="outline" onClick={clearAllFilters}>Limpar filtros</Button>}
+          />
+        ) : viewMode === 'tabela' ? (
+          <MxTableSurface aria-label="Carteira de clientes com próxima ação, consultoria e vendas" data-testid="client-portfolio-table">
+            <p className="mb-2 text-sm text-muted-foreground md:hidden">A tabela é comparativa. Deslize horizontalmente para consultar as cinco colunas.</p>
+            <Table className="w-full min-w-[960px] table-fixed text-sm xl:min-w-0">
+              <colgroup>
+                <col className="w-[27%]" />
+                <col className="w-[23%]" />
+                <col className="w-[21%]" />
+                <col className="w-[17%]" />
+                <col className="w-[12%]" />
+              </colgroup>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="px-3 py-3 text-xs leading-4">Cliente / estrutura</TableHead>
+                  <TableHead className="px-3 py-3 text-xs leading-4">Próxima ação</TableHead>
+                  <TableHead className="px-3 py-3 text-xs leading-4"><span className="inline-flex items-center gap-1"><Target size={14} aria-hidden="true" />Vendas e meta</span></TableHead>
+                  <TableHead className="px-3 py-3 text-xs leading-4"><span className="inline-flex items-center gap-1"><TrendingUp size={14} aria-hidden="true" />Consultoria</span></TableHead>
+                  <TableHead className="px-3 py-3 text-xs leading-4">Equipe / ações</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {clientViewData.map(data => {
+                  const { client, blockers, stat, teamDataAvailable, accountStatus, accountStatusLabel, operationalLabel, sales, storeSlug, progressPct } = data
+                  const salesState = salesStatus(sales)
+                  return (
+                    <TableRow key={client.id} data-action-priority={data.actionPriority} className="transition-colors hover:bg-surface-alt/50">
+                      <TableCell className="align-top px-3 py-3">
+                        <div className="flex min-w-0 items-start gap-2.5">
+                          <div aria-hidden="true" className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-brand-primary/10 text-sm font-bold text-brand-primary">{client.name.charAt(0).toUpperCase()}</div>
+                          <div className="min-w-0">
+                            <button type="button" onClick={() => navigate(`/clientes/${client.slug || client.id}`)} className="block max-w-full break-words text-left text-sm font-semibold leading-5 text-foreground outline-none hover:text-brand-primary focus-visible:text-brand-primary" title={client.name}>{client.name}</button>
+                            <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                              <Badge variant={statusBadgeVariant(accountStatus)} className="py-0.5 text-xs">{accountStatusLabel}</Badge>
+                              {operationalLabel ? <span className="text-xs text-muted-foreground">{operationalLabel}</span> : null}
                             </div>
-                            <div className="min-w-0">
-                              <button
-                                type="button"
-                                onClick={() => navigate(`/clientes/${client.slug || client.id}`)}
-                                className="block max-w-full truncate text-left font-semibold text-foreground outline-none hover:text-brand-primary focus-visible:text-brand-primary"
-                                title={client.name}
-                              >
-                                {client.name}
-                              </button>
-                              <div className="mt-1 flex flex-wrap items-center gap-1.5">
-                                <Badge variant={statusBadgeVariant(accountStatus)} className="py-0.5 text-caption">{accountStatusLabel}</Badge>
-                                {operationalLabel ? <span className="text-caption text-muted-foreground">{operationalLabel}</span> : null}
-                              </div>
-                              <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-caption text-muted-foreground">
-                                <span className="font-medium text-brand-primary">{clientStructureSummary(client)}</span>
-                                {client.primary_store_city && (
-                                  <>
-                                    <span>•</span>
-                                    <span>{formatCityName(client.primary_store_city)}</span>
-                                  </>
-                                )}
-                              </div>
-                              <div className="mt-0.5 text-caption text-muted-foreground">{client.cnpj ? `CNPJ: ${formatCnpj(client.cnpj)}` : 'CNPJ não informado'}</div>
-                              <div className="mt-1.5 space-y-1.5 border-t border-border-subtle pt-1.5 sm:hidden">
-                                <div className="flex items-center justify-between gap-2 text-caption">
-                                  <span className="font-medium text-muted-foreground">Vendas no período</span>
-                                  <span className="text-right font-bold text-foreground">{salesInitialLoading ? 'Atualizando' : salesUnavailable ? 'Indisponível' : salesEvidenceLabel(sales)}</span>
-                                </div>
-                                {!salesInitialLoading && !salesUnavailable && sales.monthlyGoal > 0 && sales.attainment !== null ? <MxProgress value={sales.attainment} tone={salesProgressTone(sales.attainment)} label={`${formatSalesLabel(sales.sales)} de ${formatSalesLabel(sales.monthlyGoal)} · meta do mês`} /> : <span className="block text-caption text-muted-foreground">{salesInitialLoading ? 'Atualizando vendas e meta...' : salesUnavailable ? 'Dados comerciais indisponíveis' : `${salesEvidenceDetail(sales)} · meta não configurada`}</span>}
-                              </div>
+                            <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
+                              <span className="font-medium text-brand-primary">{clientStructureSummary(client)}</span>
+                              {client.primary_store_city ? <><span aria-hidden="true">•</span><span>{formatCityName(client.primary_store_city)}</span></> : null}
                             </div>
+                            <div className="mt-0.5 break-words text-xs text-muted-foreground">{client.cnpj ? `CNPJ: ${formatCnpj(client.cnpj)}` : 'CNPJ não informado'}</div>
                           </div>
-                        </TableCell>
+                        </div>
+                      </TableCell>
 
-                        {/* 2. Resultado comercial do cliente consolidado */}
-                        <TableCell className="align-top px-2.5 py-2 text-caption">
-                          {salesInitialLoading ? <span className="text-muted-foreground">Atualizando vendas...</span> : salesUnavailable ? <span className="text-muted-foreground" title={salesRangeError ?? salesError ?? undefined}>Indisponível</span> : (
-                            <div className="min-w-0">
-                              <div className="text-lg font-bold leading-tight text-foreground">{salesEvidenceLabel(sales)}</div>
-                              <div className="mt-1 text-caption text-muted-foreground">{sales.storesWithSales}/{client.units} unidades com venda · {formatSalesDate(sales.lastSaleDate)}</div>
-                              {sales.units.length > 0 ? (
-                                <div className="mt-1.5 flex max-w-full flex-wrap gap-1" role="list" aria-label="Vendas por unidade">
-                                  {sales.units.slice(0, 3).map(unit => (
-                                    <span key={unit.storeId} role="listitem" className="inline-flex max-w-full min-w-0 items-center gap-1 rounded-md bg-surface-alt px-1.5 py-0.5 text-caption text-muted-foreground" title={`${unit.storeName}: ${unitSalesEvidenceLabel(unit)}`}>
-                                      <span className="truncate">{unit.parentStoreName ? 'Filial' : 'Matriz'} · {unit.storeName}</span>
-                                      <strong className="shrink-0 text-foreground">{unitSalesEvidenceLabel(unit)}</strong>
-                                    </span>
-                                  ))}
-                                  {sales.units.length > 3 ? <span role="listitem" className="rounded-md bg-surface-alt px-1.5 py-0.5 text-caption text-muted-foreground" title={`${sales.units.slice(3).map(unit => `${unit.storeName}: ${unitSalesEvidenceLabel(unit)}`).join(' · ')}`}>+{sales.units.length - 3} unidades</span> : null}
-                                </div>
-                              ) : null}
-                            </div>
-                          )}
-                        </TableCell>
+                      <TableCell className="align-top px-3 py-3">
+                        <ClientPrimaryAction data={data} onOpen={openPendencias} />
+                        {blockers.length > 0 ? (
+                          <button type="button" onClick={() => openPendencias(client)} className="mt-2 flex min-h-8 items-center gap-1 text-left text-xs font-medium text-status-error-text hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-error/30" aria-label={`${blockers.length} ${blockers.length === 1 ? 'bloqueio' : 'bloqueios'} de ativação para ${client.name}`} title={blockers.join(' · ')}>
+                            <AlertTriangle size={14} aria-hidden="true" />{blockers.length} {blockers.length === 1 ? 'bloqueio de ativação' : 'bloqueios de ativação'}
+                          </button>
+                        ) : <span className="mt-2 block text-xs text-muted-foreground">Sem bloqueio estrutural</span>}
+                      </TableCell>
 
-                        {/* 3. Meta comercial e progresso */}
-                        <TableCell className="align-top px-2.5 py-2 text-caption">
-                          {salesInitialLoading ? <span className="text-muted-foreground">Atualizando meta...</span> : salesUnavailable ? <span className="text-muted-foreground">Indisponível</span> : sales.monthlyGoal > 0 && sales.attainment !== null ? (
-                            <div className="min-w-0 space-y-1.5">
-                              <MxProgress value={sales.attainment} tone={salesProgressTone(sales.attainment)} label={`${formatSalesLabel(sales.sales)} de ${formatSalesLabel(sales.monthlyGoal)} · meta do mês`} />
-                              <Badge variant={salesStatus(sales).variant} className="text-caption py-0.5">{salesStatus(sales).label} · {formatSalesPercent(sales.attainment)}</Badge>
-                            </div>
-                          ) : (
-                            <div className="space-y-1">
-                              <span className="block font-semibold text-foreground">{salesEvidenceLabel(sales)}</span>
-                              <span className="block text-caption text-muted-foreground">Meta não configurada</span>
-                            </div>
-                          )}
-                        </TableCell>
-
-                        {/* 4. Consultoria permanece separada do comercial */}
-                        <TableCell className="align-top px-2.5 py-2 text-caption">
+                      <TableCell className="align-top px-3 py-3">
+                        {salesInitialLoading ? <span className="text-sm text-muted-foreground">Atualizando vendas...</span> : salesUnavailable ? <span className="text-sm text-muted-foreground" title={salesRangeError ?? salesError ?? undefined}>Indisponível</span> : (
                           <div className="min-w-0 space-y-2">
-                            <div className="min-w-0">
-                              <div className="truncate font-medium text-foreground" title={client.product_name || 'Produto não configurado'}>{client.product_name || 'Produto não configurado'}</div>
-                              <Badge variant="outline" className="mt-1 text-caption py-0">{PHASE_LABEL[client.business_phase ?? ''] ?? 'Fase não informada'}</Badge>
+                            <div className="flex flex-wrap items-start justify-between gap-1.5">
+                              <span className="text-base font-bold leading-5 text-foreground">{salesEvidenceLabel(sales)}</span>
+                              <Badge variant={salesState.variant} className="py-0.5 text-xs">{salesState.label}</Badge>
                             </div>
-                            <div className="border-t border-border-subtle pt-1.5">
-                              <div className="flex items-center justify-between text-caption">
-                                <span className="font-medium text-foreground">Jornada consultiva</span>
-                                <span className="text-muted-foreground">{journeyLabel(client)}</span>
-                              </div>
-                              {client.visitsTotal > 0 ? <MxProgress value={progressPct} tone="brand" label={`${client.visitsDone}/${client.visitsTotal} encontros`} /> : <span className="text-caption text-muted-foreground">Jornada não configurada</span>}
-                            </div>
+                            <p className="break-words text-xs leading-4 text-muted-foreground">
+                              {sales.monthlyGoal > 0 ? `Meta ${formatSalesLabel(sales.monthlyGoal)} · ${formatSalesPercent(sales.attainment)}` : 'Meta não configurada'} · {sales.storesWithSales}/{client.units} unidades com venda · {formatSalesDate(sales.lastSaleDate)}
+                            </p>
+                            {sales.monthlyGoal > 0 && sales.attainment !== null ? <MxProgress value={sales.attainment} tone={salesProgressTone(sales.attainment)} label={`${formatSalesLabel(sales.sales)} de ${formatSalesLabel(sales.monthlyGoal)} · meta do mês`} /> : <span className="block text-xs text-muted-foreground">{salesEvidenceDetail(sales)}</span>}
                           </div>
-                        </TableCell>
+                        )}
+                      </TableCell>
 
-                        {/* 5. Equipe e responsável */}
-                        <TableCell className="align-top px-2.5 py-2 text-caption">
-                          <div className="space-y-1.5">
-                            <div className="flex items-center gap-1.5">
-                              <Users size={14} className="text-muted-foreground" aria-hidden="true" />
-                              <span className="font-semibold text-foreground">{stat.sellers}</span>
-                              <span className="text-caption text-muted-foreground">{sellerLabel(stat.sellers)}</span>
-                            </div>
-                            {teamDataAvailable ? stat.sellers > 0 ? <div className="text-caption text-muted-foreground"><span className="font-medium text-status-success-text">{stat.disciplinePct}%</span> presença hoje</div> : <div className="text-caption text-muted-foreground">Nenhum vendedor cadastrado</div> : <div className="text-caption text-muted-foreground">Equipe indisponível</div>}
-                            <div className="border-t border-border-subtle pt-1.5">
-                              <span className="block text-caption text-muted-foreground">Responsável MX</span>
-                              {client.implementation_owner_name ? <span className="block truncate text-xs font-medium text-foreground" title={client.implementation_owner_email ?? client.implementation_owner_name}>{client.implementation_owner_name}</span> : <span className="block text-xs italic text-muted-foreground">Não atribuído</span>}
-                              {client.implementation_owner_email ? <span className="block truncate text-caption text-muted-foreground" title={client.implementation_owner_email}>{client.implementation_owner_email}</span> : null}
-                            </div>
+                      <TableCell className="align-top px-3 py-3">
+                        <div className="min-w-0 space-y-2">
+                          <div className="min-w-0">
+                            <div className="break-words text-sm font-medium leading-5 text-foreground" title={client.product_name || 'Produto não configurado'}>{client.product_name || 'Produto não configurado'}</div>
+                            <span className="mt-1 block break-words text-xs text-muted-foreground">Fase: {PHASE_LABEL[client.business_phase ?? ''] ?? 'Não configurada'}</span>
                           </div>
-                        </TableCell>
-
-                        {/* 6. Próxima ação */}
-                        <TableCell className="align-top px-2.5 py-2 text-caption">
-                          <div className="space-y-1">
-                            {client.suspended_at ? (
-                              <Badge variant="danger" className="text-caption">
-                                Suspenso
-                              </Badge>
-                            ) : !clientActive ? (
-                              <Badge variant="outline" className="text-caption">
-                                Inativo
-                              </Badge>
-                            ) : null}
-                            <button
-                              type="button"
-                              onClick={() => openPendencias(client)}
-                              className="w-full break-words text-left text-xs font-medium leading-4 text-foreground hover:text-brand-primary focus-visible:text-brand-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-primary/30"
-                              title={nextAction(client)}
-                            >
-                              {nextAction(client)}
-                            </button>
-                            {blockers.length > 1 && (
-                              <button
-                                type="button"
-                                onClick={() => openPendencias(client)}
-                                className="text-caption font-medium text-status-error-text block hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-status-error/30"
-                              >
-                                +{blockers.length - 1} {blockers.length - 1 === 1 ? 'pendência' : 'pendências'}
-                              </button>
-                            )}
+                          <div className="border-t border-border-subtle pt-2">
+                            <div className="flex items-center justify-between gap-2 text-xs">
+                              <span className="font-semibold text-foreground">Jornada consultiva</span>
+                              <span className="text-muted-foreground">{journeyLabel(client)}</span>
+                            </div>
+                            {client.visitsTotal > 0 ? <MxProgress value={progressPct} tone="brand" label={`${client.visitsDone}/${client.visitsTotal} encontros`} /> : <span className="mt-1 block text-xs text-muted-foreground">Não configurada</span>}
                           </div>
-                        </TableCell>
+                        </div>
+                      </TableCell>
 
-                        {/* 7. Ações */}
-                        <TableCell className="px-2.5 py-2 text-right text-caption">
-                          <div className="flex min-w-0 items-center justify-end gap-1">
-                            <Button
-                              variant="outline"
-                              size="xs"
-                              className="h-8 shrink-0 px-2"
-                              onClick={() => navigate(`/lojas/${storeSlug}`)}
-                              title="Abrir área da loja"
-                              aria-label={`Abrir área da loja de ${client.name}`}
-                            >
-                              <ExternalLink size={14} />
-                              Abrir loja
-                            </Button>
+                      <TableCell className="align-top px-3 py-3">
+                        <div className="min-w-0 space-y-2">
+                          <div className="flex items-center gap-1.5">
+                            <Users size={16} className="shrink-0 text-muted-foreground" aria-hidden="true" />
+                            <span className="text-sm font-semibold text-foreground">{stat.sellers} {sellerLabel(stat.sellers)}</span>
+                          </div>
+                          {teamDataAvailable ? stat.sellers > 0 ? <div className="text-xs text-muted-foreground"><span className="font-medium text-status-success-text">{stat.disciplinePct}%</span> presença hoje</div> : <div className="text-xs text-muted-foreground">Nenhum vendedor cadastrado</div> : <div className="text-xs text-muted-foreground">Equipe indisponível</div>}
+                          <div className="border-t border-border-subtle pt-2">
+                            <span className="block text-xs text-muted-foreground">Responsável MX</span>
+                            {client.implementation_owner_name ? <span className="block break-words text-sm font-medium text-foreground" title={client.implementation_owner_email ?? client.implementation_owner_name}>{client.implementation_owner_name}</span> : <span className="block text-sm italic text-muted-foreground">Não atribuído</span>}
+                          </div>
+                          <div className="flex items-center justify-end gap-1">
+                            <Button variant="outline" size="sm" className="min-h-10 h-auto px-2 text-sm" onClick={() => navigate(`/clientes/${storeSlug}`)}>Visão 360</Button>
                             <ClientActionsMenu compact client={client} onAction={action => onAction(client, action)} />
                           </div>
-                        </TableCell>
-                      </TableRow>
-                    )
-                  })}
-                </TableBody>
-              </Table>
-            </MxTableSurface>
-          ) : (
-            /* Cards Operacionais View */
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {filtered.map(client => {
-                const blockers = activationBlockers(client)
-                const storeIds = clientStoreIds(client, lojas)
-                const stat = clientTeamStat(storeIds, stats)
-                const teamDataAvailable = storeIds.some(storeId => Boolean(stats[storeId]))
-                const accountStatus = canonicalPortfolioStatus(client)
-                const accountStatusLabel = portfolioStatusLabel(client)
-                const operationalLabel = portfolioOperationalLabel(client)
-                const sales = salesByClient.get(client.id) ?? {
-                  ...aggregateClientSalesForStores(storeIds, []),
-                  units: [],
-                }
-                const storeSlug = client.slug || client.id
-                const progressPct =
-                  client.visitsTotal > 0
-                    ? Math.min(100, Math.round((client.visitsDone / client.visitsTotal) * 100))
-                    : 0
-
-                return (
-                  <div
-                    key={client.id}
-                    className="flex flex-col justify-between rounded-xl border border-border bg-card p-5 shadow-xs transition-all hover:border-brand-primary/40 hover:shadow-md"
-                  >
-                    <div className="space-y-4">
-                      {/* Header */}
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="flex items-center gap-3 min-w-0">
-                          <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-primary/10 text-brand-primary font-bold">
-                            {client.name.charAt(0).toUpperCase()}
-                          </span>
-                          <div className="min-w-0">
-                            <button
-                              type="button"
-                              onClick={() => navigate(`/clientes/${client.slug || client.id}`)}
-                              className="font-semibold text-foreground hover:text-brand-primary focus-visible:text-brand-primary text-left truncate block outline-none"
-                            >
-                              {client.name}
-                            </button>
-                            <div className="mt-1 flex flex-wrap items-center gap-1.5">
-                              <Badge variant={statusBadgeVariant(accountStatus)} className="py-0.5 text-caption">{accountStatusLabel}</Badge>
-                              {operationalLabel ? <span className="text-caption text-muted-foreground">{operationalLabel}</span> : null}
-                            </div>
-                            <p className="mt-1 truncate text-xs text-muted-foreground">
-                              {client.cnpj ? `CNPJ: ${formatCnpj(client.cnpj)}` : 'CNPJ não informado'}
-                              {client.primary_store_city ? ` • ${formatCityName(client.primary_store_city)}` : ''}
-                            </p>
-                          </div>
                         </div>
-                        {client.suspended_at ? (
-                          <Badge variant="danger">Suspenso</Badge>
-                        ) : null}
-                      </div>
-
-                      {/* Details Grid */}
-                      <div className="grid grid-cols-2 gap-2 rounded-lg bg-muted/40 p-3 text-xs">
-                        <div>
-                          <span className="text-muted-foreground">Produto:</span>{' '}
-                          <span className="font-medium text-foreground block truncate">
-                            {client.product_name || 'Consultoria PMR'}
-                          </span>
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
+              </TableBody>
+            </Table>
+          </MxTableSurface>
+        ) : (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {clientViewData.map(data => {
+              const { client, blockers, stat, teamDataAvailable, accountStatus, accountStatusLabel, operationalLabel, sales, storeSlug, progressPct } = data
+              const salesState = salesStatus(sales)
+              return (
+                <article key={client.id} data-action-priority={data.actionPriority} className="flex min-w-0 flex-col rounded-xl border border-border bg-card p-4 shadow-xs transition-colors hover:border-brand-primary/40">
+                  <div className="flex min-w-0 items-start justify-between gap-3">
+                    <div className="flex min-w-0 items-start gap-3">
+                      <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-primary/10 font-bold text-brand-primary">{client.name.charAt(0).toUpperCase()}</span>
+                      <div className="min-w-0">
+                        <button type="button" onClick={() => navigate(`/clientes/${client.slug || client.id}`)} className="block line-clamp-2 break-words text-left text-sm font-semibold leading-5 text-foreground outline-none hover:text-brand-primary focus-visible:text-brand-primary" title={client.name}>{client.name}</button>
+                        <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                          <Badge variant={statusBadgeVariant(accountStatus)} className="py-0.5 text-xs">{accountStatusLabel}</Badge>
+                          {operationalLabel ? <span className="text-xs text-muted-foreground">{operationalLabel}</span> : null}
                         </div>
-                        <div>
-                          <span className="text-muted-foreground">Fase:</span>{' '}
-                          <span className="font-medium text-foreground block truncate">
-                            {PHASE_LABEL[client.business_phase ?? ''] ?? 'Não configurada'}
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground">Responsável:</span>{' '}
-                          {client.implementation_owner_name ? <span className="block truncate font-medium text-foreground" title={client.implementation_owner_email ?? client.implementation_owner_name}>{client.implementation_owner_name}</span> : <span className="block font-medium italic text-muted-foreground">Não atribuído</span>}
-                          {client.implementation_owner_email ? <span className="block truncate text-caption text-muted-foreground" title={client.implementation_owner_email}>{client.implementation_owner_email}</span> : null}
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground">Estrutura:</span>{' '}
-                          <span className="font-medium text-foreground block truncate">
-                            {clientStructureSummary(client)}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Commercial result stays visible in the alternate view too */}
-                      <div className="space-y-2 rounded-lg border border-status-success/20 bg-status-success-surface/30 p-3">
-                        <div className="flex items-start justify-between gap-2">
-                          <div>
-                            <span className="text-xs font-medium text-muted-foreground">Vendas no período</span>
-                            <div className="mt-0.5 flex items-baseline gap-1">
-                              <span className="text-xl font-bold leading-tight text-foreground">{salesInitialLoading ? 'Atualizando' : salesUnavailable ? 'Indisponível' : salesEvidenceLabel(sales)}</span>
-                            </div>
-                          </div>
-                          {!salesInitialLoading && !salesUnavailable ? <Badge variant={salesStatus(sales).variant} className="text-caption py-0.5">{salesStatus(sales).label}</Badge> : null}
-                        </div>
-                        {salesInitialLoading ? <span className="text-xs text-muted-foreground">Atualizando vendas e meta...</span> : salesUnavailable ? <span className="text-xs text-muted-foreground">Dados comerciais indisponíveis</span> : sales.monthlyGoal > 0 && sales.attainment !== null ? <MxProgress value={sales.attainment} tone={salesProgressTone(sales.attainment)} label={`${formatSalesLabel(sales.sales)} de ${formatSalesLabel(sales.monthlyGoal)} · meta do mês`} /> : <span className="text-xs text-muted-foreground">{salesEvidenceDetail(sales)} · meta não configurada</span>}
-                        {!salesInitialLoading && !salesUnavailable ? <div className="text-caption text-muted-foreground">{sales.monthlyGoal > 0 ? `Meta ${formatSalesLabel(sales.monthlyGoal)} · ${formatSalesPercent(sales.attainment)}` : 'Meta não configurada'} · {sales.storesWithSales}/{client.units} unidades com venda</div> : null}
-                      </div>
-
-                      {/* Journey Progress */}
-                      <div className="space-y-1.5 rounded-lg border border-border/60 p-3">
-                        <div className="flex items-center justify-between text-xs">
-                          <span className="font-medium text-foreground">{journeyLabel(client)}</span>
-                          <span className="text-muted-foreground">
-                            {client.visitsTotal > 0 ? `${client.visitsDone}/${client.visitsTotal} encontros` : 'Não configurada'}
-                          </span>
-                        </div>
-                        {client.visitsTotal > 0 && (
-                          <div className="h-1.5 w-full">
-                            <MxProgress value={progressPct} tone="brand" />
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Next operational step and activation blockers remain visible on cards */}
-                      <div className="space-y-1.5 border-t border-border-subtle pt-3">
-                        <span className="block text-caption font-semibold text-muted-foreground">Próxima ação</span>
-                        <button
-                          type="button"
-                          onClick={() => openPendencias(client)}
-                          className="w-full break-words text-left text-xs font-medium leading-4 text-foreground hover:text-brand-primary focus-visible:text-brand-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-primary/30"
-                          title={nextAction(client)}
-                        >
-                          {nextAction(client)}
-                        </button>
-                        {blockers.length > 0 ? (
-                          <button
-                            type="button"
-                            onClick={() => openPendencias(client)}
-                            className="text-caption font-medium text-status-error-text hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-status-error/30"
-                          >
-                            {blockers.length === 1 ? '1 pendência de ativação' : `${blockers.length} pendências de ativação`}
-                          </button>
-                        ) : (
-                          <span className="text-caption text-muted-foreground">Sem pendências de ativação</span>
-                        )}
-                      </div>
-
-                      {/* Team & Presence */}
-                      <div className="flex items-center justify-between text-xs px-1">
-                        <div className="flex items-center gap-1.5">
-                          <Users size={14} className="text-muted-foreground" aria-hidden="true" />
-                          <span className="font-semibold text-foreground">{stat.sellers}</span>
-                          <span className="text-muted-foreground">{sellerLabel(stat.sellers)}</span>
-                        </div>
-                        {teamDataAvailable && stat.sellers > 0 ? (
-                          <div className="font-medium text-foreground">
-                            <span className="text-status-success-text">{stat.disciplinePct}%</span> presença hoje
-                          </div>
-                        ) : teamDataAvailable ? <span className="text-caption text-muted-foreground">Nenhum vendedor cadastrado</span> : <span className="text-caption text-muted-foreground">Equipe indisponível</span>}
                       </div>
                     </div>
+                    <ClientActionsMenu client={client} onAction={action => onAction(client, action)} />
+                  </div>
 
-                    {/* Card Actions Footer */}
-                    <div className="mt-4 flex items-center justify-between border-t border-border pt-3">
+                  <div className="mt-3 flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground">
+                    <span className="font-medium text-brand-primary">{clientStructureSummary(client)}</span>
+                    {client.primary_store_city ? <><span aria-hidden="true">•</span><span>{formatCityName(client.primary_store_city)}</span></> : null}
+                    <span aria-hidden="true">•</span>
+                    <span className="break-words">{client.cnpj ? `CNPJ: ${formatCnpj(client.cnpj)}` : 'CNPJ não informado'}</span>
+                  </div>
+
+                  <div className="mt-4 border-t border-border-subtle pt-3">
+                    <span className="mb-1.5 block text-sm font-semibold text-muted-foreground">Próxima ação</span>
+                    <ClientPrimaryAction data={data} onOpen={openPendencias} />
+                    {blockers.length > 0 ? (
+                      <button type="button" onClick={() => openPendencias(client)} className="mt-2 flex min-h-8 items-center gap-1 text-left text-sm font-medium text-status-error-text hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-error/30" aria-label={`${blockers.length} ${blockers.length === 1 ? 'bloqueio' : 'bloqueios'} de ativação para ${client.name}`} title={blockers.join(' · ')}>
+                        <AlertTriangle size={14} aria-hidden="true" />{blockers.length} {blockers.length === 1 ? 'pendência de ativação' : 'pendências de ativação'}
+                      </button>
+                    ) : <span className="mt-2 block text-sm text-muted-foreground">Sem pendências de ativação</span>}
+                  </div>
+
+                  <div className="mt-4 border-t border-border-subtle pt-3">
+                    <div className="flex flex-wrap items-start justify-between gap-2">
+                      <div>
+                        <span className="text-sm font-semibold text-muted-foreground">Vendas no período</span>
+                        <div className="mt-0.5 text-xl font-bold leading-6 text-foreground">{salesInitialLoading ? 'Atualizando' : salesUnavailable ? 'Indisponível' : salesEvidenceLabel(sales)}</div>
+                      </div>
+                      {!salesInitialLoading && !salesUnavailable ? <Badge variant={salesState.variant} className="py-0.5 text-xs">{salesState.label}</Badge> : null}
+                    </div>
+                    {salesInitialLoading ? <span className="mt-2 block text-sm text-muted-foreground">Atualizando vendas e meta...</span> : salesUnavailable ? <span className="mt-2 block text-sm text-muted-foreground">Dados comerciais indisponíveis</span> : sales.monthlyGoal > 0 && sales.attainment !== null ? <MxProgress value={sales.attainment} tone={salesProgressTone(sales.attainment)} label={`${formatSalesLabel(sales.sales)} de ${formatSalesLabel(sales.monthlyGoal)} · meta do mês`} /> : <span className="mt-2 block text-sm text-muted-foreground">{salesEvidenceDetail(sales)} · meta não configurada</span>}
+                    {!salesInitialLoading && !salesUnavailable ? <p className="mt-2 break-words text-xs leading-4 text-muted-foreground">{sales.monthlyGoal > 0 ? `Meta ${formatSalesLabel(sales.monthlyGoal)} · ${formatSalesPercent(sales.attainment)}` : 'Meta não configurada'} · {sales.storesWithSales}/{client.units} unidades com venda · {formatSalesDate(sales.lastSaleDate)}</p> : null}
+                  </div>
+
+                  <div className="mt-4 border-t border-border-subtle pt-3">
+                    <div className="flex items-center justify-between gap-2 text-sm">
+                      <span className="font-semibold text-foreground">Jornada consultiva</span>
+                      <span className="text-muted-foreground">{journeyLabel(client)}</span>
+                    </div>
+                    {client.visitsTotal > 0 ? <MxProgress value={progressPct} tone="brand" label={`${client.visitsDone}/${client.visitsTotal} encontros`} /> : <span className="mt-1 block text-sm text-muted-foreground">Não configurada</span>}
+                    <div className="mt-3 grid grid-cols-1 gap-2 text-sm sm:grid-cols-2">
                       <div className="flex items-center gap-1.5">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="h-8 text-xs font-medium"
-                          onClick={() => navigate(`/lojas/${storeSlug}`)}
-                        >
-                          Abrir loja
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 text-xs"
-                          onClick={() => navigate(`/lojas/${storeSlug}/equipe`)}
-                        >
-                          Equipe
-                        </Button>
+                        <Users size={16} className="shrink-0 text-muted-foreground" aria-hidden="true" />
+                        <span className="font-semibold text-foreground">{stat.sellers}</span>
+                        <span className="text-muted-foreground">{sellerLabel(stat.sellers)}</span>
                       </div>
-
-                      <div className="flex items-center gap-1">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 text-xs"
-                          onClick={() => navigate(`/clientes/${client.slug || client.id}`)}
-                        >
-                          Visão 360
-                        </Button>
-                        <ClientActionsMenu client={client} onAction={action => onAction(client, action)} />
-                      </div>
+                      {teamDataAvailable && stat.sellers > 0 ? <div className="font-medium text-foreground"><span className="text-status-success-text">{stat.disciplinePct}%</span> presença hoje</div> : teamDataAvailable ? <span className="text-sm text-muted-foreground">Nenhum vendedor cadastrado</span> : <span className="text-sm text-muted-foreground">Equipe indisponível</span>}
+                    </div>
+                    <div className="mt-2 text-sm">
+                      <span className="text-muted-foreground">Responsável MX: </span>
+                      {client.implementation_owner_name ? <span className="break-words font-medium text-foreground" title={client.implementation_owner_email ?? client.implementation_owner_name}>{client.implementation_owner_name}</span> : <span className="italic text-muted-foreground">Não atribuído</span>}
                     </div>
                   </div>
-                )
-              })}
-            </div>
-          )}
-        </div>
-      </MxSectionCard>
+
+                  <details className="mt-4 border-t border-border-subtle pt-3">
+                    <summary className="flex min-h-10 cursor-pointer list-none items-center justify-between gap-2 text-sm font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30 [&::-webkit-details-marker]:hidden">
+                      Ver detalhes da conta
+                      <ChevronDown size={16} aria-hidden="true" />
+                    </summary>
+                    <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+                      <div className="min-w-0"><span className="block text-xs text-muted-foreground">Produto</span><span className="block break-words font-medium text-foreground">{client.product_name || 'Produto não configurado'}</span></div>
+                      <div className="min-w-0"><span className="block text-xs text-muted-foreground">Fase</span><span className="block break-words font-medium text-foreground">{PHASE_LABEL[client.business_phase ?? ''] ?? 'Não configurada'}</span></div>
+                      <div className="min-w-0"><span className="block text-xs text-muted-foreground">Unidades</span><span className="block break-words font-medium text-foreground">{client.units}</span></div>
+                      <div className="min-w-0"><span className="block text-xs text-muted-foreground">E-mail do responsável</span><span className="block break-words font-medium text-foreground">{client.implementation_owner_email || 'Não informado'}</span></div>
+                    </div>
+                    {sales.units.length > 0 ? (
+                      <div className="mt-3 border-t border-border-subtle pt-3">
+                        <span className="block text-xs font-semibold text-muted-foreground">Vendas por unidade</span>
+                        <div className="mt-1 divide-y divide-border-subtle" role="list" aria-label={`Vendas por unidade de ${client.name}`}>
+                          {sales.units.map(unit => <div key={unit.storeId} role="listitem" className="flex items-start justify-between gap-2 py-2 text-sm"><span className="min-w-0 break-words text-muted-foreground">{unit.parentStoreName ? 'Filial' : 'Matriz'} · {unit.storeName}</span><strong className="shrink-0 text-foreground">{unitSalesEvidenceLabel(unit)}</strong></div>)}
+                        </div>
+                      </div>
+                    ) : null}
+                  </details>
+
+                  <footer className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-border pt-3">
+                    <Button variant="outline" size="sm" className="min-h-10 text-sm" onClick={() => navigate(`/lojas/${storeSlug}`)}>Abrir loja</Button>
+                    <Button variant="ghost" size="sm" className="min-h-10 text-sm" onClick={() => navigate(`/clientes/${client.slug || client.id}`)}>Visão 360</Button>
+                  </footer>
+                </article>
+              )
+            })}
+          </div>
+        )}
+      </section>
 
       <PendenciasModal
         open={Boolean(pendenciasClient)}

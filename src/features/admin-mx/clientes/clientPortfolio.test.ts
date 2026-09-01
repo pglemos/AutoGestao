@@ -16,10 +16,13 @@ import {
   journeyLabel,
   nextAction,
   portfolioCounters,
+  portfolioActionPriority,
+  portfolioGovernanceAttentionCount,
   portfolioOperationalLabel,
   portfolioOwnerOptions,
   portfolioStatusCounters,
   portfolioStatusLabel,
+  sortPortfolioByAction,
   structureLabel,
   EMPTY_PORTFOLIO_FILTERS,
   type PortfolioClient,
@@ -232,6 +235,29 @@ describe('próxima ação', () => {
 
   test('cliente sem usuário pede cadastro de pessoas', () => {
     expect(nextAction(client({ users: 0 }))).toBe('Cadastrar pessoas e acessos')
+  })
+
+  test('ordena a carteira pela urgência operacional sem mutar a consulta', () => {
+    const rows = [
+      client({ id: 'acompanhamento', name: 'Zeta' }),
+      client({ id: 'jornada', name: 'Beta', visitsDone: 2 }),
+      client({ id: 'master', name: 'Gamma', hasDonoMaster: false }),
+      client({ id: 'bloqueio', name: 'Alfa', status: 'inativo', primary_store_id: null }),
+    ]
+
+    expect(sortPortfolioByAction(rows, HOJE).map(row => row.id)).toEqual(['bloqueio', 'master', 'jornada', 'acompanhamento'])
+    expect(rows.map(row => row.id)).toEqual(['acompanhamento', 'jornada', 'master', 'bloqueio'])
+    expect(portfolioActionPriority(rows[3], HOJE)).toBe(0)
+  })
+
+  test('conta governança como clientes únicos da visão de pendências', () => {
+    expect(portfolioGovernanceAttentionCount([
+      client({ id: 'sem-owner', implementation_owner_id: null }),
+      client({ id: 'bloqueado', status: 'inativo', primary_store_id: null }),
+      client({ id: 'renovacao', contract_end_date: '2026-09-10' }),
+      client({ id: 'suspenso', status: 'suspenso', suspended_at: '2026-08-15' }),
+      client({ id: 'regular' }),
+    ], HOJE)).toBe(4)
   })
 })
 
