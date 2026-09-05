@@ -56,6 +56,24 @@ describe('contrato do cockpit operacional do /painel', () => {
     expect(metrics).toContain('Configurar metas')
   })
 
+  test('um único controle de situação e busca governa a página', () => {
+    const page = read('src/features/admin-mx/AdminDashboardPage.tsx')
+    const table = read('src/features/admin-mx/painel/CarteiraOperacionalTable.tsx')
+
+    // A carteira recebe o universo, não as linhas já filtradas pelo cockpit:
+    // sem isso o "Exibindo N de M" mentia sobre o tamanho da rede.
+    const content = read('src/features/network-dashboard/NetworkDashboardContent.tsx')
+    expect(content).toContain('carteiraSlot(controller.allRows)')
+    expect(page).toContain('controlledFilters')
+    expect(page).toContain('CARTEIRA_FILTER_GROUPS')
+    // A carteira não pode ter busca nem select próprios.
+    expect(page).not.toContain('Buscar loja, cliente ou responsável"\n')
+    // Ação primária exposta, resto colapsado, coluna fixa à direita.
+    expect(table).toContain('Mais ações de')
+    expect(table).toContain('sticky right-0')
+    expect(table).toContain('sticky top-0')
+  })
+
   test('entra com esqueleto, não com spinner vazio', () => {
     const content = read('src/features/network-dashboard/NetworkDashboardContent.tsx')
 

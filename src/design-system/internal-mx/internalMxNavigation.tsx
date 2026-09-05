@@ -66,6 +66,7 @@ export function buildInternalMxNavigation(
     {
       key: 'produto-metodologia',
       label: 'Produto e Metodologia',
+      defaultExpanded: true,
       items: [
         { key: 'admin-products', label: 'Produtos de Consultoria', path: '/produtos', icon: Package },
         {

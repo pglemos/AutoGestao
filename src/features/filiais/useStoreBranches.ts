@@ -36,10 +36,21 @@ export function useStoreBranches() {
   const [hardDeleteConfirmation, setHardDeleteConfirmation] = useState('')
   const [hardDeleting, setHardDeleting] = useState(false)
 
-  const matriz = useMemo(
-    () => lojas.find((store) => slugify(store.name) === storeSlug) || null,
-    [lojas, storeSlug],
-  )
+  const matriz = useMemo(() => {
+    if (!storeSlug) return null
+    const decoded = decodeURIComponent(storeSlug).trim()
+    const normalized = slugify(decoded)
+    return (
+      lojas.find(
+        (store) =>
+          store.id === storeSlug ||
+          store.id === decoded ||
+          (normalized && slugify(store.name) === normalized) ||
+          slugify(store.name) === storeSlug ||
+          store.name.toLowerCase() === decoded.toLowerCase(),
+      ) || null
+    )
+  }, [lojas, storeSlug])
 
   const branches = useMemo(() => selectBranches(lojas, matriz), [lojas, matriz])
 

@@ -8,8 +8,11 @@ import {
   Crown,
   ClipboardList,
   Link2,
+  Layers,
   Mail,
   MoveHorizontal,
+  Package,
+  PackagePlus,
   Pencil,
   Plus,
   RefreshCw,
@@ -26,7 +29,9 @@ import {
 } from "react-router-dom";
 import { resolveRouteLayout } from "@/design-system/page";
 import { Button } from "@/components/atoms/Button";
+import { Badge } from "@/components/atoms/Badge";
 import { TabNav } from "@/components/molecules/TabNav";
+import { DEFAULT_CONSULTING_MODULES } from "@/hooks/useConsultingModules";
 import {
   Table,
   TableBody,
@@ -85,6 +90,7 @@ import { PersonCreateModal } from "./clientes/PersonCreateModal";
 import { ClientIdentificationModal } from "./clientes/ClientIdentificationModal";
 import { ProgramCard } from "./clientes/ProgramCard";
 import { ProgramEditModal } from "./clientes/ProgramEditModal";
+import { ClientModulesModal } from "./clientes/ClientModulesModal";
 import { ClientPlanningContextPanel } from "./clientes/ClientPlanningContextPanel";
 import { StoreFormModal } from "./clientes/StoreFormModal";
 import { StoreOperatingHoursEditor } from "./clientes/StoreOperatingHoursEditor";
@@ -431,6 +437,7 @@ export function AdminClienteDetalhePage() {
   // Programa contratado
   const [programModalOpen, setProgramModalOpen] = useState(false);
   const [savingProgram, setSavingProgram] = useState(false);
+  const [modulesModalOpen, setModulesModalOpen] = useState(false);
   const [actionPlanWizardOpen, setActionPlanWizardOpen] = useState(false);
   const [actionPlanRefreshKey, setActionPlanRefreshKey] = useState(0);
   const [actionPlanSummary, setActionPlanSummary] =
@@ -1439,6 +1446,66 @@ export function AdminClienteDetalhePage() {
       if (result.repaired) await refetch();
     } finally {
       setRepairing(null);
+    }
+  };
+
+  const [applyingDefaultModules, setApplyingDefaultModules] = useState(false);
+  const [togglingModuleKey, setTogglingModuleKey] = useState<string | null>(null);
+
+  const applyDefaultModules = async () => {
+    if (applyingDefaultModules || !client?.id || !supabaseUser) return;
+    setApplyingDefaultModules(true);
+    try {
+      const result = await runClientRepair({
+        key: "modulos",
+        clientId: client.id,
+        clientName: client.name,
+        programKey: client.program_template_key ?? null,
+        userId: supabaseUser.id,
+      });
+      if (result.repaired) {
+        toast.success(result.message);
+        await refetch();
+      } else {
+        toast.error(result.message);
+      }
+    } finally {
+      setApplyingDefaultModules(false);
+    }
+  };
+
+  const toggleModule = async (moduleKey: string, nextEnabled: boolean) => {
+    if (togglingModuleKey || !client?.id || !supabaseUser) return;
+    setTogglingModuleKey(moduleKey);
+    try {
+      const defaults = DEFAULT_CONSULTING_MODULES.find((m) => m.module_key === moduleKey);
+      const existing = client.modules?.find((m) => m.module_key === moduleKey);
+      const { error } = await supabase
+        .from("modulos_cliente_consultoria")
+        .upsert(
+          {
+            client_id: client.id,
+            module_key: moduleKey,
+            label: existing?.label || defaults?.label || moduleKey,
+            premium: existing?.premium ?? defaults?.premium ?? false,
+            enabled: nextEnabled,
+            configured_by: supabaseUser.id,
+            configured_at: new Date().toISOString(),
+          },
+          { onConflict: "client_id,module_key" }
+        );
+      if (error) {
+        toast.error(error.message);
+      } else {
+        toast.success(
+          nextEnabled
+            ? `Módulo "${existing?.label || defaults?.label || moduleKey}" liberado.`
+            : `Módulo "${existing?.label || defaults?.label || moduleKey}" desabilitado.`
+        );
+        await refetch();
+      }
+    } finally {
+      setTogglingModuleKey(null);
     }
   };
 
@@ -2834,55 +2901,153 @@ export function AdminClienteDetalhePage() {
                       <MxSectionHeader
                         title="Módulos do cliente"
                         description={`${quantity((client.modules ?? []).filter((item) => item.enabled !== false).length, "módulo liberado")}.`}
+                        actions={
+                          <div className="flex flex-wrap items-center gap-2">
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setProgramModalOpen(true)}
+                            >
+                              <Package size={14} aria-hidden="true" />
+                              {client.product_name ? "Alterar produto" : "Cadastrar produto"}
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setModulesModalOpen(true)}
+                            >
+                              <Layers size={14} aria-hidden="true" />
+                              Gerenciar módulos
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => void applyDefaultModules()}
+                              disabled={applyingDefaultModules}
+                            >
+                              <PackagePlus size={16} aria-hidden="true" />
+                              {applyingDefaultModules ? "Aplicando..." : "Liberar módulos padrão"}
+                            </Button>
+                          </div>
+                        }
                       />
                       <div className="p-5">
-                        {client.modules?.length ? (
-                          <>
-                            <p className="mb-2 flex items-center gap-1.5 text-xs text-muted-foreground medium:hidden">
-                              <MoveHorizontal size={14} aria-hidden="true" />
-                              Deslize horizontalmente para consultar a liberação
-                              de cada módulo.
-                            </p>
-                            <MxTableSurface>
-                              <Table
-                                className="min-w-[520px]"
-                                aria-label="Módulos do cliente"
-                              >
-                                <TableHeader>
-                                  <TableRow>
-                                    <TableHead>Módulo</TableHead>
-                                    <TableHead>Chave</TableHead>
-                                    <TableHead>Liberado</TableHead>
-                                    <TableHead>Premium</TableHead>
-                                  </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                  {client.modules.map((item) => (
-                                    <TableRow key={item.id}>
-                                      <TableCell className="font-semibold text-foreground">
-                                        {item.label || item.module_key}
-                                      </TableCell>
-                                      <TableCell className="text-xs text-muted-foreground">
-                                        {item.module_key}
-                                      </TableCell>
-                                      <TableCell>
-                                        {item.enabled === false ? "Não" : "Sim"}
-                                      </TableCell>
-                                      <TableCell>
-                                        {item.premium ? "Sim" : "Não"}
-                                      </TableCell>
+                        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-surface-alt/70 p-3.5">
+                          <div className="flex items-center gap-2.5">
+                            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                              <Package size={18} />
+                            </div>
+                            <div>
+                              <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                                Produto Contratado
+                              </div>
+                              <div className="text-sm font-semibold text-foreground">
+                                {client.product_name || client.program_template_key || "Nenhum produto cadastrado"}
+                                {client.modality ? ` · Modalidade: ${client.modality}` : ""}
+                              </div>
+                            </div>
+                          </div>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setProgramModalOpen(true)}
+                          >
+                            <Pencil size={14} />
+                            {client.product_name ? "Alterar produto" : "Cadastrar produto"}
+                          </Button>
+                        </div>
+                        {(() => {
+                          const clientMods = client.modules ?? [];
+                          const mergedModules = DEFAULT_CONSULTING_MODULES.map((defaultModule) => {
+                            const existing = clientMods.find((item) => item.module_key === defaultModule.module_key);
+                            return {
+                              id: existing?.id,
+                              module_key: defaultModule.module_key,
+                              label: existing?.label || defaultModule.label,
+                              enabled: existing ? existing.enabled !== false : false,
+                              premium: existing?.premium ?? defaultModule.premium,
+                            };
+                          });
+                          const customModules = clientMods
+                            .filter((item) => !DEFAULT_CONSULTING_MODULES.some((d) => d.module_key === item.module_key))
+                            .map((item) => ({
+                              id: item.id,
+                              module_key: item.module_key,
+                              label: item.label || item.module_key,
+                              enabled: item.enabled !== false,
+                              premium: Boolean(item.premium),
+                            }));
+                          const allRows = [...mergedModules, ...customModules];
+
+                          return (
+                            <>
+                              <p className="mb-2 flex items-center gap-1.5 text-xs text-muted-foreground medium:hidden">
+                                <MoveHorizontal size={14} aria-hidden="true" />
+                                Deslize horizontalmente para consultar a liberação
+                                de cada módulo.
+                              </p>
+                              <MxTableSurface>
+                                <Table
+                                  className="min-w-[620px]"
+                                  aria-label="Módulos do cliente"
+                                >
+                                  <TableHeader>
+                                    <TableRow>
+                                      <TableHead>Módulo</TableHead>
+                                      <TableHead>Chave</TableHead>
+                                      <TableHead>Tipo</TableHead>
+                                      <TableHead>Status</TableHead>
+                                      <TableHead className="text-right">Ação</TableHead>
                                     </TableRow>
-                                  ))}
-                                </TableBody>
-                              </Table>
-                            </MxTableSurface>
-                          </>
-                        ) : (
-                          <MxEmptyState
-                            title="Nenhum módulo configurado"
-                            description="O cliente entra sem acesso até liberar ao menos um módulo."
-                          />
-                        )}
+                                  </TableHeader>
+                                  <TableBody>
+                                    {allRows.map((item) => (
+                                      <TableRow key={item.module_key}>
+                                        <TableCell className="font-semibold text-foreground">
+                                          {item.label}
+                                        </TableCell>
+                                        <TableCell className="font-mono text-xs text-muted-foreground">
+                                          {item.module_key}
+                                        </TableCell>
+                                        <TableCell>
+                                          {item.premium ? (
+                                            <Badge variant="warning">Premium</Badge>
+                                          ) : (
+                                            <Badge variant="outline">Base PMR</Badge>
+                                          )}
+                                        </TableCell>
+                                        <TableCell>
+                                          <Badge variant={item.enabled ? "success" : "outline"}>
+                                            {item.enabled ? "Liberado" : "Bloqueado"}
+                                          </Badge>
+                                        </TableCell>
+                                        <TableCell className="text-right">
+                                          <Button
+                                            type="button"
+                                            variant={item.enabled ? "ghost" : "outline"}
+                                            size="sm"
+                                            disabled={togglingModuleKey === item.module_key || applyingDefaultModules}
+                                            onClick={() => void toggleModule(item.module_key, !item.enabled)}
+                                          >
+                                            {togglingModuleKey === item.module_key
+                                              ? "Salvando..."
+                                              : item.enabled
+                                                ? "Desabilitar"
+                                                : "Habilitar"}
+                                          </Button>
+                                        </TableCell>
+                                      </TableRow>
+                                    ))}
+                                  </TableBody>
+                                </Table>
+                              </MxTableSurface>
+                            </>
+                          );
+                        })()}
                       </div>
                     </MxSectionCard>
                   ) : (
@@ -2920,6 +3085,17 @@ export function AdminClienteDetalhePage() {
               team={team.rows}
               onSubmit={(draft) => void submitProgram(draft)}
               onClose={() => setProgramModalOpen(false)}
+            />
+
+            <ClientModulesModal
+              open={modulesModalOpen}
+              clientId={client.id}
+              clientName={client.name}
+              productName={client.product_name}
+              currentModules={client.modules ?? []}
+              userId={supabaseUser?.id}
+              onClose={() => setModulesModalOpen(false)}
+              onSuccess={() => void refetch()}
             />
 
             <ClientIdentificationModal

@@ -51,7 +51,7 @@ export function DashboardLoja() {
     role, isOwner, storeSlug, selectableStores,
     selectedStoreId, selectedStore,
     requestedStoreForbidden, storeResolutionIssue, resolving,
-  } = useStoreResolution({ activeStores, storesLoading })
+  } = useStoreResolution({ activeStores, storesLoading, allStores: lojas })
 
   const isAdminMx = isAdministradorMx(role)
 
@@ -63,7 +63,7 @@ export function DashboardLoja() {
   }, [selectedStoreId])
 
   const activeTab = useMemo<DashboardTab>(() => {
-    if (location.pathname === '/minha-equipe') return 'equipe'
+    if (location.pathname === '/minha-equipe' || location.pathname.endsWith('/equipe')) return 'equipe'
     if (location.pathname === '/meta-loja') return 'metas'
     if (location.pathname === '/vendas') return 'vendas'
     const tab = new URLSearchParams(location.search).get('tab')
@@ -100,11 +100,11 @@ export function DashboardLoja() {
 
   const handleTabChange = useCallback((tab: DashboardTab) => {
     const params = new URLSearchParams(location.search)
-    // ?id= eh redundante: o slug na URL ja identifica a loja unicamente
     params.delete('id')
+    const basePath = location.pathname.replace(/\/equipe\/?$/, '')
     if (tab === 'performance') params.delete('tab')
     else params.set('tab', tab)
-    navigate({ pathname: location.pathname, search: params.toString() ? `?${params.toString()}` : '' })
+    navigate({ pathname: basePath, search: params.toString() ? `?${params.toString()}` : '' })
   }, [location.pathname, location.search, navigate])
 
   // Dono: período do filtro do cabeçalho (M-1) alimenta as queries do /home.
@@ -148,6 +148,16 @@ export function DashboardLoja() {
     )
   }
   if (!resolving && !storesLoading && !selectedStoreId && (isPerfilInternoMx(role) || role === 'dono')) {
+    if (storeSlug && isPerfilInternoMx(role)) {
+      return (
+        <OwnerStoreUnavailable
+          requestedStoreForbidden={requestedStoreForbidden}
+          storeResolutionIssue={storeResolutionIssue || 'Não encontramos uma unidade correspondente.'}
+          fallbackPath="/clientes"
+          fallbackLabel="Voltar para clientes"
+        />
+      )
+    }
     return <Navigate to={isPerfilInternoMx(role) ? '/clientes' : '/minhas-lojas'} replace />
   }
   if (resolving || (storesLoading && isPerfilInternoMx(role) && !selectedStoreId)) {

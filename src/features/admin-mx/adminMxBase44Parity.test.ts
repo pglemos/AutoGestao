@@ -44,10 +44,14 @@ describe('Admin MX Base44 parity UI contracts', () => {
 
   test('início expõe o cockpit operacional e ações de governança', () => {
     const page = read('AdminDashboardPage.tsx')
+    // Os recortes de contrato deixaram de ser cartões e viraram opções do
+    // controle único de situação — a capacidade segue exposta, agrupada por
+    // eixo em vez de repetida num segundo filtro.
+    const filters = read('painel/carteiraOperacional.ts')
     expect(page).toContain('NetworkDashboardContent')
     expect(page).toContain('Governança da carteira')
-    expect(page).toContain('Clientes Ativos')
-    expect(page).toContain('Com Bloqueios')
+    expect(filters).toContain("label: 'Clientes ativos'")
+    expect(filters).toContain("label: 'Com bloqueios'")
     expect(page).toContain('Ações de governança')
     expect(page).toContain('Novo Cliente MX')
     expect(page).toContain('Validar Cadastros')

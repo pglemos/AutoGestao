@@ -76,3 +76,4 @@ graphify-out/
 base44-reference/
 *.tsbuildinfo
 mx-critique/
+.impeccable/

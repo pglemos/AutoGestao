@@ -245,7 +245,7 @@
 | `metas_metricas_cliente` | 3 |
 | `modelos_formulario_pmr` | 1 |
 | `modelos_relatorio` | 1 |
-| `modulos_cliente_consultoria` | 8 |
+| `modulos_cliente_consultoria` | 10 |
 | `modulos_produto_consultoria` | 2 |
 | `modulos_sistema` | 1 |
 | `notificacoes` | 4 |
@@ -539,7 +539,7 @@
 | `modelos_relatorio:upsert` | 1 |
 | `modulos_cliente_consultoria:insert` | 2 |
 | `modulos_cliente_consultoria:select` | 8 |
-| `modulos_cliente_consultoria:upsert` | 2 |
+| `modulos_cliente_consultoria:upsert` | 4 |
 | `modulos_produto_consultoria:select` | 2 |
 | `modulos_produto_consultoria:upsert` | 1 |
 | `modulos_sistema:select` | 1 |

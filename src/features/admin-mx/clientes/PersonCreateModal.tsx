@@ -73,15 +73,23 @@ export function PersonCreateModal(props: {
       const next = current.papeis.includes(role)
         ? current.papeis.filter(item => item !== role)
         : [...current.papeis, role]
+      let nextVisao = current.visao_padrao
+      if (role === 'GERENTE_COMERCIAL' && next.includes('GERENTE_COMERCIAL') && (!current.visao_padrao || current.visao_padrao === 'VENDEDOR')) {
+        nextVisao = 'GERENCIAL'
+      } else if (role === 'DONO' && next.includes('DONO') && (!current.visao_padrao || current.visao_padrao === 'VENDEDOR')) {
+        nextVisao = 'DONO'
+      } else if (next.length === 1 && next[0] === 'VENDEDOR' && (!current.visao_padrao || current.visao_padrao === 'GERENCIAL' || current.visao_padrao === 'DONO')) {
+        nextVisao = 'VENDEDOR'
+      }
       // Remover Dono desfaz Dono Master e escopo global.
       if (role === 'DONO' && !next.includes('DONO')) {
-        return { ...current, papeis: next, is_dono_master: false, lojas_autorizadas: [] }
+        return { ...current, papeis: next, is_dono_master: false, lojas_autorizadas: [], visao_padrao: nextVisao }
       }
       // Marcar Dono + Master atribui todas as lojas.
       if (role === 'DONO' && next.includes('DONO') && current.is_dono_master) {
-        return { ...current, papeis: next, lojas_autorizadas: props.stores.map(store => store.id) }
+        return { ...current, papeis: next, lojas_autorizadas: props.stores.map(store => store.id), visao_padrao: nextVisao }
       }
-      return { ...current, papeis: next }
+      return { ...current, papeis: next, visao_padrao: nextVisao }
     })
   }
 

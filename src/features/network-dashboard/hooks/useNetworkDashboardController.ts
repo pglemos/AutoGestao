@@ -39,7 +39,22 @@ export const NETWORK_COCKPIT_REALTIME_TABLES = [
   'consultoria_participantes_encontro', 'consultoria_solicitacoes_antecipacao',
 ] as const
 
-export function useNetworkDashboardController(scope: NetworkCockpitScope = 'internal') {
+/**
+ * Busca e situação podem vir de fora quando a página tem um controle único
+ * governando cockpit e carteira. Sem isso, dois controles do mesmo eixo
+ * conviviam na mesma tela e um restringia o outro em silêncio.
+ */
+export type NetworkControlledFilters = {
+  search: string
+  status: NetworkStatusFilter
+  setSearch: (value: string) => void
+  setStatus: (value: NetworkStatusFilter) => void
+}
+
+export function useNetworkDashboardController(
+  scope: NetworkCockpitScope = 'internal',
+  controlled?: NetworkControlledFilters,
+) {
   const repository = scope === 'owner' ? ownerNetworkCockpitRepository : networkCockpitRepository
   const requestSequence = useRef(0)
   const realtimeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -58,8 +73,12 @@ export function useNetworkDashboardController(scope: NetworkCockpitScope = 'inte
   const [lastUpdatedAt, setLastUpdatedAt] = useState<Date | null>(null)
   const [realtimeStatus, setRealtimeStatus] = useState<RealtimeStatus>('connecting')
   const realtimeStatusRef = useRef<RealtimeStatus>('connecting')
-  const [search, setSearch] = useState('')
-  const [status, setStatus] = useState<NetworkStatusFilter>('all')
+  const [internalSearch, setInternalSearch] = useState('')
+  const [internalStatus, setInternalStatus] = useState<NetworkStatusFilter>('all')
+  const search = controlled ? controlled.search : internalSearch
+  const status = controlled ? controlled.status : internalStatus
+  const setSearch = controlled ? controlled.setSearch : setInternalSearch
+  const setStatus = controlled ? controlled.setStatus : setInternalStatus
   const [timeframe, setTimeframe] = useState<NetworkTimeframe>('mensal')
   const [customRange, setCustomRange] = useState(initialRange)
   const [sort, setSort] = useState<NetworkSort>({ key: 'sales', direction: 'desc' })
@@ -195,7 +214,7 @@ export function useNetworkDashboardController(scope: NetworkCockpitScope = 'inte
     setStatus('all')
     setTimeframe('mensal')
     setCustomRange(initialRange)
-  }, [initialRange])
+  }, [initialRange, setSearch, setStatus])
 
   return {
     rows: visibleRows, allRows: rows, metrics, loading, refreshing, error, lastUpdatedAt, realtimeStatus,

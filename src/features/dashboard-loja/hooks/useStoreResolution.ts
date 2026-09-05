@@ -8,6 +8,7 @@ import type { Store } from '@/types/database'
 type UseStoreResolutionInput = {
   activeStores: Store[]
   storesLoading: boolean
+  allStores?: Store[]
 }
 
 /**
@@ -15,7 +16,7 @@ type UseStoreResolutionInput = {
  * Calcula vínculos, lista selecionável e estado de erro de resolução.
  * Extraído do container do DashboardLoja (Story 2.5).
  */
-export function useStoreResolution({ activeStores, storesLoading }: UseStoreResolutionInput) {
+export function useStoreResolution({ activeStores, storesLoading, allStores }: UseStoreResolutionInput) {
   const { role, storeId: authStoreId, vinculos_loja } = useAuth()
   const { storeSlug } = useParams()
   const location = useLocation()
@@ -26,9 +27,9 @@ export function useStoreResolution({ activeStores, storesLoading }: UseStoreReso
   const [storeResolutionIssue, setStoreResolutionIssue] = useState<string | null>(null)
 
   const selectableStores = useMemo(() => {
-    if (isPerfilInternoMx(role)) return activeStores
+    if (isPerfilInternoMx(role)) return allStores && allStores.length > 0 ? allStores : activeStores
     return activeStores.filter(store => vinculos_loja.some(m => m.store_id === store.id))
-  }, [activeStores, role, vinculos_loja])
+  }, [activeStores, allStores, role, vinculos_loja])
 
   const queryStoreId = useMemo(() => new URLSearchParams(location.search).get('id'), [location.search])
 
@@ -44,8 +45,17 @@ export function useStoreResolution({ activeStores, storesLoading }: UseStoreReso
       return
     }
     setResolving(true)
+    const decodedSlug = storeSlug ? decodeURIComponent(storeSlug).trim() : ''
+    const normalizedSlug = decodedSlug ? slugify(decodedSlug) : ''
     const foundByQuery = queryStoreId ? selectableStores.find(store => store.id === queryStoreId) : null
-    const found = foundByQuery || selectableStores.find(store => slugify(store.name) === storeSlug)
+    const found = foundByQuery || selectableStores.find(store =>
+      store.id === queryStoreId ||
+      store.id === storeSlug ||
+      store.id === decodedSlug ||
+      (normalizedSlug && slugify(store.name) === normalizedSlug) ||
+      slugify(store.name) === storeSlug ||
+      store.name.toLowerCase() === decodedSlug.toLowerCase()
+    )
     if (found) {
       setResolvedStoreId(found.id)
       setStoreResolutionIssue(null)

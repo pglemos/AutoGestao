@@ -27,7 +27,7 @@ import {
 } from '@/components/module/MxModuleVisualPrimitives'
 import { NetworkDashboardContent } from '@/features/network-dashboard/NetworkDashboardContent'
 import { slugify } from '@/lib/utils'
-import type { NetworkCockpitStore } from '@/features/network-dashboard/types'
+import type { NetworkCockpitStore, NetworkStatusFilter } from '@/features/network-dashboard/types'
 import { useClientPortfolio } from './clientes/useClientPortfolio'
 import { fetchInscricoesPendentes } from './clientes/inscricaoAutocadastroMutations'
 import type { InscricaoRow } from './clientes/inscricaoAutocadastro'
@@ -35,6 +35,8 @@ import { fetchLojasSemMeta, vendedoresImpactados, type LojaSemMeta } from './loj
 import {
   buildCarteiraOperacional,
   carteiraCounters,
+  carteiraFilterToNetworkStatus,
+  CARTEIRA_FILTER_GROUPS,
   filterCarteiraRows,
   sortCarteiraRows,
   type CarteiraFilter,
@@ -42,20 +44,6 @@ import {
 } from './painel/carteiraOperacional'
 import { CarteiraOperacionalTable, type CarteiraSort } from './painel/CarteiraOperacionalTable'
 import { applyCarteiraParams, readCarteiraParams } from './painel/carteiraUrlState'
-
-const CARTEIRA_FILTER_LABELS: Record<CarteiraFilter, string> = {
-  todos: 'Todas as situações',
-  exigem_decisao: 'Exigem decisão',
-  critical: 'Críticas',
-  alert: 'Em atenção',
-  target: 'Meta atingida',
-  healthy: 'Em dia',
-  sem_vinculo: 'Sem vínculo loja↔cliente',
-  ativos: 'Contrato: Clientes Ativos',
-  em_implantacao: 'Contrato: Em implantação',
-  prontos_para_ativar: 'Contrato: Prontos para ativar',
-  com_bloqueios: 'Contrato: Com Bloqueios',
-}
 
 function errorMessage(cause: unknown, fallback: string): string {
   return getSafeUserFacingDataError(cause, fallback)
@@ -73,13 +61,16 @@ function countPhrase(value: number, singular: string, plural: string): string {
  * Operação da rede e governança da carteira na mesma tabela. Cada linha é uma
  * loja, um cliente MX, ou os dois quando o vínculo existe — com todas as
  * colunas e ações dos dois domínios.
+ *
+ * Recebe o universo completo de lojas, nunca as já filtradas pelo cockpit: o
+ * filtro da página é aplicado aqui uma única vez, e o "N de M" do rodapé fala
+ * da rede inteira em vez de um subconjunto invisível.
  */
-function CarteiraSection({ stores, clients, loading, search, onSearch, filter, onFilter, sort, onSort, actions }: {
+function CarteiraSection({ stores, clients, loading, search, filter, onFilter, sort, onSort, actions }: {
   stores: NetworkCockpitStore[]
   clients: ReturnType<typeof useClientPortfolio>['rows']
   loading: boolean
   search: string
-  onSearch: (value: string) => void
   filter: CarteiraFilter
   onFilter: (value: CarteiraFilter) => void
   sort: CarteiraSort | null
@@ -98,31 +89,8 @@ function CarteiraSection({ stores, clients, loading, search, onSearch, filter, o
     <MxSectionCard id="carteira-operacional" aria-labelledby="carteira-operacional-title">
       <MxSectionHeader
         title={<span id="carteira-operacional-title">Carteira operacional</span>}
-        description="Operação da rede e governança da carteira na mesma linha. Ordene pelos cabeçalhos; a coluna da loja fica fixa na rolagem."
+        description="Operação da rede e governança da carteira na mesma linha. O filtro e a busca no topo da página governam esta tabela. Ordene pelos cabeçalhos; a coluna da loja e a de ações ficam fixas na rolagem."
       />
-
-      <div className="flex flex-col gap-3 border-b border-border-subtle px-4 py-3 sm:flex-row sm:items-end sm:px-5">
-        <div className="relative min-w-0 flex-1">
-          <Search size={16} aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-          <MxInput
-            value={search}
-            onChange={event => onSearch(event.target.value)}
-            placeholder="Buscar loja, cliente ou responsável"
-            aria-label="Buscar loja, cliente ou responsável"
-            className="pl-10"
-          />
-        </div>
-        <MxSelect
-          label="Situação"
-          value={filter}
-          onChange={event => onFilter(event.target.value as CarteiraFilter)}
-          className="sm:w-64"
-        >
-          {(Object.keys(CARTEIRA_FILTER_LABELS) as CarteiraFilter[]).map(value => (
-            <option key={value} value={value}>{CARTEIRA_FILTER_LABELS[value]}</option>
-          ))}
-        </MxSelect>
-      </div>
 
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-border-subtle px-4 py-3 text-sm sm:px-5" aria-live="polite">
         <span className="font-semibold text-foreground">Exibindo {rows.length.toLocaleString('pt-BR')} de {counters.total.toLocaleString('pt-BR')} registros</span>
@@ -214,6 +182,16 @@ export function AdminDashboardPage() {
   const setCarteiraFilter = useCallback((value: CarteiraFilter) => updateCarteiraParams({ filter: value }), [updateCarteiraParams])
   const [carteiraSort, setCarteiraSort] = useState<CarteiraSort | null>(null)
 
+  // Um controle de situação e uma busca para a página inteira. O cockpit
+  // recebe o eixo que entende; os recortes de contrato e vínculo só existem
+  // para a carteira e deixam a fila de lojas aberta.
+  const controlledFilters = useMemo(() => ({
+    search: carteiraSearch,
+    status: carteiraFilterToNetworkStatus(carteiraFilter),
+    setSearch: setCarteiraSearch,
+    setStatus: (value: NetworkStatusFilter) => setCarteiraFilter(value === 'all' ? 'todos' : value),
+  }), [carteiraFilter, carteiraSearch, setCarteiraFilter, setCarteiraSearch])
+
   const systemAlerts = useMemo(() => {
     const alerts: Array<{ id: string; title: string; subtitle: string; tone: 'danger' | 'warning' | 'info'; link: string }> = []
 
@@ -296,13 +274,20 @@ export function AdminDashboardPage() {
         <NetworkDashboardContent
           scope="internal"
           onConfigureGoals={() => navigate('/metas')}
+          controlledFilters={controlledFilters}
+          filterProps={{
+            statusValue: carteiraFilter,
+            onStatusValue: value => setCarteiraFilter(value as CarteiraFilter),
+            statusGroups: CARTEIRA_FILTER_GROUPS,
+            searchLabel: 'Buscar loja, cliente ou responsável',
+            searchPlaceholder: 'Ex.: nome da loja ou do cliente',
+          }}
           carteiraSlot={stores => (
             <CarteiraSection
               stores={stores}
               clients={clients}
               loading={clientsLoading}
               search={carteiraSearch}
-              onSearch={setCarteiraSearch}
               filter={carteiraFilter}
               onFilter={setCarteiraFilter}
               sort={carteiraSort}

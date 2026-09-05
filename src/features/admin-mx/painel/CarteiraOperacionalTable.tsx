@@ -1,4 +1,4 @@
-import { ArrowUpDown, Building2, CheckCircle2, CircleAlert, ExternalLink, ShieldAlert, Unlink, type LucideIcon } from 'lucide-react'
+import { ArrowUpDown, Building2, CheckCircle2, ChevronDown, CircleAlert, ExternalLink, ShieldAlert, Unlink, type LucideIcon } from 'lucide-react'
 import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
 import { MxEmptyState, MxTableSurface } from '@/components/module/MxModuleVisualPrimitives'
@@ -79,32 +79,63 @@ export type CarteiraActions = {
   onOpenConsulting: (row: CarteiraRow) => void
 }
 
+/**
+ * Ação primária exposta; o resto atrás de um disclosure.
+ *
+ * Cinco botões lado a lado empilhavam numa coluna de 151px e inflavam a linha
+ * para 237px — 3,5 registros por tela numa carteira de 47. Em modo Operate a
+ * ação é a tarefa, então uma fica visível e as outras ficam a um clique.
+ */
 function RowActions({ row, actions, compact }: { row: CarteiraRow; actions: CarteiraActions; compact?: boolean }) {
-  const width = compact ? 'w-full justify-center' : ''
+  const primary = row.store
+    ? { label: 'Abrir análise', run: () => actions.onAnalyzeStore(row) }
+    : row.client
+      ? { label: 'Abrir ficha', run: () => actions.onOpenClient(row) }
+      : null
+
+  const secondary = [
+    row.store && row.client ? { label: 'Ficha do cliente', icon: ExternalLink, run: () => actions.onOpenClient(row) } : null,
+    row.store ? { label: 'Plano estratégico', icon: null, run: () => actions.onOpenStrategicPlan(row) } : null,
+    row.store ? { label: 'Plano de ação', icon: null, run: () => actions.onOpenActionPlan(row) } : null,
+    row.store ? { label: 'Consultoria', icon: null, run: () => actions.onOpenConsulting(row) } : null,
+  ].filter((item): item is { label: string; icon: typeof ExternalLink | null; run: () => void } => Boolean(item))
+
+  if (!primary) return null
+
   return (
-    <div className={compact ? 'grid grid-cols-2 gap-2' : 'flex flex-wrap items-center justify-end gap-2'}>
-      {row.store ? (
-        <Button variant="outline" size="sm" className={width} onClick={() => actions.onAnalyzeStore(row)} aria-label={`Analisar ${row.name}`}>
-          Abrir análise
-        </Button>
-      ) : null}
-      {row.client ? (
-        <Button variant="outline" size="sm" className={width} onClick={() => actions.onOpenClient(row)} aria-label={`Abrir ficha do cliente ${row.name}`}>
-          <ExternalLink size={14} aria-hidden="true" />Ficha
-        </Button>
-      ) : null}
-      {row.store ? (
-        <>
-          <Button variant="ghost" size="sm" className={width} onClick={() => actions.onOpenStrategicPlan(row)} aria-label={`Plano estratégico de ${row.name}`}>
-            Estratégico
-          </Button>
-          <Button variant="ghost" size="sm" className={width} onClick={() => actions.onOpenActionPlan(row)} aria-label={`Plano de ação de ${row.name}`}>
-            Plano de ação
-          </Button>
-          <Button variant="ghost" size="sm" className={width} onClick={() => actions.onOpenConsulting(row)} aria-label={`Consultoria de ${row.name}`}>
-            Consultoria
-          </Button>
-        </>
+    <div className={compact ? 'flex items-center gap-2' : 'flex items-center justify-end gap-2'}>
+      <Button
+        variant="outline"
+        size="sm"
+        className={compact ? 'flex-1 justify-center' : 'whitespace-nowrap'}
+        onClick={primary.run}
+        aria-label={`${primary.label} de ${row.name}`}
+      >
+        {primary.label}
+      </Button>
+      {secondary.length ? (
+        <details className="group relative">
+          <summary
+            className="grid h-9 w-9 cursor-pointer list-none place-items-center rounded-lg border border-border text-muted-foreground outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-focus-ring [&::-webkit-details-marker]:hidden"
+            aria-label={`Mais ações de ${row.name}`}
+          >
+            <ChevronDown size={16} aria-hidden="true" className="transition-transform group-open:rotate-180" />
+          </summary>
+          <div className="absolute right-0 top-full z-[var(--mx-z-sticky)] mt-1 flex w-52 flex-col gap-1 rounded-xl border border-border-subtle bg-white p-1 shadow-lg">
+            {secondary.map(item => (
+              <Button
+                key={item.label}
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start"
+                onClick={item.run}
+                aria-label={`${item.label} de ${row.name}`}
+              >
+                {item.icon ? <item.icon size={14} aria-hidden="true" /> : null}{item.label}
+              </Button>
+            ))}
+          </div>
+        </details>
       ) : null}
     </div>
   )
@@ -154,7 +185,7 @@ export function CarteiraOperacionalTable({ rows, sort, onSort, actions }: {
           <table className="w-full min-w-[1180px] border-collapse text-sm">
             <caption className="sr-only">Operação da rede e governança da carteira MX na mesma leitura. A coluna de loja permanece visível durante a rolagem horizontal.</caption>
             <thead>
-              <tr className="border-b border-border-subtle bg-surface-alt text-left text-muted-foreground">
+              <tr className="sticky top-0 z-[var(--mx-z-sticky)] border-b border-border-subtle bg-surface-alt text-left text-muted-foreground">
                 {columns.map(column => {
                   const sortable = SORTABLE.has(column.key)
                   const isSorted = sortable && sort.key === column.key
@@ -179,7 +210,7 @@ export function CarteiraOperacionalTable({ rows, sort, onSort, actions }: {
                     </th>
                   )
                 })}
-                <th scope="col" className="px-4 py-3 text-right font-semibold">Ações</th>
+                <th scope="col" className="sticky right-0 z-[var(--mx-z-sticky)] bg-surface-alt px-4 py-3 text-right font-semibold">Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -203,7 +234,7 @@ export function CarteiraOperacionalTable({ rows, sort, onSort, actions }: {
                   <td className="px-4 py-4 tabular-nums">{pendingValue(row)}</td>
                   <td className="px-4 py-4"><ContractCell row={row} /></td>
                   <td className="px-4 py-4 text-muted-foreground">{row.ownerName || 'Não atribuído'}</td>
-                  <td className="px-4 py-4 text-right"><RowActions row={row} actions={actions} /></td>
+                  <td className="sticky right-0 z-[var(--mx-z-sticky)] bg-white px-4 py-4 text-right"><RowActions row={row} actions={actions} /></td>
                 </tr>
               ))}
             </tbody>

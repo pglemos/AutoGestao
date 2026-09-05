@@ -4,6 +4,7 @@ import { uniqueMasterChangeGuard, validatePersonAccessDraft, type PersonAccessDr
 import {
   collectClientStoreIds,
   isVinculoPersonId,
+  vinculoPersonUserId,
   mergeAccessAndVinculos,
   type UsuarioRow,
   type VinculoLojaRow,
@@ -193,6 +194,182 @@ export async function grantStoreToClientDonoMasters(
   return { error: null }
 }
 
+const ROLE_TO_MX_CODE: Record<string, string> = {
+  dono: 'master',
+  gerente: 'sales_manager',
+  vendedor: 'seller',
+}
+
+/**
+ * Mapeia os perfis selecionados na consultoria para o papel operacional primário
+ * da conta em `usuarios` e `vinculos_loja`.
+ */
+export function mapPersonProfilesToOperationalRole(papeis: readonly string[]): 'dono' | 'gerente' | 'vendedor' {
+  if (papeis.includes('DONO')) return 'dono'
+  if (papeis.includes('GERENTE_COMERCIAL') || papeis.includes('DIRETOR')) return 'gerente'
+  if (papeis.includes('VENDEDOR')) return 'vendedor'
+  if (papeis.length > 0) return 'gerente'
+  return 'vendedor'
+}
+
+/**
+ * Sincroniza em cascata os dados operacionais da pessoa com as tabelas `usuarios`,
+ * `vinculos_loja` e `vendedores_loja`, garantindo que mudanças de papel (ex: Vendedor -> Gerente)
+ * reflitam imediatamente no cadastro, nas permissões e no perfil do usuário.
+ */
+export async function syncPersonOperationalState(input: {
+  clientId: string
+  email: string
+  draft: PersonAccessDraft
+  userIdHint?: string | null
+}): Promise<{ error: string | null }> {
+  const email = input.email.trim().toLowerCase()
+  if (!email) return { error: null }
+
+  let userId = input.userIdHint || null
+  if (!userId) {
+    const { data: userRow } = await supabase
+      .from('usuarios')
+      .select('id')
+      .eq('email', email)
+      .maybeSingle()
+    userId = userRow?.id ?? null
+  }
+  if (!userId) return { error: null }
+
+  const operationalRole = mapPersonProfilesToOperationalRole(input.draft.papeis)
+  const roleCode = ROLE_TO_MX_CODE[operationalRole] ?? 'seller'
+  const { data: roleRow } = await supabase
+    .from('roles')
+    .select('id')
+    .eq('code', roleCode)
+    .maybeSingle()
+  const roleId = roleRow?.id ?? null
+
+  const isActive = input.draft.status === 'ativo'
+  const today = new Date().toISOString().slice(0, 10)
+
+  // 1. Atualiza `usuarios`
+  const defaultView = input.draft.visao_padrao || (operationalRole === 'gerente' ? 'GERENCIAL' : operationalRole === 'dono' ? 'DONO' : 'VENDEDOR')
+  const userUpdates: Record<string, unknown> = {
+    name: input.draft.nome.trim(),
+    email,
+    phone: input.draft.telefone.trim() || null,
+    declared_function: input.draft.funcao_declarada.trim() || null,
+    role: operationalRole,
+    role_id: roleId,
+    active: isActive,
+    default_view: defaultView,
+    updated_at: new Date().toISOString(),
+  }
+  if (!isActive) {
+    userUpdates.deactivated_at = new Date().toISOString()
+    userUpdates.deactivation_reason = 'Desativado na gestão de acessos do cliente.'
+  } else {
+    userUpdates.deactivated_at = null
+    userUpdates.deactivation_reason = null
+  }
+
+  const { error: userError } = await supabase
+    .from('usuarios')
+    .update(userUpdates)
+    .eq('id', userId)
+
+  if (userError) {
+    console.error('syncPersonOperationalState usuarios error:', userError)
+  }
+
+  // 2. Atualiza `vinculos_loja`
+  const authorizedStores = new Set(input.draft.lojas_autorizadas)
+
+  if (!isActive) {
+    if (authorizedStores.size > 0) {
+      await supabase
+        .from('vinculos_loja')
+        .update({ is_active: false, ended_at: today })
+        .eq('user_id', userId)
+        .in('store_id', Array.from(authorizedStores))
+    } else {
+      await supabase
+        .from('vinculos_loja')
+        .update({ is_active: false, ended_at: today })
+        .eq('user_id', userId)
+        .eq('is_active', true)
+    }
+  } else {
+    for (const storeId of input.draft.lojas_autorizadas) {
+      const { data: existingVinculo } = await supabase
+        .from('vinculos_loja')
+        .select('id, role, is_active')
+        .eq('user_id', userId)
+        .eq('store_id', storeId)
+        .maybeSingle()
+
+      if (existingVinculo) {
+        await supabase
+          .from('vinculos_loja')
+          .update({
+            role: operationalRole,
+            is_active: true,
+            ended_at: null,
+          })
+          .eq('id', existingVinculo.id)
+      } else {
+        await supabase
+          .from('vinculos_loja')
+          .insert({
+            user_id: userId,
+            store_id: storeId,
+            role: operationalRole,
+            is_active: true,
+            ended_at: null,
+          })
+      }
+    }
+  }
+
+  // 3. Atualiza `vendedores_loja`
+  const hasVendedorRole = input.draft.papeis.includes('VENDEDOR')
+  if (!hasVendedorRole || !isActive) {
+    // Não é mais vendedor (ex: promovido a gerente) ou inativo -> encerrar em vendedores_loja
+    await supabase
+      .from('vendedores_loja')
+      .update({ is_active: false, ended_at: today, updated_at: new Date().toISOString() })
+      .eq('seller_user_id', userId)
+      .eq('is_active', true)
+  } else if (hasVendedorRole && isActive) {
+    for (const storeId of input.draft.lojas_autorizadas) {
+      const { data: existingSeller } = await supabase
+        .from('vendedores_loja')
+        .select('id, is_active')
+        .eq('seller_user_id', userId)
+        .eq('store_id', storeId)
+        .maybeSingle()
+
+      if (existingSeller) {
+        if (!existingSeller.is_active) {
+          await supabase
+            .from('vendedores_loja')
+            .update({ is_active: true, ended_at: null, updated_at: new Date().toISOString() })
+            .eq('id', existingSeller.id)
+        }
+      } else {
+        await supabase
+          .from('vendedores_loja')
+          .insert({
+            seller_user_id: userId,
+            store_id: storeId,
+            started_at: today,
+            is_active: true,
+            ended_at: null,
+          })
+      }
+    }
+  }
+
+  return { error: null }
+}
+
 export async function createClientPerson(
   clientId: string,
   draft: PersonAccessDraft,
@@ -243,12 +420,18 @@ export async function createClientPerson(
     created_by: createdBy,
   })
   if (!error) {
+    const { data: session } = await supabase.auth.getUser()
     await supabase.from('logs_auditoria').insert({
       action: 'criar_pessoa_cliente',
       entity: 'acessos_cliente_consultoria',
       entity_id: clientId,
       user_id: createdBy,
       details_json: { email, is_dono_master: draft.is_dono_master, papeis: draft.papeis },
+    })
+    await syncPersonOperationalState({
+      clientId,
+      email: draft.email,
+      draft,
     })
   }
   return { error: tableError(error, 'Não foi possível criar a pessoa.') }
@@ -324,6 +507,13 @@ export async function updateClientPerson(
         is_dono_master: draft.is_dono_master,
         status: draft.status,
       },
+    })
+    const userIdHint = isVinculoPersonId(personId) ? vinculoPersonUserId(personId) : null
+    await syncPersonOperationalState({
+      clientId,
+      email: draft.email,
+      draft,
+      userIdHint,
     })
   }
   return { error: tableError(error, 'Não foi possível atualizar a pessoa.') }

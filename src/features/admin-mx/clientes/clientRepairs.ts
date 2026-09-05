@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase'
+import { DEFAULT_CONSULTING_MODULES } from '@/hooks/useConsultingModules'
 
 export type RepairKey = 'consultor-responsavel' | 'modulos' | 'loja-principal'
 
@@ -98,7 +99,21 @@ export async function runClientRepair(input: {
       .from('modulos_produto_consultoria')
       .select('module_key, label, incluido')
       .eq('program_key', plan.programKey)
-    const included = (defaults ?? []).filter(item => item.incluido !== false)
+    let included = (defaults ?? [])
+      .filter(item => item.incluido !== false)
+      .map(item => ({ module_key: item.module_key, label: item.label, premium: false }))
+
+    if (!included.length) {
+      const isPlus = plan.programKey === 'pmr_plus' || plan.programKey?.toLowerCase().includes('plus')
+      included = DEFAULT_CONSULTING_MODULES
+        .filter(item => item.enabled || (isPlus && item.module_key === 'dre'))
+        .map(item => ({
+          module_key: item.module_key,
+          label: item.label,
+          premium: item.premium,
+        }))
+    }
+
     if (!included.length) return { repaired: false, message: 'O produto não tem módulos padrão configurados.' }
 
     const { error } = await supabase.from('modulos_cliente_consultoria').upsert(
@@ -106,6 +121,7 @@ export async function runClientRepair(input: {
         client_id: input.clientId,
         module_key: item.module_key,
         label: item.label,
+        premium: item.premium,
         enabled: true,
         configured_by: input.userId,
         configured_at: new Date().toISOString(),
@@ -114,7 +130,7 @@ export async function runClientRepair(input: {
     )
     return error
       ? { repaired: false, message: error.message }
-      : { repaired: true, message: `${included.length} módulo(s) do produto aplicados ao cliente.` }
+      : { repaired: true, message: `${included.length} módulo(s) padrão aplicados ao cliente.` }
   }
 
   const [{ data: stores }, { data: clients }] = await Promise.all([

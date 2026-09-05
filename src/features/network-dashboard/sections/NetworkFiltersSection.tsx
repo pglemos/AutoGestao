@@ -4,18 +4,49 @@ import { Button } from '@/components/atoms/Button'
 import { MxField, MxToolbar } from '@/components/module/MxModuleVisualPrimitives'
 import type { NetworkDateRange, NetworkStatusFilter, NetworkTimeframe } from '../types'
 
+/**
+ * Grupos do seletor de situação. Quando a página tem um controle único
+ * governando cockpit e carteira, ela passa o vocabulário completo agrupado
+ * por eixo — situação operacional e contrato não são a mesma dimensão.
+ */
+export type StatusGroup = { label: string; options: Array<{ value: string; label: string }> }
+
+const DEFAULT_STATUS_GROUPS: StatusGroup[] = [{
+  label: 'Situação',
+  options: [
+    { value: 'all', label: 'Todas' },
+    { value: 'critical', label: 'Crítico' },
+    { value: 'alert', label: 'Atenção' },
+    { value: 'target', label: 'Meta atingida' },
+    { value: 'healthy', label: 'Em dia' },
+  ],
+}]
+
 export function NetworkFiltersSection(props: {
   search: string
   onSearch: (value: string) => void
   status: NetworkStatusFilter
   onStatus: (value: NetworkStatusFilter) => void
+  /** Valor exibido no seletor quando a página governa o filtro. */
+  statusValue?: string
+  onStatusValue?: (value: string) => void
+  statusGroups?: StatusGroup[]
+  searchLabel?: string
+  searchPlaceholder?: string
   timeframe: NetworkTimeframe
   onTimeframe: (value: NetworkTimeframe) => void
   customRange: NetworkDateRange
   onCustomRange: (value: NetworkDateRange) => void
   onReset: () => void
 }) {
-  const hasActiveFilters = Boolean(props.search.trim()) || props.status !== 'all' || props.timeframe !== 'mensal'
+  const groups = props.statusGroups ?? DEFAULT_STATUS_GROUPS
+  const statusValue = props.statusValue ?? props.status
+  const defaultStatusValue = groups[0]?.options[0]?.value ?? 'all'
+  const setStatusValue = (value: string) => {
+    if (props.onStatusValue) props.onStatusValue(value)
+    else props.onStatus(value as NetworkStatusFilter)
+  }
+  const hasActiveFilters = Boolean(props.search.trim()) || statusValue !== defaultStatusValue || props.timeframe !== 'mensal'
 
   return (
     <MxToolbar aria-label="Filtros do cockpit operacional">
@@ -23,12 +54,18 @@ export function NetworkFiltersSection(props: {
         <p className="text-sm font-semibold text-foreground">Refinar a fila</p>
         <p className="text-xs leading-5 text-muted-foreground">Atenção inclui configuração pendente, ausência de leitura ou risco operacional.</p>
       </div>
-      <MxField label="Buscar loja" className="min-w-[220px] flex-1">
-        <div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} aria-hidden="true" /><Input aria-label="Buscar loja por nome" value={props.search} onChange={event => props.onSearch(event.target.value)} className="h-mx-10 min-h-[var(--mx-touch-target-min)] pl-9 sm:min-h-[var(--mx-input-height)]" placeholder="Ex.: nome da loja" /></div>
+      <MxField label={props.searchLabel ?? 'Buscar loja'} className="min-w-[220px] flex-1">
+        <div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} aria-hidden="true" /><Input aria-label={props.searchLabel ?? 'Buscar loja por nome'} value={props.search} onChange={event => props.onSearch(event.target.value)} className="h-mx-10 min-h-[var(--mx-touch-target-min)] pl-9 sm:min-h-[var(--mx-input-height)]" placeholder={props.searchPlaceholder ?? 'Ex.: nome da loja'} /></div>
       </MxField>
-      <MxField label="Situação" className="min-w-[168px]">
-        <select aria-label="Filtrar lojas por situação" className="h-mx-10 min-h-[var(--mx-touch-target-min)] rounded-xl border border-border bg-white px-3 text-sm sm:min-h-[var(--mx-input-height)]" value={props.status} onChange={event => props.onStatus(event.target.value as NetworkStatusFilter)}>
-          <option value="all">Todas</option><option value="critical">Crítico</option><option value="alert">Atenção</option><option value="target">Meta atingida</option><option value="healthy">Em dia</option>
+      <MxField label="Situação" className="min-w-[200px]">
+        <select aria-label="Filtrar por situação" className="h-mx-10 min-h-[var(--mx-touch-target-min)] rounded-xl border border-border bg-white px-3 text-sm sm:min-h-[var(--mx-input-height)]" value={statusValue} onChange={event => setStatusValue(event.target.value)}>
+          {groups.length === 1
+            ? groups[0].options.map(option => <option key={option.value} value={option.value}>{option.label}</option>)
+            : groups.map(group => (
+              <optgroup key={group.label} label={group.label}>
+                {group.options.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
+              </optgroup>
+            ))}
         </select>
       </MxField>
       <MxField label="Período" className="min-w-[168px]">

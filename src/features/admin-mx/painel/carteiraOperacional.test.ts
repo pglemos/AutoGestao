@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'bun:test'
-import { buildCarteiraOperacional, carteiraCounters, filterCarteiraRows } from './carteiraOperacional'
+import { buildCarteiraOperacional, carteiraCounters, carteiraFilterToNetworkStatus, CARTEIRA_FILTER_GROUPS, filterCarteiraRows } from './carteiraOperacional'
+import { CARTEIRA_FILTERS } from './carteiraUrlState'
 import type { PortfolioClient } from '@/features/admin-mx/clientes/clientPortfolio'
 import type { NetworkCockpitStore } from '@/features/network-dashboard/types'
 
@@ -88,5 +89,27 @@ describe('carteira operacional unificada', () => {
     expect(filterCarteiraRows(rows, 'todos', 'norte').map(r => r.name)).toEqual(['Loja Norte'])
     expect(filterCarteiraRows(rows, 'sem_vinculo', '')).toHaveLength(2)
     expect(filterCarteiraRows(rows, 'todos', 'inexistente')).toHaveLength(0)
+  })
+})
+
+describe('controle único de situação', () => {
+  test('eixo operacional atravessa para o cockpit', () => {
+    expect(carteiraFilterToNetworkStatus('critical')).toBe('critical')
+    expect(carteiraFilterToNetworkStatus('healthy')).toBe('healthy')
+  })
+
+  test('recortes de contrato e de vínculo deixam a fila aberta', () => {
+    // A fila de lojas não conhece contrato: estreitá-la por "com bloqueios"
+    // esconderia lojas sem explicação visível.
+    expect(carteiraFilterToNetworkStatus('com_bloqueios')).toBe('all')
+    expect(carteiraFilterToNetworkStatus('sem_vinculo')).toBe('all')
+    expect(carteiraFilterToNetworkStatus('exigem_decisao')).toBe('all')
+    expect(carteiraFilterToNetworkStatus('todos')).toBe('all')
+  })
+
+  test('todo filtro do vocabulário aparece exatamente uma vez nos grupos', () => {
+    const fromGroups = CARTEIRA_FILTER_GROUPS.flatMap(group => group.options.map(option => option.value))
+    expect(new Set(fromGroups).size).toBe(fromGroups.length)
+    expect([...fromGroups].sort()).toEqual([...CARTEIRA_FILTERS].sort())
   })
 })

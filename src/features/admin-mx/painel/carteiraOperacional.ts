@@ -184,3 +184,51 @@ export function sortCarteiraRows(rows: CarteiraRow[], key: CarteiraSortKey, dire
     return (left - right) * factor
   })
 }
+
+/**
+ * Vocabulário do controle único de situação da página, agrupado por eixo.
+ *
+ * Situação operacional e status de contrato são eixos diferentes; num único
+ * menu plano de 11 opções o usuário não sabe que está trocando de dimensão.
+ */
+export const CARTEIRA_FILTER_GROUPS: Array<{ label: string; options: Array<{ value: CarteiraFilter; label: string }> }> = [
+  {
+    label: 'Todas',
+    options: [
+      { value: 'todos', label: 'Todas as situações' },
+      { value: 'exigem_decisao', label: 'Exigem decisão' },
+    ],
+  },
+  {
+    label: 'Situação operacional',
+    options: [
+      { value: 'critical', label: 'Críticas' },
+      { value: 'alert', label: 'Em atenção' },
+      { value: 'target', label: 'Meta atingida' },
+      { value: 'healthy', label: 'Em dia' },
+    ],
+  },
+  {
+    label: 'Contrato',
+    options: [
+      { value: 'ativos', label: 'Clientes ativos' },
+      { value: 'em_implantacao', label: 'Em implantação' },
+      { value: 'prontos_para_ativar', label: 'Prontos para ativar' },
+      { value: 'com_bloqueios', label: 'Com bloqueios' },
+    ],
+  },
+  {
+    label: 'Vínculo',
+    options: [{ value: 'sem_vinculo', label: 'Sem vínculo loja↔cliente' }],
+  },
+]
+
+/**
+ * Traduz o filtro da página para o eixo que o cockpit entende. Recortes de
+ * contrato e de vínculo não existem para a fila de lojas, então ela fica
+ * aberta e só a carteira estreita.
+ */
+export function carteiraFilterToNetworkStatus(filter: CarteiraFilter): NetworkStatusFilter {
+  if (filter === 'critical' || filter === 'alert' || filter === 'target' || filter === 'healthy') return filter
+  return 'all'
+}

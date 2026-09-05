@@ -25,6 +25,7 @@ export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch
   const [loading, setLoading] = useState(false)
   const [repairing, setRepairing] = useState<RepairKey | null>(null)
   const [storeTaken, setStoreTaken] = useState(false)
+  const [programKey, setProgramKey] = useState<string | null>(null)
 
   useEffect(() => {
     if (!open || !clientId) return
@@ -48,6 +49,8 @@ export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch
         toast.error('Cliente não encontrado')
         return
       }
+
+      setProgramKey((client as { program_template_key?: string | null }).program_template_key ?? null)
 
       const busyStores = new Set(
         (clientsRes.data ?? [])
@@ -124,7 +127,7 @@ export function PendenciasModal({ open, clientId, clientName, onClose, onRefetch
         key,
         clientId,
         clientName,
-        programKey: checks.find(c => c.key === 'produto')?.evaluationStatus === 'VALID' ? (checks.find(c => c.key === 'produto')?.detail.includes('jornada') ? 'unknown' : null) : null,
+        programKey,
         userId: supabaseUser.id,
       })
       if (result.repaired) {

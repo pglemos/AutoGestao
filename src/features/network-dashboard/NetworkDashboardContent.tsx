@@ -9,7 +9,7 @@ import { NetworkReportActions } from './components/NetworkReportActions'
 import { NetworkMetricsSection } from './sections/NetworkMetricsSection'
 import { NetworkFiltersSection } from './sections/NetworkFiltersSection'
 import { NetworkPrioritiesSection } from './sections/NetworkPrioritiesSection'
-import { useNetworkDashboardController } from './hooks/useNetworkDashboardController'
+import { useNetworkDashboardController, type NetworkControlledFilters } from './hooks/useNetworkDashboardController'
 import { canTriggerNetworkReport } from './lib/networkDashboardPolicy'
 import type { NetworkCockpitScope } from './data/networkCockpitRepository'
 import type { NetworkCockpitStore, NetworkTimeframe, PersonEvolution } from './types'
@@ -58,8 +58,8 @@ function NetworkCockpitSkeleton() {
   )
 }
 
-export function NetworkDashboardContent({ scope = 'internal', carteiraSlot, onConfigureGoals }: { scope?: NetworkCockpitScope; carteiraSlot?: (rows: NetworkCockpitStore[]) => ReactNode; onConfigureGoals?: () => void }) {
-  const controller = useNetworkDashboardController(scope)
+export function NetworkDashboardContent({ scope = 'internal', carteiraSlot, onConfigureGoals, controlledFilters, filterProps }: { scope?: NetworkCockpitScope; carteiraSlot?: (rows: NetworkCockpitStore[]) => ReactNode; onConfigureGoals?: () => void; controlledFilters?: NetworkControlledFilters; filterProps?: Partial<Parameters<typeof NetworkFiltersSection>[0]> }) {
+  const controller = useNetworkDashboardController(scope, controlledFilters)
   const navigate = useNavigate()
   const { role, profile, setActiveStoreId } = useAuth()
   const [selectedStore, setSelectedStore] = useState<NetworkCockpitStore | null>(null)
@@ -110,9 +110,9 @@ export function NetworkDashboardContent({ scope = 'internal', carteiraSlot, onCo
       {controller.error && controller.allRows.length > 0 ? <MxStatusBanner tone="warning">Leitura anterior mantida. {controller.error}</MxStatusBanner> : null}
       {controller.loading && !controller.allRows.length ? <NetworkCockpitSkeleton /> : controller.error && !controller.allRows.length ? <MxErrorState description={controller.error} retry={controller.refresh} /> : <>
         <NetworkMetricsSection metrics={controller.metrics} periodLabel={periodLabel} onShowPriorities={showPriorities} onConfigureGoals={onConfigureGoals} />
-        <NetworkFiltersSection search={controller.search} onSearch={controller.setSearch} status={controller.status} onStatus={controller.setStatus} timeframe={controller.timeframe} onTimeframe={controller.setTimeframe} customRange={controller.customRange} onCustomRange={controller.setCustomRange} onReset={controller.resetFilters} />
+        <NetworkFiltersSection search={controller.search} onSearch={controller.setSearch} status={controller.status} onStatus={controller.setStatus} timeframe={controller.timeframe} onTimeframe={controller.setTimeframe} customRange={controller.customRange} onCustomRange={controller.setCustomRange} onReset={controller.resetFilters} {...filterProps} />
         <NetworkPrioritiesSection rows={controller.rows} sort={controller.sort} onSort={controller.setSort} onOpen={setSelectedStore} />
-        {carteiraSlot ? carteiraSlot(controller.rows) : null}
+        {carteiraSlot ? carteiraSlot(controller.allRows) : null}
         {canTrigger ? <NetworkReportActions loading={controller.reportLoading} onTrigger={controller.triggerReport} /> : null}
       </>}
       <NetworkDrilldownDrawer store={selectedStore} open={Boolean(selectedStore)} onOpenChange={open => { if (!open) setSelectedStore(null) }} onNavigate={navigateStore} onOpenPerson={openPerson} />

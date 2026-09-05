@@ -22,7 +22,7 @@ import { useStores, useStoresStats, type StoreUpdateFields } from '@/hooks/useSt
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/lib/toast'
 import { describeAdminRpcError } from './equipe/adminRpcErrors'
-import { getPreRegistrationLink } from '@/lib/utils'
+import { getPreRegistrationLink, slugify } from '@/lib/utils'
 import type { Store } from '@/types/database'
 import { CreateStoreModal, type NewStoreDraft } from '@/components/organisms/CreateStoreModal'
 import { StoreEditModal } from '@/features/admin/components/StoreEditModal'
@@ -135,23 +135,34 @@ export function AdminClientesPage() {
 
   const handleAction = (client: PortfolioClient, action: ClientAction) => {
     const base = `/clientes/${client.slug || client.id}`
-    const storeSlug = client.slug || client.id
+    const storeMatch = (lojas || []).find(s =>
+      (client.primary_store_id && s.id === client.primary_store_id) ||
+      s.id === client.id ||
+      (s.name && client.name && slugify(s.name) === slugify(client.name))
+    )
+    const targetStoreSlug = storeMatch
+      ? slugify(storeMatch.name)
+      : (client.name ? slugify(client.name) : (client.slug ? slugify(client.slug) : client.id))
+    const storeQuery = storeMatch?.id
+      ? `?id=${storeMatch.id}`
+      : (client.primary_store_id ? `?id=${client.primary_store_id}` : '')
+
     switch (action) {
       case 'abrir_visao360':
         navigate(base)
         break
       case 'acessar_workspace':
-        navigate(`/lojas/${storeSlug}`)
+        navigate(`/lojas/${targetStoreSlug}${storeQuery}`)
         break
       case 'gerenciar_equipe':
-        navigate(`/lojas/${storeSlug}/equipe`)
+        navigate(`/lojas/${targetStoreSlug}/equipe${storeQuery}`)
         break
       case 'copiar_link_cadastro':
-        handleCopyLink(client.name)
+        handleCopyLink(storeMatch?.name || client.name)
         break
       case 'editar_loja': {
-        const storeMatch = (lojas || []).find(s => s.id === client.id) || ({
-          id: client.id,
+        const storeToEdit = storeMatch || ({
+          id: client.primary_store_id || client.id,
           name: client.name,
           manager_email: null,
           legal_name: client.name,
@@ -161,15 +172,15 @@ export function AdminClientesPage() {
           partners: [],
           active: isActive(client),
         } as unknown as Store)
-        setEditingStore(storeMatch)
+        setEditingStore(storeToEdit)
         break
       }
       case 'arquivar_loja': {
-        const storeMatch = (lojas || []).find(s => s.id === client.id) || ({
-          id: client.id,
+        const storeToArchive = storeMatch || ({
+          id: client.primary_store_id || client.id,
           name: client.name,
         } as unknown as Store)
-        setHardDeleteStore(storeMatch)
+        setHardDeleteStore(storeToArchive)
         break
       }
       case 'continuar_onboarding':

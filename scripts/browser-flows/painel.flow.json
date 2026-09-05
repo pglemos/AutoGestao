@@ -7,7 +7,8 @@
   "assertText": [
     "Carteira operacional",
     "Fila de prioridades",
-    "Governança da carteira"
+    "Governança da carteira",
+    "Exibindo"
   ],
   "screenshots": [
     "desktop",
@@ -50,8 +51,10 @@
     }
   ],
   "measure": [
-    "[data-mx-page-canvas]",
-    "[data-mx-module-header]",
-    "#carteira-operacional"
+    "#carteira-operacional table",
+    "#carteira-operacional thead tr",
+    "#carteira-operacional tbody tr:first-child",
+    "#carteira-operacional tbody tr:first-child td:last-child",
+    "[data-mx-page-canvas]"
   ]
 }

@@ -61,10 +61,17 @@ export function PerformanceLoadingSkeleton() {
 type OwnerStoreUnavailableProps = {
   requestedStoreForbidden: boolean
   storeResolutionIssue: string | null
+  fallbackPath?: string
+  fallbackLabel?: string
 }
 
-/** EmptyState do Dono quando loja é fora do vínculo ou não localizada. */
-export function OwnerStoreUnavailable({ requestedStoreForbidden, storeResolutionIssue }: OwnerStoreUnavailableProps) {
+/** EmptyState quando loja é fora do vínculo ou não localizada. */
+export function OwnerStoreUnavailable({
+  requestedStoreForbidden,
+  storeResolutionIssue,
+  fallbackPath = '/minhas-lojas',
+  fallbackLabel = 'Voltar para minhas lojas',
+}: OwnerStoreUnavailableProps) {
   const navigate = useNavigate()
   return (
     <div className="w-full h-full bg-surface-alt">
@@ -76,13 +83,13 @@ export function OwnerStoreUnavailable({ requestedStoreForbidden, storeResolution
           title={requestedStoreForbidden ? 'Loja fora do seu vínculo' : 'Unidade não localizada'}
           description={
             requestedStoreForbidden
-              ? 'Seu perfil de Dono não possui vínculo ativo com esta unidade.'
+              ? 'Seu perfil não possui vínculo ativo com esta unidade.'
               : storeResolutionIssue || 'Não encontramos uma unidade ativa para abrir este painel.'
           }
-          nextStep="Volte para a visão executiva da rede e escolha uma loja ativa. Se a loja foi renomeada ou criada recentemente, solicite ao Admin MX revisar seu vínculo."
+          nextStep="Volte para a visão principal e escolha uma loja ativa. Se a loja foi renomeada ou criada recentemente, solicite ao Admin MX revisar o cadastro."
           action={
-            <Button onClick={() => navigate('/minhas-lojas', { replace: true })} className="rounded-mx-full bg-gray-900 px-mx-xl">
-              Voltar para minhas lojas
+            <Button onClick={() => navigate(fallbackPath, { replace: true })} className="rounded-mx-full bg-gray-900 px-mx-xl">
+              {fallbackLabel}
             </Button>
           }
         />
