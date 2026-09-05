@@ -2938,10 +2938,10 @@ export function AdminClienteDetalhePage() {
                         <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-surface-alt/70 p-3.5">
                           <div className="flex items-center gap-2.5">
                             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                              <Package size={18} />
+                              <Package size={16} aria-hidden="true" />
                             </div>
                             <div>
-                              <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                              <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                                 Produto Contratado
                               </div>
                               <div className="text-sm font-semibold text-foreground">
