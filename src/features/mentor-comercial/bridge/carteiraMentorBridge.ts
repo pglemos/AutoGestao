@@ -485,11 +485,11 @@ export function variaveisDoCliente(
 export function scriptOficialParaCliente(
   cliente: (ClienteCarteira & Record<string, unknown>) | null | undefined,
   tentativa = 1,
+  agora = new Date(),
 ): ScriptOficial | null {
   const situacao = cliente?.situacao_atual || cliente?.momento || null
 
   // Casos prioritários de 30 dias (indicação pós-venda) e 1 ano (recompra com bônus)
-  const agora = new Date()
   const dataVenda = (cliente as Record<string, unknown>)?.data_venda as string | undefined
   if (dataVenda) {
     const diffDias = diasEntre(dataVenda, agora)

@@ -56,14 +56,14 @@ describe('Mentor Comercial — Regras de Prioridade e Scripts dos Áudios', () =
       expect(isPosVenda30Dias(clienteComprador30d, refHoje)).toBe(true)
       expect(isRecompra1Ano(clienteComprador30d, refHoje)).toBe(false)
 
-      const { objetivo, proximoPasso } = calcularObjetivoEProximoPasso(clienteComprador30d)
+      const { objetivo, proximoPasso } = calcularObjetivoEProximoPasso(clienteComprador30d, refHoje)
       expect(objetivo).toBe('Pedir indicação')
       expect(proximoPasso).toBe('Pedir indicação')
 
-      const prioridade = calcularPrioridade(clienteComprador30d)
+      const prioridade = calcularPrioridade(clienteComprador30d, refHoje)
       expect(prioridade).toBe('Alta')
 
-      const explicacao = explicacaoCliente(clienteComprador30d)
+      const explicacao = explicacaoCliente(clienteComprador30d, refHoje)
       expect(explicacao).toContain('30 dias')
       expect(explicacao).toContain('indicação')
     })
@@ -78,7 +78,7 @@ describe('Mentor Comercial — Regras de Prioridade e Scripts dos Áudios', () =
         status_comercial: 'Vendido',
       }
 
-      const oficial = scriptOficialParaCliente(cliente)
+      const oficial = scriptOficialParaCliente(cliente, 1, refHoje)
       expect(oficial?.scriptReady).toBe(true)
       expect(oficial?.texto).toContain('Olá Marcos! Tudo bem?')
       expect(oficial?.texto).toContain('Corolla XEi')
@@ -103,14 +103,14 @@ describe('Mentor Comercial — Regras de Prioridade e Scripts dos Áudios', () =
       expect(isRecompra1Ano(clienteComprador1Ano, refHoje)).toBe(true)
       expect(isPosVenda30Dias(clienteComprador1Ano, refHoje)).toBe(false)
 
-      const { objetivo, proximoPasso } = calcularObjetivoEProximoPasso(clienteComprador1Ano)
+      const { objetivo, proximoPasso } = calcularObjetivoEProximoPasso(clienteComprador1Ano, refHoje)
       expect(objetivo).toBe('Criar recompra/troca futura')
       expect(proximoPasso).toBe('Campanha de recompra (1 ano da compra)')
 
-      const prioridade = calcularPrioridade(clienteComprador1Ano)
+      const prioridade = calcularPrioridade(clienteComprador1Ano, refHoje)
       expect(prioridade).toBe('Alta')
 
-      const explicacao = explicacaoCliente(clienteComprador1Ano)
+      const explicacao = explicacaoCliente(clienteComprador1Ano, refHoje)
       expect(explicacao).toContain('1 ano')
       expect(explicacao).toContain('bônus de recompra/troca')
     })
@@ -125,7 +125,7 @@ describe('Mentor Comercial — Regras de Prioridade e Scripts dos Áudios', () =
         status_comercial: 'Vendido',
       }
 
-      const oficial = scriptOficialParaCliente(cliente)
+      const oficial = scriptOficialParaCliente(cliente, 1, refHoje)
       expect(oficial?.scriptReady).toBe(true)
       expect(oficial?.texto).toContain('Olá Fernanda! Tudo bem?')
       expect(oficial?.texto).toContain('Faz 1 ano que você comprou seu Compass Longitude conosco')

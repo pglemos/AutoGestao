@@ -276,12 +276,12 @@ export function isPrioridadeSistema(cliente, refDate = new Date()) {
 }
 
 // ─── LÓGICA AUTOMÁTICA: SITUAÇÃO → OBJETIVO + PRÓXIMO PASSO ─────────────────
-export function calcularObjetivoEProximoPasso(cliente) {
+export function calcularObjetivoEProximoPasso(cliente, refDate = new Date()) {
   // Regras prioritárias de pós-venda (30 dias) e recompra (1 ano)
-  if (isPosVenda30Dias(cliente)) {
+  if (isPosVenda30Dias(cliente, refDate)) {
     return { objetivo: "Pedir indicação", proximoPasso: "Pedir indicação" };
   }
-  if (isRecompra1Ano(cliente)) {
+  if (isRecompra1Ano(cliente, refDate)) {
     return { objetivo: "Criar recompra/troca futura", proximoPasso: "Campanha de recompra (1 ano da compra)" };
   }
 
@@ -371,19 +371,19 @@ export function calcularProximaAcao(cliente) {
 }
 
 // ─── EXPLICAÇÃO "POR QUE ESTÁ AQUI" ─────────────────────────────────────────
-export function explicacaoCliente(cliente) {
+export function explicacaoCliente(cliente, agora = new Date()) {
   // Proteção contra nulos
   if (!cliente) {
     return "Este cliente precisa de atenção e desenvolvimento comercial.";
   }
 
-  if (isPosVenda30Dias(cliente)) {
+  if (isPosVenda30Dias(cliente, agora)) {
     return "Cliente comprou há 30 dias. Momento ideal para saber da experiência com o carro e pedir 2 contatos de indicação.";
   }
-  if (isRecompra1Ano(cliente)) {
+  if (isRecompra1Ano(cliente, agora)) {
     return "Cliente comprou há 1 ano (aniversário de compra). Agradeça pela confiança e ofereça a campanha com bônus de recompra/troca.";
   }
-  if (isAgendamentoHoje(cliente)) {
+  if (isAgendamentoHoje(cliente, agora)) {
     return "Cliente com visita agendada para hoje! Prioridade máxima para confirmar presença e realizar atendimento.";
   }
 

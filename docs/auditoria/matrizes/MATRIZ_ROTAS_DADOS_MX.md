@@ -289,7 +289,7 @@
 | `respostas_formulario_pmr` | 1 |
 | `resultados_metricas_cliente` | 2 |
 | `reunioes_google_meet_atas` | 1 |
-| `roles` | 1 |
+| `roles` | 2 |
 | `routine_activity_templates` | 2 |
 | `score_calculations` | 1 |
 | `seller_routine_snapshots` | 1 |
@@ -323,7 +323,7 @@
 | `veiculos_estoque` | 4 |
 | `vendedor_nivel_carreira` | 1 |
 | `vendedor_perfil` | 5 |
-| `vendedores_loja` | 9 |
+| `vendedores_loja` | 10 |
 | `versoes_metodologia_produto` | 1 |
 | `vinculo_modelo_relatorio_encontro` | 1 |
 | `vinculo_plano_acao_encontro` | 1 |
@@ -642,7 +642,7 @@
 | `resultados_metricas_cliente:select` | 2 |
 | `resultados_metricas_cliente:upsert` | 1 |
 | `reunioes_google_meet_atas:select` | 1 |
-| `roles:select` | 1 |
+| `roles:select` | 2 |
 | `routine_activity_templates:select` | 2 |
 | `score_calculations:select` | 1 |
 | `seller_routine_snapshots:select` | 1 |
@@ -681,7 +681,7 @@
 | `user_roles:update` | 1 |
 | `usuarios:delete` | 1 |
 | `usuarios:select` | 31 |
-| `usuarios:update` | 3 |
+| `usuarios:update` | 4 |
 | `usuarios:upsert` | 1 |
 | `valores_indicadores_planejamento_vigentes:select` | 4 |
 | `valores_indicadores_planejamento:select` | 2 |
@@ -696,9 +696,9 @@
 | `vendedor_nivel_carreira:upsert` | 1 |
 | `vendedor_perfil:select` | 5 |
 | `vendedor_perfil:upsert` | 3 |
-| `vendedores_loja:insert` | 3 |
-| `vendedores_loja:select` | 8 |
-| `vendedores_loja:update` | 2 |
+| `vendedores_loja:insert` | 4 |
+| `vendedores_loja:select` | 9 |
+| `vendedores_loja:update` | 3 |
 | `versoes_metodologia_produto:insert` | 1 |
 | `versoes_metodologia_produto:select` | 1 |
 | `versoes_metodologia_produto:update` | 1 |
@@ -710,9 +710,9 @@
 | `vinculo_plano_acao_encontro:select` | 1 |
 | `vinculo_plano_acao_encontro:update` | 1 |
 | `vinculos_loja:delete` | 1 |
-| `vinculos_loja:insert` | 3 |
+| `vinculos_loja:insert` | 4 |
 | `vinculos_loja:select` | 22 |
-| `vinculos_loja:update` | 2 |
+| `vinculos_loja:update` | 3 |
 | `visitas_consultoria:delete` | 2 |
 | `visitas_consultoria:insert` | 5 |
 | `visitas_consultoria:select` | 15 |
